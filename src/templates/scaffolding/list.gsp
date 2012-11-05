@@ -42,7 +42,7 @@
                         props = domainClass.properties.findAll { allowedNames.contains(it.name) && !excludedProps.contains(it.name) && it.type != null && !Collection.isAssignableFrom(it.type) }
                         Collections.sort(props, comparator.constructors[0].newInstance([domainClass] as Object[]))
                         props.eachWithIndex { p, i ->
-                            if (i < 5) {
+                            if (i < 6) {
                                 if (p.isAssociation()) { %>
                         <th>${p.naturalName}</th>
                     <%      } else { %>

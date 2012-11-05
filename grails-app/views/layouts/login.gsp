@@ -9,15 +9,15 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.8.0.min.js')}"></script>
-        <script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.8.23.custom.min.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.8.2.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.9.1.custom.min.js')}"></script>
 
         <!-- Le styles -->
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
 
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">
 
-        <link href="${resource(dir: 'js/jquery/css/twit', file: 'jquery-ui-1.8.23.custom.css')}" rel="stylesheet">
+        <link href="${resource(dir: 'js/jquery/css/twitBoot', file: 'jquery-ui-1.9.1.custom.min.css')}" rel="stylesheet">
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>

@@ -105,7 +105,7 @@ class PersonaController extends janus.seguridad.Shield {
         def usroInstance = Persona.get(params.id)
         if (!usroInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Usuario con id " + params.id
+            flash.message = "No se encontró Persona con id " + params.id
             redirect(action: "list")
             return
         }
@@ -123,7 +123,7 @@ class PersonaController extends janus.seguridad.Shield {
         }
         if (!user.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar Usuario " + (user.id ? user.login : "") + "</h4>"
+            def str = "<h4>No se pudo guardar Persona " + (user.id ? user.login : "") + "</h4>"
 
             str += "<ul>"
             user.errors.allErrors.each { err ->
@@ -138,7 +138,7 @@ class PersonaController extends janus.seguridad.Shield {
             flash.message = str
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha guardado correctamente Usuario " + user.login
+            flash.message = "Se ha guardado correctamente Persona " + user.login
         }
         redirect(action: 'list')
     }
@@ -151,7 +151,6 @@ class PersonaController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
         [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params]
     } //list
 
@@ -182,6 +181,12 @@ class PersonaController extends janus.seguridad.Shield {
         if (params.fechaPass) {
             params.fechaPass = new Date().parse("dd-MM-yyyy", params.fechaPass)
         }
+        if (params.password) {
+            params.password = params.password.encodeAsMD5()
+        }
+        if (params.autorizacion) {
+            params.autorizacion = params.autorizacion.encodeAsMD5()
+        }
 
         def personaInstance
         if (params.id) {
@@ -199,7 +204,7 @@ class PersonaController extends janus.seguridad.Shield {
         } //es create
         if (!personaInstance.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar Persona " + (personaInstance.id ? personaInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar Persona " + (personaInstance.id ? personaInstance.nombre + " " + personaInstance.apellido : "") + "</h4>"
 
             str += "<ul>"
             personaInstance.errors.allErrors.each { err ->
@@ -218,10 +223,10 @@ class PersonaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Persona " + personaInstance.id
+            flash.message = "Se ha actualizado correctamete Persona " + personaInstance.nombre + " " + personaInstance.apellido
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Persona " + personaInstance.id
+            flash.message = "Se ha creado correctamete Persona " + personaInstance.nombre + " " + personaInstance.apellido
         }
         redirect(action: 'list')
     } //save
@@ -249,12 +254,12 @@ class PersonaController extends janus.seguridad.Shield {
         try {
             personaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Persona " + personaInstance.id
+            flash.message = "Se ha eliminado correctamete Persona " + personaInstance.nombre + " " + personaInstance.apellido
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Persona " + (personaInstance.id ? personaInstance.id : "")
+            flash.message = "No se pudo eliminar Persona " + (personaInstance.id ? personaInstance.nombre + " " + personaInstance.apellido : "")
             redirect(action: "list")
         }
     } //delete

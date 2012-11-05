@@ -1,4 +1,3 @@
-
 <%@ page import="janus.Persona" %>
 <!doctype html>
 <html>
@@ -10,6 +9,7 @@
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
     </head>
+
     <body>
 
         <div class="span12">
@@ -37,50 +37,54 @@
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                    
-                        <g:sortableColumn property="cedula" title="Cedula" />
-                    
-                        <g:sortableColumn property="nombre" title="Nombre" />
-                    
-                        <g:sortableColumn property="apellido" title="Apellido" />
-                    
-                        <g:sortableColumn property="codigo" title="Codigo" />
-                    
-                        <g:sortableColumn property="fechaNacimiento" title="Fecha Nacimiento" />
-                    
+
+                        <g:sortableColumn property="cedula" title="Cedula"/>
+
+                        <g:sortableColumn property="nombre" title="Nombre"/>
+
+                        <g:sortableColumn property="apellido" title="Apellido"/>
+
+                        <g:sortableColumn property="login" title="Login"/>
+
+                        <g:sortableColumn property="departamento" title="Departamento"/>
+
+                        <g:sortableColumn property="activo" title="Activo"/>
+
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                <g:each in="${personaInstanceList}" status="i" var="personaInstance">
-                    <tr>
-                    
-                        <td>${fieldValue(bean: personaInstance, field: "cedula")}</td>
-                    
-                        <td>${fieldValue(bean: personaInstance, field: "nombre")}</td>
-                    
-                        <td>${fieldValue(bean: personaInstance, field: "apellido")}</td>
-                    
-                        <td>${fieldValue(bean: personaInstance, field: "codigo")}</td>
-                    
-                        <td><g:formatDate date="${personaInstance.fechaNacimiento}" /></td>
-                    
-                        <td>${fieldValue(bean: personaInstance, field: "departamento")}</td>
-                    
-                        <td>
-                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">
-                                <i class="icon-zoom-in icon-large"></i>
-                            </a>
-                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">
-                                <i class="icon-pencil icon-large"></i>
-                            </a>
+                    <g:each in="${personaInstanceList}" status="i" var="personaInstance">
+                        <tr>
 
-                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${personaInstance.id}">
-                                <i class="icon-trash icon-large"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </g:each>
+                            <td>${fieldValue(bean: personaInstance, field: "cedula")}</td>
+
+                            <td>${fieldValue(bean: personaInstance, field: "nombre")}</td>
+
+                            <td>${fieldValue(bean: personaInstance, field: "apellido")}</td>
+
+                            <td>${fieldValue(bean: personaInstance, field: "login")}</td>
+
+                            <td>${personaInstance.departamento?.descripcion}</td>
+
+                            <td><g:formatBoolean boolean="${personaInstance.activo == 1}" true="Sí" false="No"/></td>
+
+                            <td>
+                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">
+                                    <i class="icon-zoom-in icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">
+                                    <i class="icon-pencil icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${personaInstance.id}">
+                                    <i class="icon-lock icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${personaInstance.id}">
+                                    <i class="icon-trash icon-large"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </g:each>
                 </tbody>
             </table>
 
@@ -117,7 +121,7 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows: 10
+                    maxRows : 10
                 });
 
                 $(".btn-new").click(function () {
@@ -209,6 +213,32 @@
                     $("#modal-Persona").modal("show");
                     return false;
                 });
+                $(".btn-password").click(function () {
+                    var id = $(this).data("id");
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'pass_ajax')}",
+                        data    : {
+                            id : id
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                            $("#modalTitle").html("Cambiar password de la Persona");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-Persona").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn password
 
             });
 

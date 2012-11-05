@@ -1,3 +1,7 @@
+.highlight {
+    background-color : #FFFF88;
+}
+
 /* Custom styling */
 body {
     font-size : 13px;
@@ -19,4 +23,32 @@ body {
 .ui-datepicker-calendar {
     font-size   : 12px;
     line-height : 12px;
+}
+
+.datepicker {
+    background : url(../images/calendar.png) right no-repeat !important;
+}
+
+fieldset.borde {
+    border : 1px solid #999;
+}
+
+fieldset.borde legend {
+    width  : auto;
+    border : none;
+}
+
+/***************************** TABLAS **********************************/
+th.sortable a {
+    background-position : right;
+    background-repeat   : no-repeat;
+    padding-right       : 1.1em;
+}
+
+th.asc a {
+    background-image : url(../images/skin/sorted_asc.gif) !important;
+}
+
+th.desc a {
+    background-image : url(../images/skin/sorted_desc.gif) !important;
 }

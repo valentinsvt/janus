@@ -1,6 +1,7 @@
 package janus.seguridad
 
 import janus.InicioController
+import janus.Persona
 //import janus.Contabilidad
 
 class LoginController {
@@ -16,37 +17,24 @@ class LoginController {
     }
 
     def validar = {
+        println params
+        def user = Persona.withCriteria {
+            eq("login", params.login)
+            eq("password", params.pass.encodeAsMD5())
+            eq("activo", 1)
+        }
 
-        def login
-        def password
-
-        login = params.login
-        password = params.password?.encodeAsMD5()
-
-//        println(params)
-
-        def usuario = Usro.findWhere(login: login, password: password)
-
-
-        if (usuario) {
-
-            session.usuario = usuario
-            session.empresa = usuario.persona.empresa
-            println "empresa " + session.empresa
+        if (user.size() == 0) {
+            flash.message = "No se ha encontrado el usuario"
+        } else if (user.size() > 1) {
+            flash.message = "Ha ocurrido un error grave"
+        } else {
+            user = user[0]
+            session.usuario = user
             redirect(action: "perfiles")
-
-
+            return
         }
-        else {
-
-            redirect(action: "login")
-            println "Usuario - Password Incorrecto"
-
-            flash.message = 'Usuario o Password Incorrecto'
-            flash.clase = "error"
-            flash.ico = "ss_delete"
-        }
-
+        redirect(controller: 'login',action: "login")
     }
 
     def perfiles = {

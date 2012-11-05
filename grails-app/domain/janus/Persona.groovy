@@ -20,7 +20,7 @@ class Persona implements Serializable {
     String password
     String autorizacion
 
-    String activo
+    Integer activo
     Date fechaActualizacionPass
 
     //static hasMany = [sesiones: Sesn, accesos: Accs, alertas: janus.alertas.Alerta]
@@ -69,12 +69,12 @@ class Persona implements Serializable {
         titulo(size: 1..4, blank: true, nullable: true, attributes: [title: 'titulo'])
         cargo(size: 1..50, blank: true, nullable: true, attributes: [title: 'cargo'])
 
-        login(size: 1..16, blank: false, nullable: false, attributes: [title: 'cargo'])
-        password(size: 1..63, blank: false, nullable: false, attributes: [title: 'cargo'])
-        autorizacion(size: 1..63, blank: false, nullable: false, attributes: [title: 'cargo'])
+        login(size: 1..16, blank: false, nullable: false, attributes: [title: 'login'])
+        password(size: 1..63, blank: false, nullable: false, attributes: [title: 'password'])
+        autorizacion(size: 1..63, blank: false, nullable: false, attributes: [title: 'autorizacion'])
 
-        activo(size: 1..1, blank: false, nullable: false, attributes: [title: 'cargo'])
-        fechaActualizacionPass(blank: false, nullable: false, attributes: [title: 'cargo'])
+        activo(blank: false, nullable: false, attributes: [title: 'activo'])
+        fechaActualizacionPass(blank: true, nullable: true, attributes: [title: 'fecha cmabio pass'])
     }
 
     String toString() {

@@ -46,8 +46,7 @@ jQuery.fn.paginate = function (settings) {
         var paginas = Math.ceil(cantRows / num);
         var fila, padre;
 
-        var show = function () {
-            var pag = $(this).html();
+        var show = function (pag) {
             var body = $element;
             body.find("tr").addClass("hidden");
             body.find("." + pag).removeClass("hidden").show();
@@ -71,7 +70,8 @@ jQuery.fn.paginate = function (settings) {
                 rows.addClass("hidden").hide();
                 $("td").unhighlight();
                 if (strSearch == "") {
-                    $(".1").removeClass("hidden").show();
+//                    $(".1").removeClass("hidden").show();
+                    show(1);
                     $(".pagination").show();
                 } else {
                     $(".pagination").hide();
@@ -117,7 +117,10 @@ jQuery.fn.paginate = function (settings) {
             for (var i = 0; i < paginas; i++) {
                 var $li = $("<li/>");
                 var $a = $("<a href='#'/>");
-                $a.html(i + 1).bind("click", show).data("body", id).addClass("b" + (i + 1) + " paginateButton");
+//                $a.html(i + 1).bind("click", show).data("body", id).addClass("b" + (i + 1) + " paginateButton");
+                $a.html(i + 1).click(function () {
+                    show($(this).html());
+                }).data("body", id).addClass("b" + (i + 1) + " paginateButton");
                 if (i == 0) {
                     $li.addClass("active");
                 }

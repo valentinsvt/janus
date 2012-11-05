@@ -29,3 +29,13 @@ jQuery.expr[":"].icontains = jQuery.expr.createPseudo(function (arg) {
         return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
     };
 });
+
+jQuery.extend(
+    jQuery.expr[':'].containsCI = function (a, i, m) {
+        //-- faster than jQuery(a).text()
+        var sText = (a.textContent || a.innerText || "");
+        var zRegExp = new RegExp(m[3], 'i');
+//        console.log(sText, zRegExp.test(sText));
+        return zRegExp.test(sText);
+    }
+);

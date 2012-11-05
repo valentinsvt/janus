@@ -8,7 +8,6 @@
 
 
 <%@ page import="janus.Unidad" %>
-<%@ page import="janus.seguridad.Usro" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
@@ -45,10 +44,10 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="password">Password:</label>
+                    <label class="control-label" for="pass">Password:</label>
 
                     <div class="controls">
-                        <g:passwordField name="password" class="span2" required=""/>
+                        <g:passwordField name="pass" class="span2" required=""/>
                         <p class="help-block ui-helper-hidden"></p>
                     </div>
                 </div>
