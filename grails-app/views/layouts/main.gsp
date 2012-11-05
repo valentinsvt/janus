@@ -46,7 +46,6 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-        <!-- Le fav and touch icons -->
         <link rel="shortcut icon" href="${resource(dir: 'images/ico', file: 'janus_16.png')}">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="${resource(dir: 'images/ico', file: 'janus_144.png')}">
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="${resource(dir: 'images/ico', file: 'janus_114.png')}">
@@ -66,11 +65,8 @@
 
             <g:layoutBody/>
 
-        </div> <!-- /container -->
+        </div>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
         <script src="${resource(dir: 'css/bootstrap/js', file: 'bootstrap.js')}"></script>
 
         <script type="text/javascript">
