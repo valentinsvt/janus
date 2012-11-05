@@ -1,0 +1,7 @@
+/* Styles for mobile devices */
+
+@media screen and (max-width: 480px) {
+    .table td:nth-child(n+6), .table th:nth-child(n+6) {
+        display : none;
+    }
+}

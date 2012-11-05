@@ -1,0 +1,22 @@
+/* Custom styling */
+body {
+    font-size : 13px;
+}
+
+.table th {
+    text-align : center;
+}
+
+.navbar {
+    margin-bottom : 10px;
+}
+
+.mandatory {
+    color       : #b62f29;
+    font-weight : bold;
+}
+
+.ui-datepicker-calendar {
+    font-size   : 12px;
+    line-height : 12px;
+}

@@ -1,0 +1,108 @@
+package janus
+
+import org.springframework.dao.DataIntegrityViolationException
+
+class TransporteController extends janus.seguridad.Shield {
+
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def index() {
+        redirect(action: "list", params: params)
+    } //index
+
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        [transporteInstanceList: Transporte.list(params), transporteInstanceTotal: Transporte.count(), params: params]
+    } //list
+
+    def form_ajax() {
+        def transporteInstance = new Transporte(params)
+        if (params.id) {
+            transporteInstance = Transporte.get(params.id)
+            if (!transporteInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Transporte con id " + params.id
+                redirect(action: "list")
+                return
+            } //no existe el objeto
+        } //es edit
+        return [transporteInstance: transporteInstance]
+    } //form_ajax
+
+    def save() {
+        def transporteInstance
+        if (params.id) {
+            transporteInstance = Transporte.get(params.id)
+            if (!transporteInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Transporte con id " + params.id
+                redirect(action: 'list')
+                return
+            }//no existe el objeto
+            transporteInstance.properties = params
+        }//es edit
+        else {
+            transporteInstance = new Transporte(params)
+        } //es create
+        if (!transporteInstance.save(flush: true)) {
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Transporte " + (transporteInstance.id ? transporteInstance.id : "") + "</h4>"
+
+            str += "<ul>"
+            transporteInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+
+            flash.message = str
+            redirect(action: 'list')
+            return
+        }
+
+        if (params.id) {
+            flash.clase = "alert-success"
+            flash.message = "Se ha actualizado correctamete Transporte " + transporteInstance.id
+        } else {
+            flash.clase = "alert-success"
+            flash.message = "Se ha creado correctamete Transporte " + transporteInstance.id
+        }
+        redirect(action: 'list')
+    } //save
+
+    def show_ajax() {
+        def transporteInstance = Transporte.get(params.id)
+        if (!transporteInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Transporte con id " + params.id
+            redirect(action: "list")
+            return
+        }
+        [transporteInstance: transporteInstance]
+    } //show
+
+    def delete() {
+        def transporteInstance = Transporte.get(params.id)
+        if (!transporteInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Transporte con id " + params.id
+            redirect(action: "list")
+            return
+        }
+
+        try {
+            transporteInstance.delete(flush: true)
+            flash.clase = "alert-success"
+            flash.message = "Se ha eliminado correctamete Transporte " + transporteInstance.id
+            redirect(action: "list")
+        }
+        catch (DataIntegrityViolationException e) {
+            flash.clase = "alert-error"
+            flash.message = "No se pudo eliminar Transporte " + (transporteInstance.id ? transporteInstance.id : "")
+            redirect(action: "list")
+        }
+    } //delete
+} //fin controller
