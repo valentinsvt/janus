@@ -1,24 +1,22 @@
 package janus
 
-
-
 class MenuTagLib {
     static namespace = "mn"
 
     def menu = { attrs ->
 
         def items = [:]
-        session.usuario=janus.seguridad.Usro.get(1)
+        session.usuario = janus.Persona.get(1)
         session.perfil = janus.seguridad.Prfl.get(1)
         def usuario = session.usuario
         def perfil = session.perfil
-        def acciones  =  janus.seguridad.Prms.findAllByPerfil(perfil).accion
-        acciones.each {ac->
-            if (!items[ac.modulo.nombre]){
-                items.put(ac.modulo.nombre,[ac.accnDescripcion,g.createLink(controller: ac.control.ctrlNombre,action: ac.accnNombre)])
-            }else{
+        def acciones = janus.seguridad.Prms.findAllByPerfil(perfil).accion
+        acciones.each {ac ->
+            if (!items[ac.modulo.nombre]) {
+                items.put(ac.modulo.nombre, [ac.accnDescripcion, g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre)])
+            } else {
                 items[ac.modulo.nombre].add(ac.accnDescripcion)
-                items[ac.modulo.nombre].add(g.createLink(controller: ac.control.ctrlNombre,action: ac.accnNombre))
+                items[ac.modulo.nombre].add(g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre))
             }
         }
 
@@ -26,7 +24,7 @@ class MenuTagLib {
 
 
         def strItems = ""
-        items.each {item->
+        items.each {item ->
 //            def clase = ""
 //            println session.controller + "    " + tipo
 //            if (session.controller == item) {
@@ -37,12 +35,12 @@ class MenuTagLib {
 //            strItems += "</li>"
 
             strItems += '<li class="dropdown">'
-            strItems += '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'+item.key+'<b class="caret"></b></a>'
+            strItems += '<a href="#" class="dropdown-toggle" data-toggle="dropdown">' + item.key + '<b class="caret"></b></a>'
             strItems += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">'
 
-             (item.value.size()/2).toInteger().times{
-                 strItems += '<li><a href="'+item.value[it*2+1]+'">'+item.value[it*2]+'</a></li>'
-             }
+            (item.value.size() / 2).toInteger().times {
+                strItems += '<li><a href="' + item.value[it * 2 + 1] + '">' + item.value[it * 2] + '</a></li>'
+            }
 
 
 

@@ -18,10 +18,13 @@
 
         <!-- Le styles -->
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
+        <link href="${resource(dir: 'css', file: 'customButtons.css')}" rel="stylesheet">
 
+        <link href="${resource(dir: 'css', file: 'font-awesome.css')}" rel="stylesheet">
 
         <link href="${resource(dir: 'css', file: 'mobile2.css')}" rel="stylesheet">
         <link href="${resource(dir: 'css', file: 'custom.css')}" rel="stylesheet">
+        <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.highlight.js')}"></script>
         <style>
 
         .hasCountdown {
@@ -71,6 +74,9 @@
         <script src="${resource(dir: 'css/bootstrap/js', file: 'bootstrap.js')}"></script>
 
         <script type="text/javascript">
+            var url = "${resource(dir:'images', file:'spinner_24.gif')}";
+            var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
+
             var ot = document.title;
 
             function resetTimer() {

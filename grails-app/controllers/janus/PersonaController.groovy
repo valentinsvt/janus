@@ -4,6 +4,146 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class PersonaController extends janus.seguridad.Shield {
 
+    def checkUniqueUser() {
+//        println params
+        if (params.id) {
+//            println "EDIT"
+            def user = Persona.get(params.id)
+            if (user.login.trim() == params.login.trim()) {
+//                println "1"
+                render true
+            } else {
+                def users = Persona.countByLogin(params.login.trim())
+                if (users == 0) {
+//                    println "2"
+                    render true
+                } else {
+//                    println "3"
+                    render false
+                }
+            }
+        } else {
+//            println "CREATE"
+            def users = Persona.countByLogin(params.login.trim())
+            if (users == 0) {
+//                println "4"
+                render true
+            } else {
+//                println "5"
+                render false
+            }
+        }
+    }
+
+    def checkUniqueCi() {
+//        println params
+        if (params.id) {
+//            println "EDIT"
+            def user = Persona.get(params.id)
+            if (user.cedula.trim() == params.cedula.trim()) {
+//                println "1"
+                render true
+            } else {
+                def users = Persona.countByCedula(params.cedula.trim())
+                if (users == 0) {
+//                    println "2"
+                    render true
+                } else {
+//                    println "3"
+                    render false
+                }
+            }
+        } else {
+//            println "CREATE"
+            def users = Persona.countByCedula(params.cedula.trim())
+            if (users == 0) {
+//                println "4"
+                render true
+            } else {
+//                println "5"
+                render false
+            }
+        }
+    }
+
+    def checkUserPass() {
+//        println params
+        if (params.id) {
+//            println "EDIT"
+            def user = Persona.get(params.id)
+            if (user.password == params.passwordAct.trim().encodeAsMD5()) {
+//                println "1"
+//                println true
+                render true
+            } else {
+//                println false
+                render false
+            }
+        } else {
+//            println false
+            render false
+        }
+    }
+
+    def checkUserAuth() {
+//        println params
+        if (params.id) {
+//            println "EDIT"
+            def user = Persona.get(params.id)
+            if (user.autorizacion == params.autorizacionAct.trim().encodeAsMD5()) {
+//                println "1"
+                render true
+            } else {
+                render false
+            }
+        } else {
+            render false
+        }
+    }
+
+    def pass_ajax() {
+        def usroInstance = Persona.get(params.id)
+        if (!usroInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Usuario con id " + params.id
+            redirect(action: "list")
+            return
+        }
+        [usroInstance: usroInstance]
+    } //pass
+
+    def savePass() {
+        println params
+        def user = Persona.get(params.id)
+        if (params.password.trim() != "") {
+            user.password = params.password.trim().encodeAsMD5()
+        }
+        if (params.autorizacion.trim() != "") {
+            user.autorizacion = params.autorizacion.trim().encodeAsMD5()
+        }
+        if (!user.save(flush: true)) {
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Usuario " + (user.id ? user.login : "") + "</h4>"
+
+            str += "<ul>"
+            user.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+
+            flash.message = str
+        } else {
+            flash.clase = "alert-success"
+            flash.message = "Se ha guardado correctamente Usuario " + user.login
+        }
+        redirect(action: 'list')
+    }
+
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -30,6 +170,19 @@ class PersonaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        if (params.fechaInicio) {
+            params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        }
+        if (params.fechaFin) {
+            params.fechaFin = new Date().parse("dd-MM-yyyy", params.fechaFin)
+        }
+        if (params.fechaNacimiento) {
+            params.fechaNacimiento = new Date().parse("dd-MM-yyyy", params.fechaNacimiento)
+        }
+        if (params.fechaPass) {
+            params.fechaPass = new Date().parse("dd-MM-yyyy", params.fechaPass)
+        }
+
         def personaInstance
         if (params.id) {
             personaInstance = Persona.get(params.id)

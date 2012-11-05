@@ -216,56 +216,67 @@
         }
     }
 
-    private renderDateEditor(domainClass, property) {
-        if (!cp) {
-            return "<g:textField name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
-        } else {
-            def sb = new StringBuilder("")
-            sb << '<g:textField'
 
-            sb << ' name="' << property.name << '"'
-            if (!cp.editable) sb << ' readonly="readonly"'
-            sb << ' class="datepicker'
-            if (isRequired()) sb << ' required'
-            sb << '"'
-            sb << ' value="${' << "${domainInstance}?.${property.name}" << '}"'
-            sb << "/>\n"
+private renderDateEditor(domainClass, property) {
+    if (!cp) {
+        return "<g:textField name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
+    } else {
+        def sb = new StringBuilder("")
+        sb << "<elm:datepicker"
+        sb << ' name="' << property.name << '"'
+        if (!cp.editable) sb << ' readonly="readonly"'
+        sb << ' class="'
+        if (isRequired()) sb << ' required'
+        sb << '"'
+        sb << ' value="${' << "${domainInstance}?.${property.name}" << '}"'
+        sb << "/>\n"
 
-            sb << "<script type=\"text/javascript\">\n"
-            sb << "\$(\"#${property.name}\").datepicker({\n"
-            sb << "changeMonth: true,\n"
-            sb << "changeYear: true,\n"
-            sb << "showOn: \"both\",\n"
-            sb << "buttonImage: \"\${resource(dir:'images', file:'calendar.png')}\",\n"
-            sb << "buttonImageOnly: true\n"
-            sb << "});\n"
-            sb << "</script>"
 
-            sb as String
-        }
+//            sb << '<g:textField'
+//
+//            sb << ' name="' << property.name << '"'
+//            if (!cp.editable) sb << ' readonly="readonly"'
+//            sb << ' class="datepicker'
+//            if (isRequired()) sb << ' required'
+//            sb << '"'
+//            sb << ' value="${' << "${domainInstance}?.${property.name}" << '}"'
+//            sb << "/>\n"
+//
+//            sb << "<script type=\"text/javascript\">\n"
+//            sb << "\$(\"#${property.name}\").datepicker({\n"
+//            sb << "changeMonth: true,\n"
+//            sb << "changeYear: true,\n"
+//            sb << "showOn: \"both\",\n"
+//            sb << "buttonImage: \"\${resource(dir:'images', file:'calendar.png')}\",\n"
+//            sb << "buttonImageOnly: true\n"
+//            sb << "});\n"
+//            sb << "</script>"
 
-        //def precision = (property.type == Date || property.type == java.sql.Date || property.type == Calendar) ? "day" : "minute";
-        //if (!cp) {
-        //    return "<g:datePicker name=\"${property.name}\" precision=\"${precision}\" value=\"\${${domainInstance}?.${property.name}}\" />"
-        //} else {
-        //    if (!cp.editable) {
-        //        return "\${${domainInstance}?.${property.name}?.toString()}"
-        //    } else {
-        //        def sb = new StringBuilder("<g:datePicker name=\"${property.name}\" ")
-        //        if (cp.format) sb << "format=\"${cp.format}\" "
-        //        if (cp.widget) sb << "widget=\"${cp.widget}\" "
-        //        cp.attributes.each { k, v ->
-        //            sb << "${k}=\"${v}\" "
-        //        }
-        //        if (!cp.attributes.precision){
-        //            sb << "precision=\"${precision}\" "
-        //        }
-        //        sb << " value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} />"
-
-        //       return sb.toString()
-        //    }
-        //}
+        sb as String
     }
+
+    //def precision = (property.type == Date || property.type == java.sql.Date || property.type == Calendar) ? "day" : "minute";
+    //if (!cp) {
+    //    return "<g:datePicker name=\"${property.name}\" precision=\"${precision}\" value=\"\${${domainInstance}?.${property.name}}\" />"
+    //} else {
+    //    if (!cp.editable) {
+    //        return "\${${domainInstance}?.${property.name}?.toString()}"
+    //    } else {
+    //        def sb = new StringBuilder("<g:datePicker name=\"${property.name}\" ")
+    //        if (cp.format) sb << "format=\"${cp.format}\" "
+    //        if (cp.widget) sb << "widget=\"${cp.widget}\" "
+    //        cp.attributes.each { k, v ->
+    //            sb << "${k}=\"${v}\" "
+    //        }
+    //        if (!cp.attributes.precision){
+    //            sb << "precision=\"${precision}\" "
+    //        }
+    //        sb << " value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} />"
+
+    //       return sb.toString()
+    //    }
+    //}
+}
 
     private renderSelectTypeEditor(type, domainClass,property) {
         if (!cp) {

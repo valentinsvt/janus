@@ -75,9 +75,10 @@ class ElementosTagLib {
         if (currentstep > firststep) {
             linkTagAttrs.class = 'prevLink'
             linkParams.offset = offset - max
-            writer << link(linkTagAttrs.clone()) {
+            writer << "<li>" + link(linkTagAttrs.clone()) {
                 (attrs.prev ?: messageSource.getMessage('paginate.prev', null, messageSource.getMessage('default.paginate.prev', null, 'Previous', locale), locale))
             }
+            writer << "</li>"
         }
 
         // display steps when steps are enabled and laststep is not firststep
@@ -135,6 +136,65 @@ class ElementosTagLib {
             } + "</li>"
         }
         writer << "</ul>"
+    }
+
+    def datepicker = { attrs ->
+        def str = ""
+        def clase = attrs.remove("class")
+        def name = attrs.remove("name")
+        def id = attrs.id ? attrs.remove("id") : name
+
+        def value = attrs.remove("value")
+        if (value.toString() == 'none') {
+            value = null
+        }
+        else if (!value) {
+            value = null
+        }
+
+        def format = attrs.format ? attrs.remove("format") : "dd-MM-yyyy"
+        def formatJs = format
+        formatJs = formatJs.replaceAll("M", "m")
+        formatJs = formatJs.replaceAll("yyyy", "yy")
+
+        str += "<input type='text' class='datepicker " + clase + "' name='" + name + "' id='" + id + "' value='" + g.formatDate(date: value, format: format) + "'"
+        str += renderAttributes(attrs)
+        str += "/>"
+
+        def js = "<script type='text/javascript'>"
+        js += '$(function() {'
+        js += '$("#' + id + '").datepicker({'
+        js += 'dateFormat: "' + formatJs + '",'
+        js += 'changeMonth: true,'
+        js += 'changeYear: true'
+//        js += 'showOn          : "both",'
+//        js += 'buttonImage     : "' + resource(dir: 'images', file: 'calendar.png') + '",'
+//        js += 'buttonImageOnly : true'
+        js += '});'
+        js += '});'
+        js += "</script>"
+
+        out << str
+        out << js
+    }
+
+    /**
+     * renders attributes in HTML compliant fashion returning them in a string
+     */
+    String renderAttributes(attrs) {
+        def ret = ""
+        attrs.remove('tagName') // Just in case one is left
+        attrs.each { k, v ->
+            ret += k
+            ret += '="'
+            if (v) {
+                ret += v.encodeAsHTML()
+            } else {
+                ret += ""
+            }
+            ret += '" '
+        }
+        return ret
     }
 
 }

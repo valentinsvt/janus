@@ -12,7 +12,7 @@ String.prototype.lpad = function(padString, length) {
     while (str.length < length)
         str = padString + str;
     return str;
-}
+};
 
 //pads right
 String.prototype.rpad = function(padString, length) {
@@ -20,4 +20,12 @@ String.prototype.rpad = function(padString, length) {
     while (str.length < length)
         str = str + padString;
     return str;
-}
+};
+
+
+jQuery.expr[":"].icontains = jQuery.expr.createPseudo(function (arg) {
+    return function (elem) {
+//        console.log(arg, elem, jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0);
+        return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+});

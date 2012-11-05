@@ -18,8 +18,11 @@ function extendRemove(target, props) {
 
 jQuery.fn.paginate = function (settings) {
     var defaults = {
-        maxRows:10,
-        hideOnePage:true
+        maxRows      : 10,
+        hideOnePage  : true,
+        search       : true,
+        searchSize   : "span2",
+        searchButton : false //String del boton o false para hacer en keypress
     };
 
     defaults = extendRemove(defaults, settings || {});
@@ -61,10 +64,48 @@ jQuery.fn.paginate = function (settings) {
                 $(this).addClass("1");
             }
         });
+        padre = $element.parent().parent();
+        if (defaults.search) {
+            var doSearch = function () {
+                var strSearch = $.trim($inputSearch.val());
+                rows.addClass("hidden").hide();
+                $("td").unhighlight();
+                if (strSearch == "") {
+                    $(".1").removeClass("hidden").show();
+                    $(".pagination").show();
+                } else {
+                    $(".pagination").hide();
+                    rows.each(function () {
+                        var tds = $(this).find("td:containsCI('" + strSearch + "')");
+                        $(this).find("td:containsCI('" + strSearch + "')").highlight(strSearch);
+                        if (tds.size() > 0) {
+                            $(this).show().removeClass("hidden");
+                        }
+                    });
+                }
+            }
+            var $formSearch = $("<form class='form-search'></form>");
+            var $divSearch = $("<div class='input-append'></div>");
+            var $inputSearch = $("<input type='text' class='" + defaults.searchSize + " search-query' />");
+            var $btnSearch = "";
+            if (defaults.searchButton) {
+                $btnSearch = $("<a href='#' class='btn'><i class='icon-zoom-in'></i> " + defaults.searchButton + "</button>");
+                $btnSearch.click(function () {
+                    doSearch();
+                });
+            } else {
+                $btnSearch = $("<span class='add-on'><i class='icon-zoom-in'></i></span>");
+                $inputSearch.keyup(function () {
+                    doSearch();
+                });
+            }
+            $divSearch.append($inputSearch).append($btnSearch);
+            $formSearch.append($divSearch);
+            padre.prepend($formSearch);
+        }
 
+        if ((paginas == 1 && !defaults.hideOnePage) || paginas > 1) {
 
-        if ( (paginas == 1 && !defaults.hideOnePage) || paginas > 1) {
-            padre = $element.parent().parent();
             fila = $("<div>");
             fila.addClass("pagination");
             fila.width($element.parent().width() - 10);

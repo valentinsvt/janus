@@ -9,7 +9,7 @@
         <div class="control-group">
             <div>
                 <span id="cedula-label" class="control-label label label-inverse">
-                    Cédula
+                    Cedula
                 </span>
             </div>
             <div class="controls">
@@ -60,7 +60,7 @@
         <div class="control-group">
             <div>
                 <span id="codigo-label" class="control-label label label-inverse">
-                    Código
+                    Codigo
                 </span>
             </div>
             <div class="controls">
@@ -164,7 +164,7 @@
         <div class="control-group">
             <div>
                 <span id="titulo-label" class="control-label label label-inverse">
-                    Título
+                    Titulo
                 </span>
             </div>
             <div class="controls">
@@ -189,6 +189,133 @@
                 <span aria-labelledby="cargo-label">
                     <g:fieldValue bean="${personaInstance}" field="cargo"/>
                 </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${personaInstance?.login}">
+        <div class="control-group">
+            <div>
+                <span id="login-label" class="control-label label label-inverse">
+                    Login
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="login-label">
+                    <g:fieldValue bean="${personaInstance}" field="login"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${personaInstance?.password}">
+        <div class="control-group">
+            <div>
+                <span id="password-label" class="control-label label label-inverse">
+                    Password
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="password-label">
+                    <g:fieldValue bean="${personaInstance}" field="password"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${personaInstance?.autorizacion}">
+        <div class="control-group">
+            <div>
+                <span id="autorizacion-label" class="control-label label label-inverse">
+                    Autorizacion
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="autorizacion-label">
+                    <g:fieldValue bean="${personaInstance}" field="autorizacion"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${personaInstance?.activo}">
+        <div class="control-group">
+            <div>
+                <span id="activo-label" class="control-label label label-inverse">
+                    Activo
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="activo-label">
+                    <g:fieldValue bean="${personaInstance}" field="activo"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${personaInstance?.fechaActualizacionPass}">
+        <div class="control-group">
+            <div>
+                <span id="fechaActualizacionPass-label" class="control-label label label-inverse">
+                    Fecha Actualizacion Pass
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="fechaActualizacionPass-label">
+                    <g:formatDate date="${personaInstance?.fechaActualizacionPass}" />
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${personaInstance?.accesos}">
+        <div class="control-group">
+            <div>
+                <span id="accesos-label" class="control-label label label-inverse">
+                    Accesos
+                </span>
+            </div>
+            <div class="controls">
+        
+                <g:each in="${personaInstance.accesos}" var="a">
+                    <span aria-labelledby="accesos-label">
+            %{--<g:link controller="accs" action="show" id="${a.id}">--}%
+                        ${a?.encodeAsHTML()}
+            %{--</g:link>--}%
+                    </span>
+                </g:each>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${personaInstance?.sesiones}">
+        <div class="control-group">
+            <div>
+                <span id="sesiones-label" class="control-label label label-inverse">
+                    Sesiones
+                </span>
+            </div>
+            <div class="controls">
+        
+                <g:each in="${personaInstance.sesiones}" var="s">
+                    <span aria-labelledby="sesiones-label">
+            %{--<g:link controller="sesn" action="show" id="${s.id}">--}%
+                        ${s?.encodeAsHTML()}
+            %{--</g:link>--}%
+                    </span>
+                </g:each>
         
             </div>
         </div>

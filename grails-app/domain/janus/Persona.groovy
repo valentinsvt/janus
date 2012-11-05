@@ -16,6 +16,13 @@ class Persona implements Serializable {
     String titulo
     String cargo
 
+    String login
+    String password
+    String autorizacion
+
+    String activo
+    Date fechaActualizacionPass
+
     //static hasMany = [sesiones: Sesn, accesos: Accs, alertas: janus.alertas.Alerta]
     static hasMany = [sesiones: Sesn, accesos: Accs]
     static auditable = [ignore: ['password']]
@@ -40,6 +47,13 @@ class Persona implements Serializable {
             sigla column: 'prsnsgla'
             titulo column: 'prsntitl'
             cargo column: 'prsncrgo'
+
+            login column: 'prsnlogn'
+            password column: 'prsnpass'
+            autorizacion column: 'prsnatrz'
+
+            activo column: 'prsnactv'
+            fechaActualizacionPass column: 'prsnfcps'
         }
     }
     static constraints = {
@@ -54,5 +68,16 @@ class Persona implements Serializable {
         sigla(size: 1..3, blank: true, nullable: true, attributes: [title: 'sigla'])
         titulo(size: 1..4, blank: true, nullable: true, attributes: [title: 'titulo'])
         cargo(size: 1..50, blank: true, nullable: true, attributes: [title: 'cargo'])
+
+        login(size: 1..16, blank: false, nullable: false, attributes: [title: 'cargo'])
+        password(size: 1..63, blank: false, nullable: false, attributes: [title: 'cargo'])
+        autorizacion(size: 1..63, blank: false, nullable: false, attributes: [title: 'cargo'])
+
+        activo(size: 1..1, blank: false, nullable: false, attributes: [title: 'cargo'])
+        fechaActualizacionPass(blank: false, nullable: false, attributes: [title: 'cargo'])
+    }
+
+    String toString() {
+        return this.nombre + " " + this.apellido
     }
 }

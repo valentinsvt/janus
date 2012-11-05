@@ -1,19 +1,19 @@
 
 <%@ page import="janus.Persona" %>
 
-<div id="create-personaInstance" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-personaInstance" action="save">
+<div id="create-Persona" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-Persona" action="save">
         <g:hiddenField name="id" value="${personaInstance?.id}"/>
                 
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Cédula
+                    Cedula
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="cedula" maxlength="10" style="width: 100px" class="" value="${personaInstance?.cedula}"/>
+                <g:textField name="cedula" maxlength="10" class="" value="${personaInstance?.cedula}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="nombre" maxlength="30" style="width: 310px" class="" value="${personaInstance?.nombre}"/>
+                <g:textField name="nombre" maxlength="30" class="" value="${personaInstance?.nombre}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -41,7 +41,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="apellido" maxlength="30" style="width: 310px" class="" value="${personaInstance?.apellido}"/>
+                <g:textField name="apellido" maxlength="30" class="" value="${personaInstance?.apellido}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -50,7 +50,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Código
+                    Codigo
                 </span>
             </div>
 
@@ -69,16 +69,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="fechaNacimiento" class="datepicker" style="width: 90px" value="${personaInstance?.fechaNacimiento}"/>
-<script type="text/javascript">
-$("#fechaNacimiento").datepicker({
-changeMonth: true,
-changeYear: true,
-showOn: "both",
-buttonImage: "${resource(dir:'images', file:'calendar.png')}",
-buttonImageOnly: true
-});
-</script>
+                <elm:datepicker name="fechaNacimiento" class="" value="${personaInstance?.fechaNacimiento}"/>
+
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -106,16 +98,8 @@ buttonImageOnly: true
             </div>
 
             <div class="controls">
-                <g:textField name="fechaInicio" class="datepicker" style="width: 90px" value="${personaInstance?.fechaInicio}"/>
-<script type="text/javascript">
-$("#fechaInicio").datepicker({
-changeMonth: true,
-changeYear: true,
-showOn: "both",
-buttonImage: "${resource(dir:'images', file:'calendar.png')}",
-buttonImageOnly: true
-});
-</script>
+                <elm:datepicker name="fechaInicio" class="" value="${personaInstance?.fechaInicio}"/>
+
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -129,16 +113,8 @@ buttonImageOnly: true
             </div>
 
             <div class="controls">
-                <g:textField name="fechaFin" class="datepicker" style="width: 90px" value="${personaInstance?.fechaFin}"/>
-<script type="text/javascript">
-$("#fechaFin").datepicker({
-changeMonth: true,
-changeYear: true,
-showOn: "both",
-buttonImage: "${resource(dir:'images', file:'calendar.png')}",
-buttonImageOnly: true
-});
-</script>
+                <elm:datepicker name="fechaFin" class="" value="${personaInstance?.fechaFin}"/>
+
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -152,7 +128,7 @@ buttonImageOnly: true
             </div>
 
             <div class="controls">
-                <g:textField name="sigla"  maxlength="3" style="width: 40px" class="" value="${personaInstance?.sigla}"/>
+                <g:textField name="sigla" maxlength="3" class="" value="${personaInstance?.sigla}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -161,12 +137,12 @@ buttonImageOnly: true
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Título
+                    Titulo
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="titulo" maxlength="4" style="width: 40px" class="" value="${personaInstance?.titulo}"/>
+                <g:textField name="titulo" maxlength="4" class="" value="${personaInstance?.titulo}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -180,7 +156,124 @@ buttonImageOnly: true
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="2" style="resize: none;" name="cargo" maxlength="50" class="" value="${personaInstance?.cargo}"/>
+                <g:textField name="cargo" maxlength="50" class="" value="${personaInstance?.cargo}"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Login
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="login" maxlength="16" class=" required" value="${personaInstance?.login}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Password
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="password" maxlength="63" class=" required" value="${personaInstance?.password}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Autorizacion
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="autorizacion" maxlength="63" class=" required" value="${personaInstance?.autorizacion}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Activo
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="activo" maxlength="1" class=" required" value="${personaInstance?.activo}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Actualizacion Pass
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaActualizacionPass" class=" required" value="${personaInstance?.fechaActualizacionPass}"/>
+
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Accesos
+                </span>
+            </div>
+
+            <div class="controls">
+                
+<ul class="one-to-many">
+<g:each in="${personaInstance?.accesos?}" var="a">
+    <li><g:link controller="accs" action="show" id="${a.id}">${a?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="accs" action="create" params="['persona.id': personaInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'accs.label', default: 'Accs')])}</g:link>
+</li>
+</ul>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Sesiones
+                </span>
+            </div>
+
+            <div class="controls">
+                
+<ul class="one-to-many">
+<g:each in="${personaInstance?.sesiones?}" var="s">
+    <li><g:link controller="sesn" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
+</g:each>
+<li class="add">
+<g:link controller="sesn" action="create" params="['persona.id': personaInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'sesn.label', default: 'Sesn')])}</g:link>
+</li>
+</ul>
+
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -189,10 +282,7 @@ buttonImageOnly: true
     </g:form>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-personaInstance").validate({
+    $("#frmSave-Persona").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
@@ -201,8 +291,14 @@ buttonImageOnly: true
         },
         errorClass     : "label label-important",
         submitHandler  : function(form) {
-            $("[name=btnSave-personaInstance]").replaceWith(spinner);
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

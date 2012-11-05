@@ -35,38 +35,39 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Password
-            </span>
+    <g:if test="${!usroInstance?.id}">
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Password
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="password" name="password" maxlength="64" class=" required"
+                         value="${usroInstance?.password}"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
         </div>
 
-        <div class="controls">
-            <g:field type="password" name="password" maxlength="64" class=" required"
-                     value="${usroInstance?.password}"/>
-            <span class="mandatory">*</span>
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Autorizacion
+                </span>
+            </div>
 
-            <p class="help-block ui-helper-hidden"></p>
+            <div class="controls">
+                <g:field type="password" name="autorizacion" maxlength="255" class=" required"
+                         value="${usroInstance?.autorizacion}"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
         </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Autorizacion
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:field type="password" name="autorizacion" maxlength="255" class=" required"
-                     value="${usroInstance?.autorizacion}"/>
-            <span class="mandatory">*</span>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
+    </g:if>
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -106,16 +107,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="fechaPass" class="datepicker" value="${usroInstance?.fechaPass}"/>
-            <script type="text/javascript">
-                $("#fechaPass").datepicker({
-                    changeMonth:true,
-                    changeYear:true,
-                    showOn:"both",
-                    buttonImage:"${resource(dir:'images', file:'calendar.png')}",
-                    buttonImageOnly:true
-                });
-            </script>
+            %{--<g:textField name="fechaPass" class="datepicker" value="${usroInstance?.fechaPass}"/>--}%
+            <elm:datepicker name="fechaPass" class="datepicker" value="${usroInstance?.fechaPass}"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -140,14 +133,14 @@
 
 <script type="text/javascript">
     $("#frmSave-Usro").validate({
-        errorPlacement:function (error, element) {
+        errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
-        success:function (label) {
+        success        : function (label) {
             label.parent().hide();
         },
-        errorClass:"label label-important",
-        submitHandler:function (form) {
+        errorClass     : "label label-important",
+        submitHandler  : function (form) {
             $(".btn-success").replaceWith(spinner);
             form.submit();
         }

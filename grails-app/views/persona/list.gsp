@@ -24,34 +24,34 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Nueva Persona
+                Crear  Persona
             </a>
         </div>
 
-        <g:form action="delete" name="frmDelete-personaInstance">
+        <g:form action="delete" name="frmDelete-Persona">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-persona" class="span12" role="main" style="margin-top: 10px;">
+        <div id="list-Persona" class="span12" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="cedula" title="Cédula" />
+                        <g:sortableColumn property="cedula" title="Cedula" />
                     
                         <g:sortableColumn property="nombre" title="Nombre" />
                     
                         <g:sortableColumn property="apellido" title="Apellido" />
                     
-                        <g:sortableColumn property="codigo" title="Código" />
+                        <g:sortableColumn property="codigo" title="Codigo" />
                     
                         <g:sortableColumn property="fechaNacimiento" title="Fecha Nacimiento" />
                     
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="paginate">
                 <g:each in="${personaInstanceList}" status="i" var="personaInstance">
                     <tr>
                     
@@ -69,28 +69,28 @@
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">
-                                <i class="icon-zoom-in"></i>
+                                <i class="icon-zoom-in icon-large"></i>
                             </a>
                             <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">
-                                <i class="icon-pencil"></i>
+                                <i class="icon-pencil icon-large"></i>
                             </a>
 
                             <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${personaInstance.id}">
-                                <i class="icon-trash"></i>
+                                <i class="icon-trash icon-large"></i>
                             </a>
                         </td>
                     </tr>
                 </g:each>
                 </tbody>
             </table>
-            <div class="pagination">
-                <elm:paginate total="${personaInstanceTotal}" params="${params}" />
-            </div>
+
         </div>
 
-        <div class="modal hide fade" id="modal-persona">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
+        <div class="modal hide fade" id="modal-Persona">
+            <div class="modal-header" id="modalHeader">
+                <button type="button" class="close darker" data-dismiss="modal">
+                    <i class="icon-remove-circle"></i>
+                </button>
 
                 <h3 id="modalTitle"></h3>
             </div>
@@ -106,9 +106,19 @@
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
+            function submitForm(btn) {
+                if ($("#frmSave-Persona").valid()) {
+                    btn.replaceWith(spinner);
+                }
+                $("#frmSave-Persona").submit();
+            }
 
             $(function () {
                 $('[rel=tooltip]').tooltip();
+
+                $(".paginate").paginate({
+                    maxRows: 10
+                });
 
                 $(".btn-new").click(function () {
                     $.ajax({
@@ -116,20 +126,18 @@
                         url     : "${createLink(action:'form_ajax')}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-personaInstance").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                }
-                                $("#frmSave-personaInstance").submit();
+                                submitForm(btnSave);
                                 return false;
                             });
 
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle").html("Crear Persona");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-persona").modal("show");
+                            $("#modal-Persona").modal("show");
                         }
                     });
                     return false;
@@ -145,20 +153,18 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-personaInstance").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                }
-                                $("#frmSave-personaInstance").submit();
+                                submitForm(btnSave);
                                 return false;
                             });
 
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
                             $("#modalTitle").html("Editar Persona");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-persona").modal("show");
+                            $("#modal-Persona").modal("show");
                         }
                     });
                     return false;
@@ -174,10 +180,11 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
                             $("#modalTitle").html("Ver Persona");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-persona").modal("show");
+                            $("#modal-Persona").modal("show");
                         }
                     });
                     return false;
@@ -191,14 +198,15 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-personaInstance").submit();
+                        $("#frmDelete-Persona").submit();
                         return false;
                     });
 
+                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                     $("#modalTitle").html("Eliminar Persona");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar esta persona?</p>");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Persona?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-persona").modal("show");
+                    $("#modal-Persona").modal("show");
                     return false;
                 });
 
