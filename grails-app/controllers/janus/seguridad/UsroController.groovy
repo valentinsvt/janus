@@ -2,109 +2,106 @@ package janus.seguridad
 
 import org.springframework.dao.DataIntegrityViolationException
 
-class UsroController extends janus.seguridad.Shield  {
+class UsroController extends janus.seguridad.Shield {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST", delete: "GET"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
         redirect(action: "list", params: params)
-    }
+    } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [usroInstanceList: Usro.list(params), usroInstanceTotal: Usro.count()]
-    }
+        [usroInstanceList: Usro.list(params), params: params]
+    } //list
 
-    def create() {
-        [usroInstance: new Usro(params)]
-    }
+    def form_ajax() {
+        def usroInstance = new Usro(params)
+        if(params.id) {
+            usroInstance = Usro.get(params.id)
+            if(!usroInstance) {
+                flash.clase = "alert-error"
+                flash.message =  "No se encontró Usro con id " + params.id
+                redirect(action:  "list")
+                return
+            } //no existe el objeto
+        } //es edit
+        return [usroInstance: usroInstance]
+    } //form_ajax
 
     def save() {
-        if (params.fechaPass) {
-            params.fechaPass = new Date().parse("dd-MM-yyyy", params.fechaPass)
-        }
-        if (params.password) {
-            params.password = params.password.encodeAsMD5()
-        }
-        if (params.autorizacion) {
-            params.autorizacion = params.autorizacion.encodeAsMD5()
-        }
-        def usroInstance = new Usro(params)
-
-        if (params.id) {
+        def usroInstance
+        if(params.id) {
             usroInstance = Usro.get(params.id)
+            if(!usroInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Usro con id " + params.id
+                redirect(action: 'list')
+                return
+            }//no existe el objeto
             usroInstance.properties = params
-        }
-
+        }//es edit
+        else {
+            usroInstance = new Usro(params)
+        } //es create
         if (!usroInstance.save(flush: true)) {
-            if (params.id) {
-                render(view: "edit", model: [usroInstance: usroInstance])
-            } else {
-                render(view: "create", model: [usroInstance: usroInstance])
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Usro " + (usroInstance.id ? usroInstance.id : "") + "</h4>"
+
+            str += "<ul>"
+            usroInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
             }
+            str += "</ul>"
+
+            flash.message = str
+            redirect(action: 'list')
             return
         }
 
-        if (params.id) {
-            flash.message = "Usro actualizado"
-            flash.clase = "success"
-            flash.ico = "ss_accept"
+        if(params.id) {
+            flash.clase = "alert-success"
+            flash.message = "Se ha actualizado correctamente Usro " + usroInstance.id
         } else {
-            flash.message = "Usro creado"
-            flash.clase = "success"
-            flash.ico = "ss_accept"
+            flash.clase = "alert-success"
+            flash.message = "Se ha creado correctamente Usro " + usroInstance.id
         }
-        redirect(action: "show", id: usroInstance.id)
-    }
+        redirect(action: 'list')
+    } //save
 
-    def show() {
+    def show_ajax() {
         def usroInstance = Usro.get(params.id)
         if (!usroInstance) {
-            flash.message = "No se encontró Usro con id " + params.id
-            flash.clase = "error"
-            flash.ico = "ss_delete"
+            flash.clase = "alert-error"
+            flash.message =  "No se encontró Usro con id " + params.id
             redirect(action: "list")
             return
         }
-
         [usroInstance: usroInstance]
-    }
-
-    def edit() {
-        def usroInstance = Usro.get(params.id)
-        if (!usroInstance) {
-            flash.message = "No se encontró Usro con id " + params.id
-            flash.clase = "error"
-            flash.ico = "ss_delete"
-            redirect(action: "list")
-            return
-        }
-
-        [usroInstance: usroInstance]
-    }
+    } //show
 
     def delete() {
         def usroInstance = Usro.get(params.id)
         if (!usroInstance) {
-            flash.message = "No se encontró Usro con id " + params.id
-            flash.clase = "error"
-            flash.ico = "ss_delete"
+            flash.clase = "alert-error"
+            flash.message =  "No se encontró Usro con id " + params.id
             redirect(action: "list")
             return
         }
 
         try {
             usroInstance.delete(flush: true)
-            flash.message = "Usro  con id " + params.id + " eliminado"
-            flash.clase = "success"
-            flash.ico = "ss_accept"
+            flash.clase = "alert-success"
+            flash.message =  "Se ha eliminado correctamente Usro " + usroInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
-            flash.message = "No se pudo eliminar Usro con id " + params.id
-            flash.clase = "error"
-            flash.ico = "ss_delete"
-            redirect(action: "show", id: params.id)
+            flash.clase = "alert-error"
+            flash.message =  "No se pudo eliminar Usro " + (usroInstance.id ? usroInstance.id : "")
+            redirect(action: "list")
         }
-    }
-}
+    } //delete
+} //fin controller

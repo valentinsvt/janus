@@ -1,74 +1,56 @@
 package janus
+
+
+
 class MenuTagLib {
     static namespace = "mn"
 
     def menu = { attrs ->
 
-//        def items = [:]
-//
-//        items.genero = [:]
-//        items.genero.url = createLink(controller: "genero", action: "list")
-//        items.genero.label = "Género"
-//
-//        items.estado = [:]
-//        items.estado.url = createLink(controller: "estado", action: "list")
-//        items.estado.label = "Estado"
-//
-//        items.actor = [:]
-//        items.actor.url = createLink(controller: "actor", action: "list")
-//        items.actor.label = "Actor"
-//
-//        items.idioma = [:]
-//        items.idioma.url = createLink(controller: "idioma", action: "list")
-//        items.idioma.label = "Idioma"
-//
-//        items.pelicula = [:]
-//        items.pelicula.url = createLink(controller: "pelicula", action: "list")
-//        items.pelicula.label = "Película"
-//
-//        items.usuario = [:]
-//        items.usuario.url = createLink(controller: "usuario", action: "list")
-//        items.usuario.label = "Usuario"
-//
-//        items.tipoUsuario = [:]
-//        items.tipoUsuario.url = createLink(controller: "tipoUsuario", action: "list")
-//        items.tipoUsuario.label = "Tipo Usuario"
-//
-//        items.tipo = [:]
-//        items.tipo.url = createLink(controller: "tipo", action: "list")
-//        items.tipo.label = "Tipo"
-//
-//        items.grupo = [:]
-//        items.grupo.url = createLink(controller: "grupo", action: "list")
-//        items.grupo.label = "Grupo"
-//
-//
-//        def strItems = ""
-//        items.each { tipo, item ->
+        def items = [:]
+        session.usuario=janus.seguridad.Usro.get(1)
+        session.perfil = janus.seguridad.Prfl.get(1)
+        def usuario = session.usuario
+        def perfil = session.perfil
+        def acciones  =  janus.seguridad.Prms.findAllByPerfil(perfil).accion
+        acciones.each {ac->
+            if (!items[ac.modulo.nombre]){
+                items.put(ac.modulo.nombre,[ac.accnDescripcion,g.createLink(controller: ac.control.ctrlNombre,action: ac.accnNombre)])
+            }else{
+                items[ac.modulo.nombre].add(ac.accnDescripcion)
+                items[ac.modulo.nombre].add(g.createLink(controller: ac.control.ctrlNombre,action: ac.accnNombre))
+            }
+        }
+
+//        println "items "+items
+
+
+        def strItems = ""
+        items.each {item->
 //            def clase = ""
-////            println session.controller + "    " + tipo
-//            if (session.controller == tipo) {
+//            println session.controller + "    " + tipo
+//            if (session.controller == item) {
 //                clase = "active"
 //            }
 //            strItems += "<li class='" + clase + "'>"
 //            strItems += "<a href='" + item.url + "'>" + item.label + "</a>"
 //            strItems += "</li>"
-//        }
 
-//        println strItems
+            strItems += '<li class="dropdown">'
+            strItems += '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'+item.key+'<b class="caret"></b></a>'
+            strItems += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">'
 
-        def strItems = ""
-        strItems += '<li class="active"><a href="#">Home</a></li>'
-        strItems += '<li><a href="#">Link</a></li>'
-        strItems += '<li><a href="#">Link</a></li>'
+             (item.value.size()/2).toInteger().times{
+                 strItems += '<li><a href="'+item.value[it*2+1]+'">'+item.value[it*2]+'</a></li>'
+             }
 
-        strItems += '<li class="dropdown">'
-        strItems += '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account<b class="caret"></b></a>'
-        strItems += '<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">'
-        strItems += '<li><a href="#">Link</a></li>'
-        strItems += '<li><a href="#">Link</a></li>'
-        strItems += '</ul>'
-        strItems += '</li>'
+
+
+            strItems += '</ul>'
+            strItems += '</li>'
+
+        }
+
 
         def html = ""
         html += '<div class="navbar navbar-static-top navbar-inverse">'
@@ -79,7 +61,7 @@ class MenuTagLib {
         html += '<span class="icon-bar"></span>'
         html += '<span class="icon-bar"></span>'
         html += '</a>'
-        html += '<a class="brand" href="#">'
+        html += '<a class="brand" href="#" style="font-size:11px">'
         html += attrs.title
         html += '</a>'
 
@@ -87,7 +69,7 @@ class MenuTagLib {
         html += '<ul class="nav">'
         html += strItems
         html += ' <li class="divider-vertical"></li>'
-        html += '<li><a href="' + g.createLink(controller: 'loginLuz', action: 'logout') + '"><i class="icon-off icon-white"></i> Salir</a></li>'
+        html += '<li><a href="' + g.createLink(controller: 'login', action: 'logout') + '"><i class="icon-off icon-white"></i> Salir</a></li>'
 //        html += '<li><a href="#contact">Contact</a></li>'
         html += '</ul>'
         html += '<p class="navbar-text pull-right" id="countdown"></p>'
