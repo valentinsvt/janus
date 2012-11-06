@@ -6,9 +6,43 @@ class RubroController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def buscadorService
+
     def index() {
         redirect(action: "list", params: params)
     } //index
+
+
+    def rubroPrincipal(){
+
+        def campos = ["codigo": ["Código", "string"], "descripcion": ["Descripción", "string"]]
+        [campos:campos]
+    }
+
+    def buscaRubro(){
+
+        def listaTitulos = ["Código","Descripción"]
+        def listaCampos = ["codigo", "nombre"]
+        def funciones = [null, null]
+        def url = g.createLink(action: "buscaRubro", controller: "rubro")
+//        def show = "registro"
+//        def link = "cedula"
+        def numRegistros = 20
+        def extras = " and tipoItem = 2"
+        if (!params.reporte) {
+            def lista = buscadorService.buscar(Item, "Item", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            lista.pop()
+            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros])
+        } else {
+            println "entro reporte"
+            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+            session.dominio = Item
+            session.funciones = funciones
+            def anchos = [20,80] /*el ancho de las columnas en porcentajes... solo enteros*/
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Item", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Rubros", anchos: anchos, extras: extras, landscape: true])
+        }
+    }
+
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)

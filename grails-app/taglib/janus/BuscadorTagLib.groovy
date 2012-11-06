@@ -70,10 +70,10 @@ class BuscadorTagLib {
 
     def lista(name, value, campos, controlador, accion) {
         def salida = ""
-        salida += '<div style="border:1px solid black;margin-top:10px;float:left;width:100%" class="ui-corner-all">'
+        salida += '<div style="border:1px solid black;margin-top:10px;float:left;width:95%;font-size:10px !important" class="ui-corner-all">'
         salida += '<div class="filaBuscador ui-corner-all" style="margin-left:15px;margin-top:10px;width:100%" >'
         salida += '<div id="campo" style="float: left; margin-right:  5px;">'
-        salida += 'Buscar por: <select name="campo" id="campo" style="width: 100px;" >'
+        salida += 'Buscar por: <select name="campo" id="campo" style="width: 80px;font-size:10px" >'
         def i = 0
         campos.each {
             if (i == 0)
@@ -85,11 +85,11 @@ class BuscadorTagLib {
         salida += '</select>'
         salida += '</div>'
         salida += '<div id="Doperador" style="float: left; margin-right: 5px;">'
-        salida += '<select name="operador" style="width: 100px;" id="operador"></select>'
+        salida += '<select name="operador" style="width: 80px;;font-size:10px" id="operador"></select>'
         salida += '</div>'
         salida += '<input type="hidden" name="tipoCampo" id="tipoCampo" value="string">'
         salida += 'Criterio:<input type="text" size="8" style="margin-right:5px" name="criterio" id="criterio">'
-        salida += 'Ordenado por: <select name="campoOrdn" id="campoOrdn" style="width: 100px;" >'
+        salida += 'Ordenado por: <select name="campoOrdn" id="campoOrdn" style="width: 80px;font-size:10px;" >'
         i = 0
         campos.each {
             if (i == 0)
@@ -100,7 +100,7 @@ class BuscadorTagLib {
         }
         def url = resource(dir: 'images', file: 'spinner_24.gif')
         salida += '</select>'
-        salida += '<select name="orden" id="orden" style="width: 100px;" ><option value="asc" selected>Ascendente</option><option value="desc">Descendente</option></select>'
+        salida += '<select name="orden" id="orden" style="width: 100px;;font-size:10px" ><option value="asc" selected>Ascendente</option><option value="desc">Descendente</option></select>'
         salida += '<a href="#" id="mas" style="margin-left:5px">Agregar condición</a>'
         salida += '<a href="#" id="reset" style="margin-left:5px">Resetear</a>'
         salida += '<input id="buscarDialog" type="button" value="Buscar" style="width:80px;margin-left:10px" class="tbbtn " ><img class="hide" id="spinner" style="margin-left:15px;" src=' + url + ' alt="Cargando..."/>'
@@ -110,6 +110,7 @@ class BuscadorTagLib {
         salida += '<a href="#" id="btn_reporte" style="margin:10px;margin-left:20px;color:white">Reporte</a>'
         salida += '</div>'
         salida += "<script type='text/javascript' src='${createLinkTo(dir: 'js', file: 'buscador.js')}' ></script>"
+        salida += "<script type='text/javascript' src='${createLinkTo(dir: 'js/jquery/plugins', file: 'jquery.livequery.js')}' ></script>"
         salida += "<script type='text/javascript'>"
 
         salida += 'function enviar() {'
@@ -194,7 +195,7 @@ class BuscadorTagLib {
         salida += '<select name="orden" id="orden" style="width: 100px;" ><option value="asc" selected>Ascendente</option><option value="desc">Descendente</option></select>'
         salida += '<a href="#" id="mas" style="margin-left:5px">Agregar condición</a>'
         salida += '<a href="#" id="reset" style="margin-left:5px">Resetear</a>'
-        salida += '<input id="buscarDialog" type="button" value="Buscar" style="width:80px;margin-left:10px" class="tbbtn fg-button ui-state-default fg-button-icon-left ui-corner-all" >'
+        salida += '<input id="buscarDialog" type="button" value="Buscar" style="width:80px;margin-left:10px" >'
         salida += '</div>'
         salida += '<div id="criterios" style="width:750px;height:25px"></div>'
         salida += '<div class="contenidoBuscador  ui-corner-all" id="contenidoBuscador" style="float:left;width:860px;margin-top:5px"></div>'
@@ -203,7 +204,7 @@ class BuscadorTagLib {
         }
         salida += '</div>'
         salida += "<script type='text/javascript' src='${createLinkTo(dir: 'js/jquery/plugins', file: 'jquery.livequery.js')}' ></script>"
-        salida += "<script type='text/javascript' src='${createLinkTo(dir: 'js/aplicacion', file: 'buscador.js')}' ></script>"
+        salida += "<script type='text/javascript' src='${createLinkTo(dir: 'js', file: 'buscador.js')}' ></script>"
         salida += "<script type='text/javascript'>"
 
         salida += 'function enviar() {'

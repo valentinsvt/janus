@@ -194,18 +194,20 @@ class BuscadorService {
 
         sql += res[0]
         res.remove(0)
-        if(sql=~"where")
-            sql += extras
-        else
-            sql+= " where "+extras.replaceFirst(" and ","").replaceFirst(" or ","")
+        if(extras.size()>1){
+            if(sql=~"where")
+                sql += extras
+            else
+                sql+= " where "+extras.replaceFirst(" and ","").replaceFirst(" or ","")
+        }
         println "sql " + sql  + orderby+" pars "+res
-        lista = dominio.findAll(sql+orderby, res)
+        lista = dominio.findAll(sql+orderby, res,[max: 990])
         lista.add(lista.size())
         if (lista.size() < 1 && tipo != "excluyente") {
             res = filtro("or", parametros, common, mapa, ignoreCase)
             sql ="from " + tabla+" "+res[0]
             res.remove(0)
-            lista = dominio.findAll(sql+orderby, res)
+            lista = dominio.findAll(sql+orderby, res,[max: 990])
             lista.add(lista.size())
         }
         return lista

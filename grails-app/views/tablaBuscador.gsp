@@ -1,40 +1,41 @@
-
 <g:if test="${lista?.size()>0}">
-    <table width="400px" id="tablaBuscador" class="table table-bordered table-striped table-condensed table-hover">
-        <thead>
-        <g:each in="${listaTitulos}">
-            <th>${it}</th>
-        </g:each>
-        <th style="width: 40px"></th>
-        </thead>
-        <tbody id="paginate">
-        <g:each var="reg" in="${lista}" status="i">
-            <tr>
-                <g:each in="${listaCampos}" var="nombre" status="j">
-                    <g:if test="${funciones}">
-                        <g:if test="${funciones[j]}">
-                            <g:set var="prop" value="${bsc.operacion(propiedad:nombre,funcion:funciones[j],registro:reg)}"></g:set>
+    <div url="${url}">
+        <table width="400px" id="tablaBuscador" class="table table-bordered table-striped table-condensed table-hover">
+            <thead>
+            <g:each in="${listaTitulos}">
+                <th>${it}</th>
+            </g:each>
+            <th style="width: 40px"></th>
+            </thead>
+            <tbody id="paginate">
+            <g:each var="reg" in="${lista}" status="i">
+                <tr>
+                    <g:each in="${listaCampos}" var="nombre" status="j">
+                        <g:if test="${funciones}">
+                            <g:if test="${funciones[j]}">
+                                <g:set var="prop" value="${bsc.operacion(propiedad:nombre,funcion:funciones[j],registro:reg)}"></g:set>
+                            </g:if>
+                            <g:else>
+                                <g:set var="prop" value="${reg.properties[nombre]}"></g:set>
+                            </g:else>
                         </g:if>
                         <g:else>
                             <g:set var="prop" value="${reg.properties[nombre]}"></g:set>
                         </g:else>
-                    </g:if>
-                    <g:else>
-                        <g:set var="prop" value="${reg.properties[nombre]}"></g:set>
-                    </g:else>
-                    <td>
-                        ${prop}
+                        <td>
+                            ${prop}
+                        </td>
+                    </g:each>
+                    <td style="text-align: right;width: 40px">
+                        <div  style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" >
+                            <span class="ui-icon ui-icon-circle-check"></span>
+                        </div>
                     </td>
-                </g:each>
-                <td style="text-align: right;width: 40px">
-                    <div  style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" >
-                        <span class="ui-icon ui-icon-circle-check"></span>
-                    </div>
-                </td>
-            </tr>
-        </g:each>
-        </tbody>
-    </table>
+                </tr>
+            </g:each>
+            </tbody>
+        </table>
+    </div>
     <script type="text/javascript">
 
         function paginar(id,mostrar){
