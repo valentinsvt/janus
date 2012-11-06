@@ -1,5 +1,7 @@
 package janus
 
+import janus.seguridad.Prfl
+import janus.seguridad.Sesn
 import org.springframework.dao.DataIntegrityViolationException
 
 class PersonaController extends janus.seguridad.Shield {
@@ -219,6 +221,37 @@ class PersonaController extends janus.seguridad.Shield {
             flash.message = str
             redirect(action: 'list')
             return
+        }
+
+        //guardo los perfiles de la persona
+        //saco los perfiles q ya tiene
+        def perfilesAct = Sesn.findAllByUsuario(personaInstance).id*.toString()
+        //perfiles q llegaron como parametro
+        def perfilesNue = params.perfiles
+        def perfilesAdd = [], perfilesDel = []
+
+        perfilesAct.each { per ->
+            if (!perfilesNue.contains(per)) {
+                perfilesDel.add(per)
+            }
+        }
+        perfilesNue.each { per ->
+            if (!perfilesAct.contains(per)) {
+                perfilesAdd.add(per)
+            }
+        }
+
+        perfilesAdd.each {
+            def sesn = new Sesn()
+            sesn.perfil = Prfl.get(it)
+            sesn.usuario = personaInstance
+            if (!sesn.save(flush: true)) {
+                println "error al grabar sesn perfil: " + it + " persona " + personaInstance.id
+            }
+        }
+        perfilesDel.each {
+            def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
+            sesn.delete()
         }
 
         if (params.id) {

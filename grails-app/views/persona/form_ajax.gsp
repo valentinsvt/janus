@@ -1,277 +1,228 @@
 <%@ page import="janus.Persona" %>
 
-<div id="create-Persona" class="span" role="main">
 <g:form class="form-horizontal" name="frmSave-Persona" action="save">
     <g:hiddenField name="id" value="${personaInstance?.id}"/>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Cedula
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="cedula" maxlength="10" class="" value="${personaInstance?.cedula}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Nombre
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="nombre" maxlength="30" class="" value="${personaInstance?.nombre}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Apellido
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="apellido" maxlength="30" class="" value="${personaInstance?.apellido}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Codigo
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:field type="number" name="codigo" class=" required" value="${fieldValue(bean: personaInstance, field: 'codigo')}"/>
-            <span class="mandatory">*</span>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Fecha Nacimiento
-            </span>
-        </div>
-
-        <div class="controls">
-            <elm:datepicker name="fechaNacimiento" class="" value="${personaInstance?.fechaNacimiento}"/>
-
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Departamento
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id" class="many-to-one "
-                      value="${personaInstance?.departamento?.id}" noSelection="['null': '']" optionValue="descripcion"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Fecha Inicio
-            </span>
-        </div>
-
-        <div class="controls">
-            <elm:datepicker name="fechaInicio" class="" value="${personaInstance?.fechaInicio}"/>
-
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Fecha Fin
-            </span>
-        </div>
-
-        <div class="controls">
-            <elm:datepicker name="fechaFin" class="" value="${personaInstance?.fechaFin}"/>
-
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Sigla
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="sigla" maxlength="3" class="" value="${personaInstance?.sigla}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Titulo
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="titulo" maxlength="4" class="" value="${personaInstance?.titulo}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Cargo
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="cargo" maxlength="50" class="" value="${personaInstance?.cargo}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Login
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="login" maxlength="16" class=" required" value="${personaInstance?.login}"/>
-            <span class="mandatory">*</span>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <g:if test="${!personaInstance?.id}">
-        <div class="control-group">
-            <div>
+    <table cellpadding="5">
+        <tr>
+            <td>
                 <span class="control-label label label-inverse">
-                    Password
+                    Cedula
                 </span>
-            </div>
-
-            <div class="controls">
-                <g:passwordField name="password" maxlength="63" class=" required" value="${personaInstance?.password}"/>
+            </td>
+            <td>
+                <g:textField name="cedula" maxlength="10" class="span2" value="${personaInstance?.cedula}"/>
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Nombre
+                </span>
+            </td>
+            <td>
+                <g:textField name="nombre" maxlength="30" class="span2" value="${personaInstance?.nombre}"/>
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="control-label label label-inverse">
+                    Apellido
+                </span>
+            </td>
+            <td>
+                <g:textField name="apellido" maxlength="30" class="span2" value="${personaInstance?.apellido}"/>
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Codigo
+                </span>
+            </td>
+            <td>
+                <g:field type="number" name="codigo" class="span2 required" value="${fieldValue(bean: personaInstance, field: 'codigo')}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <span class="control-label label label-inverse">
-                    Verificar Password
+                    Fecha Nacimiento
                 </span>
-            </div>
+            </td>
+            <td>
+                <elm:datepicker name="fechaNacimiento" class="span2" value="${personaInstance?.fechaNacimiento}"/>
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Departamento
+                </span>
+            </td>
+            <td>
+                <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id" class="many-to-one span2"
+                          value="${personaInstance?.departamento?.id}" noSelection="['null': '']" optionValue="descripcion"/>
 
-            <div class="controls">
-                <g:passwordField name="passwordVerif" equalTo="#password" maxlength="63" class=" required" value="${personaInstance?.password}"/>
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="control-label label label-inverse">
+                    Fecha Inicio
+                </span>
+            </td>
+            <td>
+                <elm:datepicker name="fechaInicio" class="span2" value="${personaInstance?.fechaInicio}"/>
+
+
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Fecha Fin
+                </span>
+            </td>
+            <td>
+                <elm:datepicker name="fechaFin" class="span2" value="${personaInstance?.fechaFin}"/>
+
+
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="control-label label label-inverse">
+                    Sigla
+                </span>
+            </td>
+            <td>
+                <g:textField name="sigla" maxlength="3" class="span2" value="${personaInstance?.sigla}"/>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Titulo
+                </span>
+            </td>
+            <td>
+                <g:textField name="titulo" maxlength="4" class="span2" value="${personaInstance?.titulo}"/>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="control-label label label-inverse">
+                    Cargo
+                </span>
+            </td>
+            <td>
+                <g:textField name="cargo" maxlength="50" class="span2" value="${personaInstance?.cargo}"/>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Login
+                </span>
+            </td>
+            <td>
+                <g:textField name="login" maxlength="16" class="span2 required" value="${personaInstance?.login}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
+            </td>
+        </tr>
+        <g:if test="${!personaInstance?.id}">
+            <tr>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Password
+                    </span>
+                </td>
+                <td>
+                    <g:passwordField name="password" maxlength="63" class="span2 required" value="${personaInstance?.password}"/>
+                    <span class="mandatory">*</span>
 
-        <div class="control-group">
-            <div>
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Verificar Password
+                    </span>
+                </td>
+                <td>
+                    <g:passwordField name="passwordVerif" equalTo="#password" maxlength="63" class="span2 required" value="${personaInstance?.password}"/>
+                    <span class="mandatory">*</span>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Autorizacion
+                    </span>
+                </td>
+                <td>
+                    <g:passwordField name="autorizacion" maxlength="63" class="span2 required" value="${personaInstance?.autorizacion}"/>
+                    <span class="mandatory">*</span>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Verificar Autorizacion
+                    </span>
+                </td>
+                <td>
+                    <g:passwordField name="autorizacionVerif" equalTo="#autorizacion" maxlength="63" class="span2 required" value="${personaInstance?.password}"/>
+                    <span class="mandatory">*</span>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+            </tr>
+        </g:if>
+        <tr>
+            <td>
                 <span class="control-label label label-inverse">
-                    Autorizacion
+                    Activo
                 </span>
-            </div>
-
-            <div class="controls">
-                <g:passwordField name="autorizacion" maxlength="63" class=" required" value="${personaInstance?.autorizacion}"/>
-                <span class="mandatory">*</span>
+            </td>
+            <td>
+                <g:radioGroup name="activo" values="['1', '0']" labels="['Sí', 'No']" value="${personaInstance?.id ? personaInstance.activo : '0'}">
+                    ${it.label} ${it.radio}
+                </g:radioGroup>
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Fecha Actualizacion Pass
+                </span>
+            </td>
+            <td>
+                <elm:datepicker name="fechaActualizacionPass" class="span2" value="${personaInstance?.fechaActualizacionPass}"/>
 
                 <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <span class="control-label label label-inverse">
-                    Verificar Autorizacion
+                    Perfiles
                 </span>
-            </div>
-
-            <div class="controls">
-                <g:passwordField name="autorizacionVerif" equalTo="#autorizacion" maxlength="63" class=" required" value="${personaInstance?.password}"/>
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-    </g:if>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Activo
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:radioGroup name="activo" values="['1', '0']" labels="['Sí', 'No']" value="${personaInstance?.id ? personaInstance.activo : '0'}">
-                ${it.label} ${it.radio}
-            </g:radioGroup>
-            <span class="mandatory">*</span>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Fecha Actualizacion Pass
-            </span>
-        </div>
-
-        <div class="controls">
-            <elm:datepicker name="fechaActualizacionPass" value="${personaInstance?.fechaActualizacionPass}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
+            </td>
+            <td>
+                <g:select name="perfiles" class="span2" multiple="" from="${janus.seguridad.Prfl.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre"
+                          value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"/>
+            </td>
+        </tr>
+    </table>
 </g:form>
+
 
 <script type="text/javascript">
     $("#frmSave-Persona").validate({

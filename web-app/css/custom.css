@@ -38,6 +38,11 @@ fieldset.borde legend {
     border : none;
 }
 
+.modal.large {
+    width       : 780px;
+    margin-left : -390px; /* - width/2 */
+}
+
 /***************************** TABLAS **********************************/
 th.sortable a {
     background-position : right;

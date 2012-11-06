@@ -8,113 +8,98 @@
 
 <g:form class="form-horizontal" name="frmSave-Persona" action="savePass">
     <g:hiddenField name="id" value="${usroInstance?.id}"/>
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Usuario
-            </span>
-        </div>
-
-        <div class="controls">
-            ${usroInstance.nombre} ${usroInstance.apellido} (${usroInstance.login})
-        </div>
-    </div>
-    <g:if test="${usroInstance?.id}">
-        <div class="control-group">
-            <div>
+    <table cellpadding="5">
+        <tr>
+            <td>
                 <span class="control-label label label-inverse">
-                    Password actual
+                    Usuario
                 </span>
-            </div>
+            </td>
+            <td colspan="3">
+                ${usroInstance.nombre} ${usroInstance.apellido} (${usroInstance.login})
+            </td>
+        </tr>
+        <g:if test="${usroInstance?.id}">
+            <tr>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Password actual
+                    </span>
+                </td>
+                <td>
+                    <g:field type="password" name="passwordAct" maxlength="64" class="span2 required"/>
+                    <span class="mandatory">*</span>
 
-            <div class="controls">
-                <g:field type="password" name="passwordAct" maxlength="64" class=" required"/>
-                <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Nuevo password
+                    </span>
+                </td>
+                <td>
+                    <g:field type="password" name="password" maxlength="64" class="span2 required"/>
+                    <span class="mandatory">*</span>
 
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Verificar password
+                    </span>
+                </td>
+                <td>
+                    <g:field type="password" name="passwordVerif" equalTo="#password" maxlength="64" class="span2 required"/>
+                    <span class="mandatory">*</span>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Nuevo password
-                </span>
-            </div>
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Autorización actual
+                    </span>
+                </td>
+                <td>
+                    <g:field type="password" name="autorizacionAct" maxlength="64" class="span2 required"/>
+                    <span class="mandatory">*</span>
 
-            <div class="controls">
-                <g:field type="password" name="password" maxlength="64" class=" required"/>
-                <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Nueva autorización
+                    </span>
+                </td>
+                <td>
+                    <g:field type="password" name="autorizacion" maxlength="64" class="span2 required"/>
+                    <span class="mandatory">*</span>
 
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+                <td>
+                    <span class="control-label label label-inverse">
+                        Verificar autorización
+                    </span>
+                </td>
+                <td>
+                    <g:field type="password" name="autorizacionVerif" equalTo="#autorizacion" maxlength="64" class="span2 required"/>
+                    <span class="mandatory">*</span>
 
-
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Verificar password
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:field type="password" name="passwordVerif" equalTo="#password" maxlength="64" class=" required"/>
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-
-        <hr/>
-
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Autorización actual
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:field type="password" name="autorizacionAct" maxlength="64" class=" required"/>
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Nueva autorización
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:field type="password" name="autorizacion" maxlength="64" class=" required"/>
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-
-
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Verificar autorización
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:field type="password" name="autorizacionVerif" equalTo="#autorizacion" maxlength="64" class=" required"/>
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-    </g:if>
-
+                    <p class="help-block ui-helper-hidden"></p>
+                </td>
+            </tr>
+        </g:if>
+    </table>
 </g:form>
 
 <script type="text/javascript">

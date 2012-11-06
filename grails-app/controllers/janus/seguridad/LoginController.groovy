@@ -1,15 +1,13 @@
 package janus.seguridad
 
-import janus.InicioController
 import janus.Persona
+
 //import janus.Contabilidad
 
 class LoginController {
 
-    def loginService
-
     def index = {
-        println "index login"
+        redirect(action: 'login')
     }
 
     def login = {
@@ -34,14 +32,12 @@ class LoginController {
             redirect(action: "perfiles")
             return
         }
-        redirect(controller: 'login',action: "login")
+        redirect(controller: 'login', action: "login")
     }
 
     def perfiles = {
-//        def usuarioLog = session.usuario
-//        def perfilesUsr = Sesn.findAllByUsuario(usuarioLog)
-
-        def perfilesUsr = []
+        def usuarioLog = session.usuario
+        def perfilesUsr = Sesn.findAllByUsuario(usuarioLog)
 
         return [perfilesUsr: perfilesUsr]
     }
@@ -50,45 +46,24 @@ class LoginController {
     def savePer = {
 //        println params
 
-
         def sesn = Sesn.get(params.perfiles)
         def perf = sesn.perfil
 //        println perf
 
         if (perf) {
-
-            def usuario = Usro.get(session.usuario.id)
-
-            def empresa = usuario.persona.empresa
-
-            session.empresa = empresa
-
-            println "login EMPRESA!! " + empresa
-            println "session empresa login: " + session.empresa
-
             session.perfil = perf
-            def ahora = new Date()
-            session.contabilidad = Contabilidad.findByFechaInicioLessThanEqualsAndFechaCierreGreaterThanEquals(ahora, ahora)
-            if (!session.contabilidad) {
-                def conts = Contabilidad.list([sort: "fechaCierre", order: "desc"])
-                if (conts) {
-                    session.contabilidad = conts[0]
-                }
-            }
-//            println "contabilidad  " + session.contabilidad
-
             if (session.an && session.cn) {
-//                println "si session url " + session.an + " " + session.cn
-                redirect(controller: session.cn, action: session.an, params: session.pr)
+                if (session.an.toString().contains("ajax")) {
+                    redirect(controller: "inicio", action: "index")
+                } else {
+                    redirect(controller: session.cn, action: session.an, params: session.pr)
+                }
             } else {
                 redirect(controller: "inicio", action: "index")
             }
-//            redirect(controller: 'inicio', action: "index")
         }
         else {
             redirect(action: "login")
-
-
         }
     }
 
