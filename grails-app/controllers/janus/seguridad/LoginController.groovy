@@ -6,15 +6,15 @@ import janus.Persona
 
 class LoginController {
 
-    def index = {
+    def index() {
         redirect(action: 'login')
     }
 
-    def login = {
+    def login() {
 
     }
 
-    def validar = {
+    def validar() {
         println params
         def user = Persona.withCriteria {
             eq("login", params.login)
@@ -35,7 +35,7 @@ class LoginController {
         redirect(controller: 'login', action: "login")
     }
 
-    def perfiles = {
+    def perfiles() {
         def usuarioLog = session.usuario
         def perfilesUsr = Sesn.findAllByUsuario(usuarioLog)
 
@@ -43,7 +43,7 @@ class LoginController {
     }
 
 
-    def savePer = {
+    def savePer() {
 //        println params
 
         def sesn = Sesn.get(params.perfiles)
@@ -68,7 +68,7 @@ class LoginController {
     }
 
 
-    def logout = {
+    def logout() {
         if (session.usuario) {
             session.usuario = null
             session.perfil = null
@@ -77,9 +77,9 @@ class LoginController {
             session.an = null
             session.cn = null
             session.invalidate()
-            redirect(controller: 'inicio', action: 'index')
+            redirect(controller: 'login', action: 'login')
         } else {
-            redirect(controller: 'inicio', action: 'index')
+            redirect(controller: 'login', action: 'login')
         }
     }
 

@@ -14,32 +14,39 @@ class Shield {
         session.an = actionName
         session.cn = controllerName
         session.pr = params
-        return true
-        /****************************************************************************
-         if (!session.usuario || !session.perfil) {//            println "1"
-         redirect(controller: 'login', action: 'login')
-         session.finalize()
-         return false} else {//            println "2"
-         //verificacion de permisos
-         if (!session.unidad) {if (controllerName == "proyecto") {if (this.isAllowed())
-         return true
+//        return true
+        /** **************************************************************************/
+        if (!session.usuario || !session.perfil) {
+            //            println "1"
+            redirect(controller: 'login', action: 'login')
+            session.finalize()
+            return false
+        } else {
+            //            println "2"
+            //verificacion de permisos
+            if (!session.unidad) {
+                try {
+                    //                        println "3"
+                    def usuario = session.usuario
+                    if (this.isAllowed())
+                        return true
+                    response.sendError(403)
+                    return false
+                } catch (e) {
+                    //                        println "4"
+                    redirect(controller: 'login', action: 'login')
+                    session.finalize()
+                    return false
+                }
+            } else {
+                if (this.isAllowed())
+                    return true
 
-         response.sendError(403)
-         return false} else {try {//                        println "3"
-         def usuario = session.usuario
-         //                        session.empresa = usuario.unidad
-         if (this.isAllowed())
-         return true
-
-         response.sendError(403)
-         return false} catch (e) {//                        println "4"
-         redirect(controller: 'login', action: 'login')
-         session.finalize()
-         return false}}} else {if (this.isAllowed())
-         return true
-
-         response.sendError(403)
-         return false}}*************************************************************************** */
+                response.sendError(403)
+                return false
+            }
+        }
+        /*************************************************************************** */
     }
 
     boolean isAllowed() {
