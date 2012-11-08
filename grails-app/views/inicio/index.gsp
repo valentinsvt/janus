@@ -29,6 +29,7 @@
         margin: 8px;
         /*font-family: fantasy; */
         font-size: 12px;
+
         /*
                 font-weight: bolder;
         */
