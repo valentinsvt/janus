@@ -15,6 +15,19 @@ class ItemController extends janus.seguridad.Shield {
         [itemInstanceList: Item.list(params), itemInstanceTotal: Item.count(), params: params]
     } //list
 
+    def mantenimientoPrecios(){
+
+
+        def lugar = Lugar.get(14)
+
+        def rubroPrecio = PrecioRubrosItems.findAllByLugar(lugar,[max:10])
+
+
+
+        [rubroPrecio: rubroPrecio, lugar:lugar]
+
+    }
+
     def form_ajax() {
         def itemInstance = new Item(params)
         if (params.id) {
