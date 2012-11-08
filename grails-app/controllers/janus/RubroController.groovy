@@ -14,9 +14,15 @@ class RubroController extends janus.seguridad.Shield {
 
 
     def rubroPrincipal(){
-
+        def rubro
         def campos = ["codigo": ["Código", "string"], "descripcion": ["Descripción", "string"]]
-        [campos:campos]
+
+        if (params.idRubro){
+            rubro=Item.get(params.idRubro)
+            [campos:campos,rubro:rubro]
+        }else{
+            [campos:campos]
+        }
     }
 
     def buscaRubro(){
@@ -25,14 +31,17 @@ class RubroController extends janus.seguridad.Shield {
         def listaCampos = ["codigo", "nombre"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaRubro", controller: "rubro")
-//        def show = "registro"
-//        def link = "cedula"
+        def funcionJs="function(){"
+        funcionJs+='$("#modal-rubro").modal("hide");'
+        funcionJs+='location.href="'+g.createLink(action: 'rubroPrincipal',controller: 'rubro')+'?idRubro="+$(this).attr("regId");'
+        funcionJs+='}'
+        println "funcion "+funcionJs
         def numRegistros = 20
         def extras = " and tipoItem = 2"
         if (!params.reporte) {
             def lista = buscadorService.buscar(Item, "Item", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
-            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros])
+            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros,funcionJs:funcionJs])
         } else {
             println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/

@@ -127,9 +127,9 @@ class BuscadorTagLib {
         salida += '}'
         salida += 'data+="&ordenado="+$("#campoOrdn :selected").val()+"&orden="+$("#orden :selected").val();'
         if (controlador) {
-            salida += '$.ajax({type: "POST",url: "' + controlador + '/' + accion + '",'
+            salida += '$.ajax({type: "POST",url: "' + g.createLink(controller: controlador,action: accion) + '",'
         } else {
-            salida += '$.ajax({type: "POST",url: "' + accion + '",'
+            salida += '$.ajax({type: "POST",url: "' + g.createLink(action: accion) + '",'
         }
 
         salida += 'data: data,'

@@ -52,7 +52,7 @@ fieldset.borde legend {
 
 .css-vertical-text {
     position: absolute;
-    left: 0px;
+    left: 5px;
     bottom:5px;
     color:#0088CC;
     border:0px solid red;
@@ -64,13 +64,20 @@ fieldset.borde legend {
     display:block;
     width:20px;
     height:20px;
-    font-size:24px;
-    font-weight:normal;
+    font-size:25px;
+    font-family: 'Tulpen One',cursive;
+    font-weight: bold;
+    font-size: 35px;
+    text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);
+
     /*text-shadow: 0px 0px 1px #333;*/
+}
+.tituloGrande{
+    text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.5);
 }
 .linea{
     position: absolute;
-    left: 21px;
+    left: 30px;
     bottom:5px;
     width: 1px;
     border-left: 1px solid #0088CC;
@@ -94,4 +101,23 @@ th.asc a {
 
 th.desc a {
     background-image : url(../images/skin/sorted_desc.gif) !important;
+}
+
+.table-striped tbody tr:nth-child(odd) td,
+.table-striped tbody tr:nth-child(odd) th {
+    background-color: #ececec;
+}
+
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+    background-color: rgba(255, 172, 55,1);
+}
+
+.table th{
+    background: #49AFCD;
+    font-family:"Open Sans Condensed";
+    font-size: 15px;
+    font-weight: bolder;
+    color: white;
+    text-shadow: -2px 4px 2px rgba(0, 0, 0, 0.8);
 }

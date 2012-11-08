@@ -201,13 +201,13 @@ class BuscadorService {
                 sql+= " where "+extras.replaceFirst(" and ","").replaceFirst(" or ","")
         }
         println "sql " + sql  + orderby+" pars "+res
-        lista = dominio.findAll(sql+orderby, res,[max: 990])
+        lista = dominio.findAll(sql+orderby, res,[max: 200])
         lista.add(lista.size())
         if (lista.size() < 1 && tipo != "excluyente") {
             res = filtro("or", parametros, common, mapa, ignoreCase)
             sql ="from " + tabla+" "+res[0]
             res.remove(0)
-            lista = dominio.findAll(sql+orderby, res,[max: 990])
+            lista = dominio.findAll(sql+orderby, res,[max: 200])
             lista.add(lista.size())
         }
         return lista

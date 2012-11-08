@@ -92,15 +92,7 @@ $(".btnpq").livequery(function() {
     );
 });
 
-$(".ok").livequery(function() {
-    $(this).click(function() {
-        var idReg = $(this).attr("regId");
-        var txtReg = $(this).attr("txtReg");
-        $("#hidVal").val(idReg);
-        $("#txtValor").val(txtReg);
-        $(".buscador").dialog("close");
-    });
-});
+
 function cambiaOperador() {
     if ($("#campo option:selected").attr("tipo") == 'string') {
         $("#operador option").remove();

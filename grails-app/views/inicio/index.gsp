@@ -9,9 +9,11 @@
         margin: 0.25in;
     }
     .item{
-        width: 260px;height: 220px;float: left;margin: 8px;
-        /*border:1px solid #A6C9E2;*/
-        /*background-color: white;*/
+        width: 260px;height: 220px;float: left;margin: 4px;
+        font-family: 'open sans condensed';
+        border: none;
+
+
 
     }
     .imagen{
@@ -28,7 +30,7 @@
         margin: auto;
         margin: 8px;
         /*font-family: fantasy; */
-        font-size: 12px;
+        font-size: 16px;
 
         /*
                 font-weight: bolder;
@@ -40,7 +42,9 @@
         margin-left: 15px;
         margin-top: 20px;
         /*background-color: #317fbf; */
-        background-color: #716d66;
+        background-color: rgba(200,200,200,0.9);
+        border: none;
+
     }
     .desactivado{
         color: #bbc;
@@ -52,9 +56,9 @@
 </head>
 <body>
 <div class="dialog">
-    <div style="text-align: center;"><h1>Control de Proyectos, Contratación, Ejecución y Seguimiento de Obras del GADPP</h1></div>
-    <div class="body" style="width: 1020px;height: 540px;position: relative;">
-        <div style="width: 90%;height: 90%;float: left;padding-left: 60px;  margin-top: 0px;">
+    <div style="text-align: center;"><h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#0088CC;">Control de Proyectos, Contratación, Ejecución y Seguimiento de Obras del GADPP</h1></div>
+    <div class="body" style="width: 100%;height: 540px;position: relative;margin: auto;overflow-y: auto;">
+
             %{--<g:link  controller="proyecto" action="list" title="Gestión de proyectos">--}%
                 <div  class="ui-corner-all  item fuera">
                     <div  class="ui-corner-all ui-widget-content item">
@@ -124,9 +128,9 @@
             </div>
             %{--</g:link>--}%
 
-        </div>
+
     </div>
-    <div style="height: 25px;width: 800px;position:relative;bottom: 10px;left: 750px;text-align: left">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '0.1.0x')}</div>
+    <div style="height: 25px;width: 100%;text-align: right;float: right;">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '0.1.0x')}</div>
 </div>
 <script type="text/javascript">
     $(".fuera").hover(function(){

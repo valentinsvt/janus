@@ -37,6 +37,20 @@
         </table>
     </div>
     <script type="text/javascript">
+        <g:if test="${funcionJs}">
+        $(".ok").click(${funcionJs});
+        </g:if>
+        <g:else>
+        $(".ok").click(function() {
+            var idReg = $(this).attr("regId");
+            var txtReg = $(this).attr("txtReg");
+            $("#hidVal").val(idReg);
+            $("#txtValor").val(txtReg);
+            $(".buscador").dialog("close");
+
+        });
+        </g:else>
+
 
         function paginar(id,mostrar){
 

@@ -16,6 +16,10 @@
         <script src="${resource(dir: 'js/jquery/plugins', file: 'date.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/paginate/js', file: 'jquery.luz.paginate.js')}"></script>
 
+        %{--Fuentes--}%
+        <link href='${resource(dir:"font/open",file: "stylesheet.css" )}' rel='stylesheet' type='text/css'>
+        <link href='${resource(dir:"font/tulpen",file: "stylesheet.css" )}' rel='stylesheet' type='text/css'>
+
         <!-- Le styles -->
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
         <link href="${resource(dir: 'css', file: 'customButtons.css')}" rel="stylesheet">
@@ -60,12 +64,12 @@
         <g:layoutHead/>
     </head>
 
-    <body>
+    <body >
 
         <mn:menu title="${g.layoutTitle(default: g.message(code: 'default.app.name'))}"/>
 
 
-        <div class="container">
+        <div class="container principal" >
 
             <g:layoutBody/>
 
