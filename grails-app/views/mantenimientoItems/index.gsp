@@ -1,0 +1,799 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: luz
+  Date: 11/6/12
+  Time: 3:01 PM
+  To change this template use File | Settings | File Templates.
+--%>
+
+<%@ page contentType="text/html;charset=UTF-8" %>
+<html>
+    <head>
+        <meta name="layout" content="main">
+        <title>Registro y mantenimiento de items</title>
+
+        <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jquery.jstree.js')}"></script>
+        %{--<script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>--}%
+
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+
+        <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
+
+        <style type="text/css">
+        .btn-group {
+            margin-bottom : 10px;
+        }
+
+        #tree {
+            overflow-y : auto;
+            height     : 720px;
+            width      : 500px;
+            display    : none;
+            background : #CEE2E8;
+            border     : solid 2px #6AA8BA;
+        }
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="span12">
+            <g:if test="${flash.message}">
+                <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    ${flash.message}
+                </div>
+            </g:if>
+        </div>
+
+        <div class="span12 btn-group" data-toggle="buttons-radio">
+            <a href="#" id="1" class="btn btn-info toggle active">
+                <i class="icon-briefcase"></i>
+                Materiales <!--grpo--><!--sbgr -> Grupo--><!--dprt -> Subgrupo--><!--item-->
+            </a>
+            <a href="#" id="2" class="btn btn-info toggle">
+                <i class="icon-group"></i>
+                Mano de obra
+            </a>
+            <a href="#" id="3" class="btn btn-info toggle">
+                <i class="icon-truck"></i>
+                Equipos
+            </a>
+        </div>
+
+        <div id="loading" style="text-align:center;">
+            <img src="${resource(dir: 'images', file: 'spinner_24.gif')}" alt="Cargando..."/>
+
+            <p>Cargando... Por favor espere.</p>
+        </div>
+
+        <form class="form-search" style="width: 500px;">
+            <div class="input-append">
+                <input type="text" class="input-medium search-query" id="search"/>
+                <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
+            </div>
+            <span id="cantRes"></span>
+            <input type="button" class="btn pull-right" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
+        </form>
+
+        %{--<div class="btn-group">--}%
+        %{--<input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">--}%
+        %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
+        %{--</div>--}%
+
+        <div id="tree" class="ui-corner-all">
+
+        </div>
+
+        <div class="modal hide fade" id="modal-tree">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+
+                <h3 id="modalTitle"></h3>
+            </div>
+
+            <div class="modal-body" id="modalBody">
+            </div>
+
+            <div class="modal-footer" id="modalFooter">
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            var btn = $("<a href='#' class='btn' id='btnSearch'><i class='icon-zoom-in'></i> Buscar</a>");
+            var urlSp = "${resource(dir: 'images', file: 'spinner.gif')}";
+            var sp = $('<span class="add-on" id="btnSearch"><img src="' + urlSp + '"/></span>');
+
+            var current = "1";
+
+            var icons = {
+                edit   : "${resource(dir: 'images/tree', file: 'edit.png')}",
+                delete : "${resource(dir: 'images/tree', file: 'delete.gif')}",
+
+                grupo_material : "${resource(dir: 'images/tree', file: 'grupo_material.png')}",
+                grupo_manoObra : "${resource(dir: 'images/tree', file: 'grupo_manoObra.png')}",
+                grupo_equipo   : "${resource(dir: 'images/tree', file: 'grupo_equipo.png')}",
+
+                subgrupo_material : "${resource(dir: 'images/tree', file: 'subgrupo_material.png')}",
+                subgrupo_manoObra : "${resource(dir: 'images/tree', file: 'subgrupo_manoObra.png')}",
+                subgrupo_equipo   : "${resource(dir: 'images/tree', file: 'subgrupo_equipo.png')}",
+
+                departamento_material : "${resource(dir: 'images/tree', file: 'departamento_material.png')}",
+                departamento_manoObra : "${resource(dir: 'images/tree', file: 'departamento_manoObra.png')}",
+                departamento_equipo   : "${resource(dir: 'images/tree', file: 'departamento_equipo.png')}",
+
+                item_material : "${resource(dir: 'images/tree', file: 'item_material.png')}",
+                item_manoObra : "${resource(dir: 'images/tree', file: 'item_manoObra.png')}",
+                item_equipo   : "${resource(dir: 'images/tree', file: 'item_equipo.png')}"
+            };
+
+            function log(msg) {
+//                console.log(msg);
+                $.jGrowl(msg, {
+                    theme : 'manilla',
+                    speed : 'slow'
+                });
+            }
+
+            function createContextmenu(node) {
+                var parent = node.parent().parent();
+
+                var nodeStrId = node.attr("id");
+                var nodeText = $.trim(node.children("a").text());
+
+                var parentStrId = parent.attr("id");
+                var parentText = $.trim(parent.children("a").text());
+
+                var nodeRel = node.attr("rel");
+                var parts = nodeRel.split("_");
+                var nodeNivel = parts[0];
+                var nodeTipo = parts[1];
+
+                var parentRel = parent.attr("rel");
+                parts = nodeRel.split("_");
+                var parentNivel = parts[0];
+                var parentTipo = parts[1];
+
+                parts = nodeStrId.split("_");
+                var nodeId = parts[1];
+
+                parts = parentStrId.split("_");
+                var parentId = parts[1];
+
+                var nodeHasChildren = node.hasClass("hasChildren");
+
+                var menuItems = {}, lbl = "";
+
+                switch (nodeTipo) {
+                    case "material":
+                        lbl = "o material";
+                        break;
+                    case "manoObra":
+                        lbl = "a mano de obra";
+                        break;
+                    case "equipo":
+                        lbl = "o equipo";
+                        break;
+                }
+
+                switch (nodeNivel) {
+                    case "grupo":
+                        menuItems.crearHijo = {
+                            label            : "Nuevo grupo",
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons["subgrupo_" + nodeTipo],
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'formSg_ajax')}",
+                                    data    : {
+                                        grupo : nodeId
+                                    },
+                                    success : function (msg) {
+                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                        btnSave.click(function () {
+                                            if ($("#frmSave").valid()) {
+                                                btnSave.replaceWith(spinner);
+                                                var url = $("#frmSave").attr("action");
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : url,
+                                                    data    : $("#frmSave").serialize(),
+                                                    success : function (msg) {
+                                                        var parts = msg.split("_");
+                                                        if (parts[0] == "OK") {
+                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "first", {attr : {id : "sg_" + parts[2]}, data : parts[3]});
+                                                            $("#modal-tree").modal("hide");
+                                                            log("Grupo " + parts[3] + " creado correctamente");
+                                                        }
+                                                    }
+                                                });
+                                            }
+//                                            $("#frmSave").submit();
+                                            return false;
+                                        });
+
+                                        $("#modalTitle").html("Nuevo grupo");
+                                        $("#modalBody").html(msg);
+                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                        $("#modal-tree").modal("show");
+                                    }
+                                });
+                            }
+                        };
+                        break;
+                    case "subgrupo":
+                        menuItems.editar = {
+                            label            : "Editar",
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons.edit,
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'formSg_ajax')}",
+                                    data    : {
+                                        grupo : parentId,
+                                        id    : nodeId
+                                    },
+                                    success : function (msg) {
+                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                        btnSave.click(function () {
+                                            if ($("#frmSave").valid()) {
+                                                btnSave.replaceWith(spinner);
+                                                var url = $("#frmSave").attr("action");
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : url,
+                                                    data    : $("#frmSave").serialize(),
+                                                    success : function (msg) {
+                                                        var parts = msg.split("_");
+                                                        if (parts[0] == "OK") {
+                                                            $("#tree").jstree('rename_node', $("#" + nodeStrId), parts[3]);
+                                                            $("#modal-tree").modal("hide");
+                                                            log("Grupo " + parts[3] + " editado correctamente");
+                                                        }
+                                                    }
+                                                });
+                                            }
+//                                            $("#frmSave").submit();
+                                            return false;
+                                        });
+
+                                        $("#modalTitle").html("Nuevo grupo");
+                                        $("#modalBody").html(msg);
+                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                        $("#modal-tree").modal("show");
+                                    }
+                                });
+                            }
+                        };
+                        if (!nodeHasChildren) {
+                            menuItems.eliminar = {
+                                label            : "Eliminar",
+                                separator_before : false, // Insert a separator before the item
+                                separator_after  : false, // Insert a separator after the item
+                                icon             : icons.delete,
+                                action           : function (obj) {
+
+                                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                    var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+                                    $("#modalTitle").html("Eliminar grupo");
+                                    $("#modalBody").html("<p>Está seguro de querer eliminar este grupo?</p>");
+                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                    $("#modal-tree").modal("show");
+
+                                    btnSave.click(function () {
+                                        btnSave.replaceWith(spinner);
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : "${createLink(action:'deleteSg_ajax')}",
+                                            data    : {
+                                                id : nodeId
+                                            },
+                                            success : function (msg) {
+                                                var parts = msg.split("_");
+                                                if (parts[0] == "OK") {
+                                                    $("#tree").jstree('delete_node', $("#" + nodeStrId));
+                                                    $("#modal-tree").modal("hide");
+                                                    log("Grupo eliminado correctamente");
+                                                }
+                                            }
+                                        });
+//                                            $("#frmSave").submit();
+                                        return false;
+                                    });
+                                }
+                            };
+                        }
+                        menuItems.crearHermano = {
+                            label            : "Nuevo grupo",
+                            separator_before : true, // Insert a separator before the item
+                            separator_after  : true, // Insert a separator after the item
+                            icon             : icons[nodeRel],
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'formSg_ajax')}",
+                                    data    : {
+                                        tipo : parentId
+                                    },
+                                    success : function (msg) {
+                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                        btnSave.click(function () {
+                                            if ($("#frmSave").valid()) {
+                                                btnSave.replaceWith(spinner);
+                                                var url = $("#frmSave").attr("action");
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : url,
+                                                    data    : $("#frmSave").serialize(),
+                                                    success : function (msg) {
+                                                        var parts = msg.split("_");
+                                                        if (parts[0] == "OK") {
+                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "after", {attr : {id : "sg_" + parts[1]}, data : parts[2]});
+                                                            $("#modal-tree").modal("hide");
+                                                            log("Grupo " + parts[2] + " creado correctamente");
+                                                        }
+                                                    }
+                                                });
+                                            }
+//                                            $("#frmSave").submit();
+                                            return false;
+                                        });
+
+                                        $("#modalTitle").html("Nuevo grupo");
+                                        $("#modalBody").html(msg);
+                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                        $("#modal-tree").modal("show");
+                                    }
+                                });
+                            }
+                        };
+                        menuItems.crearHijo = {
+                            label            : "Nuevo subgrupo",
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons["departamento_" + nodeTipo],
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'formDp_ajax')}",
+                                    data    : {
+                                        subgrupo : nodeId
+                                    },
+                                    success : function (msg) {
+                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                        btnSave.click(function () {
+                                            if ($("#frmSave").valid()) {
+                                                btnSave.replaceWith(spinner);
+                                                var url = $("#frmSave").attr("action");
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : url,
+                                                    data    : $("#frmSave").serialize(),
+                                                    success : function (msg) {
+                                                        var parts = msg.split("_");
+                                                        if (parts[0] == "OK") {
+                                                            $('#tree').jstree("open_node", $("#" + nodeStrId));
+                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "first", {attr : {id : "dp_" + parts[2]}, data : parts[3]});
+                                                            $("#modal-tree").modal("hide");
+                                                            log("Subgrupo " + parts[3] + " creado correctamente");
+                                                        }
+                                                    }
+                                                });
+                                            }
+//                                            $("#frmSave").submit();
+                                            return false;
+                                        });
+
+                                        $("#modalTitle").html("Nuevo subgrupo");
+                                        $("#modalBody").html(msg);
+                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                        $("#modal-tree").modal("show");
+                                    }
+                                });
+                            }
+                        };
+                        break;
+                    case "departamento":
+                        menuItems.editar = {
+                            label            : "Editar",
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons.edit,
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'formDp_ajax')}",
+                                    data    : {
+                                        subgrupo : parentId,
+                                        id       : nodeId
+                                    },
+                                    success : function (msg) {
+                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                        btnSave.click(function () {
+                                            if ($("#frmSave").valid()) {
+                                                btnSave.replaceWith(spinner);
+                                                var url = $("#frmSave").attr("action");
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : url,
+                                                    data    : $("#frmSave").serialize(),
+                                                    success : function (msg) {
+                                                        var parts = msg.split("_");
+                                                        if (parts[0] == "OK") {
+                                                            $("#tree").jstree('rename_node', $("#" + nodeStrId), parts[3]);
+                                                            $("#modal-tree").modal("hide");
+                                                            log("Subgrupo " + parts[3] + " editado correctamente");
+                                                        }
+                                                    }
+                                                });
+                                            }
+//                                            $("#frmSave").submit();
+                                            return false;
+                                        });
+
+                                        $("#modalTitle").html("Editar subgrupo");
+                                        $("#modalBody").html(msg);
+                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                        $("#modal-tree").modal("show");
+                                    }
+                                });
+                            }
+                        };
+                        if (!nodeHasChildren) {
+                            menuItems.eliminar = {
+                                label            : "Eliminar",
+                                separator_before : false, // Insert a separator before the item
+                                separator_after  : false, // Insert a separator after the item
+                                icon             : icons.delete,
+                                action           : function (obj) {
+                                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                    var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+                                    $("#modalTitle").html("Eliminar subgrupo");
+                                    $("#modalBody").html("<p>Está seguro de querer eliminar este subgrupo?</p>");
+                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                    $("#modal-tree").modal("show");
+
+                                    btnSave.click(function () {
+                                        btnSave.replaceWith(spinner);
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : "${createLink(action:'deleteDp_ajax')}",
+                                            data    : {
+                                                id : nodeId
+                                            },
+                                            success : function (msg) {
+                                                var parts = msg.split("_");
+                                                if (parts[0] == "OK") {
+                                                    $("#tree").jstree('delete_node', $("#" + nodeStrId));
+                                                    $("#modal-tree").modal("hide");
+                                                    log("Subgrupo eliminado correctamente");
+                                                }
+                                            }
+                                        });
+//                                            $("#frmSave").submit();
+                                        return false;
+                                    });
+                                }
+                            };
+                        }
+                        menuItems.crearHermano = {
+                            label            : "Nuevo subgrupo",
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : true, // Insert a separator after the item
+                            icon             : icons[nodeRel],
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'formDp_ajax')}",
+                                    data    : {
+                                        subgrupo : parentId
+                                    },
+                                    success : function (msg) {
+                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                        btnSave.click(function () {
+                                            if ($("#frmSave").valid()) {
+                                                btnSave.replaceWith(spinner);
+                                                var url = $("#frmSave").attr("action");
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : url,
+                                                    data    : $("#frmSave").serialize(),
+                                                    success : function (msg) {
+                                                        var parts = msg.split("_");
+                                                        if (parts[0] == "OK") {
+                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "after", {attr : {id : "dp_" + parts[2]}, data : parts[3]});
+                                                            $("#modal-tree").modal("hide");
+                                                            log("Subgrupo " + parts[3] + " creado correctamente");
+                                                        }
+                                                    }
+                                                });
+                                            }
+//                                            $("#frmSave").submit();
+                                            return false;
+                                        });
+
+                                        $("#modalTitle").html("Nuevo subgrupo");
+                                        $("#modalBody").html(msg);
+                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                        $("#modal-tree").modal("show");
+                                    }
+                                });
+                            }
+                        };
+                        menuItems.crearHijo = {
+                            label            : "Nuev" + lbl,
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons["item_" + nodeTipo],
+                            action           : function (obj) {
+
+                            }
+                        };
+                        break;
+                    case "item":
+                        menuItems.crearHermano = {
+                            label            : "Nuev" + lbl,
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons[nodeRel],
+                            action           : function (obj) {
+
+                            }
+                        };
+                        break;
+                }
+
+                return menuItems;
+            }
+
+            function initTree(tipo) {
+                var id, rel, label;
+                switch (tipo) {
+                    case "1":
+                        id = "materiales_1";
+                        rel = "grupo_material";
+                        label = "Materiales";
+                        break;
+                    case "2":
+                        id = "manoObra_2";
+                        rel = "grupo_manoObra";
+                        label = "Mano de obra";
+                        break;
+                    case "3":
+                        id = "equipos_3";
+                        rel = "grupo_equipo";
+                        label = "Equipos";
+                        break;
+                }
+                $("#tree").bind("loaded.jstree",
+                        function (event, data) {
+                            $("#loading").hide();
+                            $("#tree").show();
+                        }).jstree({
+                            "core"        : {
+                                "initially_open" : [ id ]
+                            },
+                            "plugins"     : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "crrm"/*, "wholerow"*/],
+                            "html_data"   : {
+                                "data" : "<ul type='root'><li id='" + id + "' class='root hasChildren jstree-closed' rel='" + rel + "' ><a href='#' class='label_arbol'>" + label + "</a></ul>",
+                                "ajax" : {
+                                    "url"   : "${createLink(action: 'loadTreePart')}",
+                                    "data"  : function (n) {
+                                        var obj = $(n);
+                                        var id = obj.attr("id");
+                                        var parts = id.split("_");
+                                        id = 0;
+                                        if (parts.length > 1) {
+                                            id = parts[1]
+                                        }
+                                        var tipo = obj.attr("rel");
+                                        return {id : id, tipo : tipo}
+                                    },
+                                    success : function (data) {
+
+                                    },
+                                    error   : function (data) {
+                                        ////console.log("error");
+                                        ////console.log(data);
+                                    }
+                                }
+                            },
+                            "types"       : {
+                                "valid_children" : [ "grupo_material", "grupo_manoObra", "grupo_equipo"  ],
+                                "types"          : {
+                                    "grupo_material"        : {
+                                        "icon"           : {
+                                            "image" : icons.grupo_material
+                                        },
+                                        "valid_children" : [ "subgrupo_material" ]
+                                    },
+                                    "subgrupo_material"     : {
+                                        "icon"           : {
+                                            "image" : icons.subgrupo_material
+                                        },
+                                        "valid_children" : [ "departamento_material" ]
+                                    },
+                                    "departamento_material" : {
+                                        "icon"           : {
+                                            "image" : icons.departamento_material
+                                        },
+                                        "valid_children" : [ "item_material" ]
+                                    },
+                                    "item_material"         : {
+                                        "icon"           : {
+                                            "image" : icons.item_material
+                                        },
+                                        "valid_children" : [ "" ]
+                                    },
+
+                                    "grupo_manoObra"        : {
+                                        "icon"           : {
+                                            "image" : icons.grupo_manoObra
+                                        },
+                                        "valid_children" : [ "subgrupo_manoObra" ]
+                                    },
+                                    "subgrupo_manoObra"     : {
+                                        "icon"           : {
+                                            "image" : icons.subgrupo_manoObra
+                                        },
+                                        "valid_children" : [ "departamento_manoObra" ]
+                                    },
+                                    "departamento_manoObra" : {
+                                        "icon"           : {
+                                            "image" : icons.departamento_manoObra
+                                        },
+                                        "valid_children" : [ "item_manoObra" ]
+                                    },
+                                    "item_manoObra"         : {
+                                        "icon"           : {
+                                            "image" : icons.item_manoObra
+                                        },
+                                        "valid_children" : [ "" ]
+                                    },
+
+                                    "grupo_equipo"        : {
+                                        "icon"           : {
+                                            "image" : icons.grupo_equipo
+                                        },
+                                        "valid_children" : [ "subgrupo_equipo" ]
+                                    },
+                                    "subgrupo_equipo"     : {
+                                        "icon"           : {
+                                            "image" : icons.subgrupo_equipo
+                                        },
+                                        "valid_children" : [ "departamento_equipo" ]
+                                    },
+                                    "departamento_equipo" : {
+                                        "icon"           : {
+                                            "image" : icons.departamento_equipo
+                                        },
+                                        "valid_children" : [ "item_equipo" ]
+                                    },
+                                    "item_equipo"         : {
+                                        "icon"           : {
+                                            "image" : icons.item_equipo
+                                        },
+                                        "valid_children" : [ "" ]
+                                    }
+                                }
+                            },
+                            "themes"      : {
+                                "theme" : "default"
+                            },
+                            "search"      : {
+                                "case_insensitive" : true,
+                                "ajax"             : {
+                                    "url"    : "${createLink(action:'searchTree_ajax')}",
+                                    "data"   : function () {
+                                        return { search : this.data.search.str, tipo : current }
+                                    },
+                                    complete : function () {
+                                        $("#btnSearch").replaceWith(btn);
+                                        btn.click(function () {
+                                            doSearch();
+                                        });
+                                    }
+                                }
+                            },
+                            "contextmenu" : {
+                                select_node : true,
+                                "items"     : createContextmenu
+                            }, //contextmenu
+                            "ui"          : {
+                                "select_limit" : 1
+                            }
+                        }).bind("search.jstree", function (e, data) {
+                            var cant = data.rslt.nodes.length;
+                            var search = data.rslt.str;
+                            $("#cantRes").html("<b>" + cant + "</b> resultado" + (cant == 1 ? "" : "s"));
+
+                            var container = $('#tree'), scrollTo = $('.jstree-search').first();
+                            container.animate({
+                                scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
+                            }, 2000);
+                        });
+            }
+
+            function doSearch() {
+                var val = $.trim($("#search").val());
+                if (val != "") {
+                    $("#btnSearch").replaceWith(sp);
+                    $("#tree").jstree("search", val);
+                }
+            }
+
+            $(function () {
+                $("#search").val("");
+
+                $(".toggle").click(function () {
+                    var tipo = $(this).attr("id");
+                    if (tipo != current) {
+//                        console.log(tipo);
+                        current = tipo;
+                        initTree(current);
+                    }
+                });
+
+                initTree("1");
+
+                $("#btnSearch").click(function () {
+                    doSearch();
+                });
+                $("#search").keyup(function (ev) {
+                    if (ev.keyCode == 13) {
+                        doSearch();
+                    }
+                });
+
+                var cache = {};
+                $("#search").autocomplete({
+                    minLength : 3,
+                    source    : function (request, response) {
+                        var term = request.term;
+                        if (term in cache) {
+                            response(cache[ term ]);
+                            return;
+                        }
+
+                        $.ajax({
+                            type     : "POST",
+                            dataType : 'json',
+                            url      : "${createLink(action: 'search_ajax')}",
+                            data     : {
+                                search : term,
+                                tipo   : current
+                            },
+                            success  : function (data) {
+                                cache[ term ] = data;
+                                response(data);
+                            }
+                        });
+
+                    }
+                });
+
+            });
+        </script>
+
+    </body>
+</html>

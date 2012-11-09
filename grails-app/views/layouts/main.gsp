@@ -17,8 +17,8 @@
         <script src="${resource(dir: 'js/jquery/plugins/paginate/js', file: 'jquery.luz.paginate.js')}"></script>
 
         %{--Fuentes--}%
-        <link href='${resource(dir:"font/open",file: "stylesheet.css" )}' rel='stylesheet' type='text/css'>
-        <link href='${resource(dir:"font/tulpen",file: "stylesheet.css" )}' rel='stylesheet' type='text/css'>
+        <link href='${resource(dir: "font/open", file: "stylesheet.css")}' rel='stylesheet' type='text/css'>
+        <link href='${resource(dir: "font/tulpen", file: "stylesheet.css")}' rel='stylesheet' type='text/css'>
 
         <!-- Le styles -->
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
@@ -64,12 +64,12 @@
         <g:layoutHead/>
     </head>
 
-    <body >
+    <body>
 
         <mn:menu title="${g.layoutTitle(default: g.message(code: 'default.app.name'))}"/>
 
 
-        <div class="container principal" >
+        <div class="container principal">
 
             <g:layoutBody/>
 
@@ -80,6 +80,8 @@
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
+            var url2 = "${resource(dir:'images', file:'spinner.gif')}";
+            var spinner2 = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
             var ot = document.title;
 
