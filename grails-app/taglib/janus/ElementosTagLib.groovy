@@ -143,6 +143,9 @@ class ElementosTagLib {
         def clase = attrs.remove("class")
         def name = attrs.remove("name")
         def id = attrs.id ? attrs.remove("id") : name
+        if(id.contains(".")) {
+            id=id.replaceAll("\\.", "_")
+        }
 
         def value = attrs.remove("value")
         if (value.toString() == 'none') {

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>Proyectos de Obras</title>
+    <title>Sistema Janus</title>
     <meta name="layout" content="main"/>
     <style type="text/css">
     @page {

@@ -59,7 +59,7 @@ class MenuTagLib {
         html += '<span class="icon-bar"></span>'
         html += '<span class="icon-bar"></span>'
         html += '</a>'
-        html += '<a class="brand" href="#" style="font-size:11px">'
+        html += '<a class="brand" href="#" style="font-size:22px;font-family: \'Tulpen One\', cursive;font-weight: bold;color:#FFAC37; ;">'
         html += attrs.title
         html += '</a>'
 

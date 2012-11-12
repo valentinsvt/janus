@@ -9,8 +9,10 @@
             </thead>
             <tbody id="paginate">
             <g:each var="reg" in="${lista}" status="i">
+                <g:set var="propiedades" value=""></g:set>
                 <tr>
                     <g:each in="${listaCampos}" var="nombre" status="j">
+                        <g:set var="propiedades" value="${propiedades+=" prop_"+nombre+"='"+reg.properties[nombre]+"'"}"></g:set>
                         <g:if test="${funciones}">
                             <g:if test="${funciones[j]}">
                                 <g:set var="prop" value="${bsc.operacion(propiedad:nombre,funcion:funciones[j],registro:reg)}"></g:set>
@@ -27,7 +29,7 @@
                         </td>
                     </g:each>
                     <td style="text-align: right;width: 40px">
-                        <div  style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" >
+                        <div  style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}"  ${propiedades}>
                             <span class="ui-icon ui-icon-circle-check"></span>
                         </div>
                     </td>
