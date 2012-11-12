@@ -13,7 +13,7 @@ class Item implements Serializable {
     String padre
     String inec
     String transporte
-    double rendimiento=0
+    double rendimiento = 0
     String tipo
     String campo
     String registro

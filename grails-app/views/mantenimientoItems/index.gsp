@@ -26,13 +26,22 @@
             margin-bottom : 10px;
         }
 
-        #tree {
+        #tree, #info {
+            float      : left;
             overflow-y : auto;
             height     : 720px;
             width      : 500px;
-            display    : none;
             background : #CEE2E8;
             border     : solid 2px #6AA8BA;
+        }
+
+        #info {
+            margin-left  : 15px;
+            width        : 617px;
+            height       : 690px;
+            border-color : #DC6816;
+            background   : #F2DFD2;
+            padding      : 15px;
         }
         </style>
 
@@ -70,26 +79,29 @@
             <p>Cargando... Por favor espere.</p>
         </div>
 
-        <form class="form-search" style="width: 500px;">
-            <div class="input-append">
-                <input type="text" class="input-medium search-query" id="search"/>
-                <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
-            </div>
-            <span id="cantRes"></span>
-            <input type="button" class="btn pull-right" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
-        </form>
 
-        %{--<div class="btn-group">--}%
-        %{--<input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">--}%
-        %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
-        %{--</div>--}%
+        <div id="treeArea" class="hide">
+            <form class="form-search" style="width: 500px;">
+                <div class="input-append">
+                    <input type="text" class="input-medium search-query" id="search"/>
+                    <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
+                </div>
+                <span id="cantRes"></span>
+                <input type="button" class="btn pull-right" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
+            </form>
 
-        <div id="tree" class="ui-corner-all">
+            %{--<div class="btn-group">--}%
+            %{--<input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">--}%
+            %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
+            %{--</div>--}%
 
+            <div id="tree" class="ui-corner-all"></div>
+
+            <div id="info" class="ui-corner-all"></div>
         </div>
 
         <div class="modal hide fade" id="modal-tree">
-            <div class="modal-header">
+            <div class="modal-header" id="modalHeader">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 
                 <h3 id="modalTitle"></h3>
@@ -132,11 +144,111 @@
             };
 
             function log(msg) {
-//                console.log(msg);
                 $.jGrowl(msg, {
-                    theme : 'manilla',
                     speed : 'slow'
                 });
+            }
+
+            function createUpdate(params) {
+                var obj = {
+                    label            : params.label,
+                    separator_before : params.sepBefore, // Insert a separator before the item
+                    separator_after  : params.sepAfter, // Insert a separator after the item
+                    icon             : params.icon,
+                    action           : function (obj) {
+                        $.ajax({
+                            type    : "POST",
+                            url     : params.url,
+                            data    : params.data,
+                            success : function (msg) {
+                                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                btnSave.click(function () {
+                                    if ($("#frmSave").valid()) {
+                                        btnSave.replaceWith(spinner);
+                                        var url = $("#frmSave").attr("action");
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : url,
+                                            data    : $("#frmSave").serialize(),
+                                            success : function (msg) {
+                                                var parts = msg.split("_");
+                                                if (parts[0] == "OK") {
+                                                    if (params.action == "create") {
+                                                        if (params.open) {
+                                                            $("#" + params.nodeStrId).removeClass("jstree-leaf").addClass("jstree-closed");
+                                                            $('#tree').jstree("open_node", $("#" + params.nodeStrId));
+                                                        }
+                                                        $('#tree').jstree("create_node", $("#" + params.nodeStrId), params.where, {attr : {id : params.tipo + "_" + parts[2]}, data : parts[3]});
+                                                        $("#modal-tree").modal("hide");
+                                                        log(params.log + parts[3] + " creado correctamente");
+                                                    } else if (params.action == "update") {
+                                                        $("#tree").jstree('rename_node', $("#" + params.nodeStrId), parts[3]);
+                                                        $("#modal-tree").modal("hide");
+                                                        log(params.log + parts[3] + " editado correctamente");
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+//                                            $("#frmSave").submit();
+                                    return false;
+                                });
+                                if (params.action == "create") {
+                                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                                } else if (params.action == "update") {
+                                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
+                                }
+                                $("#modalTitle").html(params.title);
+                                $("#modalBody").html(msg);
+                                $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                $("#modal-tree").modal("show");
+                            }
+                        });
+                    }
+                };
+                return obj;
+            }
+
+            function remove(params) {
+                var obj = {
+                    label            : params.label,
+                    separator_before : params.sepBefore, // Insert a separator before the item
+                    separator_after  : params.sepAfter, // Insert a separator after the item
+                    icon             : params.icon,
+                    action           : function (obj) {
+
+                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                        var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+                        console.log($("#modalHeader"));
+                        $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
+                        $("#modalTitle").html(params.title);
+                        $("#modalBody").html("<p>Está seguro de querer eliminar este " + params.confirm + "?</p>");
+                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                        $("#modal-tree").modal("show");
+
+                        btnSave.click(function () {
+                            btnSave.replaceWith(spinner);
+                            $.ajax({
+                                type    : "POST",
+                                url     : params.url,
+                                data    : params.data,
+                                success : function (msg) {
+                                    var parts = msg.split("_");
+                                    if (parts[0] == "OK") {
+                                        $("#tree").jstree('delete_node', $("#" + params.nodeStrId));
+                                        $("#modal-tree").modal("hide");
+                                        log(params.log + " eliminado correctamente");
+                                    }
+                                }
+                            });
+//                                            $("#frmSave").submit();
+                            return false;
+                        });
+                    }
+                };
+                return obj;
             }
 
             function createContextmenu(node) {
@@ -166,400 +278,229 @@
 
                 var nodeHasChildren = node.hasClass("hasChildren");
 
-                var menuItems = {}, lbl = "";
+                var menuItems = {}, lbl = "", item = "";
 
                 switch (nodeTipo) {
                     case "material":
                         lbl = "o material";
+                        item = "Material";
                         break;
                     case "manoObra":
                         lbl = "a mano de obra";
+                        item = "Mano de obra";
                         break;
                     case "equipo":
                         lbl = "o equipo";
+                        item = "Equipo";
                         break;
                 }
 
                 switch (nodeNivel) {
                     case "grupo":
-                        menuItems.crearHijo = {
-                            label            : "Nuevo grupo",
-                            separator_before : false, // Insert a separator before the item
-                            separator_after  : false, // Insert a separator after the item
-                            icon             : icons["subgrupo_" + nodeTipo],
-                            action           : function (obj) {
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(action:'formSg_ajax')}",
-                                    data    : {
-                                        grupo : nodeId
-                                    },
-                                    success : function (msg) {
-                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
-
-                                        btnSave.click(function () {
-                                            if ($("#frmSave").valid()) {
-                                                btnSave.replaceWith(spinner);
-                                                var url = $("#frmSave").attr("action");
-                                                $.ajax({
-                                                    type    : "POST",
-                                                    url     : url,
-                                                    data    : $("#frmSave").serialize(),
-                                                    success : function (msg) {
-                                                        var parts = msg.split("_");
-                                                        if (parts[0] == "OK") {
-                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "first", {attr : {id : "sg_" + parts[2]}, data : parts[3]});
-                                                            $("#modal-tree").modal("hide");
-                                                            log("Grupo " + parts[3] + " creado correctamente");
-                                                        }
-                                                    }
-                                                });
-                                            }
-//                                            $("#frmSave").submit();
-                                            return false;
-                                        });
-
-                                        $("#modalTitle").html("Nuevo grupo");
-                                        $("#modalBody").html(msg);
-                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                        $("#modal-tree").modal("show");
-                                    }
-                                });
-                            }
-                        };
+                        menuItems.crearHijo = createUpdate({
+                            action    : "create",
+                            label     : "Nuevo grupo",
+                            icon      : icons["subgrupo_" + nodeTipo],
+                            sepBefore : false,
+                            sepAfter  : false,
+                            url       : "${createLink(action:'formSg_ajax')}",
+                            data      : {
+                                grupo : nodeId
+                            },
+                            open      : false,
+                            nodeStrId : nodeStrId,
+                            where     : "first",
+                            tipo      : "sg",
+                            log       : "Grupo ",
+                            title     : "Nuevo grupo"
+                        });
                         break;
                     case "subgrupo":
-                        menuItems.editar = {
-                            label            : "Editar",
-                            separator_before : false, // Insert a separator before the item
-                            separator_after  : false, // Insert a separator after the item
-                            icon             : icons.edit,
-                            action           : function (obj) {
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(action:'formSg_ajax')}",
-                                    data    : {
-                                        grupo : parentId,
-                                        id    : nodeId
-                                    },
-                                    success : function (msg) {
-                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
-
-                                        btnSave.click(function () {
-                                            if ($("#frmSave").valid()) {
-                                                btnSave.replaceWith(spinner);
-                                                var url = $("#frmSave").attr("action");
-                                                $.ajax({
-                                                    type    : "POST",
-                                                    url     : url,
-                                                    data    : $("#frmSave").serialize(),
-                                                    success : function (msg) {
-                                                        var parts = msg.split("_");
-                                                        if (parts[0] == "OK") {
-                                                            $("#tree").jstree('rename_node', $("#" + nodeStrId), parts[3]);
-                                                            $("#modal-tree").modal("hide");
-                                                            log("Grupo " + parts[3] + " editado correctamente");
-                                                        }
-                                                    }
-                                                });
-                                            }
-//                                            $("#frmSave").submit();
-                                            return false;
-                                        });
-
-                                        $("#modalTitle").html("Nuevo grupo");
-                                        $("#modalBody").html(msg);
-                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                        $("#modal-tree").modal("show");
-                                    }
-                                });
-                            }
-                        };
+                        menuItems.editar = createUpdate({
+                            action    : "update",
+                            label     : "Editar grupo",
+                            icon      : icons.edit,
+                            sepBefore : false,
+                            sepAfter  : false,
+                            url       : "${createLink(action:'formSg_ajax')}",
+                            data      : {
+                                grupo : parentId,
+                                id    : nodeId
+                            },
+                            open      : false,
+                            nodeStrId : nodeStrId,
+                            log       : "Grupo ",
+                            title     : "Editar grupo"
+                        });
                         if (!nodeHasChildren) {
-                            menuItems.eliminar = {
-                                label            : "Eliminar",
-                                separator_before : false, // Insert a separator before the item
-                                separator_after  : false, // Insert a separator after the item
-                                icon             : icons.delete,
-                                action           : function (obj) {
-
-                                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                    var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
-                                    $("#modalTitle").html("Eliminar grupo");
-                                    $("#modalBody").html("<p>Está seguro de querer eliminar este grupo?</p>");
-                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                    $("#modal-tree").modal("show");
-
-                                    btnSave.click(function () {
-                                        btnSave.replaceWith(spinner);
-                                        $.ajax({
-                                            type    : "POST",
-                                            url     : "${createLink(action:'deleteSg_ajax')}",
-                                            data    : {
-                                                id : nodeId
-                                            },
-                                            success : function (msg) {
-                                                var parts = msg.split("_");
-                                                if (parts[0] == "OK") {
-                                                    $("#tree").jstree('delete_node', $("#" + nodeStrId));
-                                                    $("#modal-tree").modal("hide");
-                                                    log("Grupo eliminado correctamente");
-                                                }
-                                            }
-                                        });
-//                                            $("#frmSave").submit();
-                                        return false;
-                                    });
-                                }
-                            };
+                            menuItems.eliminar = remove({
+                                label     : "Eliminar grupo",
+                                sepBefore : false,
+                                sepAfter  : false,
+                                icon      : icons.delete,
+                                title     : "Eliminar grupo",
+                                confirm   : "grupo",
+                                url       : "${createLink(action:'deleteSg_ajax')}",
+                                data      : {
+                                    id : nodeId
+                                },
+                                nodeStrId : nodeStrId,
+                                log       : "Grupo "
+                            });
                         }
-                        menuItems.crearHermano = {
-                            label            : "Nuevo grupo",
-                            separator_before : true, // Insert a separator before the item
-                            separator_after  : true, // Insert a separator after the item
-                            icon             : icons[nodeRel],
-                            action           : function (obj) {
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(action:'formSg_ajax')}",
-                                    data    : {
-                                        tipo : parentId
-                                    },
-                                    success : function (msg) {
-                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
-
-                                        btnSave.click(function () {
-                                            if ($("#frmSave").valid()) {
-                                                btnSave.replaceWith(spinner);
-                                                var url = $("#frmSave").attr("action");
-                                                $.ajax({
-                                                    type    : "POST",
-                                                    url     : url,
-                                                    data    : $("#frmSave").serialize(),
-                                                    success : function (msg) {
-                                                        var parts = msg.split("_");
-                                                        if (parts[0] == "OK") {
-                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "after", {attr : {id : "sg_" + parts[1]}, data : parts[2]});
-                                                            $("#modal-tree").modal("hide");
-                                                            log("Grupo " + parts[2] + " creado correctamente");
-                                                        }
-                                                    }
-                                                });
-                                            }
-//                                            $("#frmSave").submit();
-                                            return false;
-                                        });
-
-                                        $("#modalTitle").html("Nuevo grupo");
-                                        $("#modalBody").html(msg);
-                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                        $("#modal-tree").modal("show");
-                                    }
-                                });
-                            }
-                        };
-                        menuItems.crearHijo = {
-                            label            : "Nuevo subgrupo",
-                            separator_before : false, // Insert a separator before the item
-                            separator_after  : false, // Insert a separator after the item
-                            icon             : icons["departamento_" + nodeTipo],
-                            action           : function (obj) {
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(action:'formDp_ajax')}",
-                                    data    : {
-                                        subgrupo : nodeId
-                                    },
-                                    success : function (msg) {
-                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
-
-                                        btnSave.click(function () {
-                                            if ($("#frmSave").valid()) {
-                                                btnSave.replaceWith(spinner);
-                                                var url = $("#frmSave").attr("action");
-                                                $.ajax({
-                                                    type    : "POST",
-                                                    url     : url,
-                                                    data    : $("#frmSave").serialize(),
-                                                    success : function (msg) {
-                                                        var parts = msg.split("_");
-                                                        if (parts[0] == "OK") {
-                                                            $('#tree').jstree("open_node", $("#" + nodeStrId));
-                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "first", {attr : {id : "dp_" + parts[2]}, data : parts[3]});
-                                                            $("#modal-tree").modal("hide");
-                                                            log("Subgrupo " + parts[3] + " creado correctamente");
-                                                        }
-                                                    }
-                                                });
-                                            }
-//                                            $("#frmSave").submit();
-                                            return false;
-                                        });
-
-                                        $("#modalTitle").html("Nuevo subgrupo");
-                                        $("#modalBody").html(msg);
-                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                        $("#modal-tree").modal("show");
-                                    }
-                                });
-                            }
-                        };
+                        menuItems.crearHermano = createUpdate({
+                            action    : "create",
+                            label     : "Nuevo grupo",
+                            icon      : icons[nodeRel],
+                            sepBefore : true,
+                            sepAfter  : true,
+                            url       : "${createLink(action:'formSg_ajax')}",
+                            data      : {
+                                grupo : parentId
+                            },
+                            open      : false,
+                            nodeStrId : nodeStrId,
+                            where     : "after",
+                            tipo      : "sg",
+                            log       : "Grupo ",
+                            title     : "Nuevo grupo"
+                        });
+                        menuItems.crearHijo = createUpdate({
+                            action    : "create",
+                            label     : "Nuevo subgrupo",
+                            sepBefore : false,
+                            sepAfter  : false,
+                            icon      : icons["departamento_" + nodeTipo],
+                            url       : "${createLink(action:'formDp_ajax')}",
+                            data      : {
+                                subgrupo : nodeId
+                            },
+                            open      : true,
+                            nodeStrId : nodeStrId,
+                            where     : "first",
+                            tipo      : "dp",
+                            log       : "Subgrupo ",
+                            title     : "Nuevo subgrupo"
+                        });
                         break;
                     case "departamento":
-                        menuItems.editar = {
-                            label            : "Editar",
-                            separator_before : false, // Insert a separator before the item
-                            separator_after  : false, // Insert a separator after the item
-                            icon             : icons.edit,
-                            action           : function (obj) {
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(action:'formDp_ajax')}",
-                                    data    : {
-                                        subgrupo : parentId,
-                                        id       : nodeId
-                                    },
-                                    success : function (msg) {
-                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
-
-                                        btnSave.click(function () {
-                                            if ($("#frmSave").valid()) {
-                                                btnSave.replaceWith(spinner);
-                                                var url = $("#frmSave").attr("action");
-                                                $.ajax({
-                                                    type    : "POST",
-                                                    url     : url,
-                                                    data    : $("#frmSave").serialize(),
-                                                    success : function (msg) {
-                                                        var parts = msg.split("_");
-                                                        if (parts[0] == "OK") {
-                                                            $("#tree").jstree('rename_node', $("#" + nodeStrId), parts[3]);
-                                                            $("#modal-tree").modal("hide");
-                                                            log("Subgrupo " + parts[3] + " editado correctamente");
-                                                        }
-                                                    }
-                                                });
-                                            }
-//                                            $("#frmSave").submit();
-                                            return false;
-                                        });
-
-                                        $("#modalTitle").html("Editar subgrupo");
-                                        $("#modalBody").html(msg);
-                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                        $("#modal-tree").modal("show");
-                                    }
-                                });
-                            }
-                        };
+                        menuItems.editar = createUpdate({
+                            action    : "update",
+                            label     : "Editar subgrupo",
+                            icon      : icons.edit,
+                            sepBefore : false,
+                            sepAfter  : false,
+                            url       : "${createLink(action:'formDp_ajax')}",
+                            data      : {
+                                subgrupo : parentId,
+                                id       : nodeId
+                            },
+                            open      : false,
+                            nodeStrId : nodeStrId,
+                            log       : "Subgrupo ",
+                            title     : "Editar subgrupo"
+                        });
                         if (!nodeHasChildren) {
-                            menuItems.eliminar = {
-                                label            : "Eliminar",
-                                separator_before : false, // Insert a separator before the item
-                                separator_after  : false, // Insert a separator after the item
-                                icon             : icons.delete,
-                                action           : function (obj) {
-                                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                    var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
-                                    $("#modalTitle").html("Eliminar subgrupo");
-                                    $("#modalBody").html("<p>Está seguro de querer eliminar este subgrupo?</p>");
-                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                    $("#modal-tree").modal("show");
-
-                                    btnSave.click(function () {
-                                        btnSave.replaceWith(spinner);
-                                        $.ajax({
-                                            type    : "POST",
-                                            url     : "${createLink(action:'deleteDp_ajax')}",
-                                            data    : {
-                                                id : nodeId
-                                            },
-                                            success : function (msg) {
-                                                var parts = msg.split("_");
-                                                if (parts[0] == "OK") {
-                                                    $("#tree").jstree('delete_node', $("#" + nodeStrId));
-                                                    $("#modal-tree").modal("hide");
-                                                    log("Subgrupo eliminado correctamente");
-                                                }
-                                            }
-                                        });
-//                                            $("#frmSave").submit();
-                                        return false;
-                                    });
-                                }
-                            };
+                            menuItems.eliminar = remove({
+                                label     : "Eliminar subgrupo",
+                                sepBefore : false,
+                                sepAfter  : false,
+                                icon      : icons.delete,
+                                title     : "Eliminar subgrupo",
+                                confirm   : "subgrupo",
+                                url       : "${createLink(action:'deleteDp_ajax')}",
+                                data      : {
+                                    id : nodeId
+                                },
+                                nodeStrId : nodeStrId,
+                                log       : "Subgrupo "
+                            });
                         }
-                        menuItems.crearHermano = {
-                            label            : "Nuevo subgrupo",
-                            separator_before : false, // Insert a separator before the item
-                            separator_after  : true, // Insert a separator after the item
-                            icon             : icons[nodeRel],
-                            action           : function (obj) {
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(action:'formDp_ajax')}",
-                                    data    : {
-                                        subgrupo : parentId
-                                    },
-                                    success : function (msg) {
-                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
-
-                                        btnSave.click(function () {
-                                            if ($("#frmSave").valid()) {
-                                                btnSave.replaceWith(spinner);
-                                                var url = $("#frmSave").attr("action");
-                                                $.ajax({
-                                                    type    : "POST",
-                                                    url     : url,
-                                                    data    : $("#frmSave").serialize(),
-                                                    success : function (msg) {
-                                                        var parts = msg.split("_");
-                                                        if (parts[0] == "OK") {
-                                                            $('#tree').jstree("create_node", $("#" + nodeStrId), "after", {attr : {id : "dp_" + parts[2]}, data : parts[3]});
-                                                            $("#modal-tree").modal("hide");
-                                                            log("Subgrupo " + parts[3] + " creado correctamente");
-                                                        }
-                                                    }
-                                                });
-                                            }
-//                                            $("#frmSave").submit();
-                                            return false;
-                                        });
-
-                                        $("#modalTitle").html("Nuevo subgrupo");
-                                        $("#modalBody").html(msg);
-                                        $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                        $("#modal-tree").modal("show");
-                                    }
-                                });
-                            }
-                        };
-                        menuItems.crearHijo = {
-                            label            : "Nuev" + lbl,
-                            separator_before : false, // Insert a separator before the item
-                            separator_after  : false, // Insert a separator after the item
-                            icon             : icons["item_" + nodeTipo],
-                            action           : function (obj) {
-
-                            }
-                        };
+                        menuItems.crearHermano = createUpdate({
+                            action    : "create",
+                            label     : "Nuevo subgrupo",
+                            sepBefore : false,
+                            sepAfter  : true,
+                            icon      : icons[nodeRel],
+                            url       : "${createLink(action:'formDp_ajax')}",
+                            data      : {
+                                subgrupo : parentId
+                            },
+                            open      : false,
+                            nodeStrId : nodeStrId,
+                            where     : "after",
+                            tipo      : "dp",
+                            log       : "Subgrupo ",
+                            title     : "Nuevo subgrupo"
+                        });
+                        menuItems.crearHijo = createUpdate({
+                            action    : "create",
+                            label     : "Nuev" + lbl,
+                            sepBefore : false,
+                            sepAfter  : false,
+                            icon      : icons["item_" + nodeTipo],
+                            url       : "${createLink(action:'formIt_ajax')}",
+                            data      : {
+                                departamento : nodeId
+                            },
+                            open      : true,
+                            nodeStrId : nodeStrId,
+                            where     : "first",
+                            tipo      : "it",
+                            log       : item + " ",
+                            title     : "Nuevo " + item.toLowerCase()
+                        });
                         break;
                     case "item":
-                        menuItems.crearHermano = {
-                            label            : "Nuev" + lbl,
-                            separator_before : false, // Insert a separator before the item
-                            separator_after  : false, // Insert a separator after the item
-                            icon             : icons[nodeRel],
-                            action           : function (obj) {
-
-                            }
-                        };
+                        menuItems.editar = createUpdate({
+                            action    : "update",
+                            label     : "Editar " + item.toLowerCase(),
+                            icon      : icons.edit,
+                            sepBefore : false,
+                            sepAfter  : false,
+                            url       : "${createLink(action:'formIt_ajax')}",
+                            data      : {
+                                departamento : parentId,
+                                id           : nodeId
+                            },
+                            open      : false,
+                            nodeStrId : nodeStrId,
+                            log       : item + " ",
+                            title     : "Editar " + item.toLowerCase()
+                        });
+                        if (!nodeHasChildren) {
+                            menuItems.eliminar = remove({
+                                label     : "Eliminar " + item.toLowerCase(),
+                                sepBefore : false,
+                                sepAfter  : false,
+                                icon      : icons.delete,
+                                title     : "Eliminar " + item.toLowerCase(),
+                                confirm   : item.toLowerCase(),
+                                url       : "${createLink(action:'deleteIt_ajax')}",
+                                data      : {
+                                    id : nodeId
+                                },
+                                nodeStrId : nodeStrId,
+                                log       : item + " "
+                            });
+                        }
+                        menuItems.crearHermano = createUpdate({
+                            action    : "create",
+                            label     : "Nuev" + lbl,
+                            sepBefore : true,
+                            sepAfter  : false,
+                            icon      : icons[nodeRel],
+                            url       : "${createLink(action:'formIt_ajax')}",
+                            data      : {
+                                departamento : parentId
+                            },
+                            open      : false,
+                            nodeStrId : nodeStrId,
+                            where     : "after",
+                            tipo      : "it",
+                            log       : item + " ",
+                            title     : "Nuevo " + item
+                        });
                         break;
                 }
 
@@ -588,7 +529,7 @@
                 $("#tree").bind("loaded.jstree",
                         function (event, data) {
                             $("#loading").hide();
-                            $("#tree").show();
+                            $("#treeArea").show();
                         }).jstree({
                             "core"        : {
                                 "initially_open" : [ id ]
@@ -722,7 +663,7 @@
                             "ui"          : {
                                 "select_limit" : 1
                             }
-                        }).bind("search.jstree", function (e, data) {
+                        }).bind("search.jstree",function (e, data) {
                             var cant = data.rslt.nodes.length;
                             var search = data.rslt.str;
                             $("#cantRes").html("<b>" + cant + "</b> resultado" + (cant == 1 ? "" : "s"));
@@ -731,6 +672,49 @@
                             container.animate({
                                 scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
                             }, 2000);
+                        }).bind("select_node.jstree", function (NODE, REF_NODE) {
+                            var node = $.jstree._focused().get_selected();
+                            var parent = node.parent().parent();
+
+                            var nodeStrId = node.attr("id");
+                            var nodeText = $.trim(node.children("a").text());
+
+                            var nodeRel = node.attr("rel");
+                            var parts = nodeRel.split("_");
+                            var nodeNivel = parts[0];
+                            var nodeTipo = parts[1];
+
+                            parts = nodeStrId.split("_");
+                            var nodeId = parts[1];
+
+                            var url = "";
+
+                            switch (nodeNivel) {
+                                case "grupo":
+                                    url = "${createLink(action:'showGr_ajax')}";
+                                    break;
+                                case "subgrupo":
+                                    url = "${createLink(action:'showSg_ajax')}";
+                                    break;
+                                case "departamento":
+                                    url = "${createLink(action:'showDp_ajax')}";
+                                    break;
+                                case "item":
+                                    url = "${createLink(action:'showIt_ajax')}";
+                                    break;
+                            }
+
+                            $.ajax({
+                                type    : "POST",
+                                url     : url,
+                                data    : {
+                                    id : nodeId
+                                },
+                                success : function (msg) {
+                                    $("#info").html(msg);
+                                }
+                            });
+
                         });
             }
 

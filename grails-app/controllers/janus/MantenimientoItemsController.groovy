@@ -159,6 +159,16 @@ class MantenimientoItemsController extends Shield {
         //equipo = 3
     }
 
+    def showGr_ajax() {
+        def grupoInstance = Grupo.get(params.id)
+        return [grupoInstance: grupoInstance]
+    }
+
+    def showSg_ajax() {
+        def subgrupoItemsInstance = SubgrupoItems.get(params.id)
+        return [subgrupoItemsInstance: subgrupoItemsInstance]
+    }
+
     def formSg_ajax() {
         def grupo = Grupo.get(params.grupo)
         def subgrupoItemsInstance = new SubgrupoItems()
@@ -196,6 +206,11 @@ class MantenimientoItemsController extends Shield {
         }
     }
 
+    def showDp_ajax() {
+        def departamentoItemInstance = DepartamentoItem.get(params.id)
+        return [departamentoItemInstance: departamentoItemInstance]
+    }
+
     def formDp_ajax() {
         def subgrupo = SubgrupoItems.get(params.subgrupo)
         def departamentoItemInstance = new DepartamentoItem()
@@ -217,6 +232,60 @@ class MantenimientoItemsController extends Shield {
             render "OK_" + accion + "_" + departamento.id + "_" + departamento.descripcion
         } else {
             println departamento.errors
+            render "NO"
+        }
+    }
+
+    def deleteDp_ajax() {
+        def departamento = DepartamentoItem.get(params.id)
+        try {
+            departamento.delete(flush: true)
+            render "OK"
+        }
+        catch (DataIntegrityViolationException e) {
+            println e
+            render "NO"
+        }
+    }
+
+    def showIt_ajax() {
+        def itemInstance = Item.get(params.id)
+        return [itemInstance: itemInstance]
+    }
+
+    def formIt_ajax() {
+        def departamento = DepartamentoItem.get(params.departamento)
+        def itemInstance = new Item()
+        if (params.id) {
+            itemInstance = Item.get(params.id)
+        }
+        return [departamento: departamento, itemInstance: itemInstance]
+    }
+
+    def saveIt_ajax() {
+        def accion = "create"
+        def item = new Item()
+        if (params.id) {
+            item = Item.get(params.id)
+            accion = "edit"
+        }
+        item.properties = params
+        if (item.save(flush: true)) {
+            render "OK_" + accion + "_" + item.id + "_" + item.nombre
+        } else {
+            println item.errors
+            render "NO"
+        }
+    }
+
+    def deleteIt_ajax() {
+        def item = Item.get(params.id)
+        try {
+            item.delete(flush: true)
+            render "OK"
+        }
+        catch (DataIntegrityViolationException e) {
+            println e
             render "NO"
         }
     }
