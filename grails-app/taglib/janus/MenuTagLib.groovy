@@ -41,14 +41,9 @@ class MenuTagLib {
             (item.value.size() / 2).toInteger().times {
                 strItems += '<li><a href="' + item.value[it * 2 + 1] + '">' + item.value[it * 2] + '</a></li>'
             }
-
-
-
             strItems += '</ul>'
             strItems += '</li>'
-
         }
-
 
         def html = ""
         html += '<div class="navbar navbar-static-top navbar-inverse">'
@@ -59,7 +54,7 @@ class MenuTagLib {
         html += '<span class="icon-bar"></span>'
         html += '<span class="icon-bar"></span>'
         html += '</a>'
-        html += '<a class="brand" href="#" style="font-size:22px;font-family: \'Tulpen One\', cursive;font-weight: bold;color:#FFAC37; ;">'
+        html += '<a class="brand titulo" href="#">'
         html += attrs.title
         html += '</a>'
 

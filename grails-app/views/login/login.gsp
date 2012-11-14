@@ -32,7 +32,7 @@
                     </div>
                 </g:if>
 
-                <div class="control-group" style="margin-top: 0px">
+                <div class="control-group" style="margin-top: 0">
                     <label class="control-label" for="login" style="width: 100%;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder">Usuario:</label>
 
                     <div class="controls" style="width: 100%;margin-left: 5px">

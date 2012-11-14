@@ -5,7 +5,15 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class MantenimientoItemsController extends Shield {
 
-    String makeBasicTree(id, tipo) {
+    String makeBasicTree(params) {
+
+        def id = params.id
+        def tipo = params.tipo
+        def precios = params.precios
+        def all = params.all ? params.all.toBoolean() : false
+        def ignore = params.ignore ? params.ignore.toBoolean() : false
+
+//        println "all:" + all + "     ignore:" + ignore
 
 //        println id
 //        println tipo
@@ -28,6 +36,26 @@ class MantenimientoItemsController extends Shield {
             case "departamento_equipo":
                 hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'nombre'])
                 break;
+            case "item_material":
+            case "item_manoObra":
+            case "item_equipo":
+                if (precios) {
+                    if (ignore) {
+                        hijos = ["Todos"]
+                    } else {
+                        if (all) {
+                            hijos = Lugar.withCriteria {
+                                and {
+                                    order("tipo", "asc")
+                                    order("descripcion", "asc")
+                                }
+                            }
+                        } else {
+                            hijos = Lugar.findAllByTipo("C", [sort: 'descripcion'])
+                        }
+                    }
+                }
+                break;
         }
 
         String tree = "", clase = "", rel = ""
@@ -43,7 +71,7 @@ class MantenimientoItemsController extends Shield {
                     desc = hijo.descripcion
                     def parts = tipo.split("_")
                     rel = "subgrupo_" + parts[1]
-                    liId = "sg"
+                    liId = "sg" + "_" + hijo.id
                     break;
                 case "subgrupo_material":
                 case "subgrupo_manoObra":
@@ -52,22 +80,58 @@ class MantenimientoItemsController extends Shield {
                     desc = hijo.descripcion
                     def parts = tipo.split("_")
                     rel = "departamento_" + parts[1]
-                    liId = "dp"
+                    liId = "dp" + "_" + hijo.id
                     break;
                 case "departamento_material":
                 case "departamento_manoObra":
                 case "departamento_equipo":
                     hijosH = []
+                    if (precios) {
+                        if (ignore) {
+                            hijosH = ["Todos"]
+                        } else {
+                            if (all) {
+                                hijosH = Lugar.withCriteria {
+                                    and {
+                                        order("tipo", "asc")
+                                        order("descripcion", "asc")
+                                    }
+                                }
+                            } else {
+                                hijosH = Lugar.findAllByTipo("C", [sort: 'descripcion'])
+                            }
+                        }
+                    }
                     desc = hijo.nombre
                     def parts = tipo.split("_")
                     rel = "item_" + parts[1]
-                    liId = "it"
+                    liId = "it" + "_" + hijo.id
+                    break;
+                case "item_material":
+                case "item_manoObra":
+                case "item_equipo":
+                    if (precios) {
+                        hijosH = []
+                        if (ignore) {
+                            desc = "Todos los lugares"
+                            rel = "lugar_all"
+                            liId = "lg_" + id + "_all"
+                        } else {
+                            if (all) {
+                                desc = hijo.descripcion + " (" + hijo.tipo + ")"
+                            } else {
+                                desc = hijo.descripcion
+                            }
+                            rel = "lugar_" + hijo.tipo
+                            liId = "lg_" + id + "_" + hijo.id
+                        }
+                    }
                     break;
             }
 
             clase = (hijosH.size() > 0) ? "jstree-closed hasChildren" : ""
 
-            tree += "<li id='" + liId + "_" + hijo.id + "' class='" + clase + "' rel='" + rel + "'>"
+            tree += "<li id='" + liId + "' class='" + clase + "' rel='" + rel + "'>"
             tree += "<a href='#' class='label_arbol'>" + desc + "</a>"
             tree += "</li>"
         }
@@ -76,7 +140,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def loadTreePart() {
-        render(makeBasicTree(params.id, params.tipo))
+        render(makeBasicTree(params))
     }
 
     def searchTree_ajax() {
@@ -128,7 +192,6 @@ class MantenimientoItemsController extends Shield {
     }
 
     def search_ajax() {
-
         def search = params.search.trim()
         def id = params.tipo
         def find = Item.withCriteria {
@@ -152,11 +215,16 @@ class MantenimientoItemsController extends Shield {
         render json
     }
 
-    def index() {
+    def registro() {
         //<!--grpo--><!--sbgr -> Grupo--><!--dprt -> Subgrupo--><!--item-->
         //materiales = 1
         //mano de obra = 2
         //equipo = 3
+    }
+
+    def precios() {
+        //lugar
+        //rubro precio
     }
 
     def showGr_ajax() {
@@ -178,6 +246,29 @@ class MantenimientoItemsController extends Shield {
         return [grupo: grupo, subgrupoItemsInstance: subgrupoItemsInstance]
     }
 
+    def checkDsSg_ajax() {
+        if (params.id) {
+            def subgrupo = SubgrupoItems.get(params.id)
+            if (params.descripcion == subgrupo.descripcion) {
+                render true
+            } else {
+                def subgrupos = SubgrupoItems.findAllByDescripcion(params.descripcion)
+                if (subgrupos.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def subgrupos = SubgrupoItems.findAllByDescripcion(params.descripcion)
+            if (subgrupos.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
     def saveSg_ajax() {
         def accion = "create"
         def subgrupo = new SubgrupoItems()
@@ -189,8 +280,8 @@ class MantenimientoItemsController extends Shield {
         if (subgrupo.save(flush: true)) {
             render "OK_" + accion + "_" + subgrupo.id + "_" + subgrupo.descripcion
         } else {
-            println subgrupo.errors
-            render "NO"
+            def errores = g.renderErrors(bean: subgrupo)
+            render "NO_" + errores
         }
     }
 
@@ -220,6 +311,29 @@ class MantenimientoItemsController extends Shield {
         return [subgrupo: subgrupo, departamentoItemInstance: departamentoItemInstance]
     }
 
+    def checkDsDp_ajax() {
+        if (params.id) {
+            def departamento = DepartamentoItem.get(params.id)
+            if (params.descripcion == departamento.descripcion) {
+                render true
+            } else {
+                def departamentos = DepartamentoItem.findAllByDescripcion(params.descripcion)
+                if (departamentos.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def departamentos = DepartamentoItem.findAllByDescripcion(params.descripcion)
+            if (departamentos.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
     def saveDp_ajax() {
         def accion = "create"
         def departamento = new DepartamentoItem()
@@ -232,7 +346,8 @@ class MantenimientoItemsController extends Shield {
             render "OK_" + accion + "_" + departamento.id + "_" + departamento.descripcion
         } else {
             println departamento.errors
-            render "NO"
+            def errores = g.renderErrors(bean: departamento)
+            render "NO_" + errores
         }
     }
 
@@ -262,7 +377,77 @@ class MantenimientoItemsController extends Shield {
         return [departamento: departamento, itemInstance: itemInstance]
     }
 
+    def checkCdIt_ajax() {
+        if (params.id) {
+            def item = Item.get(params.id)
+            if (params.codigo == item.codigo) {
+                render true
+            } else {
+                def items = Item.findAllByCodigo(params.codigo)
+                if (items.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def items = Item.findAllByCodigo(params.codigo)
+            if (items.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
+    def checkNmIt_ajax() {
+        if (params.id) {
+            def item = Item.get(params.id)
+            if (params.nombre == item.nombre) {
+                render true
+            } else {
+                def items = Item.findAllByNombre(params.nombre)
+                if (items.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def items = Item.findAllByNombre(params.nombre)
+            if (items.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
+    def checkCmIt_ajax() {
+        if (params.id) {
+            def item = Item.get(params.id)
+            if (params.campo == item.campo) {
+                render true
+            } else {
+                def items = Item.findAllByCampo(params.campo)
+                if (items.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def items = Item.findAllByCampo(params.campo)
+            if (items.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
     def saveIt_ajax() {
+        params.tipoItem = TipoItem.findByCodigo("I")
         def accion = "create"
         def item = new Item()
         if (params.id) {
@@ -274,7 +459,8 @@ class MantenimientoItemsController extends Shield {
             render "OK_" + accion + "_" + item.id + "_" + item.nombre
         } else {
             println item.errors
-            render "NO"
+            def errores = g.renderErrors(bean: item)
+            render "NO_" + errores
         }
     }
 
@@ -290,5 +476,35 @@ class MantenimientoItemsController extends Shield {
         }
     }
 
+    def showLg_ajax() {
+        println params
+        def parts = params.id.split("_")
+        def itemId = parts[0]
+        def lugarId = parts[1]
 
+        def item = Item.get(itemId)
+        def lgar, precios
+        if (lugarId == "all") {
+            if (params.all.toBoolean()) {
+                precios = PrecioRubrosItems.withCriteria {
+                    eq("item", item)
+                    lugar {
+                        order("tipo", "asc")
+                    }
+                }
+            } else {
+                precios = PrecioRubrosItems.withCriteria {
+                    eq("item", item)
+                    lugar {
+                        eq("tipo", "C")
+                    }
+                }
+            }
+            lgar = "todos los lugares"
+        } else {
+            lgar = Lugar.get(lugarId).descripcion
+            precios = PrecioRubrosItems.findAllByItemAndLugar(item, lgar)
+        }
+        return [item: item, lugarNombre: lgar, precios: precios, lgar: lugarId == "all"]
+    }
 }

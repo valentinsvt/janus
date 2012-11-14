@@ -2,23 +2,24 @@
 
 <form class="form-horizontal">
 
-    <g:if test="${itemInstance?.nombre}">
-        <div class="control-group">
-            <div>
-                <span id="nombre-label" class="control-label label label-inverse">
-                    Nombre
-                </span>
-            </div>
+    <div class="tituloTree">${itemInstance.nombre}</div>
+%{--<g:if test="${itemInstance?.nombre}">--}%
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span id="nombre-label" class="control-label label label-inverse">--}%
+%{--Nombre--}%
+%{--</span>--}%
+%{--</div>--}%
 
-            <div class="controls">
+%{--<div class="controls">--}%
 
-                <span aria-labelledby="nombre-label">
-                    <g:fieldValue bean="${itemInstance}" field="nombre"/>
-                </span>
+%{--<span aria-labelledby="nombre-label">--}%
+%{--<g:fieldValue bean="${itemInstance}" field="nombre"/>--}%
+%{--</span>--}%
 
-            </div>
-        </div>
-    </g:if>
+%{--</div>--}%
+%{--</div>--}%
+%{--</g:if>--}%
 
     <g:if test="${itemInstance?.codigo}">
         <div class="control-group">
@@ -264,7 +265,7 @@
         <div class="control-group">
             <div>
                 <span id="campo-label" class="control-label label label-inverse">
-                    Campo
+                    Nombre corto
                 </span>
             </div>
 

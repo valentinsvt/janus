@@ -13,7 +13,7 @@ class Lugar implements Serializable {
             id column: 'lgar__id'
             codigo column: 'lgarcdgo'
             descripcion column: 'lgardscr'
-            tipo column: 'obratipo'
+            tipo column: 'lgartipo'
         }
     }
     static constraints = {

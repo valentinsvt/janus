@@ -25,7 +25,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="nombre" maxlength="160" style="width: 280px" class=" required" value="${itemInstance?.nombre}"/>
+            <g:textField name="nombre" maxlength="160" style="width: 280px" class="allCaps required" value="${itemInstance?.nombre}"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="codigo" maxlength="20" style="width: 180px" class=" required" value="${itemInstance?.codigo}"/>
+            <g:textField name="codigo" maxlength="20" style="width: 180px" class="allCaps required" value="${itemInstance?.codigo}"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -55,23 +55,8 @@
         </div>
 
         <div class="controls">
-            <g:select id="unidad" name="unidad.id" from="${janus.Unidad.list([sort:'descripcion'])}" optionKey="id" optionValue="descripcion"
+            <g:select id="unidad" name="unidad.id" from="${janus.Unidad.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"
                       class="many-to-one " value="${itemInstance?.unidad?.id}" noSelection="['': '']"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Tipo Item
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:select id="tipoItem" name="tipoItem.id" from="${janus.TipoItem.list([sort:'descripcion'])}" optionKey="id" optionValue="descripcion"
-                      class="many-to-one " value="${itemInstance?.tipoItem?.id}" noSelection="['': '']"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -209,12 +194,12 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Campo
+                Nombre corto
             </span>
         </div>
 
         <div class="controls">
-            <g:textField name="campo" maxlength="29" style="width: 300px" class="" value="${itemInstance?.campo}"/>
+            <g:textField name="campo" maxlength="29" style="width: 300px" class="allCaps" value="${itemInstance?.campo}"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -280,7 +265,53 @@
 
 <script type="text/javascript">
 
+    $(".allCaps").keyup(function () {
+        this.value = this.value.toUpperCase();
+    });
+
     $("#frmSave").validate({
+        rules          : {
+            codigo : {
+                remote : {
+                    url  : "${createLink(action:'checkCdIt_ajax')}",
+                    type : "post",
+                    data : {
+                        id : "${itemInstance?.id}"
+                    }
+                }
+            },
+            nombre : {
+                remote : {
+                    url  : "${createLink(action:'checkNmIt_ajax')}",
+                    type : "post",
+                    data : {
+                        id : "${itemInstance?.id}"
+                    }
+                }
+            },
+            campo  : {
+                remote : {
+                    url  : "${createLink(action:'checkCmIt_ajax')}",
+                    type : "post",
+                    data : {
+                        id : "${itemInstance?.id}"
+                    }
+                },
+                regex  : /^[A-Za-z\d_]+$/
+            }
+        },
+        messages       : {
+            codigo : {
+                remote : "El código ya se ha ingresado para otro item"
+            },
+            nombre : {
+                remote : "El nombre ya se ha ingresado para otro item"
+            },
+            campo  : {
+                regex  : "El nombre corto no permite caracteres especiales",
+                remote : "El nombre ya se ha ingresado para otro item"
+            }
+        },
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },

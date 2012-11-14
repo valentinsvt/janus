@@ -51,7 +51,7 @@ class Item implements Serializable {
         }
     }
     static constraints = {
-        nombre(size: 1..160, blank: false, attributes: [title: 'nombre'])
+        nombre(size: 1..160, blank: false, unique: true, attributes: [title: 'nombre'])
         codigo(size: 1..20, blank: false, attributes: [title: 'numero'])
         unidad(blank: true, nullable: true, attributes: [title: 'unidad'])
         tipoItem(blank: true, nullable: true, attributes: [title: 'tipoItem'])
@@ -66,7 +66,7 @@ class Item implements Serializable {
         inec(size: 1..1, blank: true, nullable: true, attributes: [title: 'inec'])
         rendimiento(blank: true, nullable: true, attributes: [title: 'rendimiento'])
         tipo(size: 1..1, blank: true, nullable: true, attributes: [title: 'tipo'])
-        campo(size: 1..29, blank: true, nullable: true, attributes: [title: 'campo'])
+        campo(size: 1..29, blank: true, unique: true, nullable: true, attributes: [title: 'nombre corto'])
         registro(size: 1..1, blank: true, nullable: true, attributes: [title: 'registro'])
         transporte(size: 1..1, blank: true, nullable: true, attributes: [title: 'transporte'])
         combustible(size: 1..1, blank: true, nullable: true, attributes: [title: 'combustible'])

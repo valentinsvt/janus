@@ -22,12 +22,10 @@
 
         <!-- Le styles -->
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
-        <link href="${resource(dir: 'css', file: 'customButtons.css')}" rel="stylesheet">
 
         <link href="${resource(dir: 'css', file: 'font-awesome.css')}" rel="stylesheet">
 
         <link href="${resource(dir: 'css', file: 'mobile2.css')}" rel="stylesheet">
-        <link href="${resource(dir: 'css', file: 'custom.css')}" rel="stylesheet">
         <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.highlight.js')}"></script>
         <style>
 
@@ -62,6 +60,9 @@
 
         <script src="${resource(dir: 'js', file: 'functions.js')}"></script>
         <g:layoutHead/>
+
+        <link href="${resource(dir: 'css', file: 'custom.css')}" rel="stylesheet">
+        <link href="${resource(dir: 'css', file: 'customButtons.css')}" rel="stylesheet">
     </head>
 
     <body>

@@ -1,13 +1,28 @@
 /*Menu*/
 .navbar .brand {
-    float: left;
-    display: block;
-    padding: 10px 20px 10px;
-    margin-left: -20px;
-    font-size: 20px;
-    font-weight: 200;
-    color: #777777;
-    text-shadow: -2px 2px 1px rgba(248, 148, 6,0.5) !important;
+    float       : left;
+    display     : block;
+    padding     : 10px 20px 10px;
+    margin-left : -20px;
+    font-size   : 20px;
+    font-weight : 200;
+    /*color       : #777777;*/
+    color       : #FFAC37;
+    text-shadow : -2px 2px 1px rgba(248, 148, 6, 0.5) !important;
+}
+
+.titulo, .tituloTree {
+    font-size   : 22px !important;
+    font-family : 'Tulpen One', cursive;
+    font-weight : bold !important;
+    text-shadow : -2px 2px 1px rgba(148, 148, 148, 0.5);
+}
+
+.tituloTree {
+    font-family   : 'Open Sans Condensed', cursive;
+    margin-bottom : 10px;
+    font-size     : 25px;
+    border-bottom : 1px solid rgba(148, 148, 148, 1);
 }
 
 .highlight {
@@ -32,6 +47,15 @@ body {
     font-weight : bold;
 }
 
+.textRight {
+    text-align : right !important;
+}
+
+/******************inputs ******************************/
+.allCaps {
+    text-transform : uppercase;
+}
+
 /********** para los datepickers ***********/
 .ui-datepicker-calendar {
     font-size   : 12px;
@@ -40,6 +64,10 @@ body {
 
 .datepicker {
     background : url(../images/calendar.png) right no-repeat !important;
+}
+
+.datepicker.disabled {
+    background : url(../images/calendar_disabled.png) right no-repeat !important;
 }
 
 /************ para los autocomplete *************/

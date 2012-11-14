@@ -2,23 +2,24 @@
 
 <form class="form-horizontal">
 
-    <g:if test="${departamentoItemInstance?.descripcion}">
-        <div class="control-group">
-            <div>
-                <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripción
-                </span>
-            </div>
+    <div class="tituloTree">${departamentoItemInstance.descripcion}</div>
+%{--<g:if test="${departamentoItemInstance?.descripcion}">--}%
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span id="descripcion-label" class="control-label label label-inverse">--}%
+%{--Descripción--}%
+%{--</span>--}%
+%{--</div>--}%
 
-            <div class="controls">
+%{--<div class="controls">--}%
 
-                <span aria-labelledby="descripcion-label">
-                    <g:fieldValue bean="${departamentoItemInstance}" field="descripcion"/>
-                </span>
+%{--<span aria-labelledby="descripcion-label">--}%
+%{--<g:fieldValue bean="${departamentoItemInstance}" field="descripcion"/>--}%
+%{--</span>--}%
 
-            </div>
-        </div>
-    </g:if>
+%{--</div>--}%
+%{--</div>--}%
+%{--</g:if>--}%
 
     <g:if test="${departamentoItemInstance?.codigo}">
         <div class="control-group">

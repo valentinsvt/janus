@@ -25,7 +25,7 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="codigo" class=" required" value="${fieldValue(bean: subgrupoItemsInstance, field: 'codigo')}"/>
+            <g:field type="number" name="codigo" class="allCaps required" value="${fieldValue(bean: subgrupoItemsInstance, field: 'codigo')}"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="controls">
-            <g:textArea cols="5" rows="3" style="height: 65px; resize: none;" name="descripcion" maxlength="63" class=" required" value="${subgrupoItemsInstance?.descripcion}"/>
+            <g:textArea cols="5" rows="3" style="height: 65px; resize: none;" name="descripcion" maxlength="63" class="allCaps required" value="${subgrupoItemsInstance?.descripcion}"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -51,7 +51,27 @@
 
 <script type="text/javascript">
 
+    $(".allCaps").keyup(function () {
+        this.value = this.value.toUpperCase();
+    });
+
     $("#frmSave").validate({
+        rules          : {
+            descripcion : {
+                remote : {
+                    url  : "${createLink(action:'checkDsSg_ajax')}",
+                    type : "post",
+                    data : {
+                        id : "${subgrupoItemsInstance?.id}"
+                    }
+                }
+            }
+        },
+        messages       : {
+            descripcion : {
+                remote : "La descripción ya se ha ingresado para otro item"
+            }
+        },
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },

@@ -3,23 +3,25 @@
 
 <form class="form-horizontal">
 
-    <g:if test="${grupoInstance?.descripcion}">
-        <div class="control-group">
-            <div>
-                <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripción
-                </span>
-            </div>
+    <div class="tituloTree">${grupoInstance.descripcion}</div>
 
-            <div class="controls">
+%{--<g:if test="${grupoInstance?.descripcion}">--}%
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span id="descripcion-label" class="control-label label label-inverse">--}%
+%{--Descripción--}%
+%{--</span>--}%
+%{--</div>--}%
 
-                <span aria-labelledby="descripcion-label">
-                    <g:fieldValue bean="${grupoInstance}" field="descripcion"/>
-                </span>
+%{--<div class="controls">--}%
 
-            </div>
-        </div>
-    </g:if>
+%{--<span aria-labelledby="descripcion-label">--}%
+%{--<g:fieldValue bean="${grupoInstance}" field="descripcion"/>--}%
+%{--</span>--}%
+
+%{--</div>--}%
+%{--</div>--}%
+%{--</g:if>--}%
 
     <g:if test="${grupoInstance?.codigo}">
         <div class="control-group">

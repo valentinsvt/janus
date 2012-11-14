@@ -17,9 +17,11 @@
 
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'custom-methods.js')}"></script>
 
         <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
         <style type="text/css">
         .btn-group {
@@ -116,6 +118,8 @@
 
         <script type="text/javascript">
 
+            $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
+
             var btn = $("<a href='#' class='btn' id='btnSearch'><i class='icon-zoom-in'></i> Buscar</a>");
             var urlSp = "${resource(dir: 'images', file: 'spinner.gif')}";
             var sp = $('<span class="add-on" id="btnSearch"><img src="' + urlSp + '"/></span>');
@@ -143,9 +147,19 @@
                 item_equipo   : "${resource(dir: 'images/tree', file: 'item_equipo.png')}"
             };
 
-            function log(msg) {
+            function log(msg, error) {
+                var sticky = false;
+                var theme = "success";
+                if (error) {
+                    sticky = true;
+                    theme = "error";
+                }
                 $.jGrowl(msg, {
-                    speed : 'slow'
+                    speed          : 'slow',
+                    sticky         : sticky,
+                    theme          : theme,
+                    closerTemplate : '<div>[ cerrar todos ]</div>',
+                    themeState     : ''
                 });
             }
 
@@ -188,6 +202,9 @@
                                                         $("#modal-tree").modal("hide");
                                                         log(params.log + parts[3] + " editado correctamente");
                                                     }
+                                                } else {
+                                                    $("#modal-tree").modal("hide");
+                                                    log("Ha ocurrido el siguiente error: " + parts[1], true);
                                                 }
                                             }
                                         });
@@ -221,7 +238,6 @@
 
                         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                         var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
-                        console.log($("#modalHeader"));
                         $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                         $("#modalTitle").html(params.title);
                         $("#modalBody").html("<p>Está seguro de querer eliminar este " + params.confirm + "?</p>");
@@ -240,10 +256,15 @@
                                         $("#tree").jstree('delete_node', $("#" + params.nodeStrId));
                                         $("#modal-tree").modal("hide");
                                         log(params.log + " eliminado correctamente");
+                                        if ($("#" + params.parentStrId).children("ul").children().size() == 0) {
+                                            $("#" + params.parentStrId).removeClass("hasChildren");
+                                        }
+                                    } else {
+                                        $("#modal-tree").modal("hide");
+                                        log("Ha ocurrido un error al eliminar", true);
                                     }
                                 }
                             });
-//                                            $("#frmSave").submit();
                             return false;
                         });
                     }
@@ -277,6 +298,8 @@
                 var parentId = parts[1];
 
                 var nodeHasChildren = node.hasClass("hasChildren");
+                var cantChildren = node.children("ul").children().size();
+                nodeHasChildren = nodeHasChildren || cantChildren != 0;
 
                 var menuItems = {}, lbl = "", item = "";
 
@@ -334,18 +357,19 @@
                         });
                         if (!nodeHasChildren) {
                             menuItems.eliminar = remove({
-                                label     : "Eliminar grupo",
-                                sepBefore : false,
-                                sepAfter  : false,
-                                icon      : icons.delete,
-                                title     : "Eliminar grupo",
-                                confirm   : "grupo",
-                                url       : "${createLink(action:'deleteSg_ajax')}",
-                                data      : {
+                                label       : "Eliminar grupo",
+                                sepBefore   : false,
+                                sepAfter    : false,
+                                icon        : icons.delete,
+                                title       : "Eliminar grupo",
+                                confirm     : "grupo",
+                                url         : "${createLink(action:'deleteSg_ajax')}",
+                                data        : {
                                     id : nodeId
                                 },
-                                nodeStrId : nodeStrId,
-                                log       : "Grupo "
+                                nodeStrId   : nodeStrId,
+                                parentStrId : parentStrId,
+                                log         : "Grupo "
                             });
                         }
                         menuItems.crearHermano = createUpdate({
@@ -402,24 +426,25 @@
                         });
                         if (!nodeHasChildren) {
                             menuItems.eliminar = remove({
-                                label     : "Eliminar subgrupo",
-                                sepBefore : false,
-                                sepAfter  : false,
-                                icon      : icons.delete,
-                                title     : "Eliminar subgrupo",
-                                confirm   : "subgrupo",
-                                url       : "${createLink(action:'deleteDp_ajax')}",
-                                data      : {
+                                label       : "Eliminar subgrupo",
+                                sepBefore   : false,
+                                sepAfter    : false,
+                                icon        : icons.delete,
+                                title       : "Eliminar subgrupo",
+                                confirm     : "subgrupo",
+                                url         : "${createLink(action:'deleteDp_ajax')}",
+                                data        : {
                                     id : nodeId
                                 },
-                                nodeStrId : nodeStrId,
-                                log       : "Subgrupo "
+                                nodeStrId   : nodeStrId,
+                                parentStrId : parentStrId,
+                                log         : "Subgrupo "
                             });
                         }
                         menuItems.crearHermano = createUpdate({
                             action    : "create",
                             label     : "Nuevo subgrupo",
-                            sepBefore : false,
+                            sepBefore : true,
                             sepAfter  : true,
                             icon      : icons[nodeRel],
                             url       : "${createLink(action:'formDp_ajax')}",
@@ -470,25 +495,26 @@
                         });
                         if (!nodeHasChildren) {
                             menuItems.eliminar = remove({
-                                label     : "Eliminar " + item.toLowerCase(),
-                                sepBefore : false,
-                                sepAfter  : false,
-                                icon      : icons.delete,
-                                title     : "Eliminar " + item.toLowerCase(),
-                                confirm   : item.toLowerCase(),
-                                url       : "${createLink(action:'deleteIt_ajax')}",
-                                data      : {
+                                label       : "Eliminar " + item.toLowerCase(),
+                                sepBefore   : false,
+                                sepAfter    : false,
+                                icon        : icons.delete,
+                                title       : "Eliminar " + item.toLowerCase(),
+                                confirm     : item.toLowerCase(),
+                                url         : "${createLink(action:'deleteIt_ajax')}",
+                                data        : {
                                     id : nodeId
                                 },
-                                nodeStrId : nodeStrId,
-                                log       : item + " "
+                                nodeStrId   : nodeStrId,
+                                parentStrId : parentStrId,
+                                log         : item + " "
                             });
                         }
                         menuItems.crearHermano = createUpdate({
                             action    : "create",
                             label     : "Nuev" + lbl,
                             sepBefore : true,
-                            sepAfter  : false,
+                            sepAfter  : true,
                             icon      : icons[nodeRel],
                             url       : "${createLink(action:'formIt_ajax')}",
                             data      : {

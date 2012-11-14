@@ -23,8 +23,8 @@ class DepartamentoItem implements Serializable {
     }
     static constraints = {
         descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
-        transporte(blank:true, nullable: true)
-        codigo(blank:false)
-        subgrupo(blank:false)
+        transporte(blank: true, nullable: true)
+        codigo(blank: false, unique: true)
+        subgrupo(blank: false)
     }
 }
