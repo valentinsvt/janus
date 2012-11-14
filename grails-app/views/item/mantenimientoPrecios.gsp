@@ -6,14 +6,6 @@
     <meta name="layout" content="main">
     <title>Mantenimiento de Precios</title>
 
-    <script src="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/js', file: 'jquery.dataTables.min.js')}"></script>
-
-    <script src="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/js', file: 'jquery.jeditable.js')}"></script>
-
-    <link rel="stylesheet"
-          href="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/css', file: 'jquery.dataTables.css')}"/>
-    <script src="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/extras/KeyTable/js', file: 'KeyTable.min.js')}"></script>
-
 
     <style type="text/css">
 
@@ -45,15 +37,17 @@
 
     <div class="span12">
 
-        <div class="span2" align="center"><g:select class="precioRubro" name="precioRubro"
+        <div class="span2" align="center"><g:select class="listPrecio" name="listaPrecio"
                                                     from="${janus.Lugar.list([sort: "id"])}"
-                                                    noSelection="['': 'Seleccione']" optionKey="id"
-                                                    optionValue="descripcion" style="width: 270px"/></div>
+                                                    noSelection="['-1': 'Seleccione']" optionKey="id"
+                                                    optionValue="descripcion" style="width: 270px"
+                                                    disabled="false"/></div>
 
-        <div class="span1" align="center" style="margin-left: 130px"><elm:datepicker name="fecha" class="datepicker"
+        <div class="span1" align="center" style="margin-left: 130px"><elm:datepicker name="fecha"
+                                                                                     class="fecha datepicker"
                                                                                      style="width: 90px"/></div>
 
-        <div class="span1" align="center" style="margin-left: 40px"><g:checkBox name="todosPrecios"
+        <div class="span1" align="center" style="margin-left: 40px"><g:checkBox name="todosPrecios" id="todos"
                                                                                 checked="false"/></div>
 
         <div class="btn-group span1">
@@ -69,219 +63,98 @@
 
 <fieldset class="borde">
 
-    <div class="span12">
-
-        <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPrecios">
-            <thead style="background-color:#0074cc;">
-
-            <th>Item</th>
-            <th>Nombre del Item</th>
-            <th>U</th>
-            <th>Precio</th>
-            <th class="precioAL hidden">Precio Anterior</th>
-            <th>Fecha</th>
-
-            </thead>
-            <tbody>
-
-            <g:each in="${rubroPrecio}" var="rubro" status="i">
-
-                <tr>
-
-                    <td class="itemId" align="center" style="width: 150px; color: #009926;">
-
-                        ${rubro?.item?.id}
-
-                    </td>
-
-                    <td class="itemNombre" align="center">
-
-                        ${rubro?.item?.nombre}
-
-                    </td>
-
-                    <td class="unidad" align="center" style="width: 150px">
-
-                        ${rubro?.item?.unidad?.descripcion}
-
-                    </td>
-                    <td class="editable ${i == 0 ? 'selected' : ''}" id="${rubro?.item?.id}" align="center"
-                        data-original="${rubro?.precioUnitario}"
-                        style="width: 150px">
-
-                        ${rubro?.precioUnitario}
-
-                    </td>
-
-                    <td class="precioAnterior hidden" align="center" style="width: 105px">
-                        0.00
-                    </td>
-
-                    <td class="fecha" align="center" style="width: 150px">
-
-                        <g:formatDate date="${rubro?.fecha}" format="dd-MM-yyyy"/>
-
-                    </td>
-
-                </tr>
-
-            </g:each>
-
-            </tbody>
-
-        </table>
+    <div id="tablaPrecios">
 
     </div>
 
 </fieldset>
 
+
 <script type="text/javascript">
 
-    function doEdit(sel) {
-
-        var texto = $.trim(sel.text());
-        var w = sel.width();
-        textField = $('<input type="text" class="editando" value="' + texto + '"/>');
-        textField.width(w - 5);
-        sel.html(textField);
-        textField.focus();
-        sel.data("valor", texto);
-
-    }
-
-    function stopEdit() {
-
-        //var value = $(".editando").val(); //valor del texfield (despues de editar)
-        var value = $(".selected").data("valor"); //valor antes de la edicion
-        if (value) {
+    $(function () {
 
 
-            $(".selected").html(number_format(value, 2, ".", ""));
+        $("#todos").click(function () {
 
-        }
-    }
 
-    function seleccionar(elm) {
-        deseleccionar($(".selected"));
-        elm.addClass("selected");
-    }
+            var fecha2 = new Date().toString("dd-MM-yyyy");
 
-    function deseleccionar(elm) {
-        stopEdit();
-        elm.removeClass("selected");
-    }
+
+            console.log(fecha2);
+
+
+
+            if ($("#todos").attr("checked") == "checked") {
+
+                $("#listaPrecio").attr("disabled", true);
+                $("#listaPrecio").attr("value", -1);
+                $("#fecha").attr("value", fecha2);
+
+
+            }
+            else {
+
+
+                $("#listaPrecio").attr("disabled", false)
+            }
+
+
+        })
+
+
+    });
+
 
     $(function () {
 
         $(".btn-consultar").click(function () {
 
 
-        });
-
-
-        $(".btn-generar").click(function () {
-
-            $(".precioAL").show();
-            $(".precioAnterior").show();
-
+            consultar();
 
         });
 
-        $(".btn-actualizar").click(function () {
 
-            var data = "";
+        function consultar() {
+
+            var lgar = $("#listaPrecio").val();
+
+            var fcha = $("#fecha").val();
 
 
-            $(".editable").each(function () {
-                var id = $(this).attr("id");
-                var valor = $(this).data("valor");
-                if (parseFloat(valor) > 0 && parseFloat($(this).data("original")) != parseFloat(valor)) {
-                    if (data != "") {
-                        data += "&";
-                    }
+            console.log("fcha" + fcha)
 
-                    data += "item=" + id + "_" + valor;
+            var todos = "";
+
+            if ($("#todos").attr("checked") == "checked") {
+
+                todos = 1
+            }
+
+            else {
+
+                todos = 2
+            }
+
+            $.ajax({
+                type:"POST",
+                url:"${createLink(action:'tabla')}",
+                data:{
+                    lgar:lgar,
+                    fecha:fcha,
+                    todos:todos,
+                    max:10,
+                    pag:1
+                },
+                success:function (msg) {
+                    $("#tablaPrecios").html(msg);
                 }
             });
-            console.log(data);
 
-        });
+        }
 
-        $(".editable").click(function (ev) {
-            if ($(ev.target).hasClass("editable")) {
-                seleccionar($(this));
-            }
-        });
-
-        $(".editable").dblclick(function (ev) {
-
-
-            if ($(ev.target).hasClass("editable")) {
-                seleccionar($(this));
-                doEdit($(this));
-            }
-        });
-
-        $(document).keyup(function (ev) {
-            var sel = $(".selected");
-            var celdaIndex = sel.index();
-            var tr = sel.parent();
-            var filaIndex = tr.index();
-            var ntr;
-
-            var textField;
-
-            switch (ev.keyCode) {
-                case 38: //arriba
-                    if (filaIndex > 0) {
-                        ntr = tr.prev();
-                        seleccionar(ntr.children().eq(celdaIndex));
-                    }
-                    break;
-                case 40: //abajo
-                    var cant = $('#tablaPrecios > tbody > tr').size();
-                    if (filaIndex < cant - 1) {
-                        ntr = tr.next();
-                        seleccionar(ntr.children().eq(celdaIndex));
-                    }
-                    break;
-                case 13: //enter
-                    var target = $(ev.target);
-
-                    if (target.hasClass("editando")) {
-
-
-                        var value = target.val();
-
-                        $(".selected").html(number_format(value, 2, ".", ""));
-                        sel.data("valor", value);
-
-                    }
-
-                    else {
-
-
-                        doEdit(sel);
-
-                    }
-                    break;
-
-
-                case 27: //esc
-
-                    stopEdit();
-
-                    break;
-
-                default:
-
-                    return true;
-            }
-        })
     });
-
-
-
 
 </script>
 </body>

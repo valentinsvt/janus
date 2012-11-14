@@ -1,8 +1,11 @@
 package janus
 
 import org.springframework.dao.DataIntegrityViolationException
+import jxl.write.DateTime
 
 class ItemController extends janus.seguridad.Shield {
+
+    def preciosService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -15,18 +18,138 @@ class ItemController extends janus.seguridad.Shield {
         [itemInstanceList: Item.list(params), itemInstanceTotal: Item.count(), params: params]
     } //list
 
-    def mantenimientoPrecios(){
-
-
-        def lugar = Lugar.get(14)
-
-        def rubroPrecio = PrecioRubrosItems.findAllByLugar(lugar,[max:10])
-
-
-
-        [rubroPrecio: rubroPrecio, lugar:lugar]
+    def mantenimientoPrecios() {
 
     }
+
+    def tabla() {
+
+        println "tabla " + params
+        if (!params.max || params.max == 0) {
+            params.max = 10
+        } else {
+            params.max = params.max.toInteger()
+        }
+        if (!params.pag) {
+            params.pag = 1;
+        } else {
+            params.pag = params.pag.toInteger()
+        }
+
+
+        params.offset = params.max * (params.pag - 1)
+
+
+
+        def f = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        println("fechaControlador:" + f)
+
+
+        def t = params.todos
+
+        def todos = [];
+
+        todos = Lugar.list();
+
+        def lugar;
+
+        def rubroPrecio;
+
+        if (t == "1") {
+
+            lugar = Lugar.get(params.lgar)
+
+
+            def c = PrecioRubrosItems.createCriteria()
+            rubroPrecio = c.list(max: params.max, offset: params.offset) {
+                eq("lugar", lugar)
+                item {
+                    order("nombre", "asc")
+                }
+            }
+
+            params.totalRows = rubroPrecio.totalCount
+            params.totalPags = Math.ceil(rubroPrecio.totalCount / params.max).toInteger()
+
+            if (params.totalPags <= 10) {
+                params.first = 1
+                params.last = params.last = params.totalPags
+            } else {
+                params.first = Math.max(1, params.pag.toInteger() - 5)
+                params.last = Math.min(params.totalPags, params.pag + 5)
+
+                def ts = params.last - params.first
+                if (ts < 9) {
+                    def r = 10 - ts
+                    params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                }
+            }
+
+
+        } else {
+
+//            def fcha = PrecioRubrosItems.createCriteria()
+//            rubroPrecio = fcha.list (max: params.max, offset: params.offset){
+//
+//                 le("fecha",f)
+//                item {
+//                    order("nombre","asc")
+//                }
+//
+//            }
+
+            lugar = Lugar.get(params.lgar)
+
+//            def c = PrecioRubrosItems.createCriteria()
+//            rubroPrecio = c.list(max: params.max, offset: params.offset) {
+//                eq("lugar", lugar)
+//                projections {
+//                    distinct("item")
+//                }
+//
+//            }
+
+            /*todo paginacion y como sacar N sin repetidos?? sql*/
+            rubroPrecio = PrecioRubrosItems.findAllByLugar(lugar,[max: 100]).item
+            println "items " + rubroPrecio
+
+            def precios = preciosService.getPrecioRubroItem(f, lugar, rubroPrecio)
+            rubroPrecio=[]
+            precios.each {
+                  rubroPrecio.add(PrecioRubrosItems.get(it))
+            }
+
+            println "precios " + precios
+            println "precios " + rubroPrecio
+
+//            rubroPrecio = PrecioRubrosItems.list(max: params.max, offset: params.offset);
+
+
+            params.totalRows = 100
+            params.totalPags = Math.ceil(100 / params.max).toInteger()
+
+            if (params.totalPags <= 10) {
+                params.first = 1
+                params.last = params.last = params.totalPags
+            } else {
+                params.first = Math.max(1, params.pag.toInteger() - 5)
+                params.last = Math.min(params.totalPags, params.pag + 5)
+
+                def ts = params.last - params.first
+                if (ts < 9) {
+                    def r = 10 - ts
+                    params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                }
+            }
+
+
+        }
+
+        [rubroPrecio: rubroPrecio, params: params]
+    }
+
+
 
     def form_ajax() {
         def itemInstance = new Item(params)
