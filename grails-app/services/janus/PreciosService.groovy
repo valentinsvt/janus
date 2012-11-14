@@ -40,16 +40,16 @@ class PreciosService {
 
     def getPrecioRubroItem(fecha,lugar,items){
         def cn = dbConnectionService.getConnection()
-        def itemsId =""
+        def itemsId = items
         def res = []
-        items.eachWithIndex{item,i->
-            itemsId+=""+item.id
-            if(i< items.size()-1)
-                itemsId+=","
-        }
-        def sql="SELECT r1.item__id,i.itemnmbr,(SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1,item i where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('MM-dd-yyyy')}' and i.item__id=r1.item__id group by 1,2 order by 2"
+//        items.eachWithIndex{item,i->
+//            itemsId+=""+item//.id
+//            if(i< items.size()-1)
+//                itemsId+=","
+//        }
+        def sql="SELECT r1.item__id,i.itemcdgo,(SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1,item i where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('MM-dd-yyyy')}' and i.item__id=r1.item__id group by 1,2 order by 2"
 
-        println "sql "+sql
+//        println "sql "+sql
         cn.eachRow(sql.toString()){row->
             res.add(row[2])
         }

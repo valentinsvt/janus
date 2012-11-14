@@ -6,6 +6,7 @@ import jxl.write.DateTime
 class ItemController extends janus.seguridad.Shield {
 
     def preciosService
+    def dbConnectionService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -24,9 +25,9 @@ class ItemController extends janus.seguridad.Shield {
 
     def tabla() {
 
-        println "tabla " + params
+//        println "tabla " + params
         if (!params.max || params.max == 0) {
-            params.max = 10
+            params.max = 100
         } else {
             params.max = params.max.toInteger()
         }
@@ -35,38 +36,32 @@ class ItemController extends janus.seguridad.Shield {
         } else {
             params.pag = params.pag.toInteger()
         }
-
-
         params.offset = params.max * (params.pag - 1)
 
-
-
         def f = new Date().parse("dd-MM-yyyy", params.fecha)
-
-        println("fechaControlador:" + f)
-
-
+        //        println("fechaControlador:" + f)
         def t = params.todos
-
-        def todos = [];
-
-        todos = Lugar.list();
-
+//        def todos = Lugar.list();
         def lugar;
-
         def rubroPrecio;
 
         if (t == "1") {
-
+            println "AQUI " + params
             lugar = Lugar.get(params.lgar)
-
-
             def c = PrecioRubrosItems.createCriteria()
             rubroPrecio = c.list(max: params.max, offset: params.offset) {
                 eq("lugar", lugar)
                 item {
-                    order("nombre", "asc")
+                    if (params.tipo != "-1") {
+                        departamento {
+                            subgrupo {
+                                eq("grupo", Grupo.get(params.tipo))
+                            }
+                        }
+                    }
+                    order("codigo", "asc")
                 }
+                order("fecha", "desc")
             }
 
             params.totalRows = rubroPrecio.totalCount
@@ -85,57 +80,57 @@ class ItemController extends janus.seguridad.Shield {
                     params.last = Math.min(params.totalPags, params.last + r).toInteger()
                 }
             }
-
-
         } else {
-
-//            def fcha = PrecioRubrosItems.createCriteria()
-//            rubroPrecio = fcha.list (max: params.max, offset: params.offset){
-//
-//                 le("fecha",f)
-//                item {
-//                    order("nombre","asc")
-//                }
-//
-//            }
-
             lugar = Lugar.get(params.lgar)
+            def sql
 
-//            def c = PrecioRubrosItems.createCriteria()
-//            rubroPrecio = c.list(max: params.max, offset: params.offset) {
-//                eq("lugar", lugar)
-//                projections {
-//                    distinct("item")
-//                }
-//
-//            }
 
-            rubroPrecio = PrecioRubrosItems.findAllByLugar(lugar).item
-            def items = PrecioRubrosItems.withCriteria {
-                eq("lugar", lugar)
-                projections {
-                    distinct("item")
-                }
+            sql = "select distinct rbpc.item__id, item.itemcdgo "
+            sql += "from rbpc, item"
+            if (params.tipo != "-1") {
+                sql += ", dprt, sbgr, grpo"
             }
-            println "items2 "+items
+            sql += " where rbpc.item__id=item.item__id and lgar__id=${lugar.id} "
+            if (params.tipo != "-1") {
+                sql += "and item.dprt__id = dprt.dprt__id "
+                sql += "and dprt.sbgr__id = sbgr.sbgr__id "
+                sql += "and sbgr.grpo__id = grpo.grpo__id "
+                sql += "and grpo.grpo__id = ${params.tipo}"
+            }
+            sql += " order by itemcdgo "
+            sql += "limit ${params.max} "
+            sql += "offset ${params.offset} "
 
+//            println sql
 
-            println "items " + rubroPrecio
+            def itemsIds = ""
 
-            def precios = preciosService.getPrecioRubroItem(f, lugar, rubroPrecio)
+            def cn = dbConnectionService.getConnection()
+            cn.eachRow(sql.toString()) {row ->
+                if (itemsIds != "") {
+                    itemsIds += ","
+                }
+                itemsIds += row[0]
+            }
+
+            def precios = preciosService.getPrecioRubroItem(f, lugar, itemsIds)
             rubroPrecio = []
 
             precios.each {
                 rubroPrecio.add(PrecioRubrosItems.get(it))
             }
 
-            println "precios " + precios
-            println "precios " + rubroPrecio
-
-//            rubroPrecio = PrecioRubrosItems.list(max: params.max, offset: params.offset);
-
             if (!params.totalRows) {
-                params.totalRows = rubroPrecio.size()
+                sql = "select count(distinct rbpc.item__id) "
+                sql += "from rbpc "
+                sql += "where lgar__id=${lugar.id}"
+
+                def totalCount
+                cn.eachRow(sql.toString()) {row ->
+                    totalCount = row[0]
+                }
+
+                params.totalRows = totalCount
 
                 params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
 
@@ -153,6 +148,7 @@ class ItemController extends janus.seguridad.Shield {
                     }
                 }
             }
+            cn.close()
         }
 
         [rubroPrecio: rubroPrecio, params: params]
