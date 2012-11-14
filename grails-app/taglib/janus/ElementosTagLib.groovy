@@ -143,8 +143,8 @@ class ElementosTagLib {
         def clase = attrs.remove("class")
         def name = attrs.remove("name")
         def id = attrs.id ? attrs.remove("id") : name
-        if(id.contains(".")) {
-            id=id.replaceAll("\\.", "_")
+        if (id.contains(".")) {
+            id = id.replaceAll("\\.", "_")
         }
 
         def value = attrs.remove("value")
@@ -180,6 +180,8 @@ class ElementosTagLib {
         out << str
         out << js
     }
+
+    /********************************************************* funciones ******************************************************/
 
     /**
      * renders attributes in HTML compliant fashion returning them in a string
