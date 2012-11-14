@@ -44,8 +44,9 @@
         <i class="icon-file"></i>
         Borrar
     </a>
-    <a href="#" class="btn btn-ajax btn-new">
+    <a href="#" class="btn btn-ajax btn-new" id="calcular">
         <i class="icon-table"></i>
+        Calcular
     </a>
 </div>
 
@@ -77,14 +78,14 @@
             </div>
             <div class="span2"  style="border: 0px solid black;">
                 Fecha registro
-                <elm:datepicker  name="rubro.fecha" class="span24" value="${rubro?.fecha}"/>
+                <elm:datepicker  name="rubro.fechaReg" class="span24" value="${rubro?.fechaRegistro}" disabled="true" id="fechaReg"/>
             </div>
 
         </div>
         <div class="row-fluid">
     <div class="span2"  style="border: 0px solid black;">
         Clase
-        <g:select name="rubro.tipoItem.id" from="${janus.Grupo.list()}" class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.departamento?.subgrupo?.grupo?.id}"></g:select>
+        <g:select name="rubro.grupo.id" from="${grupos}" class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.departamento?.subgrupo?.grupo?.id}"></g:select>
         </div>
         <div class="span2"  style="border: 0px solid black;">
             Grupo
@@ -117,17 +118,17 @@
         <div class="span3"  style="border: 0px solid black;">
             <div style="height: 40px;float: left;width: 100px">Lista de precios</div>
             <div class="btn-group span7" data-toggle="buttons-radio" style="float: right;">
-                <button type="button" class="btn btn-info active">Civiles</button>
-                <button type="button" class="btn btn-info">Viales</button>
+                <button type="button" class="btn btn-info active tipoPrecio" id="C">Civiles</button>
+                <button type="button" class="btn btn-info tipoPrecio" id="V">Viales</button>
             </div>
         </div>
         <div class="span4"  style="border: 0px solid black;">
             Ciudad
-            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10"></g:select>
+            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad"></g:select>
         </div>
         <div class="span2"  style="border: 0px solid black;">
             Fecha
-            <elm:datepicker  name="item.fecha" class="span8" />
+            <elm:datepicker  name="item.fecha" class="span8" id="fecha_precios" />
         </div>
         <div class="span2"  style="border: 0px solid black;">
             <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
@@ -150,9 +151,13 @@
             Unidad
             <input type="text" name="item.unidad" id="item_unidad" class="span8">
         </div>
-        <div class="span2"  style="border: 0px solid black;">
+        <div class="span1"  style="border: 0px solid black;">
             Cantidad
             <input type="text" name="item.cantidad" class="span10" id="item_cantidad" value="1" style="text-align: right">
+        </div>
+        <div class="span1"  style="border: 0px solid black;">
+            Rendimiento
+            <input type="text" name="item.rendimiento" class="span10" id="item_rendimiento" value="1" style="text-align: right">
         </div>
         <div class="span1"  style="border: 0px solid black;height: 45px;padding-top: 22px">
             <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Agregar" id="btn_agregarItem">
@@ -180,19 +185,30 @@
             <th style="width: 80px;">
                 Cantidad
             </th>
-            <th style="width: 40px;"></th>
+            <th class="col_tarifa" style="display: none;">Tarifa</th>
+            <th class="col_hora" style="display: none;">C.Hora</th>
+            <th class="col_rend" style="width: 50px">Rendimiento</th>
+            <th class="col_total" style="display: none;">C.Total</th>
+            <th style="width: 40px" class="col_delete"></th>
         </tr>
         </thead>
         <tbody id="tabla_equipo">
         <g:each in="${items}" var="rub" status="i">
             <g:if test="${rub.item.departamento.subgrupo.grupo.id==3}">
-                <tr>
+                <tr class="item_row" id="${rub.id}">
                     <td class="cdgo">${rub.item.codigo}</td>
                     <td>${rub.item.nombre}</td>
                     <td style="text-align: right" class="cant">
                         <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
                     </td>
-                    <td style="width: 40px;text-align: center">
+
+                    <td class="col_tarifa" style="display: none;"></td>
+                    <td class="col_hora" style="display: none;"></td>
+                    <td class="col_rend rend" style="width: 50px;text-align: right">
+                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                    </td>
+                    <td class="col_total" style="display: none;"></td>
+                    <td style="width: 40px;text-align: center" class="col_delete">
                         <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
                             <i class="icon-trash"></i></a>
                     </td>
@@ -213,19 +229,31 @@
             <th style="width: 80px">
                 Cantidad
             </th>
-            <th style="width: 40px"></th>
+
+            <th class="col_jornal" style="display: none;">Jornal</th>
+            <th class="col_hora" style="display: none;">C.Hora</th>
+            <th class="col_rend" style="width: 50px">Rendimiento</th>
+            <th class="col_total" style="display: none;">C.Total</th>
+            <th style="width: 40px" class="col_delete"></th>
         </tr>
         </thead>
         <tbody id="tabla_mano">
         <g:each in="${items}" var="rub" status="i">
             <g:if test="${rub.item.departamento.subgrupo.grupo.id==2}">
-                <tr>
+                <tr class="item_row" id="${rub.id}">
                     <td class="cdgo">${rub.item.codigo}</td>
                     <td>${rub.item.nombre}</td>
                     <td style="text-align: right" class="cant">
                         <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
                     </td>
-                    <td  style="width: 40px;text-align: center">
+
+                    <td class="col_jornal" style="display: none;"></td>
+                    <td class="col_hora" style="display: none;"></td>
+                    <td class="col_rend rend" style="width: 50px;text-align: right">
+                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                    </td>
+                    <td class="col_total" style="display: none;"></td>
+                    <td  style="width: 40px;text-align: center" class="col_delete">
                         <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
                             <i class="icon-trash"></i></a>
                     </td>
@@ -243,22 +271,34 @@
             <th style="width: 600px;">
                 Descripción Material
             </th>
+            <th style="width: 60px" class="col_unidad">
+                Unidad
+            </th>
             <th style="width: 80px">
                 Cantidad
             </th>
-            <th style="width: 40px"></th>
+            <th style="width: 40px" class="col_delete"></th>
+            <th class="col_precioUnit" style="display: none;">Unitario</th>
+            <th class="col_vacio" style="width: 55px;display: none"></th>
+            <th class="col_vacio" style="width: 55px;display: none"></th>
+            <th class="col_total" style="display: none;">C.Total</th>
         </tr>
         </thead>
         <tbody id="tabla_material">
         <g:each in="${items}" var="rub" status="i">
             <g:if test="${rub.item.departamento.subgrupo.grupo.id==1}">
-                <tr>
+                <tr class="item_row" id="${rub.id}">
                     <td class="cdgo">${rub.item.codigo}</td>
                     <td>${rub.item.nombre}</td>
+                    <td style="width: 60px !important;text-align: center" class="col_unidad">${rub.item.unidad.codigo}</td>
                     <td style="text-align: right" class="cant">
                         <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
                     </td>
-                    <td  style="width: 40px;text-align: center">
+                    <td class="col_precioUnit" style="display: none;"></td>
+                    <td class="col_vacio" style="width: 50px;display: none"></td>
+                    <td class="col_vacio" style="width: 50px;display: none"></td>
+                    <td class="col_total" style="display: none;"></td>
+                    <td  style="width: 40px;text-align: center" class="col_delete">
                         <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
                             <i class="icon-trash"></i></a>
                     </td>
@@ -338,6 +378,86 @@
 
     };
 
+
+    $("#calcular").click(function(){
+        if($(this).hasClass("active")){
+            $(this).removeClass("active")
+            $(".col_delete").show()
+            $(".col_unidad").show()
+            $(".col_tarifa").hide()
+            $(".col_hora").hide()
+            $(".col_total").hide()
+            $(".col_jornal").hide()
+            $(".col_precioUnit").hide()
+            $(".col_vacio").hide()
+        }else{
+            $(this).addClass("active")
+            var fecha = $("#fecha_precios").val()
+            if(fecha.length<8){
+                $.box({
+                    imageClass: "box_info",
+                    text      : "Seleccione una fecha para determinar la lista de precios",
+                    title     : "Alerta",
+                    iconClose : false,
+                    dialog    : {
+                        resizable    : false,
+                        draggable    : false,
+                        buttons      : {
+                            "Aceptar" : function () {}
+                        },
+                        width:500
+                    }
+                });
+                $(this).removeClass("active")
+            }else{
+                var items = $(".item_row")
+                if(items.size()<1){
+                    $.box({
+                        imageClass: "box_info",
+                        text      : "Añada items a la composición del rubro antes de calcular los precios",
+                        title     : "Alerta",
+                        iconClose : false,
+                        dialog    : {
+                            resizable    : false,
+                            draggable    : false,
+                            buttons      : {
+                                "Aceptar" : function () {}
+                            },
+                            width:500
+                        }
+                    });
+                    $(this).removeClass("active")
+                }else{
+                    var tipo = "C"
+                    if($("#V").hasClass("active"))
+                    tipo="V"
+                    var datos = "fecha="+$("#fecha_precios").val()+"&ciudad="+$("#ciudad").val()+"&tipo="+tipo+"&ids="
+                    $.each(items,function(){
+                        datos+=$(this).attr("id")+"#"
+                    });
+
+
+                    $.ajax({type: "POST",url: "${g.createLink(controller: 'rubro',action:'getPrecios')}",
+                        data: datos,
+                        success: function(msg){
+                               console.log(msg)
+
+                        }
+                    });
+
+                    $(".col_delete").hide()
+                    $(".col_unidad").hide()
+                    $(".col_tarifa").show()
+                    $(".col_hora").show()
+                    $(".col_total").show()
+                    $(".col_jornal").show()
+                    $(".col_precioUnit").show()
+                    $(".col_vacio").show()
+                }
+            }
+        }
+    });
+
     $("#btn_copiarComp").click(function(){
         if($("#rubro__id").val()*1>0){
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
@@ -377,19 +497,19 @@
                         tr.remove()
                     }
 
-                        $.box({
-                            imageClass: "box_info",
-                            text      : msg,
-                            title     : "Alerta",
-                            iconClose : false,
-                            dialog    : {
-                                resizable    : false,
-                                draggable    : false,
-                                buttons      : {
-                                    "Aceptar" : function () {}
-                                }
+                    $.box({
+                        imageClass: "box_info",
+                        text      : msg,
+                        title     : "Alerta",
+                        iconClose : false,
+                        dialog    : {
+                            resizable    : false,
+                            draggable    : false,
+                            buttons      : {
+                                "Aceptar" : function () {}
                             }
-                        });
+                        }
+                    });
 
                 }
             });
@@ -418,10 +538,18 @@
 
     }); //click btn new
     $("#rubro_registro").click(function(){
-        if($(this).hasClass("active"))
-            $("#registrado").val("N")
-        else
-            $("#registrado").val("R")
+        if($(this).hasClass("active")){
+            if(confirm("Esta seguro de desregistrar este rubro?")){
+                $("#registrado").val("N")
+                $("#fechaReg").val("")
+            }
+        }else{
+            if(confirm("Esta seguro de registrar este rubro?")){
+                $("#registrado").val("R")
+                var fecha =new Date()
+                $("#fechaReg").val(fecha.toString("dd/mm/yyyy"))
+            }
+        }
     });
 
     $("#guardar").click(function(){
@@ -435,57 +563,28 @@
             cant=0
         if(isNaN(cant))
             cant = 0
+        var rend = $("#item_rendimiento").val()
+        if(isNaN(rend))
+            rend = 1
         if($("#item_id").val()*1>0){
             if(cant>0){
-                var data="rubro=${rubro.id}&item="+$("#item_id").val()+"&cantidad="+cant
+                var data="rubro=${rubro.id}&item="+$("#item_id").val()+"&cantidad="+cant+"&rendimiento="+rend
                 $.ajax({type: "POST",url: "${g.createLink(controller: 'rubro',action:'addItem')}",
                     data: data,
                     success: function(msg){
-                        var tr =$("<tr>")
+                        var tr =$("<tr class='item_row'>")
                         var td =$("<td>")
                         var band=true
                         var parts = msg.split(";")
+                        tr.attr("id",parts[1])
+                        var a
                         td.html($("#cdgo_buscar").val())
                         tr.append(td)
                         td =$("<td>")
                         td.html($("#item_desc").val())
                         tr.append(td)
-                        td =$("<td style='text-align: right'>")
-                        td.html(number_format($("#item_cantidad").val(), 5, ".", ""))
-                        tr.append(td)
-                        td=$('<td  style="width: 40px;text-align: center">')
-                        var a = $('<a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="'+parts[1]+'"><i class="icon-trash"></i></a>')
-                        td.append(a)
-                        a.bind("click",function(){
-                            var tr = $(this).parent().parent()
-                            if(confirm("Esta seguro de eliminar este registro? Esta acción es irreversible")){
-                                $.ajax({type: "POST",url: "${g.createLink(controller: 'rubro',action:'eliminarRubroDetalle')}",
-                                    data: "id="+$(this).attr("iden"),
-                                    success: function(msg){
-                                        if(msg=="Registro eliminado"){
-                                            tr.remove()
-                                        }
 
-                                        $.box({
-                                            imageClass: "box_info",
-                                            text      : msg,
-                                            title     : "Alerta",
-                                            iconClose : false,
-                                            dialog    : {
-                                                resizable    : false,
-                                                draggable    : false,
-                                                buttons      : {
-                                                    "Aceptar" : function () {}
-                                                }
-                                            }
-                                        });
 
-                                    }
-                                });
-                            }
-
-                        });
-                        tr.append(td)
                         if(parts[0]=="1"){
                             $("#tabla_material").children().find(".cdgo").each(function(){
                                 if($(this).html()==$("#cdgo_buscar").val()){
@@ -494,41 +593,134 @@
                                     band=false
                                 }
                             });
-                            if(band)
+                            if(band){
+                                td =$("<td style='text-align: center' class='col_unidad'>")
+                                td.html($("#item_unidad").val())
+                                tr.append(td)
+                                td =$("<td style='text-align: right' class='cant'>")
+                                td.html(number_format($("#item_cantidad").val(), 5, ".", ""))
+                                tr.append(td)
+
+                                td=$('<td class="col_precioUnit" style="display: none;"></td>');
+                                tr.append(td)
+                                td=$('<td class="col_vacio" style="width: 40px;display: none"></td>');
+                                tr.append(td)
+                                td=$('<td class="col_vacio" style="width: 40px;display: none"></td>');
+                                tr.append(td)
+                                td=$('<td class="col_total" style="display: none;"></td>');
+                                tr.append(td)
+                                td=$('<td  style="width: 40px;text-align: center" class="col_delete">')
+                                a = $('<a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="'+parts[1]+'"><i class="icon-trash"></i></a>')
+                                td.append(a)
+                                tr.append(td)
                                 $("#tabla_material").append(tr)
+                            }
+
 
                         } else{
                             if(parts[0]=="2"){
-//                                console.log("caso 2")
+
                                 $("#tabla_mano").children().find(".cdgo").each(function(){
                                     if($(this).html()==$("#cdgo_buscar").val()){
-//                                        console.log($(this))
                                         var tdCant = $(this).parent().find(".cant")
+                                        var tdRend = $(this).parent().find(".rend")
                                         tdCant.html(number_format(tdCant.html()*1+$("#item_cantidad").val()*1, 5, ".", ""))
-//                                        console.log(tdCant,$("#item_cantidad").val())
+                                        tdRend.html(number_format($("#item_rendimiento").val()*1, 5, ".", ""))
                                         band=false
                                     }
                                 });
-                                if(band)
+                                if(band){
+                                    td =$("<td style='text-align: right' class='cant'>")
+                                    td.html(number_format($("#item_cantidad").val(), 5, ".", ""))
+                                    tr.append(td)
+                                    td =$('<td class="col_jornal" style="display: none;"></td>');
+                                    tr.append(td)
+                                    td =$('<td class="col_hora" style="display: none;"></td>');
+                                    tr.append(td)
+                                    td =$("<td style='text-align: right' class='col_rend rend'>")
+                                    td.html(number_format($("#item_rendimiento").val(), 5, ".", ""))
+                                    tr.append(td)
+                                    td =$('<td class="col_total" style="display: none;"></td>');
+                                    tr.append(td)
+                                    td=$('<td  style="width: 40px;text-align: center" class="col_delete">')
+                                    a = $('<a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="'+parts[1]+'"><i class="icon-trash"></i></a>')
+                                    td.append(a)
+                                    tr.append(td)
                                     $("#tabla_mano").append(tr)
+                                }
+
                             }else{
                                 $("#tabla_equipo").children().find(".cdgo").each(function(){
                                     if($(this).html()==$("#cdgo_buscar").val()){
                                         var tdCant = $(this).parent().find(".cant")
+                                        var tdRend = $(this).parent().find(".rend")
                                         tdCant.html(number_format(tdCant.html()*1+$("#item_cantidad").val()*1, 5, ".", ""))
+                                        tdRend.html(number_format(tdRend.html()*1+$("#item_rendimiento").val()*1, 5, ".", ""))
                                         band=false
                                     }
                                 });
-                                if(band)
+
+                                if(band){
+                                    td =$("<td style='text-align: right'>")
+                                    td.html(number_format(1, 5, ".", ""))
+                                    tr.append(td)
+                                    td =$('<td class="col_tarifa" style="display: none;"></td>');
+                                    tr.append(td)
+                                    td =$('<td class="col_hora" style="display: none;"></td>');
+                                    tr.append(td)
+                                    td =$("<td style='text-align: right' class='col_rend'>")
+                                    td.html(number_format($("#item_rendimiento").val(), 5, ".", ""))
+                                    tr.append(td)
+                                    td =$('<td class="col_total" style="display: none;"></td>');
+                                    tr.append(td)
+                                    td=$('<td  style="width: 40px;text-align: center" class="col_delete">')
+                                    a = $('<a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="'+parts[1]+'"><i class="icon-trash"></i></a>')
+                                    td.append(a)
+                                    tr.append(td)
                                     $("#tabla_equipo").append(tr)
+                                }
                             }
                         }
+                        if(a){
+                            a.bind("click",function(){
+                                var tr = $(this).parent().parent()
+                                if(confirm("Esta seguro de eliminar este registro? Esta acción es irreversible")){
+                                    $.ajax({type: "POST",url: "${g.createLink(controller: 'rubro',action:'eliminarRubroDetalle')}",
+                                        data: "id="+$(this).attr("iden"),
+                                        success: function(msg){
+                                            if(msg=="Registro eliminado"){
+                                                tr.remove()
+                                            }
+
+                                            $.box({
+                                                imageClass: "box_info",
+                                                text      : msg,
+                                                title     : "Alerta",
+                                                iconClose : false,
+                                                dialog    : {
+                                                    resizable    : false,
+                                                    draggable    : false,
+                                                    buttons      : {
+                                                        "Aceptar" : function () {}
+                                                    }
+                                                }
+                                            });
+
+                                        }
+                                    });
+                                }
+
+                            });
+                        }
+
+
 
                         $("#item_desc").val("")
                         $("#item_id").val("")
                         $("#item_cantidad").val("1")
                         $("#cdgo_buscar").val("")
                         $("#cdgo_unidad").val("")
+                        $("#item_rendimiento").val("1")
                     }
                 });
             }else{

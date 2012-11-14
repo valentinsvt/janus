@@ -4,6 +4,7 @@ class Rubro implements Serializable {
     Item item
     Date fecha
     double cantidad
+    double rendimiento = 1
     static mapping = {
         table 'rbro'
         cache usage: 'read-write', include: 'non-lazy'
@@ -16,6 +17,7 @@ class Rubro implements Serializable {
             item column: 'item__id'
             fecha column: 'rbrofcha'
             cantidad column: 'rbrocntd'
+            rendimiento column: 'rbrorndt'
         }
     }
     static constraints = {
@@ -23,6 +25,5 @@ class Rubro implements Serializable {
         cantidad(blank: true, attributes: [title: 'cantidad'])
         rubro(blank: false, nullable: false, attributes: [title: 'rubro'])
         fecha(blank: true, nullable: true, attributes: [title: 'fecha'])
-
     }
 }

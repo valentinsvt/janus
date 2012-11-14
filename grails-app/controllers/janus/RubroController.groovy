@@ -7,6 +7,7 @@ class RubroController extends janus.seguridad.Shield {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def buscadorService
+    def preciosService
 
     def index() {
         redirect(action: "list", params: params)
@@ -16,12 +17,15 @@ class RubroController extends janus.seguridad.Shield {
     def rubroPrincipal(){
         def rubro
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
-
+        def grupos = []
+        grupos.add(Grupo.get(4))
+        grupos.add(Grupo.get(5))
+        grupos.add(Grupo.get(6))
         if (params.idRubro){
             rubro=Item.get(params.idRubro)
-            [campos:campos,rubro:rubro]
+            [campos:campos,rubro:rubro,grupos:grupos]
         }else{
-            [campos:campos]
+            [campos:campos,grupos:grupos]
         }
     }
     def getDatosItem(){
@@ -31,7 +35,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def addItem(){
-//        println "add item "+params
+        println "add item "+params
         def rubro = Item.get(params.rubro)
         def item = Item.get(params.item)
         def detalle
@@ -42,6 +46,7 @@ class RubroController extends janus.seguridad.Shield {
         detalle.item=item
         detalle.cantidad=detalle.cantidad+params.cantidad.toDouble()
         detalle.fecha=new Date()
+        detalle.rendimiento=params.rendimiento.toDouble()
         if (!detalle.save(flush: true)){
             println "detalle "+detalle.errors
         }else{
@@ -211,12 +216,20 @@ class RubroController extends janus.seguridad.Shield {
         def rubro
         if (params.rubro.id) {
             rubro=Item.get(params.rubro.id)
+            params.rubro.fecha = null
+            rubro.tipoItem=TipoItem.get(2)
         }else {
             rubro = new Item(params)
+            params.rubro.fecha = new Date()
+            rubro.tipoItem=TipoItem.get(2)
         }
-        params.rubro.fecha = new Date().parse("dd-MM-yyyy",params.rubro.fecha)
-        if (params.rubro.registro!="R")
+
+        if (params.rubro.registro!="R"){
             params.rubro.registro="N"
+            rubro.fechaRegistro=null
+        }else{
+            rubro.fechaRegistro=new Date()
+        }
         rubro.properties=params.rubro
         rubro.tipoItem=TipoItem.get(2)
         println "ren "+rubro.rendimiento
@@ -277,4 +290,22 @@ class RubroController extends janus.seguridad.Shield {
             redirect(action: "list")
         }
     } //delete
+
+    def getPrecios(){
+//        println "get precios "+params
+        def lugar=Lugar.get(params.ciudad)
+        def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
+        def tipo = params.tipo
+        def items=[]
+        def parts=params.ids.split("#")
+        parts.each {
+            if(it.size()>0)
+                items.add(Rubro.get(it).item)
+        }
+        def precios = preciosService.getPrecioItems(fecha,lugar,items)
+        println "precios "+precios
+        render "ok"
+    }
+
+
 } //fin controller
