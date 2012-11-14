@@ -37,11 +37,12 @@
 
     <div class="span12">
 
-        <div class="span2" align="center"><g:select class="listPrecio" name="listaPrecio"
-                                                    from="${janus.Lugar.list([sort: "id"])}"
-                                                    noSelection="['-1': 'Seleccione']" optionKey="id"
-                                                    optionValue="descripcion" style="width: 270px"
-                                                    disabled="false"/></div>
+        <div class="span2" align="center">
+            <g:select class="listPrecio" name="listaPrecio"
+                      from="${janus.Lugar.list( [sort:'descripcion'])}" optionKey="id" optionValue="${{it.descripcion+' ('+it.tipo+')'}}"
+                      noSelection="['-1': 'Seleccione']" style="width: 270px"
+                      disabled="false"/>
+        </div>
 
         <div class="span1" align="center" style="margin-left: 130px"><elm:datepicker name="fecha"
                                                                                      class="fecha datepicker"
@@ -107,14 +108,9 @@
 
 
     $(function () {
-
         $(".btn-consultar").click(function () {
-
-
             consultar();
-
         });
-
 
         function consultar() {
 

@@ -110,14 +110,23 @@ class ItemController extends janus.seguridad.Shield {
 //
 //            }
 
-            /*todo paginacion y como sacar N sin repetidos?? sql*/
-            rubroPrecio = PrecioRubrosItems.findAllByLugar(lugar,[max: 100]).item
+            rubroPrecio = PrecioRubrosItems.findAllByLugar(lugar).item
+            def items = PrecioRubrosItems.withCriteria {
+                eq("lugar", lugar)
+                projections {
+                    distinct("item")
+                }
+            }
+            println "items2 "+items
+
+
             println "items " + rubroPrecio
 
             def precios = preciosService.getPrecioRubroItem(f, lugar, rubroPrecio)
-            rubroPrecio=[]
+            rubroPrecio = []
+
             precios.each {
-                  rubroPrecio.add(PrecioRubrosItems.get(it))
+                rubroPrecio.add(PrecioRubrosItems.get(it))
             }
 
             println "precios " + precios
@@ -125,25 +134,25 @@ class ItemController extends janus.seguridad.Shield {
 
 //            rubroPrecio = PrecioRubrosItems.list(max: params.max, offset: params.offset);
 
+            if (!params.totalRows) {
+                params.totalRows = rubroPrecio.size()
 
-            params.totalRows = 100
-            params.totalPags = Math.ceil(100 / params.max).toInteger()
+                params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
 
-            if (params.totalPags <= 10) {
-                params.first = 1
-                params.last = params.last = params.totalPags
-            } else {
-                params.first = Math.max(1, params.pag.toInteger() - 5)
-                params.last = Math.min(params.totalPags, params.pag + 5)
+                if (params.totalPags <= 10) {
+                    params.first = 1
+                    params.last = params.last = params.totalPags
+                } else {
+                    params.first = Math.max(1, params.pag.toInteger() - 5)
+                    params.last = Math.min(params.totalPags, params.pag + 5)
 
-                def ts = params.last - params.first
-                if (ts < 9) {
-                    def r = 10 - ts
-                    params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                    def ts = params.last - params.first
+                    if (ts < 9) {
+                        def r = 10 - ts
+                        params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                    }
                 }
             }
-
-
         }
 
         [rubroPrecio: rubroPrecio, params: params]
