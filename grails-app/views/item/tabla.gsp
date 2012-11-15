@@ -11,6 +11,13 @@
 
     }
 
+    .alineacion {
+
+
+       text-align: right !important
+
+    }
+
 
     </style>
 
@@ -35,7 +42,7 @@
 
     <g:each in="${rubroPrecio}" var="rubro" status="i">
 
-        <tr>
+        <tr align="right">
 
             <td class="itemId" align="center" style="width: 150px;">
 
@@ -54,11 +61,12 @@
                 ${rubro?.item?.unidad?.descripcion}
 
             </td>
-            <td class="editable ${i == 0 ? 'selected' : ''}" id="${rubro?.item?.id}" align="center"
-                data-original="${rubro?.precioUnitario}"
-                style="width: 150px">
 
-                ${rubro?.precioUnitario}
+            <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.item?.id}"
+                data-original="${rubro?.precioUnitario}"
+                style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5"/>
+
+                %{--${rubro?.precioUnitario}--}%
 
             </td>
 
@@ -87,6 +95,7 @@
 %{--TOTAL PAGS: ${params.totalPags}<br/>--}%
 %{--1st PAG: ${params.first}<br/>--}%
 %{--LAST: ${params.last}<br/>--}%
+
 
 <div>
 
@@ -242,13 +251,6 @@
             return false;
         });
 
-//        $(".btn-generar").click(function () {
-//
-////            $(".precioAL").show();
-////            $(".precioAnterior").show();
-//
-//
-//        });
 
         $(".btn-actualizar").click(function () {
 

@@ -81,7 +81,11 @@ class ItemController extends janus.seguridad.Shield {
                 }
             }
         } else {
+
+            println("aca")
+
             lugar = Lugar.get(params.lgar)
+
             def sql
 
 
@@ -118,6 +122,7 @@ class ItemController extends janus.seguridad.Shield {
 
             precios.each {
                 rubroPrecio.add(PrecioRubrosItems.get(it))
+
             }
 
             if (!params.totalRows) {
@@ -133,6 +138,8 @@ class ItemController extends janus.seguridad.Shield {
                 params.totalRows = totalCount
 
                 params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+
+                println("total" + params.totalPags)
 
                 if (params.totalPags <= 10) {
                     params.first = 1
@@ -151,7 +158,7 @@ class ItemController extends janus.seguridad.Shield {
             cn.close()
         }
 
-        [rubroPrecio: rubroPrecio, params: params]
+        [rubroPrecio: rubroPrecio, params: params, lugar:lugar]
     }
 
 

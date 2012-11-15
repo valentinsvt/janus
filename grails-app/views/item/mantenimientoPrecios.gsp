@@ -43,7 +43,7 @@
                       from="${janus.Lugar.list([sort: 'descripcion'])}" optionKey="id"
                       optionValue="${{it.descripcion + ' (' + it.tipo + ')'}}"
                       noSelection="['-1': 'Seleccione']"
-                      disabled="false"/>
+                      disabled="false" style="margin-left: 10px"/>
         </div>
 
         <div class="span2 noMargin" align="center">
@@ -84,7 +84,16 @@
     function consultar() {
         var lgar = $("#listaPrecio").val();
         var fcha = $("#fecha").val();
-//            console.log("fcha" + fcha)
+
+
+        if(fcha == "") {
+
+            fcha = new Date().toString("dd-MM-yyyy")
+        }
+
+//        console.log("lugar:" + lgar)
+
+
         var todos = "";
         if ($("#todos").attr("checked") == "checked") {
             todos = 1
@@ -115,17 +124,39 @@
             var fecha2 = new Date().toString("dd-MM-yyyy");
 //            console.log(fecha2);
             if ($("#todos").attr("checked") == "checked") {
-//                $("#listaPrecio").attr("disabled", true);
-//                $("#listaPrecio").attr("value", -1);
+//
                 $("#fecha").attr("value", fecha2);
             }
             else {
-//                $("#listaPrecio").attr("disabled", false)
+//               )
             }
         });
 
+        $(function () {
+
+
+
+        }) ;
+
         $(".btn-consultar").click(function () {
-            consultar();
+
+            var lgar = $("#listaPrecio").val();
+
+            if(lgar != -1) {
+
+                consultar();
+
+            }
+            else {
+
+                console.log("entro")
+
+
+
+            }
+
+
+
         });
     });
 </script>
