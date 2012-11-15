@@ -29,9 +29,12 @@
     background-color : #FFFF88;
 }
 
-.algo {
+.noMargin {
+    margin: 0 !important;
+}
 
-
+.noPadding {
+    padding: 0 !important;
 }
 
 /* Custom styling */
