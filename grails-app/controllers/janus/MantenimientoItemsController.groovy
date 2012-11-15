@@ -5,6 +5,8 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class MantenimientoItemsController extends Shield {
 
+    def preciosService
+
     String makeBasicTree(params) {
 
         def id = params.id
@@ -477,34 +479,38 @@ class MantenimientoItemsController extends Shield {
     }
 
     def showLg_ajax() {
-        println params
+        println "show lg"+params
+        params.tipo="C"
+        params.operador="<"
+        params.todasLasFechas="false"
         def parts = params.id.split("_")
         def itemId = parts[0]
         def lugarId = parts[1]
-
         def item = Item.get(itemId)
-        def lgar, precios
+        def lugar=[]
+        def precios = []
+        def operador=params.operador
+        def fecha= new Date()
+        if (params.todasLasFechas=="true")
+            fecha=null
         if (lugarId == "all") {
-            if (params.all.toBoolean()) {
-                precios = PrecioRubrosItems.withCriteria {
-                    eq("item", item)
-                    lugar {
-                        order("tipo", "asc")
-                    }
-                }
-            } else {
-                precios = PrecioRubrosItems.withCriteria {
-                    eq("item", item)
-                    lugar {
-                        eq("tipo", "C")
-                    }
-                }
-            }
-            lgar = "todos los lugares"
+            lugar=Lugar.findAllByTipo(params.tipo,[sort: "descripcion"])
+            println  "todos los lugares"
         } else {
-            lgar = Lugar.get(lugarId).descripcion
-            precios = PrecioRubrosItems.findAllByItemAndLugar(item, lgar)
+            lugar.add(Lugar.get(lugarId))
         }
-        return [item: item, lugarNombre: lgar, precios: precios, lgar: lugarId == "all"]
+//        println "parametros busqueda "+fecha+" - "+itemId+" - "+operador
+        lugar.each {
+            def tmp = preciosService.getPrecioRubroItemOperador(fecha,it,itemId,operador)
+            if(tmp.size()>0)
+                precios+=tmp
+        }
+        def res = []
+        precios.each {
+            res.add(PrecioRubrosItems.get(it))
+        }
+        precios=res
+
+        return [item: item, lugarNombre: lugarId, precios: precios, lgar: lugarId == "all"]
     }
 }
