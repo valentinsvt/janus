@@ -59,26 +59,6 @@
         </div>
     </g:if>
 
-    <g:if test="${itemInstance?.tipoItem}">
-        <div class="control-group">
-            <div>
-                <span id="tipoItem-label" class="control-label label label-inverse">
-                    Tipo de Item
-                </span>
-            </div>
-
-            <div class="controls">
-
-                <span aria-labelledby="tipoItem-label">
-                    %{--<g:link controller="tipoItem" action="show" id="${itemInstance?.tipoItem?.id}">--}%
-                    ${itemInstance?.tipoItem?.descripcion}
-                    %{--</g:link>--}%
-                </span>
-
-            </div>
-        </div>
-    </g:if>
-
     <g:if test="${itemInstance?.peso}">
         <div class="control-group">
             <div>

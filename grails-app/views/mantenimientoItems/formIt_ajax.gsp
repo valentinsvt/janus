@@ -40,10 +40,13 @@
         </div>
 
         <div class="controls">
-            <g:textField name="codigo" maxlength="20" style="width: 180px" class="allCaps required" value="${itemInstance?.codigo}"/>
-            <span class="mandatory">*</span>
-
-            <p class="help-block ui-helper-hidden"></p>
+            <div class="input-prepend">
+                <span class="add-on">${departamento.subgrupo.codigo.toString().padLeft(3, '0')}</span>
+                <span class="add-on">${departamento.codigo.toString().padLeft(3, '0')}</span>
+                <g:textField name="codigo" maxlength="20" class="span2 allCaps required" value="${itemInstance?.codigo}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
         </div>
     </div>
 
@@ -276,7 +279,8 @@
                     url  : "${createLink(action:'checkCdIt_ajax')}",
                     type : "post",
                     data : {
-                        id : "${itemInstance?.id}"
+                        id  : "${itemInstance?.id}",
+                        dep : "${departamento.id}"
                     }
                 }
             },

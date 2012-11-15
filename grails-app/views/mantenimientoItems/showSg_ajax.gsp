@@ -32,7 +32,7 @@
             <div class="controls">
 
                 <span aria-labelledby="codigo-label">
-                    <g:fieldValue bean="${subgrupoItemsInstance}" field="codigo"/>
+                    ${subgrupoItemsInstance?.codigo.toString().padLeft(3,'0')}
                 </span>
 
             </div>

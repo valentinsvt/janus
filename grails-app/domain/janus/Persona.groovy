@@ -1,7 +1,7 @@
 package janus
 
-import janus.seguridad.Sesn
 import janus.seguridad.Accs
+import janus.seguridad.Sesn
 
 class Persona implements Serializable {
     Departamento departamento
@@ -19,6 +19,7 @@ class Persona implements Serializable {
     String login
     String password
     String autorizacion
+    String email
 
     Integer activo
     Date fechaActualizacionPass
@@ -51,6 +52,7 @@ class Persona implements Serializable {
             login column: 'prsnlogn'
             password column: 'prsnpass'
             autorizacion column: 'prsnatrz'
+            email column: 'prsnmail'
 
             activo column: 'prsnactv'
             fechaActualizacionPass column: 'prsnfcps'
@@ -72,6 +74,7 @@ class Persona implements Serializable {
         login(size: 1..16, blank: false, nullable: false, attributes: [title: 'login'])
         password(size: 1..63, blank: false, nullable: false, attributes: [title: 'password'])
         autorizacion(size: 1..63, blank: false, nullable: false, attributes: [title: 'autorizacion'])
+        email(blank: true, nullable: true, email: true, attributes: [title: 'email'])
 
         activo(blank: false, nullable: false, attributes: [title: 'activo'])
         fechaActualizacionPass(blank: true, nullable: true, attributes: [title: 'fecha cmabio pass'])

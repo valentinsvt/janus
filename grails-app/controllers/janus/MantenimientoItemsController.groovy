@@ -380,9 +380,12 @@ class MantenimientoItemsController extends Shield {
     }
 
     def checkCdIt_ajax() {
+        def dep = DepartamentoItem.get(params.dep)
+        params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+        println params
         if (params.id) {
             def item = Item.get(params.id)
-            if (params.codigo == item.codigo) {
+            if (params.codigo.toString().trim() == item.codigo.toString().trim()) {
                 render true
             } else {
                 def items = Item.findAllByCodigo(params.codigo)
@@ -449,7 +452,9 @@ class MantenimientoItemsController extends Shield {
     }
 
     def saveIt_ajax() {
+        def dep = DepartamentoItem.get(params.departamento.id)
         params.tipoItem = TipoItem.findByCodigo("I")
+        params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
         def accion = "create"
         def item = new Item()
         if (params.id) {

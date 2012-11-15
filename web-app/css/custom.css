@@ -1,209 +1,202 @@
 /*Menu*/
 .navbar .brand {
-    float: left;
-    display: block;
-    padding: 10px 20px 10px;
-    margin-left: -20px;
-    font-size: 20px;
-    font-weight: 200;
+    float       : left;
+    display     : block;
+    padding     : 10px 20px 10px;
+    margin-left : -20px;
+    font-size   : 20px;
+    font-weight : 200;
     /*color       : #777777;*/
-    color: #FFAC37;
-    text-shadow: -2px 2px 1px rgba(248, 148, 6, 0.5) !important;
+    color       : #FFAC37;
+    text-shadow : -2px 2px 1px rgba(248, 148, 6, 0.5) !important;
 }
 
 .titulo, .tituloTree {
-    font-size: 22px !important;
-    font-family: 'Tulpen One', cursive;
-    font-weight: bold !important;
-    text-shadow: -2px 2px 1px rgba(148, 148, 148, 0.5);
+    font-size   : 22px !important;
+    font-family : 'Tulpen One', cursive;
+    font-weight : bold !important;
+    text-shadow : -2px 2px 1px rgba(148, 148, 148, 0.5);
 }
 
 .tituloTree {
-    font-family: 'Open Sans Condensed', cursive;
-    margin-bottom: 10px;
-    font-size: 25px;
-    border-bottom: 1px solid rgba(148, 148, 148, 1);
+    font-family   : 'Open Sans Condensed', cursive;
+    margin-bottom : 10px;
+    font-size     : 25px;
+    border-bottom : 1px solid rgba(148, 148, 148, 1);
 }
 
 .highlight {
-    background-color: #FFFF88;
-}
-
-.noMargin {
-    margin: 0 !important;
-}
-
-.noPadding {
-    padding: 0 !important;
+    background-color : #FFFF88;
 }
 
 /* Custom styling */
 body {
-    font-size: 13px;
+    font-size : 13px;
 }
 
 .table th {
-    text-align: center;
+    text-align : center;
 }
 
 .navbar {
-    margin-bottom: 10px;
+    margin-bottom : 10px;
 }
 
 .mandatory {
-    color: #b62f29;
-    font-weight: bold;
+    color       : #b62f29;
+    font-weight : bold;
 }
 
 .textRight {
-    text-align: right !important;
+    text-align : right !important;
 }
 
 /******************inputs ******************************/
 .allCaps {
-    text-transform: uppercase;
+    text-transform : uppercase;
 }
 
 /********** para los datepickers ***********/
 .ui-datepicker-calendar {
-    font-size: 12px;
-    line-height: 12px;
+    font-size   : 12px;
+    line-height : 12px;
 }
 
 .datepicker {
-    background: url(../images/calendar.png) right no-repeat !important;
+    background : url(../images/calendar.png) right no-repeat !important;
 }
 
 .datepicker.disabled {
-    background: url(../images/calendar_disabled.png) right no-repeat !important;
+    background : url(../images/calendar_disabled.png) right no-repeat !important;
 }
 
 /************ para los autocomplete *************/
 .ui-autocomplete-loading {
-    background: white url('../images/spinner.gif') right center no-repeat;
+    background : white url('../images/spinner.gif') right center no-repeat;
 }
 
 .ui-autocomplete {
-    max-height: 300px;
-    overflow-y: auto;
+    max-height : 300px;
+    overflow-y : auto;
     /* prevent horizontal scrollbar */
-    overflow-x: hidden;
+    overflow-x : hidden;
 }
 
 /* IE 6 doesn't support max-height
 * we use height instead, but this forces the menu to always be this tall
 */
 * html .ui-autocomplete {
-    height: 100px;
+    height : 100px;
 }
 
 /*************** para los arboles ************/
 a.jstree-search, a.jstree-search.jstree-hovered {
-    background-color: #5bb75b;
-    color: white !important;
-    text-shadow: none;
+    background-color : #5bb75b;
+    color            : white !important;
+    text-shadow      : none;
 }
 
 a.jstree-search.jstree-hovered {
-    border: solid 1px;
-    border-color: #387038;
-    background-color: #A9D6A9;
+    border           : solid 1px;
+    border-color     : #387038;
+    background-color : #A9D6A9;
 }
 
 fieldset.borde {
-    border: 1px solid #999;
+    border : 1px solid #999;
 }
 
 fieldset.borde legend {
-    width: auto;
-    border: none;
+    width  : auto;
+    border : none;
 }
 
 .modal.large {
-    width: 780px;
-    margin-left: -390px; /* - width/2 */
+    width       : 780px;
+    margin-left : -390px; /* - width/2 */
 }
 
 .modal.grande {
-    width: 1000px;
-    margin-left: -500px; /* - width/2 */
+    width       : 1000px;
+    margin-left : -500px; /* - width/2 */
 }
 
 .buscador {
-    width: 800px
+    width : 800px
 }
 
 .css-vertical-text {
-    position: absolute;
-    left: 5px;
-    bottom: 5px;
-    color: #0088CC;
-    border: 0px solid red;
-    writing-mode: tb-rl;
-    -webkit-transform: rotate(270deg);
-    -moz-transform: rotate(270deg);
-    -o-transform: rotate(270deg);
-    white-space: nowrap;
-    display: block;
-    width: 20px;
-    height: 20px;
-    font-size: 25px;
-    font-family: 'Tulpen One', cursive;
-    font-weight: bold;
-    font-size: 35px;
-    text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);
+    position          : absolute;
+    left              : 5px;
+    bottom            : 5px;
+    color             : #0088CC;
+    border            : 0px solid red;
+    writing-mode      : tb-rl;
+    -webkit-transform : rotate(270deg);
+    -moz-transform    : rotate(270deg);
+    -o-transform      : rotate(270deg);
+    white-space       : nowrap;
+    display           : block;
+    width             : 20px;
+    height            : 20px;
+    font-size         : 25px;
+    font-family       : 'Tulpen One', cursive;
+    font-weight       : bold;
+    font-size         : 35px;
+    text-shadow       : -2px 2px 1px rgba(0, 0, 0, 0.25);
 
     /*text-shadow: 0px 0px 1px #333;*/
 }
 
 .tituloGrande {
-    text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.5);
+    text-shadow : -2px 2px 1px rgba(0, 0, 0, 0.5);
 
 }
 
 .linea {
-    position: absolute;
-    left: 30px;
-    bottom: 5px;
-    width: 1px;
-    border-left: 1px solid #0088CC;
+    position    : absolute;
+    left        : 30px;
+    bottom      : 5px;
+    width       : 1px;
+    border-left : 1px solid #0088CC;
 
 }
 
 td .numero {
-    text-align: right;
+    text-align : right;
 }
 
 /***************************** TABLAS **********************************/
 th.sortable a {
-    background-position: right;
-    background-repeat: no-repeat;
-    padding-right: 1.1em;
+    background-position : right;
+    background-repeat   : no-repeat;
+    padding-right       : 1.1em;
+    color               : #ffffff !important;
 }
 
 th.asc a {
-    background-image: url(../images/skin/sorted_asc.gif) !important;
+    background-image : url(../images/skin/sorted_asc.gif) !important;
 }
 
 th.desc a {
-    background-image: url(../images/skin/sorted_desc.gif) !important;
+    background-image : url(../images/skin/sorted_desc.gif) !important;
 }
 
 .table-striped tbody tr:nth-child(odd) td,
 .table-striped tbody tr:nth-child(odd) th {
-    background-color: #ececec;
+    background-color : #ececec;
 }
 
 .table-hover tbody tr:hover td,
 .table-hover tbody tr:hover th {
-    background-color: rgba(255, 172, 55, 1);
+    background-color : rgba(255, 172, 55, 1);
 }
 
 .table th {
-    background: #49AFCD;
-    font-family: "Open Sans Condensed";
-    font-size: 15px;
-    font-weight: bolder;
-    color: white;
-    text-shadow: -2px 4px 2px rgba(0, 0, 0, 0.8);
+    background  : #49AFCD;
+    font-family : "Open Sans Condensed";
+    font-size   : 15px;
+    font-weight : bolder;
+    color       : white;
+    text-shadow : -2px 4px 2px rgba(0, 0, 0, 0.8);
 }
