@@ -32,6 +32,7 @@
         <div class="span2 noMargin" align="center">Fecha</div>
 
         <div class="span1 noMargin" align="center">Todos</div>
+
         <div class="span1 noMargin" align="center">Ver</div>
 
     </div>
@@ -47,7 +48,7 @@
         </div>
 
         <div class="span2 noMargin" align="center">
-            <elm:datepicker name="fecha" class="fecha datepicker input-small" />
+            <elm:datepicker name="fecha" class="fecha datepicker input-small"/>
         </div>
 
         <div class="span1 noMargin" align="center">
@@ -55,7 +56,8 @@
         </div>
 
         <div class="span2 noMargin" align="center">
-            <g:select name="tipo" from="${janus.Grupo.findAllByIdLessThanEquals(3)}" class="span2" optionKey="id" optionValue="descripcion" noSelection="['-1':'Todos']" />
+            <g:select name="tipo" from="${janus.Grupo.findAllByIdLessThanEquals(3)}" class="span2" optionKey="id"
+                      optionValue="descripcion" noSelection="['-1': 'Todos']"/>
         </div>
 
         <div class="btn-group span1">
@@ -69,13 +71,35 @@
 </fieldset>
 
 
-<fieldset class="borde">
+<fieldset class="borde" style="width: 1170px">
 
     <div id="tablaPrecios">
+
+
 
     </div>
 
 </fieldset>
+
+<fieldset class="borde" style="width: 1170px">
+    <div class="hide" id="error">
+        <div class="alert alert-error">
+
+            <h4 style="margin-left: 450px">No existen datos!!</h4>
+
+            <div style="margin-left: 420px">
+                Ingrese los parámetros de búsqueda!
+
+            </div>
+        </div>
+    </div>
+
+</fieldset>
+
+<div id="dlgLoad" class="ui-helper-hidden" style="text-align:center;">
+    Cargando.....Por favor espere......<br/><br/>
+    <img src="${resource(dir: 'images', file: 'spinner64.gif')}" alt=""/>
+</div>
 
 
 <script type="text/javascript">
@@ -86,13 +110,10 @@
         var fcha = $("#fecha").val();
 
 
-        if(fcha == "") {
+        if (fcha == "") {
 
             fcha = new Date().toString("dd-MM-yyyy")
         }
-
-//        console.log("lugar:" + lgar)
-
 
         var todos = "";
         if ($("#todos").attr("checked") == "checked") {
@@ -132,29 +153,35 @@
             }
         });
 
-        $(function () {
+        $(function error(lugar) {
 
 
-
-        }) ;
+        });
 
         $(".btn-consultar").click(function () {
 
             var lgar = $("#listaPrecio").val();
 
-            if(lgar != -1) {
+            if (lgar != -1) {
 
+                $("#error").hide();
+                $("#dlgLoad").dialog("open");
                 consultar();
+
+                $("#tablaPrecios").show();
+
 
             }
             else {
 
-                console.log("entro")
+                console.log("entro!");
+                $("#tablaPrecios").hide();
+
+                $("#error").show();
 
 
 
             }
-
 
 
         });

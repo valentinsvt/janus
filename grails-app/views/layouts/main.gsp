@@ -76,6 +76,11 @@
 
         </div>
 
+    <div id="dlgLoad" class="ui-helper-hidden" style="text-align:center;">
+        Cargando.....Por favor espere......<br/><br/>
+        <img src="${resource(dir: 'images', file: 'spinner64.gif')}" alt=""/>
+    </div>
+
         <script src="${resource(dir: 'css/bootstrap/js', file: 'bootstrap.js')}"></script>
 
         <script type="text/javascript">
@@ -117,6 +122,19 @@
             }
 
             $(function () {
+
+                $("#dlgLoad").dialog({
+                    modal:true,
+                    autoOpen:false,
+                    closeOnEscape:false,
+                    draggable:false,
+                    resizable:false,
+                    zIndex:9000,
+                    open:function (event, ui) {
+                        $(event.target).parent().find(".ui-dialog-titlebar-close").remove();
+                    }
+                });
+
                 var ahora = new Date();
                 var fin = ahora.clone().add(20).minute();
 

@@ -25,7 +25,7 @@
 
 <body>
 
-<div class="span12" id="tabla">
+<div id="tabla">
 
 <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPrecios">
     <thead style="background-color:#0074cc;">
