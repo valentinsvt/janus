@@ -23,29 +23,7 @@
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
-        <style type="text/css">
-        .btn-group {
-            margin-bottom : 10px;
-        }
-
-        #tree, #info {
-            float      : left;
-            overflow-y : auto;
-            height     : 720px;
-            width      : 500px;
-            background : #CEE2E8;
-            border     : solid 2px #6AA8BA;
-        }
-
-        #info {
-            margin-left  : 15px;
-            width        : 617px;
-            height       : 690px;
-            border-color : #DC6816;
-            background   : #F2DFD2;
-            padding      : 15px;
-        }
-        </style>
+        <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
 
     </head>
 

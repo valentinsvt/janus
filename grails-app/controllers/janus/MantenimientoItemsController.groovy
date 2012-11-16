@@ -484,38 +484,56 @@ class MantenimientoItemsController extends Shield {
     }
 
     def showLg_ajax() {
-        println "show lg"+params
-        params.tipo="C"
-        params.operador="<"
-        params.todasLasFechas="false"
+//        params.tipo = "C"
+//        params.operador = "<"
+        if (params.fecha == "all") {
+            params.todasLasFechas = "true"
+        } else {
+            params.todasLasFechas = "false"
+            params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        }
+//        println "show lg" + params
+
         def parts = params.id.split("_")
         def itemId = parts[0]
         def lugarId = parts[1]
         def item = Item.get(itemId)
-        def lugar=[]
+        def lugar = []
         def precios = []
-        def operador=params.operador
-        def fecha= new Date()
-        if (params.todasLasFechas=="true")
-            fecha=null
+        def operador = params.operador
+        def fecha = params.fecha
+
+        def lugarNombre
+
+        if (params.todasLasFechas == "true") {
+            fecha = null
+        }
+        if (params.ignore == "true") {
+            params.tipo = ['C', 'V']
+            lugarNombre = " (C y V)"
+        } else {
+            params.tipo = ['C']
+            lugarNombre = " (C)"
+        }
         if (lugarId == "all") {
-            lugar=Lugar.findAllByTipo(params.tipo,[sort: "descripcion"])
-            println  "todos los lugares"
+            lugar = Lugar.findAllByTipoInList(params.tipo, [sort: "descripcion"])
+            lugarNombre = "todos los lugares" + lugarNombre
         } else {
             lugar.add(Lugar.get(lugarId))
+            lugarNombre = lugar[0].descripcion
         }
 //        println "parametros busqueda "+fecha+" - "+itemId+" - "+operador
         lugar.each {
-            def tmp = preciosService.getPrecioRubroItemOperador(fecha,it,itemId,operador)
-            if(tmp.size()>0)
-                precios+=tmp
+            def tmp = preciosService.getPrecioRubroItemOperador(fecha, it, itemId, operador)
+            if (tmp.size() > 0)
+                precios += tmp
         }
         def res = []
         precios.each {
             res.add(PrecioRubrosItems.get(it))
         }
-        precios=res
+        precios = res
 
-        return [item: item, lugarNombre: lugarId, precios: precios, lgar: lugarId == "all"]
+        return [item: item, lugarNombre: lugarNombre, precios: precios, lgar: lugarId == "all"]
     }
 }

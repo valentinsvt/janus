@@ -18,13 +18,14 @@
 
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
-        <link href='${resource(dir:"css",file: "custom.css" )}' rel='stylesheet' type='text/css'>
+        <link href='${resource(dir: "css", file: "custom.css")}' rel='stylesheet' type='text/css'>
     </head>
 
     <body>
 
         <g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #525E67;background: #202328;color: #939Aa2;width: 300px;position: relative;padding-left: 70px">
             <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px">Sistema Janus</p>
+
             <div class="linea" style="height: 95%;left: 45px"></div>
             <fieldset>
                 <legend style="color: white;border:none;font-family: 'Open Sans Condensed', serif;font-weight: bolder;font-size: 25px">Ingreso</legend>
@@ -73,7 +74,11 @@
                     success        : function (label) {
                         label.parent().hide();
                     },
-                    errorClass     : "label label-important"
+                    errorClass     : "label label-important",
+                    submitHandler  : function (form) {
+                        $("#btnLogin").replaceWith(spinnerLogin);
+                        form.submit();
+                    }
                 });
 
             });

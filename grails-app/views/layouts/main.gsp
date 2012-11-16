@@ -69,20 +69,6 @@
 
         <mn:menu title="${g.layoutTitle(default: g.message(code: 'default.app.name'))}"/>
 
-
-        <div class="container principal">
-
-            <g:layoutBody/>
-
-        </div>
-
-    <div id="dlgLoad" class="ui-helper-hidden" style="text-align:center;">
-        Cargando.....Por favor espere......<br/><br/>
-        <img src="${resource(dir: 'images', file: 'spinner64.gif')}" alt=""/>
-    </div>
-
-        <script src="${resource(dir: 'css/bootstrap/js', file: 'bootstrap.js')}"></script>
-
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
@@ -124,13 +110,13 @@
             $(function () {
 
                 $("#dlgLoad").dialog({
-                    modal:true,
-                    autoOpen:false,
-                    closeOnEscape:false,
-                    draggable:false,
-                    resizable:false,
-                    zIndex:9000,
-                    open:function (event, ui) {
+                    modal         : true,
+                    autoOpen      : false,
+                    closeOnEscape : false,
+                    draggable     : false,
+                    resizable     : false,
+                    zIndex        : 9000,
+                    open          : function (event, ui) {
                         $(event.target).parent().find(".ui-dialog-titlebar-close").remove();
                     }
                 });
@@ -151,5 +137,20 @@
                 });
             });
         </script>
+
+        <div id="dlgLoad" class="ui-helper-hidden" style="text-align:center;">
+            Cargando.....Por favor espere......<br/><br/>
+            <img src="${resource(dir: 'images', file: 'spinner64.gif')}" alt=""/>
+        </div>
+
+        <div class="container principal">
+
+            <g:layoutBody/>
+
+        </div>
+
+
+        <script src="${resource(dir: 'css/bootstrap/js', file: 'bootstrap.js')}"></script>
+
     </body>
 </html>

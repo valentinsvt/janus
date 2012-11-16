@@ -151,7 +151,11 @@
                     success        : function (label) {
                         label.parent().hide();
                     },
-                    errorClass     : "label label-important"
+                    errorClass     : "label label-important",
+                    submitHandler  : function (form) {
+                        $("#btnLogin").replaceWith(spinnerLogin);
+                        form.submit();
+                    }
                 });
 
             });

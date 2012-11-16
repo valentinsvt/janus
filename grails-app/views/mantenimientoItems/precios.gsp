@@ -21,30 +21,9 @@
         <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
-        <style type="text/css">
-        .btn-group {
-            margin-bottom : 10px;
-        }
-
-        #tree, #info {
-            float      : left;
-            overflow-y : auto;
-            height     : 720px;
-            width      : 500px;
-            background : #CEE2E8;
-            border     : solid 2px #6AA8BA;
-        }
-
-        #info {
-            margin-left  : 15px;
-            width        : 617px;
-            height       : 690px;
-            border-color : #DC6816;
-            background   : #F2DFD2;
-            padding      : 15px;
-        }
-        </style>
+        <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
 
     </head>
 
@@ -96,7 +75,7 @@
             %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
             %{--</div>--}%
 
-            <div class="span12">
+            <div class="span12 noMargin">
                 <div class="btn-group pull-left" data-toggle="buttons-checkbox">
                     <a href="#" id="all" class="btn toggleTipo">
                         Ver todas las listas
@@ -115,17 +94,17 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#" class="fecha" id="todasFechas" data-fecha='false'>
+                            <a href="#" class="fecha" data-operador="all" data-fecha='false'>
                                 Todas las fechas
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="fecha" id="fechaIgual" data-fecha='true'>
+                            <a href="#" class="fecha" data-operador="=" data-fecha='true'>
                                 Fecha igual
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="fecha" id="fechaMenor" data-fecha='true'>
+                            <a href="#" class="fecha" data-operador="<=" data-fecha='true'>
                                 Hasta la fecha
                             </a>
                         </li>
@@ -133,8 +112,13 @@
                 </div>
 
                 <div class="pull-left hide" id="divFecha">
-                    <elm:datepicker name="fecha" class="input-small"/>
+                    <elm:datepicker name="fecha" class="input-small" onClose="cambiaFecha" yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"/>
                 </div>
+
+                <div class="pull-left">
+                    <a href="#" id="btnRefresh" class="btn"><i class="icon-refresh"></i> Refrescar</a>
+                </div>
+
             </div>
 
             <div id="tree" class="ui-corner-all"></div>
@@ -158,6 +142,7 @@
 
         <script type="text/javascript">
 
+
             $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
 
             var btn = $("<a href='#' class='btn' id='btnSearch'><i class='icon-zoom-in'></i> Buscar</a>");
@@ -166,9 +151,10 @@
 
             var current = "1";
             var showLugar = {
-                all    : false,
-                ignore : false,
-                fecha  : "all"
+                all      : false,
+                ignore   : false,
+                fecha    : "all",
+                operador : ""
             };
 
             var icons = {
@@ -196,6 +182,11 @@
                 lugar_all : "${resource(dir: 'images/tree', file: 'lugar_all.png')}"
             };
 
+            function cambiaFecha(dateText, inst) {
+                showLugar.fecha = dateText;
+//                console.log(showLugar);
+            }
+
             function log(msg, error) {
                 var sticky = false;
                 var theme = "success";
@@ -210,6 +201,246 @@
                     closerTemplate : '<div>[ cerrar todos ]</div>',
                     themeState     : ''
                 });
+            }
+
+            function createUpdate(params) {
+                var obj = {
+                    label            : params.label,
+                    separator_before : params.sepBefore, // Insert a separator before the item
+                    separator_after  : params.sepAfter, // Insert a separator after the item
+                    icon             : params.icon,
+                    action           : function (obj) {
+                        $.ajax({
+                            type    : "POST",
+                            url     : params.url,
+                            data    : params.data,
+                            success : function (msg) {
+                                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                btnSave.click(function () {
+                                    if ($("#frmSave").valid()) {
+                                        btnSave.replaceWith(spinner);
+                                        var url = $("#frmSave").attr("action");
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : url,
+                                            data    : $("#frmSave").serialize(),
+                                            success : function (msg) {
+                                                var parts = msg.split("_");
+                                                if (parts[0] == "OK") {
+                                                    if (params.action == "create") {
+                                                        if (params.open) {
+                                                            $("#" + params.nodeStrId).removeClass("jstree-leaf").addClass("jstree-closed");
+                                                            $('#tree').jstree("open_node", $("#" + params.nodeStrId));
+                                                        }
+                                                        $('#tree').jstree("create_node", $("#" + params.nodeStrId), params.where, {attr : {id : params.tipo + "_" + parts[2]}, data : parts[3]});
+                                                        $("#modal-tree").modal("hide");
+                                                        log(params.log + parts[3] + " creado correctamente");
+                                                    } else if (params.action == "update") {
+                                                        $("#tree").jstree('rename_node', $("#" + params.nodeStrId), parts[3]);
+                                                        $("#modal-tree").modal("hide");
+                                                        log(params.log + parts[3] + " editado correctamente");
+                                                    }
+                                                } else {
+                                                    $("#modal-tree").modal("hide");
+                                                    log("Ha ocurrido el siguiente error: " + parts[1], true);
+                                                }
+                                            }
+                                        });
+                                    }
+//                                            $("#frmSave").submit();
+                                    return false;
+                                });
+                                if (params.action == "create") {
+                                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                                } else if (params.action == "update") {
+                                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
+                                }
+                                $("#modalTitle").html(params.title);
+                                $("#modalBody").html(msg);
+                                $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                $("#modal-tree").modal("show");
+                            }
+                        });
+                    }
+                };
+                return obj;
+            }
+
+            function remove(params) {
+                var obj = {
+                    label            : params.label,
+                    separator_before : params.sepBefore, // Insert a separator before the item
+                    separator_after  : params.sepAfter, // Insert a separator after the item
+                    icon             : params.icon,
+                    action           : function (obj) {
+
+                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                        var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+                        $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
+                        $("#modalTitle").html(params.title);
+                        $("#modalBody").html("<p>Está seguro de querer eliminar este " + params.confirm + "?</p>");
+                        $("#modalFooter").html("").append(btnOk).append(btnSave);
+                        $("#modal-tree").modal("show");
+
+                        btnSave.click(function () {
+                            btnSave.replaceWith(spinner);
+                            $.ajax({
+                                type    : "POST",
+                                url     : params.url,
+                                data    : params.data,
+                                success : function (msg) {
+                                    var parts = msg.split("_");
+                                    if (parts[0] == "OK") {
+                                        $("#tree").jstree('delete_node', $("#" + params.nodeStrId));
+                                        $("#modal-tree").modal("hide");
+                                        log(params.log + " eliminado correctamente");
+                                        if ($("#" + params.parentStrId).children("ul").children().size() == 0) {
+                                            $("#" + params.parentStrId).removeClass("hasChildren");
+                                        }
+                                    } else {
+                                        $("#modal-tree").modal("hide");
+                                        log("Ha ocurrido un error al eliminar", true);
+                                    }
+                                }
+                            });
+                            return false;
+                        });
+                    }
+                };
+                return obj;
+            }
+
+            function createContextmenu(node) {
+                var parent = node.parent().parent();
+
+                var nodeStrId = node.attr("id");
+                var nodeText = $.trim(node.children("a").text());
+
+                var parentStrId = parent.attr("id");
+                var parentText = $.trim(parent.children("a").text());
+
+                var nodeRel = node.attr("rel");
+                var parts = nodeRel.split("_");
+                var nodeNivel = parts[0];
+                var nodeTipo = parts[1];
+
+                var parentRel = parent.attr("rel");
+                parts = nodeRel.split("_");
+                var parentNivel = parts[0];
+                var parentTipo = parts[1];
+
+                parts = nodeStrId.split("_");
+                var nodeId = parts[1];
+
+                parts = parentStrId.split("_");
+                var parentId = parts[1];
+
+                var nodeHasChildren = node.hasClass("hasChildren");
+                var cantChildren = node.children("ul").children().size();
+                nodeHasChildren = nodeHasChildren || cantChildren != 0;
+
+                var menuItems = {}, lbl = "", item = "";
+
+                switch (nodeTipo) {
+                    case "material":
+                        lbl = "o material";
+                        item = "Material";
+                        break;
+                    case "manoObra":
+                        lbl = "a mano de obra";
+                        item = "Mano de obra";
+                        break;
+                    case "equipo":
+                        lbl = "o equipo";
+                        item = "Equipo";
+                        break;
+                    case "C":
+                        break;
+                    case "V":
+                        break;
+                }
+
+                switch (nodeNivel) {
+                    case "item":
+                        if (!showLugar.all && !showLugar.ignore) {
+                            menuItems.crearHijo = createUpdate({
+                                action    : "create",
+                                label     : "Nueva lista",
+                                sepBefore : true,
+                                sepAfter  : false,
+                                icon      : icons.lugar_c,
+                                url       : "${createLink(action:'formDp_ajax')}",
+                                data      : {
+                                    item : nodeId
+                                },
+                                open      : true,
+                                nodeStrId : nodeStrId,
+                                where     : "first",
+                                tipo      : "dp",
+                                log       : "Lista ",
+                                title     : "Nueva lista"
+                            });
+                        }
+                        break;
+                    case "lugar":
+                        if (!showLugar.all && !showLugar.ignore) {
+                            menuItems.editar = createUpdate({
+                                action    : "update",
+                                label     : "Editar lista",
+                                icon      : icons.edit,
+                                sepBefore : false,
+                                sepAfter  : false,
+                                url       : "${createLink(action:'formSg_ajax')}",
+                                data      : {
+                                    grupo : parentId,
+                                    id    : nodeId
+                                },
+                                open      : false,
+                                nodeStrId : nodeStrId,
+                                log       : "Lista ",
+                                title     : "Editar lista"
+                            });
+                            if (!nodeHasChildren) {
+                                menuItems.eliminar = remove({
+                                    label       : "Eliminar lista",
+                                    sepBefore   : false,
+                                    sepAfter    : false,
+                                    icon        : icons.delete,
+                                    title       : "Eliminar lista",
+                                    confirm     : "lista",
+                                    url         : "${createLink(action:'deleteSg_ajax')}",
+                                    data        : {
+                                        id : nodeId
+                                    },
+                                    nodeStrId   : nodeStrId,
+                                    parentStrId : parentStrId,
+                                    log         : "Lista "
+                                });
+                            }
+                            menuItems.crearHermano = createUpdate({
+                                action    : "create",
+                                label     : "Nueva lista",
+                                icon      : icons.lugar_c,
+                                sepBefore : true,
+                                sepAfter  : true,
+                                url       : "${createLink(action:'formSg_ajax')}",
+                                data      : {
+                                    grupo : parentId
+                                },
+                                open      : false,
+                                nodeStrId : nodeStrId,
+                                where     : "after",
+                                tipo      : "lg",
+                                log       : "Lista ",
+                                title     : "Nueva lista"
+                            });
+                        }
+                        break;
+                }
+
+                return menuItems;
             }
 
             function initTree(tipo) {
@@ -236,11 +467,11 @@
                             $("#loading").hide();
                             $("#treeArea").show();
                         }).jstree({
-                            "core"      : {
+                            "core"        : {
                                 "initially_open" : [ id ]
                             },
-                            "plugins"   : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "crrm"/*, "wholerow"*/],
-                            "html_data" : {
+                            "plugins"     : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "crrm"/*, "wholerow"*/],
+                            "html_data"   : {
                                 "data" : "<ul type='root'><li id='" + id + "' class='root hasChildren jstree-closed' rel='" + rel + "' ><a href='#' class='label_arbol'>" + label + "</a></ul>",
                                 "ajax" : {
                                     "type"  : "POST",
@@ -271,7 +502,7 @@
                                     }
                                 }
                             },
-                            "types"     : {
+                            "types"       : {
                                 "valid_children" : [ "grupo_material", "grupo_manoObra", "grupo_equipo"  ],
                                 "types"          : {
                                     "grupo_material" : {
@@ -370,12 +601,13 @@
                                     }
                                 }
                             },
-                            "themes"    : {
+                            "themes"      : {
                                 "theme" : "default"
                             },
-                            "search"    : {
+                            "search"      : {
                                 "case_insensitive" : true,
                                 "ajax"             : {
+                                    "type"   : "POST",
                                     "url"    : "${createLink(action:'searchTree_ajax')}",
                                     "data"   : function () {
                                         return { search : this.data.search.str, tipo : current }
@@ -388,70 +620,83 @@
                                     }
                                 }
                             },
-                            "ui"        : {
+                            "contextmenu" : {
+                                select_node : true,
+                                "items"     : createContextmenu
+                            }, //contextmenu
+                            "ui"          : {
                                 "select_limit" : 1
                             }
                         }).bind("search.jstree",function (e, data) {
                             var cant = data.rslt.nodes.length;
                             var search = data.rslt.str;
                             $("#cantRes").html("<b>" + cant + "</b> resultado" + (cant == 1 ? "" : "s"));
-
                             var container = $('#tree'), scrollTo = $('.jstree-search').first();
                             container.animate({
                                 scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
                             }, 2000);
                         }).bind("select_node.jstree", function (NODE, REF_NODE) {
-                            var node = $.jstree._focused().get_selected();
-                            var parent = node.parent().parent();
-
-                            var nodeStrId = node.attr("id");
-                            var nodeText = $.trim(node.children("a").text());
-
-                            var nodeRel = node.attr("rel");
-                            var parts = nodeRel.split("_");
-                            var nodeNivel = parts[0];
-                            var nodeTipo = parts[1];
-
-                            parts = nodeStrId.split("_");
-                            var nodeId = parts[1];
-
-                            var url = "";
-
-                            switch (nodeNivel) {
-                                case "grupo":
-                                    url = "${createLink(action:'showGr_ajax')}";
-                                    break;
-                                case "subgrupo":
-                                    url = "${createLink(action:'showSg_ajax')}";
-                                    break;
-                                case "departamento":
-                                    url = "${createLink(action:'showDp_ajax')}";
-                                    break;
-                                case "item":
-                                    url = "${createLink(action:'showIt_ajax')}";
-                                    break;
-                                case "lugar":
-                                    url = "${createLink(action:'showLg_ajax')}";
-                                    nodeId = parts[1] + "_" + parts[2];
-                                    break;
-                            }
-
-                            if (url != "") {
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : url,
-                                    data    : {
-                                        id     : nodeId,
-                                        all    : showLugar.all,
-                                        ignore : showLugar.ignore
-                                    },
-                                    success : function (msg) {
-                                        $("#info").html(msg);
-                                    }
-                                });
-                            }
+                            refresh();
                         });
             }
+
+            function refresh() {
+                var node = $.jstree._focused().get_selected();
+                var parent = node.parent().parent();
+
+                var nodeStrId = node.attr("id");
+                var nodeText = $.trim(node.children("a").text());
+
+                var nodeRel = node.attr("rel");
+                var parts = nodeRel.split("_");
+                var nodeNivel = parts[0];
+                var nodeTipo = parts[1];
+
+                parts = nodeStrId.split("_");
+                var nodeId = parts[1];
+
+                var url = "";
+
+                switch (nodeNivel) {
+                    case "grupo":
+                        url = "${createLink(action:'showGr_ajax')}";
+                        break;
+                    case "subgrupo":
+                        url = "${createLink(action:'showSg_ajax')}";
+                        break;
+                    case "departamento":
+                        url = "${createLink(action:'showDp_ajax')}";
+                        break;
+                    case "item":
+                        url = "${createLink(action:'showIt_ajax')}";
+                        break;
+                    case "lugar":
+                        url = "${createLink(action:'showLg_ajax')}";
+                        nodeId = parts[1] + "_" + parts[2];
+                        break;
+                }
+
+                if (url != "") {
+                    $.ajax({
+                        type    : "POST",
+                        url     : url,
+                        data    : {
+                            id       : nodeId,
+                            all      : showLugar.all,
+                            ignore   : showLugar.ignore,
+                            fecha    : showLugar.fecha,
+                            operador : showLugar.operador
+                        },
+                        success : function (msg) {
+                            $("#info").html(msg);
+                        }
+                    });
+                }
+            }
+
+            $("#btnRefresh").click(function () {
+                refresh();
+            });
 
             function doSearch() {
                 var val = $.trim($("#search").val());
@@ -462,6 +707,7 @@
             }
 
             $(function () {
+
                 $("#search").val("");
 
                 $(".toggle").click(function () {
@@ -485,7 +731,7 @@
                 });
 
                 $(".fecha").click(function () {
-                    var id = $(this).attr("id");
+                    var op = $(this).data("operador");
                     var text = $.trim($(this).text());
                     var fecha = $(this).data("fecha");
 
@@ -495,10 +741,12 @@
                         $("#divFecha").show();
                         $("#fecha").datepicker("setDate", hoy);
                         showLugar.fecha = hoy.getDate() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getFullYear()
-                        console.log(showLugar);
                     } else {
+                        showLugar.fecha = "all";
                         $("#divFecha").hide();
                     }
+                    showLugar.operador = op;
+//                    console.log(showLugar);
                 });
 
                 initTree("1");
