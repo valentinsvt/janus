@@ -13,8 +13,7 @@
 
     .alineacion {
 
-
-       text-align: right !important
+        text-align: right !important
 
     }
 
@@ -62,11 +61,9 @@
 
             </td>
 
-            <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.item?.id}"
+            <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.id}"
                 data-original="${rubro?.precioUnitario}"
                 style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5"/>
-
-                %{--${rubro?.precioUnitario}--}%
 
             </td>
 
@@ -88,13 +85,14 @@
 
 </table>
 
-%{--MAX: ${params.max}<br/>--}%
-%{--OFFSET: ${params.offset}<br/>--}%
-%{--PAG: ${params.pag}<br/>--}%
-%{--TOTAL ROWS: ${params.totalRows}<br/>--}%
-%{--TOTAL PAGS: ${params.totalPags}<br/>--}%
-%{--1st PAG: ${params.first}<br/>--}%
-%{--LAST: ${params.last}<br/>--}%
+MAX: ${params.max}<br/>
+OFFSET: ${params.offset}<br/>
+PAG: ${params.pag}<br/>
+TOTAL ROWS: ${params.totalRows}<br/>
+TOTAL PAGS: ${params.totalPags}<br/>
+1st PAG: ${params.first}<br/>
+LAST: ${params.last}<br/>
+tipo: ${params.tipo}
 
 
 <div>
@@ -192,6 +190,7 @@
                 lgar:"${params.lgar}",
                 fecha:"${params.fecha}",
                 todos:"${params.todos}",
+                tipo:"${params.tipo}",
                 max:100,
                 pag:pag
             },
@@ -246,31 +245,11 @@
 
         $(".num").click(function () {
             var num = $(this).attr("href");
-            console.log(num);
+            console.log("num" + num);
             enviar(num);
             return false;
         });
 
-
-        $(".btn-actualizar").click(function () {
-
-            var data = "";
-
-
-            $(".editable").each(function () {
-                var id = $(this).attr("id");
-                var valor = $(this).data("valor");
-                if (parseFloat(valor) > 0 && parseFloat($(this).data("original")) != parseFloat(valor)) {
-                    if (data != "") {
-                        data += "&";
-                    }
-
-                    data += "item=" + id + "_" + valor;
-                }
-            });
-            console.log(data);
-
-        });
 
         $(".editable").click(function (ev) {
             if ($(ev.target).hasClass("editable")) {
