@@ -536,4 +536,89 @@ class MantenimientoItemsController extends Shield {
 
         return [item: item, lugarNombre: lugarNombre, precios: precios, lgar: lugarId == "all"]
     }
+
+    def formLg_ajax() {
+        def lugarInstance = new Lugar()
+        def tipo = "C"
+        if (params.id) {
+            lugarInstance = Lugar.get(params.id)
+            tipo = lugarInstance.tipo
+        }
+        return [lugarInstance: lugarInstance, all: params.all, tipo: tipo]
+    }
+
+    def checkCdLg_ajax() {
+        if (params.id) {
+            def lugar = Lugar.get(params.id)
+            if (params.codigo.toString().trim() == lugar.codigo.toString().trim()) {
+                render true
+            } else {
+                def lugares = Lugar.findAllByCodigo(params.codigo)
+                if (lugares.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def lugares = Lugar.findAllByCodigo(params.codigo)
+            if (lugares.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
+    def checkDsLg_ajax() {
+        if (params.id) {
+            def lugar = Lugar.get(params.id)
+            if (params.descripcion == lugar.descripcion) {
+                render true
+            } else {
+                def lugares = Lugar.findAllByDescripcion(params.descripcion)
+                if (lugares.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def lugares = Lugar.findAllByDescripcion(params.descripcion)
+            if (lugares.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
+    def saveLg_ajax() {
+        def accion = "create"
+        def lugar = new Lugar()
+        if (params.id) {
+            lugar = Lugar.get(params.id)
+            accion = "edit"
+        }
+        lugar.properties = params
+        if (lugar.save(flush: true)) {
+            render "OK_" + accion + "_" + lugar.id + "_" + (lugar.descripcion + (params.all.toString().toBoolean() ? " (" + lugar.tipo + ")" : "")) + "_" + lugar.tipo.toLowerCase()
+        } else {
+            println lugar.errors
+            def errores = g.renderErrors(bean: lugar)
+            render "NO_" + errores
+        }
+    }
+
+    def deleteLg_ajax() {
+        def lugar = Lugar.get(params.id)
+        try {
+            lugar.delete(flush: true)
+            render "OK"
+        }
+        catch (DataIntegrityViolationException e) {
+            println e
+            render "NO"
+        }
+    }
 }

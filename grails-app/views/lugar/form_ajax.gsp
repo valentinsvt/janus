@@ -1,24 +1,24 @@
-
 <%@ page import="janus.Lugar" %>
 
-<div id="create-lugarInstance" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-lugarInstance" action="save">
+<div id="create-Lugar" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-Lugar" action="save">
         <g:hiddenField name="id" value="${lugarInstance?.id}"/>
-                
+
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Código
+                    Codigo
                 </span>
             </div>
 
             <div class="controls">
                 <g:field type="number" name="codigo" class=" required" value="${fieldValue(bean: lugarInstance, field: 'codigo')}"/>
                 <span class="mandatory">*</span>
+
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
-                
+
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
@@ -27,33 +27,32 @@
             </div>
 
             <div class="controls">
-                <g:textField name="tipo" maxlength="1" style="width: 20px" class="" value="${lugarInstance?.tipo}"/>
-                
+                <g:select name="tipo" from="${lugarInstance.constraints.tipo.inList}" class="" value="${lugarInstance?.tipo}" valueMessagePrefix="lugar.tipo" noSelection="['': '']"/>
+
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
-                
+
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripción
+                    Descripcion
                 </span>
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="2" style="resize: none;" name="descripcion" maxlength="40" class=" required" value="${lugarInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="40" class=" required" value="${lugarInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
+
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
-                
+
     </g:form>
+</div>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-lugarInstance").validate({
+    $("#frmSave-Lugar").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
@@ -61,9 +60,15 @@
             label.parent().hide();
         },
         errorClass     : "label label-important",
-        submitHandler  : function(form) {
-            $("[name=btnSave-lugarInstance]").replaceWith(spinner);
+        submitHandler  : function (form) {
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

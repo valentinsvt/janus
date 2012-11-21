@@ -17,9 +17,8 @@ class Lugar implements Serializable {
         }
     }
     static constraints = {
-        codigo(blank: false, attributes: [title: 'numero'])
-        tipo(size: 1..1, blank: true, nullable: true, attributes: [title: 'tipo'])
+        codigo(blank: false, attributes: [title: 'codigo'])
+        tipo(size: 1..1, blank: true, nullable: true, inList: ['C', 'V'], attributes: [title: 'tipo'])
         descripcion(size: 1..40, blank: false, attributes: [title: 'descripcion'])
-
     }
 }

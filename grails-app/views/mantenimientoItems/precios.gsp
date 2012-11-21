@@ -13,7 +13,7 @@
         <title>Precios y mantenimiento de items</title>
 
         <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jquery.jstree.js')}"></script>
-        %{--<script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>--}%
+        <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>
 
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -230,15 +230,26 @@
                                                 var parts = msg.split("_");
                                                 if (parts[0] == "OK") {
                                                     if (params.action == "create") {
-                                                        if (params.open) {
-                                                            $("#" + params.nodeStrId).removeClass("jstree-leaf").addClass("jstree-closed");
-                                                            $('#tree').jstree("open_node", $("#" + params.nodeStrId));
+                                                        if (params.tipo == "lg") {
+                                                            initTree(current);
+                                                        } else {
+                                                            if (params.open) {
+                                                                $("#" + params.nodeStrId).removeClass("jstree-leaf").addClass("jstree-closed");
+                                                                $('#tree').jstree("open_node", $("#" + params.nodeStrId));
+                                                            }
+                                                            var config = {attr : {id : params.tipo + "_" + parts[2]}, data : parts[3]};
+                                                            if (parts.length > 4) {
+                                                                config.attr.rel = "lugar_" + parts[4];
+                                                            }
+                                                            $('#tree').jstree("create_node", $("#" + params.nodeStrId), params.where, config);
                                                         }
-                                                        $('#tree').jstree("create_node", $("#" + params.nodeStrId), params.where, {attr : {id : params.tipo + "_" + parts[2]}, data : parts[3]});
                                                         $("#modal-tree").modal("hide");
                                                         log(params.log + parts[3] + " creado correctamente");
                                                     } else if (params.action == "update") {
                                                         $("#tree").jstree('rename_node', $("#" + params.nodeStrId), parts[3]);
+                                                        if (parts.length > 4) {
+                                                            $("#" + params.nodeStrId).attr("rel", "lugar_" + parts[4]);
+                                                        }
                                                         $("#modal-tree").modal("hide");
                                                         log(params.log + parts[3] + " editado correctamente");
                                                     }
@@ -269,6 +280,11 @@
             }
 
             function remove(params) {
+                var letraConfirm = "e", letraDelete = "o";
+                if (params.confirm == "lista") {
+                    letraConfirm = "a";
+                    letraDelete = "a";
+                }
                 var obj = {
                     label            : params.label,
                     separator_before : params.sepBefore, // Insert a separator before the item
@@ -280,7 +296,7 @@
                         var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
                         $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                         $("#modalTitle").html(params.title);
-                        $("#modalBody").html("<p>Está seguro de querer eliminar este " + params.confirm + "?</p>");
+                        $("#modalBody").html("<p>Está seguro de querer eliminar est" + letraConfirm + " " + params.confirm + "?</p>");
                         $("#modalFooter").html("").append(btnOk).append(btnSave);
                         $("#modal-tree").modal("show");
 
@@ -295,7 +311,7 @@
                                     if (parts[0] == "OK") {
                                         $("#tree").jstree('delete_node', $("#" + params.nodeStrId));
                                         $("#modal-tree").modal("hide");
-                                        log(params.log + " eliminado correctamente");
+                                        log(params.log + " eliminad" + letraDelete + " correctamente");
                                         if ($("#" + params.parentStrId).children("ul").children().size() == 0) {
                                             $("#" + params.parentStrId).removeClass("hasChildren");
                                         }
@@ -333,6 +349,9 @@
 
                 parts = nodeStrId.split("_");
                 var nodeId = parts[1];
+                if (parts.length == 3) {
+                    nodeId = parts[2];
+                }
 
                 parts = parentStrId.split("_");
                 var parentId = parts[1];
@@ -364,38 +383,38 @@
 
                 switch (nodeNivel) {
                     case "item":
-                        if (!showLugar.all && !showLugar.ignore) {
+                        if (/*!showLugar.all &&*/ !showLugar.ignore) {
                             menuItems.crearHijo = createUpdate({
                                 action    : "create",
                                 label     : "Nueva lista",
                                 sepBefore : true,
                                 sepAfter  : false,
                                 icon      : icons.lugar_c,
-                                url       : "${createLink(action:'formDp_ajax')}",
+                                url       : "${createLink(action:'formLg_ajax')}",
                                 data      : {
-                                    item : nodeId
+                                    all : showLugar.all
                                 },
                                 open      : true,
                                 nodeStrId : nodeStrId,
                                 where     : "first",
-                                tipo      : "dp",
+                                tipo      : "lg",
                                 log       : "Lista ",
                                 title     : "Nueva lista"
                             });
                         }
                         break;
                     case "lugar":
-                        if (!showLugar.all && !showLugar.ignore) {
+                        if (/*!showLugar.all &&*/ !showLugar.ignore) {
                             menuItems.editar = createUpdate({
                                 action    : "update",
                                 label     : "Editar lista",
                                 icon      : icons.edit,
                                 sepBefore : false,
                                 sepAfter  : false,
-                                url       : "${createLink(action:'formSg_ajax')}",
+                                url       : "${createLink(action:'formLg_ajax')}",
                                 data      : {
-                                    grupo : parentId,
-                                    id    : nodeId
+                                    id  : nodeId,
+                                    all : showLugar.all
                                 },
                                 open      : false,
                                 nodeStrId : nodeStrId,
@@ -410,7 +429,7 @@
                                     icon        : icons.delete,
                                     title       : "Eliminar lista",
                                     confirm     : "lista",
-                                    url         : "${createLink(action:'deleteSg_ajax')}",
+                                    url         : "${createLink(action:'deleteLg_ajax')}",
                                     data        : {
                                         id : nodeId
                                     },
@@ -425,9 +444,9 @@
                                 icon      : icons.lugar_c,
                                 sepBefore : true,
                                 sepAfter  : true,
-                                url       : "${createLink(action:'formSg_ajax')}",
+                                url       : "${createLink(action:'formLg_ajax')}",
                                 data      : {
-                                    grupo : parentId
+                                    all : showLugar.all
                                 },
                                 open      : false,
                                 nodeStrId : nodeStrId,
@@ -470,7 +489,7 @@
                             "core"        : {
                                 "initially_open" : [ id ]
                             },
-                            "plugins"     : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "crrm"/*, "wholerow"*/],
+                            "plugins"     : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "cookies", "crrm"/*, "wholerow"*/],
                             "html_data"   : {
                                 "data" : "<ul type='root'><li id='" + id + "' class='root hasChildren jstree-closed' rel='" + rel + "' ><a href='#' class='label_arbol'>" + label + "</a></ul>",
                                 "ajax" : {
@@ -494,7 +513,6 @@
                                         }
                                     },
                                     success : function (data) {
-
                                     },
                                     error   : function (data) {
                                         ////console.log("error");
@@ -566,19 +584,19 @@
                                         "icon"           : {
                                             "image" : icons.item_manoObra
                                         },
-                                        "valid_children" : [ "lugar_c, lugar_v, lugar_all" ]
+                                        "valid_children" : [ "lugar_c", "lugar_v", "lugar_all" ]
                                     },
                                     "item_material" : {
                                         "icon"           : {
                                             "image" : icons.item_material
                                         },
-                                        "valid_children" : [ "lugar_c, lugar_v, lugar_all" ]
+                                        "valid_children" : [ "lugar_c", "lugar_v", "lugar_all" ]
                                     },
                                     "item_equipo"   : {
                                         "icon"           : {
                                             "image" : icons.item_equipo
                                         },
-                                        "valid_children" : [ "lugar_c, lugar_v, lugar_all" ]
+                                        "valid_children" : [ "lugar_c", "lugar_v", "lugar_all" ]
                                     },
 
                                     "lugar_c"   : {
