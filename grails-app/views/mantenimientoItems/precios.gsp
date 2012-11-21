@@ -24,6 +24,17 @@
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
         <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
+        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
+
+        <style type="text/css">
+        .selectedRow {
+            background : red;
+        }
+
+        .selected {
+            border : solid 2px blue !important;
+        }
+        </style>
 
     </head>
 
@@ -659,6 +670,13 @@
             }
 
             function refresh() {
+                var loading = $("<div></div>");
+                loading.css({
+                    textAlign : "center",
+                    width     : "100%"
+                });
+                loading.append("Cargando....Por favor espere...<br/>").append(spinnerBg);
+                $("#info").html(loading);
                 var node = $.jstree._focused().get_selected();
                 var parent = node.parent().parent();
 
