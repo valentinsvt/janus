@@ -147,3 +147,15 @@ por estándar se debe usar tp_tipo para evitar confusiones.
 * tp_pcun    --->  función:  rbpc_fcha.
 
 
+
+
+insert into paux( trnpftrd, trnpvlcd, trnpcpvl, trnpftvl, trnprdtp,
+ trnpftps, indignrl, indiimpr, indiutil, indicntr,
+ inditotl, indidrob, indimntn, indiadmn,
+ indtgrnt, indicsfn, indivhcl, indiprmo, inditmbr, paux__id)
+values (10, 40, 8, 0.8, 24, 
+  1.7, 7, 2.5, 9, 4,
+  21, 3.26, 0.16, 1.10, 
+  1.81, 0.43, 0.09, 0.05, 2.5, 1);
+
+

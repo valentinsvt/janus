@@ -1,6 +1,6 @@
 package janus
 class Parametros implements Serializable {
-    int indicador
+    //int indicador
     String password
     String direccionObrasCiviles
     String direccionVialidadConcesiones
@@ -31,7 +31,7 @@ class Parametros implements Serializable {
         version false
         columns {
             id column: 'paux__id'
-            indicador column: 'pauxindi'
+            //indicador column: 'pauxindi'
             password column: 'pauxpass'
             direccionObrasCiviles column: 'prsn_dic'
             direccionVialidadConcesiones column: 'prsndvyc'
@@ -57,7 +57,7 @@ class Parametros implements Serializable {
         }
     }
     static constraints = {
-        indicador(blank: true, nullable: true, attributes: [title: 'indicador'])
+        //indicador(blank: true, nullable: true, attributes: [title: 'indicador'])
         password(size: 1..8, blank: true, nullable: true, attributes: [title: 'password'])
         direccionObrasCiviles(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionObrasCiviles'])
         direccionVialidadConcesiones(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionVialidadConcesiones'])
