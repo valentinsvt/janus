@@ -6,6 +6,15 @@
  * To change this template use File | Settings | File Templates.
  */
 
+function doHighlight(params) {
+    if (!params.tiempo) {
+        params.tiempo = 2000;
+    }
+    params.elem.addClass(params.clase, params.tiempo, function () {
+        params.elem.removeClass(params.clase, params.tiempo);
+    });
+}
+
 function scroll() {
     var container = $('#divTabla'), scrollTo = $('.selected');
     var newPos = scrollTo.offset().top - container.offset().top + container.scrollTop() - 100;

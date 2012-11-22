@@ -7,17 +7,8 @@
     <title>Mantenimiento de Precios</title>
 
 
-    <style type="text/css">
-
-
-    .selected {
-
-        border: solid 2px blue !important;
-
-    }
-
-
-    </style>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
+    <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}">
 
 </head>
 
@@ -60,11 +51,10 @@
                       optionValue="descripcion" noSelection="['-1': 'Todos']"/>
         </div>
 
-        <div class="btn-group span1" style="margin-left: 10px; margin-right: 10px">
+        <div class="btn-group span1" style="margin-left: 90px; margin-right: 10px">
             <a href="#" class="btn btn-consultar"><i class="icon-search"></i>Consultar</a>
-
-            <a href="#" class="btn btn-cargar"><i class="icon-edit"></i> Precios a la Fecha</a>
-            <a href="#" class="btn btn-actualizar"><i class="icon-refresh"></i>Actualizar</a>
+            <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i>Guardar</a>
+            <a href="#" class="btn btn-reporte btn-inverse"><i class="icon-list-alt"></i>Reporte</a>
         </div>
     </div>
 
@@ -73,7 +63,7 @@
 
 <fieldset class="borde" style="width: 1170px">
 
-    <div id="tablaPrecios">
+    <div id="divTabla" style="height: 760px; overflow-y:auto; overflow-x: hidden;">
 
     </div>
 
@@ -128,7 +118,7 @@
                 pag:1
             },
             success:function (msg) {
-                $("#tablaPrecios").html(msg);
+                $("#divTabla").html(msg);
                 $("#dlgLoad").dialog("close");
             }
         });
@@ -159,49 +149,16 @@
                 $("#error").hide();
                 $("#dlgLoad").dialog("open");
                 consultar();
-                $("#tablaPrecios").show();
+                $("#divTabla").show();
             }
             else {
 
-                $("#tablaPrecios").hide();
+                $("#divTabla").hide();
 
                 $("#error").show();
 
 
             }
-
-
-        });
-
-        $(".btn-cargar").click(function () {
-
-            $("#dlgLoad").dialog("open");
-
-
-            var fcha = new Date().toString("dd-MM-yyyy");
-
-            $("#fecha").val(fcha);
-
-
-            var todos = 3;
-
-
-            $.ajax({
-                type:"POST",
-                url:"${createLink(action:'tabla')}",
-                data:{
-                    lgar:-1,
-                    fecha:fcha,
-                    todos:todos,
-                    tipo:-1,
-                    max:100,
-                    pag:1
-                },
-                success:function (msg) {
-                    $("#tablaPrecios").html(msg);
-                    $("#dlgLoad").dialog("close");
-                }
-            });
 
 
         });
@@ -230,12 +187,15 @@
                     var parts = msg.split("_");
                     var ok = parts[0];
                     var no = parts[1];
-                    $(ok).css({
-                        background:"#C5DDC5"
-                    });
-                    $(no).css({
-                        background:"#DBC5C5"
-                    });
+
+                    doHighlight({elem:$(ok), clase:"ok"});
+                    doHighlight({elem:$(no), clase:"no"});
+//                    $(ok).css({
+//                        background:"#C5DDC5"
+//                    });
+//                    $(no).css({
+//                        background:"#DBC5C5"
+//                    });
 
                     console.log(msg);
                 }

@@ -85,14 +85,17 @@
 
 </table>
 
-MAX: ${params.max}<br/>
-OFFSET: ${params.offset}<br/>
-PAG: ${params.pag}<br/>
-TOTAL ROWS: ${params.totalRows}<br/>
-TOTAL PAGS: ${params.totalPags}<br/>
-1st PAG: ${params.first}<br/>
-LAST: ${params.last}<br/>
-tipo: ${params.tipo}
+Total de registros visualizados: ${params.totalRows}<br/>
+
+
+%{--MAX: ${params.max}<br/>--}%
+%{--OFFSET: ${params.offset}<br/>--}%
+%{--PAG: ${params.pag}<br/>--}%
+%{--TOTAL ROWS: ${params.totalRows}<br/>--}%
+%{--TOTAL PAGS: ${params.totalPags}<br/>--}%
+%{--1st PAG: ${params.first}<br/>--}%
+%{--LAST: ${params.last}<br/>--}%
+%{--tipo: ${params.tipo}--}%
 
 
 <div>
@@ -176,7 +179,7 @@ tipo: ${params.tipo}
 
 </div>
 
-
+<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js' )}"></script>
 
 <script type="text/javascript">
 
@@ -195,53 +198,18 @@ tipo: ${params.tipo}
                 pag:pag
             },
             success:function (msg) {
-                $("#tablaPrecios").html(msg);
+                $("#divTabla").html(msg);
             }
         });
 
     }
 
 
-    function doEdit(sel) {
 
-        var texto = $.trim(sel.text());
-        var w = sel.width();
-        textField = $('<input type="text" class="editando" value="' + texto + '"/>');
-        textField.width(w - 5);
-        sel.html(textField);
-        textField.focus();
-        sel.data("valor", texto);
-
-    }
-
-    function stopEdit() {
-
-        //var value = $(".editando").val(); //valor del texfield (despues de editar)
-        var value = $(".selected").data("valor"); //valor antes de la edicion
-        if (value) {
-
-
-            $(".selected").html(number_format(value, 2, ".", ""));
-
-        }
-    }
-
-    function seleccionar(elm) {
-        deseleccionar($(".selected"));
-        elm.addClass("selected");
-    }
-
-    function deseleccionar(elm) {
-        stopEdit();
-        elm.removeClass("selected");
-    }
 
 
     $(function () {
 
-        $(".disabled").click(function () {
-            return false;
-        });
 
         $(".num").click(function () {
             var num = $(this).attr("href");
@@ -251,77 +219,6 @@ tipo: ${params.tipo}
         });
 
 
-        $(".editable").click(function (ev) {
-            if ($(ev.target).hasClass("editable")) {
-                seleccionar($(this));
-            }
-        });
-
-        $(".editable").dblclick(function (ev) {
-
-
-            if ($(ev.target).hasClass("editable")) {
-                seleccionar($(this));
-                doEdit($(this));
-            }
-        });
-
-        $(document).keyup(function (ev) {
-            var sel = $(".selected");
-            var celdaIndex = sel.index();
-            var tr = sel.parent();
-            var filaIndex = tr.index();
-            var ntr;
-
-            var textField;
-
-            switch (ev.keyCode) {
-                case 38: //arriba
-                    if (filaIndex > 0) {
-                        ntr = tr.prev();
-                        seleccionar(ntr.children().eq(celdaIndex));
-                    }
-                    break;
-                case 40: //abajo
-                    var cant = $('#tablaPrecios > tbody > tr').size();
-                    if (filaIndex < cant - 1) {
-                        ntr = tr.next();
-                        seleccionar(ntr.children().eq(celdaIndex));
-                    }
-                    break;
-                case 13: //enter
-                    var target = $(ev.target);
-
-                    if (target.hasClass("editando")) {
-
-
-                        var value = target.val();
-
-                        $(".selected").html(number_format(value, 2, ".", ""));
-                        sel.data("valor", value);
-
-                    }
-
-                    else {
-
-
-                        doEdit(sel);
-
-                    }
-                    break;
-
-
-                case 27: //esc
-
-                    stopEdit();
-
-                    break;
-
-                default:
-
-                    return true;
-            }
-        })
     });
 
 

@@ -167,98 +167,98 @@ class ItemController extends janus.seguridad.Shield {
 
         if (t == "3") {
 
-            println("t3")
-//            println(params);
-
-            if (!params.max || params.max == 0) {
-                params.max = 100
-            } else {
-                params.max = params.max.toInteger()
-            }
-            if (!params.pag) {
-                params.pag = 1;
-            } else {
-                params.pag = params.pag.toInteger()
-            }
-            params.offset = params.max * (params.pag - 1)
-
-            f = new Date().parse("dd-MM-yyyy", params.fecha)
-
-            def sql
-
-            def ids = ""
-            Lugar.list().id.each {
-                if (ids != "") {
-                    ids += ","
-                }
-                ids += it
-            }
-
-
-            println("ids" + ids)
-
-            sql = "select distinct rbpc.item__id, item.itemcdgo, item.itemnmbr "
-            sql += " from rbpc, item"
-            sql += " where rbpc.item__id=item.item__id "
-            sql += " order by itemnmbr"
-            sql += " limit ${params.max}"
-            sql += " offset ${params.offset}"
-
-            println(sql)
-
-            def itemIds = ""
-
-            def cn = dbConnectionService.getConnection()
-            cn.eachRow(sql.toString()) {row ->
-
-                if (itemIds != "") {
-
-                    itemIds += ","
-                }
-                itemIds += row[0]
-            }
-            def precios = []
-            Lugar.list().each {
-                def tmp = preciosService.getPrecioRubroItemOperador(f, it, itemIds, "<=")
-                if (tmp.size() > 0)
-                    precios += tmp
-            }
-            rubroPrecio = []
-            precios.each {
-                rubroPrecio.add(PrecioRubrosItems.get(it))
-            }
-
-            if (!params.totalRows) {
-                sql = "select count(distinct rbpc.item__id) "
-                sql += "from rbpc "
-//                sql += "where lgar__id=${lugar.id}"
-
-                def totalCount
-                cn.eachRow(sql.toString()) {row ->
-                    totalCount = row[0]
-                }
-
-                params.totalRows = totalCount
-
-                params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
-
-//                println("total" + params.totalPags)
-
-                if (params.totalPags <= 10) {
-                    params.first = 1
-                    params.last = params.last = params.totalPags
-                } else {
-                    params.first = Math.max(1, params.pag.toInteger() - 5)
-                    params.last = Math.min(params.totalPags, params.pag + 5)
-
-                    def ts = params.last - params.first
-                    if (ts < 9) {
-                        def r = 10 - ts
-                        params.last = Math.min(params.totalPags, params.last + r).toInteger()
-                    }
-                }
-            }
-            cn.close()
+//            println("t3")
+////            println(params);
+//
+//            if (!params.max || params.max == 0) {
+//                params.max = 100
+//            } else {
+//                params.max = params.max.toInteger()
+//            }
+//            if (!params.pag) {
+//                params.pag = 1;
+//            } else {
+//                params.pag = params.pag.toInteger()
+//            }
+//            params.offset = params.max * (params.pag - 1)
+//
+//            f = new Date().parse("dd-MM-yyyy", params.fecha)
+//
+//            def sql
+//
+//            def ids = ""
+//            Lugar.list().id.each {
+//                if (ids != "") {
+//                    ids += ","
+//                }
+//                ids += it
+//            }
+//
+//
+//            println("ids" + ids)
+//
+//            sql = "select distinct rbpc.item__id, item.itemcdgo, item.itemnmbr "
+//            sql += " from rbpc, item"
+//            sql += " where rbpc.item__id=item.item__id "
+//            sql += " order by itemcdgo "
+//            sql += " limit ${params.max}"
+//            sql += " offset ${params.offset}"
+//
+//            println(sql)
+//
+//            def itemIds = ""
+//
+//            def cn = dbConnectionService.getConnection()
+//            cn.eachRow(sql.toString()) {row ->
+//
+//                if (itemIds != "") {
+//
+//                    itemIds += ","
+//                }
+//                itemIds += row[0]
+//            }
+//            def precios = []
+//            Lugar.list().each {
+//                def tmp = preciosService.getPrecioRubroItemOperador(f, it, itemIds, "<=")
+//                if (tmp.size() > 0)
+//                    precios += tmp
+//            }
+//            rubroPrecio = []
+//            precios.each {
+//                rubroPrecio.add(PrecioRubrosItems.get(it))
+//            }
+//
+//            if (!params.totalRows) {
+//                sql = "select count(distinct rbpc.item__id) "
+//                sql += "from rbpc "
+////                sql += "where lgar__id=${lugar.id}"
+//
+//                def totalCount
+//                cn.eachRow(sql.toString()) {row ->
+//                    totalCount = row[0]
+//                }
+//
+//                params.totalRows = totalCount
+//
+//                params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+//
+////                println("total" + params.totalPags)
+//
+//                if (params.totalPags <= 10) {
+//                    params.first = 1
+//                    params.last = params.last = params.totalPags
+//                } else {
+//                    params.first = Math.max(1, params.pag.toInteger() - 5)
+//                    params.last = Math.min(params.totalPags, params.pag + 5)
+//
+//                    def ts = params.last - params.first
+//                    if (ts < 9) {
+//                        def r = 10 - ts
+//                        params.last = Math.min(params.totalPags, params.last + r).toInteger()
+//                    }
+//                }
+//            }
+//            cn.close()
         }
 
         [rubroPrecio: rubroPrecio, params: params, lugar: lugar]
