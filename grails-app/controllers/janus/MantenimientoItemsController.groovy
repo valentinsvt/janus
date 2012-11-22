@@ -483,6 +483,54 @@ class MantenimientoItemsController extends Shield {
         }
     }
 
+    def formPrecio_ajax() {
+
+    }
+
+    def deletePrecio_ajax() {
+        def rubroPrecioInstance = PrecioRubrosItems.get(params.id);
+        try {
+            rubroPrecioInstance.delete(flush: true)
+            render "OK"
+        }
+        catch (DataIntegrityViolationException e) {
+            println e
+            render "NO"
+        }
+    }
+
+    def actualizarPrecios_ajax() {
+        if (params.item instanceof java.lang.String) {
+            params.item = [params.item]
+        }
+
+        def oks = "", nos = ""
+
+        params.item.each {
+            def parts = it.split("_")
+//            println parts
+            def rubroId = parts[0]
+            def nuevoPrecio = parts[1]
+
+            def rubroPrecioInstance = PrecioRubrosItems.get(rubroId);
+            rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
+            if (!rubroPrecioInstance.save(flush: true)) {
+                println "error " + parts
+                if (nos != "") {
+                    nos += ","
+                }
+                nos += "#" + rubroId
+            } else {
+                if (oks != "") {
+                    oks += ","
+                }
+                oks += "#" + rubroId
+            }
+
+        }
+        render oks + "_" + nos
+    }
+
     def showLg_ajax() {
 //        params.tipo = "C"
 //        params.operador = "<"

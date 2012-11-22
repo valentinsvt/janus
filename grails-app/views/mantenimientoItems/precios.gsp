@@ -24,17 +24,9 @@
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
         <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
-        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
 
-        <style type="text/css">
-        .selectedRow {
-            background : red;
-        }
-
-        .selected {
-            border : solid 2px blue !important;
-        }
-        </style>
+        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
+        <link href="${resource(dir: 'css', file: 'tableHandler.css')}" rel="stylesheet"/>
 
     </head>
 
@@ -89,10 +81,10 @@
             <div class="span12 noMargin">
                 <div class="btn-group pull-left" data-toggle="buttons-checkbox">
                     <a href="#" id="all" class="btn toggleTipo">
-                        Ver todas las listas
+                        Todas las listas
                     </a>
                     <a href="#" id="ignore" class="btn toggleTipo">
-                        Ignorar lugar
+                        Todos los lugares
                     </a>
                 </div>
 
