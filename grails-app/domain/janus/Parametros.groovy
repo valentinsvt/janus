@@ -1,6 +1,6 @@
 package janus
 class Parametros implements Serializable {
-    //int indicador
+    //int indicador  NO SE USA
     String password
     String direccionObrasCiviles
     String direccionVialidadConcesiones
