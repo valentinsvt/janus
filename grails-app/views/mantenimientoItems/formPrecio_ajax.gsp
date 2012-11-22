@@ -5,9 +5,11 @@
         <g:hiddenField name="id" value="${precioRubrosItemsInstance?.id}"/>
         <g:hiddenField id="lugar" name="lugar.id" value="${lugar ? precioRubrosItemsInstance?.lugar?.id : -1}"/>
         <g:hiddenField id="item" name="item.id" value="${precioRubrosItemsInstance?.item?.id}"/>
+        <g:hiddenField name="all" value="${params.all}"/>
+        <g:hiddenField name="ignore" value="${params.ignore}"/>
 
         <div class="tituloTree">
-            Nuevo precio de ${precioRubrosItemsInstance.item.nombre} en ${lugar ? precioRubrosItemsInstance.lugar.descripcion : "todos los lugares"}
+            Nuevo precio de ${precioRubrosItemsInstance.item.nombre} en ${lugarNombre}%{--${lugar ? precioRubrosItemsInstance.lugar.descripcion : "todos los lugares"}--}%
         </div>
 
         <div class="control-group">

@@ -7,8 +7,8 @@
             Nuevo Precio
         </a>
         %{--<a href="#" class="btn" id="btnCopy">--}%
-            %{--<i class="icon-copy"></i>--}%
-            %{--Copiar Precios--}%
+        %{--<i class="icon-copy"></i>--}%
+        %{--Copiar Precios--}%
         %{--</a>--}%
         <a href="#" class="btn btn-success btn-ajax" id="btnSave">
             <i class="icon-save"></i>
@@ -76,9 +76,12 @@
             type    : "POST",
             url     : "${createLink(action:'formPrecio_ajax')}",
             data    : {
-                item  : "${item.id}",
-                lugar : "${lugarId}",
-                fecha : "${fecha}"
+                item        : "${item.id}",
+                lugar       : "${lugarId}",
+                nombreLugar : "${lugarNombre}",
+                fecha       : "${fecha}",
+                all         : "${params.all}",
+                ignore      : "${params.ignore}"
             },
             success : function (msg) {
                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -86,7 +89,7 @@
 
                 btnSave.click(function () {
                     if ($("#frmSave").valid()) {
-//                        btnSave.replaceWith(spinner);
+                        btnSave.replaceWith(spinner);
                     }
 //                    $("#frmSave").submit();
 
@@ -97,6 +100,13 @@
                         success : function (msg) {
                             if (msg == "OK") {
                                 $("#modal").modal("hide");
+                                var loading = $("<div></div>");
+                                loading.css({
+                                    textAlign : "center",
+                                    width     : "100%"
+                                });
+                                loading.append("Cargando....Por favor espere...<br/>").append(spinnerBg);
+                                $("#info").html(loading);
                                 $.ajax({
                                     type    : "POST",
                                     url     : "${createLink(action:'showLg_ajax')}",
