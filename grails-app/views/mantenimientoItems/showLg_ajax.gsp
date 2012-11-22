@@ -2,15 +2,15 @@
 
 <div style="height: 35px; width: 100%;">
     <div class="btn-group pull-left">
-        <a href="#" class="btn" id="btnNew">
+        <a href="#" class="btn btn-ajax" id="btnNew">
             <i class="icon-money"></i>
             Nuevo Precio
         </a>
-        <a href="#" class="btn" id="btnCopy">
-            <i class="icon-copy"></i>
-            Copiar Precios
-        </a>
-        <a href="#" class="btn btn-success" id="btnSave">
+        %{--<a href="#" class="btn" id="btnCopy">--}%
+            %{--<i class="icon-copy"></i>--}%
+            %{--Copiar Precios--}%
+        %{--</a>--}%
+        <a href="#" class="btn btn-success btn-ajax" id="btnSave">
             <i class="icon-save"></i>
             Guardar
         </a>
@@ -44,7 +44,7 @@
                         <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5"/>
                     </td>
                     <td class="delete">
-                        <a href="#" class="btn btn-danger btn-small btnDelete" rel="tooltip" title="Eliminar">
+                        <a href="#" class="btn btn-danger btn-small btnDelete" rel="tooltip" title="Eliminar" id="${precio.id}">
                             <i class="icon-trash icon-large"></i>
                         </a>
                     </td>
@@ -75,22 +75,58 @@
         $.ajax({
             type    : "POST",
             url     : "${createLink(action:'formPrecio_ajax')}",
+            data    : {
+                item  : "${item.id}",
+                lugar : "${lugarId}",
+                fecha : "${fecha}"
+            },
             success : function (msg) {
                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                 var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
                 btnSave.click(function () {
                     if ($("#frmSave").valid()) {
-                        btnSave.replaceWith(spinner);
+//                        btnSave.replaceWith(spinner);
                     }
-                    $("#frmSave").submit();
+//                    $("#frmSave").submit();
+
+                    $.ajax({
+                        type    : "POST",
+                        url     : $("#frmSave").attr("action"),
+                        data    : $("#frmSave").serialize(),
+                        success : function (msg) {
+                            if (msg == "OK") {
+                                $("#modal").modal("hide");
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'showLg_ajax')}",
+                                    data    : {
+                                        id       : "${params.id}",
+                                        all      : "${params.all}",
+                                        ignore   : "${params.ignore}",
+                                        fecha    : "${params.fecha}",
+                                        operador : "${params.operador}"
+                                    },
+                                    success : function (msg) {
+                                        $("#info").html(msg);
+                                    }
+                                });
+                            } else {
+                                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                                $("#modalTitle").html("Error");
+                                $("#modalBody").html("Ha ocurrido un error al guardar");
+                                $("#modalFooter").html("").append(btnClose);
+                            }
+                        }
+                    });
+
                     return false;
                 });
 
                 $("#modalTitle").html("Crear Precio");
                 $("#modalBody").html(msg);
                 $("#modalFooter").html("").append(btnOk).append(btnSave);
-                $("#modal-item").modal("show");
+                $("#modal").modal("show");
             }
         });
         return false;
@@ -119,12 +155,8 @@
                 var parts = msg.split("_");
                 var ok = parts[0];
                 var no = parts[1];
-                $(ok).addClass("ok", 1000, function () {
-                    $(ok).removeClass("ok", 1000);
-                });
-                $(no).addClass("no", 1000, function () {
-                    $(no).removeClass("no");
-                });
+                doHighlight({elem : $(ok), clase : "ok"});
+                doHighlight({elem : $(no), clase : "no"});
             }
         });
         return false;
@@ -134,17 +166,34 @@
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
         var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
 
+        var id = $(this).attr("id");
+
         btnSave.click(function () {
             btnSave.replaceWith(spinner);
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(action: 'deletePrecio_ajax')}",
                 data    : {
-                    name     : "John",
-                    location : "Boston"
+                    id : id
                 },
                 success : function (msg) {
-                    alert("Data Saved: " + msg);
+                    if (msg == "OK") {
+                        $("#modal").modal("hide");
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(action:'showLg_ajax')}",
+                            data    : {
+                                id       : "${params.id}",
+                                all      : "${params.all}",
+                                ignore   : "${params.ignore}",
+                                fecha    : "${params.fecha}",
+                                operador : "${params.operador}"
+                            },
+                            success : function (msg) {
+                                $("#info").html(msg);
+                            }
+                        });
+                    }
                 }
             });
             return false;
