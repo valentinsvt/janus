@@ -186,7 +186,7 @@ class MantenimientoItemsController extends Shield {
             }
             ids = ids[0..-2]
             ids += "]"
-            println ids
+//            println ids
             render ids
         } else {
             render ""
@@ -484,7 +484,29 @@ class MantenimientoItemsController extends Shield {
     }
 
     def formPrecio_ajax() {
+        def item = Item.get(params.item)
+        def lugar = null
+        if (params.lugar != "all") {
+            lugar = Lugar.get(params.lugar)
+        }
+        def precioRubrosItemsInstance = new PrecioRubrosItems()
+        precioRubrosItemsInstance.item = item
+        if (lugar) {
+            precioRubrosItemsInstance.lugar = lugar
+        }
+        return [precioRubrosItemsInstance: precioRubrosItemsInstance, lugar: lugar, fecha: params.fecha]
+    }
 
+    def savePrecio_ajax() {
+        println params
+        params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def precioRubrosItemsInstance = new PrecioRubrosItems(params)
+        if (precioRubrosItemsInstance.save(flush: true)) {
+            render "OK"
+        } else {
+            println precioRubrosItemsInstance.errors
+            render "NO"
+        }
     }
 
     def deletePrecio_ajax() {
@@ -508,12 +530,15 @@ class MantenimientoItemsController extends Shield {
 
         params.item.each {
             def parts = it.split("_")
-//            println parts
+
+            println parts
+
             def rubroId = parts[0]
             def nuevoPrecio = parts[1]
 
             def rubroPrecioInstance = PrecioRubrosItems.get(rubroId);
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
+            println rubroPrecioInstance.precioUnitario
             if (!rubroPrecioInstance.save(flush: true)) {
                 println "error " + parts
                 if (nos != "") {
@@ -582,7 +607,7 @@ class MantenimientoItemsController extends Shield {
         }
         precios = res
 
-        return [item: item, lugarNombre: lugarNombre, precios: precios, lgar: lugarId == "all"]
+        return [item: item, lugarNombre: lugarNombre, lugarId: lugarId, precios: precios, lgar: lugarId == "all", fecha: operador == "=" ? fecha.format("dd-MM-yyyy") : null, params: params]
     }
 
     def formLg_ajax() {

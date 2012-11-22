@@ -765,10 +765,10 @@
 
                     $("#spFecha").text(text);
                     if (fecha) {
-                        var hoy = new Date();
+//                        var hoy = new Date();
                         $("#divFecha").show();
-                        $("#fecha").datepicker("setDate", hoy);
-                        showLugar.fecha = hoy.getDate() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getFullYear()
+//                        $("#fecha").datepicker("setDate", hoy);
+//                        showLugar.fecha = hoy.getDate() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getFullYear()
                     } else {
                         showLugar.fecha = "all";
                         $("#divFecha").hide();
