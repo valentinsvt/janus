@@ -54,14 +54,25 @@ class RubroController extends janus.seguridad.Shield {
         def rubro
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
         def grupos = []
+        def volquetes = []
+        def choferes = []
+        def grupoTransporte=DepartamentoItem.findAllByTransporteIsNotNull()
+        grupoTransporte.each {
+            if(it.transporte.codigo=="H")
+                choferes=Item.findAllByDepartamento(it)
+            if(it.transporte.codigo=="T")
+                volquetes=Item.findAllByDepartamento(it)
+        }
         grupos.add(Grupo.get(4))
         grupos.add(Grupo.get(5))
         grupos.add(Grupo.get(6))
         if (params.idRubro) {
             rubro = Item.get(params.idRubro)
-            [campos: campos, rubro: rubro, grupos: grupos]
+            def items=Rubro.findAllByRubro(rubro)
+            items.sort{it.item.codigo}
+            [campos: campos, rubro: rubro, grupos: grupos,items:items,choferes:choferes,volquetes:volquetes]
         } else {
-            [campos: campos, grupos: grupos]
+            [campos: campos, grupos: grupos,choferes:choferes,volquetes:volquetes]
         }
     }
 
@@ -81,14 +92,27 @@ class RubroController extends janus.seguridad.Shield {
             detalle = new Rubro()
         detalle.rubro = rubro
         detalle.item = item
-        detalle.cantidad = detalle.cantidad + params.cantidad.toDouble()
+        detalle.cantidad = params.cantidad.toDouble()
+        if(detalle.item.id.toInteger()==2868 || detalle.item.id.toInteger()==2869 || detalle.item.id.toInteger()==2870){
+            detalle.cantidad=1
+            if (detalle.item.id.toInteger()==2868)
+                detalle.rendimiento=0.2
+            if (detalle.item.id.toInteger()==2869)
+                detalle.rendimiento=0.5
+            if (detalle.item.id.toInteger()==2870)
+                detalle.rendimiento=0.3
+        }else{
+            detalle.rendimiento = params.rendimiento.toDouble()
+        }
+        if (detalle.item.departamento.subgrupo.grupo.id==2)
+            detalle.cantidad=Math.ceil(detalle.cantidad)
         detalle.fecha = new Date()
-        detalle.rendimiento = params.rendimiento.toDouble()
+        if (detalle.item.departamento.subgrupo.grupo.id==1)
+            detalle.rendimiento=1
         if (!detalle.save(flush: true)) {
             println "detalle " + detalle.errors
         } else {
-            println "render " + item.departamento.subgrupo.grupo.id
-            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id
+            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id+";"+detalle.item.id+";"+detalle.cantidad+";"+detalle.rendimiento
         }
     }
 
@@ -329,7 +353,7 @@ class RubroController extends janus.seguridad.Shield {
     } //delete
 
     def getPrecios() {
-//        println "get precios "+params
+        println "get precios "+params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -339,9 +363,9 @@ class RubroController extends janus.seguridad.Shield {
             if (it.size() > 0)
                 items.add(Rubro.get(it).item)
         }
-        def precios = preciosService.getPrecioItems(fecha, lugar, items)
+        def precios = preciosService.getPrecioItemsString(fecha, lugar, items)
         println "precios " + precios
-        render "ok"
+        render precios
     }
 
 

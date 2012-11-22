@@ -22,6 +22,16 @@ class ReportesController {
     def index() { }
 
     def buscadorService
+
+
+
+    def rubro(){
+        println "params "+params
+        def rubro = Item.get(params.id)
+        [rubro:rubro]
+        render "ok"
+    }
+
     def reporteBuscador= {
 
         // println "reporte buscador params !! "+params
