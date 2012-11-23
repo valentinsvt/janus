@@ -19,6 +19,10 @@ class Reportes2Controller {
 //
 //        println params
 
+        def orden = "itemnmbr"
+        if (params.orden == "n") {
+            orden = "itemcdgo"
+        }
         def lugar = Lugar.get(params.lugar.toLong())
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def items = ""
@@ -38,7 +42,7 @@ class Reportes2Controller {
         }
         def res = []
 //        println items
-        def tmp = preciosService.getPrecioRubroItem(fecha, lugar, items)
+        def tmp = preciosService.getPrecioRubroItemOrder(fecha, lugar, items, orden, "asc")
         tmp.each {
             res.add(PrecioRubrosItems.get(it))
         }
