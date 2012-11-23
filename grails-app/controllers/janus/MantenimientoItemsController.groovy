@@ -224,6 +224,18 @@ class MantenimientoItemsController extends Shield {
         //equipo = 3
     }
 
+    def loadLugarPorTipo() {
+        params.tipo = params.tipo.toString().toUpperCase()
+        def lugares = Lugar.findAllByTipo(params.tipo, [sort: 'descripcion'])
+        def sel = g.select(name: "lugar", from: lugares, optionKey: "id", optionValue: {it.descripcion + ' (' + it.tipo + ')'})
+        render sel
+    }
+
+    def reportePreciosUI() {
+        def lugares = Lugar.list()
+        return [lugares: lugares]
+    }
+
     def precios() {
         //lugar
         //rubro precio
@@ -593,7 +605,7 @@ class MantenimientoItemsController extends Shield {
             params.todasLasFechas = "false"
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         }
-        println "show lg" + params
+//        println "show lg" + params
 
         def parts = params.id.split("_")
         def itemId = parts[0]

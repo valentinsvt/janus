@@ -119,7 +119,8 @@
                 </div>
 
                 <div class="pull-left">
-                    <a href="#" id="btnRefresh" class="btn"><i class="icon-refresh"></i> Refrescar</a>
+                    <a href="#" id="btnRefresh" class="btn btn-ajax"><i class="icon-refresh"></i> Refrescar</a>
+                    <a href="#" id="btnReporte" class="btn btn-ajax"><i class="icon-print"></i> Reporte</a>
                 </div>
 
             </div>
@@ -722,10 +723,6 @@
                 }
             }
 
-            $("#btnRefresh").click(function () {
-                refresh();
-            });
-
             function doSearch() {
                 var val = $.trim($("#search").val());
                 if (val != "") {
@@ -783,9 +780,48 @@
                 initTree("1");
                 $("#info").html("");
 
+                $("#btnRefresh").click(function () {
+                    refresh();
+                });
+
                 $("#btnSearch").click(function () {
                     doSearch();
                 });
+
+                $("#btnReporte").click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'reportePreciosUI')}",
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-print"></i> Ver</a>');
+
+                            btnSave.click(function () {
+                                var data = "";
+                                data += "orden=" + $(".orden.active").attr("id");
+                                data += "Wtipo=" + $(".tipo.active").attr("id");
+                                data += "Wlugar=" + $("#lugarRep").val();
+                                data += "Wfecha=" + $("#fechaRep").val();
+                                data += "Wgrupo=" + current;
+
+                                $(".col.active").each(function () {
+                                    data += "Wcol=" + $(this).attr("id");
+                                });
+
+                                var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=Reporte_costos_materiales.pdf&url=${createLink(controller: 'reportes2', action: 'reportePrecios')}";
+                                location.href = actionUrl + "?" + data;
+
+                                return false;
+                            });
+
+                            $("#modalTitle").html("Formato de impresión");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-tree").modal("show");
+                        }
+                    });
+                });
+
                 $("#search").keyup(function (ev) {
                     if (ev.keyCode == 13) {
                         doSearch();
