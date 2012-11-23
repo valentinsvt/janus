@@ -24,18 +24,18 @@ fieldset {
             </a>
         </div>
     </fieldset>
-    <fieldset>
-        <legend>Orden de impresión</legend>
+    %{--<fieldset>--}%
+        %{--<legend>Orden de impresión</legend>--}%
 
-        <div class="btn-group" data-toggle="buttons-radio">
-            <a href="#" id="a" class="orden btn active">
-                Alfabético
-            </a>
-            <a href="#" id="n" class="orden btn">
-                Numérico
-            </a>
-        </div>
-    </fieldset>
+        %{--<div class="btn-group" data-toggle="buttons-radio">--}%
+            %{--<a href="#" id="a" class="orden btn active">--}%
+                %{--Alfabético--}%
+            %{--</a>--}%
+            %{--<a href="#" id="n" class="orden btn">--}%
+                %{--Numérico--}%
+            %{--</a>--}%
+        %{--</div>--}%
+    %{--</fieldset>--}%
     <fieldset class="form-inline">
         <legend>Lugar y fecha de referencia</legend>
 

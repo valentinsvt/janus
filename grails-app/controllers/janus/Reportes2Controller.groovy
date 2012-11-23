@@ -11,11 +11,13 @@ class Reportes2Controller {
     }
 
     def reportePrecios() {
-        params.orden = "a" //a,n    Alfabetico | Numerico
-        params.col = ["t", "u", "p", "f"] //t,u,p,f   Transporte | Unidad | Precio | Fecha de Act
-        params.fecha = "22-11-2012"
-        params.lugar = "4"
-        params.grupo = "1"
+//        params.orden = "a" //a,n    Alfabetico | Numerico
+//        params.col = ["t", "u", "p", "f"] //t,u,p,f   Transporte | Unidad | Precio | Fecha de Act
+//        params.fecha = "22-11-2012"
+//        params.lugar = "4"
+//        params.grupo = "1"
+//
+//        println params
 
         def lugar = Lugar.get(params.lugar.toLong())
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)

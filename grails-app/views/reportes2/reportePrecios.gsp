@@ -88,9 +88,11 @@
 
             <h2>Reporte de costos de materiales</h2>
 
-            <div class="left strong">${lugar.descripcion}</div>
+            <div style="height: 30px;">
+                <div class="left strong">${lugar.descripcion}</div>
 
-            <div class="right">Fecha consulta: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
+                <div class="right">Fecha consulta: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
+            </div>
 
             <table border="1">
                 <thead>
