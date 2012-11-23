@@ -80,7 +80,9 @@ class PrflController extends janus.seguridad.Shield  {
       def mdloInstance = new Modulo()
       params.controllerName = controllerName
       params.actionName = "saveMdlo"
-      mdloInstance = kerberosoldService.save(params, Modulo, session.perfil, session.usuario)
+//      mdloInstance = kerberosoldService.save(params, Modulo, session.perfil, session.usuario)
+        mdloInstance.properties=params
+        mdloInstance.save()
       if (mdloInstance.properties.errors.getErrorCount() > 0) {
         //println "---- save ${bancoInstance}"
         render("El módulo no ha podido crearse")
@@ -92,7 +94,9 @@ class PrflController extends janus.seguridad.Shield  {
       def mdloInstance = Modulo.get(params.id)
       params.controllerName = controllerName
       params.actionName = "UpdateMdlo"
-      mdloInstance = kerberosoldService.save(params, Modulo, session.perfil, session.usuario)
+//      mdloInstance = kerberosoldService.save(params, Modulo, session.perfil, session.usuario)
+        mdloInstance.properties=params
+        mdloInstance.save(flush:true)
       if (mdloInstance.properties.errors.getErrorCount() > 0) {
 //        println "---- save ${mdloInstance}"
         render("El módulo no se ha podido actualizar")

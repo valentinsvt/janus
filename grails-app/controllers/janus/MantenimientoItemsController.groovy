@@ -233,7 +233,8 @@ class MantenimientoItemsController extends Shield {
 
     def reportePreciosUI() {
         def lugares = Lugar.list()
-        return [lugares: lugares]
+        def grupo = Grupo.get(params.grupo)
+        return [lugares: lugares, grupo: grupo]
     }
 
     def precios() {

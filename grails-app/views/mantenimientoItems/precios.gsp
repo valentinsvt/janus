@@ -42,15 +42,15 @@
         </div>
 
         <div class="span12 btn-group" data-toggle="buttons-radio">
-            <a href="#" id="1" class="btn btn-info toggle active">
+            <a href="#" id="1" class="btn btn-info toggle active" data-reporte="materiales">
                 <i class="icon-briefcase"></i>
                 Materiales <!--grpo--><!--sbgr -> Grupo--><!--dprt -> Subgrupo--><!--item-->
             </a>
-            <a href="#" id="2" class="btn btn-info toggle">
+            <a href="#" id="2" class="btn btn-info toggle" data-reporte="mano_obra">
                 <i class="icon-group"></i>
                 Mano de obra
             </a>
-            <a href="#" id="3" class="btn btn-info toggle">
+            <a href="#" id="3" class="btn btn-info toggle" data-reporte="equipos">
                 <i class="icon-truck"></i>
                 Equipos
             </a>
@@ -120,7 +120,11 @@
 
                 <div class="pull-left">
                     <a href="#" id="btnRefresh" class="btn btn-ajax"><i class="icon-refresh"></i> Refrescar</a>
+                </div>
+
+                <div class="btn-group">
                     <a href="#" id="btnReporte" class="btn btn-ajax"><i class="icon-print"></i> Reporte</a>
+                    <g:link action="registro" class="btn"><i class="icon-list-ul"></i> Items</g:link>
                 </div>
 
             </div>
@@ -789,9 +793,13 @@
                 });
 
                 $("#btnReporte").click(function () {
+                    var tipo = $.trim($("#" + current).data("reporte")).toLowerCase();
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'reportePreciosUI')}",
+                        data    : {
+                            grupo : current
+                        },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-print"></i> Ver</a>');
@@ -808,7 +816,7 @@
                                     data += "Wcol=" + $(this).attr("id");
                                 });
 
-                                var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=Reporte_costos_materiales.pdf&url=${createLink(controller: 'reportes2', action: 'reportePrecios')}";
+                                var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=Reporte_costos_" + tipo + ".pdf&url=${createLink(controller: 'reportes2', action: 'reportePrecios')}";
                                 location.href = actionUrl + "?" + data;
 
                                 return false;
