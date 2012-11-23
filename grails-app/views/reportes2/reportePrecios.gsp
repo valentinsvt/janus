@@ -16,7 +16,7 @@
 
         .hoja {
             width      : 17.5cm;
-            background : #ffebcd;
+            /*background : #ffebcd;*/
             /*border     : solid 1px black;*/
             min-height : 200px;
         }
@@ -125,7 +125,7 @@
                 </thead>
                 <tbody>
                     <g:each in="${precios}" var="precio" status="i">
-                        <tr>
+                        <tr class="${i % 2 == 0 ? 'even' : 'odd'}">
                             <td>
                                 ${precio.item.codigo}
                             </td>
