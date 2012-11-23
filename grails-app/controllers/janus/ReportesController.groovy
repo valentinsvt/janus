@@ -85,6 +85,27 @@ class ReportesController {
         }
     }
 
+
+    def analisisPrecios() {
+
+//        def item = Item.get(189)
+//
+//        println(item.id)
+//
+//        def rubro = PrecioRubrosItems.get(item.id)
+//
+//
+//
+//        println(rubro)
+//
+//        def grupo = Grupo.get(rubro.item.departamento.subgrupo.grupo.id)
+//
+//
+//        println(grupo)
+//        [item: item, rubro: rubro, grupo: grupo]
+
+    }
+
     private static void addEmptyLine(Paragraph paragraph, int number) {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
