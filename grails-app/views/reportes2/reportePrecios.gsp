@@ -162,7 +162,6 @@
                     </g:each>
                 </tbody>
             </table>
-
         </div>
     </body>
 </html>
