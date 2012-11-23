@@ -1,10 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<!doctype html>
 <html>
 <head>
-  <title>${rubro.nombre}</title>
-    <meta name="layout" content="main">
+    <title>asdf</title>
 </head>
 <body>
-
+asdf
 </body>
 </html>

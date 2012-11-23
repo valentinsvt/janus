@@ -96,11 +96,11 @@ class RubroController extends janus.seguridad.Shield {
         if(detalle.item.id.toInteger()==2868 || detalle.item.id.toInteger()==2869 || detalle.item.id.toInteger()==2870){
             detalle.cantidad=1
             if (detalle.item.id.toInteger()==2868)
-                detalle.rendimiento=0.2
+                detalle.rendimiento=0.02
             if (detalle.item.id.toInteger()==2869)
-                detalle.rendimiento=0.5
+                detalle.rendimiento=0.05
             if (detalle.item.id.toInteger()==2870)
-                detalle.rendimiento=0.3
+                detalle.rendimiento=0.03
         }else{
             detalle.rendimiento = params.rendimiento.toDouble()
         }
@@ -367,6 +367,58 @@ class RubroController extends janus.seguridad.Shield {
         println "precios " + precios
         render precios
     }
+    def getPreciosTransporte() {
+        println "get precios "+params
+        def lugar = Lugar.get(params.ciudad)
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def tipo = params.tipo
+        def items = []
+        def parts = params.ids.split("#")
+        parts.each {
+            if (it.size() > 0)
+                items.add(Item.get(it))
+        }
+        def precios = preciosService.getPrecioItemsString(fecha, lugar, items)
+        println "precios " + precios
+        render precios
+    }
 
+
+    def transporte(){
+        def idRubro = params.id
+        def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
+        def rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
+        def parametros = ""+idRubro+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+        def res = preciosService.rb_precios(parametros,"")
+
+        def tabla='<table class="table table-bordered table-striped table-condensed table-hover"> '
+        def total = 0
+        tabla+="<thead><tr><th colspan=7>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></thead><tbody>"
+        println "rends "+rendimientos
+
+//        println "res "+res
+        res.each {r->
+            if(r["parcial_t"]>0){
+//                println "en tabla "+r["itemcdgo"]
+                tabla+="<tr>"
+                tabla+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
+                tabla+="<td>"+r["itemnmbr"]+"</td>"
+                tabla+="<td style='width: 50px;text-align: right'>"+r["itempeso"]+"</td>"
+                tabla+="<td style='width: 50px;text-align: right'>"+r["rbrocntd"]+"</td>"
+                tabla+="<td style='width: 50px;text-align: right'>"+r["distancia"]+"</td>"
+                tabla+="<td style='width: 50px;text-align: right'>"+(r["parcial_t"]/(r["itempeso"]*r["rbrocntd"]*r["distancia"])).toFloat().round(5)+"</td>"
+                tabla+="<td style='width: 50px;text-align: right'>"+r["parcial_t"]+"</td>"
+                total+=r["parcial_t"]
+                tabla+="</tr>"
+            }
+
+        }
+        tabla+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${total}</td>"
+        tabla+="</tbody></table>"
+
+        render(tabla)
+//
+//        pg: select * from rb_precios(293, 4, '1-feb-2008', 50, 70, 0.1015477897561282, 0.1710401760227313);
+    }
 
 } //fin controller

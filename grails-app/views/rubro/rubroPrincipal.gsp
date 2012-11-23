@@ -57,6 +57,11 @@
         <i class="icon-print"></i>
         Imprimir
     </a>
+
+    %{--<a href="${g.createLink(controller: 'pdf',action: 'pdfLink',params: [url:g.createLink(controller: 'reportes3',action: 'imprimirRubro',id: rubro?.id)])}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
+        %{--<i class="icon-print"></i>--}%
+        %{--Imprimir--}%
+    %{--</a>--}%
 </div>
 
 
@@ -161,7 +166,7 @@
 
         <div class="span2">
             Fecha
-            <elm:datepicker name="item.fecha" class="span8" id="fecha_precios"/>
+            <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}"/>
         </div>
 
         <div class="span2">
@@ -209,10 +214,10 @@
 </div>
 
 <input type="hidden" id="actual_row">
-<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;height: 500px;overflow-y: auto;" id="tablas">
+<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;" id="tablas">
     <p class="css-vertical-text">Composición</p>
 
-    <div class="linea" style="height: 485px;"></div>
+    <div class="linea" style="height: 100%;"></div>
     <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 10px;">
         <thead>
         <tr>
@@ -347,6 +352,7 @@
         </g:each>
         </tbody>
     </table>
+    <div id="tabla_transporte"></div>
 </div>
 
 </div>
@@ -396,7 +402,7 @@
         <div class="row-fluid">
             <div class="span6">
                 Distancia peso
-                <input type="text" style="width: 50px;" id="dist_pero" value="0.00">
+                <input type="text" style="width: 50px;" id="dist_peso" value="0.00">
             </div>
             <div class="span5" style="margin-left: 30px;">
                 Distancia volumen <input type="text" style="width: 50px;" id="dist_vol" value="0.00">
@@ -455,6 +461,20 @@
                 $(".contenidoBuscador").html(msg).show("slide");
             }
         });
+    }
+
+    function transporte(){
+        var dsps=$("#dist_peso").val()
+        var dsvs=$("#dist_vol").val()
+        var volqueta=$("#costo_volqueta").val()
+        var chofer=$("#costo_chofer").val()
+        $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'transporte')}",
+            data     : "dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val(),
+            success  : function (msg) {
+               $("#tabla_transporte").html(msg)
+            }
+        });
+
     }
 
     function calculaHerramientas(){
@@ -543,13 +563,16 @@
         </g:if>
 
         $("#imprimir").click(function(){
-            %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'reportes',action:'rubro')}",--}%
-                %{--data     : "tabla="+$("#tablas").html()+"&id=${rubro?.id}",--}%
-                %{--success  : function (msg) {--}%
-                    %{--console.log(msg)--}%
-                %{--}--}%
-            %{--});--}%
-        }) ;
+            var dsps=$("#dist_peso").val()
+            var dsvs=$("#dist_vol").val()
+            var volqueta=$("#costo_volqueta").val()
+            var chofer=$("#costo_chofer").val()
+            %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
+            %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
+            var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()
+            var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos
+            location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+        });
 
         $("#transporte").click(function(){
             if ($("#fecha_precios").val().length < 8) {
@@ -577,7 +600,7 @@
         $("#cmb_vol").change(function(){
             if($("#cmb_vol").val()!="-1"){
                 var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids="+$("#cmb_vol").val()
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPrecios')}",
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPreciosTransporte')}",
                     data     : datos,
                     success  : function (msg) {
                         var precios = msg.split("&")
@@ -600,7 +623,7 @@
         $("#cmb_chof").change(function(){
             if($("#cmb_chof").val()!="-1"){
                 var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val()  + "&ids="+$("#cmb_chof").val()
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPrecios')}",
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPreciosTransporte')}",
                     data     : datos,
                     success  : function (msg) {
                         var precios = msg.split("&")
@@ -791,6 +814,7 @@
 
                                 }
                                 calcularTotales()
+                                transporte()
                             }
                         });
 

@@ -1,8 +1,11 @@
 package janus
 
+import org.springframework.jdbc.core.JdbcTemplate
+
 class PreciosService {
 
     def dbConnectionService
+
 
     def getPrecioItems(fecha, lugar, items) {
         def cn = dbConnectionService.getConnection()
@@ -31,7 +34,8 @@ class PreciosService {
             if (i < items.size() - 1)
                 itemsId += ","
         }
-        def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('MM-dd-yyyy')}' group by 1"
+        def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha <= '${fecha.format('MM-dd-yyyy')}' group by 1"
+        println "sql precios string "+sql
         cn.eachRow(sql.toString()) {row ->
             res += "" + row[0] + ";" + row[1] + "&"
         }
@@ -104,5 +108,56 @@ class PreciosService {
         cn.close()
         return res
     }
+
+
+    def rendimientoTranposrte(dsps,dsvl,precioUnitChofer,precioUnitVolquete){
+
+        def ftrd = 10
+        def vlcd = 40
+        def cpvl=8
+        def ftvl=0.8
+        def rdtp=24
+        def ftps=1.7
+        def pcunchfr = precioUnitChofer
+        def pcunvlqt = precioUnitVolquete
+
+        def rdvl = (ftrd * vlcd * cpvl * ftvl * dsvl) / (vlcd + (rdtp * dsvl))
+        rdvl = (pcunchfr + pcunvlqt) / rdvl;
+        def rdps = (ftrd * vlcd * cpvl * ftvl * dsps * ftps) / (vlcd + (rdtp * dsps))
+        rdps = (pcunchfr + pcunvlqt) / rdps
+        return ["rdvl":rdvl,"rdps":rdps]
+        //        Factor de reducción(10):       --> ftrd
+//        Velocidad(40):                 --> vlcd
+//        Capacidad del volquete(8):     --> cpvl
+//        Factor Volumen (0.8):          --> ftvl
+//        Reducción / Tiempo (24):       --> rdtp
+//        Factor de Peso (1.7):
+
+//        Precio unitario de chofer:   ---> pcunchfr
+//        Precio unitario de volqueta: ---> pcunvlqt
+//
+//        rdvl = (pcuncfr + pcunvlqt) / ((ftrd * vlcd * cpvl * ftvl * dsvl) / (vlcd + (rdtp * dsvl));
+//        rdps = (pcuncfr + pcunvlqt) / ((ftrd * vlcd * cpvl * ftvl * dsps * ftps) / (vlcd + (rdtp * dsps));
+//
+//        o mejor:
+//
+//                rdvl = (ftrd * vlcd * cpvl * ftvl * dsvl) / (vlcd + (rdtp * dsvl));
+//        rdvl = (pcuncfr + pcunvlqt) / rdvl;
+//
+//        rdps = (ftrd * vlcd * cpvl * ftvl * dsps * ftps) / (vlcd + (rdtp * dsps));
+//        rdps = (pcuncfr + pcunvlqt) / rdps;
+    }
+
+
+    def rb_precios(parametros,condicion){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rb_precios("+parametros+") "+condicion
+        def result = []
+        cn.eachRow(sql){r->
+           result.add(r.toRowResult())
+        }
+        return result
+    }
+
 
 }

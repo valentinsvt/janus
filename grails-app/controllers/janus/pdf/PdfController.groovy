@@ -11,22 +11,16 @@ class PdfController {
         try{
             byte[] b
             def baseUri = request.scheme + "://" + request.serverName + ":" + request.serverPort
-            // def baseUri = g.createLink(uri:"/", absolute:"true").toString()
-            // TODO: get this working...
-            //if(params.template){
-            //println "Template: $params.template"
-            //def content = g.render(template:params.template, model:[pdf:params])
-            //b = pdfService.buildPdfFromString(content.readAsString(), baseUri)
-            //}
+
             params.url=params.url.replaceAll("W","&")
             if(params.pdfController){
                 def content = g.include(controller:params.pdfController, action:params.pdfAction, id:params.pdfId)
                 b = pdfService.buildPdfFromString(content.readAsString(), baseUri)
             }
             else{
-                println "sin plugin --> params url "+params.url
+//                println "sin plugin --> params url "+params.url
                 def url = baseUri + params.url
-                //println "url pdf "+url
+                println "url pdf "+url
                 b = pdfService.buildPdf(url)
             }
             response.setContentType("application/pdf")

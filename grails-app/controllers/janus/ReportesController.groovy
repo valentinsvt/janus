@@ -25,11 +25,29 @@ class ReportesController {
 
 
 
-    def rubro(){
-        println "params "+params
-        def rubro = Item.get(params.id)
-        [rubro:rubro]
-        render "ok"
+    def rubro = {
+        println "rep!!!  rubro "+params
+//        def rubro
+//        def grupos = []
+//        def volquetes = []
+//        def choferes = []
+//        def grupoTransporte=DepartamentoItem.findAllByTransporteIsNotNull()
+//        grupoTransporte.each {
+//            if(it.transporte.codigo=="H")
+//                choferes=Item.findAllByDepartamento(it)
+//            if(it.transporte.codigo=="T")
+//                volquetes=Item.findAllByDepartamento(it)
+//        }
+//        grupos.add(Grupo.get(4))
+//        grupos.add(Grupo.get(5))
+//        grupos.add(Grupo.get(6))
+//
+//        rubro = Item.get(params.id)
+//        def items=Rubro.findAllByRubro(rubro)
+//        items.sort{it.item.codigo}
+//        [ rubro: rubro, grupos: grupos,items:items,choferes:choferes,volquetes:volquetes]
+//        render "<html><head></head><body>Hola</body></html>"
+        return [algo:"algo"]
     }
 
     def reporteBuscador= {
@@ -53,9 +71,9 @@ class ReportesController {
             Font info = new Font(Font.TIMES_ROMAN, 8,Font.NORMAL)
             Document document
             if(params.landscape)
-               document = new Document(PageSize.A4.rotate());
+                document = new Document(PageSize.A4.rotate());
             else
-               document = new Document();
+                document = new Document();
 
             def pdfw= PdfWriter.getInstance(document,baos);
 
