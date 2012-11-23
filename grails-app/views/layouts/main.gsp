@@ -140,7 +140,7 @@
             });
         </script>
 
-        <div id="dlgLoad" class="ui-helper-hidden" style="text-align:center;">
+        <div id="dlgLoad" class="ui-helper-hidden" title="CARGANDO..." style="text-align:center;">
             Cargando.....Por favor espere......<br/><br/>
             <img src="${resource(dir: 'images', file: 'spinner64.gif')}" alt=""/>
         </div>

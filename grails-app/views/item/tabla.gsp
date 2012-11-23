@@ -63,7 +63,8 @@
 
             <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.id}"
                 data-original="${rubro?.precioUnitario}"
-                style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5"/>
+                style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5"
+                                                    maxFractionDigits="5"/>
 
             </td>
 
@@ -179,12 +180,11 @@ Total de registros visualizados: ${params.totalRows}<br/>
 
 </div>
 
-<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js' )}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
 
 <script type="text/javascript">
 
     function enviar(pag) {
-
 
         $.ajax({
             type:"POST",
@@ -199,26 +199,24 @@ Total de registros visualizados: ${params.totalRows}<br/>
             },
             success:function (msg) {
                 $("#divTabla").html(msg);
+                $("#dlgLoad").dialog("close");
             }
         });
 
     }
 
 
-
-
-
     $(function () {
 
-
         $(".num").click(function () {
+            $("#dlgLoad").dialog("open");
+
             var num = $(this).attr("href");
-            console.log("num" + num);
             enviar(num);
             return false;
         });
 
-
+        $("#dlgLoad").dialog("close");
     });
 
 

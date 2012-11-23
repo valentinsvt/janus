@@ -54,7 +54,6 @@
         <div class="btn-group span1" style="margin-left: 90px; margin-right: 10px">
             <a href="#" class="btn btn-consultar"><i class="icon-search"></i>Consultar</a>
             <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i>Guardar</a>
-            <a href="#" class="btn btn-reporte btn-inverse"><i class="icon-list-alt"></i>Reporte</a>
         </div>
     </div>
 
@@ -190,15 +189,8 @@
 
                     doHighlight({elem:$(ok), clase:"ok"});
                     doHighlight({elem:$(no), clase:"no"});
-//                    $(ok).css({
-//                        background:"#C5DDC5"
-//                    });
-//                    $(no).css({
-//                        background:"#DBC5C5"
-//                    });
 
-                    console.log(msg);
-                }
+             }
             });
         });
 
