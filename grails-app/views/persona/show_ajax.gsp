@@ -101,7 +101,7 @@
         
                 <span aria-labelledby="departamento-label">
         %{--<g:link controller="departamento" action="show" id="${personaInstance?.departamento?.id}">--}%
-                    ${personaInstance?.departamento?.encodeAsHTML()}
+                    ${personaInstance?.departamento?.descripcion}
         %{--</g:link>--}%
                 </span>
         
