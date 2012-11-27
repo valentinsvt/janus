@@ -31,7 +31,7 @@
         height      : 24.7cm; /*29.7-(1.5*2)*/
         font-family : arial;
         font-size   : 10px;
-        width : 15cm;
+        width : 16cm;
     }
 
     .tituloPdf {
@@ -142,7 +142,7 @@
             </div>
         </div>
     </div>
-    <div>
+    <div style="width: 100%">
 
         ${tablaHer}
         ${tablaMano}
