@@ -214,10 +214,10 @@
 </div>
 
 <input type="hidden" id="actual_row">
-<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;" id="tablas">
+<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;float: left" id="tablas">
     <p class="css-vertical-text">Composición</p>
 
-    <div class="linea" style="height: 100%;"></div>
+    <div class="linea" style="height: 98%;"></div>
     <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 10px;">
         <thead>
         <tr>
@@ -353,6 +353,8 @@
         </tbody>
     </table>
     <div id="tabla_transporte"></div>
+    <div id="tabla_indi"></div>
+    <div id="tabla_costos" style="height: 120px;display: none;float: right;width: 100%;margin-bottom: 10px;"></div>
 </div>
 
 </div>
@@ -472,6 +474,7 @@
             data     : "dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val(),
             success  : function (msg) {
                $("#tabla_transporte").html(msg)
+                tablaIndirectos();
             }
         });
 
@@ -552,8 +555,29 @@
 
 
         $("#tabla_equipo").append(trE)
-//        console.log(totalM,totalMa,totalE)
 
+
+    }
+
+    function tablaIndirectos(){
+        var total=0
+        $(".valor_total").each(function(){
+            total+=$(this).html()*1
+        })
+        var tabla = $('<table class="table table-bordered table-striped table-condensed table-hover">')
+        tabla.append("<thead><tr><th colspan='3'>Costos indirectos</th></tr><tr><th style='width: 885px;'>Descripción</th><th style='text-align: right'>Porcentaje</th><th style='text-align: right'>Valor</th></tr></thead>")
+        tabla.append("<tbody><tr><td>Costos indirectos</td><td style='text-align: right'>32%</td><td style='text-align: right'>"+number_format(total*0.32, 5, ".", "")+"</td></tr></tbody>")
+        tabla.append("</table>")
+        $("#tabla_indi").append(tabla)
+        tabla = $('<table class="table table-bordered table-striped table-condensed table-hover" style="width: 360px;float: right;border: 1px solid #FFAC37">')
+        tabla.append("<tbody>");
+        tabla.append("<tr><td style='width: 300px;font-weight: bolder;'>Costo unitario directo</td><td style='text-align: right;font-weight: bold'>"+number_format(total, 5, ".", "")+"</td></tr>")
+        tabla.append("<tr><td style='font-weight: bolder'>Costos indirectos</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32, 5, ".", "")+"</td></tr>")
+        tabla.append("<tr><td style='font-weight: bolder'>Costos total del rubro</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32+total, 5, ".", "")+"</td></tr>")
+        tabla.append("<tr><td style='font-weight: bolder'>Precio unitario</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32+total, 2, ".", "")+"</td></tr>")
+        tabla.append("</tbody>");
+        $("#tabla_costos").append(tabla)
+        $("#tabla_costos").show("slide")
     }
 
     $(function () {
@@ -739,6 +763,9 @@
                 $(".col_precioUnit").hide()
                 $(".col_vacio").hide()
                 $(".total").remove()
+                $("#tabla_indi").html("")
+                $("#tabla_costos").html("")
+                $("#tabla_transporte").html("")
             } else {
                 $(this).addClass("active")
                 var fecha = $("#fecha_precios").val()

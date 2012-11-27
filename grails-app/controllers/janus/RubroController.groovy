@@ -387,7 +387,20 @@ class RubroController extends janus.seguridad.Shield {
     def transporte(){
         def idRubro = params.id
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
+        if (!params.dsps)
+            params.dsps=0
+        if (!params.dsvs)
+            params.dsvs=0
+        if (!params.prch)
+            params.prch=0
+        if (!params.prvl)
+            params.prvl=0
         def rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
+        println "rends "+rendimientos
+        if (rendimientos["rdps"].toString()=="NaN")
+            rendimientos["rdps"]=0
+        if (rendimientos["rdvl"].toString()=="NaN")
+            rendimientos["rdvl"]=0
         def parametros = ""+idRubro+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
         def res = preciosService.rb_precios(parametros,"")
 
@@ -413,7 +426,7 @@ class RubroController extends janus.seguridad.Shield {
             }
 
         }
-        tabla+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${total}</td>"
+        tabla+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right' class='valor_total'>${total}</td>"
         tabla+="</tbody></table>"
 
         render(tabla)
