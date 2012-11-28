@@ -536,10 +536,10 @@
         manos.each(function(){
             totalMa+=parseFloat($(this).find(".col_total").html())
         })
-        td=$("<td class='valor_total' style='text-align: right'>")
+        td=$("<td class='valor_total' style='text-align: right;font-weight: bold'>")
         td.html(number_format(totalM, 5, ".", ""))
         trM.append(td)
-        td=$("<td class='valor_total'  style='text-align: right'>")
+        td=$("<td class='valor_total'  style='text-align: right;font-weight: bold'>")
         td.html(number_format(totalMa, 5, ".", ""))
         trMa.append(td)
         $("#tabla_material").append(trM)
@@ -549,7 +549,7 @@
             totalE+=parseFloat($(this).find(".col_total").html())
         })
 
-        td=$("<td class='valor_total'  style='text-align: right'>")
+        td=$("<td class='valor_total'  style='text-align: right;;font-weight: bold'>")
         td.html(number_format(totalE, 5, ".", ""))
         trE.append(td)
 
@@ -566,7 +566,7 @@
         })
         var tabla = $('<table class="table table-bordered table-striped table-condensed table-hover">')
         tabla.append("<thead><tr><th colspan='3'>Costos indirectos</th></tr><tr><th style='width: 885px;'>Descripción</th><th style='text-align: right'>Porcentaje</th><th style='text-align: right'>Valor</th></tr></thead>")
-        tabla.append("<tbody><tr><td>Costos indirectos</td><td style='text-align: right'>32%</td><td style='text-align: right'>"+number_format(total*0.32, 5, ".", "")+"</td></tr></tbody>")
+        tabla.append("<tbody><tr><td>Costos indirectos</td><td style='text-align: right'>32%</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32, 5, ".", "")+"</td></tr></tbody>")
         tabla.append("</table>")
         $("#tabla_indi").append(tabla)
         tabla = $('<table class="table table-bordered table-striped table-condensed table-hover" style="width: 360px;float: right;border: 1px solid #FFAC37">')

@@ -426,7 +426,7 @@ class RubroController extends janus.seguridad.Shield {
             }
 
         }
-        tabla+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right' class='valor_total'>${total}</td>"
+        tabla+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${total}</td>"
         tabla+="</tbody></table>"
 
         render(tabla)

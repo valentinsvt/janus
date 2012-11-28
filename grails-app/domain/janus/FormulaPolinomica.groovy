@@ -19,7 +19,7 @@ class FormulaPolinomica implements Serializable {
         }
     }
     static constraints = {
-        obra(blank: true, nullable: true, attributes: [title: 'revisor'])
+        obra(blank: true, nullable: true, attributes: [title: 'obra'])
         numero(size: 1..3, blank: false, attributes: [title: 'numero'])
         valor(blank: true, nullable: true, attributes: [title: 'valor'])
         indice(blank: true, nullable: true, attributes: [title: 'indice'])

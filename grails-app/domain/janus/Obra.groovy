@@ -71,7 +71,7 @@ class Obra implements Serializable {
     double indiceCostosIndirectosPromocion
     double indiceCostosIndirectosTimbresProvinciales
     static mapping = {
-        table 'revisor'
+        table 'obra'
         cache usage: 'read-write', include: 'non-lazy'
         id column: 'obra__id'
         id generator: 'identity'

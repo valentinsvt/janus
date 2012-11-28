@@ -31,7 +31,7 @@ class Concurso implements Serializable {
         }
     }
     static constraints = {
-        obra(blank: true, nullable: true, attributes: [title: 'revisor'])
+        obra(blank: true, nullable: true, attributes: [title: 'obra'])
         administracion(blank: true, nullable: true, attributes: [title: 'administracion'])
         codigo(size: 1..15, blank: false, attributes: [title: 'numero'])
         objetivo(size: 1..255, blank: true, nullable: true, attributes: [title: 'objetivo'])

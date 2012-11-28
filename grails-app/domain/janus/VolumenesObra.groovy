@@ -19,7 +19,7 @@ class VolumenesObra implements Serializable {
         }
     }
     static constraints = {
-        obra(blank: false, attributes: [title: 'revisor'])
+        obra(blank: false, attributes: [title: 'obra'])
         item(blank: false, attributes: [title: 'item'])
         cantidad(blank: false, attributes: [title: 'cantidad'])
         subPrograma(blank: false, attributes: [title: 'subPrograma'])
