@@ -59,7 +59,7 @@
                     
                         <td>${fieldValue(bean: volumenesObraInstance, field: "cantidad")}</td>
                     
-                        <td>${fieldValue(bean: volumenesObraInstance, field: "subPrograma")}</td>
+                        <td>${fieldValue(bean: volumenesObraInstance, field: "subPresupuesto")}</td>
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${volumenesObraInstance.id}">

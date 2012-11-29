@@ -1,5 +1,5 @@
 package janus
-class SubPrograma implements Serializable {
+class SubPresupuesto implements Serializable {
     String descripcion
     String tipo
     static mapping = {

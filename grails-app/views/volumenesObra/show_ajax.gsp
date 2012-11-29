@@ -60,18 +60,18 @@
         </div>
     </g:if>
     
-    <g:if test="${volumenesObraInstance?.subPrograma}">
+    <g:if test="${volumenesObraInstance?.subPresupuesto}">
         <div class="control-group">
             <div>
-                <span id="subPrograma-label" class="control-label label label-inverse">
+                <span id="subPresupuesto-label" class="control-label label label-inverse">
                     Sub Programa
                 </span>
             </div>
             <div class="controls">
         
-                <span aria-labelledby="subPrograma-label">
-        %{--<g:link controller="subPrograma" action="show" id="${volumenesObraInstance?.subPrograma?.id}">--}%
-                    ${volumenesObraInstance?.subPrograma?.encodeAsHTML()}
+                <span aria-labelledby="subPresupuesto-label">
+        %{--<g:link controller="subPresupuesto" action="show" id="${volumenesObraInstance?.subPresupuesto?.id}">--}%
+                    ${volumenesObraInstance?.subPresupuesto?.encodeAsHTML()}
         %{--</g:link>--}%
                 </span>
         

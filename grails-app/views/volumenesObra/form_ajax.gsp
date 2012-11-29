@@ -55,7 +55,7 @@
             </div>
 
             <div class="controls">
-                <g:select id="subPrograma" name="subPrograma.id" from="${janus.SubPrograma.list()}" optionKey="id" class="many-to-one  required" value="${volumenesObraInstance?.subPrograma?.id}"/>
+                <g:select id="subPresupuesto" name="subPresupuesto.id" from="${janus.subPresupuesto.list()}" optionKey="id" class="many-to-one  required" value="${volumenesObraInstance?.subPresupuesto?.id}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

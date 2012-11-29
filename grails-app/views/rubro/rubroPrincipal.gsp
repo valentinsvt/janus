@@ -160,7 +160,7 @@
         </div>
 
         <div class="span4">
-            Ciudad
+            Lista
             <g:select name="item.ciudad.id" from="${janus.Lugar.findAllByTipo('C')}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad"/>
         </div>
 
