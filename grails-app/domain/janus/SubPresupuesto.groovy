@@ -15,8 +15,7 @@ class SubPresupuesto implements Serializable {
         }
     }
     static constraints = {
-        tipo(size: 1..1, blank: false, attributes: [title: 'tipo'])
+        tipo(size: 1..1, blank: true, nullable: true, attributes: [title: 'tipo'])
         descripcion(size: 1..127, blank: false, attributes: [title: 'descripcion'])
-
     }
 }
