@@ -159,5 +159,9 @@ class PreciosService {
         return result
     }
 
+    def actualizaOrden(obra,numero){
+
+    }
+
 
 }

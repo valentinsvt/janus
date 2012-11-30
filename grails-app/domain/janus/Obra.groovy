@@ -32,8 +32,8 @@ class Obra implements Serializable {
     String observaciones
     String tipo
     Date fechaCreacionObra
-    String itemChofer
-    String itemPorVolquete
+    Item  chofer
+    Item volquete
     String memoCantidadObra
     String memoSalida
     Date fechaOficioSalida
@@ -110,8 +110,8 @@ class Obra implements Serializable {
             observaciones column: 'obraobsr'
             tipo column: 'obratipo'
             fechaPreciosRubros column: 'rbpcfcha'
-            itemChofer column: 'obrachfr'
-            itemPorVolquete column: 'obravlqt'
+            chofer column: 'obrachfr'
+            volquete column: 'obravlqt'
             memoCantidadObra column: 'obrammco'
             memoSalida column: 'obrammsl'
             fechaOficioSalida column: 'obrafcsl'
@@ -183,8 +183,8 @@ class Obra implements Serializable {
         observaciones(size: 1..127, blank: true, nullable: true, attributes: [title: 'observaciones'])
         tipo(size: 1..1, blank: true, nullable: true, attributes: [title: 'tipo'])
         fechaPreciosRubros(blank: true, nullable: true, attributes: [title: 'fecha'])
-        itemChofer(size: 1..31, blank: true, nullable: true, attributes: [title: 'itemChofer'])
-        itemPorVolquete(size: 1..31, blank: true, nullable: true, attributes: [title: 'item/volquete'])
+        chofer(size: 1..31, blank: true, nullable: true, attributes: [title: 'itemChofer'])
+        volquete(size: 1..31, blank: true, nullable: true, attributes: [title: 'item/volquete'])
         memoCantidadObra(size: 1..15, blank: true, nullable: true, attributes: [title: 'memoCantidadObra'])
         memoSalida(size: 1..15, blank: true, nullable: true, attributes: [title: 'memoSalida'])
         fechaOficioSalida(blank: true, nullable: true, attributes: [title: 'fechaOficioSalida'])
