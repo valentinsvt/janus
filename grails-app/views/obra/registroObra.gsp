@@ -355,7 +355,7 @@
         </div>
 
 
-        <div class="modal hide fade " id="modal-var" style=";overflow: hidden;">
+        <div class="modal hide fade mediumModal" id="modal-var" style=";overflow: hidden;">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 

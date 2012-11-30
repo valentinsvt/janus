@@ -11,6 +11,10 @@
     text-shadow : -2px 2px 1px rgba(248, 148, 6, 0.5) !important;
 }
 
+.bold {
+    font-weight : bold;
+}
+
 .titulo, .tituloTree {
     font-size   : 22px !important;
     font-family : 'Tulpen One', cursive;
@@ -30,11 +34,11 @@
 }
 
 .noMargin {
-    margin: 0 !important;
+    margin : 0 !important;
 }
 
 .noPadding {
-    padding: 0 !important;
+    padding : 0 !important;
 }
 
 /* Custom styling */
@@ -209,8 +213,25 @@ th.desc a {
     text-shadow : -2px 4px 2px rgba(0, 0, 0, 0.8);
 }
 
+.borde_abajo {
+    border-bottom : 1px solid black;
+    margin-bottom : 10px;
+}
 
-.borde_abajo{
-    border-bottom: 1px solid black;
-    margin-bottom: 10px;
+/************************************** TAMANIO DE LOS MODALES *************************************************************/
+
+/********cambiar el height *********/
+.tallModal .modal-body {
+    max-height : 800px;
+}
+
+/********cambiar el width************/
+.longModal {
+    width  : 900px; /* SET THE WIDTH OF THE MODAL */
+    margin : -250px 0 0 -450px; /* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
+}
+
+.mediumModal {
+    width  : 700px; /* SET THE WIDTH OF THE MODAL */
+    margin : -250px 0 0 -350px; /* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
 }
