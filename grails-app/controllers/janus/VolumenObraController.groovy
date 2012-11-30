@@ -48,7 +48,6 @@ class VolumenObraController extends janus.seguridad.Shield{
             detalle= VolumenesObra.findAllByObra(obra)
 
 
-
         def fecha = obra.fechaPreciosRubros
         def dpsp = obra.distanciaPeso
         def dsvs = obra.distanciaVolumen
