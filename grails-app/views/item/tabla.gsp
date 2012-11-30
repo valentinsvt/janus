@@ -103,7 +103,7 @@ Total de registros visualizados: ${params.totalRows}<br/>
 
     <g:if test="${params.totalPags == 0}">
 
-        <div class="alert alert-error">
+        <div class="alert alert-error" >
 
             <h4 style="margin-left: 450px">No existen datos!!</h4>
 

@@ -15,6 +15,36 @@ class ObraController extends janus.seguridad.Shield {
         [obraInstanceList: Obra.list(params), obraInstanceTotal: Obra.count(), params: params]
     } //list
 
+
+    def registroObra () {
+
+
+        def provincia = new Provincia().get(2)
+       def canton = Canton.findAllByProvincia(provincia);
+
+        canton.each {
+
+
+
+
+        }
+
+
+
+
+
+//       def parroquia = Parroquia.findAllByCanton(canton.get());
+
+
+        println(provincia);
+
+        println(canton);
+
+
+        [provincia: provincia/*, canton: canton, parroquia: parroquia */]
+//
+    }
+
     def form_ajax() {
         def obraInstance = new Obra(params)
         if (params.id) {

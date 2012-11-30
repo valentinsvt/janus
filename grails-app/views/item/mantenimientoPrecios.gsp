@@ -66,23 +66,30 @@
 
     </div>
 
-</fieldset>
 
-<fieldset class="borde hide" style="width: 1170px; height: 58px" id="error">
+    <fieldset class="borde hide" style="width: 1170px; height: 58px" id="error">
 
     <div class="alert alert-error">
 
-        <h4 style="margin-left: 450px">No existen datos!!</h4>
+    <h4 style="margin-left: 450px">No existen datos!!</h4>
 
-        <div style="margin-left: 420px">
-            Ingrese los parámetros de búsqueda!
+    <div style="margin-left: 420px">
+    Ingrese los parámetros de búsqueda!
 
-        </div>
     </div>
+    </div>
+
+    </fieldset>
+
 
 </fieldset>
 
+
+
 <script type="text/javascript">
+
+
+
 
 
     function consultar() {
@@ -152,6 +159,7 @@
             }
             else {
 
+                $("#divTabla").html("");
                 $("#divTabla").hide();
 
                 $("#error").show();
