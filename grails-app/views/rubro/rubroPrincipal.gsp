@@ -59,8 +59,8 @@
     </a>
 
     %{--<a href="${g.createLink(controller: 'pdf',action: 'pdfLink',params: [url:g.createLink(controller: 'reportes3',action: 'imprimirRubro',id: rubro?.id)])}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
-        %{--<i class="icon-print"></i>--}%
-        %{--Imprimir--}%
+    %{--<i class="icon-print"></i>--}%
+    %{--Imprimir--}%
     %{--</a>--}%
 </div>
 
@@ -150,29 +150,33 @@
     <div class="linea" style="height: 100px;"></div>
 
     <div class="row-fluid">
-        <div class="span3">
-            <div style="height: 40px;float: left;width: 100px">Lista de precios</div>
+        %{--<div class="span3">--}%
+        %{--<div style="height: 40px;float: left;width: 100px">Lista de precios</div>--}%
 
-            <div class="btn-group span7" data-toggle="buttons-radio" style="float: right;">
-                <button type="button" class="btn btn-info active tipoPrecio" id="C">Civiles</button>
-                <button type="button" class="btn btn-info tipoPrecio" id="V">Viales</button>
-            </div>
-        </div>
+        %{--<div class="btn-group span7" data-toggle="buttons-radio" style="float: right;">--}%
+        %{--<button type="button" class="btn btn-info active tipoPrecio" id="C">Civiles</button>--}%
+        %{--<button type="button" class="btn btn-info tipoPrecio" id="V">Viales</button>--}%
+        %{--</div>--}%
+        %{--</div>--}%
 
         <div class="span4">
             Lista
-            <g:select name="item.ciudad.id" from="${janus.Lugar.findAllByTipo('C')}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad"/>
+            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad"/>
         </div>
 
         <div class="span2">
             Fecha
-            <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}"/>
+            <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
         </div>
 
         <div class="span2">
             <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
                 Copiar composición
             </a>
+        </div>
+        <div class="span3">
+            % costos indriectos
+            <input type="text" style="width: 30px;" id="costo_indi" value="21.5">
         </div>
 
     </div>
@@ -214,7 +218,7 @@
 </div>
 
 <input type="hidden" id="actual_row">
-<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;float: left" id="tablas">
+<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;float: left;width: 95%" id="tablas">
     <p class="css-vertical-text">Composición</p>
 
     <div class="linea" style="height: 98%;"></div>
@@ -470,10 +474,11 @@
         var dsvs=$("#dist_vol").val()
         var volqueta=$("#costo_volqueta").val()
         var chofer=$("#costo_chofer").val()
+
         $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'transporte')}",
             data     : "dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val(),
             success  : function (msg) {
-               $("#tabla_transporte").html(msg)
+                $("#tabla_transporte").html(msg)
                 tablaIndirectos();
             }
         });
@@ -564,17 +569,21 @@
         $(".valor_total").each(function(){
             total+=$(this).html()*1
         })
+        var indi = $("#costo_indi").val()
+        if(isNaN(indi))
+            indi=21.5
+        indi=parseFloat(indi)
         var tabla = $('<table class="table table-bordered table-striped table-condensed table-hover">')
         tabla.append("<thead><tr><th colspan='3'>Costos indirectos</th></tr><tr><th style='width: 885px;'>Descripción</th><th style='text-align: right'>Porcentaje</th><th style='text-align: right'>Valor</th></tr></thead>")
-        tabla.append("<tbody><tr><td>Costos indirectos</td><td style='text-align: right'>32%</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32, 5, ".", "")+"</td></tr></tbody>")
+        tabla.append("<tbody><tr><td>Costos indirectos</td><td style='text-align: right'>"+indi+"%</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100, 5, ".", "")+"</td></tr></tbody>")
         tabla.append("</table>")
         $("#tabla_indi").append(tabla)
         tabla = $('<table class="table table-bordered table-striped table-condensed table-hover" style="width: 360px;float: right;border: 1px solid #FFAC37">')
         tabla.append("<tbody>");
         tabla.append("<tr><td style='width: 300px;font-weight: bolder;'>Costo unitario directo</td><td style='text-align: right;font-weight: bold'>"+number_format(total, 5, ".", "")+"</td></tr>")
-        tabla.append("<tr><td style='font-weight: bolder'>Costos indirectos</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32, 5, ".", "")+"</td></tr>")
-        tabla.append("<tr><td style='font-weight: bolder'>Costos total del rubro</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32+total, 5, ".", "")+"</td></tr>")
-        tabla.append("<tr><td style='font-weight: bolder'>Precio unitario</td><td style='text-align: right;font-weight: bold'>"+number_format(total*0.32+total, 2, ".", "")+"</td></tr>")
+        tabla.append("<tr><td style='font-weight: bolder'>Costos indirectos</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100, 5, ".", "")+"</td></tr>")
+        tabla.append("<tr><td style='font-weight: bolder'>Costos total del rubro</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100+total, 5, ".", "")+"</td></tr>")
+        tabla.append("<tr><td style='font-weight: bolder'>Precio unitario</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100+total, 2, ".", "")+"</td></tr>")
         tabla.append("</tbody>");
         $("#tabla_costos").append(tabla)
         $("#tabla_costos").show("slide")
@@ -585,6 +594,27 @@
         <g:if test="${!rubro?.departamento?.subgrupo?.grupo?.id}">
         $("#selClase").val("");
         </g:if>
+        $("#costo_indi").blur(function(){
+            var indi = $(this).val()
+            if(isNaN(indi) || indi*1<0){
+                $.box({
+                    imageClass : "box_info",
+                    text       : "El porcentaje de costos indirectos debe ser un número positvo",
+                    title      : "Alerta",
+                    iconClose  : false,
+                    dialog     : {
+                        resizable : false,
+                        draggable : false,
+                        buttons   : {
+                            "Aceptar" : function () {
+                            }
+                        },
+                        width     : 500
+                    }
+                });
+                $("#costo_indi").val("21.5")
+            }
+        });
 
         $("#imprimir").click(function(){
             var dsps=$("#dist_peso").val()
@@ -593,7 +623,7 @@
             var chofer=$("#costo_chofer").val()
             %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
             %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
-            var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()
+            var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()+"Windi="+$("#costo_indi").val()
             var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos
             location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
         });

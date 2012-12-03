@@ -19,7 +19,7 @@ class PreciosService {
         def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('MM-dd-yyyy')}' group by 1"
         println "sql " + sql
         cn.eachRow(sql.toString()) {row ->
-            res.put(row[0], row[1])
+            res.put(row[0].toString(), row[1])
         }
         cn.close()
         return res
@@ -155,6 +155,15 @@ class PreciosService {
         def result = []
         cn.eachRow(sql){r->
            result.add(r.toRowResult())
+        }
+        return result
+    }
+    def rb_precios(select,parametros,condicion){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select ${select} from rb_precios("+parametros+") "+condicion
+        def result = []
+        cn.eachRow(sql.toString()){r->
+            result.add(r.toRowResult())
         }
         return result
     }

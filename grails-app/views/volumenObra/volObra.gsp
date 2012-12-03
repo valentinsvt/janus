@@ -96,6 +96,7 @@
                 <input type="text" style="width: 30px;text-align: right" id="item_orden" value="1">
             </div>
             <div class="span1" style="margin-left: 15px;padding-top:30px">
+                <input type="hidden" value="" id="vol_id">
                 <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
                     <i class="icon-plus"></i>
                 </a>
@@ -118,6 +119,9 @@
 
         </div>
         <div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
+        <div style="width: 99.7%;height: 30px;overflow-y: auto;float: right;text-align: right" id="total">
+            <b>TOTAL:</b> <div id="divTotal" style="width: 150px;float: right;height: 30px;font-weight: bold;font-size: 12px;></div>
+        </div>
     </div>
 </div>
 <div class="modal grande hide fade " id="modal-rubro" style=";overflow: hidden;">
@@ -152,7 +156,30 @@
     $(function () {
 
         cargarTabla();
+        $("#vol_id").val("")
+        $("#calcular").click(function () {
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active")
+                $(".col_delete").show()
+                $(".col_precio").hide()
+                $(".col_total").hide()
+                $("#divTotal").html("")
+            } else {
+                $(this).addClass("active")
+                $(".col_delete").hide()
+                $(".col_precio").show()
+                $(".col_total").show()
+                var total =0
+                $(".total").each(function(){
+                    total+=$(this).html()*1
+                })
+                $("#divTotal").html(number_format(total, 5, ".", ""))
+            }
+        });
         $("#subPres_desc").change(function(){
+            $("#ver_todos").removeClass("active")
+            $("#divTotal").html("")
+            $("#calcular").removeClass("active")
             var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
             $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
                 data     : datos,
@@ -160,7 +187,34 @@
                     $("#detalle").html(msg)
                 }
             });
-        })
+        });
+
+        $("#ver_todos").click(function(){
+            $("#calcular").removeClass("active")
+            $("#divTotal").html("")
+            if ($(this).hasClass("active")) {
+                $(this).removeClass("active")
+                var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+                    data     : datos,
+                    success  : function (msg) {
+                        $("#detalle").html(msg)
+                    }
+                });
+
+            }else{
+                $(this).addClass("active")
+                var datos = "obra=${obra.id}"
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+                    data     : datos,
+                    success  : function (msg) {
+                        $("#detalle").html(msg)
+                    }
+                });
+            }
+            return false
+
+        }) ;
 
         $("#item_codigo").dblclick(function () {
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
@@ -190,6 +244,8 @@
 
             if(msn.length==0){
                 var datos ="rubro="+rubro+"&cantidad="+cantidad+"&orden="+orden+"&sub="+sub+"&obra=${obra.id}"
+                if($("#vol_id").val()*1>0)
+                datos+="&id="+$("#vol_id").val()
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'addItem')}",
                     data     : datos,
                     success  : function (msg) {

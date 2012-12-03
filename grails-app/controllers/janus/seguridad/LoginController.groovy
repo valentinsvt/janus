@@ -101,18 +101,17 @@ class LoginController {
 
 
     def logout() {
-        if (session.usuario) {
-            session.usuario = null
-            session.perfil = null
-            session.permisos = null
-            session.menu = null
-            session.an = null
-            session.cn = null
-            session.invalidate()
-            redirect(controller: 'login', action: 'login')
-        } else {
-            redirect(controller: 'login', action: 'login')
-        }
+
+        session.usuario = null
+        session.perfil = null
+        session.permisos = null
+        session.menu = null
+        session.an = null
+        session.cn = null
+        session.invalidate()
+        redirect(controller: 'login', action: 'login')
+
+
     }
 
 

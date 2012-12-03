@@ -22,29 +22,9 @@ class Shield {
             session.finalize()
             return false
         } else {
-            //            println "2"
-            //verificacion de permisos
-            if (!session.unidad) {
-                try {
-                    //                        println "3"
-                    def usuario = session.usuario
-                    if (this.isAllowed())
-                        return true
-                    response.sendError(403)
-                    return false
-                } catch (e) {
-                    //                        println "4"
-                    redirect(controller: 'login', action: 'login')
-                    session.finalize()
-                    return false
-                }
-            } else {
-                if (this.isAllowed())
-                    return true
 
-                response.sendError(403)
-                return false
-            }
+                return true
+
         }
         /*************************************************************************** */
     }

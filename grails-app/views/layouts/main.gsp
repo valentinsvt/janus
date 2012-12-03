@@ -76,6 +76,8 @@
             var spinnerBg = $("<img src='" + url + "' alt='Cargando...'/>");
             var url2 = "${resource(dir:'images', file:'spinner.gif')}";
             var spinner2 = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
+            var urlLogin = "${resource(dir:'images', file:'spinnerLogin_24.gif')}";
+            var spinnerLogin = $("<img style='margin-left:15px;' src='" + urlLogin + "' alt='Cargando...'/>");
 
             var ot = document.title;
 
@@ -136,6 +138,10 @@
 
                 $(".btn-ajax").click(function () {
                     resetTimer();
+                });
+
+                $("#ingresar").click(function(){
+                    $("#modal-ingreso").modal("show");
                 });
             });
         </script>

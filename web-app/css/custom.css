@@ -132,6 +132,12 @@ fieldset.borde legend {
     width       : 1000px;
     margin-left : -500px; /* - width/2 */
 }
+.modal.login {
+    width       : 390px;
+    margin-left : -195px; /* - width/2 */
+    padding: 0px;
+    background: none;
+}
 
 .buscador {
     width : 800px

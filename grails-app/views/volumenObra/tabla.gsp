@@ -22,6 +22,7 @@
     </tr>
     </thead>
     <tbody id="tabla_material">
+
     <g:each in="${detalle}" var="vol" status="i">
 
         <tr class="item_row" id="${vol.id}">
@@ -32,8 +33,8 @@
             <td style="text-align: right" class="cant">
                 <g:formatNumber number="${vol.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
             </td>
-            <td class="col_precio" style="display: none;text-align: right" id="i_${vol.item.id}"></td>
-            <td class="col_total" style="display: none;text-align: right"></td>
+            <td class="col_precio" style="display: none;text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/></td>
+            <td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${precios[vol.id.toString()]*vol.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/></td>
             <td style="width: 40px;text-align: center" class="col_delete">
                 <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${vol.id}">
                     <i class="icon-trash"></i></a>
