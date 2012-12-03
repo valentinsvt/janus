@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="codigo" class="allCaps required" value="${fieldValue(bean: lugarInstance, field: 'codigo')}"/>
+                <g:field type="number" name="codigo" class="allCaps required input-small" value="${fieldValue(bean: lugarInstance, field: 'codigo')}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -60,9 +60,9 @@
 </div>
 
 <script type="text/javascript">
-    $(".allCaps").keyup(function () {
-        this.value = this.value.toUpperCase();
-    });
+//    $(".allCaps").keyup(function () {
+//        this.value = this.value.toUpperCase();
+//    });
 
     $("#frmSave").validate({
         rules          : {

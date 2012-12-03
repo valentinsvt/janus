@@ -80,7 +80,7 @@
             <div id="info" class="ui-corner-all"></div>
         </div>
 
-        <div class="modal hide fade" id="modal-tree">
+        <div class="modal longModal hide fade" id="modal-tree">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -489,7 +489,8 @@
                             icon      : icons["item_" + nodeTipo],
                             url       : "${createLink(action:'formIt_ajax')}",
                             data      : {
-                                departamento : nodeId
+                                departamento : nodeId,
+                                grupo        : current
                             },
                             open      : true,
                             nodeStrId : nodeStrId,
@@ -509,7 +510,8 @@
                             url       : "${createLink(action:'formIt_ajax')}",
                             data      : {
                                 departamento : parentId,
-                                id           : nodeId
+                                id           : nodeId,
+                                grupo        : current
                             },
                             open      : false,
                             nodeStrId : nodeStrId,
@@ -541,7 +543,8 @@
                             icon      : icons[nodeRel],
                             url       : "${createLink(action:'formIt_ajax')}",
                             data      : {
-                                departamento : parentId
+                                departamento : parentId,
+                                grupo        : current
                             },
                             open      : false,
                             nodeStrId : nodeStrId,

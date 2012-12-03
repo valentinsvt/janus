@@ -25,7 +25,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="codigo" class="allCaps required" value="${fieldValue(bean: subgrupoItemsInstance, field: 'codigo')}"/>
+                <g:field type="number" name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance.codigo.toString().padLeft(3, '0')}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -40,7 +40,7 @@
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="3" style="height: 65px; resize: none;" name="descripcion" maxlength="63" class="allCaps required" value="${subgrupoItemsInstance?.descripcion}"/>
+                <g:textArea cols="5" rows="3" style="height: 65px; resize: none;" name="descripcion" maxlength="63" class="allCaps required input-xxlarge" value="${subgrupoItemsInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -52,9 +52,9 @@
 
 <script type="text/javascript">
 
-    $(".allCaps").keyup(function () {
-        this.value = this.value.toUpperCase();
-    });
+//    $(".allCaps").keyup(function () {
+//        this.value = this.value.toUpperCase();
+//    });
 
     $("#frmSave").validate({
         rules          : {

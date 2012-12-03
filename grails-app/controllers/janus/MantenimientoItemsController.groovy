@@ -424,7 +424,7 @@ class MantenimientoItemsController extends Shield {
         if (params.id) {
             itemInstance = Item.get(params.id)
         }
-        return [departamento: departamento, itemInstance: itemInstance]
+        return [departamento: departamento, itemInstance: itemInstance, grupo:params.grupo]
     }
 
     def checkCdIt_ajax() {

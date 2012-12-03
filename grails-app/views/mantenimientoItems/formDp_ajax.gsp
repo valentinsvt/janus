@@ -26,7 +26,11 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="codigo" class="allCaps required" value="${fieldValue(bean: departamentoItemInstance, field: 'codigo')}"/>
+                <div class="input-prepend">
+                    <g:set var="cd1" value="${subgrupo.codigo.toString().padLeft(3, '0')}"/>
+                    <span class="add-on">${cd1}</span>
+                    <g:field type="number" name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.codigo.toString().padLeft(3, '0')}"/>
+                </div>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -42,7 +46,7 @@
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="3" name="descripcion" style="resize: none; height: 50px" maxlength="50" class="allCaps required" value="${departamentoItemInstance?.descripcion}"/>
+                <g:textArea cols="5" rows="3" name="descripcion" style="resize: none; height: 50px" maxlength="50" class="allCaps required input-xxlarge" value="${departamentoItemInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -67,9 +71,9 @@
 </div>
 <script type="text/javascript">
 
-    $(".allCaps").keyup(function () {
-        this.value = this.value.toUpperCase();
-    });
+    //    $(".allCaps").keyup(function () {
+    //        this.value = this.value.toUpperCase();
+    //    });
 
     $("#frmSave").validate({
         rules          : {
