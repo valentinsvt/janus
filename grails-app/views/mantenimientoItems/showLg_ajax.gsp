@@ -84,7 +84,7 @@
                 ignore      : "${params.ignore}"
             },
             success : function (msg) {
-                var btnOk = $('<a href="#" data-dismiss="modal_lugar" class="btn">Cancelar</a>');
+                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                 var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
                 btnSave.click(function () {
@@ -99,7 +99,7 @@
                         data    : $("#frmSave").serialize(),
                         success : function (msg) {
                             if (msg == "OK") {
-                                $("#modal_lugar").modal("hide");
+                                $("#modal-tree").modal("hide");
                                 var loading = $("<div></div>");
                                 loading.css({
                                     textAlign : "center",
@@ -122,10 +122,10 @@
                                     }
                                 });
                             } else {
-                                var btnClose = $('<a href="#" data-dismiss="modal_lugar" class="btn">Cerrar</a>');
-                                $("#modalTitle_lugar").html("Error");
-                                $("#modalBody_lugar").html("Ha ocurrido un error al guardar");
-                                $("#modalFooter_lugar").html("").append(btnClose);
+                                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                                $("#modalTitle").html("Error");
+                                $("#modalBody").html("Ha ocurrido un error al guardar");
+                                $("#modalFooter").html("").append(btnClose);
                             }
                         }
                     });
@@ -133,10 +133,10 @@
                     return false;
                 });
 
-                $("#modalTitle_lugar").html("Crear Precio");
-                $("#modalBody_lugar").html(msg);
-                $("#modalFooter_lugar").html("").append(btnOk).append(btnSave);
-                $("#modal_lugar").modal("show");
+                $("#modalTitle").html("Crear Precio");
+                $("#modalBody").html(msg);
+                $("#modalFooter").html("").append(btnOk).append(btnSave);
+                $("#modal-tree").modal("show");
             }
         });
         return false;

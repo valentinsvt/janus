@@ -424,7 +424,7 @@ class MantenimientoItemsController extends Shield {
         if (params.id) {
             itemInstance = Item.get(params.id)
         }
-        return [departamento: departamento, itemInstance: itemInstance, grupo:params.grupo]
+        return [departamento: departamento, itemInstance: itemInstance, grupo: params.grupo]
     }
 
     def checkCdIt_ajax() {
@@ -551,6 +551,26 @@ class MantenimientoItemsController extends Shield {
         return [precioRubrosItemsInstance: precioRubrosItemsInstance, lugar: lugar, lugarNombre: params.nombreLugar, fecha: params.fecha, params: params]
     }
 
+    def checkFcPr_ajax() {
+//        println params
+        if (!params.lugar) {
+            render true
+        } else {
+            def precios = PrecioRubrosItems.withCriteria {
+                and {
+                    eq("lugar", Lugar.get(params.lugar))
+                    eq("fecha", new Date().parse("dd-MM-yyyy", params.fecha))
+                    eq("item", Item.get(params.item))
+                }
+            }
+            if (precios.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
     def savePrecio_ajax() {
         println params
         params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
@@ -563,23 +583,32 @@ class MantenimientoItemsController extends Shield {
                 render "NO"
             }
         } else {
-            def tipo = ["C"]
+//            def tipo = ["C"]
             if (params.ignore == "true") {
-                if (params.all == "true") {
-                    tipo.add("V")
-                }
+//                if (params.all == "true") {
+//                    tipo.add("V")
+//                }
                 def error = 0
-                Lugar.findAllByTipoInList(tipo).each { lugar ->
-                    def precioRubrosItemsInstance = new PrecioRubrosItems()
-                    precioRubrosItemsInstance.precioUnitario = params.precioUnitario.toDouble()
-                    precioRubrosItemsInstance.lugar = lugar
-                    precioRubrosItemsInstance.item = Item.get(params.item.id)
-                    precioRubrosItemsInstance.fecha = params.fecha
-                    if (precioRubrosItemsInstance.save(flush: true)) {
-                        println "OK"
-                    } else {
-                        println precioRubrosItemsInstance.errors
-                        error++
+                Lugar.list().each { lugar ->
+                    def precios = PrecioRubrosItems.withCriteria {
+                        and {
+                            eq("lugar", lugar)
+                            eq("fecha", params.fecha)
+                            eq("item", Item.get(params.item.id))
+                        }
+                    }
+                    if (precios.size() == 0) {
+                        def precioRubrosItemsInstance = new PrecioRubrosItems()
+                        precioRubrosItemsInstance.precioUnitario = params.precioUnitario.toDouble()
+                        precioRubrosItemsInstance.lugar = lugar
+                        precioRubrosItemsInstance.item = Item.get(params.item.id)
+                        precioRubrosItemsInstance.fecha = params.fecha
+                        if (precioRubrosItemsInstance.save(flush: true)) {
+                            println "OK"
+                        } else {
+                            println precioRubrosItemsInstance.errors
+                            error++
+                        }
                     }
                 }
                 if (error == 0) {
@@ -658,21 +687,22 @@ class MantenimientoItemsController extends Shield {
         def operador = params.operador
         def fecha = params.fecha
 
-        def lugarNombre, lugarTipo
+        def lugarNombre
 
         if (params.todasLasFechas == "true") {
             fecha = null
         }
-        if (params.all == "true") {
-            params.tipo = ['C', 'V']
-            lugarTipo = " (C y V)"
-        } else {
-            params.tipo = ['C']
-            lugarTipo = " (C)"
-        }
+//        if (params.all == "true") {
+//            params.tipo = ['C', 'V']
+//            lugarTipo = " (C y V)"
+//        } else {
+//            params.tipo = ['C']
+//            lugarTipo = " (C)"
+//        }
         if (lugarId == "all") {
-            lugar = Lugar.findAllByTipoInList(params.tipo, [sort: "descripcion"])
-            lugarNombre = "todos los lugares" + lugarTipo
+//            lugar = Lugar.findAllByTipoInList(params.tipo, [sort: "descripcion"])
+            lugar = Lugar.list([sort: "descripcion"])
+            lugarNombre = "todos los lugares"
         } else {
             lugar.add(Lugar.get(lugarId))
             lugarNombre = lugar[0].descripcion

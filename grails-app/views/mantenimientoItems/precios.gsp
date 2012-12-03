@@ -80,9 +80,9 @@
 
             <div class="btn-toolbar">
                 <div class="btn-group" data-toggle="buttons-checkbox">
-                    <a href="#" id="all" class="btn toggleTipo">
-                        Todas las listas
-                    </a>
+                    %{--<a href="#" id="all" class="btn toggleTipo">--}%
+                    %{--Todas las listas--}%
+                    %{--</a>--}%
                     <a href="#" id="ignore" class="btn toggleTipo">
                         Todos los lugares
                     </a>
@@ -739,6 +739,8 @@
             }
 
             $(function () {
+
+                $(".modal").draggable();
 
                 $("#search").val("");
 

@@ -22,10 +22,10 @@
             <div class="controls">
                 <g:if test="${fecha}">
                     ${fecha}
-                    <g:hiddenField name="fehca" value="${fecha}"/>
+                    <g:hiddenField name="fecha" value="${fecha}"/>
                 </g:if>
                 <g:else>
-                    <elm:datepicker name="fecha" id="fechaPrecio" class="datepicker required" style="width: 90px" value="${precioRubrosItemsInstance?.fecha}"
+                    <elm:datepicker name="fecha" id="fechaPrecio" class="datepicker required" style="width: 90px"
                                     yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"
                                     maxDate="new Date()"/>
                 </g:else>
@@ -44,7 +44,13 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="precioUnitario" class=" required" value="${fieldValue(bean: precioRubrosItemsInstance, field: 'precioUnitario')}"/>
+                <div class="input-append">
+                    <g:field type="number" name="precioUnitario" class=" required input-small" value="${fieldValue(bean: precioRubrosItemsInstance, field: 'precioUnitario')}"/>
+                    <span class="add-on" id="spanPeso">
+                        $
+                    </span>
+                </div>
+                por ${precioRubrosItemsInstance.item.unidad.descripcion}
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -56,6 +62,23 @@
 
 <script type="text/javascript">
     $("#frmSave").validate({
+        rules          : {
+            fecha : {
+                remote : {
+                    url  : "${createLink(action:'checkFcPr_ajax')}",
+                    type : "post",
+                    data : {
+                        item  : "${precioRubrosItemsInstance.itemId}",
+                        lugar : "${lugar?.id}"
+                    }
+                }
+            }
+        },
+        messages       : {
+            fecha : {
+                remote : "Ya existe un precio para esta fecha"
+            }
+        },
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
