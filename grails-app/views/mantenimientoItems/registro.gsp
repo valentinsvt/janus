@@ -23,6 +23,9 @@
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
         <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
 
+        <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet"/>
+
         <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
 
     </head>
@@ -586,7 +589,7 @@
                             "core"        : {
                                 "initially_open" : [ id ]
                             },
-                            "plugins"     : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "crrm"/*, "wholerow"*/],
+                            "plugins"     : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "crrm", "dnd"/*, "wholerow"*/],
                             "html_data"   : {
                                 "data" : "<ul type='root'><li id='" + id + "' class='root hasChildren jstree-closed' rel='" + rel + "' ><a href='#' class='label_arbol'>" + label + "</a></ul>",
                                 "ajax" : {
@@ -725,8 +728,57 @@
                                     scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
                                 }, 2000);
                             }
-                        }).bind("select_node.jstree", function (NODE, REF_NODE) {
+                        }).bind("select_node.jstree",function (NODE, REF_NODE) {
                             showInfo();
+                        }).bind("move_node.jstree", function (event, data) {
+//                            console.log('move', data);
+                            var oldParent = data.rslt.op;
+                            var newParent = data.rslt.np;
+                            var node = data.rslt.o;
+
+                            var nodeId = node.attr("id");
+                            var newParentId = newParent.attr("id");
+
+                            if (oldParent.attr("id") != newParentId) {
+                                var html = "Está seguro de mover el item <b>" + $.trim(node.children("a").text()) + "</b> de <b>" + $.trim(oldParent.children("a").text()) + "</b>";
+                                html += " a <b>" + $.trim(newParent.children("a").text()) + "</b>?";
+                                $.box({
+                                    imageClass : "box_info",
+                                    text       : html,
+                                    title      : "Confirmación",
+                                    iconClose  : false,
+                                    dialog     : {
+                                        resizable     : false,
+                                        draggable     : false,
+                                        closeOnEscape : false,
+                                        buttons       : {
+                                            "Aceptar"  : function () {
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : "${createLink(action:'moveNode_ajax')}",
+                                                    data    : {
+                                                        node      : nodeId,
+                                                        newParent : newParentId
+                                                    },
+                                                    success : function (msg) {
+                                                        var parts = msg.split("_");
+                                                        log(parts[1], parts[0] == "NO");
+                                                        if (parts[0] == "NO") {
+                                                            $.jstree.rollback(data.rlbk);
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            "Cancelar" : function () {
+                                                $.jstree.rollback(data.rlbk);
+                                            }
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                $.jstree.rollback(data.rlbk);
+                            }
                         });
             }
 

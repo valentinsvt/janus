@@ -228,6 +228,63 @@ class MantenimientoItemsController extends Shield {
         //equipo = 3
     }
 
+    def moveNode_ajax() {
+//        println params
+
+        def node = params.node
+        def newParent = params.newParent
+
+        def parts = node.split("_")
+        def tipoNode = parts[0]
+        def idNode = parts[1]
+
+        parts = newParent.split("_")
+        def tipoParent = parts[0]
+        def idParent = parts[1]
+
+        switch (tipoNode) {
+            case "it":
+                def item = Item.get(idNode.toLong())
+                def departamento = DepartamentoItem.get(idParent.toLong())
+                item.departamento = departamento
+                if (item.save(flush: true)) {
+                    def tipo
+                    def a
+                    switch (item.departamento.subgrupo.grupoId) {
+                        case 1:
+                            tipo = "Material"
+                            a = "o"
+                            break;
+                        case 2:
+                            tipo = "Mano de obra"
+                            a = "a"
+                            break;
+                        case 3:
+                            tipo = "Equipo"
+                            a = "o"
+                            break;
+                    }
+                    render "OK_" + tipo + " movid" + a + " correctamente"
+                } else {
+                    render "NO_Ha ocurrid un error al mover"
+                }
+                break;
+            case "dp":
+                def departamento = DepartamentoItem.get(idNode.toLong())
+                def subgrupo = SubgrupoItems.get(idParent.toLong())
+                departamento.subgrupo = subgrupo
+                if (departamento.save(flush: true)) {
+                    render "OK_Subgrupo movido correctamente"
+                } else {
+                    render "NO_Ha ocurrid un error al mover"
+                }
+                break;
+            default:
+                render "NO"
+                break;
+        }
+    }
+
     def loadLugarPorTipo() {
         params.tipo = params.tipo.toString().toUpperCase()
         def lugares = Lugar.findAllByTipo(params.tipo, [sort: 'descripcion'])

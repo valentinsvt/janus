@@ -125,6 +125,7 @@
                 <div class="btn-group">
                     <a href="#" id="btnReporte" class="btn btn-ajax"><i class="icon-print"></i> Reporte</a>
                     <g:link action="registro" class="btn"><i class="icon-list-ul"></i> Items</g:link>
+                    <g:link controller="item" action="mantenimientoPrecios" class="btn"><i class="icon-money"></i> Mantenimiento de precios</g:link>
                 </div>
             </div>
 
