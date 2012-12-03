@@ -173,20 +173,24 @@ class MantenimientoItemsController extends Shield {
 
             def ids = "["
 
-            ids += "\"#materiales_1\","
+            if (find.size() > 0) {
+                ids += "\"#materiales_1\","
 
-            grupos.each { gr ->
-                ids += "\"#gr_" + gr.id + "\","
+                grupos.each { gr ->
+                    ids += "\"#gr_" + gr.id + "\","
+                }
+                subgrupos.each { sg ->
+                    ids += "\"#sg_" + sg.id + "\","
+                }
+                departamentos.each { dp ->
+                    ids += "\"#dp_" + dp.id + "\","
+                }
+                ids = ids[0..-2]
             }
-            subgrupos.each { sg ->
-                ids += "\"#sg_" + sg.id + "\","
-            }
-            departamentos.each { dp ->
-                ids += "\"#dp_" + dp.id + "\","
-            }
-            ids = ids[0..-2]
             ids += "]"
+//            println ">>>>>>"
 //            println ids
+//            println "<<<<<<<"
             render ids
         } else {
             render ""

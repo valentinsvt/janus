@@ -78,8 +78,8 @@
             %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
             %{--</div>--}%
 
-            <div class="span12 noMargin">
-                <div class="btn-group pull-left" data-toggle="buttons-checkbox">
+            <div class="btn-toolbar">
+                <div class="btn-group" data-toggle="buttons-checkbox">
                     <a href="#" id="all" class="btn toggleTipo">
                         Todas las listas
                     </a>
@@ -88,7 +88,7 @@
                     </a>
                 </div>
 
-                <div class="btn-group pull-left">
+                <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                         <span id="spFecha">
                             Todas las fechas
@@ -114,11 +114,11 @@
                     </ul>
                 </div>
 
-                <div class="pull-left hide" id="divFecha">
+                <span class="hide" id="divFecha">
                     <elm:datepicker name="fecha" class="input-small" onClose="cambiaFecha" yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"/>
-                </div>
+                </span>
 
-                <div class="pull-left">
+                <div class="btn-group">
                     <a href="#" id="btnRefresh" class="btn btn-ajax"><i class="icon-refresh"></i> Refrescar</a>
                 </div>
 
@@ -126,7 +126,6 @@
                     <a href="#" id="btnReporte" class="btn btn-ajax"><i class="icon-print"></i> Reporte</a>
                     <g:link action="registro" class="btn"><i class="icon-list-ul"></i> Items</g:link>
                 </div>
-
             </div>
 
             <div id="tree" class="ui-corner-all"></div>
@@ -657,10 +656,12 @@
                             var cant = data.rslt.nodes.length;
                             var search = data.rslt.str;
                             $("#cantRes").html("<b>" + cant + "</b> resultado" + (cant == 1 ? "" : "s"));
-                            var container = $('#tree'), scrollTo = $('.jstree-search').first();
-                            container.animate({
-                                scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
-                            }, 2000);
+                            if (cant > 0) {
+                                var container = $('#tree'), scrollTo = $('.jstree-search').first();
+                                container.animate({
+                                    scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
+                                }, 2000);
+                            }
                         }).bind("select_node.jstree", function (NODE, REF_NODE) {
                             refresh();
                         });
@@ -728,8 +729,10 @@
             }
 
             function doSearch() {
+//                console.log("1");
                 var val = $.trim($("#search").val());
                 if (val != "") {
+//                    console.log("2");
                     $("#btnSearch").replaceWith(sp);
                     $("#tree").jstree("search", val);
                 }

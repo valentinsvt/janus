@@ -671,11 +671,12 @@
                             var cant = data.rslt.nodes.length;
                             var search = data.rslt.str;
                             $("#cantRes").html("<b>" + cant + "</b> resultado" + (cant == 1 ? "" : "s"));
-
-                            var container = $('#tree'), scrollTo = $('.jstree-search').first();
-                            container.animate({
-                                scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
-                            }, 2000);
+                            if (cant > 0) {
+                                var container = $('#tree'), scrollTo = $('.jstree-search').first();
+                                container.animate({
+                                    scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
+                                }, 2000);
+                            }
                         }).bind("select_node.jstree", function (NODE, REF_NODE) {
                             var node = $.jstree._focused().get_selected();
                             var parent = node.parent().parent();
