@@ -73,6 +73,16 @@
 
     $("#frmSave").validate({
         rules          : {
+            codigo      : {
+                remote : {
+                    url  : "${createLink(action:'checkCdDp_ajax')}",
+                    type : "post",
+                    data : {
+                        id : "${departamentoItemInstance?.id}",
+                        sg : "${subgrupo.id}"
+                    }
+                }
+            },
             descripcion : {
                 remote : {
                     url  : "${createLink(action:'checkDsDp_ajax')}",
@@ -84,6 +94,9 @@
             }
         },
         messages       : {
+            codigo      : {
+                remote : "El código ya se ha ingresado para otro item"
+            },
             descripcion : {
                 remote : "La descripción ya se ha ingresado para otro item"
             }

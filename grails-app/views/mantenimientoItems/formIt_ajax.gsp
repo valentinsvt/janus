@@ -7,7 +7,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Departamento
+                Subgrupo
             </span>
         </div>
 
@@ -41,10 +41,13 @@
 
         <div class="controls">
             <div class="input-prepend">
-                <span class="add-on">${departamento.subgrupo.codigo.toString().padLeft(3, '0')}</span>
-                <span class="add-on">${departamento.codigo.toString().padLeft(3, '0')}</span>
-                <g:textField name="codigo" maxlength="20" class="span2 allCaps required" value="${itemInstance?.codigo}"/>
+                <g:set var="cd1" value="${departamento.subgrupo.codigo.toString().padLeft(3, '0')}"/>
+                <g:set var="cd2" value="${departamento.codigo.toString().padLeft(3, '0')}"/>
+                <span class="add-on">${cd1}</span>
+                <span class="add-on">${cd2}</span>
+                <g:textField name="codigo" maxlength="20" class="span2 allCaps required" value="${itemInstance?.codigo.replace(cd1 + ".", '').replace(cd2 + ".", '')}"/>
                 <span class="mandatory">*</span>
+
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

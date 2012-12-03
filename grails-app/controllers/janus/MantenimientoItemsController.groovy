@@ -330,6 +330,34 @@ class MantenimientoItemsController extends Shield {
         return [subgrupo: subgrupo, departamentoItemInstance: departamentoItemInstance]
     }
 
+    def checkCdDp_ajax() {
+//        println params
+        if (params.id) {
+            def departamento = DepartamentoItem.get(params.id)
+//            println params.codigo
+//            println params.codigo.class
+//            println departamento.codigo
+//            println departamento.codigo.class
+            if (params.codigo == departamento.codigo.toString()) {
+                render true
+            } else {
+                def departamentos = DepartamentoItem.findAllByCodigoAndSubgrupo(params.codigo, SubgrupoItems.get(params.sg))
+                if (departamentos.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def departamentos = DepartamentoItem.findAllByCodigoAndSubgrupo(params.codigo, SubgrupoItems.get(params.sg))
+            if (departamentos.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
     def checkDsDp_ajax() {
         if (params.id) {
             def departamento = DepartamentoItem.get(params.id)
@@ -354,10 +382,13 @@ class MantenimientoItemsController extends Shield {
     }
 
     def saveDp_ajax() {
+//        println params
         def accion = "create"
         def departamento = new DepartamentoItem()
         if (params.id) {
+//            println "EDIT!!!!"
             departamento = DepartamentoItem.get(params.id)
+//            println "\t\t" + departamento.codigo
             accion = "edit"
         }
         departamento.properties = params
@@ -471,13 +502,19 @@ class MantenimientoItemsController extends Shield {
     def saveIt_ajax() {
         def dep = DepartamentoItem.get(params.departamento.id)
         params.tipoItem = TipoItem.findByCodigo("I")
-        params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+        if (!params.codigo.contains(".")) {
+            params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+        }
+        if (params.fecha) {
+            params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        }
         def accion = "create"
         def item = new Item()
         if (params.id) {
             item = Item.get(params.id)
             accion = "edit"
         }
+//        println "ITEM: " + params
         item.properties = params
         if (item.save(flush: true)) {
             render "OK_" + accion + "_" + item.id + "_" + item.nombre

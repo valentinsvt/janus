@@ -141,6 +141,50 @@
                 });
             }
 
+            function showInfo() {
+                var node = $.jstree._focused().get_selected();
+                var parent = node.parent().parent();
+
+                var nodeStrId = node.attr("id");
+                var nodeText = $.trim(node.children("a").text());
+
+                var nodeRel = node.attr("rel");
+                var parts = nodeRel.split("_");
+                var nodeNivel = parts[0];
+                var nodeTipo = parts[1];
+
+                parts = nodeStrId.split("_");
+                var nodeId = parts[1];
+
+                var url = "";
+
+                switch (nodeNivel) {
+                    case "grupo":
+                        url = "${createLink(action:'showGr_ajax')}";
+                        break;
+                    case "subgrupo":
+                        url = "${createLink(action:'showSg_ajax')}";
+                        break;
+                    case "departamento":
+                        url = "${createLink(action:'showDp_ajax')}";
+                        break;
+                    case "item":
+                        url = "${createLink(action:'showIt_ajax')}";
+                        break;
+                }
+
+                $.ajax({
+                    type    : "POST",
+                    url     : url,
+                    data    : {
+                        id : nodeId
+                    },
+                    success : function (msg) {
+                        $("#info").html(msg);
+                    }
+                });
+            }
+
             function createUpdate(params) {
                 var obj = {
                     label            : params.label,
@@ -179,6 +223,7 @@
                                                         $("#tree").jstree('rename_node', $("#" + params.nodeStrId), parts[3]);
                                                         $("#modal-tree").modal("hide");
                                                         log(params.log + parts[3] + " editado correctamente");
+                                                        showInfo();
                                                     }
                                                 } else {
                                                     $("#modal-tree").modal("hide");
@@ -678,48 +723,7 @@
                                 }, 2000);
                             }
                         }).bind("select_node.jstree", function (NODE, REF_NODE) {
-                            var node = $.jstree._focused().get_selected();
-                            var parent = node.parent().parent();
-
-                            var nodeStrId = node.attr("id");
-                            var nodeText = $.trim(node.children("a").text());
-
-                            var nodeRel = node.attr("rel");
-                            var parts = nodeRel.split("_");
-                            var nodeNivel = parts[0];
-                            var nodeTipo = parts[1];
-
-                            parts = nodeStrId.split("_");
-                            var nodeId = parts[1];
-
-                            var url = "";
-
-                            switch (nodeNivel) {
-                                case "grupo":
-                                    url = "${createLink(action:'showGr_ajax')}";
-                                    break;
-                                case "subgrupo":
-                                    url = "${createLink(action:'showSg_ajax')}";
-                                    break;
-                                case "departamento":
-                                    url = "${createLink(action:'showDp_ajax')}";
-                                    break;
-                                case "item":
-                                    url = "${createLink(action:'showIt_ajax')}";
-                                    break;
-                            }
-
-                            $.ajax({
-                                type    : "POST",
-                                url     : url,
-                                data    : {
-                                    id : nodeId
-                                },
-                                success : function (msg) {
-                                    $("#info").html(msg);
-                                }
-                            });
-
+                            showInfo();
                         });
             }
 
