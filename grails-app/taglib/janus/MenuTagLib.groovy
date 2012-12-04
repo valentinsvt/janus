@@ -19,7 +19,6 @@ class MenuTagLib {
                 }
             }
 
-
             items=items.sort{it.key.toString()}
             def strItems = ""
             items.each {item ->
