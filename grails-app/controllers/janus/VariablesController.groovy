@@ -17,8 +17,13 @@ class VariablesController {
     }
 
     def saveVar_ajax() {
-        println params
-
-        render "OK"
+        def obra = Obra.get(params.id)
+        obra.properties = params
+        if (obra.save(flush: true)) {
+            render "OK"
+        } else {
+            println obra.errors
+            render "NO"
+        }
     }
 }
