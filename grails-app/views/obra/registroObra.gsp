@@ -11,23 +11,17 @@
 <head>
 
     <meta name="layout" content="main">
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
     <style type="text/css">
 
     .formato {
-
         font-weight: bolder;
-
     }
 
     .titulo {
-
         font-size: 20px;
-
     }
-
-
-
-
     </style>
 
     <title>Registro de Obras</title>
@@ -44,31 +38,6 @@
     <button class="btn"><i class="icon-print"></i> Imprimir</button>
     <button class="btn"><i class="icon-retweet"></i> Cambiar de Estados</button>
 </div>
-
-%{--<div class="navbar navbar-inverse" style="margin-top: 10px; padding-left: 35px" align="center">--}%
-
-%{--<div class="navbar-inner">--}%
-%{--<div class="botones">--}%
-
-%{--<ul class="nav">--}%
-%{--<li class="active">--}%
-%{--<a href="#"><i class="icon-book"></i>Lista</a>--}%
-%{--</li>--}%
-%{--<li><a href="#"><i class="icon-plus"></i>Nuevo</a></li>--}%
-%{--<li><a href="#"><i class="icon-ok"></i>Aceptar</a></li>--}%
-%{--<li><a href="#"><i class="icon-ban-circle"></i>Cancelar</a></li>--}%
-%{--<li><a href="#"><i class="icon-remove"></i>Eliminar la Obra</a></li>--}%
-%{--<li><a href="#"><i class="icon-print"></i>Imprimir</a></li>--}%
-%{--<li><a href="#"><i class="icon-retweet"></i>Cambiar de Estado</a></li>--}%
-%{--</ul>--}%
-
-%{--</div>--}%
-%{--</div>--}%
-
-
-%{--</div>--}%
-
-
 
 <fieldset class="borde" style="position: relative; height: 100px">
     <g:hiddenField name="id" value="388"/>
@@ -148,19 +117,27 @@
 
         <div class="span1" style="margin-left: -50px">Provincia</div>
 
-        <div class="span3" style="margin-left: -5px"><g:select name="provincia" from="${prov}"
-                                                               noSelection="['-1': 'Seleccione...']" optionKey="id" optionValue="nombre"/></div>
+        <div class="span3" style="margin-left: -5px"><g:select name="provincia" from="${prov}" id="selProvincia"
+                                                               noSelection="['-1': 'Seleccione...']" optionKey="id"
+                                                               optionValue="nombre"/></div>
 
         <div class="span1" style="margin-left: -15px">Cantón</div>
 
-        <div class="span3" style="margin-left: -9px"><g:select name="canton" from="${cant}" id="canton"
-                                                               noSelection="['-1': 'Seleccione...']"
-                                                               optionValue="nombre" optionKey="id"/></div>
+
+        <div class="span3" style="margin-left: -9px">
+
+            <select id="selCanton" class="span3"></select>
+
+        </div>
+
 
         <div class="span1">Parroquia</div>
 
-        <div class="span1"><g:select name="parroquia" from="${parr}"
-                                     noSelection="['-1': 'Seleccione...']" optionValue="nombre" optionKey="id"/></div>
+        <div class="span1">
+
+            <select id="selParroquia" class="span3" style="width: 215px"></select>
+
+        </div>
 
     </div>
 
@@ -360,25 +337,37 @@
 <script type="text/javascript">
     $(function () {
 
-        $("#canton").change(function () {
-
-             var c = $("#canton").val();
-
-            console.log($("#canton").val());
+        $("#selProvincia").change(function () {
+            var provincia = $(this).val();
+            var $parroquia = $("<select id='selParroquia' class='span3' style='width: 215px'></select>");
+            $("#selParroquia").replaceWith($parroquia);
             $.ajax({
-                  type:"POST",
-                  url:"${createLink(action: 'registroObra')}",
-                  data:{
-                      c:c
-                  },
+                type:"POST",
+                url:"${createLink(action:'cantonPorProvincia')}",
+                data:{
+                    id:provincia
+                },
                 success:function (msg) {
+                    $("#selCanton").replaceWith(msg);
 
-//                    $("#parroquia").html();
-                     console.log($("#canton").val())
-                    console.log(${parr})
                 }
+            });
+        });
 
-            })
+
+        $("#selCanton").change(function () {
+
+            var canton = $(this).val();
+            $.ajax({
+                type:"POST",
+                url:"${createLink(action:'parroquiaPorCanton')}",
+                data:{
+                    id:canton
+                },
+                success:function (msg) {
+                    $("#selParroquia").replaceWith(msg);
+                }
+            });
 
 
         });
@@ -394,7 +383,6 @@
         });
 
         $("#btn-consultar").click(function () {
-
 
             $("#dlgLoad").dialog("open");
 
@@ -414,7 +402,21 @@
                         if ($("#frmSave-var").valid()) {
                             btnSave.replaceWith(spinner);
                         }
-                        $("#frmSave-var").submit();
+                        var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();
+                        var url = $("#frmSave-var").attr("action");
+
+//                                console.log(url);
+//                                console.log(data);
+
+                        $.ajax({
+                            type:"POST",
+                            url:url,
+                            data:data,
+                            success:function (msg) {
+                                console.log("Data Saved: " + msg);
+                            }
+                        });
+
                         return false;
                     });
 
@@ -440,7 +442,6 @@
 
         });
 
-
         function busqueda() {
 
             var buscarPor = $("#buscarPor").val();
@@ -451,7 +452,6 @@
 //                   console.log("buscar" + buscarPor)
 //                    console.log("criterio" + criterio)
 //                    console.log("ordenar" + ordenar)
-
 
             $.ajax({
                 type:"POST",
@@ -468,7 +468,6 @@
                     $("#dlgLoad").dialog("close");
                 }
             });
-
 
         }
     });
