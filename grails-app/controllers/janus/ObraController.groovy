@@ -16,27 +16,62 @@ class ObraController extends janus.seguridad.Shield {
     } //list
 
 
+    def cantonPorProvincia () {
+
+            def provincia = Canton.get(params.id)
+
+            def cantones = Parroquia.findAllByCanton(provincia)
+
+            def sel = g.select(id: "selCanton", name: "parroquia.id", from: cantones, "class": "span12", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "--Seleccione--"])
+            def js = "<script type='text/javascript'>"
+            js += '$("#selParroquia").change(function () {'
+            js += 'var parroquia = $(this).val();'
+            js += '$.ajax({'
+            js += 'type    : "POST",'
+            js += 'url     : "' + createLink(action: 'subgruposPorGrupo') + '",'
+            js += 'data    : {'
+            js += 'id : parroquia'
+            js += '},'
+            js += 'success : function (msg) {'
+            js += '$("#selParroquia").replaceWith(msg);'
+            js += '}'
+            js += '});'
+            js += '});'
+            js += "</script>"
+            render sel + js
+
+
+    }
+
+
     def registroObra() {
 
+        println(params)
 
+        println(params.c)
 
 
         def prov = Provincia.list();
 
         def cant = Canton.list();
 
+        def parr;
 
-        println(cant);
+        def can = Canton.get(params.c)
 
-        println(params.canton)
+        if (params.c != null) {
 
-//        def parr = Parroquia.findAllByCanton()
+            parr = Parroquia.findAllByCanton(can)
 
-        def parr = Parroquia.list();
+            println(parr)
 
+
+        } else {
+
+            parr = "";
+        }
 
         [prov: prov, cant: cant, parr: parr]
-
 
     }
 
@@ -50,11 +85,6 @@ class ObraController extends janus.seguridad.Shield {
         def orden;
 
         def colorProv, colorCant, colorParr, colorComn;
-
-
-
-
-
 
 
         if (params.ordenar == '1') {
@@ -75,7 +105,7 @@ class ObraController extends janus.seguridad.Shield {
             case "1":
 
 
-               colorProv = "#00008B";
+                colorProv = "#00008B";
 
                 if (params.criterio != "") {
                     comunidades = Comunidad.withCriteria {
@@ -93,7 +123,6 @@ class ObraController extends janus.seguridad.Shield {
                     }
                 } else {
                     comunidades = Comunidad.list(order: "nombre")
-
 
 
                 }
