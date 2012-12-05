@@ -15,4 +15,8 @@ class VariablesController {
 
         [choferes: choferes, volquetes: volquetes]
     }
+
+    def saveVar_ajax() {
+
+    }
 }
