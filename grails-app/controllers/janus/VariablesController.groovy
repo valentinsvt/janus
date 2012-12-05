@@ -17,6 +17,8 @@ class VariablesController {
     }
 
     def saveVar_ajax() {
+        println params
 
+        render "OK"
     }
 }
