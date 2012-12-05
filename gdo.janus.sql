@@ -54,6 +54,8 @@ Probar con:
 
   pg: select * from rb_precios(293, 4, '1-feb-2008', 50, 70, 0.1015477897561282, 0.1710401760227313);
 
+      select * from ac_rbro_hr1(293, 4, '1-feb-2008');
+
 ----------- usando setof:
 DROP FUNCTION rbpc_fcha(fcha date, lgar integer);
 drop type tp_pcun;

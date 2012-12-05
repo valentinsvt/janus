@@ -825,6 +825,14 @@
                                 var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=Reporte_costos_" + tipo + ".pdf&url=${createLink(controller: 'reportes2', action: 'reportePrecios')}";
                                 location.href = actionUrl + "?" + data;
 
+                                var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
+                                wait.prepend(spinnerBg);
+
+                                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                                $("#modalTitle").html("Procesando");
+                                $("#modalBody").html(wait);
+                                $("#modalFooter").html("").append(btnClose);
+
                                 return false;
                             });
 

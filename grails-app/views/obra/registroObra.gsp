@@ -71,7 +71,7 @@
 
 
         <fieldset class="borde" style="position: relative; height: 100px">
-
+                <g:hiddenField name="id" value="388"/><
             <div class="span12" style="margin-top: 20px" align="center">
 
                 <p class="css-vertical-text">Ingreso</p>
@@ -148,17 +148,17 @@
 
                 <div class="span1" style="margin-left: -50px">Provincia</div>
 
-                <div class="span3" style="margin-left: -5px"><g:select name="provincia" from="${provincia?.nombre}"
+                <div class="span3" style="margin-left: -5px"><g:select name="provincia" from="${prov?.nombre}"
                                                                        noSelection="['-1': 'Seleccione...']"/></div>
 
                 <div class="span1" style="margin-left: -15px">Cantón</div>
 
-                <div class="span3" style="margin-left: -9px"><g:select name="canton" from="${canton?.nombre}"
-                                                                       noSelection="['-1': 'Seleccione...']"/></div>
+                <div class="span3" style="margin-left: -9px"><g:select name="canton" from="${cant?.nombre}"
+                                                                       noSelection="['-1': 'Seleccione...']" optionValue="value" /></div>
 
                 <div class="span1">Parroquia</div>
 
-                <div class="span1"><g:select name="parroquia" from="${parroquia?.nombre}"
+                <div class="span1"><g:select name="parroquia" from="${parr?.nombre}"
                                              noSelection="['-1': 'Seleccione...']"/></div>
 
             </div>
@@ -284,11 +284,13 @@
                 </div>
 
                 <div>
-                    <div class="span2"><g:select name="buscarPor" class="buscarPor" from="['Provincia', 'Cantón', 'Parroquia', 'Comunidad']" style="width: 120px"/></div>
+                    <div class="span2"><g:select name="buscarPor" class="buscarPor" from="['1':'Provincia', '2':'Cantón', '3': 'Parroquia', '4':'Comunidad']" style="width: 120px" optionKey="key"
+                                                 optionValue="value"/></div>
 
                     <div class="span2" style="margin-left: -20px"><g:textField name="criterio" class="criterio"/></div>
 
-                    <div class="span1"><g:select name="ordenar" class="ordenar" from="['Ascendente', 'Descendente']" style="width: 120px; margin-left: 60px;"/></div>
+                    <div class="span1"><g:select name="ordenar" class="ordenar" from="['1':'Ascendente', '2':'Descendente']" style="width: 120px; margin-left: 60px;" optionKey="key"
+                                                 optionValue="value"/></div>
 
                     <div class="span2" style="margin-left: 140px"><button class="btn btn-info" id="btn-consultar"><i class="icon-check"></i> Consultar
                     </button></div>
@@ -298,32 +300,10 @@
 
             <fieldset class="borde">
 
-                <table class="table table-bordered table-striped table-hover table-condensed" id="tabla">
+                <div id="divTabla" style="height: 460px; overflow-y:auto; overflow-x: auto;">
 
-                    <thead>
 
-                        <th>Provincia</th>
-                        <th>Cantón</th>
-                        <th>Parroquia</th>
-                        <th>Comunidad</th>
-
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-
-                            %{--<g:each in="${provincia}" status="i" var="provincia">--}%
-                            <td>${provincia?.nombre}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
+                </div>
 
             </fieldset>
 
@@ -346,7 +326,7 @@
                         <li><a href="#"><i class="icon-calendar"></i>Cronograma</a></li>
                         <li><a href="#">Composición</a></li>
                         <li><a href="#">Trámites</a></li>
-                        <li><a href="#"><i class="icon-legal"></i>Delegados</a></li>
+                        %{--<li><a href="#"><i class="icon-legal"></i>Delegados</a></li>--}%
                     </ul>
 
                 </div>
@@ -377,7 +357,19 @@
             $(function () {
                 $("#btn-buscar").click(function () {
 
+
+//                    $("#dlgLoad").dialog("close");
                     $("#busqueda").dialog("open");
+//
+
+                });
+
+                $("#btn-consultar").click(function () {
+
+
+                    $("#dlgLoad").dialog("open");
+
+                     busqueda();
 
                 });
 
@@ -418,6 +410,39 @@
                     title     : 'Datos de Situación Geográfica'
 
                 });
+
+
+                function busqueda () {
+
+                    var buscarPor = $("#buscarPor").val();
+                    var criterio = $("#criterio").val();
+                    var ordenar = $("#ordenar").val();
+
+//
+//                   console.log("buscar" + buscarPor)
+//                    console.log("criterio" + criterio)
+//                    console.log("ordenar" + ordenar)
+
+
+                    $.ajax({
+                        type:"POST",
+                        url:"${createLink(action:'situacionGeografica')}",
+                        data:{
+                            buscarPor:buscarPor,
+                            criterio:criterio,
+                            ordenar:ordenar
+
+                        },
+                        success:function (msg) {
+
+                            $("#divTabla").html(msg);
+                            $("#dlgLoad").dialog("close");
+                        }
+                    });
+
+
+
+                }
             });
         </script>
 

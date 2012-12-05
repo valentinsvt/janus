@@ -16,33 +16,156 @@ class ObraController extends janus.seguridad.Shield {
     } //list
 
 
-    def registroObra () {
-
-
-        def provincia = new Provincia().get(2)
-       def canton = Canton.findAllByProvincia(provincia);
-
-        canton.each {
+    def registroObra() {
 
 
 
+
+        def prov = Provincia.list();
+
+        def cant = Canton.list();
+
+
+        println(cant);
+
+        println(params.canton)
+
+//        def parr = Parroquia.findAllByCanton()
+
+        def parr = Parroquia.list();
+
+
+        [prov: prov, cant: cant, parr: parr]
+
+
+    }
+
+
+    def situacionGeografica() {
+
+//        println("params:" + params)
+
+        def comunidades
+
+        def orden;
+
+        def colorProv, colorCant, colorParr, colorComn;
+
+
+
+
+
+
+
+        if (params.ordenar == '1') {
+
+
+            orden = "asc";
+
+        }
+        else {
+
+            orden = "desc";
 
         }
 
 
+        switch (params.buscarPor) {
+
+            case "1":
+
+
+               colorProv = "#00008B";
+
+                if (params.criterio != "") {
+                    comunidades = Comunidad.withCriteria {
+                        parroquia {
+                            canton {
+                                provincia {
+                                    ilike("nombre", "%" + params.criterio + "%")
+                                    order("nombre", orden)
+                                }
+                                order("nombre", orden)
+                            }
+                            order("nombre", orden)
+                        }
+                        order("nombre", orden)
+                    }
+                } else {
+                    comunidades = Comunidad.list(order: "nombre")
 
 
 
-//       def parroquia = Parroquia.findAllByCanton(canton.get());
+                }
 
 
-        println(provincia);
+                break
+            case "2":
 
-        println(canton);
+                colorCant = "#00008B";
+
+                if (params.criterio != "") {
+                    comunidades = Comunidad.withCriteria {
+                        parroquia {
+                            canton {
+
+                                ilike("nombre", "%" + params.criterio + "%")
+                                order("nombre", orden)
+
+                            }
+                            order("nombre", orden)
+                        }
+                        order("nombre", orden)
+                    }
+                } else {
+                    comunidades = Comunidad.list(order: "nombre")
+                }
+
+                break
+            case "3":
 
 
-        [provincia: provincia/*, canton: canton, parroquia: parroquia */]
+                colorParr = "#00008B";
+
+                if (params.criterio != "") {
+                    println params
+                    comunidades = Comunidad.withCriteria {
+                        parroquia {
+                            ilike("nombre", "%" + params.criterio + "%")
+                            order("nombre", orden)
+                        }
+                        order("nombre", orden)
+                    }
+                } else {
+                    comunidades = Comunidad.list()
+                }
+
+                break
+            case "4":
 //
+
+                colorComn = "#00008B";
+
+                if (params.criterio != "") {
+                    comunidades = Comunidad.withCriteria {
+
+
+                        ilike("nombre", "%" + params.criterio + "%")
+                        order("nombre", orden)
+
+
+                    }
+                } else {
+                    comunidades = Comunidad.list()
+                }
+
+                break
+
+        }
+
+
+        [comunidades: comunidades, colorComn: colorComn, colorProv: colorProv, colorParr: colorParr, colorCant: colorCant]
+
     }
 
     def form_ajax() {
