@@ -5,6 +5,7 @@ class VolumenesObra implements Serializable {
     Obra obra
     double cantidad
     int orden = 1
+    static auditable=[ignore:["orden"]]
     static mapping = {
         table 'vlob'
         cache usage: 'read-write', include: 'non-lazy'

@@ -67,6 +67,12 @@
 </head>
 
 <body>
+<g:if test="${flash.message}">
+    <div class="alert alert-info" role="status">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        ${flash.message}
+    </div>
+</g:if>
 <div class="dialog ui-corner-all" style="height: 635px;background: #0C5994;;padding: 30px;width: 910px;margin: auto;margin-top: 20px" >
     <div style="text-align: center;">
         <h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#fff;">
