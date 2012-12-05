@@ -43,10 +43,10 @@
             <td class="nombre">${vol.item.nombre}</td>
             <td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>
             <td style="text-align: right" class="cant">
-                <g:formatNumber number="${vol.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
             </td>
-            <td class="col_precio" style="display: none;text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/></td>
-            <td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${precios[vol.id.toString()]*vol.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/></td>
+            <td class="col_precio" style="display: none;text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+            <td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${precios[vol.id.toString()]*vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
             <td style="width: 40px;text-align: center" class="col_delete">
                 <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${vol.id}">
                     <i class="icon-trash"></i></a>

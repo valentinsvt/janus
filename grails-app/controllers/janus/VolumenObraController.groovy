@@ -5,7 +5,7 @@ class VolumenObraController extends janus.seguridad.Shield{
     def preciosService
     def volObra(){
 
-        def obra = Obra.get(1)
+        def obra = Obra.get(2)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]

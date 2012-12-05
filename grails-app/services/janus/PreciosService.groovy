@@ -35,7 +35,7 @@ class PreciosService {
                 itemsId += ","
         }
         def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha <= '${fecha.format('MM-dd-yyyy')}' group by 1"
-        println "sql precios string "+sql
+//        println "sql precios string "+sql
         cn.eachRow(sql.toString()) {row ->
 
             res += "" + row[0] + ";" + row[1] + "&"

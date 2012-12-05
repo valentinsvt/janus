@@ -109,7 +109,7 @@
 
         <div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
         <div style="width: 99.7%;height: 30px;overflow-y: auto;float: right;text-align: right" id="total">
-            <b>TOTAL:</b> <div id="divTotal" style="width: 150px;float: right;height: 30px;font-weight: bold;font-size: 12px;"></div>
+            <b>TOTAL:</b> <div id="divTotal" style="width: 150px;float: right;height: 30px;font-weight: bold;font-size: 12px;margin-right: 20px"></div>
         </div>
     </div>
 </div>
@@ -161,9 +161,9 @@
                 $(".col_total").show()
                 var total =0
                 $(".total").each(function(){
-                    total+=$(this).html()*1
+                    total+=parseFloat(str_replace(",","",$(this).html()))
                 })
-                $("#divTotal").html(number_format(total, 5, ".", ""))
+                $("#divTotal").html(number_format(total, 2, ".", " "))
             }
         });
 

@@ -248,13 +248,13 @@
                     <td class="cdgo">${rub.item.codigo}</td>
                     <td>${rub.item.nombre}</td>
                     <td style="text-align: right" class="cant">
-                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"  locale="ec"  />
                     </td>
 
                     <td class="col_tarifa" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
                     <td class="col_hora" style="display: none;text-align: right"></td>
                     <td class="col_rend rend" style="width: 50px;text-align: right">
-                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec" />
                     </td>
                     <td class="col_total" style="display: none;text-align: right"></td>
                     <td style="width: 40px;text-align: center" class="col_delete">
@@ -293,13 +293,13 @@
                     <td class="cdgo">${rub.item.codigo}</td>
                     <td>${rub.item.nombre}</td>
                     <td style="text-align: right" class="cant">
-                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"  />
                     </td>
 
                     <td class="col_jornal" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
                     <td class="col_hora" style="display: none;text-align: right"></td>
                     <td class="col_rend rend" style="width: 50px;text-align: right">
-                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                        <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"  />
                     </td>
                     <td class="col_total" style="display: none;text-align: right"></td>
                     <td style="width: 40px;text-align: center" class="col_delete">
@@ -341,7 +341,7 @@
                     <td>${rub.item.nombre}</td>
                     <td style="width: 60px !important;text-align: center" class="col_unidad">${rub.item.unidad.codigo}</td>
                     <td style="text-align: right" class="cant">
-                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                        <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"  locale="ec"  />
                     </td>
                     <td class="col_precioUnit" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
                     <td class="col_vacio" style="width: 50px;display: none;"></td>
@@ -859,7 +859,12 @@
                                     var celdaCant = padre.find(".cant")
                                     var celdaHora =  padre.find(".col_hora")
 //                                    console.log(celdaHora)
-//                                    console.log(celda,celdaCant,celdaRend,celdaTotal)
+//                                    console.log(,,"rend "+celdaRend.html(),"total "+ celdaTotal.html(),"multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
+//                                    console.log("----")
+//                                    console.log("celda "+parseFloat(celda.html()))
+//                                    console.log("cant sin mun "+celdaCant.html() )
+//                                    console.log("cant "+parseFloat(celdaCant.html()) )
+//                                    console.log(" multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
                                     var rend = 1
                                     if(celdaHora.hasClass("col_hora")){
                                         celdaHora.html(number_format(parseFloat(celda.html())*parseFloat(celdaCant.html()), 5, ".", ""))
