@@ -22,38 +22,38 @@
     </g:if>
 </div>
 <div class="span12 btn-group" role="navigation" style="margin-left: 0px;">
-    <a href="#" class="btn  " id="btn_lista">
-        <i class="icon-file"></i>
-        Lista
-    </a>
-    <a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">
-        <i class="icon-file"></i>
-        Nuevo
-    </a>
-    <a href="#" class="btn btn-ajax btn-new" id="guardar">
-        <i class="icon-file"></i>
-        Guardar
-    </a>
-    <a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">
-        <i class="icon-file"></i>
-        Cancelar
-    </a>
-    <a href="#" class="btn btn-ajax btn-new">
-        <i class="icon-file"></i>
-        Borrar
-    </a>
+    %{--<a href="#" class="btn  " id="btn_lista">--}%
+        %{--<i class="icon-file"></i>--}%
+        %{--Lista--}%
+    %{--</a>--}%
+    %{--<a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">--}%
+        %{--<i class="icon-file"></i>--}%
+        %{--Nuevo--}%
+    %{--</a>--}%
+    %{--<a href="#" class="btn btn-ajax btn-new" id="guardar">--}%
+        %{--<i class="icon-file"></i>--}%
+        %{--Guardar--}%
+    %{--</a>--}%
+    %{--<a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">--}%
+        %{--<i class="icon-file"></i>--}%
+        %{--Cancelar--}%
+    %{--</a>--}%
+    %{--<a href="#" class="btn btn-ajax btn-new">--}%
+        %{--<i class="icon-file"></i>--}%
+        %{--Borrar--}%
+    %{--</a>--}%
     <a href="#" class="btn btn-ajax btn-new" id="calcular" title="Calcular precios">
         <i class="icon-table"></i>
         Calcular
     </a>
-    <a href="#" class="btn btn-ajax btn-new" id="transporte" title="Transporte">
-        <i class="icon-truck"></i>
-        Transporte
-    </a>
-    <a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
-        <i class="icon-print"></i>
-        Imprimir
-    </a>
+    %{--<a href="#" class="btn btn-ajax btn-new" id="transporte" title="Transporte">--}%
+        %{--<i class="icon-truck"></i>--}%
+        %{--Transporte--}%
+    %{--</a>--}%
+    %{--<a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
+        %{--<i class="icon-print"></i>--}%
+        %{--Imprimir--}%
+    %{--</a>--}%
 </div>
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
     <div class="borde_abajo" style="padding-left: 45px;position: relative;">
@@ -106,25 +106,15 @@
     <div class="borde_abajo" style="position: relative;float: left;width: 95%;padding-left: 45px">
         <p class="css-vertical-text">Composición</p>
         <div class="linea" style="height: 98%;"></div>
-        <div class="row-fluid" style="margin-left: 0px">
-            <div class="span5">
-                <b>Subpresupuesto:</b>
-                <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc"></g:select>
-            </div>
-            <div class="span1">
-                <div class="btn-group" data-toggle="buttons-checkbox">
-                    <button type="button" id="ver_todos" class="btn btn-info" style="font-size: 10px">Ver todos</button>
-                </div>
-            </div>
 
-        </div>
         <div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
         <div style="width: 99.7%;height: 30px;overflow-y: auto;float: right;text-align: right" id="total">
-            <b>TOTAL:</b> <div id="divTotal" style="width: 150px;float: right;height: 30px;font-weight: bold;font-size: 12px;></div>
+            <b>TOTAL:</b> <div id="divTotal" style="width: 150px;float: right;height: 30px;font-weight: bold;font-size: 12px;"></div>
         </div>
     </div>
 </div>
-<div class="modal grande hide fade " id="modal-rubro" style=";overflow: hidden;">
+
+<div class="modal grande hide fade" id="modal-rubro" style="overflow: hidden;">
     <div class="modal-header btn-info">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -176,45 +166,7 @@
                 $("#divTotal").html(number_format(total, 5, ".", ""))
             }
         });
-        $("#subPres_desc").change(function(){
-            $("#ver_todos").removeClass("active")
-            $("#divTotal").html("")
-            $("#calcular").removeClass("active")
-            var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
-            $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-                data     : datos,
-                success  : function (msg) {
-                    $("#detalle").html(msg)
-                }
-            });
-        });
 
-        $("#ver_todos").click(function(){
-            $("#calcular").removeClass("active")
-            $("#divTotal").html("")
-            if ($(this).hasClass("active")) {
-                $(this).removeClass("active")
-                var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-                    data     : datos,
-                    success  : function (msg) {
-                        $("#detalle").html(msg)
-                    }
-                });
-
-            }else{
-                $(this).addClass("active")
-                var datos = "obra=${obra.id}"
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-                    data     : datos,
-                    success  : function (msg) {
-                        $("#detalle").html(msg)
-                    }
-                });
-            }
-            return false
-
-        }) ;
 
         $("#item_codigo").dblclick(function () {
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
@@ -227,6 +179,7 @@
         });
 
         $("#item_agregar").click(function(){
+            $("#calcular").removeClass("active")
             var cantidad = $("#item_cantidad").val()
             var orden = $("#item_orden").val()
             var rubro = $("#item_id").val()
@@ -250,6 +203,12 @@
                     data     : datos,
                     success  : function (msg) {
                         $("#detalle").html(msg)
+                        $("#vol_id").val("")
+                        $("#item_codigo").val("")
+                        $("#item_id").val("")
+                        $("#item_nombre").val("")
+                        $("#item_cantidad").val("1")
+                        $("#item_orden").val("1")
                     }
                 });
             }else{

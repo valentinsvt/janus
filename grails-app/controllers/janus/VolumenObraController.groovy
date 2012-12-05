@@ -7,10 +7,10 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def obra = Obra.get(1)
         def volumenes = VolumenesObra.findAllByObra(obra)
-        def subPres = volumenes.subPresupuesto
+
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra:obra,volumenes:volumenes,subPres:subPres,campos:campos]
+        [obra:obra,volumenes:volumenes,campos:campos]
 
 
 
@@ -23,19 +23,22 @@ class VolumenObraController extends janus.seguridad.Shield{
         def volumen
         if (params.id)
             volumen=VolumenesObra.get(params.id)
-        else
-            volumen=new VolumenesObra()
+        else{
+            volumen=VolumenesObra.findByObraAndItem(obra,rubro)
+            if(!volumen)
+                volumen=new VolumenesObra()
+        }
         volumen.cantidad=params.cantidad.toDouble()
         volumen.orden=params.orden.toInteger()
         volumen.subPresupuesto=SubPresupuesto.get(params.sub)
         volumen.obra=obra
         volumen.item=rubro
-        preciosService.actualizaOrden(obra,volumen.orden)
         if (!volumen.save(flush: true)){
             println "error volumen obra "+volumen.errors
             render "error"
         }else{
-            redirect(action: "tabla",params: [obra:obra.id])
+            preciosService.actualizaOrden(volumen,"insert")
+            redirect(action: "tabla",params: [obra:obra.id,sub:volumen.subPresupuesto.id])
         }
     }
 
@@ -43,9 +46,10 @@ class VolumenObraController extends janus.seguridad.Shield{
         def obra = Obra.get(params.obra)
         def detalle
         if (params.sub)
-            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub))
+            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
         else
-            detalle= VolumenesObra.findAllByObra(obra)
+            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
@@ -76,10 +80,10 @@ class VolumenObraController extends janus.seguridad.Shield{
             precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
         }
 //
-        println "precios "+precios
+//        println "precios "+precios
 
 
-        [detalle:detalle,precios:precios]
+        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra]
 
     }
 
@@ -87,8 +91,8 @@ class VolumenObraController extends janus.seguridad.Shield{
         def vol = VolumenesObra.get(params.id)
         def obra = vol.obra
         def orden = vol.orden
+        preciosService.actualizaOrden(vol,"delete")
         vol.delete()
-        preciosService.actualizaOrden(obra,orden)
         redirect(action: "tabla",params: [obra:obra.id])
 
     }
