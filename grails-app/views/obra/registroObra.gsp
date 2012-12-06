@@ -13,6 +13,12 @@
         <meta name="layout" content="main">
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+
+        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
+        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
+        <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}">
+
+
         <style type="text/css">
 
         .formato {

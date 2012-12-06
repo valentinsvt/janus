@@ -8,6 +8,8 @@
 
 
     <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
+    <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
+
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}">
 
 </head>
