@@ -132,6 +132,17 @@ fieldset.borde legend {
     width       : 1000px;
     margin-left : -500px; /* - width/2 */
 }
+.modal.grandote {
+    width       : 1200px;
+    margin-left : -600px; /* - width/2 */
+    height: 800px;
+    margin-top: -400px;
+}
+.grandote .modal-body{
+    height: 650px;
+    max-height: 650px;
+
+}
 .modal.login {
     width       : 390px;
     margin-left : -195px; /* - width/2 */

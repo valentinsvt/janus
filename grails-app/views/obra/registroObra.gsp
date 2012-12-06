@@ -8,469 +8,492 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-    <head>
+<head>
 
-        <meta name="layout" content="main">
-        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
-        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+    <meta name="layout" content="main">
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
 
-        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
-        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
-        <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}">
+    <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
+    <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
 
-        <style type="text/css">
+    <style type="text/css">
 
-        .formato {
-            font-weight : bolder;
-        }
+    .formato {
+        font-weight : bolder;
+    }
 
-        .titulo {
-            font-size : 20px;
-        }
-        </style>
+    .titulo {
+        font-size : 20px;
+    }
+    </style>
 
-        <title>Registro de Obras</title>
-    </head>
+    <title>Registro de Obras</title>
+</head>
 
-    <body>
+<body>
 
-        <div class="btn-group" style="margin-bottom: 10px">
-            <button class="btn"><i class="icon-book"></i> Lista</button>
-            <button class="btn"><i class="icon-plus"></i> Nuevo</button>
-            <button class="btn"><i class="icon-ok"></i> Aceptar</button>
-            <button class="btn"><i class="icon-ban-circle"></i> Cancelar</button>
-            <button class="btn"><i class="icon-remove"></i> Eliminar la Obra</button>
-            <button class="btn"><i class="icon-print"></i> Imprimir</button>
-            <button class="btn"><i class="icon-retweet"></i> Cambiar de Estados</button>
+<div class="btn-group" style="margin-bottom: 10px">
+    <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
+    <button class="btn"><i class="icon-plus"></i> Nuevo</button>
+    <button class="btn"><i class="icon-ok"></i> Aceptar</button>
+    <button class="btn"><i class="icon-ban-circle"></i> Cancelar</button>
+    <button class="btn"><i class="icon-remove"></i> Eliminar la Obra</button>
+    <button class="btn"><i class="icon-print"></i> Imprimir</button>
+    <button class="btn"><i class="icon-retweet"></i> Cambiar de Estados</button>
+</div>
+
+<fieldset class="borde" style="position: relative; height: 100px">
+    <g:hiddenField name="id" value="${obra.id}"/>
+    <div class="span12" style="margin-top: 20px" align="center">
+
+        <p class="css-vertical-text">Ingreso</p>
+
+        <div class="linea" style="height: 85%;"></div>
+
+    </div>
+
+    <div class="span12" style="margin-top: 10px">
+
+        <div class="span1 formato">MEMO</div>
+
+        <div class="span3"><g:textField name="memo" class="memo" value="${obra.oficioIngreso}"/></div>
+
+        <div class="span2 formato">CANTIDAD DE OBRA</div>
+
+        <div class="span3"><g:textField name="cantidad" class="cantidad" value="${obra.memoCantidadObra}" /></div>
+
+        <div class="span1 formato">FECHA</div>
+
+        <div class="span1"><elm:datepicker name="fecha" class="fecha datepicker input-small" value="${obra.fechaCreacionObra}"/></div>
+
+    </div>
+
+</fieldset>
+<fieldset class="borde">
+    <div class="span12" style="margin-top: 10px">
+        <div class="span1">Código</div>
+
+        <div class="span3"><g:textField name="codigo" class="codigo" value="${obra.codigo}"/></div>
+
+        <div class="span1">Nombre</div>
+
+        <div class="span6"><g:textField name="nombre" class="nombre" style="width: 608px" value="${obra.nombre}"/></div>
+    </div>
+
+    <div class="span12">
+        <div class="span1">Programa</div>
+
+        <div class="span3"><g:select name="programa" from="" value="${obra.programacion}"/></div>
+
+        <div class="span1">Tipo</div>
+
+        <div class="span3"><g:textField name="tipo" class="tipo" value="${obra.tipo}"/></div>
+
+        <div class="span1">Clase</div>
+
+        <div class="span1"><g:select name="clase" from="" value="${obra.claseObra.id}"/></div>
+    </div>
+
+    <div class="span12">
+        <div class="span1">Referencias</div>
+
+        <div class="span6"><g:textField name="refrencias" class="referencias" style="width: 610px" value="${obra.referencia}"/></div>
+
+        <div class="span1" style="margin-left: 130px">Estado</div>
+
+        <div class="span1"><g:textField name="estado" class="estado" value="${obra.estado}"/></div>
+    </div>
+
+    <div class="span12">
+        <div class="span1">Descripción</div>
+
+        <div class="span6"><g:textArea name="descripcion" rows="5" cols="5"
+                                       style="width: 1007px; height: 72px; resize: none" maxlength="511" value="${obra.descripcion}" /></div>
+    </div>
+
+    <div class="span12">
+
+        <div class="span2"><button class="btn btn-buscar" id="btn-buscar"><i class="icon-globe"></i> Buscar
+        </button>
         </div>
 
-        <fieldset class="borde" style="position: relative; height: 100px">
-            <g:hiddenField name="id" value="388"/>
-            <div class="span12" style="margin-top: 20px" align="center">
 
-                <p class="css-vertical-text">Ingreso</p>
+        <div class="span1" style="margin-left: -50px">Provincia</div>
 
-                <div class="linea" style="height: 85%;"></div>
+        <div class="span3" style="margin-left: -5px"><g:select name="provincia" from="${prov}" id="selProvincia"
+                                                               noSelection="['-1': 'Seleccione...']" optionKey="id"
+                                                               optionValue="nombre"/></div>
 
-            </div>
+        <div class="span1" style="margin-left: -15px">Cantón</div>
 
-            <div class="span12" style="margin-top: 10px">
 
-                <div class="span1 formato">MEMO</div>
+        <div class="span3" style="margin-left: -9px">
 
-                <div class="span3"><g:textField name="memo" class="memo"/></div>
-
-                <div class="span2 formato">CANTIDAD DE OBRA</div>
-
-                <div class="span3"><g:textField name="cantidad" class="cantidad"/></div>
-
-                <div class="span1 formato">FECHA</div>
-
-                <div class="span1"><elm:datepicker name="fecha" class="fecha datepicker input-small" value=""/></div>
-
-            </div>
-
-        </fieldset>
-        <fieldset class="borde">
-            <div class="span12" style="margin-top: 10px">
-                <div class="span1">Código</div>
-
-                <div class="span3"><g:textField name="codigo" class="codigo"/></div>
-
-                <div class="span1">Nombre</div>
-
-                <div class="span6"><g:textField name="nombre" class="nombre" style="width: 608px"/></div>
-            </div>
-
-            <div class="span12">
-                <div class="span1">Programa</div>
-
-                <div class="span3"><g:select name="programa" from=""/></div>
-
-                <div class="span1">Tipo</div>
-
-                <div class="span3"><g:textField name="tipo" class="tipo"/></div>
-
-                <div class="span1">Clase</div>
-
-                <div class="span1"><g:select name="clase" from=""/></div>
-            </div>
-
-            <div class="span12">
-                <div class="span1">Referencias</div>
-
-                <div class="span6"><g:textField name="refrencias" class="referencias" style="width: 610px"/></div>
-
-                <div class="span1" style="margin-left: 130px">Estado</div>
-
-                <div class="span1"><g:textField name="estado" class="estado"/></div>
-            </div>
-
-            <div class="span12">
-                <div class="span1">Descripción</div>
-
-                <div class="span6"><g:textArea name="descripcion" rows="5" cols="5"
-                                               style="width: 1007px; height: 72px; resize: none" maxlength="511"/></div>
-            </div>
-
-            <div class="span12">
-
-                <div class="span2"><button class="btn btn-buscar" id="btn-buscar"><i class="icon-globe"></i> Buscar
-                </button>
-                </div>
-
-
-                <div class="span1" style="margin-left: -50px">Provincia</div>
-
-                <div class="span3" style="margin-left: -5px"><g:select name="provincia" from="${prov}" id="selProvincia"
-                                                                       noSelection="['-1': 'Seleccione...']" optionKey="id"
-                                                                       optionValue="nombre"/></div>
-
-                <div class="span1" style="margin-left: -15px">Cantón</div>
-
-
-                <div class="span3" style="margin-left: -9px">
-
-                    <select id="selCanton" class="span3"></select>
-
-                </div>
-
-
-                <div class="span1">Parroquia</div>
-
-                <div class="span1">
-
-                    <select id="selParroquia" class="span3" style="width: 215px"></select>
-
-                </div>
-
-            </div>
-
-            <div class="span12">
-                <div class="span1">Comunidad</div>
-
-                <div class="span3"><g:textField name="comunidad" class="comunidad"/></div>
-
-                <div class="span1">Sitio</div>
-
-                <div class="span3"><g:textField name="sitio" class="sitio"/></div>
-
-                <div class="span1">Plazo</div>
-
-                <div class="span2"><g:textField name="plazoMeses" class="plazoMeses" style="width: 28px"
-                                                maxlength="3" type="number"/>Meses</div>
-
-                <div class="span1" style="margin-left: -40px"><g:textField name="plazoDias" class="plazoDias"
-                                                                           style="width: 28px" maxlength="3"/>Días</div>
-
-            </div>
-
-            <div class="span12">
-                <div class="span1">Inspección</div>
-
-                <div class="span3"><g:select name="inspeccion" from=""/></div>
-
-                <div class="span1">Revisión</div>
-
-                <div class="span3"><g:select name="revision" from=""/></div>
-
-                <div class="span1">Responsable</div>
-
-                <div class="span1"><g:select name="responsable" from=""/></div>
-            </div>
-
-            <div class="span12">
-                <div class="span1">Observaciones</div>
-
-                <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;"/></div>
-
-                <div class="span1" style="margin-left: 130px">Anticipo</div>
-
-                <div class="span2"><g:textField name="anticipo" class="anticipo" style="width: 70px"/> %</div>
-
-            </div>
-
-            <div class="span12">
-
-                <div class="span1">Lista</div>
-
-                <div class="span2" style="margin-right: 70px"><g:textField name="lista" class="lista"/></div>
-
-                <div class="span1">Fecha</div>
-
-                <div class="span2"><elm:datepicker name="fechaLista" class="fechaLista datepicker input-small" value=""/></div>
-
-                <div class="span1" style="margin-left: -40px">Dist.Peso</div>
-
-                <div class="span2"><g:textField name="peso" class="peso" style="width: 70px"/>(km)</div>
-
-                <div class="span1" style="margin-left: -20px">Dist.Volumen</div>
-
-                <div class="span2" style="width: 150px"><g:textField name="volumen" class="volumen"
-                                                                     style="width: 70px"/>(km)</div>
-
-            </div>
-
-        </fieldset>
-
-        <fieldset class="borde" style="position: relative;">
-
-            <div class="span12" style="margin-top: 10px">
-
-                <p class="css-vertical-text">Salida</p>
-
-                <div class="linea" style="height: 85%;"></div>
-
-            </div>
-
-            <div class="span12" style="margin-top: 10px">
-
-                <div class="span1 formato" style="width: 80px">OFICIO SAL.</div>
-
-                <div class="span3" style="margin-left: 18px"><g:textField name="oficio" class="oficio"/></div>
-
-                <div class="span1 formato">MEMO</div>
-
-                <div class="span3"><g:textField name="memoSal" class="memoSal"/></div>
-
-            </div>
-
-            <div class="span12" style="margin-top: 10px">
-                <div class="span1 formato">FORMULA</div>
-
-                <div class="span3"><g:textField name="formula" class="formula"/></div>
-
-                <div class="span1 formato">DESTINO</div>
-
-                <div class="span3" style="margin-right: 95px"><g:select name="destino" from="" style="width: 300px"/></div>
-
-                <div class="span1 formato">FECHA</div>
-
-                <div class="span1"><elm:datepicker name="fechaSalida" class="fechaSalida datepicker input-small"
-                                                   value=""/></div>
-
-            </div>
-
-        </fieldset>
-
-        <div id="busqueda">
-
-            <fieldset class="borde">
-                <div class="span7">
-
-                    <div class="span2">Buscar Por</div>
-
-                    <div class="span2">Criterio</div>
-
-                    <div class="span1">Ordenar</div>
-
-                </div>
-
-                <div>
-                    <div class="span2"><g:select name="buscarPor" class="buscarPor"
-                                                 from="['1': 'Provincia', '2': 'Cantón', '3': 'Parroquia', '4': 'Comunidad']"
-                                                 style="width: 120px" optionKey="key"
-                                                 optionValue="value"/></div>
-
-                    <div class="span2" style="margin-left: -20px"><g:textField name="criterio" class="criterio"/></div>
-
-                    <div class="span1"><g:select name="ordenar" class="ordenar" from="['1': 'Ascendente', '2': 'Descendente']"
-                                                 style="width: 120px; margin-left: 60px;" optionKey="key"
-                                                 optionValue="value"/></div>
-
-                    <div class="span2" style="margin-left: 140px"><button class="btn btn-info" id="btn-consultar"><i
-                            class="icon-check"></i> Consultar
-                    </button></div>
-
-                </div>
-            </fieldset>
-
-            <fieldset class="borde">
-
-                <div id="divTabla" style="height: 460px; overflow-y:auto; overflow-x: auto;">
-
-                </div>
-
-            </fieldset>
+            <select id="selCanton" class="span3"></select>
 
         </div>
 
 
-        <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px" align="center">
+        <div class="span1">Parroquia</div>
 
-            <div class="navbar-inner">
-                <div class="botones">
+        <div class="span1">
 
-                    <ul class="nav">
-                        <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
-                        <li><a href="#">Vol. Obra</a></li>
-                        <li><a href="#">Matriz FP</a></li>
-                        <li><a href="#">Fórmula Pol.</a></li>
-                        <li><a href="#">FP Liquidación</a></li>
-                        <li><a href="#"><i class="icon-money"></i>Rubros</a></li>
-                        <li><a href="#"><i class="icon-file"></i>Documentos</a></li>
-                        <li><a href="#"><i class="icon-calendar"></i>Cronograma</a></li>
-                        <li><a href="#">Composición</a></li>
-                        <li><a href="#">Trámites</a></li>
-                        %{--<li><a href="#"><i class="icon-legal"></i>Delegados</a></li>--}%
-                    </ul>
-
-                </div>
-            </div>
+            <select id="selParroquia" class="span3" style="width: 215px" ></select>
 
         </div>
 
+    </div>
 
-        <div class="modal hide fade mediumModal" id="modal-var" style=";overflow: hidden;">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
+    <div class="span12">
+        <div class="span1">Comunidad</div>
 
-                <h3 id="modal_title_var">
-                </h3>
-            </div>
+        <div class="span3"><g:textField name="comunidad" class="comunidad"/></div>
 
-            <div class="modal-body" id="modal_body_var">
+        <div class="span1">Sitio</div>
 
-            </div>
+        <div class="span3"><g:textField name="sitio" class="sitio" value="${obra.sitio}"/></div>
 
-            <div class="modal-footer" id="modal_footer_var">
-            </div>
+        <div class="span1">Plazo</div>
+
+        <div class="span2"><g:textField name="plazoMeses" class="plazoMeses" style="width: 28px"
+                                        maxlength="3" type="number" value="${obra.plazo}"/>Meses</div>
+
+
+
+    </div>
+
+    <div class="span12">
+        <div class="span1">Inspección</div>
+
+        <div class="span3"><g:select name="inspeccion" from="" value="${obra.inspector.id}"/></div>
+
+        <div class="span1">Revisión</div>
+
+        <div class="span3"><g:select name="revision" from="" value="${obra.revisor.id}"/></div>
+
+        <div class="span1">Responsable</div>
+
+        <div class="span1"><g:select name="responsable" from="" value="${obra.responsableObra.id}"/></div>
+    </div>
+
+    <div class="span12">
+        <div class="span1">Observaciones</div>
+
+        <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;" value="${obra.observaciones}"/></div>
+
+        <div class="span1" style="margin-left: 130px">Anticipo</div>
+
+        <div class="span2"><g:textField name="anticipo" class="anticipo" style="width: 70px" value="${obra.porcentajeAnticipo}"/> %</div>
+
+    </div>
+
+    <div class="span12">
+
+        <div class="span1">Lista</div>
+        %{--todo esto es un combo--}%
+        <div class="span2" style="margin-right: 70px"><g:textField name="lista" class="lista" value="${obra.lugar.id}"/></div>
+
+        <div class="span1" >Fecha</div>
+
+        <div class="span2"><elm:datepicker name="fechaLista" class="fechaLista datepicker input-small" value="${obra.fechaPreciosRubros}"/></div>
+
+        %{--<div class="span1" style="margin-left: -40px">Dist.Peso</div>--}%
+
+        %{--<div class="span2"><g:textField name="peso" class="peso" style="width: 70px"/>(km)</div>--}%
+
+        %{--<div class="span1" style="margin-left: -20px">Dist.Volumen</div>--}%
+
+        %{--<div class="span2" style="width: 150px"><g:textField name="volumen" class="volumen"--}%
+                                                             %{--style="width: 70px"/>(km)</div>--}%
+
+    </div>
+
+</fieldset>
+
+<fieldset class="borde" style="position: relative;">
+
+    <div class="span12" style="margin-top: 10px">
+
+        <p class="css-vertical-text">Salida</p>
+
+        <div class="linea" style="height: 85%;"></div>
+
+    </div>
+
+    <div class="span12" style="margin-top: 10px">
+
+        <div class="span1 formato" style="width: 80px">OFICIO SAL.</div>
+
+        <div class="span3" style="margin-left: 18px"><g:textField name="oficio" class="oficio" value="${obra.fechaOficioSalida}"/></div>
+
+        <div class="span1 formato">MEMO</div>
+
+        <div class="span3"><g:textField name="memoSal" class="memoSal" value="${obra.memoSalida}"/></div>
+
+    </div>
+
+    <div class="span12" style="margin-top: 10px">
+        <div class="span1 formato">FORMULA</div>
+
+        <div class="span3"><g:textField name="formula" class="formula" value="${obra.formulaPolinomica}"/></div>
+
+        <div class="span1 formato">DESTINO</div>
+
+        <div class="span3" style="margin-right: 95px"><g:select name="destino" from="" style="width: 300px" /></div>
+
+        <div class="span1 formato">FECHA</div>
+
+        <div class="span1"><elm:datepicker name="fechaSalida" class="fechaSalida datepicker input-small"
+                                           value="${obra.fechaOficioSalida}"/></div>
+
+    </div>
+
+</fieldset>
+
+<div id="busqueda">
+
+    <fieldset class="borde">
+        <div class="span7">
+
+            <div class="span2">Buscar Por</div>
+
+            <div class="span2">Criterio</div>
+
+            <div class="span1">Ordenar</div>
+
         </div>
 
+        <div>
+            <div class="span2"><g:select name="buscarPor" class="buscarPor"
+                                         from="['1': 'Provincia', '2': 'Cantón', '3': 'Parroquia', '4': 'Comunidad']"
+                                         style="width: 120px" optionKey="key"
+                                         optionValue="value"/></div>
+
+            <div class="span2" style="margin-left: -20px"><g:textField name="criterio" class="criterio"/></div>
+
+            <div class="span1"><g:select name="ordenar" class="ordenar" from="['1': 'Ascendente', '2': 'Descendente']"
+                                         style="width: 120px; margin-left: 60px;" optionKey="key"
+                                         optionValue="value"/></div>
+
+            <div class="span2" style="margin-left: 140px"><button class="btn btn-info" id="btn-consultar"><i
+                    class="icon-check"></i> Consultar
+            </button></div>
+
+        </div>
+    </fieldset>
+
+    <fieldset class="borde">
+
+        <div id="divTabla" style="height: 460px; overflow-y:auto; overflow-x: auto;">
+
+        </div>
+
+    </fieldset>
+
+</div>
 
 
-        <script type="text/javascript">
-            $(function () {
+<div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px" align="center">
 
-                $("#selProvincia").change(function () {
-                    var provincia = $(this).val();
-                    var $parroquia = $("<select id='selParroquia' class='span3' style='width: 215px'></select>");
-                    $("#selParroquia").replaceWith($parroquia);
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'cantonPorProvincia')}",
-                        data    : {
-                            id : provincia
-                        },
-                        success : function (msg) {
-                            $("#selCanton").replaceWith(msg);
+    <div class="navbar-inner">
+        <div class="botones">
 
-                        }
-                    });
-                });
+            <ul class="nav">
+                <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
+                <li><a href="#">Vol. Obra</a></li>
+                <li><a href="#">Matriz FP</a></li>
+                <li><a href="#">Fórmula Pol.</a></li>
+                <li><a href="#">FP Liquidación</a></li>
+                <li><a href="#"><i class="icon-money"></i>Rubros</a></li>
+                <li><a href="#"><i class="icon-file"></i>Documentos</a></li>
+                <li><a href="#"><i class="icon-calendar"></i>Cronograma</a></li>
+                <li><a href="#">Composición</a></li>
+                <li><a href="#">Trámites</a></li>
+                %{--<li><a href="#"><i class="icon-legal"></i>Delegados</a></li>--}%
+            </ul>
 
-                $("#selCanton").change(function () {
-                    var canton = $(this).val();
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'parroquiaPorCanton')}",
-                        data    : {
-                            id : canton
-                        },
-                        success : function (msg) {
-                            $("#selParroquia").replaceWith(msg);
-                        }
-                    });
-                });
+        </div>
+    </div>
 
-                $("#btn-buscar").click(function () {
+</div>
+
+
+<div class="modal hide fade mediumModal" id="modal-var" style=";overflow: hidden;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modal_title_var">
+        </h3>
+    </div>
+
+    <div class="modal-body" id="modal_body_var">
+
+    </div>
+
+    <div class="modal-footer" id="modal_footer_var">
+    </div>
+</div>
+
+<div class="modal grandote hide fade " id="modal-busqueda" style=";overflow: hidden;">
+    <div class="modal-header btn-info">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modalTitle_busqueda"></h3>
+    </div>
+
+    <div class="modal-body" id="modalBody" >
+        <bsc:buscador name="obra.buscador.id" value="" accion="buscarObra" controlador="obra" campos="${campos}" label="Obra" tipo="lista"/>
+    </div>
+
+    <div class="modal-footer" id="modalFooter_busqueda">
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+
+        $("#lista").click(function(){
+            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+            $("#modalTitle_busqueda").html("Lista de obras");
+//        $("#modalBody").html($("#buscador_rubro").html());
+            $("#modalFooter_busqueda").html("").append(btnOk);
+            $(".contenidoBuscador").html("")
+            $("#modal-busqueda").modal("show");
+        });
+
+        $("#selProvincia").change(function () {
+            var provincia = $(this).val();
+            var $parroquia = $("<select id='selParroquia' class='span3' style='width: 215px'></select>");
+            $("#selParroquia").replaceWith($parroquia);
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'cantonPorProvincia')}",
+                data    : {
+                    id : provincia
+                },
+                success : function (msg) {
+                    $("#selCanton").replaceWith(msg);
+
+                }
+            });
+        });
+
+        $("#selCanton").change(function () {
+            var canton = $(this).val();
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'parroquiaPorCanton')}",
+                data    : {
+                    id : canton
+                },
+                success : function (msg) {
+                    $("#selParroquia").replaceWith(msg);
+                }
+            });
+        });
+
+        $("#btn-buscar").click(function () {
 //                    $("#dlgLoad").dialog("close");
-                    $("#busqueda").dialog("open");
+            $("#busqueda").dialog("open");
 //
-                });
+        });
 
-                $("#btn-consultar").click(function () {
-                    $("#dlgLoad").dialog("open");
-                    busqueda();
-                });
+        $("#btn-consultar").click(function () {
+            $("#dlgLoad").dialog("open");
+            busqueda();
+        });
 
-                $("#btnVar").click(function () {
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
-                        data    : {
-                            //TODO CAMBIAR AQUI!!!
-                            obra : "388"
-                        },
-                        success : function (msg) {
-                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+        $("#btnVar").click(function () {
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
+                data    : {
+                    //TODO CAMBIAR AQUI!!!
+                    obra : "388"
+                },
+                success : function (msg) {
+                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
-                            btnSave.click(function () {
-                                if ($("#frmSave-var").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                }
-                                var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();
-                                var url = $("#frmSave-var").attr("action");
+                    btnSave.click(function () {
+                        if ($("#frmSave-var").valid()) {
+                            btnSave.replaceWith(spinner);
+                        }
+                        var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();
+                        var url = $("#frmSave-var").attr("action");
 
 //                                console.log(url);
 //                                console.log(data);
 
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : url,
-                                    data    : data,
-                                    success : function (msg) {
-                                        console.log("Data Saved: " + msg);
-                                    }
-                                });
+                        $.ajax({
+                            type    : "POST",
+                            url     : url,
+                            data    : data,
+                            success : function (msg) {
+                                console.log("Data Saved: " + msg);
+                            }
+                        });
 
-                                return false;
-                            });
-
-                            $("#modal_title_var").html("Variables");
-                            $("#modal_body_var").html(msg);
-                            $("#modal_footer_var").html("").append(btnCancel).append(btnSave);
-                            $("#modal-var").modal("show");
-                        }
+                        return false;
                     });
-                    return false;
-                });
 
-                $("#busqueda").dialog({
+                    $("#modal_title_var").html("Variables");
+                    $("#modal_body_var").html(msg);
+                    $("#modal_footer_var").html("").append(btnCancel).append(btnSave);
+                    $("#modal-var").modal("show");
+                }
+            });
+            return false;
+        });
 
-                    autoOpen  : false,
-                    resizable : false,
-                    modal     : true,
-                    draggable : false,
-                    width     : 800,
-                    height    : 600,
-                    position  : 'center',
-                    title     : 'Datos de Situación Geográfica'
+        $("#busqueda").dialog({
 
-                });
+            autoOpen  : false,
+            resizable : false,
+            modal     : true,
+            draggable : false,
+            width     : 800,
+            height    : 600,
+            position  : 'center',
+            title     : 'Datos de Situación Geográfica'
 
-                function busqueda() {
+        });
 
-                    var buscarPor = $("#buscarPor").val();
-                    var criterio = $("#criterio").val();
-                    var ordenar = $("#ordenar").val();
+        function busqueda() {
+
+            var buscarPor = $("#buscarPor").val();
+            var criterio = $("#criterio").val();
+            var ordenar = $("#ordenar").val();
 
 //
 //                   console.log("buscar" + buscarPor)
 //                    console.log("criterio" + criterio)
 //                    console.log("ordenar" + ordenar)
 
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'situacionGeografica')}",
-                        data    : {
-                            buscarPor : buscarPor,
-                            criterio  : criterio,
-                            ordenar   : ordenar
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'situacionGeografica')}",
+                data    : {
+                    buscarPor : buscarPor,
+                    criterio  : criterio,
+                    ordenar   : ordenar
 
-                        },
-                        success : function (msg) {
+                },
+                success : function (msg) {
 
-                            $("#divTabla").html(msg);
-                            $("#dlgLoad").dialog("close");
-                        }
-                    });
-
+                    $("#divTabla").html(msg);
+                    $("#dlgLoad").dialog("close");
                 }
             });
-        </script>
 
-    </body>
+        }
+    });
+</script>
+
+</body>
 </html>

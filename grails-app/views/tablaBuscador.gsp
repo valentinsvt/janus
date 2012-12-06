@@ -1,16 +1,22 @@
 <g:if test="${lista?.size()>0}">
-    <div url="${url}">
-        <table width="400px" id="tablaBuscador" class="table table-bordered table-striped table-condensed table-hover">
+    <div url="${url}" style="max-width: 200%;${(width)?'width:'+width+'px':''}">
+        <table id="tablaBuscador" class="table table-bordered table-striped table-condensed table-hover" style="max-width: 100%;width: 100%">
             <thead>
+            <th style="width: 40px"></th>
             <g:each in="${listaTitulos}">
                 <th>${it}</th>
             </g:each>
-            <th style="width: 40px"></th>
+
             </thead>
             <tbody id="paginate">
             <g:each var="reg" in="${lista}" status="i">
                 <g:set var="propiedades" value=""></g:set>
-                <tr>
+                <tr style="font-size: 10px !important;">
+                    <td style="text-align: right;width: 40px">
+                        <div  style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}"  ${propiedades}>
+                            <span class="ui-icon ui-icon-circle-check"></span>
+                        </div>
+                    </td>
                     <g:each in="${listaCampos}" var="nombre" status="j">
                         <g:set var="propiedades" value="${propiedades+=" prop_"+nombre+"='"+reg.properties[nombre]+"'"}"></g:set>
                         <g:if test="${funciones}">
@@ -28,11 +34,7 @@
                             ${prop}
                         </td>
                     </g:each>
-                    <td style="text-align: right;width: 40px">
-                        <div  style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}"  ${propiedades}>
-                            <span class="ui-icon ui-icon-circle-check"></span>
-                        </div>
-                    </td>
+
                 </tr>
             </g:each>
             </tbody>
@@ -88,7 +90,7 @@
             fila=$("<div>")
             fila.width(tbody.parent().width()-10)
             fila.height(20)
-            fila.css("padding-left",5).css("padding-rigth",5).css("padding-top",2)
+            fila.css("padding-left",5).css("padding-rigth",5).css("padding-top",2).css("marginBottom",15)
 
             for(i=0;i<paginas;i++){
                 var boton = $("<div>")
@@ -115,7 +117,7 @@
 
 
 
-        paginar("paginate",10)
+        paginar("paginate",${(paginas)?paginas:10})
 
     </script>
 </g:if>
