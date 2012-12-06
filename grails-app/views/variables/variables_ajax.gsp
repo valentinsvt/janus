@@ -50,13 +50,13 @@
     width : 65px;
 }
 
-/*.sum1 {*/
+    /*.sum1 {*/
     /*background : #adff2f !important;*/
-/*}*/
+    /*}*/
 
-/*.sum2 {*/
+    /*.sum2 {*/
     /*border : solid 2px green !important;*/
-/*}*/
+    /*}*/
 </style>
 
 <g:form controller="variables" action="saveVar_ajax" name="frmSave-var">
@@ -74,7 +74,8 @@
                 </div>
 
                 <div class="span5">
-                    <g:select name="volquete.id" id="cmb_vol" from="${volquetes}" optionKey="id" optionValue="nombre" noSelection="${['': 'Seleccione']}"/>
+                    <g:select name="volquete.id" id="cmb_vol" from="${volquetes}" optionKey="id" optionValue="nombre"
+                              noSelection="${['': 'Seleccione']}" value="${obra?.volqueteId}"/>
                 </div>
 
                 <div class="span1">
@@ -83,11 +84,11 @@
 
                 <div class="span2">
                     %{--<div class="input-append">--}%
-                    <g:textField class="inputVar" style="" disabled="" name="costo_volqueta"/>
+                    <g:textField class="inputVar" style="" disabled="" name="costo_volqueta" value=""/>
                     %{--<span class="add-on">$</span>--}%
                     %{--</div>--}%
                 </div>
-            </div>
+            </div>e
 
             <div class="row-fluid">
                 <div class="span3">
@@ -95,7 +96,8 @@
                 </div>
 
                 <div class="span5">
-                    <g:select name="chofer.id" id="cmb_chof" from="${choferes}" optionKey="id" optionValue="nombre" noSelection="${['': 'Seleccione']}"/>
+                    <g:select name="chofer.id" id="cmb_chof" from="${choferes}" optionKey="id" optionValue="nombre"
+                              noSelection="${['': 'Seleccione']}" value="${obra?.choferId}"/>
                 </div>
 
                 <div class="span1">
@@ -104,7 +106,7 @@
 
                 <div class="span2">
                     %{--<div class="input-append">--}%
-                    <g:textField class="inputVar" name="costo_chofer" style="text-align: right" disabled=""/>
+                    <g:textField class="inputVar" name="costo_chofer" disabled=""/>
                     %{--<span class="add-on">$</span>--}%
                     %{--</div>--}%
                 </div>
@@ -117,7 +119,7 @@
 
                 <div class="span3">
                     %{--<div class="input-append">--}%
-                    <g:textField type="text" name="distanciaPeso" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="distanciaPeso" class="inputVar" value="${g.formatNumber(number: obra?.distanciaPeso, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
                 </div>
@@ -128,7 +130,7 @@
 
                 <div class="span1">
                     %{--<div class="input-append">--}%
-                    <g:textField type="text" name="distanciaVolumen" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="distanciaVolumen" class="inputVar" value="${g.formatNumber(number: obra?.distanciaVolumen, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
                 </div>
@@ -142,7 +144,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorReduccion" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="factorReduccion" class="inputVar" value="${g.formatNumber(number: obra?.factorReduccion, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
 
                 <div class="span3">
@@ -150,7 +152,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorVelocidad" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="factorVelocidad" class="inputVar" value="${g.formatNumber(number: obra?.factorVelocidad, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
             </div>
 
@@ -160,7 +162,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="capacidadVolquete" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="capacidadVolquete" class="inputVar" value="${g.formatNumber(number: obra?.capacidadVolquete, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
 
                 <div class="span3">
@@ -168,7 +170,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorReduccionTiempo" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="factorReduccionTiempo" class="inputVar" value="${g.formatNumber(number: obra?.factorReduccionTiempo, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
             </div>
 
@@ -178,7 +180,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorVolumen" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="factorVolumen" class="inputVar" value="${g.formatNumber(number: obra?.factorVolumen, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
 
                 <div class="span3">
@@ -186,7 +188,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorPeso" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="factorPeso" class="inputVar" value="${g.formatNumber(number: obra?.factorPeso, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
             </div>
 
@@ -217,7 +219,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="contrato" class="inputVar" value="0.00"/>
+                    <g:textField type="text" name="contrato" class="inputVar" value="${g.formatNumber(number: obra?.contrato, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
             </div>
 
@@ -227,7 +229,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosObra" class="inputVar sum1" value="0.00" tabindex="1"/>
+                    <g:textField type="text" name="indiceCostosIndirectosObra" class="inputVar sum1" value="${g.formatNumber(number: obra?.indiceCostosIndirectosObra, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="1"/>
                 </div>
 
                 <div class="span4">
@@ -235,7 +237,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosPromocion" class="inputVar sum1" value="0.00" tabindex="7"/>
+                    <g:textField type="text" name="indiceCostosIndirectosPromocion" class="inputVar sum1" value="${g.formatNumber(number: obra?.indiceCostosIndirectosPromocion, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="7"/>
                 </div>
             </div>
 
@@ -245,7 +247,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosMantenimiento" class="inputVar sum1" value="0.00" tabindex="2"/>
+                    <g:textField type="text" name="indiceCostosIndirectosMantenimiento" class="inputVar sum1" value="${g.formatNumber(number: obra?.indiceCostosIndirectosMantenimiento, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="2"/>
                 </div>
 
                 <div class="span4 bold">
@@ -253,7 +255,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceGastosGenerales" class="inputVar sum2" value="0.00" disabled=""/>
+                    <g:textField type="text" name="indiceGastosGenerales" class="inputVar sum2" value="${g.formatNumber(number: obra?.indiceGastosGenerales, maxFractionDigits: 2, minFractionDigits: 2)}" disabled=""/>
                 </div>
             </div>
 
@@ -263,7 +265,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="administracion" class="inputVar sum1" value="0.00" tabindex="3"/>
+                    <g:textField type="text" name="administracion" class="inputVar sum1" value="${g.formatNumber(number: obra?.administracion, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="3"/>
                 </div>
 
                 <div class="span4 bold">
@@ -271,7 +273,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="impreso" class="inputVar  sum2" value="0.00" tabindex="8"/>
+                    <g:textField type="text" name="impreso" class="inputVar  sum2" value="${g.formatNumber(number: obra?.impreso, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="8"/>
                 </div>
             </div>
 
@@ -281,7 +283,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosGarantias" class="inputVar sum1" value="0.00" tabindex="4"/>
+                    <g:textField type="text" name="indiceCostosIndirectosGarantias" class="inputVar sum1" value="${g.formatNumber(number: obra?.indiceCostosIndirectosGarantias, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="4"/>
                 </div>
 
                 <div class="span4 bold">
@@ -289,7 +291,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceUtilidad" class="inputVar sum2 " value="0.00" tabindex="9"/>
+                    <g:textField type="text" name="indiceUtilidad" class="inputVar sum2 " value="${g.formatNumber(number: obra?.indiceUtilidad, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="9"/>
                 </div>
             </div>
 
@@ -299,7 +301,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosCostosFinancieros" class="inputVar sum1" value="0.00" tabindex="5"/>
+                    <g:textField type="text" name="indiceCostosIndirectosCostosFinancieros" class="inputVar sum1" value="${g.formatNumber(number: obra?.indiceCostosIndirectosCostosFinancieros, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="5"/>
                 </div>
 
                 <div class="span4 bold">
@@ -307,7 +309,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosTimbresProvinciales" class="inputVar sum2" value="0.00" tabindex="10"/>
+                    <g:textField type="text" name="indiceCostosIndirectosTimbresProvinciales" class="inputVar sum2" value="${g.formatNumber(number: obra?.indiceCostosIndirectosTimbresProvinciales, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="10"/>
                 </div>
             </div>
 
@@ -317,7 +319,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceCostosIndirectosVehiculos" class="inputVar sum1" value="0.00" tabindex="6"/>
+                    <g:textField type="text" name="indiceCostosIndirectosVehiculos" class="inputVar sum1" value="${g.formatNumber(number: obra?.indiceCostosIndirectosVehiculos, maxFractionDigits: 2, minFractionDigits: 2)}" tabindex="6"/>
                 </div>
 
                 <div class="span4 bold" style="border-top: solid 1px #D3D3D3;">
@@ -325,7 +327,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="totales" class="inputVar" value="0.00" disabled=""/>
+                    <g:textField type="text" name="totales" class="inputVar" value="${g.formatNumber(number: obra?.totales, maxFractionDigits: 2, minFractionDigits: 2)}" disabled=""/>
                 </div>
             </div>
 
@@ -346,20 +348,45 @@
          9          -> tab
          */
 //        console.log(ev.keyCode);
-        if ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 190 || ev.keyCode == 110 || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9) {
-            return true;
-        } else {
-            return false;
-        }
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 190 || ev.keyCode == 110 || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9);
     });
 
     function suma(items, update) {
         var sum1 = 0;
         items.each(function () {
-            var val = parseFloat($(this).val());
-            sum1 += val;
+            sum1 += parseFloat($(this).val());
         });
         update.val(number_format(sum1, 2, ".", ""));
+    }
+
+    function costoItem($campo, $update) {
+        var id = $campo.val();
+        var fecha = $("#fechaLista").val();
+        var ciudad = $("#lista").val();
+        if (id != "" && fecha != "" && ciudad != "") {
+            $.ajax({
+                type    : "POST",
+                url     : "${g.createLink(controller: 'rubro',action:'getPreciosTransporte')}",
+                data    : {
+                    fecha  : fecha,
+                    ciudad : ciudad,
+                    ids    : id
+                },
+                success : function (msg) {
+                    var precios = msg.split("&");
+                    for (var i = 0; i < precios.length; i++) {
+                        if ($.trim(precios[i]) != "") {
+                            var parts = precios[i].split(";");
+                            if (parts.length > 1) {
+                                $update.val(parts[1].toString().trim());
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            $update.val("0.00");
+        }
     }
 
     $(".sum1").keyup(function (ev) {
@@ -379,57 +406,14 @@
         heightStyle : "fill"
     });
 
+    costoItem($("#cmb_vol"), $("#costo_volqueta"));
+    costoItem($("#cmb_chof"), $("#costo_chofer"));
+
     $("#cmb_vol").change(function () {
-        if ($("#cmb_vol").val() != "-1") {
-            $.ajax({
-                type    : "POST",
-                url     : "${g.createLink(controller: 'rubro',action:'getPreciosTransporte')}",
-                data    : {
-                    fecha  : $("#fechaLista").val(),
-                    ciudad : $("#lista").val(),
-                    ids    : $("#cmb_vol").val()
-                },
-                success : function (msg) {
-                    var precios = msg.split("&")
-//                    console.log(precios);
-                    for (i = 0; i < precios.length; i++) {
-                        if ($.trim(precios[i]) != "") {
-                            var parts = precios[i].split(";")
-//                        console.log(parts,parts.length)
-                            if (parts.length > 1) {
-//                                console.log($("#costo_volqueta"), parts, parts[1]);
-//                                $("#costo_volqueta").after($("<span class='add-on'>" + parts[1] + "</span>"));
-                                $("#costo_volqueta").val(parts[1].toString().trim());
-                            }
-                        }
-                    }
-                }
-            });
-        } else {
-            $("#costo_volqueta").val("0.00")
-        }
+        costoItem($(this), $("#costo_volqueta"));
     });
     $("#cmb_chof").change(function () {
-        if ($("#cmb_chof").val() != "-1") {
-            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids=" + $("#cmb_chof").val()
-            $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPreciosTransporte')}",
-                data     : {
-                    fecha  : $("#fechaLista").val(),
-                    ciudad : $("#lista").val(),
-                    ids    : $("#cmb_chof").val()
-                },
-                success  : function (msg) {
-                    var precios = msg.split("&")
-                    for (i = 0; i < precios.length; i++) {
-                        var parts = precios[i].split(";")
-                        if (parts.length > 1)
-                            $("#costo_chofer").val(parts[1].trim())
-                    }
-                }
-            });
-        } else {
-            $("#costo_chofer").val("0.00")
-        }
+        costoItem($(this), $("#costo_chofer"));
     });
 
 </script>

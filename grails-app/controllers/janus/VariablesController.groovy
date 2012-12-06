@@ -3,6 +3,10 @@ package janus
 class VariablesController {
 
     def variables_ajax() {
+//        println params
+
+        def obra = Obra.get(params.obra)
+
         def volquetes = []
         def choferes = []
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
@@ -13,7 +17,7 @@ class VariablesController {
                 volquetes = Item.findAllByDepartamento(it)
         }
 
-        [choferes: choferes, volquetes: volquetes]
+        [choferes: choferes, volquetes: volquetes, obra: obra]
     }
 
     def saveVar_ajax() {
