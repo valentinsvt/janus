@@ -384,6 +384,7 @@
                         type    : "POST",
                         url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
                         data    : {
+                            //TODO CAMBIAR AQUI!!!
                             obra : "388"
                         },
                         success : function (msg) {
