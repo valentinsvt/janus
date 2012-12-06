@@ -383,6 +383,9 @@
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
+                        data    : {
+                            obra : "388"
+                        },
                         success : function (msg) {
                             var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
