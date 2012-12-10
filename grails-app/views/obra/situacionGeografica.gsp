@@ -1,10 +1,5 @@
-
+<html>
 <head>
-
-
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
-    <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}">
 
 </head>
 
@@ -18,30 +13,79 @@
     <th style="background-color: ${colorCant};">Cantón</th>
     <th style="background-color: ${colorParr};">Parroquia</th>
     <th style="background-color: ${colorComn};">Comunidad</th>
-
+    <th>Seleccionar</th>
     </thead>
 
     <tbody>
 
-                <g:each in="${comunidades}" var="comn" status="i">
-                    <tr>
+    <g:each in="${comunidades}" var="comn" status="i">
+        <tr>
 
-                        <td>${comn.parroquia.canton.provincia.nombre}</td>
-                        <td>${comn.parroquia.canton.nombre}</td>
-                        <td>${comn.parroquia.nombre}</td>
-                        <td>${comn.nombre}</td>
+            <td class="provincia">${comn.parroquia.canton.provincia.nombre}</td>
+            <td class="canton">${comn.parroquia.canton.nombre}</td>
+            <td class="parroquia">${comn.parroquia.nombre}</td>
+            <td class="comunidad">${comn.nombre}</td>
+            <td><div style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all"
+                     id="reg_${i}" regId="${comn?.id}" parroquia="${comn?.parroquia?.id}" canton="${comn?.parroquia?.canton?.id}" txtReg="${comn.toString()}" ${comunidades}>
+                <span class="ui-icon ui-icon-circle-check"></span>
+            </div></td>
 
-
-                    </tr>
+        </tr>
 
     </g:each>
     </tbody>
 
 </table>
 
+<script type="text/javascript">
 
-<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
-<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
 
+    $(".btnpq").click(function () {
+
+
+        var comunidad = $(this).attr("regId");
+
+        console.log("comunidadId:" + comunidad);
+
+        var parroquia = $(this).attr("parroquia");
+
+        console.log ("parroquia:" + parroquia);
+
+        var canton = $(this).attr("canton");
+
+        console.log("canton:" + canton);
+
+        $("#dlgLoad").dialog("open");
+        cerrarBusqueda(comunidad,parroquia,canton);
+
+    });
+
+    function cerrarBusqueda(comunidad,parroquia,canton) {
+
+
+        $("#selParroquia").val(parroquia)
+        $("#dlgLoad").dialog("close");
+        $("#busqueda").dialog("close");
+        %{--$.ajax({--}%
+            %{--type    : "POST",--}%
+            %{--url     : "${createLink(action:'registroObra')}",--}%
+            %{--data    : {--}%
+                %{--comunidad : comunidad,--}%
+                %{--parroquia  : parroquia,--}%
+                %{--canton   : canton--}%
+
+            %{--},--}%
+            %{--success : function (msg) {--}%
+
+%{--//                $("#divTabla").html(msg);--}%
+                %{--$("#dlgLoad").dialog("close");--}%
+            %{--}--}%
+        %{--});--}%
+
+    }
+
+
+</script>
 
 </body>
+</html>

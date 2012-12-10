@@ -51,3 +51,5 @@ $(".editable").dblclick(function (ev) {
         doEdit($(this));
     }
 });
+
+

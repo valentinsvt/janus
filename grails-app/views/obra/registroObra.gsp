@@ -46,7 +46,7 @@
 </div>
 
 <fieldset class="borde" style="position: relative; height: 100px">
-    <g:hiddenField name="id" value="${obra.id}"/>
+    <g:hiddenField name="id" value="${obra?.id}"/>
     <div class="span12" style="margin-top: 20px" align="center">
 
         <p class="css-vertical-text">Ingreso</p>
@@ -59,15 +59,15 @@
 
         <div class="span1 formato">MEMO</div>
 
-        <div class="span3"><g:textField name="memo" class="memo" value="${obra.oficioIngreso}"/></div>
+        <div class="span3"><g:textField name="memo" class="memo" value="${obra?.oficioIngreso}"/></div>
 
         <div class="span2 formato">CANTIDAD DE OBRA</div>
 
-        <div class="span3"><g:textField name="cantidad" class="cantidad" value="${obra.memoCantidadObra}" /></div>
+        <div class="span3"><g:textField name="cantidad" class="cantidad" value="${obra?.memoCantidadObra}" /></div>
 
         <div class="span1 formato">FECHA</div>
 
-        <div class="span1"><elm:datepicker name="fecha" class="fecha datepicker input-small" value="${obra.fechaCreacionObra}"/></div>
+        <div class="span1"><elm:datepicker name="fecha" class="fecha datepicker input-small" value="${obra?.fechaCreacionObra}"/></div>
 
     </div>
 
@@ -76,42 +76,42 @@
     <div class="span12" style="margin-top: 10px">
         <div class="span1">Código</div>
 
-        <div class="span3"><g:textField name="codigo" class="codigo" value="${obra.codigo}"/></div>
+        <div class="span3"><g:textField name="codigo" class="codigo" value="${obra?.codigo}"/></div>
 
         <div class="span1">Nombre</div>
 
-        <div class="span6"><g:textField name="nombre" class="nombre" style="width: 608px" value="${obra.nombre}"/></div>
+        <div class="span6"><g:textField name="nombre" class="nombre" style="width: 608px" value="${obra?.nombre}"/></div>
     </div>
 
     <div class="span12">
         <div class="span1">Programa</div>
 
-        <div class="span3"><g:select name="programa" from="" value="${obra.programacion}"/></div>
+        <div class="span3"><g:select name="programa" from="" value="${obra?.programacion}"/></div>
 
         <div class="span1">Tipo</div>
 
-        <div class="span3"><g:textField name="tipo" class="tipo" value="${obra.tipo}"/></div>
+        <div class="span3"><g:textField name="tipo" class="tipo" value="${obra?.tipo}"/></div>
 
         <div class="span1">Clase</div>
 
-        <div class="span1"><g:select name="clase" from="" value="${obra.claseObra.id}"/></div>
+        <div class="span1"><g:select name="clase" from="" value="${obra?.claseobra?.id}"/></div>
     </div>
 
     <div class="span12">
         <div class="span1">Referencias</div>
 
-        <div class="span6"><g:textField name="refrencias" class="referencias" style="width: 610px" value="${obra.referencia}"/></div>
+        <div class="span6"><g:textField name="refrencias" class="referencias" style="width: 610px" value="${obra?.referencia}"/></div>
 
         <div class="span1" style="margin-left: 130px">Estado</div>
 
-        <div class="span1"><g:textField name="estado" class="estado" value="${obra.estado}"/></div>
+        <div class="span1"><g:textField name="estado" class="estado" value="${obra?.estado}"/></div>
     </div>
 
     <div class="span12">
         <div class="span1">Descripción</div>
 
         <div class="span6"><g:textArea name="descripcion" rows="5" cols="5"
-                                       style="width: 1007px; height: 72px; resize: none" maxlength="511" value="${obra.descripcion}" /></div>
+                                       style="width: 1007px; height: 72px; resize: none" maxlength="511" value="${obra?.descripcion}" /></div>
     </div>
 
     <div class="span12">
@@ -154,12 +154,12 @@
 
         <div class="span1">Sitio</div>
 
-        <div class="span3"><g:textField name="sitio" class="sitio" value="${obra.sitio}"/></div>
+        <div class="span3"><g:textField name="sitio" class="sitio" value="${obra?.sitio}"/></div>
 
         <div class="span1">Plazo</div>
 
         <div class="span2"><g:textField name="plazoMeses" class="plazoMeses" style="width: 28px"
-                                        maxlength="3" type="number" value="${obra.plazo}"/>Meses</div>
+                                        maxlength="3" type="number" value="${obra?.plazo}"/>Meses</div>
 
 
 
@@ -168,25 +168,25 @@
     <div class="span12">
         <div class="span1">Inspección</div>
 
-        <div class="span3"><g:select name="inspeccion" from="" value="${obra.inspector.id}"/></div>
+        <div class="span3"><g:select name="inspeccion" from="" value="${obra?.inspector?.id}"/></div>
 
         <div class="span1">Revisión</div>
 
-        <div class="span3"><g:select name="revision" from="" value="${obra.revisor.id}"/></div>
+        <div class="span3"><g:select name="revision" from="" value="${obra?.revisor?.id}"/></div>
 
         <div class="span1">Responsable</div>
 
-        <div class="span1"><g:select name="responsable" from="" value="${obra.responsableObra.id}"/></div>
+        <div class="span1"><g:select name="responsable" from="" value="${obra?.responsableobra?.id}"/></div>
     </div>
 
     <div class="span12">
         <div class="span1">Observaciones</div>
 
-        <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;" value="${obra.observaciones}"/></div>
+        <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;" value="${obra?.observaciones}"/></div>
 
         <div class="span1" style="margin-left: 130px">Anticipo</div>
 
-        <div class="span2"><g:textField name="anticipo" class="anticipo" style="width: 70px" value="${obra.porcentajeAnticipo}"/> %</div>
+        <div class="span2"><g:textField name="anticipo" class="anticipo" style="width: 70px" value="${obra?.porcentajeAnticipo}"/> %</div>
 
     </div>
 
@@ -194,11 +194,11 @@
 
         <div class="span1">Lista</div>
         %{--todo esto es un combo--}%
-        <div class="span2" style="margin-right: 70px"><g:textField name="lista" class="lista" value="${obra.lugar.id}"/></div>
+        <div class="span2" style="margin-right: 70px"><g:textField name="lista" class="lista" value="${obra?.lugar?.id}"/></div>
 
         <div class="span1" >Fecha</div>
 
-        <div class="span2"><elm:datepicker name="fechaLista" class="fechaLista datepicker input-small" value="${obra.fechaPreciosRubros}"/></div>
+        <div class="span2"><elm:datepicker name="fechaLista" class="fechaLista datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
         %{--<div class="span1" style="margin-left: -40px">Dist.Peso</div>--}%
 
@@ -227,18 +227,18 @@
 
         <div class="span1 formato" style="width: 80px">OFICIO SAL.</div>
 
-        <div class="span3" style="margin-left: 18px"><g:textField name="oficio" class="oficio" value="${obra.fechaOficioSalida}"/></div>
+        <div class="span3" style="margin-left: 18px"><g:textField name="oficio" class="oficio" value="${obra?.fechaOficioSalida}"/></div>
 
         <div class="span1 formato">MEMO</div>
 
-        <div class="span3"><g:textField name="memoSal" class="memoSal" value="${obra.memoSalida}"/></div>
+        <div class="span3"><g:textField name="memoSal" class="memoSal" value="${obra?.memoSalida}"/></div>
 
     </div>
 
     <div class="span12" style="margin-top: 10px">
         <div class="span1 formato">FORMULA</div>
 
-        <div class="span3"><g:textField name="formula" class="formula" value="${obra.formulaPolinomica}"/></div>
+        <div class="span3"><g:textField name="formula" class="formula" value="${obra?.formulaPolinomica}"/></div>
 
         <div class="span1 formato">DESTINO</div>
 
@@ -247,7 +247,7 @@
         <div class="span1 formato">FECHA</div>
 
         <div class="span1"><elm:datepicker name="fechaSalida" class="fechaSalida datepicker input-small"
-                                           value="${obra.fechaOficioSalida}"/></div>
+                                           value="${obra?.fechaOficioSalida}"/></div>
 
     </div>
 
@@ -345,7 +345,7 @@
     </div>
 
     <div class="modal-body" id="modalBody" >
-        <bsc:buscador name="obra.buscador.id" value="" accion="buscarObra" controlador="obra" campos="${campos}" label="Obra" tipo="lista"/>
+        <bsc:buscador name="obra?.buscador.id" value="" accion="buscarObra" controlador="obra" campos="${campos}" label="Obra" tipo="lista"/>
     </div>
 
     <div class="modal-footer" id="modalFooter_busqueda">
