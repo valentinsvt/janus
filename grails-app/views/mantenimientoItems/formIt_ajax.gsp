@@ -42,13 +42,20 @@
             <div class="input-prepend">
                 <g:set var="cd1" value="${departamento.subgrupo.codigo.toString().padLeft(3, '0')}"/>
                 <g:set var="cd2" value="${departamento.codigo.toString().padLeft(3, '0')}"/>
+                <g:set var="cd" value="${itemInstance?.codigo}"/>
+                <g:if test="${itemInstance.id && cd}">
+                    <g:set var="cd" value="${cd?.replace(cd1 + ".", '').replace(cd2 + ".", '')}"/>
+                </g:if>
                 <span class="add-on">${cd1}</span>
                 <span class="add-on">${cd2}</span>
-                <g:textField name="codigo" maxlength="20" class="allCaps required input-small" value="${itemInstance?.codigo.replace(cd1 + ".", '').replace(cd2 + ".", '')}"/>
-            </div>
-            <span class="mandatory">*</span>
+                <g:textField name="codigo" maxlength="20" class="allCaps required input-small" value="${cd}"/>
+                <span class="mandatory">*</span>
 
-            <p class="help-block ui-helper-hidden"></p>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+            %{--<span class="mandatory">*</span>--}%
+
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
         </div>
     </div>
 

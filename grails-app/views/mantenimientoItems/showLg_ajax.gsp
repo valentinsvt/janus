@@ -173,6 +173,7 @@
     }); //btnSave
 
     $(".btnDelete").click(function () {
+        console.log("AQUI")
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
         var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
 
@@ -188,7 +189,7 @@
                 },
                 success : function (msg) {
                     if (msg == "OK") {
-                        $("#modal").modal("hide");
+                        $("#modal-tree").modal("hide");
                         $.ajax({
                             type    : "POST",
                             url     : "${createLink(action:'showLg_ajax')}",
@@ -212,7 +213,7 @@
         $("#modalTitle").html("Confirmación");
         $("#modalBody").html("Está seguro de querer eliminar este precio?");
         $("#modalFooter").html("").append(btnOk).append(btnSave);
-        $("#modal").modal("show");
+        $("#modal-tree1").modal("show");
         return false;
     });
 

@@ -4,7 +4,50 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class CronogramaController extends janus.seguridad.Shield {
 
+    def preciosService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def cronogramaObra() {
+        def obra = Obra.get(params.id)
+
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+
+        def precios = [:]
+        def fecha = obra.fechaPreciosRubros
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+        def lugar = obra.lugar
+        def prch = 0
+        def prvl = 0
+        if (obra.chofer) {
+            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
+            prch = prch["${obra.chofer.id}"]
+            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
+            prvl = prvl["${obra.volquete.id}"]
+        }
+//        println "PARAMETROS!= "+fecha+" "+dsps+" "+dsvl+" "+lugar+" "+obra.chofer+ " "+obra.volquete+" "+prch+" "+prvl
+        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
+//        println "rends "+rendimientos
+        if (rendimientos["rdps"].toString() == "NaN")
+            rendimientos["rdps"] = 0
+        if (rendimientos["rdvl"].toString() == "NaN")
+            rendimientos["rdvl"] = 0
+        def indirecto = obra.indiceCostosIndirectosCostosFinancieros + obra.indiceCostosIndirectosGarantias + obra.indiceCostosIndirectosMantenimiento + obra.indiceCostosIndirectosObra + obra.indiceCostosIndirectosTimbresProvinciales + obra.indiceCostosIndirectosVehiculos
+//        println "indirecto "+indirecto
+
+        detalle.each {
+            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
+            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
+            precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
+        }
+//
+//        println "precios "+precios
+
+
+        [detalle: detalle, precios: precios, subPres: subPres, obra: obra]
+    }
 
     def index() {
         redirect(action: "list", params: params)
@@ -51,7 +94,7 @@ class CronogramaController extends janus.seguridad.Shield {
             str += "<ul>"
             cronogramaInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"

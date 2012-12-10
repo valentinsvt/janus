@@ -288,7 +288,7 @@ class MantenimientoItemsController extends Shield {
     def loadLugarPorTipo() {
         params.tipo = params.tipo.toString().toUpperCase()
         def lugares = Lugar.findAllByTipo(params.tipo, [sort: 'descripcion'])
-        def sel = g.select(name: "lugar", from: lugares, optionKey: "id", optionValue: {it.descripcion + ' (' + it.tipo + ')'})
+        def sel = g.select(name: "lugar", from: lugares, optionKey: "id", optionValue: { it.descripcion + ' (' + it.tipo + ')' })
         render sel
     }
 
@@ -559,11 +559,14 @@ class MantenimientoItemsController extends Shield {
     def saveIt_ajax() {
         def dep = DepartamentoItem.get(params.departamento.id)
         params.tipoItem = TipoItem.findByCodigo("I")
+        params.fechaModificacion = new Date()
         if (!params.codigo.contains(".")) {
             params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
         }
         if (params.fecha) {
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        } else {
+            params.fecha = new Date()
         }
         def accion = "create"
         def item = new Item()
@@ -838,6 +841,7 @@ class MantenimientoItemsController extends Shield {
     def saveLg_ajax() {
         def accion = "create"
         def lugar = new Lugar()
+        params.descripcion = params.descripcion.toString().toUpperCase()
         if (params.id) {
             lugar = Lugar.get(params.id)
             accion = "edit"
@@ -854,11 +858,24 @@ class MantenimientoItemsController extends Shield {
 
     def deleteLg_ajax() {
         def lugar = Lugar.get(params.id)
+
+        def precios = PrecioRubrosItems.findAllByLugar(lugar)
+        def cant = 0
+        precios.each { p ->
+            try {
+                p.delete(flush: true)
+                println "p deleted " + p.id
+                cant++
+            } catch (DataIntegrityViolationException e) {
+                println e
+                println "p not deleted " + p.id
+            }
+        }
+
         try {
             lugar.delete(flush: true)
             render "OK"
-        }
-        catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             println e
             render "NO"
         }

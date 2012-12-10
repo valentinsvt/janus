@@ -71,6 +71,7 @@
 
                 <span aria-labelledby="peso-label">
                     <g:fieldValue bean="${itemInstance}" field="peso"/>
+                    ${itemInstance?.transporte == 'V' ? 'M<sup>3</sup>' : 'Ton'}
                 </span>
 
             </div>
@@ -108,7 +109,7 @@
             <div class="controls">
 
                 <span aria-labelledby="estado-label">
-                    <g:fieldValue bean="${itemInstance}" field="estado"/>
+                    ${itemInstance.estado == 'A' ? 'ACTIVO' : itemInstance.estado == 'B' ? 'DADO DE BAJA' : ''}
                 </span>
 
             </div>
@@ -119,7 +120,7 @@
         <div class="control-group">
             <div>
                 <span id="fecha-label" class="control-label label label-inverse">
-                    Fecha
+                    Fecha creación
                 </span>
             </div>
 
@@ -127,6 +128,24 @@
 
                 <span aria-labelledby="fecha-label">
                     <g:formatDate date="${itemInstance?.fecha}" format="dd-MM-yyyy"/>
+                </span>
+
+            </div>
+        </div>
+    </g:if>
+
+    <g:if test="${itemInstance?.fechaModificacion}">
+        <div class="control-group">
+            <div>
+                <span id="fechaModificacion-label" class="control-label label label-inverse">
+                    Fecha última modificación
+                </span>
+            </div>
+
+            <div class="controls">
+
+                <span aria-labelledby="fecha-label">
+                    <g:formatDate date="${itemInstance?.fechaModificacion}" format="dd-MM-yyyy"/>
                 </span>
 
             </div>
@@ -288,7 +307,7 @@
             <div class="controls">
 
                 <span aria-labelledby="transporte-label">
-                    <g:fieldValue bean="${itemInstance}" field="transporte"/>
+                    ${itemInstance.transporte == 'P' ? 'PESO' : itemInstance.transporte == 'V' ? 'VOLUMEN' : ''}
                 </span>
 
             </div>
@@ -306,7 +325,7 @@
             <div class="controls">
 
                 <span aria-labelledby="combustible-label">
-                    <g:fieldValue bean="${itemInstance}" field="combustible"/>
+                    ${itemInstance.combustible == 'S' ? 'SI' : itemInstance.combustible == 'N' ? 'NO' : ''}
                 </span>
 
             </div>

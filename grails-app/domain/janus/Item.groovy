@@ -8,6 +8,7 @@ class Item implements Serializable {
     double peso
     Date fecha
     Date fechaRegistro
+    Date fechaModificacion
     String estado
     double transportePeso
     double transporteVolumen
@@ -36,6 +37,7 @@ class Item implements Serializable {
             peso column: 'itempeso'
             fecha column: 'itemfcha'
             fechaRegistro column: 'itemfcrg'
+            fechaModificacion column: 'itemfcmd'
             estado column: 'itemetdo'
             transportePeso column: 'itemtrps'
             transporteVolumen column: 'itemtrvl'
@@ -60,6 +62,7 @@ class Item implements Serializable {
         estado(size: 1..1, blank: true, nullable: true, attributes: [title: 'estado'])
         fecha(blank: true, nullable: true, attributes: [title: 'fecha'])
         fechaRegistro(blank: true, nullable: true, attributes: [title: 'fecha de registro'])
+        fechaModificacion(blank: true, nullable: true, attributes: [title: 'fecha de ultima modificacion'])
         transportePeso(blank: true, nullable: true, attributes: [title: 'transportePeso'])
         transporteVolumen(blank: true, nullable: true, attributes: [title: 'transporteVolumen'])
         padre(size: 1..15, blank: true, nullable: true, attributes: [title: 'padre'])

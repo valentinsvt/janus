@@ -7,6 +7,8 @@
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/kerberos-0.7/grails-app/views" relative="/" />
+          <root url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/jquery-1.7.1/web-app" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>
@@ -22,47 +24,36 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/hibernate-2.1.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/hibernate-2.1.1/grails-app/i18n" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/hibernate-2.1.0">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/hibernate-2.1.0/grails-app/i18n" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/grails-app/services" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/grails-app/taglib" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/jquery-1.7.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/jquery-1.7.1/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/jquery-1.7.1/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/jquery-1.7.1/grails-app/services" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/jquery-1.7.1/grails-app/taglib" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/grails-app/domain" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/grails-app/services" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/kerberos-0.7">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/kerberos-0.7/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/kerberos-0.7/grails-app/domain" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/kerberos-0.7/grails-app/services" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/grails-app/services" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/grails-app/taglib" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/resources-1.1.5">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/resources-1.1.5/src/java" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/resources-1.1.5/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/resources-1.1.5/grails-app/i18n" isTestSource="false" />
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/resources-1.1.5/grails-app/taglib" isTestSource="false" />
     </content>
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/resources-1.1.5">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/resources-1.1.5/src/java" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/resources-1.1.5/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/resources-1.1.5/grails-app/i18n" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/resources-1.1.5/grails-app/taglib" isTestSource="false" />
-    </content>
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/tomcat-2.1.1" />
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/webxml-1.4.1">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />
+    <content url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/tomcat-2.1.0" />
+    <content url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/webxml-1.4.1">
+      <sourceFolder url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/webxml-1.4.1/src/groovy" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="grails-2.1.1" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="grails-2.1.1" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (Janus-grailsPlugins)">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/org.springframework/spring-test/jars/spring-test-3.1.0.RELEASE.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.activation/activation/jars/activation-1.1.jar!/" />
-          <root url="jar://$USER_HOME$/.grails/ivy-cache/javax.mail/mail/jars/mail-1.4.3.jar!/" />
-        </CLASSES>
+        <CLASSES />
         <JAVADOC />
         <SOURCES />
       </library>

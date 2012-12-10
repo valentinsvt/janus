@@ -741,7 +741,9 @@
 
             $(function () {
 
-                $(".modal").draggable();
+                $(".modal").draggable({
+                    cancel : '.btn'
+                });
 
                 $("#search").val("");
 
@@ -829,6 +831,7 @@
                                 wait.prepend(spinnerBg);
 
                                 var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                                $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                                 $("#modalTitle").html("Procesando");
                                 $("#modalBody").html(wait);
                                 $("#modalFooter").html("").append(btnClose);
@@ -836,6 +839,7 @@
                                 return false;
                             });
 
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle").html("Formato de impresión");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
