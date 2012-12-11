@@ -522,7 +522,7 @@
             h=h5
 
 
-        if(h.html()){
+        if(h){
 
             var precio = 0
             var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids="+ str_replace("i_","",h.attr("id"))
@@ -552,12 +552,13 @@
                     tarifa.html(number_format(precio, 5, ".", ""))
                     hora.html(number_format(parseFloat(cant.html())*parseFloat(tarifa.html()), 5, ".", ""))
                     total.html(number_format(parseFloat(hora.html())*parseFloat(rend.html()), 5, ".", ""))
-                    totalEquipos()
+
                 }
             });
 
 
         }
+        totalEquipos()
     }
 
 
