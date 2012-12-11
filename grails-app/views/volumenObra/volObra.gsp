@@ -11,6 +11,9 @@
     <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
     <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
+    <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src',file: 'jquery.ui.position.js')}" type="text/javascript"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src',file: 'jquery.contextMenu.js')}" type="text/javascript"></script>
+    <link href="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src',file: 'jquery.contextMenu.css')}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class="span12">
@@ -87,9 +90,9 @@
                 <input type="text" style="width: 330px;font-size: 10px" id="item_nombre">
 
             </div>
-            <div class="span1" style="margin-left: 0px;">
+            <div class="span2" style="margin-left: 0px;">
                 <b>Cantidad</b>
-                <input type="text" style="width: 60px;text-align: right" id="item_cantidad" value="1">
+                <input type="text" style="width: 130px;text-align: right" id="item_cantidad" value="1">
             </div>
             <div class="span1" style="margin-left: 15px;">
                 <b>Orden</b>
@@ -180,7 +183,12 @@
 
         $("#item_agregar").click(function(){
             $("#calcular").removeClass("active")
+            $(".col_delete").show()
+            $(".col_precio").hide()
+            $(".col_total").hide()
+            $("#divTotal").html("")
             var cantidad = $("#item_cantidad").val()
+            cantidad = str_replace(",","",cantidad)
             var orden = $("#item_orden").val()
             var rubro = $("#item_id").val()
             var sub = $("#subPres").val()

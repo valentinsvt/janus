@@ -10,6 +10,53 @@ class Reportes3Controller {
         return [params: params]
     }
 
+    def imprimirTablaSub(){
+        println "imprimir tabla sub "+params
+        def obra = Obra.get(params.obra)
+        def detalle
+        if (params.sub)
+            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+        else
+            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
+        def precios = [:]
+        def fecha = obra.fechaPreciosRubros
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+        def lugar = obra.lugar
+        def prch = 0
+        def prvl = 0
+        if (obra.chofer){
+            prch = preciosService.getPrecioItems(fecha,lugar,[obra.chofer])
+            prch = prch["${obra.chofer.id}"]
+            prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
+            prvl = prvl["${obra.volquete.id}"]
+        }
+//        println "PARAMETROS!= "+fecha+" "+dsps+" "+dsvl+" "+lugar+" "+obra.chofer+ " "+obra.volquete+" "+prch+" "+prvl
+        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
+//        println "rends "+rendimientos
+        if (rendimientos["rdps"].toString()=="NaN")
+            rendimientos["rdps"]=0
+        if (rendimientos["rdvl"].toString()=="NaN")
+            rendimientos["rdvl"]=0
+        /*Todo ver como mismo es esta suma*/
+        def indirecto = obra.indiceCostosIndirectosCostosFinancieros+obra.indiceCostosIndirectosGarantias+obra.indiceCostosIndirectosMantenimiento+obra.indiceCostosIndirectosObra+obra.indiceCostosIndirectosTimbresProvinciales+obra.indiceCostosIndirectosVehiculos
+//        println "indirecto "+indirecto
+
+        detalle.each{
+            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+        }
+//
+//        println "precios "+precios
+
+
+        [detalle:detalle,precios:precios,subPres:subPres,subPre:SubPresupuesto.get(params.sub).descripcion,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto]
+    }
+
     def imprimirRubro(){
 //        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
@@ -17,8 +64,9 @@ class Reportes3Controller {
         def lugar = params.lugar
         def indi = params.indi
         try{
-            indi=indi.toDoblue()
+            indi=indi.toDouble()
         } catch (e){
+            println "error parse "+e
             indi=21.5
         }
         if (!params.dsps){
@@ -131,7 +179,6 @@ class Reportes3Controller {
         tablaIndi+="<tbody><tr><td>Costos indirectos</td><td style='text-align:right'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number:totalIndi ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")}</td></tr></tbody>"
         tablaIndi+="</table>"
 
-        /*todo descomentar esto una vez que sirva el proceso */
         if (total==0)
             tablaTrans=""
         if(totalHer==0)
@@ -140,6 +187,7 @@ class Reportes3Controller {
             tablaMano=""
         if(totalMat==0)
             tablaMat=""
+        println "fin reporte rubro"
         [rubro:rubro,fechaPrecios:fecha,tablaTrans:tablaTrans,tablaHer:tablaHer,tablaMano:tablaMano,tablaMat:tablaMat,tablaIndi:tablaIndi,totalRubro:totalRubro,totalIndi:totalIndi]
 
 

@@ -6,7 +6,15 @@
     <div class="span1">
         <div class="btn-group" data-toggle="buttons-checkbox">
             <button type="button" id="ver_todos" class="btn btn-info ${(!subPre)?'active':''} " style="font-size: 10px">Ver todos</button>
+
         </div>
+
+    </div>
+    <div class="span4">
+        <a href="#" class="btn  " id="imprimir_sub">
+            <i class="icon-file"></i>
+            Imprimir Subpresupuesto
+        </a>
     </div>
 
 </div>
@@ -57,6 +65,43 @@
     </tbody>
 </table>
 <script type="text/javascript">
+
+    $.contextMenu({
+        selector: '.item_row',
+        callback: function(key, options) {
+            if(key=="edit"){
+                $(this).dblclick()
+            }
+            if(key="print"){
+                var dsps=${obra.distanciaPeso}
+                var dsvs=${obra.distanciaVolumen}
+                var volqueta=${precioVol}
+                var chofer=${precioChof}
+                %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
+                %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
+                var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha=${obra.fechaPreciosRubros.format('dd-MM-yyyy')}Wid="+$(this).attr("item")+"Wlugar=${obra.lugar.id}Windi=${indirectos}"
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos
+                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+            }
+        },
+        items: {
+            "edit": {name: "Editar", icon: "edit"},
+            "print": {name: "Imprimir", icon: "print"}
+        }
+    });
+
+    $("#imprimir_sub").click(function(){
+        var dsps=${obra.distanciaPeso}
+        var dsvs=${obra.distanciaVolumen}
+        var volqueta=${precioVol}
+        var chofer=${precioChof}
+        %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
+        %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
+        var datos = "?obra=${obra.id}Wsub="+$("#subPres_desc").val()
+        var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}"+datos
+        location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+    });
+
     $("#subPres_desc").change(function(){
         $("#ver_todos").removeClass("active")
         $("#divTotal").html("")
@@ -99,6 +144,11 @@
 
 
     $(".item_row").dblclick(function(){
+        $("#calcular").removeClass("active")
+        $(".col_delete").show()
+        $(".col_precio").hide()
+        $(".col_total").hide()
+        $("#divTotal").html("")
         $("#vol_id").val($(this).attr("id"))
         $("#item_codigo").val($(this).find(".cdgo").html())
         $("#item_id").val($(this).attr("item"))
