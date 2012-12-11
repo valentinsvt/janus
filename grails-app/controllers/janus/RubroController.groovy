@@ -56,6 +56,7 @@ class RubroController extends janus.seguridad.Shield {
         def grupos = []
         def volquetes = []
         def choferes = []
+        def aux = Parametros.get(1)
         def grupoTransporte=DepartamentoItem.findAllByTransporteIsNotNull()
         grupoTransporte.each {
             if(it.transporte.codigo=="H")
@@ -70,9 +71,9 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.idRubro)
             def items=Rubro.findAllByRubro(rubro)
             items.sort{it.item.codigo}
-            [campos: campos, rubro: rubro, grupos: grupos,items:items,choferes:choferes,volquetes:volquetes]
+            [campos: campos, rubro: rubro, grupos: grupos,items:items,choferes:choferes,volquetes:volquetes,aux:aux]
         } else {
-            [campos: campos, grupos: grupos,choferes:choferes,volquetes:volquetes]
+            [campos: campos, grupos: grupos,choferes:choferes,volquetes:volquetes,aux:aux]
         }
     }
 
@@ -96,11 +97,11 @@ class RubroController extends janus.seguridad.Shield {
         if(detalle.item.id.toInteger()==2868 || detalle.item.id.toInteger()==2869 || detalle.item.id.toInteger()==2870){
             detalle.cantidad=1
             if (detalle.item.id.toInteger()==2868)
-                detalle.rendimiento=0.02
+                detalle.rendimiento=1
             if (detalle.item.id.toInteger()==2869)
-                detalle.rendimiento=0.05
+                detalle.rendimiento=1
             if (detalle.item.id.toInteger()==2870)
-                detalle.rendimiento=0.03
+                detalle.rendimiento=1
         }else{
             detalle.rendimiento = params.rendimiento.toDouble()
         }
@@ -353,7 +354,7 @@ class RubroController extends janus.seguridad.Shield {
     } //delete
 
     def getPrecios() {
-        println "get precios "+params
+//        println "get precios "+params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -364,11 +365,11 @@ class RubroController extends janus.seguridad.Shield {
                 items.add(Rubro.get(it).item)
         }
         def precios = preciosService.getPrecioItemsString(fecha, lugar, items)
-        println "precios " + precios
+//        println "precios " + precios
         render precios
     }
     def getPreciosTransporte() {
-        println "get precios "+params
+//        println "get precios "+params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -379,7 +380,7 @@ class RubroController extends janus.seguridad.Shield {
                 items.add(Item.get(it))
         }
         def precios = preciosService.getPrecioItemsString(fecha, lugar, items)
-        println "precios " + precios
+//        println "precios " + precios
         render precios
     }
 
@@ -387,27 +388,39 @@ class RubroController extends janus.seguridad.Shield {
     def transporte(){
         def idRubro = params.id
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
-        if (!params.dsps)
+        if (!params.dsps){
             params.dsps=0
-        if (!params.dsvs)
+            params.prch=0
+            params.prvl=0
             params.dsvs=0
+        }
+        if (!params.dsvs){
+            params.dsps=0
+            params.dsvs=0
+            params.prvl=0
+            params.prch=0
+        }
         if (!params.prch)
             params.prch=0
         if (!params.prvl)
             params.prvl=0
         def rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
-        println "rends "+rendimientos
-        if (rendimientos["rdps"].toString()=="NaN")
+//        println "rends "+rendimientos
+        if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
             rendimientos["rdps"]=0
-        if (rendimientos["rdvl"].toString()=="NaN")
             rendimientos["rdvl"]=0
+        }
+        if (rendimientos["rdvl"].toString()=="NaN" || rendimientos["rdvl"].toString()=="Infinity"){
+            rendimientos["rdvl"]=0
+            rendimientos["rdps"]=0
+        }
         def parametros = ""+idRubro+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
         def res = preciosService.rb_precios(parametros,"")
 
         def tabla='<table class="table table-bordered table-striped table-condensed table-hover"> '
         def total = 0
         tabla+="<thead><tr><th colspan=7>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></thead><tbody>"
-        println "rends "+rendimientos
+//        println "rends "+rendimientos
 
 //        println "res "+res
         res.each {r->

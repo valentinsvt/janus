@@ -390,7 +390,7 @@
         <div class="row-fluid">
             <div class="span8">
                 Volquete
-                <g:select name="volquetes" from="${volquetes}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1':'Seleccione']}"></g:select>
+                <g:select name="volquetes" from="${volquetes}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1':'Seleccione']}" value="${aux.volquete.id}"></g:select>
             </div>
             <div class="span4">
                 Costo <input type="text" style="width: 50px;text-align: right" disabled="" id="costo_volqueta">
@@ -399,7 +399,7 @@
         <div class="row-fluid">
             <div class="span8">
                 Chofer
-                <g:select name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" style="margin-left: 13px" noSelection="${['-1':'Seleccione']}"></g:select>
+                <g:select name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" style="margin-left: 13px" noSelection="${['-1':'Seleccione']}" value="${aux.chofer.id}" ></g:select>
             </div>
             <div class="span4">
                 Costo <input type="text" style="width: 50px;text-align: right" disabled="" id="costo_chofer" >
@@ -485,10 +485,34 @@
 
     }
 
+    function totalEquipos(){
+        var trE=$("<tr id='total_equipo' class='total'>")
+        var equipos = $("#tabla_equipo").children()
+        var totalE= 0
+        var td=$("<td>")
+        td.html("<b>SUBTOTAL</b>")
+        trE.append(td)
+        for(i=0;i<5;i++){
+            td=$("<td>")
+            trE.append(td)
+        }
+
+        equipos.each(function(){
+            totalE+=parseFloat($(this).find(".col_total").html())
+        })
+
+        td=$("<td class='valor_total'  style='text-align: right;;font-weight: bold'>")
+        td.html(number_format(totalE, 5, ".", ""))
+        trE.append(td)
+        $("#tabla_equipo").append(trE)
+        transporte()
+    }
+
+
     function calculaHerramientas(){
         var h2 = $("#i_2868")
-        var h3 = $("#i_2869")
-        var h5 = $("#i_2870")
+        var h3 = $("#i_2870")
+        var h5 = $("#i_2869")
         var h
         if(h2.html())
             h=h2
@@ -496,17 +520,46 @@
             h=h3
         if(h5.html())
             h=h5
+
+
         if(h.html()){
-            var padre = h.parent()
-            var rend = padre.find(".rend")
-            var hora = padre.find(".col_hora")
-            var total= padre.find(".col_total")
-            rend.html(number_format(h.html(), 5, ".", ""))
-            h.html(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
-            hora.html(number_format(parseFloat(h.html()), 5, ".", ""))
-            total.html(number_format(parseFloat(h.html())*parseFloat(rend.html()), 5, ".", ""))
+
+            var precio = 0
+            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids="+ str_replace("i_","",h.attr("id"))
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPrecios')}",
+                data     : datos,
+                success  : function (msg) {
+                    var precios = msg.split("&")
+
+                    for(i=0;i<precios.length;i++){
+                        var parts = precios[i].split(";")
+//                        console.log(parts,parts.length)
+                        if(parts.length>1){
+                            precio = parseFloat(parts[1].trim())
+
+                        }
+
+
+                    }
+                    var padre = h.parent()
+                    var rend = padre.find(".rend")
+                    var hora = padre.find(".col_hora")
+                    var total= padre.find(".col_total")
+                    var cant = padre.find(".cant")
+                    var tarifa = padre.find(".col_tarifa")
+                    rend.html(number_format(1, 5, ".", ""))
+                    cant.html(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
+                    tarifa.html(number_format(precio, 5, ".", ""))
+                    hora.html(number_format(parseFloat(cant.html())*parseFloat(tarifa.html()), 5, ".", ""))
+                    total.html(number_format(parseFloat(hora.html())*parseFloat(rend.html()), 5, ".", ""))
+                    totalEquipos()
+                }
+            });
+
+
         }
     }
+
 
     function calcularTotales(){
         var materiales = $("#tabla_material").children()
@@ -550,16 +603,18 @@
         $("#tabla_material").append(trM)
         $("#tabla_mano").append(trMa)
         calculaHerramientas()
-        equipos.each(function(){
-            totalE+=parseFloat($(this).find(".col_total").html())
-        })
+//        window.setTimeout(vacio,2000)
+//
+//        equipos.each(function(){
+//            totalE+=parseFloat($(this).find(".col_total").html())
+//        })
+//
+//        td=$("<td class='valor_total'  style='text-align: right;;font-weight: bold'>")
+//        td.html(number_format(totalE, 5, ".", ""))
+//        trE.append(td)
 
-        td=$("<td class='valor_total'  style='text-align: right;;font-weight: bold'>")
-        td.html(number_format(totalE, 5, ".", ""))
-        trE.append(td)
 
-
-        $("#tabla_equipo").append(trE)
+//        $("#tabla_equipo").append(trE)
 
 
     }
@@ -674,6 +729,7 @@
             }
 
         })
+        $("#cmb_vol").change()
         $("#cmb_chof").change(function(){
             if($("#cmb_chof").val()!="-1"){
                 var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val()  + "&ids="+$("#cmb_chof").val()
@@ -695,6 +751,7 @@
             }
 
         })
+        $("#cmb_chof").change()
 
         $(".item_row").dblclick(function(){
             var hijos = $(this).children()
@@ -876,7 +933,7 @@
 
                                 }
                                 calcularTotales()
-                                transporte()
+
                             }
                         });
 
@@ -1106,10 +1163,12 @@
                                 } else {
                                     $("#tabla_equipo").children().find(".cdgo").each(function () {
                                         if ($(this).html() == $("#cdgo_buscar").val()) {
+
                                             var tdCant = $(this).parent().find(".cant")
                                             var tdRend = $(this).parent().find(".rend")
                                             tdCant.html(number_format(parts[3], 5, ".", ""))
                                             tdRend.html(number_format(parts[4], 5, ".", ""))
+
                                             band = false
                                         }
                                     });
@@ -1124,7 +1183,7 @@
                                         td = $('<td class="col_hora" style="display: none;text-align: right"></td>');
                                         tr.append(td)
                                         td = $("<td style='text-align: right' class='col_rend rend'>")
-                                        td.html(number_format(parts[5], 5, ".", ""))
+                                        td.html(number_format(parts[4], 5, ".", ""))
                                         tr.append(td)
                                         td = $('<td class="col_total" style="display: none;text-align: right"></td>');
                                         tr.append(td)

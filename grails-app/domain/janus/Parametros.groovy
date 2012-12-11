@@ -23,6 +23,10 @@ class Parametros implements Serializable {
     double indiceCostosIndirectosVehiculos
     double indiceCostosIndirectosPromocion
     double indiceCostosIndirectosTimbresProvinciales
+    Item chofer
+    Item volquete
+
+
     static mapping = {
         table 'paux'
         cache usage: 'read-write', include: 'non-lazy'
@@ -54,6 +58,8 @@ class Parametros implements Serializable {
             indiceCostosIndirectosVehiculos column: 'indivhcl'
             indiceCostosIndirectosPromocion column: 'indiprmo'
             indiceCostosIndirectosTimbresProvinciales column: 'inditmbr'
+            chofer column: 'itemchfr'
+            volquete column: 'itemvlqt'
         }
     }
     static constraints = {
@@ -80,5 +86,7 @@ class Parametros implements Serializable {
         indiceCostosIndirectosVehiculos(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosVehiculos'])
         indiceCostosIndirectosPromocion(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosPromocion'])
         indiceCostosIndirectosTimbresProvinciales(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosTimbresProvinciales'])
+        chofer(nullable: true,blank:true)
+        volquete(nullable: true,blank:true)
     }
 }

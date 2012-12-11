@@ -169,6 +169,16 @@ class PreciosService {
         return result
     }
 
+    def ac_rbro(rubro,lugar,fecha){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from ac_rbro_hr1("+rubro+","+lugar+",'"+fecha+"') "
+        def result = []
+        cn.eachRow(sql.toString()){r->
+            result.add(r.toRowResult())
+        }
+        return result
+    }
+
     def actualizaOrden(volumen,tipo){
 
         def vlob = VolumenesObra.findAll("from VolumenesObra where obra = ${volumen.obra.id} order by orden asc,id desc")

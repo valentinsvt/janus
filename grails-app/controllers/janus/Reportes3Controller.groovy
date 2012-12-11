@@ -11,7 +11,7 @@ class Reportes3Controller {
     }
 
     def imprimirRubro(){
-        println "imprimir rubro "+params
+//        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
         def lugar = params.lugar
@@ -21,21 +21,34 @@ class Reportes3Controller {
         } catch (e){
             indi=21.5
         }
-        if (!params.dsps)
+        if (!params.dsps){
             params.dsps=0
-        if (!params.dsvs)
+            params.prch=0
+            params.prvl=0
             params.dsvs=0
+        }
+        if (!params.dsvs){
+            params.dsps=0
+            params.dsvs=0
+            params.prvl=0
+            params.prch=0
+        }
         if (!params.prch)
             params.prch=0
         if (!params.prvl)
             params.prvl=0
         def rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
-        println "rends "+rendimientos
-        if (rendimientos["rdps"].toString()=="NaN")
+//        println "rends "+rendimientos
+        if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
             rendimientos["rdps"]=0
-        if (rendimientos["rdvl"].toString()=="NaN")
             rendimientos["rdvl"]=0
+        }
+        if (rendimientos["rdvl"].toString()=="NaN" || rendimientos["rdvl"].toString()=="Infinity"){
+            rendimientos["rdvl"]=0
+            rendimientos["rdps"]=0
+        }
         def parametros = ""+params.id+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+        preciosService.ac_rbro(params.id,params.lugar,fecha.format("yyyy-MM-dd"))
         def res = preciosService.rb_precios(parametros,"")
         def tablaHer='<table class="table table-bordered table-striped table-condensed table-hover"> '
         def tablaMano='<table class="table table-bordered table-striped table-condensed table-hover"> '
@@ -58,7 +71,7 @@ class Reportes3Controller {
                 tablaHer+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
                 tablaHer+="<td>"+r["itemnmbr"]+"</td>"
                 tablaHer+="<td style='width: 50px;text-align: right'>"+ g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")+"</td>"
-                tablaHer+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")+"</td>"
+                tablaHer+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbpcpcun"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")+"</td>"
                 tablaHer+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbpcpcun"]*r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")+"</td>"
                 tablaHer+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rndm"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")+"</td>"
                 tablaHer+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["parcial"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")+"</td>"
