@@ -88,7 +88,7 @@
                     %{--<span class="add-on">$</span>--}%
                     %{--</div>--}%
                 </div>
-            </div>e
+            </div>
 
             <div class="row-fluid">
                 <div class="span3">
@@ -112,9 +112,30 @@
                 </div>
             </div>
 
+
+           <div class="span6" style="margin-bottom: 20px; margin-top: 10px">
+
+               <div class="span3" style="font-weight: bold;">
+
+                   Distancia Peso
+
+               </div>
+
+               <div class="span2" style="font-weight: bold;">
+                   Distancia Volumen
+
+               </div>
+
+
+           </div>
+
+
+
             <div class="row-fluid">
+
+
                 <div class="span3">
-                    Distancia peso
+                    Capital de Cantón
                 </div>
 
                 <div class="span3">
@@ -124,8 +145,9 @@
                     %{--</div>--}%
                 </div>
 
+
                 <div class="span3">
-                    Distancia volumen
+                    Materiales Petreos Hormigones
                 </div>
 
                 <div class="span1">
@@ -134,7 +156,61 @@
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
                 </div>
+
+
             </div>
+
+            <div class="row-fluid">
+
+
+                <div class="span3">
+                   Especial
+                </div>
+
+                <div class="span3">
+                    %{--<div class="input-append">--}%
+                    <g:textField type="text" name="distanciaPesoEspecial" class="inputVar" value="${g.formatNumber(number: obra?.distanciaPesoEspecial, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    %{--<span class="add-on">km</span>--}%
+                    %{--</div>--}%
+                </div>
+
+                <div class="span3">
+                    Materiales Mejoramiento
+                </div>
+
+                <div class="span1">
+                    %{--<div class="input-append">--}%
+                    <g:textField type="text" name="distanciaVolumenMejoramiento" class="inputVar" value="${g.formatNumber(number: obra?.distanciaVolumenMejoramiento, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    %{--<span class="add-on">km</span>--}%
+                    %{--</div>--}%
+                </div>
+
+
+
+
+            </div>
+
+            <div class="row-fluid">
+
+                <div class="span3"></div>
+                <div class="span3"></div>
+
+
+
+
+                <div class="span3">
+                    Materiales Carpeta Asfáltica
+                </div>
+
+                <div class="span1">
+                    %{--<div class="input-append">--}%
+                    <g:textField type="text" name="distanciaVolumenCarpetaAsfaltica" class="inputVar" value="${g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    %{--<span class="add-on">km</span>--}%
+                    %{--</div>--}%
+                </div>
+
+            </div>
+
         </div>
 
         <div id="tab-factores" class="tab">

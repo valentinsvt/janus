@@ -3,7 +3,7 @@ package janus
 class VariablesController {
 
     def variables_ajax() {
-//        println params
+        println params
 
         def obra = Obra.get(params.obra)
 

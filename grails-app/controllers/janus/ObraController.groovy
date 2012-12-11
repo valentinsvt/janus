@@ -18,78 +18,79 @@ class ObraController extends janus.seguridad.Shield {
     } //list
 
 
-    def cantonPorProvincia() {
-
-
-        if (params.id == '-1') {
-
-
-            def sel = g.select(id: "selCanton", name: "canton.id", from: "", "class": "span3", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-            render sel
-
-
-        } else {
-
-
-            def provincia = Provincia.get(params.id)
-
-
-
-            def cantones = Canton.findAllByProvincia(provincia)
-
-
-
-            def sel = g.select(id: "selCanton", name: "canton.id", from: cantones, "class": "span3", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-            def js = "<script type='text/javascript'>"
-            js += '$("#selCanton").change(function () {'
-            js += 'var canton = $(this).val();'
-            js += '$.ajax({'
-            js += 'type    : "POST",'
-            js += 'url     : "' + createLink(action: 'parroquiaPorCanton') + '",'
-            js += 'data    : {'
-            js += 'id : canton'
-            js += '},'
-            js += 'success : function (msg) {'
-            js += '$("#selParroquia").replaceWith(msg);'
-            js += '}'
-            js += '});'
-            js += '});'
-            js += "</script>"
-            render sel + js
-
-        }
-    }
-
-
-    def parroquiaPorCanton() {
-
-
-        if (params.id == '-1') {
-
-            def sel = g.select(id: "selParroquia", name: "parroquia.id", from: "", "class": "span3", style: "width: 215px", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-            render sel
-
-
-        } else {
-
-            def canton = Canton.get(params.id)
-            def parroquias = Parroquia.findAllByCanton(canton)
-            def sel = g.select(id: "selParroquia", name: "parroquia.id", from: parroquias, "class": "span3", style: "width: 215px", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-            render sel
-
-        }
-
-    }
-
-
+//    def cantonPorProvincia() {
+//
+//
+//        if (params.id == '-1') {
+//
+//
+//            def sel = g.select(id: "selCanton", name: "canton.id", from: "", "class": "span3", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
+//            render sel
+//
+//
+//        } else {
+//
+//
+//            def provincia = Provincia.get(params.id)
+//
+//
+//
+//            def cantones = Canton.findAllByProvincia(provincia)
+//
+//
+//
+//            def sel = g.select(id: "selCanton", name: "canton.id", from: cantones, "class": "span3", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
+//            def js = "<script type='text/javascript'>"
+//            js += '$("#selCanton").change(function () {'
+//            js += 'var canton = $(this).val();'
+//            js += '$.ajax({'
+//            js += 'type    : "POST",'
+//            js += 'url     : "' + createLink(action: 'parroquiaPorCanton') + '",'
+//            js += 'data    : {'
+//            js += 'id : canton'
+//            js += '},'
+//            js += 'success : function (msg) {'
+//            js += '$("#selParroquia").replaceWith(msg);'
+//            js += '}'
+//            js += '});'
+//            js += '});'
+//            js += "</script>"
+//            render sel + js
+//
+//        }
+//    }
+//
+//
+//    def parroquiaPorCanton() {
+//
+//
+//        if (params.id == '-1') {
+//
+//            def sel = g.select(id: "selParroquia", name: "parroquia.id", from: "", "class": "span3", style: "width: 215px", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
+//            render sel
+//
+//
+//        } else {
+//
+//            def canton = Canton.get(params.id)
+//            def parroquias = Parroquia.findAllByCanton(canton)
+//            def sel = g.select(id: "selParroquia", name: "parroquia.id", from: parroquias, "class": "span3", style: "width: 215px", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
+//            render sel
+//
+//        }
+//
+//    }
 
 
     def registroObra() {
 
-        def prov = Provincia.list();
+//        println(params)
+
+       def prov = Provincia.list();
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"]]
         if (params.obra) {
             def obra = Obra.get(params.obra)
+
             [campos: campos, prov:prov,obra:obra]
         } else {
             [campos: campos, prov: prov]
@@ -177,7 +178,7 @@ class ObraController extends janus.seguridad.Shield {
         def comu = {c ->
             return c.comunidad?.nombre
         }
-        def listaTitulos = ["Código", "Nombre","Descripción","Fecha Reg.","M. ingreso","M. salida","Sitio","Plazo","Parroquia","Comunidad","Inspector","Revisor","Responsable","Estado"]
+        def listaTitulos = ["Código", "Nombre","Descripción","Fecha Reg.","M. ingreso","M. salida","Sitio","Plazo","Parroquia","Comunidad","Inspector","Revisor","Responsable","Estado Obra"]
         def listaCampos = ["codigo", "nombre","descripcion","fechaCreacionObra","oficioIngreso","oficioSalida","sitio","plazo","parroquia","comunidad","inspector","revisor","responsable","estadoObra"]
         def funciones = [null, null,null,["format": ["dd/MM/yyyy hh:mm"]],null, null,null,null, ["closure": [parr, "&"]],["closure": [comu, "&"]],null,null,null,null]
         def url = g.createLink(action: "buscarObra", controller: "obra")
@@ -203,8 +204,6 @@ class ObraController extends janus.seguridad.Shield {
 
 
     def situacionGeografica() {
-
-
         def comunidades
 
         def orden;

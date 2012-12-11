@@ -37,12 +37,12 @@
 
 <div class="btn-group" style="margin-bottom: 10px">
     <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
-    <button class="btn"><i class="icon-plus"></i> Nuevo</button>
+    <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
     <button class="btn"><i class="icon-ok"></i> Aceptar</button>
     <button class="btn"><i class="icon-ban-circle"></i> Cancelar</button>
     <button class="btn"><i class="icon-remove"></i> Eliminar la Obra</button>
     <button class="btn"><i class="icon-print"></i> Imprimir</button>
-    <button class="btn"><i class="icon-retweet"></i> Cambiar de Estados</button>
+    <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estados</button>
 </div>
 
 <fieldset class="borde" style="position: relative; height: 100px">
@@ -86,25 +86,41 @@
     <div class="span12">
         <div class="span1">Programa</div>
 
-        <div class="span3"><g:select name="programa" from="" value="${obra?.programacion}"/></div>
+        <div class="span3"><g:select name="programa" from="${obra?.programacion?.list()?.descripcion}"  value="${obra?.programacion?.descripcion}" optionValue="value"/></div>
 
         <div class="span1">Tipo</div>
 
-        <div class="span3"><g:textField name="tipo" class="tipo" value="${obra?.tipo}"/></div>
+        <div class="span3"><g:select name="tipo" from="${obra?.tipoObjetivo?.list()?.descripcion}" value="${obra?.tipoObjetivo?.descripcion}" optionValue="value" /></div>
 
         <div class="span1">Clase</div>
 
-        <div class="span1"><g:select name="clase" from="" value="${obra?.claseobra?.id}"/></div>
+        <div class="span1"><g:select name="clase" from="${obra?.claseObra?.list()?.descripcion}" value="${obra?.claseObra?.id}" optionValue="value"/></div>
     </div>
 
     <div class="span12">
         <div class="span1">Referencias</div>
 
-        <div class="span6"><g:textField name="refrencias" class="referencias" style="width: 610px" value="${obra?.referencia}"/></div>
+        <div class="span6"><g:textField name="referencias" class="referencias" style="width: 610px" value="${obra?.referencia}"/></div>
 
         <div class="span1" style="margin-left: 130px">Estado</div>
 
-        <div class="span1"><g:textField name="estado" class="estado" value="${obra?.estado}"/></div>
+        <div class="span1">
+
+              <g:hiddenField name="estado" id="hiddenEstado"/>
+
+
+
+            <g:if test="${obra?.estado == 'N'}">
+
+                <g:textField name="estado2" id="estadoNombre" class="estado" value="${"No Registrado"}" disabled="true"/>
+
+            </g:if>
+            <g:if test="${obra?.estado == 'R'}">
+                <g:textField name="estado2" id="estadoNombre" class="estado" value="${"Registrado"}" disabled="true"/>
+
+            </g:if>
+
+          </div>
     </div>
 
     <div class="span12">
@@ -116,41 +132,25 @@
 
     <div class="span12">
 
+        <div class="span1">Parroquia</div>
+
+        <g:hiddenField name="parroquia" id="hiddenParroquia"/>
+       <div class="span3"><g:textField name="parroquia2" id="parrNombre"  class="parroquia" value="${obra?.comunidad?.parroquia?.nombre}"  style="width: 215px" disabled="true"/></div>
+
+        <div class="span1">Comunidad</div>
+
+        <g:hiddenField name="comunidad" id="hiddenComunidad"/>
+        <div class="span3"><g:textField name="comunidad2" id="comuNombre" class="comunidad" value="${obra?.comunidad?.nombre}"  disabled="true"/></div>
+
+
         <div class="span2"><button class="btn btn-buscar" id="btn-buscar"><i class="icon-globe"></i> Buscar
         </button>
         </div>
 
 
-        <div class="span1" style="margin-left: -50px">Provincia</div>
-
-        <div class="span3" style="margin-left: -5px"><g:select name="provincia" from="${prov}" id="selProvincia"
-                                                               noSelection="['-1': 'Seleccione...']" optionKey="id"
-                                                               optionValue="nombre"/></div>
-
-        <div class="span1" style="margin-left: -15px">Cantón</div>
-
-
-        <div class="span3" style="margin-left: -9px">
-
-            <select id="selCanton" class="span3"></select>
-
-        </div>
-
-
-        <div class="span1">Parroquia</div>
-
-        <div class="span1">
-
-            <select id="selParroquia" class="span3" style="width: 215px" ></select>
-
-        </div>
-
     </div>
 
     <div class="span12">
-        <div class="span1">Comunidad</div>
-
-        <div class="span3"><g:textField name="comunidad" class="comunidad"/></div>
 
         <div class="span1">Sitio</div>
 
@@ -168,15 +168,15 @@
     <div class="span12">
         <div class="span1">Inspección</div>
 
-        <div class="span3"><g:select name="inspeccion" from="" value="${obra?.inspector?.id}"/></div>
+        <div class="span3"><g:select name="inspeccion" from="${obra?.revisor?.list()?.nombre}" value="${obra?.inspector?.id}" optionValue="value"/></div>
 
         <div class="span1">Revisión</div>
 
-        <div class="span3"><g:select name="revision" from="" value="${obra?.revisor?.id}"/></div>
+        <div class="span3"><g:select name="revision" from="${obra?.revisor?.list()?.nombre}" value="${obra?.revisor?.id}" optionValue="value"/></div>
 
         <div class="span1">Responsable</div>
 
-        <div class="span1"><g:select name="responsable" from="" value="${obra?.responsableobra?.id}"/></div>
+        <div class="span1"><g:select name="responsable" from="${obra?.responsableObra?.list()?.nombre}" value="${obra?.responsableObra?.id}" optionValue="value"/></div>
     </div>
 
     <div class="span12">
@@ -200,14 +200,6 @@
 
         <div class="span2"><elm:datepicker name="fechaLista" class="fechaLista datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
-        %{--<div class="span1" style="margin-left: -40px">Dist.Peso</div>--}%
-
-        %{--<div class="span2"><g:textField name="peso" class="peso" style="width: 70px"/>(km)</div>--}%
-
-        %{--<div class="span1" style="margin-left: -20px">Dist.Volumen</div>--}%
-
-        %{--<div class="span2" style="width: 150px"><g:textField name="volumen" class="volumen"--}%
-                                                             %{--style="width: 70px"/>(km)</div>--}%
 
     </div>
 
@@ -233,21 +225,18 @@
 
         <div class="span3"><g:textField name="memoSal" class="memoSal" value="${obra?.memoSalida}"/></div>
 
+        <div class="span1 formato">FECHA</div>
+
+        <div class="span1"><elm:datepicker name="fechaSalida" class="fechaSalida datepicker input-small"
+                                           value="${obra?.fechaOficioSalida}"/></div>
+
+
     </div>
 
     <div class="span12" style="margin-top: 10px">
         <div class="span1 formato">FORMULA</div>
 
         <div class="span3"><g:textField name="formula" class="formula" value="${obra?.formulaPolinomica}"/></div>
-
-        <div class="span1 formato">DESTINO</div>
-
-        <div class="span3" style="margin-right: 95px"><g:select name="destino" from="" style="width: 300px" /></div>
-
-        <div class="span1 formato">FECHA</div>
-
-        <div class="span1"><elm:datepicker name="fechaSalida" class="fechaSalida datepicker input-small"
-                                           value="${obra?.fechaOficioSalida}"/></div>
 
     </div>
 
@@ -312,7 +301,7 @@
                 <li><a href="#"><i class="icon-calendar"></i>Cronograma</a></li>
                 <li><a href="#">Composición</a></li>
                 <li><a href="#">Trámites</a></li>
-                %{--<li><a href="#"><i class="icon-legal"></i>Delegados</a></li>--}%
+
             </ul>
 
         </div>
@@ -366,36 +355,78 @@
             $("#modal-busqueda").modal("show");
         });
 
-        $("#selProvincia").change(function () {
-            var provincia = $(this).val();
-            var $parroquia = $("<select id='selParroquia' class='span3' style='width: 215px'></select>");
-            $("#selParroquia").replaceWith($parroquia);
-            $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'cantonPorProvincia')}",
-                data    : {
-                    id : provincia
-                },
-                success : function (msg) {
-                    $("#selCanton").replaceWith(msg);
+        $("#nuevo").click(function() {
 
-                }
-            });
+
         });
 
-        $("#selCanton").change(function () {
-            var canton = $(this).val();
-            $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'parroquiaPorCanton')}",
-                data    : {
-                    id : canton
-                },
-                success : function (msg) {
-                    $("#selParroquia").replaceWith(msg);
-                }
-            });
+        $("#cambiarEstado").click(function () {
+
+           var estadoCambiado = $("#estadoNombre").val();
+
+
+
+
+            if(estadoCambiado == 'No Registrado') {
+
+
+
+                estadoCambiado = 'Registrado';
+
+                $("#hiddenEstado").val( $(this).attr("estado"));
+
+
+//                $("#estadoNombre").val(estadoCambiado)
+
+                $("#estadoNombre").val(estadoCambiado)
+            }
+
+            else{
+
+              estadoCambiado = 'No Registrado';
+                $("#hiddenEstado").val( $(this).attr("estado"));
+
+
+                $("#estadoNombre").val(estadoCambiado);
+
+
+            }
+
+
+
         });
+
+
+        %{--$("#selProvincia").change(function () {--}%
+            %{--var provincia = $(this).val();--}%
+            %{--var $parroquia = $("<select id='selParroquia' class='span3' style='width: 215px'></select>");--}%
+            %{--$("#selParroquia").replaceWith($parroquia);--}%
+            %{--$.ajax({--}%
+                %{--type    : "POST",--}%
+                %{--url     : "${createLink(action:'cantonPorProvincia')}",--}%
+                %{--data    : {--}%
+                    %{--id : provincia--}%
+                %{--},--}%
+                %{--success : function (msg) {--}%
+                    %{--$("#selCanton").replaceWith(msg);--}%
+
+                %{--}--}%
+            %{--});--}%
+        %{--});--}%
+
+        %{--$("#selCanton").change(function () {--}%
+            %{--var canton = $(this).val();--}%
+            %{--$.ajax({--}%
+                %{--type    : "POST",--}%
+                %{--url     : "${createLink(action:'parroquiaPorCanton')}",--}%
+                %{--data    : {--}%
+                    %{--id : canton--}%
+                %{--},--}%
+                %{--success : function (msg) {--}%
+                    %{--$("#selParroquia").replaceWith(msg);--}%
+                %{--}--}%
+            %{--});--}%
+        %{--});--}%
 
         $("#btn-buscar").click(function () {
 //                    $("#dlgLoad").dialog("close");
@@ -414,7 +445,7 @@
                 url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
                 data    : {
                     //TODO CAMBIAR AQUI!!!
-                    obra : "388"
+                    obra : "${obra?.id}"
                 },
                 success : function (msg) {
                     var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -467,10 +498,11 @@
         function busqueda() {
 
             var buscarPor = $("#buscarPor").val();
-            var criterio = $("#criterio").val();
-            var ordenar = $("#ordenar").val();
+            var criterio = $(".criterio").val();
 
-//
+       var ordenar = $("#ordenar").val();
+
+
 //                   console.log("buscar" + buscarPor)
 //                    console.log("criterio" + criterio)
 //                    console.log("ordenar" + ordenar)

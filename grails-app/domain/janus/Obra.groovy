@@ -70,6 +70,9 @@ class Obra implements Serializable {
     double indiceCostosIndirectosVehiculos
     double indiceCostosIndirectosPromocion
     double indiceCostosIndirectosTimbresProvinciales
+    double distanciaPesoEspecial
+    double distanciaVolumenMejoramiento
+    double distanciaVolumenCarpetaAsfaltica
     static mapping = {
         table 'obra'
         cache usage: 'read-write', include: 'non-lazy'
@@ -148,6 +151,9 @@ class Obra implements Serializable {
             indiceCostosIndirectosVehiculos column: 'indivhcl'
             indiceCostosIndirectosPromocion column: 'indiprmo'
             indiceCostosIndirectosTimbresProvinciales column: 'inditmbr'
+            distanciaPesoEspecial column: 'obradses'
+            distanciaVolumenMejoramiento column: 'obradsmj'
+            distanciaVolumenCarpetaAsfaltica column: 'obradsca'
         }
     }
     static constraints = {
@@ -221,5 +227,11 @@ class Obra implements Serializable {
         indiceCostosIndirectosVehiculos(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosVehiculos'])
         indiceCostosIndirectosPromocion(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosPromocion'])
         indiceCostosIndirectosTimbresProvinciales(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosTimbresProvinciales'])
+
+        distanciaPesoEspecial(blank: true, nullable: true, attributes: [title: 'distanciaPesoEspecial'])
+        distanciaVolumenMejoramiento(blank: true, nullable: true, attributes: [title: 'distanciaVolumenMejoramiento'])
+        distanciaVolumenCarpetaAsfaltica(blank: true, nullable: true, attributes: [title: 'distanciaVolumenCarpetaAsfaltica'])
+
+
     }
 }
