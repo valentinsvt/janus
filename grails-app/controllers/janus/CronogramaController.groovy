@@ -74,7 +74,19 @@ class CronogramaController extends janus.seguridad.Shield {
         render "ok:" + ok + "_no:" + no
     }
 
+    def graficos2() {
+        params.each {
+            println it
+        }
+        def obra = Obra.get(params.obra)
+        return [params: params, obra: obra]
+    }
+
     def graficos() {
+        return [params: params]
+    }
+
+    def excel() {
 
     }
 

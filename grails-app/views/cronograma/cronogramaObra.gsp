@@ -7,9 +7,6 @@
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
 
-        <script language="javascript" type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jqplot', file: 'jquery.jqplot.min.js')}"></script>
-        <link rel="stylesheet" type="text/css" href="${resource(dir: 'js/jquery/plugins/jqplot', file: 'jquery.jqplot.min.css')}"/>
-
         <title>Cronograma</title>
 
 
@@ -115,6 +112,14 @@
                     <i class="icon-bar-chart"></i>
                     Gráficos de avance
                 </a>
+                %{--<a href="#" class="btn" id="btnGraficoEco">--}%
+                %{--<i class="icon-bar-chart"></i>--}%
+                %{--Gráfico de avance económico--}%
+                %{--</a>--}%
+                %{--<a href="#" class="btn" id="btnGraficoFis">--}%
+                %{--<i class="icon-bar-chart"></i>--}%
+                %{--Gráfico de avance físico--}%
+                %{--</a>--}%
                 <a href="#" class="btn" id="btnXls">
                     <i class="icon-table"></i>
                     Exportar a Excel
@@ -957,162 +962,288 @@
                 });
 
                 $("#btnGrafico").click(function () {
-                    var dataDol = "";
-                    var dataPrc = "";
-
-//                    var data = [];
-//                    var serie = [];
-//                    var max = 0;
-//                    var ticksx = [];
-//                    var ticksy = [];
+                    var dataEco = "[[";
+                    var ticksXEco = "[";
+                    var ticksYEco = "[";
+                    var maxEco = 0;
 
                     $(".totalAcumulado.total").each(function () {
                         var mes = $(this).data("mes");
-//                        ticksx.push(mes);
+                        ticksXEco += mes + ",";
                         var val = $(this).data("val");
-//                        ticksy.push(val);
-//                        if (val > max) {
-//                            max = val;
-//                        }
-                        var dato = [mes, val];
-//                        serie.push(dato);
-
-                        dataDol += "datoDol=" + mes + ";" + val + "&";
-
-//                        console.log(mes, val);
+                        ticksYEco += number_format(val, 2, ".", "") + ",";
+                        if (val > maxEco) {
+                            maxEco = val;
+                        }
+                        dataEco += "[" + mes + "," + val + "],";
                     });
-//                    data.push(serie);
+                    dataEco = dataEco.substr(0, dataEco.length - 1);
+                    dataEco += "]]";
+                    ticksXEco = ticksXEco.substr(0, ticksXEco.length - 1);
+                    ticksXEco += "]";
+                    ticksYEco = ticksYEco.substr(0, ticksYEco.length - 1);
+                    ticksYEco += "]";
 
-//                    data = [];
-//                    serie = [];
-//                    max = 0;
-//                    ticksy = [];
-
+                    var dataFis = "[[";
+                    var ticksXFis = "[";
+                    var ticksYFis = "[";
+                    var maxFis = 0;
                     $(".prctAcumulado.total").each(function () {
                         var mes = $(this).data("mes");
+                        ticksXFis += mes + ",";
                         var val = $(this).data("val");
-//                        ticksy.push(val);
-//                        if (val > max) {
-//                            max = val;
-//                        }
-                        var dato = [mes, val];
-//                        serie.push(dato);
-                        dataPrc += "datoPrc=" + mes + ";" + val + "&";
-//                        console.log(mes, val);
-                    });
-//                    data.push(serie);
-
-                    var d = dataDol + dataPrc + "obra=${obra.id}";
-
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'graficos')}",
-                        data    : d,
-                        success : function (msg) {
-                            console.log("Data Saved: " + msg);
-                            $("#modalTitle-graf").html("Gráfico del Cronograma");
-                            $("#modalBody-graf").html(msg);
-                            $("#modal-graf").modal("show");
+                        ticksYFis += number_format(val, 2, ".", "") + ",";
+                        if (val > maxFis) {
+                            maxFis = val;
                         }
+                        dataFis += "[" + mes + "," + val + "],";
                     });
+                    dataFis = dataFis.substr(0, dataFis.length - 1);
+                    dataFis += "]]";
+                    ticksXFis = ticksXFis.substr(0, ticksXFis.length - 1);
+                    ticksXFis += "]";
+                    ticksYFis = ticksYFis.substr(0, ticksYFis.length - 1);
+                    ticksYFis += "]";
 
-//                    console.log(dataDol);
-//                    console.log(dataPrc);
+                    var tituloe = "Avance económico de la obra";
+                    var colore = "5FAB78";
+                    var titulof = "Avance físico de la obra";
+                    var colorf = "5F81AA";
+
+                    var d = "datae=" + dataEco + "&txe=" + ticksXEco + "&tye=" + ticksYEco + "&me=" + maxEco + "&tituloe=" + tituloe + "&colore=" + colore;
+                    d += "&dataf=" + dataFis + "&txf=" + ticksXFis + "&tyf=" + ticksYFis + "&mf=" + maxFis + "&titulof=" + titulof + "&colorf=" + colorf;
+                    d += "&obra=${obra.id}";
+
+                    var url = "${createLink(action: 'graficos2')}?" + d;
+//                    console.log(url);
+                    location.href = url;
+
+                    %{--$.ajax({--}%
+                    %{--type    : "POST",--}%
+                    %{--url     : "${createLink(action:'graficos2')}",--}%
+                    %{--data    : {--}%
+                    %{--datae   : dataEco,--}%
+                    %{--txe     : ticksXEco,--}%
+                    %{--tye     : ticksYEco,--}%
+                    %{--me      : maxEco,--}%
+                    %{--tituloe : "Avance económico de la obra",--}%
+                    %{--colore  : "#5FAB78",--}%
+
+                    %{--dataf   : dataFis,--}%
+                    %{--txf     : ticksXFis,--}%
+                    %{--tyf     : ticksYFis,--}%
+                    %{--mf      : maxFis,--}%
+                    %{--titulof : "Avance físico de la obra",--}%
+                    %{--colorf  : "#5F81AA"--}%
+                    %{--},--}%
+                    %{--success : function (msg) {--}%
+                    %{--console.log("Data Saved: " + msg);--}%
+                    %{--$("#modalTitle-graf").html("Gráfico del Cronograma");--}%
+                    %{--$("#modalBody-graf").html(msg);--}%
+                    %{--$("#modal-graf").modal("show");--}%
+                    %{--}--}%
+                    %{--});--}%
 
                     return false;
                 });
 
-//                /****************************************************************************************************************************************************/
-//                var data = [];
-//                var serie = [];
-//                var max = 0;
-//                var ticksx = [];
-//                var ticksy = [];
-//
-//                $(".totalAcumulado.total").each(function () {
-//                    var mes = $(this).data("mes");
-//                    ticksx.push(mes);
-//                    var val = $(this).data("val");
-//                    ticksy.push(val);
-//                    if (val > max) {
-//                        max = val;
-//                    }
-//                    var dato = [mes, val];
-//                    serie.push(dato);
-////                        console.log(mes, val);
-//                });
-//                data.push(serie);
-//
-//                grafico({
-//                    target : "grafEco",
-//                    titulo : 'Avance económico de la obra',
-//                    data   : data,
-//                    axes   : {
-//                        xaxis : {
-//                            min   : 1,
-//                            ticks : ticksx,
-//                            pad   : 5.5
-//                        },
-//                        yaxis : {
-//                            min   : 0,
-//                            max   : max,
-//                            ticks : ticksy,
-//                            pad   : 5.5
-//                        }
-//                    }
-//                });
-//
-//                data = [];
-//                serie = [];
-//                max = 0;
-//                ticksy = [];
-//
-//                $(".prctAcumulado.total").each(function () {
-//                    var mes = $(this).data("mes");
-//                    var val = $(this).data("val") * 100;
-//                    ticksy.push(val);
-//                    if (val > max) {
-//                        max = val;
-//                    }
-//                    var dato = [mes, val];
-//                    serie.push(dato);
-////                        console.log(mes, val);
-//                });
-//                data.push(serie);
-//                console.log(serie, max);
-//                grafico({
-//                    target : "grafFis",
-//                    titulo : 'Avance físico de la obra',
-//                    data   : data,
-//                    axes   : {
-//                        xaxis : {
-//                            min   : 1,
-//                            ticks : ticksx,
-//                            pad   : 5.5
-//                        },
-//                        yaxis : {
-//                            min   : 0,
-//                            max   : max,
-//                            ticks : ticksy,
-//                            pad   : 5.5
-//                        }
-//                    }
-//                });
-//                /****************************************************************************************************************************************************/
+                %{--$("#btnGraficoEco").click(function () {--}%
+                %{--var data = "[[";--}%
+                %{--var ticksX = "[";--}%
+                %{--var ticksY = "[";--}%
+                %{--var max = 0;--}%
 
-//                $("#btnGraficoEco").click(function () {
-//                    graph("eco");
-//                    $("#modalTitle-graf").html("Gráfico del Cronograma");
-//                    $("#modal-graf").modal("show");
-//                });
-//
-//                $("#btnGraficoFis").click(function () {
-//                    graph("fis");
-//                    $("#modalTitle-graf").html("Gráfico del Cronograma");
-//                    $("#modal-graf").modal("show");
-//                });
+                %{--$(".totalAcumulado.total").each(function () {--}%
+                %{--var mes = $(this).data("mes");--}%
+                %{--ticksX += mes + ",";--}%
+                %{--var val = $(this).data("val");--}%
+                %{--ticksY += val + ",";--}%
+                %{--if (val > max) {--}%
+                %{--max = val;--}%
+                %{--}--}%
+                %{--data += "[" + mes + "," + val + "],";--}%
+                %{--});--}%
+                %{--data = data.substr(0, data.length - 1);--}%
+                %{--data += "]]";--}%
+                %{--ticksX = ticksX.substr(0, ticksX.length - 1);--}%
+                %{--ticksX += "]";--}%
+                %{--ticksY = ticksY.substr(0, ticksY.length - 1);--}%
+                %{--ticksY += "]";--}%
 
-            });
+                %{--var d = "data=" + data + "&tx=" + ticksX + "&ty=" + ticksY + "&m=" + max + "&obra=${obra.id}";--}%
+                %{--$.ajax({--}%
+                %{--type    : "POST",--}%
+                %{--url     : "${createLink(action:'graficos')}",--}%
+                %{--data    : {--}%
+                %{--data   : data,--}%
+                %{--tx     : ticksX,--}%
+                %{--ty     : ticksY,--}%
+                %{--m      : max,--}%
+                %{--obra   :${obra.id},--}%
+                %{--titulo : "Avance económico de la obra",--}%
+                %{--color  : "#5FAB78"--}%
+                %{--},--}%
+                %{--success : function (msg) {--}%
+                %{--console.log("Data Saved: " + msg);--}%
+                %{--$("#modalTitle-graf").html("Gráfico del Cronograma");--}%
+                %{--$("#modalBody-graf").html(msg);--}%
+                %{--$("#modal-graf").modal("show");--}%
+                %{--}--}%
+                %{--});--}%
+
+                %{--return false;--}%
+                %{--});--}%
+
+                %{--$("#btnGraficoFis").click(function () {--}%
+                %{--var data = "[[";--}%
+                %{--var ticksX = "[";--}%
+                %{--var ticksY = "[";--}%
+                %{--var max = 0;--}%
+
+                %{--$(".prctAcumulado.total").each(function () {--}%
+                %{--var mes = $(this).data("mes");--}%
+                %{--ticksX += mes + ",";--}%
+                %{--var val = $(this).data("val");--}%
+                %{--ticksY += val + ",";--}%
+                %{--if (val > max) {--}%
+                %{--max = val;--}%
+                %{--}--}%
+                %{--data += "[" + mes + "," + val + "],";--}%
+                %{--});--}%
+                %{--data = data.substr(0, data.length - 1);--}%
+                %{--data += "]]";--}%
+                %{--ticksX = ticksX.substr(0, ticksX.length - 1);--}%
+                %{--ticksX += "]";--}%
+                %{--ticksY = ticksY.substr(0, ticksY.length - 1);--}%
+                %{--ticksY += "]";--}%
+
+                %{--var d = "data=" + data + "&tx=" + ticksX + "&ty=" + ticksY + "&m=" + max + "&obra=${obra.id}";--}%
+
+                %{--$.ajax({--}%
+                %{--type    : "POST",--}%
+                %{--url     : "${createLink(action:'graficos')}",--}%
+                %{--data    : {--}%
+                %{--data   : data,--}%
+                %{--tx--}%
+                %{--:--}%
+                %{--ticksX,--}%
+                %{--ty--}%
+                %{--:--}%
+                %{--ticksY,--}%
+                %{--m--}%
+                %{--:--}%
+                %{--max,--}%
+                %{--obra--}%
+                %{--:${obra.id},--}%
+                %{--titulo : "Avance físico de la obra",--}%
+                %{--color--}%
+                %{--:--}%
+                %{--"#5F81AA"--}%
+                %{--}--}%
+                %{--,--}%
+                %{--success : function (msg) {--}%
+                %{--console.log("Data Saved: " + msg);--}%
+                %{--$("#modalTitle-graf").html("Gráfico del Cronograma");--}%
+                %{--$("#modalBody-graf").html(msg);--}%
+                %{--$("#modal-graf").modal("show");--}%
+                %{--}--}%
+                %{--});--}%
+                %{--return false;--}%
+                %{--})--}%
+                %{--;--}%
+
+                //                /****************************************************************************************************************************************************/
+                //                var data = [];
+                //                var serie = [];
+                //                var max = 0;
+                //                var ticksx = [];
+                //                var ticksy = [];
+                //
+                //                $(".totalAcumulado.total").each(function () {
+                //                    var mes = $(this).data("mes");
+                //                    ticksx.push(mes);
+                //                    var val = $(this).data("val");
+                //                    ticksy.push(val);
+                //                    if (val > max) {
+                //                        max = val;
+                //                    }
+                //                    var dato = [mes, val];
+                //                    serie.push(dato);
+                ////                        console.log(mes, val);
+                //                });
+                //                data.push(serie);
+                //
+                //                grafico({
+                //                    target : "grafEco",
+                //                    titulo : 'Avance económico de la obra',
+                //                    data   : data,
+                //                    axes   : {
+                //                        xaxis : {
+                //                            min   : 1,
+                //                            ticks : ticksx,
+                //                            pad   : 5.5
+                //                        },
+                //                        yaxis : {
+                //                            min   : 0,
+                //                            max   : max,
+                //                            ticks : ticksy,
+                //                            pad   : 5.5
+                //                        }
+                //                    }
+                //                });
+                //
+                //                data = [];
+                //                serie = [];
+                //                max = 0;
+                //                ticksy = [];
+                //
+                //                $(".prctAcumulado.total").each(function () {
+                //                    var mes = $(this).data("mes");
+                //                    var val = $(this).data("val") * 100;
+                //                    ticksy.push(val);
+                //                    if (val > max) {
+                //                        max = val;
+                //                    }
+                //                    var dato = [mes, val];
+                //                    serie.push(dato);
+                ////                        console.log(mes, val);
+                //                });
+                //                data.push(serie);
+                //                console.log(serie, max);
+                //                grafico({
+                //                    target : "grafFis",
+                //                    titulo : 'Avance físico de la obra',
+                //                    data   : data,
+                //                    axes   : {
+                //                        xaxis : {
+                //                            min   : 1,
+                //                            ticks : ticksx,
+                //                            pad   : 5.5
+                //                        },
+                //                        yaxis : {
+                //                            min   : 0,
+                //                            max   : max,
+                //                            ticks : ticksy,
+                //                            pad   : 5.5
+                //                        }
+                //                    }
+                //                });
+                //                /****************************************************************************************************************************************************/
+
+                //                $("#btnGraficoEco").click(function () {
+                //                    graph("eco");
+                //                    $("#modalTitle-graf").html("Gráfico del Cronograma");
+                //                    $("#modal-graf").modal("show");
+                //                });
+                //
+                //                $("#btnGraficoFis").click(function () {
+                //                    graph("fis");
+                //                    $("#modalTitle-graf").html("Gráfico del Cronograma");
+                //                    $("#modal-graf").modal("show");
+                //                });
+
+            })
+            ;
 
             //            function graph(tipo) {
             //                var target = "graf";
