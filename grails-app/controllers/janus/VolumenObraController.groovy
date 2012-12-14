@@ -73,7 +73,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (rendimientos["rdvl"].toString()=="NaN")
             rendimientos["rdvl"]=0
         /*Todo ver como mismo es esta suma*/
-        def indirecto = obra.indiceCostosIndirectosCostosFinancieros+obra.indiceCostosIndirectosGarantias+obra.indiceCostosIndirectosMantenimiento+obra.indiceCostosIndirectosObra+obra.indiceCostosIndirectosTimbresProvinciales+obra.indiceCostosIndirectosVehiculos
+        def indirecto = obra.totales
 //        println "indirecto "+indirecto
 
         detalle.each{

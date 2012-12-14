@@ -25,7 +25,7 @@
     </g:if>
 </div>
 <div class="tituloTree">
-    Volumen de obra de: ${obra.descripcion}
+    Volumen de obra de: ${obra.descripcion + " ("+obra.codigo+")"}
 </div>
 
 <div class="span12 btn-group" role="navigation" style="margin-left: 0px;">

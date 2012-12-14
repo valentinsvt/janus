@@ -354,7 +354,7 @@ class ObraController extends janus.seguridad.Shield {
 
 
 
-        println("parametros" + params)
+//        println("parametros" + params)
 
         def obraInstance
         if (params.id) {
@@ -391,12 +391,12 @@ class ObraController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Obra " + obraInstance.id
+            flash.message = "Se ha actualizado correctamete Obra "
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Obra " + obraInstance.id
+            flash.message = "Se ha creado correctamete Obra "
         }
-        redirect(action: 'list')
+        redirect(action: 'registroObra',params: [obra: obraInstance.id])
     } //save
 
     def show_ajax() {

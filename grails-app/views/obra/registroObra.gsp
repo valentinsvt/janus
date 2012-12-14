@@ -38,9 +38,16 @@
 </head>
 
 <body>
-%{--Todo Arreglar: la comunidad no guarda nada--}%
 %{--Todo Por hacer: imprimir, Formula pol, Fp liquidacion, rubros , documentos, composicion, tramites--}%
-<div class="btn-group" style="margin-bottom: 10px">
+<g:if test="${flash.message}">
+    <div class="span12" style="height: 35px;margin-bottom: 10px;">
+        <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            ${flash.message}
+        </div>
+    </div>
+</g:if>
+<div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;float: left;height: 35px;">
     <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
     <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
     <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar</button>
@@ -52,7 +59,7 @@
 
 <g:form class="registroObra" name="frm-registroObra" action="save">
 
-<fieldset class="borde" style="position: relative; height: 100px">
+<fieldset class="borde" style="position: relative; height: 100px;float: left">
     <g:hiddenField name="id" value="${obra?.id}"/>
     <div class="span12" style="margin-top: 20px" align="center">
 
@@ -79,7 +86,7 @@
     </div>
 
 </fieldset>
-<fieldset class="borde">
+<fieldset class="borde" style="float: left">
     <div class="span12" style="margin-top: 10px">
         <div class="span1">Código</div>
 
@@ -225,7 +232,7 @@
 
 </fieldset>
 
-<fieldset class="borde" style="position: relative;">
+<fieldset class="borde" style="position: relative;float: left">
 
     <div class="span12" style="margin-top: 10px">
 
@@ -318,7 +325,7 @@
 
 
 <g:if test="${obra?.id}">
-    <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px" align="center">
+    <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px;float: left" align="center">
 
         <div class="navbar-inner">
             <div class="botones">
@@ -345,7 +352,7 @@
 
 
 <div class="modal hide fade mediumModal" id="modal-var" style=";overflow: hidden;">
-    <div class="modal-header">
+    <div class="modal-header btn-primary">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modal_title_var">

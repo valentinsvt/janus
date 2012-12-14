@@ -114,11 +114,12 @@ class CronogramaController extends janus.seguridad.Shield {
             rendimientos["rdps"] = 0
         if (rendimientos["rdvl"].toString() == "NaN")
             rendimientos["rdvl"] = 0
-        def indirecto = obra.indiceCostosIndirectosCostosFinancieros + obra.indiceCostosIndirectosGarantias + obra.indiceCostosIndirectosMantenimiento + obra.indiceCostosIndirectosObra + obra.indiceCostosIndirectosTimbresProvinciales + obra.indiceCostosIndirectosVehiculos
+        def indirecto = obra.totales
 //        println "indirecto "+indirecto
 
         detalle.each {
             def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
+            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
             def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
             precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
         }
@@ -232,11 +233,12 @@ class CronogramaController extends janus.seguridad.Shield {
             rendimientos["rdps"] = 0
         if (rendimientos["rdvl"].toString() == "NaN")
             rendimientos["rdvl"] = 0
-        def indirecto = obra.indiceCostosIndirectosCostosFinancieros + obra.indiceCostosIndirectosGarantias + obra.indiceCostosIndirectosMantenimiento + obra.indiceCostosIndirectosObra + obra.indiceCostosIndirectosTimbresProvinciales + obra.indiceCostosIndirectosVehiculos
+        def indirecto = obra.totales
 //        println "indirecto "+indirecto
 
         detalle.each {
             def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
+            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
             def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
             precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
         }

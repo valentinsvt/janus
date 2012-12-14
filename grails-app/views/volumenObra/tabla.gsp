@@ -72,7 +72,7 @@
             if(key=="edit"){
                 $(this).dblclick()
             }
-            if(key="print"){
+            if(key=="print"){
                 var dsps=${obra.distanciaPeso}
                 var dsvs=${obra.distanciaVolumen}
                 var volqueta=${precioVol}
