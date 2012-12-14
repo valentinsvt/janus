@@ -87,7 +87,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 //        println "precios "+precios
 
 
-        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto]
+        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100]
 
     }
 

@@ -41,7 +41,7 @@ class Reportes3Controller {
         if (rendimientos["rdvl"].toString()=="NaN")
             rendimientos["rdvl"]=0
         /*Todo ver como mismo es esta suma*/
-        def indirecto = obra.indiceCostosIndirectosCostosFinancieros+obra.indiceCostosIndirectosGarantias+obra.indiceCostosIndirectosMantenimiento+obra.indiceCostosIndirectosObra+obra.indiceCostosIndirectosTimbresProvinciales+obra.indiceCostosIndirectosVehiculos
+        def indirecto = obra.totales/100
 //        println "indirecto "+indirecto
 
         detalle.each{
@@ -54,7 +54,7 @@ class Reportes3Controller {
 //        println "precios "+precios
 
 
-        [detalle:detalle,precios:precios,subPres:subPres,subPre:SubPresupuesto.get(params.sub).descripcion,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto]
+        [detalle:detalle,precios:precios,subPres:subPres,subPre:SubPresupuesto.get(params.sub).descripcion,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100]
     }
 
     def imprimirRubro(){
