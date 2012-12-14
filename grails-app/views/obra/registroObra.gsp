@@ -150,13 +150,13 @@
 
         <div class="span1">Parroquia</div>
 
-        <g:hiddenField name="parroquia.id" id="hiddenParroquia"/>
-        <div class="span3"><g:textField name="parroquia2.id" id="parrNombre"  class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}"  style="width: 215px" disabled="true"/></div>
+        <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
+        <div class="span3"><g:textField name="parroquia.id" id="parrNombre"  class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}"  style="width: 215px" disabled="true"/></div>
 
         <div class="span1">Comunidad</div>
 
-        <g:hiddenField name="comunidad.id" id="hiddenComunidad"/>
-        <div class="span3"><g:textField name="comunidad2.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}"  disabled="true"/></div>
+        <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
+        <div class="span3"><g:textField name="comunidad.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}"  disabled="true"/></div>
 
 
         <div class="span2"><button class="btn btn-buscar btn-info" id="btn-buscar"><i class="icon-globe"></i> Buscar

@@ -27,7 +27,7 @@
             <td class="comunidad">${comn.nombre}</td>
             <td><div style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all"
                      id="reg_${i}" regId="${comn?.id}" parroquia="${comn?.parroquia?.id}" parroquiaN="${comn?.parroquia?.nombre}"
-                     canton="${comn?.parroquia?.canton?.id}"  comN="${comn?.nombre}" txtReg="${comn.toString()}" ${comunidades}>
+                     canton="${comn?.parroquia?.canton?.id}"  comN="${comn?.nombre}" comunidad="${comn?.id}" txtReg="${comn.toString()}" ${comunidades}>
                 <span class="ui-icon ui-icon-circle-check"></span>
             </div></td>
 
@@ -44,7 +44,7 @@
     $(".btnpq").click(function () {
 
 
-        var comunidad = $(this).attr("regId");
+        var comunidad = $(this).attr("comunidad");
 
         $("#hiddenParroquia").val( $(this).attr("parroquia"));
         $("#parrNombre").val($(this).attr("parroquiaN"));
