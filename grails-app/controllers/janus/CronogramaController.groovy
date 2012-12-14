@@ -145,21 +145,29 @@ class CronogramaController extends janus.seguridad.Shield {
         def label
         def number
 
-        def headers = ["Código", "Rubro", "Unidad", "Cantidad", "Unitario", "c.Total", "T."]
+//        def headers = ["Código", "Rubro", "Unidad", "Cantidad", "Unitario", "c.Total", "T."]
+        def headers = ["Código": 15, "Rubro": 30, "Unidad": 10, "Cantidad": 15,
+                "Unitario": 15, "c.Total": 10, "T.": 5]
+
+
         def col = 0
         def row = 0
+        def colIniMes = 0
+        def sumaMeses = [:]
 
-        headers.each {
-            sheet.setColumnView(col, 25)
-            label = new Label(col, row, it, times16format); sheet.addCell(label);
+        headers.each { k, v ->
+            sheet.setColumnView(col, v)
+            label = new Label(col, row, k, times16format); sheet.addCell(label);
             col++
+            colIniMes++
         }
         meses.times { m ->
-            sheet.setColumnView(col, 25)
+            sheet.setColumnView(col, 15)
             label = new Label(col, row, "Mes " + (m + 1), times16format); sheet.addCell(label);
             col++
+            sumaMeses[m] = 0
         }
-        sheet.setColumnView(col, 25)
+        sheet.setColumnView(col, 15)
         label = new Label(col, row, "Total Rubro", times16format); sheet.addCell(label);
 
         def suma = 0
@@ -185,17 +193,90 @@ class CronogramaController extends janus.seguridad.Shield {
             col++
             number = new Number(col, row, parcial); sheet.addCell(number);
             col++
+            label = new Label(col, row, '$'); sheet.addCell(label);
+            col = colIniMes
 
             meses.times { m ->
                 def prec = cronos.find { it.periodo == m + 1 }
-                number = new Number(col, row, prec.precio); sheet.addCell(number);
-                sumaDol += prec.precio
+                def p = 0
+                if (prec) {
+                    p = prec.precio
+                    sumaDol += prec.precio
+                    sumaMeses[m] += prec.precio
+                }
+                number = new Number(col, row, p); sheet.addCell(number);
                 col++
             }
             number = new Number(col, row, sumaDol); sheet.addCell(number);
-            col++
 
+            row++
+            col = colIniMes /*- 1
+            label = new Label(col, row, '%'); sheet.addCell(label);*/
+            meses.times { m ->
+                def porc = cronos.find { it.periodo == m + 1 }
+                def p = 0
+                if (porc) {
+                    p = porc.porcentaje
+                    sumaPrc += p
+                }
+                number = new Number(col, row, p); sheet.addCell(number);
+                col++
+            }
+            number = new Number(col, row, sumaPrc); sheet.addCell(number);
+
+            row++
+            col = colIniMes /*- 1
+            label = new Label(col, row, 'F'); sheet.addCell(label);*/
+            meses.times { m ->
+                def cant = cronos.find { it.periodo == m + 1 }
+                def p = 0
+                if (cant) {
+                    p = cant.cantidad
+                    sumaCant += cant.cantidad
+                }
+                number = new Number(col, row, p); sheet.addCell(number);
+                col++
+            }
+            number = new Number(col, row, sumaCant); sheet.addCell(number);
+
+            row++
         }
+
+        col = 1
+        label = new Label(col, row, "TOTAL PARCIAL"); sheet.addCell(label);
+        label = new Label(col, row + 2, "PORCENTAJE PARCIAL"); sheet.addCell(label);
+        col++
+
+        col = colIniMes - 2
+        number = new Number(col, row, suma); sheet.addCell(number);
+        col++
+        label = new Label(col, row, "T"); sheet.addCell(label);
+        label = new Label(col, row + 2, "T"); sheet.addCell(label);
+        col++
+        sumaMeses.each { k, v ->
+            number = new Number(col, row, v); sheet.addCell(number);
+            number = new Number(col, row + 2, (v * 100 / suma)); sheet.addCell(number);
+            col++
+        }
+
+        row++
+        col = 1
+        label = new Label(col, row, "TOTAL ACUMULADO"); sheet.addCell(label);
+        label = new Label(col, row + 2, "PORCENTAJE ACUMULADO"); sheet.addCell(label);
+        col++
+
+        col = colIniMes - 1
+        label = new Label(col, row, "T"); sheet.addCell(label);
+        label = new Label(col, row + 2, "T"); sheet.addCell(label);
+        col++
+        def ta = 0;
+        sumaMeses.each { k, v ->
+            ta += v
+            number = new Number(col, row, ta); sheet.addCell(number);
+            number = new Number(col, row + 2, (ta * 100 / suma)); sheet.addCell(number);
+            col++
+        }
+
 
 
         workbook.write();
