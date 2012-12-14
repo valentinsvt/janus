@@ -62,35 +62,11 @@
 
 //        console.log("canton:" + canton);
 
-        $("#dlgLoad").dialog("open");
-        cerrarBusqueda(comunidad,parroquia,canton);
+
+        $("#busqueda").dialog("close");
+
 
     });
-
-    function cerrarBusqueda(comunidad,parroquia,canton) {
-
-
-        $("#selParroquia").val(parroquia)
-        $("#dlgLoad").dialog("close");
-        $("#busqueda").dialog("close");
-        $.ajax({
-            type    : "POST",
-            url     : "${createLink(action:'parroquiaComunidad')}",
-            data    : {
-                comunidad : comunidad,
-                parroquia  : parroquia
-//                canton   : canton
-
-            },
-            success : function (msg) {
-
-//                $("#divTabla").html(msg);
-                $("#dlgLoad").dialog("close");
-            }
-        });
-
-    }
-
 
 </script>
 

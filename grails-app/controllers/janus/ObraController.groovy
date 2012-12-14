@@ -336,6 +336,26 @@ class ObraController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+
+        if (params.fechaOficioSalida) {
+            params.fechaOficioSalida = new Date().parse("dd-MM-yyyy", params.fechaOficioSalida)
+        }
+
+        if (params.fechaPreciosRubros) {
+            params.fechaPreciosRubros = new Date().parse("dd-MM-yyyy", params.fechaPreciosRubros)
+        }
+
+        if (params.fechaCreacionObra) {
+            params.fechaCreacionObra = new Date().parse("dd-MM-yyyy", params.fechaCreacionObra)
+        }
+
+
+
+
+        println("parametros" + params)
+
         def obraInstance
         if (params.id) {
             obraInstance = Obra.get(params.id)

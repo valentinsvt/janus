@@ -40,8 +40,8 @@ class Obra implements Serializable {
     int factorReduccion
     int factorVelocidad
     int capacidadVolquete
-    String factorVolumen
-    String factorPeso
+    double factorVolumen
+    double factorPeso
     int factorReduccionTiempo
     String sitio
     int plazoEjecucionAnios
@@ -55,13 +55,13 @@ class Obra implements Serializable {
     int contrato
     int totales
     String periodo
-    String valor
-    String partidaObra
+    double valor
+    Presupuesto partidaObra
     String memoCertificacionPartida
     String memoActualizacionPrefecto
     String memoPartidaPresupuestaria
-    String porcentajeAnticipo
-    String porcentajeReajuste
+    int porcentajeAnticipo
+    int porcentajeReajuste
     double indiceCostosIndirectosObra
     double indiceCostosIndirectosMantenimiento
     double administracion

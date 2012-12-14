@@ -19,5 +19,6 @@ jQuery.extend(jQuery.validator.messages, {
   rangelength: jQuery.validator.format("Por favor, escribe un valor entre {0} y {1} caracteres."),
   range: jQuery.validator.format("Por favor, escribe un valor entre {0} y {1}."),
   max: jQuery.validator.format("Por favor, escribe un valor menor o igual a {0}."),
-  min: jQuery.validator.format("Por favor, escribe un valor mayor o igual a {0}.")
+  min: jQuery.validator.format("Por favor, escribe un valor mayor o igual a {0}."),
+    nowhitespace:  "Por favor, rellena este campo."
 });

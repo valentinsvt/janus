@@ -28,6 +28,10 @@
     .titulo {
         font-size : 20px;
     }
+
+    .error {
+        background: #c17474;
+    }
     </style>
 
     <title>Registro de Obras</title>
@@ -38,12 +42,14 @@
 <div class="btn-group" style="margin-bottom: 10px">
     <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
     <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
-    <button class="btn"><i class="icon-ok"></i> Aceptar</button>
-    <button class="btn"><i class="icon-ban-circle"></i> Cancelar</button>
+    <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar</button>
+    <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
     <button class="btn"><i class="icon-remove"></i> Eliminar la Obra</button>
     <button class="btn"><i class="icon-print"></i> Imprimir</button>
     <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estados</button>
 </div>
+
+<g:form class="registroObra" name="frm-registroObra" action="save">
 
 <fieldset class="borde" style="position: relative; height: 100px">
     <g:hiddenField name="id" value="${obra?.id}"/>
@@ -59,15 +65,15 @@
 
         <div class="span1 formato">MEMO</div>
 
-        <div class="span3"><g:textField name="memo" class="memo" value="${obra?.oficioIngreso}"/></div>
+        <div class="span3"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}"/></div>
 
         <div class="span2 formato">CANTIDAD DE OBRA</div>
 
-        <div class="span3"><g:textField name="cantidad" class="cantidad" value="${obra?.memoCantidadObra}" /></div>
+        <div class="span3"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" /></div>
 
         <div class="span1 formato">FECHA</div>
 
-        <div class="span1"><elm:datepicker name="fecha" class="fecha datepicker input-small" value="${obra?.fechaCreacionObra}"/></div>
+        <div class="span1"><elm:datepicker name="fechaCreacionObra" class="fechaCreacionObra datepicker input-small" value="${obra?.fechaCreacionObra}"/></div>
 
     </div>
 
@@ -76,57 +82,66 @@
     <div class="span12" style="margin-top: 10px">
         <div class="span1">Código</div>
 
-        <div class="span3"><g:textField name="codigo" class="codigo" value="${obra?.codigo}"/></div>
+        <g:if test="${obra?.codigo != null}">
+
+            <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true"/></div>
+
+        </g:if>
+        <g:else>
+
+            <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}"/></div>
+
+        </g:else>
 
         <div class="span1">Nombre</div>
 
-        <div class="span6"><g:textField name="nombre" class="nombre" style="width: 608px" value="${obra?.nombre}"/></div>
+        <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 608px" value="${obra?.nombre}"/></div>
     </div>
 
     <div class="span12">
         <div class="span1">Programa</div>
 
-        <div class="span3"><g:select name="programa" from="${obra?.programacion?.list()?.descripcion}"  value="${obra?.programacion?.descripcion}" optionValue="value"/></div>
+        <div class="span3"><g:select name="programacion.id" class="programacion required" from="${janus.Programacion?.list()}"  value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" /></div>
 
         <div class="span1">Tipo</div>
 
-        <div class="span3"><g:select name="tipo" from="${obra?.tipoObjetivo?.list()?.descripcion}" value="${obra?.tipoObjetivo?.descripcion}" optionValue="value" /></div>
+        <div class="span3"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObjetivo?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" /></div>
 
         <div class="span1">Clase</div>
 
-        <div class="span1"><g:select name="clase" from="${obra?.claseObra?.list()?.descripcion}" value="${obra?.claseObra?.id}" optionValue="value"/></div>
+        <div class="span1"><g:select name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id"/></div>
     </div>
 
     <div class="span12">
         <div class="span1">Referencias</div>
 
-        <div class="span6"><g:textField name="referencias" class="referencias" style="width: 610px" value="${obra?.referencia}"/></div>
+        <div class="span6"><g:textField name="referencia" class="referencia" style="width: 610px" value="${obra?.referencia}"/></div>
 
         <div class="span1" style="margin-left: 130px">Estado</div>
 
         <div class="span1">
 
-              <g:hiddenField name="estado" id="hiddenEstado"/>
+            <g:hiddenField name="estadoObra" id="hiddenEstado"/>
 
-
-
-            <g:if test="${obra?.estado == 'N'}">
-
-                <g:textField name="estado2" id="estadoNombre" class="estado" value="${"No Registrado"}" disabled="true"/>
-
-            </g:if>
             <g:if test="${obra?.estado == 'R'}">
                 <g:textField name="estado2" id="estadoNombre" class="estado" value="${"Registrado"}" disabled="true"/>
 
             </g:if>
 
-          </div>
+            <g:else>
+
+                <g:textField name="estado2" id="estadoNombre" class="estado" value="${"No Registrado"}" disabled="true"/>
+
+
+            </g:else>
+
+        </div>
     </div>
 
     <div class="span12">
         <div class="span1">Descripción</div>
 
-        <div class="span6"><g:textArea name="descripcion" rows="5" cols="5"
+        <div class="span6"><g:textArea name="descripcion" rows="5" cols="5" class="required"
                                        style="width: 1007px; height: 72px; resize: none" maxlength="511" value="${obra?.descripcion}" /></div>
     </div>
 
@@ -134,16 +149,16 @@
 
         <div class="span1">Parroquia</div>
 
-        <g:hiddenField name="parroquia" id="hiddenParroquia"/>
-       <div class="span3"><g:textField name="parroquia2" id="parrNombre"  class="parroquia" value="${obra?.comunidad?.parroquia?.nombre}"  style="width: 215px" disabled="true"/></div>
+        <g:hiddenField name="parroquia.id" id="hiddenParroquia"/>
+        <div class="span3"><g:textField name="parroquia2.id" id="parrNombre"  class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}"  style="width: 215px" disabled="true"/></div>
 
         <div class="span1">Comunidad</div>
 
-        <g:hiddenField name="comunidad" id="hiddenComunidad"/>
-        <div class="span3"><g:textField name="comunidad2" id="comuNombre" class="comunidad" value="${obra?.comunidad?.nombre}"  disabled="true"/></div>
+        <g:hiddenField name="comunidad.id" id="hiddenComunidad"/>
+        <div class="span3"><g:textField name="comunidad2.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}"  disabled="true"/></div>
 
 
-        <div class="span2"><button class="btn btn-buscar" id="btn-buscar"><i class="icon-globe"></i> Buscar
+        <div class="span2"><button class="btn btn-buscar btn-info" id="btn-buscar"><i class="icon-globe"></i> Buscar
         </button>
         </div>
 
@@ -158,25 +173,23 @@
 
         <div class="span1">Plazo</div>
 
-        <div class="span2"><g:textField name="plazoMeses" class="plazoMeses" style="width: 28px"
-                                        maxlength="3" type="number" value="${obra?.plazo}"/>Meses</div>
-
-
+        <div class="span2"><g:textField name="plazo" class="plazoMeses required number" style="width: 28px"
+                                        maxlength="3" type="number" value="${obra?.plazo}" /> Meses</div>
 
     </div>
 
     <div class="span12">
         <div class="span1">Inspección</div>
 
-        <div class="span3"><g:select name="inspeccion" from="${obra?.revisor?.list()?.nombre}" value="${obra?.inspector?.id}" optionValue="value"/></div>
+        <div class="span3"><g:select name="inspector.id" class="inspector required" from="${janus.Persona?.list()}" value="${obra?.inspector?.id}" optionValue="nombre" optionKey="id" /></div>
 
         <div class="span1">Revisión</div>
 
-        <div class="span3"><g:select name="revision" from="${obra?.revisor?.list()?.nombre}" value="${obra?.revisor?.id}" optionValue="value"/></div>
+        <div class="span3"><g:select name="revisor.id"  class="revisor required" from="${janus.Persona?.list()}" value="${obra?.revisor?.id}" optionValue="nombre" optionKey="id" /></div>
 
         <div class="span1">Responsable</div>
 
-        <div class="span1"><g:select name="responsable" from="${obra?.responsableObra?.list()?.nombre}" value="${obra?.responsableObra?.id}" optionValue="value"/></div>
+        <div class="span1"><g:select name="responsableObra.id" class="responsableObra required" from="${janus.Persona?.list()}" value="${obra?.responsableObra?.id}" optionValue="nombre" optionKey="id"/></div>
     </div>
 
     <div class="span12">
@@ -186,7 +199,7 @@
 
         <div class="span1" style="margin-left: 130px">Anticipo</div>
 
-        <div class="span2"><g:textField name="anticipo" class="anticipo" style="width: 70px" value="${obra?.porcentajeAnticipo}"/> %</div>
+        <div class="span2"><g:textField name="porcentajeAnticipo" type="number" class="anticipo number required" style="width: 70px" value="${obra?.porcentajeAnticipo}"/> %</div>
 
     </div>
 
@@ -194,11 +207,17 @@
 
         <div class="span1">Lista</div>
         %{--todo esto es un combo--}%
-        <div class="span2" style="margin-right: 70px"><g:textField name="lista" class="lista" value="${obra?.lugar?.id}"/></div>
+        %{--<div class="span2" style="margin-right: 70px"><g:textField name="lugar.id" class="lugar" value="${obra?.lugar?.id}" optionKey="id"/></div>--}%
+
+
+        <div class="span2" style="margin-right: 70px"><g:select name="lugar.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion"/></div>
+
+
+
 
         <div class="span1" >Fecha</div>
 
-        <div class="span2"><elm:datepicker name="fechaLista" class="fechaLista datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
+        <div class="span2"><elm:datepicker name="fechaPreciosRubro" class="fechaPreciosRubro datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
 
     </div>
@@ -219,15 +238,15 @@
 
         <div class="span1 formato" style="width: 80px">OFICIO SAL.</div>
 
-        <div class="span3" style="margin-left: 18px"><g:textField name="oficio" class="oficio" value="${obra?.fechaOficioSalida}"/></div>
+        <div class="span3" style="margin-left: 18px"><g:textField name="oficioSalida" class="oficio" value="${obra?.oficioSalida}"/></div>
 
         <div class="span1 formato">MEMO</div>
 
-        <div class="span3"><g:textField name="memoSal" class="memoSal" value="${obra?.memoSalida}"/></div>
+        <div class="span3"><g:textField name="memoSalida" class="memoSalida" value="${obra?.memoSalida}"/></div>
 
         <div class="span1 formato">FECHA</div>
 
-        <div class="span1"><elm:datepicker name="fechaSalida" class="fechaSalida datepicker input-small"
+        <div class="span1"><elm:datepicker name="fechaOficioSalida" class="fechaOficioSalida datepicker input-small"
                                            value="${obra?.fechaOficioSalida}"/></div>
 
 
@@ -236,11 +255,13 @@
     <div class="span12" style="margin-top: 10px">
         <div class="span1 formato">FORMULA</div>
 
-        <div class="span3"><g:textField name="formula" class="formula" value="${obra?.formulaPolinomica}"/></div>
+        <div class="span3"><g:textField name="formulaPolinomica" class="formula" value="${obra?.formulaPolinomica}"/></div>
 
     </div>
 
 </fieldset>
+
+</g:form>
 
 <div id="busqueda">
 
@@ -284,6 +305,16 @@
 
 </div>
 
+<div id="estadoDialog">
+
+    <fieldset>
+        <div class="span3">
+            Está seguro de querer cambiar el estado de la obra:<div style="font-weight: bold;">${obra?.nombre} ?</div>
+
+        </div>
+    </fieldset>
+</div>
+
 
 <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px" align="center">
 
@@ -297,7 +328,7 @@
                 <li><a href="#">Fórmula Pol.</a></li>
                 <li><a href="#">FP Liquidación</a></li>
                 <li><a href="#"><i class="icon-money"></i>Rubros</a></li>
-                <li><a href="#"><i class="icon-file"></i>Documentos</a></li>
+                <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
                 <li><a href="#"><i class="icon-calendar"></i>Cronograma</a></li>
                 <li><a href="#">Composición</a></li>
                 <li><a href="#">Trámites</a></li>
@@ -351,92 +382,73 @@
             $("#modalTitle_busqueda").html("Lista de obras");
 //        $("#modalBody").html($("#buscador_rubro").html());
             $("#modalFooter_busqueda").html("").append(btnOk);
-            $(".contenidoBuscador").html("")
+            $(".contenidoBuscador").html("");
             $("#modal-busqueda").modal("show");
         });
 
         $("#nuevo").click(function() {
+//            $("input[type=text]").val("");
+//            $("textarea").val("");
+//            $("select").val("-1");
+
+
+            location.href =  "${g.createLink(action: 'registroObra')}";
+
+
+
+        });
+
+        $("#cancelarObra").click(function () {
+
+            location.href =  "${g.createLink(action: 'registroObra')}" + "?obra=" + "${obra?.id}";
 
 
         });
 
         $("#cambiarEstado").click(function () {
 
-           var estadoCambiado = $("#estadoNombre").val();
 
+            if(${obra?.id != null}) {
 
-
-
-            if(estadoCambiado == 'No Registrado') {
-
-
-
-                estadoCambiado = 'Registrado';
-
-                $("#hiddenEstado").val( $(this).attr("estado"));
-
-
-//                $("#estadoNombre").val(estadoCambiado)
-
-                $("#estadoNombre").val(estadoCambiado)
-            }
-
-            else{
-
-              estadoCambiado = 'No Registrado';
-                $("#hiddenEstado").val( $(this).attr("estado"));
-
-
-                $("#estadoNombre").val(estadoCambiado);
-
+                $("#estadoDialog").dialog("open")
 
             }
+
 
 
 
         });
 
 
-        %{--$("#selProvincia").change(function () {--}%
-            %{--var provincia = $(this).val();--}%
-            %{--var $parroquia = $("<select id='selParroquia' class='span3' style='width: 215px'></select>");--}%
-            %{--$("#selParroquia").replaceWith($parroquia);--}%
-            %{--$.ajax({--}%
-                %{--type    : "POST",--}%
-                %{--url     : "${createLink(action:'cantonPorProvincia')}",--}%
-                %{--data    : {--}%
-                    %{--id : provincia--}%
-                %{--},--}%
-                %{--success : function (msg) {--}%
-                    %{--$("#selCanton").replaceWith(msg);--}%
+        $("#frm-registroObra").validate();
 
-                %{--}--}%
-            %{--});--}%
-        %{--});--}%
+        $("#btn-aceptar").click(function () {
 
-        %{--$("#selCanton").change(function () {--}%
-            %{--var canton = $(this).val();--}%
-            %{--$.ajax({--}%
-                %{--type    : "POST",--}%
-                %{--url     : "${createLink(action:'parroquiaPorCanton')}",--}%
-                %{--data    : {--}%
-                    %{--id : canton--}%
-                %{--},--}%
-                %{--success : function (msg) {--}%
-                    %{--$("#selParroquia").replaceWith(msg);--}%
-                %{--}--}%
-            %{--});--}%
-        %{--});--}%
+
+
+            $("#frm-registroObra").submit();
+
+
+        });
+
 
         $("#btn-buscar").click(function () {
-//                    $("#dlgLoad").dialog("close");
+            $("#dlgLoad").dialog("close");
             $("#busqueda").dialog("open");
+            return false;
 //
         });
 
         $("#btn-consultar").click(function () {
             $("#dlgLoad").dialog("open");
             busqueda();
+        });
+
+        $("#btnDocumentos").click(function () {
+
+            location.href  = "${g.createLink(controller: 'documentosObra', action: 'documentosObra')}";
+
+
         });
 
         $("#btnVar").click(function () {
@@ -493,6 +505,54 @@
             position  : 'center',
             title     : 'Datos de Situación Geográfica'
 
+
+        });
+
+
+        $("#estadoDialog").dialog({
+
+            autoOpen  : false,
+            resizable : false,
+            modal     : true,
+            draggable : false,
+            width     : 350,
+            height    : 220,
+            position  : 'center',
+            title     : 'Cambiar estado de la Obra',
+            buttons: {
+                "Aceptar": function() {
+
+                    var estadoCambiado = $("#estadoNombre").val();
+
+                    if(estadoCambiado == 'No Registrado') {
+
+                        estadoCambiado = 'Registrado';
+
+                        $("#hiddenEstado").val( $(this).attr("estado"));
+
+                        $("#estadoNombre").val(estadoCambiado)
+
+                        $("#estadoDialog").dialog("close");
+                    }
+
+                    else{
+
+                        estadoCambiado = 'No Registrado';
+                        $("#hiddenEstado").val( $(this).attr("estado"));
+
+                        $("#estadoNombre").val(estadoCambiado);
+                        $("#estadoDialog").dialog("close");
+
+                    }
+
+
+
+                },
+                "Cancelar": function() {
+                    $("#estadoDialog").dialog("close");
+                }
+            }
+
         });
 
         function busqueda() {
@@ -500,7 +560,7 @@
             var buscarPor = $("#buscarPor").val();
             var criterio = $(".criterio").val();
 
-       var ordenar = $("#ordenar").val();
+            var ordenar = $("#ordenar").val();
 
 
 //                   console.log("buscar" + buscarPor)
@@ -524,6 +584,7 @@
             });
 
         }
+
     });
 </script>
 
