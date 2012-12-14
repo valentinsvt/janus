@@ -9,7 +9,7 @@ class ObraFPController {
     def index() { }
 
     def matrizFP() {
-        def obra__id = 886         // obra de pruebas dos rubros: 550, varios 921.
+        def obra__id = 886         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
         def sbpr = 0               // todos los subpresupuestos
         def conTransporte = true   // parámetro leido de la interfaz
 
