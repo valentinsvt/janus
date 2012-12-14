@@ -1,5 +1,8 @@
 package janus
 
+import jxl.Workbook
+import jxl.WorkbookSettings
+import jxl.write.*
 import org.springframework.dao.DataIntegrityViolationException
 
 class CronogramaController extends janus.seguridad.Shield {
@@ -9,8 +12,8 @@ class CronogramaController extends janus.seguridad.Shield {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def saveCrono_ajax() {
-        println ">>>>>>>>>>>>>>>>>"
-        println params
+//        println ">>>>>>>>>>>>>>>>>"
+//        println params
         def saved = ""
         def ok = ""
         if (params.crono.class == java.lang.String) {
@@ -18,7 +21,7 @@ class CronogramaController extends janus.seguridad.Shield {
         }
         params.crono.each { str ->
             def parts = str.split("_")
-            println parts
+//            println parts
             def per = parts[1].toString().toInteger()
             def vol = VolumenesObra.get(parts[0].toString().toLong())
             /*
@@ -76,7 +79,7 @@ class CronogramaController extends janus.seguridad.Shield {
 
     def graficos2() {
         params.each {
-            println it
+//            println it
         }
         def obra = Obra.get(params.obra)
         return [params: params, obra: obra]
@@ -87,6 +90,120 @@ class CronogramaController extends janus.seguridad.Shield {
     }
 
     def excel() {
+        def obra = Obra.get(params.id)
+
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+
+        def precios = [:]
+        def fecha = obra.fechaPreciosRubros
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+        def lugar = obra.lugar
+        def prch = 0
+        def prvl = 0
+        if (obra.chofer) {
+            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
+            prch = prch["${obra.chofer.id}"]
+            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
+            prvl = prvl["${obra.volquete.id}"]
+        }
+//        println "PARAMETROS!= "+fecha+" "+dsps+" "+dsvl+" "+lugar+" "+obra.chofer+ " "+obra.volquete+" "+prch+" "+prvl
+        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
+//        println "rends "+rendimientos
+        if (rendimientos["rdps"].toString() == "NaN")
+            rendimientos["rdps"] = 0
+        if (rendimientos["rdvl"].toString() == "NaN")
+            rendimientos["rdvl"] = 0
+        def indirecto = obra.indiceCostosIndirectosCostosFinancieros + obra.indiceCostosIndirectosGarantias + obra.indiceCostosIndirectosMantenimiento + obra.indiceCostosIndirectosObra + obra.indiceCostosIndirectosTimbresProvinciales + obra.indiceCostosIndirectosVehiculos
+//        println "indirecto "+indirecto
+
+        detalle.each {
+            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
+            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
+            precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
+        }
+        def meses = obra.plazo
+//        println "precios "+precios
+
+
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('reporte', '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        WritableSheet sheet = workbook.createSheet('Reporte', 0)
+
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+
+        def label
+        def number
+
+        def headers = ["Código", "Rubro", "Unidad", "Cantidad", "Unitario", "c.Total", "T."]
+        def col = 0
+        def row = 0
+
+        headers.each {
+            sheet.setColumnView(col, 25)
+            label = new Label(col, row, it, times16format); sheet.addCell(label);
+            col++
+        }
+        meses.times { m ->
+            sheet.setColumnView(col, 25)
+            label = new Label(col, row, "Mes " + (m + 1), times16format); sheet.addCell(label);
+            col++
+        }
+        sheet.setColumnView(col, 25)
+        label = new Label(col, row, "Total Rubro", times16format); sheet.addCell(label);
+
+        def suma = 0
+        row++
+
+        detalle.each { vol ->
+            col = 0
+            def cronos = Cronograma.findAllByVolumenObra(vol)
+            def parcial = precios[vol.id.toString()] * vol.cantidad
+            suma += parcial
+
+            def sumaDol = 0, sumaPrc = 0, sumaCant = 0
+
+            label = new Label(col, row, vol.item.codigo); sheet.addCell(label);
+            col++
+            label = new Label(col, row, vol.item.nombre); sheet.addCell(label);
+            col++
+            label = new Label(col, row, vol.item.unidad.codigo); sheet.addCell(label);
+            col++
+            number = new Number(col, row, vol.cantidad); sheet.addCell(number);
+            col++
+            number = new Number(col, row, precios[vol.id.toString()]); sheet.addCell(number);
+            col++
+            number = new Number(col, row, parcial); sheet.addCell(number);
+            col++
+
+            meses.times { m ->
+                def prec = cronos.find { it.periodo == m + 1 }
+                number = new Number(col, row, prec.precio); sheet.addCell(number);
+                sumaDol += prec.precio
+                col++
+            }
+            number = new Number(col, row, sumaDol); sheet.addCell(number);
+            col++
+
+        }
+
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "Cronograma.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
 
     }
 
@@ -134,10 +251,10 @@ class CronogramaController extends janus.seguridad.Shield {
         redirect(action: "list", params: params)
     } //index
 
-    def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [cronogramaInstanceList: Cronograma.list(params), cronogramaInstanceTotal: Cronograma.count(), params: params]
-    } //list
+//    def list() {
+//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+//        [cronogramaInstanceList: Cronograma.list(params), cronogramaInstanceTotal: Cronograma.count(), params: params]
+//    } //list
 
     def form_ajax() {
         def cronogramaInstance = new Cronograma(params)

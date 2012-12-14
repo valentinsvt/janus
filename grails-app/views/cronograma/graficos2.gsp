@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div id="grafEco" class="graf"></div>
+        <div id="grafEco" class="graf" style="margin-top: 15px;"></div>
 
         <div id="grafFis" class="graf"></div>
 
