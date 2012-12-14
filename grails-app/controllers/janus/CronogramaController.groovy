@@ -122,7 +122,7 @@ class CronogramaController extends janus.seguridad.Shield {
             def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
             precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
         }
-        def meses = obra.plazoEjecucionMeses
+        def meses = obra.plazo
 //        println "precios "+precios
 
 
@@ -251,10 +251,10 @@ class CronogramaController extends janus.seguridad.Shield {
         redirect(action: "list", params: params)
     } //index
 
-    def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [cronogramaInstanceList: Cronograma.list(params), cronogramaInstanceTotal: Cronograma.count(), params: params]
-    } //list
+//    def list() {
+//        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+//        [cronogramaInstanceList: Cronograma.list(params), cronogramaInstanceTotal: Cronograma.count(), params: params]
+//    } //list
 
     def form_ajax() {
         def cronogramaInstance = new Cronograma(params)

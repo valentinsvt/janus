@@ -84,7 +84,7 @@
 
     <body>
 
-        <g:set var="meses" value="${obra.plazoEjecucionMeses}"/>
+        <g:set var="meses" value="${obra.plazo}"/>
         <g:set var="sum" value="${0}"/>
 
         <div class="tituloTree">
