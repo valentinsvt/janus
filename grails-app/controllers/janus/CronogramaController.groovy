@@ -114,7 +114,7 @@ class CronogramaController extends janus.seguridad.Shield {
             rendimientos["rdps"] = 0
         if (rendimientos["rdvl"].toString() == "NaN")
             rendimientos["rdvl"] = 0
-        def indirecto = obra.totales
+        def indirecto = obra.totales/100
 //        println "indirecto "+indirecto
 
         detalle.each {
@@ -233,7 +233,7 @@ class CronogramaController extends janus.seguridad.Shield {
             rendimientos["rdps"] = 0
         if (rendimientos["rdvl"].toString() == "NaN")
             rendimientos["rdvl"] = 0
-        def indirecto = obra.totales
+        def indirecto = obra.totales/100
 //        println "indirecto "+indirecto
 
         detalle.each {

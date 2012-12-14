@@ -73,13 +73,14 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (rendimientos["rdvl"].toString()=="NaN")
             rendimientos["rdvl"]=0
         /*Todo ver como mismo es esta suma*/
-        def indirecto = obra.totales
+        def indirecto = obra.totales/100
 //        println "indirecto "+indirecto
 
         detalle.each{
             def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
             preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
             def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+//            println "r->" + res
             precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
         }
 //
@@ -115,7 +116,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (!params.reporte) {
             def lista = buscadorService.buscar(Item, "Item", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
-            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
             println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/

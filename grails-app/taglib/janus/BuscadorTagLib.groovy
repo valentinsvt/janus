@@ -22,12 +22,12 @@ class BuscadorTagLib {
         if (operacion != "closure") {
             switch (parametros.size()) {
                 case 1:
-                    result = registro[propiedad]."$operacion"(parametros[0])
+                    result = registro[propiedad]?."$operacion"(parametros[0])
                     break
                 case 2:
-                    result = registro[propiedad]."$operacion"(parametros[0], parametros[1])
+                    result = registro[propiedad]?."$operacion"(parametros[0], parametros[1])
                 case 3:
-                    result = registro[propiedad]."$operacion"(parametros[0], parametros[1], parametros[2])
+                    result = registro[propiedad]?."$operacion"(parametros[0], parametros[1], parametros[2])
                     break
                 default:
                     result = ""
