@@ -24,6 +24,7 @@ class ObraFPController {
         tbla_usro.tbcl = tbcl
         tbla_usro.tbvl = tbvl
         tbla_usro.tbrb = tbrb
+
         /* --------------------------------------- procesaMatriz --------------------------------
         * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
         * 1. Eliminar las tablas obxx_user si existen y crear nuevas                            *
