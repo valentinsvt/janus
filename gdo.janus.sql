@@ -2,7 +2,35 @@ Para desplegar el tiempo :
 
   \time
 
+----------------------------- cambios en rubros ------------------------------
+-- el rendimiento es 0.03 para herramienta menores, cntd = 1
+update rbro set rbrocntd = 1 where item__id in 
+  (select item__id from item where itemcdgo like '103.001.00%');
 
+select item__id, itemcdgo, itemnmbr from item where itemcdgo like '103.001.00%';
+ item__id |  itemcdgo   |      itemnmbr       
+----------+-------------+---------------------
+     2868 | 103.001.003 | HERRAMIENTA MENOR 2
+     2869 | 103.001.002 | HERRAMIENTA MENOR 5
+     2870 | 103.001.001 | HERRAMIENTA MENOR 3
+(3 rows)
+
+janus2=# update rbro set rbrorndt = 0.03 where item__id = 2870;
+UPDATE 1582
+janus2=# update rbro set rbrorndt = 0.05 where item__id = 2869;
+UPDATE 276
+janus2=# update rbro set rbrorndt = 0.02 where item__id = 2868;
+UPDATE 13
+
+---------------- problemas: ...................
+ El suma de MO no puede ir como pcun porque debe haber un solo precio para 
+ cada item en la obra. Entonces figuraría un precio distintopara cada rubro.
+
+ Se debe mandar la suma(MO) a cantidad, manejar rendimiento de 1 y la 
+ tarifa de 0.03 o 0.02 según sea el caso. Cambiar procedimientos:
+   rb_precios, ac_rbro_hr, ac_rbro_hr1.
+
+-----------------...................-------------------............---------
 
 
 sp:
