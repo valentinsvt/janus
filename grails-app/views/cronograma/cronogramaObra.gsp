@@ -116,18 +116,18 @@
                     <i class="icon-bar-chart"></i>
                     Gráficos de avance
                 </a>
-                %{--<a href="#" class="btn" id="btnGraficoEco">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance económico--}%
-                %{--</a>--}%
-                %{--<a href="#" class="btn" id="btnGraficoFis">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance físico--}%
-                %{--</a>--}%
-                <a href="#" class="btn" id="btnXls">
+            %{--<a href="#" class="btn" id="btnGraficoEco">--}%
+            %{--<i class="icon-bar-chart"></i>--}%
+            %{--Gráfico de avance económico--}%
+            %{--</a>--}%
+            %{--<a href="#" class="btn" id="btnGraficoFis">--}%
+            %{--<i class="icon-bar-chart"></i>--}%
+            %{--Gráfico de avance físico--}%
+            %{--</a>--}%
+                <g:link action="excel" class="btn" id="${obra.id}">
                     <i class="icon-table"></i>
                     Exportar a Excel
-                </a>
+                </g:link>
             </div>
         </div>
 
@@ -441,7 +441,7 @@
         </div>
 
 
-        <div class="modal longModal tallModal fade " id="modal-graf">
+        <div class="modal longModal tallModal fade hide " id="modal-graf">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -963,6 +963,9 @@
                             }
                         }
                     });
+                });
+
+                $("#btnXls").click(function () {
                 });
 
                 $("#btnGrafico").click(function () {
