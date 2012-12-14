@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        Rubros
+        Volumenes de obra
     </title>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,38 +24,46 @@
         </div>
     </g:if>
 </div>
+<div class="tituloTree">
+    Volumen de obra de: ${obra.descripcion}
+</div>
+
 <div class="span12 btn-group" role="navigation" style="margin-left: 0px;">
     %{--<a href="#" class="btn  " id="btn_lista">--}%
-        %{--<i class="icon-file"></i>--}%
-        %{--Lista--}%
+    %{--<i class="icon-file"></i>--}%
+    %{--Lista--}%
     %{--</a>--}%
     %{--<a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">--}%
-        %{--<i class="icon-file"></i>--}%
-        %{--Nuevo--}%
+    %{--<i class="icon-file"></i>--}%
+    %{--Nuevo--}%
     %{--</a>--}%
     %{--<a href="#" class="btn btn-ajax btn-new" id="guardar">--}%
-        %{--<i class="icon-file"></i>--}%
-        %{--Guardar--}%
+    %{--<i class="icon-file"></i>--}%
+    %{--Guardar--}%
     %{--</a>--}%
     %{--<a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">--}%
-        %{--<i class="icon-file"></i>--}%
-        %{--Cancelar--}%
+    %{--<i class="icon-file"></i>--}%
+    %{--Cancelar--}%
     %{--</a>--}%
     %{--<a href="#" class="btn btn-ajax btn-new">--}%
-        %{--<i class="icon-file"></i>--}%
-        %{--Borrar--}%
+    %{--<i class="icon-file"></i>--}%
+    %{--Borrar--}%
     %{--</a>--}%
+    <a href="${g.createLink(controller: 'obra',action: 'registroObra',params: [obra:obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
+        <i class="icon-arrow-left"></i>
+        Regresar
+    </a>
     <a href="#" class="btn btn-ajax btn-new" id="calcular" title="Calcular precios">
         <i class="icon-table"></i>
         Calcular
     </a>
     %{--<a href="#" class="btn btn-ajax btn-new" id="transporte" title="Transporte">--}%
-        %{--<i class="icon-truck"></i>--}%
-        %{--Transporte--}%
+    %{--<i class="icon-truck"></i>--}%
+    %{--Transporte--}%
     %{--</a>--}%
     %{--<a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
-        %{--<i class="icon-print"></i>--}%
-        %{--Imprimir--}%
+    %{--<i class="icon-print"></i>--}%
+    %{--Imprimir--}%
     %{--</a>--}%
 </div>
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
@@ -132,7 +140,21 @@
     </div>
 </div>
 <script type="text/javascript">
+    function loading(div){
+        y = 0;
+        $("#"+div).html("<div class='tituloChevere' id='loading'>Sistema Janus - Cargando, Espere por favor</div>")
+        var interval=setInterval(function(){
+            if(y==30){
+                $("#detalle").html("<div class='tituloChevere' id='loading'>Cargando, Espere por favor</div>")
+                y=0
+            }
+            $("#loading").append(".");
+            y++
+        }, 500);
+        return interval
+    }
     function cargarTabla(){
+        var interval = loading("detalle")
         var datos=""
         if($("#subPres_desc").val()*1>0){
             datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
@@ -142,11 +164,13 @@
         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
             data     : datos,
             success  : function (msg) {
+                clearInterval(interval)
                 $("#detalle").html(msg)
             }
         });
     }
     $(function () {
+        %{--$("#detalle").html("<img src='${resource(dir: 'images',file: 'loadingText.gif')}' width='300px' height='45px'>")--}%
 
         cargarTabla();
         $("#vol_id").val("")
@@ -206,7 +230,7 @@
             if(msn.length==0){
                 var datos ="rubro="+rubro+"&cantidad="+cantidad+"&orden="+orden+"&sub="+sub+"&obra=${obra.id}"
                 if($("#vol_id").val()*1>0)
-                datos+="&id="+$("#vol_id").val()
+                    datos+="&id="+$("#vol_id").val()
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'addItem')}",
                     data     : datos,
                     success  : function (msg) {

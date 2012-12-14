@@ -26,7 +26,9 @@
     font-family   : 'Open Sans Condensed', cursive;
     margin-bottom : 10px;
     font-size     : 25px;
+    padding-bottom: 8px;;
     border-bottom : 1px solid rgba(148, 148, 148, 1);
+    color: #0088CC;
 }
 
 .highlight {
@@ -173,6 +175,25 @@ fieldset.borde legend {
     font-weight       : bold;
     font-size         : 35px;
     text-shadow       : -2px 2px 1px rgba(0, 0, 0, 0.25);
+
+    /*text-shadow: 0px 0px 1px #333;*/
+}
+
+
+.tituloChevere{
+
+    color             : #0088CC;
+    border            : 0px solid red;
+    white-space       : nowrap;
+    display           : block;
+    width             : 98%;
+    height            : 30px;
+    font-family: 'open sans condensed';
+    font-weight       : bold;
+    font-size         : 25px;
+    text-shadow       : -2px 2px 1px rgba(0, 0, 0, 0.25);
+    margin-top: 10px;
+    line-height: 25px;
 
     /*text-shadow: 0px 0px 1px #333;*/
 }

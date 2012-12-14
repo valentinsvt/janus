@@ -106,10 +106,13 @@
         $("#ver_todos").removeClass("active")
         $("#divTotal").html("")
         $("#calcular").removeClass("active")
+
         var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
+        var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
             data     : datos,
             success  : function (msg) {
+                clearInterval(interval)
                 $("#detalle").html(msg)
             }
         });
@@ -120,10 +123,13 @@
         $("#divTotal").html("")
         if ($(this).hasClass("active")) {
             $(this).removeClass("active")
+
             var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
+            var interval = loading("detalle")
             $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
                 data     : datos,
                 success  : function (msg) {
+                    clearInterval(interval)
                     $("#detalle").html(msg)
                 }
             });
@@ -131,9 +137,11 @@
         }else{
             $(this).addClass("active")
             var datos = "obra=${obra.id}"
+            var interval = loading("detalle")
             $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
                 data     : datos,
                 success  : function (msg) {
+                    clearInterval(interval)
                     $("#detalle").html(msg)
                 }
             });

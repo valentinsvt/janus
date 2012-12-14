@@ -93,6 +93,10 @@
 
         <div class="btn-toolbar">
             <div class="btn-group">
+                <a href="${g.createLink(controller: 'obra',action: 'registroObra',params: [obra:obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
+                    <i class="icon-arrow-left"></i>
+                    Regresar
+                </a>
                 <a href="#" class="btn disabled" id="btnLimpiarRubro">
                     <i class="icon-check-empty"></i>
                     Limpiar Rubro

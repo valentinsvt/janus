@@ -38,7 +38,8 @@
 </head>
 
 <body>
-
+%{--Todo Arreglar: la comunidad no guarda nada--}%
+%{--Todo Por hacer: imprimir, Formula pol, Fp liquidacion, rubros , documentos, composicion, tramites--}%
 <div class="btn-group" style="margin-bottom: 10px">
     <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
     <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
@@ -316,29 +317,31 @@
 </div>
 
 
-<div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px" align="center">
+<g:if test="${obra?.id}">
+    <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px" align="center">
 
-    <div class="navbar-inner">
-        <div class="botones">
+        <div class="navbar-inner">
+            <div class="botones">
 
-            <ul class="nav">
-                <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
-                <li><a href="#">Vol. Obra</a></li>
-                <li><a href="#">Matriz FP</a></li>
-                <li><a href="#">Fórmula Pol.</a></li>
-                <li><a href="#">FP Liquidación</a></li>
-                <li><a href="#"><i class="icon-money"></i>Rubros</a></li>
-                <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
-                <li><a href="#"><i class="icon-calendar"></i>Cronograma</a></li>
-                <li><a href="#">Composición</a></li>
-                <li><a href="#">Trámites</a></li>
+                <ul class="nav">
+                    <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
+                    <li><a href="${g.createLink(controller: 'volumenObra',action: 'volObra',id:obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra</a></li>
+                    <li><a href="${g.createLink(controller: 'matriz',action: 'matrizPolinomica',id: obra?.id)}"><i class="icon-th"></i>Matriz FP</a></li>
+                    <li><a href="#">Fórmula Pol.</a></li>
+                    <li><a href="#">FP Liquidación</a></li>
+                    <li><a href="#"><i class="icon-money"></i>Rubros</a></li>
+                    <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
+                    <li><a href="${g.createLink(controller: 'cronograma',action: 'cronogramaObra',id:obra?.id)}"><i class="icon-calendar"></i>Cronograma</a></li>
+                    <li><a href="#">Composición</a></li>
+                    <li><a href="#">Trámites</a></li>
 
-            </ul>
+                </ul>
 
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
+</g:if>
 
 
 <div class="modal hide fade mediumModal" id="modal-var" style=";overflow: hidden;">

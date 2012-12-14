@@ -50,6 +50,122 @@ class ReportesController {
         return [algo:"algo"]
     }
 
+    def imprimeMatriz(){
+        println "imprime matriz"
+        def cn = buscadorService.dbConnectionService.getConnection()
+        def cn2 = buscadorService.dbConnectionService.getConnection()
+        def sql = "SELECT clmncdgo,clmndscr,clmntipo from obcl_${session.usuario} order by 1"
+        def columnas = []
+        def filas = []
+        cn.eachRow(sql.toString()){r->
+            columnas.add([r[0],r[1],r[2]])
+        }
+        sql ="SELECT * from obrb_${session.usuario} order by orden"
+        def cont = 1
+        cn.eachRow(sql.toString()){r->
+            def tmp = [cont,r[0].trim(),r[1],r[2],r[3]]
+            def sq =""
+            columnas.each {c->
+                if(c[2]!="R"){
+                    sq = "select valor from obvl_${session.usuario} where clmncdgo=${c[0]} and codigo='${r[0].trim()}'"
+                    cn2.eachRow(sq.toString()){v->
+                        tmp.add(v[0])
+                    }
+                }
+
+            }
+//            println "fila  "+tmp
+            filas.add(tmp)
+            cont++
+        }
+
+        def baos = new ByteArrayOutputStream()
+        def name = "matriz_polinomica_"+new Date().format("ddMMyyyy_hhmm")+".pdf";
+//            println "name "+name
+        Font catFont = new Font(Font.TIMES_ROMAN, 10,Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 8,Font.NORMAL)
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw= PdfWriter.getInstance(document,baos);
+        document.open();
+        document.addTitle("Matriz Polinómica "+new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus,matriz");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.add(new Paragraph("Matriz polinómica", catFont));
+        preface.add(new Paragraph("Generado por el usuario: "+session.usuario+"   el: "+new Date().format("dd/MM/yyyy hh:mm"),info))
+        addEmptyLine(preface, 1);
+        document.add(preface);
+        Font small= new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+
+        /*table*/
+
+        def parcial = []
+        def anchos =[5,10,30,5,10,10,10,10]
+        def inicio = 0
+        def fin = 8
+//        println "size "+columnas.size()
+        while(fin<=columnas.size()){
+//            println "inicio "+inicio+"  fin  "+fin
+            if (inicio!=0)
+                anchos = [12,12,12,12,12,12,12,12]
+            if (fin-inicio<8){
+                anchos = []
+                (fin-inicio).toInteger().times{i->
+                    anchos.add((100/(fin-inicio)).toInteger())
+                }
+            }
+            def parrafo =  new Paragraph("")
+            PdfPTable table = new PdfPTable((fin-inicio).toInteger());
+            table.setWidthPercentage(100);
+            table.setWidths(arregloEnteros(anchos))
+            (fin-inicio).toInteger().times{i->
+                PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1],small));
+                c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(c1);
+            }
+            table.setHeaderRows(1);
+            filas.each{f->
+                (fin-inicio).toInteger().times{i->
+                    def dato = f[inicio+i]
+                    if (!dato)
+                        dato="0.00"
+                    else
+                        dato=dato.toString()
+                    table.addCell(new Phrase(dato,small));
+                }
+            }
+            parrafo.add(table);
+            document.add(parrafo);
+            document.newPage();
+            inicio=fin+1
+            fin = inicio+8
+            if (fin>columnas.size())
+                fin = columnas.size()
+            if (inicio>columnas.size())
+                break;
+
+        }
+
+        /*table*/
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+
+
+
+    }
+
     def reporteBuscador= {
 
         // println "reporte buscador params !! "+params

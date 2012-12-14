@@ -5,7 +5,7 @@ class VolumenObraController extends janus.seguridad.Shield{
     def preciosService
     def volObra(){
 
-        def obra = Obra.get(2)
+        def obra = Obra.get(params.id)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
@@ -17,7 +17,7 @@ class VolumenObraController extends janus.seguridad.Shield{
     }
 
     def addItem(){
-        println "addItem "+params
+//        println "addItem "+params
         def obra= Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
         def volumen
@@ -43,6 +43,7 @@ class VolumenObraController extends janus.seguridad.Shield{
     }
 
     def tabla(){
+//        println "paramms "+params
         def obra = Obra.get(params.obra)
         def detalle
         if (params.sub)
