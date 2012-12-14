@@ -8,11 +8,80 @@ class CronogramaController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def saveCrono_ajax() {
+        println ">>>>>>>>>>>>>>>>>"
+        println params
+        def saved = ""
+        def ok = ""
+        if (params.crono.class == java.lang.String) {
+            params.crono = [params.crono]
+        }
+        params.crono.each { str ->
+            def parts = str.split("_")
+            println parts
+            def per = parts[1].toString().toInteger()
+            def vol = VolumenesObra.get(parts[0].toString().toLong())
+            /*
+            VolumenesObra volumenObra
+            Integer periodo
+            Double precio
+            Double porcentaje
+            Double cantidad
+             */
+            def cont = true
+            def crono = Cronograma.findAllByVolumenObraAndPeriodo(vol, per)
+            if (crono.size() == 1) {
+                crono = crono[0]
+            } else if (crono.size() == 0) {
+                crono = new Cronograma()
+            } else {
+                println "WTF MAS DE UN CRONOGRAMA volumen obra " + vol.id + " periodo " + per + " hay " + crono.size()
+                cont = false
+            }
+
+            if (cont) {
+                crono.volumenObra = vol
+                crono.periodo = per
+                crono.precio = parts[2].toString().toDouble()
+                crono.porcentaje = parts[3].toString().toDouble()
+                crono.cantidad = parts[4].toString().toDouble()
+                if (crono.save(flush: true)) {
+                    saved += parts[1] + ":" + crono.id + ";"
+                    ok = "OK"
+                } else {
+                    ok = "NO"
+                    println crono.errors
+                }
+            }
+        }
+        render ok + "_" + saved
+    }
+
+    def deleteCronograma_ajax() {
+        def ok = 0, no = 0
+        def obra = Obra.get(params.obra)
+        VolumenesObra.findAllByObra(obra, [sort: "orden"]).each { vo ->
+            Cronograma.findAllByVolumenObra(vo).each { cr ->
+                try {
+                    cr.delete(flush: true)
+                    ok++
+                } catch (DataIntegrityViolationException e) {
+                    no++
+                }
+            }
+
+        }
+        render "ok:" + ok + "_no:" + no
+    }
+
+    def graficos() {
+
+    }
+
     def cronogramaObra() {
         def obra = Obra.get(params.id)
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
-        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
@@ -46,7 +115,7 @@ class CronogramaController extends janus.seguridad.Shield {
 //        println "precios "+precios
 
 
-        [detalle: detalle, precios: precios, subPres: subPres, obra: obra]
+        [detalle: detalle, precios: precios, obra: obra]
     }
 
     def index() {

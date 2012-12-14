@@ -1,21 +1,12 @@
 package janus
+
 class Cronograma implements Serializable {
 
-    Obra obra
-    String orden
-    String codigo
-    String nombre
-    String codigoCronograma
-    String cantidad
-    String precioUnitario
-    String sbtl
-    String tipoCronograma
-    String tipoPeriodo
-    String periodo
-    String crno__p1
-    String crno__p2
-    String crno_p50
-    String ttal
+    VolumenesObra volumenObra
+    Integer periodo
+    Double precio
+    Double porcentaje
+    Double cantidad
 
     static mapping = {
         table 'crno'
@@ -25,40 +16,19 @@ class Cronograma implements Serializable {
         version false
         columns {
             id column: 'crno__id'
-            obra column: 'obra__id'
-            orden column: 'vlobordn'
-            codigo column: 'rbrocdgo'
-            nombre column: 'rbronmbr'
-            codigoCronograma column: 'unddcdgo'
-            cantidad column: 'vlobcntd'
-            precioUnitario column: 'vlobpcun'
-            sbtl column: 'vlobsbtl'
-            tipoCronograma column: 'crnotipo'
-            tipoPeriodo column: 'prdotipo'
+            volumenObra column: 'vlob__id'
             periodo column: 'crnoprdo'
-            crno__p1 column: 'crno__p1'
-            crno__p2 column: 'crno__p2'
-            crno_p50 column: 'crno_p50'
-            ttal column: 'crnottal'
-
+            precio column: 'crnoprco'
+            porcentaje column: 'crnoprct'
+            cantidad column: 'crnocntd'
         }
     }
     static constraints = {
-        nombre(size: 1..10, attributes: [title: 'nombre'])
-        codigo(size: 1..10, blank: true, nullable: true, attributes: [title: 'numero'])
-        obra(blank: true, nullable: true, attributes: [title: 'obra'])
-        orden(size: 1..10, blank: true, nullable: true, attributes: [title: 'orden'])
-          codigoCronograma(size: 1..10, blank: true, nullable: true, attributes: [title: 'numero'])
-        cantidad(size: 1..10, blank: true, nullable: true, attributes: [title: 'cantidad'])
-        precioUnitario(size: 1..10, blank: true, nullable: true, attributes: [title: 'precioUnitario'])
-        sbtl(size: 1..10, blank: true, nullable: true, attributes: [title: 'sbtl'])
-        tipoCronograma(size: 1..10, blank: true, nullable: true, attributes: [title: 'tipo'])
-        tipoPeriodo(size: 1..10, blank: true, nullable: true, attributes: [title: 'tipo'])
-        periodo(size: 1..10, blank: true, nullable: true, attributes: [title: 'periodo'])
-        crno__p1(size: 1..10, blank: true, nullable: true, attributes: [title: 'crno__p1'])
-        crno__p2(size: 1..10, blank: true, nullable: true, attributes: [title: 'crno__p2'])
-        crno_p50(size: 1..10, blank: true, nullable: true, attributes: [title: '_p50'])
-        ttal(size: 1..10, blank: true, nullable: true, attributes: [title: 'ttal'])
-
+        volumenObra(blank: false, nullable: false, attributes: [title: 'volumen de obra'])
+        periodo(blank: false, nullable: false, attributes: [title: 'periodo'])
+        precio(blank: false, nullable: false, attributes: [title: 'precio'])
+        porcentaje(blank: false, nullable: false, attributes: [title: 'porcentaje'])
+        cantidad(blank: false, nullable: false, attributes: [title: 'cantidad'])
     }
+
 }
