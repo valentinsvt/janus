@@ -8,9 +8,11 @@ class ObraFPController {
     def index() { }
 
     def matrizFP() {
+        /* --------------------- parámetros que se requieren para correr el proceso  --------------------- */
         def obra__id = 886         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
         def sbpr = 0               // todos los subpresupuestos
         def conTransporte = true   // parámetro leido de la interfaz
+        /* ----------------------------------- FIN de parámetros  ---------------------------------------- */
 
         //def obra = Obra.get(obra__id)
         ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
