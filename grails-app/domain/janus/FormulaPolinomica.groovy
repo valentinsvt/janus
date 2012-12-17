@@ -14,8 +14,8 @@ class FormulaPolinomica implements Serializable {
             id column: 'fpob__id'
             obra column: 'obra__id'
             indice column: 'indc__id'
-            numero column: 'frplnmro'
-            valor column: 'frplvlor'
+            numero column: 'fpobnmro'
+            valor column: 'fpobvlor'
         }
     }
     static constraints = {

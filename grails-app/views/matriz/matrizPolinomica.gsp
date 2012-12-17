@@ -55,7 +55,7 @@
         <i class="icon-arrow-left"></i>
         Regresar
     </a>
-    <a href="#" class="btn btn-ajax btn-new" id="calcular" title="Coeficientes">
+    <a href="#" class="btn btn-ajax btn-new" id="coef" title="Coeficientes">
         <i class="icon-table"></i>
         Coeficientes de la matriz
     </a>
@@ -144,6 +144,19 @@
             $("."+$(this).attr("fila")).addClass("activo")
             $("."+$(this).attr("fila")).removeClass("gris")
             $("."+$(this).attr("fila")).removeClass("blanco")
+        });
+        $("#coef").click(function(){
+            $("#dlgLoad").dialog("open");
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action: 'insertarVolumenesItem',controller: 'matriz')}",
+                data    : "obra=${obraId}",
+                success : function (msg) {
+                    $("#dlgLoad").dialog("close");
+                    location.href="${createLink(action: 'coeficientes',controller: 'matriz',id: obraId)}"
+                }
+            });
+//
         });
     });
 

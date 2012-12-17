@@ -129,7 +129,7 @@
 
 
     %{-- TODO --}%
-    %{-- implementar acciones y hacer el ingreso de etiqueta de acciones, algo pareceido a lo de finis con--}%
+    %{-- implementar acciones y hacer el ingreso de etiqueta de acciones, algo pareceido a lo de finis--> finis!! wtf con--}%
     %{--   el botón grabar alado--}%
     %{-- */--}%
     $("#btenviar").button().click(function() {
