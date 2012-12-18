@@ -8,6 +8,10 @@ class LoginController {
 
     def mail
 
+    def tests() {
+
+    }
+
     def index() {
         redirect(action: 'login')
     }
