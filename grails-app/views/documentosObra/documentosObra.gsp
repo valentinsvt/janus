@@ -71,11 +71,11 @@
 
                 <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.descripcion}" optionValue="descripcion" optionKey="id" style="width: 350px"/>
 
-                <div class="btn-group" style="margin-left: 400px; margin-top: -40px; margin-bottom: 10px">
-                    <button class="btn" id="btnNuevo">Nuevo</button>
-                    <button class="btn" id="btnCancelar">Cancelar</button>
-                    <button class="btn" id="btnEditar">Editar</button>
-                    <button class="btn" id="btnAceptar">Aceptar</button>
+                <div class="btn-group" style="margin-left: 350px; margin-top: -40px; margin-bottom: 10px">
+                    <button class="btn" id="btnNuevo"><i class="icon-plus"></i> Nuevo</button>
+                    <button class="btn" id="btnCancelar"><i class="icon-ban-circle"></i> Cancelar</button>
+                    <button class="btn" id="btnEditar"> Editar</button>
+                    <button class="btn" id="btnAceptar"><i class="icon-ok"></i> Aceptar</button>
                 </div>
 
 
@@ -645,6 +645,35 @@
         }
     });
 
+
+    $("#piePaginaSel").change(function () {
+
+       var idPie = $("#piePaginaSel").val();
+
+        console.log(idPie)
+
+
+//        $("#descripcion").val("")
+//
+//          $("#texto").val("");
+//        $("#adicional").val("");
+
+
+
+        $.ajax({
+            type    : "POST",
+            url     : url,
+            data    : data,
+            success : function (msg) {
+//                                console.log("Data Saved: " + msg);
+            }
+        });
+
+
+
+    });
+
+
     $(".btnQuitar").click(function () {
         var strid = $(this).attr("id");
         var parts=strid.split("_");
@@ -702,10 +731,7 @@
 
     $("#btnAceptar").click(function () {
 
-
-
         $("#frm-nota").submit();
-
 
     });
 

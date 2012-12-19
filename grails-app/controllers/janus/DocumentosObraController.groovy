@@ -75,4 +75,21 @@ class DocumentosObraController {
 
     }
 
+
+    def getDatos () {
+
+        def nota = Nota.get(params.id)
+
+        def json = "{"
+        json+='"id":  ' + nota.id + ','
+        json+='"descripcion":  "' + nota.descripcion + '",'
+        json+='"texto":  "' + nota.texto + '",'
+        json+='"adicional":  "' + nota.adicional + '"'
+
+        json+="}"
+
+        render json
+
+    }
+
 }
