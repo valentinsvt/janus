@@ -298,8 +298,10 @@ class ReportesController {
     }
 
     def imprimirRubros() {
-        params.obra = "886"
-        params.transporte = "1"
+//        params.obra = "886"
+//        params.transporte = "1"
+
+//        println params
 
 //        render "AQUI"
 
@@ -316,6 +318,8 @@ class ReportesController {
         def fecha = obra.fechaPreciosRubros
         def itemsChofer = [obra.chofer]
         def itemsVolquete = [obra.volquete]
+
+        def indi = obra.totales
 
         def precioChoferA = preciosService.getPrecioItemsString(fecha, lugar, itemsChofer)
         def precioVolqueteA = preciosService.getPrecioItemsString(fecha, lugar, itemsVolquete)
@@ -362,7 +366,6 @@ class ReportesController {
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
 
-
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
@@ -370,13 +373,14 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-        def prmsCell = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.BLACK, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCell, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum]
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum]
 
         VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.each { rubro ->
 
@@ -432,14 +436,18 @@ class ReportesController {
             PdfPTable tablaMateriales = new PdfPTable(7);
             PdfPTable tablaTransporte = new PdfPTable(7);
             PdfPTable tablaIndirectos = new PdfPTable(3);
+            PdfPTable tablaTotales = new PdfPTable(3);
 
             creaHeadersTabla(tablaHerramientas, fonts, prms, "Herramientas")
             creaHeadersTabla(tablaManoObra, fonts, prms, "Mano de obra")
             creaHeadersTabla(tablaMateriales, fonts, prms, "Materiales")
-            creaHeadersTabla(tablaTransporte, fonts, prms, "Transporte")
+            if (params.transporte == "1") {
+                creaHeadersTabla(tablaTransporte, fonts, prms, "Transporte")
+            }
             creaHeadersTabla(tablaIndirectos, fonts, prms, "Costos Indirectos")
 
             def totalTrans = 0, totalHer = 0, totalMan = 0, totalMat = 0
+            def totalRubro
 
             res.each { r ->
                 if (r["grpocdgo"] == 3) {
@@ -459,6 +467,11 @@ class ReportesController {
                     totalTrans += r.parcial_t
                 }
             }
+            totalRubro = totalHer + totalMan + totalMat
+            if (params.transporte == "1") {
+                totalRubro += totalTrans
+            }
+            def totalIndi = totalRubro * (indi / 100)
 
             addSubtotal(tablaHerramientas, totalHer, fonts, prms)
             addSubtotal(tablaManoObra, totalMan, fonts, prms)
@@ -467,12 +480,37 @@ class ReportesController {
                 addSubtotal(tablaTransporte, totalTrans, fonts, prms)
             }
 
-            addTablaHoja(document, headerRubroTabla)
-            addTablaHoja(document, tablaHerramientas)
-            addTablaHoja(document, tablaManoObra)
-            addTablaHoja(document, tablaMateriales)
-            addTablaHoja(document, tablaTransporte)
-            addTablaHoja(document, tablaIndirectos)
+            addCellTabla(tablaIndirectos, new Paragraph("Costos Indirectos", fonts.times8bold), prmsCellLeft)
+            addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: indi, minFractionDigits: 2, maxFractionDigits: 2) + "%", fonts.times8normal), prmsNum)
+            addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+
+            tablaTotales.setWidthPercentage(100);
+            tablaTotales.setWidths(arregloEnteros([70, 20, 10]))
+
+            addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(tablaTotales, new Paragraph("Costo unitario directo", fonts.times8bold), prmsCellLeft)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+
+            addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(tablaTotales, new Paragraph("Costos indirectos", fonts.times8bold), prmsCellLeft)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+
+            addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(tablaTotales, new Paragraph("Costos total del rubro", fonts.times8bold), prmsCellLeft)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+
+            addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(tablaTotales, new Paragraph("Precio unitario", fonts.times8bold), prmsCellLeft)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0"), fonts.times8normal), prmsNum)
+
+
+            addTablaHoja(document, headerRubroTabla, false)
+            addTablaHoja(document, tablaHerramientas, false)
+            addTablaHoja(document, tablaManoObra, false)
+            addTablaHoja(document, tablaMateriales, false)
+            addTablaHoja(document, tablaTransporte, false)
+            addTablaHoja(document, tablaIndirectos, false)
+            addTablaHoja(document, tablaTotales, true)
 
             document.newPage();
 //            println res
@@ -489,8 +527,8 @@ class ReportesController {
     }
 
     def llenaDatos(PdfPTable table, r, fonts, params, tipo) {
-        addCellTabla(table, new Paragraph(r.itemcdgo, fonts.times8normal), params.prmsCell)
-        addCellTabla(table, new Paragraph(r.itemnmbr, fonts.times8normal), params.prmsCell)
+        addCellTabla(table, new Paragraph(r.itemcdgo, fonts.times8normal), params.prmsCellLeft)
+        addCellTabla(table, new Paragraph(r.itemnmbr, fonts.times8normal), params.prmsCellLeft)
         switch (tipo) {
             case "H":
             case "O":
@@ -545,9 +583,13 @@ class ReportesController {
         }
     }
 
-    def addTablaHoja(Document document, PdfPTable table) {
+    def addTablaHoja(Document document, PdfPTable table, boolean right) {
         Paragraph paragraph = new Paragraph()
-        addEmptyLine(paragraph, 1);
+        if (right) {
+            paragraph.setAlignment(Element.ALIGN_RIGHT);
+        }
+        paragraph.setSpacingAfter(10);
+//        addEmptyLine(paragraph, 1);
         paragraph.add(table);
         document.add(paragraph);
     }
