@@ -79,7 +79,7 @@
                 var chofer=${precioChof}
                 %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
                 %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
-                var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha=${obra.fechaPreciosRubros.format('dd-MM-yyyy')}Wid="+$(this).attr("item")+"Wlugar=${obra.lugar.id}Windi=${indirectos}"
+                var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha=${obra.fechaPreciosRubros.format('dd-MM-yyyy')}Wid="+$(this).attr("item")+"Wlugar=${obra.lugar.id}Windi=${indirectos}Wobra=${obra.id}"
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos
                 location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
             }

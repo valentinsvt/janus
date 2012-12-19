@@ -16,9 +16,9 @@ class PreciosService {
             if (i < items.size() - 1)
                 itemsId += ","
         }
-        println "get Precios items "+fecha+"  "+fecha.format('yyyy-MM-dd')
+//        println "get Precios items "+fecha+"  "+fecha.format('yyyy-MM-dd')
         def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('yyyy-MM-dd')}' group by 1"
-        println "sql " + sql
+//        println "sql " + sql
         cn.eachRow(sql.toString()) {row ->
             res.put(row[0].toString(), row[1])
         }
@@ -35,9 +35,9 @@ class PreciosService {
             if (i < items.size() - 1)
                 itemsId += ","
         }
-        println "get Precios string "+fecha+"  "+fecha.format('yyyy-MM-dd')
+//        println "get Precios string "+fecha+"  "+fecha.format('yyyy-MM-dd')
         def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha <= '${fecha.format('yyyy-MM-dd')}' group by 1"
-        println "sql precios string "+sql
+//        println "sql precios string "+sql
         cn.eachRow(sql.toString()) {row ->
 
             res += "" + row[0] + ";" + row[1] + "&"
@@ -50,7 +50,7 @@ class PreciosService {
         def cn = dbConnectionService.getConnection()
         def itemsId = items
         def res = []
-        def sql = "SELECT r1.item__id,i.itemcdgo,(SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1,item i where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('MM-dd-yyyy')}' and i.item__id=r1.item__id group by 1,2 order by 2"
+        def sql = "SELECT r1.item__id,i.itemcdgo,(SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1,item i where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('yyyy-MM-dd')}' and i.item__id=r1.item__id group by 1,2 order by 2"
 //        println(sql)
         cn.eachRow(sql.toString()) {row ->
             res.add(row[2])
@@ -63,7 +63,7 @@ class PreciosService {
         def cn = dbConnectionService.getConnection()
         def itemsId = items
         def res = []
-        def sql = "SELECT r1.item__id,i.itemcdgo,i.itemnmbr, (SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1,item i where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('MM-dd-yyyy')}' and i.item__id=r1.item__id group by 1,2,3 order by ${order} ${sort}"
+        def sql = "SELECT r1.item__id,i.itemcdgo,i.itemnmbr, (SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1,item i where r1.item__id in (${itemsId}) and r1.lgar__id=${lugar.id} and r1.rbpcfcha < '${fecha.format('yyyy-MM-dd')}' and i.item__id=r1.item__id group by 1,2,3 order by ${order} ${sort}"
         println(sql)
         cn.eachRow(sql.toString()) {row ->
             res.add(row[3])
@@ -90,9 +90,9 @@ class PreciosService {
             sql = "SELECT rbpc__id precio,rbpcfcha from rbpc where item__id in (${itemsId}) and lgar__id=${lugar.id} order by 2 desc"
         } else {
             if (operador != "=") {
-                sql = "SELECT rbpc__id precio,rbpcfcha from rbpc where item__id in (${itemsId}) and lgar__id=${lugar.id} and rbpcfcha ${operador} '${fecha.format('MM-dd-yyyy')}' order by 2 desc"
+                sql = "SELECT rbpc__id precio,rbpcfcha from rbpc where item__id in (${itemsId}) and lgar__id=${lugar.id} and rbpcfcha ${operador} '${fecha.format('yyyy-MM-dd')}' order by 2 desc"
             } else {
-                condicion1 = " and r1.rbpcfcha & '${fecha.format('MM-dd-yyyy')}' "
+                condicion1 = " and r1.rbpcfcha & '${fecha.format('yyyy-MM-dd')}' "
                 condicion2 = " and r2.rbpcfcha = max(r1.rbpcfcha) "
                 if (operador != "") {
                     condicion1 = condicion1.replaceFirst("&", operador)
@@ -149,6 +149,29 @@ class PreciosService {
 //
 //        rdps = (ftrd * vlcd * cpvl * ftvl * dsps * ftps) / (vlcd + (rdtp * dsps));
 //        rdps = (pcuncfr + pcunvlqt) / rdps;
+    }
+
+
+    def rendimientoTransporteLuz(Obra obra, precioUnitChofer, precioUnitVolquete) {
+
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+
+        def ftrd = obra.factorReduccion
+        def vlcd = obra.factorVelocidad
+        def cpvl = obra.capacidadVolquete
+        def ftvl = obra.factorVolumen
+        def rdtp = obra.factorReduccionTiempo
+        def ftps = obra.factorPeso
+        def pcunchfr = precioUnitChofer
+        def pcunvlqt = precioUnitVolquete
+
+        def rdvl = (ftrd * vlcd * cpvl * ftvl * dsvl) / (vlcd + (rdtp * dsvl))
+        rdvl = (pcunchfr + pcunvlqt) / rdvl;
+        def rdps = (ftrd * vlcd * cpvl * ftvl * dsps * ftps) / (vlcd + (rdtp * dsps))
+        rdps = (pcunchfr + pcunvlqt) / rdps
+        return ["rdvl": rdvl, "rdps": rdps]
+
     }
 
 

@@ -85,7 +85,12 @@ class Reportes3Controller {
             params.prch=0
         if (!params.prvl)
             params.prvl=0
-        def rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
+        def rendimientos
+        if(!params.obra)
+            rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
+        else
+            rendimientos = preciosService.rendimientoTransporteLuz(Obra.get(params.obra),params.prch.toDouble(),params.prvl.toDouble())
+
 //        println "rends "+rendimientos
         if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
             rendimientos["rdps"]=0
