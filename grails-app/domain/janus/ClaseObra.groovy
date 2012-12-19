@@ -19,6 +19,6 @@ class ClaseObra implements Serializable {
     static constraints = {
         codigo(blank: false, attributes: [title: 'numero'])
         descripcion(size: 1..63, blank: false, attributes: [title: 'descripcion'])
-        tipo(size: 1..1, blank: false, attributes:[title: 'tipo'])
+        tipo(size: 1..1, blank: true,nullable:true, attributes:[title: 'tipo'])
     }
 }
