@@ -9,8 +9,8 @@ class ObraFPController {
 
     def matrizFP() {
         /* --------------------- parámetros que se requieren para correr el proceso  --------------------- */
-        def obra__id = 886         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
-        def sbpr = 0               // todos los subpresupuestos
+        def obra__id = params.obra         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
+        def sbpr = params.sub               // todos los subpresupuestos
         def conTransporte = true   // parámetro leido de la interfaz
         /* ----------------------------------- FIN de parámetros  ---------------------------------------- */
 
