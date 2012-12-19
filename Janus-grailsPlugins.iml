@@ -7,8 +7,6 @@
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/grails-app/views" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/jquery-1.7.1/web-app" relative="/" />
-          <root url="file://$USER_HOME$/.grails/2.1.0/projects/janus/plugins/kerberos-0.7/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
       </configuration>

@@ -1,9 +1,9 @@
 package janus
 
-class Nota {
+class Nota implements Serializable {
 
     String obraTipo
-    int codigo;
+
     String descripcion;
     String texto
     String adicional
@@ -19,7 +19,7 @@ class Nota {
         columns {
             id column: 'nota__id'
             obraTipo column: 'obratipo'
-            codigo column: 'notacdgo'
+
             descripcion column: 'notadscr'
             texto column: 'notatext'
             adicional column: 'notaadcn'
@@ -28,8 +28,7 @@ class Nota {
 
     static constraints = {
 
-        obraTipo(blank: true, nullable: true, attributes: [title: 'obraTipo'])
-        codigo(blank: true, nullable: true, attributes: [title: 'codigo'])
+        obraTipo(maxSize: 1, blank: true, nullable: true, attributes: [title: 'obraTipo'])
         descripcion(size: 1..253, blank:true, attributes: [title: 'descripcion'])
         texto(size: 1..253, blank: true, attributes: [title: 'texto'])
         adicional(size: 1..253, blank: true, nullable: true, attributes: [title: 'adicional'])
