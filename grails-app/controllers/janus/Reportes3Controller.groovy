@@ -70,10 +70,10 @@ class Reportes3Controller {
             indi=21.5
         }
         if (!params.dsps){
-            params.dsps=0
-            params.prch=0
-            params.prvl=0
-            params.dsvs=0
+            params.dsps=0 //distancia peso
+            params.prch=0 //precio chofer
+            params.prvl=0 //precio volquete
+            params.dsvs=0 //distancia volumen
         }
         if (!params.dsvs){
             params.dsps=0
@@ -106,7 +106,7 @@ class Reportes3Controller {
         def total = 0,totalHer=0,totalMan=0,totalMat=0
         tablaTrans+="<thead><tr><th colspan='7'>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></tr></thead><tbody>"
 
-        tablaHer+="<thead><tr><th colspan='7'>Herramienta</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Taria</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
+        tablaHer+="<thead><tr><th colspan='7'>Herramienta</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
         tablaMano+="<thead><tr><th colspan='7'>Mano de obra</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Jornal</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
         tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Unitario</th><th></th><th></th><th>C.Total</th></tr></thead><tbody>"
 //        println "rends "+rendimientos
