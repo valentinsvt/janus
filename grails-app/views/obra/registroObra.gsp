@@ -129,19 +129,20 @@
 
         <div class="span1">
 
-            <g:hiddenField name="estadoObra" id="hiddenEstado"/>
+            <g:if test="${obra?.estado == null}">
 
-            <g:if test="${obra?.estado == 'R'}">
-                <g:textField name="estado2" id="estadoNombre" class="estado" value="${"Registrado"}" disabled="true"/>
+                <g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"/>
+                <g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>
 
             </g:if>
 
             <g:else>
 
-                <g:textField name="estado2" id="estadoNombre" class="estado" value="${"No Registrado"}" disabled="true"/>
-
+            <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"/>
+            <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
 
             </g:else>
+
 
         </div>
     </div>
@@ -225,7 +226,7 @@
 
         <div class="span1" >Fecha</div>
 
-        <div class="span2"><elm:datepicker name="fechaPreciosRubro" class="fechaPreciosRubro datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
+        <div class="span2"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
 
     </div>
@@ -264,6 +265,10 @@
         <div class="span1 formato">FORMULA</div>
 
         <div class="span3"><g:textField name="formulaPolinomica" class="formula" value="${obra?.formulaPolinomica}"/></div>
+
+
+        <div class="span1 formato">DESTINO</div>
+        <div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>
 
     </div>
 
@@ -337,7 +342,7 @@
                     <li><a href="#">Fórmula Pol.</a></li>
                     <li><a href="#">FP Liquidación</a></li>
                     <li><a href="#"><i class="icon-money"></i>Rubros</a></li>
-                    <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
+                    <li><a href="${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
                     <li><a href="${g.createLink(controller: 'cronograma',action: 'cronogramaObra',id:obra?.id)}"><i class="icon-calendar"></i>Cronograma</a></li>
                     <li><a href="#">Composición</a></li>
                     <li><a href="#">Trámites</a></li>
@@ -401,9 +406,7 @@
 //            $("textarea").val("");
 //            $("select").val("-1");
 
-
             location.href =  "${g.createLink(action: 'registroObra')}";
-
 
 
         });
@@ -437,6 +440,7 @@
 
 
             $("#frm-registroObra").submit();
+//            console.log($("#frm-registroObra").serialize());
 
 
         });
@@ -454,12 +458,12 @@
             busqueda();
         });
 
-        $("#btnDocumentos").click(function () {
+        %{--$("#btnDocumentos").click(function () {--}%
 
-            location.href  = "${g.createLink(controller: 'documentosObra', action: 'documentosObra')}";
+            %{--location.href  = "${g.createLink(controller: 'documentosObra', action: 'documentosObra')}";--}%
 
 
-        });
+        %{--});--}%
 
         $("#btnVar").click(function () {
             $.ajax({
@@ -488,7 +492,7 @@
                             url     : url,
                             data    : data,
                             success : function (msg) {
-                                console.log("Data Saved: " + msg);
+//                                console.log("Data Saved: " + msg);
                             }
                         });
 
@@ -531,30 +535,22 @@
             title     : 'Cambiar estado de la Obra',
             buttons: {
                 "Aceptar": function() {
-
-                    var estadoCambiado = $("#estadoNombre").val();
-
-                    if(estadoCambiado == 'No Registrado') {
-
-                        estadoCambiado = 'Registrado';
-
-                        $("#hiddenEstado").val( $(this).attr("estado"));
-
-                        $("#estadoNombre").val(estadoCambiado)
-
-                        $("#estadoDialog").dialog("close");
+//
+                    var estadoCambiado = $("#estado").val();
+//
+//                    console.log("estado"+ estadoCambiado);
+//
+                    if(estadoCambiado == 'N') {
+                        estadoCambiado = 'R';
+//                        console.log("estadocambiado" + $(".estado").val() )
+//                        $("#estadoDialog").dialog("close");
+                    } else {
+                        estadoCambiado = 'N';
+//                      $("#estadoNom").val(estadoCambiado);
+//                      console.log("estadocambiado" + $(".estado").val() )
                     }
-
-                    else{
-
-                        estadoCambiado = 'No Registrado';
-                        $("#hiddenEstado").val( $(this).attr("estado"));
-
-                        $("#estadoNombre").val(estadoCambiado);
-                        $("#estadoDialog").dialog("close");
-
-                    }
-
+                    $(".estado").val(estadoCambiado);
+                    $("#estadoDialog").dialog("close");
 
 
                 },

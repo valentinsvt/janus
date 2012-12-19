@@ -352,9 +352,15 @@ class ObraController extends janus.seguridad.Shield {
         }
 
 
+        params.each {k,v ->
 
+            println(k+"\t" + v)
+
+        }
 
 //        println("parametros" + params)
+
+
 
         def obraInstance
         if (params.id) {
