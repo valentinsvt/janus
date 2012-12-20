@@ -335,7 +335,7 @@ class ReportesController {
         def precioVolquete = parts[1].toDouble()
 
         def rendimientos = preciosService.rendimientoTransporteLuz(obra, precioChofer, precioVolquete)
-        println "rends " + rendimientos
+//        println "rends " + rendimientos
         if (rendimientos["rdps"].toString() == "NaN" || rendimientos["rdps"].toString() == "Infinity") {
             rendimientos["rdps"] = 0
             rendimientos["rdvl"] = 0

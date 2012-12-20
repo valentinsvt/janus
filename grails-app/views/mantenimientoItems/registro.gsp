@@ -32,14 +32,14 @@
 
     <body>
 
-        <div class="span12">
-            <g:if test="${flash.message}">
+        <g:if test="${flash.message}">
+            <div class="span12">
                 <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
                     <a class="close" data-dismiss="alert" href="#">×</a>
                     ${flash.message}
                 </div>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
 
         <div class="span12 btn-group" data-toggle="buttons-radio">
             <a href="#" id="1" class="btn btn-info toggle active">
