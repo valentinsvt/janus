@@ -34,9 +34,9 @@ class VariablesController {
     }
 
     def composicion() {
-        if (!params.id) {
-            params.id = "886"
-        }
+//        if (!params.id) {
+//            params.id = "886"
+//        }
         if (!params.tipo) {
             params.tipo = "-1"
         }
