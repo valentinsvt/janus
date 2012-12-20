@@ -90,9 +90,10 @@ class MatrizController extends janus.seguridad.Shield {
                     fpx.numero="p0"+(it+1)
                     if (it==0){
                         fpx.indice=indiMano
-                        def select = "select clmncdgo from mfcl where clmndscr = 'MANO_OBRA_T' "
+                        def select = "select clmncdgo from mfcl where clmndscr = 'MANO_OBRA_T' and obra__id = ${params.obra} "
                         def columna
                         def valor = 0
+                        println "sql it 0 mfcl "+select
                         cn.eachRow(select.toString()){r->
                               columna=r[0]
                         }
