@@ -138,8 +138,8 @@
 
             <g:else>
 
-            <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"/>
-            <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
+                <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"/>
+                <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
 
             </g:else>
 
@@ -332,7 +332,7 @@
 
     <fieldset>
         <div class="span3">
-          Primero debe registrar la obra para poder imprimir los documentos.
+            Primero debe registrar la obra para poder imprimir los documentos.
 
         </div>
     </fieldset>
@@ -350,7 +350,7 @@
                 <ul class="nav">
                     <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
                     <li><a href="${g.createLink(controller: 'volumenObra',action: 'volObra',id:obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra</a></li>
-                    <li><a href="${g.createLink(controller: 'matriz',action: 'matrizPolinomica',id: obra?.id)}"><i class="icon-th"></i>Matriz FP</a></li>
+                    <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
                     <li><a href="#">Fórmula Pol.</a></li>
                     <li><a href="#">FP Liquidación</a></li>
                     <li><a href="#" id="btnRubros"><i class="icon-money"></i>Rubros</a></li>
@@ -400,11 +400,70 @@
     </div>
 </div>
 
+<g:if test="${obra}">
+    <div class="modal hide fade mediumModal" id="modal-matriz" style=";overflow: hidden;">
+        <div class="modal-header btn-primary">
+            <button type="button" class="close" data-dismiss="modal">×</button>
 
+            <h3 id="modal_title_matriz">
+            </h3>
+        </div>
+
+        <div class="modal-body" id="modal_body_matriz">
+            <div id="msg_matriz">
+                <p>Desea volver a generar la matriz? Esta acción podria tomar varios minutos</p>
+                <a href="#" class="btn btn-info" id="no">No</a>
+                <a href="#" class="btn btn-danger" id="si">Si</a>
+
+            </div>
+            <div id="datos_matriz">
+                <p>Si no escoge un subpresupuesto se generará con todos</p>
+                <g:select name="mtariz_sub" from="${subs}" noSelection="['0':'Seleccione...']" optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
+                Generar con transporte <input type="checkbox" id="si_trans" style="margin-top: -3px" checked="true">
+                <a href="#" class="btn btn-success" id="ok_matiz" style="margin-left: 10px">Generar</a>
+            </div>
+        </div>
+
+    </div>
+</g:if>
 
 <script type="text/javascript">
     $(function () {
+        <g:if test="${obra}">
+        $("#matriz").click(function(){
+            $("#modal_title_matriz").html("Generar matriz");
+            $("#datos_matriz").hide()
+            $("#msg_matriz").show()
+            $("#modal-matriz").modal("show")
 
+
+
+        });
+        $("#no").click(function(){
+            location.href="${g.createLink(controller: 'matriz',action: 'matrizPolinomica',id: obra?.id)}"
+        })
+        $("#si").click(function(){
+            $("#datos_matriz").show()
+            $("#msg_matriz").hide()
+        })
+
+        $("#ok_matiz").click(function(){
+            var sp = $("#mtariz_sub").val()
+            var tr = $("#si_trans").attr("checked")
+//            console.log(sp,tr)
+            if(sp!="-1")
+                $("#dlgLoad").dialog("open");
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action: 'matrizFP',controller: 'obraFP')}",
+                data    : "obra=${obra.id}&sub="+sp+"&trans="+tr,
+                success : function (msg) {
+                    $("#dlgLoad").dialog("close");
+                    location.href="${g.createLink(controller: 'matriz',action: 'matrizPolinomica',id: obra?.id)}"
+                }
+            });
+        });
+        </g:if>
         $("#lista").click(function(){
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
             $("#modalTitle_busqueda").html("Lista de obras");
@@ -459,7 +518,7 @@
             }
             else {
 
-                 $("#documentosDialog").dialog("open")
+                $("#documentosDialog").dialog("open")
 
             }
 
@@ -528,7 +587,7 @@
 
         %{--$("#btnDocumentos").click(function () {--}%
 
-            %{--location.href  = "${g.createLink(controller: 'documentosObra', action: 'documentosObra')}";--}%
+        %{--location.href  = "${g.createLink(controller: 'documentosObra', action: 'documentosObra')}";--}%
 
 
         %{--});--}%

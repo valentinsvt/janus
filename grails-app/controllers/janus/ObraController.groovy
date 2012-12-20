@@ -90,8 +90,8 @@ class ObraController extends janus.seguridad.Shield {
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"]]
         if (params.obra) {
             def obra = Obra.get(params.obra)
-
-            [campos: campos, prov:prov,obra:obra]
+            def subs = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+            [campos: campos, prov:prov,obra:obra,subs:subs]
         } else {
             [campos: campos, prov: prov]
         }

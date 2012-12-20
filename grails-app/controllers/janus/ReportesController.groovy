@@ -45,20 +45,20 @@ class ReportesController {
         println "imprime matriz"
         def cn = buscadorService.dbConnectionService.getConnection()
         def cn2 = buscadorService.dbConnectionService.getConnection()
-        def sql = "SELECT clmncdgo,clmndscr,clmntipo from obcl_${session.usuario} order by 1"
+        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id=${params.id} order by 1"
         def columnas = []
         def filas = []
         cn.eachRow(sql.toString()) { r ->
             columnas.add([r[0], r[1], r[2]])
         }
-        sql = "SELECT * from obrb_${session.usuario} order by orden"
+        sql = "SELECT * from mfrb where obra__id=${params.id} order by orden"
         def cont = 1
         cn.eachRow(sql.toString()) { r ->
-            def tmp = [cont, r[0].trim(), r[1], r[2], r[3]]
+            def tmp = [cont, r[0].trim(), r[2], r[3], r[4]]
             def sq = ""
             columnas.each { c ->
                 if (c[2] != "R") {
-                    sq = "select valor from obvl_${session.usuario} where clmncdgo=${c[0]} and codigo='${r[0].trim()}'"
+                    sq = "select valor from mfvl where obra__id=${params.id} and clmncdgo=${c[0]} and codigo='${r[0].trim()}'"
                     cn2.eachRow(sq.toString()) { v ->
                         tmp.add(v[0])
                     }
@@ -84,12 +84,12 @@ class ReportesController {
         document.addKeywords("reporte, janus,matriz");
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
-        Paragraph preface = new Paragraph();
-        addEmptyLine(preface, 1);
-        preface.add(new Paragraph("Matriz polinómica", catFont));
-        preface.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-        addEmptyLine(preface, 1);
-        document.add(preface);
+//        Paragraph preface = new Paragraph();
+//        addEmptyLine(preface, 1);
+//        preface.add(new Paragraph("Matriz polinómica", catFont));
+//        preface.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+//        addEmptyLine(preface, 1);
+//        document.add(preface);
         Font small = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
 
         /*table*/
@@ -126,7 +126,9 @@ class ReportesController {
                         dato = "0.00"
                     else
                         dato = dato.toString()
-                    table.addCell(new Phrase(dato, small));
+                    def cell = new PdfPCell(new Phrase(dato, small));
+                    cell.setFixedHeight(28f);
+                    table.addCell(cell);
                 }
             }
             parrafo.add(table);

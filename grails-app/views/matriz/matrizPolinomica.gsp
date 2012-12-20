@@ -40,6 +40,9 @@
         padding: 3px !important;
     }
     </style>
+    <script type="text/javascript">
+        $("#dlgLoad").dialog("open");
+    </script>
 </head>
 <body>
 <div class="span12">
@@ -59,7 +62,7 @@
         <i class="icon-table"></i>
         Coeficientes de la matriz
     </a>
-    <a href="${g.createLink(controller: 'reportes',action: 'imprimeMatriz')}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
+    <a href="${g.createLink(controller: 'reportes',action: 'imprimeMatriz',id:"${obraId}")}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
         <i class="icon-print"></i>
         Imprimir
     </a>
@@ -139,6 +142,7 @@
     }
     $(function () {
         copiaTabla()
+        $("#dlgLoad").dialog("close");
         $(".item_row").click(function(){
             $(".activo").addClass($(".activo").attr("color")).removeClass("activo")
             $("."+$(this).attr("fila")).addClass("activo")

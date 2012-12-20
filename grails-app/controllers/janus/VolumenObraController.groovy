@@ -46,7 +46,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 //        println "paramms "+params
         def obra = Obra.get(params.obra)
         def detalle
-        if (params.sub)
+        if (params.sub && params.sub !="null")
             detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
         else
             detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
