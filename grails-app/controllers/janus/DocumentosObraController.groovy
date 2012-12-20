@@ -15,14 +15,14 @@ class DocumentosObraController {
 
         def obra = Obra.get(params.id)
 
-       def personas = Persona.list()
+        def personas = Persona.list()
 
         def departamentos = Departamento.list()
 
 //        println(departamentos)
 
 
-         def firmas
+        def firmas
 
         def firmasViales
 
@@ -32,14 +32,14 @@ class DocumentosObraController {
         firmas = c.list {
 
             or{
-            ilike("cargo", "%Director%")
+                ilike("cargo", "%Director%")
                 ilike("cargo","%Jefe%")
-                    ilike("cargo", "%Subdirector%")
+                ilike("cargo", "%Subdirector%")
                 ilike("cargo", "%subd%")
             }
             or{
-            eq("departamento", Departamento.get(3))
-            eq("departamento", Departamento.get(10))
+                eq("departamento", Departamento.get(3))
+                eq("departamento", Departamento.get(10))
             }
             maxResults(20)
             order("nombre", "desc")
@@ -81,15 +81,22 @@ class DocumentosObraController {
         def nota = Nota.get(params.id)
 
         def json = "{"
-        json+='"id":  ' + nota.id + ','
-        json+='"descripcion":  "' + nota.descripcion + '",'
-        json+='"texto":  "' + nota.texto + '",'
-        json+='"adicional":  "' + nota.adicional + '"'
 
+        if(nota) {
+            json+='"id":  ' + nota.id + ','
+            json+='"descripcion":  "' + (nota.descripcion ?: "") + '",'
+            json+='"texto":  "' + nota.texto + '",'
+            json+='"adicional":  "' + (nota.adicional ?: "") + '"'
+        }
+        else {
+            json+='"id":  "",'
+            json+='"descripcion":  "",'
+            json+='"texto":  "",'
+            json+='"adicional":  ""'
+        }
         json+="}"
 
         render json
-
     }
 
 }

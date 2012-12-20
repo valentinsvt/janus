@@ -3,6 +3,7 @@ class Presupuesto implements Serializable {
     String numero
     String descripcion
     int nivel
+
     static mapping = {
         table 'prsp'
         cache usage: 'read-write', include: 'non-lazy'
@@ -14,12 +15,14 @@ class Presupuesto implements Serializable {
             numero column: 'prspnmro'
             descripcion column: 'prspdscr'
             nivel column: 'prspnvel'
+
         }
     }
     static constraints = {
         numero(size: 1..31, blank: false, attributes: [title: 'numero'])
-        nivel(blank: false, attributes: [title: 'nivel'])
+        nivel(blank: true, attributes: [title: 'nivel'])
         descripcion(size: 1..255, blank: false, attributes: [title: 'descripcion'])
+
 
     }
 }

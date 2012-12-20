@@ -82,40 +82,40 @@
             </div>
 
 
-        <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
+            <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
 
-            <div class="span6">
+                <div class="span6">
 
-                <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 685px"/>
+                    <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 685px" disabled="true"/>
 
-            </div>
-            <div class="span6">
-
-
-                <g:textArea name="texto" value="${nota?.texto}" rows="5" cols="5" style="height: 125px; width:685px ; resize: none"/>
-
-            </div>
+                </div>
+                <div class="span6">
 
 
-            <div class="span6" style="margin-top: 5px; margin-bottom: 10px">
+                    <g:textArea name="texto" value="${nota?.texto}" rows="5" cols="5" style="height: 125px; width:685px ; resize: none" disabled="true"/>
 
-                <g:checkBox name="notaAdicional" checked="false"/> Nota al Pie Adicional (15 líneas aprox)
-
-            </div>
+                </div>
 
 
+                <div class="span6" style="margin-top: 5px; margin-bottom: 10px">
+
+                    <g:checkBox name="notaAdicional" checked="false" disabled="true"/> Nota al Pie Adicional (15 líneas aprox)
+
+                </div>
 
 
-            <div class="span6">
 
 
-                <g:textArea name="adicional" value="${nota?.adicional}" rows="5" cols="5" style="height: 125px; width:685px ; resize: none" disabled="true" />
+                <div class="span6">
 
-            </div>
-            
-            <g:hiddenField name="obraTipo" value="${obra?.claseObra?.tipo}"/>
 
-        </g:form>
+                    <g:textArea name="adicional" value="${nota?.adicional}" rows="5" cols="5" style="height: 125px; width:685px ; resize: none" disabled="true" />
+
+                </div>
+
+                <g:hiddenField name="obraTipo" value="${obra?.claseObra?.tipo}"/>
+
+            </g:form>
 
         </fieldset>
 
@@ -262,10 +262,18 @@
         <fieldset class="borde">
             <legend>Texto</legend>
 
+<g:form class="memo" name="frm-memo" controller="presupuesto" action="save">
+
+    <g:hiddenField name="id" value="${obra?.partidaObra?.id}"/>
+
+
+
             <div class="span6">
+                ${obra?.partidaObra?.id}
+
                 <div class="span1">Texto</div>
 
-                <div class="span3"><g:textArea name="textoMemo" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px;resize: none;"/></div>
+                <div class="span3"><g:textArea name="textoPresupuesto" value="${obra?.partidaObra?.textoPresupuesto}" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px;resize: none;" /></div>
 
             </div>
 
@@ -273,9 +281,11 @@
             <div class="span6">
                 <div class="span1">Pie</div>
 
-                <div class="span3"><g:textArea name="pieMemo" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px; resize: none"/></div>
+                <div class="span3"><g:textArea name="piePresupuesto" value="${obra?.partidaObra?.piePresupuesto}" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px; resize: none" /></div>
 
             </div>
+
+</g:form>
 
             <div class="span6" style="margin-top: 10px">
                 <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
@@ -588,6 +598,24 @@
 <script type="text/javascript">
 
 
+    function loadNota() {
+        var idPie = $("#piePaginaSel").val();
+        $.ajax({
+            type    : "POST",
+            dataType: 'json',
+            url     : "${g.createLink(action:'getDatos')}",
+            data    : {id: idPie} ,
+            success : function (msg) {
+                $("#descripcion").val(msg.descripcion);
+                $("#texto").val(msg.texto);
+                $("#adicional").val(msg.adicional);
+            }
+        });
+    }
+
+
+    loadNota();
+
     $("#tabs").tabs({
         heightStyle:"fill"
     });
@@ -645,31 +673,34 @@
         }
     });
 
+    $("#btnEditarMemo").click(function () {
+
+         $("#textoPresupuesto").attr("disabled",false);
+        $("#piePresupuesto").attr("disabled",false)
+
+
+
+    });
+
+
+    $("#btnAceptarMemo").click(function () {
+
+
+            $("#frm-memo").submit();
+
+
+    });
 
     $("#piePaginaSel").change(function () {
 
-       var idPie = $("#piePaginaSel").val();
 
-        console.log(idPie)
+        loadNota();
 
-
-//        $("#descripcion").val("")
-//
-//          $("#texto").val("");
-//        $("#adicional").val("");
-
-
-
-        $.ajax({
-            type    : "POST",
-            url     : url,
-            data    : data,
-            success : function (msg) {
-//                                console.log("Data Saved: " + msg);
-            }
-        });
-
-
+        $("#piePaginaSel").attr("disabled",false);
+        $("#descripcion").attr("disabled",true);
+        $("#texto").attr("disabled",true);
+        $("#adicional").attr("disabled",true);
+        $("#notaAdicional").attr("disabled",true)
 
     });
 
@@ -680,6 +711,8 @@
         var tipo = parts[1];
 
     });
+
+
 
     $("#btnAdicionarMemo").click(function () {
 
@@ -733,6 +766,8 @@
 
         $("#frm-nota").submit();
 
+
+
     });
 
 
@@ -741,13 +776,59 @@
 
 //        $("input[type=text]").val("");
 //            $("textarea").val("");
-            $("#piePaginaSel").attr("disabled",true);
-            $("#descripcion").val("");
-            $("#texto").val("");
+        $("#piePaginaSel").attr("disabled",true);
+
+        $("#descripcion").attr("disabled",false);
+        $("#texto").attr("disabled",false);
+
+        $("#notaAdicional").attr("checked",true)
+
+        $("#adicional").attr("disabled",false);
+        $("#descripcion").val("");
+        $("#texto").val("");
         $("#adicional").val("");
+
+        $("#notaAdicional").attr("disabled",false)
 
 
     });
+
+
+    $("#btnCancelar").click(function () {
+
+        $("#piePaginaSel").attr("disabled",false);
+        loadNota();
+
+        $("#descripcion").attr("disabled",true);
+        $("#texto").attr("disabled",true);
+        $("#adicional").attr("disabled",true);
+        $("#notaAdicional").attr("disabled",true)
+    });
+
+
+
+    function desbloquear() {
+
+        $("#piePaginaSel").attr("disabled",false);
+        $("#descripcion").attr("disabled",false);
+        $("#texto").attr("disabled",false);
+        $("#adicional").attr("disabled",false);
+        $("#notaAdicional").attr("disabled",false)
+
+    }
+
+
+    $("#btnEditar").click(function () {
+
+
+           loadNota();
+           desbloquear();
+
+
+
+    });
+
+
 
 
     $("#notaAdicional").click(function () {
@@ -757,7 +838,7 @@
 
         if($("#notaAdicional").attr("checked") == "checked") {
 
-              console.log("checked")
+//            console.log("checked")
             $("#adicional").attr("disabled", false)
 
         }
@@ -766,7 +847,7 @@
 
 //            console.log(" no checked")
             $("#adicional").attr("disabled", true)
-            $("#adicional").val("");
+//            $("#adicional").val("");
         }
 
 
