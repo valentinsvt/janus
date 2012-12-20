@@ -133,6 +133,13 @@
 
             <g:if test="${rend == 'screen'}">
                 <div class="btn-toolbar" style="margin-top: 15px;">
+                    <div class="btn-group">
+                        <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn " title="Regresar a la obra">
+                            <i class="icon-arrow-left"></i>
+                            Regresar
+                        </a>
+                    </div>
+
                     <div class="btn-group" data-toggle="buttons-radio">
                         <g:link action="composicion" id="${obra.id}" params="[tipo: -1]" class="btn btn-info toggle ${tipo.contains(',') ? 'active' : ''}">
                             <i class="icon-cogs"></i>
@@ -259,7 +266,7 @@
                         oLanguage       : {
                             sZeroRecords : "No se encontraron datos",
                             sInfo        : "",
-                            sInfoEmpty   : "No se encontraron datos"
+                            sInfoEmpty   : ""
                         }
                     });
 
