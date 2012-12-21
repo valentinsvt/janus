@@ -131,7 +131,7 @@
             <tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">
                 <td style="width: 20px" class="orden">${vol.orden}</td>
                 <td class="cdgo">${vol.item.codigo}</td>
-                <td class="nombre">${vol.item.nombre}</td>
+                <td class="nombre">${vol.item.nombre.replaceAll("<","(Menor)").replaceAll(">","(Mayor)")}</td>
                 <td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>
                 <td style="text-align: right" class="cant">
                     <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>

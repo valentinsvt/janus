@@ -439,7 +439,7 @@
 
                 });
                 $("#no").click(function () {
-                    location.href = "${g.createLink(controller: 'matriz',action: 'matrizPolinomica',id: obra?.id)}"
+                    location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',id: obra?.id)}"
                 })
                 $("#si").click(function () {
                     $("#datos_matriz").show()

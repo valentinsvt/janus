@@ -15,19 +15,41 @@ class MatrizController extends janus.seguridad.Shield {
         [obra:obra,fp:fp]
     }
 
-    def matrizPolinomica(){
-        /*Todo cambiar para que funcione por obra*/
+    def pantallaMatriz(){
         def obra = params.id
         def cn = dbConnectionService.getConnection()
-        def cn2 = dbConnectionService.getConnection()
-        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra} order by 1"
+        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra} order by  1"
+//        println "sql desc "+sql
         def columnas = []
         def filas = []
         cn.eachRow(sql.toString()){r->
             columnas.add([r[0],r[1],r[2]])
         }
-        sql ="SELECT * from mfrb where obra__id =${obra} order by orden"
-        def cont = 1
+        [obra:obra,cols:columnas]
+    }
+
+    def matrizPolinomica(){
+        println "matriz "+params
+        def obra = params.id
+        def offset = params.inicio
+        if (!offset)
+            offset = 0
+        else
+            offset = offset.toInteger()
+        def limit = params.limit.toInteger()
+        offset = offset*limit
+        def cn = dbConnectionService.getConnection()
+        def cn2 = dbConnectionService.getConnection()
+        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra} order by 1"
+
+        def columnas = []
+        def filas = []
+        cn.eachRow(sql.toString()){r->
+            columnas.add([r[0],r[1],r[2]])
+        }
+        sql ="SELECT * from mfrb where obra__id =${obra} order by orden limit ${limit} offset ${offset}"
+        println "sql desc "+sql
+        def cont = offset+1
         cn.eachRow(sql.toString()){r->
             def tmp = [cont,r[0].trim(),r[2],r[3],r[4]]
             def sq =""
@@ -45,9 +67,12 @@ class MatrizController extends janus.seguridad.Shield {
             filas.add(tmp)
             cont++
         }
+        if (filas.size()==0)
+            render "fin"
+        else
+            [filas:filas,cols:columnas,obraId:params.id,offset:offset]
 
 
-        [filas:filas,cols:columnas,obraId:params.id]
     }
 
     def insertarVolumenesItem(){
@@ -95,7 +120,7 @@ class MatrizController extends janus.seguridad.Shield {
                         def valor = 0
                         println "sql it 0 mfcl "+select
                         cn.eachRow(select.toString()){r->
-                              columna=r[0]
+                            columna=r[0]
                         }
                         select = "select valor from mfvl where clmncdgo=${columna} and codigo='sS3' and obra__id =${params.obra} "
                         cn.eachRow(select.toString()){r->
