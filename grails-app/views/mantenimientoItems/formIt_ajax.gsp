@@ -83,7 +83,8 @@
             </div>
 
             <div class="controls">
-                <g:select from="['P': 'Peso', 'V': 'Volumen']" name="transporte" class="input-medium" value="${itemInstance?.transporte}" optionKey="key" optionValue="value"/>
+                <g:select from="['P': 'Peso (capital de cantón)', 'P1': 'Peso (especial)', 'V': 'Volumen (materiales pétreos para hormigones)', 'V1': 'Volumen (materiales pétreos para mejoramiento)', 'V2': 'Volumen (materiales pétreos para carpeta asfáltica)']"
+                          name="transporte" class="span4" value="${itemInstance?.transporte}" optionKey="key" optionValue="value"/>
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -100,7 +101,7 @@
                 <div class="input-append">
                     <g:field type="number" name="peso" maxlength="20" class=" required input-small" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>
                     <span class="add-on" id="spanPeso">
-                        ${itemInstance?.transporte == 'V' ? 'M<sup>3</sup>' : 'Ton'}
+                        ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}
                     </span>
                 </div>
                 <span class="mandatory">*</span>
@@ -210,7 +211,7 @@
     $("#transporte").change(function () {
         var v = $(this).val();
         var l = "";
-        if (v == 'P') {
+        if (v == 'P' || v == 'P1') {
             l = "Ton";
         } else {
             l = "M<sup>3</sup>";

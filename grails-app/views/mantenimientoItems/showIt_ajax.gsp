@@ -71,7 +71,7 @@
 
                 <span aria-labelledby="peso-label">
                     <g:fieldValue bean="${itemInstance}" field="peso"/>
-                    ${itemInstance?.transporte == 'V' ? 'M<sup>3</sup>' : 'Ton'}
+                    ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}
                 </span>
 
             </div>
@@ -307,7 +307,23 @@
             <div class="controls">
 
                 <span aria-labelledby="transporte-label">
-                    ${itemInstance.transporte == 'P' ? 'PESO' : itemInstance.transporte == 'V' ? 'VOLUMEN' : ''}
+                    ${(itemInstance.transporte == 'P') ? 'PESO' : itemInstance.transporte == 'V' ? 'VOLUMEN' : ''}
+                    <g:if test="${itemInstance.transporte == 'P'}">
+                        Peso (capital de cantón)
+                    </g:if>
+                    <g:elseif test="${itemInstance.transporte == 'P1'}">
+                        Peso (especial)
+                    </g:elseif>
+                    <g:elseif test="${itemInstance.transporte == 'V'}">
+                        Volumen (materiales pétreos para hormigones)
+                    </g:elseif>
+                    <g:elseif test="${itemInstance.transporte == 'V1'}">
+                        Volumen (materiales pétreos para mejoramiento)
+                    </g:elseif>
+                    <g:elseif test="${itemInstance.transporte == 'V2'}">
+                        Volumen (materiales pétreos para carpeta asfáltica)
+                    </g:elseif>
+
                 </span>
 
             </div>

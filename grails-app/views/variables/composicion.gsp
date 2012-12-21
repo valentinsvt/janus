@@ -176,17 +176,37 @@
                 <table class="table table-bordered table-condensed table-hover table-striped" id="tbl">
                     <thead>
                         <tr>
-                            <th>Código</th>
-                            <th>Item</th>
-                            <th>U</th>
-                            <th>Cantidad</th>
-                            <th>P. Unitario</th>
-                            <th>Transporte</th>
-                            <th>Costo</th>
-                            <th>Total</th>
-                            <g:if test="${tipo.contains(",")}">
-                                <th>Tipo</th>
+                            <g:if test="${tipo.contains(",") || tipo == '1'}">
+                                <th>Código</th>
+                                <th>Item</th>
+                                <th>U</th>
+                                <th>Cantidad</th>
+                                <th>P. Unitario</th>
+                                <th>Transporte</th>
+                                <th>Costo</th>
+                                <th>Total</th>
+                                <g:if test="${tipo.contains(",")}">
+                                    <th>Tipo</th>
+                                </g:if>
                             </g:if>
+                            <g:elseif test="${tipo == '2'}">
+                                <th>Código</th>
+                                <th>Mano de obra</th>
+                                <th>U</th>
+                                <th>Horas hombre</th>
+                                <th>Sal. / hora</th>
+                                <th>Costo</th>
+                                <th>Total</th>
+                            </g:elseif>
+                            <g:elseif test="${tipo == '3'}">
+                                <th>Código</th>
+                                <th>Equipo</th>
+                                <th>U</th>
+                                <th>Cantidad</th>
+                                <th>Tarifa</th>
+                                <th>Costo</th>
+                                <th>Total</th>
+                            </g:elseif>
                         </tr>
                     </thead>
                     <tbody>
@@ -204,9 +224,11 @@
                                 <td class="numero">
                                     <g:formatNumber number="${r.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,###0"/>
                                 </td>
-                                <td class="numero">
-                                    <g:formatNumber number="${r.transporte}" minFractionDigits="4" maxFractionDigits="4" format="##,####0"/>
-                                </td>
+                                <g:if test="${tipo.contains(",") || tipo == '1'}">
+                                    <td class="numero">
+                                        <g:formatNumber number="${r.transporte}" minFractionDigits="4" maxFractionDigits="4" format="##,####0"/>
+                                    </td>
+                                </g:if>
                                 <td class="numero">
                                     <g:formatNumber number="${r.costo}" minFractionDigits="4" maxFractionDigits="4" format="##,####0"/>
                                 </td>
@@ -214,13 +236,13 @@
                                     <g:formatNumber number="${r.total}" minFractionDigits="2" maxFractionDigits="2" format="##,##0"/>
 
                                     <g:if test="${r.grid == 1}">
-                                        <g:set var="totalEquipo" value="${totalEquipo + r.total}"/>
+                                        <g:set var="totalMaterial" value="${totalMaterial + r.total}"/>
                                     </g:if>
                                     <g:elseif test="${r.grid == 2}">
                                         <g:set var="totalMano" value="${totalMano + r.total}"/>
                                     </g:elseif>
                                     <g:elseif test="${r.grid == 3}">
-                                        <g:set var="totalMaterial" value="${totalMaterial + r.total}"/>
+                                        <g:set var="totalEquipo" value="${totalEquipo + r.total}"/>
                                     </g:elseif>
 
                                 </td>

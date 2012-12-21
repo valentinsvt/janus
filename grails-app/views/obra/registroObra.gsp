@@ -346,7 +346,11 @@
                             <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra
                             </a></li>
                             <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
-                            <li><a href="#">Fórmula Pol.</a></li>
+                            <li>
+                                <g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">
+                                    Fórmula Pol.
+                                </g:link>
+                            </li>
                             <li><a href="#">FP Liquidación</a></li>
                             <li><a href="#" id="btnRubros"><i class="icon-money"></i>Rubros</a></li>
                             <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
