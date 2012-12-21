@@ -39,7 +39,7 @@ class ObraFPController {
         /* 2. Se descomponen los items de la obra y se los inserta en vlobitem: sp_obra         */
 
         /* -------------------------------------------------------------------------------------
-        * Verifica si existe Transporte y/o Equipos'                                            */
+        * Verifica si existe Transporte y/o Equipos'                                          */
 
         def transporte = calculaTransporte(obra__id)
         if(!transporte)
