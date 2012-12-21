@@ -458,7 +458,7 @@
                         data    : "obra=${obra.id}&sub=" + sp + "&trans=" + tr,
                         success : function (msg) {
                             $("#dlgLoad").dialog("close");
-                            location.href = "${g.createLink(controller: 'matriz',action: 'matrizPolinomica',id: obra?.id)}"
+                            location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',params:[id:obra.id,inicio:0,limit:40])}"
                         }
                     });
                 });

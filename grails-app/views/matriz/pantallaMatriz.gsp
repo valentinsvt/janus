@@ -73,13 +73,18 @@
         <i class="icon-print"></i>
         Imprimir
     </a>
-    <input type="text" style="width: 200px;margin-left: 20px;" class="ui-corner-all">
+    <input type="text" style="width: 200px;margin-left: 20px;margin-top: 9px;" class="ui-corner-all" id="texto_busqueda">
+    <a href="#" class="btn btn-ajax btn-new" id="buscar" title="Buscar">
+        <i class="icon-search"></i>
+        Buscar
+    </a>
+    <a href="#" class="btn btn-ajax btn-new" id="reset" title="Resetear">
+        <i class="icon-refresh"></i>
+        Limpiar selección
+    </a>
 </div>
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px;width: 100%;max-width: 100%;overflow-x: hidden">
-
-
     <div style="width: 1000px;overflow-x: auto;max-width: 1000px;" class="scroll-pane">
-
         <table class="table table-bordered table-condensed  " style="width: ${cols.size()*150-140}px;max-width: ${cols.size()*150-140}px;float:left">
             <thead>
             <tr style="font-size: 10px !important;">
@@ -100,14 +105,10 @@
             </tbody>
             <tfoot>
             <tr id="bandera">
-
             </tr>
             </tfoot>
         </table>
     </div>
-
-
-
 </div>
 <div id="div_hidden" style="display: none">
     <table class="table table-bordered table-condensed  " style="width: ${cols.size()*150-140}px;max-width: ${cols.size()*150-140}px;float:left">
@@ -213,7 +214,7 @@
             var c0 = col0.clone()
             var c1 = col1.clone()
             c0.removeClass("col_0").addClass("estaticas")
-            c1.removeClass("col_1").addClass("estaticas")
+            c1.removeClass("col_1").addClass("estaticas codigos")
             tr.append(c0)
             tr.append(c1)
             cnt++
@@ -222,10 +223,10 @@
         });
         tabla.append(body)
         $("#list-grupo").prepend(tabla)
-        $(".h_0").hide()
-        $(".h_1").hide()
-        $(".col_0").hide()
-        $(".col_1").hide()
+        $(".h_0").remove()
+        $(".h_1").remove()
+        $(".col_0").remove()
+        $(".col_1").remove()
 
     }
     function appendTabla(){
@@ -254,10 +255,14 @@
 
         });
         $(".item_row").bind("click",function(){
-            $(".activo").addClass($(".activo").attr("color")).removeClass("activo")
-            $("."+$(this).attr("fila")).addClass("activo")
-            $("."+$(this).attr("fila")).removeClass("gris")
-            $("."+$(this).attr("fila")).removeClass("blanco")
+            if($(this).hasClass("activo")){
+                $("."+$(this).attr("fila")).addClass($(".activo").attr("color")).removeClass("activo")
+            }else{
+                $(this).addClass("activo")
+                $("."+$(this).attr("fila")).addClass("activo")
+                $("."+$(this).attr("fila")).removeClass("gris")
+                $("."+$(this).attr("fila")).removeClass("blanco")
+            }
         });
 
 
@@ -277,10 +282,16 @@
 //
 //        }, 4000);
         $(".item_row").click(function(){
-            $(".activo").addClass($(".activo").attr("color")).removeClass("activo")
-            $("."+$(this).attr("fila")).addClass("activo")
-            $("."+$(this).attr("fila")).removeClass("gris")
-            $("."+$(this).attr("fila")).removeClass("blanco")
+            if($(this).hasClass("activo")){
+                $("."+$(this).attr("fila")).addClass($(".activo").attr("color")).removeClass("activo")
+            }else{
+                $(this).addClass("activo")
+                $("."+$(this).attr("fila")).addClass("activo")
+                $("."+$(this).attr("fila")).removeClass("gris")
+                $("."+$(this).attr("fila")).removeClass("blanco")
+            }
+
+
         });
         var ctrl = 0
         $("body").keydown(function (ev) {
@@ -296,7 +307,7 @@
                 if(!fin){
 
                     if(inicio>ultimo){
-//                        $("#dlgLoad").dialog("open");
+                        $("#dlgLoad").dialog("open");
                         fin = cargarDatosAsinc(inicio,"interval",20)
                         ultimo = inicio
                         if(!fin)
@@ -349,6 +360,45 @@
 
 
         });
+        $("#buscar").click(function(){
+
+            var par = $("#texto_busqueda").val()
+            var primero = null
+            if(par.length>0){
+                $("th").each(function(){
+                    var mayus = par.toUpperCase()
+                    if($(this).html().match(mayus)){
+                        if(!$(this).hasClass("selectedColumna"))
+                            $(this).click();
+                        if(!primero)
+                            primero=$(this)
+
+                    }
+                });
+                $("#body_headers").find(".codigos").each(function(){
+                    var mayus = par.toUpperCase()
+                    if($(this).html().toUpperCase().match(mayus)){
+                        if(!$(this).hasClass("activo"))
+                            $(this).click();
+                    }
+                });
+
+                if(primero){
+                    var leftPos = $('.scroll-pane').scrollLeft()+500;
+                    var pos = primero.position().left-500
+//                console.log($('.scroll-pane').scrollLeft(),leftPos,primero.position().left,primero,primero.offsetParent())
+                    $(".scroll-pane").animate({scrollLeft:leftPos+pos-500}, 800);
+                }
+            }
+
+
+        });
+        $("#reset").click(function(){
+            $(".activo").addClass($(".activo").attr("color")).removeClass("activo")
+            $(".selectedColumna").removeClass("selectedColumna")
+
+
+        })
 
 
     });
