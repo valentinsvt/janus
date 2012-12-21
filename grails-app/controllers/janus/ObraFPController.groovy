@@ -90,19 +90,27 @@ class ObraFPController {
         rubros(obra__id, sbpr)
         //println "completa rubros"
         descomposicion(obra__id, sbpr)
+        //println "completa descomposicion"
         des_Materiales(obra__id, sbpr, conTransporte)
+        //println "completa des_Materiales"
         if (hayEquipos) {
             if (conTransporte) acTransporte(obra__id, sbpr)
             acEquipos(obra__id, sbpr)
         }
+        //println "completa hayEquipos"
 
         acManoDeObra(obra__id)                      /* cambio obra__id */
+        //println "completa acManoDeObra"
         acTotal(obra__id)                           /* cambio obra__id */
+        //println "completa acTotal"
 
         if (hayEquipos) desgloseTrnp(obra__id)      /* cambio obra__id */
+        //println "completa desgloseTrnp"
 
         completaTotalS2(obra__id, hayEquipos)
+        //println "completa completaTotalS2"
         acTotalS2(obra__id)                         /* cambio obra__id */
+        //println "completa acTotalS2"
 
 
         render(tarifaHoraria(obra__id))
@@ -395,6 +403,8 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def cn1 = dbConnectionService.getConnection()
         def tx_cr = ""
+        def tx_sql = ""
+/*
         def tx_sql = "select rdvl, rdps, dsps, dsvl from transporte(${id})"
         def rdvl = 0.0
         def rdps = 0.0
@@ -406,6 +416,7 @@ class ObraFPController {
             dsvl = row.dsvl
             dsps = row.dsps
         }
+*/
         //println "dsps: $dsps, dsvl: $dsvl, rdps: $rdps, rdvl: $rdvl"
         if (sbpr == 0) {
             tx_sql = "select item.item__id, itemcdgo, sum(vlobcntd) vlobcntd, itemnmbr, unddcdgo "
@@ -431,8 +442,13 @@ class ObraFPController {
                 }
             } else {
                 if (obra.estado == 'N') {
+/*
                     tx_cr = "select itemcdgo, parcial + parcial_t pcun, cmpo from rb_precios (${row.item__id}, "
                     tx_cr += "${obra.lugarId},'${obra.fechaPreciosRubros}',${dsps}, ${dsvl}, ${rdps}, ${rdvl}) where grpocdgo = 1"
+*/
+
+                    tx_cr = "select itemcdgo, parcial + parcial_t pcun, cmpo from vlob_pcun (${id},${row.item__id}) where grpocdgo = 1"
+
                 } else {
                     tx_cr = "select itemcdgo, parcial + parcial_t pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 1"
                 }
@@ -469,6 +485,7 @@ class ObraFPController {
                 tx_sql += "sbpr__id = ${sbpr} group by rbrocdgo"
             }
         }
+
         cn.eachRow(tx_sql.toString()) {row ->
             clmn = columnaCdgo(id, 'TRANSPORTE_T')
             cntd = rubroCantidad(id, row.rbrocdgo)
@@ -511,7 +528,7 @@ class ObraFPController {
             tx_sql = "select item.item__id, itemcdgo from vlob, item where obra__id = ${id} and vlobcntd > 0 and "
             tx_sql += "item.item__id = vlob.item__id"
         } else {
-            tx_sql = "select item.item__id, itemcdgo from vlob where obra__id = ${id} and sbpr__id = ${sbpr} and "
+            tx_sql = "select item.item__id, itemcdgo from vlob, item where obra__id = ${id} and sbpr__id = ${sbpr} and "
             tx_sql += "vlobcntd > 0 and item.item__id = vlob.item__id"
         }
         //println "acEquipos: " + tx_sql
