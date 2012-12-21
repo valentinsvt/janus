@@ -18,6 +18,7 @@ class ObraFPController {
         /* ----------------------------------- FIN de parámetros  ---------------------------------------- */
 
         //def obra = Obra.get(obra__id)
+        ejecutaSQL("select * from ac_rbro_hr(${obra__id})")
         ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
 
         render(verificaMatriz(obra__id)); render("Verificando matriz<br>")
