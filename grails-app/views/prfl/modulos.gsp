@@ -15,7 +15,7 @@
             <span style="margin-left: 6px;"><a href="#" id="creaModulo">Crear M&oacute;dulo</a>
                 <a href="#" id="editModulo">Editar M&oacute;dulo</a>
                 <a href="#" id="borraModulo">Borrar M&oacute;dulo</a>
-                <span style="margin-left: 6px;"></span><a href="#" id="vermenu">Ver men&uacute; de usuario</a>
+               %{-- <span style="margin-left: 6px;"></span><a href="#" id="vermenu">Ver men&uacute; de usuario</a>--}%
             </span>
         </div>
 

@@ -226,7 +226,7 @@
 
         $("#btnOlvidoPass").click(function () {
             var p = $("<p>Ingrese el email registrado a su usuario y se le enviará una nueva contraseña para ingresar al sistema.</p>");
-            var div = $('<div class="control-group" id="divMail"/>');
+            var div = $('<div class="control-group" />');
             var input = $('<input type="text" class="" id="email" placeholder="Email"/>');
             div.append(input);
 

@@ -4,12 +4,12 @@
     <g:hiddenField name="id" value="${personaInstance?.id}"/>
     <table cellpadding="5">
         <tr>
-            <td>
+            <td width="100px">
                 <span class="control-label label label-inverse">
-                    Cedula
+                    Cédula
                 </span>
             </td>
-            <td>
+            <td width="250px">
                 <g:textField name="cedula" maxlength="10" class="span2" value="${personaInstance?.cedula}"/>
                 <p class="help-block ui-helper-hidden"></p>
             </td>
@@ -19,8 +19,9 @@
                 </span>
             </td>
             <td>
-                <g:textField name="nombre" maxlength="30" class="span2" value="${personaInstance?.nombre}"/>
+                <g:textField name="nombre" maxlength="30" class="span2 required" value="${personaInstance?.nombre}"/>
                 <p class="help-block ui-helper-hidden"></p>
+                <span class="mandatory">*</span>
             </td>
         </tr>
         <tr>
@@ -30,12 +31,13 @@
                 </span>
             </td>
             <td>
-                <g:textField name="apellido" maxlength="30" class="span2" value="${personaInstance?.apellido}"/>
+                <g:textField name="apellido" maxlength="30" class="span2 required" value="${personaInstance?.apellido}"/>
                 <p class="help-block ui-helper-hidden"></p>
+                <span class="mandatory">*</span>
             </td>
             <td>
                 <span class="control-label label label-inverse">
-                    Codigo
+                    Código
                 </span>
             </td>
             <td>
@@ -104,7 +106,7 @@
             </td>
             <td>
                 <span class="control-label label label-inverse">
-                    Titulo
+                    Título
                 </span>
             </td>
             <td>
@@ -136,7 +138,7 @@
                 <p class="help-block ui-helper-hidden"></p>
             </td>
         </tr>
-        <g:if test="${!personaInstance?.id}">
+        %{--<g:if test="${!personaInstance?.id}">--}%
             <tr>
                 <td>
                     <span class="control-label label label-inverse">
@@ -185,7 +187,7 @@
                     <p class="help-block ui-helper-hidden"></p>
                 </td>
             </tr>
-        </g:if>
+        %{--</g:if>--}%
         <tr>
             <td>
                 <span class="control-label label label-inverse">
@@ -218,6 +220,16 @@
             <td>
                 <g:select name="perfiles" class="span2" multiple="" from="${janus.seguridad.Prfl.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre"
                           value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"/>
+            </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Mail
+                </span>
+            </td>
+            <td>
+                <g:textField name="email" maxlength="63" class="span2 required" value="${personaInstance?.email}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
             </td>
         </tr>
     </table>

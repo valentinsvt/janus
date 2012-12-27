@@ -90,7 +90,7 @@
 
         </div>
 
-        <div class="modal large hide fade" id="modal-Persona">
+        <div class="modal large hide fade" id="modal-Persona" style="width: 900px;">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>

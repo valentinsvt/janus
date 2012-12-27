@@ -11,7 +11,7 @@ class DepartamentoController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 15, 100)
         [departamentoInstanceList: Departamento.list(params), departamentoInstanceTotal: Departamento.count(), params: params]
     } //list
 
