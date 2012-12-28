@@ -18,15 +18,25 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             items = [items]
         }
 
-        items.each { itemId ->
+        def total = 0
+        items.each { itemStr ->
+            def parts2 = itemStr.split("_")
+            def itemId = parts2[0]
+            def valor = parts2[1].toDouble()
             def itemFormula = new ItemsFormulaPolinomica()
             itemFormula.formulaPolinomica = formula
             itemFormula.item = Item.get(itemId)
+            itemFormula.valor = valor
+            total += valor
             if (itemFormula.save(flush: true)) {
                 saved += itemFormula.id + ","
             } else {
                 println itemFormula.errors
             }
+        }
+        formula.valor = formula.valor + total
+        if (!formula.save(flush: true)) {
+            println "ERROR:: " + formula.errors
         }
         if (saved == "") {
             render "NO"
@@ -36,9 +46,22 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         }
     }
 
+    def delItemFormula() {
+        def itemFormulaPolinomica = ItemsFormulaPolinomica.get(params.id)
+        def formula = itemFormulaPolinomica.formulaPolinomica
+        formula.valor = formula.valor - itemFormulaPolinomica.valor
+        if (formula.save(flush: true)) {
+            itemFormulaPolinomica.delete(flush: true)
+            render "OK"
+        } else {
+            println "error: " + formula.errors
+            render "NO"
+        }
+    }
+
 
     def coeficientes() {
-        println "coef " + params
+//        println "coef " + params
 
         if (!params.tipo) {
             params.tipo = 'p'
@@ -51,24 +74,45 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         }
 
         def obra = Obra.get(params.id)
-        def fp = FormulaPolinomica.findAllByObra(obra, [order: "numero"])
+        def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
 
         def data = []
         fp.each { f ->
             if (f.numero =~ params.tipo) {
-                data.add([
+                def mapFormula = [
                         data: f.numero,
                         attr: [
                                 id: "fp_" + f.id,
                                 numero: f.numero,
                                 nombre: f.indice.descripcion,
-                                valor: f.valor
+                                valor: f.valor,
+                                rel: "fp"
                         ]
-                ])
+                ]
+                def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
+                if (children.size() > 0) {
+                    mapFormula.children = []
+                    children.each { ch ->
+                        def mapItem = [
+                                data: " ",
+                                attr: [
+                                        id: "it_" + ch.id,
+                                        numero: ch.item.codigo,
+                                        nombre: ch.item.nombre,
+                                        item: ch.itemId,
+                                        valor: ch.valor,
+                                        rel: "it"
+                                ]
+                        ]
+                        mapFormula.children.add(mapItem)
+                    }
+                }
+
+                data.add(mapFormula)
             }
         }
         def json = new JsonBuilder(data)
-
+//        println json.toPrettyString()
         def sql = "SELECT\n" +
                 "  v.voit__id                            id,\n" +
                 "  i.item__id                            iid,\n" +

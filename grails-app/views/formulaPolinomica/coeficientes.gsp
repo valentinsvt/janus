@@ -12,6 +12,7 @@
 
         <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jquery.jstree.js')}"></script>
         <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jstreegrid.js')}"></script>
+        <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>
 
         <script src="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/js', file: 'jquery.dataTables.min.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/css', file: 'jquery.dataTables.css')}" rel="stylesheet">
@@ -55,6 +56,10 @@
             cursor : pointer;
         }
 
+        .editable {
+            background : #98A8B5 !important;
+        }
+
         .selected {
             background : #A4CCEA !important;
         }
@@ -71,6 +76,10 @@
 
         table.dataTable tr.odd.selected td.sorting_1, table.dataTable tr.even.selected td.sorting_1 {
             background : #88AFCC !important;
+        }
+
+        .jstree-apple a {
+            border-radius : 0 !important;
         }
 
         </style>
@@ -165,6 +174,14 @@
 
         <script type="text/javascript">
 
+            var icons = {
+                edit   : "${resource(dir: 'images/tree', file: 'edit.png')}",
+                delete : "${resource(dir: 'images/tree', file: 'delete.gif')}",
+
+                fp : "${resource(dir: 'images/tree', file: 'boxes.png')}",
+                it : "${resource(dir: 'images/tree', file: 'box.png')}"
+            };
+
             function updateCoef($row) {
                 $("#spanCoef").text($.trim($row.attr("numero")) + ": " + $.trim($row.attr("nombre")));
             }
@@ -173,9 +190,156 @@
             }
 
             function treeSelection($item) {
-                $("a.selected, div.selected").removeClass("selected");
-                $item.parent().children("a, .jstree-grid-cell").addClass("selected");
-                updateCoef($item.parents("li"));
+                var $parent = $item.parent();
+                var strId = $parent.attr("id");
+                var parts = strId.split("_");
+
+                var tipo = parts[0];
+                var index = $parent.index();
+                var numero = $parent.attr("numero");
+
+                var $seleccionados = $("a.selected, div.selected, a.editable, div.editable");
+
+                if (tipo == 'fp') {
+                    //padres
+                    if (index) { //el primero (p01) no es seleccionable
+                        $seleccionados.removeClass("selected editable");
+                        $parent.children("a, .jstree-grid-cell").addClass("selected editable parent");
+                        updateCoef($item.parents("li"));
+                    } else {
+                        $seleccionados.removeClass("selected editable");
+                        $parent.children("a, .jstree-grid-cell").addClass("editable parent");
+                    }
+                } else if (tipo == 'it') {
+                    //hijos AQUI
+                    $seleccionados.removeClass("selected editable");
+                    $parent.children("a, .jstree-grid-cell").addClass("editable child");
+                    var $upper = $parent.parent().parent();
+                    if ($upper.index() > 0) {
+                        $seleccionados.removeClass("selected");
+                        $upper.children("a, .jstree-grid-cell").addClass("selected editable parent");
+                        updateCoef($upper);
+                    } else {
+                        $seleccionados.removeClass("selected");
+                        $upper.children("a, .jstree-grid-cell").addClass("editable parent");
+                    }
+                }
+            }
+
+            function treeNodeEvents($items) {
+                $items.bind({
+                    mouseenter : function (e) {
+                        // Hover event handler
+                        var $parent = $(this).parent();
+                        $parent.children("a, .jstree-grid-cell").addClass("hovered");
+                    },
+                    mouseleave : function (e) {
+                        // Hover event handler
+                        $(".hovered").removeClass("hovered");
+                    },
+                    click      : function (e) {
+                        // Click event handler
+                        treeSelection($(this));
+                    }
+                });
+            }
+
+            function createContextmenu(node) {
+                var parent = node.parent().parent();
+
+                var nodeStrId = node.attr("id");
+                var nodeText = $.trim(node.children("a").text());
+
+                var parentStrId = parent.attr("id");
+                var parentText = $.trim(parent.children("a").text());
+
+                var nodeTipo = node.attr("rel");
+
+                var parentTipo = parent.attr("rel");
+
+                var parts = nodeStrId.split("_");
+                var nodeId = parts[1];
+                if (parts.length == 3) {
+                    nodeId = parts[2];
+                }
+
+                parts = parentStrId.split("_");
+                var parentId = parts[1];
+
+                var nodeHasChildren = node.hasClass("hasChildren");
+                var cantChildren = node.children("ul").children().size();
+                nodeHasChildren = nodeHasChildren || cantChildren != 0;
+
+                var menuItems = {}, lbl = "", item = "";
+
+                switch (nodeTipo) {
+                    case "fp":
+                        break;
+                    case "it":
+                        var nodeCod = node.attr("numero");
+                        var nodeDes = node.attr("nombre");
+                        var nodeValor = node.attr("valor");
+                        var nodeItem = node.attr("item");
+
+                            /*
+                            TODO: AQUI:
+                            seleccionar el nodo y el padre
+                             */
+
+                        menuItems.delete = {
+                            label            : "Eliminar",
+                            separator_before : false,
+                            separator_after  : false,
+                            icon             : icons.delete,
+                            action           : function (obj) {
+                                $.box({
+                                    imageClass : "box_info",
+                                    text       : "Está seguro de eliminar?",
+                                    title      : "Confirmación",
+                                    iconClose  : false,
+                                    dialog     : {
+                                        resizable     : false,
+                                        draggable     : false,
+                                        closeOnEscape : false,
+                                        buttons       : {
+                                            "Aceptar"  : function () {
+                                                $.ajax({
+                                                    type    : "POST",
+                                                    url     : "${createLink(action:'delItemFormula')}",
+                                                    data    : {
+                                                        tipo : nodeTipo,
+                                                        id   : nodeId
+                                                    },
+                                                    success : function (msg) {
+                                                        if (msg == "OK") {
+                                                            $("#tree").jstree('delete_node', $("#" + nodeStrId));
+                                                            var tr = $("<tr>");
+                                                            var tdItem = $("<td>").append(nodeCod);
+                                                            var tdDesc = $("<td>").append(nodeDes);
+                                                            var tdApor = $("<td>").append(nodeValor);
+                                                            tr.append(tdItem).append(tdDesc).append(tdApor);
+                                                            tr.data({
+                                                                valor  : nodeValor,
+                                                                nombre : nodeDes,
+                                                                codigo : nodeCod,
+                                                                item   : nodeItem
+                                                            });
+                                                            $("#tblDisponibles").children("tbody").prepend(tr);
+                                                        }
+                                                    }
+                                                });
+                                            },
+                                            "Cancelar" : function () {
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        };
+                        break;
+                }
+
+                return menuItems;
             }
 
             $(function () {
@@ -187,6 +351,8 @@
                     if (!$(this).hasClass("disabled")) {
                         $tabla.children("tbody").children("tr.selected").removeClass("selected");
                         $("#btnRemoveSelection").addClass("disabled");
+                        updateTotal(0);
+                        $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
                     }
                     return false;
                 });
@@ -207,15 +373,11 @@
                             var data = $(this).data();
                             rows2add.push({add : {attr : {id : "it_" + data.item, numero : "", nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
                             total += parseFloat(data.valor);
-                            dataAdd.items.push(data.item);
-//                        $tree.jstree("create_node", $target, "first", {attr : {id : "it_" + data.item, numero : "", nombre : data.nombre, valor : data.valor}, data : "   "});
-//                        if (!$target.hasClass("jstree-open")) {
-//                            $('#tree').jstree("open_node", $target);
-//                        }
-//                        $(this).remove();
+                            dataAdd.items.push(data.item + "_" + data.valor);
                         });
 
                         $.ajax({
+                            async   : false,
                             type    : "POST",
                             url     : "${createLink(action:'addItemFormula')}",
                             data    : dataAdd,
@@ -235,8 +397,12 @@
                             }
                         });
 
+                        $target.find("li").children("a, .jstree-grid-cell").unbind("hover").unbind("click");
+                        treeNodeEvents($target.find("li").children("a, .jstree-grid-cell"));
+
                         $target.attr("valor", number_format(total, 3, ".", ",")).trigger("change_node.jstree");
                         $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
+                        updateTotal(0);
                     }
                     return false;
                 });
@@ -272,45 +438,43 @@
 
                 $tree.bind("loaded.jstree",
                         function (event, data) {
-                            var $first = $tree.children("ul").first().children("li").first();
+                            var $first = $tree.children("ul").first().children("li").eq(1);
                             $first.children("a, .jstree-grid-cell").addClass("selected");
                             updateCoef($first);
                             updateTotal(0);
 
-                            $("#tree").find("a").hover(function () {
-                                $(this).addClass("hovered");
-                                $(this).siblings(".jstree-grid-cell").addClass("hovered");
-                            },function () {
-                                $(".hovered").removeClass("hovered");
-                            }).click(function () {
-                                        treeSelection($(this));
-//                                        $("a.selected, div.selected").removeClass("selected");
-//                                        $(this).addClass("selected");
-//                                        $(this).siblings(".jstree-grid-cell").addClass("selected");
-//                                        updateCoef($(this).parents("li"));
-                                    });
-                            $(".jstree-grid-cell").hover(function () {
-                                $(this).addClass("hovered");
-                                $(this).siblings(".jstree-grid-cell").addClass("hovered");
-                                $(this).siblings("a").addClass("hovered");
-                            },function () {
-                                $(".hovered").removeClass("hovered");
-                            }).click(function () {
-                                        treeSelection($(this));
-//                                        $("a.selected, div.selected").removeClass("selected");
-//                                        $(this).addClass("selected");
-//                                        $(this).siblings(".jstree-grid-cell").addClass("selected");
-//                                        $(this).siblings("a").addClass("selected");
-//                                        updateCoef($(this).parents("li"));
-                                    });
+                            treeNodeEvents($("#tree").find("a"));
+                            treeNodeEvents($(".jstree-grid-cell"));
+
                             $("#rightContents").show();
                         }).jstree({
-                            plugins   : ["themes", "json_data", "grid", "types", "contextmenu", "search", "crrm" ],
-                            json_data : {data : ${json.toString()}},
-                            themes    : {
+                            plugins     : ["themes", "json_data", "grid", "types", "contextmenu", "search", "crrm", "cookies", "types" ],
+                            json_data   : {data : ${json.toString()}},
+                            themes      : {
                                 theme : "apple"
                             },
-                            grid      : {
+                            contextmenu : {
+                                select_node : true,
+                                items       : createContextmenu
+                            },
+                            types       : {
+                                valid_children : [ "fp", "it"],
+                                types          : {
+                                    fp : {
+                                        icon           : {
+                                            image : icons.fp
+                                        },
+                                        valid_children : ["it"]
+                                    },
+                                    it : {
+                                        icon           : {
+                                            image : icons.it
+                                        },
+                                        valid_children : [""]
+                                    }
+                                }
+                            },
+                            grid        : {
                                 columns : [
                                     {
                                         header : "Coef.",
