@@ -292,7 +292,7 @@
 
                             if (valor != "") {
                                 btnSave.replaceWith(spinner);
-//                                console.log("SI");
+//                                console.log("SI!!");
                                 $.ajax({
                                     type    : "POST",
                                     url     : "${createLink(action: 'guardarGrupo')}",
