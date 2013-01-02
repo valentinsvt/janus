@@ -10,6 +10,10 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     def dbConnectionService
 
     def addItemFormula() {
+
+//        println "add item"
+//        println params
+
         def parts = params.formula.split("_")
         def formula = FormulaPolinomica.get(parts[1])
         def saved = ""
@@ -29,7 +33,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             itemFormula.valor = valor
             total += valor
             if (itemFormula.save(flush: true)) {
-                saved += itemFormula.id + ","
+                saved += itemFormula.itemId + ":" + itemFormula.id + ","
             } else {
                 println itemFormula.errors
             }
@@ -47,18 +51,35 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def delItemFormula() {
+//        println "delete "
+//        println params
         def itemFormulaPolinomica = ItemsFormulaPolinomica.get(params.id)
         def formula = itemFormulaPolinomica.formulaPolinomica
         formula.valor = formula.valor - itemFormulaPolinomica.valor
         if (formula.save(flush: true)) {
             itemFormulaPolinomica.delete(flush: true)
-            render "OK"
+            render "OK_" + formula.valor
         } else {
             println "error: " + formula.errors
             render "NO"
         }
     }
 
+    def editarGrupo() {
+        def formula = FormulaPolinomica.get(params.id)
+        return [formula: formula]
+    }
+
+    def guardarGrupo() {
+        def formula = FormulaPolinomica.get(params.id)
+        formula.indice = Indice.get(params.indice)
+        formula.valor = params.valor.toDouble()
+        if (formula.save(flush: true)) {
+            render "OK"
+        } else {
+            render "NO"
+        }
+    }
 
     def coeficientes() {
 //        println "coef " + params
