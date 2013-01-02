@@ -65,10 +65,10 @@ class TransporteController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Transporte " + transporteInstance.id
+            flash.message = "Se ha actualizado correctamente Transporte " + transporteInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Transporte " + transporteInstance.id
+            flash.message = "Se ha creado correctamente Transporte " + transporteInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class TransporteController extends janus.seguridad.Shield {
         try {
             transporteInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Transporte " + transporteInstance.id
+            flash.message = "Se ha eliminado correctamente Transporte " + transporteInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

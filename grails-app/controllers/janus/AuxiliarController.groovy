@@ -65,10 +65,10 @@ class AuxiliarController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Auxiliar " + auxiliarInstance.id
+            flash.message = "Se ha actualizado correctamente Auxiliar " + auxiliarInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Auxiliar " + auxiliarInstance.id
+            flash.message = "Se ha creado correctamente Auxiliar " + auxiliarInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class AuxiliarController extends janus.seguridad.Shield {
         try {
             auxiliarInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Auxiliar " + auxiliarInstance.id
+            flash.message = "Se ha eliminado correctamente Auxiliar " + auxiliarInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

@@ -65,10 +65,10 @@ class ProgramacionController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Programacion " + programacionInstance.id
+            flash.message = "Se ha actualizado correctamente Programacion " + programacionInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Programacion " + programacionInstance.id
+            flash.message = "Se ha creado correctamente Programacion " + programacionInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ProgramacionController extends janus.seguridad.Shield {
         try {
             programacionInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Programacion " + programacionInstance.id
+            flash.message = "Se ha eliminado correctamente Programacion " + programacionInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

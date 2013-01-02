@@ -65,10 +65,10 @@ class ParametrosController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Parametros " + parametrosInstance.id
+            flash.message = "Se ha actualizado correctamente Parametros " + parametrosInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Parametros " + parametrosInstance.id
+            flash.message = "Se ha creado correctamente Parametros " + parametrosInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ParametrosController extends janus.seguridad.Shield {
         try {
             parametrosInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Parametros " + parametrosInstance.id
+            flash.message = "Se ha eliminado correctamente Parametros " + parametrosInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

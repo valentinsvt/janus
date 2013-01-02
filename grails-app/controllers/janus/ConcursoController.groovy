@@ -65,10 +65,10 @@ class ConcursoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Concurso " + concursoInstance.id
+            flash.message = "Se ha actualizado correctamente Concurso " + concursoInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Concurso " + concursoInstance.id
+            flash.message = "Se ha creado correctamente Concurso " + concursoInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ConcursoController extends janus.seguridad.Shield {
         try {
             concursoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Concurso " + concursoInstance.id
+            flash.message = "Se ha eliminado correctamente Concurso " + concursoInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

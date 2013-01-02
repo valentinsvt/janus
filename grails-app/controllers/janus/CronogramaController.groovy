@@ -389,10 +389,10 @@ class CronogramaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Cronograma " + cronogramaInstance.id
+            flash.message = "Se ha actualizado correctamente Cronograma " + cronogramaInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Cronograma " + cronogramaInstance.id
+            flash.message = "Se ha creado correctamente Cronograma " + cronogramaInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -420,7 +420,7 @@ class CronogramaController extends janus.seguridad.Shield {
         try {
             cronogramaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Cronograma " + cronogramaInstance.id
+            flash.message = "Se ha eliminado correctamente Cronograma " + cronogramaInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

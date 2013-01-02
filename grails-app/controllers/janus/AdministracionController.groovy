@@ -65,10 +65,10 @@ class AdministracionController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Administracion " + administracionInstance.id
+            flash.message = "Se ha actualizado correctamente Administracion " + administracionInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Administracion " + administracionInstance.id
+            flash.message = "Se ha creado correctamente Administracion " + administracionInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class AdministracionController extends janus.seguridad.Shield {
         try {
             administracionInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Administracion " + administracionInstance.id
+            flash.message = "Se ha eliminado correctamente Administracion " + administracionInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

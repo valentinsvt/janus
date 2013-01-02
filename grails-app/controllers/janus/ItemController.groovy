@@ -255,10 +255,10 @@ class ItemController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Item " + itemInstance.id
+            flash.message = "Se ha actualizado correctamente Item " + itemInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Item " + itemInstance.id
+            flash.message = "Se ha creado correctamente Item " + itemInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -286,7 +286,7 @@ class ItemController extends janus.seguridad.Shield {
         try {
             itemInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Item " + itemInstance.id
+            flash.message = "Se ha eliminado correctamente Item " + itemInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

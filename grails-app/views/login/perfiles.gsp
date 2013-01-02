@@ -41,7 +41,7 @@
                     <label class="control-label" style="width: 50px;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder;float: left;">Perfil:</label>
 
                     <div class="controls" style="width: 150px;margin-left: 5px;float: right;margin-right: 60px">
-                        <g:select name="perfiles" from="${perfilesUsr}" class="span2" required="" optionKey="id"/>
+                        <g:select name="perfiles" from="${perfilesUsr}" class="span2" required="" optionKey="id" style="width: 180px;"/>
                         <p class="help-block ui-helper-hidden"></p>
                     </div>
                 </div>

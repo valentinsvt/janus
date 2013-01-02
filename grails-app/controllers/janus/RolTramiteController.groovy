@@ -65,10 +65,10 @@ class RolTramiteController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete RolTramite " + rolTramiteInstance.id
+            flash.message = "Se ha actualizado correctamente RolTramite " + rolTramiteInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete RolTramite " + rolTramiteInstance.id
+            flash.message = "Se ha creado correctamente RolTramite " + rolTramiteInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class RolTramiteController extends janus.seguridad.Shield {
         try {
             rolTramiteInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete RolTramite " + rolTramiteInstance.id
+            flash.message = "Se ha eliminado correctamente RolTramite " + rolTramiteInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

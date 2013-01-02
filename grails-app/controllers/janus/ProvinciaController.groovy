@@ -65,10 +65,10 @@ class ProvinciaController extends janus.seguridad.Shield {
 
         if(params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Provincia " + provinciaInstance.id
+            flash.message = "Se ha actualizado correctamente Provincia " + provinciaInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Provincia " + provinciaInstance.id
+            flash.message = "Se ha creado correctamente Provincia " + provinciaInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ProvinciaController extends janus.seguridad.Shield {
         try {
             provinciaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message =  "Se ha eliminado correctamete Provincia " + provinciaInstance.id
+            flash.message =  "Se ha eliminado correctamente Provincia " + provinciaInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

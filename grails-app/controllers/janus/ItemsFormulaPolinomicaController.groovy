@@ -65,10 +65,10 @@ class ItemsFormulaPolinomicaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete ItemsFormulaPolinomica " + itemsFormulaPolinomicaInstance.id
+            flash.message = "Se ha actualizado correctamente ItemsFormulaPolinomica " + itemsFormulaPolinomicaInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete ItemsFormulaPolinomica " + itemsFormulaPolinomicaInstance.id
+            flash.message = "Se ha creado correctamente ItemsFormulaPolinomica " + itemsFormulaPolinomicaInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ItemsFormulaPolinomicaController extends janus.seguridad.Shield {
         try {
             itemsFormulaPolinomicaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete ItemsFormulaPolinomica " + itemsFormulaPolinomicaInstance.id
+            flash.message = "Se ha eliminado correctamente ItemsFormulaPolinomica " + itemsFormulaPolinomicaInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

@@ -65,10 +65,10 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete EspecialidadProveedor " + especialidadProveedorInstance.id
+            flash.message = "Se ha actualizado correctamente EspecialidadProveedor " + especialidadProveedorInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete EspecialidadProveedor " + especialidadProveedorInstance.id
+            flash.message = "Se ha creado correctamente EspecialidadProveedor " + especialidadProveedorInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
         try {
             especialidadProveedorInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete EspecialidadProveedor " + especialidadProveedorInstance.id
+            flash.message = "Se ha eliminado correctamente EspecialidadProveedor " + especialidadProveedorInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

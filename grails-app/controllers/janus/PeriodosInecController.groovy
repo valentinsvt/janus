@@ -65,10 +65,10 @@ class PeriodosInecController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete PeriodosInec " + periodosInecInstance.id
+            flash.message = "Se ha actualizado correctamente PeriodosInec " + periodosInecInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete PeriodosInec " + periodosInecInstance.id
+            flash.message = "Se ha creado correctamente PeriodosInec " + periodosInecInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class PeriodosInecController extends janus.seguridad.Shield {
         try {
             periodosInecInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete PeriodosInec " + periodosInecInstance.id
+            flash.message = "Se ha eliminado correctamente PeriodosInec " + periodosInecInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

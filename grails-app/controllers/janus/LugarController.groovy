@@ -65,10 +65,10 @@ class LugarController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Lugar " + lugarInstance.id
+            flash.message = "Se ha actualizado correctamente Lugar " + lugarInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Lugar " + lugarInstance.id
+            flash.message = "Se ha creado correctamente Lugar " + lugarInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class LugarController extends janus.seguridad.Shield {
         try {
             lugarInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Lugar " + lugarInstance.id
+            flash.message = "Se ha eliminado correctamente Lugar " + lugarInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

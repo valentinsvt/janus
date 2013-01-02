@@ -65,10 +65,10 @@ class ParroquiaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Parroquia " + parroquiaInstance.id
+            flash.message = "Se ha actualizado correctamente Parroquia " + parroquiaInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Parroquia " + parroquiaInstance.id
+            flash.message = "Se ha creado correctamente Parroquia " + parroquiaInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ParroquiaController extends janus.seguridad.Shield {
         try {
             parroquiaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Parroquia " + parroquiaInstance.id
+            flash.message = "Se ha eliminado correctamente Parroquia " + parroquiaInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

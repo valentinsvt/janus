@@ -65,10 +65,10 @@ class ComunidadController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Comunidad " + comunidadInstance.id
+            flash.message = "Se ha actualizado correctamente Comunidad " + comunidadInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Comunidad " + comunidadInstance.id
+            flash.message = "Se ha creado correctamente Comunidad " + comunidadInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ComunidadController extends janus.seguridad.Shield {
         try {
             comunidadInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Comunidad " + comunidadInstance.id
+            flash.message = "Se ha eliminado correctamente Comunidad " + comunidadInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

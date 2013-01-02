@@ -65,10 +65,10 @@ class PresupuestoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Presupuesto " + presupuestoInstance.id
+            flash.message = "Se ha actualizado correctamente Presupuesto " + presupuestoInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Presupuesto " + presupuestoInstance.id
+            flash.message = "Se ha creado correctamente Presupuesto " + presupuestoInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class PresupuestoController extends janus.seguridad.Shield {
         try {
             presupuestoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Presupuesto " + presupuestoInstance.id
+            flash.message = "Se ha eliminado correctamente Presupuesto " + presupuestoInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

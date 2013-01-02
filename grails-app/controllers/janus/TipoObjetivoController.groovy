@@ -65,10 +65,10 @@ class TipoObjetivoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete TipoObjetivo " + tipoObjetivoInstance.id
+            flash.message = "Se ha actualizado correctamente TipoObjetivo " + tipoObjetivoInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete TipoObjetivo " + tipoObjetivoInstance.id
+            flash.message = "Se ha creado correctamente TipoObjetivo " + tipoObjetivoInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class TipoObjetivoController extends janus.seguridad.Shield {
         try {
             tipoObjetivoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete TipoObjetivo " + tipoObjetivoInstance.id
+            flash.message = "Se ha eliminado correctamente TipoObjetivo " + tipoObjetivoInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

@@ -65,10 +65,10 @@ class CantonController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Canton " + cantonInstance.id
+            flash.message = "Se ha actualizado correctamente Canton " + cantonInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Canton " + cantonInstance.id
+            flash.message = "Se ha creado correctamente Canton " + cantonInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class CantonController extends janus.seguridad.Shield {
         try {
             cantonInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Canton " + cantonInstance.id
+            flash.message = "Se ha eliminado correctamente Canton " + cantonInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

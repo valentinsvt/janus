@@ -65,10 +65,10 @@ class PrecioRubrosItemsTemporalController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete PrecioRubrosItemsTemporal " + precioRubrosItemsTemporalInstance.id
+            flash.message = "Se ha actualizado correctamente PrecioRubrosItemsTemporal " + precioRubrosItemsTemporalInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete PrecioRubrosItemsTemporal " + precioRubrosItemsTemporalInstance.id
+            flash.message = "Se ha creado correctamente PrecioRubrosItemsTemporal " + precioRubrosItemsTemporalInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class PrecioRubrosItemsTemporalController extends janus.seguridad.Shield {
         try {
             precioRubrosItemsTemporalInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete PrecioRubrosItemsTemporal " + precioRubrosItemsTemporalInstance.id
+            flash.message = "Se ha eliminado correctamente PrecioRubrosItemsTemporal " + precioRubrosItemsTemporalInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

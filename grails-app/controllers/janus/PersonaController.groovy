@@ -256,10 +256,10 @@ class PersonaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Persona " + personaInstance.nombre + " " + personaInstance.apellido
+            flash.message = "Se ha actualizado correctamente Persona " + personaInstance.nombre + " " + personaInstance.apellido
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Persona " + personaInstance.nombre + " " + personaInstance.apellido
+            flash.message = "Se ha creado correctamente Persona " + personaInstance.nombre + " " + personaInstance.apellido
         }
         redirect(action: 'list')
     } //save
@@ -287,7 +287,7 @@ class PersonaController extends janus.seguridad.Shield {
         try {
             personaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Persona " + personaInstance.nombre + " " + personaInstance.apellido
+            flash.message = "Se ha eliminado correctamente Persona " + personaInstance.nombre + " " + personaInstance.apellido
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

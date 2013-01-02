@@ -65,10 +65,10 @@ class VolumenesObraController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete VolumenesObra " + volumenesObraInstance.id
+            flash.message = "Se ha actualizado correctamente VolumenesObra " + volumenesObraInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete VolumenesObra " + volumenesObraInstance.id
+            flash.message = "Se ha creado correctamente VolumenesObra " + volumenesObraInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class VolumenesObraController extends janus.seguridad.Shield {
         try {
             volumenesObraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete VolumenesObra " + volumenesObraInstance.id
+            flash.message = "Se ha eliminado correctamente VolumenesObra " + volumenesObraInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

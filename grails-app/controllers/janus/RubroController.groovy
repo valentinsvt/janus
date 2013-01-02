@@ -343,7 +343,7 @@ class RubroController extends janus.seguridad.Shield {
         try {
             rubroInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Rubro " + rubroInstance.id
+            flash.message = "Se ha eliminado correctamente Rubro " + rubroInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

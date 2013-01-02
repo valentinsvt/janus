@@ -65,10 +65,10 @@ class ClaveController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Clave " + claveInstance.id
+            flash.message = "Se ha actualizado correctamente Clave " + claveInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Clave " + claveInstance.id
+            flash.message = "Se ha creado correctamente Clave " + claveInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class ClaveController extends janus.seguridad.Shield {
         try {
             claveInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Clave " + claveInstance.id
+            flash.message = "Se ha eliminado correctamente Clave " + claveInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

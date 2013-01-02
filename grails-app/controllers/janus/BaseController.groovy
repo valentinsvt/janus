@@ -65,10 +65,10 @@ class BaseController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Base " + baseInstance.id
+            flash.message = "Se ha actualizado correctamente Base " + baseInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Base " + baseInstance.id
+            flash.message = "Se ha creado correctamente Base " + baseInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class BaseController extends janus.seguridad.Shield {
         try {
             baseInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Base " + baseInstance.id
+            flash.message = "Se ha eliminado correctamente Base " + baseInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

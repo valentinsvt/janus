@@ -65,10 +65,10 @@ class PersonaRolController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete PersonaRol " + personaRolInstance.id
+            flash.message = "Se ha actualizado correctamente PersonaRol " + personaRolInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete PersonaRol " + personaRolInstance.id
+            flash.message = "Se ha creado correctamente PersonaRol " + personaRolInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class PersonaRolController extends janus.seguridad.Shield {
         try {
             personaRolInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete PersonaRol " + personaRolInstance.id
+            flash.message = "Se ha eliminado correctamente PersonaRol " + personaRolInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

@@ -65,10 +65,10 @@ class IndiceController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete Indice " + indiceInstance.id
+            flash.message = "Se ha actualizado correctamente Indice " + indiceInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete Indice " + indiceInstance.id
+            flash.message = "Se ha creado correctamente Indice " + indiceInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class IndiceController extends janus.seguridad.Shield {
         try {
             indiceInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete Indice " + indiceInstance.id
+            flash.message = "Se ha eliminado correctamente Indice " + indiceInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

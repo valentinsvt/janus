@@ -65,10 +65,10 @@ class SubgrupoItemsController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamete SubgrupoItems " + subgrupoItemsInstance.id
+            flash.message = "Se ha actualizado correctamente SubgrupoItems " + subgrupoItemsInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamete SubgrupoItems " + subgrupoItemsInstance.id
+            flash.message = "Se ha creado correctamente SubgrupoItems " + subgrupoItemsInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -96,7 +96,7 @@ class SubgrupoItemsController extends janus.seguridad.Shield {
         try {
             subgrupoItemsInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamete SubgrupoItems " + subgrupoItemsInstance.id
+            flash.message = "Se ha eliminado correctamente SubgrupoItems " + subgrupoItemsInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
