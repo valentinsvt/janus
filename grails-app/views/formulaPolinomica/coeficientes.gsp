@@ -21,7 +21,7 @@
 
         <style type="text/css">
         #tree {
-            width      : auto;
+            width      : 100%;
             background : none;
             border     : none;
         }
@@ -172,6 +172,20 @@
             </div>
         </div>
 
+        <div class="modal hide fade" id="modal-formula">
+            <div class="modal-header" id="modalHeader-formula">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+
+                <h3 id="modalTitle-formula"></h3>
+            </div>
+
+            <div class="modal-body" id="modalBody-formula">
+            </div>
+
+            <div class="modal-footer" id="modalFooter-formula">
+            </div>
+        </div>
+
         <script type="text/javascript">
 
             var icons = {
@@ -229,16 +243,13 @@
             function treeNodeEvents($items) {
                 $items.bind({
                     mouseenter : function (e) {
-                        // Hover event handler
                         var $parent = $(this).parent();
                         $parent.children("a, .jstree-grid-cell").addClass("hovered");
                     },
                     mouseleave : function (e) {
-                        // Hover event handler
                         $(".hovered").removeClass("hovered");
                     },
                     click      : function (e) {
-                        // Click event handler
                         treeSelection($(this));
                     }
                 });
@@ -248,10 +259,10 @@
                 var parent = node.parent().parent();
 
                 var nodeStrId = node.attr("id");
-                var nodeText = $.trim(node.children("a").text());
+                var nodeText = $.trim(node.attr("nombre"));
 
                 var parentStrId = parent.attr("id");
-                var parentText = $.trim(parent.children("a").text());
+                var parentText = $.trim(parent.attr("nombre"));
 
                 var nodeTipo = node.attr("rel");
 
@@ -259,21 +270,71 @@
 
                 var parts = nodeStrId.split("_");
                 var nodeId = parts[1];
-                if (parts.length == 3) {
-                    nodeId = parts[2];
-                }
 
                 parts = parentStrId.split("_");
                 var parentId = parts[1];
 
                 var nodeHasChildren = node.hasClass("hasChildren");
                 var cantChildren = node.children("ul").children().size();
-                nodeHasChildren = nodeHasChildren || cantChildren != 0;
 
                 var menuItems = {}, lbl = "", item = "";
 
                 switch (nodeTipo) {
                     case "fp":
+                        var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                        btnSave.click(function () {
+                            var indice = $("#indice").val();
+                            var valor = $.trim($("#valor").val());
+
+                            var indiceNombre = $("#indice option:selected").text();
+
+                            if (valor != "") {
+                                btnSave.replaceWith(spinner);
+//                                console.log("SI!!");
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action: 'guardarGrupo')}",
+                                    data    : {
+                                        id     : nodeId,
+                                        indice : indice,
+                                        valor  : valor
+                                    },
+                                    success : function (msg) {
+                                        if (msg == "OK") {
+                                            node.attr("nombre", indiceNombre).trigger("change_node.jstree");
+                                            node.attr("valor", valor).trigger("change_node.jstree");
+                                            $("#modal-formula").modal("hide");
+                                        }
+                                    }
+                                });
+                            } else {
+//                                console.log("NO");
+                            }
+                        });
+
+                        menuItems.editar = {
+                            label            : "Editar",
+                            separator_before : false,
+                            separator_after  : false,
+                            icon             : icons.edit,
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action: 'editarGrupo')}",
+                                    data    : {
+                                        id : nodeId
+                                    },
+                                    success : function (msg) {
+                                        $("#modalTitle-formula").html("Editar grupo");
+                                        $("#modalBody-formula").html(msg);
+                                        $("#modalFooter-formula").html("").append(btnCancel).append(btnSave);
+                                        $("#modal-formula").modal("show");
+                                    }
+                                });
+                            }
+                        };
                         break;
                     case "it":
                         var nodeCod = node.attr("numero");
@@ -281,10 +342,13 @@
                         var nodeValor = node.attr("valor");
                         var nodeItem = node.attr("item");
 
-                            /*
-                            TODO: AQUI:
-                            seleccionar el nodo y el padre
-                             */
+                        /*** Selecciona el nodo y su padre ***/
+                        var $seleccionados = $("a.selected, div.selected, a.editable, div.editable");
+                        $seleccionados.removeClass("selected editable");
+                        node.children("a, .jstree-grid-cell").addClass("editable child");
+                        $seleccionados.removeClass("selected");
+                        node.parent().parent().children("a, .jstree-grid-cell").addClass("selected editable parent");
+                        /*** Fin Selecciona el nodo y su padre ***/
 
                         menuItems.delete = {
                             label            : "Eliminar",
@@ -294,7 +358,7 @@
                             action           : function (obj) {
                                 $.box({
                                     imageClass : "box_info",
-                                    text       : "Está seguro de eliminar?",
+                                    text       : "Está seguro de eliminar " + nodeText + " del grupo " + parentText + "?",
                                     title      : "Confirmación",
                                     iconClose  : false,
                                     dialog     : {
@@ -311,12 +375,13 @@
                                                         id   : nodeId
                                                     },
                                                     success : function (msg) {
-                                                        if (msg == "OK") {
+                                                        var msgParts = msg.split("_");
+                                                        if (msgParts[0] == "OK") {
                                                             $("#tree").jstree('delete_node', $("#" + nodeStrId));
                                                             var tr = $("<tr>");
                                                             var tdItem = $("<td>").append(nodeCod);
                                                             var tdDesc = $("<td>").append(nodeDes);
-                                                            var tdApor = $("<td>").append(nodeValor);
+                                                            var tdApor = $("<td class='numero'>").append(number_format(nodeValor, 3, '.', ''));
                                                             tr.append(tdItem).append(tdDesc).append(tdApor);
                                                             tr.data({
                                                                 valor  : nodeValor,
@@ -325,6 +390,8 @@
                                                                 item   : nodeItem
                                                             });
                                                             $("#tblDisponibles").children("tbody").prepend(tr);
+                                                            tr.show("pulsate");
+                                                            parent.attr("valor", msgParts[1]).trigger("change_node.jstree");
                                                         }
                                                     }
                                                 });
@@ -358,7 +425,9 @@
                 });
 
                 $("#btnAgregarItems").click(function () {
-                    if (!$(this).hasClass("disabled")) {
+                    var $btn = $(this);
+                    if (!$btn.hasClass("disabled")) {
+                        $btn.after(spinner).hide();
                         var $target = $("a.selected").parent();
 
                         var total = parseFloat($target.attr("valor"));
@@ -371,10 +440,12 @@
 
                         $tabla.children("tbody").children("tr.selected").each(function () {
                             var data = $(this).data();
-                            rows2add.push({add : {attr : {id : "it_" + data.item, numero : "", nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
+                            rows2add.push({add : {attr : {item : data.item, numero : "", nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
                             total += parseFloat(data.valor);
                             dataAdd.items.push(data.item + "_" + data.valor);
                         });
+
+//                        console.log(dataAdd);
 
                         $.ajax({
                             async   : false,
@@ -382,17 +453,34 @@
                             url     : "${createLink(action:'addItemFormula')}",
                             data    : dataAdd,
                             success : function (msg) {
-                                console.log(msg);
-                                for (var i = 0; i < rows2add.length; i++) {
-                                    var it = rows2add[i];
-                                    var add = it.add;
-                                    var rem = it.remove;
-
-                                    $tree.jstree("create_node", $target, "first", add);
-                                    if (!$target.hasClass("jstree-open")) {
-                                        $('#tree').jstree("open_node", $target);
+//                                console.log(msg);
+                                var msgParts = msg.split("_");
+                                if (msgParts[0] == "OK") {
+                                    var insertados = {};
+                                    var inserted = msgParts[1].split(",");
+                                    for (var i = 0; i < inserted.length; i++) {
+                                        var j = inserted[i];
+                                        if (j != "") {
+                                            var p = j.split(":");
+                                            insertados[p[0]] = p[1];
+                                        }
                                     }
-                                    rem.remove();
+
+//                                    console.log("insertados", insertados);
+                                    for (i = 0; i < rows2add.length; i++) {
+                                        var it = rows2add[i];
+                                        var add = it.add;
+                                        var rem = it.remove;
+
+                                        add.attr.id = "it_" + insertados[add.attr.item];
+//                                        console.log(add.attr.item, add);
+
+                                        $tree.jstree("create_node", $target, "first", add);
+                                        if (!$target.hasClass("jstree-open")) {
+                                            $('#tree').jstree("open_node", $target);
+                                        }
+                                        rem.remove();
+                                    }
                                 }
                             }
                         });
@@ -403,6 +491,8 @@
                         $target.attr("valor", number_format(total, 3, ".", ",")).trigger("change_node.jstree");
                         $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
                         updateTotal(0);
+                        $btn.show();
+                        spinner.remove();
                     }
                     return false;
                 });
@@ -454,8 +544,7 @@
                                 theme : "apple"
                             },
                             contextmenu : {
-                                select_node : true,
-                                items       : createContextmenu
+                                items : createContextmenu
                             },
                             types       : {
                                 valid_children : [ "fp", "it"],
@@ -486,7 +575,7 @@
                                         header : "Nombre del Indice",
                                         value  : "nombre",
                                         title  : "nombre",
-                                        width  : 314
+                                        width  : 300
                                     },
                                     {
                                         header : "Valor",
