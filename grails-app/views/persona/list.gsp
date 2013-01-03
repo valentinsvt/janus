@@ -121,7 +121,7 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows : 10
+                    maxRows : 15
                 });
 
                 $(".btn-new").click(function () {
