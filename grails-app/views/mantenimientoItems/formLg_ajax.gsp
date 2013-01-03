@@ -23,27 +23,6 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Tipo
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:if test="${all.toString().toBoolean()}">
-                    <g:select name="tipo" from="${lugarInstance.constraints.tipo.inList}" class="required" value="${lugarInstance?.tipo}" valueMessagePrefix="lugar.tipo" noSelection="['': '']"/>
-                </g:if>
-                <g:else>
-                    <span class="uneditable-input">${tipo}</span>
-                    <g:hiddenField name="tipo" value="${tipo}"/>
-                </g:else>
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
                     Descripcion
                 </span>
             </div>
