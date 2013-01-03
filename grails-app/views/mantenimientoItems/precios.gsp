@@ -288,23 +288,27 @@
             }
 
             function remove(params) {
-                var letraConfirm = "e", letraDelete = "o";
+                var letraConfirm = "e", letraDelete = "o", interrogacion = "?";
                 if (params.confirm == "lista") {
                     letraConfirm = "a";
                     letraDelete = "a";
+                }
+                if (params.extraConfirm) {
+                    interrogacion = "";
                 }
                 var obj = {
                     label            : params.label,
                     separator_before : params.sepBefore, // Insert a separator before the item
                     separator_after  : params.sepAfter, // Insert a separator after the item
                     icon             : params.icon,
+                    _disabled        : params.disabled,
                     action           : function (obj) {
 
                         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                         var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
                         $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                         $("#modalTitle").html(params.title);
-                        $("#modalBody").html("<p>Está seguro de querer eliminar est" + letraConfirm + " " + params.confirm + "?</p>");
+                        $("#modalBody").html("<p>Está seguro de querer eliminar est" + letraConfirm + " " + params.confirm + params.extraConfirm + interrogacion + "</p>");
                         $("#modalFooter").html("").append(btnOk).append(btnSave);
                         $("#modal-tree").modal("show");
 
@@ -431,19 +435,21 @@
                             });
                             if (!nodeHasChildren) {
                                 menuItems.eliminar = remove({
-                                    label       : "Eliminar lista",
-                                    sepBefore   : false,
-                                    sepAfter    : false,
-                                    icon        : icons.delete,
-                                    title       : "Eliminar lista",
-                                    confirm     : "lista",
-                                    url         : "${createLink(action:'deleteLg_ajax')}",
-                                    data        : {
+                                    disabled     : node.data("obras") != 0,
+                                    label        : "Eliminar lista",
+                                    sepBefore    : false,
+                                    sepAfter     : false,
+                                    icon         : icons.delete,
+                                    title        : "Eliminar lista",
+                                    confirm      : "lista",
+                                    extraConfirm : "? <br/><span style='font-weight: bold; font-size: larger'>Se eliminarán todos los precios de la lista y no se puede deshacer....</span>",
+                                    url          : "${createLink(action:'deleteLg_ajax')}",
+                                    data         : {
                                         id : nodeId
                                     },
-                                    nodeStrId   : nodeStrId,
-                                    parentStrId : parentStrId,
-                                    log         : "Lista "
+                                    nodeStrId    : nodeStrId,
+                                    parentStrId  : parentStrId,
+                                    log          : "Lista "
                                 });
                             }
                             menuItems.crearHermano = createUpdate({
@@ -773,10 +779,14 @@
                     var fecha = $(this).data("fecha");
 
                     $("#spFecha").text(text);
+
                     if (fecha) {
                         $("#divFecha").show();
                         var hoy = $("#fecha").datepicker("getDate");
-                        console.log(hoy);
+                        if (!hoy) {
+                            hoy = new Date();
+                            $("#fecha").datepicker("setDate", hoy);
+                        }
                         showLugar.fecha = hoy.getDate() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getFullYear();
 
 //                        var hoy = new Date();

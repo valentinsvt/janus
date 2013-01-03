@@ -60,7 +60,7 @@ class MantenimientoItemsController extends Shield {
                 break;
         }
 
-        String tree = "", clase = "", rel = ""
+        String tree = "", clase = "", rel = "", extra = ""
 
         tree += "<ul>"
         hijos.each { hijo ->
@@ -126,6 +126,11 @@ class MantenimientoItemsController extends Shield {
                             }
                             rel = "lugar_" + hijo.tipo
                             liId = "lg_" + id + "_" + hijo.id
+
+                            def obras = Obra.countByLugar(hijo)
+//                            println "lugar " + hijo.tipo + " " + hijo.id + " " + hijo.descripcion + "    o: " + obras
+                            extra = "data-obras='${obras}'"
+
                         }
                     }
                     break;
@@ -133,7 +138,7 @@ class MantenimientoItemsController extends Shield {
 
             clase = (hijosH.size() > 0) ? "jstree-closed hasChildren" : ""
 
-            tree += "<li id='" + liId + "' class='" + clase + "' rel='" + rel + "'>"
+            tree += "<li id='" + liId + "' class='" + clase + "' rel='" + rel + "' " + extra + ">"
             tree += "<a href='#' class='label_arbol'>" + desc + "</a>"
             tree += "</li>"
         }
@@ -857,6 +862,8 @@ class MantenimientoItemsController extends Shield {
     }
 
     def deleteLg_ajax() {
+        println "DELETE LUGAR "
+        println params
         def lugar = Lugar.get(params.id)
 
         def precios = PrecioRubrosItems.findAllByLugar(lugar)
