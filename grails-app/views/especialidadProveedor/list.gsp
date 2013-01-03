@@ -1,11 +1,11 @@
 
-<%@ page import="janus.EspecialidadProveedor" %>
+<%@ page import="janus.pac.EspecialidadProveedor" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Especialidad Proveedor
+            Lista de Especialidad Proveedors
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,26 +24,26 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Nueva Especialidad Proveedor
+                Crear  Especialidad Proveedor
             </a>
         </div>
 
-        <g:form action="delete" name="frmDelete-especialidadProveedorInstance">
+        <g:form action="delete" name="frmDelete-EspecialidadProveedor">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-especialidadProveedor" class="span12" role="main" style="margin-top: 10px;">
+        <div id="list-EspecialidadProveedor" class="span12" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="descripcion" title="Descripción" />
+                        <g:sortableColumn property="descripcion" title="Descripcion" />
                     
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="paginate">
                 <g:each in="${especialidadProveedorInstanceList}" status="i" var="especialidadProveedorInstance">
                     <tr>
                     
@@ -51,28 +51,28 @@
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${especialidadProveedorInstance.id}">
-                                <i class="icon-zoom-in"></i>
+                                <i class="icon-zoom-in icon-large"></i>
                             </a>
                             <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${especialidadProveedorInstance.id}">
-                                <i class="icon-pencil"></i>
+                                <i class="icon-pencil icon-large"></i>
                             </a>
 
                             <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${especialidadProveedorInstance.id}">
-                                <i class="icon-trash"></i>
+                                <i class="icon-trash icon-large"></i>
                             </a>
                         </td>
                     </tr>
                 </g:each>
                 </tbody>
             </table>
-            <div class="pagination">
-                <elm:paginate total="${especialidadProveedorInstanceTotal}" params="${params}" />
-            </div>
+
         </div>
 
-        <div class="modal hide fade" id="modal-especialidadProveedor">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
+        <div class="modal hide fade" id="modal-EspecialidadProveedor">
+            <div class="modal-header" id="modalHeader">
+                <button type="button" class="close darker" data-dismiss="modal">
+                    <i class="icon-remove-circle"></i>
+                </button>
 
                 <h3 id="modalTitle"></h3>
             </div>
@@ -88,9 +88,19 @@
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
+            function submitForm(btn) {
+                if ($("#frmSave-EspecialidadProveedor").valid()) {
+                    btn.replaceWith(spinner);
+                }
+                $("#frmSave-EspecialidadProveedor").submit();
+            }
 
             $(function () {
                 $('[rel=tooltip]').tooltip();
+
+                $(".paginate").paginate({
+                    maxRows: 10
+                });
 
                 $(".btn-new").click(function () {
                     $.ajax({
@@ -98,20 +108,18 @@
                         url     : "${createLink(action:'form_ajax')}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-especialidadProveedorInstance").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                }
-                                $("#frmSave-especialidadProveedorInstance").submit();
+                                submitForm(btnSave);
                                 return false;
                             });
 
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle").html("Crear Especialidad Proveedor");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-especialidadProveedor").modal("show");
+                            $("#modal-EspecialidadProveedor").modal("show");
                         }
                     });
                     return false;
@@ -127,20 +135,18 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-especialidadProveedorInstance").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                }
-                                $("#frmSave-especialidadProveedorInstance").submit();
+                                submitForm(btnSave);
                                 return false;
                             });
 
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
                             $("#modalTitle").html("Editar Especialidad Proveedor");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-especialidadProveedor").modal("show");
+                            $("#modal-EspecialidadProveedor").modal("show");
                         }
                     });
                     return false;
@@ -156,10 +162,11 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
                             $("#modalTitle").html("Ver Especialidad Proveedor");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-especialidadProveedor").modal("show");
+                            $("#modal-EspecialidadProveedor").modal("show");
                         }
                     });
                     return false;
@@ -173,14 +180,15 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-especialidadProveedorInstance").submit();
+                        $("#frmDelete-EspecialidadProveedor").submit();
                         return false;
                     });
 
+                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                     $("#modalTitle").html("Eliminar Especialidad Proveedor");
                     $("#modalBody").html("<p>¿Está seguro de querer eliminar este Especialidad Proveedor?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-especialidadProveedor").modal("show");
+                    $("#modal-EspecialidadProveedor").modal("show");
                     return false;
                 });
 

@@ -1,8 +1,8 @@
 
-<%@ page import="janus.Concurso2" %>
+<%@ page import="janus.pac.Concurso" %>
 
-<div id="create-concursoInstance" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-concursoInstance" action="save">
+<div id="create-Concurso" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-Concurso" action="save">
         <g:hiddenField name="id" value="${concursoInstance?.id}"/>
                 
         <div class="control-group">
@@ -22,7 +22,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Administración
+                    Administracion
                 </span>
             </div>
 
@@ -36,26 +36,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Código
+                    Pac
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="15" style="width: 140px" class=" required" value="${concursoInstance?.codigo}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Objetivo
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:textArea name="objetivo" cols="5" rows="5" style="resize: none" maxlength="255" class="" value="${concursoInstance?.objetivo}"/>
+                <g:select id="pac" name="pac.id" from="${janus.pac.Pac.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.pac?.id}" noSelection="['null': '']"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -64,26 +50,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Base
+                    Codigo
                 </span>
             </div>
 
             <div class="controls">
-                <g:field type="number" name="base" class=" required" max="14" style="width: 140px" value="${fieldValue(bean: concursoInstance, field: 'base')}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Tipo Cuenta
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:select id="tipoCuenta" name="tipoCuenta.id" from="${janus.TipoCuenta.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.tipoCuenta?.id}" noSelection="['null': '']"/>
+                <g:textField name="codigo" class="" value="${concursoInstance?.codigo}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -92,12 +64,26 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Estado
+                    Objeto
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="estado" maxlength="1" style="width: 20px" class="" value="${concursoInstance?.estado}"/>
+                <g:textField name="objeto" class="" value="${concursoInstance?.objeto}"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Costo Bases
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="costoBases" class="" value="${fieldValue(bean: concursoInstance, field: 'costoBases')}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -111,16 +97,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="fechaInicio" class="datepicker" style="width: 90px" value="${concursoInstance?.fechaInicio}"/>
-<script type="text/javascript">
-$("#fechaInicio").datepicker({
-changeMonth: true,
-changeYear: true,
-showOn: "both",
-buttonImage: "${resource(dir:'images', file:'calendar.png')}",
-buttonImageOnly: true
-});
-</script>
+                <elm:datepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}"/>
+
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -129,21 +107,162 @@ buttonImageOnly: true
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Fecha Cierre
+                    Fecha Publicacion
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="fechaCierre" class="datepicker" style="width: 90px" value="${concursoInstance?.fechaCierre}"/>
-<script type="text/javascript">
-$("#fechaCierre").datepicker({
-changeMonth: true,
-changeYear: true,
-showOn: "both",
-buttonImage: "${resource(dir:'images', file:'calendar.png')}",
-buttonImageOnly: true
-});
-</script>
+                <elm:datepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Limite Preguntas
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Limite Respuestas
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Limite Entrega Ofertas
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Limite Solicitar Convalidacion
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Limite Respuesta Convalidacion
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Calificacion
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Inicio Puja
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Fin Puja
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fecha Adjudicacion
+                </span>
+            </div>
+
+            <div class="controls">
+                <elm:datepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}"/>
+
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Estado
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="estado" class="" value="${concursoInstance?.estado}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -157,7 +276,7 @@ buttonImageOnly: true
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="5" style="resize: none;" name="observaciones" maxlength="127" class="" value="${concursoInstance?.observaciones}"/>
+                <g:textField name="observaciones" class="" value="${concursoInstance?.observaciones}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -166,10 +285,7 @@ buttonImageOnly: true
     </g:form>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-concursoInstance").validate({
+    $("#frmSave-Concurso").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
@@ -178,8 +294,14 @@ buttonImageOnly: true
         },
         errorClass     : "label label-important",
         submitHandler  : function(form) {
-            $("[name=btnSave-concursoInstance]").replaceWith(spinner);
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

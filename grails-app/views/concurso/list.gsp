@@ -1,5 +1,5 @@
 
-<%@ page import="janus.Concurso" %>
+<%@ page import="janus.pac.Concurso" %>
 <!doctype html>
 <html>
     <head>
@@ -24,15 +24,15 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Nuevo Concurso
+                Crear  Concurso
             </a>
         </div>
 
-        <g:form action="delete" name="frmDelete-concursoInstance">
+        <g:form action="delete" name="frmDelete-Concurso">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-concurso" class="span12" role="main" style="margin-top: 10px;">
+        <div id="list-Concurso" class="span12" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
@@ -40,18 +40,20 @@
                     
                         <th>Obra</th>
                     
-                        <th>Administración</th>
+                        <th>Administracion</th>
                     
-                        <g:sortableColumn property="codigo" title="Código" />
+                        <th>Pac</th>
                     
-                        <g:sortableColumn property="objetivo" title="Objetivo" />
+                        <g:sortableColumn property="codigo" title="Codigo" />
                     
-                        <g:sortableColumn property="base" title="Base" />
+                        <g:sortableColumn property="objeto" title="Objeto" />
+                    
+                        <g:sortableColumn property="costoBases" title="Costo Bases" />
                     
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="paginate">
                 <g:each in="${concursoInstanceList}" status="i" var="concursoInstance">
                     <tr>
                     
@@ -59,38 +61,38 @@
                     
                         <td>${fieldValue(bean: concursoInstance, field: "administracion")}</td>
                     
+                        <td>${fieldValue(bean: concursoInstance, field: "pac")}</td>
+                    
                         <td>${fieldValue(bean: concursoInstance, field: "codigo")}</td>
                     
-                        <td>${fieldValue(bean: concursoInstance, field: "objetivo")}</td>
+                        <td>${fieldValue(bean: concursoInstance, field: "objeto")}</td>
                     
-                        <td>${fieldValue(bean: concursoInstance, field: "base")}</td>
-                    
-                        <td>${fieldValue(bean: concursoInstance, field: "tipoCuenta")}</td>
+                        <td>${fieldValue(bean: concursoInstance, field: "costoBases")}</td>
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${concursoInstance.id}">
-                                <i class="icon-zoom-in"></i>
+                                <i class="icon-zoom-in icon-large"></i>
                             </a>
                             <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${concursoInstance.id}">
-                                <i class="icon-pencil"></i>
+                                <i class="icon-pencil icon-large"></i>
                             </a>
 
                             <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${concursoInstance.id}">
-                                <i class="icon-trash"></i>
+                                <i class="icon-trash icon-large"></i>
                             </a>
                         </td>
                     </tr>
                 </g:each>
                 </tbody>
             </table>
-            <div class="pagination">
-                <elm:paginate total="${concursoInstanceTotal}" params="${params}" />
-            </div>
+
         </div>
 
-        <div class="modal hide fade" id="modal-concurso">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
+        <div class="modal hide fade" id="modal-Concurso">
+            <div class="modal-header" id="modalHeader">
+                <button type="button" class="close darker" data-dismiss="modal">
+                    <i class="icon-remove-circle"></i>
+                </button>
 
                 <h3 id="modalTitle"></h3>
             </div>
@@ -106,9 +108,19 @@
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
+            function submitForm(btn) {
+                if ($("#frmSave-Concurso").valid()) {
+                    btn.replaceWith(spinner);
+                }
+                $("#frmSave-Concurso").submit();
+            }
 
             $(function () {
                 $('[rel=tooltip]').tooltip();
+
+                $(".paginate").paginate({
+                    maxRows: 10
+                });
 
                 $(".btn-new").click(function () {
                     $.ajax({
@@ -116,20 +128,18 @@
                         url     : "${createLink(action:'form_ajax')}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-concursoInstance").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                }
-                                $("#frmSave-concursoInstance").submit();
+                                submitForm(btnSave);
                                 return false;
                             });
 
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle").html("Crear Concurso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-concurso").modal("show");
+                            $("#modal-Concurso").modal("show");
                         }
                     });
                     return false;
@@ -145,20 +155,18 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-concursoInstance").valid()) {
-                                    btnSave.replaceWith(spinner);
-                                }
-                                $("#frmSave-concursoInstance").submit();
+                                submitForm(btnSave);
                                 return false;
                             });
 
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
                             $("#modalTitle").html("Editar Concurso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-concurso").modal("show");
+                            $("#modal-Concurso").modal("show");
                         }
                     });
                     return false;
@@ -174,10 +182,11 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
                             $("#modalTitle").html("Ver Concurso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-concurso").modal("show");
+                            $("#modal-Concurso").modal("show");
                         }
                     });
                     return false;
@@ -191,14 +200,15 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-concursoInstance").submit();
+                        $("#frmDelete-Concurso").submit();
                         return false;
                     });
 
+                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                     $("#modalTitle").html("Eliminar Concurso");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este concurso?</p>");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Concurso?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-concurso").modal("show");
+                    $("#modal-Concurso").modal("show");
                     return false;
                 });
 

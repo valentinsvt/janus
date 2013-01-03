@@ -1,5 +1,5 @@
 
-<%@ page import="janus.EspecialidadProveedor" %>
+<%@ page import="janus.pac.EspecialidadProveedor" %>
 
 <div id="show-especialidadProveedor" class="span5" role="main">
 
@@ -9,7 +9,7 @@
         <div class="control-group">
             <div>
                 <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripción
+                    Descripcion
                 </span>
             </div>
             <div class="controls">
