@@ -1,5 +1,5 @@
 
-<%@ page import="janus.Concurso" %>
+<%@ page import="janus.Concurso2" %>
 
 <div id="create-concursoInstance" class="span" role="main">
     <g:form class="form-horizontal" name="frmSave-concursoInstance" action="save">

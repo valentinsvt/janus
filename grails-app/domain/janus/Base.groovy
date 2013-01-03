@@ -1,7 +1,7 @@
 package janus
 class Base implements Serializable {
     PrecioVenta precioVenta
-    Concurso concurso
+    Concurso2 concurso
     Date fecha
     double monto
     static mapping = {
@@ -23,6 +23,5 @@ class Base implements Serializable {
         monto(blank: true, nullable: true, attributes: [title: 'monto'])
         precioVenta(blank: true, nullable: true, attributes: [title: 'precioVenta'])
         fecha(blank: true, nullable: true, attributes: [title: 'fecha'])
-
     }
 }

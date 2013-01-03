@@ -1,5 +1,5 @@
 
-<%@ page import="janus.Base" %>
+<%@ page import="janus.Concurso2; janus.Base" %>
 
 <div id="create-baseInstance" class="span" role="main">
     <g:form class="form-horizontal" name="frmSave-baseInstance" action="save">
@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:select id="concurso" name="concurso.id" from="${janus.Concurso.list()}" optionKey="id" class="many-to-one " value="${baseInstance?.concurso?.id}" noSelection="['null': '']"/>
+                <g:select id="concurso" name="concurso.id" from="${Concurso2.list()}" optionKey="id" class="many-to-one " value="${baseInstance?.concurso?.id}" noSelection="['null': '']"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

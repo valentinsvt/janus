@@ -1,5 +1,6 @@
 package janus
-class Concurso implements Serializable {
+class Concurso2 implements Serializable {
+
     Obra obra
     TipoCuenta tipoCuenta
     Administracion administracion
@@ -10,6 +11,10 @@ class Concurso implements Serializable {
     Date fechaCierre
     String estado
     String observaciones
+
+
+
+
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
