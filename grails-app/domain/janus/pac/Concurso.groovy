@@ -43,9 +43,9 @@ class Concurso {
             fechaInicio column: 'cncrfcin'
             fechaPublicacion column: 'cncrfcpu'
             fechaLimitePreguntas column: 'cncrfcpg'
-            fechaLimiteRespuestas column: 'cncrfcpg'
-            fechaLimiteEntregaOfertas column: 'cncrfcrp'
-            fechaLimiteSolicitarConvalidacion column: 'cncrfceo'
+            fechaLimiteRespuestas column: 'cncrfcrp'
+            fechaLimiteEntregaOfertas column: 'cncrfceo'
+            fechaLimiteSolicitarConvalidacion column: 'cncrfcsc'
             fechaLimiteRespuestaConvalidacion column: 'cncrfcrc'
             fechaCalificacion column: 'cncrfccf'
             fechaInicioPuja column: 'cncrfcip'
@@ -60,8 +60,8 @@ class Concurso {
         obra(blank: true, nullable: true)
         administracion(blank: true, nullable: true)
         pac(blank: true, nullable: true)
-        codigo(blank: true, nullable: true)
-        objeto(blank: true, nullable: true)
+        codigo(blank: true, nullable: true, maxSize: 15)
+        objeto(blank: true, nullable: true, maxSize: 255)
         costoBases(blank: true, nullable: true)
         fechaInicio(blank: true, nullable: true)
         fechaPublicacion(blank: true, nullable: true)
@@ -74,7 +74,7 @@ class Concurso {
         fechaInicioPuja(blank: true, nullable: true)
         fechaFinPuja(blank: true, nullable: true)
         fechaAdjudicacion(blank: true, nullable: true)
-        estado(blank: true, nullable: true)
-        observaciones(blank: true, nullable: true)
+        estado(blank: true, nullable: true, maxSize: 1)
+        observaciones(blank: true, nullable: true, maxSize: 127)
     }
 }

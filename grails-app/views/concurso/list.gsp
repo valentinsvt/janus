@@ -24,7 +24,15 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Crear  Concurso
+                Nuevo proceso
+            </a>
+            <a href="#" class="btn btn-ajax btn-new">
+                <i class="icon-file"></i>
+                PAC
+            </a>
+            <a href="#" class="btn btn-ajax btn-new">
+                <i class="icon-file"></i>
+                Documentos
             </a>
         </div>
 

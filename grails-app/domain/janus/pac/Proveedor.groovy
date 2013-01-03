@@ -1,5 +1,7 @@
 package janus.pac
 
+import janus.EspecialidadProveedor
+
 class Proveedor {
 
     EspecialidadProveedor especialidad
