@@ -742,7 +742,7 @@
             $(function () {
 
                 $(".modal").draggable({
-                    cancel : '.btn'
+                    cancel : '.btn, input, select'
                 });
 
                 $("#search").val("");
@@ -776,7 +776,8 @@
                     if (fecha) {
                         $("#divFecha").show();
                         var hoy = $("#fecha").datepicker("getDate");
-                        showLugar.fecha = hoy.getDate() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getFullYear()
+                        console.log(hoy);
+                        showLugar.fecha = hoy.getDate() + "-" + (hoy.getMonth() + 1) + "-" + hoy.getFullYear();
 
 //                        var hoy = new Date();
 //                        $("#fecha").datepicker("setDate", hoy);
