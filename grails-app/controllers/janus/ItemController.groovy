@@ -162,6 +162,58 @@ class ItemController extends janus.seguridad.Shield {
 
             println("precios2" + precios);
 
+
+            if(params.tipo == '-1'){
+//                println("entro")
+
+
+
+
+                if (!params.totalRows) {
+                    sql = "select count(distinct rbpc.item__id) "
+                    sql += "from rbpc "
+                    sql += "where lgar__id=${lugar.id} "
+
+                    def totalCount
+                    cn.eachRow(sql.toString()) {row ->
+                        totalCount = row[0]
+                    }
+
+                    params.totalRows = totalCount
+
+                    params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+
+
+
+//                    println("totalrows" + params.totalRows)
+//
+//                    println("total" + params.totalPags)
+
+                    if (params.totalPags <= 10) {
+                        params.first = 1
+                        params.last = params.last = params.totalPags
+                    } else {
+                        params.first = Math.max(1, params.pag.toInteger() - 5)
+                        params.last = Math.min(params.totalPags, params.pag + 5)
+
+                        def ts = params.last - params.first
+                        if (ts < 9) {
+                            def r = 10 - ts
+                            params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                        }
+                    }
+                }
+                cn.close()
+
+
+
+            }else {
+
+
+//                println("entro2")
+
+
+
             if (!params.totalRows) {
                 sql = "select count(distinct rbpc.item__id) "
                 sql += "from rbpc, item "
@@ -187,9 +239,9 @@ class ItemController extends janus.seguridad.Shield {
 
 
 
-                println("totalrows" + params.totalRows)
-
-                println("total" + params.totalPags)
+//                println("totalrows" + params.totalRows)
+//
+//                println("total" + params.totalPags)
 
                 if (params.totalPags <= 10) {
                     params.first = 1
@@ -206,6 +258,9 @@ class ItemController extends janus.seguridad.Shield {
                 }
             }
             cn.close()
+
+            }
+
         }
 
          [rubroPrecio: rubroPrecio, params: params, lugar: lugar]
@@ -214,7 +269,7 @@ class ItemController extends janus.seguridad.Shield {
 
     def actualizar() {
 
-        println params
+//        println params
         if (params.item instanceof java.lang.String) {
             params.item = [params.item]
         }
