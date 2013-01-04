@@ -45,7 +45,9 @@ class ItemController extends janus.seguridad.Shield {
         def lugar;
         def rubroPrecio;
 
-        println("tipo" + params.tipo)
+        def tipo;
+
+//        println("tipo" + params.tipo)
 
         if (t == "1") {
 //            println "AQUI " + params
@@ -68,7 +70,13 @@ class ItemController extends janus.seguridad.Shield {
             }
 
             params.totalRows = rubroPrecio.totalCount
+
+//            println("totalrows" + params.totalRows)
+
             params.totalPags = Math.ceil(rubroPrecio.totalCount / params.max).toInteger()
+
+//            println("totalpags" + params.totalPags)
+
 
             if (params.totalPags <= 10) {
                 params.first = 1
@@ -93,7 +101,14 @@ class ItemController extends janus.seguridad.Shield {
 
             def sql
 
-//            println("tipo: " + params.tipo)
+            tipo = Grupo.get(params.tipo)
+
+
+            println(tipo);
+
+//
+//
+// println("tipo: " + params.tipo)
 
 
             sql = "select distinct rbpc.item__id, item.itemcdgo "
@@ -106,7 +121,7 @@ class ItemController extends janus.seguridad.Shield {
                 sql += "and item.dprt__id = dprt.dprt__id "
                 sql += "and dprt.sbgr__id = sbgr.sbgr__id "
                 sql += "and sbgr.grpo__id = grpo.grpo__id "
-                sql += "and grpo.grpo__id = ${params.tipo}"
+                sql += "and grpo.grpo__id = ${tipo.id}"
             }
             sql += " order by itemcdgo "
             sql += "limit ${params.max} "
@@ -146,7 +161,11 @@ class ItemController extends janus.seguridad.Shield {
 
                 params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
 
-//                println("total" + params.totalPags)
+
+
+                println("totalrows" + params.totalRows)
+
+                println("total" + params.totalPags)
 
                 if (params.totalPags <= 10) {
                     params.first = 1

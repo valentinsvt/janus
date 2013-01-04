@@ -24,9 +24,9 @@
 
         <div class="span1 noMargin" align="center">Fecha</div>
 
-        <div class="span2 noMargin" align="center">Todos</div>
+        %{--<div class="span2 noMargin" align="center">Todos</div>--}%
 
-        <div class="span2 noMargin" align="center">Ver</div>
+        <div class="span4 noMargin" align="center">Ver</div>
 
     </div>
 
@@ -44,16 +44,16 @@
             <elm:datepicker name="fecha" class="fecha datepicker input-small" value=""/>
         </div>
 
-        <div class="span1" align="center" style="margin-left: 50px; margin-right: 40px">
-            <g:checkBox name="todosPrecios" id="todos" checked="false" class="span1"/>
-        </div>
+        %{--<div class="span1" align="center" style="margin-left: 50px; margin-right: 40px">--}%
+            %{--<g:checkBox name="todosPrecios" id="todos" checked="false" class="span1"/>--}%
+        %{--</div>--}%
 
         <div class="span2 noMargin" align="center">
             <g:select name="tipo" from="${janus.Grupo.findAllByIdLessThanEquals(3)}" class="span2" optionKey="id"
-                      optionValue="descripcion" noSelection="['-1': 'Todos']"/>
+                      optionValue="descripcion" noSelection="['-1': 'Todos']" style="margin-left: 90px"/>
         </div>
 
-        <div class="btn-group span1" style="margin-left: 90px; margin-right: 10px">
+        <div class="btn-group span1" style="margin-left: 190px; margin-right: 10px">
             <a href="#" class="btn btn-consultar"><i class="icon-search"></i>Consultar</a>
             <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i>Guardar</a>
         </div>
@@ -106,12 +106,12 @@
             $("#fecha").val(fcha);
         }
 
-        var todos = "";
-        if ($("#todos").attr("checked") == "checked") {
-            todos = 1
-        } else {
-            todos = 2
-        }
+        var todos = 2;
+//        if ($("#todos").attr("checked") == "checked") {
+//            todos = 1
+//        } else {
+//            todos = 2
+//        }
         var tipo = $("#tipo").val();
 
         $.ajax({
@@ -135,17 +135,17 @@
     }
 
     $(function () {
-        $("#todos").click(function () {
-            var fecha2 = new Date().toString("dd-MM-yyyy");
-//            console.log(fecha2);
-            if ($("#todos").attr("checked") == "checked") {
-//
-                $("#fecha").attr("value", fecha2);
-            }
-            else {
-//               )
-            }
-        });
+//        $("#todos").click(function () {
+//            var fecha2 = new Date().toString("dd-MM-yyyy");
+////            console.log(fecha2);
+//            if ($("#todos").attr("checked") == "checked") {
+////
+//                $("#fecha").attr("value", fecha2);
+//            }
+//            else {
+////               )
+//            }
+//        });
 
 
         $(".btn-consultar").click(function () {
