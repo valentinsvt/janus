@@ -45,7 +45,7 @@ class ItemController extends janus.seguridad.Shield {
         def lugar;
         def rubroPrecio;
 
-//        println("tipo" + params.tipo)
+        println("tipo" + params.tipo)
 
         if (t == "1") {
 //            println "AQUI " + params
@@ -180,12 +180,42 @@ class ItemController extends janus.seguridad.Shield {
 
         params.item.each {
             def parts = it.split("_")
-//            println parts
+            println parts
+
             def rubroId = parts[0]
             def nuevoPrecio = parts[1]
+            def nuevaFecha = parts[2]
 
-            def rubroPrecioInstance = PrecioRubrosItems.get(rubroId);
+            nuevaFecha =new Date().parse("dd-MM-yyyy", nuevaFecha);
+
+
+            def rubroPrecioInstanceOld = PrecioRubrosItems.get(rubroId);
+
+            def precios = PrecioRubrosItems.countByFechaAndLugar(nuevaFecha, rubroPrecioInstanceOld.lugar)
+
+
+            def rubroPrecioInstance
+
+            if(precios == 0) {
+
+                rubroPrecioInstance = new PrecioRubrosItems();
+
+                rubroPrecioInstance.properties = rubroPrecioInstanceOld.properties
+
+
+
+            }else {
+
+
+                rubroPrecioInstance = rubroPrecioInstanceOld
+            }
+
+
+
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
+
+            rubroPrecioInstance.fecha = nuevaFecha
+
             if (!rubroPrecioInstance.save(flush: true)) {
                 println "error " + parts
                 if (nos != "") {

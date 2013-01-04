@@ -38,9 +38,9 @@
             <div class="span6" style="margin-bottom: 10px">
 
 
-                <input type="radio" name="tipo" value="1" checked="checked" />  Base de Contrato
+                <input type="radio" name="tipoPresupuesto" class="radioPresupuesto" value="1" />  Base de Contrato
 
-                <input type="radio" name="tipo" value="2" style="margin-left: 220px"/> Presupuesto Referencial
+                <input type="radio" name="tipoPresupuesto" class="radioPresupuesto" value="2" style="margin-left: 220px"/> Presupuesto Referencial
 
 
 
@@ -63,26 +63,27 @@
 
     <div class="piePagina" style="margin-top: 10px; margin-bottom: 10px">
 
+        <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
         <fieldset class="borde">
 
             <legend>Pie de Página</legend>
 
             <div class="span6">
 
-                <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.descripcion}" optionValue="descripcion" optionKey="id" style="width: 350px"/>
+                <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion" optionKey="id" style="width: 350px"/>
 
                 <div class="btn-group" style="margin-left: 350px; margin-top: -40px; margin-bottom: 10px">
-                    <button class="btn" id="btnNuevo"><i class="icon-plus"></i> Nuevo</button>
-                    <button class="btn" id="btnCancelar"><i class="icon-ban-circle"></i> Cancelar</button>
-                    <button class="btn" id="btnEditar"> Editar</button>
-                    <button class="btn" id="btnAceptar"><i class="icon-ok"></i> Aceptar</button>
+                    <a class="btn" id="btnNuevo"> Nuevo</a>
+                    <a class="btn" id="btnCancelar"> Cancelar</a>
+                    <a class="btn" id="btnEditar"> Editar</a>
+                    <a class="btn" id="btnAceptar"> Aceptar</a>
                 </div>
 
 
             </div>
 
-
-            <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
+                %{--<g:hiddenField name="nota" value="${nota?.id}"/>--}%
+                <g:hiddenField name="obra" value="${obra?.id}"/>
 
                 <div class="span6">
 
@@ -115,11 +116,11 @@
 
                 <g:hiddenField name="obraTipo" value="${obra?.claseObra?.tipo}"/>
 
-            </g:form>
+
 
         </fieldset>
 
-
+        </g:form>
 
     </div>
 
@@ -159,7 +160,7 @@
 
             <div class="span6" style="width: 700px">
 
-                <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmas">
+                <table class="table table-bordered table-striped table-hover table-condensed " id="tablaFirmas">
 
                     <thead>
                     <tr>
@@ -219,22 +220,36 @@
 
             <div class="span6">
                 <div class="span1"> Memo N°</div>
-                <div class="span3"><g:textField name="numeroMemo" value="${obra?.memoSalida}"/></div>
+                <div class="span3"><g:textField name="numeroMemo" value="${obra?.memoSalida}" disabled="true"/></div>
             </div>
 
             <div class="span6">
                 <div class="span1"> DE: </div>
-                <div class="span3"><g:textField name="deMemo" style="width: 470px"/></div>
+
+
+                <g:if test="${obra?.claseObra?.tipo == 'C'}">
+
+                    <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${"Dpto. Infraestructura Comunitaria"}" disabled="true"/></div>
+
+                </g:if>
+
+                <g:if test="${obra?.claseObra?.tipo == 'V'}">
+
+                    <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${"Dpto de Estudios Viales"}" disabled="true"/></div>
+
+                </g:if>
+
+
             </div>
 
             <div class="span6">
                 <div class="span1"> PARA: </div>
-                <div class="span3"><g:textField name="paraMemo" value="${obra?.departamento}" style="width: 470px"/></div>
+                <div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.descripcion}" style="width: 470px" disabled="true"/></div>
             </div>
 
             <div class="span7">
                 <div class="span1"> Valor de la Base: </div>
-                <div class="span2"><g:textField name="baseMemo" style="width: 100px"/></div>
+                <div class="span2"><g:textField name="baseMemo" style="width: 100px" disabled="true"/></div>
 
                 <div class="span1" style="margin-left: -30px"> Valor de Reajuste: </div>
                 <div class="span2"><g:textField name="reajusteMemo" style="width: 100px"/></div>
@@ -262,18 +277,18 @@
         <fieldset class="borde">
             <legend>Texto</legend>
 
-<g:form class="memo" name="frm-memo" controller="presupuesto" action="save">
+<g:form class="memoGrabar" name="frm-memo" controller="auxiliar" action="save">
 
-    <g:hiddenField name="id" value="${obra?.partidaObra?.id}"/>
+    <g:hiddenField name="id" value="${"1"}" />
 
-
+    <g:hiddenField name="obra" value="${obra?.id}"/>
 
             <div class="span6">
-                ${obra?.partidaObra?.id}
+
 
                 <div class="span1">Texto</div>
 
-                <div class="span3"><g:textArea name="textoPresupuesto" value="${obra?.partidaObra?.textoPresupuesto}" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px;resize: none;" /></div>
+                <div class="span3"><g:textArea name="memo1" value="${auxiliarFijo?.memo1}" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px;resize: none;"  disabled="true" /></div>
 
             </div>
 
@@ -281,7 +296,7 @@
             <div class="span6">
                 <div class="span1">Pie</div>
 
-                <div class="span3"><g:textArea name="piePresupuesto" value="${obra?.partidaObra?.piePresupuesto}" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px; resize: none" /></div>
+                <div class="span3"><g:textArea name="memo2" value="${auxiliarFijo?.memo2}" rows="4" cols="4" style="width: 600px; height: 55px; margin-left: -50px; resize: none;"  disabled="true"/></div>
 
             </div>
 
@@ -332,6 +347,10 @@
                     <button class="btn btnAdicionar" id="memo">Adicionar</button>
 
 
+
+
+
+
                 </div>
 
 
@@ -380,17 +399,17 @@
 
             <div class="span6" style="margin-top: 10px">
                 <div class="span2"> Fórmula Polinómica N°</div>
-                <div class="span3"><g:textField name="numeroFor"/></div>
+                <div class="span3"><g:textField name="numeroFor" value="${obra?.formulaPolinomica}" disabled="true"/></div>
             </div>
 
             <div class="span6">
                 <div class="span2"> Fecha de Lista de Precios: </div>
-                <div class="span3"><elm:datepicker name="fechaFor" style="width: 100px"/></div>
+                <div class="span3"><g:textField name="fechaFor" value="${obra?.fechaPreciosRubros}" style="width: 100px" disabled="true"/></div>
             </div>
 
             <div class="span6">
                 <div class="span2"> Monto del Contrato: </div>
-                <div class="span3"><g:textField name="montoFor"/></div>
+                <div class="span3"><g:textField name="montoFor" value="${""}" disabled="true"/></div>
             </div>
 
 
@@ -408,11 +427,18 @@
         <fieldset class="borde">
             <legend>Nota</legend>
 
+<g:form class="memoGrabar" name="frm-formula" controller="auxiliar" action="save" >
+
+<g:hiddenField name="id" value="${"1"}" />
+
+    <g:hiddenField name="obra" value="${obra?.id}"/>
+
             <div class="span6">
-                <div class="span3"><g:textArea name="textFor" rows="4" cols="4" style="width: 690px; margin-left: -30px; height: 70px; resize: none"/></div>
+                <div class="span3"><g:textArea name="notaFormula" rows="4" value="${auxiliarFijo?.notaFormula}" cols="4"
+                                               style="width: 690px; margin-left: -30px; height: 70px; resize: none" disabled="true"/></div>
 
             </div>
-
+ </g:form>
             <div class="span6" style="margin-top: 10px">
                 <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
                     <button class="btn" id="btnEditarFor">Editar</button>
@@ -501,12 +527,23 @@
     <div class="cabecera">
 
         <fieldset class="borde">
+
+
+
             <legend>Cabecera</legend>
 
-            <div class="span6">
+
+<g:form class="memoGrabar" name="frm-textoFijo" controller="auxiliar" action="save">
+
+<g:hiddenField name="id" value="${"1"}" />
+
+    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+
+<div class="span6">
                 <div class="span1">Título</div>
 
-                <div class="span3"><g:textField name="tituloTextos" style="width: 560px"/></div>
+                <div class="span3"><g:textField name="titulo" value="${auxiliarFijo?.titulo}" style="width: 560px" disabled="true"/></div>
 
             </div>
 
@@ -517,7 +554,7 @@
             </div>
 
             <div class="span6">
-                <div class="span3"><g:textArea name="general" rows="4" cols="4" style="width: 665px; height: 130px; resize: none;"/></div>
+                <div class="span3"><g:textArea name="general" value="${auxiliarFijo?.general}" rows="4" cols="4" style="width: 665px; height: 130px; resize: none;" disabled="true"/></div>
 
             </div>
 
@@ -527,7 +564,7 @@
             </div>
 
             <div class="span6">
-                <div class="span3"><g:textArea name="baseContratos" rows="4" cols="4" style="width: 665px; height: 35px; resize: none;"/></div>
+                <div class="span3"><g:textArea name="baseCont" value="${auxiliarFijo?.baseCont}" rows="4" cols="4" style="width: 665px; height: 35px; resize: none;" disabled="true"/></div>
 
             </div>
 
@@ -537,28 +574,43 @@
             </div>
 
             <div class="span6">
-                <div class="span3"><g:textArea name="presupuestoRefe" rows="4" cols="4" style="width: 665px; height: 35px; resize: none;"/></div>
+                <div class="span3"><g:textArea name="presupuestoRef"  value="${auxiliarFijo?.presupuestoRef}" rows="4" cols="4" style="width: 665px; height: 35px; resize: none;" disabled="true"/></div>
 
             </div>
 
+</g:form>
 
 
+    <div class="span6" style="margin-top: 10px">
+        <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+            <button class="btn" id="btnEditarTextoF">Editar</button>
+            <button class="btn" id="btnAceptarTextoF">Aceptar</button>
 
-
-        </fieldset>
-
-
+        </div>
     </div>
 
-    <div class="cabecera">
 
-        <fieldset class="borde">
-            <legend>Pie de Página</legend>
 
-            <div class="span6">
-                <div class="span1">Retenciones</div>
+    </fieldset>
 
-                <div class="span3"><g:textField name="retenciones" style="width: 560px"/></div>
+
+</div>
+
+<div class="cabecera">
+
+<fieldset class="borde">
+<legend>Pie de Página</legend>
+
+<g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="save" >
+
+<g:hiddenField name="id" value="${"1"}" />
+
+    <g:hiddenField name="obra" value="${obra?.id}"/>
+
+<div class="span6">
+   <div class="span1">Retenciones</div>
+
+   <div class="span3"><g:textField name="retencion" value="${auxiliarFijo?.retencion}" style="width: 560px" disabled="true"/></div>
 
             </div>
 
@@ -569,11 +621,23 @@
             </div>
 
             <div class="span6">
-                <div class="span3"><g:textArea name="nota" rows="4" cols="4" style="width: 665px; height: 130px; resize: none;"/></div>
+                <div class="span3"><g:textArea name="notaAuxiliar" value="${auxiliarFijo?.notaAuxiliar}" rows="4" cols="4" style="width: 665px; height: 130px; resize: none;" disabled="true"/></div>
 
             </div>
 
-        </fieldset>
+  </g:form>
+
+    <div class="span6" style="margin-top: 10px">
+        <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+            <button class="btn" id="btnEditarTextoRet">Editar</button>
+            <button class="btn" id="btnAceptarTextoRet">Aceptar</button>
+
+        </div>
+    </div>
+
+
+
+</fieldset>
 
 
     </div>
@@ -584,10 +648,36 @@
 
 
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 160px">
-    <button class="btn" id="imprimir"><i class="icon-book"></i> Imprimir</button>
+    <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
     <button class="btn" id="tramite"><i class="icon-plus"></i> Ingresar Trámite</button>
-    <button class="btn" id="presupuestoExcel"><i class="icon-ok"></i> Presupuesto a Excel</button>
+    <button class="btn" id="presupuestoExcel"><i class="icon-table"></i> Presupuesto a Excel</button>
     <button class="btn" id="salir"><i class="icon-ban-circle"></i> Salir</button>
+</div>
+
+
+<div id="tipoReporteDialog">
+
+    <fieldset>
+        <div class="span3">
+
+
+            Debe elegir un Tipo de Reporte antes de imprimir el documento!!
+
+        </div>
+    </fieldset>
+</div>
+
+
+
+<div id="maxFirmasDialog">
+
+    <fieldset>
+        <div class="span3">
+
+        A ingresado el número máximo de firmas para este documento!!
+
+        </div>
+    </fieldset>
 </div>
 
 
@@ -598,14 +688,31 @@
 <script type="text/javascript">
 
 
+    var tipoClick;
+
+   var tg =0;
+
+   var forzarValue;
+
+
+    var notaValue;
+
+
+    var firmasId = [];
+
+
     function loadNota() {
         var idPie = $("#piePaginaSel").val();
+
         $.ajax({
             type    : "POST",
             dataType: 'json',
             url     : "${g.createLink(action:'getDatos')}",
             data    : {id: idPie} ,
             success : function (msg) {
+
+
+
                 $("#descripcion").val(msg.descripcion);
                 $("#texto").val(msg.texto);
                 $("#adicional").val(msg.adicional);
@@ -621,24 +728,44 @@
     });
 
 
+
     $(".btnAdicionar").click(function () {
+
+
+
 
         var tipo = $(this).attr("id");
         var tbody = $("#bodyFirmas_"+tipo);
         var id = $("#cmb_"+tipo).val();
 
+        var maxFirmas = (tbody.children("tr").length)+1;
+
+
+        console.log(maxFirmas)
+
+
+       if(maxFirmas > 3) {
+
+
+           console.log("NO")
+           $("#maxFirmasDialog").dialog("open");
+
+
+
+       } else {
+
+
+
         var cont = true;
 
         tbody.children("tr").each(function() {
             var curId = $(this).data("id");
+
             if(curId.toString() == id.toString()) {
                 cont = false;
             }
         });
 
-//        console.log(id)
-
-//        var nombreFirmas = $("#cmb_"+id).val();
 
         if(cont) {
             var nombre = $.trim($("#cmb_"+tipo+" option:selected").text());
@@ -649,7 +776,11 @@
 
 
             var rows = tbody.children("tr").length;
+
+
+
             var num = rows+1;
+
 
             var tr = $("<tr>");
             var tdNumero = $("<td>");
@@ -670,16 +801,80 @@
                 tr.remove();
             });
 
-        }
+
+
+
+         }
+
+
+       }
+
     });
 
     $("#btnEditarMemo").click(function () {
 
-         $("#textoPresupuesto").attr("disabled",false);
-        $("#piePresupuesto").attr("disabled",false)
+         $("#memo1").attr("disabled",false);
+        $("#memo2").attr("disabled",false)
 
 
 
+    });
+
+    $(".radioPresupuesto").click(function () {
+
+         tipoClick = $(this).attr("value")
+
+           return tipoClick
+    });
+
+
+
+    $("#btnImprimir").click(function () {
+
+    firmasId = [];
+
+      $("#bodyFirmas_presupuesto").children("tr").each(function(i){
+
+          firmasId[i]=$(this).data("id")
+
+          console.log(firmasId[i])
+
+//          console.log(  $(this).data("id") )
+        console.log(  $(this).data("nombre") )
+        console.log(  $(this).data("puesto") )
+
+      })
+
+
+
+          notaValue = $("#piePaginaSel").attr("value");
+
+
+        if($("#forzar").attr("checked") == "checked") {
+
+            forzarValue = 1;
+
+        } else {
+
+           forzarValue = 2;
+
+        }
+
+
+        if(tipoClick == null) {
+
+            $("#tipoReporteDialog").dialog("open");
+
+
+        }else
+        {
+
+        var tipoReporte = tipoClick;
+
+        location.href="${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
+            + "&firmasId=" + firmasId
+
+        }
     });
 
 
@@ -688,10 +883,63 @@
 
             $("#frm-memo").submit();
 
+        success_func( location.href="${g.createLink(controller: 'documentosObra',action: 'documentosObra',id: obra?.id)}")
+
 
     });
 
+    $("#btnEditarFor").click(function () {
+
+       $("#notaFormula").attr("disabled", false);
+
+    });
+
+    $("#btnAceptarFor").click(function () {
+
+
+        $("#frm-formula").submit();
+    });
+
+
+
+
+    $("#btnEditarTextoF").click(function () {
+
+        $("#presupuestoRef").attr("disabled", false);
+        $("#baseCont").attr("disabled", false);
+        $("#general").attr("disabled", false);
+        $("#titulo").attr("disabled", false);
+
+    });
+
+    $("#btnAceptarTextoF").click(function () {
+
+
+        $("#frm-textoFijo").submit();
+    });
+
+    $("#btnEditarTextoRet").click(function () {
+
+        $("#retencion").attr("disabled", false);
+        $("#notaAuxiliar").attr("disabled", false);
+
+
+    });
+
+    $("#btnAceptarTextoRet").click(function () {
+
+
+        $("#frm-textoFijoRet").submit();
+    });
+
+
+
+
+
     $("#piePaginaSel").change(function () {
+
+
+//        console.log("entro")
 
 
         loadNota();
@@ -766,6 +1014,8 @@
 
         $("#frm-nota").submit();
 
+        %{--success_func( location.href="${g.createLink(controller: 'documentosObra',action: 'documentosObra',id: obra?.id)}")--}%
+
 
 
     });
@@ -812,7 +1062,7 @@
         $("#piePaginaSel").attr("disabled",false);
         $("#descripcion").attr("disabled",false);
         $("#texto").attr("disabled",false);
-        $("#adicional").attr("disabled",false);
+//        $("#adicional").attr("disabled",false);
         $("#notaAdicional").attr("disabled",false)
 
     }
@@ -850,9 +1100,48 @@
 //            $("#adicional").val("");
         }
 
+    });
 
 
-//
+
+    $("#tipoReporteDialog").dialog({
+
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 350,
+        height    : 180,
+        position  : 'center',
+        title     : 'Seleccione un Tipo de Reporte',
+        buttons   : {
+            "Aceptar" : function () {
+
+                $("#tipoReporteDialog").dialog("close");
+
+            }
+        }
+
+    });
+
+
+    $("#maxFirmasDialog").dialog({
+
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 350,
+        height    : 180,
+        position  : 'center',
+        title     : 'Máximo Número de Firmas',
+        buttons   : {
+            "Aceptar" : function () {
+
+                $("#maxFirmasDialog").dialog("close");
+
+            }
+        }
 
     });
 

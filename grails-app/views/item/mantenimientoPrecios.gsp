@@ -175,15 +175,33 @@
         $(".btn-actualizar").click(function () {
             $("#dlgLoad").dialog("open");
             var data = "";
+
+            var fcha = $("#fecha").val();
+
+
+            console.log("fecha" + fcha)
+
+
+
+
+
+
             $(".editable").each(function () {
                 var id = $(this).attr("id");
                 var valor = $(this).data("valor");
+
+
+                var data1 = $(this).data("original");
+
+
+                console.log(data1)
+
 
                 if (parseFloat(valor) > 0 && parseFloat($(this).data("original")) != parseFloat(valor)) {
                     if (data != "") {
                         data += "&";
                     }
-                    data += "item=" + id + "_" + valor;
+                    data += "item=" + id + "_" + valor + "_" + fcha;
                 }
             });
 
@@ -197,7 +215,18 @@
                     var ok = parts[0];
                     var no = parts[1];
 
+//                    var ok2 = [];
+
+                    $(ok).each( function () {
+                       var fec=$(this).siblings(".fecha");
+                       fec.text($("#fecha").val());
+//                        ok2.push(fec);
+
+                    });
+
+
                     doHighlight({elem:$(ok), clase:"ok"});
+//                    doHighlight({elem:$(ok2), clase:"ok"});
                     doHighlight({elem:$(no), clase:"no"});
 
              }

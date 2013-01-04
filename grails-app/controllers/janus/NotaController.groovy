@@ -29,6 +29,14 @@ class NotaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+         println "params "+params
+        if (params.piePaginaSel) {
+
+            params.id = params.piePaginaSel
+
+        }
+
+
         def notaInstance
         if (params.id) {
             notaInstance = Nota.get(params.id)
@@ -69,7 +77,9 @@ class NotaController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Nota " + notaInstance.id
         }
-        redirect(action: 'list')
+//        redirect(action: 'list')
+        redirect(controller: 'documentosObra',action: 'documentosObra',id: params.obra)
+
     } //save
 
     def show_ajax() {

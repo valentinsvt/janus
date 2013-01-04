@@ -263,7 +263,9 @@
 
                     <div class="span1 formato">DESTINO</div>
 
-                    <div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>
+                    %{--<div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>--}%
+                    <div class="span3"><g:select name="departamento.id" class="departamento" value="${obra?.departamento?.id}" from="${janus.Departamento?.list()}"
+                                                 optionKey="id" optionValue="descripcion" style="width: 350px" /></div>
 
                 </div>
 

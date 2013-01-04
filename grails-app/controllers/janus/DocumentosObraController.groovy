@@ -1,5 +1,7 @@
 package janus
 
+import groovy.json.JsonBuilder
+
 class DocumentosObraController {
 
     def index() { }
@@ -10,6 +12,10 @@ class DocumentosObraController {
 
         def nota = new Nota();
 
+        def auxiliar = new Auxiliar();
+
+        def auxiliarFijo = Auxiliar.get(1);
+
 
 //        println(params)
 
@@ -18,8 +24,6 @@ class DocumentosObraController {
         def personas = Persona.list()
 
         def departamentos = Departamento.list()
-
-//        println(departamentos)
 
 
         def firmas
@@ -69,7 +73,7 @@ class DocumentosObraController {
 //        println("firmas Viales" + firmasViales)
 
 
-        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota]
+        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo]
 
 
 
@@ -78,23 +82,28 @@ class DocumentosObraController {
 
     def getDatos () {
 
+
+
         def nota = Nota.get(params.id)
 
-        def json = "{"
 
-        if(nota) {
-            json+='"id":  ' + nota.id + ','
-            json+='"descripcion":  "' + (nota.descripcion ?: "") + '",'
-            json+='"texto":  "' + nota.texto + '",'
-            json+='"adicional":  "' + (nota.adicional ?: "") + '"'
+        def map
+        if (nota) {
+            map=[
+                    id: nota.id,
+                    descripcion: nota.descripcion?:"",
+                    texto: nota.texto,
+                    adicional:nota.adicional?:""
+            ]
+        } else {
+            map=[
+                    id: "",
+                    descripcion: "",
+                    texto: "",
+                    adicional:""
+            ]
         }
-        else {
-            json+='"id":  "",'
-            json+='"descripcion":  "",'
-            json+='"texto":  "",'
-            json+='"adicional":  ""'
-        }
-        json+="}"
+        def json = new JsonBuilder( map)
 
         render json
     }

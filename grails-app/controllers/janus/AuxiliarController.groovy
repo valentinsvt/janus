@@ -30,19 +30,40 @@ class AuxiliarController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+        println(params)
+
+
         def auxiliarInstance
+
+
         if (params.id) {
             auxiliarInstance = Auxiliar.get(params.id)
+
+
+
+
             if (!auxiliarInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Auxiliar con id " + params.id
                 redirect(action: 'list')
+
+
+
                 return
             }//no existe el objeto
             auxiliarInstance.properties = params
+
+
         }//es edit
         else {
-            auxiliarInstance = new Auxiliar(params)
+
+            println("entro")
+
+                auxiliarInstance = new Auxiliar(params)
+
+
         } //es create
         if (!auxiliarInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -59,7 +80,11 @@ class AuxiliarController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
+
+
             redirect(action: 'list')
+
+
             return
         }
 
@@ -70,7 +95,11 @@ class AuxiliarController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Auxiliar " + auxiliarInstance.id
         }
-        redirect(action: 'list')
+//        redirect(action: 'list')
+
+        redirect(controller: 'documentosObra',action: 'documentosObra',id: params.obra)
+
+
     } //save
 
     def show_ajax() {

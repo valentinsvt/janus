@@ -2,11 +2,13 @@ package janus
 class Auxiliar implements Serializable {
 //    String sbdr
 //    String prcr
+//    String drtr
     String subPrograma
-//    String cbcr
-//    String bsct
-//    String psrf
-//    String rete
+    String general
+    String baseCont
+    String presupuestoRef
+    String retencion
+    String notaAuxiliar
     String nota
     String nota1
     String nota2
@@ -14,22 +16,25 @@ class Auxiliar implements Serializable {
     String notaFormula
     String titulo
     String memo2
+
     static mapping = {
         table 'auxl'
         cache usage: 'read-write', include: 'non-lazy'
-        id column: 'fscldrtr'
+        id column: 'auxl__id'
         id generator: 'identity'
         version false
         columns {
-            id column: 'fscldrtr'
-//            sbdr column: 'fsclsbdr'
+            id column: 'auxl__id'
+//
+//              drtr column: 'fscldrtr'
+//              sbdr column: 'fsclsbdr'
 //            prcr column: 'sindprcr'
             subPrograma column: 'sindsbpr'
-//            cbcr column: 'prspcbcr'
-//            bsct column: 'prspbsct'
-//            psrf column: 'prsppsrf'
-//            rete column: 'prsprete'
-            nota column: 'prspnota'
+            general column: 'prspcbcr'
+            baseCont column: 'prspbsct'
+            presupuestoRef column: 'prsppsrf'
+            retencion column: 'prsprete'
+            notaAuxiliar column: 'prspnota'
             nota1 column: 'prspnta1'
             nota2 column: 'prspnta2'
             memo1 column: 'prspmem1'
@@ -42,11 +47,12 @@ class Auxiliar implements Serializable {
 //        sbdr(size: 1..40, blank: true, nullable: true, attributes: [title: 'sbdr'])
 //        prcr(size: 1..40, blank: true, nullable: true, attributes: [title: 'prcr'])
         subPrograma(size: 1..40, blank: true, nullable: true, attributes: [title: 'subPrograma'])
-//        cbcr(size: 1..200, blank: true, nullable: true, attributes: [title: 'cbcr'])
-//        bsct(size: 1..200, blank: true, nullable: true, attributes: [title: 'bsct'])
-//        psrf(size: 1..200, blank: true, nullable: true, attributes: [title: 'psrf'])
-//        rete(size: 1..200, blank: true, nullable: true, attributes: [title: 'rete'])
-        nota(size: 1..3071, blank: true, nullable: true, attributes: [title: 'nota'])
+        general(size: 1..200, blank: true, nullable: true, attributes: [title: 'cbcr'])
+        baseCont(size: 1..200, blank: true, nullable: true, attributes: [title: 'bsct'])
+        presupuestoRef(size: 1..200, blank: true, nullable: true, attributes: [title: 'psrf'])
+        retencion(size: 1..200, blank: true, nullable: true, attributes: [title: 'retencion'])
+        notaAuxiliar(size: 1..3071, blank: true, nullable: true, attributes: [title: 'nota'])
+        nota(size: 1..200, blank: true, nullable: true, attributes: [title: 'nota'])
         nota1(size: 1..200, blank: true, nullable: true, attributes: [title: 'nota1'])
         nota2(size: 1..200, blank: true, nullable: true, attributes: [title: 'nota2'])
         memo1(size: 1..200, blank: true, nullable: true, attributes: [title: 'memo1'])
