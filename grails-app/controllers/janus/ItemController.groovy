@@ -138,7 +138,7 @@ class ItemController extends janus.seguridad.Shield {
                 }
                 itemsIds += row[0]
             }
-
+//
             def precios = preciosService.getPrecioRubroItem(f, lugar, itemsIds)
             rubroPrecio = []
 
@@ -147,10 +147,34 @@ class ItemController extends janus.seguridad.Shield {
 
             }
 
+
+
+//            def precios = PrecioRubrosItems.findAllByFechaAndLugar(f, lugar)
+//            rubroPrecio = []
+//
+//
+//            precios.each {
+//
+//                rubroPrecio.add(PrecioRubrosItems.get(it))
+//
+//            }
+
+
+            println("precios2" + precios);
+
             if (!params.totalRows) {
                 sql = "select count(distinct rbpc.item__id) "
-                sql += "from rbpc "
-                sql += "where lgar__id=${lugar.id}"
+                sql += "from rbpc, item "
+                sql += ", dprt, sbgr, grpo "
+                sql += "where lgar__id=${lugar.id} "
+                sql += "and rbpc.item__id = item.item__id "
+                sql += "and item.dprt__id = dprt.dprt__id "
+                sql += "and dprt.sbgr__id = sbgr.sbgr__id "
+                sql += "and sbgr.grpo__id = grpo.grpo__id "
+                sql += "and grpo.grpo__id =${tipo.id}"
+
+
+                println(sql)
 
                 def totalCount
                 cn.eachRow(sql.toString()) {row ->
