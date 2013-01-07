@@ -1,5 +1,5 @@
 
-<%@ page import="janus.pac.EspecialidadProveedor" %>
+<%@ page import="janus.EspecialidadProveedor" %>
 
 <div id="create-EspecialidadProveedor" class="span" role="main">
     <g:form class="form-horizontal" name="frmSave-EspecialidadProveedor" action="save">

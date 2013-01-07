@@ -1,5 +1,5 @@
 
-<%@ page import="janus.pac.EspecialidadProveedor" %>
+<%@ page import="janus.EspecialidadProveedor" %>
 
 <div id="show-especialidadProveedor" class="span5" role="main">
 
