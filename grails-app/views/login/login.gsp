@@ -51,7 +51,7 @@
     }
     .fuera{
         margin-left: 15px;
-        margin-top: 20px;
+        margin-top: 10px;
         /*background-color: #317fbf; */
         background-color: rgba(200,200,200,0.9);
         border: none;
@@ -73,13 +73,13 @@
         ${flash.message}
     </div>
 </g:if>
-<div class="dialog ui-corner-all" style="height: 635px;background: #0C5994;;padding: 30px;width: 910px;margin: auto;margin-top: 20px" >
+<div class="dialog ui-corner-all" style="height: 595px;background: #0C5994;;padding: 10px;width: 910px;margin: auto;margin-top: 20px" >
     <div style="text-align: center;">
         <h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#fff;">
             Control de Proyectos, Contratación, Ejecución y Seguimiento de Obras del GADPP
         </h1>
     </div>
-    <div class="body" style="width: 850px;position: relative;margin: auto;">
+    <div class="body" style="width: 850px;position: relative;margin: auto;margin-top: 0px;height: 480px">
 
         %{--<g:link  controller="proyecto" action="list" title="Gestión de proyectos">--}%
         <div  class="ui-corner-all  item fuera">
@@ -157,7 +157,7 @@
 
 
     </div>
-    <div style="width: 100%;height: 30px;float: left;margin-top: 30px;text-align: center">
+    <div style="width: 100%;height: 30px;float: left;margin-top: 10px;text-align: center">
         <a href="#" id="ingresar" class="btn btn-inverse">
             <i class="icon-off icon-white"></i>
             Ingresar
