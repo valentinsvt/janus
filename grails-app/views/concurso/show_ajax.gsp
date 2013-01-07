@@ -16,7 +16,7 @@
         
                 <span aria-labelledby="obra-label">
         %{--<g:link controller="obra" action="show" id="${concursoInstance?.obra?.id}">--}%
-                    ${concursoInstance?.obra?.encodeAsHTML()}
+                    ${concursoInstance?.obra?.descripcion}
         %{--</g:link>--}%
                 </span>
         
@@ -35,7 +35,7 @@
         
                 <span aria-labelledby="administracion-label">
         %{--<g:link controller="administracion" action="show" id="${concursoInstance?.administracion?.id}">--}%
-                    ${concursoInstance?.administracion?.encodeAsHTML()}
+                    ${concursoInstance?.administracion?.descripcion}
         %{--</g:link>--}%
                 </span>
         
@@ -54,7 +54,7 @@
         
                 <span aria-labelledby="pac-label">
         %{--<g:link controller="pac" action="show" id="${concursoInstance?.pac?.id}">--}%
-                    ${concursoInstance?.pac?.encodeAsHTML()}
+                    ${concursoInstance?.pac?.descripcion}
         %{--</g:link>--}%
                 </span>
         

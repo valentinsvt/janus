@@ -1,4 +1,5 @@
 package janus
+
 class Presupuesto implements Serializable {
     String numero
     String descripcion
@@ -22,7 +23,9 @@ class Presupuesto implements Serializable {
         numero(size: 1..31, blank: false, attributes: [title: 'numero'])
         nivel(blank: true, attributes: [title: 'nivel'])
         descripcion(size: 1..255, blank: false, attributes: [title: 'descripcion'])
+    }
 
-
+    String toString() {
+        return this.descripcion
     }
 }

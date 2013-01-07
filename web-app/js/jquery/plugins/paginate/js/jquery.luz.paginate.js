@@ -18,11 +18,12 @@ function extendRemove(target, props) {
 
 jQuery.fn.paginate = function (settings) {
     var defaults = {
-        maxRows      : 10,
-        hideOnePage  : true,
-        search       : true,
-        searchSize   : "span2",
-        searchButton : false //String del boton o false para hacer en keypress
+        maxRows        : 10,
+        hideOnePage    : true,
+        searchPosition : "default", //default para q se ubique arriba de la tabla, un elemento jquery para q se ubique en append
+        search         : true, //true para mostrar la cajita de busqueda
+        searchSize     : "span2", //tamanio del textfield
+        float          : "left" //float del form
     };
 
     defaults = extendRemove(defaults, settings || {});
@@ -70,7 +71,6 @@ jQuery.fn.paginate = function (settings) {
                 rows.addClass("hidden").hide();
                 $("td").unhighlight();
                 if (strSearch == "") {
-//                    $(".1").removeClass("hidden").show();
                     show(1);
                     $(".pagination").show();
                 } else {
@@ -83,25 +83,65 @@ jQuery.fn.paginate = function (settings) {
                         }
                     });
                 }
-            }
-            var $formSearch = $("<form class='form-search'></form>");
+            };
+
+            var inputEvents = function (tipo) {
+                switch (tipo) {
+                    case "click":
+                        $btnSearch.click(function () {
+                            doSearch();
+                        });
+                        $inputSearch.keyup(function (ev) {
+                            if (ev.keyCode == 27) {
+                                $inputSearch.val("");
+                                $("td").unhighlight();
+                                show(1);
+                                $(".pagination").show();
+                                $inputSearch.val("");
+                                return false;
+                            } else if (ev.keyCode == 13) {
+                                doSearch();
+                                return false;
+                            }
+                        });
+                        break;
+                    case "keyup":
+                        $inputSearch.keyup(function (ev) {
+                            if (ev.keyCode == 27) {
+                                $inputSearch.val("");
+                                $("td").unhighlight();
+                                show(1);
+                                $(".pagination").show();
+                            } else {
+                                doSearch();
+                            }
+                        });
+                        break;
+                }
+            };
+
+            var $formSearch = $("<form class='form-search' style='float:" + defaults.float + ";'></form>");
+            $formSearch.css({
+                width : "auto"
+            });
             var $divSearch = $("<div class='input-append'></div>");
             var $inputSearch = $("<input type='text' class='" + defaults.searchSize + " search-query' />");
             var $btnSearch = "";
             if (defaults.searchButton) {
-                $btnSearch = $("<a href='#' class='btn'><i class='icon-zoom-in'></i> " + defaults.searchButton + "</a>");
-                $btnSearch.click(function () {
-                    doSearch();
-                });
+                $btnSearch = $("<a href='#' class='btn'><i class='icon-zoom-in'></i> " + defaults.searchButton + "</button>");
+                inputEvents("click");
             } else {
                 $btnSearch = $("<span class='add-on'><i class='icon-zoom-in'></i></span>");
-                $inputSearch.keyup(function () {
-                    doSearch();
-                });
+                inputEvents("keyup");
             }
+
             $divSearch.append($inputSearch).append($btnSearch);
             $formSearch.append($divSearch);
-            padre.prepend($formSearch);
+            if (defaults.searchPosition == "default") {
+                padre.prepend($formSearch);
+            } else {
+                defaults.searchPosition.append($formSearch);
+            }
         }
 
         if ((paginas == 1 && !defaults.hideOnePage) || paginas > 1) {
@@ -117,7 +157,7 @@ jQuery.fn.paginate = function (settings) {
             for (var i = 0; i < paginas; i++) {
                 var $li = $("<li/>");
                 var $a = $("<a href='#'/>");
-//                $a.html(i + 1).bind("click", show).data("body", id).addClass("b" + (i + 1) + " paginateButton");
+                //                $a.html(i + 1).bind("click", show).data("body", id).addClass("b" + (i + 1) + " paginateButton");
                 $a.html(i + 1).click(function () {
                     show($(this).html());
                 }).data("body", id).addClass("b" + (i + 1) + " paginateButton");

@@ -16,12 +16,12 @@ class EtapaController extends janus.seguridad.Shield {
 
     def form_ajax() {
         def etapaInstance = new Etapa(params)
-        if (params.id) {
+        if(params.id) {
             etapaInstance = Etapa.get(params.id)
-            if (!etapaInstance) {
+            if(!etapaInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Etapa con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Etapa con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,9 +30,9 @@ class EtapaController extends janus.seguridad.Shield {
 
     def save() {
         def etapaInstance
-        if (params.id) {
+        if(params.id) {
             etapaInstance = Etapa.get(params.id)
-            if (!etapaInstance) {
+            if(!etapaInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Etapa con id " + params.id
                 redirect(action: 'list')
@@ -50,7 +50,7 @@ class EtapaController extends janus.seguridad.Shield {
             str += "<ul>"
             etapaInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
+                err.arguments.eachWithIndex {  arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -62,7 +62,7 @@ class EtapaController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Etapa " + etapaInstance.id
         } else {
@@ -76,7 +76,7 @@ class EtapaController extends janus.seguridad.Shield {
         def etapaInstance = Etapa.get(params.id)
         if (!etapaInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Etapa con id " + params.id
+            flash.message =  "No se encontró Etapa con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +87,7 @@ class EtapaController extends janus.seguridad.Shield {
         def etapaInstance = Etapa.get(params.id)
         if (!etapaInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Etapa con id " + params.id
+            flash.message =  "No se encontró Etapa con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +95,12 @@ class EtapaController extends janus.seguridad.Shield {
         try {
             etapaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Etapa " + etapaInstance.id
+            flash.message =  "Se ha eliminado correctamente Etapa " + etapaInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Etapa " + (etapaInstance.id ? etapaInstance.id : "")
+            flash.message =  "No se pudo eliminar Etapa " + (etapaInstance.id ? etapaInstance.id : "")
             redirect(action: "list")
         }
     } //delete

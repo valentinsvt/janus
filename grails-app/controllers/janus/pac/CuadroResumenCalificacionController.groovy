@@ -16,12 +16,12 @@ class CuadroResumenCalificacionController extends janus.seguridad.Shield {
 
     def form_ajax() {
         def cuadroResumenCalificacionInstance = new CuadroResumenCalificacion(params)
-        if (params.id) {
+        if(params.id) {
             cuadroResumenCalificacionInstance = CuadroResumenCalificacion.get(params.id)
-            if (!cuadroResumenCalificacionInstance) {
+            if(!cuadroResumenCalificacionInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Cuadro Resumen Calificacion con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Cuadro Resumen Calificacion con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,9 +30,9 @@ class CuadroResumenCalificacionController extends janus.seguridad.Shield {
 
     def save() {
         def cuadroResumenCalificacionInstance
-        if (params.id) {
+        if(params.id) {
             cuadroResumenCalificacionInstance = CuadroResumenCalificacion.get(params.id)
-            if (!cuadroResumenCalificacionInstance) {
+            if(!cuadroResumenCalificacionInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Cuadro Resumen Calificacion con id " + params.id
                 redirect(action: 'list')
@@ -50,7 +50,7 @@ class CuadroResumenCalificacionController extends janus.seguridad.Shield {
             str += "<ul>"
             cuadroResumenCalificacionInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
+                err.arguments.eachWithIndex {  arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -62,7 +62,7 @@ class CuadroResumenCalificacionController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Cuadro Resumen Calificacion " + cuadroResumenCalificacionInstance.id
         } else {
@@ -76,7 +76,7 @@ class CuadroResumenCalificacionController extends janus.seguridad.Shield {
         def cuadroResumenCalificacionInstance = CuadroResumenCalificacion.get(params.id)
         if (!cuadroResumenCalificacionInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Cuadro Resumen Calificacion con id " + params.id
+            flash.message =  "No se encontró Cuadro Resumen Calificacion con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +87,7 @@ class CuadroResumenCalificacionController extends janus.seguridad.Shield {
         def cuadroResumenCalificacionInstance = CuadroResumenCalificacion.get(params.id)
         if (!cuadroResumenCalificacionInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Cuadro Resumen Calificacion con id " + params.id
+            flash.message =  "No se encontró Cuadro Resumen Calificacion con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +95,12 @@ class CuadroResumenCalificacionController extends janus.seguridad.Shield {
         try {
             cuadroResumenCalificacionInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Cuadro Resumen Calificacion " + cuadroResumenCalificacionInstance.id
+            flash.message =  "Se ha eliminado correctamente Cuadro Resumen Calificacion " + cuadroResumenCalificacionInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Cuadro Resumen Calificacion " + (cuadroResumenCalificacionInstance.id ? cuadroResumenCalificacionInstance.id : "")
+            flash.message =  "No se pudo eliminar Cuadro Resumen Calificacion " + (cuadroResumenCalificacionInstance.id ? cuadroResumenCalificacionInstance.id : "")
             redirect(action: "list")
         }
     } //delete

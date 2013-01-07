@@ -141,6 +141,15 @@ fieldset.borde legend {
     max-height: 580px;
 }
 
+.modal.grande2 {
+    width       : 1016px;
+    margin-left : -508px; /* - width/2 */
+}
+.grande2 .modal-body {
+    height     : 545px;
+    max-height : 545px;
+}
+
 .modal.grandote {
     width       : 1200px;
     margin-left : -600px; /* - width/2 */

@@ -8,6 +8,7 @@ class DocumentoProceso {
     String palabrasClave
     String resumen
     String nombre
+    String path
 
     static mapping = {
         table 'dcmt'
@@ -24,7 +25,7 @@ class DocumentoProceso {
             palabrasClave column: 'dcmtclve'
             resumen column: 'dcmtrsmn'
             nombre column: 'dcmtdcmt'
-
+            path column: 'dcmtpath'
         }
     }
     static constraints = {
@@ -34,5 +35,6 @@ class DocumentoProceso {
         palabrasClave(blank: true, nullable: true, maxSize: 63)
         resumen(blank: true, nullable: true, maxSize: 1024)
         nombre(blank: true, nullable: true, maxSize: 255)
+        path(blank: true, nullable: true, maxSize: 1024)
     }
 }

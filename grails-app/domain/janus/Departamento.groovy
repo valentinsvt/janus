@@ -1,4 +1,5 @@
 package janus
+
 class Departamento implements Serializable {
     String descripcion
     static mapping = {
@@ -14,5 +15,9 @@ class Departamento implements Serializable {
     }
     static constraints = {
         descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
+    }
+
+    String toString() {
+        return this.descripcion
     }
 }

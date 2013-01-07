@@ -1,33 +1,41 @@
-<%@ page import="janus.pac.Concurso" %>
+<%@ page import="janus.pac.DocumentoProceso" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Concursos
+            Lista de Documentos
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
-
-        <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.livequery.min.js')}"></script>
     </head>
 
     <body>
 
+        <div class="tituloTree">
+            Documentos de <span style="font-weight: bold; font-style: italic;">${concurso.objeto}</span>
+        </div>
+
         <g:if test="${flash.message}">
-            <div class="span12">
-                <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
-                    <a class="close" data-dismiss="alert" href="#">×</a>
-                    ${flash.message}
+            <div class="row">
+                <div class="span12">
+                    <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        ${flash.message}
+                    </div>
                 </div>
             </div>
         </g:if>
 
         <div class="row">
             <div class="span9 btn-group" role="navigation">
-                <a href="#" class="btn btn-ajax " id="btnPac">
+                <g:link controller="concurso" action="list" class="btn">
+                    <i class="icon-caret-left"></i>
+                    Regresar
+                </g:link>
+                <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Nuevo Proceso
+                    Nuevo Documento
                 </a>
             </div>
 
@@ -35,46 +43,47 @@
             </div>
         </div>
 
-        <g:form action="delete" name="frmDelete-Concurso">
+        <g:form action="delete" name="frmDelete-DocumentoProceso">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-Concurso" role="main">
+        <div id="list-DocumentoProceso" role="main">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                        <th>Obra</th>
-                        <th>Administracion</th>
-                        <th>Pac</th>
-                        <g:sortableColumn property="codigo" title="Codigo"/>
-                        <g:sortableColumn property="objeto" title="Objeto"/>
-                        <g:sortableColumn property="costoBases" title="Costo Bases"/>
-                        <th>Documentos</th>
-                        <th width="151">Acciones</th>
+                        <th>Etapa</th>
+                        <g:sortableColumn property="nombre" title="Nombre"/>
+                        <g:sortableColumn property="descripcion" title="Descripcion"/>
+                        <g:sortableColumn property="resumen" title="Resumen"/>
+                        <g:sortableColumn property="palabrasClave" title="Palabras Clave"/>
+                        <th>Tipo de archivo</th>
+                        <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                    <g:each in="${concursoInstanceList}" status="i" var="concursoInstance">
+                    <g:each in="${documentoProcesoInstanceList}" status="i" var="documentoProcesoInstance">
                         <tr>
-                            <td>${concursoInstance.obra?.descripcion}</td>
-                            <td>${concursoInstance.administracion?.descripcion}</td>
-                            <td>${concursoInstance.pac?.descripcion}</td>
-                            <td>${fieldValue(bean: concursoInstance, field: "codigo")}</td>
-                            <td>${fieldValue(bean: concursoInstance, field: "objeto")}</td>
-                            <td>${fieldValue(bean: concursoInstance, field: "costoBases")}</td>
-                            <td>${janus.pac.DocumentoProceso.countByConcurso(concursoInstance)}</td>
+                            <td>${documentoProcesoInstance?.etapa?.descripcion}</td>
+                            <td>${fieldValue(bean: documentoProcesoInstance, field: "nombre")}</td>
+                            <td>${fieldValue(bean: documentoProcesoInstance, field: "descripcion")}</td>
+                            <td>${fieldValue(bean: documentoProcesoInstance, field: "resumen")}</td>
+                            <td>${fieldValue(bean: documentoProcesoInstance, field: "palabrasClave")}</td>
                             <td>
-                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${concursoInstance.id}">
+                                <g:set var="p" value="${documentoProcesoInstance.path.split("\\.")}" />
+                                ${p[p.size()-1]}
+                            </td>
+                            <td>
+                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${documentoProcesoInstance.id}">
                                     <i class="icon-zoom-in icon-large"></i>
                                 </a>
-                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${concursoInstance.id}">
+                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${documentoProcesoInstance.id}">
                                     <i class="icon-pencil icon-large"></i>
                                 </a>
-                                <g:link controller="documentoProceso" action="list" class="btn btn-small btn-docs" href="#" rel="tooltip" title="Documentos" id="${concursoInstance.id}">
-                                    <i class="icon-folder-open-alt icon-large"></i>
+                                <g:link action="downloadFile" class="btn btn-small btn-docs" rel="tooltip" title="Descargar" id="${documentoProcesoInstance.id}">
+                                    <i class="icon-download-alt icon-large"></i>
                                 </g:link>
-                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${concursoInstance.id}">
+                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${documentoProcesoInstance.id}">
                                     <i class="icon-trash icon-large"></i>
                                 </a>
                             </td>
@@ -85,7 +94,7 @@
 
         </div>
 
-        <div class="modal grande2 hide fade" id="modal-Concurso">
+        <div class="modal hide fade" id="modal-DocumentoProceso">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>
@@ -101,31 +110,15 @@
             </div>
         </div>
 
-        <div class="modal grande hide fade" id="modal-pac" style="overflow: hidden;">
-            <div class="modal-header btn-info">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-
-                <h3 id="modalTitle-obra">Buscar PAC</h3>
-            </div>
-
-            <div class="modal-body" id="modalBody-obra">
-                <bsc:buscador name="pac" value="" accion="buscaPac" controlador="concurso" campos="${campos}" label="PAC" tipo="lista"/>
-            </div>
-
-            <div class="modal-footer" id="modalFooter-obra">
-            </div>
-        </div>
-
-
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
             function submitForm(btn) {
-                if ($("#frmSave-Concurso").valid()) {
+                if ($("#frmSave-DocumentoProceso").valid()) {
                     btn.replaceWith(spinner);
                 }
-                $("#frmSave-Concurso").submit();
+                $("#frmSave-DocumentoProceso").submit();
             }
 
             $(function () {
@@ -137,14 +130,13 @@
                     float          : "right"
                 });
 
-                $("#btnPac").click(function () {
-                    $("#modal-pac").modal("show");
-                });
-
                 $(".btn-new").click(function () {
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'form_ajax')}",
+                        data    : {
+                            concurso : ${concurso.id}
+                        },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
@@ -155,10 +147,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Concurso");
+                            $("#modalTitle").html("Crear Documento Proceso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Concurso").modal("show");
+                            $("#modal-DocumentoProceso").modal("show");
                         }
                     });
                     return false;
@@ -170,7 +162,8 @@
                         type    : "POST",
                         url     : "${createLink(action:'form_ajax')}",
                         data    : {
-                            id : id
+                            id       : id,
+                            concurso : ${concurso.id}
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -182,10 +175,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Concurso");
+                            $("#modalTitle").html("Editar Documento Proceso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Concurso").modal("show");
+                            $("#modal-DocumentoProceso").modal("show");
                         }
                     });
                     return false;
@@ -202,10 +195,10 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Concurso");
+                            $("#modalTitle").html("Ver Documento Proceso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-Concurso").modal("show");
+                            $("#modal-DocumentoProceso").modal("show");
                         }
                     });
                     return false;
@@ -219,15 +212,15 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-Concurso").submit();
+                        $("#frmDelete-DocumentoProceso").submit();
                         return false;
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Concurso");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Concurso?</p>");
+                    $("#modalTitle").html("Eliminar Documento Proceso");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Documento Proceso?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-Concurso").modal("show");
+                    $("#modal-DocumentoProceso").modal("show");
                     return false;
                 });
 
