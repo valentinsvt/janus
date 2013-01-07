@@ -1,5 +1,5 @@
 
-<%@ page import="janus.EspecialidadProveedor" %>
+<%@ page import="janus.EspecialidadProveedor"  %>
 <!doctype html>
 <html>
     <head>
