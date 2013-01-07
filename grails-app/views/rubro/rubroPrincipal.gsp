@@ -169,11 +169,13 @@
             <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
         </div>
 
-        <div class="span2">
-            <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
-                Copiar composición
-            </a>
-        </div>
+        <g:if test="${!items}">
+            <div class="span2">
+                <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
+                    Copiar composición
+                </a>
+            </div>
+        </g:if>
         <div class="span3">
             % costos indriectos
             <input type="text" style="width: 30px;" id="costo_indi" value="21.5">
@@ -1021,6 +1023,7 @@
             $("#buscarDialog").bind("click", enviarItem)
         });
         $("#btn_lista").click(function () {
+
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
             $("#modalTitle").html("Lista de rubros");
 //        $("#modalBody").html($("#buscador_rubro").html());
