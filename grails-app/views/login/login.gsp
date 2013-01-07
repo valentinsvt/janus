@@ -73,7 +73,7 @@
         ${flash.message}
     </div>
 </g:if>
-<div class="dialog ui-corner-all" style="height: 595px;background: #0C5994;;padding: 10px;width: 910px;margin: auto;margin-top: 20px" >
+<div class="dialog ui-corner-all" style="height: 595px;background: #0C5994;;padding: 10px;width: 910px;margin: auto;margin-top: 5px" >
     <div style="text-align: center;">
         <h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#fff;">
             Control de Proyectos, Contratación, Ejecución y Seguimiento de Obras del GADPP
