@@ -7,6 +7,7 @@ class CodigoComprasPublicas {
     String descripcion
     int nivel = 1
     Date fecha
+    int movimiento
     static mapping = {
         table 'cpac'
         cache usage: 'read-write', include: 'non-lazy'
@@ -20,6 +21,7 @@ class CodigoComprasPublicas {
             descripcion column: 'cpacdscr'
             nivel column: 'cpacnvel'
             fecha column: 'cpacfcha'
+            movimiento column: 'cpacmvnt'
         }
     }
     static constraints = {

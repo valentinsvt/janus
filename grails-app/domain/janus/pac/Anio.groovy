@@ -12,7 +12,7 @@ class Anio {
         id generator: 'identity'
         version false
         columns {
-            id column: 'base__id'
+            id column: 'anio__id'
             anio column: 'anioanio'
             estado column: 'anioetdo'
         }

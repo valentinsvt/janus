@@ -51,7 +51,7 @@ class Pac {
         cpp(blank:false,nullable: false)
         tipoCompra(blank:false,nullable: false)
         departamento(blank:false,nullable: false)
-        tipoProcedimiento(blank:false,nullable: false)
+        tipoProcedimiento(blank:true,nullable: true)
         anio(blank:false,nullable: false)
         presupuesto(blank:false,nullable: false)
         programa(blank:true,nullable: true)

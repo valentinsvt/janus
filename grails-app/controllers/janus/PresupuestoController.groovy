@@ -29,6 +29,42 @@ class PresupuestoController extends janus.seguridad.Shield {
         return [presupuestoInstance: presupuestoInstance]
     } //form_ajax
 
+    def saveAjax() {
+        def presupuestoInstance
+        if (params.id) {
+            presupuestoInstance = Presupuesto.get(params.id)
+            if (!presupuestoInstance) {
+                render "error"
+                return
+            }//no existe el objeto
+            presupuestoInstance.properties = params
+        }//es edit
+        else {
+            presupuestoInstance = new Presupuesto(params)
+        } //es create
+        if (!presupuestoInstance.save(flush: true)) {
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Presupuesto " + (presupuestoInstance.id ? presupuestoInstance.id : "") + "</h4>"
+
+            str += "<ul>"
+            presupuestoInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+
+
+            render "error"
+            return
+        }
+
+        render "${presupuestoInstance.id}&${presupuestoInstance.numero}&${presupuestoInstance.descripcion}"
+        return
+    } //save
+
     def save() {
         def presupuestoInstance
         if (params.id) {

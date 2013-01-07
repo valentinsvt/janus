@@ -6,6 +6,7 @@ import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
 
+
 import java.awt.*
 
 class ReportesController {
@@ -207,6 +208,32 @@ class ReportesController {
             response.setContentLength(b.length)
             response.getOutputStream().write(b)
         }
+    }
+
+    def pac(){
+        println "params REPORTE "+params
+        def pac
+        def dep
+        def anio
+        if (!params.todos){
+            anio=janus.pac.Anio.get(params.anio)
+            if (params.dpto){
+                dep = Departamento.get(params.dpto)
+                pac = janus.pac.Pac.findAllByDepartamentoAndAnio(dep,anio,[sort: "id"])
+                dep = dep.descripcion
+                anio=anio.anio
+            } else{
+                pac = janus.pac.Pac.findAllByAnio(janus.pac.Anio.get(params.anio),[sort: "id"])
+                dep = "Todos"
+                anio=anio.anio
+            }
+        }else{
+            dep = "Todos"
+            anio = "Todos"
+            pac = janus.pac.Pac.list([sort: "id"])
+        }
+
+        [pac:pac,todos:params.todos,dep:dep,anio:anio]
     }
 
 
