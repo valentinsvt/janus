@@ -144,25 +144,85 @@
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
 
+            function updateOrden($tr, orden) {
+                var data = $tr.data();
+                $tr.data("ord", orden);
+                $tr.find(".orden").text(orden);
+            }
+
+            function addRow(data) {
+                var $tr = $("<tr>").data(data);
+                var $tdOrd = $("<td class='orden'>").html(data.ord);
+                var $tdPar = $("<td class='parametro'>").html(data.par);
+                var $tdPnt = $("<td class='puntaje'>").html(data.pnt);
+                var $tdMin = $("<td class='minimo'>").html(data.min);
+                var $tdAcc = $("<td class='btn-group'>");
+
+                var $btnUp = $("<a href='#' class='btn btn-small btn-info' title='Mover hacia arriba'><i class='icon-arrow-up'></i></a>");
+                var $btnDn = $("<a href='#' class='btn btn-small btn-info' title='Mover hacia abajo'><i class='icon-arrow-down'></i></a>");
+                var $btnEd = $("<a href='#' class='btn btn-small btn-warning' title='Editar'><i class='icon-pencil'></i></a>");
+                var $btnDl = $("<a href='#' class='btn btn-small btn-danger' title='Eliminar'><i class='icon-trash'></i></a>");
+                $tdAcc.append($btnUp).append($btnDn).append($btnEd).append($btnDl);
+
+                $btnUp.click(function () {
+                    if (data.ord > 1) {
+                        $tr.prev().before($tr);
+                        updateOrden($tr, data.ord + 1);
+                    }
+                });
+                $btnDn.click(function () {
+                    if (data.ord < $tbody.children("tr").size()) {
+                        $tr.next().after($tr);
+                        $tr.data("ord", data.ord - 1);
+                    }
+                });
+
+                $tr.append($tdOrd).append($tdPar).append($tdPnt).append($tdMin).append($tdAcc);
+                $tbody.append($tr);
+
+                reset();
+            }
+
             $(function () {
+
+                addRow({
+                    par : "Par 1",
+                    pnt : 1,
+                    min : 0,
+                    ord : 1
+                });
+                addRow({
+                    par : "Par 2",
+                    pnt : 2,
+                    min : 0,
+                    ord : 2
+                });
+                addRow({
+                    par : "Par 3",
+                    pnt : 3,
+                    min : 0,
+                    ord : 3
+                });
+
                 $('[rel=tooltip]').tooltip();
 
-                $("#puntaje, #minimo").bind({
-                    keydown : function (ev) {
-                        if (ev.keyCode == 190 || ev.keyCode == 110) {
-                            var val = $(this).val();
-                            if (val.length == 0) {
-                                $(this).val("0");
-                            }
-                            return val.indexOf(".") == -1;
-                        } else {
-                            return validarNum(ev);
+                $("#puntaje, #minimo").keydown(function (ev) {
+                    if (ev.keyCode == 190 || ev.keyCode == 110) {
+                        var val = $(this).val();
+                        if (val.length == 0) {
+                            $(this).val("0");
                         }
-                    },
-                    keyup    : function () {
-                        if ($.trim($(this).val()) != "" && $(this).hasClass("inputError")) {
-                            $(this).removeClass("inputError");
-                            $("#err_" + $(this).attr("id")).remove();
+                        return val.indexOf(".") == -1;
+                    } else {
+                        return validarNum(ev);
+                    }
+                });
+                $("#puntaje, #parametro").keyup(function () {
+                    if ($.trim($(this).val()) != "" && $(this).hasClass("inputError")) {
+                        $(this).removeClass("inputError");
+                        $("#err_" + $(this).attr("id")).remove();
+                        if ($("#msgAlert").find("li").size() == 0) {
+                            $("#alert").hide();
                         }
                     }
                 });
@@ -192,7 +252,7 @@
                     }
 
                     if (msg == "") {
-                        console.log(data);
+                        addRow(data);
                     } else {
                         $("#ttlAlert").text("Se encontr" + (c == 1 ? "ó el siguiente error" : "aron los siguientes errores"));
                         $("#msgAlert").html("<ul>" + msg + "</ul>");
