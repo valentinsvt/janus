@@ -34,6 +34,20 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
+                Nombre corto
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="campo" maxlength="29" style="width: 300px" class="allCaps" value="${itemInstance?.campo}"/>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
                 Código
             </span>
         </div>
@@ -101,7 +115,12 @@
                 <div class="input-append">
                     <g:field type="number" name="peso" maxlength="20" class=" required input-small" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>
                     <span class="add-on" id="spanPeso">
-                        ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}
+                        <g:if test="${itemInstance && itemInstance.id}">
+                            ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}
+                        </g:if>
+                        <g:else>
+                            Ton
+                        </g:else>
                     </span>
                 </div>
                 <span class="mandatory">*</span>
@@ -156,20 +175,6 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Nombre corto
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="campo" maxlength="29" style="width: 300px" class="allCaps" value="${itemInstance?.campo}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
     <g:if test="${grupo.toString() == '1'}">
         <div class="control-group">
             <div>
@@ -194,7 +199,7 @@
         </div>
 
         <div class="controls">
-            <g:textArea cols="5" rows="4" style="resize: none; height: 65px;" name="observaciones" maxlength="127" class="input-xxlarge" value="${itemInstance?.observaciones}"/>
+            <g:textArea cols="5" rows="4" style="resize: none; height: 65px;" name="observaciones" maxlength="127" class="input-xxlarge allC3aps" value="${itemInstance?.observaciones}"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -204,9 +209,27 @@
 
 <script type="text/javascript">
 
-    //    $(".allCaps").keyup(function () {
-    //        this.value = this.value.toUpperCase();
-    //    });
+    $(".allCaps").blur(function () {
+        this.value = this.value.toUpperCase();
+    });
+
+    $("#nombre").keyup(function () {
+        var orig = $(this).val().toUpperCase();
+
+        var cleanString = orig.replace(/[|&;$%@"<>()+,'\[\]\{\}=]/g, "");
+        cleanString = cleanString.replace(/[ ]/g, "_");
+        cleanString = cleanString.replace(/[áàâäãÁÀÂÄÃ]/g, "A");
+        cleanString = cleanString.replace(/[éèêëẽÉÈÊËẼ]/g, "E");
+        cleanString = cleanString.replace(/[íìîïĩÍÌÎÏĨ]/g, "I");
+        cleanString = cleanString.replace(/[óòôöõÓÒÔÖÕ]/g, "O");
+        cleanString = cleanString.replace(/[úùûüũÚÙÛÜŨ]/g, "U");
+        cleanString = cleanString.replace(/[ñÑ]/g, "N");
+
+        if (cleanString.length > 20) {
+            cleanString = cleanString.substring(0, 19);
+        }
+        $("#campo").val(cleanString);
+    });
 
     $("#transporte").change(function () {
         var v = $(this).val();

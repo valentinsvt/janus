@@ -51,7 +51,7 @@
                         <g:sortableColumn property="objeto" title="Objeto"/>
                         <g:sortableColumn property="costoBases" title="Costo Bases"/>
                         <th>Documentos</th>
-                        <th width="151">Acciones</th>
+                        <th style="width:110px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
@@ -65,18 +65,26 @@
                             <td>${fieldValue(bean: concursoInstance, field: "costoBases")}</td>
                             <td>${janus.pac.DocumentoProceso.countByConcurso(concursoInstance)}</td>
                             <td>
-                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${concursoInstance.id}">
-                                    <i class="icon-zoom-in icon-large"></i>
-                                </a>
-                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${concursoInstance.id}">
-                                    <i class="icon-pencil icon-large"></i>
-                                </a>
-                                <g:link controller="documentoProceso" action="list" class="btn btn-small btn-docs" href="#" rel="tooltip" title="Documentos" id="${concursoInstance.id}">
-                                    <i class="icon-folder-open-alt icon-large"></i>
-                                </g:link>
-                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${concursoInstance.id}">
-                                    <i class="icon-trash icon-large"></i>
-                                </a>
+                                <p>
+                                    <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${concursoInstance.id}">
+                                        <i class="icon-zoom-in icon-large"></i>
+                                    </a>
+                                    <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${concursoInstance.id}">
+                                        <i class="icon-pencil icon-large"></i>
+                                    </a>
+                                    <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${concursoInstance.id}">
+                                        <i class="icon-trash icon-large"></i>
+                                    </a>
+                                </p>
+
+                                <p>
+                                    <g:link controller="documentoProceso" action="list" class="btn btn-small btn-docs" href="#" rel="tooltip" title="Documentos" id="${concursoInstance.id}">
+                                        <i class="icon-folder-open-alt icon-large"></i>
+                                    </g:link>
+                                    <g:link controller="parametroEvaluacion" action="list" class="btn btn-small btn-params" href="#" rel="tooltip" title="Parámetros de evaluación" id="${concursoInstance.id}">
+                                        <i class="icon-reorder icon-large"></i>
+                                    </g:link>
+                                </p>
                             </td>
                         </tr>
                     </g:each>

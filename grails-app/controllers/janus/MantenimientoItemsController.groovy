@@ -565,6 +565,9 @@ class MantenimientoItemsController extends Shield {
         def dep = DepartamentoItem.get(params.departamento.id)
         params.tipoItem = TipoItem.findByCodigo("I")
         params.fechaModificacion = new Date()
+        params.nombre = params.nombre.toString().toUpperCase()
+        params.campo = params.campo.toString().toUpperCase()
+        params.observaciones = params.observaciones.toString().toUpperCase()
         if (!params.codigo.contains(".")) {
             params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
         }
