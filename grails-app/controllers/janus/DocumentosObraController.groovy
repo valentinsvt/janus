@@ -7,7 +7,14 @@ class DocumentosObraController {
     def index() { }
 
 
+    def preciosService
+
+
     def documentosObra () {
+
+
+
+        def pr = janus.ReportesController
 
 
         def nota = new Nota();
@@ -17,9 +24,13 @@ class DocumentosObraController {
         def auxiliarFijo = Auxiliar.get(1);
 
 
-//        println(params)
+        println(params)
+
 
         def obra = Obra.get(params.id)
+
+
+
 
         def personas = Persona.list()
 
@@ -29,6 +40,80 @@ class DocumentosObraController {
         def firmas
 
         def firmasViales
+
+
+        def personasFirmas = Persona.get(48);
+
+
+        def personasFirmas2 = Persona.get(21);
+
+
+
+        //totalPresupuesto
+
+        def detalle
+
+        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
+        def precios = [:]
+        def fecha = obra.fechaPreciosRubros
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+        def lugar = obra.lugar
+
+
+        def prch = 0
+        def prvl = 0
+
+        if (obra.chofer){
+            prch = preciosService.getPrecioItems(fecha,lugar,[obra.chofer])
+            prch = prch["${obra.chofer.id}"]
+            prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
+            prvl = prvl["${obra.volquete.id}"]
+        }
+        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
+
+        if (rendimientos["rdps"].toString()=="NaN")
+            rendimientos["rdps"]=0
+        if (rendimientos["rdvl"].toString()=="NaN")
+            rendimientos["rdvl"]=0
+
+        def indirecto = obra.totales/100
+
+
+        def total1 = 0;
+
+        def totales
+
+        def totalPresupuesto;
+
+
+        detalle.each {
+
+            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+
+
+            totales =  precios[it.id.toString()]*it.cantidad
+
+
+            totalPresupuesto = (total1+=totales);
+
+
+
+
+           return totalPresupuesto
+
+        }
+
+
+        println("tp:"+ totalPresupuesto)
+
+
+
 
 
 
@@ -68,12 +153,10 @@ class DocumentosObraController {
 
 
 
-//
-//        println("firmas"+ firmas)
-//        println("firmas Viales" + firmasViales)
 
 
-        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo]
+
+        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, personasFirmas: personasFirmas, personasFirmas2: personasFirmas2, totalPresupuesto: totalPresupuesto]
 
 
 

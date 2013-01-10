@@ -54,7 +54,7 @@
             <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
             <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
             <button class="btn"><i class="icon-print"></i> Imprimir</button>
-            <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estados</button>
+            <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
         </div>
 
         <g:form class="registroObra" name="frm-registroObra" action="save">
