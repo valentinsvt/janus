@@ -19,7 +19,22 @@
     </style>
 </head>
 <body>
-<div id="show-concurso" class="span5" role="main">
+<div class="span12 btn-group" role="navigation">
+
+    <a href="#" class="btn  " id="registrar" style="${(concursoInstance.estado=="R")?'display: none':''}">
+        <i class="icon-check"></i>
+        Registrar
+    </a>
+    <g:if test="${of==0}">
+        <a href="#" class="btn  " id="desregistrar" style="${(concursoInstance.estado!="R")?'display: none':''}">
+            <i class="icon-edit"></i>
+            Desregistrar
+        </a>
+    </g:if>
+
+
+</div>
+<div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: -10px">
 
 <form class="form-horizontal">
 
@@ -318,22 +333,21 @@
     </div>
 </g:if>
 
-<g:if test="${concursoInstance?.estado}">
-    <div class="control-group">
-        <div>
-            <span id="estado-label" class="control-label label label-inverse">
-                Estado
-            </span>
-        </div>
-        <div class="controls">
-
-            <span aria-labelledby="estado-label">
-                <g:fieldValue bean="${concursoInstance}" field="estado"/>
-            </span>
-
-        </div>
+<div class="control-group">
+    <div>
+        <span id="estado-label" class="control-label label label-inverse">
+            Estado
+        </span>
     </div>
-</g:if>
+    <div class="controls">
+
+        <span aria-labelledby="estado-label" id="etdo">
+            ${(concursoInstance.estado=="R")?"Registrado":"No registrado"}
+        </span>
+
+    </div>
+</div>
+
 
 <g:if test="${concursoInstance?.observaciones}">
     <div class="control-group">
@@ -353,6 +367,41 @@
 </g:if>
 
 </form>
+<script type="text/javascript">
+    $("#registrar").click(function(){
+        if(confirm("Esta seguro")){
+            $("#dlgLoad").dialog("open")
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'concurso',action:'registrar')}",
+                data     : "id=${concursoInstance?.id}&estado=R",
+                success  : function (msg) {
+                    $("#dlgLoad").dialog("close")
+                    if(msg=="ok"){
+                        $("#desregistrar").show()
+                        $("#registrar").hide()
+                        $("#etdo").html("Registrado")
+                    }
+                }
+            });
+        }
+    })
+    $("#desregistrar").click(function(){
+        if(confirm("Esta seguro")){
+            $("#dlgLoad").dialog("open")
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'concurso',action:'registrar')}",
+                data     : "id=${concursoInstance?.id}&estado=D",
+                success  : function (msg) {
+                    $("#dlgLoad").dialog("close")
+                    if(msg=="ok"){
+                        $("#registrar").show()
+                        $("#desregistrar").hide()
+                        $("#etdo").html("No registrado")
+                    }
+                }
+            });
+        }
+
+    })
+</script>
 </div>
 </body>
 </html>

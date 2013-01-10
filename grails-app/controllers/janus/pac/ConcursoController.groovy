@@ -53,7 +53,8 @@ class ConcursoController extends janus.seguridad.Shield {
             redirect(action: "list")
             return
         }
-        [concursoInstance: concursoInstance]
+        def of = Oferta.findAllByConcurso(concursoInstance).size()
+        [concursoInstance: concursoInstance,of:of]
     }
 
     def buscaPac() {
@@ -182,4 +183,17 @@ class ConcursoController extends janus.seguridad.Shield {
             redirect(action: "list")
         }
     } //delete
+
+    def registrar(){
+        println "registrar "+params
+        def con = Concurso.get(params.id)
+        con.estado=params.estado
+        if(!con.save(flush: true))
+            render "error"
+        else
+            render "ok"
+
+    }
+
+
 } //fin controller
