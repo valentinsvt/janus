@@ -9,6 +9,9 @@
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
 
+        <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
+
         <style type="text/css">
         .lbl {
             font-weight : bold;
@@ -18,6 +21,9 @@
             border : solid 1px #995157 !important;
         }
 
+        .selected, .selected td {
+            background : #B5CBD1 !important;
+        }
         </style>
 
     </head>
@@ -72,7 +78,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="span3">
+                        <div class="span3" id="divPadre">
                             Ninguno
                         </div>
 
@@ -144,15 +150,24 @@
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
 
-            function updateOrden($tr, orden) {
-                var data = $tr.data();
-                $tr.data("ord", orden);
-                $tr.find(".orden").text(orden);
+            function updateOrden() {
+                var c = 1;
+                $tbody.children("tr").each(function () {
+                    var $tr = $(this);
+                    $tr.data("ord", c);
+                    $tr.find(".orden").text(c);
+                    c++;
+                });
             }
 
             function addRow(data) {
                 var $tr = $("<tr>").data(data);
-                var $tdOrd = $("<td class='orden'>").html(data.ord);
+                var $tdOrd;
+                if (!data.pdr) {
+                    $tdOrd = $("<td class='orden'>").html(data.ord);
+                } else {
+                    $tdOrd = $("<td class='orden'>");
+                }
                 var $tdPar = $("<td class='parametro'>").html(data.par);
                 var $tdPnt = $("<td class='puntaje'>").html(data.pnt);
                 var $tdMin = $("<td class='minimo'>").html(data.min);
@@ -165,20 +180,64 @@
                 $tdAcc.append($btnUp).append($btnDn).append($btnEd).append($btnDl);
 
                 $btnUp.click(function () {
-                    if (data.ord > 1) {
+                    var ord = $(this).parents("tr").data("ord");
+                    if (ord > 1) {
                         $tr.prev().before($tr);
-                        updateOrden($tr, data.ord + 1);
+                        updateOrden();
                     }
+                    return false;
                 });
                 $btnDn.click(function () {
-                    if (data.ord < $tbody.children("tr").size()) {
+                    var ord = $(this).parents("tr").data("ord");
+                    if (ord < $tbody.children("tr").size()) {
                         $tr.next().after($tr);
-                        $tr.data("ord", data.ord - 1);
+                        updateOrden();
+                    }
+                    return false;
+                });
+                $btnDl.click(function () {
+                    var $btn = $(this);
+                    $.box({
+                        imageClass : "box_info",
+                        text       : "Está seguro de querer eliminar este parámetro?",
+                        title      : "Confirmación",
+                        iconClose  : false,
+                        dialog     : {
+                            resizable     : false,
+                            draggable     : false,
+                            closeOnEscape : false,
+                            buttons       : {
+                                "Aceptar"  : function () {
+                                    $btn.parents("tr").remove();
+                                    updateOrden();
+                                },
+                                "Cancelar" : function () {
+                                }
+                            }
+                        }
+                    });
+                });
+
+                $tr.click(function () {
+                    $(this).toggleClass("selected");
+                    $(".selected").not($(this)).removeClass("selected");
+                    if ($(this).hasClass("selected")) {
+                        $("#divPadre").text($(this).find(".parametro").text()).data("id", $(this).data("id"));
+                    } else {
+                        $("#divPadre").text("").data("id", "");
                     }
                 });
 
                 $tr.append($tdOrd).append($tdPar).append($tdPnt).append($tdMin).append($tdAcc);
-                $tbody.append($tr);
+                if (!data.pdr) {
+                    $tbody.append($tr);
+                } else {
+                    $tbody.children("tr").each(function () {
+                        if ($(this).data("id") == data.pdr) {
+                            $(this).after($tr);
+                        }
+                    });
+                }
 
                 reset();
             }
@@ -186,18 +245,21 @@
             $(function () {
 
                 addRow({
+                    id  : "ni_1",
                     par : "Par 1",
                     pnt : 1,
                     min : 0,
                     ord : 1
                 });
                 addRow({
+                    id  : "ni_2",
                     par : "Par 2",
                     pnt : 2,
                     min : 0,
                     ord : 2
                 });
                 addRow({
+                    id  : "ni_3",
                     par : "Par 3",
                     pnt : 3,
                     min : 0,
@@ -230,10 +292,12 @@
                 $("#btnAdd").click(function () {
                     var c = 0;
                     var data = {
+                        id  : "ni_" + $tbody.children("tr").size() + 1,
                         par : $.trim($par.val()),
                         pnt : $.trim($pnt.val()),
                         min : $.trim($min.val()),
-                        ord : $tbody.children("tr").size() + 1
+                        ord : $tbody.children("tr").size() + 1,
+                        pdr : $("#divPadre").data("id")
                     };
                     var msg = "";
                     if (data.par == "") {

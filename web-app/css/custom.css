@@ -130,6 +130,11 @@ fieldset.borde legend {
     margin-left : -390px; /* - width/2 */
 }
 
+.modal.long {
+    width       : 1000px;
+    margin-left : -500px; /* - width/2 */
+}
+
 .modal.grande {
     width       : 1000px;
     height      : 600px;

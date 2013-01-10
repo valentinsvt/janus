@@ -10,6 +10,247 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
         redirect(action: "list", params: params)
     } //index
 
+    def removeParametro() {
+        def par = ParametroEvaluacion.get(params.id)
+        try {
+            par.delete(flush: true)
+            render "OK"
+        }
+        catch (DataIntegrityViolationException e) {
+            render "NO"
+        }
+    }
+
+    def addParametro() {
+//        println params
+        def par = new ParametroEvaluacion()
+        par.concurso = Concurso.get(params.cnc)
+        par.orden = params.ord.toInteger()
+        par.descripcion = params.par
+        par.puntaje = params.pnt.toDouble()
+        par.minimo = params.min.toDouble()
+        if (params.pdr) {
+            par.padre = ParametroEvaluacion.get(params.pdr)
+        }
+        if (!par.save(flush: true)) {
+            println "ERROR!!!! " + par.errors
+            render "NO"
+        } else {
+            render "OK_" + par.id
+        }
+        /*
+        Concurso concurso
+        ParametroEvaluacion padre
+        Integer orden
+        String descripcion
+        Double puntaje
+        Double minimo = 0
+
+            'min':'3',
+            'par':'df5444',
+            'id':'ni_01',
+            'cnc':'2',
+            'ord':'1',
+            'pnt':'3'
+         */
+    }
+
+    def updateInfo() {
+        def concurso = Concurso.get(params.id)
+        def html = ""
+        html += '<table class="table table-bordered table-striped table-condensed table-hover" style="width: auto;">'
+        html += "<thead>"
+        html += '<tr>'
+        html += '<th style="width: 40px;"></th>'
+        html += '<th style="width: 40px;"></th>'
+        html += '<th style="width: 40px;"></th>'
+        html += '<th style="width: 530px;">Parámetro</th>'
+        html += '<th style="width: 60px;">Puntaje</th>'
+        html += '<th style="width: 60px;">Mínimo</th>'
+        html += '</tr>'
+        html += "</thead>"
+        html += "<tbody>"
+        def filas = []
+        ParametroEvaluacion.findAllByConcursoAndPadreIsNull(concurso, [sort: 'orden']).each { par1 ->
+            def filaPar1 = [
+                    clase: "nivel1",
+                    estilos: "",
+                    celdas: []
+            ]
+            def celdaN11 = [
+                    colspan: 1,
+                    rowspan: 1,
+                    clase: "orden",
+                    estilos: "",
+                    texto: par1.orden
+            ]
+            def celdaN12 = [
+                    colspan: 2,
+                    rowspan: 1,
+                    clase: "orden",
+                    estilos: "",
+                    texto: ""
+            ]
+            def celdaPar1 = [
+                    colspan: 1,
+                    rowspan: 1,
+                    clase: "",
+                    estilos: "",
+                    texto: par1.descripcion
+            ]
+            def celdaPnt1 = [
+                    colspan: 1,
+                    rowspan: 1,
+                    clase: "numero",
+                    estilos: "",
+                    texto: g.formatNumber(number: par1.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+            ]
+            def celdaMin1 = [
+                    colspan: 1,
+                    rowspan: 1,
+                    clase: "numero",
+                    estilos: "",
+                    texto: g.formatNumber(number: par1.minimo, maxFractionDigits: 2, minFractionDigits: 2)
+            ]
+            filaPar1.celdas.add(celdaN11)
+            filaPar1.celdas.add(celdaN12)
+            filaPar1.celdas.add(celdaPar1)
+            filaPar1.celdas.add(celdaPnt1)
+            filaPar1.celdas.add(celdaMin1)
+            filas.add(filaPar1)
+
+            def rs1 = 1
+            ParametroEvaluacion.findAllByPadre(par1).each { par2 ->
+                def filaPar2 = [
+                        clase: "nivel2",
+                        estilos: "",
+                        celdas: []
+                ]
+                def celdaN22 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "orden",
+                        estilos: "",
+                        texto: par2.orden
+                ]
+                def celdaN23 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "orden",
+                        estilos: "",
+                        texto: ""
+                ]
+                def celdaPar2 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "",
+                        estilos: "",
+                        texto: par2.descripcion
+                ]
+                def celdaPnt2 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "numero",
+                        estilos: "",
+                        texto: g.formatNumber(number: par2.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                ]
+                def celdaMin2 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "numero",
+                        estilos: "",
+                        texto: g.formatNumber(number: par2.minimo, maxFractionDigits: 2, minFractionDigits: 2)
+                ]
+                filaPar2.celdas.add(celdaN22)
+                filaPar2.celdas.add(celdaN23)
+                filaPar2.celdas.add(celdaPar2)
+                filaPar2.celdas.add(celdaPnt2)
+                filaPar2.celdas.add(celdaMin2)
+                filas.add(filaPar2)
+
+                def rs2 = 1
+                ParametroEvaluacion.findAllByPadre(par2).each { par3 ->
+                    def filaPar3 = [
+                            clase: "nivel3",
+                            estilos: "",
+                            celdas: []
+                    ]
+                    def celdaN33 = [
+                            colspan: 1,
+                            rowspan: 1,
+                            clase: "orden",
+                            estilos: "",
+                            texto: par3.orden
+                    ]
+                    def celdaPar3 = [
+                            colspan: 1,
+                            rowspan: 1,
+                            clase: "",
+                            estilos: "",
+                            texto: par3.descripcion
+                    ]
+                    def celdaPnt3 = [
+                            colspan: 1,
+                            rowspan: 1,
+                            clase: "numero",
+                            estilos: "",
+                            texto: g.formatNumber(number: par3.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                    ]
+                    def celdaMin3 = [
+                            colspan: 1,
+                            rowspan: 1,
+                            clase: "numero",
+                            estilos: "",
+                            texto: g.formatNumber(number: par3.minimo, maxFractionDigits: 2, minFractionDigits: 2)
+                    ]
+                    filaPar3.celdas.add(celdaN33)
+                    filaPar3.celdas.add(celdaPar3)
+                    filaPar3.celdas.add(celdaPnt3)
+                    filaPar3.celdas.add(celdaMin3)
+                    filas.add(filaPar3)
+
+                    rs1++
+                    rs2++
+                }
+
+                filaPar2.celdas[0].rowspan = rs2
+                rs1++
+            }
+            filaPar1.celdas[0].rowspan = rs1
+
+        }
+
+        filas.each { fila ->
+            html += dibujaFila(fila)
+        }
+        html += "</tbody>"
+        html += "</table>"
+        render html
+    }
+
+    def dibujaFila(params) {
+        def str = ""
+
+        str += "<tr class='${params.clase}' style='${params.estilos}'>"
+
+        params.celdas.each { celda ->
+            str += "<td colspan='${celda.colspan}' rowspan='${celda.rowspan}' clase='${celda.clase}' style='${celda.estilos}'>"
+            str += celda.texto
+            str += "</td>"
+        }
+
+        str += "</tr>"
+
+        return str
+    }
+
+
+    def tree() {
+        def concurso = Concurso.get(params.id)
+        def parametros = ParametroEvaluacion.findAllByConcursoAndPadreIsNull(concurso, [sort: 'orden'])
+        return [parametroEvaluacionInstanceList: parametros, params: params, concurso: concurso]
+    } //tree
+
     def list() {
         def concurso = Concurso.get(params.id)
         def parametros = ParametroEvaluacion.findAllByConcurso(concurso)
