@@ -878,7 +878,10 @@
 
 
             $("#reajusteMemo").attr("disabled",false)
+
             $("#porcentajeMemo").attr("disabled",false)
+
+
             $("#btnCalBase").attr("disabled", false)
 
 
@@ -887,7 +890,9 @@
 
 
             $("#reajusteMemo").attr("disabled",true)
+            $("#reajusteMemo").val(" ");
             $("#porcentajeMemo").attr("disabled",true)
+            $("#porcentajeMemo").val(" ")
             $("#btnCalBase").attr("disabled", true)
 
 

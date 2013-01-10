@@ -53,7 +53,7 @@
             <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar</button>
             <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
             <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
-            <button class="btn"><i class="icon-print"></i> Imprimir</button>
+            <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
             <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
         </div>
 
@@ -571,6 +571,14 @@
                     busqueda();
                 });
 
+
+                $("#btnImprimir").click(function () {
+
+
+                    location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistro', id: obra?.id)}"
+
+                });
+
                 %{--$("#btnDocumentos").click(function () {--}%
 
                 %{--location.href  = "${g.createLink(controller: 'documentosObra', action: 'documentosObra')}";--}%
@@ -654,16 +662,20 @@
 //
                             if (estadoCambiado == 'N') {
                                 estadoCambiado = 'R';
+                                $(".estado").val(estadoCambiado);
+                                $("#frm-registroObra").submit();
 //                        console.log("estadocambiado" + $(".estado").val() )
 //                        $("#estadoDialog").dialog("close");
                             } else {
                                 estadoCambiado = 'N';
+                                $(".estado").val(estadoCambiado);
+                                $("#frm-registroObra").submit();
 //                      $("#estadoNom").val(estadoCambiado);
 //                      console.log("estadocambiado" + $(".estado").val() )
                             }
-                            $(".estado").val(estadoCambiado);
+//                            $(".estado").val(estadoCambiado);
                             $("#estadoDialog").dialog("close");
-
+//
                         },
                         "Cancelar" : function () {
                             $("#estadoDialog").dialog("close");
