@@ -45,6 +45,17 @@ class ConcursoController extends janus.seguridad.Shield {
         }
     }
 
+    def show(){
+        def concursoInstance = Concurso.get(params.id)
+        if (!concursoInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Concurso con id " + params.id
+            redirect(action: "list")
+            return
+        }
+        [concursoInstance: concursoInstance]
+    }
+
     def buscaPac() {
         def listaTitulos = ["Descripción", "Departamento", "Presupuesto"]
         def listaCampos = ["descripcion", "departamento", "presupuesto"]

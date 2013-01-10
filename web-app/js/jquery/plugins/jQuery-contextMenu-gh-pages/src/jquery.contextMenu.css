@@ -99,6 +99,9 @@
 .context-menu-item.mn-icon-quit { background-image: url(images/door.png); }
 
 .context-menu-item.mn-icon-print { background-image: url(images/print.png); }
+.context-menu-item.mn-icon-doc { background-image: url(images/doc.png); }
+.context-menu-item.mn-icon-eval { background-image: url(images/eval.png); }
+.context-menu-item.mn-icon-view { background-image: url(images/view.png); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }

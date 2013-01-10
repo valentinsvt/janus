@@ -331,8 +331,9 @@ class RubroController extends janus.seguridad.Shield {
     }
 
 
-    def delete() {
-        def rubroInstance = Rubro.get(params.id)
+    def borrarRubro() {
+//        println "borrar rubro "+params
+        def rubroInstance = Item.get(params.id)
         if (!rubroInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Rubro con id " + params.id
@@ -340,17 +341,31 @@ class RubroController extends janus.seguridad.Shield {
             return
         }
 
-        try {
-            rubroInstance.delete(flush: true)
-            flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Rubro " + rubroInstance.id
-            redirect(action: "list")
+        def vo = VolumenesObra.findAllByItem(rubroInstance)
+        def obras = Obra.findAllByChoferOrVolquete(rubroInstance,rubroInstance)
+//        println "vo "+vo
+//        println "obras "+obras
+        if (vo.size()+obras.size()>0){
+            render "Error"
+            return
+        }else{
+            try {
+                def comp = Rubro.findAllByRubro(rubroInstance)
+                comp.each {
+                    it.delete(flush: true)
+                }
+                rubroInstance.delete(flush: true)
+                render "ok"
+                return
+            }
+            catch (DataIntegrityViolationException e) {
+                println "error del rubro "+e
+                render "Error"
+                return
+            }
         }
-        catch (DataIntegrityViolationException e) {
-            flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Rubro " + (rubroInstance.id ? rubroInstance.id : "")
-            redirect(action: "list")
-        }
+
+
     } //delete
 
     def getPrecios() {

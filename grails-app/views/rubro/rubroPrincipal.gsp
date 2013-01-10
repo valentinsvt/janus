@@ -41,7 +41,7 @@
         <i class="icon-file"></i>
         Cancelar
     </a>
-    <a href="#" class="btn btn-ajax btn-new">
+    <a href="#" class="btn btn-ajax btn-new" id="borrar">
         <i class="icon-file"></i>
         Borrar
     </a>
@@ -648,6 +648,39 @@
     }
 
     $(function () {
+
+        $("#borrar").click(function(){
+            <g:if test="${rubro}">
+            if(confirm("Esta Seguro?")){
+                $("#dlgLoad").dialog("open")
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'borrarRubro')}",
+                    data     : "id=${rubro?.id}",
+                    success  : function (msg) {
+                        $("#dlgLoad").dialog("close")
+                        if(msg=="ok"){
+                            location.href="${createLink(action: 'rubroPrincipal')}"
+                        }else{
+                            $.box({
+                                imageClass : "box_info",
+                                text       : "Error: el rubro seleccionado no se pudo eliminar. Posiblemente este referenciado en un obra",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    draggable : false,
+                                    buttons   : {
+                                        "Aceptar" : function () {
+                                        }
+                                    },
+                                    width     : 500
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            </g:if>
+        });
 
         <g:if test="${!rubro?.departamento?.subgrupo?.grupo?.id}">
         $("#selClase").val("");
