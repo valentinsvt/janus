@@ -1483,7 +1483,7 @@ class ReportesController {
 
 
 
-            addCellTabla(tablaFirmas, new Paragraph(firma1?.titulo + "" + firma1?.nombre + " " + firma1?.apellido, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
             firma.each { f->
@@ -2098,6 +2098,8 @@ class ReportesController {
 
         def auxiliar = Auxiliar.get(1)
 
+        println(auxiliar)
+
         def auxiliarFijo = Auxiliar.get(1)
 
         def obra = Obra.get(params.id)
@@ -2123,6 +2125,120 @@ class ReportesController {
         def p09 = FormulaPolinomica.findByObraAndNumero(obra, 'p09')
         def p10 = FormulaPolinomica.findByObraAndNumero(obra, 'p10')
         def px = FormulaPolinomica.findByObraAndNumero(obra, 'px')
+
+       def p01valor
+       def p02valor
+       def p03valor
+       def p04valor
+       def p05valor
+       def p06valor
+       def p07valor
+       def p08valor
+       def p09valor
+       def p10valor
+       def pxvalor
+
+
+        if(p01 == null){
+
+            p01valor = 0;
+
+        }else {
+
+            p01valor = p01.valor
+
+        }
+        if(p02 == null){
+
+            p02valor = 0;
+
+        }else {
+
+            p02valor = p02.valor
+
+        }
+        if(p03 == null){
+
+            p03valor = 0;
+
+        }else {
+
+            p03valor = p03.valor
+
+        }
+        if(p04 == null){
+
+            p04valor = 0;
+
+        }else {
+
+            p04valor = p04.valor
+
+        }
+        if(p05 == null){
+
+            p05valor = 0;
+
+        }else {
+
+            p05valor = p05.valor
+
+        }
+        if(p06 == null){
+
+            p06valor = 0;
+
+        }else {
+
+            p06valor = p06.valor
+
+        }
+        if(p07 == null){
+
+            p07valor = 0;
+
+        }else {
+
+            p07valor = p07.valor
+
+        }
+        if(p08 == null){
+
+            p08valor = 0;
+
+        }else {
+
+            p08valor = p08.valor
+
+        }
+        if(p09 == null){
+
+            p09valor = 0;
+
+        }else {
+
+            p09valor = p09.valor
+
+        }
+        if(p10 == null){
+
+            p10valor = 0;
+
+        }else {
+
+            p10valor = p10.valor
+
+        }
+        if(px == null){
+
+            pxvalor = 0;
+
+        }else {
+
+            pxvalor = px.valor
+
+        }
+
 
 
 
@@ -2283,8 +2399,10 @@ class ReportesController {
 
         txtIzqHeader.add(new Paragraph(" ", times10bold));
 
-        txtIzqHeader.add(new Paragraph("Pr= Po(${p01.valor}B1/Bo + ${p02.valor}C1/Co + ${p03.valor}D1/Do + ${p04.valor}E1/Eo + ${p05.valor}F1/Fo +" +
-                " ${p06.valor}G1/Go + ${p07.valor}H1/Ho + ${p08.valor}I1/Io + ${p09.valor}J1/Jo + ${p10.valor}K1/Ko + ${px.valor}X1/Xo) ", times10bold));
+
+
+        txtIzqHeader.add(new Paragraph("Pr= Po(${p01valor}B1/Bo + ${p02valor}C1/Co + ${p03valor}D1/Do + ${p04valor}E1/Eo + ${p05valor}F1/Fo +" +
+                " ${p06valor}G1/Go + ${p07valor}H1/Ho + ${p08valor}I1/Io + ${p09valor}J1/Jo + ${p10valor}K1/Ko + ${pxvalor}X1/Xo) ", times10bold));
 
         document.add(txtIzqHeader)
 
@@ -2300,67 +2418,67 @@ class ReportesController {
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p01 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p01.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p01valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p01?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p02 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p02.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p02valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p02?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p03 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p03.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p03valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p03?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p04 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p04.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p04valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p04?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p05 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p05.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p05valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p05?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p06 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p06.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p06valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p06?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p07 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p07.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p07valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p07?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p08 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p08.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p08valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p08?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p09 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p09.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p09valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p09?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p10 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p10.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p10valor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p10?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("px = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: px.valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: pxvalor, format: "##.####"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(px?.indice?.descripcion, times10normal), prmsHeaderHoja)
 

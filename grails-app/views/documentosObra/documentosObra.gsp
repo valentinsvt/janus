@@ -10,6 +10,10 @@
 <html>
 <head>
     <meta name="layout" content="main">
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+
+    <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
 
     <title>Formato de Impresión</title>
 </head>
@@ -237,6 +241,7 @@
     </div>
     <div class="cabecera">
 
+
         <fieldset class="borde">
             <legend>Cabecera</legend>
 
@@ -271,12 +276,13 @@
 
             <div class="span7">
                 <div class="span1"> Valor de la Base: </div>
-                <div class="span2"><g:textField name="baseMemo" style="width: 100px" disabled="true" value="${totalPresupuesto}"/></div>
+
+                <div class="span2"><g:textField name="baseMemo" style="width: 100px" disabled="true" value="${formatNumber(number: totalPresupuesto, format: '####.######')}"/></div>
 
                 <div class="span1" style="margin-left: -30px"> Valor de Reajuste: </div>
-                <div class="span2"><g:textField name="reajusteMemo" id="reajusteMemo" style="width: 100px; margin-left: -20px" value="" disabled="false"/></div>
-                %{--<div class="span1" style="margin-left: -60px"> % </div>--}%
-                <div class="span2" style="margin-left: -45px"><g:textField name="porcentajeMemo" id="porcentajeMemo" style="width: 35px; margin-right: 10px" disabled="false"/>
+                <div class="span2"><g:textField name="reajusteMemo" id="reajusteMemo" style="width: 100px; margin-left: -20px" value="" disabled="true"/></div>
+                <div class="span2" style="margin-left: -45px"><g:textField name="porcentajeMemo" id="porcentajeMemo" style="width: 35px; margin-right: 10px" disabled="false"
+                                                                           maxlength="3"/>
 
                     <button class="btn" id="btnCalBase" style="width: 35px; margin-top: -9px; margin-left: -14px" ><i class="icon-plus-sign"></i></button>
                 </div>
@@ -289,7 +295,6 @@
 
 
         </fieldset>
-
 
     </div>
 
@@ -430,7 +435,7 @@
 
             <div class="span6">
                 <div class="span2"> Monto del Contrato: </div>
-                <div class="span3"><g:textField name="montoFor" value="${totalPresupuesto}" disabled="true"/></div>
+                <div class="span3"><g:textField name="montoFor" value="${formatNumber(number: totalPresupuesto, format: '####.######')}" disabled="true"/></div>
             </div>
 
 
@@ -668,9 +673,9 @@
 </div>
 
 
-<div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 160px">
+<div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
     <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-    <button class="btn" id="tramite" disabled="true"><i class="icon-plus"></i> Ingresar Trámite</button>
+    %{--<button class="btn" id="tramite" disabled="true"><i class="icon-plus"></i> Ingresar Trámite</button>--}%
     <button class="btn" id="btnExcel"><i class="icon-table"></i> Presupuesto a Excel</button>
     <button class="btn" id="btnSalir"><i class="icon-ban-circle"></i> Salir</button>
 </div>
@@ -736,7 +741,43 @@
     var reajusteMemo = 0;
 
 
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
 
+
+    $("#porcentajeMemo").keydown(function (ev) {
+
+            return validarNum(ev);
+
+    }).keyup(function (){
+
+              var enteros = $(this).val();
+
+               if(parseFloat(enteros) > 100){
+
+                   $(this).val(100)
+
+               }
+
+
+
+            });
 
     function loadNota() {
         var idPie = $("#piePaginaSel").val();
@@ -767,7 +808,7 @@
 
     $("#btnSalir").click(function () {
 
-        location.href = "${g.createLink(action: 'registroObra')}" + "?obra=" + "${obra?.id}";
+        location.href = "${g.createLink(controller: 'obra', action: 'registroObra')}" + "?obra=" + "${obra?.id}";
 
 
     });
@@ -783,7 +824,7 @@
         var maxFirmas = (tbody.children("tr").length)+1;
 
 
-        console.log(maxFirmas)
+//        console.log(maxFirmas)
 
 
         if(maxFirmas > 3) {
@@ -877,7 +918,7 @@
         if(tipoClickMemo == '1') {
 
 
-            $("#reajusteMemo").attr("disabled",false)
+            $("#reajusteMemo").attr("disabled",true)
 
             $("#porcentajeMemo").attr("disabled",false)
 
@@ -930,7 +971,7 @@
     var active2 = $( "#tabs" ).tabs("option", "event")
 
 
-    console.log(active2)
+//    console.log(active2)
 
 
 
@@ -1062,6 +1103,8 @@
 
 
     });
+
+
 
 
     $("#btnAceptarMemo").click(function () {

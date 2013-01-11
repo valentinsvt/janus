@@ -82,11 +82,11 @@ class DocumentosObraController {
         def indirecto = obra.totales/100
 
 
-        def total1 = 0;
+//        def total1 = 0;
 
         def totales
 
-        def totalPresupuesto;
+        def totalPresupuesto=0;
 
 
         detalle.each {
@@ -99,23 +99,13 @@ class DocumentosObraController {
 
             totales =  precios[it.id.toString()]*it.cantidad
 
+//            total1+=totales
 
-            totalPresupuesto = (total1+=totales);
+            totalPresupuesto+=totales;
 
 
-
-
-           return totalPresupuesto
 
         }
-
-
-        println("tp:"+ totalPresupuesto)
-
-
-
-
-
 
         def c = Persona.createCriteria()
         firmas = c.list {

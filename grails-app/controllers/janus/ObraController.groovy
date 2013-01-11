@@ -417,11 +417,14 @@ class ObraController extends janus.seguridad.Shield {
     } //show
 
     def delete() {
+
+        println("delete" + params.id)
+
         def obraInstance = Obra.get(params.id)
         if (!obraInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Obra con id " + params.id
-            redirect(action: "list")
+            redirect(action: "registroObra")
             return
         }
 
@@ -429,12 +432,12 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.delete(flush: true)
             flash.clase = "alert-success"
             flash.message = "Se ha eliminado correctamente Obra " + obraInstance.id
-            redirect(action: "list")
+            redirect(action: "registroObra")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
             flash.message = "No se pudo eliminar Obra " + (obraInstance.id ? obraInstance.id : "")
-            redirect(action: "list")
+            redirect(action: "registroObra")
         }
     } //delete
 } //fin controller

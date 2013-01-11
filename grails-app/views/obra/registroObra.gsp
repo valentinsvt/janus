@@ -493,6 +493,26 @@
 
                 });
 
+
+                $("#eliminarObra").click(function () {
+
+
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action: 'delete')}",
+                        data    : "id=${obra?.id}",
+                        success : function (msg) {
+
+//                            console.log(msg)
+
+                            %{--location.href = "${g.createLink(action: 'registroObra')}" + "?obra=" + "${obra?.id}";--}%
+                        }
+                    });
+
+
+                });
+
+
                 $("#cambiarEstado").click(function () {
 
                     if (${obra?.id != null}) {
@@ -503,19 +523,21 @@
 
                 });
 
-                $("#eliminarObra").click(function () {
 
-                });
 
                 $("#btnDocumentos").click(function () {
 
                     if (${obra?.estado == 'R'}) {
 
+
+
                         location.href = "${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}"
+
+                        $("#dlgLoad").dialog("open");
 
                     }
                     else {
-
+//                        $("#dlgLoad").dialog("open");
                         $("#documentosDialog").dialog("open")
 
                     }
@@ -574,17 +596,13 @@
 
                 $("#btnImprimir").click(function () {
 
-
+                    $("#dlgLoad").dialog("open");
                     location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistro', id: obra?.id)}"
+                   $("#dlgLoad").dialog("close")
 
                 });
 
-                %{--$("#btnDocumentos").click(function () {--}%
 
-                %{--location.href  = "${g.createLink(controller: 'documentosObra', action: 'documentosObra')}";--}%
-
-
-                %{--});--}%
 
                 $("#btnVar").click(function () {
                     $.ajax({
@@ -698,6 +716,7 @@
                         "Aceptar" : function () {
 
                             $("#documentosDialog").dialog("close");
+
 
                         }
                     }
