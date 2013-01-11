@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        Parámetros de evaluación
+        Evaluación
     </title>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -12,7 +12,7 @@
     <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
     <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
     <style>
-    .i_t{
+    input.numero{
         font-size: 12px !important;
         height: 18px !important;
         padding: 2px !important;
@@ -21,6 +21,14 @@
     }
     .numero{
         text-align: right !important;
+    }
+    .desc{
+        font-size: 11px !important;
+        height: 60px !important;
+        padding: 2px !important;
+        width: 400px !important;
+        line-height: 12px;
+
     }
     </style>
 </head>
@@ -35,7 +43,7 @@
         </div>
     </g:if>
 </div>
-
+<div class="tituloTree">Evaluación de la oferta del oferente: ${oferta.proveedor.nombre}</div>
 <div class="span12 btn-group" role="navigation">
     <a href="#" class="btn btn-ajax btn-new" id="guardar">
         <i class="icon-file"></i>
@@ -45,6 +53,7 @@
 
 
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: -10px;">
+
     <div style="border-bottom: 1px solid black;padding-left: 50px;margin-top: 10px;position: relative;">
         <p class="css-vertical-text">Parámetros de evaluación</p>
         <div class="linea" style="height: 98%;"></div>
@@ -75,7 +84,7 @@
 
 
 <script type="text/javascript">
-    $(".i_t").blur(function(){
+    $(".i_t").not(".val").blur(function(){
         var t = $(this)
         var val = $(this).val()
         if(isNaN(val))
@@ -129,16 +138,20 @@
     $("#guardar").click(function(){
         if(confirm("Esta seguro?")){
             var datos =""
-            $(".i_t").each(function(){
+            $(".i_t").not(".val").each(function(){
                 var t =$(this)
                 if(t.val()!=""){
-                    datos+= t.attr("iden")+"&"+ t.val()+";"
+                    datos+= t.attr("iden")+"&"+ t.val()+"&"
+                    datos+=$(this).parent().next().children().val()+"&"
+                    datos+=$(this).parent().next().next().children().val()+";"
                 }
             });
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(action:'guardarParametros')}",
                 data    : {
+                    concurso:"${concurso.id}",
+                    oferta:"${oferta.id}",
                     data : datos
                 },
                 success : function (msg) {

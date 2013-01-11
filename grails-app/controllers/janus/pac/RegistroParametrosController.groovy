@@ -6,7 +6,8 @@ class RegistroParametrosController {
 
 
     def registro(){
-        def concurso = Concurso.get(params.id)
+        def oferta = Oferta.get(params.id)
+        def concurso = oferta.concurso
         def html = ""
         html += '<table class="table table-bordered table-striped table-condensed table-hover" style="width: auto;">'
         html += "<thead>"
@@ -15,8 +16,10 @@ class RegistroParametrosController {
         html += '<th style="width: 40px;"></th>'
         html += '<th style="width: 40px;"></th>'
         html += '<th style="width: 530px;">Parámetro</th>'
+        html += '<th style="width: 60px;">Máximo</th>'
         html += '<th style="width: 60px;">Puntaje</th>'
-        html += '<th style="width: 60px;">Mínimo</th>'
+        html += '<th style="width: 60px;">Valor</th>'
+        html += '<th style="width: 400px;">Descripción</th>'
         html += '</tr>'
         html += "</thead>"
         html += "<tbody>"
@@ -63,11 +66,28 @@ class RegistroParametrosController {
                     estilos: "",
                     texto: g.formatNumber(number: par1.minimo, maxFractionDigits: 2, minFractionDigits: 2)
             ]
+            def celdaDesc1 = [
+                    colspan: 1,
+                    rowspan: 1,
+                    clase: "desc",
+                    estilos: "",
+                    texto: ""
+            ]
+            def celdaVal1 = [
+                    colspan: 1,
+                    rowspan: 1,
+                    clase: "numero",
+                    estilos: "",
+                    texto: ""
+            ]
             filaPar1.celdas.add(celdaN11)
             filaPar1.celdas.add(celdaN12)
             filaPar1.celdas.add(celdaPar1)
             filaPar1.celdas.add(celdaPnt1)
             filaPar1.celdas.add(celdaMin1)
+            filaPar1.celdas.add(celdaVal1)
+            filaPar1.celdas.add(celdaDesc1)
+
             filas.add(filaPar1)
 
 
@@ -112,13 +132,36 @@ class RegistroParametrosController {
                         clase: "numero editable",
                         estilos: "",
                         texto: g.formatNumber(number: par2.minimo, maxFractionDigits: 2, minFractionDigits: 2),
+                        id:par2.id,
+                        tipo:"puntaje"
+                ]
+                def celdaDesc2 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "desc editable",
+                        estilos: "",
+                        texto: "",
+                        tipo:"desc",
                         id:par2.id
                 ]
+                def celdaVal2 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "numero editable val",
+                        estilos: "",
+                        texto: "",
+                        tipo:"val",
+                        id:par2.id
+                ]
+
                 filaPar2.celdas.add(celdaN22)
                 filaPar2.celdas.add(celdaN23)
                 filaPar2.celdas.add(celdaPar2)
                 filaPar2.celdas.add(celdaPnt2)
                 filaPar2.celdas.add(celdaMin2)
+                filaPar2.celdas.add(celdaVal2)
+                filaPar2.celdas.add(celdaDesc2)
+
 //                filas.add(filaPar2)
                 def filaPadre = filaPar2
 
@@ -126,6 +169,8 @@ class RegistroParametrosController {
 //                println "fila padre 1 "+filaPadre.celdas[4]
                 ParametroEvaluacion.findAllByPadre(par2).each { par3 ->
                     filaPadre.celdas[4].clase="numero"
+                    filaPadre.celdas[6].clase="desc"
+                    filaPadre.celdas[5].clase="numero"
 //                    println "fila padre 2 "+filaPadre.celdas[4]
 
                     def filaPar3 = [
@@ -160,12 +205,35 @@ class RegistroParametrosController {
                             clase: "numero editable",
                             estilos: "",
                             texto: g.formatNumber(number: par3.minimo, maxFractionDigits: 2, minFractionDigits: 2),
+                            id:par3.id,
+                            tipo:"puntaje"
+                    ]
+                    def celdaDesc3 = [
+                            colspan: 1,
+                            rowspan: 1,
+                            clase: "desc editable",
+                            estilos: "",
+                            texto: "" ,
+                            tipo:"desc",
+                            id:par3.id
+                    ]
+                    def celdaVal3 = [
+                            colspan: 1,
+                            rowspan: 1,
+                            clase: "numero editable val",
+                            estilos: "",
+                            texto: "",
+                            tipo:"val" ,
                             id:par3.id
                     ]
                     filaPar3.celdas.add(celdaN33)
                     filaPar3.celdas.add(celdaPar3)
                     filaPar3.celdas.add(celdaPnt3)
                     filaPar3.celdas.add(celdaMin3)
+                    filaPar3.celdas.add(celdaVal3)
+                    filaPar3.celdas.add(celdaDesc3)
+
+
 //                    filas.add(filaPar3)
                     temp.add(filaPar3)
                     rs1++
@@ -186,22 +254,38 @@ class RegistroParametrosController {
         }
 
         filas.each { fila ->
-            html += dibujaFila(fila)
+            html += dibujaFila(fila,oferta)
         }
         html += "</tbody>"
         html += "</table>"
-        [html:html,concurso:concurso]
+        [html:html,concurso:concurso,oferta:oferta]
     }
-    def dibujaFila(params) {
+    def dibujaFila(params,oferta) {
         def str = ""
 
         str += "<tr class='${params.clase}' style='${params.estilos}'>"
 
         params.celdas.each { celda ->
             if (celda.clase=~"editable"){
-                str += "<td colspan='${celda.colspan}' rowspan='${celda.rowspan}' class='${celda.clase}' style='${celda.estilos}'>"
-                str+= "<input type='text' class='i_t' max='10'  iden='${celda.id}'> "
-                str += "</td>"
+                if (celda.clase=~"numero"){
+                    str += "<td colspan='${celda.colspan}' rowspan='${celda.rowspan}' class='${celda.clase}' style='${celda.estilos}'>"
+                    def val = janus.pac.Evaluacion.findByOfertaAndParametroEvaluacion(oferta,janus.pac.ParametroEvaluacion.get(celda.id))
+                    if (val){
+                        str+= "<input type='text' class='i_t ${celda.clase}'  iden='${celda.id}' value='${(celda.tipo=="val")?val.valor:val.puntaje}'> "
+                    }else{
+                        str+= "<input type='text' class='i_t ${celda.clase}'  iden='${celda.id}'> "
+                    }
+                    str += "</td>"
+                }else{
+                    def val = janus.pac.Evaluacion.findByOfertaAndParametroEvaluacion(oferta,janus.pac.ParametroEvaluacion.get(celda.id))
+                    str += "<td colspan='${celda.colspan}' rowspan='${celda.rowspan}' class='${celda.clase}' style='${celda.estilos}'>"
+                    if (val){
+                        str+= "<textarea  class='${celda.clase}'  iden='${celda.id}'>${val.descripcion}</textarea>"
+                    }else{
+                        str+= "<textarea  class='${celda.clase}'  iden='${celda.id}'></textarea>"
+                    }
+                    str += "</td>"
+                }
             }else{
                 str += "<td colspan='${celda.colspan}' rowspan='${celda.rowspan}' class='${celda.clase}' style='${celda.estilos}'>"
                 str += celda.texto
@@ -216,11 +300,27 @@ class RegistroParametrosController {
     }
 
     def guardarParametros(){
-        println "guardar par "+params
-        if (params.datos.trim().size()>0){
-            def p = params.datos.split(";")
+//        println "guardar par "+params
+        def oferta = Oferta.get(params.oferta)
+        if (params.data.trim().size()>0){
+            def p = params.data.split(";")
             p.each {
-                def parts = p.split("&")
+                def parts = it
+                println "parts "+parts.class
+                parts=it.split("&")
+                def pe= ParametroEvaluacion.get(parts[0])
+                def calif = janus.pac.Evaluacion.findByOfertaAndParametroEvaluacion(oferta,pe)
+                if (!calif){
+                   calif = new janus.pac.Evaluacion()
+                }
+                calif.parametroEvaluacion=pe
+                calif.oferta=oferta
+                calif.puntaje=parts[1].toDouble()
+                if (parts[2]!="")
+                    calif.valor=parts[2].toDouble()
+                calif.descripcion=parts[3]
+                calif.save(flush: true)
+
                 /*aqui guardar*/
             }
         }

@@ -77,6 +77,9 @@
                                 <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${ofertaInstance.id}">
                                     <i class="icon-trash icon-large"></i>
                                 </a>
+                                <g:link class="btn btn-small btn-warning btn-ajax" href="#" rel="tooltip" title="Calificar" id="${ofertaInstance.id}" controller="registroParametros" action="registro">
+                                    <i class="icon-zoom-in icon-tasks"></i>
+                                </g:link>
                             </td>
                         </tr>
                     </g:each>
