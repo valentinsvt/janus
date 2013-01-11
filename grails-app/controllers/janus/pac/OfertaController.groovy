@@ -11,7 +11,10 @@ class OfertaController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [ofertaInstanceList: Oferta.list(params), params: params]
+        def concurso = Concurso.get(params.id)
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        def ofertas = Oferta.findAllByConcurso(concurso, params)
+        return [concurso: concurso, ofertaInstanceList: ofertas, params: params]
     } //list
 
     def form_ajax() {
@@ -25,10 +28,17 @@ class OfertaController extends janus.seguridad.Shield {
                 return
             } //no existe el objeto
         } //es edit
+        else {
+            def concurso = Concurso.get(params.cncr)
+            ofertaInstance.concurso = concurso
+        }
         return [ofertaInstance: ofertaInstance]
     } //form_ajax
 
     def save() {
+        if (params.fechaEntrega) {
+            params.fechaEntrega = new Date().parse('dd-mm-yyyy', params.fechaEntrega)
+        }
         def ofertaInstance
         if (params.id) {
             ofertaInstance = Oferta.get(params.id)
@@ -58,7 +68,7 @@ class OfertaController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
-            redirect(action: 'list')
+            redirect(action: 'list', id: ofertaInstance.concursoId)
             return
         }
 
@@ -69,7 +79,7 @@ class OfertaController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Oferta " + ofertaInstance.id
         }
-        redirect(action: 'list')
+        redirect(action: 'list', id: ofertaInstance.concursoId)
     } //save
 
     def show_ajax() {

@@ -1,9 +1,9 @@
 
-<%@ page import="janus.EspecialidadProveedor" %>
+<%@ page import="janus.pac.Etapa" %>
 
-<div id="create-EspecialidadProveedor" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-EspecialidadProveedor" action="save">
-        <g:hiddenField name="id" value="${especialidadProveedorInstance?.id}"/>
+<div id="create-Etapa" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-Etapa" action="save">
+        <g:hiddenField name="id" value="${etapaInstance?.id}"/>
                 
         <div class="control-group">
             <div>
@@ -13,8 +13,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class="" value="${especialidadProveedorInstance?.descripcion}"/>
-                
+                <g:textField name="descripcion" maxlength="31" class=" required" value="${etapaInstance?.descripcion}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -22,7 +22,7 @@
     </g:form>
 
 <script type="text/javascript">
-    $("#frmSave-EspecialidadProveedor").validate({
+    $("#frmSave-Etapa").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },

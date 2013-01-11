@@ -91,16 +91,27 @@
                             <a href="">Parámetros de evaluación</a>
                             <ul>
                                 <g:each in="${parametroEvaluacionInstanceList}" var="par1">
-                                    <li id="${par1.id}" rel="categoria">
-                                        <a href="">${par1.descripcion}</a>
+                                    <g:set var="par1Hijos" value="${janus.pac.ParametroEvaluacion.findAllByPadre(par1, [sort: 'orden'])}"/>
+                                    <li id="${par1.id}" rel="categoria" data-asig="${par1Hijos.sum { it.puntaje }}" data-total="${par1.puntaje}">
+                                        <a href="">
+                                            ${par1.descripcion}
+                                            %{--(asignados <span class="asig">${par1Hijos.sum { it.puntaje }}</span> ${par1Hijos.size() > 0 ? 'de' : ''} <span class="total">${par1.puntaje}</span> puntos)--}%
+                                        </a>
                                         <ul>
-                                            <g:each in="${janus.pac.ParametroEvaluacion.findAllByPadre(par1, [sort: 'orden'])}" var="par2">
-                                                <li id="${par2.id}" rel="node1">
-                                                    <a href="">${par2.descripcion}</a>
+                                            <g:each in="${par1Hijos}" var="par2">
+                                                <g:set var="par2Hijos" value="${janus.pac.ParametroEvaluacion.findAllByPadre(par2, [sort: 'orden'])}"/>
+                                                <li id="${par2.id}" rel="node1" data-asig="${par2Hijos.sum { it.puntaje }}" data-total="${par2.puntaje}">
+                                                    <a href="">
+                                                        ${par2.descripcion}
+                                                        %{--(asignados <span class="asig">${par2Hijos.sum { it.puntaje }}</span> ${par2Hijos.size() > 0 ? 'de' : ''} <span class="total">${par2.puntaje}</span> puntos)--}%
+                                                    </a>
                                                     <ul>
-                                                        <g:each in="${janus.pac.ParametroEvaluacion.findAllByPadre(par2, [sort: 'orden'])}" var="par3">
-                                                            <li id="${par3.id}" rel="node2">
-                                                                <a href="">${par3.descripcion}</a>
+                                                        <g:each in="${par2Hijos}" var="par3">
+                                                            <li id="${par3.id}" rel="node2" data-total="${par3.puntaje}">
+                                                                <a href="">
+                                                                    ${par3.descripcion}
+                                                                    %{--(asignados <span class="total">${par3.puntaje}</span> puntos)--}%
+                                                                </a>
                                                             </li>
                                                         </g:each>
                                                     </ul>
@@ -158,7 +169,7 @@
 
                         <div class="span2">
                             <g:textField name="puntaje" class="span2"/>
-                            <span class="help-block">Puntaje máximo a obtener.</span>
+                            <span class="help-block">Puntaje máximo a obtener (<span id="spMax"></span>)</span>
                         </div>
 
                         <div class="span2">
@@ -243,16 +254,19 @@
             }
 
             function createContextmenu(node) {
-//                console.log(node);
-
                 var nodeId = node.attr("id");
                 var nodeRel = node.attr("rel");
+                var nodeText = $.trim(node.children("a").text());
+
+                var tot = node.data("total");
+                var asg = node.data("asig");
+                var dsp = tot - asg;
 
                 var menuItems = {};
 
                 var nodeHasChildren = node.children("ul").size() > 0;
 
-                if (nodeRel != "node2") {
+                if (nodeRel != "node2" && dsp > 0) {
                     var cant = node.children("ul").children("li").size();
                     var ord = cant + 1;
                     menuItems.addChild = {
@@ -264,8 +278,15 @@
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
+                            if (nodeRel != "root") {
+                                $("#divPadre").text(nodeText);
+                                $("#spMax").text(dsp + " puntos disponibles de un total de " + tot);
+                                $("#puntaje").attr("max", dsp);
+                            } else {
+                                $("#divPadre").text("Ninguno");
+                            }
+
                             btnSave.click(function () {
-                                btnSave.replaceWith(spinner);
                                 var c = 0;
                                 var data = {
                                     id  : "ni_" + $tbody.children("tr").size() + 1,
@@ -275,35 +296,44 @@
                                     ord : ord,
                                     cnc : ${concurso.id}
                                 };
-//                                console.log(nodeId)
-                                if (node.attr("rel") != "root") {
+                                if (nodeRel != "root") {
                                     data.pdr = nodeId;
                                 }
-
                                 var msg = "";
                                 if (data.par == "") {
                                     c++;
-                                    msg += "<li id='err_parametro'>Ingrese el parámetro</li>";
+                                    msg += "<li class='err_parametro'>Ingrese el parámetro</li>";
                                     $par.addClass("inputError");
                                 }
                                 if (data.pnt == "") {
                                     c++;
-                                    msg += "<li id='err_puntaje'>Ingrese el puntaje</li>";
+                                    msg += "<li class='err_puntaje'>Ingrese el puntaje</li>";
+                                    $pnt.addClass("inputError");
+                                }
+                                if (parseFloat(data.pnt) > $pnt.attr("max")) {
+                                    c++;
+                                    msg += "<li class='err_puntaje'>Ingrese un puntaje inferior a " + dsp + "</li>";
                                     $pnt.addClass("inputError");
                                 }
                                 if (data.min == "") {
                                     data.min = 0;
                                     $min.val(0);
                                 }
+                                if (data.min > data.pnt) {
+                                    c++;
+                                    msg += "<li class='err_minimo'>Ingrese un valor inferior a " + data.pnt + "</li>";
+                                    $pnt.addClass("inputError");
+                                }
 
                                 if (msg == "") {
+                                    btnSave.replaceWith(spinner);
 //                                    console.log(data);
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'addParametro')}",
                                         data    : data,
                                         success : function (msg) {
-//                                            console.log(msg);
+                                            //                                            console.log(msg);
                                             var parts = msg.split("_");
                                             if (parts[0] == "OK") {
                                                 $tree.jstree("create_node", node, ord, {
@@ -315,6 +345,7 @@
                                                 $tree.jstree("open_node", node);
                                                 reset();
                                                 updateInfo();
+                                                $("#modal-Form").modal("hide");
                                             }
                                         }
                                     });
@@ -323,7 +354,6 @@
                                     $("#msgAlert").html("<ul>" + msg + "</ul>");
                                     $("#alert").show();
                                 }
-                                $("#modal-Form").modal("hide");
 
 //                            return false;
                             });
@@ -393,10 +423,20 @@
                 });
                 $("#puntaje, #parametro").keyup(function () {
                     if ($.trim($(this).val()) != "" && $(this).hasClass("inputError")) {
-                        $(this).removeClass("inputError");
-                        $("#err_" + $(this).attr("id")).remove();
-                        if ($("#msgAlert").find("li").size() == 0) {
-                            $("#alert").hide();
+                        if ($(this).attr("id") == "puntaje") {
+                            if (parseFloat($(this).val()) <= parseFloat($(this).attr("max"))) {
+                                $(this).removeClass("inputError");
+                                $(".err_" + $(this).attr("id")).remove();
+                                if ($("#msgAlert").find("li").size() == 0) {
+                                    $("#alert").hide();
+                                }
+                            }
+                        } else {
+                            $(this).removeClass("inputError");
+                            $(".err_" + $(this).attr("id")).remove();
+                            if ($("#msgAlert").find("li").size() == 0) {
+                                $("#alert").hide();
+                            }
                         }
                     }
                 });

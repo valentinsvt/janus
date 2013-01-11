@@ -67,11 +67,13 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
         html += '<th style="width: 530px;">Parámetro</th>'
         html += '<th style="width: 60px;">Puntaje</th>'
         html += '<th style="width: 60px;">Mínimo</th>'
+        html += '<th style="width: 60px;">Asignado</th>'
         html += '</tr>'
         html += "</thead>"
         html += "<tbody>"
         def filas = []
         ParametroEvaluacion.findAllByConcursoAndPadreIsNull(concurso, [sort: 'orden']).each { par1 ->
+            def par1Hijos = ParametroEvaluacion.findAllByPadre(par1)
             def filaPar1 = [
                     clase: "nivel1",
                     estilos: "",
@@ -112,15 +114,24 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
                     estilos: "",
                     texto: g.formatNumber(number: par1.minimo, maxFractionDigits: 2, minFractionDigits: 2)
             ]
+            def celdaAsg1 = [
+                    colspan: 1,
+                    rowspan: 1,
+                    clase: "numero",
+                    estilos: "",
+                    texto: g.formatNumber(number: par1Hijos.sum { it.puntaje }, maxFractionDigits: 2, minFractionDigits: 2)
+            ]
             filaPar1.celdas.add(celdaN11)
             filaPar1.celdas.add(celdaN12)
             filaPar1.celdas.add(celdaPar1)
             filaPar1.celdas.add(celdaPnt1)
             filaPar1.celdas.add(celdaMin1)
+            filaPar1.celdas.add(celdaAsg1)
             filas.add(filaPar1)
 
             def rs1 = 1
-            ParametroEvaluacion.findAllByPadre(par1).each { par2 ->
+            par1Hijos.each { par2 ->
+                def par2Hijos = ParametroEvaluacion.findAllByPadre(par2)
                 def filaPar2 = [
                         clase: "nivel2",
                         estilos: "",
@@ -161,15 +172,23 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
                         estilos: "",
                         texto: g.formatNumber(number: par2.minimo, maxFractionDigits: 2, minFractionDigits: 2)
                 ]
+                def celdaAsg2 = [
+                        colspan: 1,
+                        rowspan: 1,
+                        clase: "numero",
+                        estilos: "",
+                        texto: g.formatNumber(number: par2Hijos.sum { it.puntaje }, maxFractionDigits: 2, minFractionDigits: 2)
+                ]
                 filaPar2.celdas.add(celdaN22)
                 filaPar2.celdas.add(celdaN23)
                 filaPar2.celdas.add(celdaPar2)
                 filaPar2.celdas.add(celdaPnt2)
                 filaPar2.celdas.add(celdaMin2)
+                filaPar2.celdas.add(celdaAsg2)
                 filas.add(filaPar2)
 
                 def rs2 = 1
-                ParametroEvaluacion.findAllByPadre(par2).each { par3 ->
+                par2Hijos.each { par3 ->
                     def filaPar3 = [
                             clase: "nivel3",
                             estilos: "",
@@ -203,10 +222,18 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
                             estilos: "",
                             texto: g.formatNumber(number: par3.minimo, maxFractionDigits: 2, minFractionDigits: 2)
                     ]
+                    def celdaAsg3 = [
+                            colspan: 1,
+                            rowspan: 1,
+                            clase: "numero",
+                            estilos: "",
+                            texto: ""
+                    ]
                     filaPar3.celdas.add(celdaN33)
                     filaPar3.celdas.add(celdaPar3)
                     filaPar3.celdas.add(celdaPnt3)
                     filaPar3.celdas.add(celdaMin3)
+                    filaPar3.celdas.add(celdaAsg3)
                     filas.add(filaPar3)
 
                     rs1++
@@ -234,7 +261,7 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
         str += "<tr class='${params.clase}' style='${params.estilos}'>"
 
         params.celdas.each { celda ->
-            str += "<td colspan='${celda.colspan}' rowspan='${celda.rowspan}' clase='${celda.clase}' style='${celda.estilos}'>"
+            str += "<td colspan='${celda.colspan}' rowspan='${celda.rowspan}' class='${celda.clase}' style='${celda.estilos}'>"
             str += celda.texto
             str += "</td>"
         }

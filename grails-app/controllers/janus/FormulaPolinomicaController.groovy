@@ -94,71 +94,101 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             params.filtro = '2'
         }
 
-        def obra = Obra.get(params.id)
-        def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
+        def cn = dbConnectionService.getConnection()
 
-        def data = []
-        fp.each { f ->
-            if (f.numero =~ params.tipo) {
-                def mapFormula = [
-                        data: f.numero,
-                        attr: [
-                                id: "fp_" + f.id,
-                                numero: f.numero,
-                                nombre: f.indice.descripcion,
-                                valor: f.valor,
-                                rel: "fp"
-                        ]
-                ]
-                def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
-                if (children.size() > 0) {
-                    mapFormula.children = []
-                    children.each { ch ->
-                        def mapItem = [
-                                data: " ",
-                                attr: [
-                                        id: "it_" + ch.id,
-                                        numero: ch.item.codigo,
-                                        nombre: ch.item.nombre,
-                                        item: ch.itemId,
-                                        valor: ch.valor,
-                                        rel: "it"
-                                ]
-                        ]
-                        mapFormula.children.add(mapItem)
+        def sqlMatriz = "select count(*) cuantos from mfcl where obra__id=${params.id}"
+        def matriz = cn.rows(sqlMatriz.toString())[0].cuantos
+        if (matriz == 0) {
+            flash.message = "Tiene que crear la matriz antes de ver los coeficientes"
+            redirect(controller: "obra", action: "registroObra", params: ["obra": params.id])
+            return
+        } else {
+            println "VERIFICA"
+            def sqlValidacion = "select count(*) cuantos from vlobitem where obra__id = ${params.id} and voitcoef is not null"
+            println sqlValidacion
+            def validacion = cn.rows(sqlValidacion.toString())[0].cuantos
+            println "validacion: " + validacion
+            if (validacion == 0) {
+                def sqlSubPresupuestos = "select distinct(sbpr__id) id from vlob where obra__id = ${params.id}"
+                println sqlSubPresupuestos
+                cn.eachRow(sqlSubPresupuestos.toString()) { row ->
+                    println row
+                    def cn2 = dbConnectionService.getConnection()
+                    def idSp = row.id
+                    def sqlLlenaDatos = "select * from sp_fpoli(${params.id}, ${idSp})"
+                    println sqlLlenaDatos
+                    cn2.eachRow(sqlLlenaDatos.toString()) { row2 ->
+                        println row2
                     }
                 }
-
-                data.add(mapFormula)
             }
-        }
-        def json = new JsonBuilder(data)
+
+            def data = []
+
+            def obra = Obra.get(params.id)
+            def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
+
+            fp.each { f ->
+                if (f.numero =~ params.tipo) {
+                    def mapFormula = [
+                            data: f.numero,
+                            attr: [
+                                    id: "fp_" + f.id,
+                                    numero: f.numero,
+                                    nombre: f.indice.descripcion,
+                                    valor: f.valor,
+                                    rel: "fp"
+                            ]
+                    ]
+                    def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
+                    if (children.size() > 0) {
+                        mapFormula.children = []
+                        children.each { ch ->
+                            def mapItem = [
+                                    data: " ",
+                                    attr: [
+                                            id: "it_" + ch.id,
+                                            numero: ch.item.codigo,
+                                            nombre: ch.item.nombre,
+                                            item: ch.itemId,
+                                            valor: ch.valor,
+                                            rel: "it"
+                                    ]
+                            ]
+                            mapFormula.children.add(mapItem)
+                        }
+                    }
+
+                    data.add(mapFormula)
+                }
+            }
+            def json = new JsonBuilder(data)
 //        println json.toPrettyString()
-        def sql = "SELECT\n" +
-                "  v.voit__id                            id,\n" +
-                "  i.item__id                            iid,\n" +
-                "  i.itemcdgo                            codigo,\n" +
-                "  i.itemnmbr                            item,\n" +
-                "  v.voitcoef                            aporte,\n" +
-                "  d.dprtdscr                            departamento,\n" +
-                "  s.sbgrdscr                            subgrupo,\n" +
-                "  g.grpodscr                            grupo,\n" +
-                "  g.grpo__id                            grid  \n" +
-                "FROM vlobitem v\n" +
-                "  INNER JOIN item i ON v.item__id = i.item__id\n" +
-                "  INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
-                "  INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
-                "  INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.filtro})\n" +
-                "WHERE v.obra__id = ${obra.id}\n" +
-                "  AND v.item__id NOT IN (SELECT\n" +
-                "                           t.item__id\n" +
-                "                         FROM itfp t\n" +
-                "                           INNER JOIN fpob f ON t.fpob__id = f.fpob__id AND f.obra__id = ${obra.id});"
+            def sql = "SELECT\n" +
+                    "  v.voit__id                            id,\n" +
+                    "  i.item__id                            iid,\n" +
+                    "  i.itemcdgo                            codigo,\n" +
+                    "  i.itemnmbr                            item,\n" +
+                    "  v.voitcoef                            aporte,\n" +
+                    "  d.dprtdscr                            departamento,\n" +
+                    "  s.sbgrdscr                            subgrupo,\n" +
+                    "  g.grpodscr                            grupo,\n" +
+                    "  g.grpo__id                            grid  \n" +
+                    "FROM vlobitem v\n" +
+                    "  INNER JOIN item i ON v.item__id = i.item__id\n" +
+                    "  INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
+                    "  INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
+                    "  INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.filtro})\n" +
+                    "WHERE v.obra__id = ${obra.id}\n" +
+                    "  AND v.item__id NOT IN (SELECT\n" +
+                    "                           t.item__id\n" +
+                    "                         FROM itfp t\n" +
+                    "                           INNER JOIN fpob f ON t.fpob__id = f.fpob__id AND f.obra__id = ${obra.id});"
 
-        def cn = dbConnectionService.getConnection()
-        def rows = cn.rows(sql.toString())
+            def rows = cn.rows(sql.toString())
 
-        [obra: obra, json: json, tipo: params.tipo, rows: rows]
+            [obra: obra, json: json, tipo: params.tipo, rows: rows]
+        }
     }
 
     def insertarVolumenesItem() {
