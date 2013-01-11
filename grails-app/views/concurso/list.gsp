@@ -72,7 +72,7 @@
                 <td style="text-align: right">${fieldValue(bean: concursoInstance, field: "costoBases")}</td>
                 <td style="text-align: center">${janus.pac.DocumentoProceso.countByConcurso(concursoInstance)}</td>
                 <td>
-                    ${(concursoInstance.estado!="R")?"Registrado":"No registrado"}<br>
+                    ${(concursoInstance.estado=="R")?"Registrado":"No registrado"}<br>
 
 
                 </td>
