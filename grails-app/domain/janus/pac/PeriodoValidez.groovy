@@ -1,0 +1,29 @@
+package janus.pac
+
+class PeriodoValidez {
+
+    String descripcion
+    Date fechaInicio
+    Date fechaFin
+    String cierre
+
+    static mapping = {
+        table 'prin'
+        cache usage: 'read-write', include: 'non-lazy'
+        id column: 'prin__id'
+        id generator: 'identity'
+        version false
+        columns {
+            id column: 'prin__id'
+            descripcion column: 'prindscr'
+            fechaFin column: 'prinfcin'
+            fechaFin column: 'prinfcfn'
+            cierre column: 'princrre'
+        }
+    }
+    static constraints = {
+
+        descripcion(nullable: true,blank: true,size:1..32)
+        descripcion(nullable: true,blank: true,size:1..1)
+    }
+}
