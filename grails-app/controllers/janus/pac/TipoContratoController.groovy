@@ -2,7 +2,7 @@ package janus.pac
 
 import org.springframework.dao.DataIntegrityViolationException
 
-class TipoContratoController extends janus.pac.seguridad.Shield {
+class TipoContratoController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
