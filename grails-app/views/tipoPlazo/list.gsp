@@ -1,11 +1,11 @@
 
-<%@ page import="janus.pac.UnidadIncop" %>
+<%@ page import="janus.pac.TipoPlazo" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Unidad Incops
+            Lista de Tipo Plazos
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,17 +27,17 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Unidad Incop
+                    Crear  Tipo Plazo
                 </a>
             </div>
-            <div class="span3" id="busqueda-UnidadIncop"></div>
+            <div class="span3" id="busqueda-TipoPlazo"></div>
         </div>
 
-        <g:form action="delete" name="frmDelete-UnidadIncop">
+        <g:form action="delete" name="frmDelete-TipoPlazo">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-UnidadIncop" role="main" style="margin-top: 10px;">
+        <div id="list-TipoPlazo" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
@@ -51,22 +51,22 @@
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                <g:each in="${unidadIncopInstanceList}" status="i" var="unidadIncopInstance">
+                <g:each in="${tipoPlazoInstanceList}" status="i" var="tipoPlazoInstance">
                     <tr>
                     
-                        <td>${fieldValue(bean: unidadIncopInstance, field: "codigo")}</td>
+                        <td>${fieldValue(bean: tipoPlazoInstance, field: "codigo")}</td>
                     
-                        <td>${fieldValue(bean: unidadIncopInstance, field: "descripcion")}</td>
+                        <td>${fieldValue(bean: tipoPlazoInstance, field: "descripcion")}</td>
                     
                         <td>
-                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${unidadIncopInstance.id}">
+                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoPlazoInstance.id}">
                                 <i class="icon-zoom-in icon-large"></i>
                             </a>
-                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${unidadIncopInstance.id}">
+                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${tipoPlazoInstance.id}">
                                 <i class="icon-pencil icon-large"></i>
                             </a>
 
-                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${unidadIncopInstance.id}">
+                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${tipoPlazoInstance.id}">
                                 <i class="icon-trash icon-large"></i>
                             </a>
                         </td>
@@ -77,7 +77,7 @@
 
         </div>
 
-        <div class="modal hide fade" id="modal-UnidadIncop">
+        <div class="modal hide fade" id="modal-TipoPlazo">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>
@@ -98,10 +98,10 @@
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
             function submitForm(btn) {
-                if ($("#frmSave-UnidadIncop").valid()) {
+                if ($("#frmSave-TipoPlazo").valid()) {
                     btn.replaceWith(spinner);
                 }
-                $("#frmSave-UnidadIncop").submit();
+                $("#frmSave-TipoPlazo").submit();
             }
 
             $(function () {
@@ -109,7 +109,7 @@
 
                 $(".paginate").paginate({
                     maxRows        : 10,
-                    searchPosition : $("#busqueda-UnidadIncop"),
+                    searchPosition : $("#busqueda-TipoPlazo"),
                     float          : "right"
                 });
 
@@ -127,10 +127,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Unidad Incop");
+                            $("#modalTitle").html("Crear Tipo Plazo");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-UnidadIncop").modal("show");
+                            $("#modal-TipoPlazo").modal("show");
                         }
                     });
                     return false;
@@ -154,10 +154,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Unidad Incop");
+                            $("#modalTitle").html("Editar Tipo Plazo");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-UnidadIncop").modal("show");
+                            $("#modal-TipoPlazo").modal("show");
                         }
                     });
                     return false;
@@ -174,10 +174,10 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Unidad Incop");
+                            $("#modalTitle").html("Ver Tipo Plazo");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-UnidadIncop").modal("show");
+                            $("#modal-TipoPlazo").modal("show");
                         }
                     });
                     return false;
@@ -191,15 +191,15 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-UnidadIncop").submit();
+                        $("#frmDelete-TipoPlazo").submit();
                         return false;
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Unidad Incop");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Unidad Incop?</p>");
+                    $("#modalTitle").html("Eliminar Tipo Plazo");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Tipo Plazo?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-UnidadIncop").modal("show");
+                    $("#modal-TipoPlazo").modal("show");
                     return false;
                 });
 

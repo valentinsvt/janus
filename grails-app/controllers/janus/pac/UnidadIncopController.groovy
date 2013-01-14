@@ -16,12 +16,12 @@ class UnidadIncopController extends janus.seguridad.Shield {
 
     def form_ajax() {
         def unidadIncopInstance = new UnidadIncop(params)
-        if (params.id) {
+        if(params.id) {
             unidadIncopInstance = UnidadIncop.get(params.id)
-            if (!unidadIncopInstance) {
+            if(!unidadIncopInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Unidad Incop con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Unidad Incop con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,9 +30,9 @@ class UnidadIncopController extends janus.seguridad.Shield {
 
     def save() {
         def unidadIncopInstance
-        if (params.id) {
+        if(params.id) {
             unidadIncopInstance = UnidadIncop.get(params.id)
-            if (!unidadIncopInstance) {
+            if(!unidadIncopInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Unidad Incop con id " + params.id
                 redirect(action: 'list')
@@ -50,7 +50,7 @@ class UnidadIncopController extends janus.seguridad.Shield {
             str += "<ul>"
             unidadIncopInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
+                err.arguments.eachWithIndex {  arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -62,7 +62,7 @@ class UnidadIncopController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Unidad Incop " + unidadIncopInstance.id
         } else {
@@ -76,7 +76,7 @@ class UnidadIncopController extends janus.seguridad.Shield {
         def unidadIncopInstance = UnidadIncop.get(params.id)
         if (!unidadIncopInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Unidad Incop con id " + params.id
+            flash.message =  "No se encontró Unidad Incop con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +87,7 @@ class UnidadIncopController extends janus.seguridad.Shield {
         def unidadIncopInstance = UnidadIncop.get(params.id)
         if (!unidadIncopInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Unidad Incop con id " + params.id
+            flash.message =  "No se encontró Unidad Incop con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +95,12 @@ class UnidadIncopController extends janus.seguridad.Shield {
         try {
             unidadIncopInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Unidad Incop " + unidadIncopInstance.id
+            flash.message =  "Se ha eliminado correctamente Unidad Incop " + unidadIncopInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Unidad Incop " + (unidadIncopInstance.id ? unidadIncopInstance.id : "")
+            flash.message =  "No se pudo eliminar Unidad Incop " + (unidadIncopInstance.id ? unidadIncopInstance.id : "")
             redirect(action: "list")
         }
     } //delete
