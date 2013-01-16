@@ -20,6 +20,7 @@ class Contrato implements Serializable {
     Date fechaFin
     Double monto
     Double financiamiento
+    Double porcentajeAnticipo
     Double anticipo
     Double multas
     String estado
@@ -53,6 +54,7 @@ class Contrato implements Serializable {
             fechaFin column: 'cntrfcfn'
             monto column: 'cntrmnto'
             financiamiento column: 'cntrfina'
+            porcentajeAnticipo column: 'cntrpcan'
             anticipo column: 'cntrpcan'
             multas column: 'cntrmlta'
             estado column: 'cntretdo'
@@ -80,6 +82,7 @@ class Contrato implements Serializable {
         fechaFin(blank: false, nullable: false)
         monto(blank: false, nullable: false)
         financiamiento(blank: false, nullable: false)
+        porcentajeAnticipo(blank: false, nullable: false)
         anticipo(blank: false, nullable: false)
         multas(blank: false, nullable: false)
         estado(blank: false, nullable: false)
