@@ -6,6 +6,7 @@ class ObraController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     def buscadorService
+    def obraService
 
 
     def index() {
@@ -18,68 +19,6 @@ class ObraController extends janus.seguridad.Shield {
     } //list
 
 
-//    def cantonPorProvincia() {
-//
-//
-//        if (params.id == '-1') {
-//
-//
-//            def sel = g.select(id: "selCanton", name: "canton.id", from: "", "class": "span3", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-//            render sel
-//
-//
-//        } else {
-//
-//
-//            def provincia = Provincia.get(params.id)
-//
-//
-//
-//            def cantones = Canton.findAllByProvincia(provincia)
-//
-//
-//
-//            def sel = g.select(id: "selCanton", name: "canton.id", from: cantones, "class": "span3", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-//            def js = "<script type='text/javascript'>"
-//            js += '$("#selCanton").change(function () {'
-//            js += 'var canton = $(this).val();'
-//            js += '$.ajax({'
-//            js += 'type    : "POST",'
-//            js += 'url     : "' + createLink(action: 'parroquiaPorCanton') + '",'
-//            js += 'data    : {'
-//            js += 'id : canton'
-//            js += '},'
-//            js += 'success : function (msg) {'
-//            js += '$("#selParroquia").replaceWith(msg);'
-//            js += '}'
-//            js += '});'
-//            js += '});'
-//            js += "</script>"
-//            render sel + js
-//
-//        }
-//    }
-//
-//
-//    def parroquiaPorCanton() {
-//
-//
-//        if (params.id == '-1') {
-//
-//            def sel = g.select(id: "selParroquia", name: "parroquia.id", from: "", "class": "span3", style: "width: 215px", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-//            render sel
-//
-//
-//        } else {
-//
-//            def canton = Canton.get(params.id)
-//            def parroquias = Parroquia.findAllByCanton(canton)
-//            def sel = g.select(id: "selParroquia", name: "parroquia.id", from: parroquias, "class": "span3", style: "width: 215px", optionKey: "id", optionValue: "nombre", noSelection: ["-1": "Seleccione..."])
-//            render sel
-//
-//        }
-//
-//    }
 
 
     def registroObra() {
@@ -336,9 +275,6 @@ class ObraController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-
-
-
         if (params.fechaOficioSalida) {
             params.fechaOficioSalida = new Date().parse("dd-MM-yyyy", params.fechaOficioSalida)
         }
@@ -393,6 +329,9 @@ class ObraController extends janus.seguridad.Shield {
             flash.message = str
             redirect(action: 'list')
             return
+        }else{
+            if (obraInstance.estado=="R")
+             obraService.registrarObra(obraInstance)
         }
 
         if (params.id) {

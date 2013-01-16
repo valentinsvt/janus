@@ -194,9 +194,28 @@ class PreciosService {
         return result
     }
 
+    def presioUnitarioVolumenObra(select,obra,item){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select ${select} from vlob_pcun(${obra},${item}) "
+        def result = []
+        cn.eachRow(sql.toString()){r->
+            result.add(r.toRowResult())
+        }
+        return result
+    }
+
     def ac_rbro(rubro,lugar,fecha){
         def cn = dbConnectionService.getConnection()
         def sql = "select * from ac_rbro_hr1("+rubro+","+lugar+",'"+fecha+"') "
+        def result = []
+        cn.eachRow(sql.toString()){r->
+            result.add(r.toRowResult())
+        }
+        return result
+    }
+    def ac_rbroObra(obra){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from ac_rbro_hr("+obra+") "
         def result = []
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
