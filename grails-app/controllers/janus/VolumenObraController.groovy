@@ -75,12 +75,13 @@ class VolumenObraController extends janus.seguridad.Shield{
 //        /*Todo ver como mismo es esta suma*/
         def indirecto = obra.totales/100
 //        println "indirecto "+indirecto
+        preciosService.ac_rbroObra(obra.id)
 
         detalle.each{
-//            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-            preciosService.ac_rbroObra(obra.id)
+
             def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-            println "r->" + (res["precio"][0]+res["precio"][0]*indirecto)+"   <<<>>> "+res
+//            println "res "+res+" "+it.item.id+"  "+obra.id
+//            println "r->" + (res["precio"][0]+res["precio"][0]*indirecto)+"   <<<>>> "+res
             precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
         }
 //
