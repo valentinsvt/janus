@@ -20,7 +20,7 @@
 
 <body>
 
-<div id="tabs" style="width: 800px; height: 800px">
+<div id="tabs" style="width: 800px; height: 900px">
 
 <ul>
 
@@ -31,7 +31,7 @@
 
 </ul>
 
-<div id="tab-presupuesto" class="tab">
+<div id="tab-presupuesto" class="tab" >
 
     <div class="tipoReporte">
 

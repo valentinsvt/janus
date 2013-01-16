@@ -364,7 +364,7 @@
                                     Composición
                                 </g:link>
                             </li>
-                            <li><a href="#">Trámites</a></li>
+                            %{--<li><a href="#">Trámites</a></li>--}%
 
                         </ul>
 
