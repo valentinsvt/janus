@@ -55,7 +55,7 @@ class Contrato implements Serializable {
             monto column: 'cntrmnto'
             financiamiento column: 'cntrfina'
             porcentajeAnticipo column: 'cntrpcan'
-            anticipo column: 'cntrpcan'
+            anticipo column: 'cntrantc'
             multas column: 'cntrmlta'
             estado column: 'cntretdo'
             responsableTecnico column: 'cntrrptc'

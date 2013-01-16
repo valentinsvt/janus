@@ -74,7 +74,7 @@
                 <b>Memo:</b> ${obra?.memoCantidadObra}
             </div>
             <div class="span3">
-                <b>Ubicación:</b> ${obra?.parroquia}
+                <b>Ubicación:</b> ${obra?.parroquia?.nombre}
             </div>
             <div class="span2" >
                 <b style="">Dist. peso:</b> ${obra?.distanciaPeso}
