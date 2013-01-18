@@ -246,7 +246,7 @@ buttonImageOnly: true
             </div>
 
             <div class="controls">
-                <g:textField name="transporte" maxlength="1" style="width: 20px" class="" value="${itemInstance?.transporte}"/>
+                <g:textField name="transporte" maxlength="2" style="width: 20px" class="" value="${itemInstance?.transporte}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

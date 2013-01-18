@@ -43,7 +43,7 @@ class ObraFPController {
 
         def transporte = calculaTransporte(obra__id)
         if(!transporte)
-            transporte=0
+            transporte=0.0
         def equipos = calculaEquipos(obra__id)
         if (conTransporte)
             transporte += equipos
@@ -354,6 +354,7 @@ class ObraFPController {
             } else {
                 tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 2"
             }
+            //println "descomposicion: tx_cr: " + tx_cr
             cn1.eachRow(tx_cr.toString()) {cr ->
                 poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
             }
@@ -470,19 +471,22 @@ class ObraFPController {
             if (obra.estado == 'N') {
                 tx_sql = "select rbrocdgo, trnp from rbro_pcun(${id})"
             } else {
-                tx_sql = "select rbrocdgo, sum(rbrocntd * itemdstn * itemtrfa * itempeso) trnp from obrb, obit "
-                tx_sql += "where obrb.obra__id = ${id} and obit.obra__id = obrb.obra__id and "
-                tx_sql += "obit.item__id = obrb.item__id group by rbrocdgo"
+/*
+                tx_sql  = "select itemcdgo rbrocdgo, coalesce(sum(rbrocntd * itemdstn * itemtrfa * obit.itempeso),0) trnp "
+                tx_sql += "from obrb, obit, item "
+                tx_sql += "where item.item__id = obrb.rbrocdgo and obrb.obra__id = ${id} and obit.obra__id = obrb.obra__id and "
+                tx_sql += "obit.item__id = obrb.item__id group by item.item__id, itemcdgo"
+*/
+                tx_sql = "select distinct itemcdgo rbrocdgo, rbrotrnp trnp from obrb, item "
+                tx_sql += "where obra__id = ${id} and item.item__id = obrb.rbrocdgo"
             }
         } else {
             if (obra.estado == 'N') {
                 tx_sql = "select rbrocdgo, trnp from rbro_pcun(${id}) where sbpr__id = ${sbpr}"
-            } else {
-                tx_sql = "select rbrocdgo, sum(rbrocntd * itemdstn * itemtrfa * itempeso) trnp "
-                tx_sql += "from obrb, obit, vlob "
-                tx_sql += "where obrb.obra__id = ${id} and obit.obra__id = obrb.obra__id and "
-                tx_sql += "obit.item__id = obrb.item__id and vlob.item__id = obrb.item__id and "
-                tx_sql += "sbpr__id = ${sbpr} group by rbrocdgo"
+            } else {    /* TODO --- seguir con proceso de genera matrizFP */
+                tx_sql = "select distinct itemcdgo rbrocdgo, rbrotrnp trnp from obrb, item, vlob "
+                tx_sql += "where obrb.obra__id = ${id} and item.item__id = obrb.rbrocdgo and "
+                tx_sql += "vlob.item__id = obrb.rbrocdgo and sbpr__id = ${sbpr}"
             }
         }
 
