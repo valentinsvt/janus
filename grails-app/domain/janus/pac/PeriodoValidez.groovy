@@ -16,7 +16,7 @@ class PeriodoValidez {
         columns {
             id column: 'prin__id'
             descripcion column: 'prindscr'
-            fechaFin column: 'prinfcin'
+            fechaInicio column: 'prinfcin'
             fechaFin column: 'prinfcfn'
             cierre column: 'princrre'
         }
@@ -24,6 +24,6 @@ class PeriodoValidez {
     static constraints = {
 
         descripcion(nullable: true,blank: true,size:1..32)
-        descripcion(nullable: true,blank: true,size:1..1)
+        cierre(nullable: true,blank: true,size:1..1)
     }
 }

@@ -19,12 +19,51 @@ class ContratoController extends janus.seguridad.Shield {
 
     def registroContrato () {
 
+     def contrato
+
+        def obra
+
+        if (params.contrato) {
+
+//            def camposObra = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"]]
+
+           contrato = Contrato.get(params.contrato)
+//           obra = Obra.get(params.obra)
+
+
+
+
+            def campos = ["codigo": ["Código", "string"]]
+
+            [campos:campos, contrato: contrato]
+
+
+        } else {
+
+
+
+            def campos = ["codigo": ["Código", "string"]]
+
+            [campos:campos]
+
+        }
+
+
+
+
+
         /**
          * TODO: buscar por nombre de la obra tambien
          */
-        def campos = ["codigo": ["Código", "string"]]
 
-        [campos:campos]
+    }
+
+
+    def polinomicaContrato () {
+
+
+
+
     }
 
 
@@ -58,20 +97,22 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
         def listaTitulos = ["N. Contrato", "Nombre Obra", "Código Obra", "Monto", "% Anticipo", "Anticipo", "Contratista", "Fecha contrato", "Plazo"]
-        def listaCampos = ["codigo", "obra", "codigoObra", "monto", "porcentajeAnticipo", "anticipo", "proveedorObra", "fechaInicio", "plazoObra"]
-        def funciones = [null, null, ["closure": [codObra, "&"]], null, null, null, ["closure": [provObra, "&"]], ["format": ["dd/MM/yyyy hh:mm"]], ["closure": [plazObra, "&"]]]
-        def url = g.createLink(action: "buscaContrato", controller: "rubro")
-        def funcionJs = ""
-//        def funcionJs = "function(){"
-//        funcionJs += '$("#modal-rubro").modal("hide");'
-//        funcionJs += '$("#item_id").val($(this).attr("regId"));$("#item_codigo").val($(this).attr("prop_codigo"));$("#item_nombre").val($(this).attr("prop_nombre"))'
-//        funcionJs += '}'
+        def listaCampos = ["codigo", "obra", "codigoObra", "monto", "porcentajeAnticipo", "anticipo", "proveedorObra", "fechaInicio", "plazo"]
+        def funciones = [null, null, ["closure": [codObra, "&"]], null, null, null, ["closure": [provObra, "&"]], ["format": ["dd/MM/yyyy hh:mm"]], null]
+        def url = g.createLink(action:"buscarContrato", controller: "contrato")
+        def funcionJs = "function(){"
+        funcionJs += '$("#modal-busqueda").modal("hide");'
+        funcionJs += 'location.href="' + g.createLink(action: 'registroContrato', controller: 'contrato') + '?contrato="+$(this).attr("regId");'
+        funcionJs += '}'
         def numRegistros = 20
         def extras = ""
 //        def extras = " and tipoItem = 2"
         if (!params.reporte) {
             def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+
+
             lista.pop()
+
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
             println "entro reporte"
@@ -81,6 +122,42 @@ class ContratoController extends janus.seguridad.Shield {
             def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Item", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Rubros", anchos: anchos, extras: extras, landscape: true])
         }
+    }
+
+    def buscarObra () {
+
+
+//        def parr = {p ->
+//            return p.parroquia?.nombre
+//        }
+//        def comu = {c ->
+//            return c.comunidad?.nombre
+//        }
+//
+//        def listaTitulos = ["Código", "Nombre","Descripción","Fecha Reg.","M. ingreso","M. salida","Sitio","Plazo","Parroquia","Comunidad","Inspector","Revisor","Responsable","Estado Obra"]
+//        def listaCampos = ["codigo", "nombre","descripcion","fechaCreacionObra","oficioIngreso","oficioSalida","sitio","plazo","parroquia","comunidad","inspector","revisor","responsable","estadoObra"]
+//        def funciones = [null, null,null,["format": ["dd/MM/yyyy hh:mm"]],null, null,null,null, ["closure": [parr, "&"]],["closure": [comu, "&"]],null,null,null,null]
+//        def url = g.createLink(action: "buscarObra", controller: "obra")
+//        def funcionJs = "function(){"
+//        funcionJs += '$("#modal-busquedaOferta").modal("hide");'
+//        funcionJs += 'location.href="' + g.createLink(action: 'registroContrato', controller: 'contrato') + '?obra="+$(this).attr("regId");'
+//        funcionJs += '}'
+//        def numRegistros = 20
+//        def extras = ""
+//
+//        if (!params.reporte) {
+//            def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+//            lista.pop()
+//            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs,width:1800,paginas:12])
+//        } else {
+////            println "entro reporte"
+//            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+//            session.dominio = Obra
+//            session.funciones = funciones
+//            def anchos = [7,10,7,7,7,7,7,4,7,7,7,7,7,7 ] /*el ancho de las columnas en porcentajes... solo enteros*/
+//            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
+//        }
+
     }
 
 

@@ -23,6 +23,7 @@ class Contrato implements Serializable {
     Double porcentajeAnticipo
     Double anticipo
     Double multas
+    Double plazo
     String estado
     String responsableTecnico
     Date fechaFirma
@@ -64,6 +65,7 @@ class Contrato implements Serializable {
             prorroga column: 'cntrprrg'
             observaciones column: 'cntrobsr'
             memo column: 'cntrmemo'
+            plazo column: 'cntrplzo'
 
         }
     }
@@ -92,5 +94,6 @@ class Contrato implements Serializable {
         prorroga(blank: false, nullable: false)
         observaciones(blank: false, nullable: false)
         memo(blank: false, nullable: false)
+        plazo(blank: false, nullable: false)
     }
 }
