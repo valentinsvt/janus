@@ -29,43 +29,42 @@
 </head>
 <body>
 
-<div id="tabs" style="width: 700px; height: 900px; text-align: center">
+<div id="tabs" style="width: 700px; height: 800px; text-align: center">
 
   <ul>
-      <li><a href="#tab-formulaPolinomica">Formula Polinomica</a></li>
+      <li><a href="#tab-formulaPolinomica">Formula Polinómica</a></li>
       <li><a href="#tab-cuadrillaTipo">Cuadrilla Tipo</a></li>
+
+
 
   </ul>
 
+    <div id="tab-formulaPolinomica" class="tab">
+
+        <div class="formula">
+
+            <fieldset class="borde">
+                <legend>Formula Polinómica</legend>
+
+            </fieldset>
 
 
-</div>
+        </div>
 
 
-<div id="tab-formulaPolinomica" class="tab">
+    </div>
+    <div id="tab-cuadrillaTipo" class="tab">
 
-    <div class="formula">
+        <fieldset class="borde">
 
-    <fieldset class="borde">
-               <legend>Formula Polinómica</legend>
-
+            <legend>Cuadrilla Tipo</legend>
 
 
         </fieldset>
 
 
+
     </div>
-
-
-</div>
-<div id="tab-cuadrillaTipo" class="tab">
-
-    <fieldset class="borde">
-
-        <legend>Cuadrilla Tipo</legend>
-
-
-    </fieldset>
 
 
 
@@ -79,7 +78,7 @@
         heightStyle:"fill"
 
 
-    })
+    });
 
 
 

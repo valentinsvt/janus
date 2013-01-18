@@ -59,7 +59,7 @@
         <g:checkBox name="forzar" checked="false"/> Forzar nueva Página para las Notas de Pie de Página
 
         <div class="span3">
-            Tipo de Obra <g:textField name="tipoObra" value="${obra?.claseObra?.tipo}" style="width: 15px;height: 15px" disabled="true"/>
+            Tipo de Obra <g:textField name="tipoObra" value="${obra?.tipo}" style="width: 15px;height: 15px" disabled="true"/>
         </div>
 
     </div>
@@ -137,13 +137,13 @@
 
             <div class="span6">
 
-                <g:if test="${obra?.claseObra?.tipo == 'C'}">
+                <g:if test="${obra?.tipo == 'C'}">
 
                     <elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmas}"
                                 optionKey="id" optionValue="${{it.nombre + ' ' + it.apellido  }}" optionClass="cargo" style="width: 350px"/>
 
                 </g:if>
-                <g:if test="${obra?.claseObra?.tipo == 'V'}">
+                <g:if test="${obra?.tipo == 'V'}">
 
 
                     <elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmasViales}" optionKey="id" optionClass="cargo"
@@ -254,13 +254,13 @@
                 <div class="span1"> DE: </div>
 
 
-                <g:if test="${obra?.claseObra?.tipo == 'C'}">
+                <g:if test="${obra?.tipo == 'C'}">
 
                     <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${"Dpto. Infraestructura Comunitaria"}" disabled="true"/></div>
 
                 </g:if>
 
-                <g:if test="${obra?.claseObra?.tipo == 'V'}">
+                <g:if test="${obra?.tipo == 'V'}">
 
                     <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${"Dpto de Estudios Viales"}" disabled="true"/></div>
 
@@ -351,15 +351,18 @@
             <legend>Set de Firmas</legend>
 
 
+
+
             <div class="span6">
 
-                <g:if test="${obra?.claseObra?.tipo == 'C'}">
+
+                <g:if test="${obra?.tipo == 'C'}">
 
                     <elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"
                                 optionKey="id" optionValue="${{it.nombre + ' ' + it.apellido  }}" optionClass="cargo" style="width: 350px"/>
 
                 </g:if>
-                <g:if test="${obra?.claseObra?.tipo == 'V'}">
+                <g:if test="${obra?.tipo == 'V'}">
 
 
                     <elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmasViales}" optionKey="id" optionClass="cargo"
@@ -489,13 +492,13 @@
 
             <div class="span6">
 
-                <g:if test="${obra?.claseObra?.tipo == 'C'}">
+                <g:if test="${obra?.tipo == 'C'}">
 
                     <elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmas}"
                                 optionKey="id" optionValue="${{it.nombre + ' ' + it.apellido  }}" optionClass="cargo" style="width: 350px"/>
 
                 </g:if>
-                <g:if test="${obra?.claseObra?.tipo == 'V'}">
+                <g:if test="${obra?.tipo == 'V'}">
 
 
                     <elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmasViales}" optionKey="id" optionClass="cargo"

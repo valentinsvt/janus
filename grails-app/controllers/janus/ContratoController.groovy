@@ -61,10 +61,36 @@ class ContratoController extends janus.seguridad.Shield {
 
     def polinomicaContrato () {
 
+        println(params)
+
+
+    def obra = Obra.get(params.id)
+
+    def formula = FormulaPolinomica.findAllByObra(obra)
+
+
+        def p01 = FormulaPolinomica.findByObraAndNumero(obra, 'p01')
+        def p02 = FormulaPolinomica.findByObraAndNumero(obra, 'p02')
+        def p03 = FormulaPolinomica.findByObraAndNumero(obra, 'p03')
+        def p04 = FormulaPolinomica.findByObraAndNumero(obra, 'p04')
+        def p05 = FormulaPolinomica.findByObraAndNumero(obra, 'p05')
+        def p06 = FormulaPolinomica.findByObraAndNumero(obra, 'p06')
+        def p07 = FormulaPolinomica.findByObraAndNumero(obra, 'p07')
+        def p08 = FormulaPolinomica.findByObraAndNumero(obra, 'p08')
+        def p09 = FormulaPolinomica.findByObraAndNumero(obra, 'p09')
+        def p10 = FormulaPolinomica.findByObraAndNumero(obra, 'p10')
+        def px = FormulaPolinomica.findByObraAndNumero(obra, 'px')
+
+
+    [p01: p01, p02: p02, p03: p03, p04: p04, p05: p05, p06: p06,
+            p07: p07, p08: p08, p09: p09, p10: p10, px: px ]
+
 
 
 
     }
+
+
 
 
 

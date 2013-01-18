@@ -40,6 +40,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def buscarObra(){
+
         def extraParr=""
         def extraCom=""
         if(params.campos instanceof java.lang.String){
