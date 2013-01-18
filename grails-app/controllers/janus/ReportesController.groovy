@@ -1097,27 +1097,10 @@ class ReportesController {
         def detalle
 
             detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+        preciosService.ac_rbroObra(obra.id)
 
-        def precios = [:]
-        def fecha = obra.fechaPreciosRubros
-        def dsps = obra.distanciaPeso
-        def dsvl = obra.distanciaVolumen
-        def lugar = obra.lugar
-        def prch = 0
-        def prvl = 0
-        if (obra.chofer){
-            prch = preciosService.getPrecioItems(fecha,lugar,[obra.chofer])
-            prch = prch["${obra.chofer.id}"]
-            prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
-            prvl = prvl["${obra.volquete.id}"]
-        }
-        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
 
-        if (rendimientos["rdps"].toString()=="NaN")
-            rendimientos["rdps"]=0
-        if (rendimientos["rdvl"].toString()=="NaN")
-            rendimientos["rdvl"]=0
+        def precios=[:]
 
         def indirecto = obra.totales/100
 
@@ -1145,10 +1128,11 @@ class ReportesController {
 
 
 
-            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
-            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+//            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+//            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
+            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+//            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
 
 
             addCellTabla(tablaVolObra, new Paragraph(it?.item?.codigo,times8normal), prmsCellCenter)
@@ -1161,26 +1145,34 @@ class ReportesController {
 
 
            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
-                   2, maxFractionDigits: 2, format: "#####,##0"),times8normal), prmsCellRight)
+                   2, maxFractionDigits: 2, format: "#####.##"),times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####,##0"),times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "#####.##"),times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()]*it.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####,##0"),times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "#####.##"),times8normal), prmsCellRight)
 
 
 
 //            println("costo:" + precios[it.id.toString()]*it.cantidad)
 
+
+//            println("cccc"+ it.cantidad)
+
             totales =  precios[it.id.toString()]*it.cantidad
 
+//            println("---->>"+ totales)
+//
 //            println("total:" + (total1+=totales) )
 
+//            totalPresupuesto = (total1+=totales);
             totalPresupuesto = (total1+=totales);
 
+//            println(totalPresupuesto)
 
-            return totalPresupuesto
+
+//            return totalPresupuesto
 
         }
 
@@ -1192,21 +1184,13 @@ class ReportesController {
 
         tablaTotal.setWidths(arregloEnteros([85,0,0,0,0,15]))
 
-//        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
-//        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsHeaderHoja )
-//        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsHeaderHoja )
-//        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsHeaderHoja )
-//        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsHeaderHoja )
-//        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsHeaderHoja )
-
-
 
         addCellTabla(tablaTotal, new Paragraph("Total del presupuesto: ", times8bold), prmsCellHead )
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####,###") , times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####.##") , times8bold), prmsCellRight)
 
 
         Paragraph txtCondiciones = new Paragraph();
@@ -1518,59 +1502,6 @@ class ReportesController {
 
 
         }
-//        if(cuenta == 3){
-//
-//            PdfPTable tablaFirmas = new PdfPTable(3);
-//            tablaFirmas.setWidthPercentage(100);
-//
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//
-//
-//            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
-//
-//            firma.each { f->
-//
-//
-//                firmas=Persona.get(f)
-//
-//                addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + "" + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
-//
-//
-//
-//            }
-//
-//
-//            firma.each { f->
-//
-//
-//                firmas=Persona.get(f)
-//
-//                addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
-//
-//
-//
-//
-//            }
-//
-//            document.add(tablaFirmas);
 //
 //
 //        }
@@ -1863,11 +1794,11 @@ class ReportesController {
         if (tipo == '1') {
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor de la Base :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.#####"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor del Reajuste :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: reajusteBase, format: "####.#####"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: reajusteBase, format: "####.##"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("_________________________________", times8bold), prmsHeaderHoja)
@@ -1875,7 +1806,7 @@ class ReportesController {
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor Total :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "####.#####"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "####.##"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
         }
@@ -1884,7 +1815,7 @@ class ReportesController {
 
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor del P. Referencial :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.#####"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 
@@ -1893,7 +1824,7 @@ class ReportesController {
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor Total :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.#####"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
         }
@@ -2251,15 +2182,15 @@ class ReportesController {
 
         ps.valor.each {  i->
 
+           println("-->>" + i)
+
 
             valorCoef = i
 
             valorCoef+=valorCoef
 
-//            println(i)
-//            println(valorCoef)
 
-            return valorCoef
+//            return valorCoef
 
         }
 
@@ -2546,7 +2477,7 @@ class ReportesController {
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
        addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph(g.formatNumber(number: totalBase, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times10normal), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph(g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##.##"), fonts.times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)

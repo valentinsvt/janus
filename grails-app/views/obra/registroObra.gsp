@@ -188,15 +188,17 @@
                 <div class="span12">
                     <div class="span1">Inspección</div>
 
-                    <div class="span3"><g:select name="inspector.id" class="inspector required" from="${janus.Persona?.list()}" value="${obra?.inspector?.id}" optionValue="nombre" optionKey="id"/></div>
+                    %{--<div class="span3"><g:select name="inspector.id" class="inspector required" from="${janus.Persona?.list()}" value="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}" optionValue="nombre" optionKey="id"/></div>--}%
+                    <div class="span3"><g:select name="inspector.id" class="inspector required" from="${janus.Persona?.list()}" value="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}" optionKey="id"/></div>
 
                     <div class="span1">Revisión</div>
 
-                    <div class="span3"><g:select name="revisor.id" class="revisor required" from="${janus.Persona?.list()}" value="${obra?.revisor?.id}" optionValue="nombre" optionKey="id"/></div>
+                    %{--<div class="span3"><g:select name="revisor.id" class="revisor required" from="${janus.Persona?.list()}" value="${obra?.revisor?.id}" optionValue="nombre" optionKey="id"/></div>--}%
+                    <div class="span3"><g:select name="revisor.id" class="revisor required" from="${janus.Persona?.list()}" value="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}" optionKey="id"/></div>
 
                     <div class="span1">Responsable</div>
 
-                    <div class="span1"><g:select name="responsableObra.id" class="responsableObra required" from="${janus.Persona?.list()}" value="${obra?.responsableObra?.id}" optionValue="nombre" optionKey="id"/></div>
+                    <div class="span1"><g:select name="responsableObra.id" class="responsableObra required" from="${janus.Persona?.list()}" value="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}" optionKey="id"/></div>
                 </div>
 
                 <div class="span12">

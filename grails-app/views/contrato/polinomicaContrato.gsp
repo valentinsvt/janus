@@ -29,7 +29,7 @@
 </head>
 <body>
 
-<div id="tabs" style="width: 700px; height: 800px; text-align: center">
+<div id="tabs" style="width: 700px; height: 700px; text-align: center">
 
   <ul>
       <li><a href="#tab-formulaPolinomica">Formula Polinómica</a></li>
@@ -45,6 +45,45 @@
 
             <fieldset class="borde">
                 <legend>Formula Polinómica</legend>
+
+                   <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPoliContrato">
+
+                           <thead>
+                           <tr>
+                                <th style="width: 20px; text-align: center" > Coeficiente</th>
+                                <th style="width: 70px"> Nombre del Indice (INEC)</th>
+                                <th style="width: 40px"> Valor</th>
+
+                           </tr>
+
+                           </thead>
+
+                           <tbody id="bodyPoliContrato">
+
+                           <g:each in="${ps}" var="i">
+
+                               <tr>
+                                   <td>${i?.numero}</td>
+                                   <td>${i?.indice?.descripcion}</td>
+                                   <td style="text-align: right; width: 40px">${i?.valor}</td>
+
+                               </tr>
+
+                           </g:each>
+
+
+
+
+                           </tbody>
+
+
+                   </table>
+
+
+
+
+
+
 
             </fieldset>
 
@@ -69,6 +108,9 @@
 
 
 </div>
+
+
+
 
 
 <script type="text/javascript">

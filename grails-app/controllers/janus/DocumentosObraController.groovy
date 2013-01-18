@@ -91,15 +91,17 @@ class DocumentosObraController {
 
         detalle.each {
 
-            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
-            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+//            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+//            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+//            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+//            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
+            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
 
 
             totales =  precios[it.id.toString()]*it.cantidad
 
-//            total1+=totales
 
             totalPresupuesto+=totales;
 
