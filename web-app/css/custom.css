@@ -1,3 +1,15 @@
+.btn-group {
+    display        : inline-block;
+    font-size      : 0;
+    position       : relative;
+    vertical-align : middle;
+    white-space    : nowrap;
+}
+
+.input-append .add-on:last-child, .input-append .btn:last-child, .input-append .btn-group:last-child > .dropdown-toggle {
+    border-radius : 0 4px 4px 0;
+}
+
 /*Menu*/
 .navbar .brand {
     float       : left;
@@ -142,14 +154,15 @@ fieldset.borde legend {
 }
 
 .grande .modal-body {
-    height: 560px;
-    max-height: 580px;
+    height     : 560px;
+    max-height : 580px;
 }
 
 .modal.grande2 {
     width       : 1016px;
     margin-left : -508px; /* - width/2 */
 }
+
 .grande2 .modal-body {
     height     : 545px;
     max-height : 545px;

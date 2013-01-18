@@ -4,54 +4,54 @@ import janus.Contrato
 
 class Garantia {
 
-    int padre
+    Garantia padre
     Contrato contrato
     Aseguradora aseguradora
     Moneda moneda
     TipoGarantia tipoGarantia
-    TipoDocumentoGarantia	tipoDocumentoGarantia
-    EstadoGarantia	estado
-    String	codigo
-    int	numeroRenovaciones
-    String	estadoGarantia
-    int monto
-    Date	fechaInicio
-    Date	fechaFinalizacion
-    int	diasGarantizados
-    String	cancelada
-    String	pedido
+    TipoDocumentoGarantia tipoDocumentoGarantia
+    EstadoGarantia estado
+    String codigo
+    int numeroRenovaciones
+    String estadoGarantia //registrado o no
+    double monto
+    Date fechaInicio
+    Date fechaFinalizacion
+    int diasGarantizados
+    String cancelada
+    String pedido
 
 
-   static  mapping = {
+    static mapping = {
 
 
-       table 'grnt'
-       cache usage: 'read-write', include: 'non-lazy'
-       id column: 'grnt__id'
-       id generator: 'identity'
-       version false
-       columns {
-           id column: 'grnt__id'
-           tipoGarantia column: 'tpgr__id'
-           tipoDocumentoGarantia column: 'tdgr__id'
-           estado column: 'edgr__id'
-           moneda column: 'mnda__id'
-           aseguradora column: 'asgr__id'
-           contrato column: 'cntr__id'
-           padre column: 'grntpdre'
-           codigo column: 'grntcdgo'
-           numeroRenovaciones column: 'grntnmrv'
-           estadoGarantia column: 'grntetdo'
-           monto column: 'grntmnto'
-           fechaInicio column: 'grntfcin'
-           fechaFinalizacion column: 'grntfcfn'
-           diasGarantizados column: 'grntdias'
-           cancelada column: 'grntcncl'
-           pedido column: 'grntpddo'
+        table 'grnt'
+        cache usage: 'read-write', include: 'non-lazy'
+        id column: 'grnt__id'
+        id generator: 'identity'
+        version false
+        columns {
+            id column: 'grnt__id'
+            tipoGarantia column: 'tpgr__id'
+            tipoDocumentoGarantia column: 'tdgr__id'
+            estado column: 'edgr__id'
+            moneda column: 'mnda__id'
+            aseguradora column: 'asgr__id'
+            contrato column: 'cntr__id'
+            padre column: 'grntpdre'
+            codigo column: 'grntcdgo'
+            numeroRenovaciones column: 'grntnmrv'
+            estadoGarantia column: 'grntetdo'
+            monto column: 'grntmnto'
+            fechaInicio column: 'grntfcin'
+            fechaFinalizacion column: 'grntfcfn'
+            diasGarantizados column: 'grntdias'
+            cancelada column: 'grntcncl'
+            pedido column: 'grntpddo'
 
-       }
+        }
 
-   }
+    }
 
 
 
@@ -73,8 +73,6 @@ class Garantia {
         diasGarantizados(blank: true, nullable: true, attributes: [title: 'código'])
         cancelada(size: 1..1, blank: true, nullable: true, attributes: [title: 'código'])
         pedido(size: 1..1, blank: true, nullable: true, attributes: [title: 'código'])
-
-
 
 
     }

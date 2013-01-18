@@ -11,6 +11,7 @@
 
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.8.2.js')}"></script>
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.9.1.custom.min.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/i18n', file: 'jquery.ui.datepicker-es.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery.countdown', file: 'jquery.countdown.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery.countdown', file: 'jquery.countdown-es.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins', file: 'date.js')}"></script>

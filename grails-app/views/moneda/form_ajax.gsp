@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="1" class="" value="${monedaInstance?.codigo}"/>
+                <g:textField name="codigo" maxlength="4" class="" value="${monedaInstance?.codigo}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="10" class="" value="${monedaInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="31" class="" value="${monedaInstance?.descripcion}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

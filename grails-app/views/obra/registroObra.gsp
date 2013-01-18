@@ -267,7 +267,7 @@
 
                     %{--<div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>--}%
                     <div class="span3"><g:select name="departamento.id" class="departamento" value="${obra?.departamento?.id}" from="${janus.Departamento?.list()}"
-                                                 optionKey="id" optionValue="descripcion" style="width: 350px" /></div>
+                                                 optionKey="id" optionValue="descripcion" style="width: 350px"/></div>
 
                 </div>
 
@@ -495,9 +495,7 @@
 
                 });
 
-
                 $("#eliminarObra").click(function () {
-
 
                     $.ajax({
                         type    : "POST",
@@ -511,9 +509,7 @@
                         }
                     });
 
-
                 });
-
 
                 $("#cambiarEstado").click(function () {
 
@@ -525,13 +521,9 @@
 
                 });
 
-
-
                 $("#btnDocumentos").click(function () {
 
                     if (${obra?.estado == 'R'}) {
-
-
 
                         location.href = "${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}"
 
@@ -595,16 +587,13 @@
                     busqueda();
                 });
 
-
                 $("#btnImprimir").click(function () {
 
                     $("#dlgLoad").dialog("open");
                     location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistro', id: obra?.id)}"
-                   $("#dlgLoad").dialog("close")
+                    $("#dlgLoad").dialog("close")
 
                 });
-
-
 
                 $("#btnVar").click(function () {
                     $.ajax({
@@ -634,6 +623,7 @@
                                     data    : data,
                                     success : function (msg) {
 //                                console.log("Data Saved: " + msg);
+                                        $("#modal-var").modal("hide");
                                     }
                                 });
 
@@ -718,7 +708,6 @@
                         "Aceptar" : function () {
 
                             $("#documentosDialog").dialog("close");
-
 
                         }
                     }

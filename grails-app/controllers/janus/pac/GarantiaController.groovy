@@ -1,10 +1,141 @@
 package janus.pac
 
+import groovy.json.JsonBuilder
+import janus.Contrato
 import org.springframework.dao.DataIntegrityViolationException
 
 class GarantiaController extends janus.seguridad.Shield {
 
+    def buscadorService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def garantiasContrato() {
+        if (!params.id) {
+            params.id = "5"
+        }
+        def contrato = Contrato.get(params.id)
+        def campos = ["nombre": ["Nombre", "string"]]
+
+        def garantias = []
+//        Garantia.findAllByContrato(contrato, [sort: "tipoGarantia"])
+
+        Garantia.withCriteria {
+            eq("contrato", contrato)
+            and {
+                order("tipoGarantia", "asc")
+                estado {
+                    order("id", "asc")
+                }
+                order("fechaInicio", "desc")
+            }
+        }.each { garantia ->
+            garantias.add([
+                    id: garantia.id,
+                    contrato: contrato.id,
+                    tipoGarantiaTxt: garantia.tipoGarantia.descripcion,
+                    tipoGarantia: garantia.tipoGarantiaId,
+                    codigo: garantia.codigo,
+                    aseguradoraTxt: garantia.aseguradora.nombre,
+                    aseguradora: garantia.aseguradoraId,
+                    tipoDocumentoGarantiaTxt: garantia.tipoDocumentoGarantia.descripcion,
+                    tipoDocumentoGarantia: garantia.tipoDocumentoGarantiaId,
+                    monto: garantia.monto,
+                    monedaTxt: garantia.moneda.codigo,
+                    moneda: garantia.monedaId,
+                    fechaInicio: formatDate(date: garantia.fechaInicio, format: "dd-MM-yyyy"),
+                    fechaFinalizacion: formatDate(date: garantia.fechaFinalizacion, format: "dd-MM-yyyy"),
+                    diasGarantizados: garantia.diasGarantizados,
+                    estadoTxt: garantia.estado.descripcion,
+                    estado: garantia.estadoId
+            ])
+        }
+        def json = new JsonBuilder(garantias)
+
+        return [contrato: contrato, campos: campos, garantias: json]
+    }
+
+    def deleteGarantia() {
+        def garantia = Garantia.get(params.id)
+        if (Garantia.countByPadre(garantia) == 0) {
+            garantia.delete()
+            render "OK"
+        } else {
+            render "No puede eliminar una garantía de la cual dependen otras"
+        }
+    }
+
+    def addGarantiaContrato() {
+        println params
+        def garantia, datos = true
+
+        switch (params.tipo.toString().trim().toLowerCase()) {
+            case "add":
+                garantia = new Garantia()
+                break;
+            case "edit":
+                garantia = Garantia.get(params.id)
+                break;
+            case "renew":
+                garantia = new Garantia()
+                def padre = Garantia.get(params.id)
+                garantia.padre = padre
+                padre.estado = EstadoGarantia.get(6) //renovada
+                if (!padre.save(flush: true)) {
+                    println "error save padre" + padre.errors
+                    println renderErrors(bean: padre)
+                }
+                break;
+        }
+        garantia.monto = params.monto.toDouble()
+        garantia.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        garantia.fechaFinalizacion = new Date().parse("dd-MM-yyyy", params.fechaFinalizacion)
+        garantia.diasGarantizados = params.diasGarantizados.toInteger()
+        garantia.contrato = Contrato.get(params.contrato)
+        garantia.aseguradora = Aseguradora.get(params.aseguradora)
+        garantia.moneda = Moneda.get(params.moneda)
+        garantia.tipoGarantia = TipoGarantia.get(params.tipoGarantia)
+        garantia.tipoDocumentoGarantia = TipoDocumentoGarantia.get(params.tipoDocumentoGarantia)
+        garantia.estado = EstadoGarantia.get(1)  //Vigente
+        garantia.codigo = params.codigo.trim()
+        garantia.numeroRenovaciones = 0
+        garantia.estadoGarantia = "N" //registrado o no
+
+        if (!garantia.save(flush: true)) {
+            println "Errores: " + garantia.errors
+            render "NO"
+        } else {
+            render "OK_" + garantia.id
+        }
+    }
+
+    def buscaAseguradora() {
+        def listaTitulos = ["Nombre"]
+        def listaCampos = ["nombre"]
+        def funciones = [null]
+        def url = g.createLink(action: "buscaAseguradora", controller: "rubro")
+//        def funcionJs = ""
+        def funcionJs = "function(){"
+        funcionJs += '$("#modal-busqueda").modal("hide");'
+        funcionJs += '$("#aseguradora").val($(this).attr("regId"));$("#aseguradoraTxt").val($(this).attr("prop_nombre"));'
+        funcionJs += '}'
+        def numRegistros = 20
+        def extras = ""
+//        def extras = " and tipoItem = 2"
+        if (!params.reporte) {
+            def lista = buscadorService.buscar(Aseguradora, "Aseguradora", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            lista.pop()
+            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+        } else {
+            println "entro reporte"
+            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+            session.dominio = Aseguradora
+            session.funciones = funciones
+            def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Aseguradora", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Aseguradoras", anchos: anchos, extras: extras, landscape: true])
+        }
+    }
+
 
     def index() {
         redirect(action: "list", params: params)
