@@ -19,7 +19,8 @@ class ObraFPController {
 
         //def obra = Obra.get(obra__id)
         ejecutaSQL("select * from ac_rbro_hr(${obra__id})")
-        ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
+        /* solo se debe correr sp_obra cuando esta no está registrada */
+        if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
 
         render(verificaMatriz(obra__id)); render("Verificando matriz<br>")
         render(verifica_precios(obra__id)); render("Verifa precios<br>")
