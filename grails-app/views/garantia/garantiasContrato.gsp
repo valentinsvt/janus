@@ -488,10 +488,10 @@
                                         } else if (btn == "btnEdit") {
                                             updateRow(data);
                                         } else if (btn == "btnRenew") {
-                                            $("tr.selected").find(".estadoTxt").text("Renovada").data({
+                                            $("tr.selected").addClass("Renovada").data({
                                                 estadoTxt : "Renovada",
                                                 estado    : 6
-                                            });
+                                            }).find(".estadoTxt").text("Renovada");
 
                                             data.id = parts[1];
                                             addRow(data, "selected");
