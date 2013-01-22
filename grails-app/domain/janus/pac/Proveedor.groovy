@@ -69,4 +69,8 @@ class Proveedor {
         estado(blank: true, nullable: true, maxSize: 1)
         observaciones(blank: true, nullable: true, maxSize: 127)
     }
+
+    String toString(){
+        return "${this.nombre}"
+    }
 }

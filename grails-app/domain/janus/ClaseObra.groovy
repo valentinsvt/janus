@@ -21,4 +21,7 @@ class ClaseObra implements Serializable {
         descripcion(size: 1..63, blank: false, attributes: [title: 'descripcion'])
         tipo(size: 1..1, blank: true,nullable:true, attributes:[title: 'tipo'])
     }
+    String toString(){
+        return "${this.descripcion}"
+    }
 }

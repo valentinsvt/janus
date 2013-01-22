@@ -171,13 +171,13 @@ fieldset.borde legend {
 .modal.grandote {
     width       : 1200px;
     margin-left : -600px; /* - width/2 */
-    height      : 800px;
-    margin-top  : -400px;
+    height      : 600px;
+    margin-top  : -300px;
 }
 
 .grandote .modal-body {
-    height     : 650px;
-    max-height : 650px;
+    height     : 450px;
+    max-height : 450px;
 
 }
 

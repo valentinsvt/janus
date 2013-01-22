@@ -31,4 +31,8 @@ class Parroquia implements Serializable {
         longitud(blank: true, nullable: true, attributes: [title: 'longitud'])
 
     }
+
+    String toString(){
+        return "${this.nombre}"
+    }
 }

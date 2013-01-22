@@ -29,4 +29,8 @@ class Canton implements Serializable {
 
 
     }
+
+    String toString(){
+        return "${this.nombre}"
+    }
 }

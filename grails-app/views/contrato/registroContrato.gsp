@@ -43,10 +43,10 @@
 
 </div>
 
-<fieldset class="borde" style="position: relative; height: 50px; float: left">
-    <div class="span12" style="margin-top: 10px" align="center">
+<fieldset class="" style="position: relative; height: 50px; float: left;border-bottom: 1px solid black;">
+<div class="span12" style="margin-top: 10px" align="center">
 
-<g:if test="${contrato?.codigo != null}">
+    <g:if test="${contrato?.codigo != null}">
 
         <div class="span2 formato">Contrato N°</div>
 
@@ -57,9 +57,9 @@
         <div class="span3"><g:textField name="memoDistribucion" class="memo" value="${contrato?.memo}" disabled="true"/></div>
 
 
-    </div>
+        </div>
 
-</g:if>
+    </g:if>
 
     <g:else>
 
@@ -78,62 +78,60 @@
 </fieldset>
 
 
-<fieldset class="borde" style="position: relative; height: 220px; float: left">
-
-    <div class="span12" style="margin-top: 20px" align="center">
-
-        <p class="css-vertical-text">Contratación</p>
-
-        <div class="linea" style="height: 85%;"></div>
-
-    </div>
-
-<g:if test="${contrato?.codigo != null}">
-
-    <div class="span12" style="margin-top: 5px" align="center">
+<fieldset class="" style="position: relative; padding: 10px;border-bottom: 1px solid black;">
 
 
 
-        <div class="span2 formato">Obra</div>
+    <p class="css-vertical-text">Contratación</p>
 
-        <div class="span3"><g:textField name="obra" id ="obraCodigo" class="obraCodigo" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
-
-        <div class="span1 formato">Nombre</div>
-
-        <div class="span3"><g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}" style="width: 400px" disabled="true"/></div>
-
-    </div>
-
-    <div class="span12" style="margin-top: 5px" align="center">
-
-        <div class="span2 formato">Parroquia</div>
-
-        <div class="span3"><g:textField name="parroquia" class="parroquia" value="${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}" disabled="true"/> </div>
-
-        <div class="span1 formato">Cantón</div>
-
-        <div class="span2"><g:textField name="canton" class="canton" value="${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.nombre}" disabled="true"/> </div>
-
-    </div>
-
-    <div class="span12" style="margin-top: 5px" align="center">
-
-        <div class="span2 formato">Clase Obra</div>
-
-        <div class="span3"><g:textField name="claseObra" class="claseObra" value="${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}" disabled="true"/> </div>
+    <div class="linea" style="height: 85%;"></div>
 
 
-    </div>
 
-    <div class="span12" style="margin-top: 5px" align="center">
+    <g:if test="${contrato?.codigo != null}">
 
-        <div class="span2 formato">Contratista</div>
+        <div class="span12" align="center">
 
-        <div class="span3"><g:textField name="contratista" class="contratista" value="${contrato?.oferta?.proveedor?.nombre}" disabled="true"/> </div>
+            <div class="span2 formato">Obra</div>
 
-    </div>
+            <div class="span3"><g:textField name="obra" id ="obraCodigo" class="obraCodigo" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
 
-</g:if>
+            <div class="span1 formato">Nombre</div>
+
+            <div class="span3"><g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}" style="width: 400px" disabled="true"/></div>
+
+        </div>
+
+        <div class="span12" style="margin-top: 5px" align="center">
+
+            <div class="span2 formato">Parroquia</div>
+
+            <div class="span3"><g:textField name="parroquia" class="parroquia" value="${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}" disabled="true"/> </div>
+
+            <div class="span1 formato">Cantón</div>
+
+            <div class="span2"><g:textField name="canton" class="canton" value="${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.nombre}" disabled="true"/> </div>
+
+        </div>
+
+        <div class="span12" style="margin-top: 5px" align="center">
+
+            <div class="span2 formato">Clase Obra</div>
+
+            <div class="span3"><g:textField name="claseObra" class="claseObra" value="${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}" disabled="true"/> </div>
+
+
+        </div>
+
+        <div class="span12" style="margin-top: 5px" align="center">
+
+            <div class="span2 formato">Contratista</div>
+
+            <div class="span3"><g:textField name="contratista" class="contratista" value="${contrato?.oferta?.proveedor?.nombre}" disabled="true"/> </div>
+
+        </div>
+
+    </g:if>
 
     <g:else>
 
@@ -144,23 +142,41 @@
 
             <div class="span2 formato">Obra</div>
 
-            <div class="span3"><g:textField name="obra" id ="obraCodigo" class="obraCodigo" value="${contrato?.oferta?.concurso?.obra?.codigo}"/></div>
+            <div class="span3">
+                <input type="hidden" id="obraId" value="${contrato?.oferta?.concurso?.obra?.codigo}" name="obra.id" >
+                <g:textField name="obra" id ="obraCodigo" class="obraCodigo txtBusqueda" value="${contrato?.oferta?.concurso?.obra?.codigo}"  />
+            </div>
 
             <div class="span1 formato">Nombre</div>
 
-            <div class="span3"><g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}" style="width: 400px"/></div>
+            <div class="span5">
+                <g:textField name="nombre" class="nombreObra" id="nombreObra" style="width: 400px" disabled="true"/>
+            </div>
 
+        </div>
+        <div class="span12" style="margin-top: 5px" align="center">
+            <div class="span2 formato">Oferta</div>
+
+            <div class="span3" id="div_ofertas">
+                <g:select name="oferta.id" from="" noSelection="['-1':'Seleccione una obra']" id="oferta"></g:select>
+            </div>
+        </div>
+        <div class="span12" style="margin-top: 5px" align="center">
+            <div class="span2 formato">Contratista</div>
+            <div class="span3">
+                <g:textField name="contratista" class="contratista" id="contratista" disabled="true"/>
+            </div>
         </div>
 
         <div class="span12" style="margin-top: 5px" align="center">
 
             <div class="span2 formato">Parroquia</div>
 
-            <div class="span3"><g:textField name="parroquia" class="parroquia" value="${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}"/> </div>
+            <div class="span3"><g:textField name="parroquia" class="parroquia" id="parr"/> </div>
 
             <div class="span1 formato">Cantón</div>
 
-            <div class="span2"><g:textField name="canton" class="canton" value="${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.nombre}"/> </div>
+            <div class="span2"><g:textField name="canton" class="canton" id="canton"/> </div>
 
         </div>
 
@@ -168,16 +184,14 @@
 
             <div class="span2 formato">Clase Obra</div>
 
-            <div class="span3"><g:textField name="claseObra" class="claseObra" value="${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}"/> </div>
+            <div class="span3"><g:textField name="claseObra" class="claseObra" id="clase"/> </div>
 
 
         </div>
 
         <div class="span12" style="margin-top: 5px" align="center">
 
-            <div class="span2 formato">Contratista</div>
 
-            <div class="span3"><g:textField name="contratista" class="contratista" value="${contrato?.oferta?.proveedor?.nombre}"/> </div>
 
         </div>
 
@@ -188,7 +202,7 @@
 
 </fieldset>
 
-<fieldset class="borde" style="position: relative; height: 150px; float: left">
+<fieldset class="" style="position: relative; height: 150px; float: left;border-bottom: 1px solid black;padding: 10px;">
 
 
 
@@ -217,7 +231,7 @@
 
 </fieldset>
 
-<fieldset class="borde" style="position: relative; height: 160px; float: left">
+<fieldset class="" style="position: relative; height: 160px; float: left;padding: 10px;border-bottom: 1px solid black;">
 
     <div class="span12" style="margin-top: 10px">
 
@@ -259,44 +273,37 @@
 
     </div>
 
-
-    %{--<g:if test="${obra?.id}">--}%
-    <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;float: left" align="center">
-
-        <div class="navbar-inner">
-            <div class="botones">
-
-                <ul class="nav">
-                    <li>
-                        <g:link controller="garantia" action="garantiasContrato" id="">
-                        <i class="icon-pencil"></i>Garantías
-                        </g:link>
-                    </li>
-                    %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
-                    %{--</a></li>--}%
-                    <li><a href="#" id="btnCronograma"><i class="icon-th"></i>Cronograma</a></li>
-                    %{--<li>--}%
-                    %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
-                    %{--Fórmula Pol.--}%
-                    %{--</g:link>--}%
-                    %{--</li>--}%
-                    %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
-                    <li><a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}"><i class="icon-calendar"></i> F. Polinómica
-                    </a></li>
-
-
-                </ul>
-
-            </div>
-        </div>
-
-    </div>
-    %{--</g:if>--}%
-
-
-
-
 </fieldset>
+<div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;float: left" align="center">
+
+    <div class="navbar-inner">
+        <div class="botones">
+
+            <ul class="nav">
+                <li>
+                    <g:link controller="garantia" action="garantiasContrato" id="">
+                        <i class="icon-pencil"></i>Garantías
+                    </g:link>
+                </li>
+                %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
+                %{--</a></li>--}%
+                <li><a href="#" id="btnCronograma"><i class="icon-th"></i>Cronograma</a></li>
+                %{--<li>--}%
+                %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
+                %{--Fórmula Pol.--}%
+                %{--</g:link>--}%
+                %{--</li>--}%
+                %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
+                <li><a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}"><i class="icon-calendar"></i> F. Polinómica
+                </a></li>
+
+
+            </ul>
+
+        </div>
+    </div>
+
+</div>
 
 
 <div class="modal hide fade mediumModal" id="modal-var" style="overflow: hidden">
@@ -338,21 +345,6 @@
 </div>
 
 
-<div class="modal grandote hide fade" id="modal-busquedaOferta" style="overflow: hidden">
-    <div class="modal-header btn-info">
-        <button type="button" class="close" data-dismiss="modal">x</button>
-
-        <h3 id="modalTitle_busquedaOferta"></h3>
-
-    </div>
-    <div class="modal-body" id="modalBodyOferta">
-
-        %{--<bsc:buscador name="contratos" value="" accion="buscarObra" controlador="contrato" campos="${camposObra}" label="Obra" tipo="lista"/>--}%
-
-    </div>
-    <div class="modal-footer" id="modalFooter_busquedaOferta">
-
-    </div>
 
 </div>
 
@@ -368,6 +360,68 @@
 </div>
 
 <script type="text/javascript">
+    function enviarObra() {
+        var data = "";
+        $("#buscarDialog").hide();
+        $("#spinner").show();
+        $(".crit").each(function () {
+            data += "&campos=" + $(this).attr("campo");
+            data += "&operadores=" + $(this).attr("operador");
+            data += "&criterios=" + $(this).attr("criterio");
+        });
+        if (data.length < 2) {
+            data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" + $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
+        }
+        data += "&ordenado=" + $("#campoOrdn :selected").val() + "&orden=" + $("#orden :selected").val();
+        $.ajax({type : "POST", url : "${g.createLink(controller: 'contrato',action:'buscarObra')}",
+            data     : data,
+            success  : function (msg) {
+                $("#spinner").hide();
+                $("#buscarDialog").show();
+                $(".contenidoBuscador").html(msg).show("slide");
+            }
+        });
+
+    }
+
+    function  cargarCombo(){
+        if($("#obraId").val()*1>0) {
+            $.ajax({
+                type : "POST", url : "${g.createLink(controller: 'contrato',action:'cargarOfertas')}",
+                data     : "id="+$("#obraId").val(),
+                success  : function (msg) {
+                    $("#div_ofertas").html(msg)
+                }
+            });
+
+        }
+
+    }
+
+    function cargarCanton(){
+        if($("#obraId").val()*1>0) {
+            $.ajax({
+                type : "POST", url : "${g.createLink(controller: 'contrato',action:'cargarCanton')}",
+                data     : "id="+$("#obraId").val(),
+                success  : function (msg) {
+                    $("#canton").val(msg)
+                }
+            });
+
+        }
+    }
+
+    $("#obraCodigo").dblclick(function () {
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+        $("#modalTitle_busqueda").html("Lista de obras");
+        $("#modalFooter_busqueda").html("").append(btnOk);
+        $("#modal-busqueda").modal("show");
+        $("#contenidoBuscador").html("")
+        $("#buscarDialog").unbind("click")
+        $("#buscarDialog").bind("click", enviarObra)
+
+
+    });
 
     $("#btn-lista").click(function () {
 
@@ -378,27 +432,15 @@
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
         $("#modalTitle_busqueda").html("Lista de Contratos");
         $("#modalFooter_busqueda").html("").append(btnOk);
+        $("#buscarDialog").unbind("click")
+        $("#buscarDialog").bind("click", enviar)
+        $("#contenidoBuscador").html("")
         $("#modal-busqueda").modal("show");
 
     });
 
     $("#btn-nuevo").click(function () {
-
-        $("input[type=text]").val("");
-            $("textarea").val("");
-//            $("select").val("-1");
-
-        $("input[type=text]").attr("disabled", false);
-        $("textarea").attr("disabled", false);
-        $("select").attr("disabled", false);
-
-
-        %{--location.href = "${g.createLink(action: 'registroContrato')}";--}%
-
-        $("#btn-aceptar").attr("disabled", false)
-
-
-
+        location.href="${createLink(action: 'registroContrato')}"
     });
 
 

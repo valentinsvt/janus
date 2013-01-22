@@ -34,6 +34,10 @@
                             ${prop}
                         </td>
                     </g:each>
+                    <input type="hidden" class="props" ${propiedades}>
+                    <script type="text/javascript">
+                        $("#reg_${i}")
+                    </script>
 
                 </tr>
             </g:each>
