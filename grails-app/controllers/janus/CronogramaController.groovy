@@ -60,6 +60,22 @@ class CronogramaController extends janus.seguridad.Shield {
         render ok + "_" + saved
     }
 
+    def deleteRubro_ajax() {
+
+        println params
+        def ok = 0, no = 0
+        def vol = VolumenesObra.get(params.id)
+        Cronograma.findAllByVolumenObra(vol).each { cr ->
+            try {
+                cr.delete(flush: true)
+                ok++
+            } catch (DataIntegrityViolationException e) {
+                no++
+            }
+        }
+        render "ok:" + ok + "_no:" + no
+    }
+
     def deleteCronograma_ajax() {
         def ok = 0, no = 0
         def obra = Obra.get(params.obra)
@@ -114,12 +130,12 @@ class CronogramaController extends janus.seguridad.Shield {
             rendimientos["rdps"] = 0
         if (rendimientos["rdvl"].toString() == "NaN")
             rendimientos["rdvl"] = 0
-        def indirecto = obra.totales/100
+        def indirecto = obra.totales / 100
 //        println "indirecto "+indirecto
 
         detalle.each {
             def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
             def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
             precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
         }
@@ -314,12 +330,12 @@ class CronogramaController extends janus.seguridad.Shield {
             rendimientos["rdps"] = 0
         if (rendimientos["rdvl"].toString() == "NaN")
             rendimientos["rdvl"] = 0
-        def indirecto = obra.totales/100
+        def indirecto = obra.totales / 100
 //        println "indirecto "+indirecto
 
         detalle.each {
             def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
             def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
             precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
         }
