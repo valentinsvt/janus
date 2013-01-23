@@ -311,33 +311,38 @@ class CronogramaController extends janus.seguridad.Shield {
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
         def precios = [:]
-        def fecha = obra.fechaPreciosRubros
-        def dsps = obra.distanciaPeso
-        def dsvl = obra.distanciaVolumen
-        def lugar = obra.lugar
-        def prch = 0
-        def prvl = 0
-        if (obra.chofer) {
-            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
-            prch = prch["${obra.chofer.id}"]
-            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
-            prvl = prvl["${obra.volquete.id}"]
-        }
-//        println "PARAMETROS!= "+fecha+" "+dsps+" "+dsvl+" "+lugar+" "+obra.chofer+ " "+obra.volquete+" "+prch+" "+prvl
-        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
-//        println "rends "+rendimientos
-        if (rendimientos["rdps"].toString() == "NaN")
-            rendimientos["rdps"] = 0
-        if (rendimientos["rdvl"].toString() == "NaN")
-            rendimientos["rdvl"] = 0
+//        def fecha = obra.fechaPreciosRubros
+//        def dsps = obra.distanciaPeso
+//        def dsvl = obra.distanciaVolumen
+//        def lugar = obra.lugar
+//        def prch = 0
+//        def prvl = 0
+//        if (obra.chofer) {
+//            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
+//            prch = prch["${obra.chofer.id}"]
+//            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
+//            prvl = prvl["${obra.volquete.id}"]
+//        }
+////        println "PARAMETROS!= "+fecha+" "+dsps+" "+dsvl+" "+lugar+" "+obra.chofer+ " "+obra.volquete+" "+prch+" "+prvl
+//        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
+////        println "rends "+rendimientos
+//        if (rendimientos["rdps"].toString() == "NaN")
+//            rendimientos["rdps"] = 0
+//        if (rendimientos["rdvl"].toString() == "NaN")
+//            rendimientos["rdvl"] = 0
         def indirecto = obra.totales / 100
 //        println "indirecto "+indirecto
 
+        preciosService.ac_rbroObra(obra.id)
+
         detalle.each {
-            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
-            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
-            precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
+//            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
+//            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
+//            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
+//            precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
+
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
 //
 //        println "precios "+precios
