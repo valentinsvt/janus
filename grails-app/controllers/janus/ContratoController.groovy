@@ -1,5 +1,6 @@
 package janus
 
+import groovy.json.JsonBuilder
 import org.springframework.dao.DataIntegrityViolationException
 
 class ContratoController extends janus.seguridad.Shield {
@@ -49,13 +50,6 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
 
-
-
-
-        /**
-         * TODO: buscar por nombre de la obra tambien
-         */
-
     }
 
 
@@ -70,17 +64,15 @@ class ContratoController extends janus.seguridad.Shield {
 
     def formula = FormulaPolinomica.findAllByObra(obra)
 
-        println("formula" +  formula)
-        println("ps" + ps)
+//        println("formula" +  formula)
+//        println("ps" + ps)
 
-        [ps:ps]
+    def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%')
 
+
+        [ps:ps, cuadrilla: cuadrilla]
 
     }
-
-
-
-
 
     def buscarContrato (){
 

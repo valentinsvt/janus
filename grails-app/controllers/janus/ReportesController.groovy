@@ -925,8 +925,13 @@ class ReportesController {
         def cuenta = 0;
 
 
-        def firma1 = Persona.get(48)
-        def firma2 = Persona.get(21)
+//        println(obra.revisor.nombre);
+//        println(obra.inspector.nombre);
+//        println(obra.responsableObra.nombre);
+
+
+        def firma1 = obra?.responsableObra;
+        def firma2 = obra?.revisor
 
 //        firma = params.firmasId.split(",")
 
@@ -1375,6 +1380,9 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
+
 
 
 
@@ -1447,6 +1455,12 @@ class ReportesController {
 
 
             }
+
+
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
 
             document.add(tablaFirmas);
 
@@ -1521,9 +1535,7 @@ class ReportesController {
 
 
         }
-//
-//
-//        }
+
         else {
 
 
@@ -1560,7 +1572,9 @@ class ReportesController {
 
         def cuenta = 0;
 
-        def firma1 = Persona.get(48)
+        def firma1 = obra?.responsableObra;
+
+        def firma2 = obra?.revisor;
 
         def totalBase = params.totalPresupuesto
 
@@ -1873,7 +1887,7 @@ class ReportesController {
 
 
 
-            PdfPTable tablaFirmas = new PdfPTable(1);
+            PdfPTable tablaFirmas = new PdfPTable(2);
             tablaFirmas.setWidthPercentage(100);
 
 
@@ -1881,18 +1895,30 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
 
+            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
 
 
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.titulo + "" + firma1?.nombre + " " + firma1?.apellido, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
 
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.cargo, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
+
+
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
+
 
 
             document.add(tablaFirmas);
@@ -1906,7 +1932,7 @@ class ReportesController {
         if(cuenta == 1){
 
 
-            PdfPTable tablaFirmas = new PdfPTable(2);
+            PdfPTable tablaFirmas = new PdfPTable(3);
             tablaFirmas.setWidthPercentage(100);
 
 
@@ -1923,9 +1949,11 @@ class ReportesController {
 
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
 
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.titulo + "" + firma1?.nombre + " " + firma1?.apellido, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
             firma.each { f->
@@ -1940,22 +1968,21 @@ class ReportesController {
 
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.cargo, times8bold), prmsHeaderHoja)
-
-
-
+            addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
             firma.each { f->
 
-
-                firmas=Persona.get(f)
+                         firmas=Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
 
-
-
-
             }
+
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
 
             document.add(tablaFirmas);
 
@@ -1968,24 +1995,22 @@ class ReportesController {
 
 
 
-            PdfPTable tablaFirmas = new PdfPTable(3);
+            PdfPTable tablaFirmas = new PdfPTable(4);
             tablaFirmas.setWidthPercentage(100);
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
-            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-
+            addCellTabla(tablaFirmas, new Paragraph("_______________________________", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("_______________________________", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("_______________________________", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("_______________________________", times8bold), prmsHeaderHoja)
@@ -1993,6 +2018,7 @@ class ReportesController {
 
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.titulo + "" + firma1?.nombre + " " + firma1?.apellido, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma12.nombre + " " + firma12.apellido, times8bold), prmsHeaderHoja)
 
 
 
@@ -2008,6 +2034,7 @@ class ReportesController {
 
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.cargo, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
             firma.each { f->
@@ -2021,6 +2048,13 @@ class ReportesController {
 
 
             }
+
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
+
 
             document.add(tablaFirmas);
 
@@ -2192,8 +2226,8 @@ class ReportesController {
 
 
 
-        def firma1 = Persona.get(48)
-        def firma2 = Persona.get(21)
+        def firma1 = obra?.responsableObra;
+        def firma2 = obra?.revisor;
 
 
         def valorCoef = 0;
@@ -2452,26 +2486,6 @@ class ReportesController {
 
 
         document.add(tablaCoeficiente)
-//
-//        PdfPTable tablaCuadrilla = new PdfPTable(3);
-//        tablaCuadrilla.setWidthPercentage(100);
-//        tablaCuadrilla.setWidths(arregloEnteros([10, 60, 30]))
-//
-//        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCuadrilla, new Paragraph("CUADRILLA TIPO ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//
-//        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCuadrilla, new Paragraph("CLASE OBRERO ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//
-//        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCuadrilla, new Paragraph(" _________________________", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//
-//
-//        document.add(tablaCuadrilla)
-
 
         Paragraph txtIzqPie = new Paragraph();
         addEmptyLine(txtIzqPie, 1);
@@ -2538,8 +2552,6 @@ class ReportesController {
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.titulo + "" + firma1?.nombre + " " + firma1?.apellido, times8bold), prmsHeaderHoja)
 
-
-
             addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
@@ -2548,8 +2560,8 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
-
-
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
 
             document.add(tablaFirmas);
 
@@ -2583,8 +2595,6 @@ class ReportesController {
 
             addCellTabla(tablaFirmas, new Paragraph(firma1?.titulo + "" + firma1?.nombre + " " + firma1?.apellido, times8bold), prmsHeaderHoja)
 
-
-
             addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
@@ -2603,10 +2613,6 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma1?.cargo, times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
-
-
-
-
             firma.each { f->
 
 
@@ -2614,15 +2620,13 @@ class ReportesController {
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
 
-
-
-
             }
 
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
             document.add(tablaFirmas);
-
-
-
 
         }
         if(cuenta == 2){
@@ -2686,6 +2690,11 @@ class ReportesController {
 
 
             }
+
+            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
             document.add(tablaFirmas);
 

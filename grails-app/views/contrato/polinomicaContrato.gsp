@@ -71,20 +71,9 @@
 
                            </g:each>
 
-
-
-
                            </tbody>
 
-
-                   </table>
-
-
-
-
-
-
-
+                     </table>
             </fieldset>
 
 
@@ -97,6 +86,35 @@
         <fieldset class="borde">
 
             <legend>Cuadrilla Tipo</legend>
+
+            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaCuadrilla">
+
+                <thead>
+                <tr>
+                    <th style="width: 20px; text-align: center" > Coeficiente</th>
+                    <th style="width: 70px"> Nombre del Indice (INEC)</th>
+                    <th style="width: 40px"> Valor</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="bodyCuadrilla">
+
+                <g:each in="${cuadrilla}" var="i">
+
+                    <tr>
+                        <td>${i?.numero}</td>
+                        <td>${i?.indice?.descripcion}</td>
+                        <td style="text-align: right; width: 40px">${i?.valor}</td>
+
+                    </tr>
+
+                </g:each>
+
+                </tbody>
+
+            </table>
 
 
         </fieldset>

@@ -2,6 +2,8 @@ package janus
 
 import org.springframework.dao.DataIntegrityViolationException
 
+import groovy.json.JsonBuilder
+
 class ObraController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -23,13 +25,17 @@ class ObraController extends janus.seguridad.Shield {
 
     def registroObra() {
 
-//        println(params)
-
        def prov = Provincia.list();
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"]]
         if (params.obra) {
             def obra = Obra.get(params.obra)
             def subs = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
+
+//            println("departamento" + obra.departamento)
+
+//            if (obra.departamento)
+
             [campos: campos, prov:prov,obra:obra,subs:subs]
         } else {
             [campos: campos, prov: prov]
@@ -143,7 +149,43 @@ class ObraController extends janus.seguridad.Shield {
     }
 
 
-    def situacionGeografica() {
+
+    def getPersonas () {
+
+        def obra = Obra.get(params.obra)
+
+        def departamento = Departamento.get(params.id)
+
+        def personas = Persona.findAllByDepartamento(departamento)
+
+
+        def funcionInsp = Funcion.get(3)
+        def funcionRevi = Funcion.get(4)
+        def funcionResp = Funcion.get(5)
+
+        def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
+        def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
+        def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
+
+//        println(personasRolInsp)
+//        println(personasRolRevi)
+//        println(personasRolResp)
+//
+//        println(personasRolInsp.persona)
+//        println(personasRolRevi.persona)
+//        println(personasRolResp.persona)
+
+
+//        println(personas)
+        return [personas:personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra]
+
+
+    }
+
+
+
+
+        def situacionGeografica() {
         def comunidades
 
         def orden;
@@ -333,6 +375,7 @@ class ObraController extends janus.seguridad.Shield {
         }else{
             if (obraInstance.estado=="R")
              obraService.registrarObra(obraInstance)
+            println "fin registro"
         }
 
         if (params.id) {

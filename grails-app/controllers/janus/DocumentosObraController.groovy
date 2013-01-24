@@ -24,10 +24,14 @@ class DocumentosObraController {
         def auxiliarFijo = Auxiliar.get(1);
 
 
-        println(params)
+//        println(params)
 
 
         def obra = Obra.get(params.id)
+
+        def departamento = Departamento.get(obra?.departamento?.id)
+
+//        println("departamento: " + obra?.departamento?.id)
 
 
 
@@ -36,16 +40,16 @@ class DocumentosObraController {
 
         def departamentos = Departamento.list()
 
+//
+//        def firmas
+//
+//        def firmasViales
 
-        def firmas
-
-        def firmasViales
-
-
-        def personasFirmas = Persona.get(48);
-
-
-        def personasFirmas2 = Persona.get(21);
+//
+//        def personasFirmas = Persona.get(48);
+//
+//
+//        def personasFirmas2 = Persona.get(21);
 
 
 
@@ -109,46 +113,59 @@ class DocumentosObraController {
 
         }
 
-        def c = Persona.createCriteria()
-        firmas = c.list {
 
-            or{
-                ilike("cargo", "%Director%")
-                ilike("cargo","%Jefe%")
-                ilike("cargo", "%Subdirector%")
-                ilike("cargo", "%subd%")
-            }
-            or{
-                eq("departamento", Departamento.get(3))
-                eq("departamento", Departamento.get(10))
-            }
-            maxResults(20)
-            order("nombre", "desc")
-        }
+        def firmasAdicionales = Persona.findAllByDepartamento(departamento)
 
-        def d = Persona.createCriteria()
-        firmasViales = d.list {
 
-            or{
-                ilike("cargo", "%Director%")
-                ilike("cargo","%Jefe%")
-                ilike("cargo", "%Subdirector%")
-                ilike("cargo", "%subd%")
-            }
-            or{
-                eq("departamento", Departamento.get(4))
-                eq("departamento", Departamento.get(10))
-            }
-            maxResults(20)
-            order("nombre", "desc")
-        }
+        def funcionFirmar = Funcion.get(2)
+
+
+        def firmas = PersonaRol.findAllByFuncionAndPersonaInList(funcionFirmar, firmasAdicionales)
+
+//
+//        println("lista:" + firmas?.persona?.nombre)
 
 
 
+//        def c = Persona.createCriteria()
+//        firmas = c.list {
+//
+//            or{
+//                ilike("cargo", "%Director%")
+//                ilike("cargo","%Jefe%")
+//                ilike("cargo", "%Subdirector%")
+//                ilike("cargo", "%subd%")
+//            }
+//            or{
+//                eq("departamento", Departamento.get(3))
+//                eq("departamento", Departamento.get(10))
+//            }
+//            maxResults(20)
+//            order("nombre", "desc")
+//        }
+//
+//        def d = Persona.createCriteria()
+//        firmasViales = d.list {
+//
+//            or{
+//                ilike("cargo", "%Director%")
+//                ilike("cargo","%Jefe%")
+//                ilike("cargo", "%Subdirector%")
+//                ilike("cargo", "%subd%")
+//            }
+//            or{
+//                eq("departamento", Departamento.get(4))
+//                eq("departamento", Departamento.get(10))
+//            }
+//            maxResults(20)
+//            order("nombre", "desc")
+//        }
 
 
 
-        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, personasFirmas: personasFirmas, personasFirmas2: personasFirmas2, totalPresupuesto: totalPresupuesto]
+
+//        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, personasFirmas: personasFirmas, personasFirmas2: personasFirmas2, totalPresupuesto: totalPresupuesto]
+        [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona]
 
 
 

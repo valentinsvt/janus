@@ -59,13 +59,21 @@
 
         <g:form class="registroObra" name="frm-registroObra" action="save">
 
-            <fieldset class="borde" style="position: relative; height: 100px;float: left">
+            <fieldset class="borde" style="position: relative; height: 120px;float: left">
                 <g:hiddenField name="id" value="${obra?.id}"/>
                 <div class="span12" style="margin-top: 20px" align="center">
 
                     <p class="css-vertical-text">Ingreso</p>
 
                     <div class="linea" style="height: 85%;"></div>
+
+                </div>
+
+                <div class="span12" style="margin-top: 10px">
+
+                    <div class="span 1 formato">DEPARTAMENTO</div>
+
+                    <div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" class="departamento" id="departamentoObra" value="${obra?.departamento?.id}" optionKey="id" optionValue="descripcion"/> </div>
 
                 </div>
 
@@ -185,20 +193,23 @@
 
                 </div>
 
-                <div class="span12">
-                    <div class="span1">Inspección</div>
+                <div class="span12" id="filaPersonas">
+                    %{--<div class="span1">Inspección</div>--}%
+
+
+
 
                     %{--<div class="span3"><g:select name="inspector.id" class="inspector required" from="${janus.Persona?.list()}" value="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}" optionValue="nombre" optionKey="id"/></div>--}%
-                    <div class="span3"><g:select name="inspector.id" class="inspector required" from="${janus.Persona?.list()}" value="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}" optionKey="id"/></div>
+                    %{--<div class="span3"><g:select name="inspector.id" class="inspector required" from="${janus.Persona?.list()}" value="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}" optionKey="id"/></div>--}%
 
-                    <div class="span1">Revisión</div>
+                    %{--<div class="span1">Revisión</div>--}%
 
                     %{--<div class="span3"><g:select name="revisor.id" class="revisor required" from="${janus.Persona?.list()}" value="${obra?.revisor?.id}" optionValue="nombre" optionKey="id"/></div>--}%
-                    <div class="span3"><g:select name="revisor.id" class="revisor required" from="${janus.Persona?.list()}" value="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}" optionKey="id"/></div>
+                    %{--<div class="span3"><g:select name="revisor.id" class="revisor required" from="${janus.Persona?.list()}" value="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}" optionKey="id"/></div>--}%
 
-                    <div class="span1">Responsable</div>
+                    %{--<div class="span1">Responsable</div>--}%
 
-                    <div class="span1"><g:select name="responsableObra.id" class="responsableObra required" from="${janus.Persona?.list()}" value="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}" optionKey="id"/></div>
+                    %{--<div class="span1"><g:select name="responsableObra.id" class="responsableObra required" from="${janus.Persona?.list()}" value="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}" optionKey="id"/></div>--}%
                 </div>
 
                 <div class="span12">
@@ -208,7 +219,7 @@
 
                     <div class="span1" style="margin-left: 130px">Anticipo</div>
 
-                    <div class="span2"><g:textField name="porcentajeAnticipo" type="number" class="anticipo number required" style="width: 70px" value="${obra?.porcentajeAnticipo}"/> %</div>
+                    <div class="span2"><g:textField name="porcentajeAnticipo" type="number" class="anticipo number required" style="width: 70px" value="${obra?.porcentajeAnticipo}" maxlength="3"/> %</div>
 
                 </div>
 
@@ -263,11 +274,11 @@
                     <div class="span3"><g:textField name="formulaPolinomica" class="formula" value="${obra?.formulaPolinomica}"/></div>
 
 
-                    <div class="span1 formato">DESTINO</div>
+                    %{--<div class="span1 formato">DESTINO</div>--}%
 
                     %{--<div class="span3"><g:textField name="departamento" class="departamento" value="${obra?.departamento}"/></div>--}%
-                    <div class="span3"><g:select name="departamento.id" class="departamento" value="${obra?.departamento?.id}" from="${janus.Departamento?.list()}"
-                                                 optionKey="id" optionValue="descripcion" style="width: 350px"/></div>
+                    %{--<div class="span3"><g:select name="departamento.id" class="departamento" value="${obra?.departamento?.id}" from="${janus.Departamento?.list()}"--}%
+                                                 %{--optionKey="id" optionValue="descripcion" style="width: 350px"/></div>--}%
 
                 </div>
 
@@ -437,7 +448,88 @@
         </g:if>
 
         <script type="text/javascript">
+
+
+            function validarNum(ev) {
+                /*
+                 48-57      -> numeros
+                 96-105     -> teclado numerico
+                 188        -> , (coma)
+                 190        -> . (punto) teclado
+                 110        -> . (punto) teclado numerico
+                 8          -> backspace
+                 46         -> delete
+                 9          -> tab
+                 37         -> flecha izq
+                 39         -> flecha der
+                 */
+                return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                        ev.keyCode == 37 || ev.keyCode == 39);
+            }
+
+            $("#porcentajeAnticipo").keydown(function (ev) {
+
+                return validarNum(ev);
+
+            }).keyup(function (){
+
+                        var enteros = $(this).val();
+
+                        if(parseFloat(enteros) > 100){
+
+                            $(this).val(100)
+
+                        }
+
+
+
+                    });
+
+
+            $("#plazo").keydown(function (ev) {
+
+                return validarNum(ev);
+
+
+            }).keyup(function () {
+
+                        var enteros = $(this).val();
+
+
+
+                    });
+
+
+
+            function loadPersonas() {
+                var idDep = $(".departamento").val();
+
+                var idObra = ${obra?.id}
+
+//                        console.log("dep-->>" + idDep)
+//                        console.log("obra-->>" + idObra)
+
+                $.ajax({
+                    type    : "POST",
+                    url     : "${g.createLink(action:'getPersonas')}",
+                    data    : {id: idDep,
+                               obra: idObra
+
+                    } ,
+                    success : function (msg) {
+
+                        $("#filaPersonas").html(msg);
+                    }
+                });
+            }
+
+
             $(function () {
+
+                loadPersonas();
+
                 <g:if test="${obra}">
                 $("#matriz").click(function () {
                     $("#modal_title_matriz").html("Generar matriz");
@@ -497,17 +589,7 @@
 
                 $("#eliminarObra").click(function () {
 
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action: 'delete')}",
-                        data    : "id=${obra?.id}",
-                        success : function (msg) {
 
-//                            console.log(msg)
-
-                            %{--location.href = "${g.createLink(action: 'registroObra')}" + "?obra=" + "${obra?.id}";--}%
-                        }
-                    });
 
                 });
 
@@ -543,8 +625,6 @@
                 $("#btn-aceptar").click(function () {
 
                     $("#frm-registroObra").submit();
-//            console.log($("#frm-registroObra").serialize());
-
                 });
 
                 $("#btn-buscar").click(function () {
@@ -553,6 +633,15 @@
                     return false;
 //
                 });
+
+
+
+                $("#departamentoObra").change(function () {
+
+                    loadPersonas();
+
+
+                }) ;
 
                 $("#btnRubros").click(function () {
                     var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";
@@ -667,21 +756,17 @@
                         "Aceptar"  : function () {
 //
                             var estadoCambiado = $("#estado").val();
-//
-//                    console.log("estado"+ estadoCambiado);
-//
+
                             if (estadoCambiado == 'N') {
                                 estadoCambiado = 'R';
                                 $(".estado").val(estadoCambiado);
                                 $("#frm-registroObra").submit();
-//                        console.log("estadocambiado" + $(".estado").val() )
-//                        $("#estadoDialog").dialog("close");
+//
                             } else {
                                 estadoCambiado = 'N';
                                 $(".estado").val(estadoCambiado);
                                 $("#frm-registroObra").submit();
-//                      $("#estadoNom").val(estadoCambiado);
-//                      console.log("estadocambiado" + $(".estado").val() )
+//
                             }
 //                            $(".estado").val(estadoCambiado);
                             $("#estadoDialog").dialog("close");
@@ -710,6 +795,39 @@
                             $("#documentosDialog").dialog("close");
 
                         }
+                    }
+
+                });
+
+
+                $("#eliminarObraDialog").dialog({
+
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 350,
+                    height    : 180,
+                    position  : 'center',
+                    title     : 'Eliminar Obra',
+                    buttons   : {
+                        "Aceptar" : function () {
+
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action: 'delete')}",
+                                data    : "id=${obra?.id}",
+                                success : function (msg) {
+
+
+                                }
+                            });
+
+
+                        }
+//                        "Cancelar" : function ( {
+//
+//                                   })
                     }
 
                 });

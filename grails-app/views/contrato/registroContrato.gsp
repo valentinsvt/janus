@@ -82,6 +82,7 @@
 
 
 
+
     <p class="css-vertical-text">Contratación</p>
 
     <div class="linea" style="height: 85%;"></div>

@@ -76,7 +76,7 @@
 
                     <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion" optionKey="id" style="width: 350px"/>
 
-                    <div class="btn-group" style="margin-left: 350px; margin-top: -40px; margin-bottom: 10px">
+                    <div class="btn-group" style="margin-left: 350px; margin-top: -60px; margin-bottom: 10px">
                         <a class="btn" id="btnNuevo"> Nuevo</a>
                         <a class="btn" id="btnCancelar"> Cancelar</a>
                         <a class="btn" id="btnEditar"> Editar</a>
@@ -137,23 +137,12 @@
 
             <div class="span6">
 
-                <g:if test="${obra?.tipo == 'C'}">
 
-                    <elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmas}"
-                                optionKey="id" optionValue="${{it.nombre + ' ' + it.apellido  }}" optionClass="cargo" style="width: 350px"/>
-
-                </g:if>
-                <g:if test="${obra?.tipo == 'V'}">
+                    <elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmas}" optionClass="${{it?.cargo}}"
+                                optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido  }}" style="width: 350px"/>
 
 
-                    <elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmasViales}" optionKey="id" optionClass="cargo"
-                                optionValue="${{it.nombre + ' ' + it.apellido  }}" style="width: 350px"/>
-
-                </g:if>
-
-
-
-                <div class="btn-group" style="margin-left: 400px; margin-top: -40px; margin-bottom: 10px">
+                <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
                     <button class="btn btnAdicionar" id="presupuesto">Adicionar</button>
 
 
@@ -350,34 +339,14 @@
 
             <legend>Set de Firmas</legend>
 
-
-
-
             <div class="span6">
 
-
-                <g:if test="${obra?.tipo == 'C'}">
-
                     <elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"
-                                optionKey="id" optionValue="${{it.nombre + ' ' + it.apellido  }}" optionClass="cargo" style="width: 350px"/>
-
-                </g:if>
-                <g:if test="${obra?.tipo == 'V'}">
+                                optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido}}" optionClass="${{it?.cargo}}" style="width: 350px"/>
 
 
-                    <elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmasViales}" optionKey="id" optionClass="cargo"
-                                optionValue="${{it.nombre + ' ' + it.apellido  }}" style="width: 350px"/>
-
-                </g:if>
-
-
-
-                <div class="btn-group" style="margin-left: 400px; margin-top: -40px; margin-bottom: 10px">
+                <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
                     <button class="btn btnAdicionar" id="memo">Adicionar</button>
-
-
-
-
 
 
                 </div>
@@ -493,21 +462,11 @@
 
             <div class="span6">
 
-                <g:if test="${obra?.tipo == 'C'}">
+                          <elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmas}"
+                                optionKey="id"
+                                optionValue="${{it?.nombre + " " +  it?.apellido}}" optionClass="${{it?.cargo}}" style="width: 350px"/>
 
-                    <elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmas}"
-                                optionKey="id" optionValue="${{it.nombre + ' ' + it.apellido  }}" optionClass="cargo" style="width: 350px"/>
-
-                </g:if>
-                <g:if test="${obra?.tipo == 'V'}">
-
-
-                    <elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmasViales}" optionKey="id" optionClass="cargo"
-                                optionValue="${{it.nombre + ' ' + it.apellido  }}" style="width: 350px"/>
-
-                </g:if>
-
-                <div class="btn-group" style="margin-left: 400px; margin-top: -40px; margin-bottom: 10px">
+                <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
                     <button class="btn btnAdicionar" id="polinomica">Adicionar</button>
 
 

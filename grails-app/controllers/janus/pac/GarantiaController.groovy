@@ -11,9 +11,9 @@ class GarantiaController extends janus.seguridad.Shield {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def garantiasContrato() {
-        if (!params.id) {
-            params.id = "5"
-        }
+//        if (!params.id) {
+//            params.id = "5"
+//        }
         def contrato = Contrato.get(params.id)
         def campos = ["nombre": ["Nombre", "string"]]
 
