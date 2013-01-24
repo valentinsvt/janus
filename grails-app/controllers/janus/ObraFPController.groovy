@@ -89,19 +89,19 @@ class ObraFPController {
 
         /* ---- ejecuta Rubros(subPrsp) y Descomposicion(subPrsp) ----------------------------- */
         rubros(obra__id, sbpr)
-        //println "completa rubros"
+        println "completa rubros"
         descomposicion(obra__id, sbpr)
-        //println "completa descomposicion"
+        println "completa descomposicion"
         des_Materiales(obra__id, sbpr, conTransporte)
-        //println "completa des_Materiales"
+        println "completa des_Materiales"
         if (hayEquipos) {
             if (conTransporte) acTransporte(obra__id, sbpr)
             acEquipos(obra__id, sbpr)
         }
-        //println "completa hayEquipos"
+        println "completa hayEquipos"
 
         acManoDeObra(obra__id)                      /* cambio obra__id */
-        //println "completa acManoDeObra"
+        println "completa acManoDeObra"
         acTotal(obra__id)                           /* cambio obra__id */
         //println "completa acTotal"
 
@@ -233,7 +233,7 @@ class ObraFPController {
         tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and "
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 3"
         def eqpo = 0.0
-        //println "calculaEquipos: " + tx_sql
+        println "calculaEquipos: " + tx_sql
         cn.eachRow(tx_sql) {row ->
             eqpo = row.equipos
         }
