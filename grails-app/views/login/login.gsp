@@ -163,6 +163,7 @@
             Ingresar
         </a>
     </div>
+    <div style="position: absolute; left: 800px; top: 570px;text-align:right; color:#d95">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
 </div>
 
 <div class="modal login hide fade " id="modal-ingreso" style=";overflow: hidden;">
