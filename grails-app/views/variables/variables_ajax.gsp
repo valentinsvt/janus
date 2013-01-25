@@ -1,44 +1,3 @@
-%{--<ul class="nav nav-tabs" id="myTab">--}%
-%{--<li class="active"><a href="#home" class="tab">Home</a></li>--}%
-%{--<li><a href="#profile" class="tab">Profile</a></li>--}%
-%{--<li><a href="#messages" class="tab">Messages</a></li>--}%
-%{--<li><a href="#settings" class="tab">Settings</a></li>--}%
-%{--</ul>--}%
-
-%{--<div class="tab-content">--}%
-%{--<div class="tab-pane active" id="home">home</div>--}%
-
-%{--<div class="tab-pane" id="profile">prof</div>--}%
-
-%{--<div class="tab-pane" id="messages">mes</div>--}%
-
-%{--<div class="tab-pane" id="settings">set</div>--}%
-%{--</div>--}%
-
-%{--<script type="text/javascript">--}%
-%{--$(function () {--}%
-
-%{--$(".tab").click(function () {--}%
-%{--var tab = $(this).parents("li").index();--}%
-%{--console.log(tab);--}%
-%{--$('#myTab li:eq(' + tab + ') a').tab('show');--}%
-
-%{--//            var tab = $(this).attr("href");--}%
-%{--//            $('#myTab a[href="#' + tab + '"]').tab('show');--}%
-%{--//            $('#myTab a:last').tab('show');--}%
-%{--return false;--}%
-%{--});--}%
-
-%{--//        $('#myTab a:last').tab('show');--}%
-
-%{--//        $('#myTab a[href="#profile"]').tab('show'); // Select tab by name--}%
-%{--//        $('#myTab a:first').tab('show'); // Select first tab--}%
-%{--//        $('#myTab a:last').tab('show'); // Select last tab--}%
-%{--//        $('#myTab li:eq(2) a').tab('show'); // Select third tab (0-indexed)--}%
-%{--})--}%
-%{--</script>--}%
-
-
 <style type="text/css">
 .tab {
     height     : 260px !important;
@@ -75,7 +34,7 @@
 
                 <div class="span5">
                     <g:select name="volquete.id" id="cmb_vol" from="${volquetes}" optionKey="id" optionValue="nombre"
-                              noSelection="${['': 'Seleccione']}" value="${obra?.volqueteId}"/>
+                              noSelection="${['': 'Seleccione']}" value="${(obra.volquete)?obra?.volqueteId:par?.volquete?.id}"/>
                 </div>
 
                 <div class="span1">
@@ -97,7 +56,7 @@
 
                 <div class="span5">
                     <g:select name="chofer.id" id="cmb_chof" from="${choferes}" optionKey="id" optionValue="nombre"
-                              noSelection="${['': 'Seleccione']}" value="${obra?.choferId}"/>
+                              noSelection="${['': 'Seleccione']}"  value="${(obra.chofer)?obra?.choferId:par?.chofer?.id}"/>
                 </div>
 
                 <div class="span1">
@@ -211,7 +170,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorReduccion" class="inputVar" value="${g.formatNumber(number: obra?.factorReduccion, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    <g:textField type="text" name="factorReduccion" class="inputVar" value="${g.formatNumber(number: (obra?.factorReduccion)?:par.factorReduccion, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
 
                 <div class="span3">
@@ -219,7 +178,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorVelocidad" class="inputVar" value="${g.formatNumber(number: obra?.factorVelocidad, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    <g:textField type="text" name="factorVelocidad" class="inputVar" value="${g.formatNumber(number: (obra?.factorVelocidad)?:par.factorVelocidad, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
             </div>
 
@@ -229,7 +188,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="capacidadVolquete" class="inputVar" value="${g.formatNumber(number: obra?.capacidadVolquete, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    <g:textField type="text" name="capacidadVolquete" class="inputVar" value="${g.formatNumber(number: (obra?.capacidadVolquete)?:par.capacidadVolquete, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
 
                 <div class="span3">
@@ -237,7 +196,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorReduccionTiempo" class="inputVar" value="${g.formatNumber(number: obra?.factorReduccionTiempo, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    <g:textField type="text" name="factorReduccionTiempo" class="inputVar" value="${g.formatNumber(number: (obra?.factorReduccionTiempo)?:par.factorReduccionTiempo, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
             </div>
 
@@ -247,7 +206,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorVolumen" class="inputVar" value="${g.formatNumber(number: obra?.factorVolumen, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    <g:textField type="text" name="factorVolumen" class="inputVar" value="${g.formatNumber(number: (obra?.factorVolumen)?:par.factorVolumen, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
 
                 <div class="span3">
@@ -255,7 +214,7 @@
                 </div>
 
                 <div class="span3">
-                    <g:textField type="text" name="factorPeso" class="inputVar" value="${g.formatNumber(number: obra?.factorPeso, maxFractionDigits: 2, minFractionDigits: 2)}"/>
+                    <g:textField type="text" name="factorPeso" class="inputVar" value="${g.formatNumber(number: (obra?.factorPeso)?:par.factorPeso, maxFractionDigits: 2, minFractionDigits: 2)}"/>
                 </div>
             </div>
 

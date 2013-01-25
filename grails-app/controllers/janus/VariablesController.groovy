@@ -8,7 +8,11 @@ class VariablesController {
 //        println params
 
         def obra = Obra.get(params.obra)
+        def par = Parametros.list()
+        if (par.size()>0)
+            par = par.pop()
 
+        println "par "+par.volquete
         def volquetes = []
         def choferes = []
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
@@ -19,7 +23,7 @@ class VariablesController {
                 volquetes = Item.findAllByDepartamento(it)
         }
 
-        [choferes: choferes, volquetes: volquetes, obra: obra]
+        [choferes: choferes, volquetes: volquetes, obra: obra,par:par]
     }
 
     def saveVar_ajax() {

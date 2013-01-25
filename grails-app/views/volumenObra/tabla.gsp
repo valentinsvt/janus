@@ -84,10 +84,17 @@
                 location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
             }
         },
+        <g:if test="${obra?.estado!='R'}">
         items: {
             "edit": {name: "Editar", icon: "edit"},
             "print": {name: "Imprimir", icon: "print"}
         }
+        </g:if>
+        <g:else>
+        items: {
+            "print": {name: "Imprimir", icon: "print"}
+        }
+        </g:else>
     });
 
     $("#imprimir_sub").click(function(){
