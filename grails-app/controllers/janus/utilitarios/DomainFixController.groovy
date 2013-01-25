@@ -14,4 +14,10 @@ class DomainFixController {
         redirect(action: "index")
         return
     }
+
+
+    def secuencias(){
+
+        render    migracionService.arreglarSecuencias()
+    }
 }
