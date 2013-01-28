@@ -12,9 +12,7 @@ class PdfService {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ITextRenderer renderer = new ITextRenderer();
         try {
-            println "url "+url
             renderer.setDocument(url);
-            println "paso"
             renderer.layout();
             renderer.createPDF(baos);
             byte[] b = baos.toByteArray();
