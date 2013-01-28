@@ -616,7 +616,14 @@
 
         $("#eliminarObra").click(function () {
 
-            $("#eliminarObraDialog").dialog("open");
+            if(${obra?.id != null}) {
+
+
+                $("#eliminarObraDialog").dialog("open");
+
+            }
+
+
 
         });
 

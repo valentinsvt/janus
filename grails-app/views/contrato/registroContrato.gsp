@@ -393,6 +393,19 @@
             });
 
 
+    $("#monto").keydown(function (ev) {
+
+        return validarNum(ev);
+
+    }).keyup(function (){
+
+                var enteros = $(this).val();
+
+            });
+
+
+
+
     $("#anticipo").keydown(function (ev) {
 
         return validarNum(ev);
@@ -419,10 +432,31 @@
 
                 var enteros = $(this).val();
 
+                var porcentaje = $("#anticipo").val()
+
+                var monto = $("#monto").val()
+
+                var anticipoValor = (porcentaje*(monto))/100;
+
+                $("#anticipoValor").val(number_format(anticipoValor,2,".",""))
+
+
+            }).click(function () {
+
+                var porcentaje = $("#anticipo").val()
+
+                var monto = $("#monto").val()
+
+                var anticipoValor = (porcentaje*(monto))/100;
+
+                $("#anticipoValor").val(number_format(anticipoValor,2,".",","))
+
+
+
             });
 
 
-    $("#monto").keydown(function (ev) {
+    $("#financiamiento").keydown(function (ev) {
 
         return validarNum(ev);
 
@@ -431,6 +465,9 @@
                 var enteros = $(this).val();
 
             });
+
+
+
 
     function enviarObra() {
         var data = "";
