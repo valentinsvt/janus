@@ -178,7 +178,7 @@
         </g:if>
         <div class="span3">
             % costos indriectos
-            <input type="text" style="width: 30px;" id="costo_indi" value="21.5">
+            <input type="text" style="width: 30px;" id="costo_indi" value="21">
         </div>
 
     </div>
@@ -629,7 +629,7 @@
         })
         var indi = $("#costo_indi").val()
         if(isNaN(indi))
-            indi=21.5
+            indi=21
         indi=parseFloat(indi)
         var tabla = $('<table class="table table-bordered table-striped table-condensed table-hover">')
         tabla.append("<thead><tr><th colspan='3'>Costos indirectos</th></tr><tr><th style='width: 885px;'>Descripción</th><th style='text-align: right'>Porcentaje</th><th style='text-align: right'>Valor</th></tr></thead>")
@@ -703,7 +703,7 @@
                         width     : 500
                     }
                 });
-                $("#costo_indi").val("21.5")
+                $("#costo_indi").val("21")
             }
         });
 
