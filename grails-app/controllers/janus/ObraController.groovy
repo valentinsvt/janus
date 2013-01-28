@@ -25,6 +25,14 @@ class ObraController extends janus.seguridad.Shield {
 
     def registroObra() {
 
+        def usuario = session.usuario.id
+
+        def persona = Persona.get(usuario)
+
+        def volumen = VolumenesObra.get(params.obra)
+
+        def formula = FormulaPolinomica.get(params.obra)
+
        def prov = Provincia.list();
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"]]
         if (params.obra) {
@@ -36,9 +44,9 @@ class ObraController extends janus.seguridad.Shield {
 
 //            if (obra.departamento)
 
-            [campos: campos, prov:prov,obra:obra,subs:subs]
+            [campos: campos, prov:prov,obra:obra,subs:subs, persona:  persona, volumen: volumen, formula: formula]
         } else {
-            [campos: campos, prov: prov]
+            [campos: campos, prov: prov, persona: persona]
         }
 
 
@@ -331,11 +339,11 @@ class ObraController extends janus.seguridad.Shield {
         }
 
 
-        params.each {k,v ->
-
-            println(k+"\t" + v)
-
-        }
+//        params.each {k,v ->
+//
+//            println(k+"\t" + v)
+//
+//        }
 
 //        println("parametros" + params)
 
@@ -354,6 +362,23 @@ class ObraController extends janus.seguridad.Shield {
         }//es edit
         else {
             obraInstance = new Obra(params)
+
+            def par = Parametros.list()
+            if (par.size()>0)
+                par = par.pop()
+
+            obraInstance.indiceCostosIndirectosObra=par.indiceCostosIndirectosObra
+            obraInstance.indiceCostosIndirectosPromocion=par.indiceCostosIndirectosPromocion
+            obraInstance.indiceCostosIndirectosMantenimiento=par.indiceCostosIndirectosMantenimiento
+            obraInstance.administracion=par.administracion
+            obraInstance.impreso=par.impreso
+            obraInstance.indiceCostosIndirectosGarantias=par.indiceCostosIndirectosGarantias
+            obraInstance.indiceUtilidad=par.indiceUtilidad
+            obraInstance.indiceCostosIndirectosCostosFinancieros=par.indiceCostosIndirectosCostosFinancieros
+            obraInstance.indiceCostosIndirectosTimbresProvinciales=par.indiceCostosIndirectosTimbresProvinciales
+            obraInstance.indiceCostosIndirectosVehiculos=par.indiceCostosIndirectosVehiculos
+
+
         } //es create
         if (!obraInstance.save(flush: true)) {
             flash.clase = "alert-error"

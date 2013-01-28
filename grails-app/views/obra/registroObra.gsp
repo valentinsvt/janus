@@ -78,7 +78,7 @@
         <div class="span 1 formato">DEPARTAMENTO</div>
 
         <div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" class="departamento" id="departamentoObra"
-                                      value="${obra?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 350px"/> </div>
+                                      value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 350px" disabled="true"/> </div>
 
     </div>
 
@@ -354,6 +354,28 @@
 
 </div>
 
+<div id="eliminarObraDialog">
+
+    <fieldset>
+        <div class="span3">
+            Esta seguro que desea eliminar la Obra:<div style="font-weight: bold"> ${obra?.nombre}</div>
+
+        </div>
+    </fieldset>
+
+</div>
+
+<div id="noEliminarDialog">
+
+    <fieldset>
+        <div class="span3">
+            No se puede eliminar la obra, porque contiene valores dentro de Volumenes de Obra o Fórmula Polinómica.
+        </div>
+    </fieldset>
+
+</div>
+
+
 
 <g:if test="${obra?.id}">
     <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px;float: left" align="center">
@@ -594,7 +616,7 @@
 
         $("#eliminarObra").click(function () {
 
-
+            $("#eliminarObraDialog").dialog("open");
 
         });
 
@@ -821,6 +843,15 @@
             buttons   : {
                 "Aceptar" : function () {
 
+                    if(${volumen?.obra != null || formula?.obra != null}){
+
+                       $("#noEliminarDialog").dialog("open")
+
+                    }
+
+                    else {
+
+
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action: 'delete')}",
@@ -831,12 +862,40 @@
                         }
                     });
 
+                }
+
+
+                },
+                "Cancelar" : function () {
+
+                    $("#eliminarObraDialog").dialog("close")
 
                 }
-//                        "Cancelar" : function ( {
-//
-//                                   })
+
             }
+
+        });
+
+
+        $("#noEliminarDialog").dialog ({
+
+            autoOpen  : false,
+            resizable : false,
+            modal     : true,
+            draggable : false,
+            width     : 350,
+            height    : 180,
+            position  : 'center',
+            title     : 'No se puede Eliminar la Obra!',
+            buttons   : {
+                "Aceptar" : function () {
+
+                    $("#eliminarObraDialog").dialog("close");
+                    $("#noEliminarDialog").dialog("close");
+
+                }
+            }
+
 
         });
 
