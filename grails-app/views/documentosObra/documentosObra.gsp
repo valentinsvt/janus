@@ -637,10 +637,10 @@
 
 
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
+    <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
     <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-    %{--<button class="btn" id="tramite" disabled="true"><i class="icon-plus"></i> Ingresar Trámite</button>--}%
     <button class="btn" id="btnExcel"><i class="icon-table"></i> Presupuesto a Excel</button>
-    <button class="btn" id="btnSalir"><i class="icon-undo"></i> Regresar</button>
+
 </div>
 
 
