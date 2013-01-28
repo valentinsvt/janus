@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class ContratoController extends janus.seguridad.Shield {
 
     def buscadorService
+    def preciosService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -22,14 +23,14 @@ class ContratoController extends janus.seguridad.Shield {
 
      def contrato
 
-        def obra
+        def obra = Obra.get(params.obra)
+
 
         if (params.contrato) {
 
-//            def camposObra = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"]]
 
            contrato = Contrato.get(params.contrato)
-//           obra = Obra.get(params.obra)
+
 
 
 

@@ -242,7 +242,7 @@
 
         <div class="span2 formato">Plazo</div>
 
-        <div class="span3"><g:textField name="plazo" class="plazo activo" value="${contrato?.oferta?.concurso?.obra?.plazo}" style="width: 50px" maxlength="3"/> Días</div>
+        <div class="span3"><g:textField name="plazo" class="plazo activo" value="${contrato?.oferta?.concurso?.obra?.plazo}" style="width: 50px" maxlength="4"/> Días</div>
 
     </div>
 
@@ -252,7 +252,7 @@
 
         <div class="span1"><g:textField name="anticipo" class="anticipo activo" value="${contrato?.oferta?.concurso?.obra?.porcentajeAnticipo}" style="width: 30px; text-align: right"/> %</div>
 
-        <div class="span2"><g:textField name="anticipo" class="anticipoValor activo" value="" style="width: 105px; text-align: right"/></div>
+        <div class="span2"><g:textField name="anticipoValor" class="anticipoValor activo" value="" style="width: 105px; text-align: right"/></div>
 
         <div class="span2 formato">Indices de la Oferta</div>
 
@@ -361,6 +361,114 @@
 </div>
 
 <script type="text/javascript">
+
+
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+    $("#plazo").keydown(function (ev) {
+
+        return validarNum(ev);
+
+    }).keyup(function (){
+
+                var enteros = $(this).val();
+
+            });
+
+
+    $("#monto").keydown(function (ev) {
+
+        return validarNum(ev);
+
+    }).keyup(function (){
+
+                var enteros = $(this).val();
+
+            });
+
+
+
+
+    $("#anticipo").keydown(function (ev) {
+
+        return validarNum(ev);
+
+    }).keyup(function (){
+
+                var enteros = $(this).val();
+
+                if(parseFloat(enteros) > 100){
+
+                    $(this).val(100)
+
+                }
+
+
+
+            });
+
+    $("#anticipoValor").keydown(function (ev) {
+
+        return validarNum(ev);
+
+    }).keyup(function (){
+
+                var enteros = $(this).val();
+
+                var porcentaje = $("#anticipo").val()
+
+                var monto = $("#monto").val()
+
+                var anticipoValor = (porcentaje*(monto))/100;
+
+                $("#anticipoValor").val(number_format(anticipoValor,2,".",""))
+
+
+            }).click(function () {
+
+                var porcentaje = $("#anticipo").val()
+
+                var monto = $("#monto").val()
+
+                var anticipoValor = (porcentaje*(monto))/100;
+
+                $("#anticipoValor").val(number_format(anticipoValor,2,".",","))
+
+
+
+            });
+
+
+    $("#financiamiento").keydown(function (ev) {
+
+        return validarNum(ev);
+
+    }).keyup(function (){
+
+                var enteros = $(this).val();
+
+            });
+
+
+
+
     function enviarObra() {
         var data = "";
         $("#buscarDialog").hide();

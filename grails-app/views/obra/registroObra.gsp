@@ -616,7 +616,14 @@
 
         $("#eliminarObra").click(function () {
 
-            $("#eliminarObraDialog").dialog("open");
+            if(${obra?.id != null}) {
+
+
+                $("#eliminarObraDialog").dialog("open");
+
+            }
+
+
 
         });
 
@@ -837,7 +844,7 @@
             modal     : true,
             draggable : false,
             width     : 350,
-            height    : 180,
+            height    : 220,
             position  : 'center',
             title     : 'Eliminar Obra',
             buttons   : {
@@ -884,7 +891,7 @@
             modal     : true,
             draggable : false,
             width     : 350,
-            height    : 180,
+            height    : 220,
             position  : 'center',
             title     : 'No se puede Eliminar la Obra!',
             buttons   : {

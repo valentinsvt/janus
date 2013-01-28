@@ -371,13 +371,20 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.indiceCostosIndirectosPromocion=par.indiceCostosIndirectosPromocion
             obraInstance.indiceCostosIndirectosMantenimiento=par.indiceCostosIndirectosMantenimiento
             obraInstance.administracion=par.administracion
-            obraInstance.impreso=par.impreso
             obraInstance.indiceCostosIndirectosGarantias=par.indiceCostosIndirectosGarantias
-            obraInstance.indiceUtilidad=par.indiceUtilidad
             obraInstance.indiceCostosIndirectosCostosFinancieros=par.indiceCostosIndirectosCostosFinancieros
-            obraInstance.indiceCostosIndirectosTimbresProvinciales=par.indiceCostosIndirectosTimbresProvinciales
             obraInstance.indiceCostosIndirectosVehiculos=par.indiceCostosIndirectosVehiculos
 
+            obraInstance.impreso=par.impreso
+            obraInstance.indiceUtilidad=par.indiceUtilidad
+            obraInstance.indiceCostosIndirectosTimbresProvinciales=par.indiceCostosIndirectosTimbresProvinciales
+
+
+
+            obraInstance.indiceGastosGenerales=(obraInstance.indiceCostosIndirectosObra+obraInstance.indiceCostosIndirectosPromocion+ obraInstance.indiceCostosIndirectosMantenimiento+
+                    obraInstance.administracion+obraInstance.indiceCostosIndirectosGarantias+obraInstance.indiceCostosIndirectosCostosFinancieros+obraInstance.indiceCostosIndirectosVehiculos)
+
+            obraInstance.totales=(obraInstance.impreso+obraInstance.indiceUtilidad+obraInstance.indiceCostosIndirectosTimbresProvinciales+obraInstance.indiceGastosGenerales)
 
         } //es create
         if (!obraInstance.save(flush: true)) {
