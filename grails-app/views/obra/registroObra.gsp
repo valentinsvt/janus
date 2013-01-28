@@ -837,7 +837,7 @@
             modal     : true,
             draggable : false,
             width     : 350,
-            height    : 180,
+            height    : 220,
             position  : 'center',
             title     : 'Eliminar Obra',
             buttons   : {
@@ -884,7 +884,7 @@
             modal     : true,
             draggable : false,
             width     : 350,
-            height    : 180,
+            height    : 220,
             position  : 'center',
             title     : 'No se puede Eliminar la Obra!',
             buttons   : {
