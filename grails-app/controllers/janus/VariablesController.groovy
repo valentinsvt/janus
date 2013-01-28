@@ -12,7 +12,6 @@ class VariablesController {
         if (par.size()>0)
             par = par.pop()
 
-        println "par "+par.volquete
         def volquetes = []
         def choferes = []
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
