@@ -428,8 +428,8 @@
         }).blur(function () {
                     suma($(".sum2"), $("#totales"));
                 });
-        //$(".sum1").blur()
-        //$(".sum2").blur()
+      //  $(".sum1").blur()
+      //  $(".sum2").blur()
         $("#tabs").tabs({
             heightStyle : "fill"
         });
