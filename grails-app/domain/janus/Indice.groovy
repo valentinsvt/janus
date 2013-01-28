@@ -19,6 +19,6 @@ class Indice implements Serializable {
     static constraints = {
         tipoInstitucion(blank: true, nullable: true, attributes: [title: 'tipoInstitucion'])
         codigo(size: 1..20, blank: false, attributes: [title: 'numero'])
-        descripcion(size: 1..40, blank: false, attributes: [title: 'descripcion'])
+        descripcion(size: 1..131, blank: false, attributes: [title: 'descripcion'])
     }
 }
