@@ -125,7 +125,7 @@
         </tr>
         </thead>
         <tbody id="tabla_material">
-
+        <g:set var="total" value="${0}"></g:set>
         <g:each in="${detalle}" var="vol" status="i">
 
             <tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">
@@ -138,10 +138,15 @@
                 </td>
                 <td class="col_precio" style=";text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
                 <td class="col_total total" style=";text-align: right"><g:formatNumber number="${precios[vol.id.toString()]*vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-
+                <g:set var="total" value="${total.toDouble()+(precios[vol.id.toString()]*vol.cantidad)}"></g:set>
             </tr>
 
         </g:each>
+        <tr>
+            <td colspan="5"></td>
+            <td><b>Total:</b></td>
+            <td style="text-align: right"><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+        </tr>
         </tbody>
     </table>
 </div>

@@ -95,7 +95,7 @@
             </div>
             <div class="span4" style="margin-left: 15px;">
                 <b>Rubro</b>
-                <input type="text" style="width: 330px;font-size: 10px" id="item_nombre">
+                <input type="text" style="width: 330px;font-size: 10px" id="item_nombre" disabled="true" >
 
             </div>
             <div class="span2" style="margin-left: 0px;">
