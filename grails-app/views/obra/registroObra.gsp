@@ -77,7 +77,8 @@
 
         <div class="span 1 formato">DEPARTAMENTO</div>
 
-        <div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" class="departamento" id="departamentoObra" value="${obra?.departamento?.id}" optionKey="id" optionValue="descripcion"/> </div>
+        <div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" class="departamento" id="departamentoObra"
+                                      value="${obra?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 350px"/> </div>
 
     </div>
 
