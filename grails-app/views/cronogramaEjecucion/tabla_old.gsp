@@ -1,7 +1,8 @@
 <g:set var="meses" value="${obra.plazo}"/>
+<g:set var="sum" value="${0}"/>
 
 <g:if test="${meses > 0}">
-    ${tabla}
+   ${tabla}
 </g:if>
 <g:else>
     <div class="alert alert-error">

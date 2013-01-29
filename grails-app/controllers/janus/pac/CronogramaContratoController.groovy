@@ -51,7 +51,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
                     def pf, cf, df
                     println "resto... " + resto
                     if (cont < c.size() - 1) {
-                        pf = Math.round(crono.porcentaje)
+                        pf = Math.floor(crono.porcentaje)
                         resto -= pf
                     } else {
                         pf = resto
@@ -80,7 +80,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
                 } else {
                     println "no guarda, solo actualiza el porcentaje"
                     println "resto... " + resto
-                    def pf = Math.round(crono.porcentaje)
+                    def pf = Math.floor(crono.porcentaje)
                     resto -= pf
                     println "resto... " + resto
                 }

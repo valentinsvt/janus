@@ -216,13 +216,17 @@
 
                 if (tipo == 'fp') {
                     //padres
-                    if (index) { //el primero (p01) no es seleccionable
+                    %{--console.log("${tipo}", index, "${tipo}" == 'p', index == 0, "${tipo}" == 'p' && index == 0);--}%
+//                    if (index) { //el primero (p01) de la formula no es seleccionable (el de cuadrilla tipo si es)
+                    if ("${tipo}" == 'p' && index == 0) { //el primero (p01) de la formula no es seleccionable (el de cuadrilla tipo si es)
+//                        console.log("true");
+                        $seleccionados.removeClass("selected editable");
+                        $parent.children("a, .jstree-grid-cell").addClass("editable parent");
+                    } else {
+//                        console.log("false");
                         $seleccionados.removeClass("selected editable");
                         $parent.children("a, .jstree-grid-cell").addClass("selected editable parent");
                         updateCoef($item.parents("li"));
-                    } else {
-                        $seleccionados.removeClass("selected editable");
-                        $parent.children("a, .jstree-grid-cell").addClass("editable parent");
                     }
                 } else if (tipo == 'it') {
                     //hijos AQUI

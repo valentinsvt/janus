@@ -112,13 +112,13 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                 def sqlSubPresupuestos = "select distinct(sbpr__id) id from vlob where obra__id = ${params.id}"
                 println sqlSubPresupuestos
                 cn.eachRow(sqlSubPresupuestos.toString()) { row ->
-                    println row
+                    println ">>" + row
                     def cn2 = dbConnectionService.getConnection()
                     def idSp = row.id
                     def sqlLlenaDatos = "select * from sp_fpoli(${params.id}, ${idSp})"
                     println sqlLlenaDatos
                     cn2.eachRow(sqlLlenaDatos.toString()) { row2 ->
-                        println row2
+                        println "++" + row2
                     }
                 }
             }
@@ -162,8 +162,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     data.add(mapFormula)
                 }
             }
+            println data
             def json = new JsonBuilder(data)
-//        println json.toPrettyString()
+            println json.toPrettyString()
             def sql = "SELECT\n" +
                     "  v.voit__id                            id,\n" +
                     "  i.item__id                            iid,\n" +

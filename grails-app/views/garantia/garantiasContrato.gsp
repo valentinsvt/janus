@@ -313,14 +313,19 @@
             function updateDias() {
                 var ini = $("#fechaInicio").datepicker("getDate");
                 var fin = $("#fechaFinalizacion").datepicker("getDate");
-                var dif = daydiff(ini, fin);
-                if (dif < 0) {
-                    dif = 0;
+                if (ini && fin) {
+                    var dif = daydiff(ini, fin);
+                    if (dif < 0) {
+                        dif = 0;
+                    }
+                    $("#diasGarantizados").val(dif);
                 }
-                $("#diasGarantizados").val(dif);
-
-                $("#fechaFinalizacion").datepicker("option", "minDate", $("#fechaInicio").datepicker("getDate"));
-                $("#fechaInicio").datepicker("option", "maxDate", $("#fechaFinalizacion").datepicker("getDate"));
+                if (ini) {
+                    $("#fechaFinalizacion").datepicker("option", "minDate", ini.add(1).days());
+                }
+                if (fin) {
+                    $("#fechaInicio").datepicker("option", "maxDate", fin.add(-1).days());
+                }
             }
 
             function rowsIniciales() {
