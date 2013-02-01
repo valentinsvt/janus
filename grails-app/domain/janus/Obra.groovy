@@ -11,6 +11,7 @@ class Obra implements Serializable {
     ClaseObra claseObra
     Departamento departamento
     Lugar lugar
+    String barrio
     String codigo
     String nombre
     String descripcion
@@ -154,11 +155,13 @@ class Obra implements Serializable {
             distanciaPesoEspecial column: 'obradses'
             distanciaVolumenMejoramiento column: 'obradsmj'
             distanciaVolumenCarpetaAsfaltica column: 'obradsca'
+            barrio column: 'obrabarr'
+
         }
     }
     static constraints = {
 
-        codigo(size: 1..10, blank: false, attributes: [title: 'numero'])
+        codigo(size: 1..20, blank: false, attributes: [title: 'numero'])
         nombre(size: 1..127, blank: true, nullable: true, attributes: [title: 'nombre'])
         responsableObra(blank: true, nullable: true, attributes: [title: 'responsableObra'])
         revisor(blank: true, nullable: true, attributes: [title: 'revisor'])
@@ -183,16 +186,16 @@ class Obra implements Serializable {
         estado(size: 1..1, blank: true, nullable: true, attributes: [title: 'estado'])
         referencia(size: 1..127, blank: true, nullable: true, attributes: [title: 'referencia'])
         fechaCreacionObra(blank: true, nullable: true, attributes: [title: 'fecha'])
-        oficioIngreso(size: 1..15, blank: true, nullable: true, attributes: [title: 'oficioIngreso'])
-        oficioSalida(size: 1..15, blank: true, nullable: true, attributes: [title: 'oficioSalida'])
+        oficioIngreso(size: 1..20, blank: true, nullable: true, attributes: [title: 'oficioIngreso'])
+        oficioSalida(size: 1..20, blank: true, nullable: true, attributes: [title: 'oficioSalida'])
         plazo(blank: true, nullable: true, attributes: [title: 'plazo'])
         observaciones(size: 1..127, blank: true, nullable: true, attributes: [title: 'observaciones'])
         tipo(size: 1..1, blank: true, nullable: true, attributes: [title: 'tipo'])
         fechaPreciosRubros(blank: true, nullable: true, attributes: [title: 'fecha'])
         chofer(size: 1..31, blank: true, nullable: true, attributes: [title: 'itemChofer'])
         volquete(size: 1..31, blank: true, nullable: true, attributes: [title: 'item/volquete'])
-        memoCantidadObra(size: 1..15, blank: true, nullable: true, attributes: [title: 'memoCantidadObra'])
-        memoSalida(size: 1..15, blank: true, nullable: true, attributes: [title: 'memoSalida'])
+        memoCantidadObra(size: 1..20, blank: true, nullable: true, attributes: [title: 'memoCantidadObra'])
+        memoSalida(size: 1..20, blank: true, nullable: true, attributes: [title: 'memoSalida'])
         fechaOficioSalida(blank: true, nullable: true, attributes: [title: 'fechaOficioSalida'])
         factorReduccion(blank: true, nullable: true, attributes: [title: 'factorReduccion'])
         factorVelocidad(blank: true, nullable: true, attributes: [title: 'factorVelocidad'])
@@ -204,7 +207,7 @@ class Obra implements Serializable {
         plazoEjecucionAnios(blank: true, nullable: true, attributes: [title: 'plazoEjecucionAnios'])
         plazoEjecucionMeses(blank: true, nullable: true, attributes: [title: 'plazoEjecucionMeses'])
         plazoEjecucionDias(blank: true, nullable: true, attributes: [title: 'plazoEjecucionDias'])
-        formulaPolinomica(size: 1..15, blank: true, nullable: true, attributes: [title: 'formulaPolinomica'])
+        formulaPolinomica(size: 1..20, blank: true, nullable: true, attributes: [title: 'formulaPolinomica'])
         indicador(blank: true, nullable: true, attributes: [title: 'indicador'])
         indiceGastosGenerales(blank: true, nullable: true, attributes: [title: 'indiceGastosGenerales'])
         impreso(blank: true, nullable: true, attributes: [title: 'impreso'])
@@ -231,6 +234,7 @@ class Obra implements Serializable {
         distanciaPesoEspecial(blank: true, nullable: true, attributes: [title: 'distanciaPesoEspecial'])
         distanciaVolumenMejoramiento(blank: true, nullable: true, attributes: [title: 'distanciaVolumenMejoramiento'])
         distanciaVolumenCarpetaAsfaltica(blank: true, nullable: true, attributes: [title: 'distanciaVolumenCarpetaAsfaltica'])
+        barrio(size: 1..127, blank: true, nullable: true, attributes: [title: 'barrio'])
 
 
     }

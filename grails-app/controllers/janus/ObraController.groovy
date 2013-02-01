@@ -25,26 +25,24 @@ class ObraController extends janus.seguridad.Shield {
 
     def registroObra() {
 
+        def obra
+
         def usuario = session.usuario.id
 
         def persona = Persona.get(usuario)
 
-        def volumen = VolumenesObra.get(params.obra)
 
-        def formula = FormulaPolinomica.get(params.obra)
-
-       def prov = Provincia.list();
-        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"]]
+        def prov = Provincia.list();
+        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"]]
         if (params.obra) {
-            def obra = Obra.get(params.obra)
+            obra = Obra.get(params.obra)
             def subs = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
+            def volumen = VolumenesObra.findByObra(obra)
 
-//            println("departamento" + obra.departamento)
+            def formula = FormulaPolinomica.findByObra(obra)
 
-//            if (obra.departamento)
-
-            [campos: campos, prov:prov,obra:obra,subs:subs, persona:  persona, volumen: volumen, formula: formula]
+            [campos: campos, prov:prov,obra:obra,subs:subs, persona:  persona, formula: formula, volumen: volumen]
         } else {
             [campos: campos, prov: prov, persona: persona]
         }
@@ -157,6 +155,16 @@ class ObraController extends janus.seguridad.Shield {
     }
 
 
+    def mapaObra () {
+
+        def obra = Obra.get(params.id)
+
+        return [obra: obra]
+
+
+    }
+
+
 
     def getPersonas () {
 
@@ -193,7 +201,7 @@ class ObraController extends janus.seguridad.Shield {
 
 
 
-        def situacionGeografica() {
+    def situacionGeografica() {
         def comunidades
 
         def orden;
@@ -339,23 +347,13 @@ class ObraController extends janus.seguridad.Shield {
         }
 
 
-//        params.each {k,v ->
-//
-//            println(k+"\t" + v)
-//
-//        }
-
-//        println("parametros" + params)
-
-
-
         def obraInstance
         if (params.id) {
             obraInstance = Obra.get(params.id)
             if (!obraInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Obra con id " + params.id
-                redirect(action: 'list')
+                redirect(action: 'registroObra')
                 return
             }//no existe el objeto
             obraInstance.properties = params
@@ -402,11 +400,11 @@ class ObraController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
-            redirect(action: 'list')
+            redirect(action: 'registroObra')
             return
         }else{
             if (obraInstance.estado=="R")
-             obraService.registrarObra(obraInstance)
+                obraService.registrarObra(obraInstance)
             println "fin registro"
         }
 
@@ -433,26 +431,26 @@ class ObraController extends janus.seguridad.Shield {
 
     def delete() {
 
-        println("delete" + params.id)
+        println("delete:" + params.id)
 
         def obraInstance = Obra.get(params.id)
         if (!obraInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Obra con id " + params.id
-            redirect(action: "registroObra")
+            render("no")
             return
         }
 
         try {
             obraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Obra " + obraInstance.id
-            redirect(action: "registroObra")
+            flash.message = "Se ha eliminado correctamente Obra " + obraInstance.nombre
+            render ("ok")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
             flash.message = "No se pudo eliminar Obra " + (obraInstance.id ? obraInstance.id : "")
-            redirect(action: "registroObra")
+            render("no")
         }
     } //delete
 } //fin controller

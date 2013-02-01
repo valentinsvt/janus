@@ -43,18 +43,24 @@
 
 </div>
 
+
+
+
 <fieldset class="" style="position: relative; height: 50px; float: left;border-bottom: 1px solid black;">
+
+<g:form class="registroContrato" name="frm-registroContrato" action="save">
+
 <div class="span12" style="margin-top: 10px" align="center">
 
     <g:if test="${contrato?.codigo != null}">
 
         <div class="span2 formato">Contrato N°</div>
 
-        <div class="span3"><g:textField name="contratoNumero" class="cotratoNumero" value="${contrato?.codigo}" disabled="true"/></div>
+        <div class="span3"><g:textField name="codigo" class="cotratoNumero" value="${contrato?.codigo}" disabled="true"/></div>
 
         <div class="span2 formato">Memo de Distribución</div>
 
-        <div class="span3"><g:textField name="memoDistribucion" class="memo" value="${contrato?.memo}" disabled="true"/></div>
+        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}" disabled="true"/></div>
 
 
         </div>
@@ -65,11 +71,11 @@
 
         <div class="span2 formato">Contrato N°</div>
 
-        <div class="span3"><g:textField name="contratoNumero" class="cotratoNumero" value="${contrato?.codigo}" /></div>
+        <div class="span3"><g:textField name="codigo" class="cotratoNumero" value="${contrato?.codigo}" /></div>
 
         <div class="span2 formato">Memo de Distribución</div>
 
-        <div class="span3"><g:textField name="memoDistribucion" class="memo" value="${contrato?.memo}" /></div>
+        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}" /></div>
 
 
     </g:else>
@@ -159,7 +165,7 @@
             <div class="span2 formato">Oferta</div>
 
             <div class="span3" id="div_ofertas">
-                <g:select name="oferta.id" from="" noSelection="['-1':'Seleccione una obra']" id="oferta"></g:select>
+                <g:select name="oferta.id" from="" noSelection="['-1':'Seleccione una obra']" id="oferta" optionKey="id"> </g:select>
             </div>
         </div>
         <div class="span12" style="margin-top: 5px" align="center">
@@ -211,7 +217,7 @@
 
         <div class="span2 formato">Tipo</div>
 
-        <div class="span3"><g:select from="${janus.pac.TipoContrato.list().descripcion}" name="tipoContrato" class="tipoContrato activo" value="${contrato?.tipoContrato?.descripcion}" /></div>
+        <div class="span3"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContrato?.descripcion}" optionKey="id" optionValue="descripcion" /></div>
 
         <div class="span2 formato">Fecha de Suscripción</div>
 
@@ -223,7 +229,7 @@
 
         <div class="span2 formato">Objeto del Contrato</div>
 
-        <div class="span3"><g:textArea name="objetoContrato" class="activo" rows="5" cols="5" style="height: 79px; width: 800px; resize: none" value="${contrato?.objeto}"/></div>
+        <div class="span3"><g:textArea name="objeto" class="activo" rows="5" cols="5" style="height: 79px; width: 800px; resize: none" value="${contrato?.objeto}"/></div>
 
 
 
@@ -250,13 +256,13 @@
 
         <div class="span2 formato">Anticipo</div>
 
-        <div class="span1"><g:textField name="anticipo" class="anticipo activo" value="${contrato?.oferta?.concurso?.obra?.porcentajeAnticipo}" style="width: 30px; text-align: right"/> %</div>
+        <div class="span1"><g:textField name="porcentajeAnticipo" class="anticipo activo" value="${contrato?.oferta?.concurso?.obra?.porcentajeAnticipo}" style="width: 30px; text-align: right"/> %</div>
 
-        <div class="span2"><g:textField name="anticipoValor" class="anticipoValor activo" value="" style="width: 105px; text-align: right"/></div>
+        <div class="span2"><g:textField name="anticipo" class="anticipoValor activo" value="" style="width: 105px; text-align: right"/></div>
 
         <div class="span2 formato">Indices de la Oferta</div>
 
-        <div class="span3"><g:select name="indiceOferta" from="${janus.pac.PeriodoValidez.list().descripcion}" class="indiceOferta activo" value="${contrato?.periodoValidez}"/> </div>
+        <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list()}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id"/> </div>
 
     </div>
 
@@ -275,6 +281,12 @@
     </div>
 
 </fieldset>
+
+</g:form>
+
+
+
+
 <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;float: left" align="center">
 
     <div class="navbar-inner">
@@ -406,7 +418,7 @@
 
 
 
-    $("#anticipo").keydown(function (ev) {
+    $("#porcentajeAnticipo").keydown(function (ev) {
 
         return validarNum(ev);
 
@@ -424,7 +436,7 @@
 
             });
 
-    $("#anticipoValor").keydown(function (ev) {
+    $("#anticipo").keydown(function (ev) {
 
         return validarNum(ev);
 
@@ -432,24 +444,24 @@
 
                 var enteros = $(this).val();
 
-                var porcentaje = $("#anticipo").val()
+                var porcentaje = $("#porcentajeAnticipo").val()
 
                 var monto = $("#monto").val()
 
                 var anticipoValor = (porcentaje*(monto))/100;
 
-                $("#anticipoValor").val(number_format(anticipoValor,2,".",""))
+                $("#anticipo").val(number_format(anticipoValor,2,".",""))
 
 
             }).click(function () {
 
-                var porcentaje = $("#anticipo").val()
+                var porcentaje = $("#porcentajeAnticipo").val()
 
                 var monto = $("#monto").val()
 
                 var anticipoValor = (porcentaje*(monto))/100;
 
-                $("#anticipoValor").val(number_format(anticipoValor,2,".",","))
+                $("#anticipo").val(number_format(anticipoValor,2,".",","))
 
 
 
@@ -465,6 +477,37 @@
                 var enteros = $(this).val();
 
             });
+
+
+    $("#codigo").click (function () {
+
+            $("#btn-aceptar").attr("disabled", false)
+
+    });
+
+    $("#objeto").click (function () {
+
+       $("#btn-aceptar").attr("disabled",false)
+
+    });
+
+    $("#tipoContrato").change(function () {
+
+        $("#btn-aceptar").attr("disabled",false)
+
+    });
+
+    $("#monto").click(function () {
+
+        $("#btn-aceptar").attr("disabled",false)
+
+    });
+
+    $("#financiamiento").click(function () {
+
+        $("#btn-aceptar").attr("disabled",false)
+
+    });
 
 
 
@@ -535,7 +578,7 @@
     $("#btn-lista").click(function () {
 
         $("#btn-cancelar").attr("disabled", true);
-        $("#btn-aceptar").attr("disabled", true);
+//        $("#btn-aceptar").attr("disabled", true);
 
 
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
@@ -549,6 +592,8 @@
     });
 
     $("#btn-nuevo").click(function () {
+
+
         location.href="${createLink(action: 'registroContrato')}"
     });
 
@@ -577,13 +622,16 @@
 
     $("#btn-salir").click(function () {
 
-
-
         location.href = "${g.createLink(action: 'index', controller: "inicio")}";
 
     });
 
+     $("#btn-aceptar").click(function () {
 
+
+         $("#frm-registroContrato").submit();
+
+     });
 
 
 

@@ -791,7 +791,7 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph("Plazo: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(obra?.plazo + " Mes(es)", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(obra?.plazoEjecucionMeses + " Mes(es)" + " " + obra?.plazoEjecucionDias + " Días", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
@@ -836,6 +836,10 @@ class ReportesController {
 
         addCellTabla(tablaCoeficiente, new Paragraph("Comunidad: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(obra?.comunidad?.nombre, times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
+
+        addCellTabla(tablaCoeficiente, new Paragraph("Barrio: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(obra?.barrio, times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph("Sitio: ", times10bold), prmsHeaderHoja)
