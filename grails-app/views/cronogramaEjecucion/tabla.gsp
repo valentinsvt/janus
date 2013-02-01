@@ -11,3 +11,16 @@
         La obra tiene una planificación de 0 meses...Por favor corrija esto para continuar con el cronograma.
     </div>
 </g:else>
+
+%{--<script type="text/javascript">--}%
+%{--$("th.S.click").click(function () {--}%
+%{--if ($(this).hasClass("selected")) {--}%
+%{--$(this).removeClass("selected");--}%
+%{--$("#btnDelSusp").addClass("disabled");--}%
+%{--} else {--}%
+%{--$(".selected").removeClass("selected");--}%
+%{--$(this).addClass("selected");--}%
+%{--$("#btnDelSusp").removeClass("disabled");--}%
+%{--}--}%
+%{--});--}%
+%{--</script>--}%

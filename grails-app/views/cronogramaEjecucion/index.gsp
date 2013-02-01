@@ -67,35 +67,38 @@
             width : 75px;
         }
 
-        .item_row.rowSelected {
-            background : #75B2DE !important;
-        }
-
-        .item_prc.rowSelected {
-            background : #84BFEA !important;
-        }
-
-        .item_f.rowSelected {
-            background : #94CDF7 !important;
-        }
-
-        .graf {
-            width  : 870px;
-            height : 410px;
-            /*background : #e6e6fa;*/
-        }
-
-            /*.btn {*/
-            /*z-index : 9999 !important;*/
+            /*.P {*/
+            /*background : red !important;*/
             /*}*/
 
-            /*.modal-backdrop {*/
-            /*z-index : 9998 !important;*/
+        th.S {
+            background  : #f8f8ff !important;
+            color       : #10718C !important;
+            text-shadow : -2px 1px 3px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        .item_row td.S {
+            background : #BFBFC1 !important;
+        }
+
+        .item_prc td.S {
+            background : #D1D1D6 !important;
+        }
+
+        .item_f td.S {
+            background : #E5E5EA !important;
+        }
+
+        .selected, th.selected.S {
+            background  : #10718C !important;
+            color       : #f8f8ff !important;
+            text-shadow : -2px 1px 3px rgba(255, 255, 255, 0.6) !important;
+        }
+
+            /*.click {*/
+            /*cursor : pointer;*/
             /*}*/
 
-            /*.modal {*/
-            /*z-index : 9999 !important;*/
-            /*}*/
         </style>
 
     </head>
@@ -117,34 +120,42 @@
 
             <g:if test="${meses > 0}">
                 <div class="btn-group">
-                    <a href="#" class="btn btn-info" id="btnSusp">
-                        <i class="icon-resize-small"></i>
-                        Suspensión
-                    </a>
                     <a href="#" class="btn btn-info" id="btnAmpl">
                         <i class="icon-resize-full"></i>
                         Ampliación
                     </a>
+                    <a href="#" class="btn btn-info" id="btnSusp">
+                        <i class="icon-resize-small"></i>
+                        Suspensión
+                    </a>
+                    <a href="#" class="btn btn-info" id="btnFecha">
+                        <i class="icon-calendar"></i>
+                        Cambiar fecha de fin
+                    </a>
+                    %{--<a href="#" class="btn btn-danger disabled" id="btnDelSusp">--}%
+                    %{--<i class="icon-trash"></i>--}%
+                    %{--Eliminar Suspensión--}%
+                    %{--</a>--}%
                 </div>
 
-                <div class="btn-group">
-                    <a href="#" class="btn" id="btnGrafico">
-                        <i class="icon-bar-chart"></i>
-                        Gráficos de avance
-                    </a>
-                %{--<a href="#" class="btn" id="btnGraficoEco">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance económico--}%
-                %{--</a>--}%
-                %{--<a href="#" class="btn" id="btnGraficoFis">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance físico--}%
-                %{--</a>--}%
-                    <g:link action="excel" class="btn" id="${obra.id}">
-                        <i class="icon-table"></i>
-                        Exportar a Excel
-                    </g:link>
-                </div>
+            %{--<div class="btn-group">--}%
+            %{--<a href="#" class="btn" id="btnGrafico">--}%
+            %{--<i class="icon-bar-chart"></i>--}%
+            %{--Gráficos de avance--}%
+            %{--</a>--}%
+            %{--<a href="#" class="btn" id="btnGraficoEco">--}%
+            %{--<i class="icon-bar-chart"></i>--}%
+            %{--Gráfico de avance económico--}%
+            %{--</a>--}%
+            %{--<a href="#" class="btn" id="btnGraficoFis">--}%
+            %{--<i class="icon-bar-chart"></i>--}%
+            %{--Gráfico de avance físico--}%
+            %{--</a>--}%
+            %{--<g:link action="excel" class="btn" id="${obra.id}">--}%
+            %{--<i class="icon-table"></i>--}%
+            %{--Exportar a Excel--}%
+            %{--</g:link>--}%
+            %{--</div>--}%
             </g:if>
         </div>
 
@@ -271,6 +282,7 @@
 
                         }
                     });
+                    return false;
                 });
                 $("#btnSusp").click(function () {
                     $.ajax({
@@ -285,7 +297,7 @@
 
                             btnSave.click(function () {
                                 if ($("#frmSave-suspension").valid()) {
-//                                btnSave.replaceWith(spinner);
+                                    btnSave.replaceWith(spinner);
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'suspension')}",
@@ -295,9 +307,9 @@
                                             fin  : $("#fin").val()
                                         },
                                         success : function (msg) {
-                                            console.log(msg);
-//                                            $("#modal-forms").modal("hide");
-//                                            updateTabla();
+//                                            console.log(msg);
+                                            $("#modal-forms").modal("hide");
+                                            updateTabla();
                                         }
                                     });
                                 }
@@ -311,7 +323,76 @@
 
                         }
                     });
+                    return false;
                 });
+
+//                $("#btnDelSusp").click(function () {
+//                    if (!$(this).hasClass("disabled")) {
+//                        var per = $(".selected").data("periodo");
+//
+//                        $.box({
+//                            imageClass : "box_info",
+//                            title      : "Confirmación",
+//                            text       : "Está seguro de querer eliminar esta suspensión? Esta acción no se puede deshacer.",
+//                            iconClose  : false,
+//                            dialog     : {
+//                                resizable     : false,
+//                                draggable     : false,
+//                                closeOnEscape : false,
+//                                buttons       : {
+//                                    "Aceptar"  : function () {
+//                                        console.log("KK")
+//                                    },
+//                                    "Cancelar" : function () {
+//                                    }
+//                                }
+//                            }
+//                        });
+//                    }
+//                    return false;
+//                });
+
+                $("#btnFecha").click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'cambioFecha_ajax')}",
+                        data    : {
+                            obra : "${obra.id}"
+                        },
+                        success : function (msg) {
+                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                if ($("#frmSave-suspension").valid()) {
+                                    btnSave.replaceWith(spinner);
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'cambioFecha')}",
+                                        data    : {
+                                            obra  : "${obra.id}",
+                                            fecha : $("#fecha").val()
+                                        },
+                                        success : function (msg) {
+                                            //                                            console.log(msg);
+                                            $("#modal-forms").modal("hide");
+                                            updateTabla();
+                                        }
+                                    });
+                                }
+                                return false;
+                            });
+
+                            $("#modalTitle-forms").html("Cambio de fecha");
+                            $("#modalBody-forms").html(msg);
+                            $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                            $("#modal-forms").modal("show");
+
+                        }
+                    });
+                    return false;
+                });
+
             });
 
 

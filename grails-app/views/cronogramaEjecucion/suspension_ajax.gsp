@@ -1,4 +1,10 @@
 <g:form class="form-horizontal" name="frmSave-suspension" action="ampliacion">
+    <div class="alert alert-danger">
+        <h4>Atención</h4>
+        <i class="icon-info-sign icon-2x pull-left"></i>
+        Una vez hecha la suspensión no se puede deshacer.
+    </div>
+
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -51,4 +57,8 @@
 
 <script type="text/javascript">
     $("#frmSave-suspension").validate();
+
+    $(".datepicker").keydown(function () {
+        return false;
+    });
 </script>

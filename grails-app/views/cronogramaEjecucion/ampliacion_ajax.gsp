@@ -1,4 +1,10 @@
 <g:form class="form-horizontal" name="frmSave-ampliacion" action="ampliacion">
+    <div class="alert alert-danger">
+        <h4>Atención</h4>
+        <i class="icon-info-sign icon-2x pull-left"></i>
+        Una vez hecha la ampliación no se puede deshacer.
+    </div>
+
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -13,8 +19,8 @@
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
-</g:form>
 
+</g:form>
 
 <script type="text/javascript">
     $("#dias").keydown(function (ev) {
