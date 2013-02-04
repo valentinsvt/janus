@@ -870,7 +870,7 @@
                 url     : url,
                 success : function (msg) {
                     if (msg == "ok" || msg == "OK") {
-                        location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra.id)}";
+                        location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra?.id)}";
                     }
                 }
             });

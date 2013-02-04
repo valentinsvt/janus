@@ -57,6 +57,13 @@
         <i class="icon-print"></i>
         Imprimir
     </a>
+    <g:if test="${rubro}">
+        <a href="#" id="foto" class="btn btn-ajax btn-new" >
+            <i class="icon-picture"></i>
+            Foto
+        </a>
+
+    </g:if>
 
     %{--<a href="${g.createLink(controller: 'pdf',action: 'pdfLink',params: [url:g.createLink(controller: 'reportes3',action: 'imprimirRubro',id: rubro?.id)])}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
     %{--<i class="icon-print"></i>--}%
@@ -78,26 +85,22 @@
         <div class="row-fluid">
             <div class="span2">
                 Código
-                <input type="text" name="rubro.codigo" class="span24" value="${rubro?.codigo}">
+                <input type="text" name="rubro.codigo" class="span24" value="${rubro?.codigo}" id="input_codigo">
             </div>
 
             <div class="span6">
                 Descripción
-                <input type="text" name="rubro.nombre" class="span72" value="${rubro?.nombre}">
+                <input type="text" name="rubro.nombre" class="span72" value="${rubro?.nombre}" id="input_descripcion">
             </div>
 
-            <div class="span1" style="border: 0px solid black;height: 45px;padding-top: 18px">
-
-                <div class="btn-group" data-toggle="buttons-checkbox">
-                    <button type="button" id="rubro_registro" class="btn btn-info ${(rubro?.registro == 'R') ? 'active registrado' : ""}" style="font-size: 10px">Registrado</button>
-                </div>
-                <input type="hidden" id="registrado" name="rubro.registro" value="${rubro?.registro}">
-
+            <div class="span2" style="">
+                Fecha Creación
+                <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fecha}" disabled="true" id="fechaCreacion"/>
             </div>
 
             <div class="span2">
-                Fecha registro
-                <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fechaRegistro}" disabled="true" id="fechaReg"/>
+                Fecha Modificación
+                <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fechaModificacion}"  format="dd-MM-yyyy hh:mm " disabled="true" id="fchaMod"/>
             </div>
 
         </div>
@@ -649,6 +652,17 @@
 
     $(function () {
 
+
+
+        $("#foto").click(function () {
+            var child = window.open('${createLink(controller:"rubro",action:"showFoto",id: rubro?.id)}', 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
+
+            if (child.opener == null)
+                child.opener = self;
+            window.toolbar.visible = false;
+            window.menubar.visible = false;
+        });
+
         $("#borrar").click(function(){
             <g:if test="${rubro}">
             if(confirm("Esta Seguro?")){
@@ -1083,7 +1097,48 @@
         });
 
         $("#guardar").click(function () {
-            $(".frmRubro").submit()
+
+            var cod = $("#input_codigo").val()
+            var desc = $("#input_descripcion").val()
+            var subGr = $("#selSubgrupo").val()
+            var msg =""
+
+            if(cod.trim().length>20 || cod.trim().length<1){
+                msg="<br>Error: La propiedad código debe tener entre 1 y 20 caracteres."
+            }
+
+            if(desc.trim().length>20 || desc.trim().length<1){
+                if(msg=="")
+                    msg="<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
+                else
+                    msg+="<br>La propiedad descripción debe tener entre 1 y 160 caracteres."
+            }
+
+            if(isNaN(subGr) || subGr*1<1){
+                if(msg=="")
+                    msg="<br>Error: Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
+                else
+                    msg+="<br>Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
+            }
+            if(msg==""){
+                $(".frmRubro").submit()
+            }else{
+                $.box({
+                    imageClass : "box_info",
+                    text       : msg,
+                    title      : "Errores de validación",
+                    iconClose  : false,
+                    dialog     : {
+                        resizable : false,
+                        draggable : false,
+                        width      :600,
+                        buttons   : {
+                            "Aceptar" : function () {
+                            }
+                        }
+                    }
+                });
+            }
         });
 
         <g:if test="${rubro}">

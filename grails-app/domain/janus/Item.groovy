@@ -6,7 +6,7 @@ class Item implements Serializable {
     String codigo
     String nombre
     double peso
-    Date fecha
+    Date fecha = new Date()
     Date fechaRegistro
     Date fechaModificacion
     String estado
@@ -21,6 +21,8 @@ class Item implements Serializable {
     String registro
     String combustible
     String observaciones
+    String foto
+
     static mapping = {
         table 'item'
         cache usage: 'read-write', include: 'non-lazy'
@@ -50,11 +52,12 @@ class Item implements Serializable {
             registro column: 'itemrgst'
             combustible column: 'itemcmbs'
             observaciones column: 'itemobsr'
+            foto column: 'itemfoto'
         }
     }
     static constraints = {
-        nombre(size: 1..160, blank: false, unique: true, attributes: [title: 'nombre'])
-        codigo(size: 1..20, blank: false, attributes: [title: 'numero'])
+        nombre(size: 1..160, blank: false,  attributes: [title: 'nombre'])
+        codigo(size: 1..20, blank: false, unique: true,attributes: [title: 'numero'])
         unidad(blank: true, nullable: true, attributes: [title: 'unidad'])
         tipoItem(blank: true, nullable: true, attributes: [title: 'tipoItem'])
         peso(blank: true, nullable: true, attributes: [title: 'peso'])
@@ -74,5 +77,6 @@ class Item implements Serializable {
         transporte(size: 1..2, blank: true, nullable: true, attributes: [title: 'transporte'])
         combustible(size: 1..1, blank: true, nullable: true, attributes: [title: 'combustible'])
         observaciones(size: 1..127, blank: true, nullable: true, attributes: [title: 'observaciones'])
+        foto(size: 1..100,blank: true,nullable: true)
     }
 }

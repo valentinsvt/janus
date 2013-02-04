@@ -113,6 +113,8 @@ class RubroController extends janus.seguridad.Shield {
         if (!detalle.save(flush: true)) {
             println "detalle " + detalle.errors
         } else {
+            rubro.fechaModificacion=new Date()
+            rubro.save(flush: true)
             render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id+";"+detalle.item.id+";"+detalle.cantidad+";"+detalle.rendimiento
         }
     }
@@ -245,8 +247,11 @@ class RubroController extends janus.seguridad.Shield {
                     nuevo.fecha = new Date()
                     if (!nuevo.save(flush: true))
                         println "Error: copiar composicion " + nuevo.errors
+
                 }
             }
+            rubro.fechaModificacion=new Date()
+            rubro.save(flush: true)
             render "ok"
         } else {
             response.sendError(403)
@@ -278,8 +283,9 @@ class RubroController extends janus.seguridad.Shield {
         def rubro
         if (params.rubro.id) {
             rubro = Item.get(params.rubro.id)
-            params.rubro.fecha = null
+            params.remove("rubro.fecha")
             rubro.tipoItem = TipoItem.get(2)
+            rubro.fechaModificacion=new Date()
         } else {
             rubro = new Item(params)
             params.rubro.fecha = new Date()
@@ -461,5 +467,57 @@ class RubroController extends janus.seguridad.Shield {
 //
 //        pg: select * from rb_precios(293, 4, '1-feb-2008', 50, 70, 0.1015477897561282, 0.1710401760227313);
     }
+
+    def showFoto(){
+        def rubro = Item.get(params.id)
+        [rubro: rubro]
+    }
+
+    def uploadFile(){
+//        println "upload "+params
+        def path = servletContext.getRealPath("/") + "rubros/"   //web-app/rubros
+        def rubro = Item.get(params.rubro)
+        def f = request.getFile('file')  //archivo = name del input type file
+        if (f && !f.empty) {
+            def fileName = f.getOriginalFilename() //nombre original del archivo
+            def ext
+            def parts = fileName.split("\\.")
+            fileName = ""
+            parts.eachWithIndex { obj, i ->
+                if (i < parts.size() - 1) {
+                    fileName += obj
+                } else {
+                    ext = obj
+                }
+            }
+            if (ext=="jpg" || ext=="JPG" || ext=="png" || ext=="PNG" || ext=="gif" || ext=="GIF" || ext=="jpeg" || ext=="JPEG"){
+                def ahora = new Date()
+                fileName = "r_"+rubro.id+"_"+ahora.format("dd_MM_yyyy_hh_mm_ss")
+                def fn = fileName
+                fileName = fileName + "." + ext
+                def pathFile = path + fileName
+                def src = new File(pathFile)
+                def i = 1
+                def file = new File(pathFile)
+                f.transferTo(file)
+
+                rubro.foto= g.resource(dir: "rubros")+"/"+fileName
+                rubro.save(flush: true)
+
+
+            }else{
+                flash.message="Error: Los formatos permitidos son: JPG, JPEG, GIF, PNG"
+            }
+
+
+        }else{
+            flash.message="Error: Los formatos permitidos son: JPG, JPEG, GIF, PNG"
+        }
+        redirect(action: "showFoto",id: rubro.id)
+        return
+
+
+    }
+
 
 } //fin controller
