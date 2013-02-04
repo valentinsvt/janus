@@ -13,7 +13,7 @@ class Asignacion {
         id generator: 'identity'
         version false
         columns {
-            id column: 'anio__id'
+            id column: 'asgn__id'
             prespuesto column: 'prsp__id'
             anio column: 'anio__id'
             valor column: 'asgnvlor'
