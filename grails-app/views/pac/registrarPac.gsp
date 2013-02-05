@@ -47,6 +47,20 @@
     <div class="borde_abajo" style="padding-left: 45px;position: relative;">
         <p class="css-vertical-text">P.A.C.</p>
         <div class="linea" style="height: 98%;"></div>
+        <div class="row-fluid" style="margin-left: 0px">
+            <div class="span4">
+                <b>Requiriente:</b>
+                <input type="text" id="item_req" style="width: 250px;">
+            </div>
+            <div class="span3">
+                <b>Memorando:</b>
+                <input type="text" id="item_memo" style="width: 157px;">
+            </div>
+            <div class="span5">
+                <b>Tipo procedimiento:</b>
+                <g:select name="tipoProcedimiento.id" from="${janus.pac.TipoProcedimiento.list([order:'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 313px;;font-size: 10px" id="item_tipoProc"></g:select>
+            </div>
+        </div>
 
         <div class="row-fluid" style="margin-left: 0px">
             <div class="span3">
@@ -254,6 +268,8 @@
             var tipo = $("#item_tipo").val()
             var desc = $("#item_desc").val()
             var cant = $("#item_cantidad").val()
+            var req = $("#item_req").val()
+            var memo = $("#item_memo").val()
             cant = str_replace(",","",cant)
             if(isNaN(cant))
                 cant=0
@@ -277,10 +293,34 @@
                 c3="S"
             else
                 c3=""
+            var msg =""
+            if(req.trim()==""){
+                msg+="<br>Error: Ingrese el nombre de la persona requiriente"
+
+            }
+            if(memo.trim()==""){
+                msg+="<br>Error: Ingrese el numero del momorando de referencia"
+            }
             if(costo*1==0 || cant*1==0){
+                msg+="<br>Error: El costo y la cantidad deben ser números positivos"
+            }
+            if(desc.trim()==""){
+                msg+="<br>Error: Ingrese una descripción"
+
+            }
+            if(prsp*1<1){
+                msg+="<br>Error: Escoja una partida presupuestaria"
+
+            }
+            if(cpac*1<1){
+                msg+="<br>Error: Escoja una partida de compras públicas"
+
+            }
+            if(msg!==""){
+
                 $.box({
                     imageClass : "box_info",
-                    text       : "El costo y la cantidad deben ser números positivos",
+                    text       : msg,
                     title      : "Alerta",
                     iconClose  : false,
                     dialog     : {
@@ -294,61 +334,50 @@
                     }
                 });
             }else{
-                if(desc.trim()==""){
-                    $.box({
-                        imageClass : "box_info",
-                        text       : "Ingrese una descripción",
-                        title      : "Alerta",
-                        iconClose  : false,
-                        dialog     : {
-                            resizable : false,
-                            draggable : false,
-                            buttons   : {
-                                "Aceptar" : function () {
-                                }
-                            },
-                            width     : 500
-                        }
-                    });
-                }else{
-                    $.ajax({type : "POST", url : "${g.createLink(controller: 'pac',action:'regPac')}",
-                        data     : {
-                            "departamento.id" : dpto,
-                            "anio.id" : anio,
-                            "presupuesto.id" : prsp,
-                            "cpp.id" : cpac,
-                            "tipoCompra.id" : tipo,
-                            "descripcion" : desc,
-                            "cantidad" : cant,
-                            "costo" : costo,
-                            "unidad.id" : unidad,
-                            c1 : c1,
-                            c2 : c2,
-                            c3 : c3,
-                            id : $("#item_id").val()
-                        },
-                        success  : function (msg) {
-                            $("#item_id").val("")
-                            $("#item_cpac").val("")
-                            $("#item_tipo").val()
-                            $("#item_desc").val("")
-                            $("#item_cantidad").val("1")
-                            $("#item_precio").val("1")
-                            $("#item_unidad").val()
-                            $("#item_c1").removeClass("active")
-                            $("#item_c2").removeClass("active")
-                            $("#item_c3").removeClass("active")
-                            $("#item_codigo").val("").attr("title","")
-                            $("#item_presupuesto").val("").attr("title","")
-                            $("#item_prsp").val("")
-                            cargarTabla()
-                        }
-                    });
-                }
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'pac',action:'regPac')}",
+                    data     : {
+                        "departamento.id" : dpto,
+                        "anio.id" : anio,
+                        "presupuesto.id" : prsp,
+                        "cpp.id" : cpac,
+                        "tipoCompra.id" : tipo,
+                        "descripcion" : desc,
+                        "cantidad" : cant,
+                        "costo" : costo,
+                        "unidad.id" : unidad,
+                        "requiriente":req,
+                        "memo":memo,
+                        c1 : c1,
+                        c2 : c2,
+                        c3 : c3,
+                        id : $("#item_id").val()
+                    },
+                    success  : function (msg) {
+                        $("#item_id").val("")
+                        $("#item_cpac").val("")
+                        $("#item_tipo").val()
+                        $("#item_desc").val("")
+                        $("#item_cantidad").val("1")
+                        $("#item_precio").val("1")
+                        $("#item_unidad").val()
+                        $("#item_c1").removeClass("active")
+                        $("#item_c2").removeClass("active")
+                        $("#item_c3").removeClass("active")
+                        $("#item_codigo").val("").attr("title","")
+                        $("#item_presupuesto").val("").attr("title","")
+                        $("#item_prsp").val("")
+                        $("#item_req").val("")
+                        $("#item_memo").val("")
+                        cargarTabla()
+                    }
+                });
             }
 
 
-        })
+
+
+
+        });
 
         $("#item_depto").change(function(){
             cargarTabla()

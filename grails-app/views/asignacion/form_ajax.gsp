@@ -34,70 +34,71 @@
         </div>
     </g:if>
 </div>
-
-
-%{--<div class="span12 btn-group" role="navigation" style="margin-left: 0px;">--}%
-
-
-%{--<a href="#" class="btn btn-ajax btn-new" id="calcular" title="Calcular precios">--}%
-%{--<i class="icon-table"></i>--}%
-%{--Calcular--}%
-%{--</a>--}%
-
-%{--</div>--}%
+<div class="tituloTree" style="width: 700px;">
+    Asignacion de techos anuales a partidas presupuestarias
+</div>
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
 
-<div id="create-Asignacion" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-Asignacion" action="save">
-        <g:hiddenField name="id" value="${asignacionInstance?.id}"/>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Prespuesto
-                </span>
+    <div id="create-Asignacion" class="span" role="main">
+        <g:form class="form-horizontal frm_asgn" name="frmSave-Asignacion" action="save" >
+            <g:hiddenField name="id" value="${asignacionInstance?.id}"/>
+
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Partida
+                    </span>
+                </div>
+
+                <div class="controls">
+
+                    <input type="text" style="width: 190px;;font-size: 10px" id="item_presupuesto">
+                    <input type="hidden" style="width: 60px" id="item_prsp" name="prespuesto.id">
+                    <a href="#" class="btn btn-warning" title="Crear nueva partida" style="margin-top: -10px" id="item_agregar_prsp">
+                        <i class="icon-edit"></i>
+                         Crear nueva partida
+                    </a>
+
+                </div>
             </div>
 
-            <div class="controls">
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Anio
+                    </span>
+                </div>
 
-                <input type="text" style="width: 190px;;font-size: 10px" id="item_presupuesto">
-                <input type="hidden" style="width: 60px" id="item_prsp" name="prespuesto.id">
-                <a href="#" class="btn btn-warning" title="Crear nueva partida" style="margin-top: -10px" id="item_agregar_prsp">
-                    <i class="icon-edit"></i>
-                </a>
-
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Anio
-                </span>
+                <div class="controls">
+                    <g:select id="anio" name="anio.id" from="${janus.pac.Anio.list()}" optionKey="id" optionValue="anio" class="many-to-one  required" value="${actual}"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
             </div>
 
-            <div class="controls">
-                <g:select id="anio" name="anio.id" from="${janus.pac.Anio.list()}" optionKey="id" class="many-to-one  required" value="${asignacionInstance?.anio?.id}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Valor
+                    </span>
+                </div>
+
+                <div class="controls">
+                    <g:field type="number" name="valor" id="valor" class=" required" value="0.00"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
             </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Valor
-                </span>
+            <div class="control-group">
+                <div>
+                   <a href="#"  id="guardar"  class="btn btn-primary">Guardar </a>
+                </div>
             </div>
 
-            <div class="controls">
-                <g:field type="number" name="valor" class=" required" value="${fieldValue(bean: asignacionInstance, field: 'valor')}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-    </g:form>
+        </g:form>
+    </div>
+</div>
+
 
 <div class="modal grande hide fade" id="modal-ccp" style="overflow: hidden;">
     <div class="modal-header btn-info">
@@ -107,7 +108,7 @@
     </div>
 
     <div class="modal-body" id="modalBody">
-        <bsc:buscador name="pac.buscador.id" value="" accion="buscaCpac" controlador="pac" campos="${campos}" label="cpac" tipo="lista"/>
+        <bsc:buscador name="pac.buscador.id" value="" accion="buscaPrsp" controlador="asignacion" campos="${campos}" label="cpac" tipo="lista"/>
     </div>
 
     <div class="modal-footer" id="modalFooter">
@@ -126,25 +127,119 @@
     <div class="modal-footer" id="modalFooter-presupuesto">
     </div>
 </div>
-
 <script type="text/javascript">
-    $("#frmSave-Asignacion").validate({
-        errorPlacement : function (error, element) {
-            element.parent().find(".help-block").html(error).show();
-        },
-        success        : function (label) {
-            label.parent().hide();
-        },
-        errorClass     : "label label-important",
-        submitHandler  : function(form) {
-            $(".btn-success").replaceWith(spinner);
-            form.submit();
+    function cargarTecho(){
+        if($("#item_prsp").val()*1>0){
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'asignacion',action:'cargarTecho')}",
+                data     :  "id="+$("#item_prsp").val()+"&anio="+$("#anio").val(),
+                success  : function (msg) {
+                    $("#valor").val(number_format(msg, 2, ".", ""))
+                }
+            });
+        }else{
+            $.box({
+                imageClass : "box_info",
+                text       : "Por favor escoja una partida presupuestaria, dando doble click en el campo de texto",
+                title      : "Alerta",
+                iconClose  : false,
+                dialog     : {
+                    resizable : false,
+                    draggable : false,
+                    buttons   : {
+                        "Aceptar" : function () {
+                        }
+                    },
+                    width     : 500
+                }
+            });
         }
+
+    }
+
+    $("#guardar").click(function(){
+        var msn =""
+        var valor = $("#valor").val()
+        if($("#item_prsp").val()*1<1){
+          msn+="<br>Error: Escoja una partida presupuestaria, dando doble click en el campo de texto"
+        }
+        if(isNaN(valor)){
+            msn+="<br>Error: El valor debe ser un número positivo"
+        }else{
+            if(valor*1<0){
+                msn+="<br>Error: El valor debe ser un número positivo"
+            }
+        }
+        if(msn=="")
+        $(".frm_asgn").submit()
+        else{
+            $.box({
+                imageClass : "box_info",
+                text       : msn,
+                title      : "Errores",
+                iconClose  : false,
+                dialog     : {
+                    resizable : false,
+                    draggable : false,
+                    buttons   : {
+                        "Aceptar" : function () {
+                        }
+                    },
+                    width     : 500
+                }
+            });
+        }
+
+    })
+
+
+    $("#anio").change(cargarTecho)
+    $("#item_agregar_prsp").click(function () {
+        $.ajax({
+            type    : "POST",
+            url     : "${createLink(action:'form_ajax',controller: 'presupuesto')}",
+            success : function (msg) {
+                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                btnSave.click(function () {
+                    if ($("#frmSave-presupuestoInstance").valid()) {
+                        btnSave.replaceWith(spinner);
+                    }
+                    $.ajax({type : "POST", url : "${g.createLink(controller: 'presupuesto',action:'saveAjax')}",
+                        data     :   $("#frmSave-presupuestoInstance").serialize(),
+                        success  : function (msg) {
+                            console.log(msg)
+                            var parts = msg.split("&")
+                            $("#item_prsp").val(parts[0])
+                            $("#item_presupuesto").val(parts[1])
+                            $("#item_presupuesto").attr("title",parts[2])
+                            $("#modal-presupuesto").modal("hide");
+                        }
+                    });
+
+                    return false;
+                });
+
+                $("#modalTitle-presupuesto").html("Crear Presupuesto");
+                $("#modalBody-presupuesto").html(msg);
+                $("#modalFooter-presupuesto").html("").append(btnOk).append(btnSave);
+                $("#modal-presupuesto").modal("show");
+            }
+        });
+        return false;
+    });
+    $("#item_presupuesto").dblclick(function () {
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+        $("#modalTitle").html("Partidas presupuestarias");
+        $("#modalFooter").html("").append(btnOk);
+        $(".contenidoBuscador").html("")
+        $("#modal-ccp").modal("show");
+
     });
 
-    $("input").keyup(function (ev) {
-        if (ev.keyCode == 13) {
-            submitForm($(".btn-success"));
-        }
-    });
+
 </script>
+
+</body>
+</html>
+

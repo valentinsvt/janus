@@ -16,12 +16,12 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
 
     def form_ajax() {
         def tipoProcedimientoInstance = new TipoProcedimiento(params)
-        if (params.id) {
+        if(params.id) {
             tipoProcedimientoInstance = TipoProcedimiento.get(params.id)
-            if (!tipoProcedimientoInstance) {
+            if(!tipoProcedimientoInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Tipo Procedimiento con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Tipo Procedimiento con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,9 +30,9 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
 
     def save() {
         def tipoProcedimientoInstance
-        if (params.id) {
+        if(params.id) {
             tipoProcedimientoInstance = TipoProcedimiento.get(params.id)
-            if (!tipoProcedimientoInstance) {
+            if(!tipoProcedimientoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Tipo Procedimiento con id " + params.id
                 redirect(action: 'list')
@@ -50,7 +50,7 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
             str += "<ul>"
             tipoProcedimientoInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
+                err.arguments.eachWithIndex {  arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -62,7 +62,7 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.id
         } else {
@@ -76,7 +76,7 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
         def tipoProcedimientoInstance = TipoProcedimiento.get(params.id)
         if (!tipoProcedimientoInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Tipo Procedimiento con id " + params.id
+            flash.message =  "No se encontró Tipo Procedimiento con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +87,7 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
         def tipoProcedimientoInstance = TipoProcedimiento.get(params.id)
         if (!tipoProcedimientoInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Tipo Procedimiento con id " + params.id
+            flash.message =  "No se encontró Tipo Procedimiento con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +95,12 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
         try {
             tipoProcedimientoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.id
+            flash.message =  "Se ha eliminado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Tipo Procedimiento " + (tipoProcedimientoInstance.id ? tipoProcedimientoInstance.id : "")
+            flash.message =  "No se pudo eliminar Tipo Procedimiento " + (tipoProcedimientoInstance.id ? tipoProcedimientoInstance.id : "")
             redirect(action: "list")
         }
     } //delete
