@@ -253,6 +253,16 @@
 
         <div class="span2"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
+        <div class="span1">Latitud</div>
+
+        <div class="span1"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}" style="width: 70px" /></div>
+
+        <div class="span1">Longitud</div>
+
+        <div class="span1"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 70px"/></div>
+
+
+
     </div>
 
 </fieldset>

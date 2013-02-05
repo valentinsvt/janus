@@ -26,6 +26,14 @@
         font-weight : bolder;
     }
 
+
+    .titulo {
+        font-size : 20px;
+    }
+
+    .error {
+        background : #c17474;
+    }
     </style>
 
 
@@ -56,7 +64,7 @@
 
         <div class="span2 formato">Contrato N°</div>
 
-        <div class="span3"><g:textField name="codigo" class="cotratoNumero" value="${contrato?.codigo}" disabled="true"/></div>
+        <div class="span3"><g:textField name="codigo" class="cotratoNumero required" value="${contrato?.codigo}" disabled="true"/></div>
 
         <div class="span2 formato">Memo de Distribución</div>
 
@@ -71,7 +79,7 @@
 
         <div class="span2 formato">Contrato N°</div>
 
-        <div class="span3"><g:textField name="codigo" class="cotratoNumero" value="${contrato?.codigo}" /></div>
+        <div class="span3"><g:textField name="codigo" class="cotratoNumero required" value="${contrato?.codigo}" /></div>
 
         <div class="span2 formato">Memo de Distribución</div>
 
@@ -101,7 +109,7 @@
 
             <div class="span2 formato">Obra</div>
 
-            <div class="span3"><g:textField name="obra" id ="obraCodigo" class="obraCodigo" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
+            <div class="span3"><g:textField name="obra" id ="obraCodigo" class="obraCodigo required" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
 
             <div class="span1 formato">Nombre</div>
 
@@ -151,7 +159,7 @@
 
             <div class="span3">
                 <input type="hidden" id="obraId" value="${contrato?.oferta?.concurso?.obra?.codigo}" name="obra.id" >
-                <g:textField name="obra" id ="obraCodigo" class="obraCodigo txtBusqueda" value="${contrato?.oferta?.concurso?.obra?.codigo}"  />
+                <g:textField name="obra" id ="obraCodigo" class="obraCodigo required txtBusqueda" value="${contrato?.oferta?.concurso?.obra?.codigo}"  />
             </div>
 
             <div class="span1 formato">Nombre</div>
@@ -373,6 +381,10 @@
 </div>
 
 <script type="text/javascript">
+
+
+    $("#frm-registroContrato").validate();
+
 
 
     function validarNum(ev) {
@@ -627,6 +639,7 @@
     });
 
      $("#btn-aceptar").click(function () {
+
 
 
          $("#frm-registroContrato").submit();

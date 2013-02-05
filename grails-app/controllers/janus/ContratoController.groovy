@@ -260,7 +260,7 @@ class ContratoController extends janus.seguridad.Shield {
             if (!contratoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Contrato con id " + params.id
-                redirect(action: "list")
+                redirect(action: "registroContrato")
                 return
             } //no existe el objeto
         } //es edit
@@ -274,7 +274,7 @@ class ContratoController extends janus.seguridad.Shield {
             if (!contratoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Contrato con id " + params.id
-                redirect(action: 'list')
+                redirect(action: 'registroContrato')
                 return
             }//no existe el objeto
             contratoInstance.properties = params
@@ -297,7 +297,7 @@ class ContratoController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
-            redirect(action: 'list')
+            redirect(action: 'registroContrato')
             return
         }
 
@@ -308,7 +308,7 @@ class ContratoController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Contrato " + contratoInstance.id
         }
-        redirect(action: 'list')
+        redirect(action: 'registroContrato')
     } //save
 
     def show_ajax() {
@@ -316,7 +316,7 @@ class ContratoController extends janus.seguridad.Shield {
         if (!contratoInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Contrato con id " + params.id
-            redirect(action: "list")
+            redirect(action: "registroContrato")
             return
         }
         [contratoInstance: contratoInstance]
@@ -327,7 +327,7 @@ class ContratoController extends janus.seguridad.Shield {
         if (!contratoInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Contrato con id " + params.id
-            redirect(action: "list")
+            redirect(action: "registroContrato")
             return
         }
 
@@ -335,12 +335,12 @@ class ContratoController extends janus.seguridad.Shield {
             contratoInstance.delete(flush: true)
             flash.clase = "alert-success"
             flash.message = "Se ha eliminado correctamente Contrato " + contratoInstance.id
-            redirect(action: "list")
+            redirect(action: "registroContrato")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
             flash.message = "No se pudo eliminar Contrato " + (contratoInstance.id ? contratoInstance.id : "")
-            redirect(action: "list")
+            redirect(action: "registroContrato")
         }
     } //delete
 } //fin controller

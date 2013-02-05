@@ -19,8 +19,8 @@ class Obra implements Serializable {
     Date fechaFin
     double distanciaPeso
     double distanciaVolumen
-    String latitud
-    String longitud
+    double latitud
+    double longitud
     int beneficiariosDirectos
     int benificiariosIndirectos
     int beneficiariosPotenciales
@@ -178,8 +178,8 @@ class Obra implements Serializable {
         fechaFin(blank: true, nullable: true, attributes: [title: 'fechaFin'])
         distanciaPeso(blank: true, nullable: true, attributes: [title: 'distanciaPeso'])
         distanciaVolumen(blank: true, nullable: true, attributes: [title: 'distanciaVolumen'])
-        latitud(size: 1..12, blank: true, nullable: true, attributes: [title: 'latitud'])
-        longitud(size: 1..12, blank: true, nullable: true, attributes: [title: 'longitud'])
+        latitud(blank: true, nullable: true, attributes: [title: 'latitud'])
+        longitud(blank: true, nullable: true, attributes: [title: 'longitud'])
         beneficiariosDirectos(blank: true, nullable: true, attributes: [title: 'beneficiariosDirectos'])
         benificiariosIndirectos(blank: true, nullable: true, attributes: [title: 'benificiariosIndirectos'])
         beneficiariosPotenciales(blank: true, nullable: true, attributes: [title: 'beneficiariosPotenciales'])
