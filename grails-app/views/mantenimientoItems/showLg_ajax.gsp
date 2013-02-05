@@ -68,6 +68,20 @@
     </div>
 </div>
 
+<div class="modal hide fade" id="modal-tree1">
+    <div class="modal-header-tree1">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modalTitle-tree1"></h3>
+    </div>
+
+    <div class="modal-body" id="modalBody-tree1">
+    </div>
+
+    <div class="modal-footer" id="modalFooter-tree1">
+    </div>
+</div>
+
 <script type="text/javascript">
     $('[rel=tooltip]').tooltip();
 
@@ -173,12 +187,10 @@
     }); //btnSave
 
     $(".btnDelete").click(function () {
-        console.log("AQUI")
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
         var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
 
         var id = $(this).attr("id");
-
         btnSave.click(function () {
             btnSave.replaceWith(spinner);
             $.ajax({
@@ -189,7 +201,7 @@
                 },
                 success : function (msg) {
                     if (msg == "OK") {
-                        $("#modal-tree").modal("hide");
+                        $("#modal-tree1").modal("hide");
                         $.ajax({
                             type    : "POST",
                             url     : "${createLink(action:'showLg_ajax')}",
@@ -210,9 +222,9 @@
             return false;
         });
 
-        $("#modalTitle").html("Confirmación");
-        $("#modalBody").html("Está seguro de querer eliminar este precio?");
-        $("#modalFooter").html("").append(btnOk).append(btnSave);
+        $("#modalTitle-tree1").html("Confirmación");
+        $("#modalBody-tree1").html("Está seguro de querer eliminar este precio?");
+        $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
         $("#modal-tree1").modal("show");
         return false;
     });
