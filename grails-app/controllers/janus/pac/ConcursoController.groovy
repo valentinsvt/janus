@@ -9,6 +9,33 @@ class ConcursoController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def generaCodigo(concursoInstance) {
+        def codigo = ""
+//        def conc = Concurso.count()
+        def sec = 1
+        def lst = Concurso.list([sort: "id", order: "desc"])
+//        println "________________________________________________________"
+//        println lst
+        if (lst.size() > 0) {
+            def last = lst[1].codigo?.split("-")
+//            println last
+            if (last?.size() > 2) {
+                def cod = last[2].toInteger()
+                sec = cod + 1
+//                println cod
+//                println sec
+            }
+        }
+
+        codigo += concursoInstance.pac.tipoProcedimiento.sigla + "-"
+        codigo += "GADPP" + "-"
+        codigo += sec + "-"
+        codigo += new Date().format("yyyy")
+//        println codigo
+//        println "________________________________________________________"
+        return codigo
+    }
+
     def index() {
         redirect(action: "list", params: params)
     } //index
@@ -34,6 +61,13 @@ class ConcursoController extends janus.seguridad.Shield {
         concurso.objeto = pac.descripcion
         if (concurso.save(flush: true)) {
             println "saved ok"
+            def codigo = generaCodigo(concurso)
+            concurso.codigo = codigo
+            if (!concurso.save(flush: true)) {
+                println "error al guarda el codigo " + codigo + " en el concurso " + concurso.id
+                println concurso.errors
+            }
+
             flash.clase = "alert-success"
             flash.message = "Proceso creado"
             redirect(action: 'list')
@@ -45,7 +79,7 @@ class ConcursoController extends janus.seguridad.Shield {
         }
     }
 
-    def show(){
+    def show() {
         def concursoInstance = Concurso.get(params.id)
         if (!concursoInstance) {
             flash.clase = "alert-error"
@@ -54,7 +88,7 @@ class ConcursoController extends janus.seguridad.Shield {
             return
         }
         def of = Oferta.findAllByConcurso(concursoInstance).size()
-        [concursoInstance: concursoInstance,of:of]
+        [concursoInstance: concursoInstance, of: of]
     }
 
     def buscaPac() {
@@ -122,6 +156,8 @@ class ConcursoController extends janus.seguridad.Shield {
         else {
             concursoInstance = new Concurso(params)
         } //es create
+
+
         if (!concursoInstance.save(flush: true)) {
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Concurso " + (concursoInstance.id ? concursoInstance.id : "") + "</h4>"
@@ -139,6 +175,15 @@ class ConcursoController extends janus.seguridad.Shield {
             flash.message = str
             redirect(action: 'list')
             return
+        }
+
+        if (!concursoInstance.codigo) {
+            def codigo = generaCodigo(concursoInstance)
+            concursoInstance.codigo = codigo
+            if (!concursoInstance.save(flush: true)) {
+                println "error al guarda el codigo " + codigo + " en el concurso " + concursoInstance.id
+                println concursoInstance.errors
+            }
         }
 
         if (params.id) {
@@ -184,11 +229,11 @@ class ConcursoController extends janus.seguridad.Shield {
         }
     } //delete
 
-    def registrar(){
-        println "registrar "+params
+    def registrar() {
+        println "registrar " + params
         def con = Concurso.get(params.id)
-        con.estado=params.estado
-        if(!con.save(flush: true))
+        con.estado = params.estado
+        if (!con.save(flush: true))
             render "error"
         else
             render "ok"

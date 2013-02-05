@@ -160,7 +160,8 @@
                 </div>
 
                 <div class="controls">
-                    <g:textField name="codigo" class="" value="${concursoInstance?.codigo}"/>
+                    %{--<g:textField name="codigo" class="" value="${concursoInstance?.codigo}"/>--}%
+                    <span class="uneditable-input">${concursoInstance?.codigo}</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
