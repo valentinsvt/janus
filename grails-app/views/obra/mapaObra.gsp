@@ -40,23 +40,35 @@
 <div class="" style="margin-top: 20px">
 
 
-    <div class="coordenadasOriginales">
+    <div class="coordenadasOriginales span12">
 
-        <span>Coordenadas Originales de la Obra:</span>
-        <input class="span2" id="lato">
-        <input class="span2" id="longo">
+        %{--<span>Coordenadas Originales de la Obra:</span>--}%
+        %{--<input class="span2" id="lato">--}%
+        %{--<input class="span2" id="longo">--}%
+
+
+        <div class="span3" style="margin-left: -30px">Coordenadas Originales de la Obra:</div>
+
+        <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" id="lato" style="width: 100px" maxlength="5"/></div>
+        <div class="span3">Longitud: <g:textField name="longo" class="longo number" id="longo" style="width: 120px" maxlength="5"/></div>
+
 
 
     </div>
+<g:form class="registroObra" name="frm-latitudLongitud" action="save">
 
-    <div class="coordenadas">
-        <span>Coordenadas Nuevas de la Obra:   </span>
-        <input class="span2" id="lati">
-        <input class="span2" id="longi">
+    <g:hiddenField name="id" value="${obra?.id}"/>
+    <div class="coordenadas span12">
+        <div class="span3" style="margin-left: -30px">Coordenadas Nuevas de la Obra:</div>
+
+        <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="latitud" class="latitud number" id="latitud" style="width: 100px" maxlength="5"/></div>
+        <div class="span3">Longitud: <g:textField name="longitud" class="longitud number" id="longitud" style="width: 120px" maxlength="5"/></div>
 
     </div>
+</g:form>
 
 </div>
+
 
 <div class="btn-group" style="margin-top: 20px; margin-left: 250px">
 
@@ -79,10 +91,11 @@
 
     var allowedBounds = new google.maps.LatLngBounds (
 
-            new google.maps.LatLng(-0.41, -80.56),
+            new google.maps.LatLng(-0.41, -79.56),
             new google.maps.LatLng(-0.50,-76.44)
 
     );
+
 
     var marker = new google.maps.Marker ( {
         position:countryCenter,
@@ -94,9 +107,9 @@
 
     function initialize() {
 
-        %{--var latitudObra = ${obra?.latitud};--}%
+        var latitudObra = ${obra?.latitud};
 
-        %{--var longitudObra = ${obra?.longitud};--}%
+        var longitudObra = ${obra?.longitud};
 
         var myOptions = {
 
@@ -118,10 +131,28 @@
 
         limites2();
 
+        limites();
+
+
+        var posicion;
+
+        if(latitudObra == 0 || longitudObra == 0){
+
+            console.log("entro")
+
+            posicion = new google.maps.LatLng(-0.21, -78.52)
+
+        }else {
+
+            posicion = new google.maps.LatLng(latitudObra, longitudObra)
+
+        }
+
         var marker2 = new google.maps.Marker({
             map: map,
-            position: new google.maps.LatLng(-0.21, -78.52),
+//            position: new google.maps.LatLng(-0.21, -78.52),
 //            position: new google.maps.LatLng(latitudObra, longitudObra),
+            position: posicion,
             draggable: true
         });
 
@@ -132,8 +163,8 @@
             lat = latlng.lat();
             longitud= latlng.lng();
 
-            $("#lati").val(lat);
-            $("#longi").val(longitud);
+            $("#latitud").val(lat);
+            $("#longitud").val(longitud);
 
 
         });
@@ -152,7 +183,47 @@
         });
 
 
+
+//        var paths = [new google.maps.LatLng(0.3173,-79.26 ),
+//            new google.maps.LatLng(0.169 ,-77.96 ),
+//            new google.maps.LatLng(-0.06,-77.31 )];
+//
+//        var shape = new google.maps.Polygon({
+//            paths: paths,
+//            strokeColor: '#ff0000',
+//            strokeOpacity: 0.8,
+//            strokeWeight: 2,
+//            fillColor: '#ff0000',
+//            fillOpacity: 0.35
+//        });
+//
+//        shape.setMap(map);
+
+
+
     }
+
+
+    function limites() {
+
+        google.maps.event.addListener(map, 'center_changed', function () {
+
+           if(allowedBounds.contains(map.getCenter ())){
+               lastValidCenter = map.getCenter();
+               return
+
+
+
+           }
+
+            map.panTo(lastValidCenter);
+
+
+        });
+
+    }
+
+
 
     function limites2 () {
 
@@ -184,6 +255,9 @@
     }
 
 
+
+
+
     $(function () {
 
         initialize();
@@ -195,7 +269,16 @@
 
     $("#btnVolver").click(function () {
 
-        location.href="${createLink(action: 'registroObra')}";
+        %{--location.href="${createLink(action: 'registroObra')}";--}%
+
+        location.href = "${g.createLink(controller: 'obra', action: 'registroObra')}" + "?obra=" + "${obra?.id}";
+
+
+    });
+
+    $("#btnGuardar").click(function () {
+
+        $("#frm-latitudLongitud").submit();
 
 
     });
