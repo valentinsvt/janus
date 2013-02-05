@@ -76,7 +76,7 @@
             </a>
             <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btn btn-ajax btn-new btnFormula" params="[obra: obra]" title="Coeficientes">
                 <i class="icon-table"></i>
-                Coeficientes de la matriz
+                Coeficientes fórmula polinómica
             </g:link>
             <a href="${g.createLink(controller: 'reportes', action: 'imprimeMatriz', id: "${obra}")}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
                 <i class="icon-print"></i>

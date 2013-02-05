@@ -59,7 +59,6 @@ class AsignacionController extends janus.seguridad.Shield {
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Partidas presupuestarias", anchos: anchos, extras: extras, landscape: false])
         }
     }
-
     def cargarTecho(){
         def prsp = janus.Presupuesto.get(params.id)
         def anio = Anio.get(params.anio)
@@ -70,6 +69,7 @@ class AsignacionController extends janus.seguridad.Shield {
             techo=techo.valor
         render techo
     }
+
 
     def save() {
         def asgn
