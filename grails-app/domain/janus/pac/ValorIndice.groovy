@@ -11,15 +11,15 @@ class ValorIndice {
 
     static mapping = {
 
-        table 'vain'
+        table 'vlin'
         cache usage: 'read-write', include: 'non-lazy'
-        id column: 'vain__id'
+        id column: 'vlin__id'
         id generator: 'identity'
         version false
         columns {
-            id column: 'vain__id'
+            id column: 'vlin__id'
             indice column: 'indc__id'
-            valor column: 'vainvalr'
+            valor column: 'vlinvalr'
             fecha column: 'prin__id'
 
 
@@ -27,11 +27,9 @@ class ValorIndice {
 
     }
 
-
-
     static constraints = {
 
-
+     valor(blank: true, nullable: true)
 
 
     }
