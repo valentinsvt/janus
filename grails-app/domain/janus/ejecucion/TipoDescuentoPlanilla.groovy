@@ -4,7 +4,6 @@ class TipoDescuentoPlanilla implements Serializable{
 
      String nombre
      double porcentaje
-     String cuenta
      String valor
 
 
@@ -18,7 +17,6 @@ class TipoDescuentoPlanilla implements Serializable{
         columns {
             id column: 'tpds__id'
             nombre column: 'tpdsdscr'
-            cuenta column: 'tpdscnt'
             porcentaje column: 'tpdspcnt'
             valor column: 'tpdsedit'
     }
@@ -28,7 +26,6 @@ class TipoDescuentoPlanilla implements Serializable{
     static constraints = {
 
         nombre(blank: true, nullable: true)
-        cuenta(blank: true, nullable: true)
         porcentaje(blank: true, nullable: true)
         valor(blank: true, nullable: true)
 
