@@ -219,21 +219,21 @@
                                 <td>${r.item}</td>
                                 <td>${r.unidad}</td>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.cantidad}" minFractionDigits="3" maxFractionDigits="3" format="##,###0"/>
+                                    <g:formatNumber number="${r.cantidad}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/>
                                 </td>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,###0"/>
+                                    <g:formatNumber number="${r.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/>
                                 </td>
                                 <g:if test="${tipo.contains(",") || tipo == '1'}">
                                     <td class="numero">
-                                        <g:formatNumber number="${r.transporte}" minFractionDigits="4" maxFractionDigits="4" format="##,####0"/>
+                                        <g:formatNumber number="${r.transporte}" minFractionDigits="4" maxFractionDigits="4" format="##,####0" locale="ec"/>
                                     </td>
                                 </g:if>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.costo}" minFractionDigits="4" maxFractionDigits="4" format="##,####0"/>
+                                    <g:formatNumber number="${r.costo}" minFractionDigits="4" maxFractionDigits="4" format="##,####0" locale="ec"/>
                                 </td>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.total}" minFractionDigits="2" maxFractionDigits="2" format="##,##0"/>
+                                    <g:formatNumber number="${r.total}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>
 
                                     <g:if test="${r.grid == 1}">
                                         <g:set var="totalMaterial" value="${totalMaterial + r.total}"/>
@@ -258,19 +258,19 @@
                     <table class="table table-bordered table-condensed pull-right" style="width: 20%;">
                         <tr>
                             <th>Equipos</th>
-                            <td class="numero"><g:formatNumber number="${totalEquipo}" minFractionDigits="2" maxFractionDigits="2" format="##,##0"/></td>
+                            <td class="numero"><g:formatNumber number="${totalEquipo}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
                         </tr>
                         <tr>
                             <th>Mano de obra</th>
-                            <td class="numero"><g:formatNumber number="${totalMano}" minFractionDigits="2" maxFractionDigits="2" format="##,##0"/></td>
+                            <td class="numero"><g:formatNumber number="${totalMano}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
                         </tr>
                         <tr>
                             <th>Materiales</th>
-                            <td class="numero"><g:formatNumber number="${totalMaterial}" minFractionDigits="2" maxFractionDigits="2" format="##,##0"/></td>
+                            <td class="numero"><g:formatNumber number="${totalMaterial}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
                         </tr>
                         <tr>
                             <th>TOTAL DIRECTO</th>
-                            <td class="numero"><g:formatNumber number="${totalEquipo + totalMano + totalMaterial}" minFractionDigits="2" maxFractionDigits="2" format="##,##0"/></td>
+                            <td class="numero"><g:formatNumber number="${totalEquipo + totalMano + totalMaterial}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
                         </tr>
                     </table>
                 </div>

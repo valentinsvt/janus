@@ -41,7 +41,7 @@
                         <g:formatDate date="${precio.fecha}" format="dd-MM-yyyy"/>
                     </td>
                     <td class="precio textRight editable ${i == 0 ? 'selected' : ''}" data-original="${precio.precioUnitario}" id="${precio.id}">
-                        <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5"/>
+                        <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5" format="##,#####0" locale='ec'/>
                     </td>
                     <td class="delete">
                         <a href="#" class="btn btn-danger btn-small btnDelete" rel="tooltip" title="Eliminar" id="${precio.id}">
