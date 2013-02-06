@@ -9,7 +9,7 @@ class VariablesController {
 
         def obra = Obra.get(params.obra)
         def par = Parametros.list()
-        if (par.size()>0)
+        if (par.size() > 0)
             par = par.pop()
 
         def volquetes = []
@@ -22,10 +22,12 @@ class VariablesController {
                 volquetes = Item.findAllByDepartamento(it)
         }
 
-        [choferes: choferes, volquetes: volquetes, obra: obra,par:par]
+        [choferes: choferes, volquetes: volquetes, obra: obra, par: par]
     }
 
     def saveVar_ajax() {
+        println "save vars aqui"
+        println params
         def obra = Obra.get(params.id)
         obra.properties = params
         if (obra.save(flush: true)) {
