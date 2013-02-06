@@ -1,7 +1,7 @@
 package janus
 
 import janus.pac.PeriodoValidez
-import janus.pac.ValorIndice
+import janus.ejecucion.ValorIndice
 import jxl.Cell
 import jxl.Sheet
 import jxl.Workbook
@@ -134,10 +134,28 @@ class IndiceController extends janus.seguridad.Shield {
                                         if (indice.size() == 0){
 
 
+                                            def codigo = descripcion[0..2]
+                                            def ind = Indice.findAllByCodigo(codigo)
+                                            if (ind.size()>0){
+                                                def par = descripcion.split(" ")
+                                                if(par.size()>1){
+                                                    if (par[1]?.trim()!="" ){
+                                                        println "par "+par[1]
+                                                        if (par[1].size()>1)
+                                                            codigo+="-"+par[1][0..1]
+                                                        else{
+                                                            codigo+="-"+par[1]
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+
+
                                             indice = new Indice([
                                                     tipoInstitucion: TipoInstitucion.get(1),
                                                     descripcion: descripcion,
-                                                    codigo: descripcion[0..2]
+                                                    codigo: codigo
                                             ])
                                             if(!indice.save(flush: true)) {
                                                 println "ERROR al guardar el indice: "+indice.errors
@@ -172,20 +190,20 @@ class IndiceController extends janus.seguridad.Shield {
 
 
                                             valor = row[3].getContents();
-                                           try{
+                                            try{
 
-                                               valor = valor.toDouble()
-                                               println(valor)
-                                           }
+                                                valor = valor.toDouble()
+                                                println(valor)
+                                            }
 
-                                           catch (e){
+                                            catch (e){
 
-                                               println(e)
-                                               bandera = false
-                                               html+='fila '+(j+1)+' Error en el valor: ' + valor   + "<br/>"
+                                                println(e)
+                                                bandera = false
+                                                html+='fila '+(j+1)+' Error en el valor: ' + valor   + "<br/>"
 
 
-                                           }
+                                            }
                                         }else {
 
                                             html+='fila '+(j+1)+' Fila no tiene valor'  + "<br/>"
@@ -197,35 +215,35 @@ class IndiceController extends janus.seguridad.Shield {
 
                                         if (bandera){
 
-                                           def fecha= PeriodoValidez.get(params.periodo)
+                                            def fecha= PeriodoValidez.get(params.periodo)
                                             def valores = ValorIndice.countByIndiceAndFecha(indice,fecha)
 
-                                             if (valores == 0){
+                                            if (valores == 0){
 
-                                                 def valorIndice = new ValorIndice([
+                                                def valorIndice = new ValorIndice([
 
-                                                         indice: indice,
-                                                         valor: valor,
-                                                         fecha: fecha
-
-
-                                                 ])
-
-                                                 if (!valorIndice.save(flush: true)){
+                                                        indice: indice,
+                                                        valor: valor,
+                                                        fecha: fecha
 
 
-                                                     println("error al guardar el valor del indice" + valorIndice.errors)
+                                                ])
 
-                                                     html+='fila '+(j+1)+' ERROR valor no creado' + renderErrors(bean: valorIndice)
-                                                 }
-
-
-                                             }else {
+                                                if (!valorIndice.save(flush: true)){
 
 
-                                                 html+='fila '+(j+1)+' valor ya existe ' + '<br/>'
-                                                 println(valores)
-                                             }
+                                                    println("error al guardar el valor del indice" + valorIndice.errors)
+
+                                                    html+='fila '+(j+1)+' ERROR valor no creado' + renderErrors(bean: valorIndice)
+                                                }
+
+
+                                            }else {
+
+
+                                                html+='fila '+(j+1)+' valor ya existe ' + '<br/>'
+                                                println(valores)
+                                            }
 
 
 
