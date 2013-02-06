@@ -7,7 +7,10 @@ import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
 import jxl.Workbook
 import jxl.WorkbookSettings
-import jxl.write.*
+import jxl.write.WritableCellFormat
+import jxl.write.WritableFont
+import jxl.write.WritableSheet
+import jxl.write.WritableWorkbook
 
 import java.awt.*
 
@@ -534,27 +537,27 @@ class ReportesController {
             }
 
             addCellTabla(tablaIndirectos, new Paragraph("Costos Indirectos", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: indi, minFractionDigits: 2, maxFractionDigits: 2) + "%", fonts.times8normal), prmsNum)
-            addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: indi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec") + "%", fonts.times8normal), prmsNum)
+            addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
 
             tablaTotales.setWidthPercentage(100);
             tablaTotales.setWidths(arregloEnteros([70, 20, 10]))
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(tablaTotales, new Paragraph("Costo unitario directo", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(tablaTotales, new Paragraph("Costos indirectos", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(tablaTotales, new Paragraph("Costos total del rubro", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(tablaTotales, new Paragraph("Precio unitario", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsNum)
 
 
             addTablaHoja(document, headerRubroTabla, false)
@@ -585,39 +588,39 @@ class ReportesController {
         switch (tipo) {
             case "H":
             case "O":
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun * r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rndm, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun * r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rndm, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "M":
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "MNT":
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: (r.parcial + r.parcial_t), minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: (r.parcial + r.parcial_t), minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "T":
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.itempeso, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.distancia, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial_t / (r.itempeso * r.rbrocntd * r.distancia), minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial_t, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.itempeso, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.distancia, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial_t / (r.itempeso * r.rbrocntd * r.distancia), minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
+                addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial_t, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
         }
     }
 
     def addSubtotal(PdfPTable table, subtotal, fonts, params) {
         addCellTabla(table, new Paragraph("Subtotal", fonts.times8bold), params.prmsSubtotal)
-        addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0"), fonts.times8bold), params.prmsNum)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), params.prmsNum)
     }
 
     def creaHeadersTabla(PdfPTable table, fonts, params, String tipo) {
@@ -811,11 +814,11 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph("Distancia Peso: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "###"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "###", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph("Distancia Volumen: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "###"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "###", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
@@ -1172,13 +1175,13 @@ class ReportesController {
 
 
            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
-                   2, maxFractionDigits: 2, format: "#####.##"),times8normal), prmsCellRight)
+                   2, maxFractionDigits: 2, format: "#####.##0", locale: "ec"),times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##"),times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "#####.##0", locale: "ec"),times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()]*it.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##"),times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "#####.##0", locale: "ec"),times8normal), prmsCellRight)
 
 
 
@@ -1218,7 +1221,7 @@ class ReportesController {
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####.##") , times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####.##", locale: "ec") , times8bold), prmsCellRight)
 
 
         Paragraph txtCondiciones = new Paragraph();
@@ -1235,10 +1238,10 @@ class ReportesController {
 
 
         addCellTabla(tablaCondiciones, new Paragraph("Plazo de Ejecución :", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.plazo, format: "##") + " mes(es)", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.plazo, format: "##", locale: "ec") + " mes(es)", times8normal), prmsHeaderHoja)
 
         addCellTabla(tablaCondiciones, new Paragraph("Anticipo :", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.porcentajeAnticipo, format: "###") + " %", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.porcentajeAnticipo, format: "###", locale: "ec") + " %", times8normal), prmsHeaderHoja)
 
         addCellTabla(tablaCondiciones, new Paragraph("Elaboró :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph(obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
@@ -1831,11 +1834,11 @@ class ReportesController {
         if (tipo == '1') {
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor de la Base :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##", locale: "ec"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor del Reajuste :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: reajusteBase, format: "####.##"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: reajusteBase, format: "####.##", locale: "ec"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("_________________________________", times8bold), prmsHeaderHoja)
@@ -1843,7 +1846,7 @@ class ReportesController {
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor Total :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "####.##"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "####.##", locale: "ec"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
         }
@@ -1852,7 +1855,7 @@ class ReportesController {
 
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor del P. Referencial :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##", locale: "ec"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 
@@ -1861,7 +1864,7 @@ class ReportesController {
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor Total :", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##"), times8normal), prmsHeaderHoja)
+            addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: totalBase, format: "####.##", locale: "ec"), times8normal), prmsHeaderHoja)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
         }
@@ -2406,67 +2409,67 @@ class ReportesController {
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p01 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p01valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p01valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p01?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p02 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p02valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p02valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p02?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p03 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p03valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p03valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p03?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p04 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p04valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p04valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p04?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p05 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p05valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p05valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p05?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p06 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p06valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p06valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p06?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p07 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p07valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p07valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p07?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p08 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p08valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p08valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p08?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p09 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p09valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p09valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p09?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("p10 = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p10valor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: p10valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(p10?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("px = ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: pxvalor, format: "##.####"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: pxvalor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(px?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
@@ -2478,7 +2481,7 @@ class ReportesController {
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("SUMAN : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: valorCoef, format: "##.####"), times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: valorCoef, format: "##.####", locale: "ec"), times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
@@ -2514,7 +2517,7 @@ class ReportesController {
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
        addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph(g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##.##"), fonts.times10normal), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph(g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##.##", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)

@@ -57,14 +57,14 @@ class RegistroParametrosController {
                     rowspan: 1,
                     clase: "numero",
                     estilos: "",
-                    texto: g.formatNumber(number: par1.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                    texto: g.formatNumber(number: par1.puntaje, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             ]
             def celdaMin1 = [
                     colspan: 1,
                     rowspan: 1,
                     clase: "numero",
                     estilos: "",
-                    texto: g.formatNumber(number: par1.minimo, maxFractionDigits: 2, minFractionDigits: 2)
+                    texto: g.formatNumber(number: par1.minimo, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             ]
             def celdaDesc1 = [
                     colspan: 1,
@@ -124,14 +124,14 @@ class RegistroParametrosController {
                         rowspan: 1,
                         clase: "numero max",
                         estilos: "",
-                        texto: g.formatNumber(number: par2.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                        texto: g.formatNumber(number: par2.puntaje, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
                 ]
                 def celdaMin2 = [
                         colspan: 1,
                         rowspan: 1,
                         clase: "numero editable",
                         estilos: "",
-                        texto: g.formatNumber(number: par2.minimo, maxFractionDigits: 2, minFractionDigits: 2),
+                        texto: g.formatNumber(number: par2.minimo, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec"),
                         id:par2.id,
                         tipo:"puntaje"
                 ]
@@ -197,14 +197,14 @@ class RegistroParametrosController {
                             rowspan: 1,
                             clase: "numero max",
                             estilos: "",
-                            texto: g.formatNumber(number: par3.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                            texto: g.formatNumber(number: par3.puntaje, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
                     ]
                     def celdaMin3 = [
                             colspan: 1,
                             rowspan: 1,
                             clase: "numero editable",
                             estilos: "",
-                            texto: g.formatNumber(number: par3.minimo, maxFractionDigits: 2, minFractionDigits: 2),
+                            texto: g.formatNumber(number: par3.minimo, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec"),
                             id:par3.id,
                             tipo:"puntaje"
                     ]

@@ -425,11 +425,11 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
 
             html += "<td class='num cantidad'>"
-            html += formatNumber(number: crono.cantidad, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: crono.cantidad, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
 
             html += "<td class='num precioU'>"
-            html += formatNumber(number: crono.precioU, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: crono.precioU, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
 
             def filaDol = "", filaPor = "", filaCan = ""
@@ -441,9 +441,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 filaCan += "<td class='fis num ${periodo.tipo}'>"
                 if (cronoPer.size() == 1) {
                     cronoPer = cronoPer[0]
-                    filaDol += g.formatNumber(number: cronoPer.precio, minFractionDigits: 2, maxFractionDigits: 2)
-                    filaPor += g.formatNumber(number: cronoPer.porcentaje, minFractionDigits: 2, maxFractionDigits: 2)
-                    filaCan += g.formatNumber(number: cronoPer.cantidad, minFractionDigits: 2, maxFractionDigits: 2)
+                    filaDol += g.formatNumber(number: cronoPer.precio, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
+                    filaPor += g.formatNumber(number: cronoPer.porcentaje, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
+                    filaCan += g.formatNumber(number: cronoPer.cantidad, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
                     totDol += cronoPer.precio
                     totPor += cronoPer.porcentaje
                     totCan += cronoPer.cantidad
@@ -455,13 +455,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
 
             html += "<td class='num subtotal'>"
-            html += formatNumber(number: crono.parcial, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: crono.parcial, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             totalCosto += crono.parcial
             html += "</td>"
             html += '<td>$</td>'
             html += filaDol
             html += "<td class='num dol total totalRubro'>"
-            html += formatNumber(number: totDol, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: totDol, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
             html += "</tr>"
 
@@ -470,7 +470,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += '<td>%</td>'
             html += filaPor
             html += "<td class='num prct total totalRubro'>"
-            html += formatNumber(number: totPor, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: totPor, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
             html += "</tr>"
 
@@ -479,7 +479,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += '<td>F</td>'
             html += filaCan
             html += "<td class='num fis total totalRubro'>"
-            html += formatNumber(number: totCan, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: totCan, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
             html += "</tr>"
         }
@@ -490,7 +490,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += "<td></td>"
         html += "<td colspan='4'>TOTAL PARCIAL</td>"
         html += "<td class='num'>"
-        html += formatNumber(number: totalCosto, minFractionDigits: 2, maxFractionDigits: 2)
+        html += formatNumber(number: totalCosto, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
         html += "</td>"
         html += "<td>T</td>"
         def filaDolAcum = "", filaPor = "", filaPorAcum = "", sumaDol = 0, sumaPor = 0
@@ -499,19 +499,19 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             sumaDol += it
             sumaPor += por
             html += "<td class='num'>"
-            html += formatNumber(number: it, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: it, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
 
             filaDolAcum += "<td class='num'>"
-            filaDolAcum += formatNumber(number: sumaDol, maxFractionDigits: 2, minFractionDigits: 2)
+            filaDolAcum += formatNumber(number: sumaDol, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             filaDolAcum += "</td>"
 
             filaPor += "<td class='num'>"
-            filaPor += formatNumber(number: por, maxFractionDigits: 2, minFractionDigits: 2)
+            filaPor += formatNumber(number: por, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             filaPor += "</td>"
 
             filaPorAcum += "<td class='num'>"
-            filaPorAcum += formatNumber(number: sumaPor, maxFractionDigits: 2, minFractionDigits: 2)
+            filaPorAcum += formatNumber(number: sumaPor, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             filaPorAcum += "</td>"
         }
         html += "<td></td>"
@@ -680,15 +680,15 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
 
             html += "<td class='num cantidad'>"
-            html += formatNumber(number: crono.cantidad, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: crono.cantidad, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
 
             html += "<td class='num precioU'>"
-            html += formatNumber(number: crono.precioU, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: crono.precioU, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
 
             html += "<td class='num subtotal'>"
-            html += formatNumber(number: crono.parcial, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: crono.parcial, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             totalCosto += crono.parcial
             html += "</td>"
 
@@ -701,14 +701,14 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def cronoPer = crono.periodos.find { it.tipo == per.tipo && it.ini == per.ini && it.fin == per.fin }
                 html += "<td class='dol num'>"
                 if (cronoPer) {
-                    html += g.formatNumber(number: cronoPer.precio, minFractionDigits: 2, maxFractionDigits: 2)
+                    html += g.formatNumber(number: cronoPer.precio, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
                     tot += cronoPer.precio
                     totalesDol[i] += cronoPer.precio
                 }
                 html += "</td>"
             }
             html += "<td class='num dol total totalRubro'>"
-            html += formatNumber(number: tot, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: tot, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
             html += "</tr>"
 
@@ -722,7 +722,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def cronoPer = crono.periodos.find { it.tipo == per.tipo && it.ini == per.ini && it.fin == per.fin }
                 html += "<td class='prct num'>"
                 if (cronoPer) {
-                    html += g.formatNumber(number: cronoPer.porcentaje, minFractionDigits: 2, maxFractionDigits: 2)
+                    html += g.formatNumber(number: cronoPer.porcentaje, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
                     tot += cronoPer.porcentaje
                     totalesPor[i] += cronoPer.porcentaje
                 }
@@ -730,7 +730,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             }
 
             html += "<td class='num prct total totalRubro'>"
-            html += formatNumber(number: tot, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: tot, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
             html += "</tr>"
 
@@ -744,14 +744,14 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 def cronoPer = crono.periodos.find { it.tipo == per.tipo && it.ini == per.ini && it.fin == per.fin }
                 html += "<td class='fis num'>"
                 if (cronoPer) {
-                    html += g.formatNumber(number: cronoPer.cantidad, minFractionDigits: 2, maxFractionDigits: 2)
+                    html += g.formatNumber(number: cronoPer.cantidad, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
                     tot += cronoPer.cantidad
                     totalesCant[i] += cronoPer.cantidad
                 }
                 html += "</td>"
             }
             html += "<td class='num fis total totalRubro'>"
-            html += formatNumber(number: tot, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: tot, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
             html += "</tr>"
 
@@ -763,7 +763,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += "<td></td>"
         html += "<td colspan='4'>TOTAL PARCIAL</td>"
         html += "<td class='num'>"
-        html += formatNumber(number: totalCosto, minFractionDigits: 2, maxFractionDigits: 2)
+        html += formatNumber(number: totalCosto, minFractionDigits: 2, maxFractionDigits: 2, format:"##,##0", locale: "ec")
         html += "</td>"
         html += "<td>T</td>"
         def filaDolAcum = "", filaPor = "", filaPorAcum = "", sumaDol = 0, sumaPor = 0
@@ -772,19 +772,19 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             sumaDol += it
             sumaPor += por
             html += "<td class='num'>"
-            html += formatNumber(number: it, maxFractionDigits: 2, minFractionDigits: 2)
+            html += formatNumber(number: it, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             html += "</td>"
 
             filaDolAcum += "<td class='num'>"
-            filaDolAcum += formatNumber(number: sumaDol, maxFractionDigits: 2, minFractionDigits: 2)
+            filaDolAcum += formatNumber(number: sumaDol, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             filaDolAcum += "</td>"
 
             filaPor += "<td class='num'>"
-            filaPor += formatNumber(number: por, maxFractionDigits: 2, minFractionDigits: 2)
+            filaPor += formatNumber(number: por, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             filaPor += "</td>"
 
             filaPorAcum += "<td class='num'>"
-            filaPorAcum += formatNumber(number: sumaPor, maxFractionDigits: 2, minFractionDigits: 2)
+            filaPorAcum += formatNumber(number: sumaPor, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             filaPorAcum += "</td>"
         }
         html += "<td></td>"

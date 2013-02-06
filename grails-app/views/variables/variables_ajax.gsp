@@ -281,7 +281,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="indiceGastosGenerales" class="inputVar sum2" value="${g.formatNumber(number: (obra?.indiceGastosGenerales), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" disabled=""/>
+                    <g:textField type="text" name="indiceGastosGenerales" class="inputVar sum2" value="${g.formatNumber(number: (obra?.indiceGastosGenerales), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" readonly=""/>
                 </div>
             </div>
 
@@ -353,7 +353,7 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="totales" class="inputVar" value="${g.formatNumber(number: (obra?.totales) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" disabled=""/>
+                    <g:textField type="text" name="totales" class="inputVar" value="${g.formatNumber(number: (obra?.totales) ?: 0, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}" readonly=""/>
                 </div>
             </div>
 
@@ -363,18 +363,33 @@
 
 <script type="text/javascript">
 
-    $(".sum1, .sum2").keydown(function (ev) {
+    function validarNum(ev) {
         /*
          48-57      -> numeros
          96-105     -> teclado numerico
-         190        -> . teclado
-         110        -> . teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
          8          -> backspace
          46         -> delete
          9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
          */
-//        console.log(ev.keyCode);
-        return ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 190 || ev.keyCode == 110 || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9);
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 190 || ev.keyCode == 110 ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+    $(".sum1, .sum2").keydown(function (ev) {
+        if (ev.keyCode == 190 || ev.keyCode == 188) {
+            if ($(this).val().indexOf(".") > -1) {
+                return false
+            }
+        }
+        return validarNum(ev);
     });
 
     function suma(items, update) {

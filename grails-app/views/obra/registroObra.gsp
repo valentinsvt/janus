@@ -791,7 +791,7 @@
 
                     $("#modal_title_var").html("Variables");
                     $("#modal_body_var").html(msg);
-                    $("#modal_footer_var").html("").append(btnCancel)
+                    $("#modal_footer_var").html("").append(btnCancel);
                     <g:if test="${obra?.estado!='R'}">
                     $("#modal_footer_var").html("").append(btnSave);
                     </g:if>
