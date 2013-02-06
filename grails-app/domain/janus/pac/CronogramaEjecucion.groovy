@@ -5,10 +5,11 @@ import janus.VolumenesObra
 class CronogramaEjecucion {
 
     VolumenesObra volumenObra
-    Integer periodo
-    String tipo
-    Date fechaInicio
-    Date fechaFin
+    PeriodoEjecucion periodo
+//    Integer periodo
+//    String tipo
+//    Date fechaInicio
+//    Date fechaFin
     Double precio
     Double porcentaje
     Double cantidad
@@ -22,10 +23,10 @@ class CronogramaEjecucion {
         columns {
             id column: 'crej__id'
             volumenObra column: 'vlob__id'
-            periodo column: 'crejprdo'
-            tipo column: 'crejtipo'
-            fechaInicio column: 'crejfcin'
-            fechaFin column: 'crejfcfn'
+            periodo column: 'prej__id'
+//            tipo column: 'crejtipo'
+//            fechaInicio column: 'crejfcin'
+//            fechaFin column: 'crejfcfn'
             precio column: 'crejprco'
             porcentaje column: 'crejprct'
             cantidad column: 'crejcntd'
@@ -34,10 +35,10 @@ class CronogramaEjecucion {
     static constraints = {
         volumenObra(blank: false, nullable: false, attributes: [title: 'volumen de obra'])
         periodo(blank: false, nullable: false, attributes: [title: 'periodo'])
+//        tipo(blank: false, nullable: false, inList: ['P', 'S'], attributes: [title: 'tipo'])
+//        fechaInicio(blank: false, nullable: false, attributes: [title: 'fecha inicio'])
+//        fechaFin(blank: false, nullable: false, attributes: [title: 'fecha fin'])
         precio(blank: false, nullable: false, attributes: [title: 'precio'])
-        tipo(blank: false, nullable: false, inList: ['P', 'S'], attributes: [title: 'tipo'])
-        fechaInicio(blank: false, nullable: false, attributes: [title: 'fecha inicio'])
-        fechaFin(blank: false, nullable: false, attributes: [title: 'fecha fin'])
         porcentaje(blank: false, nullable: false, attributes: [title: 'porcentaje'])
         cantidad(blank: false, nullable: false, attributes: [title: 'cantidad'])
     }

@@ -63,8 +63,7 @@
 
             <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.id}"
                 data-original="${rubro?.precioUnitario}"
-                style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5"
-                                                    maxFractionDigits="5"/>
+                style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,#####0" locale="ec"/>
 
             </td>
 

@@ -44,7 +44,7 @@ class PacController extends janus.seguridad.Shield{
         def url = g.createLink(action: "buscaCpac", controller: "pac")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-ccp").modal("hide");'
-        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"))'
+        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"));cargarTecho();'
         funcionJs += '}'
         def numRegistros = 20
         def extras = ""
@@ -60,6 +60,26 @@ class PacController extends janus.seguridad.Shield{
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Partidas presupuestarias", anchos: anchos, extras: extras, landscape: false])
         }
     }
+
+
+
+
+    def cargarTecho(){
+        def prsp = janus.Presupuesto.get(params.id)
+        def anio = Anio.get(params.anio)
+        def techo = Asignacion.findByAnioAndPrespuesto(anio,prsp)
+        if (!techo)
+            techo="0.00"
+        else
+            techo=techo.valor
+        def pacs = Pac.findAllByPresupuestoAndAnio(prsp,anio)
+        def usado = 0
+        pacs.each {
+            usado+=it.costo*it.cantidad
+        }
+        render ""+techo+";"+usado
+    }
+
 
     def tabla(){
 

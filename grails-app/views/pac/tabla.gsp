@@ -44,8 +44,8 @@
     <g:set var="total" value="${0}"></g:set>
     <g:each in="${pac}" var="p" status="i">
 
-        <tr class="item_row" id="${p.id}"  dpto="${p.departamento.id}">
-            <td style="text-align: center">${i+1}</td>
+        <tr class="item_row" id="${p.id}"  dpto="${p.departamento.id}" req="${p.requiriente}" memo="${p.memo}" tipoP="${p.tipoProcedimiento?.id}">
+            <td style="text-align: center" title="Requiriente: ${p.requiriente}, Memo: ${p.memo}">${i+1}</td>
             <td style="width: 40px" class="anio" anio="${p.anio.id}">${p.anio.anio}</td>
             <td class="prsp" prsp="${p.presupuesto.id}" title="${p.presupuesto.descripcion}">${p.presupuesto.numero}</td>
             <td class="cpac" cpac="${p.cpp.id}" title="${p.cpp.descripcion}">${p.cpp.numero}</td>
@@ -147,12 +147,17 @@
         $("#item_cantidad").val($(this).find(".cant").html().trim())
         $("#item_precio").val($(this).find(".costo").html())
         $("#item_unidad").val($(this).find(".unidad").attr("unidad"))
+        $("#item_req").val($(this).attr("req"))
+        $("#item_memo").val($(this).attr("memo"))
+        $("#item_tipoProc").val($(this).attr("tipoP"))
         if($(this).find(".c1").html()=="S")
             $("#item_c1").addClass("active")
         if($(this).find(".c2").html()=="S")
             $("#item_c2").addClass("active")
         if($(this).find(".c3").html()=="S")
             $("#item_c3").addClass("active")
+        cargarTecho()
+
 
     });
     $(".borrarItem").click(function(){

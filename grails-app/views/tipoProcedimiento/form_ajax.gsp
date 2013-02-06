@@ -19,6 +19,48 @@
             </div>
         </div>
                 
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Sigla
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="sigla" maxlength="5" class=" required" value="${tipoProcedimientoInstance?.sigla}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Bases
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="bases" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'bases')}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Techo
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="techo" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'techo')}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
     </g:form>
 
 <script type="text/javascript">

@@ -74,9 +74,9 @@
                 <i class="icon-arrow-left"></i>
                 Regresar
             </a>
-            <g:link controller="formulaPolinomica" action="coeficientes" class="btn btn-ajax btn-new" id="${obra}" title="Coeficientes">
+            <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btn btn-ajax btn-new btnFormula" params="[obra: obra]" title="Coeficientes">
                 <i class="icon-table"></i>
-                Coeficientes de la matriz
+                Coeficientes fórmula polinómica
             </g:link>
             <a href="${g.createLink(controller: 'reportes', action: 'imprimeMatriz', id: "${obra}")}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
                 <i class="icon-print"></i>
@@ -304,7 +304,7 @@
                         ctrl = 600
                     if (ev.keyCode == 16)
                         ctrl = 60000
-                })
+                });
 
                 var interval = setInterval(function () {
                     if ($("#bandera:onScreen").attr("id")) {
@@ -399,7 +399,23 @@
                     $(".activo").addClass($(".activo").attr("color")).removeClass("activo")
                     $(".selectedColumna").removeClass("selectedColumna")
 
-                })
+                });
+
+                $(".btnFormula").click(function () {
+                    var url = $(this).attr("href");
+                    $("#dlgLoad").dialog("open");
+                    $.ajax({
+                        type    : "POST",
+                        url     : url,
+                        success : function (msg) {
+                            if (msg == "ok" || msg == "OK") {
+                                location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra)}";
+                            }
+                        }
+                    });
+
+                    return false;
+                });
 
             });
 

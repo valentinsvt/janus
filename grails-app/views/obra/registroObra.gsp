@@ -86,11 +86,11 @@
 
         <div class="span1 formato">MEMO</div>
 
-        <div class="span3"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}"/></div>
+        <div class="span3"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20"/></div>
 
         <div class="span2 formato">CANTIDAD DE OBRA</div>
 
-        <div class="span3"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}"/></div>
+        <div class="span3"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20"/></div>
 
         <div class="span1 formato">FECHA</div>
 
@@ -105,12 +105,12 @@
 
         <g:if test="${obra?.codigo != null}">
 
-            <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true"/></div>
+            <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20"/></div>
 
         </g:if>
         <g:else>
 
-            <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}"/></div>
+            <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" maxlength="20"/></div>
 
         </g:else>
 
@@ -168,15 +168,19 @@
 
     <div class="span12">
 
+        <div class="span1">Cantón</div>
+        <g:hiddenField name="canton.id" id="hiddenCanton" value="${obra?.comunidad?.parroquia?.canton?.id}"/>
+        <div class="span2"><g:textField name="canton.id" id="cantNombre" class="canton required nowhitespace" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" disabled="true"/></div>
+
         <div class="span1">Parroquia</div>
 
         <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
-        <div class="span3"><g:textField name="parroquia.id" id="parrNombre" class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 215px" disabled="true"/></div>
+        <div class="span2"><g:textField name="parroquia.id" id="parrNombre" class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" disabled="true"/></div>
 
         <div class="span1">Comunidad</div>
 
         <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
-        <div class="span3"><g:textField name="comunidad.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}" disabled="true"/></div>
+        <div class="span2"><g:textField name="comunidad.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}" style="width: 175px" disabled="true"/></div>
 
 
         <div class="span2"><button class="btn btn-buscar btn-info" id="btn-buscar"><i class="icon-globe"></i> Buscar
@@ -189,12 +193,19 @@
 
         <div class="span1">Sitio</div>
 
-        <div class="span3"><g:textField name="sitio" class="sitio" value="${obra?.sitio}"/></div>
+        <div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 300px"/></div>
 
-        <div class="span1">Plazo</div>
+        <div class="span1" style="margin-left: -40px">Barrio</div>
 
-        <div class="span2"><g:textField name="plazo" class="plazoMeses required number" style="width: 28px"
-                                        maxlength="3" type="number" value="${obra?.plazo}"/> Meses</div>
+        <div class="span3" style="margin-left: -15px"><g:textField name="barrio" class="barrio" value="${obra?.barrio}" style="width: 200px"/> </div>
+
+        <div class="span1" style="margin-left: -25px">Plazo</div>
+
+        <div class="span2" style="margin-left: -10px"><g:textField name="plazoEjecucionMeses" class="plazoMeses required number" style="width: 28px"
+                                        maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}"/> Meses</div>
+
+        <div class="span2" style="margin-left: -30px"><g:textField name="plazoEjecucionDias" class="plazoDias required number " max="29" style="width: 28px"
+                                        maxlength="2" type="number" value="${obra?.plazoEjecucionDias}"/> Días</div>
 
     </div>
 
@@ -242,6 +253,16 @@
 
         <div class="span2"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
+        <div class="span1">Latitud</div>
+
+        <div class="span1"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}" style="width: 70px" /></div>
+
+        <div class="span1">Longitud</div>
+
+        <div class="span1"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 70px"/></div>
+
+
+
     </div>
 
 </fieldset>
@@ -260,11 +281,11 @@
 
         <div class="span1 formato" style="width: 80px">OFICIO SAL.</div>
 
-        <div class="span3" style="margin-left: 18px"><g:textField name="oficioSalida" class="oficio" value="${obra?.oficioSalida}"/></div>
+        <div class="span3" style="margin-left: 18px"><g:textField name="oficioSalida" class="oficio" value="${obra?.oficioSalida}" maxlength="20"/></div>
 
         <div class="span1 formato">MEMO</div>
 
-        <div class="span3"><g:textField name="memoSalida" class="memoSalida" value="${obra?.memoSalida}"/></div>
+        <div class="span3"><g:textField name="memoSalida" class="memoSalida" value="${obra?.memoSalida}" maxlength="20"/></div>
 
         <div class="span1 formato">FECHA</div>
 
@@ -276,7 +297,7 @@
     <div class="span12" style="margin-top: 10px">
         <div class="span1 formato">FORMULA</div>
 
-        <div class="span3"><g:textField name="formulaPolinomica" class="formula" value="${obra?.formulaPolinomica}"/></div>
+        <div class="span3"><g:textField name="formulaPolinomica" class="formula" value="${obra?.formulaPolinomica}" maxlength="20"/></div>
 
 
         %{--<div class="span1 formato">DESTINO</div>--}%
@@ -385,11 +406,12 @@
 
                 <ul class="nav">
                     <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
-                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra
+                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i> Vol. Obra
                     </a></li>
                     <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
                     <li>
-                        <g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">
+                        %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}" class="btnFormula">--}%
+                        <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btnFormula" params="[obra: obra?.id]" title="Coeficientes">
                             Fórmula Pol.
                         </g:link>
                     </li>
@@ -400,11 +422,15 @@
                     <li><a href="${g.createLink(controller: 'cronograma', action: 'cronogramaObra', id: obra?.id)}"><i class="icon-calendar"></i>Cronograma
                     </a></li>
                     <li>
-                        <g:link controller="variables" action="composicion" id="${obra?.id}">
-                            Composición
+                        <g:link controller="variables" action="composicion" id="${obra?.id}"><i class="icon-paste"></i>Composición
                         </g:link>
                     </li>
-                    %{--<li><a href="#">Trámites</a></li>--}%
+                    <li>
+                        <a href="#" id="biblioteca"><i class="icon-folder-open"></i>Biblioteca</a>
+                    </li>
+                    <li>
+                        <a href="#" id="btnMapa"><i class="icon-flag"></i> Mapa</a>
+                    </li>
 
                 </ul>
 
@@ -476,6 +502,7 @@
 
 <script type="text/javascript">
 
+    $("#frm-registroObra").validate();
 
     function validarNum(ev) {
         /*
@@ -641,20 +668,29 @@
 
             if (${obra?.estado == 'R'}) {
 
+                $("#dlgLoad").dialog("open");
+
                 location.href = "${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}"
 
-                $("#dlgLoad").dialog("open");
+
 
             }
             else {
-//                        $("#dlgLoad").dialog("open");
                 $("#documentosDialog").dialog("open")
 
             }
 
         });
 
-        $("#frm-registroObra").validate();
+
+        $("#btnMapa").click(function () {
+
+
+            location.href ="${g.createLink(action: 'mapaObra', id: obra?.id)}"
+
+        });
+
+
 
         $("#btn-aceptar").click(function () {
 
@@ -836,6 +872,21 @@
 
         });
 
+        $(".btnFormula").click(function () {
+            var url = $(this).attr("href");
+            $("#dlgLoad").dialog("open");
+            $.ajax({
+                type    : "POST",
+                url     : url,
+                success : function (msg) {
+                    if (msg == "ok" || msg == "OK") {
+                        location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra?.id)}";
+                    }
+                }
+            });
+
+            return false;
+        });
 
         $("#eliminarObraDialog").dialog({
 
@@ -850,7 +901,9 @@
             buttons   : {
                 "Aceptar" : function () {
 
-                    if(${volumen?.obra != null || formula?.obra != null}){
+
+
+                    if(${volumen?.id != null || formula?.id != null}){
 
                        $("#noEliminarDialog").dialog("open")
 
@@ -865,11 +918,23 @@
                         data    : "id=${obra?.id}",
                         success : function (msg) {
 
+                            if(msg == 'ok'){
+
+                                location.href="${createLink(action: 'registroObra')}"
+
+                              }else {
+
+
+
+                            }
+
 
                         }
                     });
 
                 }
+
+                    $("#eliminarObraDialog").dialog("close")
 
 
                 },

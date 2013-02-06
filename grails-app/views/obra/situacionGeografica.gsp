@@ -27,7 +27,7 @@
             <td class="comunidad">${comn.nombre}</td>
             <td><div style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all"
                      id="reg_${i}" regId="${comn?.id}" parroquia="${comn?.parroquia?.id}" parroquiaN="${comn?.parroquia?.nombre}"
-                     canton="${comn?.parroquia?.canton?.id}"  comN="${comn?.nombre}" comunidad="${comn?.id}" txtReg="${comn.toString()}" ${comunidades}>
+                     canton="${comn?.parroquia?.canton?.id}"  comN="${comn?.nombre}" comunidad="${comn?.id}" cantN="${comn?.parroquia?.canton?.nombre}" txtReg="${comn.toString()}" ${comunidades}>
                 <span class="ui-icon ui-icon-circle-check"></span>
             </div></td>
 
@@ -51,6 +51,10 @@
 
         $("#hiddenComunidad").val($(this).attr("comunidad"));
         $("#comuNombre").val($(this).attr("comN"));
+
+        $("hiddenCanton").val($(this).attr("canton"));
+        $("#cantNombre").val($(this).attr("cantN"));
+
 
 //        console.log("comunidadId:" + comunidad);
 

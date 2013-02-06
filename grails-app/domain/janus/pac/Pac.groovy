@@ -18,6 +18,7 @@ class Pac {
     String c3
     String estado
     String memo
+    String requiriente
 
     static mapping = {
         table 'pacp'
@@ -43,6 +44,7 @@ class Pac {
             c3 column: 'pacpctr3'
             estado column: 'pacpetdo'
             memo column: 'pacpmemp'
+            requiriente column: 'pacprqri'
 
         }
     }
@@ -61,5 +63,6 @@ class Pac {
         c3(blank:true,nullable: true,size: 1..1)
         estado(blank:true,nullable: true,size: 1..1)
         memo(blank:true,nullable: true,size: 1..32)
+        requiriente(blank: true,nullable: true,size: 1..100)
     }
 }

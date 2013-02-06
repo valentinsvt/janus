@@ -12,33 +12,44 @@
     </head>
     <body>
 
-        <div class="span12">
-            <g:if test="${flash.message}">
-                <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
-                    <a class="close" data-dismiss="alert" href="#">×</a>
-                    ${flash.message}
+        <g:if test="${flash.message}">
+            <div class="row">
+                <div class="span12">
+                    <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        ${flash.message}
+                    </div>
                 </div>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
 
-        <div class="span12 btn-group" role="navigation">
-            <a href="#" class="btn btn-ajax btn-new">
-                <i class="icon-file"></i>
-                Crear  Tipo Procedimiento
-            </a>
+        <div class="row">
+            <div class="span9 btn-group" role="navigation">
+                <a href="#" class="btn btn-ajax btn-new">
+                    <i class="icon-file"></i>
+                    Crear  Tipo Procedimiento
+                </a>
+            </div>
+            <div class="span3" id="busqueda-TipoProcedimiento"></div>
         </div>
 
         <g:form action="delete" name="frmDelete-TipoProcedimiento">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-TipoProcedimiento" class="span12" role="main" style="margin-top: 10px;">
+        <div id="list-TipoProcedimiento" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
                     
                         <g:sortableColumn property="descripcion" title="Descripcion" />
+                    
+                        <g:sortableColumn property="sigla" title="Sigla" />
+                    
+                        <g:sortableColumn property="bases" title="Bases" />
+                    
+                        <g:sortableColumn property="techo" title="Techo" />
                     
                         <th width="150">Acciones</th>
                     </tr>
@@ -48,6 +59,12 @@
                     <tr>
                     
                         <td>${fieldValue(bean: tipoProcedimientoInstance, field: "descripcion")}</td>
+                    
+                        <td>${fieldValue(bean: tipoProcedimientoInstance, field: "sigla")}</td>
+                    
+                        <td>${fieldValue(bean: tipoProcedimientoInstance, field: "bases")}</td>
+                    
+                        <td>${fieldValue(bean: tipoProcedimientoInstance, field: "techo")}</td>
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoProcedimientoInstance.id}">
@@ -99,7 +116,9 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows: 10
+                    maxRows        : 10,
+                    searchPosition : $("#busqueda-TipoProcedimiento"),
+                    float          : "right"
                 });
 
                 $(".btn-new").click(function () {

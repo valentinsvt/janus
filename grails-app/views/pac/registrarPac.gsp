@@ -47,13 +47,7 @@
     <div class="borde_abajo" style="padding-left: 45px;position: relative;">
         <p class="css-vertical-text">P.A.C.</p>
         <div class="linea" style="height: 98%;"></div>
-
         <div class="row-fluid" style="margin-left: 0px">
-            <div class="span3">
-                <b>Departamento:</b>
-                <input type="hidden" id="item_id">
-                <g:select name="presupuesto.id" from="${janus.Departamento.list([order:'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 250px;;font-size: 10px" id="item_depto"></g:select>
-            </div>
             <div class="span1" >
                 <b>Año:</b>
                 <g:select name="anio" from="${janus.pac.Anio.list()}" id="item_anio" optionValue="anio" optionKey="id" style="width: 80px;font-size: 10px"></g:select>
@@ -66,15 +60,50 @@
                     <i class="icon-edit"></i>
                 </a>
             </div>
-
             <div class="span2" >
-                <b>Código C.P.:</b>
-                <input type="text" style="width: 110px;;font-size: 10px" id="item_codigo">
-                <input type="hidden" style="width: 60px" id="item_cpac">
+                <b>Techo:</b>
+                <input type="text" id="techo" disabled="true" style="width: 120px;;text-align: right">
+            </div>
+            <div class="span2" >
+                <b>Usado:</b>
+                <input type="text" id="usado" disabled="true" style="width: 120px;;text-align: right">
+            </div>
+            <div class="span2" >
+                <b>Disponible:</b>
+                <input type="text" id="disponible" disabled="true" style="width: 120px;text-align: right">
+            </div>
+        </div>
+        <div class="row-fluid" style="margin-left: 0px">
+            <div class="span4">
+                <b>Requiriente:</b>
+                <input type="text" id="item_req" style="width: 250px;">
             </div>
             <div class="span3">
+                <b>Memorando:</b>
+                <input type="text" id="item_memo" style="width: 156px;">
+            </div>
+            <div class="span4">
+                <b>Departamento:</b>
+                <input type="hidden" id="item_id">
+                <g:select name="presupuesto.id" from="${janus.Departamento.list([order:'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 250px;;font-size: 10px" id="item_depto"></g:select>
+            </div>
+
+        </div>
+
+        <div class="row-fluid" style="margin-left: 0px">
+            <div class="span4">
+                <b>Tipo procedimiento:</b>
+                <g:select name="tipoProcedimiento.id" from="${janus.pac.TipoProcedimiento.list([order:'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 213px;;font-size: 10px" id="item_tipoProc"></g:select>
+            </div>
+
+            <div class="span3" >
+                <b>Código C.P.:</b>
+                <input type="text" style="width: 154px;;font-size: 10px" id="item_codigo">
+                <input type="hidden" style="width: 60px" id="item_cpac">
+            </div>
+            <div class="span5">
                 <b>Tipo compra:</b>
-                <g:select name="tipo" from="${janus.pac.TipoCompra.list()}" optionKey="id" optionValue="descripcion" style="width: 250px;;font-size: 10px" id="item_tipo"></g:select>
+                <g:select name="tipo" from="${janus.pac.TipoCompra.list()}" optionKey="id" optionValue="descripcion" style="width: 258px;;font-size: 10px" id="item_tipo"></g:select>
             </div>
         </div>
         <div class="row-fluid" style="margin-left: 0px">
@@ -84,13 +113,13 @@
                 <input type="text" style="width: 330px;font-size: 10px" id="item_desc">
 
             </div>
-            <div class="span1" >
-                <b>Cantidad:</b>
-                <input type="text" style="width: 60px;text-align: right" id="item_cantidad" value="1">
-            </div>
             <div class="span2" >
+                <b>Cantidad:</b>
+                <input type="text" style="width: 90px;text-align: right" id="item_cantidad" value="1">
+            </div>
+            <div class="span2" style="margin-left: -50px;" >
                 <b>Costo unitario:</b>
-                <input type="text" style="width: 140px;text-align: right" id="item_precio" value="1">
+                <input type="text" style="width: 123px;text-align: right" id="item_precio" value="1">
             </div>
             <div class="span2" >
                 <b>Unidad:</b>
@@ -150,6 +179,27 @@
 </div>
 
 <script type="text/javascript">
+    function cargarTecho(){
+        if($("#item_prsp").val()*1>0){
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'pac',action:'cargarTecho')}",
+                data     :  "id="+$("#item_prsp").val()+"&anio="+$("#item_anio").val(),
+                success  : function (msg) {
+                    var parts = msg.split(";")
+                    $("#techo").val(number_format(parts[0], 2, ".", ""))
+                    $("#usado").val(number_format(parts[1], 2, ".", ""))
+                    var dis = parts[0]-parts[1]
+                    if($("#item_id").val()*1>1){
+                        var act =  $("#item_cantidad").val()*$("#item_precio").val()
+                        if(isNaN(act) || act=="")
+                            act=0
+                        dis += act
+                    }
+
+                    $("#disponible").val(number_format(dis, 2, ".", ""))
+                }
+            });
+        }
+    }
     function  enviarPrsp(){
         var data = "";
         $("#buscarDialog").hide();
@@ -203,12 +253,13 @@
                         $.ajax({type : "POST", url : "${g.createLink(controller: 'presupuesto',action:'saveAjax')}",
                             data     :   $("#frmSave-presupuestoInstance").serialize(),
                             success  : function (msg) {
-                                console.log(msg)
+
                                 var parts = msg.split("&")
                                 $("#item_prsp").val(parts[0])
                                 $("#item_presupuesto").val(parts[1])
                                 $("#item_presupuesto").attr("title",parts[2])
                                 $("#modal-presupuesto").modal("hide");
+                                cargarTecho()
                             }
                         });
 
@@ -254,6 +305,9 @@
             var tipo = $("#item_tipo").val()
             var desc = $("#item_desc").val()
             var cant = $("#item_cantidad").val()
+            var req = $("#item_req").val()
+            var memo = $("#item_memo").val()
+            var tipoP = $("#item_tipoProc").val()
             cant = str_replace(",","",cant)
             if(isNaN(cant))
                 cant=0
@@ -277,10 +331,42 @@
                 c3="S"
             else
                 c3=""
+            var msg =""
+            if(req.trim()==""){
+                msg+="<br>Error: Ingrese el nombre de la persona requiriente"
+
+            }
+            if(memo.trim()==""){
+                msg+="<br>Error: Ingrese el numero del momorando de referencia"
+            }
             if(costo*1==0 || cant*1==0){
+                msg+="<br>Error: El costo y la cantidad deben ser números positivos"
+            }
+            if(desc.trim()==""){
+                msg+="<br>Error: Ingrese una descripción"
+
+            }
+            if(prsp*1<1){
+                msg+="<br>Error: Escoja una partida presupuestaria"
+
+            }
+            if(cpac*1<1){
+                msg+="<br>Error: Escoja una partida de compras públicas"
+
+            }
+            var disponible = $("#disponible").val()
+            if(disponible=="" || isNaN(disponible))
+                disponible=0
+            else
+                disponible=disponible*1
+            if(costo*cant>disponible){
+                msg+="<br>Error: El valor total del P.A.C. (costo*cantidad) $"+(costo*cant)+" no se puede ser superior a: $"+disponible
+            }
+            if(msg!==""){
+
                 $.box({
                     imageClass : "box_info",
-                    text       : "El costo y la cantidad deben ser números positivos",
+                    text       : msg,
                     title      : "Alerta",
                     iconClose  : false,
                     dialog     : {
@@ -294,67 +380,61 @@
                     }
                 });
             }else{
-                if(desc.trim()==""){
-                    $.box({
-                        imageClass : "box_info",
-                        text       : "Ingrese una descripción",
-                        title      : "Alerta",
-                        iconClose  : false,
-                        dialog     : {
-                            resizable : false,
-                            draggable : false,
-                            buttons   : {
-                                "Aceptar" : function () {
-                                }
-                            },
-                            width     : 500
-                        }
-                    });
-                }else{
-                    $.ajax({type : "POST", url : "${g.createLink(controller: 'pac',action:'regPac')}",
-                        data     : {
-                            "departamento.id" : dpto,
-                            "anio.id" : anio,
-                            "presupuesto.id" : prsp,
-                            "cpp.id" : cpac,
-                            "tipoCompra.id" : tipo,
-                            "descripcion" : desc,
-                            "cantidad" : cant,
-                            "costo" : costo,
-                            "unidad.id" : unidad,
-                            c1 : c1,
-                            c2 : c2,
-                            c3 : c3,
-                            id : $("#item_id").val()
-                        },
-                        success  : function (msg) {
-                            $("#item_id").val("")
-                            $("#item_cpac").val("")
-                            $("#item_tipo").val()
-                            $("#item_desc").val("")
-                            $("#item_cantidad").val("1")
-                            $("#item_precio").val("1")
-                            $("#item_unidad").val()
-                            $("#item_c1").removeClass("active")
-                            $("#item_c2").removeClass("active")
-                            $("#item_c3").removeClass("active")
-                            $("#item_codigo").val("").attr("title","")
-                            $("#item_presupuesto").val("").attr("title","")
-                            $("#item_prsp").val("")
-                            cargarTabla()
-                        }
-                    });
-                }
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'pac',action:'regPac')}",
+                    data     : {
+                        "departamento.id" : dpto,
+                        "anio.id" : anio,
+                        "presupuesto.id" : prsp,
+                        "cpp.id" : cpac,
+                        "tipoCompra.id" : tipo,
+                        "descripcion" : desc,
+                        "cantidad" : cant,
+                        "costo" : costo,
+                        "unidad.id" : unidad,
+                        "requiriente":req,
+                        "memo":memo,
+                        "tipoProcedimiento.id":tipoP,
+                        c1 : c1,
+                        c2 : c2,
+                        c3 : c3,
+                        id : $("#item_id").val()
+                    },
+                    success  : function (msg) {
+                        $("#item_id").val("")
+                        $("#item_cpac").val("")
+                        $("#item_tipo").val()
+                        $("#item_desc").val("")
+                        $("#item_cantidad").val("1")
+                        $("#item_precio").val("1")
+                        $("#item_unidad").val()
+                        $("#item_c1").removeClass("active")
+                        $("#item_c2").removeClass("active")
+                        $("#item_c3").removeClass("active")
+                        $("#item_codigo").val("").attr("title","")
+                        $("#item_presupuesto").val("").attr("title","")
+                        $("#item_prsp").val("")
+                        $("#item_req").val("")
+                        $("#item_memo").val("")
+                        $("#techo").val("")
+                        $("#usado").val("")
+                        $("#disponible").val("")
+                        cargarTabla()
+                    }
+                });
             }
 
 
-        })
+
+
+
+        });
 
         $("#item_depto").change(function(){
             cargarTabla()
         })
         $("#item_anio").change(function(){
             cargarTabla()
+            cargarTecho()
         })
     });
 </script>

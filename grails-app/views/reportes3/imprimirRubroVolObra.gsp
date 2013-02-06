@@ -156,7 +156,7 @@
                     <b>Costo unitario directo </b>
                 </td>
                 <td style="text-align: right">
-                    <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                    <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
                 </td>
             </tr>
             <tr>
@@ -164,7 +164,7 @@
                     <b>Costos indirectos</b>
                 </td>
                 <td style="text-align: right">
-                    <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                    <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
                 </td>
             </tr>
             <tr>
@@ -172,14 +172,14 @@
                     <b>Costo total del rubro</b>
                 </td>
                 <td style="text-align: right">
-                    <g:formatNumber number="${totalRubro+totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"/>
+                    <g:formatNumber number="${totalRubro+totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
                 </td>
             </tr>
             <tr>
                 <td>
                     <b>Precio unitario </b>
                 </td>
-                <td style="text-align: right">  <g:formatNumber number="${(totalRubro+totalIndi).toDouble().round(2)}" format="##,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                <td style="text-align: right">  <g:formatNumber number="${(totalRubro+totalIndi).toDouble().round(2)}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
 
                 </td>
             </tr>
