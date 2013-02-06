@@ -105,21 +105,21 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
                     rowspan: 1,
                     clase: "numero",
                     estilos: "",
-                    texto: g.formatNumber(number: par1.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                    texto: g.formatNumber(number: par1.puntaje, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             ]
             def celdaMin1 = [
                     colspan: 1,
                     rowspan: 1,
                     clase: "numero",
                     estilos: "",
-                    texto: g.formatNumber(number: par1.minimo, maxFractionDigits: 2, minFractionDigits: 2)
+                    texto: g.formatNumber(number: par1.minimo, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             ]
             def celdaAsg1 = [
                     colspan: 1,
                     rowspan: 1,
                     clase: "numero",
                     estilos: "",
-                    texto: g.formatNumber(number: par1Hijos.sum { it.puntaje }, maxFractionDigits: 2, minFractionDigits: 2)
+                    texto: g.formatNumber(number: par1Hijos.sum { it.puntaje }, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
             ]
             filaPar1.celdas.add(celdaN11)
             filaPar1.celdas.add(celdaN12)
@@ -163,21 +163,21 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
                         rowspan: 1,
                         clase: "numero",
                         estilos: "",
-                        texto: g.formatNumber(number: par2.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                        texto: g.formatNumber(number: par2.puntaje, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
                 ]
                 def celdaMin2 = [
                         colspan: 1,
                         rowspan: 1,
                         clase: "numero",
                         estilos: "",
-                        texto: g.formatNumber(number: par2.minimo, maxFractionDigits: 2, minFractionDigits: 2)
+                        texto: g.formatNumber(number: par2.minimo, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
                 ]
                 def celdaAsg2 = [
                         colspan: 1,
                         rowspan: 1,
                         clase: "numero",
                         estilos: "",
-                        texto: g.formatNumber(number: par2Hijos.sum { it.puntaje }, maxFractionDigits: 2, minFractionDigits: 2)
+                        texto: g.formatNumber(number: par2Hijos.sum { it.puntaje }, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
                 ]
                 filaPar2.celdas.add(celdaN22)
                 filaPar2.celdas.add(celdaN23)
@@ -213,14 +213,14 @@ class ParametroEvaluacionController extends janus.seguridad.Shield {
                             rowspan: 1,
                             clase: "numero",
                             estilos: "",
-                            texto: g.formatNumber(number: par3.puntaje, maxFractionDigits: 2, minFractionDigits: 2)
+                            texto: g.formatNumber(number: par3.puntaje, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
                     ]
                     def celdaMin3 = [
                             colspan: 1,
                             rowspan: 1,
                             clase: "numero",
                             estilos: "",
-                            texto: g.formatNumber(number: par3.minimo, maxFractionDigits: 2, minFractionDigits: 2)
+                            texto: g.formatNumber(number: par3.minimo, maxFractionDigits: 2, minFractionDigits: 2, format:"##,##0", locale: "ec")
                     ]
                     def celdaAsg3 = [
                             colspan: 1,
