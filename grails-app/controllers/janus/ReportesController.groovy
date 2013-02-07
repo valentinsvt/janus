@@ -11,6 +11,7 @@ import jxl.write.WritableCellFormat
 import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
+import jxl.write.Label
 
 import java.awt.*
 
@@ -900,17 +901,6 @@ class ReportesController {
 
 
     def reporteDocumentosObra() {
-//
-//           println(params)
-//
-//
-//        println(params.forzarValue)
-//
-//        println(params.tipoReporte)
-
-//           if (!params.id) {
-//            params.id="477"
-//        }
 
         def cd
 
@@ -1175,35 +1165,19 @@ class ReportesController {
 
 
            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
-                   2, maxFractionDigits: 2, format: "#####.##0", locale: "ec"),times8normal), prmsCellRight)
+                   2, maxFractionDigits: 2, format: "#####.##", locale: "ec"),times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##0", locale: "ec"),times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"),times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()]*it.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##0", locale: "ec"),times8normal), prmsCellRight)
-
-
-
-//            println("costo:" + precios[it.id.toString()]*it.cantidad)
-
-
-//            println("cccc"+ it.cantidad)
+                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"),times8normal), prmsCellRight)
 
             totales =  precios[it.id.toString()]*it.cantidad
 
-//            println("---->>"+ totales)
-//
-//            println("total:" + (total1+=totales) )
-
-//            totalPresupuesto = (total1+=totales);
             totalPresupuesto = (total1+=totales);
 
-//            println(totalPresupuesto)
-
-//            return totalPresupuesto
-
-//            return totalPresupuesto
+//
 
         }
 
@@ -2898,6 +2872,80 @@ class ReportesController {
         workbook.close();
         def output = response.getOutputStream()
         def header = "attachment; filename=" + "DocumentosObraExcel.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
+
+    }
+
+
+    def reporteExcelVolObra(){
+
+        def obra = Obra.get(params.id)
+
+
+        def detalle
+
+        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
+        def precios = [:]
+        def fecha = obra.fechaPreciosRubros
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+        def lugar = obra.lugar
+        def prch = 0
+        def prvl = 0
+        if (obra.chofer){
+            prch = preciosService.getPrecioItems(fecha,lugar,[obra.chofer])
+            prch = prch["${obra.chofer.id}"]
+            prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
+            prvl = prvl["${obra.volquete.id}"]
+        }
+        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
+
+        if (rendimientos["rdps"].toString()=="NaN")
+            rendimientos["rdps"]=0
+        if (rendimientos["rdvl"].toString()=="NaN")
+            rendimientos["rdvl"]=0
+
+        def indirecto = obra.totales/100
+
+        def c;
+
+        def total1 = 0;
+
+        def totales
+
+        def totalPresupuesto;
+
+        //excel
+
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+//        println "paso"
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+        // fija el ancho de la columna
+        // sheet.setColumnView(1,40)
+
+
+
+
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "VolObraExcel.xls";
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());

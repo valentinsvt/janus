@@ -247,7 +247,7 @@
                             <div class="span1">Valor de la Base:</div>
 
                             <div class="span2">
-                                <g:textField name="baseMemo" style="width: 100px" disabled="true" value="${formatNumber(number: totalPresupuesto, format: '####,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
+                                <g:textField name="baseMemo" style="width: 100px" disabled="true" value="${formatNumber(number: totalPresupuesto, format: '####.##', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
                             </div>
 
                             <div class="span1" style="margin-left: -30px">Valor de Reajuste:</div>
@@ -379,7 +379,7 @@
                             <div class="span2">Monto del Contrato:</div>
 
                             <div class="span3">
-                                <g:textField name="montoFor" value="${formatNumber(number: totalPresupuesto, format: '####,##0', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}" disabled="true"/>
+                                <g:textField name="montoFor" value="${formatNumber(number: totalPresupuesto, format: '####.##', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}" disabled="true"/>
                             </div>
                         </div>
 
