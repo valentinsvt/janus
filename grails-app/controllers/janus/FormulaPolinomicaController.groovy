@@ -50,6 +50,18 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         }
     }
 
+    def delCoefFormula() {
+        def obra = Obra.get(params.obra)
+        if (obra.estado != "R") {
+            def id = params.id
+            def fp = FormulaPolinomica.get(id)
+            fp.delete()
+            render "OK"
+        } else {
+            render "NO"
+        }
+    }
+
     def delItemFormula() {
 //        println "delete "
 //        println params
@@ -162,9 +174,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     data.add(mapFormula)
                 }
             }
-            println data
+//            println data
             def json = new JsonBuilder(data)
-            println json.toPrettyString()
+//            println json.toPrettyString()
             def sql = "SELECT\n" +
                     "  v.voit__id                            id,\n" +
                     "  i.item__id                            iid,\n" +

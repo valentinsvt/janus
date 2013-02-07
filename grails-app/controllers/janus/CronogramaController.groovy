@@ -308,6 +308,12 @@ class CronogramaController extends janus.seguridad.Shield {
     def cronogramaObra() {
         def obra = Obra.get(params.id)
 
+        println "========"
+        println obra.plazo
+        println obra.plazoEjecucionMeses
+        println obra.plazoEjecucionDias
+        println "========"
+
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
         def precios = [:]

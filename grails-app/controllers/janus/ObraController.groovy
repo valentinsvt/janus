@@ -2,8 +2,6 @@ package janus
 
 import org.springframework.dao.DataIntegrityViolationException
 
-import groovy.json.JsonBuilder
-
 class ObraController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -20,7 +18,9 @@ class ObraController extends janus.seguridad.Shield {
         [obraInstanceList: Obra.list(params), obraInstanceTotal: Obra.count(), params: params]
     } //list
 
+    def biblioteca() {
 
+    }
 
 
     def registroObra() {
@@ -170,6 +170,10 @@ class ObraController extends janus.seguridad.Shield {
 
         def obra = Obra.get(params.obra)
 
+        def usuario = session.usuario.id
+
+        def persona = Persona.get(usuario)
+
         def departamento = Departamento.get(params.id)
 
         def personas = Persona.findAllByDepartamento(departamento)
@@ -193,7 +197,7 @@ class ObraController extends janus.seguridad.Shield {
 
 
 //        println(personas)
-        return [personas:personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra]
+        return [personas:personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona]
 
 
     }
@@ -348,8 +352,11 @@ class ObraController extends janus.seguridad.Shield {
 
 
         def obraInstance
+
+
         if (params.id) {
             obraInstance = Obra.get(params.id)
+
             if (!obraInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Obra con id " + params.id
@@ -417,6 +424,81 @@ class ObraController extends janus.seguridad.Shield {
         }
         redirect(action: 'registroObra',params: [obra: obraInstance.id])
     } //save
+
+    //guardar copia
+    def saveCopia() {
+        if (params.fechaOficioSalida) {
+            params.fechaOficioSalida = new Date().parse("dd-MM-yyyy", params.fechaOficioSalida)
+        }
+
+        if (params.fechaPreciosRubros) {
+            params.fechaPreciosRubros = new Date().parse("dd-MM-yyyy", params.fechaPreciosRubros)
+        }
+
+        if (params.fechaCreacionObra) {
+            params.fechaCreacionObra = new Date().parse("dd-MM-yyyy", params.fechaCreacionObra)
+        }
+
+        def obraInstance
+
+        def copiaObra
+
+        def obra = Obra.get(params.id);
+
+        def nuevoCodigo = params.nuevoCodigo
+
+        obraInstance = Obra.get(params.id)
+
+
+        def revisarCodigo = Obra.findByCodigo(nuevoCodigo)
+
+               if (revisarCodigo != null){
+
+                   println("entro1")
+
+                render "NO_No se puede copiar la Obra " + " " + obra.nombre + " " + "porque posee un codigo ya existente."
+                return
+
+
+               }else {
+
+                   println("entro2")
+
+
+                   obraInstance = new Obra()
+                   obraInstance.properties = obra.properties
+                   obraInstance.codigo = nuevoCodigo
+
+
+               }
+
+
+        if (!obraInstance.save(flush: true)) {
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo copiar la Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"
+
+            str += "<ul>"
+            obraInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+
+            render 'NO_' + str
+//            return(action: 'registroObra')
+            return
+        }
+render 'OK_' + "Obra copiada"
+    } //save
+
+
+
+
+
+
 
     def show_ajax() {
         def obraInstance = Obra.get(params.id)

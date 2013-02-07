@@ -47,18 +47,45 @@
         </div>
     </div>
 </g:if>
+
+<div class="span12 hide" style="height: 35px;margin-bottom: 10px;" id="divError">
+    <div class="alert alert-error" role="status">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <span id="spanError"></span>
+    </div>
+</div>
+
+<div class="span12 hide" style="height: 35px;margin-bottom: 10px;" id="divOk">
+    <div class="alert alert-info" role="status">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <span id="spanOk"></span>
+    </div>
+</div>
+
 <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;float: left;height: 35px;">
     <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
     <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
     <g:if test="${obra?.estado!='R'}">
+        <g:if test="${obra?.departamento?.id == persona?.departamento?.id}">
         <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar</button>
+        </g:if>
     </g:if>
     <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
     <g:if test="${obra?.estado!='R'}">
         <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
     </g:if>
     <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+
+    <g:if test="${obra?.departamento?.id == persona?.departamento?.id}">
     <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+    </g:if>
+
+    <g:if test="${obra?.id != null}">
+
+     <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+
+    </g:if>
+
 </div>
 
 <g:form class="registroObra" name="frm-registroObra" action="save">
@@ -396,6 +423,21 @@
 
 </div>
 
+<div id="copiarDialog">
+
+    <fieldset>
+        <div class="span3">
+            Porfavor ingrese un nuevo código para la copia de la obra: <div style="font-weight: bold">${obra?.nombre}</div>
+        </div>
+
+        <div class="span3" style="margin-top: 10px">
+        <div class="span2">Nuevo Código: </div>
+        <div class="span3"><g:textField name="nuevoCodigo" value="${obra?.codigo}" maxlength="20"/> </div>
+        </div>
+    </fieldset>
+
+</div>
+
 
 
 <g:if test="${obra?.id}">
@@ -406,7 +448,7 @@
 
                 <ul class="nav">
                     <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
-                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i> Vol. Obra
+                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra
                     </a></li>
                     <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
                     <li>
@@ -426,10 +468,12 @@
                         </g:link>
                     </li>
                     <li>
-                        <a href="#" id="biblioteca"><i class="icon-folder-open"></i>Biblioteca</a>
+                        <g:link controller="documentoObra" action="list" id="${obra.id}">
+                            <i class="icon-book"></i>Biblioteca
+                        </g:link>
                     </li>
                     <li>
-                        <a href="#" id="btnMapa"><i class="icon-flag"></i> Mapa</a>
+                        <a href="#" id="btnMapa"><i class="icon-flag"></i>Mapa</a>
                     </li>
 
                 </ul>
@@ -713,6 +757,13 @@
 
         }) ;
 
+
+        $("#copiarObra").click (function () {
+
+            $("#copiarDialog").dialog("open");
+
+        });
+
         $("#btnRubros").click(function () {
             var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";
             $.box({
@@ -800,6 +851,71 @@
             });
             return false;
         });
+
+        $("#copiarDialog").dialog ({
+
+
+            autoOpen  : false,
+            resizable : false,
+            modal     : true,
+            draggable : false,
+            width     : 380,
+            height    : 280,
+            position  : 'center',
+            title     : 'Copiar la obra',
+            buttons   : {
+                "Aceptar" : function () {
+                   %{--var data = $("#frm-registroObra").serialize();--}%
+                    %{--data+="&nuevoCodigo="+ $.trim($("#nuevoCodigo").val());--}%
+
+                    %{--var url = "${createLink(action: 'saveCopia')}?"+data;--}%
+
+                    %{--console.log(url);--}%
+
+                    //location.href = url;
+
+                    var originalId = "${obra?.id}";
+                    var nuevoCodigo  = $.trim($("#nuevoCodigo").val());
+
+
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action: 'saveCopia')}",
+                        data    : {
+                                id : originalId,
+                                nuevoCodigo  : nuevoCodigo
+
+                    },
+                        success : function (msg) {
+
+                            $("#copiarDialog").dialog("close")
+                             var parts = msg.split('_')
+                            if(parts[0] == 'NO')   {
+
+                                $("#spanError").html(parts[1]);
+                                $("#divError").show()
+                            }else {
+
+                                $("#divError").hide()
+                                $("#spanOk").html(parts[1]);
+                                $("#divOk").show()
+
+                            }
+
+                        }
+                    });
+
+                },
+                "Cancelar" : function (){
+
+                  $("#copiarDialog").dialog("close");
+
+                }
+            }
+
+
+        });
+
 
         $("#busqueda").dialog({
 

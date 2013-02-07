@@ -85,7 +85,7 @@
 
     <body>
         %{--Todo excel--}%
-        <g:set var="meses" value="${obra.plazo}"/>
+        <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
         <g:set var="sum" value="${0}"/>
 
         <div class="tituloTree">

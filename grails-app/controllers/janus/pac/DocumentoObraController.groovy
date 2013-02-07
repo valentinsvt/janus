@@ -1,9 +1,9 @@
 package janus.pac
 
-import janus.Contrato
+import janus.Obra
 import org.springframework.dao.DataIntegrityViolationException
 
-class DocumentoProcesoController extends janus.seguridad.Shield {
+class DocumentoObraController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -12,8 +12,8 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
     } //index
 
     def downloadFile() {
-        def doc = DocumentoProceso.get(params.id)
-        def folder = "archivos"
+        def doc = DocumentoObra.get(params.id)
+        def folder = "archivosObra"
         def path = servletContext.getRealPath("/") + folder + File.separatorChar + doc.path
 
 //        println servletContext.getRealPath("/")
@@ -32,53 +32,52 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
         response.getOutputStream().write(b)
     }
 
+
     def list() {
-        def contrato = null
-        if (params.contrato) {
-            contrato = Contrato.get(params.contrato)
-        }
-        def concurso = Concurso.get(params.id)
-        def documentos = DocumentoProceso.findAllByConcurso(concurso)
-        return [concurso: concurso, documentoProcesoInstanceList: documentos, params: params, contrato: contrato]
+        [documentoObraInstanceList: DocumentoObra.list(params), params: params]
+
+        def obra = Obra.get(params.id)
+        def documentos = DocumentoObra.findAllByObra(obra)
+        return [obra: obra, documentoObraInstanceList: documentos, params: params]
     } //list
 
     def form_ajax() {
-        def concurso = Concurso.get(params.concurso)
-        def documentoProcesoInstance = new DocumentoProceso(params)
+        def obra = Obra.get(params.obra)
+        def documentoObraInstance = new DocumentoObra(params)
         if (params.id) {
-            documentoProcesoInstance = DocumentoProceso.get(params.id)
-            if (!documentoProcesoInstance) {
+            documentoObraInstance = DocumentoObra.get(params.id)
+            if (!documentoObraInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Documento Proceso con id " + params.id
+                flash.message = "No se encontró Documento Obra con id " + params.id
                 redirect(action: "list")
                 return
             } //no existe el objeto
         } //es edit
-        documentoProcesoInstance.concurso = concurso
-        return [documentoProcesoInstance: documentoProcesoInstance, concurso: concurso]
+        documentoObraInstance.obra = obra
+        return [documentoObraInstance: documentoObraInstance, obra: obra]
     } //form_ajax
 
     def save() {
-        def documentoProcesoInstance
+        def documentoObraInstance
         if (params.id) {
-            documentoProcesoInstance = DocumentoProceso.get(params.id)
-            if (!documentoProcesoInstance) {
+            documentoObraInstance = DocumentoObra.get(params.id)
+            if (!documentoObraInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Documento Proceso con id " + params.id
                 redirect(action: 'list', id: params.concurso.id)
                 return
             }//no existe el objeto
-            documentoProcesoInstance.properties = params
+            documentoObraInstance.properties = params
         }//es edit
         else {
-            documentoProcesoInstance = new DocumentoProceso(params)
+            documentoObraInstance = new DocumentoObra(params)
         } //es create
 
         /***************** file upload ************************************************/
         //handle uploaded file
         println "upload....."
         println params
-        def folder = "archivos"
+        def folder = "archivosObra"
         def path = servletContext.getRealPath("/") + folder   //web-app/archivos
         new File(path).mkdirs()
 
@@ -105,7 +104,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             if (!accepted.contains(ext)) {
                 flash.message = "El archivo tiene que ser de tipo jpg, png o pdf"
                 flash.clase = "alert-error"
-                redirect(action: 'list', id: params.concurso.id)
+                redirect(action: 'list', id: params.obra.id)
                 return
             }
 
@@ -125,16 +124,16 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             }
 
             f.transferTo(new File(pathFile)) // guarda el archivo subido al nuevo path
-            documentoProcesoInstance.path = fileName
+            documentoObraInstance.path = fileName
         }
         /***************** file upload ************************************************/
 
-        if (!documentoProcesoInstance.save(flush: true)) {
+        if (!documentoObraInstance.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar Documento Proceso " + (documentoProcesoInstance.id ? documentoProcesoInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar Documento Obra " + (documentoObraInstance.id ? documentoObraInstance.id : "") + "</h4>"
 
             str += "<ul>"
-            documentoProcesoInstance.errors.allErrors.each { err ->
+            documentoObraInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
                 err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
@@ -150,49 +149,94 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Documento Proceso " + documentoProcesoInstance.id
+            flash.message = "Se ha actualizado correctamente Documento Obra " + documentoObraInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Documento Proceso " + documentoProcesoInstance.id
+            flash.message = "Se ha creado correctamente Documento Obra " + documentoObraInstance.id
         }
-        redirect(action: 'list', id: params.concurso.id)
+        redirect(action: 'list', id: params.obra.id)
     } //save
 
+//    def save() {
+//        def documentoObraInstance
+//        if (params.id) {
+//            documentoObraInstance = DocumentoObra.get(params.id)
+//            if (!documentoObraInstance) {
+//                flash.clase = "alert-error"
+//                flash.message = "No se encontró Documento Obra con id " + params.id
+//                redirect(action: 'list')
+//                return
+//            }//no existe el objeto
+//            documentoObraInstance.properties = params
+//        }//es edit
+//        else {
+//            documentoObraInstance = new DocumentoObra(params)
+//        } //es create
+//        if (!documentoObraInstance.save(flush: true)) {
+//            flash.clase = "alert-error"
+//            def str = "<h4>No se pudo guardar Documento Obra " + (documentoObraInstance.id ? documentoObraInstance.id : "") + "</h4>"
+//
+//            str += "<ul>"
+//            documentoObraInstance.errors.allErrors.each { err ->
+//                def msg = err.defaultMessage
+//                err.arguments.eachWithIndex { arg, i ->
+//                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+//                }
+//                str += "<li>" + msg + "</li>"
+//            }
+//            str += "</ul>"
+//
+//            flash.message = str
+//            redirect(action: 'list')
+//            return
+//        }
+//
+//        if (params.id) {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha actualizado correctamente Documento Obra " + documentoObraInstance.id
+//        } else {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha creado correctamente Documento Obra " + documentoObraInstance.id
+//        }
+//        redirect(action: 'list')
+//    } //save
+
     def show_ajax() {
-        def documentoProcesoInstance = DocumentoProceso.get(params.id)
-        if (!documentoProcesoInstance) {
+        def documentoObraInstance = DocumentoObra.get(params.id)
+        if (!documentoObraInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Documento Proceso con id " + params.id
+            flash.message = "No se encontró Documento Obra con id " + params.id
             redirect(action: "list")
             return
         }
-        [documentoProcesoInstance: documentoProcesoInstance]
+        [documentoObraInstance: documentoObraInstance]
     } //show
 
     def delete() {
-        def documentoProcesoInstance = DocumentoProceso.get(params.id)
-        if (!documentoProcesoInstance) {
+        def documentoObraInstance = DocumentoObra.get(params.id)
+        if (!documentoObraInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Documento Proceso con id " + params.id
+            flash.message = "No se encontró Documento Obra con id " + params.id
             redirect(action: "list")
             return
         }
-        def path = documentoProcesoInstance.path
-        def cid = documentoProcesoInstance.concursoId
+        def path = documentoObraInstance.path
+        def cid = documentoObraInstance.concursoId
         try {
-            documentoProcesoInstance.delete(flush: true)
+            documentoObraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Documento Proceso " + documentoProcesoInstance.id
-            def folder = "archivos"
+            flash.message = "Se ha eliminado correctamente Documento Obra " + documentoObraInstance.id
+
+            def folder = "archivosObra"
             path = servletContext.getRealPath("/") + folder + File.separatorChar + path
             def file = new File(path)
             file.delete()
 
-            redirect(action: "list", id: cid)
+            redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Documento Proceso " + (documentoProcesoInstance.id ? documentoProcesoInstance.id : "")
+            flash.message = "No se pudo eliminar Documento Obra " + (documentoObraInstance.id ? documentoObraInstance.id : "")
             redirect(action: "list")
         }
     } //delete

@@ -13,7 +13,7 @@
     <body>
 
         <div class="tituloTree">
-            Documentos de <span style="font-weight: bold; font-style: italic;">${concurso.objeto}</span>
+            Documentos de <span style="font-weight: bold; font-style: italic;">${obra.descripcion}</span>
         </div>
 
         <g:if test="${flash.message}">
@@ -29,18 +29,10 @@
 
         <div class="row">
             <div class="span9 btn-group" role="navigation">
-                <g:if test="${contrato}">
-                    <g:link controller="contrato" action="registroContrato" class="btn" params="[contrato: contrato.id]">
-                        <i class="icon-caret-left"></i>
-                        Regresar
-                    </g:link>
-                </g:if>
-                <g:else>
-                    <g:link controller="concurso" action="list" class="btn">
-                        <i class="icon-caret-left"></i>
-                        Regresar
-                    </g:link>
-                </g:else>
+                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
+                    <i class="icon-arrow-left"></i>
+                    Regresar
+                </a>
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
                     Nuevo Documento
@@ -51,16 +43,15 @@
             </div>
         </div>
 
-        <g:form action="delete" name="frmDelete-DocumentoProceso">
+        <g:form action="delete" name="frmDelete-DocumentoObra">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-DocumentoProceso" role="main">
+        <div id="list-DocumentoObra" role="main">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                        <th>Etapa</th>
                         <g:sortableColumn property="nombre" title="Nombre"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="resumen" title="Resumen"/>
@@ -70,28 +61,27 @@
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                    <g:each in="${documentoProcesoInstanceList}" status="i" var="documentoProcesoInstance">
+                    <g:each in="${documentoObraInstanceList}" status="i" var="documentoObraInstance">
                         <tr>
-                            <td>${documentoProcesoInstance?.etapa?.descripcion}</td>
-                            <td>${fieldValue(bean: documentoProcesoInstance, field: "nombre")}</td>
-                            <td>${fieldValue(bean: documentoProcesoInstance, field: "descripcion")}</td>
-                            <td>${fieldValue(bean: documentoProcesoInstance, field: "resumen")}</td>
-                            <td>${fieldValue(bean: documentoProcesoInstance, field: "palabrasClave")}</td>
+                            <td>${fieldValue(bean: documentoObraInstance, field: "nombre")}</td>
+                            <td>${fieldValue(bean: documentoObraInstance, field: "descripcion")}</td>
+                            <td>${fieldValue(bean: documentoObraInstance, field: "resumen")}</td>
+                            <td>${fieldValue(bean: documentoObraInstance, field: "palabrasClave")}</td>
                             <td>
-                                <g:set var="p" value="${documentoProcesoInstance.path.split("\\.")}"/>
+                                <g:set var="p" value="${documentoObraInstance.path.split("\\.")}"/>
                                 ${p[p.size() - 1]}
                             </td>
                             <td>
-                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${documentoProcesoInstance.id}">
+                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${documentoObraInstance.id}">
                                     <i class="icon-zoom-in icon-large"></i>
                                 </a>
-                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${documentoProcesoInstance.id}">
+                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${documentoObraInstance.id}">
                                     <i class="icon-pencil icon-large"></i>
                                 </a>
-                                <g:link action="downloadFile" class="btn btn-small btn-docs" rel="tooltip" title="Descargar" id="${documentoProcesoInstance.id}">
+                                <g:link action="downloadFile" class="btn btn-small btn-docs" rel="tooltip" title="Descargar" id="${documentoObraInstance.id}">
                                     <i class="icon-download-alt icon-large"></i>
                                 </g:link>
-                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${documentoProcesoInstance.id}">
+                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${documentoObraInstance.id}">
                                     <i class="icon-trash icon-large"></i>
                                 </a>
                             </td>
@@ -123,10 +113,10 @@
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
             function submitForm(btn) {
-                if ($("#frmSave-DocumentoProceso").valid()) {
+                if ($("#frmSave-DocumentoObra").valid()) {
                     btn.replaceWith(spinner);
                 }
-                $("#frmSave-DocumentoProceso").submit();
+                $("#frmSave-DocumentoObra").submit();
             }
 
             $(function () {
@@ -143,7 +133,7 @@
                         type    : "POST",
                         url     : "${createLink(action:'form_ajax')}",
                         data    : {
-                            concurso : ${concurso.id}
+                            obra : ${obra.id}
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -155,7 +145,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Documento Proceso");
+                            $("#modalTitle").html("Crear Documento Obra");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-DocumentoProceso").modal("show");
@@ -171,7 +161,7 @@
                         url     : "${createLink(action:'form_ajax')}",
                         data    : {
                             id       : id,
-                            concurso : ${concurso.id}
+                            obra : ${obra.id}
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -183,7 +173,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Documento Proceso");
+                            $("#modalTitle").html("Editar Documento Obra");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-DocumentoProceso").modal("show");
@@ -203,7 +193,7 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Documento Proceso");
+                            $("#modalTitle").html("Ver Documento Obra");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
                             $("#modal-DocumentoProceso").modal("show");
@@ -220,13 +210,13 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-DocumentoProceso").submit();
+                        $("#frmDelete-DocumentoObra").submit();
                         return false;
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Documento Proceso");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Documento Proceso?</p>");
+                    $("#modalTitle").html("Eliminar Documento Obra");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Documento Obra?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-DocumentoProceso").modal("show");
                     return false;
