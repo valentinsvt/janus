@@ -175,7 +175,7 @@
         </div>
     </div>
 
-    <g:if test="${grupo.toString() == '1'}">
+    <g:if test="${grupo.toString() == '3'}">
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
