@@ -455,11 +455,15 @@ class ObraController extends janus.seguridad.Shield {
 
         def obraInstance
 
+        def volumenInstance
+
         def copiaObra
 
         def obra = Obra.get(params.id);
 
         def nuevoCodigo = params.nuevoCodigo
+
+        def volumenes = VolumenesObra.findAllByObra(obra);
 
         obraInstance = Obra.get(params.id)
 
@@ -482,30 +486,46 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance = new Obra()
             obraInstance.properties = obra.properties
             obraInstance.codigo = nuevoCodigo
+            obraInstance.estado = 'N'
 
 
-        }
 
 
-        if (!obraInstance.save(flush: true)) {
-            flash.clase = "alert-error"
-            def str = "<h4>No se pudo copiar la Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"
+            if (!obraInstance.save(flush: true)) {
+                flash.clase = "alert-error"
+                def str = "<h4>No se pudo copiar la Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"
 
-            str += "<ul>"
-            obraInstance.errors.allErrors.each { err ->
-                def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
-                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                str += "<ul>"
+                obraInstance.errors.allErrors.each { err ->
+                    def msg = err.defaultMessage
+                    err.arguments.eachWithIndex { arg, i ->
+                        msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                    }
+                    str += "<li>" + msg + "</li>"
                 }
-                str += "<li>" + msg + "</li>"
-            }
-            str += "</ul>"
+                str += "</ul>"
 
-            render 'NO_' + str
+                render 'NO_' + str
 //            return(action: 'registroObra')
-            return
+                return
+            }
+
+            volumenes.each { volOr ->
+                volumenInstance = new VolumenesObra()
+
+                println("VO:"+volOr)
+
+                volumenInstance.properties = volOr.properties
+
+                println("VI:"+volumenInstance)
+                //
+
+                volumenInstance.obra = obraInstance
+                volumenInstance.save(flush: true)
+            }
+            render 'OK_' + "Obra copiada"
         }
-        render 'OK_' + "Obra copiada"
+
     } //save
 
 

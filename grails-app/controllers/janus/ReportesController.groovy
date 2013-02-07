@@ -2939,6 +2939,20 @@ class ReportesController {
         // sheet.setColumnView(1,40)
 
 
+        params.id = params.id.split(",")
+        if (params.id.class == java.lang.String) {
+            params.id = [params.id]
+        }
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        sheet.setColumnView(0, 60)
+        sheet.setColumnView(1, 12)
+        sheet.setColumnView(2, 25)
+        sheet.setColumnView(3, 25)
+        sheet.setColumnView(4, 30)
+        sheet.setColumnView(8, 20)
+
+
 
 
 
