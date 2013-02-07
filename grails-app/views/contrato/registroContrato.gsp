@@ -318,6 +318,11 @@
                 <li><a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}"><i class="icon-calendar"></i> F. Polinómica
                 </a></li>
 
+                <li>
+                    <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato:contrato.id]">
+                        <i class="icon-book"></i>Biblioteca
+                    </g:link>
+                </li>
 
             </ul>
 

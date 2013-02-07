@@ -79,13 +79,13 @@
     <g:if test="${obra?.departamento?.id == persona?.departamento?.id}">
     <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
     </g:if>
-    
+
     <g:if test="${obra?.id != null}">
-        
+
      <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
-        
+
     </g:if>
-    
+
 </div>
 
 <g:form class="registroObra" name="frm-registroObra" action="save">
@@ -448,7 +448,7 @@
 
                 <ul class="nav">
                     <li><a href="#" id="btnVar"><i class="icon-pencil"></i>Variables</a></li>
-                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i> Vol. Obra
+                    <li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra
                     </a></li>
                     <li><a href="#" id="matriz"><i class="icon-th"></i>Matriz FP</a></li>
                     <li>
@@ -468,10 +468,12 @@
                         </g:link>
                     </li>
                     <li>
-                        <a href="#" id="biblioteca"><i class="icon-folder-open"></i>Biblioteca</a>
+                        <g:link controller="documentoObra" action="list" id="${obra.id}">
+                            <i class="icon-book"></i>Biblioteca
+                        </g:link>
                     </li>
                     <li>
-                        <a href="#" id="btnMapa"><i class="icon-flag"></i> Mapa</a>
+                        <a href="#" id="btnMapa"><i class="icon-flag"></i>Mapa</a>
                     </li>
 
                 </ul>

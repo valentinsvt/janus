@@ -2,8 +2,6 @@ package janus
 
 import org.springframework.dao.DataIntegrityViolationException
 
-import groovy.json.JsonBuilder
-
 class ObraController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -20,7 +18,9 @@ class ObraController extends janus.seguridad.Shield {
         [obraInstanceList: Obra.list(params), obraInstanceTotal: Obra.count(), params: params]
     } //list
 
+    def biblioteca() {
 
+    }
 
 
     def registroObra() {
@@ -178,6 +178,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def personas = Persona.findAllByDepartamento(departamento)
 
+
         def funcionInsp = Funcion.get(3)
         def funcionRevi = Funcion.get(4)
         def funcionResp = Funcion.get(5)
@@ -185,11 +186,11 @@ class ObraController extends janus.seguridad.Shield {
         def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
         def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
-//
+
 //        println(personasRolInsp)
 //        println(personasRolRevi)
 //        println(personasRolResp)
-////
+//
 //        println(personasRolInsp.persona)
 //        println(personasRolRevi.persona)
 //        println(personasRolResp.persona)
