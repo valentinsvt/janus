@@ -283,6 +283,9 @@
 
                 var menuItems = {}, lbl = "", item = "";
 
+                var num = $.trim(node.attr("numero"));
+                var hijos = node.children("ul").length;
+
                 switch (nodeTipo) {
                     case "fp":
                         var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -339,6 +342,44 @@
                                 });
                             }
                         };
+                        if (hijos == 0 && num != "p01" && num != "p02" && num != "px" && num != "c01") {
+                            menuItems.eliminar = {
+                                label            : "Eliminar",
+                                separator_before : false,
+                                separator_after  : false,
+                                icon             : icons.delete,
+                                action           : function (obj) {
+                                    $.box({
+                                        imageClass : "box_info",
+                                        text       : "Está seguro de eliminar el coeficiente " + num + " " + nodeText + "?",
+                                        title      : "Confirmación",
+                                        iconClose  : false,
+                                        dialog     : {
+                                            resizable     : false,
+                                            draggable     : false,
+                                            closeOnEscape : false,
+                                            buttons       : {
+                                                "Aceptar"  : function () {
+                                                    $.ajax({
+                                                        type    : "POST",
+                                                        url     : "${createLink(action:'delCoefFormula')}",
+                                                        data    : {
+                                                            obra : "${obra.id}",
+                                                            id   : nodeId
+                                                        },
+                                                        success : function (msg) {
+                                                            $("#tree").jstree('delete_node', $("#" + nodeStrId));
+                                                        }
+                                                    });
+                                                },
+                                                "Cancelar" : function () {
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            };
+                        }
                         break;
                     case "it":
                         var nodeCod = node.attr("numero");
