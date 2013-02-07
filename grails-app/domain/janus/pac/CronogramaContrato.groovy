@@ -1,8 +1,11 @@
 package janus.pac
 
+import janus.Contrato
 import janus.VolumenesObra
 
 class CronogramaContrato {
+
+    Contrato contrato
 
     VolumenesObra volumenObra
     Integer periodo
@@ -18,6 +21,7 @@ class CronogramaContrato {
         version false
         columns {
             id column: 'crng__id'
+            contrato column: 'cntr__id'
             volumenObra column: 'vlob__id'
             periodo column: 'crngprdo'
             precio column: 'crngprco'
@@ -26,6 +30,7 @@ class CronogramaContrato {
         }
     }
     static constraints = {
+        contrato(blank: false, nullable: false)
         volumenObra(blank: false, nullable: false, attributes: [title: 'volumen de obra'])
         periodo(blank: false, nullable: false, attributes: [title: 'periodo'])
         precio(blank: false, nullable: false, attributes: [title: 'precio'])

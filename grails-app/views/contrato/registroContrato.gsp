@@ -291,7 +291,13 @@
                             </li>
                             %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
                             %{--</a></li>--}%
-                            <li><a href="#" id="btnCronograma"><i class="icon-th"></i>Cronograma</a></li>
+                            <li>
+                            %{--<a href="#" id="btnCronograma">--}%
+                                <g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">
+                                    <i class="icon-th"></i>Cronograma
+                                </g:link>
+                            %{--</a>--}%
+                            </li>
                             %{--<li>--}%
                             %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
                             %{--Fórmula Pol.--}%
@@ -304,6 +310,12 @@
                             <li>
                                 <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
                                     <i class="icon-book"></i>Biblioteca
+                                </g:link>
+                            </li>
+
+                            <li>
+                                <g:link controller="planilla" action="index" id="${contrato?.id}">
+                                    <i class=" icon-file-alt"></i>Planillas
                                 </g:link>
                             </li>
 
