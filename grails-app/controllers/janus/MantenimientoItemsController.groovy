@@ -54,6 +54,7 @@ class MantenimientoItemsController extends Shield {
                             }
                         } else {
                             hijos = Lugar.findAllByTipo("C", [sort: 'descripcion'])
+                            /*hijos = Lugar.findAll([sort: 'descripcion'])*/
                         }
                     }
                 }
