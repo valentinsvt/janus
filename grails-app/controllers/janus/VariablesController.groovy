@@ -30,6 +30,8 @@ class VariablesController {
         println params
         def obra = Obra.get(params.id)
         obra.properties = params
+//        obra.capacidadVolquete=params.asdas.toDouble()
+//        obra.factorVolumen=params.factorVolumen.toDouble()
         if (obra.save(flush: true)) {
             render "OK"
         } else {
