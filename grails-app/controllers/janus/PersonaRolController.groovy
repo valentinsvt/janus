@@ -15,6 +15,12 @@ class PersonaRolController extends janus.seguridad.Shield {
         [personaRolInstanceList: PersonaRol.list(params), personaRolInstanceTotal: PersonaRol.count(), params: params]
     } //list
 
+
+    def registroPersonaRol (){
+
+
+    }
+
     def form_ajax() {
         def personaRolInstance = new PersonaRol(params)
         if (params.id) {
