@@ -10,12 +10,25 @@
         </div>
 
     </div>
+
+
     <div class="span4">
         <a href="#" class="btn  " id="imprimir_sub">
             <i class="icon-file"></i>
             Imprimir Subpresupuesto
         </a>
+
+        <a href="#" class="btn  " id="imprimir_excel" style="margin-left:-5px">
+            <i class="icon-file"></i>
+            Imprimir Excel
+        </a>
+
     </div>
+
+
+
+
+
 
 </div>
 <table class="table table-bordered table-striped table-condensed table-hover">
@@ -116,6 +129,19 @@
         var datos = "?obra=${obra.id}Wsub="+$("#subPres_desc").val()
         var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}"+datos
         location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+    });
+
+    $("#imprimir_excel").click(function () {
+
+        %{--var dsps=${obra.distanciaPeso}--}%
+        %{--var dsvs=${obra.distanciaVolumen}--}%
+        %{--var volqueta=${precioVol}--}%
+        %{--var chofer=${precioChof}--}%
+
+        %{--var url = "${g.createLink(controller: 'reportes', action: 'reporteExcelVolObra')}"--}%
+
+        location.href = "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra',id: obra?.id)}"
+
     });
 
     $("#subPres_desc").change(function(){
