@@ -2962,6 +2962,8 @@ class ReportesController {
 
         def fila = 9;
 
+        def ultimaFila
+
 
         label = new Label(2, 2, "GOBIERNO DE LA PROVINCIA DE PRICHINCHA", times16format); sheet.addCell(label);
 
@@ -2983,10 +2985,16 @@ class ReportesController {
 
         detalle.each {
 
-            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
-            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+//            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+//            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+//            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+//            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+
+
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
+            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+
+
 
             def precioUnitario = precios[it.id.toString()]
 
@@ -3003,9 +3011,16 @@ class ReportesController {
 
             fila++
 
+            totales =  precios[it.id.toString()]*it.cantidad
+
+            totalPresupuesto = (total1+=totales);
+
+            ultimaFila = fila
+
         }
 
-//        label = new Label(6, 8, "TOTAL ", times16format); sheet.addCell(label);
+          label = new Label(5, ultimaFila, "TOTAL ", times16format); sheet.addCell(label);
+        number = new Number(6, ultimaFila, totalPresupuesto); sheet.addCell(number);
 
 
 
