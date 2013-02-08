@@ -807,6 +807,11 @@
                                 "No"       : function () {
                                     url += "0";
                                     location.href = url;
+                                },
+                                "Exportar a Excel"       : function () {
+                                    var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
+                                    url += "1";
+                                    location.href = url;
                                 }
                             }
                         }
