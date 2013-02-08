@@ -1,5 +1,6 @@
 package janus
 
+import janus.ejecucion.Planilla
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 import org.springframework.beans.SimpleTypeConverter
 import org.springframework.context.MessageSourceResolvable
@@ -8,6 +9,40 @@ import org.springframework.web.servlet.support.RequestContextUtils
 class ElementosTagLib {
 
     static namespace = "elm"
+
+
+    Closure headerPlanilla = { attrs ->
+        def str = ""
+        Planilla planilla = attrs.planilla
+        Obra obra = planilla.contrato.oferta.concurso.obra
+
+        str += "<div class='well'>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Lugar</div>"
+        str += "<div class='span5'>" + obra.lugar.descripcion + "</div>"
+        str += "<div class='span1 bold'>Planilla</div>"
+        str += "<div class='span4'>" + planilla.numero + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Ubicación</div>"
+        str += "<div class='span5'>Parroquia " + obra.parroquia.nombre + " - Cantón" + obra.parroquia.canton.nombre + "</div>"
+        str += "<div class='span1 bold'>Monto</div>"
+        str += "<div class='span4'>" + formatNumber(number: planilla.contrato.monto, format: "##,##0", locale: "ec", minFractionDigits: 2, maxFractionDigits: 2) + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Contratista</div>"
+        str += "<div class='span5'>Parroquia " + planilla.contrato.oferta.proveedor.nombre + "</div>"
+        str += "<div class='span1 bold'>Periodo</div>"
+        str += "<div class='span4'>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del '+planilla.periodoIndices.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.periodoIndices.fechaFin.format('dd-MM-yyyy')) + "</div>"
+        str += "</div>"
+
+        str += "</div>"
+
+        out << str
+    }
 
     /**
      * Creates next/previous links to support pagination for the current controller.<br/>

@@ -1,8 +1,11 @@
 package janus.ejecucion
 
 import janus.Contrato
+import janus.VolumenesObra
 
 class PlanillaController extends janus.seguridad.Shield {
+
+    def preciosService
 
     def list() {
         def contrato = Contrato.get(params.id)
@@ -125,6 +128,22 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         def contrato = Contrato.get(params.contrato)
 
+        def anterior = null
+
+        def obra = contrato.oferta.concurso.obra
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+
+        def precios = [:]
+        def indirecto = obra.totales / 100
+
+        preciosService.ac_rbroObra(obra.id)
+
+        detalle.each {
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+        }
+
+        return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, anterior: anterior]
     }
 
 }

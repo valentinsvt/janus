@@ -85,12 +85,12 @@
                     </div>
 
                     <div class="span2 formato periodo hide">
-                        Periodo Indices
+                        Periodo
                     </div>
 
                     <div class="span4 periodo hide">
                         <g:select id="periodoIndices" name="periodoIndices.id" from="${janus.pac.PeriodoValidez.list()}" optionKey="id" class="many-to-one span3"
-                                  value="${planillaInstance?.periodoIndices?.id}" noSelection="['': '']" optionValue="${{ it.fechaInicio.format('dd-MM-yyyy') + ' a ' + it.fechaFin.format('dd-MM-yyyy') }}"/>
+                                  value="${planillaInstance?.periodoIndices?.id}" noSelection="['': '']" optionValue="descripcion"/>
                         <span class="mandatory">*</span>
 
                         <p class="help-block ui-helper-hidden"></p>
