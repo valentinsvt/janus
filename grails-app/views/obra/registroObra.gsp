@@ -66,8 +66,9 @@
             <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
             <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
             <g:if test="${obra?.estado != 'R'}">
-                <g:if test="${obra?.departamento?.id == persona?.departamento?.id}">
-                    <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar</button>
+                <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
+                         <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
+                        </button>
                 </g:if>
             </g:if>
             <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
