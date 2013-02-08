@@ -57,6 +57,10 @@
         <i class="icon-print"></i>
         Imprimir
     </a>
+    <a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">
+        <i class="icon-print"></i>
+        Excel
+    </a>
     <g:if test="${rubro}">
         <a href="#" id="foto" class="btn btn-ajax btn-new" >
             <i class="icon-picture"></i>
@@ -554,6 +558,7 @@
                     var tarifa = padre.find(".col_tarifa")
                     rend.html(number_format(1, 5, ".", ""))
                     cant.html(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
+//                    console.log(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
                     tarifa.html(number_format(precio, 5, ".", ""))
                     hora.html(number_format(parseFloat(cant.html())*parseFloat(tarifa.html()), 5, ".", ""))
                     total.html(number_format(parseFloat(hora.html())*parseFloat(rend.html()), 5, ".", ""))
@@ -719,6 +724,18 @@
                 });
                 $("#costo_indi").val("21")
             }
+        });
+
+        $("#excel").click(function(){
+            var dsps=$("#dist_peso").val()
+            var dsvs=$("#dist_vol").val()
+            var volqueta=$("#costo_volqueta").val()
+            var chofer=$("#costo_chofer").val()
+            %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
+            %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
+            var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&indi="+$("#costo_indi").val()
+            var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroExcel')}"+datos
+            location.href=url
         });
 
         $("#imprimir").click(function(){
