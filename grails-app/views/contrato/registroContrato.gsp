@@ -314,7 +314,7 @@
                             </li>
 
                             <li>
-                                <g:link controller="planilla" action="index" id="${contrato?.id}">
+                                <g:link controller="planilla" action="list" id="${contrato?.id}">
                                     <i class=" icon-file-alt"></i>Planillas
                                 </g:link>
                             </li>

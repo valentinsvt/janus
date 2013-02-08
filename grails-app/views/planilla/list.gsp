@@ -79,6 +79,9 @@
                                 <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">
                                     <i class="icon-zoom-in icon-large"></i>
                                 </a>
+                                <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" title="Detalles" class="btn">
+                                    <i class="icon-reorder icon-large"></i>
+                                </g:link>
                                 %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
                                     %{--<i class="icon-pencil icon-large"></i>--}%
                                 %{--</a>--}%
