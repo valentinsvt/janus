@@ -134,31 +134,32 @@
                             location.href = "${g.createLink(controller: 'concurso',action: 'show')}/" + $(this).attr("id")
                         }
                         if (key == "edit") {
-                            $("#dlgLoad").dialog("open")
-                            var id = $(this).attr("id");
-                            $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(action:'form_ajax')}",
-                                data    : {
-                                    id : id
-                                },
-                                success : function (msg) {
-                                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+                            %{--$("#dlgLoad").dialog("open")--}%
+                            %{--var id = $(this).attr("id");--}%
+                            %{--$.ajax({--}%
+                                %{--type    : "POST",--}%
+                                %{--url     : "${createLink(action:'form_ajax')}",--}%
+                                %{--data    : {--}%
+                                    %{--id : id--}%
+                                %{--},--}%
+                                %{--success : function (msg) {--}%
+                                    %{--var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');--}%
+                                    %{--var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');--}%
 
-                                    btnSave.click(function () {
-                                        submitForm(btnSave);
-                                        return false;
-                                    });
+                                    %{--btnSave.click(function () {--}%
+                                        %{--submitForm(btnSave);--}%
+                                        %{--return false;--}%
+                                    %{--});--}%
 
-                                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                                    $("#modalTitle").html("Editar Concurso");
-                                    $("#modalBody").html(msg);
-                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
-                                    $("#dlgLoad").dialog("close")
-                                    $("#modal-Concurso").modal("show");
-                                }
-                            });
+                                    %{--$("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");--}%
+                                    %{--$("#modalTitle").html("Editar Concurso");--}%
+                                    %{--$("#modalBody").html(msg);--}%
+                                    %{--$("#modalFooter").html("").append(btnOk).append(btnSave);--}%
+                                    %{--$("#dlgLoad").dialog("close")--}%
+                                    %{--$("#modal-Concurso").modal("show");--}%
+                                %{--}--}%
+                            %{--});--}%
+                            location.href="${g.createLink(action: 'form_ajax')}/"+$(this).attr("id")
                             return false;
                         }
                         if (key == "delete") {

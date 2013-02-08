@@ -1,4 +1,34 @@
 <%@ page import="janus.pac.Concurso" %>
+<!doctype html>
+<html>
+<head>
+    <meta name="layout" content="main">
+    <title>
+        Lista de Concursos
+    </title>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.livequery.min.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.ui.position.js')}" type="text/javascript"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.js')}" type="text/javascript"></script>
+    <link href="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.css')}" rel="stylesheet" type="text/css"/>
+    <style>
+    td {
+        line-height : 12px !important;
+    }
+    </style>
+</head>
+
+<body>
+
+<g:if test="${flash.message}">
+    <div class="span12">
+        <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            ${flash.message}
+        </div>
+    </div>
+</g:if>
 
 <div class="row">
     <g:form class="form-horizontal" name="frmSave-Concurso" action="save" id="${concursoInstance?.id}">
@@ -259,6 +289,13 @@
                 </div>
             </div>
         </div>
+    <div class="span10">
+        <div class="control-group">
+            <div>
+                <input type="SUBMIT" value="Guardar" class="btn btn-primary">
+            </div>
+
+    </div>
     </g:form>
 </div>
 
@@ -283,3 +320,5 @@
         }
     });
 </script>
+</body>
+</html>
