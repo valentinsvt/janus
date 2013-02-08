@@ -31,6 +31,9 @@ class Planilla {
     Date fechaOficioPago
     String aprobado
 
+    String memoSalida
+    Date fechaMemoSalida
+
     static mapping = {
         table 'plnl'
         cache usage: 'read-write', include: 'non-lazy'
@@ -65,6 +68,9 @@ class Planilla {
             oficioPago column: 'plnlofpg'
             fechaOficioPago column: 'plnlfcop'
             aprobado column: 'plnlaprb'
+
+            memoSalida column: 'plnlmmsl'
+            fechaMemoSalida column: 'plnlfcms'
         }
     }
 
@@ -94,5 +100,8 @@ class Planilla {
         oficioPago(maxSize: 12, blank: true, nullable: true)
         fechaOficioPago(blank: true, nullable: true)
         aprobado(blank: true, nullable: true)
+
+        memoSalida(blank: true, nullable: true)
+        fechaMemoSalida(blank: true, nullable: true)
     }
 }

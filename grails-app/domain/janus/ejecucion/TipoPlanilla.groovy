@@ -15,7 +15,7 @@ class TipoPlanilla implements Serializable{
         columns {
             id column: 'tppl__id'
             codigo column: 'tpplcdgo'
-            nombre column: 'tpfpdscr'
+            nombre column: 'tppldscr'
         }
 
     }

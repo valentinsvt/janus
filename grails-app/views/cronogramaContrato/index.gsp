@@ -94,7 +94,7 @@
 
         <div class="btn-toolbar">
             <div class="btn-group">
-                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
+                <a href="${g.createLink(controller: 'contrato', action: 'registroContrato', params: [contrato: contrato?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar al contrato">
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>
