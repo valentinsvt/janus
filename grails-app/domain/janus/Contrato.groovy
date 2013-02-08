@@ -77,7 +77,7 @@ class Contrato implements Serializable {
         padre(blank: true, nullable: true)
         periodoValidez(blank: true, nullable: true)
         codigo(blank: true, nullable: true)
-        objeto(blank: true, nullable: true)
+        objeto(size: 1..1023, blank: true, nullable: true)
         fechaSubscripcion(blank: true, nullable: true)
         fechaIngreso(blank: true, nullable: true)
         fechaInicio(blank: true, nullable: true)

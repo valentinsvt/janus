@@ -164,7 +164,8 @@
                             <i class="icon-print"></i>
                             Pdf
                         </g:link>
-                        <g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print">
+                        %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel">--}%
+                        <g:link action="composicion" class="btn btn-print btnExcel">
                             <i class="icon-table"></i>
                             Excel
                         </g:link>
@@ -309,6 +310,12 @@
 
                         return false;
                     });
+
+                  $(".btnExcel").click(function () {
+                      location.href = "${g.createLink(controller: 'reportes2' ,action: 'reporteExcelComposicion',id: obra?.id)}"
+
+                  });
+
 
                 });
             </script>

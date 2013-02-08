@@ -269,6 +269,8 @@ class ContratoController extends janus.seguridad.Shield {
 
     def save() {
         def contratoInstance
+        println("-->>"+params)
+
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
             if (!contratoInstance) {

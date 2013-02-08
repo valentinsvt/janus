@@ -64,11 +64,11 @@
 
                 <div class="span2 formato">Contrato N°</div>
 
-                <div class="span3"><g:textField name="codigo" class="cotratoNumero required" value="${contrato?.codigo}" disabled="true"/></div>
+                <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}" /></div>
 
                 <div class="span2 formato">Memo de Distribución</div>
 
-                <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}" disabled="true"/></div>
+                <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
 
 
                 </div>
@@ -79,7 +79,7 @@
 
                 <div class="span2 formato">Contrato N°</div>
 
-                <div class="span3"><g:textField name="codigo" class="cotratoNumero required" value="${contrato?.codigo}"/></div>
+                <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
 
                 <div class="span2 formato">Memo de Distribución</div>
 
