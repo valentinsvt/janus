@@ -1,6 +1,7 @@
 
 
-<g:if test="${obra?.departamento?.id == persona?.departamento?.id}">
+
+<g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
 
 
 <div class="span1">Inspección</div>
@@ -21,6 +22,8 @@
                              value="${obra?.responsableObra?.id}"/></div>
 
 </g:if>
+
+
 <g:else>
 
     <div class="span1">Inspección</div>
@@ -38,3 +41,4 @@
 
 
 </g:else>
+

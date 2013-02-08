@@ -269,6 +269,7 @@ class ContratoController extends janus.seguridad.Shield {
 
     def save() {
         def contratoInstance
+
         println("-->>"+params)
 
         if (params.id) {
@@ -283,6 +284,7 @@ class ContratoController extends janus.seguridad.Shield {
         }//es edit
         else {
             contratoInstance = new Contrato(params)
+
         } //es create
         if (!contratoInstance.save(flush: true)) {
             flash.clase = "alert-error"

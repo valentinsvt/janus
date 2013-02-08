@@ -71,6 +71,7 @@
                         </button>
                 </g:if>
             </g:if>
+
             <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
             <g:if test="${obra?.estado != 'R'}">
                 <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
@@ -144,7 +145,7 @@
 
                     <div class="span1">Nombre</div>
 
-                    <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 608px" value="${obra?.nombre}"/></div>
+                    <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 608px" value="${obra?.nombre}" maxlength="127"/></div>
                 </div>
 
                 <div class="span12">
@@ -164,7 +165,7 @@
                 <div class="span12">
                     <div class="span1">Referencias</div>
 
-                    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 610px" value="${obra?.referencia}"/></div>
+                    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 610px" value="${obra?.referencia}" maxlength="127"/></div>
 
                     <div class="span1" style="margin-left: 130px">Estado</div>
 
@@ -221,11 +222,11 @@
 
                     <div class="span1">Sitio</div>
 
-                    <div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 300px"/></div>
+                    <div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 300px" maxlength="63"/></div>
 
                     <div class="span1" style="margin-left: -40px">Barrio</div>
 
-                    <div class="span3" style="margin-left: -15px"><g:textField name="barrio" class="barrio" value="${obra?.barrio}" style="width: 200px"/></div>
+                    <div class="span3" style="margin-left: -15px"><g:textField name="barrio" class="barrio" value="${obra?.barrio}" style="width: 200px" maxlength="127"/></div>
 
                     <div class="span1" style="margin-left: -25px">Plazo</div>
 
@@ -263,7 +264,7 @@
                 <div class="span12">
                     <div class="span1">Observaciones</div>
 
-                    <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;" value="${obra?.observaciones}"/></div>
+                    <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;" value="${obra?.observaciones}" maxlength="127"/></div>
 
                     <div class="span1" style="margin-left: 130px">Anticipo</div>
 

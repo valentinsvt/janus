@@ -80,10 +80,10 @@ class Reportes2Controller {
         // sheet.setColumnView(1,40)
 
 
-        params.id = params.id.split(",")
-        if (params.id.class == java.lang.String) {
-            params.id = [params.id]
-        }
+//        params.id = params.id.split(",")
+//        if (params.id.class == java.lang.String) {
+//            params.id = [params.id]
+//        }
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
 

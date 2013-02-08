@@ -120,7 +120,7 @@
 
     <body>
         <div class="hoja">
-            <div class="tituloChevere">Composición de ${obra.descripcion}</div>
+            <div class="tituloChevere">Composición de ${obra?.descripcion}</div>
 
             <g:if test="${flash.message}">
                 <div class="span12">
@@ -141,34 +141,31 @@
                     </div>
 
                     <div class="btn-group" data-toggle="buttons-radio">
-                        <g:link action="composicion" id="${obra.id}" params="[tipo: -1]" class="btn btn-info toggle ${tipo.contains(',') ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: -1]" class="btn btn-info toggle ${tipo.contains(',') ? 'active' : ''}">
                             <i class="icon-cogs"></i>
                             Todos
                         </g:link>
-                        <g:link action="composicion" id="${obra.id}" params="[tipo: 1]" class="btn btn-info toggle ${tipo == '1' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 1]" class="btn btn-info toggle ${tipo == '1' ? 'active' : ''}">
                             <i class="icon-briefcase"></i>
                             Materiales
                         </g:link>
-                        <g:link action="composicion" id="${obra.id}" params="[tipo: 2]" class="btn btn-info toggle ${tipo == '2' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 2]" class="btn btn-info toggle ${tipo == '2' ? 'active' : ''}">
                             <i class="icon-group"></i>
                             Mano de obra
                         </g:link>
-                        <g:link action="composicion" id="${obra.id}" params="[tipo: 3]" class="btn btn-info toggle ${tipo == '3' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 3]" class="btn btn-info toggle ${tipo == '3' ? 'active' : ''}">
                             <i class="icon-truck"></i>
                             Equipos
                         </g:link>
                     </div>
 
                     <div class="btn-group">
-                        <g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'pdf']" class="btn btn-print btnPdf">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: tipo, rend: 'pdf']" class="btn btn-print btnPdf">
                             <i class="icon-print"></i>
                             Pdf
                         </g:link>
-                        %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel">--}%
-                        <g:link action="composicion" class="btn btn-print btnExcel">
-                            <i class="icon-table"></i>
-                            Excel
-                        </g:link>
+                        %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel"> </g:link>--}%
+                        <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel"><i class="icon-table"></i>Excel</g:link>
                     </div>
                 </div>
             </g:if>
