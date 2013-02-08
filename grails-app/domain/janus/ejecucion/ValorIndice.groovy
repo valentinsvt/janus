@@ -8,7 +8,7 @@ class ValorIndice {
 
     Indice indice
     double  valor
-    PeriodoValidez fecha
+    PeriodosInec periodo
 
     static mapping = {
 
@@ -21,7 +21,7 @@ class ValorIndice {
             id column: 'vlin__id'
             indice column: 'indc__id'
             valor column: 'vlinvalr'
-            fecha column: 'prin__id'
+            periodo column: 'prin__id'
 
 
         }

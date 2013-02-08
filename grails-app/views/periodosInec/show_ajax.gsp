@@ -1,5 +1,5 @@
 
-<%@ page import="janus.PeriodosInec" %>
+<%@ page import="janus.ejecucion.PeriodosInec" %>
 
 <div id="show-periodosInec" class="span5" role="main">
 
@@ -9,7 +9,7 @@
         <div class="control-group">
             <div>
                 <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripción
+                    Descripcion
                 </span>
             </div>
             <div class="controls">
@@ -60,7 +60,7 @@
         <div class="control-group">
             <div>
                 <span id="periodoCerrado-label" class="control-label label label-inverse">
-                    Período Cerrado
+                    Periodo Cerrado
                 </span>
             </div>
             <div class="controls">

@@ -1,4 +1,4 @@
-package janus
+package janus.ejecucion
 class PeriodosInec implements Serializable {
     String descripcion
     Date fechaInicio

@@ -91,6 +91,30 @@ class MigracionService {
         return sec
     }
 
+    def insertRandomIndices(){
+        def perdiodos = janus.ejecucion.PeriodosInec.list()
+        def indices = janus.Indice.list()
+        def rand = new Random()
+        def html =""
+        perdiodos.each {p->
+            indices.each {i->
+                def val = janus.ejecucion.ValorIndice.findAllByPeriodoAndIndice(p,i)
+                if (!val){
+                    val = new janus.ejecucion.ValorIndice()
+                    val.periodo=p
+                    val.indice=i
+                    val.valor=rand.nextDouble()*1000
+                    if (!val.save(flush: true))
+                        println "error save vlin "+val.errors
+                    else
+                        html+="<br> inser indice: "+i.descripcion+" periodo "+p.descripcion+" valor "+val.valor
+
+                }
+            }
+        }
+        return html
+    }
+
 
 
 }
