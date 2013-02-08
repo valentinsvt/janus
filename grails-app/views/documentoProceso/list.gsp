@@ -155,7 +155,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Documento Proceso");
+                            $("#modalTitle").html("Crear Documento");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-DocumentoProceso").modal("show");
@@ -183,7 +183,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Documento Proceso");
+                            $("#modalTitle").html("Editar Documento");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-DocumentoProceso").modal("show");
@@ -203,7 +203,7 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Documento Proceso");
+                            $("#modalTitle").html("Ver Documento");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
                             $("#modal-DocumentoProceso").modal("show");
@@ -225,7 +225,7 @@
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Documento Proceso");
+                    $("#modalTitle").html("Eliminar Documento de la Biblioteca");
                     $("#modalBody").html("<p>¿Está seguro de querer eliminar este Documento Proceso?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-DocumentoProceso").modal("show");

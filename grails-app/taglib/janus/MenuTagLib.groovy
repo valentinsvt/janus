@@ -9,7 +9,8 @@ class MenuTagLib {
         def usuario = session.usuario
         def perfil = session.perfil
         if(usuario){
-            def acciones = janus.seguridad.Prms.findAllByPerfil(perfil).accion.sort{it.accnDescripcion}
+            def acciones = janus.seguridad.Prms.findAllByPerfil(perfil).accion.sort{it.modulo.orden}
+            //println "Acciones:" + acciones
             acciones.each {ac ->
                 if (!items[ac.modulo.nombre]) {
                     items.put(ac.modulo.nombre, [ac.accnDescripcion, g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre)])
@@ -19,8 +20,8 @@ class MenuTagLib {
                 }
             }
 
-
-            items=items.sort{it.key.toString()}
+            //items = items.sort{it.key.toString()}
+            println items
 
             def strItems = ""
             items.each {item ->
