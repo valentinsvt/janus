@@ -12,6 +12,7 @@ import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
 import jxl.write.Label
+import jxl.write.Number
 
 import java.awt.*
 
@@ -2945,14 +2946,66 @@ class ReportesController {
         }
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
-        sheet.setColumnView(0, 60)
-        sheet.setColumnView(1, 12)
-        sheet.setColumnView(2, 25)
+        sheet.setColumnView(0, 12)
+        sheet.setColumnView(1, 25)
+        sheet.setColumnView(2, 60)
         sheet.setColumnView(3, 25)
-        sheet.setColumnView(4, 30)
-        sheet.setColumnView(8, 20)
+        sheet.setColumnView(4, 25)
+        sheet.setColumnView(5, 25)
+        sheet.setColumnView(6, 25)
 
 
+        def label
+        def number
+        def nmro
+        def numero = 1;
+
+        def fila = 9;
+
+
+        label = new Label(2, 2, "GOBIERNO DE LA PROVINCIA DE PRICHINCHA", times16format); sheet.addCell(label);
+
+
+        label = new Label(2, 4, "DEPARTAMENTO DE COSTOS", times16format); sheet.addCell(label);
+
+
+        label = new Label(2, 6, "ANALISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: " + subPres?.descripcion.toString(), times16format); sheet.addCell(label);
+
+
+
+        label = new Label(0, 8, "#", times16format); sheet.addCell(label);
+        label = new Label(1, 8, "CODIGO", times16format); sheet.addCell(label);
+        label = new Label(2, 8, "RUBRO", times16format); sheet.addCell(label);
+        label = new Label(3, 8, "UNIDAD", times16format); sheet.addCell(label);
+        label = new Label(4, 8, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new Label(5, 8, "UNITARIO", times16format); sheet.addCell(label);
+        label = new Label(6, 8, "C.TOTAL", times16format); sheet.addCell(label);
+
+        detalle.each {
+
+            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+
+            def precioUnitario = precios[it.id.toString()]
+
+            def subtotal = (precios[it.id.toString()]*it.cantidad)
+
+
+            number = new Number(0, fila, numero++); sheet.addCell(number);
+            label = new Label(1, fila, it?.item?.codigo.toString()); sheet.addCell(label);
+            label = new Label(2, fila, it?.item?.nombre.toString()); sheet.addCell(label);
+            label = new Label(3, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
+            number = new Number(4, fila, it?.cantidad); sheet.addCell(number);
+            number = new Number(5, fila, precioUnitario); sheet.addCell(number);
+            number = new Number(6, fila, subtotal); sheet.addCell(number);
+
+            fila++
+
+        }
+
+//        label = new Label(6, 8, "TOTAL ", times16format); sheet.addCell(label);
 
 
 
