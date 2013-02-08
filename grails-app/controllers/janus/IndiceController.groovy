@@ -17,7 +17,7 @@ class IndiceController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 15, 100)
         [indiceInstanceList: Indice.list(params), indiceInstanceTotal: Indice.count(), params: params]
     } //list
 
