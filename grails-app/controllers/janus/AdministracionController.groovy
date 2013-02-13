@@ -30,6 +30,12 @@ class AdministracionController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        if(params.fechaInicio){
+            params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        }
+        if(params.fechaFin){
+            params.fechaFin = new Date().parse("dd-MM-yyyy", params.fechaFin)
+        }
         def administracionInstance
         if (params.id) {
             administracionInstance = Administracion.get(params.id)

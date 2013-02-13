@@ -89,7 +89,7 @@
                     </div>
 
                     <div class="span4 periodo hide">
-                        <g:select id="periodoIndices" name="periodoIndices.id" from="${janus.pac.PeriodoValidez.list()}" optionKey="id" class="many-to-one span3"
+                        <g:select id="periodoIndices" name="periodoIndices.id" from="${periodos}" optionKey="id" class="many-to-one span3"
                                   value="${planillaInstance?.periodoIndices?.id}" noSelection="['': '']" optionValue="descripcion"/>
                         <span class="mandatory">*</span>
 

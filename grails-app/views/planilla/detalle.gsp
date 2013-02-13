@@ -36,6 +36,17 @@
 
     <body>
 
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="span9 btn-group" role="navigation">
+                <g:link controller="planilla" action="list" params="[id: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
+                    <i class="icon-arrow-left"></i>
+                    Regresar
+                </g:link>
+            </div>
+
+            <div class="span3" id="busqueda-Planilla"></div>
+        </div>
+
         <elm:headerPlanilla planilla="${planilla}"/>
 
 
@@ -90,14 +101,14 @@
                             <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                         </td>
 
-                        <td>
-                            %{--<g:formatNumber number="${detalleAnt?.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                        <td class="ant num" id="ant_${vol.id}_${planilla.id}">
+                            0.00
                         </td>
                         <td>
-                            <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini"/>
+                            <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number"/>
                         </td>
-                        <td>
-                            %{--<g:formatNumber number="${detalle.cantidad + detalleAnt?.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                        <td class="acu num" id="acu_${vol.id}_ ${planilla.id}">
+                            0.00
                         </td>
 
                         <td>
@@ -113,6 +124,57 @@
                 </g:each>
             </tbody>
         </table>
+
+        <script type="text/javascript">
+            function validarNum(ev) {
+                /*
+                 48-57      -> numeros
+                 96-105     -> teclado numerico
+                 188        -> , (coma)
+                 190        -> . (punto) teclado
+                 110        -> . (punto) teclado numerico
+                 8          -> backspace
+                 46         -> delete
+                 9          -> tab
+                 37         -> flecha izq
+                 39         -> flecha der
+                 */
+                return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                        ev.keyCode == 190 || ev.keyCode == 110 ||
+                        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                        ev.keyCode == 37 || ev.keyCode == 39);
+            }
+
+            $(function () {
+                $(".number").keydown(function (ev) {
+                    // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+                    if (ev.keyCode == 190 || ev.keyCode == 110) {
+                        var val = $(this).val();
+                        if (val.length == 0) {
+                            $(this).val("0");
+                        }
+                        return val.indexOf(".") == -1;
+                    } else {
+                        // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                        return validarNum(ev);
+                    }
+                }).keyup(function () {
+                            var val = $(this).val();
+                            // esta parte valida q no ingrese mas de 2 decimales
+                            var parts = val.split(".");
+                            if (parts.length > 1) {
+                                if (parts[1].length > 2) {
+                                    parts[1] = parts[1].substring(0, 2);
+                                    var nval = parts[0] + "." + parts[1];
+                                    $(this).val(nval);
+                                }
+                            }
+                            // esta parte hace los calculos
+
+                        });
+            });
+        </script>
 
     </body>
 </html>

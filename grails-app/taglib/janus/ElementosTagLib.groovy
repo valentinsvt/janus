@@ -36,7 +36,7 @@ class ElementosTagLib {
         str += "<div class='span1 bold'>Contratista</div>"
         str += "<div class='span5'>Parroquia " + planilla.contrato.oferta.proveedor.nombre + "</div>"
         str += "<div class='span1 bold'>Periodo</div>"
-        str += "<div class='span4'>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del '+planilla.periodoIndices.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.periodoIndices.fechaFin.format('dd-MM-yyyy')) + "</div>"
+        str += "<div class='span4'>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del '+planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')) + "</div>"
         str += "</div>"
 
         str += "</div>"

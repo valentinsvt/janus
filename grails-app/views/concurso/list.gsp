@@ -72,8 +72,7 @@
                             <td style="text-align: right">${fieldValue(bean: concursoInstance, field: "costoBases")}</td>
                             <td style="text-align: center">${janus.pac.DocumentoProceso.countByConcurso(concursoInstance)}</td>
                             <td>
-                                ${(concursoInstance.estado != "R") ? "Registrado" : "No registrado"}<br>
-
+                                ${(concursoInstance.estado == "R") ? "Registrado" : "No registrado"}<br>
                             </td>
 
                         </tr>
@@ -137,29 +136,29 @@
                             %{--$("#dlgLoad").dialog("open")--}%
                             %{--var id = $(this).attr("id");--}%
                             %{--$.ajax({--}%
-                                %{--type    : "POST",--}%
-                                %{--url     : "${createLink(action:'form_ajax')}",--}%
-                                %{--data    : {--}%
-                                    %{--id : id--}%
-                                %{--},--}%
-                                %{--success : function (msg) {--}%
-                                    %{--var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');--}%
-                                    %{--var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');--}%
+                            %{--type    : "POST",--}%
+                            %{--url     : "${createLink(action:'form_ajax')}",--}%
+                            %{--data    : {--}%
+                            %{--id : id--}%
+                            %{--},--}%
+                            %{--success : function (msg) {--}%
+                            %{--var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');--}%
+                            %{--var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');--}%
 
-                                    %{--btnSave.click(function () {--}%
-                                        %{--submitForm(btnSave);--}%
-                                        %{--return false;--}%
-                                    %{--});--}%
-
-                                    %{--$("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");--}%
-                                    %{--$("#modalTitle").html("Editar Concurso");--}%
-                                    %{--$("#modalBody").html(msg);--}%
-                                    %{--$("#modalFooter").html("").append(btnOk).append(btnSave);--}%
-                                    %{--$("#dlgLoad").dialog("close")--}%
-                                    %{--$("#modal-Concurso").modal("show");--}%
-                                %{--}--}%
+                            %{--btnSave.click(function () {--}%
+                            %{--submitForm(btnSave);--}%
+                            %{--return false;--}%
                             %{--});--}%
-                            location.href="${g.createLink(action: 'form_ajax')}/"+$(this).attr("id")
+
+                            %{--$("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");--}%
+                            %{--$("#modalTitle").html("Editar Concurso");--}%
+                            %{--$("#modalBody").html(msg);--}%
+                            %{--$("#modalFooter").html("").append(btnOk).append(btnSave);--}%
+                            %{--$("#dlgLoad").dialog("close")--}%
+                            %{--$("#modal-Concurso").modal("show");--}%
+                            %{--}--}%
+                            %{--});--}%
+                            location.href = "${g.createLink(action: 'form_ajax')}/" + $(this).attr("id")
                             return false;
                         }
                         if (key == "delete") {

@@ -21,7 +21,7 @@ class MenuTagLib {
             }
 
             //items = items.sort{it.key.toString()}
-            println items
+//            println items
 
             def strItems = ""
             items.each {item ->

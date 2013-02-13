@@ -857,7 +857,7 @@ class MantenimientoItemsController extends Shield {
         }
         lugar.properties = params
         if (lugar.save(flush: true)) {
-            render "OK_" + accion + "_" + lugar.id + "_" + (lugar.descripcion + (params.all.toString().toBoolean() ? " (" + lugar.tipo + ")" : "")) + "_" + lugar.tipo.toLowerCase()
+            render "OK_" + accion + "_" + lugar.id + "_" + (lugar.descripcion + (params.all.toString().toBoolean() ? " (" + lugar.tipo + ")" : "")) + "_c"
         } else {
             println lugar.errors
             def errores = g.renderErrors(bean: lugar)

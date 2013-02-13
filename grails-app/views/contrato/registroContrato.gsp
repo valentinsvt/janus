@@ -41,53 +41,52 @@
 
     <body>
 
-        <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;float: left;height: 35px;">
-            <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
-            <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
-            <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-ok"></i> Aceptar</button>
-            <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
-            <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
-            <button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>
-
+        <div class="row">
+            <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">
+                <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
+                <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
+                <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-ok"></i> Aceptar</button>
+                <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
+                <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
+                <button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>
+            </div>
         </div>
 
 
-
-
-    <fieldset class="" style="position: relative; height: 50px; float: left;border-bottom: 1px solid black;">
-
         <g:form class="registroContrato" name="frm-registroContrato" action="save">
 
-            <div class="span12" style="margin-top: 10px" align="center">
+            <fieldset class="" style="position: relative; height: 50px; border-bottom: 1px solid black; width: 100%;">
 
-            <g:if test="${contrato?.codigo != null}">
+                <div class="span12" style="margin-top: 10px" align="center">
 
-                <div class="span2 formato">Contrato N°</div>
+                    <g:if test="${contrato?.codigo != null}">
 
-                <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}" /></div>
+                        <div class="span2 formato">Contrato N°</div>
 
-                <div class="span2 formato">Memo de Distribución</div>
+                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
 
-                <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
+                        <div class="span2 formato">Memo de Distribución</div>
 
-
-                </div>
-
-            </g:if>
-
-            <g:else>
-
-                <div class="span2 formato">Contrato N°</div>
-
-                <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
-
-                <div class="span2 formato">Memo de Distribución</div>
-
-                <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
-
-            </g:else>
+                        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
 
 
+                    %{--</div>--}%
+
+                    </g:if>
+
+                    <g:else>
+
+                        <div class="span2 formato">Contrato N°</div>
+
+                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
+
+                        <div class="span2 formato">Memo de Distribución</div>
+
+                        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
+
+                    </g:else>
+
+                </div> <!--DSAFSD-->
             </fieldset>
 
 
@@ -97,7 +96,7 @@
 
                 <div class="linea" style="height: 85%;"></div>
 
-                <g:hiddenField name="oferta" class="oferta" value="${contrato?.oferta?.id}"/>
+                %{--<g:hiddenField name="oferta" class="oferta" value="${contrato?.oferta?.id}"/>--}%
 
                 <g:if test="${contrato?.codigo != null}">
 
@@ -166,11 +165,11 @@
                         <div class="span2 formato">Oferta</div>
 
                         <div class="span3" id="div_ofertas">
-                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione una obra']" id="oferta" optionKey="id"> </g:select>
+                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione una obra']" id="oferta" optionKey="id"></g:select>
                         </div>
                     </div>
 
-                        <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px" align="center">
                         <div class="span2 formato">Contratista</div>
 
                         <div class="span3">
@@ -206,7 +205,7 @@
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 150px; float: left;border-bottom: 1px solid black;padding: 10px;">
+            <fieldset class="" style="position: relative; height: 150px; border-bottom: 1px solid black;padding: 10px;">
 
                 <div class="span12" style="margin-top: 10px" align="center">
 
@@ -230,7 +229,7 @@
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 160px; float: left;padding: 10px;border-bottom: 1px solid black;">
+            <fieldset class="" style="position: relative; height: 160px; padding: 10px;border-bottom: 1px solid black;">
 
                 <div class="span12" style="margin-top: 10px">
 
@@ -278,7 +277,7 @@
 
 
         <g:if test="${contrato}">
-            <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;float: left" align="center">
+            <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;" align="center">
 
                 <div class="navbar-inner">
                     <div class="botones">
@@ -286,9 +285,9 @@
                         <ul class="nav">
                             <li>
                                 %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
-                                    %{--<i class="icon-pencil"></i>Garantías--}%
+                                %{--<i class="icon-pencil"></i>Garantías--}%
                                 %{--</g:link>--}%
-                                 <a href="#"><i class="icon-pencil"></i> Garantías</a>
+                                <a href="#"><i class="icon-pencil"></i> Garantías</a>
 
                             </li>
                             %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%

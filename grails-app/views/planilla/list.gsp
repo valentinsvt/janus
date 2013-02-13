@@ -79,15 +79,17 @@
                                 <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">
                                     <i class="icon-zoom-in icon-large"></i>
                                 </a>
-                                <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" title="Detalles" class="btn">
-                                    <i class="icon-reorder icon-large"></i>
-                                </g:link>
-                                %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
-                                    %{--<i class="icon-pencil icon-large"></i>--}%
-                                %{--</a>--}%
-                                %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
-                                    %{--<i class="icon-trash icon-large"></i>--}%
-                                %{--</a>--}%
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
+                                    <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
+                                        <i class="icon-reorder icon-large"></i>
+                                    </g:link>
+                                </g:if>
+                            %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-pencil icon-large"></i>--}%
+                            %{--</a>--}%
+                            %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-trash icon-large"></i>--}%
+                            %{--</a>--}%
                             </td>
                         </tr>
                     </g:each>

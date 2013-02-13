@@ -266,7 +266,9 @@
 
                 var nodeHasChildren = node.children("ul").size() > 0;
 
-                if (nodeRel != "node2" && dsp > 0) {
+//                console.log(nodeRel, dsp);
+
+                if ((nodeRel != "node2" && dsp > 0) || isNaN(dsp)) {
                     var cant = node.children("ul").children("li").size();
                     var ord = cant + 1;
                     menuItems.addChild = {
@@ -338,7 +340,9 @@
                                             if (parts[0] == "OK") {
                                                 $tree.jstree("create_node", node, ord, {
                                                     attr : {
-                                                        id : parts[1]
+                                                        id           : parts[1],
+                                                        "data-total" : data.pnt,
+                                                        "data-asig"  : 0
                                                     },
                                                     data : data.par
                                                 });
