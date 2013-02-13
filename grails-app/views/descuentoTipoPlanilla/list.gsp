@@ -1,15 +1,15 @@
-<%@ page import="janus.ejecucion.Planilla" %>
+
+<%@ page import="janus.ejecucion.DescuentoTipoPlanilla" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Planillas
+            Lista de Descuento Tipo Planillas
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
     </head>
-
     <body>
 
         <g:if test="${flash.message}">
@@ -23,80 +23,61 @@
             </div>
         </g:if>
 
-        <div class="tituloTree">
-            Planillas del contrato de la obra ${obra.descripcion}
-        </div>
-
         <div class="row">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" id="atras" title="Regresar al contrato">
-                    <i class="icon-arrow-left"></i>
-                    Regresar
-                </g:link>
-                <g:link action="form" class="btn" params="[contrato: contrato.id]">
+                <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Nueva planilla
-                </g:link>
+                    Crear  Descuento Tipo Planilla
+                </a>
             </div>
-
-            <div class="span3" id="busqueda-Planilla"></div>
+            <div class="span3" id="busqueda-DescuentoTipoPlanilla"></div>
         </div>
 
-        <g:form action="delete" name="frmDelete-Planilla">
+        <g:form action="delete" name="frmDelete-DescuentoTipoPlanilla">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-Planilla" role="main" style="margin-top: 10px;">
+        <div id="list-DescuentoTipoPlanilla" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                        <g:sortableColumn property="numero" title="Número"/>
-                        <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
-                        <g:sortableColumn property="estadoPlanilla" title="Estado"/>
-                        <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
-                        <g:sortableColumn property="periodoIndices" title="Periodo"/>
-                        <g:sortableColumn property="descripcion" title="Descripcion"/>
+                    
+                        <th>Tipo Descuento Planilla</th>
+                    
+                        <th>Tipo Planilla</th>
+                    
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                    <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
-                        <tr>
-                            <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
-                            <td>${planillaInstance.tipoPlanilla.nombre}</td>
-                            <td>${planillaInstance.estadoPlanilla?.nombre}</td>
-                            <td>
-                                <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
-                            </td>
-                            <td>
-                                <g:if test="${planillaInstance.periodoIndices}">
-                                    ${planillaInstance.periodoIndices?.fechaInicio?.format("dd-MM-yyyy")} a ${planillaInstance.periodoIndices?.fechaFin?.format("dd-MM-yyyy")}
-                                </g:if>
-                            </td>
-                            <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
-                            <td>
-                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">
-                                    <i class="icon-zoom-in icon-large"></i>
-                                </a>
-                                <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" title="Detalles" class="btn">
-                                    <i class="icon-reorder icon-large"></i>
-                                </g:link>
-                                %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
-                                    %{--<i class="icon-pencil icon-large"></i>--}%
-                                %{--</a>--}%
-                                %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
-                                    %{--<i class="icon-trash icon-large"></i>--}%
-                                %{--</a>--}%
-                            </td>
-                        </tr>
-                    </g:each>
+                <g:each in="${descuentoTipoPlanillaInstanceList}" status="i" var="descuentoTipoPlanillaInstance">
+                    <tr>
+                    
+                        <td>${fieldValue(bean: descuentoTipoPlanillaInstance, field: "tipoDescuentoPlanilla.nombre")}</td>
+                    
+                        <td>${fieldValue(bean: descuentoTipoPlanillaInstance, field: "tipoPlanilla.nombre")}</td>
+                    
+                        <td>
+                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${descuentoTipoPlanillaInstance.id}">
+                                <i class="icon-zoom-in icon-large"></i>
+                            </a>
+                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${descuentoTipoPlanillaInstance.id}">
+                                <i class="icon-pencil icon-large"></i>
+                            </a>
+
+                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${descuentoTipoPlanillaInstance.id}">
+                                <i class="icon-trash icon-large"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </g:each>
                 </tbody>
             </table>
 
         </div>
 
-        <div class="modal hide fade" id="modal-Planilla">
+        <div class="modal hide fade" id="modal-DescuentoTipoPlanilla">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>
@@ -117,10 +98,10 @@
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
             function submitForm(btn) {
-                if ($("#frmSave-Planilla").valid()) {
+                if ($("#frmSave-DescuentoTipoPlanilla").valid()) {
                     btn.replaceWith(spinner);
                 }
-                $("#frmSave-Planilla").submit();
+                $("#frmSave-DescuentoTipoPlanilla").submit();
             }
 
             $(function () {
@@ -128,7 +109,7 @@
 
                 $(".paginate").paginate({
                     maxRows        : 10,
-                    searchPosition : $("#busqueda-Planilla"),
+                    searchPosition : $("#busqueda-DescuentoTipoPlanilla"),
                     float          : "right"
                 });
 
@@ -146,10 +127,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Planilla");
+                            $("#modalTitle").html("Crear Descuento Tipo Planilla");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Planilla").modal("show");
+                            $("#modal-DescuentoTipoPlanilla").modal("show");
                         }
                     });
                     return false;
@@ -173,10 +154,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Planilla");
+                            $("#modalTitle").html("Editar Descuento Tipo Planilla");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Planilla").modal("show");
+                            $("#modal-DescuentoTipoPlanilla").modal("show");
                         }
                     });
                     return false;
@@ -193,10 +174,10 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Planilla");
+                            $("#modalTitle").html("Ver Descuento Tipo Planilla");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-Planilla").modal("show");
+                            $("#modal-DescuentoTipoPlanilla").modal("show");
                         }
                     });
                     return false;
@@ -210,15 +191,15 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-Planilla").submit();
+                        $("#frmDelete-DescuentoTipoPlanilla").submit();
                         return false;
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Planilla");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Planilla?</p>");
+                    $("#modalTitle").html("Eliminar Descuento Tipo Planilla");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Descuento Tipo Planilla?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-Planilla").modal("show");
+                    $("#modal-DescuentoTipoPlanilla").modal("show");
                     return false;
                 });
 

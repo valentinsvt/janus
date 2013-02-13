@@ -335,6 +335,18 @@ class ObraController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+
+        def usuario = session.usuario.id
+
+        def persona = Persona.get(usuario)
+
+
+        println("usuario" + usuario)
+        println("dep" + persona.departamento.id)
+
+
         if (params.fechaOficioSalida) {
             params.fechaOficioSalida = new Date().parse("dd-MM-yyyy", params.fechaOficioSalida)
         }
@@ -381,6 +393,11 @@ class ObraController extends janus.seguridad.Shield {
         }//es edit
         else {
             obraInstance = new Obra(params)
+
+            obraInstance.departamento = persona.departamento
+
+
+            println("AQUIII"+obraInstance.departamento)
 
             def par = Parametros.list()
             if (par.size() > 0)

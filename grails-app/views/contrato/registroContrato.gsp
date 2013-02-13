@@ -97,7 +97,7 @@
 
                 <div class="linea" style="height: 85%;"></div>
 
-
+                <g:hiddenField name="oferta" class="oferta" value="${contrato?.oferta?.id}"/>
 
                 <g:if test="${contrato?.codigo != null}">
 
@@ -166,11 +166,11 @@
                         <div class="span2 formato">Oferta</div>
 
                         <div class="span3" id="div_ofertas">
-                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione una obra']" id="oferta" optionKey="id"></g:select>
+                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione una obra']" id="oferta" optionKey="id"> </g:select>
                         </div>
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                        <div class="span12" style="margin-top: 5px" align="center">
                         <div class="span2 formato">Contratista</div>
 
                         <div class="span3">
@@ -285,9 +285,11 @@
 
                         <ul class="nav">
                             <li>
-                                <g:link controller="garantia" action="garantiasContrato" id="">
-                                    <i class="icon-pencil"></i>Garantías
-                                </g:link>
+                                %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
+                                    %{--<i class="icon-pencil"></i>Garantías--}%
+                                %{--</g:link>--}%
+                                 <a href="#"><i class="icon-pencil"></i> Garantías</a>
+
                             </li>
                             %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
                             %{--</a></li>--}%
@@ -314,7 +316,7 @@
                             </li>
 
                             <li>
-                                <g:link controller="planilla" action="index" id="${contrato?.id}">
+                                <g:link controller="planilla" action="list" id="${contrato?.id}">
                                     <i class=" icon-file-alt"></i>Planillas
                                 </g:link>
                             </li>
