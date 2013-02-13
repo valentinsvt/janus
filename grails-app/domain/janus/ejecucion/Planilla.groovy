@@ -8,7 +8,7 @@ class Planilla {
     Contrato contrato
     TipoPlanilla tipoPlanilla
     EstadoPlanilla estadoPlanilla
-    PeriodoValidez periodoIndices
+    PeriodosInec periodoIndices
 
     int numero
     String numeroFactura

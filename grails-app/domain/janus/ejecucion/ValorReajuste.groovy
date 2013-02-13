@@ -5,8 +5,9 @@ import janus.pac.PeriodoValidez
 
 class ValorReajuste {
 
+    janus.Obra obra
     Planilla planilla
-    PeriodoValidez periodoIndice
+    PeriodosInec periodoIndice
     Indice indice
     double valor
 
@@ -22,6 +23,7 @@ class ValorReajuste {
             periodoIndice column: 'prin__id'
             indice column: 'indc__id'
             valor column: 'vlrjvlor'
+            obra column: 'obra__id'
         }
     }
     static constraints = {
@@ -29,5 +31,6 @@ class ValorReajuste {
         periodoIndice(blank: true, nullable: true)
         indice(blank: true, nullable: true)
         valor(blank: true, nullable: true)
+        obra(blank:false,nullable: false)
     }
 }
