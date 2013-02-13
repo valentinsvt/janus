@@ -47,7 +47,7 @@ fieldset {
         %{--Vial--}%
         %{--</a>--}%
         %{--</div>--}%
-        <g:select name="lugarRep" from="${janus.Lugar.list([sort: 'descripcion'])}" optionKey="id" optionValue="${{it.descripcion + ' (' + it.tipo + ')'}}"/>
+        <g:select name="lugarRep" from="${janus.Lugar.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
         <elm:datepicker name="fechaRep" class="datepicker required" style="width: 90px" value="${new Date()}"
                         yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"
                         maxDate="new Date()"/>

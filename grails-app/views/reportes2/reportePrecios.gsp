@@ -78,6 +78,10 @@
         .tright {
             text-align : right;
         }
+
+        .tcenter {
+            text-align : center;
+        }
         </style>
 
     </head>
@@ -135,7 +139,7 @@
                                 ${precio.item.nombre}
                             </td>
                             <g:if test="${cols.contains('u')}">
-                                <td>
+                                <td class="tcenter">
                                     ${precio.item.unidad.codigo}
                                 </td>
                             </g:if>
@@ -156,7 +160,7 @@
                                 </td>
                             </g:if>
                             <g:if test="${cols.contains('f')}">
-                                <td>
+                                <td class="tright">
                                     <g:formatDate date="${precio.fecha}" format="dd-MM-yyyy"/>
                                 </td>
                             </g:if>

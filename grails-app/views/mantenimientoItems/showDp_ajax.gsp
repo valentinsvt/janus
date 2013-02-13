@@ -32,7 +32,7 @@
             <div class="controls">
 
                 <span aria-labelledby="codigo-label">
-                    ${departamentoItemInstance?.codigo.toString().padLeft(3,'0')}
+                    ${departamentoItemInstance?.subgrupo?.codigo.toString().padLeft(3,'0')}.${departamentoItemInstance?.codigo.toString().padLeft(3,'0')}
                 </span>
 
             </div>

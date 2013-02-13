@@ -96,7 +96,7 @@
 
                 <div class="linea" style="height: 85%;"></div>
 
-                %{--<g:hiddenField name="oferta" class="oferta" value="${contrato?.oferta?.id}"/>--}%
+            %{--<g:hiddenField name="oferta" class="oferta" value="${contrato?.oferta?.id}"/>--}%
 
                 <g:if test="${contrato?.codigo != null}">
 
@@ -235,11 +235,13 @@
 
                     <div class="span2 formato">Monto</div>
 
-                    <div class="span3"><g:textField name="monto" class="monto activo" value="${contrato?.monto}"/></div>
+                    <div class="span3"><g:textField name="monto" class="monto activo"
+                                                    value="${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/></div>
 
                     <div class="span2 formato">Plazo</div>
 
-                    <div class="span3"><g:textField name="plazo" class="plazo activo" value="${contrato?.oferta?.concurso?.obra?.plazo}" style="width: 50px" maxlength="4"/> Días</div>
+                    <div class="span3"><g:textField name="plazo" class="plazo activo" style="width: 50px" maxlength="4"
+                                                    value="${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> Días</div>
 
                 </div>
 
@@ -247,9 +249,16 @@
 
                     <div class="span2 formato">Anticipo</div>
 
-                    <div class="span1"><g:textField name="porcentajeAnticipo" class="anticipo activo" value="${contrato?.oferta?.concurso?.obra?.porcentajeAnticipo}" style="width: 30px; text-align: right"/> %</div>
+                    <div class="span1">
+                        <g:textField name="porcentajeAnticipo" class="anticipo activo"
+                                     value="${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"
+                                     style="width: 30px; text-align: right"/> %
+                    </div>
 
-                    <div class="span2"><g:textField name="anticipo" class="anticipoValor activo" value="" style="width: 105px; text-align: right"/></div>
+                    <div class="span2">
+                        <g:textField name="anticipo" class="anticipoValor activo" style="width: 105px; text-align: right"
+                                     value="${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    </div>
 
                     <div class="span2 formato">Indices de la Oferta</div>
 
@@ -385,6 +394,12 @@
 
         <script type="text/javascript">
 
+            function updateAnticipo() {
+                var porcentaje = $("#porcentajeAnticipo").val();
+                var monto = $("#monto").val().replace(",", "");
+                var anticipoValor = (porcentaje * (monto)) / 100;
+                $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
+            }
 
             $("#frm-registroContrato").validate();
 
@@ -440,6 +455,7 @@
                             $(this).val(100)
 
                         }
+                        updateAnticipo();
 
                     });
 
@@ -450,24 +466,24 @@
             }).keyup(function () {
 
                         var enteros = $(this).val();
-
-                        var porcentaje = $("#porcentajeAnticipo").val()
-
-                        var monto = $("#monto").val()
-
-                        var anticipoValor = (porcentaje * (monto)) / 100;
-
-                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ""))
+                        updateAnticipo();
+//                        var porcentaje = $("#porcentajeAnticipo").val();
+//
+//                        var monto = $("#monto").val();
+//
+//                        var anticipoValor = (porcentaje * (monto)) / 100;
+//
+//                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ""));
 
                     }).click(function () {
-
-                        var porcentaje = $("#porcentajeAnticipo").val()
-
-                        var monto = $("#monto").val()
-
-                        var anticipoValor = (porcentaje * (monto)) / 100;
-
-                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ","))
+                        updateAnticipo();
+//                        var porcentaje = $("#porcentajeAnticipo").val();
+//
+//                        var monto = $("#monto").val();
+//
+//                        var anticipoValor = (porcentaje * (monto)) / 100;
+//
+//                        $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
 
                     });
 

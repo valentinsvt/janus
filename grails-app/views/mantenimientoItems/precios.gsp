@@ -185,6 +185,7 @@
                 item_manoObra : "${resource(dir: 'images/tree', file: 'item_manoObra.png')}",
                 item_equipo   : "${resource(dir: 'images/tree', file: 'item_equipo.png')}",
 
+                lugar     : "${resource(dir: 'images/tree', file: 'lugar_c.png')}",
                 lugar_c   : "${resource(dir: 'images/tree', file: 'lugar_c.png')}",
                 lugar_v   : "${resource(dir: 'images/tree', file: 'lugar_v.png')}",
                 lugar_all : "${resource(dir: 'images/tree', file: 'lugar_all.png')}"
@@ -613,6 +614,12 @@
                                         "valid_children" : [ "lugar_c", "lugar_v", "lugar_all" ]
                                     },
 
+                                    "lugar"     : {
+                                        "icon"           : {
+                                            "image" : icons.lugar
+                                        },
+                                        "valid_children" : [ "" ]
+                                    },
                                     "lugar_c"   : {
                                         "icon"           : {
                                             "image" : icons.lugar_c

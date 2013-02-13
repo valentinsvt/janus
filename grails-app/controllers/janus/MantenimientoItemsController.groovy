@@ -45,17 +45,25 @@ class MantenimientoItemsController extends Shield {
                     if (ignore) {
                         hijos = ["Todos"]
                     } else {
-                        if (all) {
-                            hijos = Lugar.withCriteria {
-                                and {
-                                    order("tipo", "asc")
-                                    order("descripcion", "asc")
-                                }
-                            }
-                        } else {
-                            hijos = Lugar.findAllByTipo("C", [sort: 'descripcion'])
-                            /*hijos = Lugar.findAll([sort: 'descripcion'])*/
-                        }
+
+                        hijos = Lugar.list([sort: "descripcion"])
+//                        hijos = Lugar.withCriteria {
+//                            and {
+//                                order("tipo", "asc")
+//                                order("descripcion", "asc")
+//                            }
+//                        }
+//                        if (all) {
+//                            hijos = Lugar.withCriteria {
+//                                and {
+//                                    order("tipo", "asc")
+//                                    order("descripcion", "asc")
+//                                }
+//                            }
+//                        } else {
+//                            hijos = Lugar.findAllByTipo("C", [sort: 'descripcion'])
+//                            /*hijos = Lugar.findAll([sort: 'descripcion'])*/
+//                        }
                     }
                 }
                 break;
@@ -93,16 +101,23 @@ class MantenimientoItemsController extends Shield {
                         if (ignore) {
                             hijosH = ["Todos"]
                         } else {
-                            if (all) {
-                                hijosH = Lugar.withCriteria {
-                                    and {
-                                        order("tipo", "asc")
-                                        order("descripcion", "asc")
-                                    }
-                                }
-                            } else {
-                                hijosH = Lugar.findAllByTipo("C", [sort: 'descripcion'])
-                            }
+                            hijosH = Lugar.list([sort: "descripcion"])
+//                            hijosH = Lugar.withCriteria {
+//                                and {
+//                                    order("tipo", "asc")
+//                                    order("descripcion", "asc")
+//                                }
+//                            }
+//                            if (all) {
+//                                hijosH = Lugar.withCriteria {
+//                                    and {
+//                                        order("tipo", "asc")
+//                                        order("descripcion", "asc")
+//                                    }
+//                                }
+//                            } else {
+//                                hijosH = Lugar.findAllByTipo("C", [sort: 'descripcion'])
+//                            }
                         }
                     }
                     desc = hijo.nombre
@@ -125,7 +140,8 @@ class MantenimientoItemsController extends Shield {
                             } else {
                                 desc = hijo.descripcion
                             }
-                            rel = "lugar_" + hijo.tipo
+//                            rel = "lugar_" + hijo.tipo
+                            rel = "lugar"
                             liId = "lg_" + id + "_" + hijo.id
 
                             def obras = Obra.countByLugar(hijo)
