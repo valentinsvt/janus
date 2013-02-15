@@ -30,6 +30,14 @@
             width      : 60px;
             /*background : #c71585 !important;*/
         }
+
+        .borderLeft {
+            border-left : #5E8E9B double 3px !important;
+        }
+
+        .borderTop {
+            border-top : #5E8E9B double 3px !important;
+        }
         </style>
 
     </head>
@@ -38,10 +46,20 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="planilla" action="list" params="[id: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
-                    <i class="icon-arrow-left"></i>
-                    Regresar
+                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
+                    <i class="icon-double-angle-left"></i>
+                    Contrato
                 </g:link>
+                <g:link controller="planilla" action="list" params="[id: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
+                    <i class="icon-angle-left"></i>
+                    Plantillas
+                </g:link>
+                <g:if test="${editable}">
+                    <a href="#" id="btnSave" class="btn btn-success">
+                        <i class="icon-save"></i>
+                        Guardar
+                    </a>
+                </g:if>
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -55,74 +73,116 @@
                 <tr>
                     <th rowspan="2">N.</th>
                     <th rowspan="2">Descripción del rubro</th>
-                    <th rowspan="2">U.</th>
+                    <th rowspan="2" class="borderLeft">U.</th>
                     <th rowspan="2">Precio unitario</th>
                     <th rowspan="2">Volumen contrat.</th>
-                    <th colspan="3">Cantidades</th>
-                    <th colspan="3">Valores</th>
+                    <th colspan="3" class="borderLeft">Cantidades</th>
+                    <th colspan="3" class="borderLeft">Valores</th>
                 </tr>
                 <tr>
-                    <th>Anterior</th>
+                    <th class="borderLeft">Anterior</th>
                     <th>Actual</th>
                     <th>Acumulado</th>
-                    <th>Anterior</th>
+                    <th class="borderLeft">Anterior</th>
                     <th>Actual</th>
                     <th>Acumulado</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbDetalle">
+                <g:set var="totalAnterior" value="${0}"/>
+                <g:set var="totalActual" value="${0}"/>
+                <g:set var="totalAcumulado" value="${0}"/>
+
                 <g:set var="sp" value="null"/>
                 <g:each in="${detalle}" var="vol">
-                    <g:set var="detalle" value="${janus.ejecucion.DetallePlanilla.findByPlanillaAndVolumenObra(planilla, vol)}"/>
-                    <g:set var="detalleAnt" value="${janus.ejecucion.DetallePlanilla.findByPlanillaAndVolumenObra(anterior, vol)}"/>
+                    <g:set var="det" value="${janus.ejecucion.DetallePlanilla.findByPlanillaAndVolumenObra(planilla, vol)}"/>
+                    <g:set var="anteriores" value="${janus.ejecucion.DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasAnteriores, vol)}"/>
+
+                    <g:set var="cantAnt" value="${anteriores.sum { it.cantidad } ?: 0}"/>
+                    <g:set var="valAnt" value="${anteriores.sum { it.monto } ?: 0}"/>
+                    <g:set var="cant" value="${det?.cantidad ?: 0}"/>
+                    <g:set var="val" value="${det?.monto ?: 0}"/>
+
+                    <g:set var="totalAnterior" value="${totalAnterior + valAnt}"/>
+                    <g:set var="totalActual" value="${totalActual + val}"/>
+                    <g:set var="totalAcumulado" value="${totalAcumulado + val + valAnt}"/>
+
                     <g:if test="${sp != vol.subPresupuestoId}">
                         <tr>
                             <th colspan="2">
                                 ${vol.subPresupuesto.descripcion}
                             </th>
-                            <td colspan="9"></td>
+                            <td colspan="3" class="espacio borderLeft"></td>
+                            <td colspan="3" class="espacio borderLeft"></td>
+                            <td colspan="3" class="espacio borderLeft"></td>
                         </tr>
                         <g:set var="sp" value="${vol.subPresupuestoId}"/>
                     </g:if>
-                    <tr>
+                    <tr data-id="${det ? det.id : 'nuevo'}" data-vol="${vol.id}" data-cant="${cant}" data-val="${val}" data-canto="${cant}" data-valo="${val}" data-valacu="${val + valAnt}">
                         <td class="codigo">
                             ${vol.item.codigo}
                         </td>
                         <td class="nombre">
                             ${vol.item.nombre}
                         </td>
-                        <td style="text-align: center" class="unidad">
+                        <td style="text-align: center" class="unidad borderLeft">
                             ${vol.item.unidad.codigo}
                         </td>
                         <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
-                            <g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                            <elm:numero number="${precios[vol.id.toString()]}" cero="hide"/>
                         </td>
                         <td class="num cantidad" data-valor="${vol.cantidad}">
-                            <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                            <elm:numero number="${vol.cantidad}" cero="hide"/>
                         </td>
 
-                        <td class="ant num" id="ant_${vol.id}_${planilla.id}">
-                            0.00
-                        </td>
-                        <td>
-                            <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number"/>
-                        </td>
-                        <td class="acu num" id="acu_${vol.id}_ ${planilla.id}">
-                            0.00
+                        <!-------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                        <td class="ant num cant borderLeft" id="ant_${vol.id}_${planilla.id}" data-valor="${cantAnt}" data-valoro="${cantAnt}">
+                            <elm:numero number="${cantAnt}" cero="hide"/>
                         </td>
 
-                        <td>
-                            %{--<g:formatNumber number="${detalleAnt?.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                        <td class="act num cant" data-valor="${cant}">
+                            <g:if test="${editable}">
+                                <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${elm.numero(number: cant, cero: 'hide')}"/>
+                            </g:if>
+                            <g:else>
+                                <elm:numero number="cant" cero="hide"/>
+                            </g:else>
                         </td>
-                        <td>
-                            %{--<g:formatNumber number="${detalle.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                        <td class="acu num cant" id="acu_${vol.id}_ ${planilla.id}" data-valor="${cant + cantAnt}" data-valoro="${cant + cantAnt}">
+                            <elm:numero number="${cant + cantAnt}" cero="hide"/>
                         </td>
-                        <td>
-                            %{--<g:formatNumber number="${detalle.cantidad + detalleAnt?.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                        <!-------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                        <td class="ant num val borderLeft" data-valor="${valAnt}" data-valoro="${valAnt}">
+                            <elm:numero number="${valAnt}" cero="hide"/>
+                        </td>
+                        <td class="act num val" data-valor="${val}" data-valoro="${val}">
+                            <elm:numero number="${val}" cero="hide"/>
+                        </td>
+                        <td class="acu num val" data-valor="${val + valAnt}" data-valoro="${val + valAnt}">
+                            <elm:numero number="${val + valAnt}" cero="hide"/>
                         </td>
                     </tr>
                 </g:each>
             </tbody>
+            <tfoot>
+                <tr style="font-size: smaller">
+                    <td colspan="5" class="borderTop">
+                        <b>OBSERVACIONES:</b>
+                    </td>
+                    <td colspan="3" class="espacio borderLeft borderTop">
+                        <b>A) TOTAL AVANCE DE OBRA</b>
+                    </td>
+                    <td class="borderLeft borderTop num totalAnt" data-valor="${totalAnterior}" data-valoro="${totalAnterior}">
+                        <elm:numero number="${totalAnterior}" cero="hide"/>
+                    </td>
+                    <td class="borderTop num totalAct" data-valor="${totalActual}" data-valoro="${totalActual}">
+                        <elm:numero number="${totalActual}" cero="hide"/>
+                    </td>
+                    <td class="borderTop num totalAcu" data-valor="${totalAcumulado}" data-valoro="${totalAcumulado}">
+                        <elm:numero number="${totalAcumulado}" cero="hide"/>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
 
         <script type="text/javascript">
@@ -146,33 +206,149 @@
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
 
-            $(function () {
-                $(".number").keydown(function (ev) {
-                    // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
-                    if (ev.keyCode == 190 || ev.keyCode == 110) {
-                        var val = $(this).val();
-                        if (val.length == 0) {
-                            $(this).val("0");
-                        }
-                        return val.indexOf(".") == -1;
-                    } else {
-                        // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
-                        return validarNum(ev);
-                    }
-                }).keyup(function () {
-                            var val = $(this).val();
-                            // esta parte valida q no ingrese mas de 2 decimales
-                            var parts = val.split(".");
-                            if (parts.length > 1) {
-                                if (parts[1].length > 2) {
-                                    parts[1] = parts[1].substring(0, 2);
-                                    var nval = parts[0] + "." + parts[1];
-                                    $(this).val(nval);
-                                }
-                            }
-                            // esta parte hace los calculos
+            function updateRow($row) {
+                var val = $row.find(".number.act").val();
+                // esta parte hace los calculos
+                var $antCant = $row.find(".ant.num.cant");
+                var $acuCant = $row.find(".acu.num.cant");
+                var $antVal = $row.find(".ant.num.val");
+                var $acuVal = $row.find(".acu.num.val");
 
+                if (val != "") {
+                    val = parseFloat(val);
+                    //si no es vacio calcula
+                    var precio = $row.find(".precioU").data("valor");
+                    var total = parseFloat(val) * parseFloat(precio);
+
+                    //el valor actual
+                    $row.find(".act.num.val").text(number_format(total, 2, ".", ",")).data("valor", total);
+
+                    //los acumulados
+                    var anterior = parseFloat($antCant.data("valor"));
+                    var acuCant = anterior + val;
+                    numero($acuCant, acuCant);
+
+                    anterior = parseFloat($antVal.data("valor"));
+                    var acuVal = anterior + total;
+                    numero($acuVal, acuVal);
+
+                    // actualiza los valores en el row
+                    $row.data({
+                        cant   : val,
+                        val    : total,
+                        valacu : acuVal
+                    });
+                } else {
+                    //si esta vacio solo pone en 0
+                    $row.find(".act.num.val").text("").data("valor", 0);
+                    $row.data({
+                        cant   : $row.data("canto"),
+                        val    : $row.data("valo"),
+                        valacu : $acuVal.data("valoro")
+                    });
+                    numero($antCant, $antCant.data("valoro"));
+                    numero($acuCant, $acuCant.data("valoro"));
+                    numero($antVal, $antVal.data("valoro"));
+                    numero($acuVal, $acuVal.data("valoro"));
+                }
+            }
+
+            function numero($item, val) {
+                if ($item.is("input")) {
+                    if (val != 0 && val != "" && !isNaN(val)) {
+                        $item.val(number_format(val, 2, ".", ",")).data("valor", val);
+                    } else {
+                        $item.val("").data("valor", 0);
+                    }
+                } else {
+                    if (val != 0 && val != "" && !isNaN(val)) {
+                        $item.text(number_format(val, 2, ".", ",")).data("valor", val);
+                    } else {
+                        $item.text("").data("valor", 0);
+                    }
+                }
+            }
+
+            $(function () {
+
+//                $("#tbDetalle").children("tr").each(function () {
+//                    updateRow($(this));
+//                });
+
+                $("#btnSave").click(function () {
+                    var data = "";
+                    $("#tbDetalle").children("tr").each(function () {
+                        var $row = $(this);
+                        var vol = $row.data("vol");
+                        var cant = $row.data("cant");
+                        var val = $row.data("val");
+                        var id = $row.data("id");
+
+                        if (vol && cant && val && cant > 0 && val > 0) {
+                            data += "d=" + vol + "_" + cant + "_" + val;
+                            if (id != "nuevo") {
+                                data += "_" + id;
+                            }
+                            data += "&";
+                        }
+                    });
+                    data += "id=${planilla.id}";
+//                    console.log(data);
+                    location.href = "${createLink(action:'saveDetalle')}?" + data;
+                    return false;
+                });
+
+                $(".number").bind({
+                    keydown : function (ev) {
+                        // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+                        if (ev.keyCode == 190 || ev.keyCode == 110) {
+                            var val = $(this).val();
+                            if (val.length == 0) {
+                                $(this).val("0");
+                            }
+                            return val.indexOf(".") == -1;
+                        } else {
+                            // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                            return validarNum(ev);
+                        }
+                    }, //keydown
+                    keyup   : function () {
+                        var val = $(this).val();
+                        // esta parte valida q no ingrese mas de 2 decimales
+                        var parts = val.split(".");
+                        if (parts.length > 1) {
+                            if (parts[1].length > 2) {
+                                parts[1] = parts[1].substring(0, 2);
+                                val = parts[0] + "." + parts[1];
+                                $(this).val(val);
+                            }
+                        }
+                        // esta parte hace los calculos
+                        updateRow($(this).parents("tr"));
+                    }, //keyup
+                    blur    : function () {
+                        // esta parte hace los calculos
+                        updateRow($(this).parents("tr"));
+
+                        // esta parte le pone los 2 decimales si no tiene
+                        numero($(this), parseFloat($(this).val()));
+
+                        var total = 0, totalAcu = 0;
+                        //esta parte calcula los totales
+                        $("#tbDetalle").children("tr").each(function () {
+                            var $row = $(this);
+                            if ($row.data("val")) {
+                                total += parseFloat($row.data("val"));
+                            }
+                            if ($row.data("valacu")) {
+                                totalAcu += parseFloat($row.data("valacu"));
+                            }
                         });
+                        numero($(".totalAct"), total);
+                        numero($(".totalAcu"), totalAcu);
+                    } //blur
+                });
+
             });
         </script>
 

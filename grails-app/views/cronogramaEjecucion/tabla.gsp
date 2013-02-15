@@ -1,4 +1,4 @@
-<g:set var="meses" value="${obra.plazo}"/>
+<g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
 
 <g:if test="${meses > 0}">
     ${tabla}

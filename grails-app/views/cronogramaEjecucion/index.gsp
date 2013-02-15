@@ -104,7 +104,7 @@
     </head>
 
     <body>
-        <g:set var="meses" value="${obra.plazo}"/>
+        <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
 
         <div class="tituloTree">
             Cronograma del contrato de la obra ${obra.descripcion} (${meses} mes${obra.plazoEjecucionMeses == 1 ? "" : "es"})
@@ -112,7 +112,7 @@
 
         <div class="btn-toolbar hide" id="toolbar">
             <div class="btn-group">
-                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
+                <a href="${g.createLink(controller: 'contrato', action: 'registroContrato', params: [contrato: contrato?.id])}" class="btn btn-ajax btn-new" id="atras" rel="tooltip" title="Regresar al contrato">
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>

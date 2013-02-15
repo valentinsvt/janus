@@ -29,7 +29,7 @@
 
         <div class="row">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" id="atras" title="Regresar al contrato">
+                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </g:link>
@@ -55,8 +55,10 @@
                         <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
                         <g:sortableColumn property="estadoPlanilla" title="Estado"/>
                         <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
+                        <g:sortableColumn property="fechaPago" title="Fecha pago"/>
                         <g:sortableColumn property="periodoIndices" title="Periodo"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
+                        <g:sortableColumn property="valor" title="Valor"/>
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
@@ -70,11 +72,17 @@
                                 <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
                             </td>
                             <td>
+                                <g:formatDate date="${planillaInstance.fechaPago}" format="dd-MM-yyyy"/>
+                            </td>
+                            <td>
                                 <g:if test="${planillaInstance.periodoIndices}">
                                     ${planillaInstance.periodoIndices?.fechaInicio?.format("dd-MM-yyyy")} a ${planillaInstance.periodoIndices?.fechaFin?.format("dd-MM-yyyy")}
                                 </g:if>
                             </td>
                             <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
+                            <td>
+                                <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
+                            </td>
                             <td>
                                 <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">
                                     <i class="icon-zoom-in icon-large"></i>
@@ -82,6 +90,11 @@
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
+                                    </g:link>
+                                </g:if>
+                                <g:if test="${!planillaInstance.fechaPago}">
+                                    <g:link action="pagar" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Pagar" id="${planillaInstance.id}">
+                                        <i class="icon-money icon-large"></i>
                                     </g:link>
                                 </g:if>
                             %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%

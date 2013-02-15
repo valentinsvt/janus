@@ -145,6 +145,20 @@
                     </div>
                 </div>
 
+                <g:if test="${esAnticipo}">
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class='span2 formato'>
+                            Valor
+                        </div>
+
+                        <div class="span4">
+                            $<g:formatNumber number="${contrato.anticipo}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>
+                            (anticipo del <g:formatNumber number="${contrato.porcentajeAnticipo}" maxFractionDigits="0" minFractionDigits="0"/>%
+                            de <g:formatNumber number="${contrato.monto}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>)
+                        </div>
+                    </div>
+                </g:if>
+
                 <div class="row">
                     <div class="span2 formato">
                         Descripción

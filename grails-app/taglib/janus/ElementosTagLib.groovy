@@ -10,6 +10,28 @@ class ElementosTagLib {
 
     static namespace = "elm"
 
+    Closure numero = { attrs ->
+        if (!attrs.format) {
+            attrs.format = "##,##0"
+        }
+        if (!attrs.minFractionDigits) {
+            attrs.minFractionDigits = 2
+        }
+        if (!attrs.maxFractionDigits) {
+            attrs.maxFractionDigits = 2
+        }
+        if (!attrs.locale) {
+            attrs.locale = "ec"
+        }
+        if (attrs.cero == "false" || attrs.cero == false || attrs.cero == "hide") {
+            if (attrs.number.toDouble() == 0.toDouble()) {
+                out << ""
+                return
+            }
+        }
+        out << g.formatNumber(attrs)
+    }
+
 
     Closure headerPlanilla = { attrs ->
         def str = ""
@@ -27,7 +49,7 @@ class ElementosTagLib {
 
         str += "<div class='row'>"
         str += "<div class='span1 bold'>Ubicación</div>"
-        str += "<div class='span5'>Parroquia " + obra.parroquia.nombre + " - Cantón" + obra.parroquia.canton.nombre + "</div>"
+        str += "<div class='span5'>Parroquia " + obra.parroquia.nombre + " - Cantón " + obra.parroquia.canton.nombre + "</div>"
         str += "<div class='span1 bold'>Monto</div>"
         str += "<div class='span4'>" + formatNumber(number: planilla.contrato.monto, format: "##,##0", locale: "ec", minFractionDigits: 2, maxFractionDigits: 2) + "</div>"
         str += "</div>"
@@ -36,7 +58,7 @@ class ElementosTagLib {
         str += "<div class='span1 bold'>Contratista</div>"
         str += "<div class='span5'>Parroquia " + planilla.contrato.oferta.proveedor.nombre + "</div>"
         str += "<div class='span1 bold'>Periodo</div>"
-        str += "<div class='span4'>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del '+planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')) + "</div>"
+        str += "<div class='span4'>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')) + "</div>"
         str += "</div>"
 
         str += "</div>"
@@ -175,6 +197,28 @@ class ElementosTagLib {
         writer << "</ul>"
     }
 
+    /**
+     * attrs:
+     *      class       clase
+     *      name        name
+     *      id          id (opcional, si no existe usa el mismo name)
+     *      value       value (groovy Date)
+     *      format      format para el Date (groovy)
+     *      onClose     funcion js a ejecutarse cuando se cierra el datepicker (se usa <elm:datepicker onClose="funcion" />
+     *      onSelect    funcion js a ejecutarse cuando se selecciona una fecha (se usa <elm:datepicker onSelect="funcion" />
+     *      yearRange   rango de años en el select de años:  The range of years displayed in the year drop-down: either relative to today's year ("-nn:+nn"),
+     *                                                       relative to the currently selected year ("c-nn:c+nn"), absolute ("nnnn:nnnn"), or combinations of these formats ("nnnn:-nn").
+     *                                                       Note that this option only affects what appears in the drop-down, to restrict which dates may be selected use the minDate and/or maxDate options.
+     *      minDate     fecha minima seleccionable
+     *      maxDate     fecha maxima seleccionable:   The minimum selectable date. When set to null, there is no minimum.
+     *                                                  Multiple types supported:
+     *                                                       Date: A date object containing the minimum date.
+     *                                                       Number: A number of days from today. For example 2 represents two days from today and -1 represents yesterday.
+     *                                                       String: A string in the format defined by the dateFormat option, or a relative date.
+     *                                                                      Relative dates must contain value and period pairs;
+     *                                                                      valid periods are "y" for years, "m" for months, "w" for weeks, and "d" for days.
+     *                                                                      For example, "+1m +7d" represents one month and seven days from today.
+     */
     def datepicker = { attrs ->
         def str = ""
         def clase = attrs.remove("class")
@@ -209,6 +253,10 @@ class ElementosTagLib {
         if (attrs.onClose) {
             js += ','
             js += 'onClose: ' + attrs.onClose
+        }
+        if (attrs.onSelect) {
+            js += ','
+            js += 'onSelect: ' + attrs.onSelect
         }
         if (attrs.yearRange) {
             js += ','
