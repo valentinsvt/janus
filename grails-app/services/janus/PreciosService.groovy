@@ -46,6 +46,21 @@ class PreciosService {
         return res
     }
 
+    def getPrecioItemStringListaDefinida(fecha, lugar, item) {
+        def cn = dbConnectionService.getConnection()
+        def itemsId = ""
+        def res = ""
+//        println "get Precios string "+fecha+"  "+fecha.format('yyyy-MM-dd')
+        def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id = ${item} and r1.lgar__id=${lugar.id} and r1.rbpcfcha <= '${fecha.format('yyyy-MM-dd')}' group by 1"
+//        println "sql precios string "+sql
+        cn.eachRow(sql.toString()) {row ->
+
+            res += "" + row[0] + ";" + row[1] + "&"
+        }
+        cn.close()
+        return res
+    }
+
     def getPrecioRubroItem(fecha, lugar, items) {
         def cn = dbConnectionService.getConnection()
         def itemsId = items
@@ -226,7 +241,7 @@ class PreciosService {
     def actualizaOrden(volumen,tipo){
 
         def vlob = VolumenesObra.findAll("from VolumenesObra where obra = ${volumen.obra.id} order by orden asc,id desc")
-//        println "vlob "+vlob
+//        println "actualizar orden !!!!!  --------------------------------     "
         def dist = 1
         def prev = null
         def i = 0
@@ -248,13 +263,13 @@ class PreciosService {
                 }else{
                     prev=vlob[i]
                 }
-//                println "i=0 "+prev
+//                println "i=0 "+prev+" "+prev.orden
                 i++
 
             }else{
 
                 dist = vlob[i].orden - prev.orden
-//                println " ${i} prev "+prev.id+"  "+prev.orden+" i "+vlob[i].id+"  "+vlob[i].orden+"  dist  "+dist+" --- > "+i
+//                println " ${i} prev "+prev.id+"  "+prev.orden+" i "+vlob[i].id+"  "+vlob[i].orden+"  dist  "+dist+" --- > "+i +"  actual !!! "+volumen.id
                 if(dist>1){
                     vlob[i].orden-=(dist-1)
                     band=true
@@ -263,7 +278,17 @@ class PreciosService {
                         if(vlob[i].id.toInteger()!=volumen.id.toInteger()){
                             vlob[i].orden++
                         }else{
-                            prev.orden--
+//                            if(prev.orden>1){
+//                                prev.orden--
+//                                prev.save(flush: true)
+//                            }else{
+//                                vlob[i].orden++
+//                            }
+//                            println "intercambio "+prev.orden+" --- "+vlob[i].orden
+                            def ordn = prev.orden
+                            prev.orden=vlob[i].orden + 1
+                            vlob[i].orden=ordn
+//                            println "intercambio fin "+prev.orden+" --- "+vlob[i].orden
                             prev.save(flush: true)
                         }
                         band=true
@@ -280,7 +305,8 @@ class PreciosService {
                     if(vlob[i].id.toInteger()!=volumen.id.toInteger())
                         prev=vlob[i]
                 }else{
-                    prev=vlob[i]
+                    if (prev.orden<vlob[i].orden)
+                        prev=vlob[i]
                 }
                 i++
 

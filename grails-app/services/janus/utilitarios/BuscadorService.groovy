@@ -118,6 +118,11 @@ class BuscadorService {
                                     comparador="not like '%"+par[0]+"'"
                                     band=true
                                     break
+                                case "igual" :
+                                    // println "like"
+                                    comparador=" = '"+par[0]+"'"
+                                    band=true
+                                    break
                                 default:
                                     // println "default"
                                     comparador=par[1]
@@ -154,6 +159,7 @@ class BuscadorService {
     }
 
     List buscar(dominio, tabla, tipo, params, ignoreCase,extras="") {
+//        println "params "+params
         def sql = "from " + tabla
         def mapa = toMap(dominio)
         def parametros =[:]

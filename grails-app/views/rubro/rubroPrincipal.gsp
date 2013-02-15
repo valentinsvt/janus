@@ -69,10 +69,10 @@
 
     </g:if>
 
-    %{--<a href="${g.createLink(controller: 'pdf',action: 'pdfLink',params: [url:g.createLink(controller: 'reportes3',action: 'imprimirRubro',id: rubro?.id)])}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
-    %{--<i class="icon-print"></i>--}%
-    %{--Imprimir--}%
-    %{--</a>--}%
+%{--<a href="${g.createLink(controller: 'pdf',action: 'pdfLink',params: [url:g.createLink(controller: 'reportes3',action: 'imprimirRubro',id: rubro?.id)])}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
+%{--<i class="icon-print"></i>--}%
+%{--Imprimir--}%
+%{--</a>--}%
 </div>
 
 
@@ -195,6 +195,7 @@
             Código
             <input type="text" name="item.codigo" id="cdgo_buscar" class="span24">
             <input type="hidden" id="item_id">
+            <input type="hidden" id="item_tipoLista">
         </div>
 
         <div class="span6">
@@ -386,7 +387,7 @@
     <div class="modal-footer" id="modalFooter">
     </div>
 </div>
-<div class="modal hide fade " id="modal-transporte" style=";overflow: hidden;">
+<div class="modal large hide fade " id="modal-transporte" style=";overflow: hidden;">
     <div class="modal-header btn-primary">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -397,37 +398,132 @@
 
     <div class="modal-body" id="modal_trans_body">
         <div class="row-fluid">
-            <div class="span8">
+            <div class="span2">
                 Volquete
+            </div>
+            <div class="span5">
                 <g:select name="volquetes" from="${volquetes}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1':'Seleccione']}" value="${aux.volquete.id}"></g:select>
             </div>
-            <div class="span4">
-                Costo <input type="text" style="width: 50px;text-align: right" disabled="" id="costo_volqueta">
+            <div class="span2">
+                Costo
+            </div>
+            <div class="span3">
+                <input type="text" style="width: 60px;text-align: right" disabled="" id="costo_volqueta">
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span8">
+            <div class="span2">
                 Chofer
-                <g:select name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" style="margin-left: 13px" noSelection="${['-1':'Seleccione']}" value="${aux.chofer.id}" ></g:select>
             </div>
-            <div class="span4">
-                Costo <input type="text" style="width: 50px;text-align: right" disabled="" id="costo_chofer" >
+            <div class="span5">
+                <g:select name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" style="" noSelection="${['-1':'Seleccione']}" value="${aux.chofer.id}" ></g:select>
+            </div>
+            <div class="span2">
+                Costo
+            </div>
+            <div class="span3">
+                <input type="text" style="width: 60px;text-align: right" disabled="" id="costo_chofer" >
             </div>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid" style="border-bottom: 1px solid black;margin-bottom: 10px">
             <div class="span6">
-                Distancia peso
-                <input type="text" style="width: 50px;" id="dist_peso" value="0.00">
+                <b>Distancia peso</b>
+                %{--<input type="text" style="width: 50px;" id="dist_peso" value="0.00">--}%
             </div>
             <div class="span5" style="margin-left: 30px;">
-                Distancia volumen <input type="text" style="width: 50px;" id="dist_vol" value="0.00">
+                <b>Distancia volumen</b>
+                %{--<input type="text" style="width: 50px;" id="dist_vol" value="0.00">--}%
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span2">
+                Canton
+            </div>
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_p1" value="0.00">
+            </div>
+            <div class="span4">
+                Materiales Petreos Hormigones
+            </div>
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_v1" value="0.00">
+            </div>
+
+        </div>
+        <div class="row-fluid">
+            <div class="span2">
+                Especial
+            </div>
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_p2" value="0.00">
+            </div>
+            <div class="span4">
+                Materiales Mejoramiento
+            </div>
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_v2" value="0.00">
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span5">
+
+            </div>
+            <div class="span4">
+                Materiales Carpeta Asfáltica
+            </div>
+            <div class="span3">
+                <input type="text" style="width: 50px;" id="dist_v3" value="0.00">
+            </div>
+        </div>
+        <div class="row-fluid" style="border-bottom: 1px solid black;margin-bottom: 10px">
+            <div class="span6">
+                <b>Listas de precios</b>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span1">
+                Canton
+            </div>
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_1" noSelection="['-1':'Seleccione..']"/>
+            </div>
+            <div class="span3">
+                Petreos Hormigones
+            </div>
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_3" noSelection="['-1':'Seleccione..']"/>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span1">
+                Especial
+            </div>
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_2" noSelection="['-1':'Seleccione..']"/>
+            </div>
+
+            <div class="span3">
+                Mejoramiento
+            </div>
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_4" noSelection="['-1':'Seleccione..']"/>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span5"></div>
+            <div class="span3">
+                Carpeta Asfáltica
+            </div>
+            <div class="span4">
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_5" noSelection="['-1':'Seleccione..']"/>
             </div>
         </div>
 
     </div>
 
     <div class="modal-footer" id="modal_trans_footer">
-        <a href="#" data-dismiss="modal" class="btn">OK</a>
+        <a href="#" data-dismiss="modal" class="btn btn-primary">OK</a>
     </div>
 </div>
 <script type="text/javascript">
@@ -963,7 +1059,10 @@
                         var tipo = "C"
                         if ($("#V").hasClass("active"))
                             tipo = "V"
-                        var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&tipo=" + tipo + "&ids="
+                        var listas =""
+                        listas+=$("#lista_1").val()+"#"+$("#lista_2").val()+"#"+$("#lista_3").val()+"#"+$("#lista_4").val()+"#"+$("#lista_5").val()
+
+                        var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&tipo=" + tipo+"&listas="+listas+"&ids="
                         $.each(items, function () {
                             datos += $(this).attr("id") + "#"
                         });
@@ -1077,7 +1176,7 @@
 
         });
 
-        $("#cdgo_buscar").focus(function () {
+        $("#cdgo_buscar").dblclick(function () {
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
             $("#modalTitle").html("Lista de items");
             $("#modalFooter").html("").append(btnOk);
@@ -1163,7 +1262,7 @@
             if ($("#calcular").hasClass("active")){
                 $.box({
                     imageClass : "box_info",
-                    text       : "Antes de agregar items, por fvor desactive la opción calcular precios en el menú superior.",
+                    text       : "Antes de agregar items, por favor desactive la opción calcular precios en el menú superior.",
                     title      : "Alerta",
                     iconClose  : false,
                     dialog     : {
@@ -1196,6 +1295,7 @@
                             var band = true
                             var parts = msg.split(";")
                             tr.attr("id", parts[1])
+                            tr.attr("tipoLista",parts[5])
                             var a
                             td.html($("#cdgo_buscar").val())
                             tr.append(td)

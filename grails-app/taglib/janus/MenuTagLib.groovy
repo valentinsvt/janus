@@ -10,7 +10,8 @@ class MenuTagLib {
         def perfil = session.perfil
         if(usuario){
             def acciones = janus.seguridad.Prms.findAllByPerfil(perfil).accion.sort{it.modulo.orden}
-            //println "Acciones:" + acciones
+//            println "Acciones:" + acciones
+
             acciones.each {ac ->
                 if (!items[ac.modulo.nombre]) {
                     items.put(ac.modulo.nombre, [ac.accnDescripcion, g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre)])
@@ -18,8 +19,38 @@ class MenuTagLib {
                     items[ac.modulo.nombre].add(ac.accnDescripcion)
                     items[ac.modulo.nombre].add(g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre))
                 }
+//                if (!items[ac.modulo.nombre]) {
+//                    def temp =[:]
+//                    temp.put(ac.accnDescripcion, g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre))
+//                    items.put(ac.modulo.nombre, temp)
+//
+//                } else {
+//                    items[ac.modulo.nombre].put(ac.accnDescripcion,g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre))
+//
+//                }
             }
 
+
+            items.each {item->
+//               println "item "+item.value
+               for(int i=0;i<item.value.size();i+=2){
+                   for(int j=2;j<item.value.size()-1;j+=2){
+//                       println "compare "+item.value[i]+" <<>> "+item.value[j]+" --> "+item.value[i].compareTo(item.value[j])
+                       def val = item.value[i].trim().compareTo(item.value[j].trim())
+                       if (val>0 && i<j){
+                           def tmp = [item.value[j],item.value[j+1]]
+                           item.value[j]=item.value[i]
+                           item.value[j+1]=item.value[i+1]
+                           item.value[i]=tmp[0]
+                           item.value[i+1]=tmp[1]
+                       }
+
+                   }
+//                   println "iteracion "+item.value
+               }
+//                println "item sort "+item.value
+
+            }
             //items = items.sort{it.key.toString()}
 //            println items
 

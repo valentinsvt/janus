@@ -18,4 +18,8 @@ class Unidad implements Serializable {
         codigo(size: 1..5, blank: false, attributes: [title: 'numero'])
         descripcion(size: 1..31, blank: false, nullable: false, attributes: [title: 'descripcion'])
     }
+
+    String toString(){
+        return "${this.codigo}"
+    }
 }

@@ -17,40 +17,48 @@ class ReajustePreciosController {
                 it.delete(flush: true)
             }
             fp.each {
-                def frpl = new FormulaPolinomicaContractual()
-                frpl.valor = it.valor
-                frpl.contrato = contrato
-                frpl.indice = it.indice
-                frpl.tipoFormulaPolinomica = tipo
-                frpl.numero = it.numero
-                if (!frpl.save(flush: true))
-                    println "error "+errors
+                if(it.valor>0){
+                    def frpl = new FormulaPolinomicaContractual()
+                    frpl.valor = it.valor
+                    frpl.contrato = contrato
+                    frpl.indice = it.indice
+                    frpl.tipoFormulaPolinomica = tipo
+                    frpl.numero = it.numero
+                    if (!frpl.save(flush: true))
+                        println "error "+errors
+                }
+
             }
 
         }
 
-        def cs =    FormulaPolinomicaContractual.findAllByContratoAndNumeroLike(contrato,"c%")
+        def cs =    FormulaPolinomicaContractual.findAllByContratoAndNumeroLike(contrato,"c%",[sort: "numero"])
+
         def datos = []
-        def periodoOferta = PeriodosInec.findByFechaFinGreaterThanAndFechaInicioLessThan(oferta.fechaEntrega,oferta.fechaEntrega)
+        def periodoOferta =  PeriodosInec.findAll("from PeriodosInec where fechaInicio <='${oferta.fechaEntrega}' and fechaFin >= '${oferta.fechaEntrega}'" )
+//        println "perof "+periodoOferta+"  " +oferta.fechaEntrega+" ofer "+oferta
         def periodos=[]
-        periodos.add(periodoOferta)
+        periodos.add(periodoOferta[0])
         planillas.each {
-            println "planilla "+it.id +" "+it.periodoIndices?.fechaInicio+" "+it.periodoIndices?.fechaInicio+"  "+it.tipoPlanilla.nombre
+//            println "planilla "+it.id +" "+it.periodoIndices?.fechaInicio+" "+it.periodoIndices?.fechaFin+"  "+it.tipoPlanilla.nombre
             if (it.tipoPlanilla.id==1){
-                println "entro anticipo"
-                periodos.add(PeriodosInec.findByFechaFinGreaterThanAndFechaInicioLessThan(it.fechaPresentacion,it.fechaPresentacion))
+                def prin = PeriodosInec.findAll("from PeriodosInec where fechaInicio <='${it.fechaPresentacion}' and fechaFin >= '${it.fechaPresentacion}'" )
+//                println "periodo  anticipo "+prin+"  "+it.fechaPresentacion
+                periodos.add(prin[0])
             }else{
                 periodos.add(it.periodoIndices)
             }
 
         }
-        println "periodos "+periodos
+//        println "periodos "+periodos
 
-
+        def tot = 0
         periodos.each {per->
             def vlin = ValorReajuste.findAllByObraAndPeriodoIndice(obra,per)
-            if (vlin.size()<1){
 
+            if (vlin.size()<1){
+                def tmp = [:]
+                tot = 0
                 cs.each {
 
                     def val = ValorIndice.findByPeriodoAndIndice(per,it.indice)?.valor
@@ -65,29 +73,44 @@ class ReajustePreciosController {
                     if (!vr.save(flush: true)){
                         println "vr errors "+vr.errors
                     }
-                    def tmp = [:]
                     tmp.put(it.numero,vr.valor)
-                    datos.add(tmp)
+                    tot+=vr.valor*it.valor
 
                 }
+                if (tmp.size()>0){
+                    tmp.put("tot",tot)
+                    datos.add(tmp)
+                }
             }else{
+                def tmp = [:]
+                tot = 0
                 vlin.each {v->
                     cs.each {c->
                         if (c.indice.id.toInteger()==v.indice.id.toInteger()){
-                            def tmp = [:]
                             tmp.put(c.numero,v.valor)
-                            datos.add(tmp)
+                            tot+=v.valor*c.valor
                         }
-
                     }
+//                    println "tmp "+tmp
+                }
+                if (tmp.size()>0){
+                    tmp.put("tot",tot)
+                    datos.add(tmp)
                 }
             }
         }
-        println "datos "+datos
+//        println "cs "+cs.numero
+        datos.each {
+            println "it "+it
+        }
 
+        def cant = []
+        0.upto(datos.size()-1){
+            cant.add(it)
+        }
+//        println "cant "+cant
 
-
-        [datos:datos]
+        [datos:datos,cs:cs,cant:cant,periodos:periodos,fechaOferta:oferta.fechaEntrega,fechaAnticipo:planilla.fechaPresentacion]
 
 
     }

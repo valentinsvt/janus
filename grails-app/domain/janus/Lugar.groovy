@@ -3,6 +3,7 @@ class Lugar implements Serializable {
     int codigo
     String descripcion
     String tipo
+    TipoLista tipoLista
     static mapping = {
         table 'lgar'
         cache usage: 'read-write', include: 'non-lazy'
@@ -14,6 +15,7 @@ class Lugar implements Serializable {
             codigo column: 'lgarcdgo'
             descripcion column: 'lgardscr'
             tipo column: 'lgartipo'
+            tipoLista column: 'tpls__id'
         }
     }
     static constraints = {

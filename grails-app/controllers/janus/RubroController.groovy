@@ -80,7 +80,8 @@ class RubroController extends janus.seguridad.Shield {
     def getDatosItem() {
 //        println "get datos items "+params
         def item = Item.get(params.id)
-        render "" + item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad.codigo + "&" + item.rendimiento
+//        println "render "+  item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad.codigo + "&" + item.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
+        render "" + item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad?.codigo?.trim() + "&" + item.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
     }
 
     def addItem() {
@@ -115,7 +116,7 @@ class RubroController extends janus.seguridad.Shield {
         } else {
             rubro.fechaModificacion=new Date()
             rubro.save(flush: true)
-            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id+";"+detalle.item.id+";"+detalle.cantidad+";"+detalle.rendimiento
+            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id+";"+detalle.item.id+";"+detalle.cantidad+";"+detalle.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
         }
     }
 
@@ -130,11 +131,12 @@ class RubroController extends janus.seguridad.Shield {
         funcionJs += '$.ajax({type: "POST",url: "' + g.createLink(controller: 'rubro', action: 'getDatosItem') + '",'
         funcionJs += ' data: "id="+idReg,'
         funcionJs += ' success: function(msg){'
-        funcionJs += 'var parts = msg.split("&");'
+        funcionJs += 'var parts = msg.split("&");console.log(parts);'
         funcionJs += ' $("#item_id").val(parts[0]);'
         funcionJs += '$("#cdgo_buscar").val(parts[1]);'
         funcionJs += '$("#item_desc").val(parts[2]);'
         funcionJs += '$("#item_unidad").val(parts[3]);'
+        funcionJs += '$("#item_tipoLista").val(parts[5]);'
         funcionJs += '$("#modal-rubro").modal("hide");'
         funcionJs += '}'
         funcionJs += '});'
@@ -157,8 +159,8 @@ class RubroController extends janus.seguridad.Shield {
 
     def buscaRubro() {
 
-        def listaTitulos = ["Código", "Descripción"]
-        def listaCampos = ["codigo", "nombre"]
+        def listaTitulos = ["Código", "Descripción","Unidad"]
+        def listaCampos = ["codigo", "nombre","unidad"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaRubro", controller: "rubro")
         def funcionJs = "function(){"
@@ -381,9 +383,21 @@ class RubroController extends janus.seguridad.Shield {
         def tipo = params.tipo
         def items = []
         def parts = params.ids.split("#")
+        def listas = []
+        def conLista = []
+        listas=params.listas.split("#")
+        println "listas "+listas
         parts.each {
-            if (it.size() > 0)
-                items.add(Rubro.get(it).item)
+            if (it.size() > 0){
+                def item=Rubro.get(it).item
+                if (item.tipoLista){
+                    conLista.add(item)
+                }else{
+                    items.add(item)
+                }
+
+            }
+
         }
         def precios = preciosService.getPrecioItemsString(fecha, lugar, items)
 //        println "precios " + precios
