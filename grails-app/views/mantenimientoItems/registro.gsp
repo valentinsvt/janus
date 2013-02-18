@@ -110,6 +110,7 @@
             var icons = {
                 edit   : "${resource(dir: 'images/tree', file: 'edit.png')}",
                 delete : "${resource(dir: 'images/tree', file: 'delete.gif')}",
+                info   : "${resource(dir: 'images/tree', file: 'info.png')}",
 
                 grupo_material : "${resource(dir: 'images/tree', file: 'grupo_material.png')}",
                 grupo_manoObra : "${resource(dir: 'images/tree', file: 'grupo_manoObra.png')}",
@@ -521,6 +522,15 @@
                             log       : item + " ",
                             title     : "Editar " + item.toLowerCase()
                         });
+                        menuItems.info = {
+                            label            : "Información",
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons.info,
+                            action           : function (obj) {
+
+                            }
+                        };
                         if (!nodeHasChildren) {
                             menuItems.eliminar = remove({
                                 label       : "Eliminar " + item.toLowerCase(),
