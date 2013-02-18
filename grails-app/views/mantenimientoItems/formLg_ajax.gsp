@@ -5,6 +5,22 @@
         <g:hiddenField name="id" value="${lugarInstance?.id}"/>
         <g:hiddenField name="all" value="${all}"/>
 
+
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Tipo
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:select name="tipoLista.id" id="tipoListaId" from="${janus.TipoLista.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
@@ -39,9 +55,9 @@
 </div>
 
 <script type="text/javascript">
-//    $(".allCaps").keyup(function () {
-//        this.value = this.value.toUpperCase();
-//    });
+    //    $(".allCaps").keyup(function () {
+    //        this.value = this.value.toUpperCase();
+    //    });
 
     $("#frmSave").validate({
         rules          : {

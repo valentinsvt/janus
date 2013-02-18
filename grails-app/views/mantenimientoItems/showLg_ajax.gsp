@@ -44,9 +44,11 @@
                         <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5" format="##,#####0" locale='ec'/>
                     </td>
                     <td class="delete">
-                        <a href="#" class="btn btn-danger btn-small btnDelete" rel="tooltip" title="Eliminar" id="${precio.id}">
-                            <i class="icon-trash icon-large"></i>
-                        </a>
+                        <g:if test="${precio.fechaIngreso == new java.util.Date().clearTime()}">
+                            <a href="#" class="btn btn-danger btn-small btnDelete" rel="tooltip" title="Eliminar" id="${precio.id}">
+                                <i class="icon-trash icon-large"></i>
+                            </a>
+                        </g:if>
                     </td>
                 </tr>
             </g:each>

@@ -193,7 +193,7 @@ class PlanillaController extends janus.seguridad.Shield {
         switch (planillaInstance.tipoPlanilla.codigo) {
             case 'A':
             case 'L':
-                redirect(action: 'resumen', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])
+                redirect(action: 'list', id: planillaInstance.contratoId)
                 break;
             case 'P':
                 redirect(action: 'detalle', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])

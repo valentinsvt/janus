@@ -657,7 +657,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def savePrecio_ajax() {
-        println params
+//        println params
         params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         if (params.lugar.id != "-1") {
             def precioRubrosItemsInstance = new PrecioRubrosItems(params)
@@ -790,7 +790,7 @@ class MantenimientoItemsController extends Shield {
             lugarNombre = "todos los lugares"
         } else {
             lugar.add(Lugar.get(lugarId))
-            lugarNombre = lugar[0].descripcion
+            lugarNombre = lugar[0].descripcion + " <i>(" + (lugar[0].tipoLista ? lugar[0].tipoLista?.descripcion : 'sin tipo') + ")</i>"
         }
 //        println "parametros busqueda "+fecha+" - "+itemId+" - "+operador
         lugar.each {

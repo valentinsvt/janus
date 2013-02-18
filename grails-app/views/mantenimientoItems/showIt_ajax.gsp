@@ -59,12 +59,12 @@
         </div>
     </g:if>
 
-    <g:if test="${itemInstance?.peso}">
+    %{--<g:if test="${itemInstance?.peso}">--}%
         <div class="control-group">
             <div>
                 <span id="peso-label" class="control-label label label-inverse">
-                    Peso
-                    %{--${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Peso' : 'Volumen'}--}%
+                    %{--Peso--}%
+                    ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Peso' : 'Volumen'}
                 </span>
             </div>
 
@@ -77,7 +77,7 @@
 
             </div>
         </div>
-    </g:if>
+    %{--</g:if>--}%
 
     <g:if test="${itemInstance?.departamento}">
         <div class="control-group">

@@ -103,6 +103,7 @@
 .context-menu-item.mn-icon-eval { background-image: url(images/eval.png); }
 .context-menu-item.mn-icon-view { background-image: url(images/view.png); }
 .context-menu-item.mn-icon-ofrt { background-image: url(images/ofertas.png); }
+.context-menu-item.mn-icon-info { background-image: url(images/info.png); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }
