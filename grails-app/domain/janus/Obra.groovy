@@ -77,6 +77,7 @@ class Obra implements Serializable {
     Lugar listaVolumen0
     Lugar listaVolumen1
     Lugar listaVolumen2
+    Lugar listaManoObra
 
     static mapping = {
         table 'obra'
@@ -164,6 +165,7 @@ class Obra implements Serializable {
             listaVolumen0 column: 'lgarvl00'
             listaVolumen1 column: 'lgarvl01'
             listaVolumen2 column: 'lgarvl02'
+            listaManoObra column: 'lgarlsmq'
         }
     }
     static constraints = {
