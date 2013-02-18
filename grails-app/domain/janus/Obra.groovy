@@ -55,7 +55,6 @@ class Obra implements Serializable {
     double indiceUtilidad
     int contrato
     double totales
-    String periodo
     double valor
     Presupuesto partidaObra
     String memoCertificacionPartida
@@ -74,6 +73,11 @@ class Obra implements Serializable {
     double distanciaPesoEspecial
     double distanciaVolumenMejoramiento
     double distanciaVolumenCarpetaAsfaltica
+    Lugar listaPeso1
+    Lugar listaVolumen0
+    Lugar listaVolumen1
+    Lugar listaVolumen2
+
     static mapping = {
         table 'obra'
         cache usage: 'read-write', include: 'non-lazy'
@@ -136,7 +140,6 @@ class Obra implements Serializable {
             indiceUtilidad column: 'indiutil'
             contrato column: 'indicntr'
             totales column: 'inditotl'
-            periodo column: 'obraprdo'
             valor column: 'obravlor'
             partidaObra column: 'prsp__id'
             memoCertificacionPartida column: 'obrammpr'
@@ -157,6 +160,10 @@ class Obra implements Serializable {
             distanciaVolumenCarpetaAsfaltica column: 'obradsca'
             barrio column: 'obrabarr'
 
+            listaPeso1 column: 'lgarps01'
+            listaVolumen0 column: 'lgarvl00'
+            listaVolumen1 column: 'lgarvl01'
+            listaVolumen2 column: 'lgarvl02'
         }
     }
     static constraints = {
@@ -214,7 +221,6 @@ class Obra implements Serializable {
         indiceUtilidad(blank: true, nullable: true, attributes: [title: 'indiceUtilidad'])
         contrato(blank: true, nullable: true, attributes: [title: 'contrato'])
         totales(blank: true, nullable: true, attributes: [title: 'totales'])
-        periodo(size: 1..1, blank: true, nullable: true, attributes: [title: 'periodo'])
         valor(size: 1..10, blank: true, nullable: true, attributes: [title: 'valor'])
         partidaObra(size: 1..10, blank: true, nullable: true, attributes: [title: 'partidaObra'])
         memoCertificacionPartida(size: 1..10, blank: true, nullable: true, attributes: [title: 'memoCertificacionPartida'])
