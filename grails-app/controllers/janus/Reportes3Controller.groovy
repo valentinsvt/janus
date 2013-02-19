@@ -380,7 +380,7 @@ class Reportes3Controller {
                 number = new Number(2, fila, rt["itempeso"]);sheet.addCell(number);
                 number = new Number(3, fila, rt["rbrocntd"]);sheet.addCell(number);
                 number = new Number(4, fila, rt["distancia"]);sheet.addCell(number);
-                number = new Number(5, fila, rt["parcial_t"]/(rt["itempeso"]*rt["rbrocntd"]*rt["distancia"]));sheet.addCell(number);
+                number = new Number(5, fila, rt["tarifa"]);sheet.addCell(number);
                 number = new Number(6, fila, rt["parcial_t"]);sheet.addCell(number);
                 fila++
             }

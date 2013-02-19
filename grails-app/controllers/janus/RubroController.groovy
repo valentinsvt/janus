@@ -459,7 +459,7 @@ class RubroController extends janus.seguridad.Shield {
                 tabla+="<td style='width: 50px;text-align: right'>"+r["itempeso"]+"</td>"
                 tabla+="<td style='width: 50px;text-align: right'>"+r["rbrocntd"]+"</td>"
                 tabla+="<td style='width: 50px;text-align: right'>"+r["distancia"]+"</td>"
-                tabla+="<td style='width: 50px;text-align: right'>"+(r["parcial_t"]/(r["itempeso"]*r["rbrocntd"]*r["distancia"])).toFloat().round(5)+"</td>"
+                tabla+="<td style='width: 50px;text-align: right'>"+r["tarifa"].toFloat().round(5)+"</td>"
                 tabla+="<td style='width: 50px;text-align: right'>"+r["parcial_t"]+"</td>"
                 total+=r["parcial_t"]
                 tabla+="</tr>"
