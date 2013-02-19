@@ -88,7 +88,7 @@
 
     <body>
         <div class="hoja">
-            <h1>Gobierno de la Provincia de Pichincha</h1>
+            <h1>Gobierno Autónomo Descentralizado de la Provincia de Pichincha</h1>
 
             <h2>Reporte de costos de materiales</h2>
 

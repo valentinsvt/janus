@@ -275,7 +275,7 @@ class Reportes2Controller {
         def number
         def fila = 8;
 
-        label = new Label(2, 1, "Gobierno de la Provincia de Pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(2, 1, "Gobierno Autónomo Descentralizado de la Provincia de Pichincha".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(2, 2, "Reporte de Costos de Materiales", times16format); sheet.addCell(label);
 
         label = new Label(1,4, lugar?.descripcion, times16format); sheet.addCell(label);

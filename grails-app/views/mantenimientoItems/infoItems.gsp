@@ -159,8 +159,7 @@
                         <tbody id="bodyFormulaPolinomica">
 
                         <g:each in="${fpItems}" var="f">
-                            <tr>                             0
-
+                            <tr>
                                 <td style="width: 100px">${f?.formulaPolinomica?.numero}</td>
                                 <td style="width: 100px">${f?.formulaPolinomica?.obra?.codigo}</td>
                                 <td style="width: 300px">${f?.formulaPolinomica?.obra?.nombre}</td>

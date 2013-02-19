@@ -19,8 +19,8 @@
         </a>
 
         <a href="#" class="btn  " id="imprimir_excel" style="margin-left:-5px">
-            <i class="icon-file"></i>
-            Imprimir Excel
+            <i class="icon-table"></i>
+            Excel
         </a>
 
     </div>

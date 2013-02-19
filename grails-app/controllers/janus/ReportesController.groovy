@@ -384,9 +384,9 @@ class ReportesController {
 
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
-        def label = new Label(0, 1,"Gobierno de la provincia de pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1,"Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0,2, "Departamento de costos".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 3, "Analisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 
         sheet.mergeCells(0,1, 1, 1)
         sheet.mergeCells(0,2, 1,2)
@@ -635,9 +635,9 @@ class ReportesController {
             Paragraph headers = new Paragraph();
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
-            headers.add(new Paragraph("GOBIERNO DE LA PROVINCIA DE PICHINCHA", times12bold));
+            headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
             headers.add(new Paragraph("DEPARTAMENTO DE COSTOS", times10bold));
-            headers.add(new Paragraph("ANALISIS DE PRECIOS UNITARIOS DE PRESUPUESTO", times10bold));
+            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO", times10bold));
 //            headers.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el " + new Date().format("dd/MM/yyyy hh:mm"), times8normal))
             addEmptyLine(headers, 1);
             document.add(headers);
@@ -3170,18 +3170,18 @@ class ReportesController {
         def ultimaFila
 
 
-        label = new Label(2, 2, "GOBIERNO DE LA PROVINCIA DE PRICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(2, 2, "GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
 
 
         label = new Label(2, 4, "DEPARTAMENTO DE COSTOS", times16format); sheet.addCell(label);
 
 
-        label = new Label(2, 6, "ANALISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: " + subPres?.descripcion.toString(), times16format); sheet.addCell(label);
+        label = new Label(2, 6, "ANÁLISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: " + subPres?.descripcion.toString(), times16format); sheet.addCell(label);
 
 
 
         label = new Label(0, 8, "#", times16format); sheet.addCell(label);
-        label = new Label(1, 8, "CODIGO", times16format); sheet.addCell(label);
+        label = new Label(1, 8, "CÓDIGO", times16format); sheet.addCell(label);
         label = new Label(2, 8, "RUBRO", times16format); sheet.addCell(label);
         label = new Label(3, 8, "UNIDAD", times16format); sheet.addCell(label);
         label = new Label(4, 8, "CANTIDAD", times16format); sheet.addCell(label);

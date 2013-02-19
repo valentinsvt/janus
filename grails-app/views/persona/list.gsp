@@ -26,7 +26,15 @@
                 <i class="icon-file"></i>
                 Crear  Persona
             </a>
-        </div>
+        %{--</div>--}%
+
+    %{--<div class="span12 btn-group" role="navigation">--}%
+        <a href="#" class="btn btn-ajax btn-rol" id="btn-rol">
+            <i class="icon-user"></i>
+            Colocar Rol en la persona
+        </a>
+    </div>
+
 
         <g:form action="delete" name="frmDelete-Persona">
             <g:hiddenField name="id"/>
@@ -239,6 +247,13 @@
                     });
                     return false;
                 }); //click btn password
+
+
+                $("#btn-rol").click(function () {
+
+                    location.href= "${createLink(controller: 'personaRol', action: 'registroPersonaRol')}"
+
+                });
 
             });
 
