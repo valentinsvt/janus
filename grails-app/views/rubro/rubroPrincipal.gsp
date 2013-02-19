@@ -575,13 +575,17 @@
     }
 
     function transporte(){
-        var dsps=$("#dist_peso").val()
-        var dsvs=$("#dist_vol").val()
+        var dsp0=$("#dist_p1").val()
+        var dsp1=$("#dist_p2").val()
+        var dsv0=$("#dist_v1").val()
+        var dsv1=$("#dist_v2").val()
+        var dsv2=$("#dist_v3").val()
+        var listas = $("#lista_1").val()+","+$("#lista_2").val()+","+$("#lista_3").val()+","+$("#lista_4").val()+","+$("#lista_5").val()+","+$("#ciudad").val()
         var volqueta=$("#costo_volqueta").val()
         var chofer=$("#costo_chofer").val()
 
         $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'transporte')}",
-            data     : "dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val(),
+            data     : "dsp0="+dsp0+"&dsp1="+dsp1+"&dsv0="+dsv0+"&dsv1="+dsv1+"&dsv2="+dsv2+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&listas="+listas+"&chof="+$("#cmb_chof").val()+"&volq="+$("#cmb_vol").val(),
             success  : function (msg) {
                 $("#tabla_transporte").html(msg)
                 tablaIndirectos();
@@ -654,6 +658,7 @@
                     var tarifa = padre.find(".col_tarifa")
                     rend.html(number_format(1, 5, ".", ""))
                     cant.html(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
+//                    console.log("cantidad",$("#total_mano").find(".valor_total").html())
 //                    console.log(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
                     tarifa.html(number_format(precio, 5, ".", ""))
                     hora.html(number_format(parseFloat(cant.html())*parseFloat(tarifa.html()), 5, ".", ""))
@@ -709,6 +714,7 @@
         trMa.append(td)
         $("#tabla_material").append(trM)
         $("#tabla_mano").append(trMa)
+//        console.log(totalMa)
         calculaHerramientas()
 //        window.setTimeout(vacio,2000)
 //
@@ -835,14 +841,34 @@
         });
 
         $("#imprimir").click(function(){
-            var dsps=$("#dist_peso").val()
-            var dsvs=$("#dist_vol").val()
+//            var dsps=$("#dist_peso").val()
+//            var dsvs=$("#dist_vol").val()
+//            var volqueta=$("#costo_volqueta").val()
+//            var chofer=$("#costo_chofer").val()
+
+            var dsp0=$("#dist_p1").val()
+            var dsp1=$("#dist_p2").val()
+            var dsv0=$("#dist_v1").val()
+            var dsv1=$("#dist_v2").val()
+            var dsv2=$("#dist_v3").val()
+            var listas = $("#lista_1").val()+","+$("#lista_2").val()+","+$("#lista_3").val()+","+$("#lista_4").val()+","+$("#lista_5").val()+","+$("#ciudad").val()
             var volqueta=$("#costo_volqueta").val()
             var chofer=$("#costo_chofer").val()
-            %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
+
+            %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'transporte')}",--}%
+                %{--data     : "dsp0="+dsp0+"&dsp1="+dsp1+"&dsv0="+dsv0+"&dsv1="+dsv1+"&dsv2="+dsv2+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&listas="+listas+"&chof="+$("#cmb_chof").val()+"&volq="+$("#cmb_vol").val(),--}%
+                %{--success  : function (msg) {--}%
+                    %{--$("#tabla_transporte").html(msg)--}%
+                    %{--tablaIndirectos();--}%
+                %{--}--}%
+            %{--});--}%
+
+            %{--"dsp0="+dsp0+"&dsp1="+dsp1+"&dsv0="+dsv0+"&dsv1="+dsv1+"&dsv2="+dsv2+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&listas="+listas+"&chof="+$("#cmb_chof").val()+"&volq="+$("#cmb_vol").val()--}%
+            %{--var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
             %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
-            var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()+"Windi="+$("#costo_indi").val()
-            var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos
+            %{--var datos = "?dsps="+dsps+"Wdsvs="+dsvs+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()+"Windi="+$("#costo_indi").val()--}%
+            datos="dsp0="+dsp0+"Wdsp1="+dsp1+"Wdsv0="+dsv0+"Wdsv1="+dsv1+"Wdsv2="+dsv2+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()+"Wlistas="+listas+"Wchof="+$("#cmb_chof").val()+"Wvolq="+$("#cmb_vol").val()+"Windi="+$("#costo_indi").val()
+            var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}?"+datos
             location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
         });
 
@@ -1060,7 +1086,7 @@
                         if ($("#V").hasClass("active"))
                             tipo = "V"
                         var listas =""
-                        listas+=$("#lista_1").val()+"#"+$("#lista_2").val()+"#"+$("#lista_3").val()+"#"+$("#lista_4").val()+"#"+$("#lista_5").val()
+                        listas+=$("#lista_1").val()+"#"+$("#lista_2").val()+"#"+$("#lista_3").val()+"#"+$("#lista_4").val()+"#"+$("#lista_5").val()+"#"+$("#ciudad").val()
 
                         var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&tipo=" + tipo+"&listas="+listas+"&ids="
                         $.each(items, function () {

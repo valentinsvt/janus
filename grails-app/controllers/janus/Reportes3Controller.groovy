@@ -437,50 +437,52 @@ class Reportes3Controller {
     }
 
     def imprimirRubro(){
-//        println "imprimir rubro "+params
+        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
         def lugar = params.lugar
         def indi = params.indi
+        def listas = params.listas
         try{
             indi=indi.toDouble()
         } catch (e){
             println "error parse "+e
             indi=21.5
         }
-        if (!params.dsps){
-            params.dsps=0 //distancia peso
-            params.prch=0 //precio chofer
-            params.prvl=0 //precio volquete
-            params.dsvs=0 //distancia volumen
-        }
-        if (!params.dsvs){
-            params.dsps=0
-            params.dsvs=0
-            params.prvl=0
-            params.prch=0
-        }
-        if (!params.prch)
-            params.prch=0
-        if (!params.prvl)
-            params.prvl=0
-        def rendimientos
-        if(!params.obra)
-            rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
-        else
-            rendimientos = preciosService.rendimientoTransporteLuz(Obra.get(params.obra),params.prch.toDouble(),params.prvl.toDouble())
-
-//        println "rends "+rendimientos
-        if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
-            rendimientos["rdps"]=0
-            rendimientos["rdvl"]=0
-        }
-        if (rendimientos["rdvl"].toString()=="NaN" || rendimientos["rdvl"].toString()=="Infinity"){
-            rendimientos["rdvl"]=0
-            rendimientos["rdps"]=0
-        }
-        def parametros = ""+params.id+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-        preciosService.ac_rbro(params.id,params.lugar,fecha.format("yyyy-MM-dd"))
+//        if (!params.dsps){
+//            params.dsps=0 //distancia peso
+//            params.prch=0 //precio chofer
+//            params.prvl=0 //precio volquete
+//            params.dsvs=0 //distancia volumen
+//        }
+//        if (!params.dsvs){
+//            params.dsps=0
+//            params.dsvs=0
+//            params.prvl=0
+//            params.prch=0
+//        }
+//        if (!params.prch)
+//            params.prch=0
+//        if (!params.prvl)
+//            params.prvl=0
+//        def rendimientos
+//        if(!params.obra)
+//            rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
+//        else
+//            rendimientos = preciosService.rendimientoTransporteLuz(Obra.get(params.obra),params.prch.toDouble(),params.prvl.toDouble())
+//
+////        println "rends "+rendimientos
+//        if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
+//            rendimientos["rdps"]=0
+//            rendimientos["rdvl"]=0
+//        }
+//        if (rendimientos["rdvl"].toString()=="NaN" || rendimientos["rdvl"].toString()=="Infinity"){
+//            rendimientos["rdvl"]=0
+//            rendimientos["rdps"]=0
+//        }
+//        def parametros = ""+params.id+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+        def parametros = ""+rubro.id+",'"+fecha.format("yyyy-MM-dd")+"',"+listas+","+params.dsp0+","+params.dsp1+","+params.dsv0+","+params.dsv1+","+params.dsv2+","+params.chof+","+params.volq
+        preciosService.ac_rbroV2(params.id,fecha.format("yyyy-MM-dd"),params.lugar)
         def res = preciosService.rb_precios(parametros,"")
         def tablaHer='<table class="table table-bordered table-striped table-condensed table-hover"> '
         def tablaMano='<table class="table table-bordered table-striped table-condensed table-hover"> '

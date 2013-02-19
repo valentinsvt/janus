@@ -51,7 +51,7 @@ class PreciosService {
         def itemsId = ""
         def res = ""
 //        println "get Precios string "+fecha+"  "+fecha.format('yyyy-MM-dd')
-        def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) from rbpc r1 where r1.item__id = ${item} and r1.lgar__id=${lugar.id} and r1.rbpcfcha <= '${fecha.format('yyyy-MM-dd')}' group by 1"
+        def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar}) from rbpc r1 where r1.item__id = ${item} and r1.lgar__id=${lugar} and r1.rbpcfcha <= '${fecha.format('yyyy-MM-dd')}' group by 1"
 //        println "sql precios string "+sql
         cn.eachRow(sql.toString()) {row ->
 
@@ -192,13 +192,23 @@ class PreciosService {
 
     def rb_precios(parametros,condicion){
         def cn = dbConnectionService.getConnection()
-        def sql = "select * from rb_precios("+parametros+") "+condicion
+        def sql = "select * from rb_precios_v2("+parametros+") "+condicion
+//        println "sql "+sql
         def result = []
         cn.eachRow(sql){r->
             result.add(r.toRowResult())
         }
         return result
     }
+//    def rb_precios(parametros,condicion){
+//        def cn = dbConnectionService.getConnection()
+//        def sql = "select * from rb_precios("+parametros+") "+condicion
+//        def result = []
+//        cn.eachRow(sql){r->
+//            result.add(r.toRowResult())
+//        }
+//        return result
+//    }
     def rb_precios(select,parametros,condicion){
         def cn = dbConnectionService.getConnection()
         def sql = "select ${select} from rb_precios("+parametros+") "+condicion
@@ -222,6 +232,16 @@ class PreciosService {
     def ac_rbro(rubro,lugar,fecha){
         def cn = dbConnectionService.getConnection()
         def sql = "select * from ac_rbro_hr1("+rubro+","+lugar+",'"+fecha+"') "
+        def result = []
+        cn.eachRow(sql.toString()){r->
+            result.add(r.toRowResult())
+        }
+        return result
+    }
+    def ac_rbroV2(rubro,fecha,lugar){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from ac_rbro_hr1_v2("+rubro+",'"+fecha+"',${lugar}) "
+//        println "sql ac rubro "+sql
         def result = []
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())

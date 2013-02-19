@@ -377,7 +377,7 @@ class RubroController extends janus.seguridad.Shield {
     } //delete
 
     def getPrecios() {
-        println "get precios "+params
+//        println "get precios "+params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -386,12 +386,13 @@ class RubroController extends janus.seguridad.Shield {
         def listas = []
         def conLista = []
         listas=params.listas.split("#")
-        println "listas "+listas
+//        println "listas "+listas
         parts.each {
             if (it.size() > 0){
                 def item=Rubro.get(it).item
                 if (item.tipoLista){
                     conLista.add(item)
+//                    println "con lista "+item.tipoLista
                 }else{
                     items.add(item)
                 }
@@ -399,8 +400,22 @@ class RubroController extends janus.seguridad.Shield {
             }
 
         }
-        def precios = preciosService.getPrecioItemsString(fecha, lugar, items)
-//        println "precios " + precios
+        def precios=""
+//        println "items "+items+"  con lista "+conLista
+        if (items.size()>0){
+            precios = preciosService.getPrecioItemsString(fecha, lugar, items)
+        }
+//        println "precios "+precios
+
+
+        conLista.each {
+//            println "tipo "+ it.tipoLista.id.toInteger()
+            precios+=preciosService.getPrecioItemStringListaDefinida(fecha, listas[it.tipoLista.id.toInteger()-1], it.id)
+        }
+
+
+//        println "precios final " + precios
+//        println "--------------------------------------------------------------------------"
         render precios
     }
     def getPreciosTransporte() {
@@ -421,35 +436,12 @@ class RubroController extends janus.seguridad.Shield {
 
 
     def transporte(){
+//        println "transporte "+params
         def idRubro = params.id
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
-        if (!params.dsps){
-            params.dsps=0
-            params.prch=0
-            params.prvl=0
-            params.dsvs=0
-        }
-        if (!params.dsvs){
-            params.dsps=0
-            params.dsvs=0
-            params.prvl=0
-            params.prch=0
-        }
-        if (!params.prch)
-            params.prch=0
-        if (!params.prvl)
-            params.prvl=0
-        def rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
-//        println "rends "+rendimientos
-        if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
-            rendimientos["rdps"]=0
-            rendimientos["rdvl"]=0
-        }
-        if (rendimientos["rdvl"].toString()=="NaN" || rendimientos["rdvl"].toString()=="Infinity"){
-            rendimientos["rdvl"]=0
-            rendimientos["rdps"]=0
-        }
-        def parametros = ""+idRubro+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+        def listas = params.listas
+        def parametros = ""+idRubro+",'"+fecha.format("yyyy-MM-dd")+"',"+listas+","+params.dsp0+","+params.dsp1+","+params.dsv0+","+params.dsv1+","+params.dsv2+","+params.chof+","+params.volq
+//        println "paramtros " +parametros
         def res = preciosService.rb_precios(parametros,"")
 
         def tabla='<table class="table table-bordered table-striped table-condensed table-hover"> '
