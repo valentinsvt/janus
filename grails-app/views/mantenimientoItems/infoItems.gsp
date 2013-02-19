@@ -66,8 +66,8 @@
 
                         <g:each in="${rubro}" var="r">
                             <tr>
-                                <td style="width: 100px">${r?.item?.codigo}</td>
-                                <td style="width: 300px">${r?.item?.nombre}</td>
+                                <td style="width: 100px">${r?.rubro?.codigo}</td>
+                                <td style="width: 300px">${r?.rubro?.nombre}</td>
                             </tr>
                         </g:each>
 
