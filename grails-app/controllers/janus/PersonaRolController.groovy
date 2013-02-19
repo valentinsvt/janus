@@ -21,6 +21,31 @@ class PersonaRolController extends janus.seguridad.Shield {
 
     }
 
+
+    def obtenerFuncion (){
+
+        def persona = Persona.get(params.id);
+
+        def rol = PersonaRol.findAllByPersona(persona)
+
+        return [persona: persona, rol: rol]
+
+    }
+
+
+
+    def grabarFuncion () {
+        def personaRol = new PersonaRol()
+        personaRol.persona = Persona.get(params.id)
+        personaRol.funcion = Funcion.get(params.rol)
+        if (!personaRol.save([flush: true])) {
+            render "NO"
+            println "ERROR al guardar rolPersona: "+personaRol.errors
+        } else {
+            render "OK_"+personaRol.id
+        }
+    }
+
     def form_ajax() {
         def personaRolInstance = new PersonaRol(params)
         if (params.id) {
@@ -93,22 +118,25 @@ class PersonaRolController extends janus.seguridad.Shield {
     def delete() {
         def personaRolInstance = PersonaRol.get(params.id)
         if (!personaRolInstance) {
-            flash.clase = "alert-error"
-            flash.message = "No se encontró PersonaRol con id " + params.id
-            redirect(action: "list")
-            return
+//            flash.clase = "alert-error"
+//            flash.message = "No se encontró PersonaRol con id " + params.id
+//            redirect(action: "list")
+//            return
+            render "NO"
         }
 
         try {
             personaRolInstance.delete(flush: true)
-            flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente PersonaRol " + personaRolInstance.id
-            redirect(action: "list")
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha eliminado correctamente PersonaRol " + personaRolInstance.id
+//            redirect(action: "list")
+            render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar PersonaRol " + (personaRolInstance.id ? personaRolInstance.id : "")
-            redirect(action: "list")
+//            flash.clase = "alert-error"
+//            flash.message = "No se pudo eliminar PersonaRol " + (personaRolInstance.id ? personaRolInstance.id : "")
+//            redirect(action: "list")
+            render "NO"
         }
     } //delete
 } //fin controller

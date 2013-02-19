@@ -286,13 +286,36 @@
 
                     <div class="span2"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
-                    <div class="span1">Latitud</div>
 
-                    <div class="span1"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}" style="width: 70px"/></div>
+                    <g:if test="${obra?.id != null}">
 
-                    <div class="span1">Longitud</div>
+                        <div class="span1" style="margin-left: -20px">Latitud</div>
 
-                    <div class="span1"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 70px"/></div>
+                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}"  style="width: 100px" maxlength="11"/></div>
+
+                        <div class="span1" style="margin-left: 60px">Longitud</div>
+
+                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 100px" maxlength="11" /></div>
+
+
+
+                    </g:if>
+                    <g:else>
+
+                        <div class="span1" style="margin-left: -20px">Latitud</div>
+
+                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}"  style="width: 100px" maxlength="11"/></div>
+
+                        <div class="span1" style="margin-left: 60px">Longitud</div>
+
+                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11"/></div>
+
+
+                    </g:else>
+
+
+
+
 
                 </div>
 
@@ -710,6 +733,7 @@
 //            $("input[type=text]").val("");
 //            $("textarea").val("");
 //            $("select").val("-1");
+
 
                     location.href = "${g.createLink(action: 'registroObra')}";
 

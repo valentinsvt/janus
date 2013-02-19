@@ -995,7 +995,7 @@
 
                 var nombreFirmas = $("#setFirmasMemo").val()
 
-//        console.log(nombreFirmas)
+        console.log(nombreFirmas)
 
                 var tbody = $("#bodyFirmasMemo")
 

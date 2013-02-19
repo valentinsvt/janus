@@ -829,6 +829,9 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-print"></i> Ver</a>');
+                            var btnExcel =  $('<a href="#" class="btn btnExcel"><i class="icon-table"></i> Excel</a>' );
+
+
 
                             btnSave.click(function () {
                                 var data = "";
@@ -857,10 +860,34 @@
                                 return false;
                             });
 
+
+                            btnExcel.click(function () {
+
+                                var fecha = $("#fechaRep").val();
+                                var lugar = $("#lugarRep").val();
+                                var grupo = current;
+
+
+                                location.href = "${g.createLink(controller: 'reportes2', action: 'reportePreciosExcel')}?fecha=" + fecha + "&lugar=" + lugar + "&grupo=" + grupo;
+
+
+                                var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
+                                wait.prepend(spinnerBg);
+
+                                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                                $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                                $("#modalTitle").html("Procesando");
+                                $("#modalBody").html(wait);
+                                $("#modalFooter").html("").append(btnClose);
+
+
+
+                            });
+
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle").html("Formato de impresión");
                             $("#modalBody").html(msg);
-                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave).append(btnExcel);
                             $("#modal-tree").modal("show");
                         }
                     });

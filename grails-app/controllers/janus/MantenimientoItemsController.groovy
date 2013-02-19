@@ -578,6 +578,24 @@ class MantenimientoItemsController extends Shield {
         }
     }
 
+
+    def infoItems() {
+
+        def item = Item.get(params.id)
+
+        def rubro = Rubro.findAllByItem(item)
+
+        def precios = PrecioRubrosItems.findAllByItem(item)
+
+        def fpItems = ItemsFormulaPolinomica.findAllByItem(item)
+
+
+        return [item: item, rubro: rubro, precios: precios, fpItems: fpItems, delete:params.delete]
+
+    }
+
+
+
     def saveIt_ajax() {
         def dep = DepartamentoItem.get(params.departamento.id)
         params.tipoItem = TipoItem.findByCodigo("I")
