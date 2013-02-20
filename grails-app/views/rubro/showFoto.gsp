@@ -65,7 +65,6 @@
         <fieldset class="borde_abajo" style="position: relative;width: 650px;padding-left: 50px;">
             <div class="linea" style="height: 98%;"></div>
             <g:uploadForm action="uploadFile" method="post" name="frmUpload" enctype="multipart/form-data">
-
                 <div class="fieldcontain required">
                     <b>Archivo:</b>
                     <input type="file" id="file" name="file" class=""/>
@@ -84,7 +83,6 @@
                         </a>
                     </div>
                 </div>
-
             </g:uploadForm>
         </fieldset>
         <g:if test="${ext.toLowerCase() == 'pdf'}">
