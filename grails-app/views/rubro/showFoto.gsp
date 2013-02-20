@@ -59,10 +59,10 @@
                 </div>
             </div>
         </g:if>
-        <div class="tituloTree" style="width: 700px;">
+        <div class="tituloTree" style="width: 720px;">
             Rubro: ${rubro?.nombre}
         </div>
-        <fieldset class="borde_abajo" style="position: relative;width: 650px;padding-left: 50px;">
+        <fieldset class="borde_abajo" style="position: relative;width: 670px;padding-left: 50px;">
             <div class="linea" style="height: 98%;"></div>
             <g:uploadForm action="uploadFile" method="post" name="frmUpload" enctype="multipart/form-data">
                 <div class="fieldcontain required">
