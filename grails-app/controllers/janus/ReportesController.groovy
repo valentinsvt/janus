@@ -3086,6 +3086,8 @@ class ReportesController {
     }
 
 
+
+
     def reporteExcelVolObra(){
 
         def obra = Obra.get(params.id)
@@ -3230,6 +3232,14 @@ class ReportesController {
 
 
     }
+
+
+    def dummyReportes () {
+
+    return false
+
+    }
+
 
 
 }
