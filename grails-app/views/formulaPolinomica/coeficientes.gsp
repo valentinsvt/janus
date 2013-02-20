@@ -188,6 +188,9 @@
 
         <script type="text/javascript">
 
+            var $tree = $("#tree");
+            var $tabla = $("#tblDisponibles");
+
             var icons = {
                 edit   : "${resource(dir: 'images/tree', file: 'edit.png')}",
                 delete : "${resource(dir: 'images/tree', file: 'delete.gif')}",
@@ -434,6 +437,9 @@
                                                                 codigo : nodeCod,
                                                                 item   : nodeItem
                                                             });
+                                                            tr.click(function () {
+                                                                clickTr(tr);
+                                                            });
                                                             $("#tblDisponibles").children("tbody").prepend(tr);
                                                             tr.show("pulsate");
                                                             parent.attr("valor", msgParts[1]).trigger("change_node.jstree");
@@ -454,10 +460,26 @@
                 return menuItems;
             }
 
-            $(function () {
+            function clickTr($tr) {
+                var $sps = $("#spanSuma");
+                var total = parseFloat($sps.data("total"));
 
-                var $tree = $("#tree");
-                var $tabla = $("#tblDisponibles");
+                if ($tr.hasClass("selected")) {
+                    $tr.removeClass("selected");
+                    total -= parseFloat($tr.data("valor"));
+                } else {
+                    $tr.addClass("selected");
+                    total += parseFloat($tr.data("valor"));
+                }
+                if ($tabla.children("tbody").children("tr.selected").length > 0) {
+                    $("#btnRemoveSelection, #btnAgregarItems").removeClass("disabled");
+                } else {
+                    $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
+                }
+                updateTotal(total);
+            }
+
+            $(function () {
 
                 $("#btnRemoveSelection").click(function () {
                     if (!$(this).hasClass("disabled")) {
@@ -485,7 +507,7 @@
 
                         $tabla.children("tbody").children("tr.selected").each(function () {
                             var data = $(this).data();
-                            rows2add.push({add : {attr : {item : data.item, numero : "", nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
+                            rows2add.push({add : {attr : {item : data.item, numero : data.codigo, nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
                             total += parseFloat(data.valor);
                             dataAdd.items.push(data.item + "_" + data.valor);
                         });
@@ -553,22 +575,23 @@
                         sInfoEmpty   : ""
                     }
                 }).children("tbody").children("tr").click(function () {
-                            var $sps = $("#spanSuma");
-                            var total = parseFloat($sps.data("total"));
-
-                            if ($(this).hasClass("selected")) {
-                                $(this).removeClass("selected");
-                                total -= parseFloat($(this).data("valor"));
-                            } else {
-                                $(this).addClass("selected");
-                                total += parseFloat($(this).data("valor"));
-                            }
-                            if ($tabla.children("tbody").children("tr.selected").length > 0) {
-                                $("#btnRemoveSelection, #btnAgregarItems").removeClass("disabled");
-                            } else {
-                                $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
-                            }
-                            updateTotal(total);
+                            clickTr($(this));
+//                            var $sps = $("#spanSuma");
+//                            var total = parseFloat($sps.data("total"));
+//
+//                            if ($(this).hasClass("selected")) {
+//                                $(this).removeClass("selected");
+//                                total -= parseFloat($(this).data("valor"));
+//                            } else {
+//                                $(this).addClass("selected");
+//                                total += parseFloat($(this).data("valor"));
+//                            }
+//                            if ($tabla.children("tbody").children("tr.selected").length > 0) {
+//                                $("#btnRemoveSelection, #btnAgregarItems").removeClass("disabled");
+//                            } else {
+//                                $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
+//                            }
+//                            updateTotal(total);
                         });
 
                 $tree.bind("loaded.jstree",

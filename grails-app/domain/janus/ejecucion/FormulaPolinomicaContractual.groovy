@@ -1,14 +1,15 @@
 package janus.ejecucion
+
 import janus.Contrato
 import janus.Indice
 
-class FormulaPolinomicaContractual implements Serializable{
+class FormulaPolinomicaContractual implements Serializable {
 
-        Contrato contrato
-        TipoFormulaPolinomica   tipoFormulaPolinomica
-        Indice   indice
-        String   numero
-        double   valor
+    Contrato contrato
+    TipoFormulaPolinomica tipoFormulaPolinomica
+    Indice indice
+    String numero
+    double valor
 
 
     static mapping = {
@@ -26,17 +27,11 @@ class FormulaPolinomicaContractual implements Serializable{
             numero column: 'frplnmro'
             valor column: 'frplvlor'
         }
-
-
-
     }
 
     static constraints = {
-
-      numero(blank: true, nullable: true)
+        numero(blank: true, nullable: true)
         valor(blank: true, nullable: true)
-
-
-
+        indice(blank: true, nullable: true)
     }
 }

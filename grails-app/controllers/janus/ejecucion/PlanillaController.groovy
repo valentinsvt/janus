@@ -192,6 +192,8 @@ class PlanillaController extends janus.seguridad.Shield {
 
         switch (planillaInstance.tipoPlanilla.codigo) {
             case 'A':
+                redirect(action: 'resumen', id: planillaInstance.id)
+                break;
             case 'L':
                 redirect(action: 'list', id: planillaInstance.contratoId)
                 break;
@@ -205,7 +207,334 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def resumen() {
         def planilla = Planilla.get(params.id)
-        def contrato = Contrato.get(params.contrato)
+        def obra = planilla.contrato.oferta.concurso.obra
+        def contrato = planilla.contrato
+        def planillas = Planilla.findAllByContrato(contrato, [sort: "id"])
+        def fp = janus.FormulaPolinomica.findAllByObra(obra)
+        def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
+        def tipo = TipoFormulaPolinomica.get(1)
+        def oferta = contrato.oferta
+        def periodoOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
+
+        def periodos = []
+        def data = [
+                c: [:],
+                p: [:]
+        ]
+
+        //copia la formula polinomica a la formula polinomica contractual si esta no existe
+        if (fr.size() < 4) {
+            fr.each {
+                it.delete(flush: true)
+            }
+            fp.each {
+                if (it.valor > 0) {
+                    def frpl = new FormulaPolinomicaContractual()
+                    frpl.valor = it.valor
+                    frpl.contrato = contrato
+                    frpl.indice = it.indice
+                    frpl.tipoFormulaPolinomica = tipo
+                    frpl.numero = it.numero
+                    if (!frpl.save(flush: true)) {
+                        println "error " + frpl.errors
+                    }
+                }
+            }
+            def frpl = new FormulaPolinomicaContractual()
+            frpl.valor = 0
+            frpl.contrato = contrato
+            frpl.indice = null
+            frpl.tipoFormulaPolinomica = tipo
+            frpl.numero = "P0"
+            if (!frpl.save(flush: true)) {
+                println "error " + frpl.errors
+            }
+            frpl = new FormulaPolinomicaContractual()
+            frpl.valor = 0
+            frpl.contrato = contrato
+            frpl.indice = null
+            frpl.tipoFormulaPolinomica = tipo
+            frpl.numero = "Fr"
+            if (!frpl.save(flush: true)) {
+                println "error " + frpl.errors
+            }
+        }
+
+        def pcs = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    ilike("numero", "c%")
+                    and {
+                        ne("numero", "P0")
+                        ilike("numero", "p%")
+                    }
+                }
+                order("numero", "asc")
+            }
+        }
+//        println pcs.numero
+
+        //llena el arreglo de periodos
+        //el periodo que corresponde a la fecha de entrega de la oferta
+        periodos.add(periodoOferta)
+        planillas.each { pl ->
+            if (pl.tipoPlanilla.codigo == 'A') {
+                //si es anticipo: el periodo q corresponde a la fecha del anticipo
+                def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPresentacion, pl.fechaPresentacion)
+                periodos.add(prin)
+            } else {
+                periodos.add(pl.periodoIndices)
+            }
+        }
+
+        periodos.each { per ->
+            def valRea = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
+            def tot = [c: 0, p: 0]
+            //si no existen valores de reajuste, se crean
+            if (valRea.size() == 0) {
+                pcs.each { c ->
+                    def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
+                    if (!val) {
+                        val = 1
+                    }
+                    def vr = new ValorReajuste([
+                            valor: val * c.valor,
+                            formulaPolinomica: FormulaPolinomicaContractual.findByIndiceAndContrato(c.indice, contrato),
+                            obra: obra,
+                            periodoIndice: per,
+                            planilla: planilla
+                    ])
+                    if (!vr.save(flush: true)) {
+                        println "vr errors " + vr.errors
+                    }
+                    def pos = "p"
+                    if (c.numero.contains("c")) {
+                        pos = "c"
+                    }
+                    tot[pos] += (vr.valor * c.valor)
+                    if (!data[pos][per]) {
+                        data[pos][per] = [valores: [], total: 0]
+                    }
+                    data[pos][per]["valores"].add([formulaPolinomica: c, valorReajuste: vr])
+                } //pcs.each
+            } //valRea.size == 0
+            else {
+                valRea.each { v ->
+                    def c = pcs.find { it.indiceId.toInteger() == v.formulaPolinomica.indiceId.toInteger() }
+                    def pos = "p"
+                    if (c.numero.contains("c")) {
+                        pos = "c"
+                    }
+                    tot[pos] += (v.valor * c.valor)
+                    if (!data[pos][per]) {
+                        data[pos][per] = [valores: [], total: 0]
+                    }
+                    data[pos][per]["valores"].add([formulaPolinomica: c, valorReajuste: v])
+                }
+            } //valRea.size == 0
+            data["c"][per]["total"] = tot["c"]
+            data["p"][per]["total"] = tot["p"]
+        }
+
+        println "DATA C"
+        data.c.each {
+            println it
+        }
+        println "DATA P"
+        data.p.each {
+            println it
+        }
+
+        return [planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos]
+    }
+
+    def resumen2() {
+        def planilla = Planilla.get(params.id)
+        def obra = planilla.contrato.oferta.concurso.obra
+        def contrato = planilla.contrato
+        def planillas = Planilla.findAllByContrato(contrato, [sort: "id"])
+        def fp = janus.FormulaPolinomica.findAllByObra(obra)
+        def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
+        def tipo = TipoFormulaPolinomica.get(1)
+        def oferta = contrato.oferta
+
+        //copia la formula polinomica a la formula polinomica contractual si esta no existe
+        if (fr.size() < 4) {
+            fr.each {
+                it.delete(flush: true)
+            }
+            fp.each {
+                if (it.valor > 0) {
+                    def frpl = new FormulaPolinomicaContractual()
+                    frpl.valor = it.valor
+                    frpl.contrato = contrato
+                    frpl.indice = it.indice
+                    frpl.tipoFormulaPolinomica = tipo
+                    frpl.numero = it.numero
+                    if (!frpl.save(flush: true)) {
+                        println "error " + frpl.errors
+                    }
+                }
+            }
+            def frpl = new FormulaPolinomicaContractual()
+            frpl.valor = 0
+            frpl.contrato = contrato
+            frpl.indice = null
+            frpl.tipoFormulaPolinomica = tipo
+            frpl.numero = "P0"
+            if (!frpl.save(flush: true)) {
+                println "error " + frpl.errors
+            }
+            frpl = new FormulaPolinomicaContractual()
+            frpl.valor = 0
+            frpl.contrato = contrato
+            frpl.indice = null
+            frpl.tipoFormulaPolinomica = tipo
+            frpl.numero = "Fr"
+            if (!frpl.save(flush: true)) {
+                println "error " + frpl.errors
+            }
+        }
+
+        // para B0: los indices de mano de obra: los c
+        def cs = FormulaPolinomicaContractual.findAllByContratoAndNumeroLike(contrato, "c%", [sort: "numero"])
+//        def ps = FormulaPolinomicaContractual.findAllByContratoAndNumeroLike(contrato, "p%", [sort: "numero"])
+        //Para Fr y Pr: los p
+        def ps = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", contrato)
+                ne("numero", "P0")
+                ilike("numero", "p%")
+                order("numero", "asc")
+            }
+        }
+
+
+        def pcs = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    ilike("numero", "c%")
+                    and {
+                        ne("numero", "P0")
+                        ilike("numero", "p%")
+                    }
+                }
+                order("numero", "asc")
+            }
+        }
+        println pcs.numero
+
+        def datos = [], datosP = [], periodos = []
+        def periodoOferta = PeriodosInec.findAllByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
+
+        periodos.add(periodoOferta[0])
+
+        planillas.each { pl ->
+            if (pl.tipoPlanilla.codigo == 'A') {
+                def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPresentacion, pl.fechaPresentacion)
+                periodos.add(prin)
+            } else {
+                periodos.add(pl.periodoIndices)
+            }
+        }
+
+        def tot = 0, totP = 0
+
+        periodos.each { per ->
+            def vlin = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
+//            println ">>>>" + vlin.formulaPolinomica.numero
+
+            if (vlin.size() == 0) {
+                def tmp = [:], tmpP = [:]
+                tot = 0
+                totP = 0
+                pcs.each { c ->
+                    def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
+                    if (!val) {
+                        val = 1
+                    }
+                    def vr = new ValorReajuste([
+                            valor: val * c.valor,
+                            formulaPolinomica: FormulaPolinomicaContractual.findByIndiceAndContrato(c.indice, contrato),
+                            obra: obra,
+                            periodoIndice: per,
+                            planilla: planilla
+                    ])
+                    if (!vr.save(flush: true)) {
+                        println "vr errors " + vr.errors
+                    }
+                    if (c.numero.contains("c")) {
+                        tmp.put(c.numero, vr.valor)
+                        tot += vr.valor * c.valor
+                    } else if (c.numero.contains("p")) {
+                        println "\t\t" + c + "\t" + val
+                        tmpP.put(c.numero, vr.valor)
+                        totP += vr.valor * c.valor
+                    }
+                } //cs.each
+                if (tmp.size() > 0) {
+                    tmp.put("tot", tot)
+                    datos.add(tmp)
+                }
+                if (tmpP.size() > 0) {
+                    tmpP.put("tot", tot)
+                    datosP.add(tmpP)
+                }
+            } // if(vlin.size=0
+            else {
+                def tmp = [:], tmpP = [:]
+                tot = 0
+                totP = 0
+                vlin.each { v ->
+                    pcs.each { c ->
+//                        println "\t" + c.numero + " :: " + c.indiceId + " " + v.formulaPolinomica.indiceId
+                        if (c.indiceId.toInteger() == v.formulaPolinomica?.indiceId?.toInteger()) {
+                            if (c.numero.contains("c")) {
+                                tmp.put(c.numero, v.valor)
+                                tot += v.valor * c.valor
+                            } else if (c.numero.contains("p")) {
+                                println "\t\t" + c + "\t" + v
+                                tmpP.put(c.numero, v.valor)
+                                totP += v.valor * c.valor
+                            }
+                        }
+                    }
+//                    println "tmp "+tmp
+                }
+                if (tmp.size() > 0) {
+                    tmp.put("tot", tot)
+                    datos.add(tmp)
+                }
+                if (tmpP.size() > 0) {
+                    tmpP.put("tot", tot)
+                    datosP.add(tmpP)
+                }
+            } //else
+        } //periodos.each
+        println "DATOS:"
+        datos.each {
+            println "it " + it
+        }
+        println "DATOSP:"
+        datosP.each {
+            println "it " + it
+        }
+
+        def cant = []
+        0.upto(datos.size() - 1) {
+            cant.add(it)
+        }
+
+        def cantP = []
+        0.upto(datosP.size() - 1) {
+            cantP.add(it)
+        }
+//        println "cant " + cant
+//        println "cantP " + cantP
+
+        return [datos: datos, datosP: datosP, cs: cs, ps: ps, cant: cant, cantP: cantP, periodos: periodos, planilla: planilla, oferta: oferta, contrato: contrato]
     }
 
     def detalle() {

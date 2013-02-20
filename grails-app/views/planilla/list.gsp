@@ -92,6 +92,9 @@
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
                                 </g:if>
+                                <g:link action="resumen" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
+                                    <i class="icon-table icon-large"></i>
+                                </g:link>
                                 <g:if test="${!planillaInstance.fechaPago}">
                                     <g:link action="pagar" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Pagar" id="${planillaInstance.id}">
                                         <i class="icon-money icon-large"></i>

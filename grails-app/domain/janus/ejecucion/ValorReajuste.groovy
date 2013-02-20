@@ -1,14 +1,16 @@
 package janus.ejecucion
 
-import janus.Indice
-import janus.pac.PeriodoValidez
+//import janus.Indice
+//import janus.pac.PeriodoValidez
 
 class ValorReajuste {
 
     janus.Obra obra
     Planilla planilla
     PeriodosInec periodoIndice
-    Indice indice
+//    Indice indice
+    FormulaPolinomicaContractual formulaPolinomica
+
     double valor
 
     static mapping = {
@@ -21,7 +23,8 @@ class ValorReajuste {
             id column: 'vlrj__id'
             planilla column: 'plnl__id'
             periodoIndice column: 'prin__id'
-            indice column: 'indc__id'
+//            indice column: 'indc__id'
+            formulaPolinomica column: 'frpl__id'
             valor column: 'vlrjvlor'
             obra column: 'obra__id'
         }
@@ -29,8 +32,9 @@ class ValorReajuste {
     static constraints = {
         planilla(blank: true, nullable: true)
         periodoIndice(blank: true, nullable: true)
-        indice(blank: true, nullable: true)
+//        indice(blank: true, nullable: true)
+        formulaPolinomica(blank: true, nullable: true)
         valor(blank: true, nullable: true)
-        obra(blank:false,nullable: false)
+        obra(blank: false, nullable: false)
     }
 }

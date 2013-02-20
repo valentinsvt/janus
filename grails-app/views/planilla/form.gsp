@@ -154,7 +154,7 @@
                         <div class="span4">
                             $<g:formatNumber number="${contrato.anticipo}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>
                             (anticipo del <g:formatNumber number="${contrato.porcentajeAnticipo}" maxFractionDigits="0" minFractionDigits="0"/>%
-                            de <g:formatNumber number="${contrato.monto}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>)
+                            de $<g:formatNumber number="${contrato.monto}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>)
                         </div>
                     </div>
                 </g:if>
