@@ -165,52 +165,24 @@ class Reportes3Controller {
     }
 
     def imprimirRubroExcel(){
-        println "imprimir rubro excel "+params
+//        println "imprimir rubro excel "+params
         def rubro = Item.get(params.id)
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
         def lugar = params.lugar
         def indi = params.indi
+        def listas = params.listas
+
         try{
             indi=indi.toDouble()
         } catch (e){
             println "error parse "+e
             indi=21.5
         }
-        if (!params.dsps){
-            params.dsps=0 //distancia peso
-            params.prch=0 //precio chofer
-            params.prvl=0 //precio volquete
-            params.dsvs=0 //distancia volumen
-        }
-        if (!params.dsvs){
-            params.dsps=0
-            params.dsvs=0
-            params.prvl=0
-            params.prch=0
-        }
-        if (!params.prch)
-            params.prch=0
-        if (!params.prvl)
-            params.prvl=0
-        def rendimientos
-        if(!params.obra)
-            rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
-        else
-            rendimientos = preciosService.rendimientoTransporteLuz(Obra.get(params.obra),params.prch.toDouble(),params.prvl.toDouble())
 
-//        println "rends "+rendimientos
-        if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
-            rendimientos["rdps"]=0
-            rendimientos["rdvl"]=0
-        }
-        if (rendimientos["rdvl"].toString()=="NaN" || rendimientos["rdvl"].toString()=="Infinity"){
-            rendimientos["rdvl"]=0
-            rendimientos["rdps"]=0
-        }
-        println "rends " + rendimientos
 
-        def parametros = ""+params.id+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-        preciosService.ac_rbro(params.id,params.lugar,fecha.format("yyyy-MM-dd"))
+//        def parametros = ""+params.id+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+        def parametros = ""+rubro.id+",'"+fecha.format("yyyy-MM-dd")+"',"+listas+","+params.dsp0+","+params.dsp1+","+params.dsv0+","+params.dsv1+","+params.dsv2+","+params.chof+","+params.volq
+        preciosService.ac_rbroV2(params.id,fecha.format("yyyy-MM-dd"),params.lugar)
         def res = preciosService.rb_precios(parametros,"order by grpocdgo desc")
 
         WorkbookSettings workbookSettings = new WorkbookSettings()
@@ -236,9 +208,9 @@ class Reportes3Controller {
 
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
-        def label = new Label(0, 1,"Gobierno Autónomo Descentralizado de la provincia de Pichincha".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0,2, "Departamento de costos".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1,"GOBIERNO  AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0,2, "GESTIÓN DE PRESUPUESTOS".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 3, "ANÁLISIS DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
 
         sheet.mergeCells(0,1, 1, 1)
         sheet.mergeCells(0,2, 1,2)
@@ -272,10 +244,10 @@ class Reportes3Controller {
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
                     label = new Label(2, fila, "Cantidad", times16format); sheet.addCell(label);
-                    label = new Label(3, fila, "Tarifa", times16format); sheet.addCell(label);
-                    label = new Label(4, fila, "Costo", times16format); sheet.addCell(label);
+                    label = new Label(3, fila, "Tarifa(\$/hora)", times16format); sheet.addCell(label);
+                    label = new Label(4, fila, "Costo(\$)", times16format); sheet.addCell(label);
                     label = new Label(5, fila, "Rendimiento", times16format); sheet.addCell(label);
-                    label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
+                    label = new Label(6, fila, "C.Total(\$)", times16format); sheet.addCell(label);
                     fila++
                 }
                 band=1
@@ -303,10 +275,10 @@ class Reportes3Controller {
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
                     label = new Label(2, fila, "Cantidad", times16format); sheet.addCell(label);
-                    label = new Label(3, fila, "Jornal", times16format); sheet.addCell(label);
-                    label = new Label(4, fila, "Costo", times16format); sheet.addCell(label);
+                    label = new Label(3, fila, "Jornal(\$/hora)", times16format); sheet.addCell(label);
+                    label = new Label(4, fila, "Costo(\$)", times16format); sheet.addCell(label);
                     label = new Label(5, fila, "Rendimiento", times16format); sheet.addCell(label);
-                    label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
+                    label = new Label(6, fila, "C.Total(\$)", times16format); sheet.addCell(label);
                     fila++
                 }
                 band=2
@@ -335,7 +307,8 @@ class Reportes3Controller {
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
                     label = new Label(2, fila, "Cantidad", times16format); sheet.addCell(label);
                     label = new Label(3, fila, "Unitario", times16format); sheet.addCell(label);
-                    label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
+                    label = new Label(4, fila, "Unidad", times16format); sheet.addCell(label);
+                    label = new Label(6, fila, "C.Total(\$)", times16format); sheet.addCell(label);
                     fila++
                 }
                 band=3
@@ -373,7 +346,7 @@ class Reportes3Controller {
             label = new Label(3, fila, "Cantidad", times16format); sheet.addCell(label);
             label = new Label(4, fila, "Distancia", times16format); sheet.addCell(label);
             label = new Label(5, fila, "Unitario", times16format); sheet.addCell(label);
-            label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
+            label = new Label(6, fila, "C.Total(\$)", times16format); sheet.addCell(label);
             fila++
             rowsTrans.each {rt->
                 label = new Label(0, fila,rt["itemcdgo"], times10); sheet.addCell(label);
@@ -418,11 +391,11 @@ class Reportes3Controller {
         sheet.mergeCells(4,fila+1, 5, fila+1)
         label = new Label(4, fila+2,"Costo total del rubro", times16format); sheet.addCell(label);
         sheet.mergeCells(4,fila+2, 5, fila+2)
-        label = new Label(4, fila+3,"Precio unitario", times16format); sheet.addCell(label);
+        label = new Label(4, fila+3,"Precio unitario(\$USD)", times16format); sheet.addCell(label);
         sheet.mergeCells(4,fila+3, 5, fila+3)
-        number = new Number(6, fila, totalRubro);sheet.addCell(number);
-        number = new Number(6, fila+1, totalIndi);sheet.addCell(number);
-        number = new Number(6, fila+2, totalRubro+totalIndi);sheet.addCell(number);
+        number = new Number(6, fila, totalRubro.toDouble().round(5));sheet.addCell(number);
+        number = new Number(6, fila+1, (totalIndi).toDouble().round(5));sheet.addCell(number);
+        number = new Number(6, fila+2, (totalRubro+totalIndi).toDouble().round(5));sheet.addCell(number);
         number = new Number(6, fila+3, (totalRubro+totalIndi).toDouble().round(2));sheet.addCell(number);
 
 
@@ -454,38 +427,7 @@ class Reportes3Controller {
         if (params.obra){
             obra = Obra.get(params.obra)
         }
-//        if (!params.dsps){
-//            params.dsps=0 //distancia peso
-//            params.prch=0 //precio chofer
-//            params.prvl=0 //precio volquete
-//            params.dsvs=0 //distancia volumen
-//        }
-//        if (!params.dsvs){
-//            params.dsps=0
-//            params.dsvs=0
-//            params.prvl=0
-//            params.prch=0
-//        }
-//        if (!params.prch)
-//            params.prch=0
-//        if (!params.prvl)
-//            params.prvl=0
-//        def rendimientos
-//        if(!params.obra)
-//            rendimientos = preciosService.rendimientoTranposrte(params.dsps.toDouble(),params.dsvs.toDouble(),params.prch.toDouble(),params.prvl.toDouble())
-//        else
-//            rendimientos = preciosService.rendimientoTransporteLuz(Obra.get(params.obra),params.prch.toDouble(),params.prvl.toDouble())
-//
-////        println "rends "+rendimientos
-//        if (rendimientos["rdps"].toString()=="NaN" || rendimientos["rdps"].toString()=="Infinity"){
-//            rendimientos["rdps"]=0
-//            rendimientos["rdvl"]=0
-//        }
-//        if (rendimientos["rdvl"].toString()=="NaN" || rendimientos["rdvl"].toString()=="Infinity"){
-//            rendimientos["rdvl"]=0
-//            rendimientos["rdps"]=0
-//        }
-//        def parametros = ""+params.id+","+params.lugar+",'"+fecha.format("yyyy-MM-dd")+"',"+params.dsps.toDouble()+","+params.dsvs.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+
         def parametros = ""+rubro.id+",'"+fecha.format("yyyy-MM-dd")+"',"+listas+","+params.dsp0+","+params.dsp1+","+params.dsv0+","+params.dsv1+","+params.dsv2+","+params.chof+","+params.volq
         preciosService.ac_rbroV2(params.id,fecha.format("yyyy-MM-dd"),params.lugar)
         def res = preciosService.rb_precios(parametros,"")
@@ -532,14 +474,25 @@ class Reportes3Controller {
             }
             if(r["grpocdgo"]==1){
                 tablaMat+="<tr>"
-                tablaMat+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
-                tablaMat+="<td>"+r["itemnmbr"]+"</td>"
-                tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
-                tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbpcpcun"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
-                tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
-                tablaMat+="<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
-                tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
-                totalMat+=r["parcial"]
+                if(!params.trans){
+                    tablaMat+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
+                    tablaMat+="<td>"+r["itemnmbr"]+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbpcpcun"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
+                    totalMat+=r["parcial"]
+                }else{
+                    tablaMat+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
+                    tablaMat+="<td>"+r["itemnmbr"]+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbpcpcun"]+r["parcial_t"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
+                    totalMat+=r["parcial"]+r["parcial_t"]
+                }
                 tablaMat+="</tr>"
             }
             if(r["parcial_t"]>0){
@@ -565,13 +518,18 @@ class Reportes3Controller {
         tablaMano+="</tbody></table>"
         tablaMat+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${g.formatNumber(number:totalMat ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")}</td></tr>"
         tablaMat+="</tbody></table>"
-        def totalRubro=total+totalHer+totalMan+totalMat
+        def totalRubro=0
+        if (!params.trans){
+            totalRubro=total+totalHer+totalMan+totalMat
+        }else{
+            totalRubro=totalHer+totalMan+totalMat
+        }
         def totalIndi=totalRubro*indi/100
         tablaIndi+="<thead><tr><th colspan='3'>Costos indirectos</th></tr><tr><th style='width:550px'>Descripción</th><th>Porcentaje</th><th>Valor</th></tr></thead>"
         tablaIndi+="<tbody><tr><td>Costos indirectos</td><td style='text-align:right'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number:totalIndi ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5")}</td></tr></tbody>"
         tablaIndi+="</table>"
 
-        if (total==0)
+        if (total==0 || params.trans=="no")
             tablaTrans=""
         if(totalHer==0)
             tablaHer=""
