@@ -95,7 +95,7 @@
                 </p>
             </div>
         </g:if>
-        <g:else>
+        <g:elseif test="${ext != ''}">
             <fieldset style="width: 650px;min-height: 500px;margin: 10px;margin-left: 0px;position: relative;padding-left: 50px;" class="borde_abajo">
                 <p class="css-vertical-text">
                     Foto
@@ -104,7 +104,7 @@
                 <div class="linea" style="height: 98%;"></div>
                 <img src="${resource(dir: 'rubros', file: rubro?.foto)}" alt="" style="margin-bottom: 10px;max-width: 600px"/>
             </fieldset>
-        </g:else>
+        </g:elseif>
         <script type="text/javascript">
             $("#submit").click(function () {
                 $("#frmUpload").submit();

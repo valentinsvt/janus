@@ -11,14 +11,27 @@ class ElementosTagLib {
     static namespace = "elm"
 
     Closure numero = { attrs ->
-        if (!attrs.format) {
-            attrs.format = "##,##0"
-        }
-        if (!attrs.minFractionDigits) {
-            attrs.minFractionDigits = 2
-        }
-        if (!attrs.maxFractionDigits) {
-            attrs.maxFractionDigits = 2
+        if (!attrs.decimales) {
+            if (!attrs.format) {
+                attrs.format = "##,##0"
+            }
+            if (!attrs.minFractionDigits) {
+                attrs.minFractionDigits = 2
+            }
+            if (!attrs.maxFractionDigits) {
+                attrs.maxFractionDigits = 2
+            }
+        } else {
+            attrs.format = "##"
+            if (attrs.decimales > 0) {
+                attrs.format += ","
+                attrs.decimales.times {
+                    attrs.format += "#"
+                }
+                attrs.format += "0"
+            }
+            attrs.maxFractionDigits = attrs.decimales
+            attrs.minFractionDigits = attrs.decimales
         }
         if (!attrs.locale) {
             attrs.locale = "ec"
