@@ -1,8 +1,8 @@
 <style type="text/css">
 .tab {
-    height     : 260px !important;
+    height     : 410px !important;
     overflow-x : hidden;
-    overflow-y : auto;
+    overflow-y : hidden;
 }
 
 .inputVar {
@@ -19,7 +19,7 @@
 </style>
 
 <g:form controller="variables" action="saveVar_ajax" name="frmSave-var">
-    <div id="tabs" style="height: 335px;">
+    <div id="tabs" style="height: 430px">
         <ul>
             <li><a href="#tab-transporte">Variables de Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>
@@ -72,7 +72,7 @@
             </div>
 
 
-            <div class="span6" style="margin-bottom: 20px; margin-top: 10px">
+            <div class="span6" style="margin-bottom: 20px; margin-top: 5px">
 
                 <div class="span3" style="font-weight: bold;">
 
@@ -157,6 +157,71 @@
                     <g:textField type="text" name="distanciaVolumenCarpetaAsfaltica" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
+                </div>
+
+            </div>
+
+
+            <div class="row-fluid" style="margin-top: 10px">
+
+                <div class="span3">
+                    Cantón
+
+                </div>
+
+                <div class="span4" style="margin-left: -60px">
+                    <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_1" noSelection="['-1':'Seleccione..']"/>
+
+                </div>
+
+                <div class="span3" style="margin-left: -20px">
+                    Petreos Hormigones
+                </div>
+                <div class="span4">
+                    <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_3" noSelection="['-1':'Seleccione..']"/>
+
+                </div>
+
+            </div>
+
+            <div class="row-fluid">
+
+                <div class="span3">
+
+                    Especial
+                </div>
+
+                <div class="span4" style="margin-left: -60px">
+
+                    <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_2" noSelection="['-1':'Seleccione..']"/>
+                </div>
+
+                <div class="span3" style="margin-left: -20px">
+
+                    Mejoramiento
+                </div>
+
+                <div class="span4">
+
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_4" noSelection="['-1':'Seleccione..']"/>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="row-fluid">
+
+                <div class="span3" style="margin-left: 250px">
+
+                    Carpeta Asfáltica
+                </div>
+
+                <div class="span4">
+
+               <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_5" noSelection="['-1':'Seleccione..']"/>
+
                 </div>
 
             </div>
