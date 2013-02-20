@@ -113,7 +113,7 @@
 
             <div class="controls">
                 <div class="input-append">
-                    <g:field type="number" name="peso" maxlength="20" maxfractiondigits="5" class=" required input-small" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>
+                    <g:field type="number" name="peso" maxlength="20" class=" required input-small peso" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>
                     <span class="add-on" id="spanPeso">
                         <g:if test="${itemInstance && itemInstance.id}">
                             ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}
@@ -208,6 +208,61 @@
 </g:form>
 
 <script type="text/javascript">
+
+
+
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 190 || ev.keyCode == 110 ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+    $(".peso").bind({
+        keydown : function (ev) {
+            // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+            if (ev.keyCode == 190 || ev.keyCode == 110) {
+                var val = $(this).val();
+                if (val.length == 0) {
+                    $(this).val("0");
+                }
+                return val.indexOf(".") == -1;
+            } else {
+                // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                return validarNum(ev);
+            }
+        }, //keydown
+        keyup   : function () {
+            var val = $(this).val();
+            // esta parte valida q no ingrese mas de 2 decimales
+            var parts = val.split(".");
+            if (parts.length > 1) {
+                if (parts[1].length > 5) {
+                    parts[1] = parts[1].substring(0, 5);
+                    val = parts[0] + "." + parts[1];
+                    $(this).val(val);
+                }
+            }
+
+        }
+    });
+
+
+
+
 
     $(".allCaps").blur(function () {
         this.value = this.value.toUpperCase();

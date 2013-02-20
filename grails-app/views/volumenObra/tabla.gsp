@@ -27,9 +27,6 @@
 
 
 
-
-
-
 </div>
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>
@@ -140,7 +137,30 @@
 
         %{--var url = "${g.createLink(controller: 'reportes', action: 'reporteExcelVolObra')}"--}%
 
-        location.href = "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra',id: obra?.id)}"
+        $("#dlgLoad").dialog("open");
+
+        $.ajax( {
+
+            type: 'POST',
+            url: "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra')}",
+            data:{
+
+                id:'${obra?.id}'
+
+            },
+            success: function (msg) {
+               location.href = "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra',id: obra?.id)}";
+                $("#dlgLoad").dialog("close");
+
+
+
+            }
+
+
+
+        });
+
+
 
     });
 
