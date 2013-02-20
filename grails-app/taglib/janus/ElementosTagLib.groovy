@@ -22,16 +22,17 @@ class ElementosTagLib {
                 attrs.maxFractionDigits = 2
             }
         } else {
+            def dec = attrs.remove("decimales").toInteger()
             attrs.format = "##"
-            if (attrs.decimales > 0) {
+            if (dec > 0) {
                 attrs.format += ","
-                attrs.decimales.times {
+                dec.times {
                     attrs.format += "#"
                 }
                 attrs.format += "0"
             }
-            attrs.maxFractionDigits = attrs.decimales
-            attrs.minFractionDigits = attrs.decimales
+            attrs.maxFractionDigits = dec
+            attrs.minFractionDigits = dec
         }
         if (!attrs.locale) {
             attrs.locale = "ec"

@@ -73,13 +73,13 @@
 
                     <div class="btn-group">
                         %{--<input type="submit" value="Guardar" class="btn btn-primary">--}%
-                        <a href="#" id="submit" class="btn btn-primary">
+                        <a href="#" id="submit" class="btn ">
                             <i class="icon-save"></i> Guardar
                         </a>
-                        <g:link action="downloadFile" id="${rubro.id}" class="btn btn-warning">
+                        <g:link action="downloadFile" id="${rubro.id}" class="btn ">
                             <i class="icon-download-alt"></i> Descargar
                         </g:link>
-                        <a href="#" id="salir" class="btn btn-danger">
+                        <a href="#" id="salir" class="btn ">
                             <i class="icon-minus-sign"></i> Salir
                         </a>
                     </div>
