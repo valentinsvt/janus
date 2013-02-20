@@ -484,15 +484,15 @@ class Reportes3Controller {
         def parametros = ""+rubro.id+",'"+fecha.format("yyyy-MM-dd")+"',"+listas+","+params.dsp0+","+params.dsp1+","+params.dsv0+","+params.dsv1+","+params.dsv2+","+params.chof+","+params.volq
         preciosService.ac_rbroV2(params.id,fecha.format("yyyy-MM-dd"),params.lugar)
         def res = preciosService.rb_precios(parametros,"")
-        def tablaHer='<table class="table table-bordered table-striped table-condensed table-hover"> '
-        def tablaMano='<table class="table table-bordered table-striped table-condensed table-hover"> '
-        def tablaMat='<table class="table table-bordered table-striped table-condensed table-hover"> '
-        def tablaTrans='<table class="table table-bordered table-striped table-condensed table-hover"> '
-        def tablaIndi='<table class="table table-bordered table-striped table-condensed table-hover"> '
+        def tablaHer='<table class=""> '
+        def tablaMano='<table class=""> '
+        def tablaMat='<table class=""> '
+        def tablaTrans='<table class=""> '
+        def tablaIndi='<table class=""> '
         def total = 0,totalHer=0,totalMan=0,totalMat=0
         tablaTrans+="<thead><tr><th colspan='7'>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></tr></thead><tbody>"
 
-        tablaHer+="<thead><tr><th colspan='7'>Herramienta</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
+        tablaHer+="<thead><tr><th colspan='7'>Herramienta</th></tr><tr><th style='width: 80px'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
         tablaMano+="<thead><tr><th colspan='7'>Mano de obra</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Jornal</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
         tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Unitario</th><th></th><th></th><th>C.Total</th></tr></thead><tbody>"
 //        println "rends "+rendimientos

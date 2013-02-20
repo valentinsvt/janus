@@ -113,7 +113,7 @@
 
             <div class="controls">
                 <div class="input-append">
-                    <g:field type="number" name="peso" maxlength="20" class=" required input-small" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>
+                    <g:field type="number" name="peso" maxlength="20" maxfractiondigits="5" class=" required input-small" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>
                     <span class="add-on" id="spanPeso">
                         <g:if test="${itemInstance && itemInstance.id}">
                             ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}

@@ -110,7 +110,7 @@
         </div>
         <div class="row-fluid">
             <div class="span2"  >
-                Clase
+                Solicitante
                 <g:select name="rubro.grupo.id" id="selClase" from="${grupos}" class="span12" optionKey="id" optionValue="descripcion"
                           value="${rubro?.departamento?.subgrupo?.grupo?.id}" noSelection="['': '--Seleccione--']"/>
             </div>
@@ -829,15 +829,32 @@
         });
 
         $("#excel").click(function(){
-            var dsps=$("#dist_peso").val()
-            var dsvs=$("#dist_vol").val()
-            var volqueta=$("#costo_volqueta").val()
-            var chofer=$("#costo_chofer").val()
+            %{--var dsps=$("#dist_peso").val()--}%
+            %{--var dsvs=$("#dist_vol").val()--}%
+            %{--var volqueta=$("#costo_volqueta").val()--}%
+            %{--var chofer=$("#costo_chofer").val()--}%
             %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
             %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
-            var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&indi="+$("#costo_indi").val()
+            %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&indi="+$("#costo_indi").val()--}%
+            %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroExcel')}"+datos--}%
+            %{--location.href=url--}%
+
+            var dsp0=$("#dist_p1").val()
+            var dsp1=$("#dist_p2").val()
+            var dsv0=$("#dist_v1").val()
+            var dsv1=$("#dist_v2").val()
+            var dsv2=$("#dist_v3").val()
+            var listas = $("#lista_1").val()+","+$("#lista_2").val()+","+$("#lista_3").val()+","+$("#lista_4").val()+","+$("#lista_5").val()+","+$("#ciudad").val()
+            var volqueta=$("#costo_volqueta").val()
+            var chofer=$("#costo_chofer").val()
+
+            datos="dsp0="+dsp0+"Wdsp1="+dsp1+"Wdsv0="+dsv0+"Wdsv1="+dsv1+"Wdsv2="+dsv2+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()+"Wlistas="+listas+"Wchof="+$("#cmb_chof").val()+"Wvolq="+$("#cmb_vol").val()+"Windi="+$("#costo_indi").val()
+
+
             var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroExcel')}"+datos
             location.href=url
+
+
         });
 
         $("#imprimir").click(function(){
