@@ -62,9 +62,16 @@
         Excel
     </a>
     <g:if test="${rubro}">
+        <a href="#" id="detalle" class="btn btn-ajax btn-new" >
+            <i class="icon-list"></i>
+            Especificaciones
+        </a>
+
+    </g:if>
+    <g:if test="${rubro}">
         <a href="#" id="foto" class="btn btn-ajax btn-new" >
             <i class="icon-picture"></i>
-            Foto
+            Ilustración
         </a>
 
     </g:if>
@@ -166,9 +173,9 @@
         %{--</div>--}%
         %{--</div>--}%
 
-        <div class="span4">
-            Lista
-            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad"/>
+        <div class="span7">
+            Lista de equipos y materiales
+            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 400px"/>
         </div>
 
         <div class="span2">
@@ -244,10 +251,10 @@
             <th style="width: 80px;">
                 Cantidad
             </th>
-            <th class="col_tarifa" style="display: none;">Tarifa</th>
-            <th class="col_hora" style="display: none;">C.Hora</th>
+            <th class="col_tarifa" style="display: none;">Tarifa <br>($/hora)</th>
+            <th class="col_hora" style="display: none;">Costo($)</th>
             <th class="col_rend" style="width: 50px">Rendimiento</th>
-            <th class="col_total" style="display: none;">C.Total</th>
+            <th class="col_total" style="display: none;">C.Total($)<br>($/hora)</th>
             <th style="width: 40px" class="col_delete"></th>
         </tr>
         </thead>
@@ -289,10 +296,10 @@
                 Cantidad
             </th>
 
-            <th class="col_jornal" style="display: none;"  >Jornal</th>
-            <th class="col_hora" style="display: none;">C.Hora</th>
+            <th class="col_jornal" style="display: none;"  >Jornal<br>($/hora)</th>
+            <th class="col_hora" style="display: none;">Costo($)</th>
             <th class="col_rend" style="width: 50px;">Rendimiento</th>
-            <th class="col_total" style="display: none;">C.Total</th>
+            <th class="col_total" style="display: none;">C.Total($)</th>
             <th style="width: 40px" class="col_delete"></th>
         </tr>
         </thead>
@@ -340,7 +347,7 @@
             <th class="col_precioUnit" style="display: none;">Unitario</th>
             <th class="col_vacio" style="width: 55px;display: none"></th>
             <th class="col_vacio" style="width: 55px;display: none"></th>
-            <th class="col_total" style="display: none;">C.Total</th>
+            <th class="col_total" style="display: none;">C.Total($)</th>
         </tr>
         </thead>
         <tbody id="tabla_material">
@@ -385,6 +392,22 @@
     </div>
 
     <div class="modal-footer" id="modalFooter">
+    </div>
+</div>
+<div class="modal large hide fade " id="modal-detalle" style=";overflow: hidden;">
+    <div class="modal-header btn-info">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modalTitle-detalle">Especificaciones</h3>
+    </div>
+
+    <div class="modal-body" id="modalBody-detalle">
+        Especificaciones:<br>
+        <textarea id="especificaciones" style="width: 700px;height: 150px;resize: none;margin-top: 10px"></textarea>
+    </div>
+
+    <div class="modal-footer" id="modalFooter-detalle">
+        <a href="#"id="save-espc" class="btn btn-info">Guardar</a>
     </div>
 </div>
 <div class="modal large hide fade " id="modal-transporte" style=";overflow: hidden;">
@@ -521,6 +544,7 @@
         </div>
 
     </div>
+    <input type="hidden" id="totMat_h">
 
     <div class="modal-footer" id="modal_trans_footer">
         <a href="#" data-dismiss="modal" class="btn btn-primary">OK</a>
@@ -619,9 +643,10 @@
 
 
     function calculaHerramientas(){
-        var h2 = $("#i_2868")
-        var h3 = $("#i_2870")
-        var h5 = $("#i_2869")
+//        console.log("calc herramientas")
+        var h2 = $("#i_3490")
+        var h3 = $("#i_3492")
+        var h5 = $("#i_3491")
         var h
         if(h2.html())
             h=h2
@@ -632,9 +657,15 @@
 
 
         if(h){
-
+//            console.log("si h")
             var precio = 0
-            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids="+ str_replace("i_","",h.attr("id"))
+            var listas =""+$("#lista_1").val()+"#"+$("#lista_2").val()+"#"+$("#lista_3").val()+"#"+$("#lista_4").val()+"#"+$("#lista_5").val()+"#"+$("#ciudad").val()
+
+            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&tipo=C"+"&listas="+listas+"&ids="+ str_replace("i_","",h.attr("id"))
+//            $.each(items, function () {
+//                datos += $(this).attr("id") + "#"
+//            });
+//            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids="+ str_replace("i_","",h.attr("id"))
             $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPrecios')}",
                 data     : datos,
                 success  : function (msg) {
@@ -700,8 +731,17 @@
             trE.append(td)
         }
 
+        td=$("<td>")
+        trM.append(td)
         materiales.each(function(){
-            totalM+=parseFloat($(this).find(".col_total").html())
+//            console.log($(this),$(this).find(".col_total").html())
+            var val =$(this).find(".col_total").html()
+            if(val=="")
+                val=0
+            if(isNaN(val))
+                val=0
+//            console.log(val)
+            totalM+=parseFloat(val)
         })
         manos.each(function(){
             totalMa+=parseFloat($(this).find(".col_total").html())
@@ -715,6 +755,7 @@
         $("#tabla_material").append(trM)
         $("#tabla_mano").append(trMa)
 //        console.log(totalMa)
+        $("#totMat_h").val(totalMa)
         calculaHerramientas()
 //        window.setTimeout(vacio,2000)
 //
@@ -751,7 +792,7 @@
         tabla.append("<tr><td style='width: 300px;font-weight: bolder;'>Costo unitario directo</td><td style='text-align: right;font-weight: bold'>"+number_format(total, 5, ".", "")+"</td></tr>")
         tabla.append("<tr><td style='font-weight: bolder'>Costos indirectos</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100, 5, ".", "")+"</td></tr>")
         tabla.append("<tr><td style='font-weight: bolder'>Costos total del rubro</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100+total, 5, ".", "")+"</td></tr>")
-        tabla.append("<tr><td style='font-weight: bolder'>Precio unitario</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100+total, 2, ".", "")+"</td></tr>")
+        tabla.append("<tr><td style='font-weight: bolder'>Precio unitario ($USD)</td><td style='text-align: right;font-weight: bold'>"+number_format(total*indi/100+total, 2, ".", "")+"</td></tr>")
         tabla.append("</tbody>");
         $("#tabla_costos").append(tabla)
         $("#tabla_costos").show("slide")
@@ -759,6 +800,55 @@
 
     $(function () {
 
+
+        $("#detalle").click(function(){
+            $("#modal-detalle").modal("show");
+        });
+        $("#save-espc").click(function(){
+            if($("#especificaciones").val().trim().length<1024){
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'saveEspc')}",
+                    data     : "id=${rubro?.id}&espc="+$("#especificaciones").val(),
+                    success  : function (msg) {
+                        if(msg=="ok"){
+                            $("#modal-detalle").modal("hide");
+                        }else{
+                            $.box({
+                                imageClass : "box_info",
+                                text       : "Error",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    draggable : false,
+                                    buttons   : {
+                                        "Aceptar" : function () {
+                                        }
+                                    },
+                                    width     : 500
+                                }
+                            });
+                        }
+                    }
+                });
+            }else{
+                $.box({
+                    imageClass : "box_info",
+                    text       : "Error",
+                    title      : "Error: Las especificaciones deben tener un máximo de 1024 caracteres",
+                    iconClose  : false,
+                    dialog     : {
+                        resizable : false,
+                        draggable : false,
+                        buttons   : {
+                            "Aceptar" : function () {
+                            }
+                        },
+                        width     : 500
+                    }
+                });
+            }
+
+        });
 
 
         $("#foto").click(function () {
@@ -848,7 +938,7 @@
             var volqueta=$("#costo_volqueta").val()
             var chofer=$("#costo_chofer").val()
 
-            datos="dsp0="+dsp0+"Wdsp1="+dsp1+"Wdsv0="+dsv0+"Wdsv1="+dsv1+"Wdsv2="+dsv2+"Wprvl="+volqueta+"Wprch="+chofer+"Wfecha="+$("#fecha_precios").val()+"Wid=${rubro?.id}Wlugar="+$("#ciudad").val()+"Wlistas="+listas+"Wchof="+$("#cmb_chof").val()+"Wvolq="+$("#cmb_vol").val()+"Windi="+$("#costo_indi").val()
+            datos="?dsp0="+dsp0+"&dsp1="+dsp1+"&dsv0="+dsv0+"&dsv1="+dsv1+"&dsv2="+dsv2+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&listas="+listas+"&chof="+$("#cmb_chof").val()+"&volq="+$("#cmb_vol").val()+"&indi="+$("#costo_indi").val()
 
 
             var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroExcel')}"+datos
@@ -873,11 +963,11 @@
             var chofer=$("#costo_chofer").val()
 
             %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'transporte')}",--}%
-                %{--data     : "dsp0="+dsp0+"&dsp1="+dsp1+"&dsv0="+dsv0+"&dsv1="+dsv1+"&dsv2="+dsv2+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&listas="+listas+"&chof="+$("#cmb_chof").val()+"&volq="+$("#cmb_vol").val(),--}%
-                %{--success  : function (msg) {--}%
-                    %{--$("#tabla_transporte").html(msg)--}%
-                    %{--tablaIndirectos();--}%
-                %{--}--}%
+            %{--data     : "dsp0="+dsp0+"&dsp1="+dsp1+"&dsv0="+dsv0+"&dsv1="+dsv1+"&dsv2="+dsv2+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&listas="+listas+"&chof="+$("#cmb_chof").val()+"&volq="+$("#cmb_vol").val(),--}%
+            %{--success  : function (msg) {--}%
+            %{--$("#tabla_transporte").html(msg)--}%
+            %{--tablaIndirectos();--}%
+            %{--}--}%
             %{--});--}%
 
             %{--"dsp0="+dsp0+"&dsp1="+dsp1+"&dsv0="+dsv0+"&dsv1="+dsv1+"&dsv2="+dsv2+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()+"&listas="+listas+"&chof="+$("#cmb_chof").val()+"&volq="+$("#cmb_vol").val()--}%
@@ -1147,7 +1237,7 @@
                         });
 
                         $(".col_delete").hide()
-                        $(".col_unidad").hide()
+//                        $(".col_unidad").hide()
                         $(".col_tarifa").show()
                         $(".col_hora").show()
                         $(".col_total").show()

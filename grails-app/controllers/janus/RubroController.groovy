@@ -50,6 +50,15 @@ class RubroController extends janus.seguridad.Shield {
         render sel
     }
 
+    def saveEspc(){
+        def rubro=Item.get(params.id)
+        rubro.especificaciones=params.espc
+        if (rubro.save(flush: true))
+            render "ok"
+        else
+            render "no"
+    }
+
     def rubroPrincipal() {
         def rubro
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]

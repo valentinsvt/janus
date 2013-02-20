@@ -111,10 +111,10 @@
             <b>GOBIERNO  AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA </b>
         </p>
         <p>
-            DEPARTAMENTO DE COSTOS
+            GESTIÓN DE PRESUPUESTOS
         </p>
         <p>
-            ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO
+            ANÁLISIS DE PRECIOS UNITARIOS
         </p>
     </div>
     <div style="margin-top: 20px">
@@ -135,7 +135,7 @@
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span8">
+            <div class="span8" style="font-size: 13px">
                 <g:set var="nombre" value="${rubro.nombre.replaceAll('<','(menor)')}"></g:set>
                 <g:set var="nombre" value="${rubro.nombre.replaceAll('<','(mayor)')}"></g:set>
                 <b>Descripción:</b> ${nombre}
@@ -156,7 +156,7 @@
                       <b>Costo unitario directo </b>
                 </td>
                 <td style="text-align: right">
-                    <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
+                    <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
                 </td>
             </tr>
             <tr>
@@ -164,7 +164,7 @@
                     <b>Costos indirectos</b>
                 </td>
                 <td style="text-align: right">
-                    <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
+                    <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
                 </td>
             </tr>
             <tr>
@@ -172,12 +172,12 @@
                     <b>Costo total del rubro</b>
                 </td>
                 <td style="text-align: right">
-                    <g:formatNumber number="${totalRubro+totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
+                    <g:formatNumber number="${totalRubro+totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <b>Precio unitario </b>
+                    <b>Precio unitario ($USD) </b>
                 </td>
                 <td style="text-align: right">  <g:formatNumber number="${totalRubro+totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
 
@@ -186,8 +186,14 @@
 
             </tbody>
         </table>
-    </div>
 
+    </div>
+    <div style="width: 100%;float: left;height: 30px;margin-top: 40px;text-align: right">
+        Parámetros para los datos de presupuesto  obtenidos de la obra: ${obra}
+    </div>
+    <div style="width: 100%;float: left;height: 20px;margin-top: 10px;text-align: right">
+        <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.
+    </div>
 
 </div>
 </body>
