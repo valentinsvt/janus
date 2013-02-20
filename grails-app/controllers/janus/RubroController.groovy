@@ -50,9 +50,9 @@ class RubroController extends janus.seguridad.Shield {
         render sel
     }
 
-    def saveEspc(){
-        def rubro=Item.get(params.id)
-        rubro.especificaciones=params.espc
+    def saveEspc() {
+        def rubro = Item.get(params.id)
+        rubro.especificaciones = params.espc
         if (rubro.save(flush: true))
             render "ok"
         else
@@ -66,23 +66,23 @@ class RubroController extends janus.seguridad.Shield {
         def volquetes = []
         def choferes = []
         def aux = Parametros.get(1)
-        def grupoTransporte=DepartamentoItem.findAllByTransporteIsNotNull()
+        def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
         grupoTransporte.each {
-            if(it.transporte.codigo=="H")
-                choferes=Item.findAllByDepartamento(it)
-            if(it.transporte.codigo=="T")
-                volquetes=Item.findAllByDepartamento(it)
+            if (it.transporte.codigo == "H")
+                choferes = Item.findAllByDepartamento(it)
+            if (it.transporte.codigo == "T")
+                volquetes = Item.findAllByDepartamento(it)
         }
         grupos.add(Grupo.get(4))
         grupos.add(Grupo.get(5))
         grupos.add(Grupo.get(6))
         if (params.idRubro) {
             rubro = Item.get(params.idRubro)
-            def items=Rubro.findAllByRubro(rubro)
-            items.sort{it.item.codigo}
-            [campos: campos, rubro: rubro, grupos: grupos,items:items,choferes:choferes,volquetes:volquetes,aux:aux]
+            def items = Rubro.findAllByRubro(rubro)
+            items.sort { it.item.codigo }
+            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux]
         } else {
-            [campos: campos, grupos: grupos,choferes:choferes,volquetes:volquetes,aux:aux]
+            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux]
         }
     }
 
@@ -90,7 +90,7 @@ class RubroController extends janus.seguridad.Shield {
 //        println "get datos items "+params
         def item = Item.get(params.id)
 //        println "render "+  item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad.codigo + "&" + item.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
-        render "" + item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad?.codigo?.trim() + "&" + item.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
+        render "" + item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad?.codigo?.trim() + "&" + item.rendimiento + "&" + ((item.tipoLista) ? item.tipoLista?.id : "0")
     }
 
     def addItem() {
@@ -104,28 +104,28 @@ class RubroController extends janus.seguridad.Shield {
         detalle.rubro = rubro
         detalle.item = item
         detalle.cantidad = params.cantidad.toDouble()
-        if(detalle.item.id.toInteger()==2868 || detalle.item.id.toInteger()==2869 || detalle.item.id.toInteger()==2870){
-            detalle.cantidad=1
-            if (detalle.item.id.toInteger()==2868)
-                detalle.rendimiento=1
-            if (detalle.item.id.toInteger()==2869)
-                detalle.rendimiento=1
-            if (detalle.item.id.toInteger()==2870)
-                detalle.rendimiento=1
-        }else{
+        if (detalle.item.id.toInteger() == 2868 || detalle.item.id.toInteger() == 2869 || detalle.item.id.toInteger() == 2870) {
+            detalle.cantidad = 1
+            if (detalle.item.id.toInteger() == 2868)
+                detalle.rendimiento = 1
+            if (detalle.item.id.toInteger() == 2869)
+                detalle.rendimiento = 1
+            if (detalle.item.id.toInteger() == 2870)
+                detalle.rendimiento = 1
+        } else {
             detalle.rendimiento = params.rendimiento.toDouble()
         }
-        if (detalle.item.departamento.subgrupo.grupo.id==2)
-            detalle.cantidad=Math.ceil(detalle.cantidad)
+        if (detalle.item.departamento.subgrupo.grupo.id == 2)
+            detalle.cantidad = Math.ceil(detalle.cantidad)
         detalle.fecha = new Date()
-        if (detalle.item.departamento.subgrupo.grupo.id==1)
-            detalle.rendimiento=1
+        if (detalle.item.departamento.subgrupo.grupo.id == 1)
+            detalle.rendimiento = 1
         if (!detalle.save(flush: true)) {
             println "detalle " + detalle.errors
         } else {
-            rubro.fechaModificacion=new Date()
+            rubro.fechaModificacion = new Date()
             rubro.save(flush: true)
-            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id+";"+detalle.item.id+";"+detalle.cantidad+";"+detalle.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
+            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id + ";" + detalle.item.id + ";" + detalle.cantidad + ";" + detalle.rendimiento + "&" + ((item.tipoLista) ? item.tipoLista?.id : "0")
         }
     }
 
@@ -168,8 +168,8 @@ class RubroController extends janus.seguridad.Shield {
 
     def buscaRubro() {
 
-        def listaTitulos = ["Código", "Descripción","Unidad"]
-        def listaCampos = ["codigo", "nombre","unidad"]
+        def listaTitulos = ["Código", "Descripción", "Unidad"]
+        def listaCampos = ["codigo", "nombre", "unidad"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaRubro", controller: "rubro")
         def funcionJs = "function(){"
@@ -261,7 +261,7 @@ class RubroController extends janus.seguridad.Shield {
 
                 }
             }
-            rubro.fechaModificacion=new Date()
+            rubro.fechaModificacion = new Date()
             rubro.save(flush: true)
             render "ok"
         } else {
@@ -296,7 +296,7 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.rubro.id)
             params.remove("rubro.fecha")
             rubro.tipoItem = TipoItem.get(2)
-            rubro.fechaModificacion=new Date()
+            rubro.fechaModificacion = new Date()
         } else {
             rubro = new Item(params)
             params.rubro.fecha = new Date()
@@ -359,13 +359,13 @@ class RubroController extends janus.seguridad.Shield {
         }
 
         def vo = VolumenesObra.findAllByItem(rubroInstance)
-        def obras = Obra.findAllByChoferOrVolquete(rubroInstance,rubroInstance)
+        def obras = Obra.findAllByChoferOrVolquete(rubroInstance, rubroInstance)
 //        println "vo "+vo
 //        println "obras "+obras
-        if (vo.size()+obras.size()>0){
+        if (vo.size() + obras.size() > 0) {
             render "Error"
             return
-        }else{
+        } else {
             try {
                 def comp = Rubro.findAllByRubro(rubroInstance)
                 comp.each {
@@ -376,7 +376,7 @@ class RubroController extends janus.seguridad.Shield {
                 return
             }
             catch (DataIntegrityViolationException e) {
-                println "error del rubro "+e
+                println "error del rubro " + e
                 render "Error"
                 return
             }
@@ -394,24 +394,24 @@ class RubroController extends janus.seguridad.Shield {
         def parts = params.ids.split("#")
         def listas = []
         def conLista = []
-        listas=params.listas.split("#")
+        listas = params.listas.split("#")
 //        println "listas "+listas
         parts.each {
-            if (it.size() > 0){
-                def item=Rubro.get(it).item
-                if (item.tipoLista){
+            if (it.size() > 0) {
+                def item = Rubro.get(it).item
+                if (item.tipoLista) {
                     conLista.add(item)
 //                    println "con lista "+item.tipoLista
-                }else{
+                } else {
                     items.add(item)
                 }
 
             }
 
         }
-        def precios=""
+        def precios = ""
 //        println "items "+items+"  con lista "+conLista
-        if (items.size()>0){
+        if (items.size() > 0) {
             precios = preciosService.getPrecioItemsString(fecha, lugar, items)
         }
 //        println "precios "+precios
@@ -419,14 +419,14 @@ class RubroController extends janus.seguridad.Shield {
 
         conLista.each {
 //            println "tipo "+ it.tipoLista.id.toInteger()
-            precios+=preciosService.getPrecioItemStringListaDefinida(fecha, listas[it.tipoLista.id.toInteger()-1], it.id)
+            precios += preciosService.getPrecioItemStringListaDefinida(fecha, listas[it.tipoLista.id.toInteger() - 1], it.id)
         }
-
 
 //        println "precios final " + precios
 //        println "--------------------------------------------------------------------------"
         render precios
     }
+
     def getPreciosTransporte() {
 //        println "get precios "+params
         def lugar = Lugar.get(params.ciudad)
@@ -444,53 +444,77 @@ class RubroController extends janus.seguridad.Shield {
     }
 
 
-    def transporte(){
+    def transporte() {
 //        println "transporte "+params
         def idRubro = params.id
-        def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def listas = params.listas
-        def parametros = ""+idRubro+",'"+fecha.format("yyyy-MM-dd")+"',"+listas+","+params.dsp0+","+params.dsp1+","+params.dsv0+","+params.dsv1+","+params.dsv2+","+params.chof+","+params.volq
+        def parametros = "" + idRubro + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
 //        println "paramtros " +parametros
-        def res = preciosService.rb_precios(parametros,"")
+        def res = preciosService.rb_precios(parametros, "")
 
-        def tabla='<table class="table table-bordered table-striped table-condensed table-hover"> '
+        def tabla = '<table class="table table-bordered table-striped table-condensed table-hover"> '
         def total = 0
-        tabla+="<thead><tr><th colspan=7>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></thead><tbody>"
+        tabla += "<thead><tr><th colspan=7>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></thead><tbody>"
 //        println "rends "+rendimientos
 
 //        println "res "+res
-        res.each {r->
-            if(r["parcial_t"]>0){
+        res.each { r ->
+            if (r["parcial_t"] > 0) {
 //                println "en tabla "+r["itemcdgo"]
-                tabla+="<tr>"
-                tabla+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
-                tabla+="<td>"+r["itemnmbr"]+"</td>"
-                tabla+="<td style='width: 50px;text-align: right'>"+r["itempeso"]+"</td>"
-                tabla+="<td style='width: 50px;text-align: right'>"+r["rbrocntd"]+"</td>"
-                tabla+="<td style='width: 50px;text-align: right'>"+r["distancia"]+"</td>"
-                tabla+="<td style='width: 50px;text-align: right'>"+r["tarifa"].toFloat().round(5)+"</td>"
-                tabla+="<td style='width: 50px;text-align: right'>"+r["parcial_t"]+"</td>"
-                total+=r["parcial_t"]
-                tabla+="</tr>"
+                tabla += "<tr>"
+                tabla += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
+                tabla += "<td>" + r["itemnmbr"] + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" + r["itempeso"] + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" + r["rbrocntd"] + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" + r["distancia"] + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" + r["tarifa"].toFloat().round(5) + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" + r["parcial_t"] + "</td>"
+                total += r["parcial_t"]
+                tabla += "</tr>"
             }
 
         }
-        tabla+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${total}</td>"
-        tabla+="</tbody></table>"
+        tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${total}</td>"
+        tabla += "</tbody></table>"
 
         render(tabla)
 //
 //        pg: select * from rb_precios(293, 4, '1-feb-2008', 50, 70, 0.1015477897561282, 0.1710401760227313);
     }
 
-    def showFoto(){
+    def showFoto() {
         def rubro = Item.get(params.id)
-        [rubro: rubro]
+
+        def ext = rubro.foto.split("\\.")
+        ext = ext[ext.size() - 1]
+
+        return [rubro: rubro, ext: ext]
     }
 
-    def uploadFile(){
+    def downloadFile() {
+        def rubro = Item.get(params.id)
+
+        def ext = rubro.foto.split("\\.")
+        ext = ext[ext.size() - 1]
+        def folder = "rubros"
+        def path = servletContext.getRealPath("/") + folder + File.separatorChar + rubro.foto
+
+        def file = new File(path)
+        def b = file.getBytes()
+        response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
+        response.setHeader("Content-disposition", "attachment; filename=" + rubro.foto)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
+    def uploadFile() {
 //        println "upload "+params
+
+        def acceptedExt = ["jpg", "png", "gif", "jpeg", "pdf"]
+
         def path = servletContext.getRealPath("/") + "rubros/"   //web-app/rubros
+        new File(path).mkdirs()
         def rubro = Item.get(params.rubro)
         def f = request.getFile('file')  //archivo = name del input type file
         if (f && !f.empty) {
@@ -505,30 +529,34 @@ class RubroController extends janus.seguridad.Shield {
                     ext = obj
                 }
             }
-            if (ext=="jpg" || ext=="JPG" || ext=="png" || ext=="PNG" || ext=="gif" || ext=="GIF" || ext=="jpeg" || ext=="JPEG"){
+            if (acceptedExt.contains(ext.toLowerCase())) {
                 def ahora = new Date()
-                fileName = "r_"+rubro.id+"_"+ahora.format("dd_MM_yyyy_hh_mm_ss")
-                def fn = fileName
+                fileName = "r_" + rubro.id + "_" + ahora.format("dd_MM_yyyy_hh_mm_ss")
                 fileName = fileName + "." + ext
                 def pathFile = path + fileName
-                def src = new File(pathFile)
-                def i = 1
                 def file = new File(pathFile)
                 f.transferTo(file)
 
-                rubro.foto= g.resource(dir: "rubros")+"/"+fileName
+                def old = rubro.foto
+                if (old && old.trim() != "") {
+                    def oldPath = servletContext.getRealPath("/") + "rubros/" + old
+                    def oldFile = new File(oldPath)
+                    if (oldFile.exists()) {
+                        oldFile.delete()
+                    }
+                }
+
+                rubro.foto = /*g.resource(dir: "rubros") + "/" + */ fileName
                 rubro.save(flush: true)
-
-
-            }else{
-                flash.message="Error: Los formatos permitidos son: JPG, JPEG, GIF, PNG"
+            } else {
+                flash.clase = "alert-error"
+                flash.message = "Error: Los formatos permitidos son: JPG, JPEG, GIF, PNG y PDF"
             }
-
-
-        }else{
-            flash.message="Error: Los formatos permitidos son: JPG, JPEG, GIF, PNG"
+        } else {
+            flash.clase = "alert-error"
+            flash.message = "Error: Seleccione un archivo JPG, JPEG, GIF, PNG ó PDF"
         }
-        redirect(action: "showFoto",id: rubro.id)
+        redirect(action: "showFoto", id: rubro.id)
         return
 
 

@@ -223,7 +223,7 @@ class PlanillaController extends janus.seguridad.Shield {
         ]
 
         //copia la formula polinomica a la formula polinomica contractual si esta no existe
-        if (fr.size() < 4) {
+        if (fr.size() < 5) {
             fr.each {
                 it.delete(flush: true)
             }
@@ -246,6 +246,15 @@ class PlanillaController extends janus.seguridad.Shield {
             frpl.indice = null
             frpl.tipoFormulaPolinomica = tipo
             frpl.numero = "P0"
+            if (!frpl.save(flush: true)) {
+                println "error " + frpl.errors
+            }
+            frpl = new FormulaPolinomicaContractual()
+            frpl.valor = 0
+            frpl.contrato = contrato
+            frpl.indice = null
+            frpl.tipoFormulaPolinomica = tipo
+            frpl.numero = "B0"
             if (!frpl.save(flush: true)) {
                 println "error " + frpl.errors
             }
