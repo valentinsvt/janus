@@ -174,8 +174,8 @@
         %{--</div>--}%
 
         <div class="span7">
-            Lista de equipos y materiales
-            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 400px"/>
+            Lista de precios de equipos y mano de obra
+            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 350px"/>
         </div>
 
         <div class="span2">
@@ -403,7 +403,9 @@
 
     <div class="modal-body" id="modalBody-detalle">
         Especificaciones:<br>
-        <textarea id="especificaciones" style="width: 700px;height: 150px;resize: none;margin-top: 10px"></textarea>
+        <textarea id="especificaciones" style="width: 700px;height: 150px;resize: none;margin-top: 10px">
+            ${rubro?.especificaciones}
+        </textarea>
     </div>
 
     <div class="modal-footer" id="modalFooter-detalle">
@@ -829,7 +831,7 @@
         $("#save-espc").click(function(){
             if($("#especificaciones").val().trim().length<1024){
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'saveEspc')}",
-                    data     : "id=${rubro?.id}&espc="+$("#especificaciones").val(),
+                    data     : "id=${rubro?.id}&espc="+$("#especificaciones").val().trim(),
                     success  : function (msg) {
                         if(msg=="ok"){
                             $("#modal-detalle").modal("hide");
