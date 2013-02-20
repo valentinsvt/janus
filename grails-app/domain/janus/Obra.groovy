@@ -175,6 +175,12 @@ class Obra implements Serializable {
         responsableObra(blank: true, nullable: true, attributes: [title: 'responsableObra'])
         revisor(blank: true, nullable: true, attributes: [title: 'revisor'])
         lugar(blank: true, nullable: true, attributes: [title: 'lugar'])
+        listaPeso1(blank: true, nullable: true, attributes: [title: 'Lista al peso 1'])
+        listaVolumen0(blank: true, nullable: true, attributes: [title: 'Lista al volumen 1'])
+        listaVolumen1(blank: true, nullable: true, attributes: [title: 'Lista al volumen 1'])
+        listaVolumen2(blank: true, nullable: true, attributes: [title: 'Lista al volumen 1'])
+        listaManoObra(blank: true, nullable: true, attributes: [title: 'Lista de MO y Equipos'])
+
         comunidad(blank: true, nullable: true, attributes: [title: 'comunidad'])
         parroquia(blank: true, nullable: true, attributes: [title: 'parroquia'])
         tipoObjetivo(blank: true, nullable: true, attributes: [title: 'tipoObjetivo'])
