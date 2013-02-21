@@ -291,11 +291,11 @@
 
                         <div class="span1" style="margin-left: -20px">Latitud</div>
 
-                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}"  style="width: 100px" maxlength="11"/></div>
+                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}"  style="width: 100px" /></div>
 
                         <div class="span1" style="margin-left: 60px">Longitud</div>
 
-                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 100px" maxlength="11" /></div>
+                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 100px" /></div>
 
 
 

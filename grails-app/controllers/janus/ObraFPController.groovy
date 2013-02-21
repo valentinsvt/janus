@@ -19,15 +19,15 @@ class ObraFPController {
 
         //def obra = Obra.get(obra__id)
 
-        ejecutaSQL("select * from ac_rbro_hr(${obra__id})")
-        //ejecutaSQL("select * from ac_rbro_hr_v2(${obra__id})")
+        //ejecutaSQL("select * from ac_rbro_hr(${obra__id})")
+        ejecutaSQL("select * from ac_rbro_hr_v2(${obra__id})")
 
         /* solo se debe correr sp_obra cuando esta no está registrada */
         //if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
         /* TODO: insertar por subpresupuesto en vlobitem para generar composición de obra por partes **/
 
-        ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
-        //ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        //ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
+        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 
         render(verificaMatriz(obra__id)); render("Verificando matriz<br>")
         render(verifica_precios(obra__id)); render("Verifa precios<br>")
