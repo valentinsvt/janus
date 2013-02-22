@@ -68,7 +68,7 @@
                     <i class="icon-angle-left"></i>
                     Planillas
                 </g:link>
-                <a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
+                <a href="#" class="btn btn-ajax btn-new" id="btnImprimir" title="Imprimir">
                     <i class="icon-print"></i>
                     Imprimir
                 </a>
@@ -174,6 +174,36 @@
             </div> <!-- Fr y Pr -->
 
         </div>
+
+        <div class="modal hide fade" id="modal-tree">
+            <div class="modal-header" id="modalHeader">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+
+                <h3 id="modalTitle"></h3>
+            </div>
+
+            <div class="modal-body" id="modalBody">
+            </div>
+
+            <div class="modal-footer" id="modalFooter">
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $("#btnImprimir").click(function () {
+                var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=planilla.pdf&url=${createLink(controller: 'reportes2', action: 'tablasPlanilla')}";
+                location.href = actionUrl + "?id=${planilla.id}";
+
+                var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
+                wait.prepend(spinnerBg);
+
+                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                $("#modalTitle").html("Procesando");
+                $("#modalBody").html(wait);
+                $("#modalFooter").html("").append(btnClose);
+            });
+        </script>
 
     </body>
 </html>

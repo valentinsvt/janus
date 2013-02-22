@@ -120,7 +120,6 @@ class Reportes2Controller {
 
         periodos.eachWithIndex { per, i ->
             if (i > 0) {
-                def planillaActual = Planilla.findByPeriodoIndicesAndContrato(per, contrato)
                 tbodyP0 += "<tr>"
                 if (i == 1) {
                     tbodyP0 += "<th>ANTICIPO</th>"

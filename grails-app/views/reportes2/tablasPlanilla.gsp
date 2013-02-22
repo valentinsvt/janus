@@ -71,14 +71,6 @@
             background : #efefef;
         }
 
-        .left {
-            float : left;
-        }
-
-        .right {
-            float : right;
-        }
-
         .strong {
             font-weight : bold;
         }
@@ -110,7 +102,7 @@
 
         .area {
             border-bottom : 1px solid black;
-            padding-left  : 50px;
+            /*padding-left  : 50px;*/
             position      : relative;
             overflow-x    : auto;
             min-height    : 150px;
@@ -126,74 +118,54 @@
 
         .row {
             margin-left : -20px;
-            *zoom       : 1;
-        }
-
-        .row:before,
-        .row:after {
-            display     : table;
-            content     : "";
-            line-height : 0;
-        }
-
-        .row:after {
-            clear : both;
-        }
-
-        [class*="span"] {
-            float       : left;
-            min-height  : 1px;
-            margin-left : 20px;
         }
 
         .span5 {
             width : 250px;
+            float : left;
         }
 
         .span3 {
             width : 120px;
+            float : left;
         }
 
         .span2 {
             width : 70px;
+            float : left;
         }
 
         .span1 {
             width : 60px;
+            float : left;
         }
 
         .well {
-            min-height            : 20px;
-            padding               : 19px;
-            margin-bottom         : 20px;
-            background-color      : #f5f5f5;
-            border                : 1px solid #e3e3e3;
-            -webkit-border-radius : 4px;
-            -moz-border-radius    : 4px;
-            border-radius         : 4px;
-            -webkit-box-shadow    : inset 0 1px 1px rgba(0, 0, 0, 0.05);
-            -moz-box-shadow       : inset 0 1px 1px rgba(0, 0, 0, 0.05);
-            box-shadow            : inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            min-height       : 20px;
+            padding          : 19px;
+            margin-bottom    : 20px;
+            background-color : #f5f5f5;
+            border           : 1px solid #e3e3e3;
         }
         </style>
     </head>
 
     <body>
         <div class="hoja">
-            <elm:headerPlanilla planilla="${planilla}"/>
+            <elm:headerPlanillaReporte planilla="${planilla}"/>
 
             <div class="area">
 
                 <h2>Cálculo de B<sub>0</sub></h2>
 
-                <table border="1" style="width: ${150 * periodos.size() + 150}px">
+                <table border="1" style="">
                     <thead>
                         <tr>
                             <th colspan="2">Cuadrilla Tipo</th>
                             <th>Oferta</th>
                             <th class="nb">${oferta.fechaEntrega.format("MMM-yy")}</th>
                             <th>Variación</th>
-                            <th class="nb">Anticipo <br>${planilla.fechaPresentacion.format("MMM-yy")}</th>
+                            <th class="nb">Anticipo <br/>${planilla.fechaPresentacion.format("MMM-yy")}</th>
                             <g:if test="${periodos.size() > 2}">
                                 <g:each in="${2..periodos.size() - 1}" var="per">
                                     <th>Variación</th>
@@ -209,7 +181,7 @@
 
                 <h2>Cálculo de P<sub>0</sub></h2>
 
-                <table border="1" style="width: ${150 * periodos.size() + 150}px; margin-top: 10px;">
+                <table border="1" style="margin-top: 10px;">
                     <thead>
                         <tr>
                             <th colspan="2" rowspan="2">Mes y año</th>
@@ -232,7 +204,7 @@
 
                 <h2>Cálculo de F<sub>r</sub> y P<sub>r</sub></h2>
 
-                <table border="1" style="width: ${150 * periodos.size() + 150}px; margin-top: 10px; margin-bottom: 10px;">
+                <table border="1" style=" margin-top: 10px; margin-bottom: 10px;">
                     <thead>
                         <tr>
                             <th rowspan="2">Componentes</th>
@@ -241,7 +213,7 @@
                         </tr>
                         <tr>
                             <th>${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            <th>Anticipo <br>${planilla.fechaPresentacion.format("MMM-yy")}</th>
+                            <th>Anticipo <br/>${planilla.fechaPresentacion.format("MMM-yy")}</th>
                             <g:if test="${periodos.size() > 2}">
                                 <g:each in="${2..periodos.size() - 1}" var="per">
                                     <th rowspan="2">${periodos[per].fechaInicio.format("MMM-yy")}</th>
