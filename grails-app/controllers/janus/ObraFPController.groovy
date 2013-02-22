@@ -21,17 +21,19 @@ class ObraFPController {
 
         //ejecutaSQL("select * from ac_rbro_hr(${obra__id})")
         ejecutaSQL("select * from ac_rbro_hr_v2(${obra__id})")
+        println "ejecutó ac_rbro_hr"
 
         /* solo se debe correr sp_obra cuando esta no está registrada */
         //if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
         /* TODO: insertar por subpresupuesto en vlobitem para generar composición de obra por partes **/
 
-        //ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
-        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
+        //ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        println "ejecutó sp_obra"
 
-        render(verificaMatriz(obra__id)); render("Verificando matriz<br>")
-        render(verifica_precios(obra__id)); render("Verifa precios<br>")
-        render("creando tablas de usuario...<br>")
+        println "verificaMatriz" + verificaMatriz(obra__id)
+        println "pasa verificaMatriz"
+        println "verifica_precios" + verifica_precios(obra__id)
 
         /* --------------------------------------- procesaMatriz --------------------------------
         * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
@@ -177,7 +179,7 @@ class ObraFPController {
         // usa funcion
         def cn = dbConnectionService.getConnection()
         def errr = "";
-        def tx_sql = "select distinct(itemcdgo) cdgo, itemnmbr dscr from verifica_precios(${id}) order by itemcdgo "
+        def tx_sql = "select distinct(itemcdgo) cdgo, itemnmbr from verifica_precios(${id}) order by itemcdgo "
         cn.eachRow(tx_sql.toString()) {row ->
             errr += ": ${row.cdgo}  ${row.itemnmbr}"
         }

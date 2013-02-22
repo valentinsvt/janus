@@ -278,8 +278,7 @@
                     %{--todo esto es un combo--}%
                     %{--<div class="span2" style="margin-right: 70px"><g:textField name="lugar.id" class="lugar" value="${obra?.lugar?.id}" optionKey="id"/></div>--}%
 
-
-                    <div class="span2" style="margin-right: 70px"><g:select name="lugar.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion"/></div>
+                    <div class="span2" style="margin-right: 70px"><g:select name="listaManoObra.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" value="${obra?.listaManoObra.id}"/></div>
 
 
                     <div class="span1">Fecha</div>
