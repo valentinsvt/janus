@@ -18,7 +18,8 @@
         }
 
         tbody th {
-            color : #000000 !important;
+            background : #ECECEC !important;
+            color      : #000000 !important;
         }
 
         .number {
@@ -59,7 +60,14 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span12 btn-group" role="navigation">
-
+                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
+                    <i class="icon-double-angle-left"></i>
+                    Contrato
+                </g:link>
+                <g:link controller="planilla" action="list" params="[id: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
+                    <i class="icon-angle-left"></i>
+                    Planillas
+                </g:link>
                 <a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
                     <i class="icon-print"></i>
                     Imprimir
@@ -97,38 +105,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <g:set var="totC" value="${0}"/>
-                        <g:each in="${pcs.findAll { it.numero.contains('c') }}" var="c">
-                            <tr>
-                                <td>${c.indice.descripcion} (${c.numero})</td>
-                                <td class="number">
-                                    <elm:numero number="${c.valor}" decimales="3"/>
-                                    <g:set var="totC" value="${totC + c.valor}"/>
-                                </td>
-                                <g:each in="${data.c}" var="cp">
-                                    <g:set var="val" value="${cp.value.valores.find { it.formulaPolinomica.indice == c.indice }.valorReajuste.valor}"/>
-                                    <td class="number">
-                                        <elm:numero number="${val}"/>
-                                    </td>
-                                    <td class="number">
-                                        <elm:numero number="${c.valor * val}" decimales="3"/>
-                                    </td>
-                                </g:each>
-                            </tr>
-                        </g:each>
-
-                        <tr>
-                            <th>TOTALES</th>
-                            <td class="number">
-                                <elm:numero number="${totC}" decimales="3"/>
-                            </td>
-                            <g:each in="${data.c}" var="cp">
-                                <td></td>
-                                <td class="number">
-                                    <elm:numero number="${cp.value.total}" decimales="3"/>
-                                </td>
-                            </g:each>
-                        </tr>
+                        ${tbodyB0}
                     </tbody>
                 </table>
 
@@ -155,23 +132,7 @@
                             <th>Acumulado</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th>Anticipo</th>
-                            <th>${planilla.fechaPresentacion.format("MMM-yy")}</th>
-                            <td colspan="4"></td>
-                            <td class="number">
-                                <elm:numero number="${planilla.valor}"/>
-                            </td>
-                        </tr>
-                        <g:if test="${periodos.size() > 2}">
-                            <g:each in="${2..periodos.size() - 1}" var="per">
-                                <tr>
-                                    <th>${periodos[per].fechaInicio.format("MMM-yy")}</th>
-                                </tr>
-                            </g:each>
-                        </g:if>
-                    </tbody>
+                    ${tbodyP0}
                 </table>
             </div> <!-- P0 -->
 

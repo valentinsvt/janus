@@ -46,13 +46,13 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
+                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
                     <i class="icon-double-angle-left"></i>
                     Contrato
                 </g:link>
                 <g:link controller="planilla" action="list" params="[id: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
                     <i class="icon-angle-left"></i>
-                    Plantillas
+                    Planillas
                 </g:link>
                 <g:if test="${editable}">
                     <a href="#" id="btnSave" class="btn btn-success">
@@ -172,13 +172,13 @@
                     <td colspan="3" class="espacio borderLeft borderTop">
                         <b>A) TOTAL AVANCE DE OBRA</b>
                     </td>
-                    <td class="borderLeft borderTop num totalAnt" data-valor="${totalAnterior}" data-valoro="${totalAnterior}">
+                    <td class="borderLeft borderTop num totalAnt" data-valor="${totalAnterior}" data-valoro="${totalAnterior}" style="font-size: larger">
                         <elm:numero number="${totalAnterior}" cero="hide"/>
                     </td>
-                    <td class="borderTop num totalAct" data-valor="${totalActual}" data-valoro="${totalActual}">
+                    <td class="borderTop num totalAct" data-valor="${totalActual}" data-valoro="${totalActual}" style="font-size: larger">
                         <elm:numero number="${totalActual}" cero="hide"/>
                     </td>
-                    <td class="borderTop num totalAcu" data-valor="${totalAcumulado}" data-valoro="${totalAcumulado}">
+                    <td class="borderTop num totalAcu" data-valor="${totalAcumulado}" data-valoro="${totalAcumulado}" style="font-size: larger">
                         <elm:numero number="${totalAcumulado}" cero="hide"/>
                     </td>
                 </tr>
@@ -292,7 +292,7 @@
                             data += "&";
                         }
                     });
-                    data += "id=${planilla.id}";
+                    data += "id=${planilla.id}&total="+$(".totalAct").data("valor");
 //                    console.log(data);
                     location.href = "${createLink(action:'saveDetalle')}?" + data;
                     return false;

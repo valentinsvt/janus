@@ -4,6 +4,7 @@ import groovy.time.TimeCategory
 import janus.Contrato
 import janus.Obra
 import janus.VolumenesObra
+import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
 
 class PlanillaController extends janus.seguridad.Shield {
@@ -12,6 +13,11 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def list() {
         def contrato = Contrato.get(params.id)
+        def obra = contrato.oferta.concurso.obra
+
+        def fp = janus.FormulaPolinomica.findAllByObra(obra)
+        println fp
+
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
     }
@@ -61,6 +67,16 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def tiposPlanilla = TipoPlanilla.list([sort: 'nombre'])
 
+        def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
+        def anticipoPagado = false
+        if (!pla) {
+            anticipoPagado = true
+        } else {
+            if (pla.fechaPago) {
+                anticipoPagado = true
+            }
+        }
+
         def planillas = Planilla.findAllByContrato(contrato, [sort: 'periodoIndices', order: "desc"])
         def cPlanillas = planillas.size()
         def esAnticipo = false
@@ -68,7 +84,6 @@ class PlanillaController extends janus.seguridad.Shield {
             tiposPlanilla = TipoPlanilla.findAllByCodigo('A')
             esAnticipo = true
         } else {
-            def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
             if (pla) {
                 tiposPlanilla -= pla.tipoPlanilla
             }
@@ -91,6 +106,10 @@ class PlanillaController extends janus.seguridad.Shield {
         def periodos = []
         if (!esAnticipo) {
             def ultimoPeriodo = planillas.last().fechaFin
+            if (!ultimoPeriodo) {
+                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
+            }
+            println ultimoPeriodo
             PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: 'fechaInicio']).each { pe ->
                 if (pe.tipo == "P") {
                     periodos += PeriodosInec.withCriteria {
@@ -109,7 +128,7 @@ class PlanillaController extends janus.seguridad.Shield {
             periodos = periodos.unique().sort { it.fechaInicio }
         }
 
-        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo]
+        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado]
     }
 
     def save() {
@@ -209,7 +228,19 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
-        def planillas = Planilla.findAllByContrato(contrato, [sort: "id"])
+//        def planillas = Planilla.findAllByContrato(contrato, [sort: "id"])
+
+        def planillas = Planilla.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    lt("fechaInicio", planilla.fechaFin)
+                    isNull("fechaInicio")
+                }
+                order("id", "asc")
+            }
+        }
+
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
         def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
         def tipo = TipoFormulaPolinomica.get(1)
@@ -377,19 +408,54 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
+
+        def tbodyB0 = "<tbody>"
+        def totC = 0
+        pcs.findAll { it.numero.contains("c") }.each { c ->
+            tbodyB0 += "<tr>"
+            tbodyB0 += "<td>" + c.indice.descripcion + " (" + c.numero + ")</td>"
+            tbodyB0 += "<td class='number'>" + elm.numero(number: c.valor, decimales: 3) + "</td>"
+            totC += c.valor
+            data.c.each { cp ->
+                def act = cp.value.valores.find { it.formulaPolinomica.indice == c.indice }
+                def val = act.valorReajuste.valor
+                tbodyB0 += "<td class='number'>" + elm.numero(number: val) + "</td>"
+                tbodyB0 += "<td class='number'>" + elm.numero(number: val * c.valor, decimales: 3) + "</td>"
+            }
+            tbodyB0 += "</tr>"
+        }
+        tbodyB0 += "<tr>"
+        tbodyB0 += "<th>TOTALES</th>"
+        tbodyB0 += "<td class='number'>" + elm.numero(number: totC, decimales: 3) + "</td>"
+        data.c.each { cp ->
+            tbodyB0 += "<td></td>"
+            tbodyB0 += "<td class='number'>" + elm.numero(number: cp.value.total) + "</td>"
+        }
+        tbodyB0 += "</tr>"
+        tbodyB0 += "</tbody>"
+
         def p0s = []
-        def tbodyP0 = ""
+        def tbodyP0 = "<tbody>"
+        def diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+        def valorPlanilla = planilla.valor
+
+        def acumuladoCrono = 0, acumuladoPlan = 0
+
+        def diasAll = 0
+
         periodos.eachWithIndex { per, i ->
             if (i > 0) {
+                def planillaActual = Planilla.findByPeriodoIndicesAndContrato(per, contrato)
                 tbodyP0 += "<tr>"
                 if (i == 1) {
                     tbodyP0 += "<th>ANTICIPO</th>"
                     tbodyP0 += "<th>"
-                    tbodyP0 += planilla.fechaPresentacion.format("MMM-yy")
+                    def planillaAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("A"))
+                    tbodyP0 += planillaAnticipo.fechaPresentacion.format("MMM-yy")
                     tbodyP0 += "</th>"
                     tbodyP0 += "<td colspan='4'></td>"
-                    tbodyP0 += "<td class='number>"
-                    tbodyP0 += elm.numero(number: planilla.valor)
+                    tbodyP0 += "<td class='number'>"
+                    tbodyP0 += elm.numero(number: planillaAnticipo.valor)
                     tbodyP0 += "</td>"
 
                     def p0 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "P0")
@@ -397,23 +463,111 @@ class PlanillaController extends janus.seguridad.Shield {
                     if (!vrP0) {
                         vrP0 = new ValorReajuste([
                                 obra: obra,
-                                planilla: planilla,
+                                planilla: planillaAnticipo,
                                 periodoIndice: per,
                                 formulaPolinomica: p0
                         ])
                     }
-                    vrP0.valor = planilla.valor
+                    vrP0.valor = planillaAnticipo.valor
                     if (!vrP0.save(flush: true)) {
                         println "ERROR guardando P0: " + vrP0.errors
                     }
                     data["p"][per]["p0"] = vrP0.valor
                     p0s[i - 1] = vrP0.valor
                 } else {
+//                    def periodosEjecucion = PeriodoEjecucion.findAllByObra(obra)
+                    def periodosEjecucion = PeriodoEjecucion.withCriteria {
+                        and {
+                            eq("obra", obra)
+                            or {
+                                between("fechaInicio", per.fechaInicio, per.fechaFin)
+                                between("fechaFin", per.fechaInicio, per.fechaFin)
+                            }
+                            order("fechaInicio")
+                        }
+                    }
+                    def diasTotal = 0, valorTotal = 0
+//                    println per.fechaInicio.format("dd-MM-yyyy") + "  " + per.fechaFin.format("dd-MM-yyyy")
+                    tbodyP0 += "<th>"
+                    tbodyP0 += per.descripcion
+                    tbodyP0 += "</th>"
+                    periodosEjecucion.each { pe ->
+//                        println "\t" + pe.tipo + "  " + pe.fechaInicio.format("dd-MM-yyyy") + "   " + pe.fechaFin.format("dd-MM-yyyy")
+                        if (pe.tipo == "P") {
+                            def diasUsados
+                            def diasPeriodo = pe.fechaFin - pe.fechaInicio
+//                            println "\t\tdias periodo: " + diasPeriodo
+                            def crono = CronogramaEjecucion.findAllByPeriodo(pe)
+                            def valorPeriodo = crono.sum { it.precio }
+//                            println "\t\tvalor periodo: " + valorPeriodo
+                            if (pe.fechaInicio <= per.fechaInicio) {
+                                diasUsados = pe.fechaFin - per.fechaInicio
+                                if (diasUsados == 0) diasUsados = 1
+                                diasTotal += diasUsados
+//                                println "\t\tdias usados: " + diasUsados
+                            } else if (pe.fechaInicio > per.fechaInicio && pe.fechaFin < per.fechaFin) {
+                                diasUsados = pe.fechaFin - pe.fechaInicio
+                                if (diasUsados == 0) diasUsados = 1
+                                diasTotal += diasUsados
+//                                println "\t\tdias usados: " + diasUsados
+                            } else if (pe.fechaFin >= per.fechaFin) {
+                                diasUsados = per.fechaFin - pe.fechaInicio
+                                if (diasUsados == 0) diasUsados = 1
+                                diasTotal += diasUsados
+//                                println "\t\tdias usados: " + diasUsados
+                            }
+                            def valorUsado = (valorPeriodo / diasPeriodo) * diasUsados
+                            valorTotal += valorUsado
+//                            println "\t\tvalor usado: " + valorUsado
+                        }
+                    }
+                    acumuladoCrono += valorTotal
+                    def planillado = (valorPlanilla / diasPlanilla) * diasTotal
+                    acumuladoPlan += planillado
+//                    println "TOTAL: " + diasTotal + " dias"
+//                    println "PLANILLADO: " + planillado
 
+                    def p0 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "P0")
+                    def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
+                    if (!vrP0) {
+                        vrP0 = new ValorReajuste([
+                                obra: obra,
+                                planilla: planillaActual,
+                                periodoIndice: per,
+                                formulaPolinomica: p0
+                        ])
+                    }
+                    vrP0.valor = Math.max(valorTotal, planillado)
+                    if (!vrP0.save(flush: true)) {
+                        println "ERROR guardando P0: " + vrP0.errors
+                    }
+                    data["p"][per]["p0"] = vrP0.valor
+                    p0s[i - 1] = vrP0.valor
+                    diasAll += diasTotal
+                    tbodyP0 += "<th>"
+                    tbodyP0 += "(" + diasTotal + ")"
+                    tbodyP0 += "</th>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: valorTotal) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: acumuladoCrono) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: planillado) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: acumuladoPlan) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: vrP0.valor) + "</td>"
                 }
                 tbodyP0 += "</tr>"
             }
         }
+        tbodyP0 += "</tbody>"
+        tbodyP0 += "<tfoot>"
+        tbodyP0 += "<tr>"
+        tbodyP0 += "<th>TOTAL</th>"
+        tbodyP0 += "<th>(" + diasAll + ")</th>"
+        tbodyP0 += "<td></td>"
+        tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoCrono) + "</td>"
+        tbodyP0 += "<td></td>"
+        tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoPlan) + "</td>"
+        tbodyP0 += "<td></td>"
+        tbodyP0 += "</tr>"
+        tbodyP0 += "</tfoot>"
 
         def a = 0, b = 0, c = 0, d = 0, tots = []
         def tbodyFr = "<tbody>"
@@ -459,8 +613,8 @@ class PlanillaController extends janus.seguridad.Shield {
         } //pcs.p.each
 
         def filaFr = "", filaFr1 = "", filaP0 = "", filaPr = ""
-//        println ">>>"
-//        println tots
+        println ">>>"
+        println p0s
 
         def totalReajuste = 0
 
@@ -518,7 +672,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         tbodyFr += "<tr>"
         tbodyFr += "<th colspan='2'>REAJUSTE TOTAL</th>"
-        tbodyFr += "<td class='number'>"
+        tbodyFr += "<td colspan='2' class='number bold'>"
         tbodyFr += elm.numero(number: totalReajuste)
         tbodyFr += "</td>"
         tbodyFr += "</tr>"
@@ -534,7 +688,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println it
 //        }
 
-        return [tbodyFr: tbodyFr, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos]
+        return [tbodyFr: tbodyFr, tbodyP0: tbodyP0, tbodyB0: tbodyB0, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos]
     }
 
     def resumen2() {
@@ -795,8 +949,14 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.clase = "alert-error"
             flash.message = "Ocurrieron " + err + " errores"
         } else {
-            flash.clase = "alert-success"
-            flash.message = "Planilla guardada exitosamente"
+            pln.valor = params.total.toDouble()
+            if (!pln.save(flush: true)) {
+                flash.clase = "alert-error"
+                flash.message = "Ocurrió un error al guardar la planilla"
+            } else {
+                flash.clase = "alert-success"
+                flash.message = "Planilla guardada exitosamente"
+            }
         }
         redirect(controller: "planilla", action: "list", id: pln.contratoId)
 //        render params

@@ -107,7 +107,7 @@
         <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
 
         <div class="tituloTree">
-            Cronograma del contrato de la obra ${obra.descripcion} (${meses} mes${obra.plazoEjecucionMeses == 1 ? "" : "es"})
+            Cronograma de ejecución de la obra ${obra.descripcion} (${meses} mes${obra.plazoEjecucionMeses == 1 ? "" : "es"})
         </div>
 
         <div class="btn-toolbar hide" id="toolbar">
