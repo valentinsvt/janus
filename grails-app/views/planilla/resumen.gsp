@@ -72,10 +72,10 @@
                     <i class="icon-print"></i>
                     Imprimir
                 </a>
-                <a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">
-                    <i class="icon-table"></i>
-                    Excel
-                </a>
+                %{--<a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">--}%
+                %{--<i class="icon-table"></i>--}%
+                %{--Excel--}%
+                %{--</a>--}%
             </div>
         </div>
 

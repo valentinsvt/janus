@@ -613,8 +613,8 @@ class PlanillaController extends janus.seguridad.Shield {
         } //pcs.p.each
 
         def filaFr = "", filaFr1 = "", filaP0 = "", filaPr = ""
-        println ">>>"
-        println p0s
+//        println ">>>"
+//        println p0s
 
         def totalReajuste = 0
 
