@@ -102,7 +102,7 @@
                             <tr>
                                 <td>${c.indice.descripcion} (${c.numero})</td>
                                 <td class="number">
-                                    **<elm:numero number="${c.valor}" decimales="3"/>
+                                    <elm:numero number="${c.valor}" decimales="3"/>
                                     <g:set var="totC" value="${totC + c.valor}"/>
                                 </td>
                                 <g:each in="${data.c}" var="cp">
@@ -111,7 +111,7 @@
                                         <elm:numero number="${val}"/>
                                     </td>
                                     <td class="number">
-                                        <elm:numero number="${c.valor * val}" format="##,###0" maxFractionDigits="3" minFractionDigits="3"/>
+                                        <elm:numero number="${c.valor * val}" decimales="3"/>
                                     </td>
                                 </g:each>
                             </tr>
@@ -120,12 +120,12 @@
                         <tr>
                             <th>TOTALES</th>
                             <td class="number">
-                                <elm:numero number="${totC}" format="##,###0" minFractionDigits="3" maxFractionDigits="3"/>
+                                <elm:numero number="${totC}" decimales="3"/>
                             </td>
                             <g:each in="${data.c}" var="cp">
                                 <td></td>
                                 <td class="number">
-                                    <elm:numero number="${cp.value.total}" format="##,###0" maxFractionDigits="3" minFractionDigits="3"/>
+                                    <elm:numero number="${cp.value.total}" decimales="3"/>
                                 </td>
                             </g:each>
                         </tr>
@@ -161,7 +161,7 @@
                             <th>${planilla.fechaPresentacion.format("MMM-yy")}</th>
                             <td colspan="4"></td>
                             <td class="number">
-                                <g:formatNumber number="${planilla.valor}" format="##,##0" locale="ec" maxFractionDigits="2" minFractionDigits="2"/>
+                                <elm:numero number="${planilla.valor}"/>
                             </td>
                         </tr>
                         <g:if test="${periodos.size() > 2}">
@@ -186,12 +186,10 @@
                         <tr>
                             <th rowspan="2">Componentes</th>
                             <th>Oferta</th>
-                            %{--<th></th>--}%
                             <th colspan="${periodos.size() - 1}">Periodo de variación y aplicación de fórmula polinómica</th>
                         </tr>
                         <tr>
                             <th>${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            %{--<th></th>--}%
                             <th>Anticipo <br>${planilla.fechaPresentacion.format("MMM-yy")}</th>
                             <g:if test="${periodos.size() > 2}">
                                 <g:each in="${2..periodos.size() - 1}" var="per">
@@ -202,47 +200,13 @@
                         <tr>
                             <th>Anticipo</th>
                             <th>
-                                <g:formatNumber number="${contrato.porcentajeAnticipo}" minFractionDigits="0" maxFractionDigits="0"/>%
+                                <elm:numero number="${contrato.porcentajeAnticipo}" decimales="0"/>%
                             </th>
-                            %{--<th>A</th>--}%
                             <th>Anticipo</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <g:each in="${pcs.findAll { it.numero.contains('p') }}" var="p">
-                            <tr>
-                                <td>${p.indice.descripcion} (${p.numero})</td>
-                                <g:each in="${data.p}" var="cp" status="i">
-                                    <g:set var="act" value="${cp.value.valores.find { it.formulaPolinomica.indice == p.indice }}"/>
-                                    <g:if test="${i == 0}">
-                                        <g:set var="c" value="${act.formulaPolinomica.valor}"/>
-                                        <g:set var="b" value="${act.valorReajuste.valor}"/>
-                                        <td class="number">
-                                            <div>
-                                                <elm:numero number="${c}" minFractionDigits="3" maxFractionDigits="3" format="##,###0"/>
-                                            </div>
-
-                                            <div class="bold">
-                                                <elm:numero number="${b}" minFractionDigits="3" maxFractionDigits="3" format="##,###0"/>
-                                            </div>
-                                        </td>
-                                    </g:if>
-                                    <g:else>
-                                        <g:set var="a" value="${act.valorReajuste.valor}"/>
-                                        <g:set var="d" value="${(a / b) * c}"/>
-                                        <td class="number">
-                                            <div>
-                                                <elm:numero number="${a}" minFractionDigits="3" maxFractionDigits="3" format="##,###0"/>
-                                            </div>
-
-                                            <div class="bold">
-                                                <elm:numero number="${d}" minFractionDigits="3" maxFractionDigits="3" format="##,###0"/>
-                                            </div>
-                                        </td>
-                                    </g:else>
-                                </g:each>
-                            </tr>
-                        </g:each>
+                        ${tbodyFr}
                     </tbody>
                 </table>
 

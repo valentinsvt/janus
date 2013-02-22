@@ -12,8 +12,8 @@ class ElementosTagLib {
 
     Closure numero = { attrs ->
         if (!attrs.decimales) {
-            if (!attrs.format) {
-                attrs.format = "##,##0"
+            if (!attrs["format"]) {
+                attrs["format"] = "##,##0"
             }
             if (!attrs.minFractionDigits) {
                 attrs.minFractionDigits = 2
@@ -23,19 +23,25 @@ class ElementosTagLib {
             }
         } else {
             def dec = attrs.remove("decimales").toInteger()
-            attrs.format = "##"
+            attrs["format"] = "##"
             if (dec > 0) {
-                attrs.format += ","
+                attrs["format"] += ","
                 dec.times {
-                    attrs.format += "#"
+                    attrs["format"] += "#"
                 }
-                attrs.format += "0"
+                attrs["format"] += "0"
             }
             attrs.maxFractionDigits = dec
             attrs.minFractionDigits = dec
         }
         if (!attrs.locale) {
             attrs.locale = "ec"
+        }
+        if (attrs.debug == "true" || attrs.debug == true) {
+            println attrs
+            println g.formatNumber(attrs)
+            println g.formatNumber(number: attrs.number, maxFractionDigits: 3, minFractionDigits: 3, format: "##.###", locale: "ec")
+            println g.formatNumber(number: attrs.number, maxFractionDigits: 3, minFractionDigits: 3, format: "##,###.###", locale: "ec")
         }
         if (attrs.cero == "false" || attrs.cero == false || attrs.cero == "hide") {
             if (attrs.number.toDouble() == 0.toDouble()) {
