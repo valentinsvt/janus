@@ -147,6 +147,10 @@
             background-color : #f5f5f5;
             border           : 1px solid #e3e3e3;
         }
+
+        .noborder, table.noborder, table.noborder td, table.noborder th {
+            border : none !important;
+        }
         </style>
     </head>
 

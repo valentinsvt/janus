@@ -97,6 +97,48 @@ class ElementosTagLib {
 
         out << str
     }
+    Closure headerPlanillaReporte = { attrs ->
+        def str = ""
+        Planilla planilla = attrs.planilla
+        Obra obra = planilla.contrato.oferta.concurso.obra
+
+        str += "<div class='well'>"
+
+        str += "<table border='0' class='noborder'>"
+        str += "<tr>"
+        str += "<td class='bold'>Obra</td>"
+        str += "<td colspan='3'>" + obra.nombre + "</td>"
+        str += "</tr>"
+        str += "<tr>"
+        str += "<td class='bold'>Lugar</td>"
+        str += "<td>" + obra.lugar.descripcion + "</td>"
+        str += "<td class='bold'>Planilla</td>"
+        str += "<td>" + planilla.numero + "</td>"
+        str += "</tr>"
+        str += "<tr>"
+        str += "<td class='bold'>Ubicación</td>"
+        str += "<td>Parroquia " + obra.parroquia.nombre + " - Cantón " + obra.parroquia.canton.nombre + "</td>"
+        str += "<td class='bold'>Monto contrato</td>"
+        str += "<td>" + elm.numero(number: planilla.contrato.monto) + "</td>"
+        str += "</tr>"
+        str += "<tr>"
+        str += "<td class='bold'>Contratista</td>"
+        str += "<td>Parroquia " + planilla.contrato.oferta.proveedor.nombre + "</td>"
+        str += "<td class='bold'>Periodo</td>"
+        str += "<td>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')) + "</td>"
+        str += "</tr>"
+        str += "<tr>"
+        str += "<td class='bold'>Plazo</td>"
+        str += "<td>Parroquia " + planilla.contrato.plazo + "</td>"
+        str += "<td class='bold'></td>"
+        str += "<td></td>"
+        str += "</tr>"
+        str += "</table>"
+
+        str += "</div>"
+
+        out << str
+    }
 
     /**
      * Creates next/previous links to support pagination for the current controller.<br/>
