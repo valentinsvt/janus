@@ -35,91 +35,226 @@
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </g:link>
-                <a href="#" id="btnPagar" class="btn btn-success" rel="tooltip" title="Pagar planilla">
-                    <i class="icon-money"></i>
-                    Pagar
+
+                <g:if test="${planillaInstance?.fechaPago == null}">
+
+                    <a href="#" id="btnPagar" class="btn btn-success" rel="tooltip" title="Pagar planilla">
+                        <i class="icon-money"></i>
+                        Pagar
+                    </a>
+
+
+                </g:if>
+                <g:else>
+
+                </g:else>
+
+
+                <a href="#" id="btnPdf" class="btn" title="Imprimir PDF"><i class="icon-print"> </i>
+                    PDF
                 </a>
+
+
+                %{--<a href="#" id="btntablas" class="btn" title="Imprimir Tablas"><i class="icon-print"> </i>--}%
+                    %{--Tablas--}%
+                %{--</a>--}%
+
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
         </div>
 
-        <div class="well">
-            <h4>Planilla a pagar</h4>
+   <elm:headerPlanilla planilla="${planillaInstance}" />
 
-            <div class="row">
-                <div class="span4 lbl">Planilla número ${planillaInstance.numero} de ${planillaInstance.tipoPlanilla?.nombre}</div>
+    <div class="pago">
 
-                <div class="span6">${planillaInstance.descripcion}</div>
-            </div>
+        <fieldset>
 
-            <div class="row">
-                <div class="span2 lbl">Fecha de presentación</div>
+            <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
 
-                <div class="span1"><g:formatDate date="${planillaInstance?.fechaPresentacion}" format="dd-MM-yyyy"/></div>
+                <div class="span12">
 
-                <div class="span2 lbl">Fecha de ingreso</div>
+                    <div class="span3" style="font-weight: bold">
 
-                <div class="span1"><g:formatDate date="${planillaInstance?.fechaIngreso}" format="dd-MM-yyyy"/></div>
-                <g:if test="${planillaInstance?.fechaPago}">
-                    <div class="span2 lbl">Fecha pago</div>
+                        ${planillaInstance.contrato?.porcentajeAnticipo} % de Anticipo
 
-                    <div class="span1"><g:formatDate date="${planillaInstance?.fechaPago}" format="dd-MM-yyyy"/></div>
-                </g:if>
-            </div>
-
-
-            <div class="row ${planillaInstance.numeroFactura || planillaInstance.estadoPlanilla || planillaInstance.periodoIndices || planillaInstance.fechaInicio || planillaInstance.fechaFin ? '' : 'hide'}">
-                <g:if test="${planillaInstance?.numeroFactura}">
-                    <div class="span1 lbl">N. factura</div>
-
-                    <div class="span2"><g:fieldValue bean="${planillaInstance}" field="numeroFactura"/></div>
-                </g:if>
-                <g:if test="${planillaInstance?.estadoPlanilla}">
-                    <div class="span1 lbl">Estado</div>
-
-                    <div class="span1">${planillaInstance?.estadoPlanilla?.nombre}</div>
-                </g:if>
-                <g:if test="${planillaInstance?.periodoIndices}">
-                    <div class="span1 lbl">Periodo</div>
-
-                    <div class="span1">${planillaInstance?.periodoIndices?.descripcion}</div>
-                </g:if>
-                <g:if test="${planillaInstance?.fechaInicio || planillaInstance?.fechaFin}">
-                    <div class="span4">
-                        <g:formatDate date="${planillaInstance?.fechaInicio}" format="dd-MM-yyyy"/>
-                        al
-                        <g:formatDate date="${planillaInstance?.fechaFin}" format="dd-MM-yyyy"/>
                     </div>
-                </g:if>
-            </div>
 
-            <div class="row ${planillaInstance.valor || planillaInstance.descuentos ? '' : 'hide'}">
-                <g:if test="${planillaInstance?.valor}">
-                    <div class="span1 lbl">Valor</div>
+                   <div class="span3">
 
-                    <div class="span1">
-                        <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
+                        <elm:numero number="${planillaInstance?.valor}"/>
+
+
                     </div>
-                </g:if>
-                <g:if test="${planillaInstance?.descuentos}">
-                    <div class="span1 lbl">Descuentos</div>
 
-                    <div class="span1">
-                        <g:formatNumber number="${planillaInstance.descuentos}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
-                    </div>
-                </g:if>
 
-            </div>
-            <g:if test="${planillaInstance.observaciones}">
-                <div class="row">
-                    <div class="span1 lbl">Observaciones</div>
-
-                    <div class="span10"><g:fieldValue bean="${planillaInstance}" field="observaciones"/></div>
                 </div>
-            </g:if>
-        </div> <!-- well -->
+                <div class="span12" style="margin-top: 10px">
 
+
+                    <div class="span3" style="font-weight: bold">
+
+                        (+) Reajuste provisional del anticipo
+
+                    </div>
+
+                    <div class="span3">
+
+                        <elm:numero number="${planillaInstance?.reajuste}"/>
+
+                    </div>
+
+                </div>
+                <div class="span12" style="margin-top: 10px">
+
+
+                    <div class="span3" style="font-weight: bold">
+
+                        SUMA:
+
+                    </div>
+
+                    <div class="span3">
+
+                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+
+                    </div>
+
+
+                </div>
+
+                <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+
+
+                    <div class="span3" style="font-weight: bold">
+
+                        A FAVOR DEL CONTRATISTA:
+
+                    </div>
+
+                    <div class="span3">
+
+                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+
+                    </div>
+
+
+                </div>
+
+
+
+            </g:if>
+
+
+
+
+            <g:else>
+                <div class="span12">
+
+                    <div class="span3" style="font-weight: bold">
+
+                     Valor Planilla
+
+                    </div>
+
+                    <div class="span3">
+
+                        <elm:numero number="${planillaInstance?.valor}"/>
+
+
+                    </div>
+
+
+                </div>
+                <div class="span12" style="margin-top: 10px">
+
+
+                    <div class="span3" style="font-weight: bold">
+
+                        (+) Reajuste provisional del anticipo
+
+                    </div>
+
+                    <div class="span3">
+
+                        <elm:numero number="${planillaInstance?.reajuste}"/>
+
+                    </div>
+
+                </div>
+                <div class="span12" style="margin-top: 10px">
+
+
+                    <div class="span3" style="font-weight: bold">
+
+                        SUMA:
+
+                    </div>
+
+                    <div class="span3">
+
+                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+
+                    </div>
+
+
+                </div>
+
+                <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+
+
+                    <div class="span3" style="font-weight: bold">
+
+                        A FAVOR DEL CONTRATISTA:
+
+                    </div>
+
+                    <div class="span3">
+
+                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+
+                    </div>
+
+
+                </div>
+            </g:else>
+
+
+
+        </fieldset>
+
+
+    </div>
+
+       <g:if test="${planillaInstance?.fechaPago != null}">
+
+           <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+               <div class="span3" style=" font-weight: bold">
+                 Fecha Pago
+               </div>
+
+               <div class="span3"><g:formatDate date="${planillaInstance?.fechaPago}" format="dd-MM-yyyy"/>
+
+               </div>
+           </div>
+
+           <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+               <div class="span12">
+                   <div class="span3" style="font-weight: bold">
+                       Fecha de inicio de obra
+                   </div>
+
+                   <div class="span3"><g:formatDate date="${planillaInstance?.contrato?.oferta?.concurso?.obra?.fechaInicio}" format="dd-MM-yyyy"/>
+
+
+                   </div>
+               </div>
+           </g:if>
+
+
+       </g:if>
+
+       <g:else>
         <g:form class="form-horizontal" name="frmSave-Planilla" action="savePago">
             <g:hiddenField name="id" value="${planillaInstance?.id}"/>
 
@@ -153,7 +288,7 @@
                 </div>
             </g:if>
         </g:form>
-
+       </g:else>
 
         <script type="text/javascript">
 
@@ -173,6 +308,29 @@
             $(".datepicker").keydown(function () {
                 return false;
             });
+
+            %{--$("#btnPdf").click(function () {--}%
+
+                %{--location.href="${createLink(controller: 'reportes', action: 'anticipoReporte', id: planillaInstance?.id)}"--}%
+            %{--});--}%
+
+
+                    $("#btnPdf").click(function () {
+                        var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=planilla.pdf&url=${createLink(controller: 'reportes', action: 'anticipoReporte')}";
+                        location.href = actionUrl + "?id=${planillaInstance?.id}";
+
+                        var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
+                        wait.prepend(spinnerBg);
+
+                        var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                        $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                        $("#modalTitle").html("Procesando");
+                        $("#modalBody").html(wait);
+                        $("#modalFooter").html("").append(btnClose);
+                    });
+
+
+
         </script>
 
     </body>
