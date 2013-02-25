@@ -39,6 +39,20 @@
 
 <div class="" style="margin-top: 20px">
 
+    <div class="datosObra span12" style="margin-bottom: 20px">
+
+
+        <div class="span3" style="margin-left: -30px; margin-right: 30px;">
+            <span id="nombreObra" class="control-label label label-inverse">
+                Nombre de la Obra:
+            </span>
+        </div>
+
+        <div class="span5" style="margin-left: -50px">${obra?.nombre}</div>
+
+
+    </div>
+
 
     <div class="coordenadasOriginales span12">
 
@@ -47,10 +61,27 @@
         %{--<input class="span2" id="longo">--}%
 
 
-        <div class="span3" style="margin-left: -30px">Coordenadas Originales de la Obra:</div>
+        %{--<div class="span3" style="margin-left: -30px; margin-right: 30px; font-weight: bold">Coordenadas Originales de la Obra:</div>--}%
 
-        <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" id="lato" style="width: 100px" maxlength="5"/></div>
-        <div class="span3">Longitud: <g:textField name="longo" class="longo number" id="longo" style="width: 120px" maxlength="5"/></div>
+        <div class="span3" style="margin-left: -30px; margin-right: 30px;">
+            <span id="coordOrig" class="control-label label label-inverse">
+                Coordenadas Originales de la Obra:
+            </span>
+        </div>
+
+        %{--<div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" id="lato" style="width: 100px" maxlength="5"/></div>--}%
+
+        <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" style="width: 100px" id="lato"
+                                                                           value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}" disabled="true"/></div>
+
+
+
+        %{--<div class="span3">Longitud: <g:textField name="longo" class="longo number" id="longo" style="width: 120px" maxlength="5"/></div>--}%
+
+
+        <div class="span3">Longitud: <g:textField name="longo" class="longo number" style="width: 100px" id="longo"
+                                                                           value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}" disabled="true"/></div>
+
 
 
 
@@ -59,10 +90,17 @@
 
     <g:hiddenField name="id" value="${obra?.id}"/>
     <div class="coordenadas span12">
-        <div class="span3" style="margin-left: -30px">Coordenadas Nuevas de la Obra:</div>
+        %{--<div class="span3" style="margin-left: -30px; margin-right: 30px; font-weight: bold">Coordenadas Nuevas de la Obra:</div>--}%
 
-        <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="latitud" class="latitud number" id="latitud" style="width: 100px" maxlength="5"/></div>
-        <div class="span3">Longitud: <g:textField name="longitud" class="longitud number" id="longitud" style="width: 120px" maxlength="5"/></div>
+        <div class="span3" style="margin-left: -30px; margin-right: 30px;">
+            <span id="coordNuevas" class="control-label label label-inverse">
+                Coordenadas Nuevas de la Obra:
+            </span>
+        </div>
+
+
+        <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="latitud" class="latitud number" id="latitud" style="width: 100px"/></div>
+        <div class="span3">Longitud: <g:textField name="longitud" class="longitud number" id="longitud" style="width: 100px"/></div>
 
     </div>
 </g:form>
@@ -74,6 +112,8 @@
 
     <button class="btn" id="btnVolver"><i class="icon-arrow-left"></i> Regresar</button>
     <button class="btn" id="btnGuardar"><i class="icon-check"></i> Guardar</button>
+    %{--<button class="btn print" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>--}%
+    %{--<img src="images/print.png" class="print" alt="print" title="print" onclick="window.open('print.html')" />--}%
 
 </div>
 
@@ -86,13 +126,15 @@
     var latorigen;
     var longorigen;
     var lastValidCenter;
+//    var allowedBounds;
 
     var countryCenter = new google.maps.LatLng(-0.15, -78.35);
 
     var allowedBounds = new google.maps.LatLngBounds (
 
             new google.maps.LatLng(-0.41, -79.56),
-            new google.maps.LatLng(-0.50,-76.44)
+            new google.maps.LatLng(-0.50,-76.44),
+            new google.maps.LatLng(-0.28690,-76.59190)
 
     );
 
@@ -102,6 +144,8 @@
         draggable:true
 
     });
+
+
 
 
 
@@ -131,14 +175,14 @@
 
         limites2();
 
-        limites();
+//        limites();
 
 
         var posicion;
 
         if(latitudObra == 0 || longitudObra == 0){
 
-            console.log("entro")
+//            console.log("entro")
 
             posicion = new google.maps.LatLng(-0.21, -78.52)
 
@@ -163,8 +207,10 @@
             lat = latlng.lat();
             longitud= latlng.lng();
 
-            $("#latitud").val(lat);
-            $("#longitud").val(longitud);
+//            $("#latitud").val(lat);
+            $("#latitud").val(number_format(lat, 5, ".", ","));
+            $("#longitud").val(number_format(longitud, 5, ".", ","));
+//            $("#longitud").val(longitud);
 
 
         });
@@ -176,8 +222,13 @@
             latorigen = posicion.lat();
             longorigen = posicion.lng();
 
-            $("#lato").val(latorigen);
-            $("#longo").val(longorigen);
+//            $("#lato").val(latorigen);
+            $("#lato").val(number_format(latorigen, 5, ".", ","));
+            $("#longo").val(number_format(longorigen, 5, ".", ","));
+//            $("#longo").val(longorigen);
+
+
+
 
 
         });
@@ -204,6 +255,88 @@
     }
 
 
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+    $("#latitud").bind({
+        keydown : function (ev) {
+            // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+            if (ev.keyCode == 190 || ev.keyCode == 110) {
+                var val = $(this).val();
+                if (val.length == 0) {
+                    $(this).val("0");
+                }
+                return val.indexOf(".") == -1;
+            } else {
+                // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                return validarNum(ev);
+            }
+        }, //keydown
+        keyup   : function () {
+            var val = $(this).val();
+            // esta parte valida q no ingrese mas de 2 decimales
+            var parts = val.split(".");
+            if (parts.length > 1) {
+                if (parts[1].length > 5) {
+                    parts[1] = parts[1].substring(0, 5);
+                    val = parts[0] + "." + parts[1];
+                    $(this).val(val);
+                }
+            }
+
+        }
+
+    });
+
+    $("#longitud").bind({
+        keydown : function (ev) {
+            // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+            if (ev.keyCode == 190 || ev.keyCode == 110) {
+                var val = $(this).val();
+                if (val.length == 0) {
+                    $(this).val("0");
+                }
+                return val.indexOf(".") == -1;
+            } else {
+                // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                return validarNum(ev);
+            }
+        }, //keydown
+        keyup   : function () {
+            var val = $(this).val();
+            // esta parte valida q no ingrese mas de 2 decimales
+            var parts = val.split(".");
+            if (parts.length > 1) {
+                if (parts[1].length > 5) {
+                    parts[1] = parts[1].substring(0, 5);
+                    val = parts[0] + "." + parts[1];
+                    $(this).val(val);
+                }
+            }
+
+        }
+
+    });
+
+
+
+
     function limites() {
 
         google.maps.event.addListener(map, 'center_changed', function () {
@@ -222,6 +355,16 @@
         });
 
     }
+
+//    $("#btnImprimir").click(function () {
+//
+//
+//        var contents = window.opener.document.getElementById(map);
+//        document.write(contents.innerHTML);
+//        window.print();
+//
+//
+//    });
 
 
 

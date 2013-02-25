@@ -107,19 +107,42 @@
                     <div class="span 1 formato">DEPARTAMENTO</div>
 
                     <div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" class="departamento" id="departamentoObra"
-                                                  value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 350px" disabled="true"/></div>
+                                                  value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 310px" disabled="true"/></div>
+
+
+
+                    <div class="span1" style="margin-left: 410px; font-weight: bold">ESTADO</div>
+
+                    <div class="span1">
+
+                        <g:if test="${obra?.estado == null}">
+
+                            <g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"  style="width: 30px; font-weight: bold"/>
+                            <g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>
+
+                        </g:if>
+
+                        <g:else>
+
+                            <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"  style="width: 30px; font-weight: bold"/>
+                            <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
+
+                        </g:else>
+
+                    </div>
+
 
                 </div>
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span1 formato">MEMO</div>
+                    <div class="span3 formato">DOCUMENTO DE REFERENCIA</div>
 
-                    <div class="span3"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20"/></div>
+                    <div class="span1"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20" style="width: 70px; margin-left: -50px"/></div>
 
-                    <div class="span2 formato">CANTIDAD DE OBRA</div>
+                    <div class="span3 formato">MEMORANDO CANTIDAD DE OBRA</div>
 
-                    <div class="span3"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20"/></div>
+                    <div class="span1"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 70px; margin-left: -50px"/></div>
 
                     <div class="span1 formato">FECHA</div>
 
@@ -167,25 +190,25 @@
 
                     <div class="span6"><g:textField name="referencia" class="referencia" style="width: 610px" value="${obra?.referencia}" maxlength="127"/></div>
 
-                    <div class="span1" style="margin-left: 130px">Estado</div>
+                    %{--<div class="span1" style="margin-left: 130px">Estado</div>--}%
 
-                    <div class="span1">
+                    %{--<div class="span1">--}%
 
-                        <g:if test="${obra?.estado == null}">
+                        %{--<g:if test="${obra?.estado == null}">--}%
 
-                            <g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"/>
-                            <g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>
+                            %{--<g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"/>--}%
+                            %{--<g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>--}%
 
-                        </g:if>
+                        %{--</g:if>--}%
 
-                        <g:else>
+                        %{--<g:else>--}%
 
-                            <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"/>
-                            <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
+                            %{--<g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"/>--}%
+                            %{--<g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>--}%
 
-                        </g:else>
+                        %{--</g:else>--}%
 
-                    </div>
+                    %{--</div>--}%
                 </div>
 
                 <div class="span12">
@@ -230,15 +253,46 @@
 
                     <div class="span1" style="margin-left: -25px">Plazo</div>
 
-                    <div class="span2" style="margin-left: -10px">
-                        <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
-                                     maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}"/> Meses
-                    </div>
+                    <g:if test="${obra?.plazoEjecucionMeses == null}">
+
+
+                        <div class="span2" style="margin-left: -10px">
+                            <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
+                                         maxlength="3" type="number" value="${'1'}"/> Meses
+                        </div>
+
+
+
+                    </g:if>
+                    <g:else>
+
+
+                        <div class="span2" style="margin-left: -10px">
+                            <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
+                                         maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}"/> Meses
+                        </div>
+
+
+                    </g:else>
+
+                    <g:if test="${obra?.plazoEjecucionDias == null}">
+
+
+                        <div class="span2" style="margin-left: -30px">
+                            <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
+                                         maxlength="2" type="number" value="${'0'}"/> Días
+                        </div>
+
+
+                    </g:if>
+                    <g:else>
 
                     <div class="span2" style="margin-left: -30px">
                         <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
                                      maxlength="2" type="number" value="${obra?.plazoEjecucionDias}"/> Días
                     </div>
+
+                    </g:else>
 
                 </div>
 
@@ -290,11 +344,15 @@
 
                         <div class="span1" style="margin-left: -20px">Latitud</div>
 
-                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}"  style="width: 100px" /></div>
+                        %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}"  style="width: 100px" /></div>--}%
+
+                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}"/></div>
 
                         <div class="span1" style="margin-left: 60px">Longitud</div>
 
-                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 100px" /></div>
+                        %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 100px" /></div>--}%
+
+                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}"/></div>
 
 
 
@@ -619,6 +677,69 @@
                         var enteros = $(this).val();
 
                     });
+
+            $("#latitud").bind({
+                keydown : function (ev) {
+                    // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+                    if (ev.keyCode == 190 || ev.keyCode == 110) {
+                        var val = $(this).val();
+                        if (val.length == 0) {
+                            $(this).val("0");
+                        }
+                        return val.indexOf(".") == -1;
+                    } else {
+                        // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                        return validarNum(ev);
+                    }
+                }, //keydown
+                keyup   : function () {
+                    var val = $(this).val();
+                    // esta parte valida q no ingrese mas de 2 decimales
+                    var parts = val.split(".");
+                    if (parts.length > 1) {
+                        if (parts[1].length > 5) {
+                            parts[1] = parts[1].substring(0, 5);
+                            val = parts[0] + "." + parts[1];
+                            $(this).val(val);
+                        }
+                    }
+
+                }
+
+            });
+
+
+            $("#longitud").bind({
+                keydown : function (ev) {
+                    // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+                    if (ev.keyCode == 190 || ev.keyCode == 110) {
+                        var val = $(this).val();
+                        if (val.length == 0) {
+                            $(this).val("0");
+                        }
+                        return val.indexOf(".") == -1;
+                    } else {
+                        // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                        return validarNum(ev);
+                    }
+                }, //keydown
+                keyup   : function () {
+                    var val = $(this).val();
+                    // esta parte valida q no ingrese mas de 2 decimales
+                    var parts = val.split(".");
+                    if (parts.length > 1) {
+                        if (parts[1].length > 5) {
+                            parts[1] = parts[1].substring(0, 5);
+                            val = parts[0] + "." + parts[1];
+                            $(this).val(val);
+                        }
+                    }
+
+                }
+
+            });
+
+
 
             function loadPersonas() {
                 var idDep = $(".departamento").val();
