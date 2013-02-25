@@ -30,8 +30,21 @@
             </div>
         </g:if>
 
-        <div class="row">
-            <g:form class="form-horizontal" name="frmSave-Concurso" action="save" id="${concursoInstance?.id}">
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="span9 btn-group" role="navigation">
+                <g:link controller="concurso" action="list" class="btn">
+                    <i class="icon-angle-left"></i> Regresar
+                </g:link>
+            %{--<input type="SUBMIT" value="Guardar" class="btn btn-primary">--}%
+                <a href="#" class="btn btn-success" id="btnSave">
+                    <i class="icon-save"></i> Guardar
+                </a>
+            </div>
+        </div>
+
+
+        <g:form class="form-horizontal" name="frmSave-Concurso" action="save" id="${concursoInstance?.id}">
+            <div class="row">
                 <div class="span10">
                     <div class="control-group">
                         <div>
@@ -179,7 +192,7 @@
                         <div class="controls">
                             %{--<g:select id="administracion" name="administracion.id" from="${janus.Administracion.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.administracion?.id}" noSelection="['null': '']"/>--}%
                             <g:hiddenField name="administracion.id" value="${concursoInstance?.administracion?.id}"/>
-                            ${concursoInstance?.administracion?.fechaInicio.format("dd-MM-yyyy")} a ${concursoInstance?.administracion?.fechaFin.format("dd-MM-yyyy")} (${concursoInstance?.administracion?.nombrePrefecto})
+                            ${concursoInstance?.administracion?.fechaInicio?.format("dd-MM-yyyy")} a ${concursoInstance?.administracion?.fechaFin?.format("dd-MM-yyyy")} (${concursoInstance?.administracion?.nombrePrefecto})
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
                     </div>
@@ -276,6 +289,19 @@
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <div>
+                            <span class="control-label label label-inverse">
+                                Presupuesto referencial
+                            </span>
+                        </div>
+
+                        <div class="controls">
+                            <g:field type="number" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}"/>
+                            <p class="help-block ui-helper-hidden"></p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="span10">
@@ -292,36 +318,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="span10">
-                    <div class="control-group">
-                        <div>
-                            <input type="SUBMIT" value="Guardar" class="btn btn-primary">
-                        </div>
+            </div>
+        </g:form>
 
-                </div>
-            </g:form>
-        </div>
+        <script type="text/javascript">
+            $("#frmSave-Concurso").validate({
+                errorPlacement : function (error, element) {
+                    element.parent().find(".help-block").html(error).show();
+                },
+                success        : function (label) {
+                    label.parent().hide();
+                },
+                errorClass     : "label label-important",
+                submitHandler  : function (form) {
+                    $(".btn-success").replaceWith(spinner);
+                    form.submit();
+                }
+            });
 
-            <script type="text/javascript">
-                $("#frmSave-Concurso").validate({
-                    errorPlacement : function (error, element) {
-                        element.parent().find(".help-block").html(error).show();
-                    },
-                    success        : function (label) {
-                        label.parent().hide();
-                    },
-                    errorClass     : "label label-important",
-                    submitHandler  : function (form) {
-                        $(".btn-success").replaceWith(spinner);
-                        form.submit();
-                    }
-                });
+            $("#btnSave").click(function () {
+                $("#frmSave-Concurso").submit();
+            });
 
-                $("input").keyup(function (ev) {
-                    if (ev.keyCode == 13) {
-                        submitForm($(".btn-success"));
-                    }
-                });
-            </script>
+            $("input").keyup(function (ev) {
+                if (ev.keyCode == 13) {
+                    submitForm($(".btn-success"));
+                }
+            });
+        </script>
     </body>
 </html>

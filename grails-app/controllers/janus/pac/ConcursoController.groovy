@@ -59,6 +59,7 @@ class ConcursoController extends janus.seguridad.Shield {
         }
         concurso.costoBases = 0
         concurso.objeto = pac.descripcion
+
         if (concurso.save(flush: true)) {
             println "saved ok"
             def codigo = generaCodigo(concurso)
@@ -100,7 +101,7 @@ class ConcursoController extends janus.seguridad.Shield {
         def funcionJs = "function(){"
         funcionJs += '$("#modal-pac").modal("hide");'
         funcionJs += 'var id=$(this).attr("regId");'
-        funcionJs += 'console.log(id);'
+//        funcionJs += 'console.log(id);'
         funcionJs += 'var url = "' + createLink(controller: 'concurso', action: 'nuevoProceso') + '/"+id;'
         funcionJs += 'location.href = url;'
         funcionJs += '}'
@@ -130,7 +131,7 @@ class ConcursoController extends janus.seguridad.Shield {
     def form_ajax() {
         def concursoInstance = new Concurso(params)
         if (params.id) {
-            concursoInstance = Concurso.get(params.id)
+            concursoInstance = Concurso.get(params.id.toLong())
             if (!concursoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Concurso con id " + params.id

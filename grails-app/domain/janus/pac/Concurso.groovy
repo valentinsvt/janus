@@ -25,6 +25,8 @@ class Concurso {
     String estado
     String observaciones
 
+    Double presupuestoReferencial = 0
+
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
@@ -54,6 +56,7 @@ class Concurso {
             estado column: 'cncretdo'
             observaciones column: 'cncrobsr'
 
+            presupuestoReferencial column: 'cncrprrf'
         }
     }
     static constraints = {

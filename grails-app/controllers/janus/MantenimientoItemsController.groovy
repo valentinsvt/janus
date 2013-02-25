@@ -41,12 +41,13 @@ class MantenimientoItemsController extends Shield {
             case "item_material":
             case "item_manoObra":
             case "item_equipo":
+                def tipoLista = Item.get(id).tipoLista
                 if (precios) {
                     if (ignore) {
                         hijos = ["Todos"]
                     } else {
-
-                        hijos = Lugar.list([sort: "descripcion"])
+                        hijos = Lugar.findAllByTipoLista(tipoLista)
+//                        hijos = Lugar.list([sort: "descripcion"])
 //                        hijos = Lugar.withCriteria {
 //                            and {
 //                                order("tipo", "asc")
@@ -590,7 +591,7 @@ class MantenimientoItemsController extends Shield {
         def fpItems = ItemsFormulaPolinomica.findAllByItem(item)
 
 
-        return [item: item, rubro: rubro, precios: precios, fpItems: fpItems, delete:params.delete]
+        return [item: item, rubro: rubro, precios: precios, fpItems: fpItems, delete: params.delete]
 
     }
 
@@ -676,6 +677,7 @@ class MantenimientoItemsController extends Shield {
 
     def savePrecio_ajax() {
 //        println params
+        def item = Item.get(params.item.id)
         params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         if (params.lugar.id != "-1") {
             def precioRubrosItemsInstance = new PrecioRubrosItems(params)
@@ -692,12 +694,12 @@ class MantenimientoItemsController extends Shield {
 //                    tipo.add("V")
 //                }
                 def error = 0
-                Lugar.list().each { lugar ->
+                Lugar.findAllByTipoLista(item.tipoLista).each { lugar ->
                     def precios = PrecioRubrosItems.withCriteria {
                         and {
                             eq("lugar", lugar)
                             eq("fecha", params.fecha)
-                            eq("item", Item.get(params.item.id))
+                            eq("item", item)
                         }
                     }
                     if (precios.size() == 0) {
