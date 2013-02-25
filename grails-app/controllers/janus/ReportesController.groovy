@@ -5,22 +5,12 @@ import com.lowagie.text.*
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
-import janus.ejecucion.FormulaPolinomicaContractual
-import janus.ejecucion.PeriodosInec
-import janus.ejecucion.Planilla
-import janus.ejecucion.TipoFormulaPolinomica
-import janus.ejecucion.TipoPlanilla
-import janus.ejecucion.ValorReajuste
+import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
 import jxl.Workbook
 import jxl.WorkbookSettings
-import jxl.write.WritableCellFormat
-import jxl.write.WritableFont
-import jxl.write.WritableSheet
-import jxl.write.WritableWorkbook
-import jxl.write.Label
-import jxl.write.Number
+import jxl.write.*
 
 import java.awt.*
 
@@ -227,30 +217,30 @@ class ReportesController {
         }
     }
 
-    def pac(){
-        println "params REPORTE "+params
+    def pac() {
+        println "params REPORTE " + params
         def pac
         def dep
         def anio
-        if (!params.todos){
-            anio=janus.pac.Anio.get(params.anio)
-            if (params.dpto){
+        if (!params.todos) {
+            anio = janus.pac.Anio.get(params.anio)
+            if (params.dpto) {
                 dep = Departamento.get(params.dpto)
-                pac = janus.pac.Pac.findAllByDepartamentoAndAnio(dep,anio,[sort: "id"])
+                pac = janus.pac.Pac.findAllByDepartamentoAndAnio(dep, anio, [sort: "id"])
                 dep = dep.descripcion
-                anio=anio.anio
-            } else{
-                pac = janus.pac.Pac.findAllByAnio(janus.pac.Anio.get(params.anio),[sort: "id"])
+                anio = anio.anio
+            } else {
+                pac = janus.pac.Pac.findAllByAnio(janus.pac.Anio.get(params.anio), [sort: "id"])
                 dep = "Todos"
-                anio=anio.anio
+                anio = anio.anio
             }
-        }else{
+        } else {
             dep = "Todos"
             anio = "Todos"
             pac = janus.pac.Pac.list([sort: "id"])
         }
 
-        [pac:pac,todos:params.todos,dep:dep,anio:anio]
+        [pac: pac, todos: params.todos, dep: dep, anio: anio]
     }
 
 
@@ -344,7 +334,7 @@ class ReportesController {
     }
 
 
-    def imprimirRubrosExcel(){
+    def imprimirRubrosExcel() {
         def obra = Obra.get(params.obra.toLong())
         def lugar = obra.lugar
         def fecha = obra.fechaPreciosRubros
@@ -361,10 +351,10 @@ class ReportesController {
         def row = 0
 
         preciosService.ac_rbroObra(obra.id)
-        VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.eachWithIndex { rubro,i ->
+        VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.eachWithIndex { rubro, i ->
             def res = preciosService.presioUnitarioVolumenObra("* ", obra.id, rubro.id)
             WritableSheet sheet = workbook.createSheet(rubro.codigo, i)
-            rubroAExcel(sheet,res,rubro,fecha,indi)
+            rubroAExcel(sheet, res, rubro, fecha, indi)
         }
         workbook.write();
         workbook.close();
@@ -377,7 +367,7 @@ class ReportesController {
     }
 
 
-    def rubroAExcel(sheet,res,rubro,fecha,indi){
+    def rubroAExcel(sheet, res, rubro, fecha, indi) {
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, true);
@@ -392,39 +382,39 @@ class ReportesController {
 
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
-        def label = new Label(0, 1,"Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0,2, "Departamento de costos".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1, "Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2, "Departamento de costos".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 
-        sheet.mergeCells(0,1, 1, 1)
-        sheet.mergeCells(0,2, 1,2)
-        sheet.mergeCells(0,3, 1, 3)
-        label = new Label(0, 5, "Fecha: "+new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
-        sheet.mergeCells(0,5, 1, 5)
-        label = new Label(0, 6, "Código: "+rubro.codigo, times16format); sheet.addCell(label);
-        sheet.mergeCells(0,6, 1, 6)
-        label = new Label(0, 7, "Descripción: "+rubro.nombre, times16format); sheet.addCell(label);
-        sheet.mergeCells(0,7, 1, 7)
-        label = new Label(5, 5, "Fecha Act. P.U: "+fecha?.format("dd-MM-yyyy"), times16format); sheet.addCell(label);
-        sheet.mergeCells(5,5, 6, 5)
-        label = new Label(5, 6, "Unidad: "+rubro.unidad?.codigo, times16format); sheet.addCell(label);
-        sheet.mergeCells(5,6, 6, 6)
+        sheet.mergeCells(0, 1, 1, 1)
+        sheet.mergeCells(0, 2, 1, 2)
+        sheet.mergeCells(0, 3, 1, 3)
+        label = new Label(0, 5, "Fecha: " + new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
+        sheet.mergeCells(0, 5, 1, 5)
+        label = new Label(0, 6, "Código: " + rubro.codigo, times16format); sheet.addCell(label);
+        sheet.mergeCells(0, 6, 1, 6)
+        label = new Label(0, 7, "Descripción: " + rubro.nombre, times16format); sheet.addCell(label);
+        sheet.mergeCells(0, 7, 1, 7)
+        label = new Label(5, 5, "Fecha Act. P.U: " + fecha?.format("dd-MM-yyyy"), times16format); sheet.addCell(label);
+        sheet.mergeCells(5, 5, 6, 5)
+        label = new Label(5, 6, "Unidad: " + rubro.unidad?.codigo, times16format); sheet.addCell(label);
+        sheet.mergeCells(5, 6, 6, 6)
 
         def fila = 9
-        label = new Label(0, fila,"Herramientas", times16format); sheet.addCell(label);
-        sheet.mergeCells(0,fila, 1, fila)
+        label = new Label(0, fila, "Herramientas", times16format); sheet.addCell(label);
+        sheet.mergeCells(0, fila, 1, fila)
         fila++
         def number
-        def totalHer=0
-        def totalMan=0
-        def totalMat=0
+        def totalHer = 0
+        def totalMan = 0
+        def totalMat = 0
         def total = 0
-        def band=0
-        def rowsTrans=[]
-        res.each {r->
+        def band = 0
+        def rowsTrans = []
+        res.each { r ->
 //            println "r "+r
-            if(r["grpocdgo"]==3){
-                if(band==0){
+            if (r["grpocdgo"] == 3) {
+                if (band == 0) {
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
                     label = new Label(2, fila, "Cantidad", times16format); sheet.addCell(label);
@@ -434,27 +424,27 @@ class ReportesController {
                     label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
                     fila++
                 }
-                band=1
-                label = new Label(0, fila,r["itemcdgo"], times10); sheet.addCell(label);
-                label = new Label(1, fila,r["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(3, fila, r["rbpcpcun"]);sheet.addCell(number);
-                number = new Number(4, fila, r["rbpcpcun"]*r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(5, fila, r["rndm"]);sheet.addCell(number);
-                number = new Number(6, fila, r["parcial"]);sheet.addCell(number);
-                totalHer+=r["parcial"]
+                band = 1
+                label = new Label(0, fila, r["itemcdgo"], times10); sheet.addCell(label);
+                label = new Label(1, fila, r["itemnmbr"], times10); sheet.addCell(label);
+                number = new Number(2, fila, r["rbrocntd"]); sheet.addCell(number);
+                number = new Number(3, fila, r["rbpcpcun"]); sheet.addCell(number);
+                number = new Number(4, fila, r["rbpcpcun"] * r["rbrocntd"]); sheet.addCell(number);
+                number = new Number(5, fila, r["rndm"]); sheet.addCell(number);
+                number = new Number(6, fila, r["parcial"]); sheet.addCell(number);
+                totalHer += r["parcial"]
                 fila++
             }
-            if(r["grpocdgo"]==2){
-                if(band==1){
+            if (r["grpocdgo"] == 2) {
+                if (band == 1) {
                     label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
-                    number = new Number(6, fila, totalHer);sheet.addCell(number);
+                    number = new Number(6, fila, totalHer); sheet.addCell(number);
                     fila++
                 }
-                if(band!=2){
+                if (band != 2) {
                     fila++
-                    label = new Label(0, fila,"Mano de obra", times16format); sheet.addCell(label);
-                    sheet.mergeCells(0,fila, 1, fila)
+                    label = new Label(0, fila, "Mano de obra", times16format); sheet.addCell(label);
+                    sheet.mergeCells(0, fila, 1, fila)
                     fila++
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
@@ -465,27 +455,27 @@ class ReportesController {
                     label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
                     fila++
                 }
-                band=2
-                label = new Label(0, fila,r["itemcdgo"], times10); sheet.addCell(label);
-                label = new Label(1, fila,r["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(3, fila, r["rbpcpcun"]);sheet.addCell(number);
-                number = new Number(4, fila, r["rbpcpcun"]*r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(5, fila, r["rndm"]);sheet.addCell(number);
-                number = new Number(6, fila, r["parcial"]);sheet.addCell(number);
-                totalMan+=r["parcial"]
+                band = 2
+                label = new Label(0, fila, r["itemcdgo"], times10); sheet.addCell(label);
+                label = new Label(1, fila, r["itemnmbr"], times10); sheet.addCell(label);
+                number = new Number(2, fila, r["rbrocntd"]); sheet.addCell(number);
+                number = new Number(3, fila, r["rbpcpcun"]); sheet.addCell(number);
+                number = new Number(4, fila, r["rbpcpcun"] * r["rbrocntd"]); sheet.addCell(number);
+                number = new Number(5, fila, r["rndm"]); sheet.addCell(number);
+                number = new Number(6, fila, r["parcial"]); sheet.addCell(number);
+                totalMan += r["parcial"]
                 fila++
             }
-            if(r["grpocdgo"]==1){
-                if(band==2){
+            if (r["grpocdgo"] == 1) {
+                if (band == 2) {
                     label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
-                    number = new Number(6, fila, totalMan);sheet.addCell(number);
+                    number = new Number(6, fila, totalMan); sheet.addCell(number);
                     fila++
                 }
-                if(band!=3){
+                if (band != 3) {
                     fila++
-                    label = new Label(0, fila,"Materiales", times16format); sheet.addCell(label);
-                    sheet.mergeCells(0,fila, 1, fila)
+                    label = new Label(0, fila, "Materiales", times16format); sheet.addCell(label);
+                    sheet.mergeCells(0, fila, 1, fila)
                     fila++
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
@@ -494,33 +484,33 @@ class ReportesController {
                     label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
                     fila++
                 }
-                band=3
-                label = new Label(0, fila,r["itemcdgo"], times10); sheet.addCell(label);
-                label = new Label(1, fila,r["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(3, fila, r["rbpcpcun"]);sheet.addCell(number);
-                number = new Number(6, fila, r["parcial"]);sheet.addCell(number);
-                totalMat+=r["parcial"]
+                band = 3
+                label = new Label(0, fila, r["itemcdgo"], times10); sheet.addCell(label);
+                label = new Label(1, fila, r["itemnmbr"], times10); sheet.addCell(label);
+                number = new Number(2, fila, r["rbrocntd"]); sheet.addCell(number);
+                number = new Number(3, fila, r["rbpcpcun"]); sheet.addCell(number);
+                number = new Number(6, fila, r["parcial"]); sheet.addCell(number);
+                totalMat += r["parcial"]
                 fila++
 
             }
-            if(r["parcial_t"]>0){
+            if (r["parcial_t"] > 0) {
                 rowsTrans.add(r)
-                total+=r["parcial_t"]
+                total += r["parcial_t"]
             }
 
         }
-        if(band==3){
+        if (band == 3) {
             label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
-            number = new Number(6, fila, totalMat);sheet.addCell(number);
+            number = new Number(6, fila, totalMat); sheet.addCell(number);
             fila++
         }
 
         /*Tranporte*/
-        if (rowsTrans.size()>0){
+        if (rowsTrans.size() > 0) {
             fila++
-            label = new Label(0, fila,"Transporte", times16format); sheet.addCell(label);
-            sheet.mergeCells(0,fila, 1, fila)
+            label = new Label(0, fila, "Transporte", times16format); sheet.addCell(label);
+            sheet.mergeCells(0, fila, 1, fila)
             fila++
             label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
             label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
@@ -530,55 +520,54 @@ class ReportesController {
             label = new Label(5, fila, "Unitario", times16format); sheet.addCell(label);
             label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
             fila++
-            rowsTrans.each {rt->
-                label = new Label(0, fila,rt["itemcdgo"], times10); sheet.addCell(label);
-                label = new Label(1, fila,rt["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, rt["itempeso"]);sheet.addCell(number);
-                number = new Number(3, fila, rt["rbrocntd"]);sheet.addCell(number);
-                number = new Number(4, fila, rt["distancia"]);sheet.addCell(number);
-                number = new Number(5, fila, rt["parcial_t"]/(rt["itempeso"]*rt["rbrocntd"]*rt["distancia"]));sheet.addCell(number);
-                number = new Number(6, fila, rt["parcial_t"]);sheet.addCell(number);
+            rowsTrans.each { rt ->
+                label = new Label(0, fila, rt["itemcdgo"], times10); sheet.addCell(label);
+                label = new Label(1, fila, rt["itemnmbr"], times10); sheet.addCell(label);
+                number = new Number(2, fila, rt["itempeso"]); sheet.addCell(number);
+                number = new Number(3, fila, rt["rbrocntd"]); sheet.addCell(number);
+                number = new Number(4, fila, rt["distancia"]); sheet.addCell(number);
+                number = new Number(5, fila, rt["parcial_t"] / (rt["itempeso"] * rt["rbrocntd"] * rt["distancia"])); sheet.addCell(number);
+                number = new Number(6, fila, rt["parcial_t"]); sheet.addCell(number);
                 fila++
             }
             label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
-            number = new Number(6, fila, total);sheet.addCell(number);
+            number = new Number(6, fila, total); sheet.addCell(number);
             fila++
             fila++
         }
 
         /*indirectos */
 
-        label = new Label(0, fila,"Costos Indirectos", times16format); sheet.addCell(label);
-        sheet.mergeCells(0,fila, 1, fila)
+        label = new Label(0, fila, "Costos Indirectos", times16format); sheet.addCell(label);
+        sheet.mergeCells(0, fila, 1, fila)
         fila++
 
         label = new Label(0, fila, "Descripción", times16format); sheet.addCell(label);
-        sheet.mergeCells(0,fila, 1, fila)
+        sheet.mergeCells(0, fila, 1, fila)
         label = new Label(5, fila, "Porcentaje", times16format); sheet.addCell(label);
         label = new Label(6, fila, "Valor", times16format); sheet.addCell(label);
         fila++
-        def totalRubro=total+totalHer+totalMan+totalMat
-        def totalIndi=totalRubro*indi/100
+        def totalRubro = total + totalHer + totalMan + totalMat
+        def totalIndi = totalRubro * indi / 100
         label = new Label(0, fila, "Costos indirectos", times10); sheet.addCell(label);
-        sheet.mergeCells(0,fila, 1, fila)
-        number = new Number(5, fila, indi);sheet.addCell(number);
-        number = new Number(6, fila, totalIndi);sheet.addCell(number);
-
+        sheet.mergeCells(0, fila, 1, fila)
+        number = new Number(5, fila, indi); sheet.addCell(number);
+        number = new Number(6, fila, totalIndi); sheet.addCell(number);
 
         /*Totales*/
-        fila+=4
-        label = new Label(4, fila,"Costo unitario directo", times16format); sheet.addCell(label);
-        sheet.mergeCells(4,fila, 5, fila)
-        label = new Label(4, fila+1,"Costos indirectos", times16format); sheet.addCell(label);
-        sheet.mergeCells(4,fila+1, 5, fila+1)
-        label = new Label(4, fila+2,"Costo total del rubro", times16format); sheet.addCell(label);
-        sheet.mergeCells(4,fila+2, 5, fila+2)
-        label = new Label(4, fila+3,"Precio unitario", times16format); sheet.addCell(label);
-        sheet.mergeCells(4,fila+3, 5, fila+3)
-        number = new Number(6, fila, totalRubro);sheet.addCell(number);
-        number = new Number(6, fila+1, totalIndi);sheet.addCell(number);
-        number = new Number(6, fila+2, totalRubro+totalIndi);sheet.addCell(number);
-        number = new Number(6, fila+3, (totalRubro+totalIndi).toDouble().round(2));sheet.addCell(number);
+        fila += 4
+        label = new Label(4, fila, "Costo unitario directo", times16format); sheet.addCell(label);
+        sheet.mergeCells(4, fila, 5, fila)
+        label = new Label(4, fila + 1, "Costos indirectos", times16format); sheet.addCell(label);
+        sheet.mergeCells(4, fila + 1, 5, fila + 1)
+        label = new Label(4, fila + 2, "Costo total del rubro", times16format); sheet.addCell(label);
+        sheet.mergeCells(4, fila + 2, 5, fila + 2)
+        label = new Label(4, fila + 3, "Precio unitario", times16format); sheet.addCell(label);
+        sheet.mergeCells(4, fila + 3, 5, fila + 3)
+        number = new Number(6, fila, totalRubro); sheet.addCell(number);
+        number = new Number(6, fila + 1, totalIndi); sheet.addCell(number);
+        number = new Number(6, fila + 2, totalRubro + totalIndi); sheet.addCell(number);
+        number = new Number(6, fila + 3, (totalRubro + totalIndi).toDouble().round(2)); sheet.addCell(number);
         return sheet
     }
 
@@ -1108,7 +1097,6 @@ class ReportesController {
         response.getOutputStream().write(b)
 
 
-
     }
 
 
@@ -1134,7 +1122,6 @@ class ReportesController {
         def firmas
 
         def cuenta = 0;
-
 
 //        println(obra.revisor.nombre);
 //        println(obra.inspector.nombre);
@@ -1237,7 +1224,6 @@ class ReportesController {
         if (params.tipoReporte == '1') {
 
 
-
             txtIzq.add(new Paragraph(auxiliar?.baseCont, times10bold));
 
         }
@@ -1330,23 +1316,23 @@ class ReportesController {
 
         def detalle
 
-            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         preciosService.ac_rbroObra(obra.id)
 
 
-        def precios=[:]
+        def precios = [:]
 
-        def indirecto = obra.totales/100
+        def indirecto = obra.totales / 100
 
-        tablaVolObra.setWidths(arregloEnteros([10,40,5,15,15,15]))
+        tablaVolObra.setWidths(arregloEnteros([10, 40, 5, 15, 15, 15]))
 
-        addCellTabla(tablaVolObra, new Paragraph("Rubro N°", times8bold), prmsCellHead )
-        addCellTabla(tablaVolObra, new Paragraph("Descripción", times8bold), prmsCellHead )
-        addCellTabla(tablaVolObra, new Paragraph("Unidad", times8bold), prmsCellHead )
-        addCellTabla(tablaVolObra, new Paragraph("Cantidad", times8bold), prmsCellHead )
-        addCellTabla(tablaVolObra, new Paragraph("P. Unitario", times8bold), prmsCellHead )
+        addCellTabla(tablaVolObra, new Paragraph("Rubro N°", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Descripción", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Unidad", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Cantidad", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("P. Unitario", times8bold), prmsCellHead)
 
-        addCellTabla(tablaVolObra, new Paragraph("Costo Total", times8bold), prmsCellHead )
+        addCellTabla(tablaVolObra, new Paragraph("Costo Total", times8bold), prmsCellHead)
 
         def c;
 
@@ -1356,40 +1342,36 @@ class ReportesController {
 
         def totalPresupuesto;
 
-        detalle.each{
-
-
-
-
+        detalle.each {
 
 //            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
 //            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
 //            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
 
 
-            addCellTabla(tablaVolObra, new Paragraph(it?.item?.codigo,times8normal), prmsCellCenter)
+            addCellTabla(tablaVolObra, new Paragraph(it?.item?.codigo, times8normal), prmsCellCenter)
 
 
-            addCellTabla(tablaVolObra, new Paragraph(it?.item?.nombre,times8normal), prmsCellLeft)
+            addCellTabla(tablaVolObra, new Paragraph(it?.item?.nombre, times8normal), prmsCellLeft)
 
 
-            addCellTabla(tablaVolObra, new Paragraph(it?.item?.unidad?.codigo,times8normal), prmsCellCenter)
+            addCellTabla(tablaVolObra, new Paragraph(it?.item?.unidad?.codigo, times8normal), prmsCellCenter)
 
 
-           addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
-                   2, maxFractionDigits: 2, format: "#####.##", locale: "ec"),times8normal), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
+                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"), times8normal), prmsCellRight)
 
-            addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"),times8normal), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
+                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"), times8normal), prmsCellRight)
 
-            addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()]*it.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"),times8normal), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()] * it.cantidad, minFractionDigits:
+                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"), times8normal), prmsCellRight)
 
-            totales =  precios[it.id.toString()]*it.cantidad
+            totales = precios[it.id.toString()] * it.cantidad
 
-            totalPresupuesto = (total1+=totales);
+            totalPresupuesto = (total1 += totales);
 
 //
 
@@ -1401,15 +1383,15 @@ class ReportesController {
         PdfPTable tablaTotal = new PdfPTable(6);
         tablaTotal.setWidthPercentage(100);
 
-        tablaTotal.setWidths(arregloEnteros([85,0,0,0,0,15]))
+        tablaTotal.setWidths(arregloEnteros([85, 0, 0, 0, 0, 15]))
 
 
-        addCellTabla(tablaTotal, new Paragraph("Total del presupuesto: ", times8bold), prmsCellHead )
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead )
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####.##", locale: "ec") , times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph("Total del presupuesto: ", times8bold), prmsCellHead)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
 
 
         Paragraph txtCondiciones = new Paragraph();
@@ -1461,7 +1443,7 @@ class ReportesController {
 
                 headerForzar.add(new Paragraph("Oficio N°:" + " ", times10bold));
 
-            }else {
+            } else {
 
                 headerForzar.add(new Paragraph("Oficio N°:" + obra?.oficioSalida, times10bold));
 
@@ -1501,10 +1483,7 @@ class ReportesController {
             document.add(txtRetenciones);
 
 
-
-        }  else {
-
-
+        } else {
 
 
             PdfPTable tablaRetenciones = new PdfPTable(2);
@@ -1537,8 +1516,7 @@ class ReportesController {
         }
 
 
-        if(cuenta == 0) {
-
+        if (cuenta == 0) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(2);
@@ -1584,11 +1562,10 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-
         }
 
 
-        if(cuenta == 1){
+        if (cuenta == 1) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(3);
@@ -1621,10 +1598,10 @@ class ReportesController {
 
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
 
@@ -1639,14 +1616,12 @@ class ReportesController {
 
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
-
-
 
 
             }
@@ -1660,12 +1635,8 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-
-
         }
-        if(cuenta == 2){
-
-
+        if (cuenta == 2) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(4);
@@ -1698,10 +1669,10 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + "" + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
 
@@ -1713,14 +1684,12 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
-
-
 
 
             }
@@ -1728,10 +1697,7 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-
-        }
-
-        else {
+        } else {
 
 
         }
@@ -1748,8 +1714,7 @@ class ReportesController {
     }
 
 
-    def reporteDocumentosObraMemo(){
-
+    def reporteDocumentosObraMemo() {
 
 //        println(params)
 
@@ -1778,7 +1743,7 @@ class ReportesController {
         def tipo = params.tipoReporte
 
 
-        if (obra?.oficioSalida == null){
+        if (obra?.oficioSalida == null) {
 
 
             obra?.oficioSalida = "";
@@ -1791,7 +1756,7 @@ class ReportesController {
 
             reajusteBase = 0;
 
-        }else {
+        } else {
 
             reajusteBase = params.reajusteMemo
 
@@ -1799,7 +1764,7 @@ class ReportesController {
 
 
 
-        if(totalBase == "") {
+        if (totalBase == "") {
 
 
             totalBase = 0;
@@ -1831,13 +1796,11 @@ class ReportesController {
 //            println ":........................."
 //        }
 
-            cuenta = firma.size()
+        cuenta = firma.size()
 
 //            println("cuenta:" + cuenta)
 
 //            return cuenta
-
-
 
 //        }
 
@@ -1919,28 +1882,27 @@ class ReportesController {
 
         }
 
-
 //        txtIzq.add(new Paragraph("Quito," + obra?.fechaCreacionObra, times10bold));
         txtIzq.add(new Paragraph("Quito, " + formatDate(date: obra?.fechaCreacionObra, format: "dd-MM-yyyy"), times10bold));
 
         if (obra?.claseObra?.tipo == 'C') {
 
-            txtIzq.add(new Paragraph("DE : Dpto Infraestructura Comunitaria " , times10bold));
+            txtIzq.add(new Paragraph("DE : Dpto Infraestructura Comunitaria ", times10bold));
         }
 
 
         if (obra?.claseObra?.tipo == 'V') {
 
-            txtIzq.add(new Paragraph("DE : Dpto de Estudios Viales" , times10bold));
+            txtIzq.add(new Paragraph("DE : Dpto de Estudios Viales", times10bold));
         }
 
-        if(obra?.departamento?.descripcion == null) {
+        if (obra?.departamento?.descripcion == null) {
 
             txtIzq.add(new Paragraph("PARA :" + " ", times10bold));
 
-        }else {
+        } else {
 
-        txtIzq.add(new Paragraph("PARA :" + obra?.departamento?.descripcion, times10bold));
+            txtIzq.add(new Paragraph("PARA :" + obra?.departamento?.descripcion, times10bold));
 
 
         }
@@ -1957,12 +1919,11 @@ class ReportesController {
         tablaMemo.setWidthPercentage(100);
 
 
-        addCellTabla(tablaMemo, new Paragraph(" ", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph(" ", times8bold),prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
 
         if (tipo == '1') {
-
 
 
             addCellTabla(tablaMemo, new Paragraph("Base de Contrato :", times8bold), prmsHeaderHoja)
@@ -1982,18 +1943,18 @@ class ReportesController {
 
 
 
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph(" ", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph(" ", times8bold),prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaMemo, new Paragraph("Objeto :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaMemo, new Paragraph(obra?.nombre, times8normal), prmsHeaderHoja)
 
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph(" ", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph(" ", times8bold),prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
 
         addCellTabla(tablaMemo, new Paragraph("Cantón :", times8bold), prmsHeaderHoja)
@@ -2008,12 +1969,12 @@ class ReportesController {
         addCellTabla(tablaMemo, new Paragraph("Otras Referencias :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaMemo, new Paragraph(obra?.referencia, times8normal), prmsHeaderHoja)
 
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("", times8bold),prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("", times8bold), prmsHeaderHoja)
 
         PdfPTable tablaBaseMemo = new PdfPTable(3);
         tablaMemo.setWidthPercentage(100);
@@ -2039,7 +2000,7 @@ class ReportesController {
 
         }
 
-        if ( tipo == '2') {
+        if (tipo == '2') {
 
 
             addCellTabla(tablaBaseMemo, new Paragraph("Valor del P. Referencial :", times8bold), prmsHeaderHoja)
@@ -2081,7 +2042,6 @@ class ReportesController {
         if (cuenta == 0) {
 
 
-
             PdfPTable tablaFirmas = new PdfPTable(2);
             tablaFirmas.setWidthPercentage(100);
 
@@ -2119,12 +2079,11 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-
         }
 
 
 
-        if(cuenta == 1){
+        if (cuenta == 1) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(3);
@@ -2151,10 +2110,10 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
 
@@ -2166,9 +2125,9 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
-            firma.each { f->
+            firma.each { f ->
 
-                         firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
 
@@ -2182,12 +2141,8 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-
-
         }
-        if(cuenta == 2){
-
-
+        if (cuenta == 2) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(4);
@@ -2217,10 +2172,10 @@ class ReportesController {
 
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + "" + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
 
@@ -2232,14 +2187,12 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
-
-
 
 
             }
@@ -2254,7 +2207,6 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-
         }
 
 
@@ -2265,7 +2217,6 @@ class ReportesController {
         response.setHeader("Content-disposition", "attachment; filename=" + name)
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
-
 
 
     }
@@ -2305,114 +2256,114 @@ class ReportesController {
         def p10 = FormulaPolinomica.findByObraAndNumero(obra, 'p10')
         def px = FormulaPolinomica.findByObraAndNumero(obra, 'px')
 
-       def p01valor
-       def p02valor
-       def p03valor
-       def p04valor
-       def p05valor
-       def p06valor
-       def p07valor
-       def p08valor
-       def p09valor
-       def p10valor
-       def pxvalor
+        def p01valor
+        def p02valor
+        def p03valor
+        def p04valor
+        def p05valor
+        def p06valor
+        def p07valor
+        def p08valor
+        def p09valor
+        def p10valor
+        def pxvalor
 
 
-        if(p01 == null){
+        if (p01 == null) {
 
             p01valor = 0;
 
-        }else {
+        } else {
 
             p01valor = p01.valor
 
         }
-        if(p02 == null){
+        if (p02 == null) {
 
             p02valor = 0;
 
-        }else {
+        } else {
 
             p02valor = p02.valor
 
         }
-        if(p03 == null){
+        if (p03 == null) {
 
             p03valor = 0;
 
-        }else {
+        } else {
 
             p03valor = p03.valor
 
         }
-        if(p04 == null){
+        if (p04 == null) {
 
             p04valor = 0;
 
-        }else {
+        } else {
 
             p04valor = p04.valor
 
         }
-        if(p05 == null){
+        if (p05 == null) {
 
             p05valor = 0;
 
-        }else {
+        } else {
 
             p05valor = p05.valor
 
         }
-        if(p06 == null){
+        if (p06 == null) {
 
             p06valor = 0;
 
-        }else {
+        } else {
 
             p06valor = p06.valor
 
         }
-        if(p07 == null){
+        if (p07 == null) {
 
             p07valor = 0;
 
-        }else {
+        } else {
 
             p07valor = p07.valor
 
         }
-        if(p08 == null){
+        if (p08 == null) {
 
             p08valor = 0;
 
-        }else {
+        } else {
 
             p08valor = p08.valor
 
         }
-        if(p09 == null){
+        if (p09 == null) {
 
             p09valor = 0;
 
-        }else {
+        } else {
 
             p09valor = p09.valor
 
         }
-        if(p10 == null){
+        if (p10 == null) {
 
             p10valor = 0;
 
-        }else {
+        } else {
 
             p10valor = p10.valor
 
         }
-        if(px == null){
+        if (px == null) {
 
             pxvalor = 0;
 
-        }else {
+        } else {
 
             pxvalor = px.valor
 
@@ -2428,12 +2379,12 @@ class ReportesController {
         def valorCoef = 0;
 
 
-        ps.valor.each {  i->
+        ps.valor.each { i ->
 
 
             valorCoef = i
 
-            valorCoef+=valorCoef
+            valorCoef += valorCoef
 
 //            println(i)
 //            println(valorCoef)
@@ -2456,7 +2407,7 @@ class ReportesController {
         def totalBase = params.totalPresupuesto
 
 
-        if(obra?.formulaPolinomica == null) {
+        if (obra?.formulaPolinomica == null) {
 
             obra?.formulaPolinomica = ""
 
@@ -2704,7 +2655,7 @@ class ReportesController {
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
-       addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##.##", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -2719,8 +2670,7 @@ class ReportesController {
 
         document.add(tablaPie)
 
-        if(cuenta == 0) {
-
+        if (cuenta == 0) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(2);
@@ -2761,9 +2711,8 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-
         }
-        if(cuenta == 1){
+        if (cuenta == 1) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(3);
@@ -2794,10 +2743,10 @@ class ReportesController {
 
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
 
@@ -2808,10 +2757,10 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma1?.cargo, times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
 
@@ -2824,9 +2773,7 @@ class ReportesController {
             document.add(tablaFirmas);
 
         }
-        if(cuenta == 2){
-
-
+        if (cuenta == 2) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(4);
@@ -2859,10 +2806,10 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.titulo + "" + firma2?.nombre + " " + firma2?.apellido, times8bold), prmsHeaderHoja)
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + "" + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
 
@@ -2874,14 +2821,12 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(firma2?.cargo, times8bold), prmsHeaderHoja)
 
 
-            firma.each { f->
+            firma.each { f ->
 
 
-                firmas=Persona.get(f)
+                firmas = Persona.get(f)
 
                 addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
-
-
 
 
             }
@@ -2892,7 +2837,6 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
             document.add(tablaFirmas);
-
 
 
         }
@@ -2907,20 +2851,18 @@ class ReportesController {
         response.getOutputStream().write(b)
 
 
-
-
     }
 
 
-    def documentosObraExcel () {
+    def documentosObraExcel() {
 
         def obra = Obra.get(params.id)
 
 
         def detalle
 
-        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+        detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
@@ -2929,20 +2871,20 @@ class ReportesController {
         def lugar = obra.lugar
         def prch = 0
         def prvl = 0
-        if (obra.chofer){
-            prch = preciosService.getPrecioItems(fecha,lugar,[obra.chofer])
+        if (obra.chofer) {
+            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
             prch = prch["${obra.chofer.id}"]
-            prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
+            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
             prvl = prvl["${obra.volquete.id}"]
         }
-        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
+        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
 
-        if (rendimientos["rdps"].toString()=="NaN")
-            rendimientos["rdps"]=0
-        if (rendimientos["rdvl"].toString()=="NaN")
-            rendimientos["rdvl"]=0
+        if (rendimientos["rdps"].toString() == "NaN")
+            rendimientos["rdps"] = 0
+        if (rendimientos["rdvl"].toString() == "NaN")
+            rendimientos["rdvl"] = 0
 
-        def indirecto = obra.totales/100
+        def indirecto = obra.totales / 100
 
         def c;
 
@@ -2951,13 +2893,6 @@ class ReportesController {
         def totales
 
         def totalPresupuesto;
-
-
-
-
-
-
-
 
         //excel
         WorkbookSettings workbookSettings = new WorkbookSettings()
@@ -3012,16 +2947,16 @@ class ReportesController {
 
 
 
-        detalle.each{
+        detalle.each {
 
-            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
-            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
+            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
+            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
+            precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
 
             def precioUnitario = precios[it.id.toString()]
 
-            def subtotal = (precios[it.id.toString()]*it.cantidad)
+            def subtotal = (precios[it.id.toString()] * it.cantidad)
 
 //            println(precioUnitario)
 
@@ -3034,9 +2969,6 @@ class ReportesController {
             label = new Label(6, fila, "0"); sheet.addCell(label);
             label = new Label(7, fila, obra?.nombre.toString()); sheet.addCell(label);
             label = new Label(8, fila, "0"); sheet.addCell(label);
-
-
-
 
 //            addCellTabla(tablaVolObra, new Paragraph(it?.item?.codigo,times8normal), prmsCellCenter)
 //
@@ -3055,8 +2987,6 @@ class ReportesController {
 //
 //            addCellTabla(tablaVolObra, new Paragraph (g.formatNumber(number: precios[it.id.toString()]*it.cantidad, minFractionDigits:
 //                    2, maxFractionDigits: 2, format: "#####,##0"),times8normal), prmsCellRight)
-
-
 
 //            println("costo:" + precios[it.id.toString()]*it.cantidad)
 
@@ -3096,15 +3026,15 @@ class ReportesController {
 
 
 
-    def reporteExcelVolObra(){
+    def reporteExcelVolObra() {
 
         def obra = Obra.get(params.id)
 
 
         def detalle
 
-        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+        detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
@@ -3113,20 +3043,20 @@ class ReportesController {
         def lugar = obra.lugar
         def prch = 0
         def prvl = 0
-        if (obra.chofer){
-            prch = preciosService.getPrecioItems(fecha,lugar,[obra.chofer])
+        if (obra.chofer) {
+            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
             prch = prch["${obra.chofer.id}"]
-            prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
+            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
             prvl = prvl["${obra.volquete.id}"]
         }
-        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
+        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
 
-        if (rendimientos["rdps"].toString()=="NaN")
-            rendimientos["rdps"]=0
-        if (rendimientos["rdvl"].toString()=="NaN")
-            rendimientos["rdvl"]=0
+        if (rendimientos["rdps"].toString() == "NaN")
+            rendimientos["rdps"] = 0
+        if (rendimientos["rdvl"].toString() == "NaN")
+            rendimientos["rdvl"] = 0
 
-        def indirecto = obra.totales/100
+        def indirecto = obra.totales / 100
 
         def c;
 
@@ -3200,12 +3130,12 @@ class ReportesController {
 
         detalle.each {
 
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
 
             def precioUnitario = precios[it.id.toString()]
 
-            def subtotal = (precios[it.id.toString()]*it.cantidad)
+            def subtotal = (precios[it.id.toString()] * it.cantidad)
 
             number = new Number(0, fila, numero++); sheet.addCell(number);
             label = new Label(1, fila, it?.item?.codigo.toString()); sheet.addCell(label);
@@ -3217,15 +3147,15 @@ class ReportesController {
 
             fila++
 
-            totales =  precios[it.id.toString()]*it.cantidad
+            totales = precios[it.id.toString()] * it.cantidad
 
-            totalPresupuesto = (total1+=totales);
+            totalPresupuesto = (total1 += totales);
 
             ultimaFila = fila
 
         }
 
-          label = new Label(5, ultimaFila, "TOTAL ", times16format); sheet.addCell(label);
+        label = new Label(5, ultimaFila, "TOTAL ", times16format); sheet.addCell(label);
         number = new Number(6, ultimaFila, totalPresupuesto); sheet.addCell(number);
 
 
@@ -3242,15 +3172,15 @@ class ReportesController {
     }
 
 
-    def dummyReportes () {
+    def dummyReportes() {
 
-    return false
+        return false
 
     }
 
 
 
-    def pagarAnticipoPdf () {
+    def pagarAnticipoPdf() {
 
 
         def baos = new ByteArrayOutputStream()
@@ -3346,7 +3276,7 @@ class ReportesController {
         anticipoTabla.setWidthPercentage(100);
         anticipoTabla.setWidths(arregloEnteros([50, 50]))
 
-        if(planilla?.tipoPlanilla?.codigo == 'A'){
+        if (planilla?.tipoPlanilla?.codigo == 'A') {
 
             addCellTabla(anticipoTabla, new Paragraph(contrato?.porcentajeAnticipo + " % de anticipo:", times8bold), prmsHeaderHoja)
 
@@ -3364,9 +3294,7 @@ class ReportesController {
             addCellTabla(anticipoTabla, new Paragraph(g.formatNumber(number: suma, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsHeaderHoja)
 
 
-
-        }
-        else {
+        } else {
 
             addCellTabla(anticipoTabla, new Paragraph("Valor Planilla", times8bold), prmsHeaderHoja)
 
@@ -3384,10 +3312,7 @@ class ReportesController {
             addCellTabla(anticipoTabla, new Paragraph(g.formatNumber(number: suma, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsHeaderHoja)
 
 
-
         }
-
-
 
 //        def planillas = Planilla.withCriteria {
 //            and {
@@ -3440,8 +3365,6 @@ class ReportesController {
 //        b0Tabla(headerRubroTabla, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 
-
-
         document.add(headerRubroTabla);
         document.add(anticipoTabla)
 
@@ -3457,306 +3380,322 @@ class ReportesController {
     }
 
 
-    def anticipoReporte () {
+    def anticipoReporte() {
 
-            def planilla = Planilla.get(params.id)
-            def obra = planilla.contrato.oferta.concurso.obra
-            def contrato = planilla.contrato
-            def oferta = contrato.oferta
-            def planillas = Planilla.withCriteria {
-                and {
-                    eq("contrato", contrato)
-                    or {
-                        lt("fechaInicio", planilla.fechaFin)
-                        isNull("fechaInicio")
+        def planilla = Planilla.get(params.id)
+        def obra = planilla.contrato.oferta.concurso.obra
+        def contrato = planilla.contrato
+        def oferta = contrato.oferta
+        def planillas = Planilla.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    lt("fechaInicio", planilla.fechaFin)
+                    isNull("fechaInicio")
+                }
+                order("id", "asc")
+            }
+        }
+        def periodoOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
+        def periodos = []
+        def data = [
+                c: [:],
+                p: [:]
+        ]
+        def pcs = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    ilike("numero", "c%")
+                    and {
+                        ne("numero", "P0")
+                        ilike("numero", "p%")
                     }
-                    order("id", "asc")
                 }
+                order("numero", "asc")
             }
-            def periodoOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
-            def periodos = []
-            def data = [
-                    c: [:],
-                    p: [:]
-            ]
-            def pcs = FormulaPolinomicaContractual.withCriteria {
-                and {
-                    eq("contrato", contrato)
-                    or {
-                        ilike("numero", "c%")
-                        and {
-                            ne("numero", "P0")
-                            ilike("numero", "p%")
-                        }
+        }
+        periodos.add(periodoOferta)
+        planillas.each { pl ->
+            if (pl.tipoPlanilla.codigo == 'A') {
+                //si es anticipo: el periodo q corresponde a la fecha del anticipo
+                def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPresentacion, pl.fechaPresentacion)
+                periodos.add(prin)
+            } else {
+                periodos.add(pl.periodoIndices)
+            }
+        }
+        periodos.eachWithIndex { per, perNum ->
+            def valRea = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
+            def tot = [c: 0, p: 0]
+            valRea.each { v ->
+                def c = pcs.find { it.indice == v.formulaPolinomica.indice }
+                if (c) {
+                    def pos = "p"
+                    if (c.numero.contains("c")) {
+                        pos = "c"
                     }
-                    order("numero", "asc")
-                }
-            }
-            periodos.add(periodoOferta)
-            planillas.each { pl ->
-                if (pl.tipoPlanilla.codigo == 'A') {
-                    //si es anticipo: el periodo q corresponde a la fecha del anticipo
-                    def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPresentacion, pl.fechaPresentacion)
-                    periodos.add(prin)
-                } else {
-                    periodos.add(pl.periodoIndices)
-                }
-            }
-            periodos.eachWithIndex { per, perNum ->
-                def valRea = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
-                def tot = [c: 0, p: 0]
-                valRea.each { v ->
-                    def c = pcs.find { it.indice == v.formulaPolinomica.indice }
-                    if (c) {
-                        def pos = "p"
-                        if (c.numero.contains("c")) {
-                            pos = "c"
-                        }
-                        tot[pos] += (v.valor * c.valor).round(3)
+                    tot[pos] += (v.valor * c.valor).round(3)
 //                        println "\t\t" + pos + "   " + (v.valor * c.valor)
-                        if (!data[pos][per]) {
-                            data[pos][per] = [valores: [], total: 0]
-                        }
-                        data[pos][per]["valores"].add([formulaPolinomica: c, valorReajuste: v])
+                    if (!data[pos][per]) {
+                        data[pos][per] = [valores: [], total: 0]
                     }
+                    data[pos][per]["valores"].add([formulaPolinomica: c, valorReajuste: v])
                 }
-                data["c"][per]["total"] = tot["c"]
-                data["p"][per]["total"] = tot["p"]
-            }//periodos.each
-
-            def tbodyB0 = "<tbody>"
-            def totC = 0
-            pcs.findAll { it.numero.contains("c") }.each { c ->
-                tbodyB0 += "<tr>"
-                tbodyB0 += "<td>" + c.indice.descripcion + " (" + c.numero + ")</td>"
-                tbodyB0 += "<td class='number'>" + elm.numero(number: c.valor, decimales: 3) + "</td>"
-                totC += c.valor
-                data.c.each { cp ->
-                    def act = cp.value.valores.find { it.formulaPolinomica.indice == c.indice }
-                    def val = act.valorReajuste.valor
-                    tbodyB0 += "<td class='number'>" + elm.numero(number: val) + "</td>"
-                    tbodyB0 += "<td class='number'>" + elm.numero(number: val * c.valor, decimales: 3) + "</td>"
-                }
-                tbodyB0 += "</tr>"
             }
+            data["c"][per]["total"] = tot["c"]
+            data["p"][per]["total"] = tot["p"]
+        }//periodos.each
+
+        def tbodyB0 = "<tbody>"
+        def totC = 0
+        pcs.findAll { it.numero.contains("c") }.each { c ->
             tbodyB0 += "<tr>"
-            tbodyB0 += "<th>TOTALES</th>"
-            tbodyB0 += "<td class='number'>" + elm.numero(number: totC, decimales: 3) + "</td>"
+            tbodyB0 += "<td>" + c.indice.descripcion + " (" + c.numero + ")</td>"
+            tbodyB0 += "<td class='number'>" + elm.numero(number: c.valor, decimales: 3) + "</td>"
+            totC += c.valor
             data.c.each { cp ->
-                tbodyB0 += "<td></td>"
-                tbodyB0 += "<td class='number'>" + elm.numero(number: cp.value.total) + "</td>"
+                def act = cp.value.valores.find { it.formulaPolinomica.indice == c.indice }
+                def val = act.valorReajuste.valor
+                tbodyB0 += "<td class='number'>" + elm.numero(number: val) + "</td>"
+                tbodyB0 += "<td class='number'>" + elm.numero(number: val * c.valor, decimales: 3) + "</td>"
             }
             tbodyB0 += "</tr>"
-            tbodyB0 += "</tbody>"
+        }
+        tbodyB0 += "<tr>"
+        tbodyB0 += "<th>TOTALES</th>"
+        tbodyB0 += "<td class='number'>" + elm.numero(number: totC, decimales: 3) + "</td>"
+        data.c.each { cp ->
+            tbodyB0 += "<td></td>"
+            tbodyB0 += "<td class='number'>" + elm.numero(number: cp.value.total) + "</td>"
+        }
+        tbodyB0 += "</tr>"
+        tbodyB0 += "</tbody>"
 
-            def p0s = []
-            def tbodyP0 = "<tbody>"
-            def diasPlanilla = planilla.fechaFin - planilla.fechaInicio
-            def valorPlanilla = planilla.valor
+        def p0s = []
+        def tbodyP0 = "<tbody>"
+        def diasPlanilla = 0
 
-            def acumuladoCrono = 0, acumuladoPlan = 0
+        if (planilla.tipoPlanilla.codigo != "A") {
+            diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+        }
+        def valorPlanilla = planilla.valor
 
-            def diasAll = 0
+        def acumuladoCrono = 0, acumuladoPlan = 0
 
-            periodos.eachWithIndex { per, i ->
-                if (i > 0) {
-                    def planillaActual = Planilla.findByPeriodoIndicesAndContrato(per, contrato)
-                    tbodyP0 += "<tr>"
-                    if (i == 1) {
-                        tbodyP0 += "<th>ANTICIPO</th>"
-                        tbodyP0 += "<th>"
-                        def planillaAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("A"))
-                        tbodyP0 += planillaAnticipo.fechaPresentacion.format("MMM-yy")
-                        tbodyP0 += "</th>"
-                        tbodyP0 += "<td colspan='4'></td>"
-                        tbodyP0 += "<td class='number'>"
-                        tbodyP0 += elm.numero(number: planillaAnticipo.valor)
-                        tbodyP0 += "</td>"
+        def diasAll = 0
 
-                        def p0 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "P0")
-                        def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
-                        data["p"][per]["p0"] = vrP0.valor
-                        p0s[i - 1] = vrP0.valor
-                    } else {
+        periodos.eachWithIndex { per, i ->
+            if (i > 0) {
+                def planillaActual = Planilla.findByPeriodoIndicesAndContrato(per, contrato)
+                tbodyP0 += "<tr>"
+                if (i == 1) {
+                    tbodyP0 += "<th>ANTICIPO</th>"
+                    tbodyP0 += "<th>"
+                    def planillaAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("A"))
+                    tbodyP0 += planillaAnticipo.fechaPresentacion.format("MMM-yy")
+                    tbodyP0 += "</th>"
+                    tbodyP0 += "<td colspan='4'></td>"
+                    tbodyP0 += "<td class='number'>"
+                    tbodyP0 += elm.numero(number: planillaAnticipo.valor)
+                    tbodyP0 += "</td>"
+
+                    def p0 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "P0")
+                    def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
+                    data["p"][per]["p0"] = vrP0.valor
+                    p0s[i - 1] = vrP0.valor
+                } else {
 //                    def periodosEjecucion = PeriodoEjecucion.findAllByObra(obra)
-                        def periodosEjecucion = PeriodoEjecucion.withCriteria {
-                            and {
-                                eq("obra", obra)
-                                or {
-                                    between("fechaInicio", per.fechaInicio, per.fechaFin)
-                                    between("fechaFin", per.fechaInicio, per.fechaFin)
-                                }
-                                order("fechaInicio")
+                    def periodosEjecucion = PeriodoEjecucion.withCriteria {
+                        and {
+                            eq("obra", obra)
+                            or {
+                                between("fechaInicio", per.fechaInicio, per.fechaFin)
+                                between("fechaFin", per.fechaInicio, per.fechaFin)
                             }
+                            order("fechaInicio")
                         }
-                        def diasTotal = 0, valorTotal = 0
+                    }
+                    def diasTotal = 0, valorTotal = 0
 //                    println per.fechaInicio.format("dd-MM-yyyy") + "  " + per.fechaFin.format("dd-MM-yyyy")
-                        tbodyP0 += "<th>"
-                        tbodyP0 += per.descripcion
-                        tbodyP0 += "</th>"
-                        periodosEjecucion.each { pe ->
+                    tbodyP0 += "<th>"
+                    tbodyP0 += per.descripcion
+                    tbodyP0 += "</th>"
+                    periodosEjecucion.each { pe ->
 //                        println "\t" + pe.tipo + "  " + pe.fechaInicio.format("dd-MM-yyyy") + "   " + pe.fechaFin.format("dd-MM-yyyy")
-                            if (pe.tipo == "P") {
-                                def diasUsados
-                                def diasPeriodo = pe.fechaFin - pe.fechaInicio
+                        if (pe.tipo == "P") {
+                            def diasUsados
+                            def diasPeriodo = pe.fechaFin - pe.fechaInicio
 //                            println "\t\tdias periodo: " + diasPeriodo
-                                def crono = CronogramaEjecucion.findAllByPeriodo(pe)
-                                def valorPeriodo = crono.sum { it.precio }
+                            def crono = CronogramaEjecucion.findAllByPeriodo(pe)
+                            def valorPeriodo = crono.sum { it.precio }
 //                            println "\t\tvalor periodo: " + valorPeriodo
-                                if (pe.fechaInicio <= per.fechaInicio) {
-                                    diasUsados = pe.fechaFin - per.fechaInicio
-                                    if (diasUsados == 0) diasUsados = 1
-                                    diasTotal += diasUsados
+                            if (pe.fechaInicio <= per.fechaInicio) {
+                                diasUsados = pe.fechaFin - per.fechaInicio
+                                if (diasUsados == 0) diasUsados = 1
+                                diasTotal += diasUsados
 //                                println "\t\tdias usados: " + diasUsados
-                                } else if (pe.fechaInicio > per.fechaInicio && pe.fechaFin < per.fechaFin) {
-                                    diasUsados = pe.fechaFin - pe.fechaInicio
-                                    if (diasUsados == 0) diasUsados = 1
-                                    diasTotal += diasUsados
+                            } else if (pe.fechaInicio > per.fechaInicio && pe.fechaFin < per.fechaFin) {
+                                diasUsados = pe.fechaFin - pe.fechaInicio
+                                if (diasUsados == 0) diasUsados = 1
+                                diasTotal += diasUsados
 //                                println "\t\tdias usados: " + diasUsados
-                                } else if (pe.fechaFin >= per.fechaFin) {
-                                    diasUsados = per.fechaFin - pe.fechaInicio
-                                    if (diasUsados == 0) diasUsados = 1
-                                    diasTotal += diasUsados
+                            } else if (pe.fechaFin >= per.fechaFin) {
+                                diasUsados = per.fechaFin - pe.fechaInicio
+                                if (diasUsados == 0) diasUsados = 1
+                                diasTotal += diasUsados
 //                                println "\t\tdias usados: " + diasUsados
-                                }
-                                def valorUsado = (valorPeriodo / diasPeriodo) * diasUsados
-                                valorTotal += valorUsado
-//                            println "\t\tvalor usado: " + valorUsado
                             }
+                            def valorUsado = (valorPeriodo / diasPeriodo) * diasUsados
+                            valorTotal += valorUsado
+//                            println "\t\tvalor usado: " + valorUsado
                         }
-                        acumuladoCrono += valorTotal
-                        def planillado = (valorPlanilla / diasPlanilla) * diasTotal
-                        acumuladoPlan += planillado
+                    }
+                    acumuladoCrono += valorTotal
+                    def planillado = (valorPlanilla / diasPlanilla) * diasTotal
+                    acumuladoPlan += planillado
 //                    println "TOTAL: " + diasTotal + " dias"
 //                    println "PLANILLADO: " + planillado
 
-                        def p0 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "P0")
-                        def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
-                        data["p"][per]["p0"] = vrP0.valor
-                        p0s[i - 1] = vrP0.valor
-                        diasAll += diasTotal
-                        tbodyP0 += "<th>"
-                        tbodyP0 += "(" + diasTotal + ")"
-                        tbodyP0 += "</th>"
-                        tbodyP0 += "<td class='number'>" + elm.numero(number: valorTotal) + "</td>"
-                        tbodyP0 += "<td class='number'>" + elm.numero(number: acumuladoCrono) + "</td>"
-                        tbodyP0 += "<td class='number'>" + elm.numero(number: planillado) + "</td>"
-                        tbodyP0 += "<td class='number'>" + elm.numero(number: acumuladoPlan) + "</td>"
-                        tbodyP0 += "<td class='number'>" + elm.numero(number: vrP0.valor) + "</td>"
-                    }
-                    tbodyP0 += "</tr>"
+                    def p0 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "P0")
+                    def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
+                    data["p"][per]["p0"] = vrP0.valor
+                    p0s[i - 1] = vrP0.valor
+                    diasAll += diasTotal
+                    tbodyP0 += "<th>"
+                    tbodyP0 += "(" + diasTotal + ")"
+                    tbodyP0 += "</th>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: valorTotal) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: acumuladoCrono) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: planillado) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: acumuladoPlan) + "</td>"
+                    tbodyP0 += "<td class='number'>" + elm.numero(number: vrP0.valor) + "</td>"
                 }
+                tbodyP0 += "</tr>"
             }
-            tbodyP0 += "</tbody>"
-            tbodyP0 += "<tfoot>"
-            tbodyP0 += "<tr>"
-            tbodyP0 += "<th>TOTAL</th>"
-            tbodyP0 += "<th>(" + diasAll + ")</th>"
-            tbodyP0 += "<td></td>"
-            tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoCrono) + "</td>"
-            tbodyP0 += "<td></td>"
-            tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoPlan) + "</td>"
-            tbodyP0 += "<td></td>"
-            tbodyP0 += "</tr>"
-            tbodyP0 += "</tfoot>"
+        }
+        tbodyP0 += "</tbody>"
+        tbodyP0 += "<tfoot>"
+        tbodyP0 += "<tr>"
+        tbodyP0 += "<th>TOTAL</th>"
+        tbodyP0 += "<th>(" + diasAll + ")</th>"
+        tbodyP0 += "<td></td>"
+        tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoCrono) + "</td>"
+        tbodyP0 += "<td></td>"
+        tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoPlan) + "</td>"
+        tbodyP0 += "<td></td>"
+        tbodyP0 += "</tr>"
+        tbodyP0 += "</tfoot>"
 
-            def a = 0, b = 0, c = 0, d = 0, tots = []
-            def tbodyFr = "<tbody>"
-            pcs.findAll { it.numero.contains('p') }.eachWithIndex { p, i ->
-                tbodyFr += "<tr>"
-                tbodyFr += "<td>" + p.indice.descripcion + " (" + p.numero + ")</td>"
+        def a = 0, b = 0, c = 0, d = 0, tots = []
+        def tbodyFr = "<tbody>"
+        pcs.findAll { it.numero.contains('p') }.eachWithIndex { p, i ->
+            tbodyFr += "<tr>"
+            tbodyFr += "<td>" + p.indice.descripcion + " (" + p.numero + ")</td>"
 
-                data.p.eachWithIndex { cp, j ->
-                    def act = cp.value.valores.find { it.formulaPolinomica.indice == p.indice }
-                    if (j == 0) {
-                        c = act.formulaPolinomica.valor
-                        b = act.valorReajuste.valor
-                        tbodyFr += "<td class='number'>"
-                        tbodyFr += "<div>"
-                        tbodyFr += elm.numero(number: c, decimales: 3)
-                        tbodyFr += "</div>"
-                        tbodyFr += "<div class='bold'>"
-                        tbodyFr += elm.numero(number: b, decimales: 3)
-                        tbodyFr += "</div>"
-                        tbodyFr += "</td>"
-                    } //j==0
-                    else {
-                        a = act.valorReajuste.valor
-                        d = (a / b) * c
-                        tbodyFr += "<td class='number'>"
-                        tbodyFr += "<div>"
-                        tbodyFr += elm.numero(number: a, decimales: 3)
-                        tbodyFr += "</div>"
-                        tbodyFr += "<div class='bold'>"
-                        tbodyFr += elm.numero(number: d, decimales: 3)
-                        tbodyFr += "</div>"
-                        tbodyFr += "</td>"
-                        if (!tots[j - 1]) {
-                            tots[j - 1] = [
-                                    per: cp.key,
-                                    total: 0
-                            ]
-                        }
-                        tots[j - 1].total += d
+            data.p.eachWithIndex { cp, j ->
+                def act = cp.value.valores.find { it.formulaPolinomica.indice == p.indice }
+                if (j == 0) {
+                    c = act.formulaPolinomica.valor
+                    b = act.valorReajuste.valor
+                    tbodyFr += "<td class='number'>"
+                    tbodyFr += "<div>"
+                    tbodyFr += elm.numero(number: c, decimales: 3)
+                    tbodyFr += "</div>"
+                    tbodyFr += "<div class='bold'>"
+                    tbodyFr += elm.numero(number: b, decimales: 3)
+                    tbodyFr += "</div>"
+                    tbodyFr += "</td>"
+                } //j==0
+                else {
+                    a = act.valorReajuste.valor
+                    d = (a / b) * c
+                    tbodyFr += "<td class='number'>"
+                    tbodyFr += "<div>"
+                    tbodyFr += elm.numero(number: a, decimales: 3)
+                    tbodyFr += "</div>"
+                    tbodyFr += "<div class='bold'>"
+                    tbodyFr += elm.numero(number: d, decimales: 3)
+                    tbodyFr += "</div>"
+                    tbodyFr += "</td>"
+                    if (!tots[j - 1]) {
+                        tots[j - 1] = [
+                                per: cp.key,
+                                total: 0
+                        ]
                     }
-                } //data.p.each
-                tbodyFr += "</tr>"
-            } //pcs.p.each
+                    tots[j - 1].total += d
+                }
+            } //data.p.each
+            tbodyFr += "</tr>"
+        } //pcs.p.each
 
-            def filaFr = "", filaFr1 = "", filaP0 = "", filaPr = ""
+        def filaFr = "", filaFr1 = "", filaP0 = "", filaPr = ""
 //        println ">>>"
 //        println p0s
 
-            def totalReajuste = 0
+        def totalReajuste = 0
 
-            tots.eachWithIndex { t, i ->
-                def pr = (t.total - 1) * p0s[i]
-                totalReajuste += pr
-                filaFr += "<td class='number'>" + elm.numero(number: t.total, decimales: 3) + "</td>"
-                filaFr1 += "<td class='number'>" + elm.numero(number: t.total - 1, decimales: 3) + "</td>"
-                filaP0 += "<td class='number'>" + elm.numero(number: p0s[i]) + "</td>"
-                filaPr += "<td class='number'>" + elm.numero(number: pr) + "</td>"
-            }
-            tbodyFr += "</tbody>"
-            tbodyFr += "<tfoot>"
+        tots.eachWithIndex { t, i ->
+            def pr = (t.total - 1) * p0s[i]
+            totalReajuste += pr
+            filaFr += "<td class='number'>" + elm.numero(number: t.total, decimales: 3) + "</td>"
+            filaFr1 += "<td class='number'>" + elm.numero(number: t.total - 1, decimales: 3) + "</td>"
+            filaP0 += "<td class='number'>" + elm.numero(number: p0s[i]) + "</td>"
+            filaPr += "<td class='number'>" + elm.numero(number: pr) + "</td>"
+        }
+        tbodyFr += "</tbody>"
+        tbodyFr += "<tfoot>"
 
-            tbodyFr += "<tr>"
-            tbodyFr += "<th rowspan='4'>1.000</th>"
-            tbodyFr += "<th>F<sub>r</sub></th>"
-            tbodyFr += filaFr
-            tbodyFr += "</tr>"
+        tbodyFr += "<tr>"
+        tbodyFr += "<th rowspan='4'>1.000</th>"
+        tbodyFr += "<th>F<sub>r</sub></th>"
+        tbodyFr += filaFr
+        tbodyFr += "</tr>"
 
-            tbodyFr += "<tr>"
-            tbodyFr += "<th>F<sub>r</sub>-1</th>"
-            tbodyFr += filaFr1
-            tbodyFr += "</tr>"
+        tbodyFr += "<tr>"
+        tbodyFr += "<th>F<sub>r</sub>-1</th>"
+        tbodyFr += filaFr1
+        tbodyFr += "</tr>"
 
-            tbodyFr += "<tr>"
-            tbodyFr += "<th>P<sub>0</sub></th>"
-            tbodyFr += filaP0
-            tbodyFr += "</tr>"
+        tbodyFr += "<tr>"
+        tbodyFr += "<th>P<sub>0</sub></th>"
+        tbodyFr += filaP0
+        tbodyFr += "</tr>"
 
-            tbodyFr += "<tr>"
-            tbodyFr += "<th>P<sub>r</sub>-P</th>"
-            tbodyFr += filaPr
-            tbodyFr += "</tr>"
+        tbodyFr += "<tr>"
+        tbodyFr += "<th>P<sub>r</sub>-P</th>"
+        tbodyFr += filaPr
+        tbodyFr += "</tr>"
 
-            tbodyFr += "<tr>"
-            tbodyFr += "<th colspan='2'>REAJUSTE TOTAL</th>"
-            tbodyFr += "<td colspan='2' class='number bold'>"
-            tbodyFr += elm.numero(number: totalReajuste)
-            tbodyFr += "</td>"
-            tbodyFr += "</tr>"
+        tbodyFr += "<tr>"
+        tbodyFr += "<th colspan='2'>REAJUSTE TOTAL</th>"
+        tbodyFr += "<td colspan='2' class='number bold'>"
+        tbodyFr += elm.numero(number: totalReajuste)
+        tbodyFr += "</td>"
+        tbodyFr += "</tr>"
 
-            tbodyFr += "</tfoot>"
+        tbodyFr += "</tfoot>"
 
-            return [tbodyFr: tbodyFr, tbodyP0: tbodyP0, tbodyB0: tbodyB0, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos]
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def precios = [:]
+        def indirecto = obra.totales / 100
 
+        preciosService.ac_rbroObra(obra.id)
+
+        detalle.each {
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
 
+        def planillasAnteriores = Planilla.withCriteria {
+            eq("contrato", contrato)
+            lt("fechaFin", planilla.fechaInicio)
+        }
 
+        return [tbodyFr: tbodyFr, tbodyP0: tbodyP0, tbodyB0: tbodyB0, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos, detalle: detalle, planillasAnteriores: planillasAnteriores, precios: precios]
 
-
+    }
 
 
 }

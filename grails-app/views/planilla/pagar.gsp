@@ -31,9 +31,13 @@
 
         <div class="row">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="planilla" action="list" params="[id: planillaInstance.contrato?.id]" class="btn btn-ajax btn-new" rel="tooltip" title="Regresar a las planillas">
-                    <i class="icon-arrow-left"></i>
-                    Regresar
+                <g:link controller="contrato" action="registroContrato" params="[contrato: planillaInstance.contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
+                    <i class="icon-double-angle-left"></i>
+                    Contrato
+                </g:link>
+                <g:link controller="planilla" action="list" params="[id: planillaInstance.contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
+                    <i class="icon-angle-left"></i>
+                    Planillas
                 </g:link>
 
                 <g:if test="${planillaInstance?.fechaPago == null}">
@@ -43,20 +47,19 @@
                         Pagar
                     </a>
 
-
                 </g:if>
                 <g:else>
 
                 </g:else>
 
 
-                <a href="#" id="btnPdf" class="btn" title="Imprimir PDF"><i class="icon-print"> </i>
+                <a href="#" id="btnPdf" class="btn" title="Imprimir PDF"><i class="icon-print"></i>
                     PDF
                 </a>
 
 
                 %{--<a href="#" id="btntablas" class="btn" title="Imprimir Tablas"><i class="icon-print"> </i>--}%
-                    %{--Tablas--}%
+                %{--Tablas--}%
                 %{--</a>--}%
 
             </div>
@@ -64,231 +67,214 @@
             <div class="span3" id="busqueda-Planilla"></div>
         </div>
 
-   <elm:headerPlanilla planilla="${planillaInstance}" />
+        <elm:headerPlanilla planilla="${planillaInstance}"/>
 
-    <div class="pago">
+        <div class="pago">
 
-        <fieldset>
+            <fieldset>
 
-            <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
 
-                <div class="span12">
+                    <div class="span12">
 
-                    <div class="span3" style="font-weight: bold">
+                        <div class="span3" style="font-weight: bold">
 
-                        ${planillaInstance.contrato?.porcentajeAnticipo} % de Anticipo
+                            ${planillaInstance.contrato?.porcentajeAnticipo} % de Anticipo
 
-                    </div>
+                        </div>
 
-                   <div class="span3">
+                        <div class="span3">
 
-                        <elm:numero number="${planillaInstance?.valor}"/>
+                            <elm:numero number="${planillaInstance?.valor}"/>
 
-
-                    </div>
-
-
-                </div>
-                <div class="span12" style="margin-top: 10px">
-
-
-                    <div class="span3" style="font-weight: bold">
-
-                        (+) Reajuste provisional del anticipo
+                        </div>
 
                     </div>
 
-                    <div class="span3">
+                    <div class="span12" style="margin-top: 10px">
 
-                        <elm:numero number="${planillaInstance?.reajuste}"/>
+                        <div class="span3" style="font-weight: bold">
 
-                    </div>
+                            (+) Reajuste provisional del anticipo
 
-                </div>
-                <div class="span12" style="margin-top: 10px">
+                        </div>
 
+                        <div class="span3">
 
-                    <div class="span3" style="font-weight: bold">
+                            <elm:numero number="${planillaInstance?.reajuste}"/>
 
-                        SUMA:
-
-                    </div>
-
-                    <div class="span3">
-
-                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+                        </div>
 
                     </div>
 
+                    <div class="span12" style="margin-top: 10px">
 
-                </div>
+                        <div class="span3" style="font-weight: bold">
 
-                <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+                            SUMA:
 
+                        </div>
 
-                    <div class="span3" style="font-weight: bold">
+                        <div class="span3">
 
-                        A FAVOR DEL CONTRATISTA:
+                            <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
 
-                    </div>
-
-                    <div class="span3">
-
-                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+                        </div>
 
                     </div>
 
+                    <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
 
-                </div>
+                        <div class="span3" style="font-weight: bold">
 
+                            A FAVOR DEL CONTRATISTA:
 
+                        </div>
 
-            </g:if>
+                        <div class="span3">
 
+                            <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
 
-
-
-            <g:else>
-                <div class="span12">
-
-                    <div class="span3" style="font-weight: bold">
-
-                     Valor Planilla
+                        </div>
 
                     </div>
 
-                    <div class="span3">
-
-                        <elm:numero number="${planillaInstance?.valor}"/>
+                </g:if>
 
 
-                    </div>
 
 
-                </div>
-                <div class="span12" style="margin-top: 10px">
+                <g:else>
+                    <div class="span12">
 
+                        <div class="span3" style="font-weight: bold">
 
-                    <div class="span3" style="font-weight: bold">
+                            Valor Planilla
 
-                        (+) Reajuste provisional del anticipo
+                        </div>
 
-                    </div>
+                        <div class="span3">
 
-                    <div class="span3">
+                            <elm:numero number="${planillaInstance?.valor}"/>
 
-                        <elm:numero number="${planillaInstance?.reajuste}"/>
+                        </div>
 
                     </div>
 
-                </div>
-                <div class="span12" style="margin-top: 10px">
+                    <div class="span12" style="margin-top: 10px">
 
+                        <div class="span3" style="font-weight: bold">
 
-                    <div class="span3" style="font-weight: bold">
+                            (+) Reajuste provisional del anticipo
 
-                        SUMA:
+                        </div>
 
-                    </div>
+                        <div class="span3">
 
-                    <div class="span3">
+                            <elm:numero number="${planillaInstance?.reajuste}"/>
 
-                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
-
-                    </div>
-
-
-                </div>
-
-                <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
-
-
-                    <div class="span3" style="font-weight: bold">
-
-                        A FAVOR DEL CONTRATISTA:
+                        </div>
 
                     </div>
 
-                    <div class="span3">
+                    <div class="span12" style="margin-top: 10px">
 
-                        <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+                        <div class="span3" style="font-weight: bold">
+
+                            SUMA:
+
+                        </div>
+
+                        <div class="span3">
+
+                            <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
+
+                        </div>
 
                     </div>
 
+                    <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
 
-                </div>
-            </g:else>
+                        <div class="span3" style="font-weight: bold">
 
+                            A FAVOR DEL CONTRATISTA:
 
+                        </div>
 
-        </fieldset>
+                        <div class="span3">
 
+                            <elm:numero number="${planillaInstance?.valor + planillaInstance?.reajuste}"/>
 
-    </div>
+                        </div>
 
-       <g:if test="${planillaInstance?.fechaPago != null}">
+                    </div>
+                </g:else>
 
-           <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
-               <div class="span3" style=" font-weight: bold">
-                 Fecha Pago
-               </div>
+            </fieldset>
 
-               <div class="span3"><g:formatDate date="${planillaInstance?.fechaPago}" format="dd-MM-yyyy"/>
+        </div>
 
-               </div>
-           </div>
+        <g:if test="${planillaInstance?.fechaPago != null}">
 
-           <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-               <div class="span12">
-                   <div class="span3" style="font-weight: bold">
-                       Fecha de inicio de obra
-                   </div>
-
-                   <div class="span3"><g:formatDate date="${planillaInstance?.contrato?.oferta?.concurso?.obra?.fechaInicio}" format="dd-MM-yyyy"/>
-
-
-                   </div>
-               </div>
-           </g:if>
-
-
-       </g:if>
-
-       <g:else>
-        <g:form class="form-horizontal" name="frmSave-Planilla" action="savePago">
-            <g:hiddenField name="id" value="${planillaInstance?.id}"/>
-
-            <div class="control-group">
-                <div>
-                    <span class="control-label label label-inverse">
-                        Fecha de pago
-                    </span>
+            <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+                <div class="span3" style=" font-weight: bold">
+                    Fecha Pago
                 </div>
 
-                <div class="controls">
-                    <elm:datepicker name="fechaPago" class="required" value="" maxDate="new Date()" onSelect="igual"/>
+                <div class="span3"><g:formatDate date="${planillaInstance?.fechaPago}" format="dd-MM-yyyy"/>
 
-                    <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
 
             <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                <div class="span12">
+                    <div class="span3" style="font-weight: bold">
+                        Fecha de inicio de obra
+                    </div>
+
+                    <div class="span3"><g:formatDate date="${planillaInstance?.contrato?.oferta?.concurso?.obra?.fechaInicio}" format="dd-MM-yyyy"/>
+
+                    </div>
+                </div>
+            </g:if>
+
+        </g:if>
+
+        <g:else>
+            <g:form class="form-horizontal" name="frmSave-Planilla" action="savePago">
+                <g:hiddenField name="id" value="${planillaInstance?.id}"/>
+
                 <div class="control-group">
                     <div>
                         <span class="control-label label label-inverse">
-                            Fecha de inicio de obra
+                            Fecha de pago
                         </span>
                     </div>
 
                     <div class="controls">
-                        <elm:datepicker name="fechaInicioObra" class="required" value="" maxDate="new Date()"/>
+                        <elm:datepicker name="fechaPago" class="required" value="" maxDate="new Date()" onSelect="igual"/>
 
                         <p class="help-block ui-helper-hidden"></p>
                     </div>
                 </div>
-            </g:if>
-        </g:form>
-       </g:else>
+
+                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                    <div class="control-group">
+                        <div>
+                            <span class="control-label label label-inverse">
+                                Fecha de inicio de obra
+                            </span>
+                        </div>
+
+                        <div class="controls">
+                            <elm:datepicker name="fechaInicioObra" class="required" value="" maxDate="new Date()"/>
+
+                            <p class="help-block ui-helper-hidden"></p>
+                        </div>
+                    </div>
+                </g:if>
+            </g:form>
+        </g:else>
 
         <script type="text/javascript">
 
@@ -311,23 +297,22 @@
 
             %{--$("#btnPdf").click(function () {--}%
 
-                %{--location.href="${createLink(controller: 'reportes', action: 'anticipoReporte', id: planillaInstance?.id)}"--}%
+            %{--location.href="${createLink(controller: 'reportes', action: 'anticipoReporte', id: planillaInstance?.id)}"--}%
             %{--});--}%
 
+            $("#btnPdf").click(function () {
+                var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=planilla.pdf&url=${createLink(controller: 'reportes', action: 'anticipoReporte')}";
+                location.href = actionUrl + "?id=${planillaInstance?.id}";
 
-                    $("#btnPdf").click(function () {
-                        var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=planilla.pdf&url=${createLink(controller: 'reportes', action: 'anticipoReporte')}";
-                        location.href = actionUrl + "?id=${planillaInstance?.id}";
+                var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
+                wait.prepend(spinnerBg);
 
-                        var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
-                        wait.prepend(spinnerBg);
-
-                        var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-                        $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                        $("#modalTitle").html("Procesando");
-                        $("#modalBody").html(wait);
-                        $("#modalFooter").html("").append(btnClose);
-                    });
+                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                $("#modalTitle").html("Procesando");
+                $("#modalBody").html(wait);
+                $("#modalFooter").html("").append(btnClose);
+            });
 
 
 

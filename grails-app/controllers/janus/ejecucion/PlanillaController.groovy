@@ -436,7 +436,13 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def p0s = []
         def tbodyP0 = "<tbody>"
-        def diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+
+        def diasPlanilla = 0
+
+        if (planilla.tipoPlanilla.codigo != "A") {
+            diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+
+        }
         def valorPlanilla = planilla.valor
 
         def acumuladoCrono = 0, acumuladoPlan = 0
@@ -557,17 +563,19 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
         tbodyP0 += "</tbody>"
-        tbodyP0 += "<tfoot>"
-        tbodyP0 += "<tr>"
-        tbodyP0 += "<th>TOTAL</th>"
-        tbodyP0 += "<th>(" + diasAll + ")</th>"
-        tbodyP0 += "<td></td>"
-        tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoCrono) + "</td>"
-        tbodyP0 += "<td></td>"
-        tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoPlan) + "</td>"
-        tbodyP0 += "<td></td>"
-        tbodyP0 += "</tr>"
-        tbodyP0 += "</tfoot>"
+        if (planilla.tipoPlanilla.codigo != "A") {
+            tbodyP0 += "<tfoot>"
+            tbodyP0 += "<tr>"
+            tbodyP0 += "<th>TOTAL</th>"
+            tbodyP0 += "<th>(" + diasAll + ")</th>"
+            tbodyP0 += "<td></td>"
+            tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoCrono) + "</td>"
+            tbodyP0 += "<td></td>"
+            tbodyP0 += "<td class='number bold'>" + elm.numero(number: acumuladoPlan) + "</td>"
+            tbodyP0 += "<td></td>"
+            tbodyP0 += "</tr>"
+            tbodyP0 += "</tfoot>"
+        }
 
         def a = 0, b = 0, c = 0, d = 0, tots = []
         def tbodyFr = "<tbody>"

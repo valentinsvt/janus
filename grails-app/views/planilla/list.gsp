@@ -31,7 +31,7 @@
             <div class="span9 btn-group" role="navigation">
                 <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
                     <i class="icon-arrow-left"></i>
-                    Regresar
+                    Contrato
                 </g:link>
                 <g:link action="form" class="btn" params="[contrato: contrato.id]">
                     <i class="icon-file"></i>
@@ -59,7 +59,7 @@
                         <g:sortableColumn property="periodoIndices" title="Periodo"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="valor" title="Valor"/>
-                        <th width="150">Acciones</th>
+                        <th width="160">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
@@ -100,6 +100,11 @@
                                         <i class="icon-money icon-large"></i>
                                     </g:link>
                                 </g:if>
+                                <g:else>
+                                    <g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Pago" id="${planillaInstance.id}">
+                                        <i class="icon-money icon-large"></i>
+                                    </g:link>
+                                </g:else>
                             %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
                             %{--<i class="icon-pencil icon-large"></i>--}%
                             %{--</a>--}%

@@ -145,7 +145,7 @@
                                 <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${elm.numero(number: cant, cero: 'hide')}"/>
                             </g:if>
                             <g:else>
-                                <elm:numero number="cant" cero="hide"/>
+                                <elm:numero number="${cant}" cero="hide"/>
                             </g:else>
                         </td>
                         <td class="acu num cant" id="acu_${vol.id}_ ${planilla.id}" data-valor="${cant + cantAnt}" data-valoro="${cant + cantAnt}">
@@ -292,7 +292,7 @@
                             data += "&";
                         }
                     });
-                    data += "id=${planilla.id}&total="+$(".totalAct").data("valor");
+                    data += "id=${planilla.id}&total=" + $(".totalAct").data("valor");
 //                    console.log(data);
                     location.href = "${createLink(action:'saveDetalle')}?" + data;
                     return false;
