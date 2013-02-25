@@ -105,7 +105,7 @@
         items: {
             "edit": {name: "Editar", icon: "edit"},
             "print": {name: "Imprimir", icon: "print"},
-            "foto":{name:"Foto",icon:"doc"}
+            "foto":{name:"Ilustración",icon:"doc"}
         }
         </g:if>
         <g:else>

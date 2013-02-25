@@ -104,7 +104,7 @@
             </div>
             <div class="span1" style="margin-left: 15px;">
                 <b>Orden</b>
-                <input type="text" style="width: 30px;text-align: right" id="item_orden" value="1">
+                <input type="text" style="width: 30px;text-align: right" id="item_orden" value="${(volumenes?.size()>0)?volumenes.size()+1:1}">
             </div>
             <div class="span1" style="margin-left: 15px;padding-top:30px">
                 <input type="hidden" value="" id="vol_id">
@@ -207,6 +207,40 @@
 
         });
 
+        $("#item_codigo").blur(function(){
+//            console.log($("#item_id").val()=="")
+            if($("#item_id").val()=="" && $("#item_codigo").val()!=""){
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'buscarRubroCodigo')}",
+                    data     : "codigo=" + $("#item_codigo").val(),
+                    success  : function (msg) {
+                        if (msg !="-1") {
+//                            console.log("msg "+msg)
+                            var parts = msg.split("&&")
+                            $("#item_id").val(parts[0])
+                            $("#item_nombre").val(parts[2])
+                        }else{
+                            $("#item_id").val("")
+                            $("#item_nombre").val("")
+                        }
+                    }
+                });
+            }
+        });
+        $("#item_codigo").keydown(function(ev){
+
+            if(ev.keyCode*1!=9 && (ev.keyCode*1<37 || ev.keyCode*1>40)){
+
+                $("#item_id").val("")
+                $("#item_nombre").val("")
+
+            }else{
+//                console.log("no reset")
+            }
+
+
+        });
+
+
         $("#item_agregar").click(function(){
             $("#calcular").removeClass("active")
             $(".col_delete").show()
@@ -242,7 +276,7 @@
                         $("#item_id").val("")
                         $("#item_nombre").val("")
                         $("#item_cantidad").val("1")
-                        $("#item_orden").val("1")
+                        $("#item_orden").val($("#item_orden").val()*1+1)
                     }
                 });
             }else{

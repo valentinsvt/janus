@@ -140,7 +140,7 @@ class RubroController extends janus.seguridad.Shield {
         funcionJs += '$.ajax({type: "POST",url: "' + g.createLink(controller: 'rubro', action: 'getDatosItem') + '",'
         funcionJs += ' data: "id="+idReg,'
         funcionJs += ' success: function(msg){'
-        funcionJs += 'var parts = msg.split("&");console.log(parts);'
+        funcionJs += 'var parts = msg.split("&");'
         funcionJs += ' $("#item_id").val(parts[0]);'
         funcionJs += '$("#cdgo_buscar").val(parts[1]);'
         funcionJs += '$("#item_desc").val(parts[2]);'
@@ -486,6 +486,19 @@ class RubroController extends janus.seguridad.Shield {
     }
 
 
+    def buscarRubroCodigo(){
+//        println "buscar rubro "+params
+        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(),TipoItem.get(1))
+        if (rubro){
+            render ""+rubro.id+"&&"+rubro.tipoLista?.id+"&&"+rubro.nombre+"&&"+rubro.unidad?.codigo
+            return
+        } else{
+            render "-1"
+            return
+        }
+    }
+
+
     def transporte() {
 //        println "transporte "+params
         def idRubro = params.id
@@ -510,14 +523,14 @@ class RubroController extends janus.seguridad.Shield {
                 tabla += "<td style='width: 50px;text-align: right'>" + r["itempeso"] + "</td>"
                 tabla += "<td style='width: 50px;text-align: right'>" + r["rbrocntd"] + "</td>"
                 tabla += "<td style='width: 50px;text-align: right'>" + r["distancia"] + "</td>"
-                tabla += "<td style='width: 50px;text-align: right'>" + r["tarifa"].toFloat().round(5) + "</td>"
-                tabla += "<td style='width: 50px;text-align: right'>" + r["parcial_t"] + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" +  g.formatNumber(number: r["tarifa"],format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec")  + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" +  g.formatNumber(number: r["parcial_t"],format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec") + "</td>"
                 total += r["parcial_t"]
                 tabla += "</tr>"
             }
-
+//            <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"  locale="ec"  />
         }
-        tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${total}</td>"
+        tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${g.formatNumber(number: total,format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec")}</td>"
         tabla += "</tbody></table>"
 
         render(tabla)

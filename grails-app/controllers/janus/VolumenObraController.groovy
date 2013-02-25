@@ -15,6 +15,17 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     }
+    def buscarRubroCodigo(){
+        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(),TipoItem.get(2))
+        if (rubro){
+            render ""+rubro.id+"&&"+rubro.tipoLista?.id+"&&"+rubro.nombre+"&&"+rubro.unidad?.codigo
+            return
+        } else{
+            render "-1"
+            return
+        }
+    }
+
 
     def addItem(){
 //        println "addItem "+params
@@ -104,8 +115,8 @@ class VolumenObraController extends janus.seguridad.Shield{
 
     def buscaRubro() {
 
-        def listaTitulos = ["Código", "Descripción"]
-        def listaCampos = ["codigo", "nombre"]
+        def listaTitulos = ["Código", "Descripción","Unidad"]
+        def listaCampos = ["codigo", "nombre","unidad"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaRubro", controller: "rubro")
         def funcionJs = "function(){"

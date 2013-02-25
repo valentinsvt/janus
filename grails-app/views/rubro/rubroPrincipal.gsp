@@ -823,8 +823,6 @@
     }
 
     $(function () {
-
-
         $("#detalle").click(function(){
             $("#modal-detalle").modal("show");
         });
@@ -1348,6 +1346,43 @@
             $("#buscarDialog").unbind("click")
             $("#buscarDialog").bind("click", enviarItem)
         });
+        $("#cdgo_buscar").blur(function(){
+//            console.log($("#item_id").val()=="")
+            if($("#item_id").val()=="" && $("#cdgo_buscar").val()!=""){
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'buscarRubroCodigo')}",
+                    data     : "codigo=" + $("#cdgo_buscar").val(),
+                    success  : function (msg) {
+                        if (msg !="-1") {
+//                            console.log("msg "+msg)
+                           var parts = msg.split("&&")
+                            $("#item_tipoLista").val(parts[1])
+                            $("#item_id").val(parts[0])
+                            $("#item_desc").val(parts[2])
+                            $("#item_unidad").val(parts[3])
+                        }else{
+//                            $("#cdgo_buscar").val("")
+                            $("#item_tipoLista").val("")
+                            $("#item_id").val("")
+                            $("#item_desc").val("")
+                            $("#item_unidad").val("")
+                        }
+                    }
+                });
+            }
+        });
+        $("#cdgo_buscar").keydown(function(ev){
+
+            if(ev.keyCode*1!=9 && (ev.keyCode*1<37 || ev.keyCode*1>40)){
+                $("#item_tipoLista").val("")
+                $("#item_id").val("")
+                $("#item_desc").val("")
+                $("#item_unidad").val("")
+            }else{
+//                console.log("no reset")
+            }
+
+
+        });
         $("#btn_lista").click(function () {
 
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
@@ -1381,12 +1416,12 @@
             var desc = $("#input_descripcion").val()
             var subGr = $("#selSubgrupo").val()
             var msg =""
-
+            console.log(desc,desc.trim(),desc.trim().length)
             if(cod.trim().length>20 || cod.trim().length<1){
                 msg="<br>Error: La propiedad código debe tener entre 1 y 20 caracteres."
             }
 
-            if(desc.trim().length>20 || desc.trim().length<1){
+            if(desc.trim().length>160 || desc.trim().length<1){
                 if(msg=="")
                     msg="<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
                 else
@@ -1460,6 +1495,7 @@
                             tr.attr("id", parts[1])
                             tr.attr("tipoLista",parts[5])
                             var a
+                            td.addClass("cdgo")
                             td.html($("#cdgo_buscar").val())
                             tr.append(td)
                             td = $("<td>")
@@ -1468,6 +1504,7 @@
 
                             if (parts[0] == "1") {
                                 $("#tabla_material").children().find(".cdgo").each(function () {
+//                                    console.log($(this))
                                     if ($(this).html() == $("#cdgo_buscar").val()) {
                                         var tdCant = $(this).parent().find(".cant")
                                         var tdRend = $(this).parent().find(".rend")
@@ -1567,6 +1604,41 @@
                                     }
                                 }
                             }
+
+                           tr.bind("dblclick",function(){
+                                var hijos = $(this).children()
+                                var desc=$(hijos[1]).html()
+                                var cant
+                                var codigo=$(hijos[0]).html()
+                                var unidad
+                                var rendimiento
+                                var item
+                                for(i=2;i<hijos.length;i++){
+
+                                    if($(hijos[i]).hasClass("cant"))
+                                        cant=$(hijos[i]).html()
+                                    if($(hijos[i]).hasClass("col_unidad"))
+                                        unidad=$(hijos[i]).html()
+                                    if($(hijos[i]).hasClass("col_rend"))
+                                        rendimiento=$(hijos[i]).html()
+                                    if($(hijos[i]).hasClass("col_tarifa"))
+                                        item=$(hijos[i]).attr("id")
+                                    if($(hijos[i]).hasClass("col_precioUnit"))
+                                        item=$(hijos[i]).attr("id")
+                                    if($(hijos[i]).hasClass("col_jornal"))
+                                        item=$(hijos[i]).attr("id")
+
+                                }
+                                item=item.replace("i_","")
+                                $("#item_cantidad").val(cant.toString().trim())
+                                if(rendimiento)
+                                    $("#item_rendimiento").val(rendimiento.toString().trim())
+                                $("#item_id").val(item)
+                                $("#cdgo_buscar").val(codigo)
+                                $("#item_desc").val(desc)
+                                $("#item_unidad").val(unidad)
+                            })
+
                             if (a) {
                                 a.bind("click", function () {
                                     var tr = $(this).parent().parent()
