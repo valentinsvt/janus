@@ -1,5 +1,5 @@
 package janus
-class TipoObjetivo implements Serializable {
+class TipoObra implements Serializable {
     String codigo
     String descripcion
     static mapping = {

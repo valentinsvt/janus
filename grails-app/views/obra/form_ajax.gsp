@@ -1,5 +1,5 @@
 
-<%@ page import="janus.Obra" %>
+<%@ page import="janus.TipoObra; janus.Obra" %>
 
 <div id="create-obraInstance" class="span" role="main">
     <g:form class="form-horizontal" name="frmSave-obraInstance" action="save">
@@ -111,7 +111,7 @@
             </div>
 
             <div class="controls">
-                <g:select id="tipoObjetivo" name="tipoObjetivo.id" from="${janus.TipoObjetivo.list()}" optionKey="id" class="many-to-one " value="${obraInstance?.tipoObjetivo?.id}" noSelection="['null': '']"/>
+                <g:select id="tipoObjetivo" name="tipoObjetivo.id" from="${TipoObra.list()}" optionKey="id" class="many-to-one " value="${obraInstance?.tipoObjetivo?.id}" noSelection="['null': '']"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

@@ -178,7 +178,7 @@
 
                     <div class="span1">Tipo</div>
 
-                    <div class="span3"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObjetivo?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id"/></div>
+                    <div class="span3"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id"/></div>
 
                     <div class="span1">Clase</div>
 

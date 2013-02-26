@@ -5,7 +5,7 @@ class Obra implements Serializable {
     Persona inspector
     Comunidad comunidad
     Parroquia parroquia
-    TipoObjetivo tipoObjetivo
+    TipoObra tipoObjetivo
     Programacion programacion
     EstadoObra estadoObra
     ClaseObra claseObra
