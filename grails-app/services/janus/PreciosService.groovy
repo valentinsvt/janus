@@ -216,6 +216,7 @@ class PreciosService {
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
         }
+        cn.close()
         return result
     }
 
@@ -226,6 +227,7 @@ class PreciosService {
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
         }
+        cn.close()
         return result
     }
 
@@ -236,6 +238,7 @@ class PreciosService {
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
         }
+        cn.close()
         return result
     }
     def ac_rbroV2(rubro,fecha,lugar){
@@ -246,6 +249,7 @@ class PreciosService {
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
         }
+        cn.close()
         return result
     }
     def ac_rbroObra(obra){
@@ -255,6 +259,7 @@ class PreciosService {
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
         }
+        cn.close()
         return result
     }
 

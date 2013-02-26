@@ -1,11 +1,16 @@
 package janus.pac
 
 import janus.Administracion
+import janus.Comunidad
+import janus.Obra
+import janus.Parroquia
 import org.springframework.dao.DataIntegrityViolationException
 
 class ConcursoController extends janus.seguridad.Shield {
 
     def buscadorService
+    def obraService
+
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -42,6 +47,10 @@ class ConcursoController extends janus.seguridad.Shield {
 
     def list() {
         def campos = ["descripcion": ["Descripción", "string"]]
+        if (!params.sort){
+            params.sort="id"
+            params.order="desc"
+        }
         return [concursoInstanceList: Concurso.list(params), params: params, campos: campos]
     } //list
 
@@ -129,6 +138,8 @@ class ConcursoController extends janus.seguridad.Shield {
     }
 
     def form_ajax() {
+        println "aqui "
+        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"]]
         def concursoInstance = new Concurso(params)
         if (params.id) {
             concursoInstance = Concurso.get(params.id.toLong())
@@ -139,10 +150,128 @@ class ConcursoController extends janus.seguridad.Shield {
                 return
             } //no existe el objeto
         } //es edit
-        return [concursoInstance: concursoInstance]
+        return [concursoInstance: concursoInstance,campos:campos]
     } //form_ajax
 
+
+
+    def buscarObra() {
+
+        def extraParr = ""
+        def extraCom = ""
+        if (params.campos instanceof java.lang.String) {
+            if (params.campos == "parroquia") {
+                def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios.toUpperCase()}%'")
+                params.criterios = ""
+                parrs.eachWithIndex { p, i ->
+                    extraParr += "" + p.id
+                    if (i < parrs.size() - 1)
+                        extraParr += ","
+                }
+                if (extraParr.size() < 1)
+                    extraParr = "-1"
+                params.campos = ""
+                params.operadores = ""
+            }
+            if (params.campos == "comunidad") {
+                def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios.toUpperCase()}%'")
+                params.criterios = ""
+                coms.eachWithIndex { p, i ->
+                    extraCom += "" + p.id
+                    if (i < coms.size() - 1)
+                        extraCom += ","
+                }
+                if (extraCom.size() < 1)
+                    extraCom = "-1"
+                params.campos = ""
+                params.operadores = ""
+            }
+        } else {
+            def remove = []
+            params.campos.eachWithIndex { p, i ->
+                if (p == "comunidad") {
+                    def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios[i].toUpperCase()}%'")
+
+                    coms.eachWithIndex { c, j ->
+                        extraCom += "" + c.id
+                        if (j < coms.size() - 1)
+                            extraCom += ","
+                    }
+                    if (extraCom.size() < 1)
+                        extraCom = "-1"
+                    remove.add(i)
+                }
+                if (p == "parroquia") {
+                    def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios[i].toUpperCase()}%'")
+
+                    parrs.eachWithIndex { c, j ->
+                        extraParr += "" + c.id
+                        if (j < parrs.size() - 1)
+                            extraParr += ","
+                    }
+                    if (extraParr.size() < 1)
+                        extraParr = "-1"
+                    remove.add(i)
+                }
+            }
+            remove.each {
+                params.criterios[it] = null
+                params.campos[it] = null
+                params.operadores[it] = null
+            }
+        }
+
+
+        def extras = " "
+        if (extraParr.size() > 1)
+            extras += " and parroquia in (${extraParr})"
+        if (extraCom.size() > 1)
+            extras += " and comunidad in (${extraCom})"
+
+        extras+=" and estado='R' "
+
+        def parr = { p ->
+            return p.parroquia?.nombre
+        }
+        def comu = { c ->
+            return c.comunidad?.nombre
+        }
+        def listaTitulos = ["Código", "Nombre", "Descripción", "Fecha Reg.", "M. ingreso", "M. salida", "Sitio", "Plazo", "Parroquia", "Comunidad", "Inspector", "Revisor", "Responsable", "Estado Obra"]
+        def listaCampos = ["codigo", "nombre", "descripcion", "fechaCreacionObra", "oficioIngreso", "oficioSalida", "sitio", "plazo", "parroquia", "comunidad", "inspector", "revisor", "responsable", "estadoObra"]
+        def funciones = [null, null, null, ["format": ["dd/MM/yyyy hh:mm"]], null, null, null, null, ["closure": [parr, "&"]], ["closure": [comu, "&"]], null, null, null, null]
+        def url = g.createLink(action: "buscarObra", controller: "obra")
+        def funcionJs = "function(){"
+        funcionJs += '$("#modal-busqueda").modal("hide");'
+        funcionJs += '$("#obra_id").val($(this).attr("regId"));'
+        funcionJs += 'cargarDatos();'
+        funcionJs += '}'
+        def numRegistros = 20
+
+        if (!params.reporte) {
+            def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            lista.pop()
+            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+        } else {
+//            println "entro reporte"
+            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+            session.dominio = Obra
+            session.funciones = funciones
+            def anchos = [7, 10, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7] /*el ancho de las columnas en porcentajes... solo enteros*/
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
+        }
+    }
+
+    def datosObra(){
+        def obra = Obra.get(params.obra)
+        def monto = obraService.montoObra(obra)
+        def plazo = obra.plazoEjecucionMeses*30+obra.plazoEjecucionDias
+        render ""+obra.codigo+"&&"+obra.nombre+"&&"+plazo+"&&"+monto
+    }
+
+
+
     def save() {
+        println "save concurso "+params
         def concursoInstance
         if (params.id) {
             concursoInstance = Concurso.get(params.id)
@@ -160,6 +289,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
         if (!concursoInstance.save(flush: true)) {
+            println "errores concurso "+concursoInstance.errors
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Concurso " + (concursoInstance.id ? concursoInstance.id : "") + "</h4>"
 
