@@ -44,7 +44,12 @@ class ElementosTagLib {
             println g.formatNumber(number: attrs.number, maxFractionDigits: 3, minFractionDigits: 3, format: "##,###.###", locale: "ec")
         }
         if (attrs.cero == "false" || attrs.cero == false || attrs.cero == "hide") {
-            if (attrs.number.toDouble() == 0.toDouble()) {
+            if (attrs.number) {
+                if (attrs.number.toDouble() == 0.toDouble()) {
+                    out << ""
+                    return
+                }
+            } else {
                 out << ""
                 return
             }

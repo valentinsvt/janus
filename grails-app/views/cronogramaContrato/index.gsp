@@ -85,7 +85,8 @@
 
     <body>
         %{--Todo excel--}%
-        <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
+        %{--<g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>--}%
+        <g:set var="meses" value="${Math.ceil(contrato.plazo / 30)}"/>
         <g:set var="sum" value="${0}"/>
 
         <div class="tituloTree">
@@ -198,14 +199,14 @@
                                 ${vol.item.unidad.codigo}
                             </td>
                             <td class="num cantidad" data-valor="${vol.cantidad}">
-                                <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                <elm:numero number="${vol.cantidad}" cero="hide"/>
                             </td>
                             <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
-                                <g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                <elm:numero number="${precios[vol.id.toString()]}" cero="hide"/>
                             </td>
                             <g:set var="parcial" value="${precios[vol.id.toString()] * vol.cantidad}"/>
                             <td class="num subtotal" data-valor="${parcial}">
-                                <g:formatNumber number="${parcial}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                <elm:numero number="${parcial}" cero="hide"/>
                                 <g:set var="sum" value="${sum + parcial}"/>
                             </td>
                             <td>
@@ -220,7 +221,7 @@
                                     %{--${totalMes[i] = 0}--}%
                                     %{--</g:if>--}%
                                     %{--${totalMes[i] = prec ? totalMes[i] + prec : totalMes}--}%
-                                    <g:formatNumber number="${prec?.precio}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    <elm:numero number="${prec?.precio}" cero="hide"/>
                                 </td>
                             </g:each>
                             <td class="num rubro${vol.id} dol total totalRubro">
@@ -242,7 +243,7 @@
                                 <td class="prct mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
                                     data-tipo="prct" data-val="${porc?.porcentaje ?: 0}" data-id="${porc?.id ?: ''}">
                                     %{--<g:set var="totalPrcRow" value="${porc ? totalPrcRow + porc : totalPrcRow}"/>--}%
-                                    <g:formatNumber number="${porc?.porcentaje}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    <elm:numero number="${porc?.porcentaje}" cero="hide"/>
                                 </td>
                             </g:each>
                             <td class="num rubro${vol.id} prct total totalRubro">
@@ -264,7 +265,7 @@
                                 <td class="fis mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
                                     data-tipo="fis" data-val="${cant?.cantidad ?: 0}" data-id="${cant?.id ?: ''}">
                                     %{--<g:set var="totalCanRow" value="${cant ? totalCanRow + cant : totalCanRow}"/>--}%
-                                    <g:formatNumber number="${cant?.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    <elm:numero number="${cant?.cantidad}" cero="hide"/>
                                 </td>
                             </g:each>
                             <td class="num rubro${vol.id} fis total totalRubro">
@@ -281,7 +282,7 @@
                         <td></td>
                         <td colspan="4">TOTAL PARCIAL</td>
                         <td class="num">
-                            <g:formatNumber number="${sum}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                            <elm:numero number="${sum}" cero="hide"/>
                         </td>
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">

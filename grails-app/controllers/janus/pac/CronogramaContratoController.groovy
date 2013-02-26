@@ -43,52 +43,81 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         def cronoCntr = CronogramaContrato.countByContrato(contrato)
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
+        def plazoDiasContrato = contrato.plazo
+        def plazoMesesContrato = Math.ceil(plazoDiasContrato / 30);
+
+        def plazoObra = obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)
+
+//        println plazoDiasContrato + "/30 = " + plazoMesesContrato
+//        println "plazoMesesContrato: " + plazoMesesContrato + "    plazoObra: " + plazoObra
+
         if (cronoCntr == 0) {
             detalle.each { vol ->
 //            def resto = 100
                 def c = Cronograma.findAllByVolumenObra(vol)
                 def resto = c.sum { it.porcentaje }
                 c.eachWithIndex { crono, cont ->
-                    if (CronogramaContrato.countByVolumenObraAndPeriodo(crono.volumenObra, crono.periodo) == 0) {
-                        def cronoContrato = new CronogramaContrato()
-                        cronoContrato.properties = crono.properties
-                        def pf, cf, df
+                    if (cont < plazoMesesContrato) {
+                        if (CronogramaContrato.countByVolumenObraAndPeriodo(crono.volumenObra, crono.periodo) == 0) {
+                            def cronoContrato = new CronogramaContrato()
+                            cronoContrato.properties = crono.properties
+                            def pf, cf, df
 //                        println "resto... " + resto
-                        if (cont < c.size() - 1) {
-                            pf = Math.floor(crono.porcentaje)
-                            resto -= pf
-                        } else {
-                            pf = resto
-                            resto -= pf
-                        }
+                            if (cont < c.size() - 1) {
+                                pf = Math.floor(crono.porcentaje)
+                                resto -= pf
+                            } else {
+                                pf = resto
+                                resto -= pf
+                            }
 //                        println "resto... " + resto
-                        cf = (pf * cronoContrato.cantidad) / crono.porcentaje
-                        df = (pf * cronoContrato.precio) / crono.porcentaje
+                            cf = (pf * cronoContrato.cantidad) / crono.porcentaje
+                            df = (pf * cronoContrato.precio) / crono.porcentaje
 
-                        cronoContrato.porcentaje = pf
-                        cronoContrato.cantidad = cf
-                        cronoContrato.precio = df
+                            cronoContrato.porcentaje = pf
+                            cronoContrato.cantidad = cf
+                            cronoContrato.precio = df
 
 //                        println "arreglando los decimales:::::"
 //                        println "porcentaje: " + crono.porcentaje + " --> " + cronoContrato.porcentaje
 //                        println "cantidad: " + crono.cantidad + " --> " + cronoContrato.cantidad
 //                        println "precio: " + crono.precio + " --> " + cronoContrato.precio
 
-                        cronoContrato.contrato = contrato
+                            cronoContrato.contrato = contrato
 
-                        if (!cronoContrato.save(flush: true)) {
-                            println "Error al guardar el crono contrato del crono " + crono.id
-                            println cronoContrato.errors
-                        }/* else {
+                            if (!cronoContrato.save(flush: true)) {
+                                println "Error al guardar el crono contrato del crono " + crono.id
+                                println cronoContrato.errors
+                            }/* else {
                     println "ok " + crono.id + "  =>  " + cronoContrato.id
 
                 }*/
-                    } else {
+                        } else {
 //                        println "no guarda, solo actualiza el porcentaje"
 //                        println "resto... " + resto
-                        def pf = Math.floor(crono.porcentaje)
-                        resto -= pf
+                            def pf = Math.floor(crono.porcentaje)
+                            resto -= pf
 //                        println "resto... " + resto
+                        }
+                    }
+                }
+            }
+            if (plazoMesesContrato > plazoObra) {
+//                println ">>>AQUI"
+                ((plazoObra + 1)..plazoMesesContrato).each { extra ->
+                    detalle.each { vol ->
+                        def cronoContrato = new CronogramaContrato([
+                                contrato: contrato,
+                                volumenObra: vol,
+                                periodo: extra,
+                                precio: 0,
+                                porcentaje: 0,
+                                cantidad: 0,
+                        ])
+                        if (!cronoContrato.save(flush: true)) {
+                            println "Error al guardar el crono contrato extra " + extra
+                            println cronoContrato.errors
+                        }
                     }
                 }
             }

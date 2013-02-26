@@ -128,79 +128,71 @@
             $(function () {
                 $.contextMenu({
                     selector : '.item_row',
-                    callback : function (key, options) {
-                        if (key == "view") {
-                            location.href = "${g.createLink(controller: 'concurso',action: 'show')}/" + $(this).attr("id")
-                        }
-                        if (key == "edit") {
-                            %{--$("#dlgLoad").dialog("open")--}%
-                            %{--var id = $(this).attr("id");--}%
-                            %{--$.ajax({--}%
-                            %{--type    : "POST",--}%
-                            %{--url     : "${createLink(action:'form_ajax')}",--}%
-                            %{--data    : {--}%
-                            %{--id : id--}%
-                            %{--},--}%
-                            %{--success : function (msg) {--}%
-                            %{--var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');--}%
-                            %{--var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');--}%
-
-                            %{--btnSave.click(function () {--}%
-                            %{--submitForm(btnSave);--}%
-                            %{--return false;--}%
-                            %{--});--}%
-
-                            %{--$("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");--}%
-                            %{--$("#modalTitle").html("Editar Concurso");--}%
-                            %{--$("#modalBody").html(msg);--}%
-                            %{--$("#modalFooter").html("").append(btnOk).append(btnSave);--}%
-                            %{--$("#dlgLoad").dialog("close")--}%
-                            %{--$("#modal-Concurso").modal("show");--}%
-                            %{--}--}%
-                            %{--});--}%
-                            location.href = "${g.createLink(action: 'form_ajax')}/" + $(this).attr("id")
-                            return false;
-                        }
-                        if (key == "delete") {
-                            var id = $(this).attr("id");
-                            $("#id").val(id);
-                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
-
-                            btnDelete.click(function () {
-                                btnDelete.replaceWith(spinner);
-                                $("#frmDelete-Concurso").submit();
-                                return false;
-                            });
-
-                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                            $("#modalTitle").html("Eliminar Concurso");
-                            $("#modalBody").html("<p>¿Está seguro de querer eliminar este Concurso?</p>");
-                            $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                            $("#modal-Concurso").modal("show");
-                            return false;
-                        }
-                        if (key == "docs") {
-                            location.href = "${g.createLink(controller: 'documentoProceso',action: 'list')}/" + $(this).attr("id")
-
-                        }
-                        if (key == "eval") {
-                            location.href = "${g.createLink(controller: 'parametroEvaluacion',action: 'tree')}/" + $(this).attr("id")
-                        }
-                        if (key == "ofrt") {
-                            location.href = "${g.createLink(controller: 'oferta',action: 'list')}/" + $(this).attr("id")
-                        }
-                        if (key == "print") {
-
-                        }
-                    },
                     items    : {
-                        "view"   : {name : "Ver", icon : "view"},
-                        "edit"   : {name : "Editar", icon : "edit"},
-                        "delete" : {name : "Eliminar", icon : "delete"},
-                        "docs"   : {name : "Documentos", icon : "doc"},
-                        "eval"   : {name : "Evaluación", icon : "eval"},
-                        "ofrt"   : {name : "Ofertas", icon : "ofrt"}
+                        "view"   : {
+                            name     : "Ver",
+                            icon     : "view",
+                            callback : function (key, options) {
+                                location.href = "${g.createLink(controller: 'concurso',action: 'show')}/" + $(this).attr("id")
+                            }
+                        },
+                        "edit"   : {
+                            name     : "Editar",
+                            icon     : "edit",
+                            callback : function (key, options) {
+                                location.href = "${g.createLink(action: 'form_ajax')}/" + $(this).attr("id")
+                            }
+                        },
+                        "delete" : {
+                            name     : "Eliminar",
+                            icon     : "delete",
+                            callback : function (key, options) {
+                                var id = $(this).attr("id");
+                                $("#id").val(id);
+                                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+
+                                btnDelete.click(function () {
+                                    btnDelete.replaceWith(spinner);
+                                    $("#frmDelete-Concurso").submit();
+                                    return false;
+                                });
+
+                                $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
+                                $("#modalTitle").html("Eliminar Concurso");
+                                $("#modalBody").html("<p>¿Está seguro de querer eliminar este Concurso?</p>");
+                                $("#modalFooter").html("").append(btnOk).append(btnDelete);
+                                $("#modal-Concurso").modal("show");
+                                return false;
+                            }
+                        },
+                        "docs"   : {
+                            name     : "Documentos",
+                            icon     : "doc",
+                            callback : function (key, options) {
+                                location.href = "${g.createLink(controller: 'documentoProceso',action: 'list')}/" + $(this).attr("id")
+                            }
+                        },
+                        "eval"   : {
+                            name     : "Evaluación",
+                            icon     : "eval",
+                            callback : function (key, options) {
+                                location.href = "${g.createLink(controller: 'parametroEvaluacion',action: 'tree')}/" + $(this).attr("id")
+                            },
+                            disabled : function (key, opt) {
+                                return opt.$trigger.attr("reg") != 'R'
+                            }
+                        },
+                        "ofrt"   : {
+                            name     : "Ofertas",
+                            icon     : "ofrt",
+                            callback : function (key, options) {
+                                location.href = "${g.createLink(controller: 'oferta',action: 'list')}/" + $(this).attr("id")
+                            },
+                            disabled : function (key, opt) {
+                                return opt.$trigger.attr("reg") != 'R'
+                            }
+                        }
 //                "print": {name:"Imprimir",icon:"print"}
                     }
                 });

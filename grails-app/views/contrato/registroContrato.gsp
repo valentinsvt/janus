@@ -55,6 +55,8 @@
 
         <g:form class="registroContrato" name="frm-registroContrato" action="save">
 
+            <g:hiddenField name="id" value="${contrato?.id}"/>
+
             <fieldset class="" style="position: relative; height: 50px; border-bottom: 1px solid black; width: 100%;">
 
                 <div class="span12" style="margin-top: 10px" align="center">

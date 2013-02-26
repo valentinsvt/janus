@@ -19,36 +19,16 @@ class ContratoController extends janus.seguridad.Shield {
 
 
     def registroContrato() {
-
         def contrato
-
         def obra = Obra.get(params.obra)
-
-
         if (params.contrato) {
-
-
             contrato = Contrato.get(params.contrato)
-
-
-
-
-
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-
             [campos: campos, contrato: contrato]
-
-
         } else {
-
-
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-
             [campos: campos]
-
         }
-
-
     }
 
 
