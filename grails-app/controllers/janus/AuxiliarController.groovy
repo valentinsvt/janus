@@ -11,18 +11,17 @@ class AuxiliarController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [auxiliarInstanceList: Auxiliar.list(params), auxiliarInstanceTotal: Auxiliar.count(), params: params]
+        [auxiliarInstanceList: Auxiliar.list(params), params: params]
     } //list
 
     def form_ajax() {
         def auxiliarInstance = new Auxiliar(params)
-        if (params.id) {
+        if(params.id) {
             auxiliarInstance = Auxiliar.get(params.id)
-            if (!auxiliarInstance) {
+            if(!auxiliarInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Auxiliar con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Auxiliar con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,40 +29,19 @@ class AuxiliarController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-
-
-        println(params)
-
-
         def auxiliarInstance
-
-
-        if (params.id) {
+        if(params.id) {
             auxiliarInstance = Auxiliar.get(params.id)
-
-
-
-
-            if (!auxiliarInstance) {
+            if(!auxiliarInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Auxiliar con id " + params.id
                 redirect(action: 'list')
-
-
-
                 return
             }//no existe el objeto
             auxiliarInstance.properties = params
-
-
         }//es edit
         else {
-
-            println("entro")
-
-                auxiliarInstance = new Auxiliar(params)
-
-
+            auxiliarInstance = new Auxiliar(params)
         } //es create
         if (!auxiliarInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -80,33 +58,25 @@ class AuxiliarController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
-
-
             redirect(action: 'list')
-
-
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Auxiliar " + auxiliarInstance.id
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Auxiliar " + auxiliarInstance.id
         }
-//        redirect(action: 'list')
-
-        redirect(controller: 'documentosObra',action: 'documentosObra',id: params.obra)
-
-
+        redirect(action: 'list')
     } //save
 
     def show_ajax() {
         def auxiliarInstance = Auxiliar.get(params.id)
         if (!auxiliarInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Auxiliar con id " + params.id
+            flash.message =  "No se encontró Auxiliar con id " + params.id
             redirect(action: "list")
             return
         }
@@ -117,7 +87,7 @@ class AuxiliarController extends janus.seguridad.Shield {
         def auxiliarInstance = Auxiliar.get(params.id)
         if (!auxiliarInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Auxiliar con id " + params.id
+            flash.message =  "No se encontró Auxiliar con id " + params.id
             redirect(action: "list")
             return
         }
@@ -125,12 +95,12 @@ class AuxiliarController extends janus.seguridad.Shield {
         try {
             auxiliarInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Auxiliar " + auxiliarInstance.id
+            flash.message =  "Se ha eliminado correctamente Auxiliar " + auxiliarInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Auxiliar " + (auxiliarInstance.id ? auxiliarInstance.id : "")
+            flash.message =  "No se pudo eliminar Auxiliar " + (auxiliarInstance.id ? auxiliarInstance.id : "")
             redirect(action: "list")
         }
     } //delete

@@ -1,70 +1,14 @@
 
 <%@ page import="janus.Parametros" %>
 
-<div id="create-parametrosInstance" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-parametrosInstance" action="save">
+<div id="create-Parametros" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-Parametros" action="save">
         <g:hiddenField name="id" value="${parametrosInstance?.id}"/>
                 
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Indicador
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:field type="number" name="indicador" class=" required" value="${fieldValue(bean: parametrosInstance, field: 'indicador')}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Password
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:textField name="password" maxlength="8" style="width: 50px" class="" value="${parametrosInstance?.password}"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Dirección de Obras Civiles
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:textField name="direccionObrasCiviles" maxlength="15" class="" value="${parametrosInstance?.direccionObrasCiviles}"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Dirección Vialidad Concesiones
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:textField name="direccionVialidadConcesiones" maxlength="15" class="" value="${parametrosInstance?.direccionVialidadConcesiones}"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Factor Reducción
+                    Factor Reduccion
                 </span>
             </div>
 
@@ -327,13 +271,38 @@
             </div>
         </div>
                 
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Chofer
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:select id="chofer" name="chofer.id" from="${janus.Item.findAll('from Item where departamento=1')}" optionKey="id" class="many-to-one " value="${parametrosInstance?.chofer?.id}" />
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Volquete
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:select id="volquete" name="volquete.id" from="${janus.Item.findAll('from Item where departamento=157')}" optionKey="id" class="many-to-one " value="${parametrosInstance?.volquete?.id}" />
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
     </g:form>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-parametrosInstance").validate({
+    $("#frmSave-Parametros").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
@@ -342,8 +311,14 @@
         },
         errorClass     : "label label-important",
         submitHandler  : function(form) {
-            $("[name=btnSave-parametrosInstance]").replaceWith(spinner);
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

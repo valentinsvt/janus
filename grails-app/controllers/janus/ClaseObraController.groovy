@@ -11,7 +11,7 @@ class ClaseObraController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 15, 100)
         [claseObraInstanceList: ClaseObra.list(params), claseObraInstanceTotal: ClaseObra.count(), params: params]
     } //list
 

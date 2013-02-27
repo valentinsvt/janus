@@ -124,7 +124,7 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows        : 10,
+                    maxRows        : 15,
                     searchPosition : $("#busqueda-Aseguradora"),
                     float          : "right"
                 });

@@ -5,74 +5,6 @@
 
     <form class="form-horizontal">
     
-    <g:if test="${parametrosInstance?.indicador}">
-        <div class="control-group">
-            <div>
-                <span id="indicador-label" class="control-label label label-inverse">
-                    Indicador
-                </span>
-            </div>
-            <div class="controls">
-        
-                <span aria-labelledby="indicador-label">
-                    <g:fieldValue bean="${parametrosInstance}" field="indicador"/>
-                </span>
-        
-            </div>
-        </div>
-    </g:if>
-    
-    <g:if test="${parametrosInstance?.password}">
-        <div class="control-group">
-            <div>
-                <span id="password-label" class="control-label label label-inverse">
-                    Password
-                </span>
-            </div>
-            <div class="controls">
-        
-                <span aria-labelledby="password-label">
-                    <g:fieldValue bean="${parametrosInstance}" field="password"/>
-                </span>
-        
-            </div>
-        </div>
-    </g:if>
-    
-    <g:if test="${parametrosInstance?.direccionObrasCiviles}">
-        <div class="control-group">
-            <div>
-                <span id="direccionObrasCiviles-label" class="control-label label label-inverse">
-                    Direccion Obras Civiles
-                </span>
-            </div>
-            <div class="controls">
-        
-                <span aria-labelledby="direccionObrasCiviles-label">
-                    <g:fieldValue bean="${parametrosInstance}" field="direccionObrasCiviles"/>
-                </span>
-        
-            </div>
-        </div>
-    </g:if>
-    
-    <g:if test="${parametrosInstance?.direccionVialidadConcesiones}">
-        <div class="control-group">
-            <div>
-                <span id="direccionVialidadConcesiones-label" class="control-label label label-inverse">
-                    Direccion Vialidad Concesiones
-                </span>
-            </div>
-            <div class="controls">
-        
-                <span aria-labelledby="direccionVialidadConcesiones-label">
-                    <g:fieldValue bean="${parametrosInstance}" field="direccionVialidadConcesiones"/>
-                </span>
-        
-            </div>
-        </div>
-    </g:if>
-    
     <g:if test="${parametrosInstance?.factorReduccion}">
         <div class="control-group">
             <div>
@@ -390,6 +322,44 @@
         
                 <span aria-labelledby="indiceCostosIndirectosTimbresProvinciales-label">
                     <g:fieldValue bean="${parametrosInstance}" field="indiceCostosIndirectosTimbresProvinciales"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${parametrosInstance?.chofer}">
+        <div class="control-group">
+            <div>
+                <span id="chofer-label" class="control-label label label-inverse">
+                    Chofer
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="chofer-label">
+        %{--<g:link controller="item" action="show" id="${parametrosInstance?.chofer?.id}">--}%
+                    ${parametrosInstance?.chofer?.encodeAsHTML()}
+        %{--</g:link>--}%
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${parametrosInstance?.volquete}">
+        <div class="control-group">
+            <div>
+                <span id="volquete-label" class="control-label label label-inverse">
+                    Volquete
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="volquete-label">
+        %{--<g:link controller="item" action="show" id="${parametrosInstance?.volquete?.id}">--}%
+                    ${parametrosInstance?.volquete?.encodeAsHTML()}
+        %{--</g:link>--}%
                 </span>
         
             </div>

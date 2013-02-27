@@ -11,7 +11,7 @@ class PresupuestoController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : 15, 100)
         [presupuestoInstanceList: Presupuesto.list(params), presupuestoInstanceTotal: Presupuesto.count(), params: params]
     } //list
 

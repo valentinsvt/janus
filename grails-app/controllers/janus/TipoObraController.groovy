@@ -16,12 +16,12 @@ class TipoObraController extends janus.seguridad.Shield {
 
     def form_ajax() {
         def tipoObraInstance = new TipoObra(params)
-        if (params.id) {
+        if(params.id) {
             tipoObraInstance = TipoObra.get(params.id)
-            if (!tipoObraInstance) {
+            if(!tipoObraInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Tipo Obra con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Tipo Obra con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,9 +30,9 @@ class TipoObraController extends janus.seguridad.Shield {
 
     def save() {
         def tipoObraInstance
-        if (params.id) {
+        if(params.id) {
             tipoObraInstance = TipoObra.get(params.id)
-            if (!tipoObraInstance) {
+            if(!tipoObraInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Tipo Obra con id " + params.id
                 redirect(action: 'list')
@@ -50,7 +50,7 @@ class TipoObraController extends janus.seguridad.Shield {
             str += "<ul>"
             tipoObraInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
+                err.arguments.eachWithIndex {  arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -62,7 +62,7 @@ class TipoObraController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Tipo Obra " + tipoObraInstance.id
         } else {
@@ -76,7 +76,7 @@ class TipoObraController extends janus.seguridad.Shield {
         def tipoObraInstance = TipoObra.get(params.id)
         if (!tipoObraInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Tipo Obra con id " + params.id
+            flash.message =  "No se encontró Tipo Obra con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +87,7 @@ class TipoObraController extends janus.seguridad.Shield {
         def tipoObraInstance = TipoObra.get(params.id)
         if (!tipoObraInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Tipo Obra con id " + params.id
+            flash.message =  "No se encontró Tipo Obra con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +95,12 @@ class TipoObraController extends janus.seguridad.Shield {
         try {
             tipoObraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Obra " + tipoObraInstance.id
+            flash.message =  "Se ha eliminado correctamente Tipo Obra " + tipoObraInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Tipo Obra " + (tipoObraInstance.id ? tipoObraInstance.id : "")
+            flash.message =  "No se pudo eliminar Tipo Obra " + (tipoObraInstance.id ? tipoObraInstance.id : "")
             redirect(action: "list")
         }
     } //delete

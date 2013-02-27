@@ -1,9 +1,9 @@
 package janus
 class Parametros implements Serializable {
     //int indicador
-    String password
-    String direccionObrasCiviles
-    String direccionVialidadConcesiones
+    //String password
+    //String direccionObrasCiviles
+    //String direccionVialidadConcesiones
     String factorReduccion
     String factorVelocidad
     String capacidadVolquete
@@ -36,9 +36,9 @@ class Parametros implements Serializable {
         columns {
             id column: 'paux__id'
             //indicador column: 'pauxindi'
-            password column: 'pauxpass'
-            direccionObrasCiviles column: 'prsn_dic'
-            direccionVialidadConcesiones column: 'prsndvyc'
+            //password column: 'pauxpass'
+            //direccionObrasCiviles column: 'prsn_dic'
+            //direccionVialidadConcesiones column: 'prsndvyc'
             factorReduccion column: 'trnpftrd'
             factorVelocidad column: 'trnpvlcd'
             capacidadVolquete column: 'trnpcpvl'
@@ -64,9 +64,9 @@ class Parametros implements Serializable {
     }
     static constraints = {
         //indicador(blank: true, nullable: true, attributes: [title: 'indicador'])
-        password(size: 1..8, blank: true, nullable: true, attributes: [title: 'password'])
-        direccionObrasCiviles(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionObrasCiviles'])
-        direccionVialidadConcesiones(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionVialidadConcesiones'])
+        //password(size: 1..8, blank: true, nullable: true, attributes: [title: 'password'])
+        //direccionObrasCiviles(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionObrasCiviles'])
+        //direccionVialidadConcesiones(size: 1..15, blank: true, nullable: true, attributes: [title: 'direccionVialidadConcesiones'])
         factorReduccion(size: 1..6, blank: true, nullable: true, attributes: [title: 'factorReduccion'])
         factorVelocidad(size: 1..6, blank: true, nullable: true, attributes: [title: 'factorVelocidad'])
         capacidadVolquete(size: 1..6, blank: true, nullable: true, attributes: [title: 'capacidadVolquete'])
