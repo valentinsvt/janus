@@ -32,6 +32,9 @@ class Contrato implements Serializable {
     String observaciones
     String memo
 
+    Double multaRetraso
+    Double multaPlanilla
+
     static mapping = {
 
         table 'cntr'
@@ -66,6 +69,9 @@ class Contrato implements Serializable {
             observaciones column: 'cntrobsr'
             memo column: 'cntrmemo'
             plazo column: 'cntrplzo'
+
+            multaRetraso column: "cntrmlrt"
+            multaPlanilla column: "cntrmlpl"
 
         }
     }

@@ -10,6 +10,8 @@
 <html>
     <head>
         <meta name="layout" content="main">
+        <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
         <title>Detalle de planilla</title>
 
         <style type="text/css">
@@ -178,7 +180,7 @@
                     <td class="borderTop num totalAct" data-valor="${totalActual}" data-valoro="${totalActual}" style="font-size: larger">
                         <elm:numero number="${totalActual}" cero="hide"/>
                     </td>
-                    <td class="borderTop num totalAcu" data-valor="${totalAcumulado}" data-valoro="${totalAcumulado}" style="font-size: larger">
+                    <td class="borderTop num totalAcu" data-valor="${totalAcumulado}" data-valoro="${totalAcumulado}" data-max="${contrato.monto}" style="font-size: larger">
                         <elm:numero number="${totalAcumulado}" cero="hide"/>
                     </td>
                 </tr>
@@ -276,25 +278,28 @@
 //                });
 
                 $("#btnSave").click(function () {
-                    var data = "";
-                    $("#tbDetalle").children("tr").each(function () {
-                        var $row = $(this);
-                        var vol = $row.data("vol");
-                        var cant = $row.data("cant");
-                        var val = $row.data("val");
-                        var id = $row.data("id");
+                    if (!$(this).hasClass("disabled")) {
+                        $(this).replaceWith(spinner);
+                        var data = "";
+                        $("#tbDetalle").children("tr").each(function () {
+                            var $row = $(this);
+                            var vol = $row.data("vol");
+                            var cant = $row.data("cant");
+                            var val = $row.data("val");
+                            var id = $row.data("id");
 
-                        if (vol && cant && val && cant > 0 && val > 0) {
-                            data += "d=" + vol + "_" + cant + "_" + val;
-                            if (id != "nuevo") {
-                                data += "_" + id;
+                            if (vol && cant && val && cant > 0 && val > 0) {
+                                data += "d=" + vol + "_" + cant + "_" + val;
+                                if (id != "nuevo") {
+                                    data += "_" + id;
+                                }
+                                data += "&";
                             }
-                            data += "&";
-                        }
-                    });
-                    data += "id=${planilla.id}&total=" + $(".totalAct").data("valor");
+                        });
+                        data += "id=${planilla.id}&total=" + $(".totalAct").data("valor");
 //                    console.log(data);
-                    location.href = "${createLink(action:'saveDetalle')}?" + data;
+                        location.href = "${createLink(action:'saveDetalle')}?" + data;
+                    }
                     return false;
                 });
 
@@ -333,6 +338,9 @@
                         // esta parte le pone los 2 decimales si no tiene
                         numero($(this), parseFloat($(this).val()));
 
+                        var v100 = $(".totalAcu").data("max");
+                        var v125 = parseFloat($(".totalAcu").data("max")) * 1.25;
+
                         var total = 0, totalAcu = 0;
                         //esta parte calcula los totales
                         $("#tbDetalle").children("tr").each(function () {
@@ -344,6 +352,43 @@
                                 totalAcu += parseFloat($row.data("valacu"));
                             }
                         });
+
+                        if (totalAcu > v100 && totalAcu <= v125) {
+                            $.box({
+                                imageClass : "box_info",
+                                text       : "El monto total supera el 100% del monto del contrato. Se requiere autorización de aumento de cantidad de obra.",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    draggable : false,
+                                    buttons   : {
+                                        "Aceptar" : function () {
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        if (totalAcu > v125) {
+                            $("#btnSave").addClass("disabled");
+                            $.box({
+                                imageClass : "box_info",
+                                text       : "El monto total supera el 125% del monto del contrato.",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    draggable : false,
+                                    buttons   : {
+                                        "Aceptar" : function () {
+                                        }
+                                    }
+                                }
+                            });
+                        } else {
+                            $("#btnSave").removeClass("disabled");
+                        }
+
                         numero($(".totalAct"), total);
                         numero($(".totalAcu"), totalAcu);
                     } //blur

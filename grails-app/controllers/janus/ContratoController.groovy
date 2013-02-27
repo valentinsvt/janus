@@ -221,7 +221,10 @@ class ContratoController extends janus.seguridad.Shield {
         def obra = Obra.get(params.id)
         def concurso = janus.pac.Concurso.findByObraAndEstado(obra, "R")
         def ofertas = janus.pac.Oferta.findAllByConcurso(concurso)
-        [ofertas: ofertas]
+        println ofertas
+        println ofertas.monto
+        println ofertas.plazo
+        return [ofertas: ofertas]
     }
 
 

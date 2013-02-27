@@ -344,6 +344,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         detalle.each { vol ->
             def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
 //            precios.put(vol.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//            println indirecto
+//            println res
             def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
             cronos.add([
                     codigo: vol.item.codigo,
@@ -441,6 +443,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 filaCan += "<td class='fis num ${periodo.tipo}'>"
                 if (cronoPer.size() == 1) {
                     cronoPer = cronoPer[0]
+//                    println cronoPer.id
                     filaDol += g.formatNumber(number: cronoPer.precio, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
                     filaPor += g.formatNumber(number: cronoPer.porcentaje, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
                     filaCan += g.formatNumber(number: cronoPer.cantidad, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")

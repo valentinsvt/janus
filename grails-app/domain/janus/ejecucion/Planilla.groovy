@@ -1,7 +1,6 @@
 package janus.ejecucion
 
 import janus.Contrato
-import janus.pac.PeriodoValidez
 
 class Planilla {
 
@@ -33,6 +32,9 @@ class Planilla {
 
     String memoSalida
     Date fechaMemoSalida
+
+    Double multaRetraso = 0
+    Double multaPlanilla = 0
 
     static mapping = {
         table 'plnl'
@@ -71,6 +73,9 @@ class Planilla {
 
             memoSalida column: 'plnlmmsl'
             fechaMemoSalida column: 'plnlfcms'
+
+            multaRetraso column: 'plnlmlrt'
+            multaPlanilla column: 'plnlmlpl'
         }
     }
 

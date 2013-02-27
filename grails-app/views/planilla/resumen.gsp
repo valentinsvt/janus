@@ -88,27 +88,7 @@
 
                 <div class="linea" style="height: 100%;"></div>
 
-                <table class="table table-bordered table-striped table-condensed table-hover" style="width: ${150 * periodos.size() + 150}px">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Cuadrilla Tipo</th>
-                            <th>Oferta</th>
-                            <th class="nb">${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            <th>Variación</th>
-                            <th class="nb">Anticipo <br>${planilla.fechaPresentacion.format("MMM-yy")}</th>
-                            <g:if test="${periodos.size() > 2}">
-                                <g:each in="${2..periodos.size() - 1}" var="per">
-                                    <th>Variación</th>
-                                    <th class="nb">${periodos[per].fechaInicio.format("MMM-yy")}</th>
-                                </g:each>
-                            </g:if>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${tbodyB0}
-                    </tbody>
-                </table>
-
+                ${tablaB0}
             </div> <!-- B0 -->
 
             <div class="area">
@@ -117,23 +97,7 @@
 
                 <div class="linea" style="height: 100%;"></div>
 
-                <table class="table table-bordered table-striped table-condensed table-hover" style="width: ${150 * periodos.size() + 150}px; margin-top: 10px;">
-                    <thead>
-                        <tr>
-                            <th colspan="2" rowspan="2">Mes y año</th>
-                            <th colspan="2">Cronograma</th>
-                            <th colspan="2">Planillado</th>
-                            <th colspan="2" rowspan="2">Valor P<sub>0</sub></th>
-                        </tr>
-                        <tr>
-                            <th>Parcial</th>
-                            <th>Acumulado</th>
-                            <th>Parcial</th>
-                            <th>Acumulado</th>
-                        </tr>
-                    </thead>
-                    ${tbodyP0}
-                </table>
+                ${tablaP0}
             </div> <!-- P0 -->
 
             <div class="area" style="min-height: 190px; margin-bottom: 30px;">
@@ -142,37 +106,23 @@
 
                 <div class="linea" style="height: 100%;"></div>
 
-                <table class="table table-bordered table-striped table-condensed table-hover" style="width: ${150 * periodos.size() + 150}px; margin-top: 10px;">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">Componentes</th>
-                            <th>Oferta</th>
-                            <th colspan="${periodos.size() - 1}">Periodo de variación y aplicación de fórmula polinómica</th>
-                        </tr>
-                        <tr>
-                            <th>${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            <th>Anticipo <br>${planilla.fechaPresentacion.format("MMM-yy")}</th>
-                            <g:if test="${periodos.size() > 2}">
-                                <g:each in="${2..periodos.size() - 1}" var="per">
-                                    <th rowspan="2">${periodos[per].fechaInicio.format("MMM-yy")}</th>
-                                </g:each>
-                            </g:if>
-                        </tr>
-                        <tr>
-                            <th>Anticipo</th>
-                            <th>
-                                <elm:numero number="${contrato.porcentajeAnticipo}" decimales="0"/>%
-                            </th>
-                            <th>Anticipo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${tbodyFr}
-                    </tbody>
-                </table>
-
+                ${tablaFr}
             </div> <!-- Fr y Pr -->
 
+            <g:if test="${planilla.tipoPlanilla.codigo != 'A'}">
+                <div class="area" style="min-height: 190px; margin-bottom: 30px;">
+
+                    <p class="css-vertical-text">Multas</p>
+
+                    <div class="linea" style="height: 100%;"></div>
+
+                    <div class="tituloTree">Multa por no presentación de planilla</div>
+                    ${pMl}
+
+                    <div class="tituloTree">Multa por retraso de obra</div>
+                    ${tablaMl}
+                </div> <!-- Multas -->
+            </g:if>
         </div>
 
         <div class="modal hide fade" id="modal-tree">

@@ -260,6 +260,7 @@
                 });
 
                 $("#btnSave").click(function () {
+                    $(this).replaceWith(spinner);
                     $("#frmSave-Planilla").submit();
                 });
 

@@ -1,5 +1,6 @@
 package janus
 
+import janus.ejecucion.PeriodosInec
 import janus.ejecucion.Planilla
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 import org.springframework.beans.SimpleTypeConverter
@@ -67,19 +68,19 @@ class ElementosTagLib {
 
         str += "<div class='row'>"
         str += "<div class='span1 bold'>Obra</div>"
-        str += "<div class='span5'>" + obra.nombre + " " + obra.descripcion + "</div>"
+        str += "<div class='span5'>" + obra.nombre + " " + obra?.descripcion + "</div>"
         str += "</div>"
 
         str += "<div class='row'>"
         str += "<div class='span1 bold'>Lugar</div>"
-        str += "<div class='span5'>" + obra.lugar.descripcion + "</div>"
+        str += "<div class='span5'>" + (obra.lugar?.descripcion ?: "") + "</div>"
         str += "<div class='span2 bold'>Planilla</div>"
         str += "<div class='span3'>" + planilla.numero + "</div>"
         str += "</div>"
 
         str += "<div class='row'>"
         str += "<div class='span1 bold'>Ubicación</div>"
-        str += "<div class='span5'>Parroquia " + obra.parroquia.nombre + " - Cantón " + obra.parroquia.canton.nombre + "</div>"
+        str += "<div class='span5'>Parroquia " + obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre + "</div>"
         str += "<div class='span2 bold'>Monto contrato</div>"
         str += "<div class='span3'>" + formatNumber(number: planilla.contrato.monto, format: "##,##0", locale: "ec", minFractionDigits: 2, maxFractionDigits: 2) + "</div>"
         str += "</div>"
@@ -88,14 +89,20 @@ class ElementosTagLib {
         str += "<div class='span1 bold'>Contratista</div>"
         str += "<div class='span5'>" + planilla.contrato.oferta.proveedor.nombre + "</div>"
         str += "<div class='span2 bold'>Periodo</div>"
-        str += "<div class='span3'>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')) + "</div>"
+        str += "<div class='span3'>"
+        if (planilla.tipoPlanilla.codigo == "A") {
+            str += 'Anticipo (' + PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion).descripcion + ")"
+        } else {
+            str += 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')
+        }
+        str += "</div>"
         str += "</div>"
 
         str += "<div class='row'>"
         str += "<div class='span1 bold'>Plazo</div>"
-        str += "<div class='span5'>" + planilla.contrato.plazo + "</div>"
-//        str += "<div class='span2 bold'>Periodo</div>"
-//        str += "<div class='span3'>" + (planilla.tipoPlanilla.codigo == 'A' ? 'Anticipo' : 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')) + "</div>"
+        str += "<div class='span5'>" + formatNumber(number: planilla.contrato.plazo, minFractionDigits: 0, maxFractionDigits: 0, locale: "ec") + " días</div>"
+        str += "<div class='span2 bold'>Fecha pres. planilla</div>"
+        str += "<div class='span3'>" + planilla.fechaPresentacion.format("dd-MM-yyyy") + "</div>"
         str += "</div>"
 
         str += "</div>"

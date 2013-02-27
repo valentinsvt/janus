@@ -8,7 +8,8 @@
             var parts = cl.split("_");
             var m = parts[0];
             var p = parts[1];
-
+            $("#monto").val(number_format(m, 2,"."));
+            $("#plazo").val(number_format(p, 2,"."));
 //            $("#ofertaId").val($(this).val());
         }
         else {
