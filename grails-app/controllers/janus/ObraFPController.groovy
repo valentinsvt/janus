@@ -25,15 +25,14 @@ class ObraFPController {
 
         /* solo se debe correr sp_obra cuando esta no está registrada */
         //if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
-        /* TODO: insertar por subpresupuesto en vlobitem para generar composición de obra por partes **/
 
-        ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
-        //ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        //ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
+        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
         println "ejecutó sp_obra"
 
         println "verificaMatriz" + verificaMatriz(obra__id)
-        println "pasa verificaMatriz"
-        println "verifica_precios" + verifica_precios(obra__id)
+        //println "pasa verificaMatriz"
+        println "verifica_precios \n" + verifica_precios(obra__id)
 
         /* --------------------------------------- procesaMatriz --------------------------------
         * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
@@ -135,7 +134,13 @@ class ObraFPController {
         def obra = Obra.get(id)
         def errr = ""
         if (!VolumenesObra.findAllByObra(obra)) errr += "\nNo se ha ingresado los volúmenes de Obra"
-        if (!obra.lugar) errr += "\nNo se ha definido la Lista precios para esta Obra"
+        if (!obra.lugar) errr += "\nNo se ha definido la Lista precios: \"Peso Capital de cantón\" para esta Obra"
+        if (!obra.listaPeso1) errr += "\nNo se ha definido la Lista precios: \"Peso Especial\" para esta Obra"
+        if (!obra.listaVolumen0) errr += "\nNo se ha definido la Lista precios: \"Materiales Pétreos Hormigones\" para esta Obra"
+        if (!obra.listaVolumen1) errr += "\nNo se ha definido la Lista precios: \"Materiales Mejoramiento\" para esta Obra"
+        if (!obra.listaVolumen2) errr += "\nNo se ha definido la Lista precios: \"Materiales Carpeta Asfáltica\" para esta Obra"
+        if (!obra.listaManoObra) errr += "\nNo se ha definido la Lista precios: \"Mano de obra y equipos\" para esta Obra"
+
         if (!obra.distanciaPeso) errr += "\n  No se han ingresado las distancias al Peso"
         if (!obra.distanciaVolumen) errr += "\n  No se han ingresado las distancias al Volumen"
         if (rubrosSinCantidad(id) > 0) errr += "\n Existen Rubros con cantidades Negativas o CERO"
@@ -166,11 +171,13 @@ class ObraFPController {
         cn.eachRow(tx_sql) {row ->
             errr += ":" + row.itemcmpo
         }
+/*
         cn.eachRow("select item__id, itemcmpo from item".toString()) {row ->
             (row.itemcmpo =~ /\W+/).findAll { p ->
                 errr += "item: " + row.item__id + " tiene: /${p}/"
             }
         }
+*/
         cn.close()
         return errr
     }
@@ -179,9 +186,9 @@ class ObraFPController {
         // usa funcion
         def cn = dbConnectionService.getConnection()
         def errr = "";
-        def tx_sql = "select distinct(itemcdgo) cdgo, itemnmbr from verifica_precios(${id}) order by itemcdgo "
+        def tx_sql = "select itemcdgo, itemnmbr, tplsdscr from verifica_precios_v2(${id}) order by itemcdgo "
         cn.eachRow(tx_sql.toString()) {row ->
-            errr += ": ${row.cdgo}  ${row.itemnmbr}"
+            errr += "Item: ${row.itemcdgo.trim()} ${row.itemnmbr.trim()} Lista: ${row.tplsdscr.trim()}\n"
         }
         cn.close()
         if (!errr) return "<br>No hay items sin precios<br>"
@@ -227,7 +234,7 @@ class ObraFPController {
 
     def calculaTransporte(id) {
         def cn = dbConnectionService.getConnection()
-        def tx_sql = "select sum(trnp) transporte from rbro_pcun (${id})"
+        def tx_sql = "select sum(trnp) transporte from rbro_pcun_v2 (${id})"
         def trnp = 0.0
         cn.eachRow(tx_sql.toString()) {row ->
             trnp = row.transporte
@@ -256,12 +263,16 @@ class ObraFPController {
         ejecutaSQL("insert into mfcl values (${numeroCampos}, '${id}', '${campo}', '${tipo}', null, null, null)")
     }
 
-    def manoDeObra(id, sbpr, hayEq) {
+    def manoDeObra(id, sbpr, hayEq) { //sólo una fórmula por todos los sbpr
         def cn = dbConnectionService.getConnection()
+        def tx_wh = ""
+        if (sbpr != 0) tx_wh = "sbpr__id = ${sbpr} and "
         def tx_sql = "select itemcmpo, grpo__id from vlobitem, item, dprt, sbgr "
-        tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and sbpr__id = ${sbpr} and "
+        //tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and sbpr__id = ${sbpr} and "
+        tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and ${tx_wh}"
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 2 "
         tx_sql += "order by item.itemcdgo"
+        println "manoDeObra: $tx_sql"
         cn.eachRow(tx_sql.toString()) {row ->
             creaCampo(id, row.itemcmpo + "_U", "O")
             creaCampo(id, row.itemcmpo + "_T", "O")
@@ -280,8 +291,12 @@ class ObraFPController {
 
     def materiales(id, sbpr) {
         def cn = dbConnectionService.getConnection()
+        def tx_wh = ""
+        if (sbpr != 0) tx_wh = "sbpr__id = ${sbpr} and "
+
         def tx_sql = "select itemcmpo, grpo__id from vlobitem, item, dprt, sbgr "
-        tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and sbpr__id = ${sbpr} and "
+        //tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and sbpr__id = ${sbpr} and "
+        tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and ${tx_wh}"
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 1 "
         tx_sql += "order by item.itemcdgo"
         //println "materiales: " + tx_sql
@@ -359,12 +374,15 @@ class ObraFPController {
         def contador = 1
         cn.eachRow(tx_sql.toString()) {row ->
             if (obra.estado == 'N') {
+/*
                 tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios (${row.item__id}, "
                 tx_cr += "${obra.lugarId},'${obra.fechaPreciosRubros}',null, null, null, null) where grpocdgo = 2"
+*/
+                tx_cr = "select itemcdgo, parcial pcun, cmpo from vlob_pcun_v2 (${id}, ${row.item__id}) where grpocdgo = 2"  //v2
             } else {
                 tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 2"
             }
-            //println "descomposicion: tx_cr: " + tx_cr
+            println "descomposicion: tx_cr: " + tx_cr
             cn1.eachRow(tx_cr.toString()) {cr ->
                 poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
             }
@@ -446,8 +464,11 @@ class ObraFPController {
         cn.eachRow(tx_sql.toString()) {row ->
             if (conTrnp) {
                 if (obra.estado == 'N') {
+/*
                     tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios (${row.item__id}, "
                     tx_cr += "${obra.lugarId},'${obra.fechaPreciosRubros}',null, null, null, null) where grpocdgo = 1"
+*/
+                    tx_cr = "select itemcdgo, parcial pcun, cmpo from vlob_pcun_v2 (${id}, ${row.item__id}) where grpocdgo = 1"  //v2
                 } else {
                     tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 1"
                 }
@@ -458,12 +479,13 @@ class ObraFPController {
                     tx_cr += "${obra.lugarId},'${obra.fechaPreciosRubros}',${dsps}, ${dsvl}, ${rdps}, ${rdvl}) where grpocdgo = 1"
 */
 
-                    tx_cr = "select itemcdgo, parcial + parcial_t pcun, cmpo from vlob_pcun (${id},${row.item__id}) where grpocdgo = 1"
+                    tx_cr = "select itemcdgo, parcial + parcial_t pcun, cmpo from vlob_pcun_v2 (${id}, ${row.item__id}) where grpocdgo = 1"
 
                 } else {
                     tx_cr = "select itemcdgo, parcial + parcial_t pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 1"
                 }
             }
+            println "des_Materiales: " + tx_cr
             cn1.eachRow(tx_cr.toString()) {cr ->
                 poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
             }
@@ -479,7 +501,7 @@ class ObraFPController {
         def cntd = 0.0
         if (sbpr == 0) {
             if (obra.estado == 'N') {
-                tx_sql = "select rbrocdgo, trnp from rbro_pcun(${id})"
+                tx_sql = "select rbrocdgo, trnp from rbro_pcun_v2(${id})"
             } else {
 /*
                 tx_sql  = "select itemcdgo rbrocdgo, coalesce(sum(rbrocntd * itemdstn * itemtrfa * obit.itempeso),0) trnp "
@@ -492,7 +514,7 @@ class ObraFPController {
             }
         } else {
             if (obra.estado == 'N') {
-                tx_sql = "select rbrocdgo, trnp from rbro_pcun(${id}) where sbpr__id = ${sbpr}"
+                tx_sql = "select rbrocdgo, trnp from rbro_pcun_v2(${id}) where sbpr__id = ${sbpr}"
             } else {    /* TODO --- seguir con proceso de genera matrizFP */
                 tx_sql = "select distinct itemcdgo rbrocdgo, rbrotrnp trnp from obrb, item, vlob "
                 tx_sql += "where obrb.obra__id = ${id} and item.item__id = obrb.rbrocdgo and "
@@ -548,8 +570,11 @@ class ObraFPController {
         //println "acEquipos: " + tx_sql
         cn.eachRow(tx_sql.toString()) {row ->
             if (obra.estado == 'N') {
+/*
                 tx_cr = "select sum(parcial) pcun from rb_precios (${row.item__id}, ${obra.lugarId},"
                 tx_cr += "'${obra.fechaPreciosRubros}',null, null, null, null) where grpocdgo = 3 and cmbs = 'S'"
+*/
+                tx_cr = "select sum(parcial) pcun from vlob_pcun_v2 (${id},${row.item__id}) where grpocdgo = 3 and cmbs = 'S'"  //v2
             } else {
                 tx_cr = "select sum(parcial) pcun from rb_precios_r (${id}, ${row.item__id}) where grpocdgo = 3 and cmbs = 'S'"
             }
@@ -565,8 +590,11 @@ class ObraFPController {
                 }
             }
             if (obra.estado == 'N') {
+/*
                 tx_cr = "select sum(parcial) pcun from rb_precios (${row.item__id}, ${obra.lugarId},"
                 tx_cr += "'${obra.fechaPreciosRubros}',null, null, null, null) where grpocdgo = 3 and cmbs = 'N'"
+*/
+                tx_cr = "select sum(parcial) pcun from vlob_pcun_v2 (${id}, ${row.item__id}) where grpocdgo = 3 and cmbs = 'N'"   //v2
             } else {
                 tx_cr = "select sum(parcial) pcun from rb_precios_r (${id}, ${row.item__id}) where grpocdgo = 3 and cmbs = 'N'"
             }
@@ -584,8 +612,11 @@ class ObraFPController {
             }
 
             if (obra.estado == 'N') {
+/*
                 tx_cr = "select sum(parcial) pcun from rb_precios (${row.item__id}, ${obra.lugarId},"
                 tx_cr += "'${obra.fechaPreciosRubros}',null, null, null, null) where grpocdgo = 3"
+*/
+                tx_cr = "select sum(parcial) pcun from vlob_pcun_v2 (${id}, ${row.item__id}) where grpocdgo = 3"   //v2
             } else {
                 tx_cr = "select sum(parcial) pcun from rb_precios_r (${id}, ${row.item__id}) where grpocdgo = 3"
             }
@@ -749,12 +780,17 @@ class ObraFPController {
                 tx       = d.itemnmbr
             }
             if (obra.estado == 'N') {
+/*
                 tx_cr = "select rbpcpcun pcun from item_pcun (${item__id}, ${obra.lugarId}, '${obra.fechaPreciosRubros}')"
+*/
+                tx_cr = "select rbpcpcun pcun from item_pcun_v2 (${item__id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
+                        "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
+
             } else {
                 tx_cr = "select itempcun pcun from obit where item__id = ${item__id}"
             }
 
-            //println "...... segunda: " + tx_cr
+            println "...... segunda: " + tx_cr
 
             cn1.eachRow(tx_cr.toString()) {d ->
                 if (d.pcun == 0) errr = "No existe precio para el item ${item}: ${tx}"
