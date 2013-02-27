@@ -138,11 +138,11 @@
 
                     <div class="span3 formato">DOCUMENTO DE REFERENCIA</div>
 
-                    <div class="span1"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20" style="width: 70px; margin-left: -50px"/></div>
+                    <div class="span1"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20" style="width: 90px; margin-left: -50px"/></div>
 
                     <div class="span3 formato">MEMORANDO CANTIDAD DE OBRA</div>
 
-                    <div class="span1"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 70px; margin-left: -50px"/></div>
+                    <div class="span1"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 90px; margin-left: -50px"/></div>
 
                     <div class="span1 formato">FECHA</div>
 

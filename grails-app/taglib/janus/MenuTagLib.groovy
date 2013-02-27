@@ -70,7 +70,7 @@ class MenuTagLib {
             }
 
             def html = ""
-            html += '<div class="navbar navbar-static-top navbar-inverse">'
+            html += '<div class="navbar navbar-static-top navbar-inverse noprint">'
             html += '<div class="navbar-inner">'
             html += '<div class="container">'
             html += '<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">'

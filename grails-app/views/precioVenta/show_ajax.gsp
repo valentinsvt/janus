@@ -96,7 +96,7 @@
         <div class="control-group">
             <div>
                 <span id="direccion-label" class="control-label label label-inverse">
-                    Direccion
+                    Dirección
                 </span>
             </div>
             <div class="controls">
@@ -130,7 +130,7 @@
         <div class="control-group">
             <div>
                 <span id="telefono-label" class="control-label label label-inverse">
-                    Telefono
+                    Teléfono
                 </span>
             </div>
             <div class="controls">
@@ -181,7 +181,7 @@
         <div class="control-group">
             <div>
                 <span id="indiceCostosIndirectosGarantias-label" class="control-label label label-inverse">
-                    Indice Costos Indirectos Garantias
+                    Indice Costos Indirectos Garantías
                 </span>
             </div>
             <div class="controls">
@@ -215,7 +215,7 @@
         <div class="control-group">
             <div>
                 <span id="registroCamaraConstruccion-label" class="control-label label label-inverse">
-                    Registro Camara Construccion
+                    Registro Cámara Construcción
                 </span>
             </div>
             <div class="controls">
@@ -232,7 +232,7 @@
         <div class="control-group">
             <div>
                 <span id="tituloProfecionalTitular-label" class="control-label label label-inverse">
-                    Titulo Profecional Titular
+                    Título Profesional
                 </span>
             </div>
             <div class="controls">

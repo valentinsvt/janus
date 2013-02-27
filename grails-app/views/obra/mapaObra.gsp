@@ -10,6 +10,7 @@
 <html>
 <head>
     <meta name="layout" content="main">
+    <link href='${resource(dir: "css", file: "print.css")}' rel='stylesheet' type='text/css' media="print"/>
 
     <script type="text/javascript"
             src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBpasnhIQUsHfgCvC3qeJpEgcB9_ppWQI0&sensor=true"></script>
@@ -28,6 +29,20 @@
 </head>
 <body>
 
+<div class="datosObra span12" style="margin-bottom: 20px">
+
+
+    <div class="span3" style="margin-left: -30px; margin-right: 30px;">
+        <span id="nombreObra" class="control-label label label-inverse">
+            Nombre de la Obra:
+        </span>
+    </div>
+
+    <div class="span5" style="margin-left: -50px; font-size: large">${obra?.nombre}</div>
+
+
+</div>
+
 
 
 <div id="mapaPichincha" style="width: 700px; height: 500px">
@@ -38,20 +53,6 @@
 
 
 <div class="" style="margin-top: 20px">
-
-    <div class="datosObra span12" style="margin-bottom: 20px">
-
-
-        <div class="span3" style="margin-left: -30px; margin-right: 30px;">
-            <span id="nombreObra" class="control-label label label-inverse">
-                Nombre de la Obra:
-            </span>
-        </div>
-
-        <div class="span5" style="margin-left: -50px">${obra?.nombre}</div>
-
-
-    </div>
 
 
     <div class="coordenadasOriginales span12">
@@ -110,9 +111,13 @@
 
 <div class="btn-group" style="margin-top: 20px; margin-left: 250px">
 
-    <button class="btn" id="btnVolver"><i class="icon-arrow-left"></i> Regresar</button>
-    <button class="btn" id="btnGuardar"><i class="icon-check"></i> Guardar</button>
-    %{--<button class="btn print" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>--}%
+    <button class="btn noprint" id="btnVolver"><i class="icon-arrow-left"></i> Regresar</button>
+    <button class="btn noprint" id="btnGuardar"><i class="icon-check"></i> Guardar</button>
+
+    %{--<form>--}%
+        %{--<input type="button" value="Print this page" onClick="window.print()">--}%
+    %{--</form>--}%
+    <button class="btn noprint" id="btnImprimir" onClick="window.print()"><i class="icon-print"></i> Imprimir</button>
     %{--<img src="images/print.png" class="print" alt="print" title="print" onclick="window.open('print.html')" />--}%
 
 </div>
@@ -359,9 +364,6 @@
 //    $("#btnImprimir").click(function () {
 //
 //
-//        var contents = window.opener.document.getElementById(map);
-//        document.write(contents.innerHTML);
-//        window.print();
 //
 //
 //    });

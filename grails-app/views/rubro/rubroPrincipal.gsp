@@ -191,7 +191,7 @@
             </div>
         </g:if>
         <div class="span3">
-            % costos indriectos
+            % costos indirectos
             <input type="text" style="width: 30px;" id="costo_indi" value="21">
         </div>
 

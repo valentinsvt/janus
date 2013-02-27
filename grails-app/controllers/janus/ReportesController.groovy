@@ -1258,7 +1258,7 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
 
-        addCellTabla(tablaPresupuesto, new Paragraph("Cant. Obra :", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Memo Cant. Obra :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.memoCantidadObra, times8normal), prmsHeaderHoja)
 
         addCellTabla(tablaPresupuesto, new Paragraph("Nombre :", times8bold), prmsHeaderHoja)
@@ -1272,7 +1272,7 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph("Tipo de Obra :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.tipoObjetivo?.descripcion, times8normal), prmsHeaderHoja)
 
-        addCellTabla(tablaPresupuesto, new Paragraph("Memo Ref :", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Documento de Referencia :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.oficioIngreso, times8normal), prmsHeaderHoja)
 
         addCellTabla(tablaPresupuesto, new Paragraph("Sitio :", times8bold), prmsHeaderHoja)
@@ -1290,6 +1290,14 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph("Referencia :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.referencia, times8normal), prmsHeaderHoja)
 
+        addCellTabla(tablaPresupuesto, new Paragraph("Latitud :", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(g.formatNumber(number: obra?.latitud, minFractionDigits:
+                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Longitud :", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(g.formatNumber(number: obra?.longitud, minFractionDigits:
+                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times8normal), prmsHeaderHoja)
+
+
         addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
 
@@ -1301,13 +1309,6 @@ class ReportesController {
 
         addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-
-
 
 
         PdfPTable tablaVolObra = new PdfPTable(6);
@@ -1963,7 +1964,7 @@ class ReportesController {
         addCellTabla(tablaMemo, new Paragraph("Parroquia :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaMemo, new Paragraph(obra?.parroquia?.nombre, times8normal), prmsHeaderHoja)
 
-        addCellTabla(tablaMemo, new Paragraph("Memo Ref :", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("Documento de Referencia :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaMemo, new Paragraph(obra?.oficioIngreso, times8normal), prmsHeaderHoja)
 
         addCellTabla(tablaMemo, new Paragraph("Otras Referencias :", times8bold), prmsHeaderHoja)
@@ -2515,6 +2516,14 @@ class ReportesController {
         addCellTabla(tablaHeader, new Paragraph("Parroquia : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.parroquia?.nombre, times10normal), prmsHeaderHoja)
 
+        addCellTabla(tablaHeader, new Paragraph("Latitud :", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.latitud, minFractionDigits:
+                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("Longitud :", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.longitud, minFractionDigits:
+                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
+
         document.add(tablaHeader)
 
         Paragraph txtIzqHeader = new Paragraph();
@@ -2538,7 +2547,7 @@ class ReportesController {
 
         PdfPTable tablaCoeficiente = new PdfPTable(5);
         tablaCoeficiente.setWidthPercentage(100);
-        tablaCoeficiente.setWidths(arregloEnteros([10, 10, 5, 25, 50]))
+        tablaCoeficiente.setWidths(arregloEnteros([10, 10, 15, 25, 40]))
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
