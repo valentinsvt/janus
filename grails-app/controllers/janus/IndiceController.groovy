@@ -167,19 +167,22 @@ class IndiceController extends janus.seguridad.Shield {
                                             bandera = false;
                                         }
                                         if (bandera) {
-                                            def fecha = PeriodoValidez.get(params.periodo)
-                                            def valores = ValorIndice.countByIndiceAndFecha(indice, fecha)
+                                            def fecha = janus.ejecucion.PeriodosInec.get(params.periodo)
+                                            def valores = ValorIndice.countByIndiceAndPeriodo(indice, fecha)
                                             if (valores == 0) {
                                                 def valorIndice = new ValorIndice([
                                                         indice: indice,
                                                         valor: valor,
-                                                        fecha: fecha
+                                                        periodo: fecha
                                                 ])
                                                 if (!valorIndice.save(flush: true)) {
                                                     println("error al guardar el valor del indice" + valorIndice.errors)
                                                     html += 'fila ' + (j + 1) + ' ERROR valor no creado' + renderErrors(bean: valorIndice)
                                                 }
                                             } else {
+//                                                def ind =  ValorIndice.findByIndiceAndPeriodo(indice,fecha)
+//                                                ind.valor= valor
+//                                                ind.save(flush: true)
                                                 html += 'fila ' + (j + 1) + ' valor ya existe ' + '<br/>'
                                                 println(valores)
                                             }
