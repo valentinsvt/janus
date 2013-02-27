@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="1" class=" required" value="${tipoObraInstance?.codigo}"/>
+                <g:textField name="codigo" maxlength="1" class=" required" value="${tipoObraInstance?.codigo}" style="width: 40px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class=" required" value="${tipoObraInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="63" class=" required" value="${tipoObraInstance?.descripcion}" style="width: 300px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

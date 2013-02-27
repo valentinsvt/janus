@@ -1,8 +1,8 @@
 
 <%@ page import="janus.Auxiliar" %>
 
-<div id="create-auxiliarInstance" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-auxiliarInstance" action="save">
+<div id="create-Auxiliar" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-Auxiliar" action="save">
         <g:hiddenField name="id" value="${auxiliarInstance?.id}"/>
                 
         <div class="control-group">
@@ -22,12 +22,82 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
+                    General
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="general" maxlength="200" class="" value="${auxiliarInstance?.general}"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Base Cont
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="baseCont" maxlength="200" class="" value="${auxiliarInstance?.baseCont}"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Presupuesto Ref
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="presupuestoRef" maxlength="200" class="" value="${auxiliarInstance?.presupuestoRef}"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Retencion
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="retencion" maxlength="200" class="" value="${auxiliarInstance?.retencion}"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Nota Auxiliar
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textArea name="notaAuxiliar" cols="40" rows="5" maxlength="3071" class="" value="${auxiliarInstance?.notaAuxiliar}"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
                     Nota
                 </span>
             </div>
 
             <div class="controls">
-                <g:textArea name="nota" cols="40" rows="5" maxlength="3071" class="" value="${auxiliarInstance?.nota}"/>
+                <g:textField name="nota" maxlength="200" class="" value="${auxiliarInstance?.nota}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -92,7 +162,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Título
+                    Titulo
                 </span>
             </div>
 
@@ -120,10 +190,7 @@
     </g:form>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-auxiliarInstance").validate({
+    $("#frmSave-Auxiliar").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
@@ -132,8 +199,14 @@
         },
         errorClass     : "label label-important",
         submitHandler  : function(form) {
-            $("[name=btnSave-auxiliarInstance]").replaceWith(spinner);
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

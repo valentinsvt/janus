@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="codigo" class=" required" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>
+                <g:field type="number" name="codigo" class=" required" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}" style="width: 40px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

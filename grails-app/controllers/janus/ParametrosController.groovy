@@ -11,18 +11,17 @@ class ParametrosController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [parametrosInstanceList: Parametros.list(params), parametrosInstanceTotal: Parametros.count(), params: params]
+        [parametrosInstanceList: Parametros.list(params), params: params]
     } //list
 
     def form_ajax() {
         def parametrosInstance = new Parametros(params)
-        if (params.id) {
+        if(params.id) {
             parametrosInstance = Parametros.get(params.id)
-            if (!parametrosInstance) {
+            if(!parametrosInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Parametros con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Parametros con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -31,9 +30,9 @@ class ParametrosController extends janus.seguridad.Shield {
 
     def save() {
         def parametrosInstance
-        if (params.id) {
+        if(params.id) {
             parametrosInstance = Parametros.get(params.id)
-            if (!parametrosInstance) {
+            if(!parametrosInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Parametros con id " + params.id
                 redirect(action: 'list')
@@ -63,7 +62,7 @@ class ParametrosController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Parametros " + parametrosInstance.id
         } else {
@@ -77,7 +76,7 @@ class ParametrosController extends janus.seguridad.Shield {
         def parametrosInstance = Parametros.get(params.id)
         if (!parametrosInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Parametros con id " + params.id
+            flash.message =  "No se encontró Parametros con id " + params.id
             redirect(action: "list")
             return
         }
@@ -88,7 +87,7 @@ class ParametrosController extends janus.seguridad.Shield {
         def parametrosInstance = Parametros.get(params.id)
         if (!parametrosInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Parametros con id " + params.id
+            flash.message =  "No se encontró Parametros con id " + params.id
             redirect(action: "list")
             return
         }
@@ -96,12 +95,12 @@ class ParametrosController extends janus.seguridad.Shield {
         try {
             parametrosInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Parametros " + parametrosInstance.id
+            flash.message =  "Se ha eliminado correctamente Parametros " + parametrosInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Parametros " + (parametrosInstance.id ? parametrosInstance.id : "")
+            flash.message =  "No se pudo eliminar Parametros " + (parametrosInstance.id ? parametrosInstance.id : "")
             redirect(action: "list")
         }
     } //delete

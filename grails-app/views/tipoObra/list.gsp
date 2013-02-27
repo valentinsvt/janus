@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Tipo Obras
+            Lista de Tipo de Obras
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Tipo Obra
+                    Crear Tipo de Obra
                 </a>
             </div>
             <div class="span3" id="busqueda-TipoObra"></div>
@@ -108,7 +108,7 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows        : 10,
+                    maxRows        : 15,
                     searchPosition : $("#busqueda-TipoObra"),
                     float          : "right"
                 });
@@ -127,7 +127,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Tipo Obra");
+                            $("#modalTitle").html("Crear Tipo de Obra");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoObra").modal("show");

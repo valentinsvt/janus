@@ -85,4 +85,7 @@ class Item implements Serializable {
         tipoLista(blank:true,nullable: true)
         especificaciones(blank: true,nullable: true,size: 1..1024)
     }
+    String toString() {
+        "${this.codigo} - ${this.nombre}"
+    }
 }

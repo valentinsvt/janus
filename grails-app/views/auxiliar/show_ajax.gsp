@@ -22,6 +22,91 @@
         </div>
     </g:if>
     
+    <g:if test="${auxiliarInstance?.general}">
+        <div class="control-group">
+            <div>
+                <span id="general-label" class="control-label label label-inverse">
+                    General
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="general-label">
+                    <g:fieldValue bean="${auxiliarInstance}" field="general"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${auxiliarInstance?.baseCont}">
+        <div class="control-group">
+            <div>
+                <span id="baseCont-label" class="control-label label label-inverse">
+                    Base Cont
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="baseCont-label">
+                    <g:fieldValue bean="${auxiliarInstance}" field="baseCont"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${auxiliarInstance?.presupuestoRef}">
+        <div class="control-group">
+            <div>
+                <span id="presupuestoRef-label" class="control-label label label-inverse">
+                    Presupuesto Ref
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="presupuestoRef-label">
+                    <g:fieldValue bean="${auxiliarInstance}" field="presupuestoRef"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${auxiliarInstance?.retencion}">
+        <div class="control-group">
+            <div>
+                <span id="retencion-label" class="control-label label label-inverse">
+                    Retencion
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="retencion-label">
+                    <g:fieldValue bean="${auxiliarInstance}" field="retencion"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${auxiliarInstance?.notaAuxiliar}">
+        <div class="control-group">
+            <div>
+                <span id="notaAuxiliar-label" class="control-label label label-inverse">
+                    Nota Auxiliar
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="notaAuxiliar-label">
+                    <g:fieldValue bean="${auxiliarInstance}" field="notaAuxiliar"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
     <g:if test="${auxiliarInstance?.nota}">
         <div class="control-group">
             <div>

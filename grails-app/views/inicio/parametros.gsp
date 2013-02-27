@@ -93,11 +93,6 @@
                     <g:link controller="programacion" action="list">Programa</g:link> del cual forma parte una obra .
                 </div><br>
 
-                <div class="item" texto="tppr">
-                    <g:link controller="tipoPeriodo"
-                            action="list">Tipo de periodo</g:link> para la programación del cronograma de la obra.
-                </div><br>
-
                 <div class="item" texto="paux">
                     <g:link controller="parametros"
                             action="list">Parámetros de costos</g:link> indirectos y valores de los indices.
@@ -109,7 +104,7 @@
                 </div><br>
 
                 <div class="item" texto="tpfp">
-                    <g:link controller="tipoFormula" action="list">Tipo de fórmula polinómica</g:link> de reajuste de
+                    <g:link controller="tipoFormulaPolinomica" action="list">Tipo de fórmula polinómica</g:link> de reajuste de
                     precios que puede tener un contrato.
                 </div><br>
             </div>
@@ -119,11 +114,6 @@
                     <g:link controller="tipoContrato"
                             action="list">Tipo de contrato</g:link> que puede registrarse en el sistema para
                     la ejecución de una Obra.
-                </div><br>
-
-                <div class="item" texto="tppz">
-                    <g:link controller="tipoPlazo" action="list">Tipo de plazo</g:link> de ejecución de una obra
-                    en general se manejarán sólo períodos mensuales y el plazo de una obra puede fijarse en días.
                 </div><br>
 
                 <div class="item" texto="tpgr">
@@ -277,10 +267,6 @@
     <h3>Programa</h3><br>
     <p>Programa del cual forma parte una obra o proyecto.</p>
 </div>
-<div id="tppr" style="display:none">
-    <h3>Tipo de período</h3><br>
-    <p>Se usa para la programación o estructura del cronogrma de la obra.</p>
-</div>
 <div id="paux" style="display:none">
     <h3>Parámetros de Costos</h3><br>
     <p>Desglose de valores de costos indirectos que deben cargarse al presupuesto de las obras.</p>
@@ -297,11 +283,6 @@
 <div id="tpcr" style="display:none">
     <h3>Tipo de contrato</h3><br>
     <p>Tipo de contrato que se puede registrar en el sistema, por ejemplo: COntrato, escritura pública, convenio.</p>
-</div>
-<div id="tppz" style="display:none">
-    <h3>Tipo de plazo</h3><br>
-    <p>Tipo de plazo a partir del cual corre el contrato, por ejemplo: A partir de la entrega del anticipo,
-    Calendario a partir del pago del anticipo, otros.</p>
 </div>
 <div id="tpgr" style="display:none">
     <h3>Tipo de garantía</h3><br>

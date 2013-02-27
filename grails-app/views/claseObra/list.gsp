@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Clase Obra
+            Lista de Clase de Obra
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,7 +24,7 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Nuevo Clase Obra
+                Nueva Clase de Obra
             </a>
         </div>
 
@@ -112,7 +112,7 @@
                                 return false;
                             });
 
-                            $("#modalTitle").html("Crear Clase Obra");
+                            $("#modalTitle").html("Crear Clase de Obra");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-claseObra").modal("show");
