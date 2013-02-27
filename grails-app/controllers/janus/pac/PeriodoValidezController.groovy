@@ -29,6 +29,12 @@ class PeriodoValidezController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        if (params.fechaInicio) {
+            params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        }
+        if (params.fechaFin) {
+            params.fechaFin = new Date().parse("dd-MM-yyyy", params.fechaFin)
+        }
         def periodoValidezInstance
         if (params.id) {
             periodoValidezInstance = PeriodoValidez.get(params.id)

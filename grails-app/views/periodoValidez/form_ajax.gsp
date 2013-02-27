@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="1" class="" value="${periodoValidezInstance?.descripcion}"/>
+                <g:textField name="descripcion" class="" value="${periodoValidezInstance?.descripcion}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

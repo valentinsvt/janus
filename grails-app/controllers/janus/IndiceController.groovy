@@ -1,7 +1,7 @@
 package janus
 
-import janus.pac.PeriodoValidez
 import janus.ejecucion.ValorIndice
+import janus.pac.PeriodoValidez
 import jxl.Cell
 import jxl.Sheet
 import jxl.Workbook
@@ -37,12 +37,12 @@ class IndiceController extends janus.seguridad.Shield {
 
     //subir Archivo
 
-    def subirIndice(){
+    def subirIndice() {
     }
 
     def uploadFile() {
 
-        println("upload: "+params)
+        println("upload: " + params)
 
         def path = servletContext.getRealPath("/") + "xls/"   //web-app/archivos
         new File(path).mkdirs()
@@ -83,173 +83,107 @@ class IndiceController extends janus.seguridad.Shield {
 
                 //AQUI el archivo ya esta copiado en web-app/xls/nombreArchivo.xls
 
-
                 def filaInicial = 5;
                 def html = "";
                 WorkbookSettings ws = new WorkbookSettings();
                 ws.setEncoding("Cp1252");
 //                Workbook workbook = Workbook.getWorkbook(new File(my_name), ws);
 
-
                 Workbook workbook = Workbook.getWorkbook(file, ws)
 
                 def ignorar = ['MISCELANEOS', 'D E N O M I N A C I Ó N']
                 workbook.getNumberOfSheets().times { sheet ->
                     Sheet s = workbook.getSheet(sheet)
-
                     if (!s.getSettings().isHidden()) {
                         println s.getName()
-
                         html += "<h2>Hoja " + (sheet + 1) + ": " + s.getName() + "</h2>"
                         Cell[] row = null
-
                         s.getRows().times { j ->
                             row = s.getRow(j)
-
                             def celdas = row.length
 //                            println(row)
-
                             if (celdas > 0) {
-
-                                if (j >= filaInicial){
-
-                                    println("fila "+(j+1)+"   " +celdas)
+                                if (j >= filaInicial) {
+                                    println("fila " + (j + 1) + "   " + celdas)
                                     def descripcion = row[0].getContents().toString().trim()
-                                    descripcion = descripcion.replaceAll(/ {2,}/,' ')
+                                    descripcion = descripcion.replaceAll(/ {2,}/, ' ')
 //                                    descripcion = descripcion.
-                                    if (descripcion != '' && !ignorar.contains(descripcion) && !descripcion.startsWith("*")){
-
+                                    if (descripcion != '' && !ignorar.contains(descripcion) && !descripcion.startsWith("*")) {
 //                                    def valor = row[3]
-//
-                                        println(descripcion)
-
-
+//                                        println(descripcion)
                                         def indice = Indice.findAllByDescripcionIlike(descripcion)
-
                                         println(indice)
-
                                         def bandera = false;
-
-
-                                        if (indice.size() == 0){
-
-
+                                        if (indice.size() == 0) {
                                             def codigo = descripcion[0..2]
                                             def ind = Indice.findAllByCodigo(codigo)
-                                            if (ind.size()>0){
+                                            if (ind.size() > 0) {
                                                 def par = descripcion.split(" ")
-                                                if(par.size()>1){
-                                                    if (par[1]?.trim()!="" ){
-                                                        println "par "+par[1]
-                                                        if (par[1].size()>1)
-                                                            codigo+="-"+par[1][0..1]
-                                                        else{
-                                                            codigo+="-"+par[1]
+                                                if (par.size() > 1) {
+                                                    if (par[1]?.trim() != "") {
+                                                        println "par " + par[1]
+                                                        if (par[1].size() > 1)
+                                                            codigo += "-" + par[1][0..1]
+                                                        else {
+                                                            codigo += "-" + par[1]
                                                         }
 
                                                     }
                                                 }
                                             }
-
-
                                             indice = new Indice([
                                                     tipoInstitucion: TipoInstitucion.get(1),
                                                     descripcion: descripcion,
                                                     codigo: codigo
                                             ])
-                                            if(!indice.save(flush: true)) {
-                                                println "ERROR al guardar el indice: "+indice.errors
-
-                                                html+='fila '+(j+1)+' ERROR Indice no creado' + renderErrors(bean: indice)
-                                            }
-                                            else {
-
-                                                html+='fila '+(j+1)+' Indice creado:'  +indice.id + "<br/>"
-
+                                            if (!indice.save(flush: true)) {
+                                                println "ERROR al guardar el indice: " + indice.errors
+                                                html += 'fila ' + (j + 1) + ' ERROR Indice no creado' + renderErrors(bean: indice)
+                                            } else {
+                                                html += 'fila ' + (j + 1) + ' Indice creado:' + indice.id + "<br/>"
                                                 bandera = true;
-
                                             }
-
-
-                                        }
-                                        else if (indice.size() == 1){
-
+                                        } else if (indice.size() == 1) {
                                             indice = indice[0];
-
                                             bandera = true;
-
+                                        } else {
+                                            html += 'fila ' + (j + 1) + ' Indice duplicado:' + indice.id + "<br/>"
                                         }
-                                        else{
-
-                                            html+='fila '+(j+1)+' Indice duplicado:' + indice.id   + "<br/>"
-                                        }
-
                                         println(indice)
                                         def valor
-                                        if (celdas > 2){
-
-
+                                        if (celdas > 2) {
                                             valor = row[3].getContents();
-                                            try{
-
+                                            try {
                                                 valor = valor.toDouble()
                                                 println(valor)
                                             }
-
-                                            catch (e){
-
+                                            catch (e) {
                                                 println(e)
                                                 bandera = false
-                                                html+='fila '+(j+1)+' Error en el valor: ' + valor   + "<br/>"
-
-
+                                                html += 'fila ' + (j + 1) + ' Error en el valor: ' + valor + "<br/>"
                                             }
-                                        }else {
-
-                                            html+='fila '+(j+1)+' Fila no tiene valor'  + "<br/>"
-
+                                        } else {
+                                            html += 'fila ' + (j + 1) + ' Fila no tiene valor' + "<br/>"
                                             bandera = false;
-
-
                                         }
-
-                                        if (bandera){
-
-                                            def fecha= PeriodoValidez.get(params.periodo)
-                                            def valores = ValorIndice.countByIndiceAndFecha(indice,fecha)
-
-                                            if (valores == 0){
-
+                                        if (bandera) {
+                                            def fecha = PeriodoValidez.get(params.periodo)
+                                            def valores = ValorIndice.countByIndiceAndFecha(indice, fecha)
+                                            if (valores == 0) {
                                                 def valorIndice = new ValorIndice([
-
                                                         indice: indice,
                                                         valor: valor,
                                                         fecha: fecha
-
-
                                                 ])
-
-                                                if (!valorIndice.save(flush: true)){
-
-
+                                                if (!valorIndice.save(flush: true)) {
                                                     println("error al guardar el valor del indice" + valorIndice.errors)
-
-                                                    html+='fila '+(j+1)+' ERROR valor no creado' + renderErrors(bean: valorIndice)
+                                                    html += 'fila ' + (j + 1) + ' ERROR valor no creado' + renderErrors(bean: valorIndice)
                                                 }
-
-
-                                            }else {
-
-
-                                                html+='fila '+(j+1)+' valor ya existe ' + '<br/>'
+                                            } else {
+                                                html += 'fila ' + (j + 1) + ' valor ya existe ' + '<br/>'
                                                 println(valores)
                                             }
-
-
-
                                         }
-
-
                                     } //if descrcion ok
 //                                    println(valor)
                                     println("--------------")
@@ -265,7 +199,7 @@ class IndiceController extends janus.seguridad.Shield {
 
                 return [html: html]
 
-            }  else {
+            } else {
                 flash.message = "Seleccione un archivo Excel xls para procesar (archivos xlsx deben ser convertidos a xls primero)"
                 redirect(action: 'subirIndice')
             }
@@ -299,7 +233,7 @@ class IndiceController extends janus.seguridad.Shield {
             str += "<ul>"
             indiceInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
