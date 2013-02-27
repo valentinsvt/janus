@@ -7,6 +7,39 @@ class ObraFPController {
 
     def index() { }
 
+    def validaciones(){
+        def obra__id = params.obra.toInteger()
+        def sbpr = params.sub.toInteger()
+        def res
+
+        res = ejecutaSQL("select * from ac_rbro_hr_v2(${obra__id})")
+        if (!res){
+            render "Error: no se pudo ejecutar ac_rbro_hr_v2"
+            return
+        }
+        res = ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        if (!res){
+            render "Error: no se pudo ejecutar sp_obra_v2"
+            return
+        }
+
+        res = verificaMatriz(obra__id)
+        if (res!=""){
+            render res
+            return
+        }
+        res = verifica_precios(obra__id)
+        if (res.size()>0){
+            def msg ="<span style='color:red'>Errores detectados</span><br> <span class='label-azul'>No se encontraron precios para los siguientes items:</span><br>"
+            msg+= res.collect{ "<b>ITEM</b>: $it.key ${it.value.join(", <b>Lista</b>: ")}" }.join('<br>')
+            render msg
+            return
+        }
+
+        redirect(action: "matrizFP",params: ["obra":params.obra,"sub":params.sub,"trans":params.trans])
+        return
+    }
+
     def matrizFP() {
 //        println "matriz fp "+params
         /* --------------------- parámetros que se requieren para correr el proceso  --------------------- */
@@ -21,18 +54,18 @@ class ObraFPController {
 
         //ejecutaSQL("select * from ac_rbro_hr(${obra__id})")
         ejecutaSQL("select * from ac_rbro_hr_v2(${obra__id})")
-        println "ejecutó ac_rbro_hr"
+//        println "ejecutó ac_rbro_hr"
 
         /* solo se debe correr sp_obra cuando esta no está registrada */
         //if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
 
         //ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
         ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
-        println "ejecutó sp_obra"
-
-        println "verificaMatriz" + verificaMatriz(obra__id)
-        //println "pasa verificaMatriz"
-        println "verifica_precios \n" + verifica_precios(obra__id)
+//        println "ejecutó sp_obra"
+//
+//        println "verificaMatriz" + verificaMatriz(obra__id)
+//        //println "pasa verificaMatriz"
+//        println "verifica_precios \n" + verifica_precios(obra__id)
 
         /* --------------------------------------- procesaMatriz --------------------------------
         * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
@@ -122,33 +155,35 @@ class ObraFPController {
         //println "completa acTotalS2"
 
 
-        render(tarifaHoraria(obra__id))
-        render(cuadrillaTipo(obra__id))             /* cambio obra__id */
+        tarifaHoraria(obra__id)
+        cuadrillaTipo(obra__id)            /* cambio obra__id */
 
         formulaPolinomica(obra__id)                 /* cambio obra__id */
         println "fin matriz"
+        render "ok"
+        return
 
     }
 
     def verificaMatriz(id) {
         def obra = Obra.get(id)
         def errr = ""
-        if (!VolumenesObra.findAllByObra(obra)) errr += "\nNo se ha ingresado los volúmenes de Obra"
-        if (!obra.lugar) errr += "\nNo se ha definido la Lista precios: \"Peso Capital de cantón\" para esta Obra"
-        if (!obra.listaPeso1) errr += "\nNo se ha definido la Lista precios: \"Peso Especial\" para esta Obra"
-        if (!obra.listaVolumen0) errr += "\nNo se ha definido la Lista precios: \"Materiales Pétreos Hormigones\" para esta Obra"
-        if (!obra.listaVolumen1) errr += "\nNo se ha definido la Lista precios: \"Materiales Mejoramiento\" para esta Obra"
-        if (!obra.listaVolumen2) errr += "\nNo se ha definido la Lista precios: \"Materiales Carpeta Asfáltica\" para esta Obra"
-        if (!obra.listaManoObra) errr += "\nNo se ha definido la Lista precios: \"Mano de obra y equipos\" para esta Obra"
+        if (!VolumenesObra.findAllByObra(obra)) errr += "<br><span class='label-azul'>No se ha ingresado los volúmenes de Obra</span>"
+        if (!obra.lugar) errr += "<br><span class='label-azul'>No se ha definido la Lista precios:</span> \"Peso Capital de cantón\" para esta Obra"
+        if (!obra.listaPeso1) errr += "<br><span class='label-azul'>No se ha definido la Lista precios:</span> \"Peso Especial\" para esta Obra"
+        if (!obra.listaVolumen0) errr += "<br><span class='label-azul'>No se ha definido la Lista precios: </span>\"Materiales Pétreos Hormigones\" para esta Obra"
+        if (!obra.listaVolumen1) errr += "<br><span class='label-azul'>No se ha definido la Lista precios: </span>\"Materiales Mejoramiento\" para esta Obra"
+        if (!obra.listaVolumen2) errr += "<br><span class='label-azul'>No se ha definido la Lista precios:</span> \"Materiales Carpeta Asfáltica\" para esta Obra"
+        if (!obra.listaManoObra) errr += "<br><span class='label-azul'>No se ha definido la Lista precios:</span> \"Mano de obra y equipos\" para esta Obra"
 
-        if (!obra.distanciaPeso) errr += "\n  No se han ingresado las distancias al Peso"
-        if (!obra.distanciaVolumen) errr += "\n  No se han ingresado las distancias al Volumen"
-        if (rubrosSinCantidad(id) > 0) errr += "\n Existen Rubros con cantidades Negativas o CERO"
+        if (!obra.distanciaPeso) errr += "<br> <span class='label-azul'> No se han ingresado las distancias al Peso</span>"
+        if (!obra.distanciaVolumen) errr += "<br>  <span class='label-azul'>No se han ingresado las distancias al Volumen</span>"
+        if (rubrosSinCantidad(id) > 0) errr += "<br> <span class='label-azul'>Existen Rubros con cantidades Negativas o CERO</span>"
 
-        if (nombresCortos()) errr += "\nExisten Items con nombres cortos repetidos: " + nombresCortos()
+        if (nombresCortos()) errr += "<br><span class='label-azul'>Existen Items con nombres cortos repetidos: </span>" + nombresCortos()
 
-        if (errr) errr = "Errores detectados " + errr
-        else errr = " No existen errores"
+        if (errr) errr = "<b><span style='color:red'>Errores detectados</span></b> " + errr
+        else errr = ""
         return errr
     }
 
@@ -185,13 +220,14 @@ class ObraFPController {
     def verifica_precios(id) {
         // usa funcion
         def cn = dbConnectionService.getConnection()
-        def errr = "";
+        def errr = [:];
         def tx_sql = "select itemcdgo, itemnmbr, tplsdscr from verifica_precios_v2(${id}) order by itemcdgo "
         cn.eachRow(tx_sql.toString()) {row ->
-            errr += "Item: ${row.itemcdgo.trim()} ${row.itemnmbr.trim()} Lista: ${row.tplsdscr.trim()}\n"
+            errr.put(row["itemcdgo"]?.trim(),[row["itemnmbr"]?.trim(),row["tplsdscr"]?.trim()])
+//            errr += "Item: ${row.itemcdgo.trim()} ${row.itemnmbr.trim()} Lista: ${row.tplsdscr.trim()}\n"
+//            println "r "+row
         }
         cn.close()
-        if (!errr) return "<br>No hay items sin precios<br>"
         return errr
     }
 
@@ -226,10 +262,12 @@ class ObraFPController {
     }
 
     def ejecutaSQL(txSql) {
+        def res
         def cn = dbConnectionService.getConnection()
         //println txSql
-        cn.execute(txSql.toString())
+        res = cn.execute(txSql.toString())
         cn.close()
+        return res
     }
 
     def calculaTransporte(id) {
@@ -388,6 +426,7 @@ class ObraFPController {
             }
         }
         cn.close()
+        cn1.close()
     }
 
     def columnaCdgo(id, cmpo) {
@@ -491,6 +530,7 @@ class ObraFPController {
             }
         }
         cn.close()
+        cn1.close()
     }
 
     def acTransporte(id, sbpr) {  /* la existencia de transporte se mane al llamar la función */
