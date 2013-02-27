@@ -813,7 +813,7 @@ class ObraFPController {
         tx_sql =  "select clmndscr from mfcl where obra__id = ${id} and clmntipo = 'O'"
         cn.eachRow(tx_sql.toString()) {row ->
             tx_cr = "select item__id, itemcdgo, itemnmbr from item where itemcmpo = '${row.clmndscr[0..-3]}'"
-            //println "tx_cr..... campo:" + tx_cr
+            println "tx_cr..... campo:" + tx_cr
             cn1.eachRow(tx_cr.toString()) {d ->
                 item__id = d.item__id
                 item     = d.itemcdgo
@@ -825,7 +825,7 @@ class ObraFPController {
 */
                 tx_cr = "select rbpcpcun pcun from item_pcun_v2 (${item__id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
                         "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
-
+                println "tarifaHoraria:" + tx_cr
             } else {
                 tx_cr = "select itempcun pcun from obit where item__id = ${item__id}"
             }
