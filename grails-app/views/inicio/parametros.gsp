@@ -145,6 +145,23 @@
                     <g:link controller="aseguradora" action="list">Aseguradora</g:link>
                     o institución bancaria que emite la garantía.
                 </div><br>
+
+                <div class="item" texto="itun">
+                    <g:link controller="unidadIncop" action="list">Unidad del Item</g:link>
+
+                </div><br>
+
+                <div class="item" texto="tppt">
+                    <g:link controller="tipoProcedimiento" action="list">Tipo de Procedimiento</g:link>
+
+                </div><br>
+                <div class="item" texto="tpcp">
+                    <g:link controller="tipoCompra" action="list">Tipo de Compra</g:link>
+
+
+                </div><br>
+
+
             </div>
 
             <div id="ejec" class="ui-widget-content" style="height: 440px">
@@ -295,7 +312,7 @@
 </div>
 <div id="edgr" style="display:none">
     <h3>Estado de la garantía</h3><br>
-    <p>Estado que puede tener la garantía. Puden ser por ejemplo: VIgente, pedido de cobro, devuelta, efectivizada, pasivo,
+    <p>Estado que puede tener la garantía. Puden ser por ejemplo: Vigente, pedido de cobro, devuelta, efectivizada, pasivo,
     renovada, vencida, etc.</p>
 </div>
 <div id="mnda" style="display:none">
@@ -304,13 +321,35 @@
 </div>
 <div id="tpas" style="display:none">
     <h3>Tipo de Aseguradora</h3><br>
-    <p>Tipo de aseguradora que emite la ganrantía, puede ser Bnaco, Cooperativa, Aseguradora.</p>
+    <p>Tipo de aseguradora que emite la garantía, puede ser Banco, Cooperativa, Aseguradora.</p>
 </div>
 <div id="asgr" style="display:none">
     <h3>Aseguradora</h3><br>
-    <p>Aseguradora que emite la ganrantía, puede ser Bnaco, Cooperativa, Aseguradora. Se registran los datos de la
+    <p>Aseguradora que emite la garantía, puede ser Banco, Cooperativa, Aseguradora. Se registran los datos de la
     aseguradora</p>
 </div>
+<div id="itun" style="display: none">
+    <h3>Unidad del item</h3>
+    <p>Unidad del item</p>
+
+
+</div>
+
+<div id="tppr" style="display:none">
+    <h3>Tipo de Procedimiento</h3><br>
+    <p>Tipo de Procedimiento</p>
+</div>
+<div id="tpcp" style="display: none">
+    <h3>Tipo de Compra</h3>
+       <p>Tipo de Compra</p>
+</div>
+
+
+
+
+
+
+
 <div id="edpl" style="display:none">
     <h3>Estado de la Planilla</h3><br>
     <p>Estado que puede tener una planilla dentro del proceso de ejecución de la obra: ingresada, pagada, anulada.</p>
