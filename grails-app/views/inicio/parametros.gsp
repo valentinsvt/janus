@@ -159,10 +159,10 @@
                     etc.
                 </div><br>
 
-                <div class="item" texto="tpds">
-                    <g:link controller="tipoDescuento" action="list">Tipo de descuento</g:link> que puede
-                    tener una planilla, pueden ser: anticipo, fiscalización, timbres, etc.
-                </div><br>
+                %{--<div class="item" texto="tpds">--}%
+                    %{--<g:link controller="tipoDescuento" action="list">Tipo de descuento</g:link> que puede--}%
+                    %{--tener una planilla, pueden ser: anticipo, fiscalización, timbres, etc.--}%
+                %{--</div><br>--}%
 
                 <div class="item" texto="dstp">
                     <g:link controller="descuentoTipoPlanilla" action="list">Descuentos que se aplican</g:link>
@@ -174,10 +174,10 @@
                     aplicar a una planilla.
                 </div><br>
 
-                <div class="item" texto="tppo">
-                    <g:link controller="tipoProrroga" action="list">Tipo de prórroga</g:link> que se puede
-                    aplicar a una obra durante su ejecución. Puede ser ampliación o suspensión.
-                </div><br>
+                %{--<div class="item" texto="tppo">--}%
+                    %{--<g:link controller="tipoProrroga" action="list">Tipo de prórroga</g:link> que se puede--}%
+                    %{--aplicar a una obra durante su ejecución. Puede ser ampliación o suspensión.--}%
+                %{--</div><br>--}%
             </div>
         </div>
     </div>
@@ -319,10 +319,10 @@
     <h3>Tipo de Planilla</h3><br>
     <p>Tipo de planilla, pueden ser: anticipo, liquidación, avance de obra, reajuste, etc. </p>
 </div>
-<div id="tpds" style="display:none">
-    <h3>Tipo de descuento de una Planilla</h3><br>
-    <p>Tipo de descuento que puede tener una planilla, pueden ser: anticipo, fiscalización, timbres, etc. </p>
-</div>
+%{--<div id="tpds" style="display:none">--}%
+    %{--<h3>Tipo de descuento de una Planilla</h3><br>--}%
+    %{--<p>Tipo de descuento que puede tener una planilla, pueden ser: anticipo, fiscalización, timbres, etc. </p>--}%
+%{--</div>--}%
 <div id="dstp" style="display:none">
     <h3>Descuento por tipo de Planilla</h3><br>
     <p>Descuentos que se aplican a cada tipo de planilla. </p>
@@ -331,10 +331,10 @@
     <h3>Tipo de multa</h3><br>
     <p>Tipo de multa que puede tener una planilla. Pueden ser: retraso de obra, atraso de planilla, etc.</p>
 </div>
-<div id="tppo" style="display:none">
-    <h3>Tipo de prórroga</h3><br>
-    <p>Tipo de prórroga que se pueda aplicar a una obra, puede ser ampliación o suspensión.</p>
-</div>
+%{--<div id="tppo" style="display:none">--}%
+    %{--<h3>Tipo de prórroga</h3><br>--}%
+    %{--<p>Tipo de prórroga que se pueda aplicar a una obra, puede ser ampliación o suspensión.</p>--}%
+%{--</div>--}%
 
 
 <script type="text/javascript">
