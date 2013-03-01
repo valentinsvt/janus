@@ -339,7 +339,7 @@ class ReportesController {
         workbook.write();
         workbook.close();
         def output = response.getOutputStream()
-        def header = "attachment; filename=" + "rubro.xls";
+        def header = "attachment; filename=" + "pac.xls";
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());

@@ -328,7 +328,7 @@
 
 <div class="span12">
 
-    <div class="span1">Lista</div>
+    <div class="span2">Precios para MO y Equipos</div>
     %{--todo esto es un combo--}%
     %{--<div class="span2" style="margin-right: 70px"><g:textField name="lugar.id" class="lugar" value="${obra?.lugar?.id}" optionKey="id"/></div>--}%
 
@@ -346,13 +346,13 @@
 
     %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}"  style="width: 100px" /></div>--}%
 
-        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}"/></div>
+        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}"/></div>
 
         <div class="span1" style="margin-left: 60px">Longitud</div>
 
     %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 100px" /></div>--}%
 
-        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}"/></div>
+        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}"/></div>
 
 
 

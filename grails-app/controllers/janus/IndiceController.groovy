@@ -12,6 +12,8 @@ class IndiceController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def dbConnectionService
+
     def index() {
         redirect(action: "list", params: params)
     } //index
@@ -290,4 +292,42 @@ class IndiceController extends janus.seguridad.Shield {
             redirect(action: "list")
         }
     } //delete
+
+
+    def valorIndice = {
+        def cn = dbConnectionService.getConnection()
+        def tx_sql = "select * from sp_vlin(2013)"
+
+        def tabla = '<table class="table table-bordered table-striped table-condensed table-hover"> '
+        //tabla += "<thead><tr><th colspan=7>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></thead><tbody>"
+        tabla += "<thead><tr><th>Índice</th><th>Enero</th><th>Febrero</th><th>Marzo</th>" +
+                "<th>Abril</th><th>Mayo</th><th>Junio</th><th>Julio</th><th>Agosto</th><th>Septiembre</th>" +
+                "<th>Octubre</th><th>Noviembre</th><th>Diciembre</th></thead><tbody>"
+        cn.eachRow(tx_sql.toString()) { row ->
+            tabla += "<tr>"
+            tabla += "<td style='width: 300px;'>" + row.indcdscr + "</td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.enero? row.enero:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.febrero? row.febrero:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.marzo? row.marzo:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.abril? row.abril:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.mayo? row.mayo:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.junio? row.junio:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.julio? row.julio:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.agosto? row.agosto:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.septiembre? row.septiembre:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.octubre? row.octubre:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.noviembre? row.noviembre:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.diciembre? row.diciembre:''} </td>"
+            tabla += "</tr>"
+        }
+        cn.close()
+        //tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${g.formatNumber(number: total, format: "##,#####0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec")}</td>"
+        tabla += "</tbody></table>"
+
+        params.valorIndices = tabla
+//
+//        pg: select * from rb_precios(293, 4, '1-feb-2008', 50, 70, 0.1015477897561282, 0.1710401760227313);
+    }
+
+
 } //fin controller

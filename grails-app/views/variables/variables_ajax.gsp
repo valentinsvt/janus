@@ -73,18 +73,13 @@
 
 
             <div class="span6" style="margin-bottom: 20px; margin-top: 5px">
-
                 <div class="span3" style="font-weight: bold;">
-
                     Distancia Peso
-
                 </div>
 
                 <div class="span2" style="font-weight: bold;">
                     Distancia Volumen
-
                 </div>
-
             </div>
 
 
@@ -161,7 +156,11 @@
 
             </div>
 
-
+            <div class="span6" style="margin-bottom: 20px; margin-top: 5px">
+                <div class="span4" style="font-weight: bold;">
+                Listas de Precios para Peso y Volumen
+                </div>
+            </div>
             <div class="row-fluid" style="margin-top: 10px">
 
                 <div class="span3">

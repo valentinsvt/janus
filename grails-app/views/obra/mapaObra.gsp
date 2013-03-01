@@ -73,7 +73,7 @@
         %{--<div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" id="lato" style="width: 100px" maxlength="5"/></div>--}%
 
         <div class="span2" style="margin-left: -50px">Latitud: <g:textField name="lato" class="lato number" style="width: 100px" id="lato"
-                                                                           value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}" disabled="true"/></div>
+                                                                           value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" disabled="true"/></div>
 
 
 
@@ -81,7 +81,7 @@
 
 
         <div class="span3">Longitud: <g:textField name="longo" class="longo number" style="width: 100px" id="longo"
-                                                                           value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}" disabled="true"/></div>
+                                                                           value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" disabled="true"/></div>
 
 
 
@@ -213,8 +213,8 @@
             longitud= latlng.lng();
 
 //            $("#latitud").val(lat);
-            $("#latitud").val(number_format(lat, 5, ".", ","));
-            $("#longitud").val(number_format(longitud, 5, ".", ","));
+            $("#latitud").val(number_format(lat, 8, ".", ","));
+            $("#longitud").val(number_format(longitud, 8, ".", ","));
 //            $("#longitud").val(longitud);
 
 

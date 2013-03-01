@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                     
-                        <th>Tipo Institucion</th>
+                        <th>Tipo de Índice</th>
                     
                         <g:sortableColumn property="codigo" title="Código" />
                     
