@@ -37,10 +37,10 @@
                     Nuevo Proceso
                 </a>
             </div>
-
             <div class="span3" id="busca">
             </div>
         </div>
+        <span style="color: navy;">Haga clic con el botón derecho del ratón sobre el concurso para acceder al menú de acciones</span>
 
         <g:form action="delete" name="frmDelete-Concurso">
             <g:hiddenField name="id"/>
