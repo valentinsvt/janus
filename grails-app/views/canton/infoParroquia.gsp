@@ -7,10 +7,10 @@
                        default="Canton"/>
         </td>
         <td class="campo">
-            <g:link class="linkArbol" tipo="canton_${parroquiaInstance.canton.id}" controller="canton" action="show"
-                    id="${parroquiaInstance?.canton?.id}">
-                ${parroquiaInstance?.canton?.encodeAsHTML()}
-            </g:link>
+            %{--<g:link class="linkArbol" tipo="canton_${parroquiaInstance.canton.id}" controller="canton" action="show"--}%
+                    %{--id="${parroquiaInstance?.canton?.id}">--}%
+                ${parroquiaInstance?.canton?.nombre?.encodeAsHTML()}
+            %{--</g:link>--}%
         </td> <!-- campo -->
     </tr>
 

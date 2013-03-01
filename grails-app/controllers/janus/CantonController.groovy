@@ -6,6 +6,239 @@ class CantonController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def editar = {
+        redirect(action: 'editar' + (params.tipo).capitalize(), params: params)
+    }
+
+    def loadTreePart = {
+        render(makeBasicTree(params.tipo, params.id))
+    }
+
+
+    def saveFromTree = {
+
+        switch (params.tipo) {
+
+            case "canton":
+
+                def cantonInstance
+                if (params.id) {
+                    cantonInstance = Canton.get(params.id)
+                    if (!cantonInstance) {
+                        flash.clase = "alert-error"
+                        flash.message = "No se encontró Canton con id " + params.id
+//                        redirect(action: 'list')
+                        return
+                    }//no existe el objeto
+                    cantonInstance.properties = params
+                }//es edit
+                else {
+                    cantonInstance = new Canton(params)
+                } //es create
+                if (!cantonInstance.save(flush: true)) {
+                    flash.clase = "alert-error"
+                    def str = "<h4>No se pudo guardar Canton " + (cantonInstance.id ? cantonInstance.id : "") + "</h4>"
+
+                    str += "<ul>"
+                    cantonInstance.errors.allErrors.each { err ->
+                        def msg = err.defaultMessage
+                        err.arguments.eachWithIndex {  arg, i ->
+                            msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                        }
+                        str += "<li>" + msg + "</li>"
+                    }
+                    str += "</ul>"
+
+                    flash.message = str
+//                    redirect(action: 'list')
+
+//                    loadTreePart()
+
+                    return
+                }
+
+                if (params.id) {
+                    flash.clase = "alert-success"
+                    flash.message = "Se ha actualizado correctamente Canton " + cantonInstance.id
+
+
+
+
+
+                } else {
+                    flash.clase = "alert-success"
+                    flash.message = "Se ha creado correctamente Canton " + cantonInstance.id
+                }
+
+
+
+
+                break;
+            case "parroquia":
+
+
+
+                def parroquiaInstance
+                if (params.id) {
+                    parroquiaInstance = Parroquia.get(params.id)
+                    if (!parroquiaInstance) {
+                        flash.clase = "alert-error"
+//                        flash.message = "No se encontró Canton con id " + params.id
+//                        redirect(action: 'list')
+                        return
+                    }//no existe el objeto
+                    parroquiaInstance.properties = params
+                }//es edit
+                else {
+                    parroquiaInstance = new Parroquia(params)
+                } //es create
+                if (!parroquiaInstance.save(flush: true)) {
+                    flash.clase = "alert-error"
+                    def str = "<h4>No se pudo guardar Parroquia " + (parroquiaInstance.id ? parroquiaInstance.id : "") + "</h4>"
+
+                    str += "<ul>"
+                    parroquiaInstance.errors.allErrors.each { err ->
+                        def msg = err.defaultMessage
+                        err.arguments.eachWithIndex {  arg, i ->
+                            msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                        }
+                        str += "<li>" + msg + "</li>"
+                    }
+                    str += "</ul>"
+
+                    flash.message = str
+//                    redirect(action: 'list')
+
+//                    loadTreePart()
+
+                    return
+                }
+
+                if (params.id) {
+                    flash.clase = "alert-success"
+                    flash.message = "Se ha actualizado correctamente parroquia " + parroquiaInstance.id
+
+
+
+                } else {
+                    flash.clase = "alert-success"
+                    flash.message = "Se ha creado correctamente Parroquia " + parroquiaInstance.id
+                }
+
+
+
+                break;
+        }
+
+
+        render ("OK")
+
+    }
+
+
+    def deleteFromTree = {
+
+        println(params)
+
+
+        switch (params.tipo) {
+
+            case "canton":
+                def canton = Canton.get(params.id)
+                def parroquias = Parroquia.findAllByCanton(canton)
+                def band = true
+                def p = [:]
+                p.actionName = "deleteFromTree: Canton"
+                p.controllerName = "Zona"
+                if (parroquias != null){
+
+
+                    render ("No se puede borrar el Cantón " + canton?.nombre)
+
+
+
+                }else {
+
+
+                    parroquias.each { parroquia ->
+//                    p.id = parroquia.id
+                        parroquia.delete(flush: true)
+
+                    }
+
+                    if (canton.delete(flush: true)) {
+                        render("OK")
+                    } else {
+                        render("NO")
+                    }
+
+
+                }
+
+
+                break;
+            case "parroquia":
+
+                def parroquia = Parroquia.get(params.id)
+
+                def obra = Obra.findAllByParroquia(parroquia)
+
+                def comunidad = Comunidad.findAllByParroquia(parroquia)
+
+                params.actionName = "deleteFromTree: Parroquia"
+
+                if (comunidad != null && obra != null ){
+
+                 render("No se puede borrar la Parroquia " + parroquia.nombre)
+
+                } else {
+
+
+                    if (parroquia.delete(flush: true)) {
+                        render("OK")
+                    } else {
+                        render("NO")
+                    }
+
+                }
+
+
+                break;
+        }
+
+    }
+
+
+
+
+    def editarCanton = {
+        def obj, crear
+        if (params.id) {
+            obj = Canton.get(params.id)
+            crear = false
+        } else {
+            obj = new Canton()
+            obj.provincia = Provincia.get(params.padre)
+            crear = true
+        }
+        return [cantonInstance: obj, tipo: params.tipo, crear: crear]
+    }
+    def editarParroquia = {
+        def obj, crear
+        if (params.id) {
+            obj = Parroquia.get(params.id)
+            crear = false
+        } else {
+            obj = new Parroquia()
+            obj.canton = Canton.get(params.padre)
+            crear = true
+        }
+        return [parroquiaInstance: obj, tipo: params.tipo, crear: crear]
+    }
+
+
+
+
 
     String makeBasicTree(tipo, id) {
         String tree = "", clase = ""
@@ -59,19 +292,14 @@ class CantonController extends janus.seguridad.Shield {
         return tree
     }
 
-    def loadTreePart = {
-        render(makeBasicTree(params.tipo, params.id))
-    }
-
-
     def infoForTree = {
         redirect(action: 'info' + (params.tipo).capitalize(), params: params)
     }
 //
-//    def infoProvincia = {
-//        def obj = Provincia.get(params.id)
-//        return [provinciaInstance: obj]
-//    }
+    def infoProvincia = {
+        def obj = Provincia.get(params.id)
+        return [provinciaInstance: obj]
+    }
     def infoCanton = {
         def obj = Canton.get(params.id)
         return [cantonInstance: obj]
@@ -86,6 +314,7 @@ class CantonController extends janus.seguridad.Shield {
 
 
     }
+
 
 
 
@@ -152,6 +381,9 @@ class CantonController extends janus.seguridad.Shield {
         if (params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Canton " + cantonInstance.id
+
+
+
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Canton " + cantonInstance.id

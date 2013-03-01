@@ -5,12 +5,13 @@
         <td class="label">
             <g:message code="canton.provincia.label"
                        default="Provincia"/>
+
         </td>
         <td class="campo">
-            <g:link class="linkArbol" tipo="provincia_${cantonInstance.provincia.id}" controller="provincia" action="show"
-                    id="${cantonInstance?.provincia?.id}">
-                ${cantonInstance?.provincia?.encodeAsHTML()}
-            </g:link>
+            %{--<g:link class="linkArbol" tipo="provincia_${cantonInstance.provincia.id}" controller="provincia" action="show"--}%
+                    %{--id="${cantonInstance?.provincia?.id}">--}%
+                ${cantonInstance?.provincia?.nombre?.encodeAsHTML()}
+            %{--</g:link>--}%
         </td> <!-- campo -->
     </tr>
 

@@ -18,7 +18,7 @@
     <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins', file: 'jquery.cookie.js')}"></script>
     <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jquery.jstree.js')}"></script>
 
-    <title>División Política del Ecuador</title>
+    <title>División Política de la Provincia de Pichincha</title>
 
 
     <style type="text/css">
@@ -55,11 +55,11 @@
         </g:if>
 
         <div id="tree" class="div left ui-corner-all"
-             style="height:600px; width: 400px;overflow-y: auto;overflow-x: hidden;">
+             style="height:600px; width: 400px;">
 
         </div>
 
-        <div id="info" class="div info left ui-corner-all" style="margin-left: 100px">
+        <div id="info" class="div info left ui-corner-all" style="margin-left: 420px; margin-top: -615px">
             <div id="infoTitle"></div>
 
             <div id="infoCont"></div>
@@ -98,8 +98,8 @@
 
         var parent = node.parent().parent();
 
-        var textNode = trim(node.children("a").text());
-        var textParent = trim(parent.children("a").text());
+        var textNode = $.trim(node.children("a").text());
+        var textParent = $.trim(parent.children("a").text());
 
         var strIdNode = node.attr("id");
         var strIdParent = parent.attr("id");
@@ -135,6 +135,7 @@
                                     $("#dlg_editar").dialog("option", "title", "Crear cantón en la " + tipoParent + " " + textParent);
                                     $("#dlg_editar").html(msg);
                                     $("#dlg_editar").dialog("open");
+
                                 }
                             }); //ajax
                         }, //action canton
@@ -209,7 +210,7 @@
             "nuevo" : nuevo //nuevo
         } //items
 
-        if (tipoNode != "pais") {
+        if (tipoNode != "provincia") {
             items.editar = {
                 // The item label
                 "label": "Editar",
@@ -219,7 +220,7 @@
                     var str = $(obj).attr("id");
                     var parts = str.split("_");
                     var id = parts[1];
-                    var url = "${createLink(controller: 'zona', action: 'editar')}";
+                    var url = "${createLink(controller: 'canton', action: 'editar')}";
 
                     $.ajax({
                         "type": "POST",
@@ -414,6 +415,21 @@
        console.log("reloadTree")
     }
 
+
+    %{--function reloadTree() {--}%
+        %{--var url = "${createLink(controller: 'canton', action: 'renderArbol')}";--}%
+        %{--$.ajax({--}%
+            %{--"type": "POST",--}%
+            %{--"url": url,--}%
+            %{--"success": function(msg) {--}%
+                %{--$("#tree").html(msg);--}%
+                %{----}%
+                %{----}%
+                %{--initTree();--}%
+            %{--}--}%
+        %{--});--}%
+    %{--}--}%
+
     $(function() {
 
         $("#dlg_editar").dialog({
@@ -437,8 +453,10 @@
                                     reloadTree();
                                     $('.jstree-clicked').click();
                                     $("#dlg_editar").dialog("close");
+                                    window.location.reload(true);
                                 } else {
                                     alert("Ha ocurrido un error al guardar");
+                                    window.location.reload(true);
                                 }
                             }
                         });
