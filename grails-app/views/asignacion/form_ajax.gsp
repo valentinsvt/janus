@@ -1,4 +1,3 @@
-
 <%@ page import="janus.pac.Asignacion" %>
 <%@ page import="janus.Grupo" %>
 <!doctype html>
@@ -34,12 +33,12 @@
         </div>
     </g:if>
 </div>
-<div class="tituloTree" style="width: 700px;">
+<div class="tituloTree" style="width: 800px;">
     Asignacion de techos anuales a partidas presupuestarias
 </div>
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
 
-    <div id="create-Asignacion" class="span" role="main">
+    <div id="create-Asignacion"  style="border-bottom: 1px solid black;width: 800px;margin-bottom: 10px" >
         <g:form class="form-horizontal frm_asgn" name="frmSave-Asignacion" action="save" >
             <g:hiddenField name="id" value="${asignacionInstance?.id}"/>
 
@@ -53,11 +52,14 @@
                 <div class="controls">
 
                     <input type="text" style="width: 190px;;font-size: 10px" id="item_presupuesto">
+
                     <input type="hidden" style="width: 60px" id="item_prsp" name="prespuesto.id">
                     <a href="#" class="btn btn-warning" title="Crear nueva partida" style="margin-top: -10px" id="item_agregar_prsp">
                         <i class="icon-edit"></i>
-                         Crear nueva partida
+                        Crear nueva partida
                     </a>
+                    <br>
+                    <input type="text" style="width: 370px;;font-size: 10px;margin-top: 5px;" id="item_desc" disabled="true">
 
                 </div>
             </div>
@@ -91,11 +93,15 @@
             </div>
             <div class="control-group">
                 <div>
-                   <a href="#"  id="guardar"  class="btn btn-primary">Guardar </a>
+                    <a href="#"  id="guardar"  class="btn btn-primary">Guardar </a>
                 </div>
             </div>
 
         </g:form>
+    </div>
+
+    <div id="list-Asignacion" style="width: 800px;">
+
     </div>
 </div>
 
@@ -160,7 +166,7 @@
         var msn =""
         var valor = $("#valor").val()
         if($("#item_prsp").val()*1<1){
-          msn+="<br>Error: Escoja una partida presupuestaria, dando doble click en el campo de texto"
+            msn+="<br>Error: Escoja una partida presupuestaria, dando doble click en el campo de texto"
         }
         if(isNaN(valor)){
             msn+="<br>Error: El valor debe ser un número positivo"
@@ -170,7 +176,7 @@
             }
         }
         if(msn=="")
-        $(".frm_asgn").submit()
+            $(".frm_asgn").submit()
         else{
             $.box({
                 imageClass : "box_info",
@@ -208,11 +214,12 @@
                     $.ajax({type : "POST", url : "${g.createLink(controller: 'presupuesto',action:'saveAjax')}",
                         data     :   $("#frmSave-presupuestoInstance").serialize(),
                         success  : function (msg) {
-                            console.log(msg)
+//                            console.log(msg)
                             var parts = msg.split("&")
                             $("#item_prsp").val(parts[0])
                             $("#item_presupuesto").val(parts[1])
                             $("#item_presupuesto").attr("title",parts[2])
+                            $("#item_desc").val(parts[2])
                             $("#modal-presupuesto").modal("hide");
                         }
                     });
@@ -235,6 +242,13 @@
         $(".contenidoBuscador").html("")
         $("#modal-ccp").modal("show");
 
+    });
+    %{--list-Asignacion--}%
+    $.ajax({type : "POST", url : "${g.createLink(controller: 'asignacion',action:'tabla')}",
+        data     :   "",
+        success  : function (msg) {
+           $("#list-Asignacion").html(msg)
+        }
     });
 
 

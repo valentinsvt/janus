@@ -23,6 +23,8 @@ class AsignacionController extends janus.seguridad.Shield {
             actual=Anio.list([sort: "id"])?.pop()
         }
 
+
+
         def asignacionInstance = new Asignacion(params)
         if (params.id) {
             asignacionInstance = Asignacion.get(params.id)
@@ -35,6 +37,20 @@ class AsignacionController extends janus.seguridad.Shield {
         } //es edit
         return [asignacionInstance: asignacionInstance,campos:campos,actual:actual]
     } //form_ajax
+    def tabla(){
+        println "tabla "+params
+        def anio = new Date().format("yyyy")
+        if (params.anio)
+            anio=params.anio
+        def actual = Anio.findByAnio(anio.toString())
+        if(!actual){
+            actual=Anio.list([sort: "id"])?.pop()
+        }
+        def asignaciones = Asignacion.findAllByAnio(actual)
+        asignaciones.sort{it.prespuesto.descripcion}
+        [asignaciones:asignaciones,actual: actual]
+
+    }
 
     def buscaPrsp(){
         def listaTitulos = ["Código", "Descripción"]
@@ -43,7 +59,7 @@ class AsignacionController extends janus.seguridad.Shield {
         def url = g.createLink(action: "buscaCpac", controller: "pac")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-ccp").modal("hide");'
-        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"));cargarTecho();'
+        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"));$("#item_desc").val($(this).attr("prop_descripcion"));cargarTecho();'
         funcionJs += '}'
         def numRegistros = 20
         def extras = ""
