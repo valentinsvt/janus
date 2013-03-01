@@ -11,6 +11,9 @@ class PeriodoValidezController extends janus.seguridad.Shield {
     } //index
 
     def list() {
+        if (!params.sort) {
+            params.sort = "fechaInicio"
+        }
         [periodoValidezInstanceList: PeriodoValidez.list(params), params: params]
     } //list
 

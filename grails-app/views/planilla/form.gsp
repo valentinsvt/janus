@@ -125,7 +125,7 @@
                         </div>
 
                         <div class="span4">
-                            <elm:datepicker name="fechaPresentacion" class=" span3 required" value="${planillaInstance?.fechaPresentacion}"/>
+                            <elm:datepicker name="fechaPresentacion" class=" span3 required" onSelect="fechas" maxDate="new Date()" value="${planillaInstance?.fechaPresentacion}"/>
                             <span class="mandatory">*</span>
 
                             <p class="help-block ui-helper-hidden"></p>
@@ -136,7 +136,7 @@
                         </div>
 
                         <div class="span4">
-                            <elm:datepicker name="fechaIngreso" class=" span3 required" value="${planillaInstance?.fechaIngreso}"/>
+                            <elm:datepicker name="fechaIngreso" class=" span3 required" maxDate="new Date()" value="${planillaInstance?.fechaIngreso}"/>
                             <span class="mandatory">*</span>
 
                             <p class="help-block ui-helper-hidden"></p>
@@ -247,6 +247,10 @@
                 } else {
                     $(".periodo").hide();
                 }
+            }
+
+            function fechas() {
+                $("#fechaIngreso").val($("#fechaPresentacion").val());
             }
 
             $(function () {

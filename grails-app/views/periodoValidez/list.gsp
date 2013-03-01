@@ -1,15 +1,15 @@
-
 <%@ page import="janus.pac.PeriodoValidez" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Periodo Validezs
+            Lista de Periodo Validez
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
     </head>
+
     <body>
 
         <g:if test="${flash.message}">
@@ -30,6 +30,7 @@
                     Crear  Periodo Validez
                 </a>
             </div>
+
             <div class="span3" id="busqueda-PeriodoValidez"></div>
         </div>
 
@@ -42,44 +43,44 @@
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                    
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
-                    
-                        <g:sortableColumn property="cierre" title="Cierre" />
-                    
-                        <g:sortableColumn property="fechaFin" title="Fecha Fin" />
-                    
-                        <g:sortableColumn property="fechaInicio" title="Fecha Inicio" />
-                    
+
+                        <g:sortableColumn property="descripcion" title="Descripcion"/>
+
+                        <g:sortableColumn property="cierre" title="Cierre"/>
+
+                        <g:sortableColumn property="fechaInicio" title="Fecha Inicio"/>
+
+                        <g:sortableColumn property="fechaFin" title="Fecha Fin"/>
+
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                <g:each in="${periodoValidezInstanceList}" status="i" var="periodoValidezInstance">
-                    <tr>
-                    
-                        <td>${fieldValue(bean: periodoValidezInstance, field: "descripcion")}</td>
-                    
-                        <td>${fieldValue(bean: periodoValidezInstance, field: "cierre")}</td>
-                    
-                        <td><g:formatDate date="${periodoValidezInstance.fechaFin}" /></td>
-                    
-                        <td><g:formatDate date="${periodoValidezInstance.fechaInicio}" /></td>
-                    
-                        <td>
-                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${periodoValidezInstance.id}">
-                                <i class="icon-zoom-in icon-large"></i>
-                            </a>
-                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${periodoValidezInstance.id}">
-                                <i class="icon-pencil icon-large"></i>
-                            </a>
+                    <g:each in="${periodoValidezInstanceList}" status="i" var="periodoValidezInstance">
+                        <tr>
 
-                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${periodoValidezInstance.id}">
-                                <i class="icon-trash icon-large"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </g:each>
+                            <td>${fieldValue(bean: periodoValidezInstance, field: "descripcion")}</td>
+
+                            <td>${fieldValue(bean: periodoValidezInstance, field: "cierre")}</td>
+
+                            <td><g:formatDate date="${periodoValidezInstance.fechaInicio}" format="dd-MM-yyyy"/></td>
+
+                            <td><g:formatDate date="${periodoValidezInstance.fechaFin}" format="dd-MM-yyyy"/></td>
+
+                            <td>
+                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${periodoValidezInstance.id}">
+                                    <i class="icon-zoom-in icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${periodoValidezInstance.id}">
+                                    <i class="icon-pencil icon-large"></i>
+                                </a>
+
+                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${periodoValidezInstance.id}">
+                                    <i class="icon-trash icon-large"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </g:each>
                 </tbody>
             </table>
 
@@ -116,7 +117,7 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows        : 10,
+                    maxRows        : 20,
                     searchPosition : $("#busqueda-PeriodoValidez"),
                     float          : "right"
                 });
