@@ -23,7 +23,7 @@
 
             <div id="gnrl" class="ui-widget-content" style="height: 440px">
                 <div class="item" texto="grgf">
-                    <g:link controller="zona"
+                    <g:link controller="canton"
                             action="arbol">Divisi&oacute;n geogr&aacute;fica del Pa&iacute;s</g:link> en cantones, parroquias y comunidades.
                 </div><br>
 

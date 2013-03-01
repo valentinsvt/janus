@@ -26,4 +26,10 @@ class InicioController extends janus.seguridad.Shield {
 
     }
 
+    def arbol () {
+
+
+    }
+
+
 }
