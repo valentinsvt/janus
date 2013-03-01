@@ -174,7 +174,7 @@ class PrflController extends janus.seguridad.Shield  {
     * **/
 
     def grabar = {
-      //println "parametros grabar: ${params}"
+      println "parametros grabar: ${params}"
       def ids = params.ids
       def modulo = params.menu
       def prfl = params.prfl
@@ -193,7 +193,7 @@ class PrflController extends janus.seguridad.Shield  {
               "from accn where mdlo__id = " + modulo + " and  " +
               "accn__id in (${ids})) and prfl__id = ${prfl}"
 
-      //println "grabar SQL: ${tx}"
+      println "grabar SQL: ${tx}"
       cn.eachRow(tx) { d ->
         params.id = d.prms__id
         println "parametro para borrar: $params"
