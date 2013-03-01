@@ -7,10 +7,14 @@
         </div>
 
     </div>
-    <div class="span2">
+    <div class="span3">
         <a href="#" class="btn  " id="imprimir">
             <i class="icon-file"></i>
             Imprimir
+        </a>
+        <a href="#" class="btn  " id="excel">
+            <i class="icon-file"></i>
+            Excel
         </a>
     </div>
     <div class="span4">
@@ -116,6 +120,21 @@
         location.href="${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'pac')}?"+datos
         %{--location.href="${createLink(controller: 'reportes',action: 'pac')}?"+datos--}%
     });
+
+    $("#excel").click(function(){
+        var datos=""
+        if($(this).hasClass("active")){
+            datos+="todos=1"
+
+        }else{
+            if($("#item_depto").val()*1>0){
+                datos = "dpto="+$("#item_depto").val()+"&anio="+$("#item_anio").val()
+            }else{
+                datos="anio="+$("#item_anio").val()
+            }
+        }
+        location.href="${createLink(controller: 'reportes',action: 'pacExcel')}?"+datos
+    })
 
     $("#ver_todos").click(function(){
         if($(this).hasClass("active")){

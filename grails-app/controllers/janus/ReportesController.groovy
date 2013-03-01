@@ -242,6 +242,108 @@ class ReportesController {
 
         [pac: pac, todos: params.todos, dep: dep, anio: anio]
     }
+    def pacExcel() {
+        println "params REPORTE " + params
+        def pac
+        def dep
+        def anio
+        if (!params.todos) {
+            anio = janus.pac.Anio.get(params.anio)
+            if (params.dpto) {
+                dep = Departamento.get(params.dpto)
+                pac = janus.pac.Pac.findAllByDepartamentoAndAnio(dep, anio, [sort: "id"])
+                dep = dep.descripcion
+                anio = anio.anio
+            } else {
+                pac = janus.pac.Pac.findAllByAnio(janus.pac.Anio.get(params.anio), [sort: "id"])
+                dep = "Todos"
+                anio = anio.anio
+            }
+        } else {
+            dep = "Todos"
+            anio = "Todos"
+            pac = janus.pac.Pac.list([sort: "id"])
+        }
+
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, true);
+        WritableCellFormat times10 = new WritableCellFormat(times10Font);
+        def fila = 6
+
+        WritableSheet sheet = workbook.createSheet("PAC", 0)
+
+        sheet.setColumnView(0, 5)
+        sheet.setColumnView(1, 10)
+        sheet.setColumnView(2, 50)
+        sheet.setColumnView(3, 15)
+        sheet.setColumnView(4, 15)
+        sheet.setColumnView(5, 50)
+        sheet.setColumnView(6, 10)
+        sheet.setColumnView(7, 5)
+        sheet.setColumnView(8, 10)
+        sheet.setColumnView(9, 10)
+        sheet.setColumnView(10, 5)
+        sheet.setColumnView(11, 5)
+        sheet.setColumnView(12, 5)
+
+        def label = new Label(0, 1, "Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2, "Departamento de compras públicas".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 3, "Plan anual de compras".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 4, "Departamento: ${dep}".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 5, "Año: ${anio}".toUpperCase(), times16format); sheet.addCell(label);
+
+        label = new Label(0, fila, "#", times16format); sheet.addCell(label);
+        label = new Label(1, fila, "Año", times16format); sheet.addCell(label);
+        label = new Label(2, fila, "Partida", times16format); sheet.addCell(label);
+        label = new Label(3, fila, "CPP", times16format); sheet.addCell(label);
+        label = new Label(4, fila, "Tipo compra", times16format); sheet.addCell(label);
+        label = new Label(5, fila, "Descripción", times16format); sheet.addCell(label);
+        label = new Label(6, fila, "Cantidad", times16format); sheet.addCell(label);
+        label = new Label(7, fila, "Unidad", times16format); sheet.addCell(label);
+        label = new Label(8, fila, "Unitario", times16format); sheet.addCell(label);
+        label = new Label(9, fila, "Total", times16format); sheet.addCell(label);
+        label = new Label(10, fila, "C1", times16format); sheet.addCell(label);
+        label = new Label(11, fila, "C2", times16format); sheet.addCell(label);
+        label = new Label(12, fila, "C3", times16format); sheet.addCell(label);
+        fila++
+        def total = 0
+        pac.eachWithIndex{p,i->
+            label = new Label(0, fila, "${i+1}", times10); sheet.addCell(label);
+            label = new Label(1, fila, p.anio.anio, times10); sheet.addCell(label);
+            label = new Label(2, fila,p.presupuesto.numero, times10); sheet.addCell(label);
+            label = new Label(3, fila, p.cpp.numero, times10); sheet.addCell(label);
+            label = new Label(4, fila, p.tipoCompra.descripcion, times10); sheet.addCell(label);
+            label = new Label(5, fila, p.descripcion, times10); sheet.addCell(label);
+            def number = new Number(6, fila,p.cantidad); sheet.addCell(number);
+            label = new Label(7, fila, p.unidad.codigo, times10); sheet.addCell(label);
+            number = new Number(8, fila,p.costo); sheet.addCell(number);
+            number = new Number(9, fila,p.cantidad*p.costo); sheet.addCell(number);
+            label = new Label(10, fila, p.c1, times10); sheet.addCell(label);
+            label = new Label(11, fila, p.c2, times10); sheet.addCell(label);
+            label = new Label(12, fila, p.c3, times10); sheet.addCell(label);
+            total+= p.cantidad*p.costo
+            fila++
+
+        }
+        label = new Label(8, fila, "TOTAL", times10); sheet.addCell(label);
+        def number = new Number(9, fila,total); sheet.addCell(number);
+        fila++
+
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "rubro.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+    }
 
 
     def analisisPrecios() {
