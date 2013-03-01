@@ -54,7 +54,6 @@
     <orderEntry type="library" scope="PROVIDED" name="grails-2.1.1" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="grails-2.1.1" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="grails-2.1.1" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="grails-2.1.1" level="application" />
     <orderEntry type="module-library" exported="">
       <library name="Grails User Library (Janus-grailsPlugins)">
         <CLASSES>

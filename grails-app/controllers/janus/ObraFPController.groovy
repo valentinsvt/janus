@@ -287,7 +287,7 @@ class ObraFPController {
         tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and "
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 3"
         def eqpo = 0.0
-        println "calculaEquipos: " + tx_sql
+        //println "calculaEquipos: " + tx_sql
         cn.eachRow(tx_sql) {row ->
             eqpo = row.equipos
         }
@@ -310,7 +310,7 @@ class ObraFPController {
         tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and ${tx_wh}"
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 2 "
         tx_sql += "order by item.itemcdgo"
-        println "manoDeObra: $tx_sql"
+        //println "manoDeObra: $tx_sql"
         cn.eachRow(tx_sql.toString()) {row ->
             creaCampo(id, row.itemcmpo + "_U", "O")
             creaCampo(id, row.itemcmpo + "_T", "O")
@@ -420,7 +420,7 @@ class ObraFPController {
             } else {
                 tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 2"
             }
-            println "descomposicion: tx_cr: " + tx_cr
+            //println "descomposicion: tx_cr: " + tx_cr
             cn1.eachRow(tx_cr.toString()) {cr ->
                 poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
             }
@@ -524,7 +524,7 @@ class ObraFPController {
                     tx_cr = "select itemcdgo, parcial + parcial_t pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 1"
                 }
             }
-            println "des_Materiales: " + tx_cr
+            //println "des_Materiales: " + tx_cr
             cn1.eachRow(tx_cr.toString()) {cr ->
                 poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
             }
@@ -813,7 +813,7 @@ class ObraFPController {
         tx_sql =  "select clmndscr from mfcl where obra__id = ${id} and clmntipo = 'O'"
         cn.eachRow(tx_sql.toString()) {row ->
             tx_cr = "select item__id, itemcdgo, itemnmbr from item where itemcmpo = '${row.clmndscr[0..-3]}'"
-            println "tx_cr..... campo:" + tx_cr
+            //println "tx_cr..... campo:" + tx_cr
             cn1.eachRow(tx_cr.toString()) {d ->
                 item__id = d.item__id
                 item     = d.itemcdgo
@@ -825,12 +825,12 @@ class ObraFPController {
 */
                 tx_cr = "select rbpcpcun pcun from item_pcun_v2 (${item__id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
                         "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
-                println "tarifaHoraria:" + tx_cr
+                //println "tarifaHoraria:" + tx_cr
             } else {
                 tx_cr = "select itempcun pcun from obit where item__id = ${item__id}"
             }
 
-            println "...... segunda: " + tx_cr
+            //println "...... segunda: " + tx_cr
 
             cn1.eachRow(tx_cr.toString()) {d ->
                 if (d.pcun == 0) errr = "No existe precio para el item ${item}: ${tx}"
