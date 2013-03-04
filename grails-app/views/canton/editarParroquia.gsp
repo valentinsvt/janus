@@ -12,7 +12,7 @@
         <tr class="prop ${hasErrors(bean: parroquiaInstance, field: 'canton', 'error')}">
 
             <td class="l " valign="middle">
-                <g:message code="parroquia.canton.label" default="Canton: "/>
+                <g:message code="parroquia.canton.label" default="Cantón: "/>
             </td>
             <td class="indicator">
                 &nbsp;
@@ -29,17 +29,17 @@
                 </g:else>
             </td>
 
-            %{--<td class="label " valign="middle">--}%
-                %{--<g:message code="parroquia.numero.label" default="Numero"/>--}%
-            %{--</td>--}%
+            <td class="l" valign="middle">
+                <g:message code="parroquia.codigo.label" default="Código"/>
+            </td>
             <td class="indicator">
                 &nbsp;
             </td>
-            %{--<td class="campo" valign="middle">--}%
-                %{--<g:textField name="numero" id="numero"--}%
-                             %{--class="field number ui-widget-content ui-corner-all"--}%
-                             %{--value="${parroquiaInstance?.numero}"/>--}%
-            %{--</td>--}%
+            <td class="campo" valign="middle">
+                <g:textField name="codigo" id="codigo"
+                             class="field number ui-widget-content ui-corner-all"
+                             value="${parroquiaInstance?.codigo}"/>
+            </td>
 
         </tr>
 

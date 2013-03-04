@@ -14,15 +14,15 @@
         </td> <!-- campo -->
     </tr>
 
-    %{--<tr>--}%
-        %{--<td class="label">--}%
-            %{--<g:message code="parroquia.numero.label"--}%
-                       %{--default="Numero"/>--}%
-        %{--</td>--}%
-        %{--<td class="campo">--}%
-            %{--${fieldValue(bean: parroquiaInstance, field: "numero")}--}%
-        %{--</td> <!-- campo -->--}%
-    %{--</tr>--}%
+    <tr>
+        <td class="label">
+            <g:message code="parroquia.codigo.label"
+                       default="Codigo"/>
+        </td>
+        <td class="campo">
+            ${fieldValue(bean: parroquiaInstance, field: "codigo")}
+        </td> <!-- campo -->
+    </tr>
 
     <tr>
         <td class="label">

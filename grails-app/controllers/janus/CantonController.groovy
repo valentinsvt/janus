@@ -59,7 +59,7 @@ class CantonController extends janus.seguridad.Shield {
 
                 if (params.id) {
                     flash.clase = "alert-success"
-                    flash.message = "Se ha actualizado correctamente Canton " + cantonInstance.id
+                    flash.message = "Se ha actualizado correctamente Canton " + cantonInstance.nombre
 
 
 
@@ -67,7 +67,7 @@ class CantonController extends janus.seguridad.Shield {
 
                 } else {
                     flash.clase = "alert-success"
-                    flash.message = "Se ha creado correctamente Canton " + cantonInstance.id
+                    flash.message = "Se ha creado correctamente Canton " + cantonInstance.nombre
                 }
 
 
@@ -75,8 +75,6 @@ class CantonController extends janus.seguridad.Shield {
 
                 break;
             case "parroquia":
-
-
 
                 def parroquiaInstance
                 if (params.id) {
@@ -116,13 +114,13 @@ class CantonController extends janus.seguridad.Shield {
 
                 if (params.id) {
                     flash.clase = "alert-success"
-                    flash.message = "Se ha actualizado correctamente parroquia " + parroquiaInstance.id
+                    flash.message = "Se ha actualizado correctamente parroquia " + parroquiaInstance.nombre
 
 
 
                 } else {
                     flash.clase = "alert-success"
-                    flash.message = "Se ha creado correctamente Parroquia " + parroquiaInstance.id
+                    flash.message = "Se ha creado correctamente Parroquia " + parroquiaInstance.nombre
                 }
 
 
@@ -138,7 +136,7 @@ class CantonController extends janus.seguridad.Shield {
 
     def deleteFromTree = {
 
-        println(params)
+//        println(params)
 
 
         switch (params.tipo) {
@@ -146,11 +144,14 @@ class CantonController extends janus.seguridad.Shield {
             case "canton":
                 def canton = Canton.get(params.id)
                 def parroquias = Parroquia.findAllByCanton(canton)
+
+//                println(parroquias.size())
+
                 def band = true
                 def p = [:]
                 p.actionName = "deleteFromTree: Canton"
                 p.controllerName = "Zona"
-                if (parroquias != null){
+                if (parroquias.size() != 0  ){
 
 
                     render ("No se puede borrar el Cantón " + canton?.nombre)
@@ -159,18 +160,20 @@ class CantonController extends janus.seguridad.Shield {
 
                 }else {
 
+                    canton.delete(flush:  true)
+                    render ("OK")
 
-                    parroquias.each { parroquia ->
-//                    p.id = parroquia.id
-                        parroquia.delete(flush: true)
-
-                    }
-
-                    if (canton.delete(flush: true)) {
-                        render("OK")
-                    } else {
-                        render("NO")
-                    }
+//                    parroquias.each { parroquia ->
+////                    p.id = parroquia.id
+//                        parroquia.delete(flush: true)
+//
+//                    }
+//
+//                    if (canton.delete(flush: true)) {
+//                        render("OK")
+//                    } else {
+//                        render("NO")
+//                    }
 
 
                 }
@@ -178,6 +181,7 @@ class CantonController extends janus.seguridad.Shield {
 
                 break;
             case "parroquia":
+
 
                 def parroquia = Parroquia.get(params.id)
 
@@ -187,18 +191,22 @@ class CantonController extends janus.seguridad.Shield {
 
                 params.actionName = "deleteFromTree: Parroquia"
 
-                if (comunidad != null && obra != null ){
+                if (comunidad.size() != 0 && obra.size() != 0 ){
 
                  render("No se puede borrar la Parroquia " + parroquia.nombre)
 
                 } else {
 
 
-                    if (parroquia.delete(flush: true)) {
-                        render("OK")
-                    } else {
-                        render("NO")
-                    }
+                    parroquia.delete(flush: true)
+                    render ("OK")
+
+//
+//                    if (parroquia.delete(flush: true)) {
+//                        render("OK")
+//                    } else {
+//                        render("NO")
+//                    }
 
                 }
 

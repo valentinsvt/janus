@@ -42,6 +42,12 @@
         padding     : 0 5px 0 15px;
         font-weight : bold;
     }
+
+    .scroll {
+        overflow-x : hidden !important;
+        overflow-y : hidden;
+    }
+
     </style>
 
 </head>
@@ -55,7 +61,7 @@
         </g:if>
 
         <div id="tree" class="div left ui-corner-all"
-             style="height:600px; width: 400px;">
+             style="height:600px; width: 400px;overflow-y: auto">
 
         </div>
 
@@ -144,7 +150,7 @@
                     "parroquia" : {
                         "label": "Parroquia",
                         "action": function (obj) {
-                            var url = "${createLink(controller: 'zona', action: 'editar')}";
+                            var url = "${createLink(controller: 'canton', action: 'editar')}";
                             $.ajax({
                                 "type": "POST",
                                 "url": url,
@@ -169,7 +175,7 @@
                     "parroquia" : {
                         "label": "Parroquia",
                         "action": function (obj) {
-                            var url = "${createLink(controller: 'zona', action: 'editar')}";
+                            var url = "${createLink(controller: 'canton', action: 'editar')}";
                             $.ajax({
                                 "type": "POST",
                                 "url": url,
@@ -283,10 +289,13 @@
                                 id: id
                             },
                             "success": function(msg) {
+                                console.log(msg)
+
                                 if (msg == "OK") {
                                     $("#infoCont").html("");
                                     $("#infoTitle").html("");
-                                    reloadTree();
+//                                    reloadTree();
+                                    window.location.reload(true);
                                 } else {
                                     alert(msg);
                                 }
@@ -450,7 +459,7 @@
                             "data": data,
                             "success": function(msg) {
                                 if (msg == "OK") {
-                                    reloadTree();
+//                                    reloadTree();
                                     $('.jstree-clicked').click();
                                     $("#dlg_editar").dialog("close");
                                     window.location.reload(true);
