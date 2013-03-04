@@ -1,228 +1,231 @@
 <html>
 
-<head>
+    <head>
 
-    <style type="text/css">
+        <style type="text/css">
 
+        .selected {
+            border : solid 2px blue !important;
+        }
 
-    .selected {
+        .alineacion {
+            text-align : right !important
+        }
 
-        border: solid 2px blue !important;
+        </style>
 
-    }
+    </head>
 
-    .alineacion {
+    <body>
 
-        text-align: right !important
+        <div id="tabla">
 
-    }
+            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPrecios">
+                <thead style="background-color:#0074cc;">
+                    <tr>
+                        <th>Item</th>
+                        <th>Nombre del Item</th>
+                        <th>U</th>
+                        <th>Precio</th>
+                        <th class="precioAL hidden">Precio Anterior</th>
+                        <th>Fecha</th>
+                        <th>Registrar</th>
+                    </tr>
+                </thead>
+                <tbody>
 
+                    <g:each in="${rubroPrecio}" var="rubro" status="i">
 
-    </style>
+                        <tr align="right">
 
-</head>
+                            <td class="itemId" align="center" style="width: 150px;">
 
-<body>
+                                ${rubro?.item?.codigo}
 
-<div id="tabla">
+                            </td>
 
-<table class="table table-bordered table-striped table-hover table-condensed" id="tablaPrecios">
-    <thead style="background-color:#0074cc;">
+                            <td class="itemNombre" align="center">
 
-    <th>Item</th>
-    <th>Nombre del Item</th>
-    <th>U</th>
-    <th>Precio</th>
-    <th class="precioAL hidden">Precio Anterior</th>
-    <th>Fecha</th>
+                                ${rubro?.item?.nombre}
 
-    </thead>
-    <tbody>
+                            </td>
 
-    <g:each in="${rubroPrecio}" var="rubro" status="i">
+                            <td class="unidad" align="center" style="width: 150px">
 
-        <tr align="right">
+                                ${rubro?.item?.unidad?.descripcion}
 
-            <td class="itemId" align="center" style="width: 150px;">
+                            </td>
 
-                ${rubro?.item?.codigo}
+                            <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.id}"
+                                data-original="${rubro?.precioUnitario}"
+                                style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,#####0" locale="ec"/>
 
-            </td>
+                            </td>
 
-            <td class="itemNombre" align="center">
+                            <td class="precioAnterior hidden" align="center" style="width: 105px">
+                                0.00
+                            </td>
 
-                ${rubro?.item?.nombre}
+                            <td class="fecha" align="center" style="width: 150px">
 
-            </td>
+                                <g:formatDate date="${rubro?.fecha}" format="dd-MM-yyyy"/>
 
-            <td class="unidad" align="center" style="width: 150px">
+                            </td>
 
-                ${rubro?.item?.unidad?.descripcion}
+                            <td style="text-align: center;" class="chk">
+                                <g:if test="${rubro?.registrado == 'N'}">
+                                    <input type="checkbox"/>
+                                </g:if>
+                                <g:else>
+                                    <i class="icon-ok"></i>
+                                </g:else>
+                            </td>
 
-            </td>
+                        </tr>
 
-            <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.id}"
-                data-original="${rubro?.precioUnitario}"
-                style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,#####0" locale="ec"/>
+                    </g:each>
 
-            </td>
+                </tbody>
 
-            <td class="precioAnterior hidden" align="center" style="width: 105px">
-                0.00
-            </td>
+            </table>
 
-            <td class="fecha" align="center" style="width: 150px">
-
-                <g:formatDate date="${rubro?.fecha}" format="dd-MM-yyyy"/>
-
-            </td>
-
-        </tr>
-
-    </g:each>
-
-    </tbody>
-
-</table>
-
-Total de registros visualizados: ${params.totalRows}<br/>
-
-
-%{--MAX: ${params.max}<br/>--}%
-%{--OFFSET: ${params.offset}<br/>--}%
-%{--PAG: ${params.pag}<br/>--}%
-%{--TOTAL ROWS: ${params.totalRows}<br/>--}%
-%{--TOTAL PAGS: ${params.totalPags}<br/>--}%
-%{--1st PAG: ${params.first}<br/>--}%
-%{--LAST: ${params.last}<br/>--}%
-%{--tipo: ${params.tipo}--}%
+            Total de registros visualizados: ${params.totalRows}<br/>
 
 
-<div>
+            %{--MAX: ${params.max}<br/>--}%
+            %{--OFFSET: ${params.offset}<br/>--}%
+            %{--PAG: ${params.pag}<br/>--}%
+            %{--TOTAL ROWS: ${params.totalRows}<br/>--}%
+            %{--TOTAL PAGS: ${params.totalPags}<br/>--}%
+            %{--1st PAG: ${params.first}<br/>--}%
+            %{--LAST: ${params.last}<br/>--}%
+            %{--tipo: ${params.tipo}--}%
 
-    <g:if test="${params.totalPags == 0}">
 
-        <div class="alert alert-error" >
-
-            <h4 style="margin-left: 450px">No existen datos!!</h4>
-
-            <div style="margin-left: 420px">
-                Ingrese los parámetros de búsqueda!
-
-            </div>
-        </div>
-
-    </g:if>
-
-    <g:else>
-
-        <div class="pagination pagination-centered" style="margin-bottom: 40px">
             <div>
-                Página: ${params.pag} de <g:formatNumber number="${params.totalPags}" minFractionDigits="0"/>
+
+                <g:if test="${params.totalPags == 0}">
+
+                    <div class="alert alert-error">
+
+                        <h4 style="margin-left: 450px">No existen datos!!</h4>
+
+                        <div style="margin-left: 420px">
+                            Ingrese los parámetros de búsqueda!
+
+                        </div>
+                    </div>
+
+                </g:if>
+
+                <g:else>
+
+                    <div class="pagination pagination-centered" style="margin-bottom: 40px">
+                        <div>
+                            Página: ${params.pag} de <g:formatNumber number="${params.totalPags}" minFractionDigits="0"/>
+                        </div>
+
+                        <ul>
+                            <li class="${params.pag == 1 ? 'disabled' : ''}">
+                                <a href="${1}" class="num ">
+                                    <i class="icon-step-backward"></i>
+                                </a>
+                            </li>
+                            <g:if test="${params.pag - params.first > 0}">
+                                <li class="">
+                                    <a href="${params.pag - 1}" class="num">
+                                        <i class="icon-backward"></i>
+                                    </a>
+                                </li>
+                            </g:if>
+                            <g:else>
+                                <li class="disabled"><a href="#"><i class="icon-backward"></i></a></li>
+                            </g:else>
+                            <g:if test="${params.first > 1}">
+                                <li class="disabled puntos">
+                                    <a href="#">...</a>
+                                </li>
+                            </g:if>
+
+                            <g:each in="${0..params.last - params.first}" var="p">
+                                <li class="${params.first + p == params.pag ? 'active' : ''}">
+                                    <a href="${params.first + p}" class="num">${params.first + p}</a>
+                                </li>
+                            </g:each>
+
+                            <g:if test="${params.last < params.totalPags}">
+                                <li class="disabled puntos">
+                                    <a href="#">...</a>
+                                </li>
+                            </g:if>
+                            <g:if test="${params.last - params.pag > 0}">
+                                <li class="">
+                                    <a href="${params.pag + 1}" class="num">
+                                        <i class="icon-forward"></i>
+                                    </a>
+                                </li>
+                            </g:if>
+                            <g:else>
+                                <li class="disabled">
+                                    <a href="#">
+                                        <i class="icon-forward"></i>
+                                    </a>
+                                </li>
+                            </g:else>
+                            <li class="${params.pag == params.totalPags ? 'disabled' : ''}">
+                                <a href="${params.totalPags}" class="num">
+                                    <i class="icon-step-forward"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </g:else>
+
             </div>
 
-            <ul>
-                <li class="${params.pag == 1 ? 'disabled' : ''}">
-                    <a href="${1}" class="num ">
-                        <i class="icon-step-backward"></i>
-                    </a>
-                </li>
-                <g:if test="${params.pag - params.first > 0}">
-                    <li class="">
-                        <a href="${params.pag - 1}" class="num">
-                            <i class="icon-backward"></i>
-                        </a>
-                    </li>
-                </g:if>
-                <g:else>
-                    <li class="disabled"><a href="#"><i class="icon-backward"></i></a></li>
-                </g:else>
-                <g:if test="${params.first > 1}">
-                    <li class="disabled puntos">
-                        <a href="#">...</a>
-                    </li>
-                </g:if>
+            <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
 
-                <g:each in="${0..params.last - params.first}" var="p">
-                    <li class="${params.first + p == params.pag ? 'active' : ''}">
-                        <a href="${params.first + p}" class="num">${params.first + p}</a>
-                    </li>
-                </g:each>
+            <script type="text/javascript">
 
-                <g:if test="${params.last < params.totalPags}">
-                    <li class="disabled puntos">
-                        <a href="#">...</a>
-                    </li>
-                </g:if>
-                <g:if test="${params.last - params.pag > 0}">
-                    <li class="">
-                        <a href="${params.pag + 1}" class="num">
-                            <i class="icon-forward"></i>
-                        </a>
-                    </li>
-                </g:if>
-                <g:else>
-                    <li class="disabled">
-                        <a href="#">
-                            <i class="icon-forward"></i>
-                        </a>
-                    </li>
-                </g:else>
-                <li class="${params.pag == params.totalPags ? 'disabled' : ''}">
-                    <a href="${params.totalPags}" class="num">
-                        <i class="icon-step-forward"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </g:else>
+                function enviar(pag) {
 
-</div>
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'tabla')}",
+                        data    : {
+                            lgar  : "${params.lgar}",
+                            fecha : "${params.fecha}",
+                            todos : "${params.todos}",
+                            tipo  : "${params.tipo}",
+                            max   : 100,
+                            pag   : pag
+                        },
+                        success : function (msg) {
+                            $("#divTabla").html(msg);
+                            $("#dlgLoad").dialog("close");
+                        }
+                    });
 
-<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
+                }
 
-<script type="text/javascript">
+                $(function () {
 
-    function enviar(pag) {
+                    $(".num").click(function () {
+                        $("#dlgLoad").dialog("open");
 
-        $.ajax({
-            type:"POST",
-            url:"${createLink(action:'tabla')}",
-            data:{
-                lgar:"${params.lgar}",
-                fecha:"${params.fecha}",
-                todos:"${params.todos}",
-                tipo:"${params.tipo}",
-                max:100,
-                pag:pag
-            },
-            success:function (msg) {
-                $("#divTabla").html(msg);
-                $("#dlgLoad").dialog("close");
-            }
-        });
+                        var num = $(this).attr("href");
+                        enviar(num);
+                        return false;
+                    });
 
-    }
-
-
-    $(function () {
-
-        $(".num").click(function () {
-            $("#dlgLoad").dialog("open");
-
-            var num = $(this).attr("href");
-            enviar(num);
-            return false;
-        });
-
-        $("#dlgLoad").dialog("close");
-    });
+                    $("#dlgLoad").dialog("close");
+                });
 
 
 
 
-</script>
+            </script>
 
-</body>
+    </body>
 
 </html>

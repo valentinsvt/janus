@@ -378,7 +378,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 def m2 = pl.fechaFin.format("MM")
 //                println "\t" + m1 + "   " + m2
                 if (m1 == m2) {
-                    periodos.add(pl.periodoIndices)
+                    if (pl.periodoIndices) {
+                        periodos.add(pl.periodoIndices)
+                    }
                     if (pl == planilla) {
                         periodosPlanilla.add(pl)
                     }
@@ -388,7 +390,9 @@ class PlanillaController extends janus.seguridad.Shield {
 //                        println "\t\t" + it + " - " + y
                         def fi = new Date().parse("dd-MM-yyyy", "01-" + it + "-" + y)
                         def prin = PeriodosInec.findByFechaInicio(fi)
-                        periodos.add(prin)
+                        if (prin) {
+                            periodos.add(prin)
+                        }
                         if (pl == planilla) {
                             periodosPlanilla.add(prin)
                         }
@@ -399,6 +403,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
+println periodos
 //        render periodos.descripcion
 
 //        println "Aqui empieza las inserciones"
@@ -505,7 +510,7 @@ class PlanillaController extends janus.seguridad.Shield {
             periodos.eachWithIndex { per, i ->
                 if (i > 1) {
                     tablaBo += "<th>Variación</th>"
-                    tablaBo += "<th class='nb'>" + per.descripcion + "</th>"
+                    tablaBo += "<th class='nb'>" + per?.descripcion + "</th>"
                 }
             }
         }
@@ -611,9 +616,11 @@ class PlanillaController extends janus.seguridad.Shield {
                     def periodosEjecucion = PeriodoEjecucion.withCriteria {
                         and {
                             eq("obra", obra)
-                            or {
-                                between("fechaInicio", per.fechaInicio, per.fechaFin)
-                                between("fechaFin", per.fechaInicio, per.fechaFin)
+                            if (per) {
+                                or {
+                                    between("fechaInicio", per.fechaInicio, per.fechaFin)
+                                    between("fechaFin", per.fechaInicio, per.fechaFin)
+                                }
                             }
                             order("fechaInicio")
                         }
@@ -621,32 +628,34 @@ class PlanillaController extends janus.seguridad.Shield {
                     def diasTotal = 0, valorTotal = 0
 //                    println per.fechaInicio.format("dd-MM-yyyy") + "  " + per.fechaFin.format("dd-MM-yyyy")
                     tbodyP0 += "<th>"
-                    tbodyP0 += per.descripcion
+                    tbodyP0 += per?.descripcion
                     tbodyP0 += "</th>"
                     periodosEjecucion.each { pe ->
 //                        println "\t" + pe.tipo + "  " + pe.fechaInicio.format("dd-MM-yyyy") + "   " + pe.fechaFin.format("dd-MM-yyyy")
                         if (pe.tipo == "P") {
-                            def diasUsados
+                            def diasUsados = 0
                             def diasPeriodo = pe.fechaFin - pe.fechaInicio
 //                            println "\t\tdias periodo: " + diasPeriodo
                             def crono = CronogramaEjecucion.findAllByPeriodo(pe)
                             def valorPeriodo = crono.sum { it.precio }
 //                            println "\t\tvalor periodo: " + valorPeriodo
-                            if (pe.fechaInicio <= per.fechaInicio) {
-                                diasUsados = pe.fechaFin - per.fechaInicio + 1
+                            if (per) {
+                                if (pe.fechaInicio <= per.fechaInicio) {
+                                    diasUsados = pe.fechaFin - per.fechaInicio + 1
 //                                if (diasUsados == 0) diasUsados = 1
-                                diasTotal += diasUsados
+                                    diasTotal += diasUsados
 //                                println "\t\tdias usados: " + diasUsados
-                            } else if (pe.fechaInicio > per.fechaInicio && pe.fechaFin < per.fechaFin) {
-                                diasUsados = pe.fechaFin - pe.fechaInicio + 1
+                                } else if (pe.fechaInicio > per.fechaInicio && pe.fechaFin < per.fechaFin) {
+                                    diasUsados = pe.fechaFin - pe.fechaInicio + 1
 //                                if (diasUsados == 0) diasUsados = 1
-                                diasTotal += diasUsados
+                                    diasTotal += diasUsados
 //                                println "\t\tdias usados: " + diasUsados
-                            } else if (pe.fechaFin >= per.fechaFin) {
-                                diasUsados = per.fechaFin - pe.fechaInicio + 1
+                                } else if (pe.fechaFin >= per.fechaFin) {
+                                    diasUsados = per.fechaFin - pe.fechaInicio + 1
 //                                if (diasUsados == 0) diasUsados = 1
-                                diasTotal += diasUsados
+                                    diasTotal += diasUsados
 //                                println "\t\tdias usados: " + diasUsados
+                                }
                             }
                             def valorUsado = (valorPeriodo / diasPeriodo) * diasUsados
                             valorTotal += valorUsado
@@ -766,7 +775,7 @@ class PlanillaController extends janus.seguridad.Shield {
         if (periodos.size() > 2) {
             periodos.eachWithIndex { per, i ->
                 if (i > 1) {
-                    tablaFr += '<th rowspan="2">' + per.descripcion + '</th>'
+                    tablaFr += '<th rowspan="2">' + per?.descripcion + '</th>'
                 }
             }
         }
@@ -919,47 +928,50 @@ class PlanillaController extends janus.seguridad.Shield {
 
         tablaMl += "</table>"
 
-        def diasMax = 5
-        def fechaFinPer = planilla.periodoIndices.fechaFin
-        def fechaMax = fechaFinPer
-        use(TimeCategory) {
-            fechaMax = fechaFinPer + diasMax.days
-        }
-        def fechaPresentacion = planilla.fechaPresentacion
-        def retraso = fechaPresentacion - fechaMax
+        def pMl = ""
 
-        def totalMulta = 0
+        if (planilla.periodoIndices) {
+            def diasMax = 5
+            def fechaFinPer = planilla.periodoIndices?.fechaFin
+            def fechaMax = fechaFinPer
+            use(TimeCategory) {
+                fechaMax = fechaFinPer + diasMax.days
+            }
+            def fechaPresentacion = planilla.fechaPresentacion
+            def retraso = fechaPresentacion - fechaMax
 
-        def totalContrato = contrato.monto
-        def prmlMulta = contrato.multaPlanilla
-        if (retraso > 0) {
+            def totalMulta = 0
+
+            def totalContrato = contrato.monto
+            def prmlMulta = contrato.multaPlanilla
+            if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-            totalMulta = (valorTotalPeriodoActual) * (prmlMulta / 1000) * retraso
-        } else {
-            retraso = 0
+                totalMulta = (valorTotalPeriodoActual) * (prmlMulta / 1000) * retraso
+            } else {
+                retraso = 0
+            }
+
+            pMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
+            pMl += "<tr>"
+            pMl += '<th>Fecha presentación planilla</th><td>' + fechaPresentacion.format("dd-MM-yyyy") + ' </td>'
+            pMl += "</tr>"
+            pMl += "<tr>"
+            pMl += '<th>Periodo planilla</th><td>' + planilla.fechaInicio.format("dd-MM-yyyy") + " a " + planilla.fechaFin.format("dd-MM-yyyy") + ' </td>'
+            pMl += "</tr>"
+            pMl += "<tr>"
+            pMl += '<th>Fecha máximo presentación:</th> <td>' + fechaMax.format("dd-MM-yyyy") + ' </td>'
+            pMl += "</tr>"
+            pMl += "<tr>"
+            pMl += '<th>Días de retraso</th> <td>' + retraso + "</td>"
+            pMl += "</tr>"
+            pMl += "<tr>"
+            pMl += '<th>Multa</th> <td>' + elm.numero(number: prmlMulta) + "&#8240; de \$" + elm.numero(number: totalContrato) + "</td>"
+            pMl += "</tr>"
+            pMl += "<tr>"
+            pMl += '<th>Total multa</th> <td>$' + elm.numero(number: totalMulta) + "</td>"
+            pMl += "</tr>"
+            pMl += '</table>'
         }
-
-        def pMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-        pMl += "<tr>"
-        pMl += '<th>Fecha presentación planilla</th><td>' + fechaPresentacion.format("dd-MM-yyyy") + ' </td>'
-        pMl += "</tr>"
-        pMl += "<tr>"
-        pMl += '<th>Periodo planilla</th><td>' + planilla.fechaInicio.format("dd-MM-yyyy") + " a " + planilla.fechaFin.format("dd-MM-yyyy") + ' </td>'
-        pMl += "</tr>"
-        pMl += "<tr>"
-        pMl += '<th>Fecha máximo presentación:</th> <td>' + fechaMax.format("dd-MM-yyyy") + ' </td>'
-        pMl += "</tr>"
-        pMl += "<tr>"
-        pMl += '<th>Días de retraso</th> <td>' + retraso + "</td>"
-        pMl += "</tr>"
-        pMl += "<tr>"
-        pMl += '<th>Multa</th> <td>' + elm.numero(number: prmlMulta) + "&#8240; de \$" + elm.numero(number: totalContrato) + "</td>"
-        pMl += "</tr>"
-        pMl += "<tr>"
-        pMl += '<th>Total multa</th> <td>$' + elm.numero(number: totalMulta) + "</td>"
-        pMl += "</tr>"
-        pMl += '</table>'
-
         return [tablaB0: tablaBo, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato]
     }
 

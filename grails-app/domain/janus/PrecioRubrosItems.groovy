@@ -5,6 +5,7 @@ class PrecioRubrosItems implements Serializable {
     Date fecha
     double precioUnitario
     Date fechaIngreso = new Date()
+    String registrado = "N"
 
     static mapping = {
         table 'rbpc'
@@ -19,6 +20,7 @@ class PrecioRubrosItems implements Serializable {
             fecha column: 'rbpcfcha'
             precioUnitario column: 'rbpcpcun'
             fechaIngreso column: 'rbpcfcin'
+            registrado column: 'rbpcrgst'
         }
     }
     static constraints = {
@@ -27,5 +29,6 @@ class PrecioRubrosItems implements Serializable {
         lugar(blank: true, nullable: true, attributes: [title: 'lugar'])
         fecha(blank: false, attributes: [title: 'fecha'])
         fechaIngreso(blank: false, attributes: [title: 'fecha'])
+        registrado(blank: false, attributes: [title: 'Registrado'])
     }
 }

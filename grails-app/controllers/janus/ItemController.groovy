@@ -1,7 +1,6 @@
 package janus
 
 import org.springframework.dao.DataIntegrityViolationException
-import jxl.write.DateTime
 
 class ItemController extends janus.seguridad.Shield {
 
@@ -96,7 +95,6 @@ class ItemController extends janus.seguridad.Shield {
         if (t == "2") {
 
 
-
             lugar = Lugar.get(params.lgar)
 
             def sql
@@ -132,7 +130,7 @@ class ItemController extends janus.seguridad.Shield {
             def itemsIds = ""
 
             def cn = dbConnectionService.getConnection()
-            cn.eachRow(sql.toString()) {row ->
+            cn.eachRow(sql.toString()) { row ->
                 if (itemsIds != "") {
                     itemsIds += ","
                 }
@@ -146,8 +144,6 @@ class ItemController extends janus.seguridad.Shield {
                 rubroPrecio.add(PrecioRubrosItems.get(it))
 
             }
-
-
 
 //            def precios = PrecioRubrosItems.findAllByFechaAndLugar(f, lugar)
 //            rubroPrecio = []
@@ -163,10 +159,8 @@ class ItemController extends janus.seguridad.Shield {
             println("precios2" + precios);
 
 
-            if(params.tipo == '-1'){
+            if (params.tipo == '-1') {
 //                println("entro")
-
-
 
 
                 if (!params.totalRows) {
@@ -175,15 +169,13 @@ class ItemController extends janus.seguridad.Shield {
                     sql += "where lgar__id=${lugar.id} "
 
                     def totalCount
-                    cn.eachRow(sql.toString()) {row ->
+                    cn.eachRow(sql.toString()) { row ->
                         totalCount = row[0]
                     }
 
                     params.totalRows = totalCount
 
                     params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
-
-
 
 //                    println("totalrows" + params.totalRows)
 //
@@ -206,64 +198,59 @@ class ItemController extends janus.seguridad.Shield {
                 cn.close()
 
 
-
-            }else {
-
+            } else {
 
 //                println("entro2")
 
 
-
-            if (!params.totalRows) {
-                sql = "select count(distinct rbpc.item__id) "
-                sql += "from rbpc, item "
-                sql += ", dprt, sbgr, grpo "
-                sql += "where lgar__id=${lugar.id} "
-                sql += "and rbpc.item__id = item.item__id "
-                sql += "and item.dprt__id = dprt.dprt__id "
-                sql += "and dprt.sbgr__id = sbgr.sbgr__id "
-                sql += "and sbgr.grpo__id = grpo.grpo__id "
-                sql += "and grpo.grpo__id =${tipo.id}"
-
-
-                println(sql)
-
-                def totalCount
-                cn.eachRow(sql.toString()) {row ->
-                    totalCount = row[0]
-                }
-
-                params.totalRows = totalCount
-
-                params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+                if (!params.totalRows) {
+                    sql = "select count(distinct rbpc.item__id) "
+                    sql += "from rbpc, item "
+                    sql += ", dprt, sbgr, grpo "
+                    sql += "where lgar__id=${lugar.id} "
+                    sql += "and rbpc.item__id = item.item__id "
+                    sql += "and item.dprt__id = dprt.dprt__id "
+                    sql += "and dprt.sbgr__id = sbgr.sbgr__id "
+                    sql += "and sbgr.grpo__id = grpo.grpo__id "
+                    sql += "and grpo.grpo__id =${tipo.id}"
 
 
+                    println(sql)
+
+                    def totalCount
+                    cn.eachRow(sql.toString()) { row ->
+                        totalCount = row[0]
+                    }
+
+                    params.totalRows = totalCount
+
+                    params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
 
 //                println("totalrows" + params.totalRows)
 //
 //                println("total" + params.totalPags)
 
-                if (params.totalPags <= 10) {
-                    params.first = 1
-                    params.last = params.last = params.totalPags
-                } else {
-                    params.first = Math.max(1, params.pag.toInteger() - 5)
-                    params.last = Math.min(params.totalPags, params.pag + 5)
+                    if (params.totalPags <= 10) {
+                        params.first = 1
+                        params.last = params.last = params.totalPags
+                    } else {
+                        params.first = Math.max(1, params.pag.toInteger() - 5)
+                        params.last = Math.min(params.totalPags, params.pag + 5)
 
-                    def ts = params.last - params.first
-                    if (ts < 9) {
-                        def r = 10 - ts
-                        params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                        def ts = params.last - params.first
+                        if (ts < 9) {
+                            def r = 10 - ts
+                            params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                        }
                     }
                 }
-            }
-            cn.close()
+                cn.close()
 
             }
 
         }
 
-         [rubroPrecio: rubroPrecio, params: params, lugar: lugar]
+        [rubroPrecio: rubroPrecio, params: params, lugar: lugar]
     }
 
 
@@ -278,41 +265,29 @@ class ItemController extends janus.seguridad.Shield {
 
         params.item.each {
             def parts = it.split("_")
-            println parts
+            println ">>" + parts
 
             def rubroId = parts[0]
             def nuevoPrecio = parts[1]
             def nuevaFecha = parts[2]
 
-            nuevaFecha =new Date().parse("dd-MM-yyyy", nuevaFecha);
+            def reg = parts[3]
 
+            nuevaFecha = new Date().parse("dd-MM-yyyy", nuevaFecha);
 
             def rubroPrecioInstanceOld = PrecioRubrosItems.get(rubroId);
-
             def precios = PrecioRubrosItems.countByFechaAndLugar(nuevaFecha, rubroPrecioInstanceOld.lugar)
-
-
             def rubroPrecioInstance
-
-            if(precios == 0) {
-
+            if (precios == 0) {
                 rubroPrecioInstance = new PrecioRubrosItems();
-
                 rubroPrecioInstance.properties = rubroPrecioInstanceOld.properties
-
-
-
-            }else {
-
-
+            } else {
                 rubroPrecioInstance = rubroPrecioInstanceOld
             }
-
-
-
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
-
             rubroPrecioInstance.fecha = nuevaFecha
+
+            rubroPrecioInstance.registrado = reg == "true" ? "R" : "N"
 
             if (!rubroPrecioInstance.save(flush: true)) {
                 println "error " + parts
@@ -369,7 +344,7 @@ class ItemController extends janus.seguridad.Shield {
             str += "<ul>"
             itemInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
