@@ -32,6 +32,10 @@
         .Vigente {
 
         }
+
+        .error {
+            color : #aa1b17;
+        }
         </style>
 
     </head>
@@ -44,6 +48,9 @@
                     <i class="icon-double-angle-left"></i>
                     Contrato
                 </g:link>
+                <a href="#" id="btnReporte" class="btn">
+                    Reporte
+                </a>
             </div>
         </div>
 
@@ -444,6 +451,10 @@
 
                 $("#aseguradoraTxt").focus(function () {
                     $("#modal-busqueda").modal("show");
+                });
+
+                $("#btnReporte").click(function () {
+                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'garantiasContrato')}/${contrato?.id}"
                 });
 
                 $frm.validate();

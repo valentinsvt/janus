@@ -112,7 +112,7 @@
                     <g:if test="${sp != vol.subPresupuestoId}">
                         <tr>
                             <th colspan="2">
-                                ${vol.subPresupuesto.descripcion}
+                                ${sp} ${vol.subPresupuestoId} ${vol.subPresupuesto.descripcion}
                             </th>
                             <td colspan="3" class="espacio borderLeft"></td>
                             <td colspan="3" class="espacio borderLeft"></td>

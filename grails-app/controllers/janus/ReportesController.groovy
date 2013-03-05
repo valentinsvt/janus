@@ -7,6 +7,7 @@ import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
+import janus.pac.Garantia
 import janus.pac.PeriodoEjecucion
 import jxl.Workbook
 import jxl.WorkbookSettings
@@ -22,6 +23,12 @@ class ReportesController {
 
     def buscadorService
     def preciosService
+
+    def garantiasContrato() {
+        def contrato = Contrato.get(params.id)
+        def garantias = Garantia.findAllByContrato(contrato)
+        return [contrato: contrato, garantias: garantias]
+    }
 
 
     def rubro = {
@@ -242,6 +249,7 @@ class ReportesController {
 
         [pac: pac, todos: params.todos, dep: dep, anio: anio]
     }
+
     def pacExcel() {
         println "params REPORTE " + params
         def pac
@@ -313,26 +321,26 @@ class ReportesController {
         label = new Label(12, fila, "C3", times16format); sheet.addCell(label);
         fila++
         def total = 0
-        pac.eachWithIndex{p,i->
-            label = new Label(0, fila, "${i+1}", times10); sheet.addCell(label);
+        pac.eachWithIndex { p, i ->
+            label = new Label(0, fila, "${i + 1}", times10); sheet.addCell(label);
             label = new Label(1, fila, p.anio.anio, times10); sheet.addCell(label);
-            label = new Label(2, fila,p.presupuesto.numero, times10); sheet.addCell(label);
+            label = new Label(2, fila, p.presupuesto.numero, times10); sheet.addCell(label);
             label = new Label(3, fila, p.cpp.numero, times10); sheet.addCell(label);
             label = new Label(4, fila, p.tipoCompra.descripcion, times10); sheet.addCell(label);
             label = new Label(5, fila, p.descripcion, times10); sheet.addCell(label);
-            def number = new Number(6, fila,p.cantidad); sheet.addCell(number);
+            def number = new Number(6, fila, p.cantidad); sheet.addCell(number);
             label = new Label(7, fila, p.unidad.codigo, times10); sheet.addCell(label);
-            number = new Number(8, fila,p.costo); sheet.addCell(number);
-            number = new Number(9, fila,p.cantidad*p.costo); sheet.addCell(number);
+            number = new Number(8, fila, p.costo); sheet.addCell(number);
+            number = new Number(9, fila, p.cantidad * p.costo); sheet.addCell(number);
             label = new Label(10, fila, p.c1, times10); sheet.addCell(label);
             label = new Label(11, fila, p.c2, times10); sheet.addCell(label);
             label = new Label(12, fila, p.c3, times10); sheet.addCell(label);
-            total+= p.cantidad*p.costo
+            total += p.cantidad * p.costo
             fila++
 
         }
         label = new Label(8, fila, "TOTAL", times10); sheet.addCell(label);
-        def number = new Number(9, fila,total); sheet.addCell(number);
+        def number = new Number(9, fila, total); sheet.addCell(number);
         fila++
 
 
@@ -3809,9 +3817,9 @@ class ReportesController {
     }
 
 
-    def aseguradoras(){
+    def aseguradoras() {
         def asg = janus.pac.Aseguradora.list()
-        [asg:asg]
+        [asg: asg]
     }
 
 

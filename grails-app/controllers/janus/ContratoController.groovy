@@ -1,5 +1,6 @@
 package janus
 
+import janus.ejecucion.FormulaPolinomicaContractual
 import org.springframework.dao.DataIntegrityViolationException
 
 class ContratoController extends janus.seguridad.Shield {
@@ -33,24 +34,10 @@ class ContratoController extends janus.seguridad.Shield {
 
 
     def polinomicaContrato() {
-
-//        println(params)
-
-
-        def obra = Obra.get(886)
-
-        def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%')
-
-        def formula = FormulaPolinomica.findAllByObra(obra)
-
-//        println("formula" +  formula)
-//        println("ps" + ps)
-
-        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%')
-
-
-        [ps: ps, cuadrilla: cuadrilla]
-
+        def contrato = Contrato.get(params.id)
+        def ps = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "p%")
+        def cuadrilla = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, 'c%')
+        return [ps: ps, cuadrilla: cuadrilla]
     }
 
     def buscarContrato() {

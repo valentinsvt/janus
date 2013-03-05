@@ -213,7 +213,7 @@
 
                     <div class="span2 formato">Tipo</div>
 
-                    <div class="span3"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContrato?.descripcion}" optionKey="id" optionValue="descripcion"/></div>
+                    <div class="span3"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContratoId}" optionKey="id" optionValue="descripcion"/></div>
 
                     <div class="span2 formato">Fecha de Suscripción</div>
 
@@ -313,12 +313,12 @@
 
                         <ul class="nav">
                             <li>
-                                %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
-                                %{--<i class="icon-pencil"></i>Garantías--}%
-                                %{--</g:link>--}%
-                                %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
+                            %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
+                            %{--<i class="icon-pencil"></i>Garantías--}%
+                            %{--</g:link>--}%
+                            %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
                                 <g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">
-                                    <i class="icon-pencil"> </i> Garantías
+                                    <i class="icon-pencil"></i> Garantías
                                 </g:link>
 
                             </li>
@@ -344,8 +344,11 @@
                         %{--</g:link>--}%
                         %{--</li>--}%
                         %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
-                            <li><a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}"><i class="icon-calendar"></i> F. Polinómica
-                            </a></li>
+                            <li>
+                                <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}">
+                                    <i class="icon-calendar"></i> F. Polinómica
+                                </a>
+                            </li>
 
                             <li>
                                 <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
