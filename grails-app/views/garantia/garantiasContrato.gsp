@@ -253,17 +253,17 @@
 
                         <div class="btn-toolbar hide" id="btnsEdit">
                             <div class="btn-group">
-                                <a href="#" id="btnNew" class="btn btn-warning" rel="tooltip" title="Nuevo">
+                                <a href="#" id="btnNew" class="btn" rel="tooltip" title="Nuevo">
                                     <i class="icon-file icon-large"></i>
                                 </a>
                                 <g:hiddenField name="id"/>
-                                <a href="#" id="btnSave" class="btn btn-primary" rel="tooltip" title="Guardar">
+                                <a href="#" id="btnSave" class="btn" rel="tooltip" title="Guardar">
                                     <i class="icon-save icon-large"></i>
                                 </a>
-                                <a href="#" id="btnRenew" class="btn btn-info" rel="tooltip" title="Renovar">
+                                <a href="#" id="btnRenew" class="btn" rel="tooltip" title="Renovar">
                                     <i class="icon-retweet icon-large"></i>
                                 </a>
-                                <a href="#" id="btnDelete" class="btn btn-danger" rel="tooltip" title="Eliminar">
+                                <a href="#" id="btnDelete" class="btn" rel="tooltip" title="Eliminar">
                                     <i class="icon-trash icon-large"></i>
                                 </a>
                             </div>

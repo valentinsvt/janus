@@ -39,6 +39,9 @@
         <a href="#" class="btn btn-success" id="btnSave">
             <i class="icon-save"></i> Guardar
         </a>
+        <a href="#" class="btn" id="btnRegi">
+            <i class="icon-exchange"></i> Cambiar Estado
+        </a>
     </div>
 </div>
 
@@ -177,10 +180,26 @@
         </div>
 
         <div class="controls">
-            <g:textField name="estado" class="" value="${concursoInstance?.estado}"/>
-            <p class="help-block ui-helper-hidden"></p>
+            %{--<g:textField name="estado" class="" value="${concursoInstance?.estado}" />--}%
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
+            <g:hiddenField name="estado" value="${concursoInstance?.estado}"/>   ${concursoInstance?.estado}
         </div>
     </div>
+
+    %{--<div class="control-group">--}%
+        %{--<div>--}%
+            %{--<span class="control-label label label-inverse">--}%
+                %{--Presupuesto referencial--}%
+            %{--</span>--}%
+        %{--</div>--}%
+
+        %{--<div class="controls">--}%
+            %{--<g:field type="number" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right"   />--}%
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
+        %{--</div>--}%
+    %{--</div>--}%
+
+
 </div>
 
 <div class="span5">
@@ -387,6 +406,26 @@
             submitForm($(".btn-success"));
         }
     });
+
+
+    $("#btnRegi").click(function () {
+
+        var esta = $("#estado").val()
+
+        if(esta =='R'){
+
+            $("#estado").val("N");
+            $("#frmSave-Concurso").submit();
+        }else {
+
+            $("#estado").val("R");
+            $("#frmSave-Concurso").submit();
+
+        }
+
+
+    });
+
 </script>
 </body>
 </html>
