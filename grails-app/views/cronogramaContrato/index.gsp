@@ -1089,7 +1089,7 @@
 
                     var d = "datae=" + dataEco + "&txe=" + ticksXEco + "&tye=" + ticksYEco + "&me=" + maxEco + "&tituloe=" + tituloe + "&colore=" + colore;
                     d += "&dataf=" + dataFis + "&txf=" + ticksXFis + "&tyf=" + ticksYFis + "&mf=" + maxFis + "&titulof=" + titulof + "&colorf=" + colorf;
-                    d += "&obra=${obra.id}";
+                    d += "&obra=${obra.id}&contrato=${contrato.id}";
 
                     var url = "${createLink(action: 'graficos2')}?" + d;
 //                    console.log(url);

@@ -222,7 +222,8 @@ class CronogramaContratoController extends janus.seguridad.Shield {
 //            println it
         }
         def obra = Obra.get(params.obra)
-        return [params: params, obra: obra]
+        def contrato = Contrato.get(params.contrato)
+        return [params: params, contrato: contrato, obra: obra]
     }
 
 //    def list() {
