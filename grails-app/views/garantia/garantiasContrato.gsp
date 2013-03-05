@@ -38,6 +38,15 @@
 
     <body>
 
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="span9 btn-group" role="navigation">
+                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
+                    <i class="icon-double-angle-left"></i>
+                    Contrato
+                </g:link>
+            </div>
+        </div>
+
         <div style="border-bottom: 1px solid black;padding-left: 50px;margin-top: 10px;position: relative;">
             <p class="css-vertical-text">Contrato</p>
 
