@@ -32,7 +32,7 @@
 $("#fechaInicio").datepicker({
 changeMonth: true,
 changeYear: true,
-showOn: "both",
+//showOn: "both",
 buttonImage: "${resource(dir:'images', file:'calendar.png')}",
 buttonImageOnly: true
 });
@@ -55,7 +55,7 @@ buttonImageOnly: true
 $("#fechaFin").datepicker({
 changeMonth: true,
 changeYear: true,
-showOn: "both",
+//showOn: "both",
 buttonImage: "${resource(dir:'images', file:'calendar.png')}",
 buttonImageOnly: true
 });

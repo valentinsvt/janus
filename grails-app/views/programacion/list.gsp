@@ -53,9 +53,9 @@
                     
                         <td>${fieldValue(bean: programacionInstance, field: "descripcion")}</td>
                     
-                        <td><g:formatDate date="${programacionInstance.fechaInicio}" /></td>
+                        <td><g:formatDate date="${programacionInstance.fechaInicio}" format="dd-MM-yyyy" /></td>
                     
-                        <td><g:formatDate date="${programacionInstance.fechaFin}" /></td>
+                        <td><g:formatDate date="${programacionInstance.fechaFin}" format="dd-MM-yyyy"/></td>
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${programacionInstance.id}">

@@ -500,6 +500,7 @@
 
                                             data.id = parts[1];
                                             addRow(data, "selected");
+                                            botones("create");
 //                                            console.log(data);
                                         }
                                     } else {
