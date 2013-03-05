@@ -53,7 +53,12 @@
                               optionValue="descripcion" noSelection="['-1': 'Todos']" style="margin-left: 90px"/>
                 </div>
 
-                <div class="btn-group span1" style="margin-left: 190px; margin-right: 10px">
+                <div class="btn-group span1" style="margin-left: 100px; margin-right: 10px; width: 230px;" data-toggle="buttons-checkbox">
+                    <a href="#" class="btn active" id="reg">Registrados</a>
+                    <a href="#" class="btn active" id="nreg">No registrados</a>
+                </div>
+
+                <div class="btn-group span1" style="margin-left: 5px; margin-right: 10px; width: 200px;">
                     <a href="#" class="btn btn-consultar"><i class="icon-search"></i>Consultar</a>
                     <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i>Guardar</a>
                 </div>
@@ -108,6 +113,20 @@
 //        }
                 var tipo = $("#tipo").val();
 
+                var reg = "";
+                if ($("#reg").hasClass("active")) {
+                    reg += "R";
+                }
+                if ($("#nreg").hasClass("active")) {
+                    reg += "N";
+                }
+
+                if (reg == "") {
+                    $("#reg").addClass("active");
+                    $("#nreg").addClass("active");
+                    reg = "RN";
+                }
+
                 $.ajax({
                     type    : "POST",
                     url     : "${createLink(action:'tabla')}",
@@ -116,6 +135,7 @@
                         fecha : fcha,
                         todos : todos,
                         tipo  : tipo,
+                        reg   : reg,
                         max   : 100,
                         pag   : 1
                     },
@@ -193,7 +213,8 @@
                         data    : data,
                         success : function (msg) {
                             $("#dlgLoad").dialog("close");
-                            var parts = msg.split("_");
+                            var parts = msg.split("_")
+                            1;
                             var ok = parts[0];
                             var no = parts[1];
 

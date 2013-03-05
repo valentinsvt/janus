@@ -73,11 +73,12 @@
                             </td>
 
                             <td style="text-align: center;" class="chk">
-                                <g:if test="${rubro?.registrado == 'N'}">
-                                    <input type="checkbox"/>
+                                %{--${rubro?.registrado}--}%
+                                <g:if test="${rubro?.registrado == 'R'}">
+                                    <i class="icon-ok"></i>
                                 </g:if>
                                 <g:else>
-                                    <i class="icon-ok"></i>
+                                    <input type="checkbox"/>
                                 </g:else>
                             </td>
 
@@ -189,6 +190,20 @@
 
                 function enviar(pag) {
 
+                    var reg = "";
+                    if ($("#reg").hasClass("active")) {
+                        reg += "R";
+                    }
+                    if ($("#nreg").hasClass("active")) {
+                        reg += "N";
+                    }
+
+                    if (reg == "") {
+                        $("#reg").addClass("active");
+                        $("#nreg").addClass("active");
+                        reg = "RN";
+                    }
+
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'tabla')}",
@@ -197,6 +212,7 @@
                             fecha : "${params.fecha}",
                             todos : "${params.todos}",
                             tipo  : "${params.tipo}",
+                            reg   : reg,
                             max   : 100,
                             pag   : pag
                         },
