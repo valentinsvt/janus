@@ -28,6 +28,23 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         return [planillaInstance: planilla]
     }
+    def ordenPago() {
+        def planilla = Planilla.get(params.id)
+        return [planillaInstance: planilla]
+    }
+
+    def saveOrdenPago(){
+        println "save orden pago "+params
+        def planilla = Planilla.get(params.id)
+        planilla.fechaOrdenPago = new Date().parse("dd-MM-yyyy", params.fechaOrdenPago)
+        if (planilla.save(flush: true)){
+            flash.message="Orden de pago registrada"
+            redirect(action: "list",id: planilla.contrato.id)
+        }else{
+            flash.message="Error al registrar la orden de pago"
+            redirect(action: "ordenPago",id: params.id)
+        }
+    }
 
     def savePago() {
         def planilla = Planilla.get(params.id)
@@ -1186,7 +1203,7 @@ println periodos
         }
 //        println planillasAnteriores
 
-        def editable = planilla.fechaPago == null
+        def editable = planilla.fechaOrdenPago == null
         println editable
 
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]

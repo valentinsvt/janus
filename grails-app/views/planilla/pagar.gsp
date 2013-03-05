@@ -215,6 +215,15 @@
         </div>
 
         <g:if test="${planillaInstance?.fechaPago != null}">
+            <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+                <div class="span3" style=" font-weight: bold">
+                    Fecha Orden de pago
+                </div>
+
+                <div class="span3"><g:formatDate date="${planillaInstance?.fechaOrdenPago}" format="dd-MM-yyyy"/>
+
+                </div>
+            </div>
 
             <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
                 <div class="span3" style=" font-weight: bold">

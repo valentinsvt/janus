@@ -51,10 +51,11 @@
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                        <g:sortableColumn property="numero" title="Número"/>
+                        <g:sortableColumn property="numero" title="#"/>
                         <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
                         <g:sortableColumn property="estadoPlanilla" title="Estado"/>
                         <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
+                        <g:sortableColumn property="fechaOrdenPago" title="Fecha orden pago"/>
                         <g:sortableColumn property="fechaPago" title="Fecha pago"/>
                         <g:sortableColumn property="periodoIndices" title="Periodo"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
@@ -64,12 +65,15 @@
                 </thead>
                 <tbody class="paginate">
                     <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
-                        <tr>
+                        <tr style="font-size: 10px">
                             <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
                             <td>${planillaInstance.tipoPlanilla.nombre}</td>
                             <td>${planillaInstance.estadoPlanilla?.nombre}</td>
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
+                            </td>
+                            <td>
+                                <g:formatDate date="${planillaInstance.fechaOrdenPago}" format="dd-MM-yyyy"/>
                             </td>
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaPago}" format="dd-MM-yyyy"/>
@@ -102,16 +106,25 @@
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:if>
-                                <g:if test="${!planillaInstance.fechaPago}">
-                                    <g:link action="pagar" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Pagar" id="${planillaInstance.id}">
+
+                                <g:if test="${!planillaInstance.fechaOrdenPago}">
+                                    <g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">
                                         <i class="icon-money icon-large"></i>
                                     </g:link>
                                 </g:if>
                                 <g:else>
-                                    <g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Pago" id="${planillaInstance.id}">
-                                        <i class="icon-money icon-large"></i>
-                                    </g:link>
+                                    <g:if test="${!planillaInstance.fechaPago}">
+                                        <g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Pagar" id="${planillaInstance.id}">
+                                            <i class="icon-money icon-large"></i>
+                                        </g:link>
+                                    </g:if>
+                                    <g:else>
+                                        <g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Ver pago" id="${planillaInstance.id}">
+                                            <i class="icon-money icon-large"></i>
+                                        </g:link>
+                                    </g:else>
                                 </g:else>
+
                             %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
                             %{--<i class="icon-pencil icon-large"></i>--}%
                             %{--</a>--}%

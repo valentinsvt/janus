@@ -182,7 +182,7 @@ class ReportesController {
             def name = "reporte_de_" + params.titulo.replaceAll(" ", "_") + "_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
 //            println "name "+name
             Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
-            Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+            Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
             Document document
             if (params.landscape)
                 document = new Document(PageSize.A4.rotate());
@@ -3806,6 +3806,12 @@ class ReportesController {
 
         return [tbodyFr: tbodyFr, tbodyP0: tbodyP0, tbodyB0: tbodyB0, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos, detalle: detalle, planillasAnteriores: planillasAnteriores, precios: precios]
 
+    }
+
+
+    def aseguradoras(){
+        def asg = janus.pac.Aseguradora.list()
+        [asg:asg]
     }
 
 

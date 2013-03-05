@@ -126,7 +126,7 @@
             </div>
 
             <div class="controls">
-                <g:select id="tipo" name="tipo.id" from="${janus.pac.TipoAseguradora.list()}" optionKey="id" class="many-to-one " value="${aseguradoraInstance?.tipo?.id}" noSelection="['null': '']"/>
+                <g:select id="tipo" name="tipo.id" from="${janus.pac.TipoAseguradora.list()}" optionKey="id" class="many-to-one " optionValue="descripcion" value="${aseguradoraInstance?.tipo?.id}" noSelection="['null': '']"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

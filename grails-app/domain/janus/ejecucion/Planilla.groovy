@@ -14,6 +14,7 @@ class Planilla {
     Date fechaPresentacion
     Date fechaIngreso
     Date fechaPago
+    Date fechaOrdenPago
     String descripcion
     double valor
     double descuentos
@@ -55,6 +56,7 @@ class Planilla {
             fechaPresentacion column: 'plnlfcpr'
             fechaIngreso column: 'plnlfcig'
             fechaPago column: 'plnlfcpg'
+            fechaOrdenPago column: 'plnlfcod'
             descripcion column: 'plnldscr'
             valor column: 'plnlmnto'
             descuentos column: 'plnldsct'
@@ -105,7 +107,7 @@ class Planilla {
         oficioPago(maxSize: 12, blank: true, nullable: true)
         fechaOficioPago(blank: true, nullable: true)
         aprobado(blank: true, nullable: true)
-
+        fechaOrdenPago(blank:true,nullable: true)
         memoSalida(blank: true, nullable: true)
         fechaMemoSalida(blank: true, nullable: true)
     }

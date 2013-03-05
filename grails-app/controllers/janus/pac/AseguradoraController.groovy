@@ -32,6 +32,9 @@ class AseguradoraController extends janus.seguridad.Shield {
         def aseguradoraInstance
         if (params.id) {
             aseguradoraInstance = Aseguradora.get(params.id)
+            if(params.fechaContacto){
+                params.fechaContacto=new Date().parse("dd-MM-yyyy",params.fechaContacto)
+            }
             if (!aseguradoraInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Aseguradora con id " + params.id

@@ -29,6 +29,10 @@
                     <i class="icon-file"></i>
                     Crear  Aseguradora
                 </a>
+                <a href="#" class="btn btn-primary" id="print" >
+                    <i class="icon-print"></i>
+                    Imprimir
+                </a>
             </div>
             <div class="span3" id="busqueda-Aseguradora"></div>
         </div>
@@ -151,6 +155,10 @@
                     });
                     return false;
                 }); //click btn new
+
+                $("#print").click(function(){
+                    location.href="${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'aseguradoras')}"
+                });
 
                 $(".btn-edit").click(function () {
                     var id = $(this).data("id");
