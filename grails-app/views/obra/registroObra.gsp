@@ -469,7 +469,13 @@
 
     <fieldset>
         <div class="span3">
-            Está seguro de querer cambiar el estado de la obra:<div style="font-weight: bold;">${obra?.nombre} ?</div>
+            Está seguro de querer cambiar el estado de la obra:<div style="font-weight: bold;">${obra?.nombre} ?
+
+        </div>
+            <br>
+            <span style="color: red">
+                Una vez registrada los datos de la obra no podrán ser editados.
+            </span>
 
         </div>
     </fieldset>
@@ -1158,7 +1164,7 @@
             modal     : true,
             draggable : false,
             width     : 350,
-            height    : 220,
+            height    : 260,
             position  : 'center',
             title     : 'Cambiar estado de la Obra',
             buttons   : {
@@ -1168,13 +1174,62 @@
 
                     if (estadoCambiado == 'N') {
                         estadoCambiado = 'R';
-                        $(".estado").val(estadoCambiado);
-                        $("#frm-registroObra").submit();
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${g.createLink(action: 'regitrarObra')}",
+                            data    :"id=${obra?.id}",
+                            success : function (msg) {
+                                console.log(msg)
+                               if(msg!="ok"){
+                                   $.box({
+                                       imageClass : "box_info",
+                                       text       : msg,
+                                       title      : "Errores",
+                                       iconClose  : false,
+                                       dialog     : {
+                                           resizable : false,
+                                           draggable : false,
+                                           width: 900,
+                                           buttons   : {
+                                               "Aceptar" : function () {
+                                               }
+                                           }
+                                       }
+                                   });
+                               }else{
+                                   location.reload(true)
+                               }
+                            }
+                        });
 //
                     } else {
                         estadoCambiado = 'N';
-                        $(".estado").val(estadoCambiado);
-                        $("#frm-registroObra").submit();
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${g.createLink(action: 'desregitrarObra')}",
+                            data    :"id=${obra?.id}",
+                            success : function (msg) {
+                                if(msg!="ok"){
+                                    $.box({
+                                        imageClass : "box_info",
+                                        text       : msg,
+                                        title      : "Errores",
+                                        iconClose  : false,
+                                        dialog     : {
+                                            resizable : false,
+                                            draggable : false,
+                                            width: 900,
+                                            buttons   : {
+                                                "Aceptar" : function () {
+                                                }
+                                            }
+                                        }
+                                    });
+                                }else{
+                                    location.reload(true)
+                                }
+                            }
+                        });
 //
                     }
 //                            $(".estado").val(estadoCambiado);

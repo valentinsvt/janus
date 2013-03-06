@@ -23,6 +23,60 @@ class ObraController extends janus.seguridad.Shield {
     }
 
 
+    def regitrarObra(){
+        def obra = Obra.get(params.id)
+        def obrafp = new ObraFPController()
+        def res = obrafp.verificaMatriz(obra.id)
+        def msg =""
+        if (res!=""){
+            msg = res
+//            println "1 res "+msg
+            render msg
+            return
+        }
+
+        res = obrafp.verifica_precios(obra.id)
+        if (res.size()>0){
+            msg ="<span style='color:red'>Errores detectados</span><br> <span class='label-azul'>No se encontraron precios para los siguientes items:</span><br>"
+            msg+= res.collect{ "<b>ITEM</b>: $it.key ${it.value.join(", <b>Lista</b>: ")}" }.join('<br>')
+            render msg
+            return
+        }
+//        println "2 res "+msg
+
+        def fps = FormulaPolinomica.findAllByObra(obra)
+//        println "fps "+fps
+        def totalP = 0
+        fps.each {fp->
+            if(fp.numero=~"p"){
+//                println "sumo "+fp.numero+"  "+fp.valor
+                totalP+=fp.valor
+            }
+        }
+//        println "totp "+totalP
+        if (totalP!=1.000){
+            render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
+            return
+        }
+
+
+        obraService.registrarObra(obra)
+        obra.estado="R"
+        if (obra.save(flush: true)){
+            render "ok"
+            return
+        }
+    }
+
+    def desregitrarObra(){
+        def obra = Obra.get(params.id)
+        obra.estado="N"
+        if (obra.save(flush: true))
+            render "ok"
+        return
+    }
+
+
     def registroObra() {
 
         def obra
@@ -336,7 +390,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def save() {
 
-
+        println "save "+params
 
         def usuario = session.usuario.id
 
@@ -423,6 +477,7 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
 
         } //es create
+        obraInstance.estado="N"
         if (!obraInstance.save(flush: true)) {
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"
@@ -441,9 +496,7 @@ class ObraController extends janus.seguridad.Shield {
             redirect(action: 'registroObra')
             return
         } else {
-            if (obraInstance.estado == "R")
-                obraService.registrarObra(obraInstance)
-            println "fin registro"
+
         }
 
         if (params.id) {
