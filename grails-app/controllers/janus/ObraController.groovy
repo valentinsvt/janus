@@ -26,8 +26,36 @@ class ObraController extends janus.seguridad.Shield {
     def regitrarObra(){
         def obra = Obra.get(params.id)
         def obrafp = new ObraFPController()
-        def res = obrafp.verificaMatriz(obra.id)
+
         def msg =""
+        def vols = VolumenesObra.findAllByObra(obra)
+        if (vols.size()<1){
+            msg="Error: la obra no tiene volumenes de obra registrados"
+            render msg
+            return
+        }
+        def crono=0
+        vols.each {
+            def tmp = Cronograma.findAllByVolumenObra(it)
+            tmp.each {tm->
+                crono+=tm.porcentaje
+            }
+//            println "tmp "+tmp.volumenObra.id+"  "+tmp.porcentaje+"  "+tmp.precio+"  "+tmp.cantidad
+//            println "crono "+crono
+            if (crono.round(2)!=100.00){
+                msg+="<br><span class='label-azul'>Error:</span> La suma de porcentajes de el volumen de obra: ${it.item.codigo} (${crono.round(2)}) en el cronograma es diferente de 100%"
+
+            }
+            crono=0
+
+
+        }
+        if (msg!=""){
+            render msg
+            return
+        }
+
+        def res = obrafp.verificaMatriz(obra.id)
         if (res!=""){
             msg = res
 //            println "1 res "+msg
@@ -44,6 +72,9 @@ class ObraController extends janus.seguridad.Shield {
         }
 //        println "2 res "+msg
 
+
+
+
         def fps = FormulaPolinomica.findAllByObra(obra)
 //        println "fps "+fps
         def totalP = 0
@@ -58,6 +89,7 @@ class ObraController extends janus.seguridad.Shield {
             render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
             return
         }
+
 
 
         obraService.registrarObra(obra)
