@@ -135,14 +135,14 @@
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span8" style="font-size: 13px">
+            <div class="span8" style="font-size: 12px">
                 <g:set var="nombre" value="${rubro.nombre.replaceAll('<','(menor)')}"></g:set>
                 <g:set var="nombre" value="${rubro.nombre.replaceAll('<','(mayor)')}"></g:set>
                 <b>Descripción:</b> ${nombre}
             </div>
         </div>
     </div>
-    <div style="width: 100%">
+    <div style="width: 100%;margin-top: 10px;">
 
         ${tablaHer}
         ${tablaMano}

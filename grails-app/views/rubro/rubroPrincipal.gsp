@@ -893,9 +893,10 @@
                         if(msg=="ok"){
                             location.href="${createLink(action: 'rubroPrincipal')}"
                         }else{
+//                            console.log(msg)
                             $.box({
                                 imageClass : "box_info",
-                                text       : "Error: el rubro seleccionado no se pudo eliminar. Posiblemente este referenciado en un obra",
+                                text       : "Error: el rubro seleccionado no se pudo eliminar. Esta referenciado en las siguientes obras: <br>"+msg,
                                 title      : "Alerta",
                                 iconClose  : false,
                                 dialog     : {
@@ -905,7 +906,7 @@
                                         "Aceptar" : function () {
                                         }
                                     },
-                                    width     : 500
+                                    width     : 700
                                 }
                             });
                         }
@@ -1416,7 +1417,7 @@
             var desc = $("#input_descripcion").val()
             var subGr = $("#selSubgrupo").val()
             var msg =""
-            console.log(desc,desc.trim(),desc.trim().length)
+//            console.log(desc,desc.trim(),desc.trim().length)
             if(cod.trim().length>20 || cod.trim().length<1){
                 msg="<br>Error: La propiedad código debe tener entre 1 y 20 caracteres."
             }

@@ -362,8 +362,17 @@ class RubroController extends janus.seguridad.Shield {
         def obras = Obra.findAllByChoferOrVolquete(rubroInstance, rubroInstance)
 //        println "vo "+vo
 //        println "obras "+obras
+        def ob = [:]
         if (vo.size() + obras.size() > 0) {
-            render "Error"
+             vo.each {v->
+
+                    ob.put(v.obra.codigo,v.obra.nombre)
+
+             }
+            obras.each {o->
+                ob.put(o.codigo,o.nombre)
+            }
+            render ""+ob.collect{"<span class='label-azul'>"+it.key+"</span>: "+it.value}.join('<br>')
             return
         } else {
             try {
@@ -372,6 +381,9 @@ class RubroController extends janus.seguridad.Shield {
                     it.delete(flush: true)
                 }
                 rubroInstance.delete(flush: true)
+                PrecioRubrosItems.findAllByItem(rubroInstance).each {
+                    it.delete(flush: true)
+                }
                 render "ok"
                 return
             }
@@ -516,7 +528,7 @@ class RubroController extends janus.seguridad.Shield {
 //        println "res "+res
         res.each { r ->
             if (r["parcial_t"] > 0) {
-//                println "en tabla "+r["itemcdgo"]
+//                println "en tabla "+r
                 tabla += "<tr>"
                 tabla += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tabla += "<td>" + r["itemnmbr"] + "</td>"
