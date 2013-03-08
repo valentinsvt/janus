@@ -398,7 +398,7 @@ class RubroController extends janus.seguridad.Shield {
     } //delete
 
     def getPrecios() {
-        println "get precios " + params
+//        println "get precios " + params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -407,7 +407,7 @@ class RubroController extends janus.seguridad.Shield {
         def listas = []
         def conLista = []
         listas = params.listas.split("#")
-        println "listas " + listas
+//        println "listas " + listas
         parts.each {
             if (it.size() > 0) {
                 def item = Rubro.get(it).item
@@ -422,7 +422,7 @@ class RubroController extends janus.seguridad.Shield {
 
         }
         def precios = ""
-        println "items " + items + "  con lista " + conLista
+//        println "items " + items + "  con lista " + conLista
         if (items.size() > 0) {
             precios = preciosService.getPrecioItemsString(fecha, lugar, items)
         }
@@ -440,7 +440,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def getPreciosItem() {
-        println "get precios item " + params
+//        println "get precios item " + params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -449,7 +449,7 @@ class RubroController extends janus.seguridad.Shield {
         def listas = []
         def conLista = []
         listas = params.listas.split("#")
-        println "listas " + listas
+//        println "listas " + listas
         parts.each {
             if (it.size() > 0) {
                 def item = Item.get(it)
@@ -464,7 +464,7 @@ class RubroController extends janus.seguridad.Shield {
 
         }
         def precios = ""
-        println "items " + items + "  con lista " + conLista
+//        println "items " + items + "  con lista " + conLista
         if (items.size() > 0) {
             precios = preciosService.getPrecioItemsString(fecha, lugar, items)
         }
