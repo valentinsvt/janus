@@ -1204,7 +1204,7 @@
                             url     : "${g.createLink(action: 'regitrarObra')}",
                             data    :"id=${obra?.id}",
                             success : function (msg) {
-                                console.log(msg)
+//                                console.log(msg)
                                 if(msg!="ok"){
                                     $.box({
                                         imageClass : "box_info",
