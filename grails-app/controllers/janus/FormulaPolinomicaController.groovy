@@ -233,7 +233,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
         def fp = FormulaPolinomica.findAllByObra(obra)
         if (fp.size() == 0) {
-            def indice21 = Indice.findByCodigo("Cem")
+//            def indice21 = Indice.findByCodigo("Cem")
+            def indice21 = Indice.findByCodigo("Cem-Po")
             def indiSldo = Indice.findByCodigo("SLDO")
             def indiMano = Indice.findByCodigo("MO")
             def indiPeon = Indice.findByCodigo("C.1")

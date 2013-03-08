@@ -1,22 +1,260 @@
 package janus
 
+import com.lowagie.text.*
+import com.lowagie.text.pdf.*
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
 import jxl.Workbook
 import jxl.WorkbookSettings
-import jxl.write.*
+import jxl.write.WritableCellFormat
+import jxl.write.WritableFont
+import jxl.write.WritableSheet
+import jxl.write.WritableWorkbook
+
+import java.awt.*
 
 class Reportes2Controller {
 
     def preciosService
     def dbConnectionService
 
+    static int DOC = 1, ADJ = 2, PAG = 3
+
     def index() {}
 
     def test() {
         return [params: params]
     }
+
+    def reporteRubro() {
+        def obra = Obra.get(params.id)
+        def rubros = VolumenesObra.findAllByObra(obra).item
+        return [obra: obra, rubros: rubros]
+    }
+
+    private static void addEmptyLine(Paragraph paragraph, int number) {
+        for (int i = 0; i < number; i++) {
+            paragraph.add(new Paragraph(" "));
+        }
+    }
+
+    private static int[] arregloEnteros(array) {
+        int[] ia = new int[array.size()]
+        array.eachWithIndex { it, i ->
+            ia[i] = it.toInteger()
+        }
+
+        return ia
+    }
+
+    private static void addCellTabla(PdfPTable table, paragraph, params) {
+        PdfPCell cell = new PdfPCell(paragraph);
+        if (params.border) {
+            cell.setBorderColor(params.border);
+        }
+        if (params.bg) {
+            cell.setBackgroundColor(params.bg);
+        }
+        if (params.colspan) {
+            cell.setColspan(params.colspan);
+        }
+        if (params.align) {
+            cell.setHorizontalAlignment(params.align);
+        }
+        if (params.valign) {
+            cell.setVerticalAlignment(params.valign);
+        }
+        if (params.w) {
+            cell.setBorderWidth(params.w);
+        }
+        table.addCell(cell);
+    }
+
+//    def pagina(PdfContentByte cb, Document document, int pag) {
+//        BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+//        cb.beginText();
+//        cb.setFontAndSize(bf, 9);
+//        cb.showTextAligned(PdfContentByte.ALIGN_CENTER, pag.toString(), (document.right() - 15).toFloat(), (document.bottom() - 10).toFloat(), 0);
+//        cb.endText();
+//    }
+
+    private static void infoText(PdfContentByte cb, Document document, String info, int tipo) {
+        def posx = 0, posy = 0
+
+        switch (tipo) {
+            case DOC:
+                posx = ((document.right() - document.left()) / 2 + document.leftMargin()).toFloat()
+                posy = (document.bottom() - 10).toFloat()
+                break;
+            case ADJ:
+                posx = ((document.right() - document.left()) / 2 + document.leftMargin()).toFloat()
+                posy = (document.top() + 10).toFloat()
+                break;
+            case PAG:
+                posx = (document.right() - 15).toFloat()
+                posy = (document.bottom() - 10).toFloat()
+                break;
+        }
+
+        BaseFont bf = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+        cb.beginText();
+        cb.setFontAndSize(bf, 9);
+        cb.showTextAligned(PdfContentByte.ALIGN_CENTER, info, posx, posy, 0);
+        cb.endText();
+    }
+
+    private static String truncText(String str, int max = 50) {
+        if (str.length() > max) {
+            str = str[0..max - 4] + "..."
+        }
+        return str
+    }
+
+    def reporteRubroIlustracion() {
+        def obra = Obra.get(params.id)
+        def rubros = VolumenesObra.findAllByObra(obra).item
+
+
+        def baos = new ByteArrayOutputStream()
+        def name = "rubros_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        PdfContentByte cb = pdfw.getDirectContent();
+        document.addTitle("Rubros de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, rubros");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", catFont));
+        preface.add(new Paragraph("ANEXO DE ESPECIFICACIÓN DE RUBROS DE LA OBRA " + obra.nombre, catFont));
+        addEmptyLine(preface, 1);
+        Paragraph preface2 = new Paragraph();
+        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        addEmptyLine(preface2, 1);
+        document.add(preface);
+        document.add(preface2);
+
+        def prmsTh = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def prmsTd = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def prmsEs = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5]
+
+        def pagAct = 1
+
+        def rubrosText = "Rubros de la obra " + truncText(obra.nombre)
+
+        rubros.each { rubro ->
+            Paragraph paragraphRubro = new Paragraph();
+            paragraphRubro.add(new Paragraph(rubro.nombre, fontTitle));
+
+            PdfPTable tablaRubro = new PdfPTable(6);
+            tablaRubro.setWidths(arregloEnteros([12, 24, 10, 24, 10, 20]))
+            tablaRubro.setWidthPercentage(100);
+
+            def ext = ""
+            if (rubro.foto) {
+                ext = rubro.foto.split("\\.")
+                ext = ext[ext.size() - 1]
+            }
+
+            addCellTabla(tablaRubro, new Paragraph("Código", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.codigo, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Unidad", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.unidad.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph("", fontTd), prmsTd)
+
+            addCellTabla(tablaRubro, new Paragraph("Fecha creación", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.fecha?.format("dd-MM-yyyy"), fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Fecha modificación", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.fechaModificacion?.format("dd-MM-yyyy"), fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph("", fontTd), prmsTd)
+
+            addCellTabla(tablaRubro, new Paragraph("Solicitante", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.subgrupo?.grupo?.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Grupo", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.subgrupo?.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Subgrupo", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.descripcion, fontTd), prmsTd)
+
+            addCellTabla(tablaRubro, new Paragraph("Especificación", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.especificaciones, fontTd), prmsEs)
+
+            if (ext && ext != "") {
+                def path = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro.foto
+                if (ext.toLowerCase() != 'pdf') {
+                    def maxImageSize = 400
+                    addCellTabla(tablaRubro, new Paragraph("Ilustración", fontTh), prmsTh)
+
+                    def img = Image.getInstance(path);
+                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
+                        img.scaleToFit(maxImageSize, maxImageSize);
+                    }
+                    addCellTabla(tablaRubro, img, prmsEs)
+                    paragraphRubro.add(tablaRubro)
+                    document.add(paragraphRubro);
+
+                    infoText(cb, document, rubrosText, DOC)
+                    infoText(cb, document, pagAct.toString(), PAG)
+                    pagAct++
+                } else {
+                    PdfReader reader = new PdfReader(new FileInputStream(path));
+                    def pages = reader.getNumberOfPages()
+                    addCellTabla(tablaRubro, new Paragraph("Ilustración", fontTh), prmsTh)
+                    addCellTabla(tablaRubro, new Paragraph("- PDF de ${pages} página${pages == 1 ? '' : 's'} adjunto a partir de la siguiente página -", fontTd), prmsTh)
+
+                    paragraphRubro.add(tablaRubro)
+                    document.add(paragraphRubro);
+
+                    infoText(cb, document, rubrosText, DOC)
+                    infoText(cb, document, pagAct.toString(), PAG)
+                    pagAct++
+
+                    pages.times {
+                        document.newPage();
+                        PdfImportedPage page = pdfw.getImportedPage(reader, it + 1);
+                        cb.addTemplate(page, 0, 0);
+
+                        infoText(cb, document, "Especificación del rubro " + truncText(rubro.nombre) + " pág. " + (it + 1) + "/" + pages, ADJ)
+                        infoText(cb, document, rubrosText, DOC)
+                        infoText(cb, document, pagAct.toString(), PAG)
+                        pagAct++
+                    }
+                    document.newPage();
+
+                }
+            } else {
+                paragraphRubro.add(tablaRubro)
+                document.add(paragraphRubro);
+                infoText(cb, document, rubrosText, DOC)
+                infoText(cb, document, pagAct.toString(), PAG)
+                pagAct++
+            }
+            document.newPage();
+        }
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
 
     def tablasPlanilla() {
         def planilla = Planilla.get(params.id)
