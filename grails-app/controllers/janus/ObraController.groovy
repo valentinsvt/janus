@@ -642,6 +642,32 @@ class ObraController extends janus.seguridad.Shield {
         [obraInstance: obraInstance]
     } //show
 
+
+
+
+
+    def crearTipoObra() {
+
+         println(params)
+
+        def tipoObraInstance = new TipoObra(params)
+        if(params.id) {
+            tipoObraInstance = TipoObra.get(params.id)
+            if(!tipoObraInstance) {
+                flash.clase = "alert-error"
+                flash.message =  "No se encontró Tipo Obra con id " + params.id
+                redirect(action:  "list")
+                return
+            }
+        }
+        return [tipoObraInstance: tipoObraInstance]
+    }
+
+
+
+
+
+
     def delete() {
 
         println("delete:" + params.id)
