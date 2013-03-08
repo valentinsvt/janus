@@ -398,7 +398,7 @@ class RubroController extends janus.seguridad.Shield {
     } //delete
 
     def getPrecios() {
-//        println "get precios " + params
+        println "get precios " + params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -522,7 +522,7 @@ class RubroController extends janus.seguridad.Shield {
 
         def tabla = '<table class="table table-bordered table-striped table-condensed table-hover"> '
         def total = 0
-        tabla += "<thead><tr><th colspan=7>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></thead><tbody>"
+        tabla += "<thead><tr><th colspan=8>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Peso</th><th>Vol.</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></thead><tbody>"
 //        println "rends "+rendimientos
 
 //        println "res "+res
@@ -532,7 +532,15 @@ class RubroController extends janus.seguridad.Shield {
                 tabla += "<tr>"
                 tabla += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tabla += "<td>" + r["itemnmbr"] + "</td>"
-                tabla += "<td style='width: 50px;text-align: right'>" + r["itempeso"] + "</td>"
+                if(r["tplscdgo"]=~"P"){
+                    tabla += "<td style='width: 50px;text-align: right'>" + r["itempeso"] + "</td>"
+                    tabla += "<td></td>"
+                }
+                if(r["tplscdgo"]=~"V"){
+                    tabla += "<td></td>"
+                    tabla += "<td style='width: 50px;text-align: right'>" + r["itempeso"] + "</td>"
+                }
+
                 tabla += "<td style='width: 50px;text-align: right'>" + r["rbrocntd"] + "</td>"
                 tabla += "<td style='width: 50px;text-align: right'>" + r["distancia"] + "</td>"
                 tabla += "<td style='width: 50px;text-align: right'>" +  g.formatNumber(number: r["tarifa"],format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec")  + "</td>"
@@ -542,7 +550,7 @@ class RubroController extends janus.seguridad.Shield {
             }
 //            <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"  locale="ec"  />
         }
-        tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${g.formatNumber(number: total,format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec")}</td>"
+        tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${g.formatNumber(number: total,format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec")}</td>"
         tabla += "</tbody></table>"
 
         render(tabla)
