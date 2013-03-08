@@ -2,7 +2,7 @@ package janus.ejecucion
 
 import org.springframework.dao.DataIntegrityViolationException
 
-class TipoMultaController {
+class TipoMultaController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -11,19 +11,17 @@ class TipoMultaController {
     } //index
 
     def list() {
-        println("params:"+params)
-
         [tipoMultaInstanceList: TipoMulta.list(params), params: params]
     } //list
 
     def form_ajax() {
         def tipoMultaInstance = new TipoMulta(params)
-        if (params.id) {
+        if(params.id) {
             tipoMultaInstance = TipoMulta.get(params.id)
-            if (!tipoMultaInstance) {
+            if(!tipoMultaInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Tipo Multa con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Tipo Multa con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -32,9 +30,9 @@ class TipoMultaController {
 
     def save() {
         def tipoMultaInstance
-        if (params.id) {
+        if(params.id) {
             tipoMultaInstance = TipoMulta.get(params.id)
-            if (!tipoMultaInstance) {
+            if(!tipoMultaInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Tipo Multa con id " + params.id
                 redirect(action: 'list')
@@ -52,7 +50,7 @@ class TipoMultaController {
             str += "<ul>"
             tipoMultaInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
+                err.arguments.eachWithIndex {  arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -64,7 +62,7 @@ class TipoMultaController {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Tipo Multa " + tipoMultaInstance.id
         } else {
@@ -78,7 +76,7 @@ class TipoMultaController {
         def tipoMultaInstance = TipoMulta.get(params.id)
         if (!tipoMultaInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Tipo Multa con id " + params.id
+            flash.message =  "No se encontró Tipo Multa con id " + params.id
             redirect(action: "list")
             return
         }
@@ -89,7 +87,7 @@ class TipoMultaController {
         def tipoMultaInstance = TipoMulta.get(params.id)
         if (!tipoMultaInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Tipo Multa con id " + params.id
+            flash.message =  "No se encontró Tipo Multa con id " + params.id
             redirect(action: "list")
             return
         }
@@ -97,12 +95,12 @@ class TipoMultaController {
         try {
             tipoMultaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Multa " + tipoMultaInstance.id
+            flash.message =  "Se ha eliminado correctamente Tipo Multa " + tipoMultaInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Tipo Multa " + (tipoMultaInstance.id ? tipoMultaInstance.id : "")
+            flash.message =  "No se pudo eliminar Tipo Multa " + (tipoMultaInstance.id ? tipoMultaInstance.id : "")
             redirect(action: "list")
         }
     } //delete

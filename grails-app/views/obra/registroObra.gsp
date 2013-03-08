@@ -395,7 +395,7 @@
 
         <div class="span1 formato" style="width: 80px">OFICIO SAL.</div>
 
-        <div class="span3" style="margin-left: 18px"><g:textField name="oficioSalida" class="oficio" value="${obra?.oficioSalida}" maxlength="20"/></div>
+        <div class="span3" style="margin-left: 18px"><g:textField name="oficioSalida" class="oficio" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida"/></div>
 
         <div class="span1 formato">MEMO</div>
 
