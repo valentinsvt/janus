@@ -72,6 +72,91 @@ class TipoObraController extends janus.seguridad.Shield {
         redirect(action: 'list')
     } //save
 
+
+    def checkCodigo () {
+
+
+
+            def tipos = TipoObra.findAllByCodigo(params.codigo)
+            if (tipos.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+
+
+    }
+
+    def checkDesc () {
+
+
+
+        def tipos = TipoObra.findAllByDescripcion(params.descripcion)
+        if (tipos.size() == 0) {
+            render true
+        } else {
+            render false
+        }
+
+
+    }
+
+    def saveTipoObra () {
+        def tipoObraInstance
+        if(params.id) {
+            tipoObraInstance = TipoObra.get(params.id)
+            if(!tipoObraInstance) {
+//                flash.clase = "alert-error"
+//                flash.message = "No se encontró Tipo Obra con id " + params.id
+//                redirect(action: 'list')
+                render "error"
+                return
+            }//no existe el objeto
+            tipoObraInstance.properties = params
+        }//es edit
+        else {
+            tipoObraInstance = new TipoObra(params)
+        } //es create
+        if (!tipoObraInstance.save(flush: true)) {
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Tipo Obra " + (tipoObraInstance.id ? tipoObraInstance.id : "") + "</h4>"
+
+            str += "<ul>"
+            tipoObraInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+
+            flash.message = str
+//            redirect(action: 'list')
+            render "error"
+            return
+        }
+
+//        if(params.id) {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha actualizado correctamente Tipo Obra " + tipoObraInstance.id
+//        } else {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha creado correctamente el Tipo de Obra: " + tipoObraInstance.descripcion
+//        }
+
+        def sel = g.select(name:"tipoObjetivo.id", class:"tipoObjetivo required", from:janus.TipoObra?.list(), value:tipoObraInstance?.id, optionValue:"descripcion", optionKey:"id", style:"margin-left: -60px")
+
+         render sel
+//        redirect(controller: 'obra', action: 'registroObra')
+    } //save
+
+
+
+
+
+
+
     def show_ajax() {
         def tipoObraInstance = TipoObra.get(params.id)
         if (!tipoObraInstance) {

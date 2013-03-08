@@ -76,7 +76,11 @@
     <g:if test="${obra?.estado != 'R'}">
         <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
     </g:if>
+
+    <g:if test="${obra?.id != null}">
+
     <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+    </g:if>
 
     <g:if test="${obra?.departamento?.id == persona?.departamento?.id}">
         <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
@@ -107,7 +111,7 @@
         <div class="span 1 formato">DEPARTAMENTO</div>
 
         <div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" class="departamento" id="departamentoObra"
-                                      value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 310px" disabled="true"/></div>
+                                      value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 310px" disabled="true" title="Departamento actual del usuario"/></div>
 
 
 
@@ -117,14 +121,14 @@
 
             <g:if test="${obra?.estado == null}">
 
-                <g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"  style="width: 30px; font-weight: bold"/>
+                <g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"  style="width: 30px; font-weight: bold" title="Estado de la Obra"/>
                 <g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>
 
             </g:if>
 
             <g:else>
 
-                <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"  style="width: 30px; font-weight: bold"/>
+                <g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"  style="width: 30px; font-weight: bold" title="Estado de la Obra"/>
                 <g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>
 
             </g:else>
@@ -138,11 +142,11 @@
 
         <div class="span3 formato">DOCUMENTO DE REFERENCIA</div>
 
-        <div class="span1"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20" style="width: 90px; margin-left: -50px"/></div>
+        <div class="span1"><g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20" style="width: 90px; margin-left: -50px" title="Número del Oficio de Ingreso"/></div>
 
         <div class="span3 formato">MEMORANDO CANTIDAD DE OBRA</div>
 
-        <div class="span1"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 90px; margin-left: -50px"/></div>
+        <div class="span1"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 90px; margin-left: -50px" title="Memorandum u oficio de cantidad de obra"/></div>
 
         <div class="span1 formato">FECHA</div>
 
@@ -157,38 +161,41 @@
 
     <g:if test="${obra?.codigo != null}">
 
-        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20"/></div>
+        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20"  title="Código de la Obra" /></div>
 
     </g:if>
     <g:else>
 
-        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" maxlength="20"/></div>
+        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" maxlength="20" title="Código de la Obra"/></div>
 
     </g:else>
 
     <div class="span1">Nombre</div>
 
-    <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 608px" value="${obra?.nombre}" maxlength="127"/></div>
+    <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 608px" value="${obra?.nombre}" maxlength="127" title="Nombre de la Obra"/></div>
 </div>
 
 <div class="span12">
     <div class="span1">Programa</div>
 
-    <div class="span3"><g:select name="programacion.id" class="programacion required" from="${janus.Programacion?.list()}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id"/></div>
+    <div class="span3"><g:select name="programacion.id" class="programacion required" from="${janus.Programacion?.list()}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/></div>
 
     <div class="span1">Tipo</div>
 
-    <div class="span3"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id"/></div>
+    <div class="span2" id="divTipoObra"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px" title="Tipo de Obra"/></div>
 
-    <div class="span1">Clase</div>
+    <div class="span2"><a href="#" class="btn btn-info" id="btnCrearTipoObra"><i class="icon-user"></i> Crear Tipo</a></div>
 
-    <div class="span1"><g:select name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id"/></div>
+
+    <div class="span1" style="margin-left: -35px">Clase</div>
+
+    <div class="span1"><g:select name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px" title="Clase de Obra"/></div>
 </div>
 
 <div class="span12">
     <div class="span1">Referencias</div>
 
-    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 610px" value="${obra?.referencia}" maxlength="127"/></div>
+    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 610px" value="${obra?.referencia}" maxlength="127" title="Referencia del Lugar o de la Obra"/></div>
 
     %{--<div class="span1" style="margin-left: 130px">Estado</div>--}%
 
@@ -215,24 +222,24 @@
     <div class="span1">Descripción</div>
 
     <div class="span6"><g:textArea name="descripcion" rows="5" cols="5" class="required"
-                                   style="width: 1007px; height: 72px; resize: none" maxlength="511" value="${obra?.descripcion}"/></div>
+                                   style="width: 1007px; height: 72px; resize: none" maxlength="511" value="${obra?.descripcion}" title="Descripción"/></div>
 </div>
 
 <div class="span12">
 
     <div class="span1">Cantón</div>
     <g:hiddenField name="canton.id" id="hiddenCanton" value="${obra?.comunidad?.parroquia?.canton?.id}"/>
-    <div class="span2"><g:textField name="canton.id" id="cantNombre" class="canton required nowhitespace" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" disabled="true"/></div>
+    <div class="span2"><g:textField name="canton.id" id="cantNombre" class="canton required nowhitespace" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" disabled="true" title="Cantón"/></div>
 
     <div class="span1">Parroquia</div>
 
     <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
-    <div class="span2"><g:textField name="parroquia.id" id="parrNombre" class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" disabled="true"/></div>
+    <div class="span2"><g:textField name="parroquia.id" id="parrNombre" class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" disabled="true" title="Parroquia"/></div>
 
     <div class="span1">Comunidad</div>
 
     <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
-    <div class="span2"><g:textField name="comunidad.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}" style="width: 175px" disabled="true"/></div>
+    <div class="span2"><g:textField name="comunidad.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}" style="width: 175px" disabled="true" title="Comunidad"/></div>
 
 
     <div class="span2"><button class="btn btn-buscar btn-info" id="btn-buscar"><i class="icon-globe"></i> Buscar
@@ -245,11 +252,11 @@
 
     <div class="span1">Sitio</div>
 
-    <div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 300px" maxlength="63"/></div>
+    <div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 300px" maxlength="63" title="Sitio"/></div>
 
     <div class="span1" style="margin-left: -40px">Barrio</div>
 
-    <div class="span3" style="margin-left: -15px"><g:textField name="barrio" class="barrio" value="${obra?.barrio}" style="width: 200px" maxlength="127"/></div>
+    <div class="span3" style="margin-left: -15px"><g:textField name="barrio" class="barrio" value="${obra?.barrio}" style="width: 200px" maxlength="127" title="Barrio"/></div>
 
     <div class="span1" style="margin-left: -25px">Plazo</div>
 
@@ -258,7 +265,7 @@
 
         <div class="span2" style="margin-left: -10px">
             <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
-                         maxlength="3" type="number" value="${'1'}"/> Meses
+                         maxlength="3" type="number" value="${'1'}" title="Plazo de ejecución en meses"/> Meses
         </div>
 
 
@@ -269,7 +276,7 @@
 
         <div class="span2" style="margin-left: -10px">
             <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
-                         maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}"/> Meses
+                         maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}" title="Plazo de ejecución en meses"/> Meses
         </div>
 
 
@@ -280,7 +287,7 @@
 
         <div class="span2" style="margin-left: -30px">
             <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
-                         maxlength="2" type="number" value="${'0'}"/> Días
+                         maxlength="2" type="number" value="${'0'}" title="Plazo de ejecución en días"/> Días
         </div>
 
 
@@ -289,7 +296,7 @@
 
         <div class="span2" style="margin-left: -30px">
             <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
-                         maxlength="2" type="number" value="${obra?.plazoEjecucionDias}"/> Días
+                         maxlength="2" type="number" value="${obra?.plazoEjecucionDias}" title="Plazo de ejecución en días"/> Días
         </div>
 
     </g:else>
@@ -318,11 +325,11 @@
 <div class="span12">
     <div class="span1">Observaciones</div>
 
-    <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;" value="${obra?.observaciones}" maxlength="127"/></div>
+    <div class="span6"><g:textField name="observaciones" class="observaciones" style="width: 610px;" value="${obra?.observaciones}" maxlength="127" title="Observaciones"/></div>
 
     <div class="span1" style="margin-left: 130px">Anticipo</div>
 
-    <div class="span2"><g:textField name="porcentajeAnticipo" type="number" class="anticipo number required" style="width: 70px" value="${obra?.porcentajeAnticipo}" maxlength="3"/> %</div>
+    <div class="span2"><g:textField name="porcentajeAnticipo" type="number" class="anticipo number required" style="width: 70px" value="${obra?.porcentajeAnticipo}" maxlength="3" title="Porcentaje de Anticipo"/> %</div>
 
 </div>
 
@@ -332,7 +339,7 @@
     %{--todo esto es un combo--}%
     %{--<div class="span2" style="margin-right: 70px"><g:textField name="lugar.id" class="lugar" value="${obra?.lugar?.id}" optionKey="id"/></div>--}%
 
-    <div class="span2" style="margin-right: 70px"><g:select name="listaManoObra.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" value="${obra?.listaManoObra?.id}" /></div>
+    <div class="span2" style="margin-right: 70px"><g:select name="listaManoObra.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" value="${obra?.listaManoObra?.id}" title="Precios para Mano de Obra y Equipos"/></div>
 
 
     <div class="span1">Fecha</div>
@@ -344,15 +351,11 @@
 
         <div class="span1" style="margin-left: -20px">Latitud</div>
 
-    %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${obra?.latitud}"  style="width: 100px" /></div>--}%
-
-        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}"/></div>
+        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Latitud de la Obra"/></div>
 
         <div class="span1" style="margin-left: 60px">Longitud</div>
 
-    %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${obra?.longitud}" style="width: 100px" /></div>--}%
-
-        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}"/></div>
+        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Longitud de la Obra"/></div>
 
 
 
@@ -361,11 +364,11 @@
 
         <div class="span1" style="margin-left: -20px">Latitud</div>
 
-        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}"  style="width: 100px" maxlength="11"/></div>
+        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}"  style="width: 100px" maxlength="11" title="Latitud de la Obra"/></div>
 
         <div class="span1" style="margin-left: 60px">Longitud</div>
 
-        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11"/></div>
+        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11" title="Longitud de la Obra"/></div>
 
 
     </g:else>
@@ -396,7 +399,7 @@
 
         <div class="span1 formato">MEMO</div>
 
-        <div class="span3"><g:textField name="memoSalida" class="memoSalida" value="${obra?.memoSalida}" maxlength="20"/></div>
+        <div class="span3"><g:textField name="memoSalida" class="memoSalida" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida"/></div>
 
         <div class="span1 formato">FECHA</div>
 
@@ -408,7 +411,7 @@
     <div class="span12" style="margin-top: 10px">
         <div class="span1 formato">FORMULA</div>
 
-        <div class="span3"><g:textField name="formulaPolinomica" class="formula" value="${obra?.formulaPolinomica}" maxlength="20"/></div>
+        <div class="span3"><g:textField name="formulaPolinomica" class="formula" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica"/></div>
 
 
         %{--<div class="span1 formato">DESTINO</div>--}%
@@ -531,6 +534,8 @@
 
 
 
+
+
 <g:if test="${obra?.id}">
     <div class="navbar navbar-inverse" style="margin-top: 10px;padding-left: 5px;float: left" align="center">
 
@@ -591,6 +596,27 @@
     <div class="modal-footer" id="modal_footer_var">
     </div>
 </div>
+
+
+<div class="modal hide fade mediumModal" id="modal-TipoObra" style=";overflow: hidden;">
+    <div class="modal-header btn-primary">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modalTitle_tipo">
+        </h3>
+    </div>
+
+    <div class="modal-body" id="modalBody_tipo">
+
+    </div>
+
+    <div class="modal-footer" id="modalFooter_tipo">
+    </div>
+</div>
+
+
+
+
 
 <div class="modal grandote hide fade " id="modal-busqueda" style=";overflow: hidden;">
     <div class="modal-header btn-info">
@@ -1039,7 +1065,6 @@
                 type    : "POST",
                 url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
                 data    : {
-                    //TODO CAMBIAR AQUI!!!
                     obra : "${obra?.id}"
                 },
                 success : function (msg) {
@@ -1180,25 +1205,25 @@
                             data    :"id=${obra?.id}",
                             success : function (msg) {
                                 console.log(msg)
-                               if(msg!="ok"){
-                                   $.box({
-                                       imageClass : "box_info",
-                                       text       : msg,
-                                       title      : "Errores",
-                                       iconClose  : false,
-                                       dialog     : {
-                                           resizable : false,
-                                           draggable : false,
-                                           width: 900,
-                                           buttons   : {
-                                               "Aceptar" : function () {
-                                               }
-                                           }
-                                       }
-                                   });
-                               }else{
-                                   location.reload(true)
-                               }
+                                if(msg!="ok"){
+                                    $.box({
+                                        imageClass : "box_info",
+                                        text       : msg,
+                                        title      : "Errores",
+                                        iconClose  : false,
+                                        dialog     : {
+                                            resizable : false,
+                                            draggable : false,
+                                            width: 900,
+                                            buttons   : {
+                                                "Aceptar" : function () {
+                                                }
+                                            }
+                                        }
+                                    });
+                                }else{
+                                    location.reload(true)
+                                }
                             }
                         });
 //
@@ -1279,6 +1304,62 @@
             return false;
         });
 
+
+        var url = "${resource(dir:'images', file:'spinner_24.gif')}";
+        var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
+
+        function submitForm(btn) {
+            if ($("#frmSave-TipoObra").valid()) {
+                btn.replaceWith(spinner);
+            }
+            $("#frmSave-TipoObra").submit();
+        }
+
+
+
+        $("#btnCrearTipoObra").click(function () {
+
+
+
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action:'crearTipoObra')}",
+                success : function (msg) {
+                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                    btnSave.click(function () {
+//                            submitForm(btnSave);
+                        $(this).replaceWith(spinner);
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(controller: 'tipoObra', action:'saveTipoObra')}",
+                            data :  $("#frmSave-TipoObra").serialize(),
+                            success : function (msg) {
+                                if(msg != 'error'){
+                                    $("#divTipoObra").html(msg);
+                                }
+
+                                $("#modal-TipoObra").modal("hide");
+                            }
+                        });
+
+
+
+                        return false;
+                    });
+
+                    $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
+                    $("#modalTitle_tipo").html("Crear Tipo de Obra");
+                    $("#modalBody_tipo").html(msg);
+                    $("#modalFooter_tipo").html("").append(btnOk).append(btnSave);
+                    $("#modal-TipoObra").modal("show");
+                }
+            });
+            return false;
+
+        });
+
         $("#eliminarObraDialog").dialog({
 
             autoOpen  : false,
@@ -1354,6 +1435,9 @@
 
         });
 
+
+
+
         function busqueda() {
 
             var buscarPor = $("#buscarPor").val();
@@ -1382,6 +1466,9 @@
             });
 
         }
+
+
+
 
     });
 </script>
