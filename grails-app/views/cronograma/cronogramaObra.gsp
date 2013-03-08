@@ -861,10 +861,26 @@
                             } else {
                                 var meses = periodoFin - periodoIni + 1;
                                 dol = subtotal * (prct / 100);
-                                dol /= meses;
-                                prct /= meses;
-                                cant /= meses;
+
+                                var dolCalc = dol, prctCalc = prct, cantCalc = cant
+
+//                                dol /= meses;
+//                                prct /= meses;
+//                                cant /= meses;
+
+                                dol = Math.round((dol / meses) * 100) / 100;
+                                prct = Math.round((prct / meses) * 100) / 100;
+                                cant = Math.round((cant / meses) * 100) / 100;
+
                                 for (i = periodoIni; i <= periodoFin; i++) {
+                                    if (i == periodoFin) {
+                                        dol = dolCalc;
+                                        prct = prctCalc;
+                                        cant = cantCalc;
+                                    }
+                                    dolCalc -= dol;
+                                    prctCalc -= prct;
+                                    cantCalc -= cant;
                                     $(".dol.mes" + i + ".rubro" + rubro).text(number_format(dol, 2, ".", ",")).data("val", dol);
                                     $(".prct.mes" + i + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
                                     $(".fis.mes" + i + ".rubro" + rubro).text(number_format(cant, 2, ".", ",")).data("val", cant);
