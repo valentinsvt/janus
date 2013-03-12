@@ -7,6 +7,7 @@ class ObraController extends janus.seguridad.Shield {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     def buscadorService
     def obraService
+    def dbConnectionService
 
 
     def index() {
@@ -23,40 +24,40 @@ class ObraController extends janus.seguridad.Shield {
     }
 
 
-    def regitrarObra(){
+    def regitrarObra() {
         def obra = Obra.get(params.id)
         def obrafp = new ObraFPController()
 
-        def msg =""
+        def msg = ""
         def vols = VolumenesObra.findAllByObra(obra)
-        if (vols.size()<1){
-            msg="Error: la obra no tiene volumenes de obra registrados"
+        if (vols.size() < 1) {
+            msg = "Error: la obra no tiene volumenes de obra registrados"
             render msg
             return
         }
-        def crono=0
+        def crono = 0
         vols.each {
             def tmp = Cronograma.findAllByVolumenObra(it)
-            tmp.each {tm->
-                crono+=tm.porcentaje
+            tmp.each { tm ->
+                crono += tm.porcentaje
             }
 //            println "tmp "+tmp.volumenObra.id+"  "+tmp.porcentaje+"  "+tmp.precio+"  "+tmp.cantidad
 //            println "crono "+crono
-            if (crono.round(2)!=100.00){
-                msg+="<br><span class='label-azul'>Error:</span> La suma de porcentajes de el volumen de obra: ${it.item.codigo} (${crono.round(2)}) en el cronograma es diferente de 100%"
+            if (crono.round(2) != 100.00) {
+                msg += "<br><span class='label-azul'>Error:</span> La suma de porcentajes de el volumen de obra: ${it.item.codigo} (${crono.round(2)}) en el cronograma es diferente de 100%"
 
             }
-            crono=0
+            crono = 0
 
 
         }
-        if (msg!=""){
+        if (msg != "") {
             render msg
             return
         }
 
         def res = obrafp.verificaMatriz(obra.id)
-        if (res!=""){
+        if (res != "") {
             msg = res
 //            println "1 res "+msg
             render msg
@@ -64,28 +65,26 @@ class ObraController extends janus.seguridad.Shield {
         }
 
         res = obrafp.verifica_precios(obra.id)
-        if (res.size()>0){
-            msg ="<span style='color:red'>Errores detectados</span><br> <span class='label-azul'>No se encontraron precios para los siguientes items:</span><br>"
-            msg+= res.collect{ "<b>ITEM</b>: $it.key ${it.value.join(", <b>Lista</b>: ")}" }.join('<br>')
+        if (res.size() > 0) {
+            msg = "<span style='color:red'>Errores detectados</span><br> <span class='label-azul'>No se encontraron precios para los siguientes items:</span><br>"
+            msg += res.collect { "<b>ITEM</b>: $it.key ${it.value.join(", <b>Lista</b>: ")}" }.join('<br>')
             render msg
             return
         }
 //        println "2 res "+msg
 
 
-
-
         def fps = FormulaPolinomica.findAllByObra(obra)
 //        println "fps "+fps
         def totalP = 0
-        fps.each {fp->
-            if(fp.numero=~"p"){
+        fps.each { fp ->
+            if (fp.numero =~ "p") {
 //                println "sumo "+fp.numero+"  "+fp.valor
-                totalP+=fp.valor
+                totalP += fp.valor
             }
         }
 //        println "totp "+totalP
-        if (totalP!=1.000){
+        if (totalP != 1.000) {
             render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
             return
         }
@@ -93,21 +92,48 @@ class ObraController extends janus.seguridad.Shield {
 
 
         obraService.registrarObra(obra)
-        obra.estado="R"
-        if (obra.save(flush: true)){
+        obra.estado = "R"
+        if (obra.save(flush: true)) {
             render "ok"
             return
         }
     }
 
-    def desregitrarObra(){
+    def desregitrarObra() {
         def obra = Obra.get(params.id)
-        obra.estado="N"
+        obra.estado = "N"
         if (obra.save(flush: true))
             render "ok"
         return
     }
 
+    def calculaPlazo() {
+        def obra = Obra.get(params.id)
+
+        def sqlM = "select sbpr__id, itemcdgo, itemnmbr, itemcntd, itemcntd/8 dias from obra_comp(${params.id}) where grpo__id = 2"
+        def sqlR = "select itemcdgo, itemnmbr, unddcdgo, rbrocntd, dias from plazo(${params.id})"
+
+        def cn = dbConnectionService.getConnection()
+        def resultM = cn.rows(sqlM.toString())
+        def resultR = cn.rows(sqlR.toString())
+
+        return [obra: obra, resultM: resultM, resultR: resultR]
+    }
+
+    def savePlazo() {
+        def obra = Obra.get(params.id)
+        obra.plazoEjecucionMeses = params.plazoMeses.toInteger()
+        obra.plazoEjecucionDias = params.plazoDias.toInteger()
+        if (!obra.save(flush: true)) {
+            println "error: " + obra.errors
+            flash.clase = "alert-error"
+            flash.message = "Ha ocurrido un error al modificar el plazo de la obra"
+        } else {
+            flash.clase = "alert-success"
+            flash.message = "Plazo actualizado correctamente"
+        }
+        redirect(action: "registroObra", params: [obra: obra.id])
+    }
 
     def registroObra() {
 
@@ -117,20 +143,27 @@ class ObraController extends janus.seguridad.Shield {
 
         def persona = Persona.get(usuario)
 
+        def matrizOk = false
 
         def prov = Provincia.list();
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
             def subs = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
-
             def volumen = VolumenesObra.findByObra(obra)
-
             def formula = FormulaPolinomica.findByObra(obra)
 
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen]
+            def cn = dbConnectionService.getConnection()
+
+            def sqlMatriz = "select count(*) cuantos from mfcl where obra__id=${params.obra}"
+            def matriz = cn.rows(sqlMatriz.toString())[0].cuantos
+            if (matriz > 0) {
+                matrizOk = true
+            }
+
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk]
         } else {
-            [campos: campos, prov: prov, persona: persona]
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk]
         }
 
 
@@ -422,7 +455,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def save() {
 
-        println "save "+params
+        println "save " + params
 
         def usuario = session.usuario.id
 
@@ -483,7 +516,7 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.departamento = persona.departamento
 
 
-            println("AQUIII"+obraInstance.departamento)
+            println("AQUIII" + obraInstance.departamento)
 
             def par = Parametros.list()
             if (par.size() > 0)
@@ -509,7 +542,7 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
 
         } //es create
-        obraInstance.estado="N"
+        obraInstance.estado = "N"
         if (!obraInstance.save(flush: true)) {
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"
@@ -615,11 +648,11 @@ class ObraController extends janus.seguridad.Shield {
             volumenes.each { volOr ->
                 volumenInstance = new VolumenesObra()
 
-                println("VO:"+volOr)
+                println("VO:" + volOr)
 
                 volumenInstance.properties = volOr.properties
 
-                println("VI:"+volumenInstance)
+                println("VI:" + volumenInstance)
                 //
 
                 volumenInstance.obra = obraInstance
@@ -643,20 +676,17 @@ class ObraController extends janus.seguridad.Shield {
     } //show
 
 
-
-
-
     def crearTipoObra() {
 
-         println(params)
+        println(params)
 
         def tipoObraInstance = new TipoObra(params)
-        if(params.id) {
+        if (params.id) {
             tipoObraInstance = TipoObra.get(params.id)
-            if(!tipoObraInstance) {
+            if (!tipoObraInstance) {
                 flash.clase = "alert-error"
-                flash.message =  "No se encontró Tipo Obra con id " + params.id
-                redirect(action:  "list")
+                flash.message = "No se encontró Tipo Obra con id " + params.id
+                redirect(action: "list")
                 return
             }
         }

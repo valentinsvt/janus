@@ -260,39 +260,32 @@
                     <div class="span1" style="margin-left: -25px">Plazo</div>
 
                     <g:if test="${obra?.plazoEjecucionMeses == null}">
-
                         <div class="span2" style="margin-left: -10px">
                             <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
                                          maxlength="3" type="number" value="${'1'}" title="Plazo de ejecución en meses"/> Meses
                         </div>
-
                     </g:if>
                     <g:else>
-
                         <div class="span2" style="margin-left: -10px">
                             <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
                                          maxlength="3" type="number" value="${obra?.plazoEjecucionMeses}" title="Plazo de ejecución en meses"/> Meses
                         </div>
-
                     </g:else>
-
                     <g:if test="${obra?.plazoEjecucionDias == null}">
-
                         <div class="span2" style="margin-left: -30px">
                             <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
                                          maxlength="2" type="number" value="${'0'}" title="Plazo de ejecución en días"/> Días
                         </div>
-
                     </g:if>
                     <g:else>
-
                         <div class="span2" style="margin-left: -30px">
                             <g:textField name="plazoEjecucionDias" class="plazoDias  plazo required number " max="29" style="width: 28px" data-original="${obra?.plazoEjecucionDias}"
                                          maxlength="2" type="number" value="${obra?.plazoEjecucionDias}" title="Plazo de ejecución en días"/> Días
                         </div>
-
                     </g:else>
-
+                    <g:if test="${matrizOk}">
+                        <g:link action="calculaPlazo" id="${obra.id}" style="margin-left: -85px;" class="btn btn-info">Calcular</g:link>
+                    </g:if>
                 </div>
 
                 <div class="span12" id="filaPersonas">
