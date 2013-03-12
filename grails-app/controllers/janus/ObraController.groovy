@@ -160,7 +160,7 @@ class ObraController extends janus.seguridad.Shield {
             if (matriz > 0) {
                 matrizOk = true
             }
-
+            println matriz + "matriz ok: " + matrizOk
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk]
         } else {
             [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk]
