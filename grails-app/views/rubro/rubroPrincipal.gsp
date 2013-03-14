@@ -466,13 +466,13 @@
                 Canton
             </div>
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_p1" value="0.00">
+                <input type="text" style="width: 50px;" id="dist_p1" value="10.00">
             </div>
             <div class="span4">
                 Materiales Petreos Hormigones
             </div>
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_v1" value="0.00">
+                <input type="text" style="width: 50px;" id="dist_v1" value="20.00">
             </div>
 
         </div>
@@ -481,13 +481,13 @@
                 Especial
             </div>
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_p2" value="0.00">
+                <input type="text" style="width: 50px;" id="dist_p2" value="10.00">
             </div>
             <div class="span4">
                 Materiales Mejoramiento
             </div>
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_v2" value="0.00">
+                <input type="text" style="width: 50px;" id="dist_v2" value="20.00">
             </div>
         </div>
         <div class="row-fluid">
@@ -498,7 +498,7 @@
                 Materiales Carpeta Asfáltica
             </div>
             <div class="span3">
-                <input type="text" style="width: 50px;" id="dist_v3" value="0.00">
+                <input type="text" style="width: 50px;" id="dist_v3" value="20.00">
             </div>
         </div>
         <div class="row-fluid" style="border-bottom: 1px solid black;margin-bottom: 10px">
@@ -511,13 +511,13 @@
                 Canton
             </div>
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_1" noSelection="['-1':'Seleccione..']"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_1" />
             </div>
             <div class="span3">
                 Petreos Hormigones
             </div>
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_3" noSelection="['-1':'Seleccione..']"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_3" />
             </div>
         </div>
         <div class="row-fluid">
@@ -525,14 +525,14 @@
                 Especial
             </div>
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_2" noSelection="['-1':'Seleccione..']"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_2" />
             </div>
 
             <div class="span3">
                 Mejoramiento
             </div>
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_4" noSelection="['-1':'Seleccione..']"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_4" />
             </div>
         </div>
         <div class="row-fluid">
@@ -541,7 +541,7 @@
                 Carpeta Asfáltica
             </div>
             <div class="span4">
-                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_5" noSelection="['-1':'Seleccione..']"/>
+                <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span10" id="lista_5" />
             </div>
         </div>
 
