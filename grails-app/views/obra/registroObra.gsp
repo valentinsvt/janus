@@ -960,7 +960,7 @@
                 });
 
                 $("#btn-aceptar").click(function () {
-                    $(this).replaceWith(spinner);
+//                    $(this).replaceWith(spinner);
                     $("#frm-registroObra").submit();
                 });
 

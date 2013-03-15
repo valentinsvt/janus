@@ -114,6 +114,22 @@ class PersonaController extends janus.seguridad.Shield {
         [usroInstance: usroInstance]
     } //pass
 
+
+    def passOferente() {
+
+        def usroInstance = Persona.get(params.id)
+        if (!usroInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Persona con id " + params.id
+            redirect(action: "list")
+            return
+        }
+        [usroInstance: usroInstance]
+
+
+    }
+
+
     def savePass() {
         println params
         def user = Persona.get(params.id)
@@ -152,11 +168,90 @@ class PersonaController extends janus.seguridad.Shield {
         redirect(action: "list", params: params)
     } //index
 
+
+
+    def cambiarEstado () {
+
+
+
+            def persona = Persona.get(params.id)
+            persona.activo = params.activo.toInteger()
+
+           println("id: " + persona.id)
+           println("activo: " + persona.activo)
+
+            if (persona.save(flush: true))
+                render "ok"
+            flash.message = "El estado de la persona ha sido cambiado!"
+
+//        redirect(action: 'list')
+
+        return
+
+    }
+
+
+
     def list() {
-        [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params]
+
+        def perfil = Prfl.get(4);
+
+
+        def departamento = Departamento.get(13)
+
+////        def perfil1 = Prfl.get(1);
+////
+////        def perfil2 = Prfl.get(2);
+//
+//        def lista = Persona.withCriteria {
+////           ne('sesiones', perfil)
+//
+//            sesiones{
+//
+//                ne('id', 4.toLong())
+//
+//            }
+//
+//        }
+
+
+//        [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params]
+        [personaInstanceList: Persona.findAllByDepartamentoNotEqual(departamento), personaInstanceTotal: Persona.count(), params: params]
     } //list
 
+    def listOferente(){
+
+        def perfil = Prfl.get(4);
+
+
+        [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params, sesion: Sesn.findAllByPerfil(perfil)]
+        //list
+
+    }
+
+
     def form_ajax() {
+
+        def perfilOferente = Prfl.get(4);
+
+        def personaInstance = new Persona(params)
+        if (params.id) {
+            personaInstance = Persona.get(params.id)
+            if (!personaInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Persona con id " + params.id
+                redirect(action: "list")
+                return
+            } //no existe el objeto
+        } //es edit
+        return [personaInstance: personaInstance, perfilOferente: perfilOferente]
+    } //form_ajax
+
+
+
+    def formOferente () {
+
+
         def personaInstance = new Persona(params)
         if (params.id) {
             personaInstance = Persona.get(params.id)
@@ -168,7 +263,10 @@ class PersonaController extends janus.seguridad.Shield {
             } //no existe el objeto
         } //es edit
         return [personaInstance: personaInstance]
-    } //form_ajax
+
+
+    }
+
 
     def save() {
         if (params.fechaInicio) {
@@ -191,6 +289,7 @@ class PersonaController extends janus.seguridad.Shield {
         }
 
         def personaInstance
+
         if (params.id) {
             personaInstance = Persona.get(params.id)
             if (!personaInstance) {
@@ -226,8 +325,154 @@ class PersonaController extends janus.seguridad.Shield {
         //guardo los perfiles de la persona
         //saco los perfiles q ya tiene
         def perfilesAct = Sesn.findAllByUsuario(personaInstance).id*.toString()
+        def perfilesAct2 = Sesn.findAllByUsuario(personaInstance).perfil.id*.toString()
         //perfiles q llegaron como parametro
         def perfilesNue = params.perfiles
+        def perfilesAdd = [], perfilesDel = []
+
+        if (!perfilesAct){
+
+            perfilesAct.each { per ->
+                if (!perfilesNue.contains(per)) {
+                    perfilesDel.add(per)
+                }
+            }
+        }
+        perfilesNue.each { per ->
+            if (!perfilesAct.contains(per)) {
+                perfilesAdd.add(per)
+            }
+        }
+
+        println("por agregar" + perfilesAdd)
+        println("nuevos" + perfilesNue)
+        println("actuales"+ perfilesAct2)
+
+        perfilesNue.each { i->
+
+
+            if (!perfilesAct){
+
+                def sesn = new Sesn()
+                sesn.perfil = Prfl.get(i)
+                sesn.usuario = personaInstance
+                if (!sesn.save(flush: true)) {
+                    println "error al grabar sesn perfil: " + i + " persona " + personaInstance.id
+                }
+            }
+            else {
+
+//                perfilesNue.each{ i->
+
+//                    println("pa: " + perfilesAct2.contains(i))
+
+                    if (!perfilesAct2.contains(i)) {
+
+                        println("entro2")
+
+                        def sesn = new Sesn()
+                        sesn.perfil = Prfl.get(i)
+                        sesn.usuario = personaInstance
+                        if (!sesn.save(flush: true)) {
+                            println "error al grabar sesn perfil: " + i + " persona " + personaInstance.id
+                        }
+                    }
+
+//                }
+
+            }
+
+
+        }
+        perfilesDel.each {
+            def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
+            if (sesn){
+
+                sesn.delete()
+
+            }
+        }
+
+        if (params.id) {
+            flash.clase = "alert-success"
+            flash.message = "Se ha actualizado correctamente Persona " + personaInstance.nombre + " " + personaInstance.apellido
+        } else {
+            flash.clase = "alert-success"
+            flash.message = "Se ha creado correctamente Persona " + personaInstance.nombre + " " + personaInstance.apellido
+        }
+        redirect(action: 'list')
+    } //save
+
+
+    def saveOferente() {
+        if (params.fechaInicio) {
+            params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        }
+        if (params.fechaFin) {
+            params.fechaFin = new Date().parse("dd-MM-yyyy", params.fechaFin)
+        }
+        if (params.fechaNacimiento) {
+            params.fechaNacimiento = new Date().parse("dd-MM-yyyy", params.fechaNacimiento)
+        }
+        if (params.fechaPass) {
+            params.fechaPass = new Date().parse("dd-MM-yyyy", params.fechaPass)
+        }
+        if (params.password) {
+            params.password = params.password.encodeAsMD5()
+        }
+        if (params.autorizacion) {
+            params.autorizacion = params.autorizacion.encodeAsMD5()
+        }
+
+        def personaInstance
+
+        println(params.id)
+
+        if (params.id) {
+            personaInstance = Persona.get(params.id)
+
+            def sesiones = Sesn.findByUsuario(personaInstance)
+
+            if (!personaInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Persona con id " + params.id
+                redirect(action: 'listOferente')
+                return
+            }//no existe el objeto
+            personaInstance.properties = params
+        }//es edit
+        else {
+
+            personaInstance = new Persona(params)
+        } //es create
+        if (!personaInstance.save(flush: true)) {
+
+
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Persona " + (personaInstance.id ? personaInstance.nombre + " " + personaInstance.apellido : "") + "</h4>"
+
+            str += "<ul>"
+            personaInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+
+            flash.message = str
+            redirect(action: 'listOferente')
+            return
+        }
+
+        //guardo los perfiles de la persona
+        //saco los perfiles q ya tiene
+        def perfilesAct = Sesn.findAllByUsuario(personaInstance).id*.toString()
+        //perfiles q llegaron como parametro
+        def perfilesNue = params.perfiles
+
+        println("-->>>" + params.perfiles)
         def perfilesAdd = [], perfilesDel = []
 
         perfilesAct.each { per ->
@@ -242,27 +487,69 @@ class PersonaController extends janus.seguridad.Shield {
         }
 
         perfilesAdd.each {
-            def sesn = new Sesn()
-            sesn.perfil = Prfl.get(it)
-            sesn.usuario = personaInstance
-            if (!sesn.save(flush: true)) {
-                println "error al grabar sesn perfil: " + it + " persona " + personaInstance.id
+
+            def sesiones = Sesn.findAllByUsuario(personaInstance)
+
+//            println("sesiones:" + sesiones.id)
+
+            if (!sesiones){
+
+                println("no")
+
+                def sesn = new Sesn()
+                sesn.perfil = Prfl.get(it)
+                sesn.usuario = personaInstance
+                if (!sesn.save(flush: true)) {
+                    println "error al grabar sesn perfil: " + it + " persona " + personaInstance.id
+                }
+
             }
+
+
+            else {
+
+//                    println("si")
+
+//                    sesiones.usuario.properties = params
+//                    sesiones.save(flush: true){
+//
+//                        println("actualizado");
+//
+//                    }
+
+
+            }
+
         }
         perfilesDel.each {
+
+
             def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
-            sesn.delete()
+            if (sesn){
+
+                sesn.delete()
+            }
+
+
+
         }
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Persona " + personaInstance.nombre + " " + personaInstance.apellido
+            flash.message = "Se ha actualizado correctamente el Oferente " + personaInstance.nombre + " " + personaInstance.apellido
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Persona " + personaInstance.nombre + " " + personaInstance.apellido
+            flash.message = "Se ha creado correctamente el Oferente " + personaInstance.nombre + " " + personaInstance.apellido
         }
-        redirect(action: 'list')
+        redirect(action: 'listOferente')
     } //save
+
+
+
+
+
+
+
 
     def show_ajax() {
         def personaInstance = Persona.get(params.id)
@@ -274,6 +561,23 @@ class PersonaController extends janus.seguridad.Shield {
         }
         [personaInstance: personaInstance]
     } //show
+
+
+
+    def showOferente () {
+
+
+        def personaInstance = Persona.get(params.id)
+        if (!personaInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Persona con id " + params.id
+            redirect(action: "list")
+            return
+        }
+        [personaInstance: personaInstance]
+
+    }
+
 
     def delete() {
         def personaInstance = Persona.get(params.id)
@@ -296,4 +600,5 @@ class PersonaController extends janus.seguridad.Shield {
             redirect(action: "list")
         }
     } //delete
+
 } //fin controller

@@ -41,12 +41,23 @@ class MantenimientoItemsController extends Shield {
             case "item_material":
             case "item_manoObra":
             case "item_equipo":
+
+
                 def tipoLista = Item.get(id).tipoLista
+//                println(tipoLista)
+//
+//                println("id" + id)
+//                println("item:" + Item.get(id))
+
                 if (precios) {
                     if (ignore) {
                         hijos = ["Todos"]
                     } else {
+                            hijos=[]
+                        if (tipoLista){
                         hijos = Lugar.findAllByTipoLista(tipoLista)
+                        }
+
 //                        hijos = Lugar.list([sort: "descripcion"])
 //                        hijos = Lugar.withCriteria {
 //                            and {
@@ -98,11 +109,21 @@ class MantenimientoItemsController extends Shield {
                 case "departamento_manoObra":
                 case "departamento_equipo":
                     hijosH = []
+
+                    def tipoLista = hijo.tipoLista
                     if (precios) {
                         if (ignore) {
                             hijosH = ["Todos"]
                         } else {
-                            hijosH = Lugar.list([sort: "descripcion"])
+
+                            if (tipoLista){
+                                hijosH = Lugar.findAllByTipoLista(tipoLista)
+                            }
+
+                            println("hijosH" + hijosH + " " + hijo)
+
+
+//                            hijosH = Lugar.list([sort: "descripcion"])
 //                            hijosH = Lugar.withCriteria {
 //                                and {
 //                                    order("tipo", "asc")
@@ -136,6 +157,9 @@ class MantenimientoItemsController extends Shield {
                             rel = "lugar_all"
                             liId = "lg_" + id + "_all"
                         } else {
+
+//                            println("entro")
+
                             if (all) {
                                 desc = hijo.descripcion + " (" + hijo.tipo + ")"
                             } else {
@@ -611,7 +635,16 @@ class MantenimientoItemsController extends Shield {
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         } else {
             params.fecha = new Date()
+
         }
+
+        if (!params.tipoLista){
+
+            params.tipoLista = TipoLista.get(6)
+
+
+        }
+
         def accion = "create"
         def item = new Item()
         if (params.id) {

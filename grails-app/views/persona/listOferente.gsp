@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Personas
+            Lista de Oferentes
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,19 +24,13 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Crear  Persona
+                Crear  Oferente
             </a>
-        %{--</div>--}%
 
-    %{--<div class="span12 btn-group" role="navigation">--}%
-        <a href="#" class="btn btn-ajax btn-rol" id="btn-rol">
-            <i class="icon-user"></i>
-            Colocar Rol en la persona
-        </a>
     </div>
 
 
-        <g:form action="delete" name="frmDelete-Persona">
+        <g:form action="delete" name="frmDelete-Oferente">
             <g:hiddenField name="id"/>
         </g:form>
 
@@ -63,48 +57,72 @@
                 </thead>
                 <tbody class="paginate">
 
+                    <g:each in="${sesion}" status="j" var="sesionPerfil">
 
+                        <tr>
 
+                        <td>${sesionPerfil?.usuario?.cedula}</td>
 
-                    <g:each in="${personaInstanceList}" status="i" var="personaInstance">
+                        <td>${sesionPerfil?.usuario?.nombre}</td>
 
-                                        %{--${personaInstanceList?.usuario}--}%
+                        <td>${sesionPerfil?.usuario?.apellido}</td>
 
-                    %{--<g:if test="${personaInstanceList?.sesiones != 'Oferente'}">--}%
+                        <td>${sesionPerfil?.usuario?.login}</td>
 
-                            <tr>
+                        <td>${sesionPerfil?.usuario?.departamento?.descripcion}</td>
 
-                                <td>${fieldValue(bean: personaInstance, field: "cedula")}</td>
+                        <td><g:formatBoolean boolean="${sesionPerfil?.usuario?.activo == 1}" true="Sí" false="No"/></td>
 
-                                <td>${fieldValue(bean: personaInstance, field: "nombre")}</td>
-
-                                <td>${fieldValue(bean: personaInstance, field: "apellido")}</td>
-
-                                <td>${fieldValue(bean: personaInstance, field: "login")}</td>
-
-                                <td>${personaInstance.departamento?.descripcion}</td>
-
-                                <td><g:formatBoolean boolean="${personaInstance.activo == 1}" true="Sí" false="No"/></td>
-
-                                <td>
-                                    <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">
-                                        <i class="icon-zoom-in icon-large"></i>
-                                    </a>
-                                    <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">
-                                        <i class="icon-pencil icon-large"></i>
-                                    </a>
-                                    <a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${personaInstance.id}">
-                                        <i class="icon-lock icon-large"></i>
-                                    </a>
-                                    <a class="btn btn-small btn-cambiarEstado" href="#" rel="tooltip" title="Cambiar Estado" data-id="${personaInstance.id}" data-activo="${personaInstance?.activo}">
-                                        <i class="icon-refresh icon-large"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                    %{--</g:if>--}%
+                            <td>
+                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${sesionPerfil?.usuario?.id}">
+                                    <i class="icon-zoom-in icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${sesionPerfil?.usuario?.id}">
+                                    <i class="icon-pencil icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${sesionPerfil?.usuario?.id}">
+                                    <i class="icon-lock icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-cambiarEstado" href="#" rel="tooltip" title="Cambiar estado" data-id="${sesionPerfil?.usuario?.id}" data-activo="${sesionPerfil?.usuario?.activo}">
+                                    <i class="icon-refresh icon-large"></i>
+                                </a>
+                            </td>
+                        </tr>
 
                     </g:each>
+                    %{--<g:each in="${personaInstanceList}" status="i" var="personaInstance">--}%
 
+
+                        %{--<tr>--}%
+
+                            %{--<td>${fieldValue(bean: personaInstance, field: "cedula")}</td>--}%
+
+                            %{--<td>${fieldValue(bean: personaInstance, field: "nombre")}</td>--}%
+
+                            %{--<td>${fieldValue(bean: personaInstance, field: "apellido")}</td>--}%
+
+                            %{--<td>${fieldValue(bean: personaInstance, field: "login")}</td>--}%
+
+                            %{--<td>${personaInstance.departamento?.descripcion}</td>--}%
+
+                            %{--<td><g:formatBoolean boolean="${personaInstance.activo == 1}" true="Sí" false="No"/></td>--}%
+
+                            %{--<td>--}%
+                                %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">--}%
+                                    %{--<i class="icon-zoom-in icon-large"></i>--}%
+                                %{--</a>--}%
+                                %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">--}%
+                                    %{--<i class="icon-pencil icon-large"></i>--}%
+                                %{--</a>--}%
+                                %{--<a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${personaInstance.id}">--}%
+                                    %{--<i class="icon-lock icon-large"></i>--}%
+                                %{--</a>--}%
+                                %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${personaInstance.id}">--}%
+                                    %{--<i class="icon-trash icon-large"></i>--}%
+                                %{--</a>--}%
+                            %{--</td>--}%
+                        %{--</tr>--}%
+                    %{--</g:each>--}%
                 </tbody>
             </table>
 
@@ -131,10 +149,10 @@
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
             function submitForm(btn) {
-                if ($("#frmSave-Persona").valid()) {
+                if ($("#frmSave-Oferente").valid()) {
                     btn.replaceWith(spinner);
                 }
-                $("#frmSave-Persona").submit();
+                $("#frmSave-Oferente").submit();
             }
 
             $(function () {
@@ -147,7 +165,7 @@
                 $(".btn-new").click(function () {
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(action:'form_ajax')}",
+                        url     : "${createLink(action:'formOferente')}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
@@ -158,7 +176,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Persona");
+                            $("#modalTitle").html("Crear Oferente");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Persona").modal("show");
@@ -171,7 +189,7 @@
                     var id = $(this).data("id");
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(action:'form_ajax')}",
+                        url     : "${createLink(action:'formOferente')}",
                         data    : {
                             id : id
                         },
@@ -185,7 +203,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Persona");
+                            $("#modalTitle").html("Editar Oferente");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Persona").modal("show");
@@ -198,14 +216,14 @@
                     var id = $(this).data("id");
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(action:'show_ajax')}",
+                        url     : "${createLink(action:'showOferente')}",
                         data    : {
                             id : id
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Persona");
+                            $("#modalTitle").html("Ver Oferente");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
                             $("#modal-Persona").modal("show");
@@ -215,18 +233,21 @@
                 }); //click btn show
 
 
+
                 $(".btn-cambiarEstado").click(function () {
 
                     var id = $(this).data("id");
 
+                    console.log("-->>" + id)
+
                     var estado = $(this).data("activo");
 
-                    var activo = 0;
+                    console.log("estado:" + estado)
 
                     if(estado == 0) {
 
 
-                    estado = $(this).data("activo",1)
+//                        estado = $(this).data("activo",1)
 
                         $.ajax({
 
@@ -240,7 +261,7 @@
 
                                 if (msg == 'ok') {
 
-                                    location.href = "${createLink(action: 'list')}"
+                                    location.href = "${createLink(action: 'listOferente')}"
 
                                 }
 
@@ -253,9 +274,9 @@
                     }if(estado == 1) {
 
 
-                        $(this).data("activo", 0)
+//                        $(this).data("activo", 0)
 
-                       $.ajax({
+                        $.ajax({
 
                             type: "POST",
                             url: "${g.createLink(action: 'cambiarEstado')}",
@@ -267,7 +288,7 @@
 
                                 if (msg == 'ok') {
 
-                                    location.href = "${createLink(action: 'list')}"
+                                    location.href = "${createLink(action: 'listOferente')}"
 
                                 }
 
@@ -292,6 +313,8 @@
 
                 });
 
+
+
 //                $(".btn-delete").click(function () {
 //                    var id = $(this).data("id");
 //                    $("#id").val(id);
@@ -300,13 +323,13 @@
 //
 //                    btnDelete.click(function () {
 //                        btnDelete.replaceWith(spinner);
-//                        $("#frmDelete-Persona").submit();
+//                        $("#frmDelete-Oferente").submit();
 //                        return false;
 //                    });
 //
 //                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-//                    $("#modalTitle").html("Eliminar Persona");
-//                    $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Persona?</p>");
+//                    $("#modalTitle").html("Eliminar Oferente");
+//                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Oferente?</p>");
 //                    $("#modalFooter").html("").append(btnOk).append(btnDelete);
 //                    $("#modal-Persona").modal("show");
 //                    return false;
@@ -315,7 +338,7 @@
                     var id = $(this).data("id");
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(action:'pass_ajax')}",
+                        url     : "${createLink(action:'passOferente')}",
                         data    : {
                             id : id
                         },
@@ -329,7 +352,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Cambiar password de la Persona");
+                            $("#modalTitle").html("Cambiar password del Oferente");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Persona").modal("show");
@@ -339,11 +362,6 @@
                 }); //click btn password
 
 
-                $("#btn-rol").click(function () {
-
-                    location.href= "${createLink(controller: 'personaRol', action: 'registroPersonaRol')}"
-
-                });
 
             });
 

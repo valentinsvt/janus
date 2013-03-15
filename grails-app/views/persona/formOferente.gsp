@@ -1,6 +1,6 @@
 <%@ page import="janus.Persona" %>
 
-<g:form class="form-horizontal" name="frmSave-Persona" action="save">
+<g:form class="form-horizontal" name="frmSave-Oferente" action="saveOferente">
     <g:hiddenField name="id" value="${personaInstance?.id}"/>
     <table cellpadding="5">
         <tr>
@@ -64,9 +64,13 @@
                 </span>
             </td>
             <td>
-                <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id" class="many-to-one span2 required"
-                          value="${personaInstance?.departamento?.id}" noSelection="['': '']" optionValue="descripcion"/>
-                <span class="mandatory">*</span>
+                %{--<g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id" class="many-to-one span2"--}%
+                          %{--value="${personaInstance?.departamento?.id}" noSelection="['null': '']" optionValue="descripcion"/>--}%
+
+
+                <g:textField name="departamentoTxt" class="span2" value="${janus.Departamento?.findByDescripcion("OFERENTES")}" readonly="true"/>
+
+                <g:hiddenField name="departamento.id" class="span2" value="${janus.Departamento?.findByDescripcion("OFERENTES")?.id}" optionKey="id"/>
 
                 <p class="help-block ui-helper-hidden"></p>
             </td>
@@ -223,10 +227,9 @@
                 %{--<g:select name="perfiles" class="span2" multiple="" from="${janus.seguridad.Prfl.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre"--}%
                           %{--value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"/>--}%
 
+                <g:textField name="perfilesTxt" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")}" readonly="true"/>
 
-                <g:select name="perfiles" class="span2" multiple="" from="${janus.seguridad.Prfl.findAllByIdNotEqual(4)}" optionKey="id" optionValue="nombre"
-                          value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"
-                         />
+                <g:hiddenField name="perfiles" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")?.id}"/>
 
             </td>
             <td>
@@ -245,7 +248,7 @@
 
 
 <script type="text/javascript">
-    $("#frmSave-Persona").validate({
+    $("#frmSave-Oferente").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
