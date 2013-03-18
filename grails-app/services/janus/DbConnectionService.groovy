@@ -4,7 +4,10 @@ import org.springframework.jdbc.core.JdbcTemplate
 
 class DbConnectionService {
     boolean transactional = false
+
     def dataSource
+    def dataSource_oferentes
+
     public init(){
     }
 
@@ -15,6 +18,10 @@ class DbConnectionService {
     def getConnection(){
 
         Sql sql = new Sql(dataSource)
+        return sql
+    }
+    def getConnectionOferentes(){
+        Sql sql = new Sql(dataSource_oferentes)
         return sql
     }
 

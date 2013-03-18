@@ -1010,8 +1010,7 @@
                                     location.href = url;
                                 },
                                 "Especificaciones" : function () {
-                                    var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
-                                    url += "1";
+                                    var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}";
                                     location.href = url;
                                 }
                             }
