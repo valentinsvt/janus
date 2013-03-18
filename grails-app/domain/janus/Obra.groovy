@@ -1,4 +1,5 @@
 package janus
+
 class Obra implements Serializable {
     Persona responsableObra
     Persona revisor
@@ -33,7 +34,7 @@ class Obra implements Serializable {
     String observaciones
     String tipo
     Date fechaCreacionObra
-    Item  chofer
+    Item chofer
     Item volquete
     String memoCantidadObra
     String memoSalida
@@ -78,6 +79,9 @@ class Obra implements Serializable {
     Lugar listaVolumen1
     Lugar listaVolumen2
     Lugar listaManoObra
+
+    int plazoPersonas = 1
+    int plazoMaquinas = 8
 
     static mapping = {
         table 'obra'
@@ -166,6 +170,9 @@ class Obra implements Serializable {
             listaVolumen1 column: 'lgarvl01'
             listaVolumen2 column: 'lgarvl02'
             listaManoObra column: 'lgarlsmq'
+
+            plazoPersonas column: 'obraplpr'
+            plazoMaquinas column: 'obraplmq'
         }
     }
     static constraints = {
@@ -250,6 +257,7 @@ class Obra implements Serializable {
         distanciaVolumenCarpetaAsfaltica(blank: true, nullable: true, attributes: [title: 'distanciaVolumenCarpetaAsfaltica'])
         barrio(size: 1..127, blank: true, nullable: true, attributes: [title: 'barrio'])
 
-
+        plazoPersonas(attributes: [title: 'Número de integrantes de cuadrillas'])
+        plazoPersonas(attributes: [title: 'Número de equipos completos de maquinaria'])
     }
 }

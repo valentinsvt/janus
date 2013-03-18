@@ -42,83 +42,72 @@
     </head>
 
     <body>
+        <div class="tituloChevere">Plazo de la obra ${obra.nombre}</div>
 
-        <div class="area">
-            <div class="tituloChevere">Plazo de la obra ${obra.nombre}</div>
-
-            <div class="btn-toolbar" style="margin-top: 15px;">
-                <div class="btn-group">
-                    <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn " title="Regresar a la obra">
-                        <i class="icon-arrow-left"></i>
-                        Obra
-                    </a>
-                </div>
-
-                <div class="btn-group">
-
-                    <a href="#" class="btn btn-success" id="btn-save">
-                        <i class="icon-save"></i>
-                        Guardar
-                    </a>
-                    <a href="#" class="btn " id="btn-cancel">
-                        Cancelar
-                    </a>
-                </div>
-
+        <div class="btn-toolbar" style="margin-top: 15px;">
+            <div class="btn-group">
+                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn " title="Regresar a la obra">
+                    <i class="icon-arrow-left"></i>
+                    Obra
+                </a>
             </div>
 
-            <g:form action="savePlazo" method="POST" name="frmPlazo" id="${obra.id}">
-                <div style="height: 35px;">
-                    <div style="float: left; margin-right: 10px;">Aujstar plazo:</div>
+            <div class="btn-group">
+                <a href="#" class="btn btn-success" id="btn-saveParams">
+                    <i class="icon-save"></i>
+                    Guardar
+                </a>
+            </div>
+        </div>
 
+        <g:form action="calculaPlazo" method="POST" name="frmParams" id="${obra.id}">
+            <g:hiddenField name="save" value="0"/>
+            <fieldset>
+                <legend>Ajustar plazo de la obra</legend>
+
+                <div style="height: 35px;">
                     <div class="input-append" style="float: left;margin-right: 10px;">
-                        <g:textField name="plazoMeses" class="input-mini" value="${obra.plazoEjecucionMeses}" data-original="${obra.plazoEjecucionMeses}"/>
+                        <g:textField name="plazoMeses" class="input-mini orig" value="${obra.plazoEjecucionMeses}" data-original="${obra.plazoEjecucionMeses}"/>
                         <span class="add-on">meses</span>
                     </div>
 
                     <div class="input-append" style="float: left;">
-                        <g:textField name="plazoDias" class="input-mini" value="${obra.plazoEjecucionDias}" data-original="${obra.plazoEjecucionDias}"/>
+                        <g:textField name="plazoDias" class="input-mini orig" value="${obra.plazoEjecucionDias}" data-original="${obra.plazoEjecucionDias}"/>
                         <span class="add-on">días</span>
                     </div>
+
+                    %{--<div class="btn-group" style="margin-left: 10px;">--}%
+                    %{--<a href="#" class="btn btn-success" id="btn-save">--}%
+                    %{--<i class="icon-save"></i>--}%
+                    %{--Guardar--}%
+                    %{--</a>--}%
+                    %{--</div>--}%
                 </div>
-            </g:form>
+            </fieldset>
 
-            <div class="tituloTree" style="margin-top: 10px;">Plazos en base a componentes de Mano de Obra</div>
+            <fieldset>
+                <legend>Ajustar parámetros de cálculo de plazo</legend>
 
-            <table class="table table-bordered table-striped table-condensed table-hover">
-                <thead>
-                    <tr>
-                        <th style="width: 20px;">#</th>
-                        <th style="width: 80px;">Código</th>
-                        <th style="width: 600px;">Item</th>
-                        <th style="width: 70px;">Cantidad</th>
-                        <th style="width: 45px;">Días</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <g:set var="max" value="${0}"/>
-                    <g:each in="${resultM}" var="res" status="i">
-                        <tr>
-                            <td>${i + 1}</td>
-                            <td>${res.itemcdgo.trim()}</td>
-                            <td>${res.itemnmbr.trim()}</td>
-                            <td class="num"><g:formatNumber number="${res.itemcntd?:0}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <td class="num"><g:formatNumber number="${res.dias?:0}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <g:if test="${res.dias > max}">
-                                <g:set var="max" value="${res.dias?:0}"/>
-                            </g:if>
-                        </tr>
-                    </g:each>
-                </tbody>
-            </table>
-            <g:set var="meses" value="${Math.floor(max / 30).toInteger()}"/>
-            <g:set var="dias" value="${Math.floor(max - (meses * 30)).toInteger() + (((max - Math.floor(max)) > 0) ? 1 : 0)}"/>
-            Plazo recomendado: <g:formatNumber locale="ec" number="${max}" maxFractionDigits="1"/> días,
-            es decir, <b>${meses} meses y ${dias} días</b>
-            <a href="#" class="btn btn-info apply" data-meses="${meses}" data-dias="${dias}">
-                <i class="icon-ok"></i> Utilizar
-            </a>
-        </div>
+                <div style="height: 35px;">
+                    <div class="input-append" style="float: left;margin-right: 10px;">
+                        <g:textField name="personas" class="input-mini orig" value="${params.personas}" data-original="${obra.plazoPersonas}"/>
+                        <span class="add-on">integrantes de cuadrilla</span>
+                    </div>
+
+                    <div class="input-append" style="float: left;">
+                        <g:textField name="maquinas" class="input-mini orig" value="${params.maquinas}" data-original="${obra.plazoMaquinas}"/>
+                        <span class="add-on">equipos completos de maquinaria</span>
+                    </div>
+
+                    <div class="btn-group" style="margin-left: 10px;">
+                        <a href="#" class="btn btn-info" id="btn-preview">
+                            <i class="icon-eye-open"></i>
+                            Vista Previa
+                        </a>
+                    </div>
+                </div>
+            </fieldset>
+        </g:form>
 
         <div class="area">
             <div class="tituloTree">Plazos en base a la duración de cada rubro</div>
@@ -144,33 +133,80 @@
                             <td>${res.unddcdgo.trim()}</td>
                             <td class="num"><g:formatNumber number="${res.rbrocntd}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
                             <td class="num"><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <g:set var="sum" value="${sum + (res.dias?:0)}"/>
+                            <g:set var="sum" value="${sum + res.dias}"/>
                         </tr>
                     </g:each>
                 </tbody>
             </table>
-            <g:set var="meses" value="${Math.floor(sum / 30).toInteger()}"/>
-            <g:set var="dias" value="${Math.floor(sum - (meses * 30)).toInteger() + (((sum - Math.floor(sum)) > 0) ? 1 : 0)}"/>
-            Plazo recomendado: <g:formatNumber locale="ec" number="${sum}" maxFractionDigits="1"/> días,
-            es decir, <b>${meses} meses y ${dias} días</b>
-            <a href="#" class="btn btn-info apply" data-meses="${meses}" data-dias="${dias}">
-                <i class="icon-ok"></i> Utilizar
-            </a>
+
+            <div style="margin-top:10px;">
+                <g:set var="meses" value="${Math.floor(sum / 30).toInteger()}"/>
+                <g:set var="dias" value="${Math.floor(sum - (meses * 30)).toInteger() + (((sum - Math.floor(sum)) > 0) ? 1 : 0)}"/>
+                Plazo recomendado: <g:formatNumber locale="ec" number="${sum}" maxFractionDigits="1"/> días,
+                es decir, <b>${meses} meses y ${dias} días</b>
+                <a href="#" class="btn btn-info apply" data-meses="${meses}" data-dias="${dias}">
+                    <i class="icon-ok"></i> Utilizar
+                </a>
+            </div>
+        </div>
+
+        <div class="area">
+            <div class="tituloTree" style="margin-top: 10px;">Plazos en base a componentes de Mano de Obra</div>
+
+            <table class="table table-bordered table-striped table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 20px;">#</th>
+                        <th style="width: 80px;">Código</th>
+                        <th style="width: 600px;">Item</th>
+                        <th style="width: 70px;">Cantidad</th>
+                        <th style="width: 45px;">Días</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:set var="max" value="${0}"/>
+                    <g:each in="${resultM}" var="res" status="i">
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${res.itemcdgo.trim()}</td>
+                            <td>${res.itemnmbr.trim()}</td>
+                            <td class="num"><g:formatNumber number="${res.itemcntd}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <td class="num"><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <g:if test="${res.dias > max}">
+                                <g:set var="max" value="${res.dias}"/>
+                            </g:if>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
+            %{--<g:set var="meses" value="${Math.floor(max / 30).toInteger()}"/>--}%
+            %{--<g:set var="dias" value="${Math.floor(max - (meses * 30)).toInteger() + (((max - Math.floor(max)) > 0) ? 1 : 0)}"/>--}%
+            %{--Plazo recomendado: <g:formatNumber locale="ec" number="${max}" maxFractionDigits="1"/> días,--}%
+            %{--es decir, <b>${meses} meses y ${dias} días</b>--}%
+            %{--<a href="#" class="btn btn-info apply" data-meses="${meses}" data-dias="${dias}">--}%
+            %{--<i class="icon-ok"></i> Utilizar--}%
+            %{--</a>--}%
         </div>
 
         <script type="text/javascript">
             $(function () {
+                $("#btn-preview").click(function () {
+                    $("#save").val("0");
+                    $(this).replaceWith(spinner);
+                    $("#frmParams").submit();
+                    return false;
+                });
+
                 $("#btn-save").click(function () {
                     $(this).replaceWith(spinner);
                     $("#frmPlazo").submit();
                     return false;
                 });
-                $("#btn-cancel").click(function () {
-                    var $pm = $("#plazoMeses");
-                    var $pd = $("#plazoDias");
 
-                    $pm.val($pm.data("original"));
-                    $pd.val($pd.data("original"));
+                $("#btn-saveParams").click(function () {
+                    $("#save").val("1");
+                    $(this).replaceWith(spinner);
+                    $("#frmParams").submit();
                     return false;
                 });
 

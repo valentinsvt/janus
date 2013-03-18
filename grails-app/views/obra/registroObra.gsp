@@ -558,7 +558,7 @@
         </g:if>
 
 
-        <div class="modal hide fade mediumModal" id="modal-var" style=";overflow: hidden;">
+        <div class="modal hide fade mediumModal tallModal" id="modal-var" style=";overflow: hidden;">
             <div class="modal-header btn-primary">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -1005,6 +1005,11 @@
                                     location.href = url;
                                 },
                                 "Exportar a Excel" : function () {
+                                    var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
+                                    url += "1";
+                                    location.href = url;
+                                },
+                                "Especificaciones" : function () {
                                     var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
                                     url += "1";
                                     location.href = url;

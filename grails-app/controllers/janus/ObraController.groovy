@@ -110,14 +110,36 @@ class ObraController extends janus.seguridad.Shield {
     def calculaPlazo() {
         def obra = Obra.get(params.id)
 
+        if (!params.personas) params.personas = obra.plazoPersonas
+        if (!params.maquinas) params.maquinas = obra.plazoMaquinas
+        if (!params.save) params.save = "0"
+
         def sqlM = "select sbpr__id, itemcdgo, itemnmbr, itemcntd, itemcntd/8 dias from obra_comp(${params.id}) where grpo__id = 2"
-        def sqlR = "select itemcdgo, itemnmbr, unddcdgo, rbrocntd, dias from plazo(${params.id})"
+        def sqlR = "select itemcdgo, itemnmbr, unddcdgo, rbrocntd, dias from plazo(${params.id},${params.personas},${params.maquinas},${params.save})"
 
         def cn = dbConnectionService.getConnection()
         def resultM = cn.rows(sqlM.toString())
         def resultR = cn.rows(sqlR.toString())
 
-        return [obra: obra, resultM: resultM, resultR: resultR]
+        if (params.save.toString() == "0") {
+            return [obra: obra, resultM: resultM, resultR: resultR, params: params]
+        } else {
+            obra.plazoPersonas = params.personas.toInteger()
+            obra.plazoMaquinas = params.maquinas.toInteger()
+            obra.plazoEjecucionMeses = params.plazoMeses.toInteger()
+            obra.plazoEjecucionDias = params.plazoDias.toInteger()
+
+            if (!obra.save(flush: true)) {
+                println "error: " + obra.errors
+                flash.clase = "alert-error"
+                flash.message = "Ha ocurrido un error al guardar el plazo de la obra"
+                return [obra: obra, resultM: resultM, resultR: resultR, params: params]
+            } else {
+                flash.clase = "alert-success"
+                flash.message = "Plazo actualizado correctamente"
+                redirect(action: "registroObra", params: [obra: obra.id])
+            }
+        }
     }
 
     def savePlazo() {
