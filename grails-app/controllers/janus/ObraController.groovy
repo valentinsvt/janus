@@ -294,7 +294,9 @@ class ObraController extends janus.seguridad.Shield {
 
         def departamento = Departamento.get(params.id)
 
+
         def personas = Persona.findAllByDepartamento(departamento)
+
 
 
         def funcionInsp = Funcion.get(3)

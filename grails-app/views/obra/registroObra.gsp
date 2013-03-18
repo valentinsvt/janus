@@ -745,7 +745,7 @@
             });
 
             function loadPersonas() {
-                var idDep = $(".departamento").val();
+                var idDep = $("#departamentoObra").val();
 
                 var idObra = ${obra?.id}
 
