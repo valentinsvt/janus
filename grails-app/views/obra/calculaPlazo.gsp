@@ -102,10 +102,10 @@
                             <td>${i + 1}</td>
                             <td>${res.itemcdgo.trim()}</td>
                             <td>${res.itemnmbr.trim()}</td>
-                            <td class="num"><g:formatNumber number="${res.itemcntd}" locale="ec" format="###,###" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <td class="num"><g:formatNumber number="${res.dias}" locale="ec" format="###,###" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <td class="num"><g:formatNumber number="${res.itemcntd?:0}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <td class="num"><g:formatNumber number="${res.dias?:0}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
                             <g:if test="${res.dias > max}">
-                                <g:set var="max" value="${res.dias}"/>
+                                <g:set var="max" value="${res.dias?:0}"/>
                             </g:if>
                         </tr>
                     </g:each>
@@ -142,9 +142,9 @@
                             <td>${res.itemcdgo.trim()}</td>
                             <td>${res.itemnmbr.trim()}</td>
                             <td>${res.unddcdgo.trim()}</td>
-                            <td class="num"><g:formatNumber number="${res.rbrocntd}" locale="ec" format="###,###" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <td class="num"><g:formatNumber number="${res.dias}" locale="ec" format="###,###" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <g:set var="sum" value="${sum + res.dias}"/>
+                            <td class="num"><g:formatNumber number="${res.rbrocntd}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <td class="num"><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <g:set var="sum" value="${sum + (res.dias?:0)}"/>
                         </tr>
                     </g:each>
                 </tbody>
