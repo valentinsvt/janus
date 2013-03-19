@@ -9,7 +9,6 @@ class ObraController extends janus.seguridad.Shield {
     def obraService
     def dbConnectionService
 
-
     def index() {
         redirect(action: "list", params: params)
     } //index
