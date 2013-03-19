@@ -4,7 +4,7 @@
     <tr>
         <td class="label">
             <g:message code="parroquia.canton.label"
-                       default="Canton"/>
+                       default="Cantón"/>
         </td>
         <td class="campo">
             %{--<g:link class="linkArbol" tipo="canton_${parroquiaInstance.canton.id}" controller="canton" action="show"--}%
@@ -17,7 +17,7 @@
     <tr>
         <td class="label">
             <g:message code="parroquia.codigo.label"
-                       default="Codigo"/>
+                       default="Código"/>
         </td>
         <td class="campo">
             ${fieldValue(bean: parroquiaInstance, field: "codigo")}

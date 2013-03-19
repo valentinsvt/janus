@@ -126,6 +126,55 @@ class CantonController extends janus.seguridad.Shield {
 
 
                 break;
+
+            case "comunidad":
+
+                def comunidadInstance
+                if (params.id) {
+                    comunidadInstance = Comunidad.get(params.id)
+                    if (!comunidadInstance) {
+                        flash.clase = "alert-error"
+                        return
+                    }//no existe el objeto
+                    comunidadInstance.properties = params
+                }//es edit
+                else {
+                    comunidadInstance = new Comunidad(params)
+                } //es create
+                if (!comunidadInstance.save(flush: true)) {
+                    flash.clase = "alert-error"
+                    def str = "<h4>No se pudo guardar Comunidad " + (comunidadInstance.id ? comunidadInstance.id : "") + "</h4>"
+
+                    str += "<ul>"
+                    comunidadInstance.errors.allErrors.each { err ->
+                        def msg = err.defaultMessage
+                        err.arguments.eachWithIndex {  arg, i ->
+                            msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                        }
+                        str += "<li>" + msg + "</li>"
+                    }
+                    str += "</ul>"
+
+                    flash.message = str
+                    return
+                }
+
+                if (params.id) {
+                    flash.clase = "alert-success"
+                    flash.message = "Se ha actualizado correctamente la Comunidad " + comunidadInstance.nombre
+
+
+
+                } else {
+                    flash.clase = "alert-success"
+                    flash.message = "Se ha creado correctamente la Comunidad " + comunidadInstance.nombre
+                }
+
+
+
+                break;
+
+
         }
 
 
@@ -193,7 +242,7 @@ class CantonController extends janus.seguridad.Shield {
 
                 if (comunidad.size() != 0 && obra.size() != 0 ){
 
-                 render("No se puede borrar la Parroquia " + parroquia.nombre)
+                    render("No se puede borrar la Parroquia " + parroquia.nombre)
 
                 } else {
 
@@ -212,6 +261,34 @@ class CantonController extends janus.seguridad.Shield {
 
 
                 break;
+
+
+            case "comunidad":
+
+                def comunidad = Comunidad.get(params.id)
+
+                def obra = Obra.findAllByComunidad(comunidad)
+
+                params.actionName = "deleteFromTree: Comunidad"
+
+                comunidad.delete(flush:  true)
+                render ("OK")
+
+//                if (comunidad.size() != 0 && obra.size() != 0 ){
+//
+//                    render("No se puede borrar la Parroquia " + parroquia.nombre)
+//
+//                } else {
+//
+//
+//                    comunidad.delete(flush: true)
+//                    render ("OK")
+//
+//                }
+
+
+                break;
+
         }
 
     }
@@ -242,6 +319,26 @@ class CantonController extends janus.seguridad.Shield {
             crear = true
         }
         return [parroquiaInstance: obj, tipo: params.tipo, crear: crear]
+    }
+
+    def editarComunidad = {
+
+        def obj,crear
+        if (params.id){
+            obj =  Comunidad.get(params.id)
+            crear = false
+
+        }else {
+            obj = new Comunidad();
+            obj.parroquia = Parroquia.get(params.padre)
+            crear = true
+
+
+        }
+
+        return [comunidadInstance: obj, tipo: params.tipo, crear: crear]
+
+
     }
 
 
@@ -289,6 +386,12 @@ class CantonController extends janus.seguridad.Shield {
                 if (parroquias.size() > 0) {
                     tree += "<ul type='parroquia'>" // < ul parroquias
                     parroquias.each { parroquia ->
+
+
+                        def comunidades = Comunidad.countByParroquia(parroquia)
+
+                        clase = (comunidades > 0) ? "jstree-closed" : ""
+
                         tree += "<li id='parroquia_" + parroquia.id + "' class='parroquia " + clase + "' rel='parroquia'>" // <li parroquia
                         tree += "<a href='#' id='link_parroquia_" + parroquia.id + "' class='label_arbol'>" + parroquia.nombre + "</a>" // </> a href parroquia
                         tree += "</li>" // </> li parroquia
@@ -296,7 +399,30 @@ class CantonController extends janus.seguridad.Shield {
                     tree += "</ul>" // </> ul parroquias
                 }
                 break;
+            case "parroquia":
+                def parroquia = Parroquia.get(params.id)
+                def comunidades = Comunidad.findAllByParroquia(parroquia, [sort: 'nombre'])
+
+                clase = ""
+                if (comunidades.size() > 0) {
+
+
+                    tree += "<ul type='comunidad'>" // < ul parroquias
+                    comunidades.each { comunidad ->
+                        tree += "<li id='comunidad_" + comunidad.id + "' class='comunidad " + clase + "' rel='comunidad'>" // <li parroquia
+                        tree += "<a href='#' id='link_comunidad_" + comunidad.id + "' class='label_arbol'>" + comunidad.nombre + "</a>" // </> a href parroquia
+                        tree += "</li>" // </> li parroquia
+
+                    }
+                    tree += "</ul>"
+
+                }
+
+
+                break;
+
         }
+
         return tree
     }
 
@@ -316,6 +442,15 @@ class CantonController extends janus.seguridad.Shield {
         def obj = Parroquia.get(params.id)
         return [parroquiaInstance: obj]
     }
+
+    def infoComunidad = {
+
+        def obj = Comunidad.get(params.id)
+        return [comunidadInstance: obj]
+
+    }
+
+
 
     def arbol () {
 

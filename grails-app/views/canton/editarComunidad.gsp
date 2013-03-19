@@ -1,47 +1,54 @@
+
 <g:form action="save" class="frm_editar"
         method="post">
-    <g:hiddenField name="id" value="${cantonInstance?.id}"/>
-    <g:hiddenField name="version" value="${cantonInstance?.version}"/>
+    <g:hiddenField name="id" value="${comunidadInstance?.id}"/>
+    <g:hiddenField name="version" value="${comunidadInstance?.version}"/>
     <g:hiddenField name="tipo" value="${tipo}"/>
 
     <table width="100%" class="ui-widget-content ui-corner-all">
 
         <tbody>
 
-        <tr class="prop ${hasErrors(bean: cantonInstance, field: 'provincia', 'error')}">
+        <tr class="prop ${hasErrors(bean: comunidadInstance, field: 'parroquia', 'error')}">
+
             <td class="l " valign="middle">
-                <g:message code="canton.provincia.label" default="Provincia: "/>
+                <g:message code="comunidad.parroquia.label" default="Parroquia: "/>
             </td>
             <td class="indicator">
                 &nbsp;
             </td>
             <td class="campo" valign="middle">
                 <g:if test="${crear}">
-                    ${cantonInstance?.provincia?.nombre}
-                    <g:hiddenField name="provincia.id" value="${cantonInstance?.provincia?.id}"/>
+                    ${comunidadInstance?.parroquia?.nombre}
+                    <g:hiddenField name="parroquia.id" value="${comunidadInstance?.parroquia?.id}"/>
                 </g:if>
                 <g:else>
-                    <g:select class="field ui-widget-content ui-corner-all" name="provincia.id" from="${janus.Provincia.list()}" optionKey="id" optionValue="nombre"
-                              value="${cantonInstance?.provincia?.id}" noSelection="['null': '']"/>
+                    <g:select class="field ui-widget-content ui-corner-all" name="parroquia.id"
+                              from="${janus.Parroquia.list([sort:'nombre'])}" optionKey="id" value="${comunidadInstance?.parroquia?.id}"
+                              noSelection="['null': '']"/>
                 </g:else>
             </td>
 
-            <td class="l " valign="middle">
-                <g:message code="canton.numero.label" default="Número: "/>
+            <td class="l" valign="middle">
+                <g:message code="comunidad.numero.label" default="Número"/>
             </td>
             <td class="indicator">
                 &nbsp;
             </td>
             <td class="campo" valign="middle">
                 <g:textField name="numero" id="numero"
-                             class="field number ui-widget-content ui-corner-all" value="${cantonInstance?.numero}"/>
+                             class="field number ui-widget-content ui-corner-all"
+                             value="${comunidadInstance?.numero}"/>
             </td>
+
         </tr>
 
-        <tr class="prop ${hasErrors(bean: cantonInstance, field: 'nombre', 'error')}">
+
+
+        <tr class="prop ${hasErrors(bean: comunidadInstance, field: 'nombre', 'error')}">
 
             <td class="l" valign="middle">
-                <g:message code="canton.nombre.label" default="Nombre: "/>
+                <g:message code="comunidad.nombre.label" default="Nombre: "/>
                 %{----}%
             </td>
             <td class="indicator">
@@ -50,16 +57,17 @@
             <td class="campo" valign="middle">
                 <g:textField name="nombre" id="nombre"
                              class="field ui-widget-content ui-corner-all" minLenght="1" maxLenght="63"
-                             value="${cantonInstance?.nombre}"/>
+                             value="${comunidadInstance?.nombre}"/>
                 %{----}%
             </td>
 
         </tr>
 
         </tbody>
+
     </table>
 </g:form>
-</div>
+
 
 <script type="text/javascript">
     $(function() {
@@ -135,10 +143,10 @@
 //                        // If we have a tooltip on this element already, just update its content
 //                            .qtip('option', 'content.text', error);
 //                }
-
-                // If the error is empty, remove the qTip
+//
+//                // If the error is empty, remove the qTip
 //                else {
-////                    elem.qtip('destroy');
+//                    elem.qtip('destroy');
 //                }
             },
             success: $.noop // Odd workaround for errorPlacement not firing!
@@ -148,21 +156,6 @@
 
 
         $(".button").button();
-        $(".home").button("option", "icons", {primary:'ui-icon-home'});
-        $(".list").button("option", "icons", {primary:'ui-icon-clipboard'});
-        $(".show").button("option", "icons", {primary:'ui-icon-bullet'});
-        $(".save").button("option", "icons", {primary:'ui-icon-disk'}).click(function() {
-            myForm.submit();
-            return false;
-        });
-        $(".delete").button("option", "icons", {primary:'ui-icon-trash'}).click(function() {
-            if (confirm("${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}")) {
-                return true;
-            }
-            return false;
-        });
+
     });
 </script>
-
-</body>
-</html>

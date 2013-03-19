@@ -1113,11 +1113,7 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(obra?.plazoEjecucionMeses + " Mes(es)" + " " + obra?.plazoEjecucionDias + " Días", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
-
-        addCellTabla(tablaCoeficiente, new Paragraph("Oficio de Ingreso: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph("Documento de Referencia: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(obra?.oficioIngreso, times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
@@ -1129,21 +1125,14 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-//        addCellTabla(tablaCoeficiente, new Paragraph("Distancia Peso: ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "###.##", locale: "ec"), times10normal), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
-//
-//        addCellTabla(tablaCoeficiente, new Paragraph("Distancia Volumen: ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "###.##", locale: "ec"), times10normal), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         PdfPTable tablaDistancias = new PdfPTable(4);
         tablaDistancias.setWidthPercentage(100);
         tablaDistancias.setWidths(arregloEnteros([25, 25, 25, 25]))
 
-        addCellTabla(tablaDistancias, new Paragraph("Listas Peso", times12bold), prmsHeaderHoja)
+        addCellTabla(tablaDistancias, new Paragraph("Listas de Precios al Peso", times12bold), prmsHeaderHoja)
         addCellTabla(tablaDistancias, new Paragraph(" ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaDistancias, new Paragraph("Distancias Peso ", times12bold), prmsHeaderHoja)
+        addCellTabla(tablaDistancias, new Paragraph("Distancias", times12bold), prmsHeaderHoja)
         addCellTabla(tablaDistancias, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         addCellTabla(tablaDistancias, new Paragraph("Lista Cantón", times10bold), prmsHeaderHoja)
@@ -1170,7 +1159,7 @@ class ReportesController {
 
         addCellTabla(tablaDistancias, new Paragraph("Listas Volumen", times12bold), prmsHeaderHoja)
         addCellTabla(tablaDistancias, new Paragraph(" ", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaDistancias, new Paragraph("Distancias Volumen ", times12bold), prmsHeaderHoja)
+        addCellTabla(tablaDistancias, new Paragraph("Distancias", times12bold), prmsHeaderHoja)
         addCellTabla(tablaDistancias, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         addCellTabla(tablaDistancias, new Paragraph("Lista Materiales Petreos Hormigones", times10bold), prmsHeaderHoja)
@@ -1195,9 +1184,6 @@ class ReportesController {
 //        addCellTabla(tablaDistancias, new Paragraph(obra?.distanciaVolumenCarpetaAsfaltica, times10bold), prmsHeaderHoja)
 
 
-
-
-
         PdfPTable tablaCoeficiente2 = new PdfPTable(3);
         tablaCoeficiente2.setWidthPercentage(100);
         tablaCoeficiente2.setWidths(arregloEnteros([30, 40, 30]))
@@ -1206,7 +1192,7 @@ class ReportesController {
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaCoeficiente2, new Paragraph("Ubicación", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente2, new Paragraph("Ubicación", times12bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
@@ -1248,7 +1234,7 @@ class ReportesController {
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaCoeficiente2, new Paragraph("Datos Generales", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente2, new Paragraph("Datos Generales", times12bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 

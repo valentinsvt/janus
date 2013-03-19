@@ -86,7 +86,9 @@
         zona: "${resource(dir:'images/ico', file:'zona.png')}",
         provincia: "${resource(dir:'images/ico', file:'provincia.png')}",
         canton: "${resource(dir:'images/ico', file:'canton.png')}",
-        parroquia: "${resource(dir:'images/ico', file:'parroquia.png')}"
+        parroquia: "${resource(dir:'images/ico', file:'parroquia.png')}",
+        comunidad: "${resource(dir: 'images/ico', file: 'comunidad.png')}"
+
     };
 
     var lrg_icons = {
@@ -97,7 +99,8 @@
         zona: "${resource(dir:'images/ico', file:'zona_32.png')}",
         provincia: "${resource(dir:'images/ico', file:'provincia_32.png')}",
         canton: "${resource(dir:'images/ico', file:'canton_32.png')}",
-        parroquia: "${resource(dir:'images/ico', file:'parroquia_32.png')}"
+        parroquia: "${resource(dir:'images/ico', file:'parroquia_32.png')}",
+        comunidad: "${resource(dir: 'images/ico', file: 'comunidad.png')}"
     };
 
     function createContextmenu(node) {
@@ -157,7 +160,7 @@
                                 "data": {
                                     "tipo": "parroquia",
                                     "crear": true,
-                                    "padre": idNode
+                                    "padre": idParent
                                 },
                                 "success": function(msg) {
                                     $("#dlg_editar").dialog("option", "title", "Crear parroquia en el cantón " + textNode);
@@ -167,7 +170,30 @@
                             }); //ajax
                         }, //action parroquia
                         "icon": icons.parroquia
-                    } //parroquia
+                    }//parroquia
+                    %{--"comunidad" : {--}%
+                        %{--"label": "Comunidad",--}%
+                        %{--"action": function (obj) {--}%
+                            %{--var url = "${createLink(controller: 'canton', action: 'editar')}";--}%
+                            %{--$.ajax({--}%
+                                %{--"type": "POST",--}%
+                                %{--"url": url,--}%
+                                %{--"data": {--}%
+                                    %{--"tipo": "comunidad",--}%
+                                    %{--"crear": true,--}%
+                                    %{--"padre": idNode--}%
+                                %{--},--}%
+                                %{--"success": function(msg) {--}%
+                                    %{--$("#dlg_editar").dialog("option", "title", "Crear comunidad en la parroquia " + textNode);--}%
+                                    %{--$("#dlg_editar").html(msg);--}%
+                                    %{--$("#dlg_editar").dialog("open");--}%
+                                %{--}--}%
+                            %{--}); //ajax--}%
+                        %{--},--}%
+                        %{--"icon": icons.comunidad--}%
+                    %{--} //parroquia--}%
+
+
                 };
                 break;
             case "parroquia":
@@ -182,7 +208,8 @@
                                 "data": {
                                     "tipo": "parroquia",
                                     "crear": true,
-                                    "padre": idParent
+                                    "padre": idParent,
+                                    "tipoPadre": tipoParent
                                 },
                                 "success": function(msg) {
                                     $("#dlg_editar").dialog("option", "title", "Crear parroquia en el cantón " + textParent);
@@ -192,9 +219,66 @@
                             }); //ajax
                         }, //action parroquia
                         "icon": icons.parroquia
+                    }, //parroquia
+                    "comunidad" : {
+                        "label": "Comunidad",
+                        "action": function (obj) {
+                            var url = "${createLink(controller: 'canton', action: 'editar')}";
+                            $.ajax({
+                                "type": "POST",
+                                "url": url,
+                                "data": {
+                                    "tipo": "comunidad",
+                                    "crear": true,
+                                    "padre": idNode
+
+
+
+                                },
+                                "success": function(msg) {
+                                    $("#dlg_editar").dialog("option", "title", "Crear comunidad en la parroquia " + textNode);
+                                    $("#dlg_editar").html(msg);
+                                    $("#dlg_editar").dialog("open");
+                                }
+                            }); //ajax
+                        },
+                        "icon": icons.comunidad
                     } //parroquia
+
+
                 };
                 break;
+            case "comunidad":
+                submenu = {
+                    "comunidad" : {
+                        "label": "Comunidad",
+                        "action": function (obj) {
+                            var url = "${createLink(controller: 'canton', action: 'editar')}";
+                            $.ajax({
+                                "type": "POST",
+                                "url": url,
+                                "data": {
+                                    "tipo": "comunidad",
+                                    "crear": true,
+//                                    "padre": idNode
+                                    "padre": idParent,
+                                    "tipoPadre": tipoParent
+
+                                },
+                                "success": function(msg) {
+                                    $("#dlg_editar").dialog("option", "title", "Crear comunidad en la parroquia " + textNode);
+                                    $("#dlg_editar").html(msg);
+                                    $("#dlg_editar").dialog("open");
+                                }
+                            }); //ajax
+                        },
+                        "icon": icons.comunidad
+                    } //parroquia
+
+                }
+
+
+
         }
 
 
@@ -273,6 +357,11 @@
                         case "parroquia":
                             str = "Está seguro de querer eliminar esta parroquia?\nEsta acción no se puede deshacer...";
                             break;
+                        case "comunidad":
+                            str = "Está seguro de querer eliminar esta comunidad?\nEsta acción no se puede deshacer...";
+                            break;
+
+
                     }
 
                     if (confirm(str)) {
@@ -363,7 +452,18 @@
                         "icon" : {
                             "image" : icons.parroquia
                         },
-                        "valid_children" : [""]
+                        "valid_children" : ["comunidad"]
+                    },
+                    "comunidad" : {
+                        "icon": {
+
+                            "image" : icons.comunidad
+
+                        },
+                        "valid_children" : [" "]
+
+
+
                     }
                 }
             },
