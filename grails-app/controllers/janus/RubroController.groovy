@@ -125,7 +125,7 @@ class RubroController extends janus.seguridad.Shield {
         } else {
             rubro.fechaModificacion = new Date()
             rubro.save(flush: true)
-            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id + ";" + detalle.item.id + ";" + detalle.cantidad + ";" + detalle.rendimiento + "&" + ((item.tipoLista) ? item.tipoLista?.id : "0")
+            render "" + item.departamento.subgrupo.grupo.id + ";" + detalle.id + ";" + detalle.item.id + ";" + detalle.cantidad + ";" + detalle.rendimiento + ";" + ((item.tipoLista) ? item.tipoLista?.id : "0")
         }
     }
 

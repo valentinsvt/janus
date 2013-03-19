@@ -1541,6 +1541,7 @@
                                 if (parts[0] == "2") {
 
                                     $("#tabla_mano").children().find(".cdgo").each(function () {
+//                                        console.log("mano de obra ",parts)
                                         if ($(this).html() == $("#cdgo_buscar").val()) {
                                             var tdCant = $(this).parent().find(".cant")
                                             var tdRend = $(this).parent().find(".rend")
