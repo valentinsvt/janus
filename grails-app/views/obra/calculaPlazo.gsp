@@ -126,6 +126,7 @@
                 <tbody>
                     <g:set var="sum" value="${0}"/>
                     <g:each in="${resultR}" var="res" status="i">
+                        <g:set var="val" value="${res?.dias?:0}"/>
                         <tr>
                             <td>${i + 1}</td>
                             <td>${res.itemcdgo.trim()}</td>
@@ -133,7 +134,7 @@
                             <td>${res.unddcdgo.trim()}</td>
                             <td class="num"><g:formatNumber number="${res.rbrocntd}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
                             <td class="num"><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <g:set var="sum" value="${sum + res.dias}"/>
+                            <g:set var="sum" value="${sum + val}"/>
                         </tr>
                     </g:each>
                 </tbody>
