@@ -641,6 +641,7 @@
     }
 
     function totalEquipos(){
+//        console.log("tot equipo")
         var trE=$("<tr id='total_equipo' class='total'>")
         var equipos = $("#tabla_equipo").children()
         var totalE= 0
@@ -653,6 +654,7 @@
         }
 
         equipos.each(function(){
+//            console.log("each ",$(this))
             totalE+=parseFloat($(this).find(".col_total").html())
         })
 
@@ -718,13 +720,17 @@
                     tarifa.html(number_format(precio, 5, ".", ""))
                     hora.html(number_format(parseFloat(cant.html())*parseFloat(tarifa.html()), 5, ".", ""))
                     total.html(number_format(parseFloat(hora.html())*parseFloat(rend.html()), 5, ".", ""))
+                    totalEquipos()
+//                    console.log("total herramienta",parseFloat(hora.html())*parseFloat(rend.html()),total)
 
                 }
             });
 
 
+        }else{
+            totalEquipos()
         }
-        totalEquipos()
+
     }
 
 
