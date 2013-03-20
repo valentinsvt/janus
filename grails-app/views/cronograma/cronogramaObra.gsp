@@ -1098,9 +1098,9 @@
                                         } else {
                                             var meses = periodoFin - periodoIni + 1;
 
-                                            var pr = prct / meses;
-                                            var cn = cantCal / meses;
-                                            var pe = precCal / meses;
+                                            var pr = Math.round((prct / meses) * 100) / 100;
+                                            var cn = Math.round((cantCal / meses) * 100) / 100;
+                                            var pe = Math.round((precCal / meses) * 100) / 100;
 
                                             var prRest = prct, cnRest = cantCal, peRest = precCal;
 
