@@ -19,7 +19,7 @@
 </style>
 
 <g:form controller="variables" action="saveVar_ajax" name="frmSave-var">
-    <div id="tabs" style="height: 430px">
+    <div id="tabs" style="height: 455px;">
         <ul>
             <li><a href="#tab-transporte">Variables de Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>

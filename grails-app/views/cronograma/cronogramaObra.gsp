@@ -23,6 +23,10 @@
             background : #C9C9C9;
         }
 
+        .item_f td {
+            border-bottom : solid 2px;
+        }
+
         td {
             vertical-align : middle !important;
         }
@@ -64,20 +68,13 @@
         .graf {
             width  : 870px;
             height : 410px;
-            /*background : #e6e6fa;*/
         }
 
-            /*.btn {*/
-            /*z-index : 9999 !important;*/
-            /*}*/
+        tr, td {
+            height      : 15px !important;
+            line-height : 15px !important;
+        }
 
-            /*.modal-backdrop {*/
-            /*z-index : 9998 !important;*/
-            /*}*/
-
-            /*.modal {*/
-            /*z-index : 9999 !important;*/
-            /*}*/
         </style>
 
     </head>
@@ -85,6 +82,7 @@
     <body>
         %{--Todo excel--}%
         <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
+        <g:set var="plazoOk" value="${detalle.findAll { it.dias && it.dias > 0 }.size() > 0}"/>
         <g:set var="sum" value="${0}"/>
 
         <div class="tituloTree">
@@ -97,7 +95,7 @@
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>
-                <g:if test="${meses > 0}">
+                <g:if test="${meses > 0 && plazoOk}">
                     <a href="#" class="btn disabled" id="btnLimpiarRubro">
                         <i class="icon-check-empty"></i>
                         Limpiar Rubro
@@ -117,7 +115,7 @@
                 </g:if>
             </div>
 
-            <g:if test="${meses > 0}">
+            <g:if test="${meses > 0 && plazoOk}">
                 <div class="btn-group">
                     <a href="#" class="btn" id="btnGrafico">
                         <i class="icon-bar-chart"></i>
@@ -139,7 +137,7 @@
             </g:if>
         </div>
 
-        <g:if test="${meses > 0}">
+        <g:if test="${meses > 0 && plazoOk}">
             <table class="table table-bordered table-condensed table-hover">
                 <thead>
                     <tr>
@@ -160,6 +158,9 @@
                         </th>
                         <th>
                             C.Total
+                        </th>
+                        <th>
+                            Días
                         </th>
                         <th>
                             T.
@@ -208,6 +209,9 @@
                                 <g:set var="sum" value="${sum + parcial}"/>
                             </td>
                             <td>
+                                <g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/>
+                            </td>
+                            <td>
                                 $
                             </td>
                             <g:each in="${0..meses - 1}" var="i">
@@ -230,7 +234,7 @@
                         </tr>
 
                         <tr class="item_prc" data-id="${vol.id}">
-                            <td colspan="6">
+                            <td colspan="7">
                                 &nbsp
                             </td>
                             <td>
@@ -252,7 +256,7 @@
                         </tr>
 
                         <tr class="item_f" data-id="${vol.id}">
-                            <td colspan="6">
+                            <td colspan="7">
                                 &nbsp
                             </td>
                             <td>
@@ -282,6 +286,7 @@
                         <td class="num">
                             <g:formatNumber number="${sum}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                         </td>
+                        <td></td>
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
                             <td class="num mes${i + 1} totalParcial total" data-mes="${i + 1}" data-valor="0">
@@ -293,6 +298,7 @@
                     <tr>
                         <td></td>
                         <td colspan="4">TOTAL ACUMULADO</td>
+                        <td></td>
                         <td></td>
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
@@ -306,6 +312,7 @@
                         <td></td>
                         <td colspan="4">% PARCIAL</td>
                         <td></td>
+                        <td></td>
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
                             <td class="num mes${i + 1} prctParcial total" data-mes="${i + 1}" data-valor="0">
@@ -317,6 +324,7 @@
                     <tr>
                         <td></td>
                         <td colspan="4">% ACUMULADO</td>
+                        <td></td>
                         <td></td>
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
@@ -330,12 +338,27 @@
             </table>
         </g:if>
         <g:else>
-            <div class="alert alert-error">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <i class="icon-warning-sign icon-2x pull-left"></i>
-                <h4>Error</h4>
-                La obra tiene una planificación de 0 meses...Por favor corrija esto para continuar con el cronograma.
-            </div>
+            <g:if test="${meses == 0}">
+                <div class="alert alert-error">
+                    <i class="icon-warning-sign icon-2x pull-left"></i>
+                    <h4>Error</h4>
+                    La obra tiene una planificación de 0 meses...Por favor corrija esto para continuar con el cronograma.
+                </div>
+            </g:if>
+            <g:elseif test="${!plazoOk}">
+                <div class="alert alert-error">
+                    <i class="icon-warning-sign icon-2x pull-left"></i>
+                    <h4>Error</h4>
+
+                    <p>
+                        No se ha calculado el plazo de la obra.
+                    </p>
+
+                    <p>
+                        <g:link controller="obra" action="calculaPlazo" id="${obra.id}" class="btn btn-danger">Calcular</g:link>
+                    </p>
+                </div>
+            </g:elseif>
         </g:else>
 
         <div class="modal hide fade" id="modal-cronograma">
@@ -346,7 +369,7 @@
             </div>
 
             <div class="modal-body" id="modalBody">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="frmRubro">
                     <div class="control-group sm">
                         <div>
                             <span id="num-label" class="control-label label label-inverse">
@@ -417,6 +440,10 @@
                         </div>
                     </div>
                 </form>
+
+                <div id="divRubro">
+                    Múltiples rubros
+                </div>
 
 
                 <div class="well">
@@ -623,6 +650,53 @@
                 return true;
             }
 
+            function validar2() {
+                var periodoIni = $.trim($("#periodosDesde").val());
+                var periodoFin = $.trim($("#periodosHasta").val());
+
+                var $prct = $("#tf_prct");
+
+                var prct = $.trim($prct.val());
+
+                if (periodoIni == "") {
+                    log("Ingrese el periodo inicial");
+                    return false;
+                }
+                if (periodoFin == "") {
+                    log("Ingrese el periodo final");
+                    return false;
+                }
+                if (prct == "") {
+                    log("Ingrese el porcentaje, cantidad o precio");
+                    return false;
+                }
+
+                var maxPrct = $prct.attr("max");
+
+                try {
+                    periodoIni = parseFloat(periodoIni);
+                    periodoFin = parseFloat(periodoFin);
+
+                    if (periodoFin < periodoIni) {
+                        log("El periodo inicial debe ser inferior al periodo final");
+                        return false;
+                    }
+
+                    prct = parseFloat(prct);
+                    maxPrct = parseFloat(maxPrct);
+
+                    if (prct > maxPrct) {
+                        log("El porcentaje debe ser menor que " + maxPrct);
+                        return false;
+                    }
+
+                } catch (e) {
+                    console.log(e);
+                    return false;
+                }
+                return true;
+            }
+
             function validarNum(ev) {
                 /*
                  48-57      -> numeros
@@ -638,20 +712,44 @@
                 return ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 190 || ev.keyCode == 110 || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9);
             }
 
+            function getSelected() {
+                var selected = $(".item_row").filter(".rowSelected");
+                return selected;
+            }
+
             $(function () {
                 updateTotales();
 
                 $("#tabla_material").children("tr").click(function () {
-                    $("#btnLimpiarRubro, #btnDeleteRubro").removeClass("disabled");
-                    $(".rowSelected").removeClass("rowSelected");
-                    $(this).addClass("rowSelected");
-                    if ($(this).hasClass("item_row")) {
-                        $(this).next().addClass("rowSelected").next().addClass("rowSelected");
-                    } else if ($(this).hasClass("item_prc")) {
-                        $(this).next().addClass("rowSelected");
-                        $(this).prev().addClass("rowSelected");
-                    } else if ($(this).hasClass("item_f")) {
-                        $(this).prev().addClass("rowSelected").prev().addClass("rowSelected");
+                    //                    $(".rowSelected").removeClass("rowSelected");
+
+                    if ($(this).hasClass("rowSelected")) {
+                        $(this).removeClass("rowSelected");
+                        if ($(this).hasClass("item_row")) {
+                            $(this).next().removeClass("rowSelected").next().removeClass("rowSelected");
+                        } else if ($(this).hasClass("item_prc")) {
+                            $(this).next().removeClass("rowSelected");
+                            $(this).prev().removeClass("rowSelected");
+                        } else if ($(this).hasClass("item_f")) {
+                            $(this).prev().removeClass("rowSelected").prev().removeClass("rowSelected");
+                        }
+                    } else {
+                        $(this).addClass("rowSelected");
+                        if ($(this).hasClass("item_row")) {
+                            $(this).next().addClass("rowSelected").next().addClass("rowSelected");
+                        } else if ($(this).hasClass("item_prc")) {
+                            $(this).next().addClass("rowSelected");
+                            $(this).prev().addClass("rowSelected");
+                        } else if ($(this).hasClass("item_f")) {
+                            $(this).prev().addClass("rowSelected").prev().addClass("rowSelected");
+                        }
+                    }
+
+                    var sel = getSelected();
+                    if (sel.length == 0) {
+                        $("#btnLimpiarRubro, #btnDeleteRubro").addClass("disabled");
+                    } else {
+                        $("#btnLimpiarRubro, #btnDeleteRubro").removeClass("disabled");
                     }
                 });
 
@@ -718,25 +816,43 @@
                             $("#tf_cant").val("");
                             $("#tf_precio").val("");
                         } else {
-                            try {
-                                prct = parseFloat(prct);
-                                var max = parseFloat($(this).data("max"));
-                                if (prct > max) {
-                                    prct = max;
+                            var $sel = getSelected();
+                            if ($sel.length == 1) {
+                                try {
+                                    prct = parseFloat(prct);
+                                    var max = parseFloat($(this).data("max"));
+                                    if (prct > max) {
+                                        prct = max;
+                                    }
+                                    var $precio = $("#tf_precio");
+                                    var $cant = $("#tf_cant");
+                                    var total = parseFloat($cant.data("total"));
+                                    var val = (prct / 100) * total;
+                                    var dol = $precio.data("max") * (prct / 100);
+                                    $cant.val(number_format(val, 2, ".", "")).data("val", val);
+                                    $precio.val(number_format(dol, 2, ".", "")).data("val", dol);
+                                    if (ev.keyCode != 110 && ev.keyCode != 190) {
+                                        $("#tf_prct").val(prct).data("val", prct);
+                                    }
+                                } catch (e) {
+                                    console.log(e);
                                 }
-                                var $precio = $("#tf_precio");
-                                var $cant = $("#tf_cant");
-                                var total = parseFloat($cant.data("total"));
-                                var val = (prct / 100) * total;
-                                var dol = $precio.data("max") * (prct / 100);
-                                $cant.val(number_format(val, 2, ".", "")).data("val", val);
-                                $precio.val(number_format(dol, 2, ".", "")).data("val", dol);
-                                if (ev.keyCode != 110 && ev.keyCode != 190) {
-                                    $("#tf_prct").val(prct).data("val", prct);
+                            } //if $sel.lenght = 1
+                            else {
+                                try {
+                                    prct = parseFloat(prct);
+                                    if (prct > 100) {
+                                        prct = 100;
+                                    }
+                                    if (ev.keyCode != 110 && ev.keyCode != 190) {
+                                        $("#tf_prct").val(prct).data("val", prct);
+                                        $("#tf_cant").val("").data("val", null);
+                                        $("#tf_precio").val("").data("val", null);
+                                    }
+                                } catch (e) {
+                                    console.log(e);
                                 }
-                            } catch (e) {
-                                console.log(e);
-                            }
+                            } //$sel.lenght > 1
                         }
                     }
                 });
@@ -771,17 +887,15 @@
                     }
                 });
 
-                $(".mes").dblclick(function () {
-                    var $celda = $(this);
+                function clickOne($celda) {
                     var $tr = $celda.parents("tr");
-
                     if ($tr.hasClass("item_prc")) {
                         $tr = $tr.prev();
                     } else if ($tr.hasClass("item_f")) {
                         $tr = $tr.prev().prev();
                     }
 
-//                    console.log($tr);
+                    //                    console.log($tr);
 
                     var mes = $celda.data("mes");
                     var tipo = $celda.data("tipo");
@@ -791,9 +905,13 @@
                     $("#periodosDesde").val(mes);
                     $("#periodosHasta").val("${meses}");
 
-//                    console.log($celda, mes, tipo, valor, rubro);
-//                    console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
+                    //                    console.log($celda, mes, tipo, valor, rubro);
+                    //                    console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
 
+                    $("#divRubro").hide();
+                    $("#frmRubro").show();
+
+                    $("#rd_cant,#tf_cant,#rd_precio,#tf_precio").removeAttr("disabled");
                     $("#rd_cant").attr("checked", true);
 
                     var codigo = $.trim($tr.find(".codigo").text());
@@ -864,9 +982,9 @@
 
                                 var dolCalc = dol, prctCalc = prct, cantCalc = cant
 
-//                                dol /= meses;
-//                                prct /= meses;
-//                                cant /= meses;
+                                //                                dol /= meses;
+                                //                                prct /= meses;
+                                //                                cant /= meses;
 
                                 dol = Math.round((dol / meses) * 100) / 100;
                                 prct = Math.round((prct / meses) * 100) / 100;
@@ -919,8 +1037,126 @@
 
                     $("#modalFooter").html("").append($btnCancel).append($btnOk);
                     $("#modal-cronograma").modal("show");
+                }
 
-                });
+                $(".mes").dblclick(function () {
+                    var $sel = getSelected();
+                    var $celda = $(this);
+
+                    if ($sel.length == 1) {
+                        clickOne($celda);
+                    } else {
+                        if ($sel.length > 1) {
+                            var mes = $celda.data("mes");
+                            $("#rd_cant,#tf_cant,#rd_precio,#tf_precio").attr("disabled", "true");
+                            $("#periodosDesde").val(mes);
+                            $("#periodosHasta").val("${meses}");
+                            $("#rd_prct").attr("checked", true);
+
+                            $("#frmRubro").hide();
+                            $("#divRubro").show();
+
+                            $("#tf_prct").data({
+                                max   : 100,
+                                total : 100
+                            }).val("");
+
+                            $("#spCant").text("");
+                            $("#spPrecio").text("");
+                            $("#spPrct").text(100);
+
+                            var $btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                            var $btnOk = $('<a href="#" class="btn btn-success">Aceptar</a>');
+
+                            $btnOk.click(function () {
+                                if (validar2()) {
+                                    $btnOk.replaceWith(spinner);
+
+                                    var dataAjax = "";
+
+                                    var periodoIni = parseInt($("#periodosDesde").val());
+                                    var periodoFin = parseInt($("#periodosHasta").val());
+
+                                    var prct = $("#tf_prct").data("val");
+
+                                    $sel.each(function () {
+                                        var $tr = $(this);
+
+                                        var rubro = $tr.data("id");
+
+                                        var cantTot = $tr.find(".cantidad").data("valor");
+                                        var precTot = $tr.find(".subtotal").data("valor");
+
+                                        var cantCal = cantTot * (prct / 100);
+                                        var precCal = precTot * (prct / 100);
+
+                                        if (periodoIni == periodoFin) {
+                                            $(".dol.mes" + periodoIni + ".rubro" + rubro).text(number_format(precCal, 2, ".", ",")).data("val", precCal);
+                                            $(".prct.mes" + periodoIni + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
+                                            $(".fis.mes" + periodoIni + ".rubro" + rubro).text(number_format(cantCal, 2, ".", ",")).data("val", cantCal);
+                                            dataAjax += "crono=" + rubro + "_" + periodoIni + "_" + precCal + "_" + prct + "_" + cantCal;
+                                        } else {
+                                            var meses = periodoFin - periodoIni + 1;
+
+                                            var pr = prct / meses;
+                                            var cn = cantCal / meses;
+                                            var pe = precCal / meses;
+
+                                            var prRest = prct, cnRest = cantCal, peRest = precCal;
+
+                                            for (var i = periodoIni; i <= periodoFin; i++) {
+                                                if (i == periodoFin) {
+                                                    pr = prRest;
+                                                    cn = cnRest;
+                                                    pe = peRest;
+                                                }
+                                                prRest -= pr;
+                                                cnRest -= cn;
+                                                peRest -= pe;
+
+                                                $(".dol.mes" + i + ".rubro" + rubro).text(number_format(pe, 2, ".", ",")).data("val", pe);
+                                                $(".prct.mes" + i + ".rubro" + rubro).text(number_format(pr, 2, ".", ",")).data("val", pr);
+                                                $(".fis.mes" + i + ".rubro" + rubro).text(number_format(cn, 2, ".", ",")).data("val", cn);
+
+                                                dataAjax += "crono=" + rubro + "_" + i + "_" + pe + "_" + pr + "_" + cn + "&";
+                                            }
+                                        }
+                                    });
+
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'saveCrono_ajax')}",
+                                        data    : dataAjax,
+                                        success : function (msg) {
+                                            var parts = msg.split("_");
+                                            if (parts[0] == "OK") {
+                                                parts = parts[1].split(";");
+                                                for (var i = 0; i < parts.length; i++) {
+                                                    var p = parts[i].split(":");
+                                                    var mes = p[0];
+                                                    var id = p[1];
+                                                    var rubro = p[2];
+                                                    $(".dol.mes" + mes + ".rubro" + rubro).data("id", id);
+                                                    $(".prct.mes" + mes + ".rubro" + rubro).data("id", id);
+                                                    $(".fis.mes" + mes + ".rubro" + rubro).data("id", id);
+                                                }
+                                                updateTotales();
+                                                $("#modal-cronograma").modal("hide");
+                                            } else {
+                                                console.log("ERROR");
+                                            }
+                                        }
+                                    });
+                                } //if validar
+                            });
+
+                            $("#modalTitle").html("Registro del Cronograma");
+                            $("#modalFooter").html("").append($btnCancel).append($btnOk);
+                            $("#modal-cronograma").modal("show");
+                        }
+                    }
+
+                }); //fin dblclick
 
                 $("#btnLimpiarRubro").click(function () {
                     if (!$(this).hasClass("disabled")) {

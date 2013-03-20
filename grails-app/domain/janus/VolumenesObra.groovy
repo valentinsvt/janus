@@ -1,11 +1,15 @@
 package janus
+
 class VolumenesObra implements Serializable {
     SubPresupuesto subPresupuesto
     Item item
     Obra obra
     double cantidad
     int orden = 1
-    static auditable=[ignore:["orden"]]
+
+    double dias
+
+    static auditable = [ignore: ["orden"]]
     static mapping = {
         table 'vlob'
         cache usage: 'read-write', include: 'non-lazy'
@@ -19,6 +23,8 @@ class VolumenesObra implements Serializable {
             obra column: 'obra__id'
             cantidad column: 'vlobcntd'
             orden column: 'vlobordn'
+
+            dias column: 'vlobdias'
         }
     }
     static constraints = {
@@ -26,7 +32,5 @@ class VolumenesObra implements Serializable {
         item(blank: false, attributes: [title: 'item'])
         cantidad(blank: false, attributes: [title: 'cantidad'])
         subPresupuesto(blank: false, attributes: [title: 'subPresupuesto'])
-
-
     }
 }

@@ -307,6 +307,10 @@ th.desc a {
 .tallModal .modal-body {
     max-height : 800px;
 }
+/********cambiar el height *********/
+.tallModal2 .modal-body {
+    max-height : 840px;
+}
 
 /********cambiar el width************/
 .longModal {
