@@ -310,6 +310,10 @@ class CronogramaController extends janus.seguridad.Shield {
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
+        detalle.each {
+            it.refresh()
+        }
+
         def precios = [:]
         def indirecto = obra.totales / 100
 
