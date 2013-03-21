@@ -12,15 +12,15 @@
 
         <style type="text/css">
         .item_row {
-            background : #999999;
+            background : #B8B8B4;
         }
 
         .item_prc {
-            background : #C0C0C0;
+            background : #D0D0CB;
         }
 
         .item_f {
-            background : #C9C9C9;
+            background : #E8E8E4;
         }
 
         .item_f td {
@@ -71,8 +71,8 @@
         }
 
         tr, td {
-            height      : 15px !important;
-            line-height : 15px !important;
+            height      : 14px !important;
+            line-height : 14px !important;
         }
 
         </style>
@@ -208,8 +208,8 @@
                                 <g:formatNumber number="${parcial}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                 <g:set var="sum" value="${sum + parcial}"/>
                             </td>
-                            <td>
-                                <g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/>
+                            <td style="text-align: center">
+                               <span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>
                             </td>
                             <td>
                                 $

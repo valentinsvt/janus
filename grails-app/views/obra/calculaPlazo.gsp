@@ -22,27 +22,27 @@
         }
 
         table {
-            font-size : 10px;
+            font-size : 12px;
             width     : auto !important;
         }
 
         th {
             font-size   : 11px;
-            height      : 13px !important;
-            line-height : 13px !important;
+            height      : 15px !important;
+            line-height : 15px !important;
             padding     : 3px !important;
         }
 
         td {
-            height      : 12px !important;
-            line-height : 12px !important;
+            height      : 14px !important;
+            line-height : 14px !important;
             padding     : 3px !important;
         }
         </style>
     </head>
 
     <body>
-        <div class="tituloChevere">Plazo de la obra ${obra.nombre}</div>
+        <div class="tituloChevere">Plazo de la obra: ${obra.nombre}</div>
 
         <div class="btn-toolbar" style="margin-top: 15px;">
             <div class="btn-group">
@@ -62,10 +62,15 @@
 
         <g:form action="calculaPlazo" method="POST" name="frmParams" id="${obra.id}">
             <g:hiddenField name="save" value="0"/>
-            <fieldset>
-                <legend>Ajustar plazo de la obra</legend>
 
-                <div style="height: 35px;">
+            <fieldset style="margin-top: 25px;">
+%{--
+                <legend>Ajustar plazo de la obra</legend>
+--}%
+
+            <span style="font-size: 16px; color:#1066A0;">Plazo actual de la obra:</span>
+
+                <div style="height: 35px; margin-top: -25px; margin-left: 200px;">
                     <div class="input-append" style="float: left;margin-right: 10px;">
                         <g:textField name="plazoMeses" class="input-mini orig" value="${obra.plazoEjecucionMeses}" data-original="${obra.plazoEjecucionMeses}"/>
                         <span class="add-on">meses</span>
@@ -84,7 +89,31 @@
                     %{--</div>--}%
                 </div>
             </fieldset>
+            <fieldset style="margin-top: 15px;">
+                <span style="font-size: 16px; color:#1066A0;">Ajustar parámetros de cálculo del plazo a:</span>
+                <div style="height: 35px; margin-top: -25px; margin-left: 320px;">
 
+                <div class="input-append" style="float: left; margin-right: 10px;">
+                    <g:textField name="personas" class="input-mini orig" value="${params.personas}" data-original="${obra.plazoPersonas}"/>
+                    <span class="add-on">integrantes de cuadrilla</span>
+                </div>
+
+                <div class="input-append" style="float: left;">
+                    <g:textField name="maquinas" class="input-mini orig" value="${params.maquinas}" data-original="${obra.plazoMaquinas}"/>
+                    <span class="add-on">equipos completos de maquinaria</span>
+                </div>
+
+                <div class="btn-group" style="margin-left: 10px;">
+                    <a href="#" class="btn btn-info" id="btn-preview">
+                        <i class="icon-eye-open"></i>
+                        Vista Previa
+                    </a>
+                </div>
+                </div>
+
+            </fieldset>
+
+%{--
             <fieldset>
                 <legend>Ajustar parámetros de cálculo de plazo</legend>
 
@@ -107,6 +136,7 @@
                     </div>
                 </div>
             </fieldset>
+--}%
         </g:form>
 
         <div class="area">
@@ -117,7 +147,7 @@
                     <tr>
                         <th style="width: 20px;">#</th>
                         <th style="width: 80px;">Código</th>
-                        <th style="width: 600px;">Item</th>
+                        <th style="width: 600px;">Rubro</th>
                         <th style="width: 55px;">Unidad</th>
                         <th style="width: 70px;">Cantidad</th>
                         <th style="width: 45px;">Días</th>
@@ -133,7 +163,7 @@
                             <td>${res.itemnmbr.trim()}</td>
                             <td>${res.unddcdgo.trim()}</td>
                             <td class="num"><g:formatNumber number="${res.rbrocntd}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <td class="num"><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <td class="num"><b><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></b></td>
                             <g:set var="sum" value="${sum + val}"/>
                         </tr>
                     </g:each>
@@ -143,8 +173,8 @@
             <div style="margin-top:10px;">
                 <g:set var="meses" value="${Math.floor(sum / 30).toInteger()}"/>
                 <g:set var="dias" value="${Math.floor(sum - (meses * 30)).toInteger() + (((sum - Math.floor(sum)) > 0) ? 1 : 0)}"/>
-                Plazo recomendado: <g:formatNumber locale="ec" number="${sum}" maxFractionDigits="1"/> días,
-                es decir, <b>${meses} meses y ${dias} días</b>
+                <b>Plazo recomendado: <g:formatNumber locale="ec" number="${sum}" maxFractionDigits="1"/> días,
+                es decir, ${meses} meses y ${dias} días</b>
                 <a href="#" class="btn btn-info apply" data-meses="${meses}" data-dias="${dias}">
                     <i class="icon-ok"></i> Utilizar
                 </a>
@@ -159,7 +189,7 @@
                     <tr>
                         <th style="width: 20px;">#</th>
                         <th style="width: 80px;">Código</th>
-                        <th style="width: 600px;">Item</th>
+                        <th style="width: 600px;">Componente de Mano de Obra</th>
                         <th style="width: 70px;">Cantidad</th>
                         <th style="width: 45px;">Días</th>
                     </tr>
@@ -172,7 +202,7 @@
                             <td>${res.itemcdgo.trim()}</td>
                             <td>${res.itemnmbr.trim()}</td>
                             <td class="num"><g:formatNumber number="${res.itemcntd}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <td class="num"><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
+                            <td class="num"><b><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></b></td>
                             <g:if test="${res.dias > max}">
                                 <g:set var="max" value="${res.dias}"/>
                             </g:if>
