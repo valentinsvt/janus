@@ -16,12 +16,12 @@ class SubPresupuestoController extends janus.seguridad.Shield {
 
     def form_ajax() {
         def subPresupuestoInstance = new SubPresupuesto(params)
-        if(params.id) {
+        if (params.id) {
             subPresupuestoInstance = SubPresupuesto.get(params.id)
-            if(!subPresupuestoInstance) {
+            if (!subPresupuestoInstance) {
                 flash.clase = "alert-error"
-                flash.message =  "No se encontró Sub Presupuesto con id " + params.id
-                redirect(action:  "list")
+                flash.message = "No se encontró Sub Presupuesto con id " + params.id
+                redirect(action: "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -29,13 +29,19 @@ class SubPresupuestoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        println "save sp: " + params
         def subPresupuestoInstance
-        if(params.id) {
+        if (params.id) {
             subPresupuestoInstance = SubPresupuesto.get(params.id)
-            if(!subPresupuestoInstance) {
+            if (!subPresupuestoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Sub Presupuesto con id " + params.id
-                redirect(action: 'list')
+
+                if (params.volob.toString() == "1") {
+                    render "NO"
+                } else {
+                    redirect(action: 'list')
+                }
                 return
             }//no existe el objeto
             subPresupuestoInstance.properties = params
@@ -50,7 +56,7 @@ class SubPresupuestoController extends janus.seguridad.Shield {
             str += "<ul>"
             subPresupuestoInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -58,25 +64,34 @@ class SubPresupuestoController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
-            redirect(action: 'list')
+            if (params.volob.toString() == "1") {
+                render "NO"
+            } else {
+                redirect(action: 'list')
+            }
             return
         }
 
-        if(params.id) {
+        if (params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Sub Presupuesto " + subPresupuestoInstance.id
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Sub Presupuesto " + subPresupuestoInstance.id
         }
-        redirect(action: 'list')
+        if (params.volob.toString() == "1") {
+            def sel = g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 300px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
+            render sel
+        } else {
+            redirect(action: 'list')
+        }
     } //save
 
     def show_ajax() {
         def subPresupuestoInstance = SubPresupuesto.get(params.id)
         if (!subPresupuestoInstance) {
             flash.clase = "alert-error"
-            flash.message =  "No se encontró Sub Presupuesto con id " + params.id
+            flash.message = "No se encontró Sub Presupuesto con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +102,7 @@ class SubPresupuestoController extends janus.seguridad.Shield {
         def subPresupuestoInstance = SubPresupuesto.get(params.id)
         if (!subPresupuestoInstance) {
             flash.clase = "alert-error"
-            flash.message =  "No se encontró Sub Presupuesto con id " + params.id
+            flash.message = "No se encontró Sub Presupuesto con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +110,12 @@ class SubPresupuestoController extends janus.seguridad.Shield {
         try {
             subPresupuestoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message =  "Se ha eliminado correctamente Sub Presupuesto " + subPresupuestoInstance.id
+            flash.message = "Se ha eliminado correctamente Sub Presupuesto " + subPresupuestoInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message =  "No se pudo eliminar Sub Presupuesto " + (subPresupuestoInstance.id ? subPresupuestoInstance.id : "")
+            flash.message = "No se pudo eliminar Sub Presupuesto " + (subPresupuestoInstance.id ? subPresupuestoInstance.id : "")
             redirect(action: "list")
         }
     } //delete

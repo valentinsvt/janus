@@ -3,6 +3,7 @@
 <div id="create-SubPresupuesto" class="span" role="main">
 <g:form class="form-horizontal" name="frmSave-SubPresupuesto" action="save">
     <g:hiddenField name="id" value="${subPresupuestoInstance?.id}"/>
+    <g:hiddenField name="volob" value="0"/>
 
     <div class="control-group">
         <div>

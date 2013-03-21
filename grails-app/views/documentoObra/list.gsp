@@ -29,7 +29,7 @@
 
         <div class="row">
             <div class="span9 btn-group" role="navigation">
-                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
+                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn" id="atras" title="Regresar a la obra">
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>
