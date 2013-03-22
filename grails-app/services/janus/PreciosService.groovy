@@ -91,7 +91,7 @@ class PreciosService {
         sql += "group by 1,2 order by 2"
         sql += ""
 
-//        println "()" + sql
+        println "()" + sql
         cn.eachRow(sql.toString()) { row ->
             res.add(row[2])
         }
