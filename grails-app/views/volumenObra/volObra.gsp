@@ -102,24 +102,24 @@
                         </a>
                     </div>
 
-                    <div class="span1" style="margin-left: 0px;">
+                    <div class="span1" style="margin-left: 0px; width: 100px;">
                         <b>Código</b>
-                        <input type="text" style="width: 60px;;font-size: 10px" id="item_codigo">
+                        <input type="text" style="width: 100px;;font-size: 10px" id="item_codigo">
                         <input type="hidden" style="width: 60px" id="item_id">
                     </div>
 
                     <div class="span4" style="margin-left: 15px;">
                         <b>Rubro</b>
-                        <input type="text" style="width: 330px;font-size: 10px" id="item_nombre" disabled="true">
+                        <input type="text" style="width: 350px;font-size: 10px" id="item_nombre" disabled="true">
 
                     </div>
 
-                    <div class="span2" style="margin-left: 0px;">
+                    <div class="span2" style="margin-left: 20px; width: 100px;">
                         <b>Cantidad</b>
-                        <input type="text" style="width: 130px;text-align: right" id="item_cantidad" value="1">
+                        <input type="text" style="width: 100px;text-align: right" id="item_cantidad" value="1">
                     </div>
 
-                    <div class="span1" style="margin-left: 15px;">
+                    <div class="span1" style="margin-left: 20px; width: 60px;">
                         <b>Orden</b>
                         <input type="text" style="width: 30px;text-align: right" id="item_orden" value="${(volumenes?.size() > 0) ? volumenes.size() + 1 : 1}">
                     </div>

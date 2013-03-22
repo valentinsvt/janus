@@ -518,6 +518,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def showIt_ajax() {
+        println "showIt_ajax" +params
         def itemInstance = Item.get(params.id)
         return [itemInstance: itemInstance]
     }
