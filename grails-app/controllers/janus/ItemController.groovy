@@ -133,6 +133,7 @@ class ItemController extends janus.seguridad.Shield {
             }
 //
 //            println itemsIds
+
             if (itemsIds == "") itemsIds = '-1'
 
             def precios = preciosService.getPrecioRubroItemEstado(f, lugar, itemsIds, estado)
