@@ -89,8 +89,6 @@ class VariablesController {
                 wsp +
                 "  ORDER BY grid ASC"
 
-        println sql
-
         def sqlSP = "SELECT\n" +
                 "  DISTINCT v.sbpr__id      id,\n" +
                 "  s.sbprdscr               dsc,\n" +

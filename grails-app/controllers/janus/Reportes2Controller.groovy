@@ -614,12 +614,15 @@ class Reportes2Controller {
                 "  d.dprtdscr                            departamento,\n" +
                 "  s.sbgrdscr                            subgrupo,\n" +
                 "  g.grpodscr                            grupo,\n" +
-                "  g.grpo__id                            grid\n" +
+                "  g.grpo__id                            grid,\n" +
+                "  v.sbpr__id                            sp,\n" +
+                "  b.sbprdscr                            subpresupuesto\n" +
                 "FROM vlobitem v\n" +
                 "INNER JOIN item i ON v.item__id = i.item__id\n" +
                 "INNER JOIN undd u ON i.undd__id = u.undd__id\n" +
                 "INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
                 "INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
+                "INNER JOIN sbpr b ON v.sbpr__id = b.sbpr__id\n" +
                 "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo})\n" +
                 "WHERE v.obra__id = ${params.id} \n" +
                 "  ORDER BY grid ASC"
@@ -655,6 +658,7 @@ class Reportes2Controller {
         sheet.setColumnView(6, 20)
         sheet.setColumnView(7, 20)
         sheet.setColumnView(8, 25)
+        sheet.setColumnView(9, 20)
 
         def label
         def number
@@ -679,6 +683,7 @@ class Reportes2Controller {
         label = new jxl.write.Label(6, 6, "COSTO", times16format); sheet.addCell(label);
         label = new jxl.write.Label(7, 6, "TOTAL", times16format); sheet.addCell(label);
         label = new jxl.write.Label(8, 6, "TIPO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(9, 6, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
 
         res.each {
             label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
@@ -690,6 +695,7 @@ class Reportes2Controller {
             number = new jxl.write.Number(6, fila, it?.costo); sheet.addCell(number);
             number = new jxl.write.Number(7, fila, it?.total); sheet.addCell(number);
             label = new jxl.write.Label(8, fila, it?.grupo.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(9, fila, it?.subpresupuesto.toString()); sheet.addCell(label);
 
             fila++
 
