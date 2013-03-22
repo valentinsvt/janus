@@ -1,6 +1,9 @@
 package janus
 
-import com.lowagie.text.*
+import com.lowagie.text.Document
+import com.lowagie.text.Element
+import com.lowagie.text.PageSize
+import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.*
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
@@ -596,8 +599,6 @@ class Reportes2Controller {
     def reporteExcelComposicion() {
 
         def obra = Obra.get(params.id)
-
-
         params.tipo = "1,2,3"
 
         def sql = "SELECT\n" +
@@ -667,67 +668,54 @@ class Reportes2Controller {
         def totalDirecto = 0;
         def ultimaFila
 
-        label = new Label(2, 4, "Composición de " + obra?.nombre, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 4, "Composición de " + obra?.nombre, times16format); sheet.addCell(label);
 
-        label = new Label(0, 6, "CODIGO", times16format); sheet.addCell(label);
-        label = new Label(1, 6, "ITEM", times16format); sheet.addCell(label);
-        label = new Label(2, 6, "UNIDAD", times16format); sheet.addCell(label);
-        label = new Label(3, 6, "CANTIDAD", times16format); sheet.addCell(label);
-        label = new Label(4, 6, "P.UNITARIO", times16format); sheet.addCell(label);
-        label = new Label(5, 6, "TRANSPORTE", times16format); sheet.addCell(label);
-        label = new Label(6, 6, "COSTO", times16format); sheet.addCell(label);
-        label = new Label(7, 6, "TOTAL", times16format); sheet.addCell(label);
-        label = new Label(8, 6, "TIPO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(0, 6, "CODIGO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 6, "ITEM", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 6, "UNIDAD", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 6, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(4, 6, "P.UNITARIO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(5, 6, "TRANSPORTE", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(6, 6, "COSTO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(7, 6, "TOTAL", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(8, 6, "TIPO", times16format); sheet.addCell(label);
 
         res.each {
-
-
-            label = new Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
-            label = new Label(1, fila, it?.item.toString()); sheet.addCell(label);
-            label = new Label(2, fila, it?.unidad.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(2, fila, it?.unidad.toString()); sheet.addCell(label);
             number = new jxl.write.Number(3, fila, it?.cantidad); sheet.addCell(number);
             number = new jxl.write.Number(4, fila, it?.punitario); sheet.addCell(number);
             number = new jxl.write.Number(5, fila, it?.transporte); sheet.addCell(number);
             number = new jxl.write.Number(6, fila, it?.costo); sheet.addCell(number);
             number = new jxl.write.Number(7, fila, it?.total); sheet.addCell(number);
-            label = new Label(8, fila, it?.grupo.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(8, fila, it?.grupo.toString()); sheet.addCell(label);
 
             fila++
 
             if (it?.grid == 1) {
-
                 totalMaterial = (totalM += it?.total)
-
             }
             if (it?.grid == 2) {
-
                 totalManoObra = (totalMO += it?.total)
             }
-
             if (it?.grid == 3) {
-
                 totalEquipo = (totalE += it?.total)
-
             }
-
             totalDirecto = totalEquipo + totalManoObra + totalMaterial;
-
-
             ultimaFila = fila
-
-
         }
 
-        label = new Label(6, ultimaFila, "Total Materiales: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(6, ultimaFila, "Total Materiales: ", times16format); sheet.addCell(label);
         number = new jxl.write.Number(7, ultimaFila, totalMaterial); sheet.addCell(number);
 
-        label = new Label(6, ultimaFila + 1, "Total Mano de Obra: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(6, ultimaFila + 1, "Total Mano de Obra: ", times16format); sheet.addCell(label);
         number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra); sheet.addCell(number);
 
-        label = new Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
         number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo); sheet.addCell(number);
 
-        label = new Label(6, ultimaFila + 3, "TOTAL DIRECTO: ", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(6, ultimaFila + 3, "TOTAL DIRECTO: ", times16format); sheet.addCell(label);
         number = new jxl.write.Number(7, ultimaFila + 3, totalDirecto); sheet.addCell(number);
 
         workbook.write();
@@ -737,8 +725,6 @@ class Reportes2Controller {
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
-
-
     }
 
 
@@ -802,28 +788,28 @@ class Reportes2Controller {
         def number
         def fila = 8;
 
-        label = new Label(2, 1, "Gobierno Autónomo Descentralizado de la Provincia de Pichincha".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(2, 2, "Reporte de Costos de Materiales", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 1, "Gobierno Autónomo Descentralizado de la Provincia de Pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 2, "Reporte de Costos de Materiales", times16format); sheet.addCell(label);
 
-        label = new Label(1, 4, lugar?.descripcion, times16format); sheet.addCell(label);
-        label = new Label(4, 4, "Fecha Consulta: " + new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 4, lugar?.descripcion, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(4, 4, "Fecha Consulta: " + new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
 
 
-        label = new Label(0, 6, "CODIGO", times16format); sheet.addCell(label);
-        label = new Label(1, 6, "MATERIAL", times16format); sheet.addCell(label);
-        label = new Label(2, 6, "UNIDAD", times16format); sheet.addCell(label);
-        label = new Label(3, 6, "PESO/VOL", times16format); sheet.addCell(label);
-        label = new Label(4, 6, "COSTO", times16format); sheet.addCell(label);
-        label = new Label(5, 6, "FECHA ACT.", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(0, 6, "CODIGO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 6, "MATERIAL", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 6, "UNIDAD", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 6, "PESO/VOL", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(4, 6, "COSTO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(5, 6, "FECHA ACT.", times16format); sheet.addCell(label);
 
         res.each {
 
-            label = new Label(0, fila, it?.item?.codigo.toString()); sheet.addCell(label);
-            label = new Label(1, fila, it?.item?.nombre.toString()); sheet.addCell(label);
-            label = new Label(2, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(0, fila, it?.item?.codigo.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(1, fila, it?.item?.nombre.toString()); sheet.addCell(label);
+            label = new jxl.write.Label(2, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
             number = new jxl.write.Number(3, fila, it?.item?.peso); sheet.addCell(number);
             number = new jxl.write.Number(4, fila, it?.precioUnitario); sheet.addCell(number);
-            label = new Label(5, fila, it?.fecha.format("dd-MM-yyyy")); sheet.addCell(label);
+            label = new jxl.write.Label(5, fila, it?.fecha.format("dd-MM-yyyy")); sheet.addCell(label);
 
             fila++
 
