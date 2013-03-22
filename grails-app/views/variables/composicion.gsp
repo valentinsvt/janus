@@ -141,22 +141,54 @@
                     </div>
 
                     <div class="btn-group" data-toggle="buttons-radio">
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: -1]" class="btn btn-info toggle ${tipo.contains(',') ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: -1, sp: spsel]" class="btn btn-info toggle ${tipo.contains(',') ? 'active' : ''}">
                             <i class="icon-cogs"></i>
                             Todos
                         </g:link>
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 1]" class="btn btn-info toggle ${tipo == '1' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 1, sp: spsel]" class="btn btn-info toggle ${tipo == '1' ? 'active' : ''}">
                             <i class="icon-briefcase"></i>
                             Materiales
                         </g:link>
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 2]" class="btn btn-info toggle ${tipo == '2' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 2, sp: spsel]" class="btn btn-info toggle ${tipo == '2' ? 'active' : ''}">
                             <i class="icon-group"></i>
                             Mano de obra
                         </g:link>
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 3]" class="btn btn-info toggle ${tipo == '3' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 3, sp: spsel]" class="btn btn-info toggle ${tipo == '3' ? 'active' : ''}">
                             <i class="icon-truck"></i>
                             Equipos
                         </g:link>
+                    </div>
+
+                    <div class="btn-group">
+                        <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+                            <g:if test="${spsel.toString() == '-1'}">
+                                Todos los subpresupuestos
+                            </g:if>
+                            <g:else>
+                                ${sp.find { it.id.toString() == spsel.toString() }.dsc}
+                            </g:else>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="sp ${spsel.toString() == '-1' ? 'active' : ''}">
+                                <g:link action="composicion" id="${obra?.id}" params="[tipo: tipo, sp: -1]">
+                                    <g:if test="${spsel.toString() == '-1'}">
+                                        <i class="icon-chevron-right"></i>
+                                    </g:if>
+                                    Todos los subpresupuestos
+                                </g:link>
+                            </li>
+                            <g:each in="${sp}" var="s">
+                                <li class="sp ${spsel.toString() == s.id.toString() ? 'active' : ''}">
+                                    <g:link action="composicion" id="${obra?.id}" params="[tipo: tipo, sp: s.id]">
+                                        <g:if test="${spsel.toString() == s.id.toString()}">
+                                            <i class="icon-chevron-right"></i>
+                                        </g:if>
+                                        ${s.dsc}
+                                    </g:link>
+                                </li>
+                            </g:each>
+                        </ul>
                     </div>
 
                     <div class="btn-group">
@@ -164,7 +196,7 @@
                             <i class="icon-print"></i>
                             Pdf
                         </g:link>
-                        %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel"> </g:link>--}%
+                    %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel"> </g:link>--}%
                         <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel" id="${obra?.id}"><i class="icon-table"></i>Excel</g:link>
                     </div>
                 </div>
@@ -290,7 +322,7 @@
                         }
                     });
 
-                    $(".btn").click(function () {
+                    $(".btn, .sp").click(function () {
                         if ($(this).hasClass("active")) {
                             return false;
                         }
@@ -307,9 +339,6 @@
 
                         return false;
                     });
-
-
-
 
                 });
             </script>

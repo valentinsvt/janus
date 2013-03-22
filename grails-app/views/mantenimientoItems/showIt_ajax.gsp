@@ -59,7 +59,7 @@
         </div>
     </g:if>
 
-    %{--<g:if test="${itemInstance?.peso}">--}%
+    <g:if test="${itemInstance.departamento.subgrupo.grupo.id.toString() == '1'}">
         <div class="control-group">
             <div>
                 <span id="peso-label" class="control-label label label-inverse">
@@ -77,7 +77,7 @@
 
             </div>
         </div>
-    %{--</g:if>--}%
+    </g:if>
 
     <g:if test="${itemInstance?.departamento}">
         <div class="control-group">
