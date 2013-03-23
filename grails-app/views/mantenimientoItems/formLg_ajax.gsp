@@ -14,7 +14,7 @@
             </div>
 
             <div class="controls">
-                <g:select name="tipoLista.id" id="tipoListaId" from="${janus.TipoLista.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+                <g:select name="tipoLista.id" id="tipoListaId" from="${janus.TipoLista.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" value="${lugarInstance?.tipoLista?.id}" />
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -24,7 +24,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Codigo
+                    Código
                 </span>
             </div>
 

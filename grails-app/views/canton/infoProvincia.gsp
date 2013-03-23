@@ -15,7 +15,7 @@
     <tr>
         <td class="label">
             <g:message code="provincia.nombre.label"
-                       default="Nombre"/>
+                       default="Provincia:"/>
         </td>
         <td class="campo">
             ${fieldValue(bean: provinciaInstance, field: "nombre")}

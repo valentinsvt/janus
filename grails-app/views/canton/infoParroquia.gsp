@@ -17,7 +17,7 @@
     <tr>
         <td class="label">
             <g:message code="parroquia.codigo.label"
-                       default="Código"/>
+                       default="Número"/>
         </td>
         <td class="campo">
             ${fieldValue(bean: parroquiaInstance, field: "codigo")}
@@ -27,7 +27,7 @@
     <tr>
         <td class="label">
             <g:message code="parroquia.nombre.label"
-                       default="Nombre"/>
+                       default="Parroquia"/>
         </td>
         <td class="campo">
             ${fieldValue(bean: parroquiaInstance, field: "nombre")}

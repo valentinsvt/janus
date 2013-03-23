@@ -163,7 +163,7 @@
 
     <div class="linea" style="height: 100px;"></div>
 
-    <div class="row-fluid">
+    <div class="row-fluid" style="color: #248">
         %{--<div class="span3">--}%
         %{--<div style="height: 40px;float: left;width: 100px">Lista de precios</div>--}%
 
@@ -173,9 +173,13 @@
         %{--</div>--}%
         %{--</div>--}%
 
-        <div class="span7">
-            Lista de precios de equipos y mano de obra
-            <g:select name="item.ciudad.id" from="${janus.Lugar.list()}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 350px"/>
+        <div class="span6" style="width: 500px;">
+            Lista de precios: MO y Equipos
+            <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 300px"/>
+       </div>
+        <div class="span3" style="width: 180px;">
+            % costos indirectos
+            <input type="text" style="width: 30px;" id="costo_indi" value="21">
         </div>
 
         <div class="span2">
@@ -190,10 +194,12 @@
                 </a>
             </div>
         </g:if>
+%{--
         <div class="span3">
             % costos indirectos
             <input type="text" style="width: 30px;" id="costo_indi" value="21">
         </div>
+--}%
 
     </div>
 

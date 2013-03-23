@@ -1,19 +1,19 @@
 <table>
     <tbody>
 
-    %{--<tr>--}%
-        %{--<td class="label">--}%
-            %{--<g:message code="canton.provincia.label"--}%
-                       %{--default="Provincia"/>--}%
+    <tr>
+        <td class="label">
+            <g:message code="comunidad.parroquia.abel"
+                       default="Parroquia"/>
 
-        %{--</td>--}%
-        %{--<td class="campo">--}%
-            %{--<g:link class="linkArbol" tipo="provincia_${cantonInstance.provincia.id}" controller="provincia" action="show"--}%
-            %{--id="${cantonInstance?.provincia?.id}">--}%
-            %{--${cantonInstance?.provincia?.nombre?.encodeAsHTML()}--}%
-            %{--</g:link>--}%
-        %{--</td> <!-- campo -->--}%
-    %{--</tr>--}%
+        </td>
+        <td class="campo">
+            <g:link class="linkArbol" tipo="parroquia_${comunidadInstance.parroquia.id}" controller="parroquia" action="show"
+            id="${comunidadInstance?.parroquia?.id}">
+            ${comunidadInstance?.parroquia?.nombre?.encodeAsHTML()}
+            </g:link>
+        </td>
+    </tr>
 
     <tr>
         <td class="label">
@@ -28,7 +28,7 @@
     <tr>
         <td class="label">
             <g:message code="comunidad.nombre.label"
-                       default="Nombre"/>
+                       default="Comunidad"/>
         </td>
         <td class="campo">
             ${fieldValue(bean: comunidadInstance, field: "nombre")}

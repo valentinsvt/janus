@@ -18,7 +18,7 @@
     <tr>
         <td class="label">
             <g:message code="canton.numero.label"
-                       default="Número"/>
+                       default="Número de cantón:"/>
         </td>
         <td class="campo">
             ${fieldValue(bean: cantonInstance, field: "numero")}
@@ -28,7 +28,7 @@
     <tr>
         <td class="label">
             <g:message code="canton.nombre.label"
-                       default="Nombre"/>
+                       default="Nombre del cantón:"/>
         </td>
         <td class="campo">
             ${fieldValue(bean: cantonInstance, field: "nombre")}
