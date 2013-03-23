@@ -118,6 +118,11 @@
                     Cuadrilla Tipo
                 </g:link>
             </div>
+            <a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"
+              style="margin-top: -10px;">
+                <i class="icon-trash"></i>
+                Borrar la Fórmula Polinomica
+            </a>
 
         </div>
 

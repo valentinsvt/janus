@@ -390,4 +390,10 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             redirect(action: "list")
         }
     } //delete
+
+    def borrarFP() {
+        render("Borrando la FP")
+    }
+
+
 } //fin controller

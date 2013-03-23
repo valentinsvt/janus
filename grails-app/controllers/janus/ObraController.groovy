@@ -745,4 +745,5 @@ class ObraController extends janus.seguridad.Shield {
             render("no")
         }
     } //delete
+
 } //fin controller
