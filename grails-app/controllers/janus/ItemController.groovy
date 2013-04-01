@@ -62,6 +62,7 @@ class ItemController extends janus.seguridad.Shield {
                 "ORDER BY 3, 2"
 
         def sqlPrecios = "SELECT\n" +
+                "  r.rbpc__id      rbpc_id,\n" +
                 "  i.item__id      item_id,\n" +
                 "  l.lgar__id      lugar_id,\n" +
                 "  l.lgardscr      lugar,\n" +
@@ -81,9 +82,11 @@ class ItemController extends janus.seguridad.Shield {
                 "WHERE i.tpls__id ${tipoLugar}\n" +
                 "ORDER BY i.itemnmbr, i.item__id, l.lgardscr"
 
+        println sqlPrecios
+
         def lugares = []
 
-        def html = "<table border='1'>"
+        def html = "<table class=\"table table-bordered table-striped table-hover table-condensed\" id=\"tablaPrecios\">"
 
         html += "<thead>"
         html += "<tr>"
@@ -138,16 +141,18 @@ class ItemController extends janus.seguridad.Shield {
                 body += "<tr>"
                 body += "<td>${row.codigo}</td>"
                 body += "<td>${row.item}</td>"
-                body += "<td>${row.unidad}</td>"
+                body += "<td class='unidad'>${row.unidad}</td>"
                 lugares.each { lugarId ->
                     def precio = precios.find {
                         it.item_id == row.item_id && it.lugar_id == lugarId
                     }
-                    def prec = ""
+                    def prec = "", p = 0, rubro = "new"
                     if (precio) {
-                        prec = g.formatNumber(number: precio.precio, maxFractionDigits: 3, minFractionDigits: 3, locale: "ec")
+                        prec = g.formatNumber(number: precio.precio, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                        p = precio.precio
+                        rubro = precio.rbpc_id
                     }
-                    body += "<td class='editable number'>" + prec + '</td>'
+                    body += "<td class='editable number' data-original='${p}' data-lugar='${lugarId}' data-id='${rubro}' data-item='${row.item_id}'>" + prec + '</td>'
                 }
             }
         }
@@ -367,6 +372,63 @@ class ItemController extends janus.seguridad.Shield {
         }
 
         [rubroPrecio: rubroPrecio, params: params, lugar: lugar]
+    }
+
+
+    def actualizarVol() {
+
+//        println params
+        if (params.item instanceof java.lang.String) {
+            params.item = [params.item]
+        }
+
+        def oks = "", nos = ""
+        //data += "item=" + id + "_" + item + "_" + lugar + "_" + valor + "_" + fcha;
+
+        params.item.each {
+            def parts = it.split("_")
+            println ">>" + parts
+
+            def rubroId = parts[0]
+            def itemId = parts[1]
+            def lugarId = parts[2]
+
+            def nuevoPrecio = parts[3].toDouble()
+            def nuevaFecha = parts[4]
+
+            nuevaFecha = new Date().parse("dd-MM-yyyy", nuevaFecha);
+
+            def rubroPrecioInstance
+
+            if (rubroId == "new") {
+                rubroPrecioInstance = new PrecioRubrosItems();
+            } else {
+                rubroPrecioInstance = PrecioRubrosItems.get(rubroId);
+            }
+
+            rubroPrecioInstance.item = Item.get(itemId)
+            rubroPrecioInstance.lugar = Lugar.get(lugarId)
+            rubroPrecioInstance.fecha = nuevaFecha
+            rubroPrecioInstance.precioUnitario = nuevoPrecio
+            rubroPrecioInstance.fechaIngreso = nuevaFecha
+            rubroPrecioInstance.registrado = "R"
+
+            if (!rubroPrecioInstance.save(flush: true)) {
+                println "error " + parts
+                if (nos != "") {
+                    nos += ","
+                }
+                nos += "#" + rubroId
+            } else {
+                if (oks != "") {
+                    oks += ","
+                }
+                oks += "#" + rubroId
+            }
+
+        }
+        render oks + "_" + nos
+
     }
 
 

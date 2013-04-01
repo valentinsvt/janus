@@ -19,9 +19,13 @@ function doEdit(sel) {
 
 function stopEdit() {
     //var value = $(".editando").val(); //valor del texfield (despues de editar)
-    var value = $(".selected").data("valor"); //valor antes de la edicion
+    var $sel = $(".selected");
+    var value = $sel.data("valor"); //valor antes de la edicion
     if (value) {
-        $(".selected").html(number_format(value, 5, ".", ""));
+        $sel.html(number_format(value, 5, ".", ""));
+        if ($sel.data("original") != $sel.data("valor")) {
+            $sel.addClass("changed");
+        }
     }
 }
 

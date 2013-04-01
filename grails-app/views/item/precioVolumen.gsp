@@ -19,9 +19,31 @@
         <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}"/>
 
         <style type="text/css">
+        th {
+            vertical-align : middle !important;
+            font-size      : 12px;
+        }
+
+        td {
+            padding : 3px;
+        }
+
         .number {
-            text-align : right;
+            text-align : right !important;
             width      : 100px;
+        }
+
+        .unidad {
+            text-align : center;
+        }
+
+        .editable {
+            background    : url(${resource(dir:'images', file:'edit.gif')}) right no-repeat;
+            padding-right : 18px !important;
+        }
+
+        .changed {
+            background-color : #C3DBC3 !important;
         }
         </style>
 
@@ -82,6 +104,7 @@
 
 
             function consultar() {
+                $("#divTabla").html("");
                 var $fecha = $("#fecha");
 
                 var lgar = $("#listaPrecio").val();
@@ -110,15 +133,65 @@
 
             $(function () {
                 $(".btn-consultar").click(function () {
-
                     var lgar = $("#listaPrecio").val();
-
                     $("#error").hide();
                     $("#dlgLoad").dialog("open");
                     consultar();
                     $("#divTabla").show();
-
                 });
+
+                $(".btn-actualizar").click(function () {
+                    $("#dlgLoad").dialog("open");
+                    var data = "";
+
+                    var fcha = $("#fecha").val();
+
+//                    console.log("fecha" + fcha)
+
+                    $(".editable").each(function () {
+                        var id = $(this).data("id");
+                        var lugar = $(this).data("lugar");
+                        var item = $(this).data("item");
+                        var valor = $(this).data("valor");
+                        var data1 = $(this).data("original");
+//                        console.log(chk);
+//                        console.log(data1)
+
+                        if ((parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
+                            if (data != "") {
+                                data += "&";
+                            }
+                            var val = valor ? valor : data1;
+                            data += "item=" + id + "_" + item + "_" + lugar + "_" + valor + "_" + fcha;
+                        }
+                    });
+
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action: 'actualizarVol')}",
+                        data    : data,
+                        success : function (msg) {
+                            $("#dlgLoad").dialog("close");
+                            var parts = msg.split("_");
+                            var ok = parts[0];
+                            var no = parts[1];
+
+                            $(ok).each(function () {
+                                var fec = $(this).siblings(".fecha");
+                                fec.text($("#fecha").val());
+                                var $tdChk = $(this).siblings(".chk");
+                                var chk = $tdChk.children("input").is(":checked");
+                                if (chk) {
+                                    $tdChk.html('<i class="icon-ok"></i>');
+                                }
+                            });
+
+                            doHighlight({elem : $(ok), clase : "ok"});
+                            doHighlight({elem : $(no), clase : "no"});
+                        }
+                    });
+                });
+
             });
         </script>
 

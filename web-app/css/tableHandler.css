@@ -1,5 +1,5 @@
 .selected {
-    border : solid 2px #8a2be2 !important;
+    border : solid 2px blue !important;
 }
 
 td.precio, th.precio {

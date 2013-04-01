@@ -32,22 +32,28 @@ $(document).keyup(function (ev) {
     var ntr;
     switch (ev.keyCode) {
         case 38: //arriba
-            if (filaIndex > 0) {
-                ev.stopPropagation();
-                ntr = tr.prev();
+            var target = $(ev.target);
+            if (!target.hasClass("editando")) {
+                if (filaIndex > 0) {
+                    ev.stopPropagation();
+                    ntr = tr.prev();
 //                console.log(sel, celdaIndex, tr, filaIndex, ntr);
-                seleccionar(ntr.children().eq(celdaIndex));
-                scroll();
+                    seleccionar(ntr.children().eq(celdaIndex));
+                    scroll();
+                }
             }
             break;
         case 40: //abajo
-            var cant = $('#tablaPrecios > tbody > tr').size();
-            if (filaIndex < cant - 1) {
-                ev.stopPropagation();
-                ntr = tr.next();
+            var target = $(ev.target);
+            if (!target.hasClass("editando")) {
+                var cant = $('#tablaPrecios > tbody > tr').size();
+                if (filaIndex < cant - 1) {
+                    ev.stopPropagation();
+                    ntr = tr.next();
 //                console.log(sel, celdaIndex, tr, filaIndex, ntr);
-                seleccionar(ntr.children().eq(celdaIndex));
-                scroll();
+                    seleccionar(ntr.children().eq(celdaIndex));
+                    scroll();
+                }
             }
             break;
         case 13: //enter
@@ -62,6 +68,25 @@ $(document).keyup(function (ev) {
             break;
         case 27: //esc
             stopEdit();
+            break;
+
+        case 37: //izq
+            var target = $(ev.target);
+            if (!target.hasClass("editando")) {
+                var prev = sel.prev();
+                if (prev.hasClass("editable")) {
+                    seleccionar(prev);
+                }
+            }
+            break;
+        case 39: //der
+            var target = $(ev.target);
+            if (!target.hasClass("editando")) {
+                var next = sel.next();
+                if (next.hasClass("editable")) {
+                    seleccionar(next);
+                }
+            }
             break;
         default:
             return true;
