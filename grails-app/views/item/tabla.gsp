@@ -3,11 +3,6 @@
     <head>
 
         <style type="text/css">
-
-        .selected {
-            border : solid 2px blue !important;
-        }
-
         .alineacion {
             text-align : right !important
         }
