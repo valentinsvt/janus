@@ -136,9 +136,9 @@ class PersonaController extends janus.seguridad.Shield {
         if (params.password.trim() != "") {
             user.password = params.password.trim().encodeAsMD5()
         }
-        if (params.autorizacion.trim() != "") {
-            user.autorizacion = params.autorizacion.trim().encodeAsMD5()
-        }
+//        if (params.autorizacion.trim() != "") {
+//            user.autorizacion = params.autorizacion.trim().encodeAsMD5()
+//        }
         if (!user.save(flush: true)) {
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Persona " + (user.id ? user.login : "") + "</h4>"
@@ -158,7 +158,7 @@ class PersonaController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha guardado correctamente Persona " + user.login
         }
-        redirect(action: 'list')
+        redirect(action: 'listOferente')
     }
 
 

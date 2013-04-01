@@ -73,7 +73,7 @@ class Persona implements Serializable {
 
         login(size: 1..16, blank: false, nullable: false, attributes: [title: 'login'])
         password(size: 1..63, blank: false, nullable: false, attributes: [title: 'password'])
-        autorizacion(size: 1..63, blank: false, nullable: false, attributes: [title: 'autorizacion'])
+        autorizacion(size: 1..63, blank: true, nullable: true, attributes: [title: 'autorizacion'])
         email(blank: true, nullable: true, email: true, attributes: [title: 'email'])
 
         activo(blank: false, nullable: false, attributes: [title: 'activo'])

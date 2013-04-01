@@ -59,45 +59,45 @@
                     <p class="help-block ui-helper-hidden"></p>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <span class="control-label label label-inverse">
-                        Autorización actual
-                    </span>
-                </td>
-                <td>
-                    <g:field type="password" name="autorizacionAct" maxlength="64" class="span2 required"/>
-                    <span class="mandatory">*</span>
+            %{--<tr>--}%
+                %{--<td>--}%
+                    %{--<span class="control-label label label-inverse">--}%
+                        %{--Autorización actual--}%
+                    %{--</span>--}%
+                %{--</td>--}%
+                %{--<td>--}%
+                    %{--<g:field type="password" name="autorizacionAct" maxlength="64" class="span2 required"/>--}%
+                    %{--<span class="mandatory">*</span>--}%
 
-                    <p class="help-block ui-helper-hidden"></p>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="control-label label label-inverse">
-                        Nueva autorización
-                    </span>
-                </td>
-                <td>
-                    <g:field type="password" name="autorizacion" maxlength="64" class="span2 required"/>
-                    <span class="mandatory">*</span>
+                    %{--<p class="help-block ui-helper-hidden"></p>--}%
+                %{--</td>--}%
+                %{--<td></td>--}%
+                %{--<td></td>--}%
+            %{--</tr>--}%
+            %{--<tr>--}%
+                %{--<td>--}%
+                    %{--<span class="control-label label label-inverse">--}%
+                        %{--Nueva autorización--}%
+                    %{--</span>--}%
+                %{--</td>--}%
+                %{--<td>--}%
+                    %{--<g:field type="password" name="autorizacion" maxlength="64" class="span2 required"/>--}%
+                    %{--<span class="mandatory">*</span>--}%
 
-                    <p class="help-block ui-helper-hidden"></p>
-                </td>
-                <td>
-                    <span class="control-label label label-inverse">
-                        Verificar autorización
-                    </span>
-                </td>
-                <td>
-                    <g:field type="password" name="autorizacionVerif" equalTo="#autorizacion" maxlength="64" class="span2 required"/>
-                    <span class="mandatory">*</span>
+                    %{--<p class="help-block ui-helper-hidden"></p>--}%
+                %{--</td>--}%
+                %{--<td>--}%
+                    %{--<span class="control-label label label-inverse">--}%
+                        %{--Verificar autorización--}%
+                    %{--</span>--}%
+                %{--</td>--}%
+                %{--<td>--}%
+                    %{--<g:field type="password" name="autorizacionVerif" equalTo="#autorizacion" maxlength="64" class="span2 required"/>--}%
+                    %{--<span class="mandatory">*</span>--}%
 
-                    <p class="help-block ui-helper-hidden"></p>
-                </td>
-            </tr>
+                    %{--<p class="help-block ui-helper-hidden"></p>--}%
+                %{--</td>--}%
+            %{--</tr>--}%
         </g:if>
     </table>
 </g:form>
