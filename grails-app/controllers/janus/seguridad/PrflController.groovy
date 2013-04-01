@@ -4,7 +4,7 @@ class PrflController extends janus.seguridad.Shield  {
 
     def dbConnectionService
     def loginService
-    def kerberosoldService
+    //def kerberosoldService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", delete: "GET"]
 
@@ -108,9 +108,13 @@ class PrflController extends janus.seguridad.Shield  {
 
     def borraMdlo = {
 //      println "------borrarMdlo: " + params
+        Modulo.get(params.id).delete()
+/*
       params.controllerName = controllerName
       params.actionName = "delete"
+
       kerberosoldService.delete(params, Modulo, session.perfil, session.usuario)
+*/
       render('borrado: ${params.id}')
     }
 
@@ -126,7 +130,8 @@ class PrflController extends janus.seguridad.Shield  {
         def prflInstance = new Prfl()
         params.controllerName = controllerName
         params.actionName = "save"
-        prflInstance = kerberosoldService.save(params, Prfl, session.perfil, session.usuario)
+        prflInstance.save()
+        //prflInstance = kerberosoldService.save(params, Prfl, session.perfil, session.usuario)
         if (prflInstance.properties.errors.getErrorCount() > 0) {
           //println "---- save ${bancoInstance}"
           render("El perfil no ha podido crearse")
@@ -146,7 +151,8 @@ class PrflController extends janus.seguridad.Shield  {
         def prflInstance = Prfl.get(params.id)
         params.controllerName = controllerName
         params.actionName = "Update"
-        prflInstance = kerberosoldService.save(params, Prfl, session.perfil, session.usuario)
+        prflInstance.save()
+        //prflInstance = kerberosoldService.save(params, Prfl, session.perfil, session.usuario)
         if (prflInstance.properties.errors.getErrorCount() > 0) {
 //          println "---- save ${prflInstance}"
           render("El perfil no ha podido actualizar")
@@ -166,7 +172,8 @@ class PrflController extends janus.seguridad.Shield  {
 //      println "------editPrfl: " + params
       params.controllerName = controllerName
       params.actionName = "delete"
-      kerberosoldService.delete(params, Prfl, session.perfil, session.usuario)
+      Prfl.get(params.id).save()
+      //kerberosoldService.delete(params, Prfl, session.perfil, session.usuario)
       render('borrado: ${params.id}')
     }
 
@@ -195,9 +202,7 @@ class PrflController extends janus.seguridad.Shield  {
 
       println "grabar SQL: ${tx}"
       cn.eachRow(tx) { d ->
-        params.id = d.prms__id
-        println "parametro para borrar: $params"
-        kerberosoldService.delete(params, Prms, session.perfil, session.usuario)
+        Prms.get(d.prms__id).delete()
       }
       //println "-------------borrado de permisos----------"
       // se debe barrer tosos los menús señalados y si está chequeado añadir a prms.

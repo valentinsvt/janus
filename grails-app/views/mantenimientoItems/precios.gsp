@@ -133,7 +133,7 @@
                         <i class="icon-money"></i> Mantenimiento de precios
                     </g:link>
                     <g:link controller="item" action="precioVolumen" class="btn">
-                        <i class="icon-money"></i> Precios volumen
+                        <i class="icon-money"></i> Precios por Volumen
                     </g:link>
                 </div>
             </div>
