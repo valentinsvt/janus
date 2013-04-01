@@ -18,8 +18,145 @@ class ItemController extends janus.seguridad.Shield {
         [itemInstanceList: Item.list(params), itemInstanceTotal: Item.count(), params: params]
     } //list
 
+    def precioVolumen() {
+
+    }
+
     def mantenimientoPrecios() {
 
+    }
+
+    def tablaVolumen() {
+        if (!params.max || params.max == 0) {
+            params.max = 100
+        } else {
+            params.max = params.max.toInteger()
+        }
+        if (!params.pag) {
+            params.pag = 1;
+        } else {
+            params.pag = params.pag.toInteger()
+        }
+        params.offset = params.max * (params.pag - 1)
+
+        def f = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        f = f.format("yyyy-MM-dd")
+
+        def tipoLugar = ""
+
+        if (params.lgar == '-1') {
+            tipoLugar = " IN (3,4,5)"
+        } else {
+            tipoLugar = " = " + params.lgar
+        }
+
+        def sqlLugares = "SELECT\n" +
+                "  l.lgar__id id,\n" +
+                "  l.lgardscr des,\n" +
+                "  t.tplsdscr tipo\n" +
+                "FROM lgar l\n" +
+                "  INNER JOIN tpls t\n" +
+                "    ON l.tpls__id = t.tpls__id\n" +
+                "WHERE l.tpls__id ${tipoLugar}\n" +
+                "ORDER BY 3, 2"
+
+        def sqlPrecios = "SELECT\n" +
+                "  i.item__id      item_id,\n" +
+                "  l.lgar__id      lugar_id,\n" +
+                "  l.lgardscr      lugar,\n" +
+                "  i.itemnmbr      item,\n" +
+                "  i.itemcdgo      codigo,\n" +
+                "  u.unddcdgo      unidad,\n" +
+                "  r.rbpcpcun      precio,\n" +
+                "  r.rbpcfcha      fecha,\n" +
+                "  i.tpls__id      tipo\n" +
+                "FROM item i\n" +
+                "  LEFT JOIN rbpc r\n" +
+                "    ON i.item__id = r.item__id AND r.rbpcfcha = '${f}'\n" +
+                "  INNER JOIN undd u\n" +
+                "    ON i.undd__id = u.undd__id\n" +
+                "  LEFT JOIN lgar l\n" +
+                "    ON r.lgar__id = l.lgar__id\n" +
+                "WHERE i.tpls__id ${tipoLugar}\n" +
+                "ORDER BY i.itemnmbr, i.item__id, l.lgardscr"
+
+        def lugares = []
+
+        def html = "<table border='1'>"
+
+        html += "<thead>"
+        html += "<tr>"
+        html += "<th rowspan='2'>Código</th>"
+        html += "<th rowspan='2'>Item</th>"
+        html += "<th rowspan='2'>Unidad</th>"
+        def cn = dbConnectionService.getConnection()
+        def arr = cn.rows(sqlLugares.toString())
+        def precios = cn.rows(sqlPrecios.toString())
+        cn.close()
+
+        def r1 = "", r2 = "<tr>", last = arr[0].tipo, c = 1
+
+        arr.eachWithIndex { row, index ->
+            lugares.add(row.id)
+            if (last != row.tipo) {
+                r1 += "<th colspan='${c}'>${last}</th>"
+                c = 1
+                last = row.tipo
+            } else {
+                c++
+            }
+            if (index == arr.size() - 1) {
+                r1 += "<th colspan='${c}'>${last}</th>"
+            }
+            r2 += "<th>${row.des}</th>"
+        }
+        r2 += "</tr>"
+
+//        println sqlPrecios
+//
+//        println lugares
+//        println precios
+
+        html += r1
+        html += r2
+
+        html += "</tr>"
+        html += "</thead>"
+
+        html += "<tbody>"
+        def body = ""
+        last = null
+
+
+        precios.eachWithIndex { row, int index ->
+            if (last != row.item_id) {
+                last = row.item_id
+                if (index > 0) {
+                    body += "</tr>"
+                }
+                body += "<tr>"
+                body += "<td>${row.codigo}</td>"
+                body += "<td>${row.item}</td>"
+                body += "<td>${row.unidad}</td>"
+                lugares.each { lugarId ->
+                    def precio = precios.find {
+                        it.item_id == row.item_id && it.lugar_id == lugarId
+                    }
+                    def prec = ""
+                    if (precio) {
+                        prec = g.formatNumber(number: precio.precio, maxFractionDigits: 3, minFractionDigits: 3, locale: "ec")
+                    }
+                    body += "<td class='editable number'>" + prec + '</td>'
+                }
+            }
+        }
+        html += body
+        html += "</tbody>"
+
+        html += "</table>"
+
+        return [html: html]
     }
 
     def tabla() {

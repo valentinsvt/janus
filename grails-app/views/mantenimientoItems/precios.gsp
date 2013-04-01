@@ -123,9 +123,18 @@
                 </div>
 
                 <div class="btn-group">
-                    <a href="#" id="btnReporte" class="btn btn-ajax"><i class="icon-print"></i> Reporte</a>
-                    <g:link action="registro" class="btn"><i class="icon-list-ul"></i> Items</g:link>
-                    <g:link controller="item" action="mantenimientoPrecios" class="btn"><i class="icon-money"></i> Mantenimiento de precios</g:link>
+                    <a href="#" id="btnReporte" class="btn btn-ajax">
+                        <i class="icon-print"></i> Reporte
+                    </a>
+                    <g:link action="registro" class="btn">
+                        <i class="icon-list-ul"></i> Items
+                    </g:link>
+                    <g:link controller="item" action="mantenimientoPrecios" class="btn">
+                        <i class="icon-money"></i> Mantenimiento de precios
+                    </g:link>
+                    <g:link controller="item" action="precioVolumen" class="btn">
+                        <i class="icon-money"></i> Precios volumen
+                    </g:link>
                 </div>
             </div>
 
@@ -829,9 +838,7 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-print"></i> Ver</a>');
-                            var btnExcel =  $('<a href="#" class="btn btnExcel"><i class="icon-table"></i> Excel</a>' );
-
-
+                            var btnExcel = $('<a href="#" class="btn btnExcel"><i class="icon-table"></i> Excel</a>');
 
                             btnSave.click(function () {
                                 var data = "";
@@ -860,16 +867,13 @@
                                 return false;
                             });
 
-
                             btnExcel.click(function () {
 
                                 var fecha = $("#fechaRep").val();
                                 var lugar = $("#lugarRep").val();
                                 var grupo = current;
 
-
                                 location.href = "${g.createLink(controller: 'reportes2', action: 'reportePreciosExcel')}?fecha=" + fecha + "&lugar=" + lugar + "&grupo=" + grupo;
-
 
                                 var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
                                 wait.prepend(spinnerBg);
@@ -879,8 +883,6 @@
                                 $("#modalTitle").html("Procesando");
                                 $("#modalBody").html(wait);
                                 $("#modalFooter").html("").append(btnClose);
-
-
 
                             });
 

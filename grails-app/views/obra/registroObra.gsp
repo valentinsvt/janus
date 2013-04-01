@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.Departamento" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
 
@@ -87,9 +87,11 @@
             </g:if>
 
             <g:if test="${obra?.id != null}">
-
                 <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+            </g:if>
 
+            <g:if test="${obra?.id != null}">
+                <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes</button>
             </g:if>
 
         </div>
@@ -370,7 +372,7 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span1 formato" >Oficio</div>
+                    <div class="span1 formato">Oficio</div>
 
                     <div class="span2" style="margin-left: 0px"><g:textField name="oficioSalida" class="span2" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida"/></div>
 
@@ -382,14 +384,14 @@
                     <div class="span1 formato">Fórmula P.</div>
 
                     <div class="span2"><g:textField name="formulaPolinomica" class="span2" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica"/></div>
+
                     <div class="span1 formato" style="margin-left: 50px;">Fecha</div>
 
                     <div class="span1"><elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
-                                                       value="${obra?.fechaOficioSalida}" style="width: 100px; margin-left: -20px;" /></div>
+                                                       value="${obra?.fechaOficioSalida}" style="width: 100px; margin-left: -20px;"/></div>
                 </div>
 
                 <div class="span12" style="margin-top: 10px">
-
 
                     %{--<div class="span1 formato">DESTINO</div>--}%
 
@@ -497,13 +499,28 @@
 
             <fieldset>
                 <div class="span3">
-                    Porfavor ingrese un nuevo código para la copia de la obra: <div style="font-weight: bold">${obra?.nombre}</div>
+                    Por favor ingrese un nuevo código para la copia de la obra: <div style="font-weight: bold">${obra?.nombre}</div>
                 </div>
 
                 <div class="span3" style="margin-top: 10px">
                     <div class="span2">Nuevo Código:</div>
 
                     <div class="span3"><g:textField name="nuevoCodigo" value="${obra?.codigo}" maxlength="20"/></div>
+                </div>
+            </fieldset>
+
+        </div>
+
+        <div id="copiarDialogOfe">
+            <fieldset>
+                <div class="span3">
+                    Seleccione el oferente para la obra: <div style="font-weight: bold">${obra?.nombre}</div>
+                </div>
+
+                <div class="span3" style="margin-top: 10px">
+                    <div class="span3">
+                        <g:select name="oferenteCopia" from="${janus.Persona.findAllByDepartamento(Departamento.get(13))}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>
+                    </div>
                 </div>
             </fieldset>
 
@@ -981,6 +998,9 @@
                     $("#copiarDialog").dialog("open");
 
                 });
+                $("#copiarObraOfe").click(function () {
+                    $("#copiarDialogOfe").dialog("open");
+                });
 
                 $("#btnRubros").click(function () {
                     var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";
@@ -1079,8 +1099,6 @@
                 });
 
                 $("#copiarDialog").dialog({
-
-
                     autoOpen  : false,
                     resizable : false,
                     modal     : true,
@@ -1137,8 +1155,25 @@
 
                         }
                     }
+                });
 
+                $("#copiarDialogOfe").dialog({
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 380,
+//                    height    : 250,
+                    position  : 'center',
+                    title     : 'Copiar la obra al sistema de oferentes',
+                    buttons   : {
+                        "Aceptar"  : function () {
 
+                        },
+                        "Cancelar" : function () {
+                            $("#copiarDialogOfe").dialog("close");
+                        }
+                    }
                 });
 
                 $("#busqueda").dialog({
