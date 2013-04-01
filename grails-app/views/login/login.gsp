@@ -73,6 +73,12 @@
         ${flash.message}
     </div>
 </g:if>
+
+<div class="alert hide" id="divError" role="status">
+    <a class="close" data-dismiss="alert" href="#">×</a>
+    <span id="spanError"></span>
+</div>
+
 <div class="dialog ui-corner-all" style="height: 595px;background: #0C5994;;padding: 10px;width: 910px;margin: auto;margin-top: 5px" >
     <div style="text-align: center;">
         <h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#fff;">
@@ -214,67 +220,162 @@
     </div>
 </div>
 
-
-
-
-
-
-
 </div>
+
+
+<div id="recuperarPass-dialog"  class="dialog ui-corner-all" style="height: 595px;background: #0C5994;;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
+
+    %{--<fieldset>--}%
+
+
+        <div style="text-align: center;">
+            <h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 12px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#fff;">
+
+            </h1>
+        </div>
+
+        <div class="span3">
+        Ingrese el email registrado a su usuario y se le enviará una nueva contraseña para ingresar al sistema.
+
+        </div>
+
+        <div class="span3" style="margin-top: 20px">
+
+            <g:textField name="mailPass" type="text" id="email" class="span2" placeholder="Email" style="width: 300px"/>
+
+        </div>
+    %{--</fieldset>--}%
+</div>
+
+
+
 
 <script type="text/javascript">
     $(function () {
 
         $("#btnOlvidoPass").click(function () {
-            var p = $("<p>Ingrese el email registrado a su usuario y se le enviará una nueva contraseña para ingresar al sistema.</p>");
-            var div = $('<div class="control-group" />');
-            var input = $('<input type="text" class="" id="email" placeholder="Email"/>');
-            div.append(input);
 
-            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-            var btnSend = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Enviar</a>');
 
-            var send = function () {
-                var email = $.trim(input.val());
-                if (email != "") {
-                    btnSend.replaceWith(spinner);
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'olvidoPass')}",
-                        data    : {
-                            email : email
-                        },
-                        success : function (msg) {
-                            var parts = msg.split("*");
-                            if (parts[0] == "OK") {
-                                $("#modalBody").addClass("alert alert-success");
-                            } else {
-                                $("#modalBody").addClass("alert alert-error");
-                            }
-                            $("#modalBody").html(parts[1]);
-                            spinner.remove();
-                        }
-                    });
-                } else {
-                    $("#divMail").addClass("error");
-                }
-            };
 
-            btnSend.click(function () {
-                send();
-                return false;
-            });
-            input.keyup(function (ev) {
-                if (ev.keyCode == 13) {
-                    send();
-                }
-            });
+            $("#recuperarPass-dialog").dialog("open");
+            $("#modal-ingreso").modal("hide");
 
-            $("#modalTitle").html("Olvidó su contraseña?");
-            $("#modalBody").html("").append(p).append(div);
-            $("#modalFooter").html("").append(btnOk).append(btnSend);
-            $("#modal-pass").modal("show");
+            %{--var p = $("<p>Ingrese el email registrado a su usuario y se le enviará una nueva contraseña para ingresar al sistema.</p>");--}%
+            %{--var div = $('<div class="control-group" />');--}%
+            %{--var input = $('<input type="text" class="" id="email" placeholder="Email"/>');--}%
+            %{--div.append(input);--}%
+
+            %{--var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');--}%
+            %{--var btnSend = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Enviar</a>');--}%
+
+            %{--var send = function () {--}%
+                %{--var email = $.trim(input.val());--}%
+                %{--if (email != "") {--}%
+                    %{--btnSend.replaceWith(spinner);--}%
+                    %{--$.ajax({--}%
+                        %{--type    : "POST",--}%
+                        %{--url     : "${createLink(action:'olvidoPass')}",--}%
+                        %{--data    : {--}%
+                            %{--email : email--}%
+                        %{--},--}%
+                        %{--success : function (msg) {--}%
+                            %{--var parts = msg.split("*");--}%
+                            %{--if (parts[0] == "OK") {--}%
+                                %{--$("#modalBody").addClass("alert alert-success");--}%
+                            %{--} else {--}%
+                                %{--$("#modalBody").addClass("alert alert-error");--}%
+                            %{--}--}%
+                            %{--$("#modalBody").html(parts[1]);--}%
+                            %{--spinner.remove();--}%
+                        %{--}--}%
+                    %{--});--}%
+                %{--} else {--}%
+                    %{--$("#divMail").addClass("error");--}%
+                %{--}--}%
+            %{--};--}%
+
+            %{--btnSend.click(function () {--}%
+                %{--send();--}%
+                %{--return false;--}%
+            %{--});--}%
+            %{--input.keyup(function (ev) {--}%
+                %{--if (ev.keyCode == 13) {--}%
+                    %{--send();--}%
+                %{--}--}%
+            %{--});--}%
+
+            %{--$("#modalTitle").html("Olvidó su contraseña?");--}%
+            %{--$("#modalBody").html("").append(p).append(div);--}%
+            %{--$("#modalFooter").html("").append(btnOk).append(btnSend);--}%
+            %{--$("#modal-pass").modal("show");--}%
         });
+
+
+
+        $("#recuperarPass-dialog").dialog({
+
+            autoOpen  : false,
+            resizable : false,
+            modal     : true,
+            draggable : false,
+            width     : 400,
+            height    : 250,
+            position  : 'center',
+            title     : 'Recuperar Password',
+            buttons   : {
+                "Aceptar" : function () {
+
+//                    var email = $.trim(mail.val());
+
+
+                      var emailPass = $.trim(email.value)
+
+//                    console.log(emailPass)
+
+                    if (email != "") {
+//                        btnSend.replaceWith(spinner);
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(action:'olvidoPass')}",
+                            data    : {
+                                email : emailPass
+                            },
+                            success : function (msg) {
+                                var parts = msg.split("*");
+                                if (parts[0] == "OK") {
+                                     $("#divError").removeClass("alert-error").addClass("alert-success").show();
+                                     $("#spanError").html(parts[1]);
+                                    $("#recuperarPass-dialog").dialog("close");
+
+                                } else {
+                                    $("#divError").addClass("alert-error").removeClass("alert-success").show();
+                                    $("#spanError").html(parts[1]);
+                                    $("#recuperarPass-dialog").dialog("close")
+                                }
+//                                $("#modalBody").html(parts[1]);
+//                                spinner.remove();
+                            }
+                        });
+                    } else {
+                        $("#divMail").addClass("error");
+                    }
+
+
+
+
+                },
+
+                "Cancelar": function (){
+
+                    $("#recuperarPass-dialog").dialog("close")
+
+                }
+
+
+            }
+
+        });
+
 
         $("input").keypress(function (ev) {
             if (ev.keyCode == 13) {

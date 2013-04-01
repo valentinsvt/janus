@@ -17,6 +17,9 @@ class LoginController {
     }
 
     def olvidoPass() {
+
+//        println(params)
+
         def mail = params.email
         def personas = Persona.findAllByEmail(mail)
         def msg
