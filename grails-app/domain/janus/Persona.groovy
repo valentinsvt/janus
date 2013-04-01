@@ -62,7 +62,7 @@ class Persona implements Serializable {
         cedula(size: 1..10, attributes: [title: 'cedula'])
         nombre(size: 1..30, attributes: [title: 'nombre'])
         apellido(size: 1..30, attributes: [title: 'apellido'])
-        codigo(blank: false, attributes: [title: 'numero'])
+        codigo(blank: true, nullable: true, attributes: [title: 'numero'])
         fechaNacimiento(blank: true, nullable: true, attributes: [title: 'fechaNacimiento'])
         departamento(blank: true, nullable: true, attributes: [title: 'departamento'])
         fechaInicio(blank: true, nullable: true, attributes: [title: 'fechaInicio'])
