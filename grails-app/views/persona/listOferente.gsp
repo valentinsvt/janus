@@ -240,6 +240,9 @@
 
                     console.log("-->>" + id)
 
+
+
+
                     var estado = $(this).data("activo");
 
                     console.log("estado:" + estado)
