@@ -151,6 +151,7 @@
 
                 Esta seguro que desea cambiar el estado del oferente?
 
+
             </div>
         </fieldset>
     </div>
