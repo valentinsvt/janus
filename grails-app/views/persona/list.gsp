@@ -26,6 +26,10 @@
                 <i class="icon-file"></i>
                 Crear  Persona
             </a>
+            <a href="#" class="btn btn-ajax btn-new-of">
+                <i class="icon-file"></i>
+                Crear Oferente
+            </a>
         %{--</div>--}%
 
     %{--<div class="span12 btn-group" role="navigation">--}%
@@ -147,7 +151,7 @@
                 $(".btn-new").click(function () {
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(action:'form_ajax')}",
+                        url     : "${createLink(action:'form_ajax')}", 
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
@@ -159,6 +163,29 @@
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle").html("Crear Persona");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-Persona").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn new
+
+                $(".btn-new-of").click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'formOferente')}",
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                            $("#modalTitle").html("Crear cuenta de Oferente");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Persona").modal("show");
