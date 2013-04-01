@@ -4,7 +4,6 @@ class PrflController extends janus.seguridad.Shield  {
 
     def dbConnectionService
     def loginService
-    //def kerberosoldService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", delete: "GET"]
 
