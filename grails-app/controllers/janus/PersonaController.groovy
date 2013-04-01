@@ -172,9 +172,12 @@ class PersonaController extends janus.seguridad.Shield {
 
     def cambiarEstado () {
 
-
+         println(params.id)
 
             def persona = Persona.get(params.id)
+
+          println(persona)
+
             persona.activo = params.activo.toInteger()
 
            println("id: " + persona.id)
@@ -224,7 +227,7 @@ class PersonaController extends janus.seguridad.Shield {
         def perfil = Prfl.get(4);
 
 
-        [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params, sesion: Sesn.findAllByPerfil(perfil)]
+        [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params, sesion: Sesn.findAllByPerfil(perfil), sesion2 : Sesn.findByPerfil(perfil)]
         //list
 
     }
@@ -269,6 +272,9 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def save() {
+
+        println(params.password)
+
         if (params.fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
         }

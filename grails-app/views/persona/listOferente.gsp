@@ -144,6 +144,20 @@
             </div>
         </div>
 
+    <div id="cambiarEstado-dialog">
+
+        <fieldset>
+            <div class="span3">
+
+                Esta seguro que desea cambiar el estado del oferente?
+
+            </div>
+        </fieldset>
+    </div>
+
+
+
+
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
@@ -236,75 +250,76 @@
 
                 $(".btn-cambiarEstado").click(function () {
 
+
+
+                    $("#cambiarEstado-dialog").dialog("open");
+
                     var id = $(this).data("id");
-
-                    console.log("-->>" + id)
-
-
-
-
+//
                     var estado = $(this).data("activo");
+//
+//                    console.log("estado:" + estado)
+//
+//                    console.log(id)
 
-                    console.log("estado:" + estado)
-
-                    if(estado == 0) {
-
-
-//                        estado = $(this).data("activo",1)
-
-                        $.ajax({
-
-                            type: "POST",
-                            url: "${g.createLink(action: 'cambiarEstado')}",
-                            data : {id: id,
-                                activo:   '1'
-
-                            },
-                            success: function (msg){
-
-                                if (msg == 'ok') {
-
-                                    location.href = "${createLink(action: 'listOferente')}"
-
-                                }
-
-                            }
+                    %{--if(estado == 0) {--}%
 
 
+%{--//                        estado = $(this).data("activo",1)--}%
 
-                        });
+                        %{--$.ajax({--}%
 
-                    }if(estado == 1) {
+                            %{--type: "POST",--}%
+                            %{--url: "${g.createLink(action: 'cambiarEstado')}",--}%
+                            %{--data : {id: id,--}%
+                                %{--activo:   '1'--}%
 
+                            %{--},--}%
+                            %{--success: function (msg){--}%
 
-//                        $(this).data("activo", 0)
+                                %{--if (msg == 'ok') {--}%
 
-                        $.ajax({
+                                    %{--location.href = "${createLink(action: 'listOferente')}"--}%
 
-                            type: "POST",
-                            url: "${g.createLink(action: 'cambiarEstado')}",
-                            data : {id: id,
-                                activo:   '0'
+                                %{--}--}%
 
-                            },
-                            success: function (msg){
-
-                                if (msg == 'ok') {
-
-                                    location.href = "${createLink(action: 'listOferente')}"
-
-                                }
-
-
-                            }
+                            %{--}--}%
 
 
 
-                        });
+                        %{--});--}%
+
+                    %{--}if(estado == 1) {--}%
+
+
+%{--//                        $(this).data("activo", 0)--}%
+
+                        %{--$.ajax({--}%
+
+                            %{--type: "POST",--}%
+                            %{--url: "${g.createLink(action: 'cambiarEstado')}",--}%
+                            %{--data : {id: id,--}%
+                                %{--activo:   '0'--}%
+
+                            %{--},--}%
+                            %{--success: function (msg){--}%
+
+                                %{--if (msg == 'ok') {--}%
+
+                                    %{--location.href = "${createLink(action: 'listOferente')}"--}%
+
+                                %{--}--}%
+
+
+                            %{--}--}%
 
 
 
-                    }
+                        %{--});--}%
+
+
+
+                    %{--}--}%
 
 
 
@@ -315,6 +330,123 @@
 
 
                 });
+
+
+                $("#cambiarEstado-dialog").dialog({
+
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 350,
+                    height    : 180,
+                    position  : 'center',
+                    title     : 'Cambiar Estado',
+                    buttons   : {
+                        "Aceptar" : function () {
+
+
+
+//                            var id = $(this).data("id");
+
+
+                              var id = ${sesion2?.usuario?.id}
+
+
+
+                              console.log(id)
+
+
+
+
+
+                            console.log("id2" + id)
+
+//                            var estado = $(this).data("activo");
+
+                              var estado = ${sesion2?.usuario?.activo}
+
+
+                            console.log("estado2:" + estado)
+
+                            if(estado == 0) {
+
+
+//                        estado = $(this).data("activo",1)
+
+                                $.ajax({
+
+                                    type: "POST",
+                                    url: "${g.createLink(action: 'cambiarEstado')}",
+                                    data : {id: id,
+                                        activo:   '1'
+
+                                    },
+                                    success: function (msg){
+
+                                        if (msg == 'ok') {
+
+                                            location.href = "${createLink(action: 'listOferente')}"
+
+                                        }
+
+                                    }
+
+
+
+                                });
+
+                            }if(estado == 1) {
+
+
+//                        $(this).data("activo", 0)
+
+                                $.ajax({
+
+                                    type: "POST",
+                                    url: "${g.createLink(action: 'cambiarEstado')}",
+                                    data : {id: id,
+                                        activo:   '0'
+
+                                    },
+                                    success: function (msg){
+
+                                        if (msg == 'ok') {
+
+                                            location.href = "${createLink(action: 'listOferente')}"
+
+                                        }
+
+
+                                    }
+
+
+
+                                });
+
+
+
+                            }
+
+
+
+
+
+
+
+                        },
+
+                        "Cancelar": function (){
+
+                            $("#cambiarEstado-dialog").dialog("close")
+
+                        }
+
+
+                    }
+
+                });
+
 
 
 
