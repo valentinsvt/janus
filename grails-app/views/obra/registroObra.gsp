@@ -1169,6 +1169,8 @@
                     title     : 'Copiar la obra al sistema de oferentes',
                     buttons   : {
                         "Aceptar"  : function () {
+                            $("#divOk").hide();
+                            $("#divError").hide();
                             var originalId = "${obra?.id}";
                             var oferente = $("#oferenteCopia").val();
                             $.ajax({
@@ -1183,7 +1185,7 @@
                                     var parts = msg.split('_');
                                     if (parts[0] == 'NO') {
                                         $("#spanError").html(parts[1]);
-                                        $("#divError").show()
+                                        $("#divError").show();
                                     } else {
                                         $("#divError").hide();
                                         $("#spanOk").html(parts[1]);

@@ -38,8 +38,8 @@ class OferentesService {
         def tabla = mapa.table.name
         def validacion = sqlValidacion
         mapa.columns.eachWithIndex { c, i ->
-//            println "it "+c.key+" "+c.value.type+"  "+c.value.getColumn()
-//            print " "+c.key+" "+c.value.getColumn()+" ====> "
+//            println "it " + c.key + " " + c.value.type + "  " + c.value.getColumn() + " " + c
+//            print " " + c.key + " " + c.value.getColumn() + " ====> "
 
             if (!personaCol || (personaCol && personaCol != c.value.getColumn())) {
                 campos += "" + c.value.getColumn()
@@ -102,7 +102,7 @@ class OferentesService {
 
         def sql = ""
         def tipo = campo.getType()
-//      println "  campo "+campo.name+" tipo "+tipo+" valor  "+obj.properties[campo.name]
+//        println "\tcampo " + campo.name + " tipo " + tipo + " valor  " + obj.properties[campo.name]
         if (campo.name == "id") {
             sql += "default"
             return sql
@@ -123,7 +123,18 @@ class OferentesService {
                 }
             }
         } else {
-            sql += "null"
+//            println tipo
+//            println tipo.class
+//            println campo.name
+//            println obj.properties[campo.name]
+            def ceros = [int, Integer, double, Double]
+            if (ceros.contains(tipo)) {
+                sql = "0"
+            } else {
+                sql += "null"
+            }
+//            println "\t\t" + sql
+//            println "-----"
         }
 //      println "fin funcion "+sql
         return sql
