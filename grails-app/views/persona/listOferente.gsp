@@ -12,120 +12,144 @@
 
     <body>
 
-        <div class="span12">
-            <g:if test="${flash.message}">
-                <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
-                    <a class="close" data-dismiss="alert" href="#">×</a>
-                    ${flash.message}
+        <g:if test="${flash.message}">
+            <div class="row">
+                <div class="span12">
+                    <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        ${flash.message}
+                    </div>
                 </div>
-            </g:if>
+            </div>
+        </g:if>
+        <div class="row hide" id="divError">
+            <div class="span12">
+                <div class="alert " role="status">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    <span id="spanError"></span>
+                </div>
+            </div>
         </div>
 
-        <div class="span12 btn-group" role="navigation">
-            <a href="#" class="btn btn-ajax btn-new">
-                <i class="icon-file"></i>
-                Crear  Oferente
-            </a>
+        <div class="row">
+            <div class="span8 btn-group" role="navigation">
+                <a href="#" class="btn btn-ajax btn-new">
+                    <i class="icon-file"></i>
+                    Crear  Oferente
+                </a>
+                <a href="#" class="btn btn-ajax btn-copy">
+                    <i class="icon-copy"></i>
+                    Copiar al sistema de Oferentes
+                </a>
+            </div>
 
-    </div>
+            <div class="span3" id="search">
+            </div>
+        </div>
 
 
         <g:form action="delete" name="frmDelete-Oferente">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-Persona" class="span12" role="main" style="margin-top: 10px;">
-
-            <table class="table table-bordered table-striped table-condensed table-hover">
-                <thead>
-                    <tr>
-
-                        <g:sortableColumn property="cedula" title="Cedula"/>
-
-                        <g:sortableColumn property="nombre" title="Nombre"/>
-
-                        <g:sortableColumn property="apellido" title="Apellido"/>
-
-                        <g:sortableColumn property="login" title="Login"/>
-
-                        <g:sortableColumn property="departamento" title="Departamento"/>
-
-                        <g:sortableColumn property="activo" title="Activo"/>
-
-                        <th width="150">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="paginate">
-
-                    <g:each in="${sesion}" status="j" var="sesionPerfil">
-
+        <div id="list-Persona" role="main" style="margin-top: 10px;">
+            <form id="frmExport">
+                <table class="table table-bordered table-striped table-condensed table-hover">
+                    <thead>
                         <tr>
 
-                        <td>${sesionPerfil?.usuario?.cedula}</td>
+                            <g:sortableColumn property="cedula" title="Cedula"/>
 
-                        <td>${sesionPerfil?.usuario?.nombre}</td>
+                            <g:sortableColumn property="nombre" title="Nombre"/>
 
-                        <td>${sesionPerfil?.usuario?.apellido}</td>
+                            <g:sortableColumn property="apellido" title="Apellido"/>
 
-                        <td>${sesionPerfil?.usuario?.login}</td>
+                            <g:sortableColumn property="login" title="Login"/>
 
-                        <td>${sesionPerfil?.usuario?.departamento?.descripcion}</td>
+                            <g:sortableColumn property="departamento" title="Departamento"/>
 
-                        <td><g:formatBoolean boolean="${sesionPerfil?.usuario?.activo == 1}" true="Sí" false="No"/></td>
+                            <g:sortableColumn property="activo" title="Activo"/>
 
-                            <td>
-                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${sesionPerfil?.usuario?.id}">
-                                    <i class="icon-zoom-in icon-large"></i>
-                                </a>
-                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${sesionPerfil?.usuario?.id}">
-                                    <i class="icon-pencil icon-large"></i>
-                                </a>
-                                <a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${sesionPerfil?.usuario?.id}">
-                                    <i class="icon-lock icon-large"></i>
-                                </a>
-                                <a class="btn btn-small btn-cambiarEstado" href="#" rel="tooltip" title="Cambiar estado" data-id="${sesionPerfil?.usuario?.id}" data-activo="${sesionPerfil?.usuario?.activo}">
-                                    <i class="icon-refresh icon-large"></i>
-                                </a>
-                            </td>
+                            <th width="150">Acciones</th>
+
+                            <th width="50">Copiar <input type="checkbox" id="chkAll"/></th>
                         </tr>
+                    </thead>
+                    <tbody class="paginate">
 
-                    </g:each>
+                        <g:each in="${sesion}" status="j" var="sesionPerfil">
+
+                            <tr>
+
+                                <td>${sesionPerfil?.usuario?.cedula}</td>
+
+                                <td>${sesionPerfil?.usuario?.nombre}</td>
+
+                                <td>${sesionPerfil?.usuario?.apellido}</td>
+
+                                <td>${sesionPerfil?.usuario?.login}</td>
+
+                                <td>${sesionPerfil?.usuario?.departamento?.descripcion}</td>
+
+                                <td><g:formatBoolean boolean="${sesionPerfil?.usuario?.activo == 1}" true="Sí" false="No"/></td>
+
+                                <td>
+                                    <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${sesionPerfil?.usuario?.id}">
+                                        <i class="icon-zoom-in icon-large"></i>
+                                    </a>
+                                    <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${sesionPerfil?.usuario?.id}">
+                                        <i class="icon-pencil icon-large"></i>
+                                    </a>
+                                    <a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${sesionPerfil?.usuario?.id}">
+                                        <i class="icon-lock icon-large"></i>
+                                    </a>
+                                    <a class="btn btn-small btn-cambiarEstado" href="#" rel="tooltip" title="Cambiar estado" data-id="${sesionPerfil?.usuario?.id}" data-activo="${sesionPerfil?.usuario?.activo}">
+                                        <i class="icon-refresh icon-large"></i>
+                                    </a>
+                                </td>
+                                <td style="text-align: center;">
+                                    <input type="checkbox" name="id" value="${sesionPerfil?.usuario?.id}" class="chk" id="${sesionPerfil?.usuario?.id}"/>
+                                </td>
+
+                            </tr>
+
+                        </g:each>
                     %{--<g:each in="${personaInstanceList}" status="i" var="personaInstance">--}%
 
 
-                        %{--<tr>--}%
+                    %{--<tr>--}%
 
-                            %{--<td>${fieldValue(bean: personaInstance, field: "cedula")}</td>--}%
+                    %{--<td>${fieldValue(bean: personaInstance, field: "cedula")}</td>--}%
 
-                            %{--<td>${fieldValue(bean: personaInstance, field: "nombre")}</td>--}%
+                    %{--<td>${fieldValue(bean: personaInstance, field: "nombre")}</td>--}%
 
-                            %{--<td>${fieldValue(bean: personaInstance, field: "apellido")}</td>--}%
+                    %{--<td>${fieldValue(bean: personaInstance, field: "apellido")}</td>--}%
 
-                            %{--<td>${fieldValue(bean: personaInstance, field: "login")}</td>--}%
+                    %{--<td>${fieldValue(bean: personaInstance, field: "login")}</td>--}%
 
-                            %{--<td>${personaInstance.departamento?.descripcion}</td>--}%
+                    %{--<td>${personaInstance.departamento?.descripcion}</td>--}%
 
-                            %{--<td><g:formatBoolean boolean="${personaInstance.activo == 1}" true="Sí" false="No"/></td>--}%
+                    %{--<td><g:formatBoolean boolean="${personaInstance.activo == 1}" true="Sí" false="No"/></td>--}%
 
-                            %{--<td>--}%
-                                %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">--}%
-                                    %{--<i class="icon-zoom-in icon-large"></i>--}%
-                                %{--</a>--}%
-                                %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">--}%
-                                    %{--<i class="icon-pencil icon-large"></i>--}%
-                                %{--</a>--}%
-                                %{--<a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${personaInstance.id}">--}%
-                                    %{--<i class="icon-lock icon-large"></i>--}%
-                                %{--</a>--}%
-                                %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${personaInstance.id}">--}%
-                                    %{--<i class="icon-trash icon-large"></i>--}%
-                                %{--</a>--}%
-                            %{--</td>--}%
-                        %{--</tr>--}%
+                    %{--<td>--}%
+                    %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">--}%
+                    %{--<i class="icon-zoom-in icon-large"></i>--}%
+                    %{--</a>--}%
+                    %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">--}%
+                    %{--<i class="icon-pencil icon-large"></i>--}%
+                    %{--</a>--}%
+                    %{--<a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${personaInstance.id}">--}%
+                    %{--<i class="icon-lock icon-large"></i>--}%
+                    %{--</a>--}%
+                    %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${personaInstance.id}">--}%
+                    %{--<i class="icon-trash icon-large"></i>--}%
+                    %{--</a>--}%
+                    %{--</td>--}%
+                    %{--</tr>--}%
                     %{--</g:each>--}%
-                </tbody>
-            </table>
-
+                    </tbody>
+                </table>
+            </form>
         </div>
 
         <div class="modal large hide fade" id="modal-Persona" style="width: 900px;">
@@ -144,21 +168,6 @@
             </div>
         </div>
 
-    <div id="cambiarEstado-dialog">
-
-        <fieldset>
-            <div class="span3">
-
-                Esta seguro que desea cambiar el estado del oferente?
-
-
-            </div>
-        </fieldset>
-    </div>
-
-
-
-
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
@@ -174,8 +183,37 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows : 15
+                    maxRows        : 15,
+                    searchPosition : $("#search"),
+                    float          : "right"
                 });
+
+                $("#chkAll").click(function () {
+                    $(".chk").attr("checked", $(this).is(":checked"));
+                });
+
+                $(".chk").click(function () {
+                    if (!$(this).is(":checked")) {
+                        $("#chkAll").attr("checked", false);
+                    } else {
+                        if ($(".chk").length == $(".chk:checked").length) {
+                            $("#chkAll").attr("checked", true);
+                        }
+                    }
+                });
+
+                $(".btn-copy").click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(controller: 'export', action:'exportOferentes')}",
+                        data    : $("#frmExport").serialize(),
+                        success : function (msg) {
+                            $("#divError").show();
+                            $("#spanError").html(msg);
+                        }
+                    });
+                    return false;
+                }); //click btn new
 
                 $(".btn-new").click(function () {
                     $.ajax({
@@ -247,209 +285,74 @@
                     return false;
                 }); //click btn show
 
-
-
                 $(".btn-cambiarEstado").click(function () {
 
-
-
-                    $("#cambiarEstado-dialog").dialog("open");
-
                     var id = $(this).data("id");
-//
+
+                    console.log("-->>" + id)
+
                     var estado = $(this).data("activo");
-//
-//                    console.log("estado:" + estado)
-//
-//                    console.log(id)
 
-                    %{--if(estado == 0) {--}%
+                    console.log("estado:" + estado)
 
-
-%{--//                        estado = $(this).data("activo",1)--}%
-
-                        %{--$.ajax({--}%
-
-                            %{--type: "POST",--}%
-                            %{--url: "${g.createLink(action: 'cambiarEstado')}",--}%
-                            %{--data : {id: id,--}%
-                                %{--activo:   '1'--}%
-
-                            %{--},--}%
-                            %{--success: function (msg){--}%
-
-                                %{--if (msg == 'ok') {--}%
-
-                                    %{--location.href = "${createLink(action: 'listOferente')}"--}%
-
-                                %{--}--}%
-
-                            %{--}--}%
-
-
-
-                        %{--});--}%
-
-                    %{--}if(estado == 1) {--}%
-
-
-%{--//                        $(this).data("activo", 0)--}%
-
-                        %{--$.ajax({--}%
-
-                            %{--type: "POST",--}%
-                            %{--url: "${g.createLink(action: 'cambiarEstado')}",--}%
-                            %{--data : {id: id,--}%
-                                %{--activo:   '0'--}%
-
-                            %{--},--}%
-                            %{--success: function (msg){--}%
-
-                                %{--if (msg == 'ok') {--}%
-
-                                    %{--location.href = "${createLink(action: 'listOferente')}"--}%
-
-                                %{--}--}%
-
-
-                            %{--}--}%
-
-
-
-                        %{--});--}%
-
-
-
-                    %{--}--}%
-
-
-
-
-
-
-
-
-
-                });
-
-
-                $("#cambiarEstado-dialog").dialog({
-
-                    autoOpen  : false,
-                    resizable : false,
-                    modal     : true,
-                    draggable : false,
-                    width     : 350,
-                    height    : 180,
-                    position  : 'center',
-                    title     : 'Cambiar Estado',
-                    buttons   : {
-                        "Aceptar" : function () {
-
-
-
-//                            var id = $(this).data("id");
-
-
-                              var id = ${sesion2?.usuario?.id}
-
-
-
-                              console.log(id)
-
-
-
-
-
-                            console.log("id2" + id)
-
-//                            var estado = $(this).data("activo");
-
-                              var estado = ${sesion2?.usuario?.activo}
-
-
-                            console.log("estado2:" + estado)
-
-                            if(estado == 0) {
+                    if (estado == 0) {
 
 
 //                        estado = $(this).data("activo",1)
 
-                                $.ajax({
+                        $.ajax({
 
-                                    type: "POST",
-                                    url: "${g.createLink(action: 'cambiarEstado')}",
-                                    data : {id: id,
-                                        activo:   '1'
+                            type    : "POST",
+                            url     : "${g.createLink(action: 'cambiarEstado')}",
+                            data    : {id : id,
+                                activo    : '1'
 
-                                    },
-                                    success: function (msg){
+                            },
+                            success : function (msg) {
 
-                                        if (msg == 'ok') {
+                                if (msg == 'ok') {
 
-                                            location.href = "${createLink(action: 'listOferente')}"
+                                    location.href = "${createLink(action: 'listOferente')}"
 
-                                        }
-
-                                    }
-
-
-
-                                });
-
-                            }if(estado == 1) {
-
-
-//                        $(this).data("activo", 0)
-
-                                $.ajax({
-
-                                    type: "POST",
-                                    url: "${g.createLink(action: 'cambiarEstado')}",
-                                    data : {id: id,
-                                        activo:   '0'
-
-                                    },
-                                    success: function (msg){
-
-                                        if (msg == 'ok') {
-
-                                            location.href = "${createLink(action: 'listOferente')}"
-
-                                        }
-
-
-                                    }
-
-
-
-                                });
-
-
+                                }
 
                             }
 
 
 
+                        });
+
+                    }
+                    if (estado == 1) {
+
+
+//                        $(this).data("activo", 0)
+
+                        $.ajax({
+
+                            type    : "POST",
+                            url     : "${g.createLink(action: 'cambiarEstado')}",
+                            data    : {id : id,
+                                activo    : '0'
+
+                            },
+                            success : function (msg) {
+
+                                if (msg == 'ok') {
+
+                                    location.href = "${createLink(action: 'listOferente')}"
+
+                                }
+
+                            }
 
 
 
-
-                        },
-
-                        "Cancelar": function (){
-
-                            $("#cambiarEstado-dialog").dialog("close")
-
-                        }
-
+                        });
 
                     }
 
                 });
-
-
-
 
 //                $(".btn-delete").click(function () {
 //                    var id = $(this).data("id");
@@ -496,8 +399,6 @@
                     });
                     return false;
                 }); //click btn password
-
-
 
             });
 

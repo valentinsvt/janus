@@ -519,7 +519,8 @@
 
                 <div class="span3" style="margin-top: 10px">
                     <div class="span3">
-                        <g:select name="oferenteCopia" from="${janus.Persona.findAllByDepartamento(Departamento.get(13))}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>
+                        <g:select name="oferenteCopia" from="${janus.Persona.findAll('from Persona where departamento=13')}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>
+                        %{--<g:select name="oferenteCopia" from="${janus.Persona.list()}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>--}%
                     </div>
                 </div>
             </fieldset>
@@ -1168,7 +1169,28 @@
                     title     : 'Copiar la obra al sistema de oferentes',
                     buttons   : {
                         "Aceptar"  : function () {
-
+                            var originalId = "${obra?.id}";
+                            var oferente = $("#oferenteCopia").val();
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(controller: "export", action: 'exportObra')}",
+                                data    : {
+                                    obra     : originalId,
+                                    oferente : oferente
+                                },
+                                success : function (msg) {
+                                    $("#copiarDialogOfe").dialog("close");
+                                    var parts = msg.split('_');
+                                    if (parts[0] == 'NO') {
+                                        $("#spanError").html(parts[1]);
+                                        $("#divError").show()
+                                    } else {
+                                        $("#divError").hide();
+                                        $("#spanOk").html(parts[1]);
+                                        $("#divOk").show();
+                                    }
+                                }
+                            });
                         },
                         "Cancelar" : function () {
                             $("#copiarDialogOfe").dialog("close");
