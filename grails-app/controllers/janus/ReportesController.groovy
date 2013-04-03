@@ -909,16 +909,16 @@ class ReportesController {
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "M":
+                addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "MNT":
+                addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: (r.parcial + r.parcial_t), minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
@@ -947,16 +947,30 @@ class ReportesController {
             addCellTabla(table, new Paragraph("Porcentaje", fonts.times8boldWhite), params.prmsCellHead)
             addCellTabla(table, new Paragraph("Valor", fonts.times8boldWhite), params.prmsCellHead)
         } else {
-            table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 10, 8]))
-            addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
+            if (tipo == "Materiales") {
+                table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 10, 8]))
+                addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
 
-            addCellTabla(table, new Paragraph("Código", fonts.times8boldWhite), params.prmsCellHead)
-            addCellTabla(table, new Paragraph("Descripción", fonts.times8boldWhite), params.prmsCellHead)
-            addCellTabla(table, new Paragraph("Cantidad", fonts.times8boldWhite), params.prmsCellHead)
-            addCellTabla(table, new Paragraph("Tarifa", fonts.times8boldWhite), params.prmsCellHead)
-            addCellTabla(table, new Paragraph("Costo", fonts.times8boldWhite), params.prmsCellHead)
-            addCellTabla(table, new Paragraph("Rendimiento", fonts.times8boldWhite), params.prmsCellHead)
-            addCellTabla(table, new Paragraph("C.Total", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Código", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Descripción", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Unidad", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Cantidad", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Tarifa", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("C.Total", fonts.times8boldWhite), params.prmsCellHead)
+            }else{
+                table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 10, 8]))
+                addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
+
+                addCellTabla(table, new Paragraph("Código", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Descripción", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Cantidad", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Tarifa", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Costo", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Rendimiento", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("C.Total", fonts.times8boldWhite), params.prmsCellHead)
+            }
+
         }
     }
 
