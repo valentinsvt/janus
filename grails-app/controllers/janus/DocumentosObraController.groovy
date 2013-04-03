@@ -24,10 +24,19 @@ class DocumentosObraController {
         def auxiliarFijo = Auxiliar.get(1);
 
 
+
+
+
+
+
 //        println(params)
 
 
         def obra = Obra.get(params.id)
+
+//        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra,'c%')
+
+//        println("cuadrilla:" + cuadrilla)
 
         def departamento = Departamento.get(obra?.departamento?.id)
 
@@ -76,12 +85,12 @@ class DocumentosObraController {
             prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
             prvl = prvl["${obra.volquete.id}"]
         }
-        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
-
-        if (rendimientos["rdps"].toString()=="NaN")
-            rendimientos["rdps"]=0
-        if (rendimientos["rdvl"].toString()=="NaN")
-            rendimientos["rdvl"]=0
+//        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
+//
+//        if (rendimientos["rdps"].toString()=="NaN")
+//            rendimientos["rdps"]=0
+//        if (rendimientos["rdvl"].toString()=="NaN")
+//            rendimientos["rdvl"]=0
 
         def indirecto = obra.totales/100
 

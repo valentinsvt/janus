@@ -956,17 +956,17 @@
 
                 $("#btnDocumentos").click(function () {
 
-                    if (${obra?.estado == 'R'}) {
+                    %{--if (${obra?.estado == 'R'}) {--}%
 
-                        $("#dlgLoad").dialog("open");
+                        %{--$("#dlgLoad").dialog("open");--}%
 
                         location.href = "${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}"
 
-                    }
-                    else {
-                        $("#documentosDialog").dialog("open")
+                    %{--}--}%
+                    %{--else {--}%
+                        %{--$("#documentosDialog").dialog("open")--}%
 
-                    }
+                    %{--}--}%
 
                 });
 

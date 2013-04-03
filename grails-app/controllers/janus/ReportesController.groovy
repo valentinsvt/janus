@@ -2439,6 +2439,8 @@ class ReportesController {
         def formula = FormulaPolinomica.findAllByObra(obra)
 
         def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%')
+
+        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%')
 //
 //        println("---->>>>>"+ps)
 
@@ -2832,7 +2834,64 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
 
+        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+
+        PdfPTable tablaCuadrilla = new PdfPTable(3);
+        tablaCuadrilla.setWidthPercentage(100);
+        tablaCuadrilla.setWidths(arregloEnteros([10,60,30]))
+
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph("CUADRILLA TIPO ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph("CLASE OBRERO ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        def valorTotalCuadrilla = 0;
+
+        cuadrilla.each {i->
+
+
+            if(i.valor != 0.0 || i.valor != 0) {
+
+                addCellTabla(tablaCuadrilla, new Paragraph(" ", times10normal), prmsHeaderHoja)
+                addCellTabla(tablaCuadrilla, new Paragraph(i?.indice?.descripcion, times10normal),prmsHeaderHoja)
+                addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
+
+
+                valorTotalCuadrilla = i.valor + valorTotalCuadrilla
+
+            } else {
+
+
+            }
+
+        }
+
+
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph("________", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph("________", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph("SUMAN : ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: valorTotalCuadrilla, format: "##.####", locale: "ec"), times10bold), prmsHeaderHoja)
+
+
+
+
         document.add(tablaCoeficiente)
+        document.add(tablaCuadrilla)
 
         Paragraph txtIzqPie = new Paragraph();
         addEmptyLine(txtIzqPie, 1);
