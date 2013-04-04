@@ -411,7 +411,7 @@ class ItemController extends janus.seguridad.Shield {
             rubroPrecioInstance.fecha = nuevaFecha
             rubroPrecioInstance.precioUnitario = nuevoPrecio
             rubroPrecioInstance.fechaIngreso = nuevaFecha
-            rubroPrecioInstance.registrado = "R"
+            rubroPrecioInstance.registrado = "N"
 
             if (!rubroPrecioInstance.save(flush: true)) {
                 println "error " + parts
