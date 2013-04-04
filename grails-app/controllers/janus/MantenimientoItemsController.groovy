@@ -26,17 +26,17 @@ class MantenimientoItemsController extends Shield {
             case "grupo_material":
             case "grupo_manoObra":
             case "grupo_equipo":
-                hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'descripcion'])
+                hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])
                 break;
             case "subgrupo_material":
             case "subgrupo_manoObra":
             case "subgrupo_equipo":
-                hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(id), [sort: 'descripcion'])
+                hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(id), [sort: 'codigo'])
                 break;
             case "departamento_material":
             case "departamento_manoObra":
             case "departamento_equipo":
-                hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'nombre'])
+                hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'codigo'])
                 break;
             case "item_material":
             case "item_manoObra":
@@ -53,9 +53,9 @@ class MantenimientoItemsController extends Shield {
                     if (ignore) {
                         hijos = ["Todos"]
                     } else {
-                            hijos=[]
-                        if (tipoLista){
-                        hijos = Lugar.findAllByTipoLista(tipoLista)
+                        hijos = []
+                        if (tipoLista) {
+                            hijos = Lugar.findAllByTipoLista(tipoLista)
                         }
 
 //                        hijos = Lugar.list([sort: "descripcion"])
@@ -90,7 +90,7 @@ class MantenimientoItemsController extends Shield {
                 case "grupo_material":
                 case "grupo_manoObra":
                 case "grupo_equipo":
-                    hijosH = DepartamentoItem.findAllBySubgrupo(hijo, [sort: 'descripcion'])
+                    hijosH = DepartamentoItem.findAllBySubgrupo(hijo, [sort: 'codigo'])
                     desc = hijo.descripcion
                     def parts = tipo.split("_")
                     rel = "subgrupo_" + parts[1]
@@ -99,7 +99,7 @@ class MantenimientoItemsController extends Shield {
                 case "subgrupo_material":
                 case "subgrupo_manoObra":
                 case "subgrupo_equipo":
-                    hijosH = Item.findAllByDepartamento(hijo, [sort: 'nombre'])
+                    hijosH = Item.findAllByDepartamento(hijo, [sort: 'codigo'])
                     desc = hijo.descripcion
                     def parts = tipo.split("_")
                     rel = "departamento_" + parts[1]
@@ -116,12 +116,11 @@ class MantenimientoItemsController extends Shield {
                             hijosH = ["Todos"]
                         } else {
 
-                            if (tipoLista){
+                            if (tipoLista) {
                                 hijosH = Lugar.findAllByTipoLista(tipoLista)
                             }
 
                             println("hijosH" + hijosH + " " + hijo)
-
 
 //                            hijosH = Lugar.list([sort: "descripcion"])
 //                            hijosH = Lugar.withCriteria {
@@ -518,7 +517,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def showIt_ajax() {
-        println "showIt_ajax" +params
+        println "showIt_ajax" + params
         def itemInstance = Item.get(params.id)
         return [itemInstance: itemInstance]
     }
@@ -639,7 +638,7 @@ class MantenimientoItemsController extends Shield {
 
         }
 
-        if (!params.tipoLista){
+        if (!params.tipoLista) {
 
             params.tipoLista = TipoLista.get(6)
 
