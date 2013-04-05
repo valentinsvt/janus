@@ -180,8 +180,8 @@ class PersonaController extends janus.seguridad.Shield {
 
             persona.activo = params.activo.toInteger()
 
-           println("id: " + persona.id)
-           println("activo: " + persona.activo)
+//           println("id: " + persona.id)
+//           println("activo: " + persona.activo)
 
             if (persona.save(flush: true))
                 render "ok"

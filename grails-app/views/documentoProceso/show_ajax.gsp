@@ -16,7 +16,7 @@
         
                 <span aria-labelledby="etapa-label">
         %{--<g:link controller="etapa" action="show" id="${documentoProcesoInstance?.etapa?.id}">--}%
-                    ${documentoProcesoInstance?.etapa?.encodeAsHTML()}
+                    ${documentoProcesoInstance?.etapa?.descripcion?.encodeAsHTML()}
         %{--</g:link>--}%
                 </span>
         
@@ -35,7 +35,7 @@
         
                 <span aria-labelledby="concurso-label">
         %{--<g:link controller="concurso" action="show" id="${documentoProcesoInstance?.concurso?.id}">--}%
-                    ${documentoProcesoInstance?.concurso?.encodeAsHTML()}
+                    ${documentoProcesoInstance?.concurso?.id?.encodeAsHTML()}
         %{--</g:link>--}%
                 </span>
         
