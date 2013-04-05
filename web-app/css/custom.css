@@ -1,3 +1,19 @@
+/*
+para regresar a la version anterior comentar esto y cambiar en los layouts la carpeta del jquery ui de bw a twitBoot
+*/
+body {
+    background-color : #D7D7D7;
+}
+
+input, select, textarea {
+    background-color : #E7E7E7 !important;
+    border-color     : #404040 !important;
+}
+
+/*
+Hasta aca se comenta para regresar a la version anterior
+*/
+
 .btn-group {
     display        : inline-block;
     font-size      : 0;
@@ -238,7 +254,7 @@ fieldset.borde legend {
 
 }
 
-.label-azul{
+.label-azul {
     color       : #0061CC;
     font-family : 'open sans condensed';
     font-weight : bold;
@@ -307,6 +323,7 @@ th.desc a {
 .tallModal .modal-body {
     max-height : 800px;
 }
+
 /********cambiar el height *********/
 .tallModal2 .modal-body {
     max-height : 840px;
