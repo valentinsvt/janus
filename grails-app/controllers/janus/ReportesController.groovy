@@ -3303,18 +3303,7 @@ class ReportesController {
         def lugar = obra.lugar
         def prch = 0
         def prvl = 0
-        if (obra.chofer) {
-            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
-            prch = prch["${obra.chofer.id}"]
-            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
-            prvl = prvl["${obra.volquete.id}"]
-        }
-        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
-
-        if (rendimientos["rdps"].toString() == "NaN")
-            rendimientos["rdps"] = 0
-        if (rendimientos["rdvl"].toString() == "NaN")
-            rendimientos["rdvl"] = 0
+        preciosService.ac_rbroObra(obra.id)
 
         def indirecto = obra.totales / 100
 
