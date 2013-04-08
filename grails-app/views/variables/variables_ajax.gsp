@@ -19,6 +19,7 @@
 </style>
 
 <g:form controller="variables" action="saveVar_ajax" name="frmSave-var">
+    <g:hiddenField name="id_lgarMO" value="${obra?.listaManoObra?.id}"/>
     <div id="tabs" style="height: 455px;">
         <ul>
             <li><a href="#tab-transporte">Variables de Transporte</a></li>
@@ -454,7 +455,8 @@
     function costoItem($campo, $update) {
         var id = $campo.val();
         var fecha = $("#fechaPreciosRubros").val();
-        var ciudad = $("#lugar\\.id").val();
+        /*var ciudad = $("#lugar\\.id").val();*/
+        var ciudad = $("#id_lgarMO").val();
 //        console.log(id, fecha, ciudad);
         if (id != "" && fecha != "" && ciudad != "") {
             $.ajax({
