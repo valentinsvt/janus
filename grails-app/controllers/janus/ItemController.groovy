@@ -80,9 +80,9 @@ class ItemController extends janus.seguridad.Shield {
                 "  LEFT JOIN lgar l\n" +
                 "    ON r.lgar__id = l.lgar__id\n" +
                 "WHERE i.tpls__id ${tipoLugar}\n" +
-                "ORDER BY i.itemnmbr, i.item__id, l.lgardscr"
+                "ORDER BY i.itemcdgo, i.item__id, l.lgardscr"
 
-        println sqlPrecios
+//        println sqlPrecios
 
         def lugares = []
 
@@ -152,7 +152,11 @@ class ItemController extends janus.seguridad.Shield {
                         p = precio.precio
                         rubro = precio.rbpc_id
                     }
-                    body += "<td class='editable number' data-original='${p}' data-lugar='${lugarId}' data-id='${rubro}' data-item='${row.item_id}'>" + prec + '</td>'
+                    def clase = ""
+                    if (params.lgar != "-1") {
+                        clase = "editable"
+                    }
+                    body += "<td class='${clase} number' data-original='${p}' data-lugar='${lugarId}' data-id='${rubro}' data-item='${row.item_id}'>" + prec + '</td>'
                 }
             }
         }

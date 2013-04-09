@@ -19,8 +19,8 @@ function scroll() {
     var container = $('#divTabla'), scrollTo = $('.selected');
     var newPos = scrollTo.offset().top - container.offset().top + container.scrollTop() - 100;
 //    container.animate({
-//        scrollTop : scrollTo.offset().top - container.offset().top + container.scrollTop()
-//    }, 2000);
+//        scrollTop : newPos
+//    }, 200);
     container.scrollTop(newPos);
 }
 
@@ -59,6 +59,7 @@ $(document).keyup(function (ev) {
         case 13: //enter
             var target = $(ev.target);
             if (target.hasClass("editando")) {
+//                stopEdit();
                 var value = target.val();
                 $(".selected").html(number_format(value, 5, ".", ""));
                 sel.data("valor", value);
