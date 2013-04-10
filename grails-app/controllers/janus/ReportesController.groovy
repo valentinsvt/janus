@@ -722,17 +722,17 @@ class ReportesController {
         document.addCreator("Tedein SA");
 
         def prmsHeaderHoja = [border: Color.WHITE]
-        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+        def prmsHeader = [border: Color.WHITE, colspan: 7,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+        def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
-        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+        def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.WHITE, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
-        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum]
@@ -881,7 +881,7 @@ class ReportesController {
 
 
             addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
-            addCellTabla(pieTabla, new Paragraph("Parámetros para los datos de presupuesto obtenidos de la obra: " + obra?.codigo, fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(pieTabla, new Paragraph("Parámetros para los datos de presupuesto obtenidos de la obra: " + obra?.nombre, fonts.times8bold), prmsHeaderHoja)
 
             addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(pieTabla, new Paragraph("Nota: Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.   ", fonts.times8bold), prmsHeaderHoja)
