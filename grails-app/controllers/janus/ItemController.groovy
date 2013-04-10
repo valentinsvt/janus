@@ -30,6 +30,146 @@ class ItemController extends janus.seguridad.Shield {
 
     }
 
+    def tablaRegistrar() {
+        if (!params.max || params.max == 0) {
+            params.max = 100
+        } else {
+            params.max = params.max.toInteger()
+        }
+        if (!params.pag) {
+            params.pag = 1;
+        } else {
+            params.pag = params.pag.toInteger()
+        }
+        params.offset = params.max * (params.pag - 1)
+
+        def lugar = Lugar.get(params.lgar)
+        def sql
+        def tipo = Grupo.get(params.tipo)
+//           println(tipo);
+
+        sql = "select distinct rbpc.item__id, item.itemcdgo "
+        sql += "from rbpc, item"
+        if (params.tipo != "-1") {
+            sql += ", dprt, sbgr, grpo"
+        }
+        sql += " where rbpc.item__id=item.item__id and lgar__id=${lugar.id} "
+        if (params.tipo != "-1") {
+            sql += "and item.dprt__id = dprt.dprt__id "
+            sql += "and dprt.sbgr__id = sbgr.sbgr__id "
+            sql += "and sbgr.grpo__id = grpo.grpo__id "
+            sql += "and grpo.grpo__id = ${tipo.id}"
+        }
+        sql += " and rbpcrgst != 'R'"
+        estado = "and r1.rbpcrgst!='R'"
+
+        sql += " order by itemcdgo "
+
+//            println ">>" + sql
+
+        def itemsIds = ""
+
+        def cn = dbConnectionService.getConnection()
+        cn.eachRow(sql.toString()) { row ->
+//                println "\t" + row[0]
+            if (itemsIds != "") {
+                itemsIds += ","
+            }
+            itemsIds += row[0]
+        }
+//
+//          println itemsIds
+        if (itemsIds == "") itemsIds = '-1'
+
+
+
+        def precios = preciosService.getPrecioRubroItemEstadoNoFecha(lugar, itemsIds, estado)
+        def rubroPrecio = []
+//            println ">>" + precios
+        precios.each {
+            def pri = PrecioRubrosItems.get(it)
+//                println "\t" + it + "   " + pri.registrado + "    " + pri.itemId
+            rubroPrecio.add(pri)
+        }
+
+//            println("precios2" + precios);
+
+        if (params.tipo == '-1') {
+//                println("entro 1")
+
+            if (!params.totalRows) {
+                sql = "select count(distinct rbpc.item__id) "
+                sql += "from rbpc "
+                sql += "where lgar__id=${lugar.id} "
+                sql += " and rbpcrgst != 'R'"
+
+//                    println "^^" + sql
+
+                def totalCount
+                cn.eachRow(sql.toString()) { row ->
+                    totalCount = row[0]
+                }
+
+                params.totalRows = totalCount
+
+                params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+
+                if (params.totalPags <= 10) {
+                    params.first = 1
+                    params.last = params.last = params.totalPags
+                } else {
+                    params.first = Math.max(1, params.pag.toInteger() - 5)
+                    params.last = Math.min(params.totalPags, params.pag + 5)
+
+                    def ts = params.last - params.first
+                    if (ts < 9) {
+                        def r = 10 - ts
+                        params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                    }
+                }
+            }
+            cn.close()
+        } else {
+            println("entro2")
+            if (!params.totalRows) {
+                sql = "select count(distinct rbpc.item__id) "
+                sql += "from rbpc, item "
+                sql += ", dprt, sbgr, grpo "
+                sql += "where lgar__id=${lugar.id} "
+                sql += "and rbpc.item__id = item.item__id "
+                sql += "and item.dprt__id = dprt.dprt__id "
+                sql += "and dprt.sbgr__id = sbgr.sbgr__id "
+                sql += "and sbgr.grpo__id = grpo.grpo__id "
+                sql += "and grpo.grpo__id =${tipo.id}"
+                sql += " and rbpcrgst != 'R'"
+//                    println("**" + sql)
+
+                def totalCount
+                cn.eachRow(sql.toString()) { row ->
+                    totalCount = row[0]
+                }
+                params.totalRows = totalCount
+                params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+                if (params.totalPags <= 10) {
+                    params.first = 1
+                    params.last = params.last = params.totalPags
+                } else {
+                    params.first = Math.max(1, params.pag.toInteger() - 5)
+                    params.last = Math.min(params.totalPags, params.pag + 5)
+
+                    def ts = params.last - params.first
+                    if (ts < 9) {
+                        def r = 10 - ts
+                        params.last = Math.min(params.totalPags, params.last + r).toInteger()
+                    }
+                }
+            }
+            cn.close()
+        }
+
+        [rubroPrecio: rubroPrecio, params: params, lugar: lugar]
+    }
+
     def tablaVolumen() {
         if (!params.max || params.max == 0) {
             params.max = 100

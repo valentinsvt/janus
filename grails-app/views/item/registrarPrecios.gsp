@@ -97,46 +97,15 @@
 
             function consultar() {
                 var lgar = $("#listaPrecio").val();
-                var fcha = $("#fecha").val();
 
-                if (fcha == "") {
-
-                    fcha = new Date().toString("dd-MM-yyyy")
-
-                    $("#fecha").val(fcha);
-                }
-
-                var todos = 2;
-//        if ($("#todos").attr("checked") == "checked") {
-//            todos = 1
-//        } else {
-//            todos = 2
-//        }
                 var tipo = $("#tipo").val();
-
-                var reg = "";
-                if ($("#reg").hasClass("active")) {
-                    reg += "R";
-                }
-                if ($("#nreg").hasClass("active")) {
-                    reg += "N";
-                }
-
-                if (reg == "") {
-                    $("#reg").addClass("active");
-                    $("#nreg").addClass("active");
-                    reg = "RN";
-                }
 
                 $.ajax({
                     type    : "POST",
-                    url     : "${createLink(action:'tabla')}",
+                    url     : "${createLink(action:'tablaRegistrar')}",
                     data    : {
                         lgar  : lgar,
-                        fecha : fcha,
-                        todos : todos,
                         tipo  : tipo,
-                        reg   : reg,
                         max   : 100,
                         pag   : 1
                     },

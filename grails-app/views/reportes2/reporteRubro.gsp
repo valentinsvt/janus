@@ -19,6 +19,10 @@
             margin : 1.5cm;
         }
 
+        body {
+            background : none !important;
+        }
+
         html {
             font-family : Verdana, Arial, sans-serif;
             font-size   : 8px;

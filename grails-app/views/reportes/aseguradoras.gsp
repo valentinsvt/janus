@@ -12,6 +12,10 @@
             margin : 2cm;
         }
 
+        body {
+            background : none !important;
+        }
+
         .hoja {
             /*background  : #e6e6fa;*/
             height      : 24.7cm; /*29.7-(1.5*2)*/

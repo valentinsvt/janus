@@ -91,7 +91,33 @@ class PreciosService {
         sql += "group by 1,2 order by 2"
         sql += ""
 
-        println "()" + sql
+//        println "()" + sql
+        cn.eachRow(sql.toString()) { row ->
+            res.add(row[2])
+        }
+        cn.close()
+        return res
+    }
+
+    def getPrecioRubroItemEstadoNoFecha(lugar, items, registrado) {
+        def cn = dbConnectionService.getConnection()
+        def itemsId = items
+        def res = []
+
+        def sql = "SELECT "
+        sql += "r1.item__id,"
+        sql += "i.itemcdgo,"
+        sql += "(SELECT r2.rbpc__id from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar.id}) "
+        sql += "FROM rbpc r1,item i "
+        sql += "WHERE "
+        sql += "r1.item__id in (${itemsId}) "
+        sql += "and r1.lgar__id=${lugar.id} "
+        sql += "and i.item__id=r1.item__id "
+        sql += " " + registrado + " "
+        sql += "group by 1,2 order by 2"
+        sql += ""
+
+//        println "()" + sql
         cn.eachRow(sql.toString()) { row ->
             res.add(row[2])
         }
@@ -117,7 +143,7 @@ class PreciosService {
 //        sql += " " + registrado + " "
         sql += "group by 1,2 order by 2"
         sql += ""
-        println "()" + sql
+//        println "()" + sql
         cn.eachRow(sql.toString()) { row ->
             res.add(row[2])
         }
