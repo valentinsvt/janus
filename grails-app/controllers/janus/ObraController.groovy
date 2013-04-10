@@ -327,7 +327,7 @@ class ObraController extends janus.seguridad.Shield {
         def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
         def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
-
+//
 //        println(personasRolInsp)
 //        println(personasRolRevi)
 //        println(personasRolResp)
@@ -337,6 +337,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println(personasRolResp.persona)
 
 //        println(personas)
+
         return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona]
 
 
