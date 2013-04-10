@@ -24,65 +24,44 @@
                         <th>Precio</th>
                         <th class="precioAL hidden">Precio Anterior</th>
                         <th>Fecha</th>
-                        <th>Registrar</th>
+                        %{--<th>Registrar</th>--}%
                     </tr>
                 </thead>
                 <tbody>
 
                     <g:each in="${rubroPrecio}" var="rubro" status="i">
-
                         <tr align="right">
-
                             <td class="itemId" align="center" style="width: 150px;">
-
                                 ${rubro?.item?.codigo}
-
                             </td>
-
                             <td class="itemNombre" align="center">
-
                                 ${rubro?.item?.nombre}
-
                             </td>
-
                             <td class="unidad" align="center" style="width: 150px">
-
                                 ${rubro?.item?.unidad?.descripcion}
-
                             </td>
-
-                            <td class="editable alineacion ${i == 0 ? 'selected' : ''}" id="${rubro?.id}"
-                                data-original="${rubro?.precioUnitario}"
+                            <td class="editable alineacion" id="${rubro?.id}"
+                                data-original="${rubro?.precioUnitario}" data-valor="${rubro?.precioUnitario}"
                                 style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,#####0" locale="ec"/>
-
                             </td>
-
                             <td class="precioAnterior hidden" align="center" style="width: 105px">
                                 0.00
                             </td>
-
                             <td class="fecha" align="center" style="width: 150px">
-
                                 <g:formatDate date="${rubro?.fecha}" format="dd-MM-yyyy"/>
-
                             </td>
-
-                            <td style="text-align: center;" class="chk">
-                                %{--${rubro?.registrado}--}%
-                                <g:if test="${rubro?.registrado == 'R'}">
-                                    <i class="icon-ok"></i>
-                                </g:if>
-                                <g:else>
-                                    <input type="checkbox"/>
-                                </g:else>
-                            </td>
-
+                            %{--<td style="text-align: center;" class="chk">--}%
+                            %{--${rubro?.registrado}--}%
+                            %{--<g:if test="${rubro?.registrado == 'R'}">--}%
+                            %{--<i class="icon-ok"></i>--}%
+                            %{--</g:if>--}%
+                            %{--<g:else>--}%
+                            %{--<input type="checkbox"/>--}%
+                            %{--</g:else>--}%
+                            %{--</td>--}%
                         </tr>
-
                     </g:each>
-
                 </tbody>
-
             </table>
 
             Total de registros visualizados: ${params.totalRows}<br/>
@@ -185,19 +164,19 @@
 
                 function enviar(pag) {
 
-                    var reg = "";
-                    if ($("#reg").hasClass("active")) {
-                        reg += "R";
-                    }
-                    if ($("#nreg").hasClass("active")) {
-                        reg += "N";
-                    }
-
-                    if (reg == "") {
-                        $("#reg").addClass("active");
-                        $("#nreg").addClass("active");
-                        reg = "RN";
-                    }
+                    var reg = "RN";
+//                    if ($("#reg").hasClass("active")) {
+//                        reg += "R";
+//                    }
+//                    if ($("#nreg").hasClass("active")) {
+//                        reg += "N";
+//                    }
+//
+//                    if (reg == "") {
+//                        $("#reg").addClass("active");
+//                        $("#nreg").addClass("active");
+//                        reg = "RN";
+//                    }
 
                     $.ajax({
                         type    : "POST",
@@ -220,6 +199,8 @@
                 }
 
                 $(function () {
+
+                    $(".editable").first().addClass("selected");
 
                     $(".num").click(function () {
                         $("#dlgLoad").dialog("open");

@@ -39,6 +39,7 @@
             overflow-x : hidden;
             overflow-y : auto;
             border     : 1px solid #E2CBA1;
+            background : #E5DED3;
         }
 
         .left {
@@ -119,7 +120,7 @@
                 </g:link>
             </div>
             <a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"
-              style="margin-top: -10px;">
+               style="margin-top: -10px;">
                 <i class="icon-trash"></i>
                 Borrar la Fórmula Polinomica
             </a>
@@ -350,44 +351,44 @@
                                 });
                             }
                         };
-                        %{--if (hijos == 0 && num != "p01" && num != "p02" && num != "px" && num != "c01") {--}%
-                            %{--menuItems.eliminar = {--}%
-                                %{--label            : "Eliminar",--}%
-                                %{--separator_before : false,--}%
-                                %{--separator_after  : false,--}%
-                                %{--icon             : icons.delete,--}%
-                                %{--action           : function (obj) {--}%
-                                    %{--$.box({--}%
-                                        %{--imageClass : "box_info",--}%
-                                        %{--text       : "Está seguro de eliminar el coeficiente " + num + " " + nodeText + "?",--}%
-                                        %{--title      : "Confirmación",--}%
-                                        %{--iconClose  : false,--}%
-                                        %{--dialog     : {--}%
-                                            %{--resizable     : false,--}%
-                                            %{--draggable     : false,--}%
-                                            %{--closeOnEscape : false,--}%
-                                            %{--buttons       : {--}%
-                                                %{--"Aceptar"  : function () {--}%
-                                                    %{--$.ajax({--}%
-                                                        %{--type    : "POST",--}%
-                                                        %{--url     : "${createLink(action:'delCoefFormula')}",--}%
-                                                        %{--data    : {--}%
-                                                            %{--obra : "${obra.id}",--}%
-                                                            %{--id   : nodeId--}%
-                                                        %{--},--}%
-                                                        %{--success : function (msg) {--}%
-                                                            %{--$("#tree").jstree('delete_node', $("#" + nodeStrId));--}%
-                                                        %{--}--}%
-                                                    %{--});--}%
-                                                %{--},--}%
-                                                %{--"Cancelar" : function () {--}%
-                                                %{--}--}%
-                                            %{--}--}%
-                                        %{--}--}%
-                                    %{--});--}%
-                                %{--}--}%
-                            %{--};--}%
-                        %{--}--}%
+                    %{--if (hijos == 0 && num != "p01" && num != "p02" && num != "px" && num != "c01") {--}%
+                    %{--menuItems.eliminar = {--}%
+                    %{--label            : "Eliminar",--}%
+                    %{--separator_before : false,--}%
+                    %{--separator_after  : false,--}%
+                    %{--icon             : icons.delete,--}%
+                    %{--action           : function (obj) {--}%
+                    %{--$.box({--}%
+                    %{--imageClass : "box_info",--}%
+                    %{--text       : "Está seguro de eliminar el coeficiente " + num + " " + nodeText + "?",--}%
+                    %{--title      : "Confirmación",--}%
+                    %{--iconClose  : false,--}%
+                    %{--dialog     : {--}%
+                    %{--resizable     : false,--}%
+                    %{--draggable     : false,--}%
+                    %{--closeOnEscape : false,--}%
+                    %{--buttons       : {--}%
+                    %{--"Aceptar"  : function () {--}%
+                    %{--$.ajax({--}%
+                    %{--type    : "POST",--}%
+                    %{--url     : "${createLink(action:'delCoefFormula')}",--}%
+                    %{--data    : {--}%
+                    %{--obra : "${obra.id}",--}%
+                    %{--id   : nodeId--}%
+                    %{--},--}%
+                    %{--success : function (msg) {--}%
+                    %{--$("#tree").jstree('delete_node', $("#" + nodeStrId));--}%
+                    %{--}--}%
+                    %{--});--}%
+                    %{--},--}%
+                    %{--"Cancelar" : function () {--}%
+                    %{--}--}%
+                    %{--}--}%
+                    %{--}--}%
+                    %{--});--}%
+                    %{--}--}%
+                    %{--};--}%
+                    %{--}--}%
                         break;
                     case "it":
                         var nodeCod = node.attr("numero");

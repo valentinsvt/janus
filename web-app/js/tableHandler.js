@@ -8,7 +8,7 @@
 
 function doEdit(sel) {
     var texto = $.trim(sel.text());
-    console.log("doEdit", sel, texto, sel.data("valor"));
+//    console.log("doEdit", sel,sel.text(), texto, sel.data("valor"));
     if (texto == "" && sel.data("valor") > 0) {
         texto = sel.data("valor");
     }
@@ -19,7 +19,7 @@ function doEdit(sel) {
     sel.html(textField);
     textField.focus();
     sel.data("valor", texto);
-    console.log(sel, texto, sel.data("valor"));
+//    console.log(sel, texto, sel.data("valor"));
 }
 
 function stopEdit() {
@@ -28,7 +28,7 @@ function stopEdit() {
 //    if (parseFloat(value) == 0 || value == "") {
     var value = $sel.data("valor"); //valor antes de la edicion
 
-    console.log("stopEdit", $sel, value);
+//    console.log("stopEdit", $sel, value);
 
 //    }
     if (value) {

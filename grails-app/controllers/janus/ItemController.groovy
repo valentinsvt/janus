@@ -18,6 +18,10 @@ class ItemController extends janus.seguridad.Shield {
         [itemInstanceList: Item.list(params), itemInstanceTotal: Item.count(), params: params]
     } //list
 
+    def registrarPrecios() {
+
+    }
+
     def precioVolumen() {
 
     }
@@ -453,7 +457,7 @@ class ItemController extends janus.seguridad.Shield {
             def nuevoPrecio = parts[1]
             def nuevaFecha = parts[2]
 
-            def reg = parts[3]
+//            def reg = parts[3]
 
             nuevaFecha = new Date().parse("dd-MM-yyyy", nuevaFecha);
 
@@ -467,9 +471,10 @@ class ItemController extends janus.seguridad.Shield {
                 rubroPrecioInstance = rubroPrecioInstanceOld
             }
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
-            rubroPrecioInstance.fecha = nuevaFecha
 
-            rubroPrecioInstance.registrado = reg == "true" ? "R" : "N"
+            rubroPrecioInstance.registrado = "N"
+
+            rubroPrecioInstance.fecha = nuevaFecha
 
             if (!rubroPrecioInstance.save(flush: true)) {
                 println "error " + parts

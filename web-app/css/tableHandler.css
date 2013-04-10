@@ -1,3 +1,8 @@
+.editable {
+    background    : url(../images/edit.gif) right no-repeat;
+    padding-right : 18px !important;
+}
+
 .selected {
     border : solid 2px blue !important;
 }

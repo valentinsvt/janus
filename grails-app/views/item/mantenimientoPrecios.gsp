@@ -16,31 +16,40 @@
 
     <body>
 
+        <div class="btn-toolbar" style="margin-top: 5px;">
+            <div class="btn-group">
+                <a href="${g.createLink(controller: 'mantenimientoItems', action: 'precios')}" class="btn " title="Regresar">
+                    <i class="icon-arrow-left"></i>
+                    Regresar
+                </a>
+            </div>
+        </div>
+
         <fieldset class="borde">
 
-            <div class="span12 noMargin">
+            <div class="row">
 
-                <div class="span4 noMargin" align="center">Lista de Precios</div>
+                <div class="span4" align="center">Lista de Precios</div>
 
-                <div class="span1 noMargin" align="center">Fecha</div>
+                <div class="span2" align="center">Fecha</div>
 
-                %{--<div class="span2 noMargin" align="center">Todos</div>--}%
+                %{--<div class="span2" align="center">Todos</div>--}%
 
-                <div class="span4 noMargin" align="center">Ver</div>
+                <div class="span3" align="center">Ver</div>
 
             </div>
 
-            <div class="span12 noMargin">
+            <div class="row">
 
-                <div class="span4 noMargin" align="center">
+                <div class="span4" align="center">
                     <g:select class="listPrecio span2" name="listaPrecio"
                               from="${janus.Lugar.list([sort: 'descripcion'])}" optionKey="id"
-                              optionValue="${{ it.descripcion + ' (' + it.tipo + ')' }}"
+                              optionValue="${{ it.descripcion }}"
                               noSelection="['-1': 'Seleccione']"
-                              disabled="false" style="margin-left: 20px; width: 300px; margin-right: 50px"/>
+                              disabled="false" style="width: 300px;"/>
                 </div>
 
-                <div class="span1 noMargin" align="center">
+                <div class="span2" align="center">
                     <elm:datepicker name="fecha" class="fecha datepicker input-small" value=""/>
                 </div>
 
@@ -48,17 +57,17 @@
                 %{--<g:checkBox name="todosPrecios" id="todos" checked="false" class="span1"/>--}%
                 %{--</div>--}%
 
-                <div class="span2 noMargin" align="center">
+                <div class="span3" align="center">
                     <g:select name="tipo" from="${janus.Grupo.findAllByIdLessThanEquals(3)}" class="span2" optionKey="id"
-                              optionValue="descripcion" noSelection="['-1': 'Todos']" style="margin-left: 90px"/>
+                              optionValue="descripcion" noSelection="['-1': 'Todos']"/>
                 </div>
 
-                <div class="btn-group span1" style="margin-left: 100px; margin-right: 10px; width: 230px;" data-toggle="buttons-checkbox">
-                    <a href="#" class="btn active" id="reg">Registrados</a>
-                    <a href="#" class="btn active" id="nreg">No registrados</a>
-                </div>
+                %{--<div class="btn-group span1" style="margin-left: 100px; margin-right: 10px; width: 230px;" data-toggle="buttons-checkbox">--}%
+                %{--<a href="#" class="btn active" id="reg">Registrados</a>--}%
+                %{--<a href="#" class="btn active" id="nreg">No registrados</a>--}%
+                %{--</div>--}%
 
-                <div class="btn-group span1" style="margin-left: 5px; margin-right: 10px; width: 200px;">
+                <div class="btn-group span1" style=" width: 200px;">
                     <a href="#" class="btn btn-consultar"><i class="icon-search"></i>Consultar</a>
                     <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i>Guardar</a>
                 </div>
@@ -203,7 +212,7 @@
                                 data += "&";
                             }
                             var val = valor ? valor : data1;
-                            data += "item=" + id + "_" + val + "_" + fcha + "_" + chk;
+                            data += "item=" + id + "_" + val + "_" + fcha;// + "_" + chk;
                         }
                     });
 
@@ -213,8 +222,7 @@
                         data    : data,
                         success : function (msg) {
                             $("#dlgLoad").dialog("close");
-                            var parts = msg.split("_")
-                            1;
+                            var parts = msg.split("_");
                             var ok = parts[0];
                             var no = parts[1];
 
