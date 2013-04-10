@@ -61,9 +61,9 @@ class ItemController extends janus.seguridad.Shield {
             sql += "and grpo.grpo__id = ${tipo.id}"
         }
         sql += " and rbpcrgst != 'R'"
-        estado = "and r1.rbpcrgst!='R'"
-
         sql += " order by itemcdgo "
+
+        def estado = "and r1.rbpcrgst!='R'"
 
 //            println ">>" + sql
 
