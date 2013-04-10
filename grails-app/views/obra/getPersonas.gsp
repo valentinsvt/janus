@@ -30,6 +30,7 @@
     </g:else>
     <g:if test="${persona?.departamento?.id == obra?.responsableObra?.departamento?.id || obra?.id == null}">
 
+
         <div class="span1">Responsable</div>
 
         <div class="span1"><g:select name="responsableObra.id" class="responsableObra required" from="${personasRolResp}" optionKey="id" optionValue="${{it.nombre+' '+it.apellido}}"
