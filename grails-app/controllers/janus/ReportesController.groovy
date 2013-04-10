@@ -743,8 +743,8 @@ class ReportesController {
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
             headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
-            headers.add(new Paragraph("DEPARTAMENTO DE COSTOS", times10bold));
-            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO", times10bold));
+            headers.add(new Paragraph("GESTIÓN DE PRESUPUESTOS", times10bold));
+            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times10bold));
 //            headers.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el " + new Date().format("dd/MM/yyyy hh:mm"), times8normal))
             addEmptyLine(headers, 1);
             document.add(headers);
@@ -874,6 +874,19 @@ class ReportesController {
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsNum)
 
 
+
+            PdfPTable pieTabla = new PdfPTable(2);
+            pieTabla.setWidthPercentage(100);
+            pieTabla.setWidths(arregloEnteros([30, 70]))
+
+
+            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(pieTabla, new Paragraph("Parámetros para los datos de presupuesto obtenidos de la obra: " + obra?.codigo, fonts.times8bold), prmsHeaderHoja)
+
+            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(pieTabla, new Paragraph("Nota: Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.   ", fonts.times8bold), prmsHeaderHoja)
+
+
             addTablaHoja(document, headerRubroTabla, false)
             addTablaHoja(document, tablaHerramientas, false)
             addTablaHoja(document, tablaManoObra, false)
@@ -881,6 +894,7 @@ class ReportesController {
             addTablaHoja(document, tablaTransporte, false)
             addTablaHoja(document, tablaIndirectos, false)
             addTablaHoja(document, tablaTotales, true)
+            addTablaHoja(document, pieTabla, false)
 
             document.newPage();
 //            println res
