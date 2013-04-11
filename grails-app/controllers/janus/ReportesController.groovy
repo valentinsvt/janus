@@ -1313,14 +1313,29 @@ class ReportesController {
 
     def reporteDocumentosObra() {
 
+        println("--->" + params)
+
         def cd
 
-        def auxiliar = Auxiliar.get(1)
+        def auxiliar = Auxiliar.get(1);
 
 
-        def nota = Nota.get(params.notaValue)
+        def nota
 
-//        println(nota);
+        if (params.notaValue !=  'null'){
+
+            println("entro")
+
+            nota = Nota.get(params.notaValue)
+
+        }else{
+
+            println("entro2")
+
+
+            nota = new Nota();
+        }
+
 
         def obra = Obra.get(params.id)
 
@@ -1550,7 +1565,7 @@ class ReportesController {
 
         def totales
 
-        def totalPresupuesto;
+        def totalPresupuesto = 0;
 
         detalle.each {
 
@@ -1587,7 +1602,7 @@ class ReportesController {
 
         }
 
-//        println(totalPresupuesto)
+//        println("TP" + totalPresupuesto)
 
 
         PdfPTable tablaTotal = new PdfPTable(6);
@@ -1673,6 +1688,8 @@ class ReportesController {
             addCellTabla(tablaRetenciones, new Paragraph(auxiliar?.retencion, times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaRetenciones, new Paragraph("NOTAS", times8bold), prmsHeaderHoja)
+
+
             addCellTabla(tablaRetenciones, new Paragraph(nota?.texto, times8normal), prmsHeaderHoja)
 
             addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -3145,18 +3162,18 @@ class ReportesController {
         def lugar = obra.lugar
         def prch = 0
         def prvl = 0
-        if (obra.chofer) {
-            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
-            prch = prch["${obra.chofer.id}"]
-            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
-            prvl = prvl["${obra.volquete.id}"]
-        }
-        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
-
-        if (rendimientos["rdps"].toString() == "NaN")
-            rendimientos["rdps"] = 0
-        if (rendimientos["rdvl"].toString() == "NaN")
-            rendimientos["rdvl"] = 0
+//        if (obra.chofer) {
+//            prch = preciosService.getPrecioItems(fecha, lugar, [obra.chofer])
+//            prch = prch["${obra.chofer.id}"]
+//            prvl = preciosService.getPrecioItems(fecha, lugar, [obra.volquete])
+//            prvl = prvl["${obra.volquete.id}"]
+//        }
+//        def rendimientos = preciosService.rendimientoTranposrte(dsps, dsvl, prch, prvl)
+//
+//        if (rendimientos["rdps"].toString() == "NaN")
+//            rendimientos["rdps"] = 0
+//        if (rendimientos["rdvl"].toString() == "NaN")
+//            rendimientos["rdvl"] = 0
 
         def indirecto = obra.totales / 100
 
@@ -3223,8 +3240,12 @@ class ReportesController {
 
         detalle.each {
 
-            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
-            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
+//            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
+//            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
+
+            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble()
+
+
             def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
             precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
 

@@ -684,6 +684,7 @@
                         $("#descripcion").val(msg.descripcion);
                         $("#texto").val(msg.texto);
                         $("#adicional").val(msg.adicional);
+
                     }
                 });
             }
@@ -851,7 +852,12 @@
 
                     })
 
-                    notaValue = $("#piePaginaSel").attr("value");
+//                    notaValue = $("#piePaginaSel").attr("value");
+
+                    notaValue = $("#piePaginaSel").val();
+
+
+                    console.log("notavalue" + notaValue)
 
                     if ($("#forzar").attr("checked") == "checked") {
 
@@ -995,7 +1001,7 @@
 
                 var nombreFirmas = $("#setFirmasMemo").val()
 
-        console.log(nombreFirmas)
+//        console.log(nombreFirmas)
 
                 var tbody = $("#bodyFirmasMemo")
 

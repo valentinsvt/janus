@@ -183,8 +183,6 @@ class DocumentosObraController {
 
     def getDatos () {
 
-
-
         def nota = Nota.get(params.id)
 
 
@@ -197,6 +195,7 @@ class DocumentosObraController {
                     adicional:nota.adicional?:""
             ]
         } else {
+
             map=[
                     id: "",
                     descripcion: "",
