@@ -104,10 +104,10 @@
                     type    : "POST",
                     url     : "${createLink(action:'tablaRegistrar')}",
                     data    : {
-                        lgar  : lgar,
-                        tipo  : tipo,
-                        max   : 100,
-                        pag   : 1
+                        lgar : lgar,
+                        tipo : tipo,
+                        max  : 100,
+                        pag  : 1
                     },
                     success : function (msg) {
                         $("#divTabla").html(msg);
@@ -155,31 +155,25 @@
                     $("#dlgLoad").dialog("open");
                     var data = "";
 
-                    var fcha = $("#fecha").val();
-
-//                    console.log("fecha" + fcha)
-
                     $(".editable").each(function () {
                         var id = $(this).attr("id");
                         var valor = $(this).data("valor");
                         var data1 = $(this).data("original");
 
                         var chk = $(this).siblings(".chk").children("input").is(":checked");
-//                        console.log(chk);
-//                        console.log(data1)
 
                         if (chk || (parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
                             if (data != "") {
                                 data += "&";
                             }
                             var val = valor ? valor : data1;
-                            data += "item=" + id + "_" + val + "_" + fcha;// + "_" + chk;
+                            data += "item=" + id + "_" + val + "_" + chk;
                         }
                     });
 
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(action: 'actualizar')}",
+                        url     : "${createLink(action: 'actualizarRegistro')}",
                         data    : data,
                         success : function (msg) {
                             $("#dlgLoad").dialog("close");
@@ -188,19 +182,19 @@
                             var no = parts[1];
 
                             $(ok).each(function () {
-                                var fec = $(this).siblings(".fecha");
-                                fec.text($("#fecha").val());
+                                $(this).removeClass("editable").removeClass("selected");
                                 var $tdChk = $(this).siblings(".chk");
                                 var chk = $tdChk.children("input").is(":checked");
                                 if (chk) {
                                     $tdChk.html('<i class="icon-ok"></i>');
                                 }
                             });
-
+                            $(".editable").first().addClass("selected");
                             doHighlight({elem : $(ok), clase : "ok"});
                             doHighlight({elem : $(no), clase : "no"});
                         }
                     });
+                    return false;
                 });
 
             });

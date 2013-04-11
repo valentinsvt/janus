@@ -522,6 +522,42 @@ class ItemController extends janus.seguridad.Shield {
         [rubroPrecio: rubroPrecio, params: params, lugar: lugar]
     }
 
+    def actualizarRegistro() {
+        //item=145629_0.12601_true&item=478_0.11000_true&item=650_0.29000_false
+        //      idRubroPrecio_precio_registrado
+        //          0           1       2
+        if (params.item instanceof java.lang.String) {
+            params.item = [params.item]
+        }
+        def oks = "", nos = ""
+        params.item.each {
+            def parts = it.split("_")
+//            println ">>" + parts
+
+            def rubroId = parts[0]
+            def precio = parts[1]
+            def reg = parts[2] == 'true' ? 'R' : 'N'
+
+            def rubroPrecioInstance = PrecioRubrosItems.get(rubroId);
+
+            rubroPrecioInstance.precioUnitario = precio.toDouble()
+            rubroPrecioInstance.registrado = reg
+
+            if (!rubroPrecioInstance.save(flush: true)) {
+                println "error " + parts
+                if (nos != "") {
+                    nos += ","
+                }
+                nos += "#" + rubroId
+            } else {
+                if (oks != "") {
+                    oks += ","
+                }
+                oks += "#" + rubroId
+            }
+        }
+        render oks + "_" + nos
+    }
 
     def actualizarVol() {
 
@@ -535,7 +571,7 @@ class ItemController extends janus.seguridad.Shield {
 
         params.item.each {
             def parts = it.split("_")
-            println ">>" + parts
+//            println ">>" + parts
 
             def rubroId = parts[0]
             def itemId = parts[1]

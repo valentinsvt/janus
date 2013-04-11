@@ -40,7 +40,7 @@
                     <td>
                         <g:formatDate date="${precio.fecha}" format="dd-MM-yyyy"/>
                     </td>
-                    <td class="precio textRight ${precio.registrado != 'R' ? 'editable' : ''} ${i == 0 ? 'selected' : ''}" data-original="${precio.precioUnitario}" data-valor="${precio.precioUnitario}" id="${precio.id}">
+                    <td class="precio textRight ${precio.registrado != 'R' ? 'editable' : ''}" data-original="${precio.precioUnitario}" data-valor="${precio.precioUnitario}" id="${precio.id}">
                         <g:formatNumber number="${precio.precioUnitario}" maxFractionDigits="5" minFractionDigits="5" format="##,#####0" locale='ec'/>
                     </td>
                     <td class="delete">
@@ -87,6 +87,8 @@
 
 <script type="text/javascript">
     $('[rel=tooltip]').tooltip();
+
+    $(".editable").first().addClass("selected");
 
     $("#btnNew").click(function () {
         $.ajax({
