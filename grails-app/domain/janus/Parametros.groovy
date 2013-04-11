@@ -25,6 +25,8 @@ class Parametros implements Serializable {
     double indiceCostosIndirectosTimbresProvinciales
     Item chofer
     Item volquete
+    int iva
+    double inflacion
 
 
     static mapping = {
@@ -60,6 +62,8 @@ class Parametros implements Serializable {
             indiceCostosIndirectosTimbresProvinciales column: 'inditmbr'
             chofer column: 'itemchfr'
             volquete column: 'itemvlqt'
+            iva column: 'paux_iva'
+            inflacion column: 'pauxinfl'
         }
     }
     static constraints = {
@@ -88,5 +92,7 @@ class Parametros implements Serializable {
         indiceCostosIndirectosTimbresProvinciales(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosTimbresProvinciales'])
         chofer(nullable: true,blank:true)
         volquete(nullable: true,blank:true)
+        iva(nullable: true,blank:true)
+        inflacion(nullable: true,blank:true)
     }
 }

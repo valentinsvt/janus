@@ -110,7 +110,7 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span 1 formato">DEPARTAMENTO</div>
+                    <div class="span 1 formato">Dirección</div>
 
                     <div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" id="departamentoObra"
                                                   value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 450px" disabled="true" title="Departamento actual del usuario"/></div>
