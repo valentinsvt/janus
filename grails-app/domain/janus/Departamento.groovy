@@ -15,6 +15,7 @@ class Departamento implements Serializable {
             direccion column: 'dire__id'
         }
     }
+
     static constraints = {
         descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
         direccion(blank: true, attributes: [title: 'Direccion'])
