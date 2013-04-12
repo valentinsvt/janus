@@ -24,4 +24,5 @@ class Departamento implements Serializable {
     String toString() {
         "${direccion.nombre} - ${descripcion}"
     }
+
 }
