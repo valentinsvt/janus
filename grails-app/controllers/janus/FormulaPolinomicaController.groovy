@@ -140,6 +140,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             def obra = Obra.get(params.id)
             def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
 
+            def total = 0
+
             fp.each { f ->
                 if (f.numero =~ params.tipo) {
                     def mapFormula = [
@@ -152,6 +154,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                                     rel: "fp"
                             ]
                     ]
+                    total += f.valor
                     def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
                     if (children.size() > 0) {
                         mapFormula.children = []
@@ -200,7 +203,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
             def rows = cn.rows(sql.toString())
 
-            [obra: obra, json: json, tipo: params.tipo, rows: rows]
+            [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total]
         }
     }
 

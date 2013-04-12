@@ -124,7 +124,14 @@
                 <i class="icon-trash"></i>
                 Borrar la Fórmula Polinomica
             </a>
+        </div>
 
+        <div class="row">
+            <div class="span1" style="font-weight: bold;">Total</div>
+
+            <div class="span2" id="spanTotal" data-valor='${total}'>
+                <g:formatNumber number="${total}" maxFractionDigits="3" minFractionDigits="3" locale="ec"/>
+            </div>
         </div>
 
         <div id="list-grupo" class="span12" role="main" style="margin-top: 5px;margin-left: 0;">
@@ -431,6 +438,7 @@
                                                     success : function (msg) {
                                                         var msgParts = msg.split("_");
                                                         if (msgParts[0] == "OK") {
+                                                            var totalInit = parseFloat($("#spanTotal").data("valor"));
                                                             $("#tree").jstree('delete_node', $("#" + nodeStrId));
                                                             var tr = $("<tr>");
                                                             var tdItem = $("<td>").append(nodeCod);
@@ -449,6 +457,9 @@
                                                             $("#tblDisponibles").children("tbody").prepend(tr);
                                                             tr.show("pulsate");
                                                             parent.attr("valor", msgParts[1]).trigger("change_node.jstree");
+
+                                                            totalInit -= parseFloat(nodeValor);
+                                                            $("#spanTotal").text(number_format(totalInit, 3, ".", "")).data("valor", totalInit);
                                                         }
                                                     }
                                                 });
@@ -529,6 +540,9 @@
 //                                console.log(msg);
                                 var msgParts = msg.split("_");
                                 if (msgParts[0] == "OK") {
+
+                                    var totalInit = parseFloat($("#spanTotal").data("valor"));
+
                                     var insertados = {};
                                     var inserted = msgParts[1].split(",");
                                     for (var i = 0; i < inserted.length; i++) {
@@ -546,6 +560,7 @@
                                         var rem = it.remove;
 
                                         add.attr.id = "it_" + insertados[add.attr.item];
+                                        totalInit += parseFloat(add.attr.valor);
 //                                        console.log(add.attr.item, add);
 
                                         $tree.jstree("create_node", $target, "first", add);
@@ -554,6 +569,7 @@
                                         }
                                         rem.remove();
                                     }
+                                    $("#spanTotal").text(number_format(totalInit, 3, ".", "")).data("valor", totalInit);
                                 }
                             }
                         });
