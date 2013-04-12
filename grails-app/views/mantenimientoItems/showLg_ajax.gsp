@@ -50,6 +50,11 @@
                                 <i class="icon-trash icon-large"></i>
                             </a>
                         </g:if>
+                        <g:else>
+                            <a href="#" class="btn btn-danger btn-small btnDeleteReg" rel="tooltip" title="Eliminar" id="${precio.id}">
+                                <i class="icon-trash icon-large"></i>
+                            </a>
+                        </g:else>
                     </td>
                 </tr>
             </g:each>
@@ -58,7 +63,7 @@
 </div>
 
 <div class="modal hide fade" id="modal_lugar">
-    <div class="modal-header_lugar">
+    <div class="modal-header" id="modal-header_lugar">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modalTitle_lugar"></h3>
@@ -72,7 +77,7 @@
 </div>
 
 <div class="modal hide fade" id="modal-tree1">
-    <div class="modal-header-tree1">
+    <div class="modal-header" id="modal-header-tree1">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modalTitle-tree1"></h3>
@@ -207,6 +212,7 @@
                 success : function (msg) {
                     if (msg == "OK") {
                         $("#modal-tree1").modal("hide");
+                        log("Precio eliminado correctamente", false);
                         $.ajax({
                             type    : "POST",
                             url     : "${createLink(action:'showLg_ajax')}",
@@ -221,6 +227,9 @@
                                 $("#info").html(msg);
                             }
                         });
+                    } else {
+                        $("#modal-tree1").modal("hide");
+                        log(msg, true);
                     }
                 }
             });
@@ -229,6 +238,65 @@
 
         $("#modalTitle-tree1").html("Confirmación");
         $("#modalBody-tree1").html("Está seguro de querer eliminar este precio?");
+        $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
+        $("#modal-tree1").modal("show");
+        return false;
+    });
+
+    $(".btnDeleteReg").click(function () {
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+        var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+
+        var $auto = $("<input type='password' placeholder='Autorización'/> ");
+
+        var id = $(this).attr("id");
+        btnSave.click(function () {
+            var auto = $.trim($auto.val());
+            if (auto != "") {
+                btnSave.replaceWith(spinner);
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(action: 'deletePrecio_ajax')}",
+                    data    : {
+                        id   : id,
+                        auto : $auto.val()
+                    },
+                    success : function (msg) {
+                        if (msg == "OK") {
+                            $("#modal-tree1").modal("hide");
+                            log("Precio eliminado correctamente", false);
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action:'showLg_ajax')}",
+                                data    : {
+                                    id       : "${params.id}",
+                                    all      : "${params.all}",
+                                    ignore   : "${params.ignore}",
+                                    fecha    : "${params.fecha}",
+                                    operador : "${params.operador}"
+                                },
+                                success : function (msg) {
+                                    $("#info").html(msg);
+                                }
+                            });
+                        } else {
+                            $("#modal-tree1").modal("hide");
+                            log(msg, true);
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+
+        var $p1 = $("<p>").html("Está seguro de querer eliminar este precio?");
+        var $p2 = $("<p>").html("Este precio está registrado. Para eliminarlo necesita ingresar su clave de autorización.");
+        var $p3 = $("<p>").html($auto);
+
+        var $div = $("<div>").append($p1).append($p2).append($p3);
+
+        $("#modalTitle-tree1").html("Confirmación");
+        $("#modalBody-tree1").html($div);
         $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
         $("#modal-tree1").modal("show");
         return false;

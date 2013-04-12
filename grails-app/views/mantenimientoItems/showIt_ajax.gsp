@@ -51,7 +51,7 @@
 
                 <span aria-labelledby="unidad-label">
                     %{--<g:link controller="unidad" action="show" id="${itemInstance?.unidad?.id}">--}%
-                    ${itemInstance?.unidad?.descripcion}
+                    ${itemInstance?.unidad?.codigo}
                     %{--</g:link>--}%
                 </span>
 

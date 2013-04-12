@@ -23,23 +23,30 @@ class MantenimientoItemsController extends Shield {
         def hijos = []
 
         switch (tipo) {
-            case "grupo_material":
             case "grupo_manoObra":
+                hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])[0].id
+                hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(hijos), [sort: 'codigo'])
+                println hijos.descripcion
+                break;
+            case "grupo_material":
             case "grupo_equipo":
                 hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])
                 break;
-            case "subgrupo_material":
             case "subgrupo_manoObra":
+                hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'codigo'])
+                println hijos.nombre
+                break;
+            case "subgrupo_material":
             case "subgrupo_equipo":
                 hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(id), [sort: 'codigo'])
                 break;
-            case "departamento_material":
             case "departamento_manoObra":
+            case "departamento_material":
             case "departamento_equipo":
                 hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'codigo'])
                 break;
-            case "item_material":
             case "item_manoObra":
+            case "item_material":
             case "item_equipo":
 
 
@@ -87,26 +94,78 @@ class MantenimientoItemsController extends Shield {
         hijos.each { hijo ->
             def hijosH, desc, liId
             switch (tipo) {
-                case "grupo_material":
                 case "grupo_manoObra":
+                    hijosH = Item.findAllByDepartamento(hijo, [sort: 'codigo'])
+                    desc = hijo.codigo.toString().padLeft(3, '0') + " " + hijo.descripcion
+                    def parts = tipo.split("_")
+                    rel = "subgrupo_" + parts[1]
+                    liId = "sg" + "_" + hijo.id
+//                    println "_______________________"
+//                    println hijo.descripcion
+//                    println hijosH.descripcion
+                    break;
+                case "grupo_material":
                 case "grupo_equipo":
                     hijosH = DepartamentoItem.findAllBySubgrupo(hijo, [sort: 'codigo'])
-                    desc = hijo.descripcion
+                    desc = hijo.codigo.toString().padLeft(3, '0') + " " + hijo.descripcion
                     def parts = tipo.split("_")
                     rel = "subgrupo_" + parts[1]
                     liId = "sg" + "_" + hijo.id
                     break;
-                case "subgrupo_material":
                 case "subgrupo_manoObra":
+                    hijosH = []
+                    def tipoLista = hijo.tipoLista
+                    if (precios) {
+                        if (ignore) {
+                            hijosH = ["Todos"]
+                        } else {
+                            if (tipoLista) {
+                                hijosH = Lugar.findAllByTipoLista(tipoLista)
+                            }
+                        }
+                    }
+                    desc = hijo.codigo + " " + hijo.nombre
+                    def parts = tipo.split("_")
+                    rel = "item_" + parts[1]
+                    liId = "it" + "_" + hijo.id
+                    break;
+                case "subgrupo_material":
                 case "subgrupo_equipo":
                     hijosH = Item.findAllByDepartamento(hijo, [sort: 'codigo'])
-                    desc = hijo.descripcion
+                    desc = hijo.subgrupo.codigo.toString().padLeft(3, '0') + '.' + hijo.codigo.toString().padLeft(3, '0') + " " + hijo.descripcion
                     def parts = tipo.split("_")
                     rel = "departamento_" + parts[1]
                     liId = "dp" + "_" + hijo.id
                     break;
-                case "departamento_material":
                 case "departamento_manoObra":
+                    hijosH = []
+                    if (precios) {
+                        hijosH = []
+                        if (ignore) {
+                            desc = "Todos los lugares"
+                            rel = "lugar_all"
+                            liId = "lg_" + id + "_all"
+                        } else {
+
+//                            println("entro")
+
+                            if (all) {
+                                desc = hijo.descripcion + " (" + hijo.tipo + ")"
+                            } else {
+                                desc = hijo.descripcion
+                            }
+//                            rel = "lugar_" + hijo.tipo
+                            rel = "lugar"
+                            liId = "lg_" + id + "_" + hijo.id
+
+                            def obras = Obra.countByLugar(hijo)
+//                            println "lugar " + hijo.tipo + " " + hijo.id + " " + hijo.descripcion + "    o: " + obras
+                            extra = "data-obras='${obras}'"
+
+                        }
+                    }
+                    break;
+                case "departamento_material":
                 case "departamento_equipo":
                     hijosH = []
 
@@ -119,35 +178,42 @@ class MantenimientoItemsController extends Shield {
                             if (tipoLista) {
                                 hijosH = Lugar.findAllByTipoLista(tipoLista)
                             }
-
-                            println("hijosH" + hijosH + " " + hijo)
-
-//                            hijosH = Lugar.list([sort: "descripcion"])
-//                            hijosH = Lugar.withCriteria {
-//                                and {
-//                                    order("tipo", "asc")
-//                                    order("descripcion", "asc")
-//                                }
-//                            }
-//                            if (all) {
-//                                hijosH = Lugar.withCriteria {
-//                                    and {
-//                                        order("tipo", "asc")
-//                                        order("descripcion", "asc")
-//                                    }
-//                                }
-//                            } else {
-//                                hijosH = Lugar.findAllByTipo("C", [sort: 'descripcion'])
-//                            }
                         }
                     }
-                    desc = hijo.nombre
+                    desc = hijo.codigo + " " + hijo.nombre
                     def parts = tipo.split("_")
                     rel = "item_" + parts[1]
                     liId = "it" + "_" + hijo.id
                     break;
-                case "item_material":
                 case "item_manoObra":
+//                    hijosH = []
+//                    if (precios) {
+//                        hijosH = []
+//                        if (ignore) {
+//                            desc = "mo4  " + "Todos los lugares"
+//                            rel = "lugar_all"
+//                            liId = "lg_" + id + "_all"
+//                        } else {
+//
+////                            println("entro")
+//
+//                            if (all) {
+//                                desc = hijo.descripcion + " (" + hijo.tipo + ")"
+//                            } else {
+//                                desc = hijo.descripcion
+//                            }
+////                            rel = "lugar_" + hijo.tipo
+//                            rel = "lugar"
+//                            liId = "lg_" + id + "_" + hijo.id
+//
+//                            def obras = Obra.countByLugar(hijo)
+////                            println "lugar " + hijo.tipo + " " + hijo.id + " " + hijo.descripcion + "    o: " + obras
+//                            extra = "data-obras='${obras}'"
+//
+//                        }
+//                    }
+//                    break;
+                case "item_material":
                 case "item_equipo":
                     if (precios) {
                         hijosH = []
@@ -293,6 +359,13 @@ class MantenimientoItemsController extends Shield {
                 def item = Item.get(idNode.toLong())
                 def departamento = DepartamentoItem.get(idParent.toLong())
                 item.departamento = departamento
+
+                def cod = item.codigo
+                def codItem = cod.split("\\.")[2]
+                println "codigo anterior: " + cod
+                cod = "" + item.departamento.subgrupo.codigo.toString().padLeft(3, '0') + "." + item.departamento.codigo.toString().padLeft(3, '0') + "." + codItem.toString().padLeft(3, '0')
+                println "codigo nuevo: " + cod
+
                 if (item.save(flush: true)) {
                     def tipo
                     def a
@@ -760,13 +833,23 @@ class MantenimientoItemsController extends Shield {
 
     def deletePrecio_ajax() {
         def rubroPrecioInstance = PrecioRubrosItems.get(params.id);
-        try {
-            rubroPrecioInstance.delete(flush: true)
-            render "OK"
+        def ok = true
+        if (params.auto) {
+            def usu = Persona.get(session.usuario.id)
+            if (params.auto.toString().encodeAsMD5() != usu.autorizacion) {
+                ok = false
+                render "Ha ocurrido un error en la autorización."
+            }
         }
-        catch (DataIntegrityViolationException e) {
-            println e
-            render "NO"
+        if (ok) {
+            try {
+                rubroPrecioInstance.delete(flush: true)
+                render "OK"
+            }
+            catch (DataIntegrityViolationException e) {
+                println e
+                render "No se pudo eliminar el precio."
+            }
         }
     }
 
