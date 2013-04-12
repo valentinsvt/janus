@@ -1313,7 +1313,7 @@ class ReportesController {
 
     def reporteDocumentosObra() {
 
-        println("--->" + params)
+//        println("--->" + params)
 
         def cd
 
@@ -1324,13 +1324,11 @@ class ReportesController {
 
         if (params.notaValue !=  'null'){
 
-            println("entro")
+
 
             nota = Nota.get(params.notaValue)
 
         }else{
-
-            println("entro2")
 
 
             nota = new Nota();
@@ -2481,52 +2479,6 @@ class ReportesController {
 
         def banderafp = 0
 
-//        ps.each {i->
-//            c = FormulaPolinomica.findByObraAndNumero(obra, i.numero)
-////         println(c.valor)
-//
-//            if (c.valor != 0.0 && c.valor != 0){
-//
-//                println("entro:" + i.numero)
-//
-//                z[banderafp] = i.numero
-//            }else {
-//
-//
-//            }
-//
-//            banderafp++
-//        }
-
-//        println(z)
-
-
-//
-//        def p01 = FormulaPolinomica.findByObraAndNumero(obra, 'p01')
-//        def p02 = FormulaPolinomica.findByObraAndNumero(obra, 'p02')
-//        def p03 = FormulaPolinomica.findByObraAndNumero(obra, 'p03')
-//        def p04 = FormulaPolinomica.findByObraAndNumero(obra, 'p04')
-//        def p05 = FormulaPolinomica.findByObraAndNumero(obra, 'p05')
-//        def p06 = FormulaPolinomica.findByObraAndNumero(obra, 'p06')
-//        def p07 = FormulaPolinomica.findByObraAndNumero(obra, 'p07')
-//        def p08 = FormulaPolinomica.findByObraAndNumero(obra, 'p08')
-//        def p09 = FormulaPolinomica.findByObraAndNumero(obra, 'p09')
-//        def p10 = FormulaPolinomica.findByObraAndNumero(obra, 'p10')
-//        def px = FormulaPolinomica.findByObraAndNumero(obra, 'px')
-//
-//        def p01valor
-//        def p02valor
-//        def p03valor
-//        def p04valor
-//        def p05valor
-//        def p06valor
-//        def p07valor
-//        def p08valor
-//        def p09valor
-//        def p10valor
-//        def pxvalor
-//
-
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor;
 
@@ -2947,7 +2899,7 @@ class ReportesController {
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph(g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##.##", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "###,###", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -3240,18 +3192,21 @@ class ReportesController {
 
         detalle.each {
 
-//            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
-//            preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
+//            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble() + preciosService.ac_rbro(it.item.id, lugar.id, fecha.format("yyyy-MM-dd"))
 
-            def parametros = "" + it.item.id + "," + lugar.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + dsps.toDouble() + "," + dsvl.toDouble()
+//            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+//            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
 
 
-            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ", parametros, "")
-            precios.put(it.id.toString(), res["precio"][0] + res["precio"][0] * indirecto)
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+
 
             def precioUnitario = precios[it.id.toString()]
 
+
             def subtotal = (precios[it.id.toString()] * it.cantidad)
+
 
 //            println(precioUnitario)
 
