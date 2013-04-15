@@ -120,7 +120,7 @@
                 </g:link>
             </div>
             <a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"
-               style="margin-top: -10px;">
+               style="margin-top: -10px;" id="btnBorrar">
                 <i class="icon-trash"></i>
                 Borrar la Fórmula Polinomica
             </a>
@@ -505,6 +505,34 @@
                         updateTotal(0);
                         $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
                     }
+                    return false;
+                });
+
+                $("#btnBorrar").click(function () {
+                    $(this).replaceWith(spinner);
+                    $.ajax({
+                        async   : false,
+                        type    : "POST",
+                        url     : "${createLink(action:'borrarFP')}",
+                        data    : {
+                            obra : ${obra.id}
+                        },
+                        success : function (msg) {
+//                            console.log(msg);
+                            $.ajax({
+                                async   : false,
+                                type    : "POST",
+                                url     : "${createLink(action:'insertarVolumenesItem')}",
+                                data    : {
+                                    obra : ${obra.id}
+                                },
+                                success : function (msg) {
+//                                    console.log(msg);
+                                    location.reload(true);
+                                }
+                            });
+                        }
+                    });
                     return false;
                 });
 

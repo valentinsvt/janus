@@ -287,8 +287,6 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     if (!cuadrilla.save(flush: true))
                         println "error save cuadrilla " + cuadrilla.errors
                 }
-
-
             }
         }
         render "ok"
@@ -395,7 +393,34 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     } //delete
 
     def borrarFP() {
-        render("Borrando la FP")
+
+        def obra = Obra.get(params.obra)
+        def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
+
+        def ok = true
+
+        fp.each { f ->
+            println f.indice.descripcion + '    ' + f.valor
+            def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
+            children.each { ch ->
+                println "\t" + ch.item.nombre + '     ' + ch.valor
+                try {
+                    ch.delete(flush: true)
+                } catch (e) {
+                    ok = false
+                    println "error al borrar hijo ${ch.id}"
+                    println e.printStackTrace()
+                }
+            }
+            try {
+                f.delete(flush: true)
+            } catch (e) {
+                ok = false
+                println "error al borrar ${f.id}"
+                println e.printStackTrace()
+            }
+        }
+        render ok
     }
 
 
