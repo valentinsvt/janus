@@ -5,38 +5,38 @@ class ObraFPController {
     def rg_cmpo = []
     def numeroCampos = 0
 
-    def index() { }
+    def index() {}
 
-    def validaciones(){
+    def validaciones() {
         def obra__id = params.obra.toInteger()
         def sbpr = params.sub.toInteger()
         def res
 
         res = ejecutaSQL("select * from ac_rbro_hr_v2(${obra__id})")
-        if (!res){
+        if (!res) {
             render "Error: no se pudo ejecutar ac_rbro_hr_v2"
             return
         }
         res = ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
-        if (!res){
+        if (!res) {
             render "Error: no se pudo ejecutar sp_obra_v2"
             return
         }
 
         res = verificaMatriz(obra__id)
-        if (res!=""){
+        if (res != "") {
             render res
             return
         }
         res = verifica_precios(obra__id)
-        if (res.size()>0){
-            def msg ="<span style='color:red'>Errores detectados</span><br> <span class='label-azul'>No se encontraron precios para los siguientes items:</span><br>"
-            msg+= res.collect{ "<b>ITEM</b>: $it.key ${it.value.join(", <b>Lista</b>: ")}" }.join('<br>')
+        if (res.size() > 0) {
+            def msg = "<span style='color:red'>Errores detectados</span><br> <span class='label-azul'>No se encontraron precios para los siguientes items:</span><br>"
+            msg += res.collect { "<b>ITEM</b>: $it.key ${it.value.join(", <b>Lista</b>: ")}" }.join('<br>')
             render msg
             return
         }
 
-        redirect(action: "matrizFP",params: ["obra":params.obra,"sub":params.sub,"trans":params.trans])
+        redirect(action: "matrizFP", params: ["obra": params.obra, "sub": params.sub, "trans": params.trans])
         return
     }
 
@@ -46,8 +46,8 @@ class ObraFPController {
         def obra__id = params.obra.toInteger()         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
         def sbpr = params.sub.toInteger()              // todos los subpresupuestos
         def conTransporte = false   // parámetro leido de la interfaz
-        if(params.trans == "checked")
-            conTransporte=true
+        if (params.trans == "checked")
+            conTransporte = true
         /* ----------------------------------- FIN de parámetros  ---------------------------------------- */
 
         //def obra = Obra.get(obra__id)
@@ -84,8 +84,8 @@ class ObraFPController {
         * Verifica si existe Transporte y/o Equipos'                                          */
 
         def transporte = calculaTransporte(obra__id)
-        if(!transporte)
-            transporte=0.0
+        if (!transporte)
+            transporte = 0.0
         def equipos = calculaEquipos(obra__id)
         if (conTransporte)
             transporte += equipos
@@ -191,7 +191,7 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def er = 0;
         def tx_sql = "select count(*) nada from vlob where obra__id = ${id} and vlobcntd <= 0"
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             er = row.nada
         }
         cn.close()
@@ -203,7 +203,7 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def errr = "";
         def tx_sql = "select count(*), itemcmpo from item where tpit__id = 1 group by itemcmpo having count(*) > 1"
-        cn.eachRow(tx_sql) {row ->
+        cn.eachRow(tx_sql) { row ->
             errr += ":" + row.itemcmpo
         }
 /*
@@ -222,8 +222,8 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def errr = [:];
         def tx_sql = "select itemcdgo, itemnmbr, tplsdscr from verifica_precios_v2(${id}) order by itemcdgo "
-        cn.eachRow(tx_sql.toString()) {row ->
-            errr.put(row["itemcdgo"]?.trim(),[row["itemnmbr"]?.trim(),row["tplsdscr"]?.trim()])
+        cn.eachRow(tx_sql.toString()) { row ->
+            errr.put(row["itemcdgo"]?.trim(), [row["itemnmbr"]?.trim(), row["tplsdscr"]?.trim()])
 //            errr += "Item: ${row.itemcdgo.trim()} ${row.itemnmbr.trim()} Lista: ${row.tplsdscr.trim()}\n"
 //            println "r "+row
         }
@@ -274,7 +274,7 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def tx_sql = "select sum(trnp) transporte from rbro_pcun_v2 (${id})"
         def trnp = 0.0
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             trnp = row.transporte
         }
         cn.close()
@@ -288,7 +288,7 @@ class ObraFPController {
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 3"
         def eqpo = 0.0
         //println "calculaEquipos: " + tx_sql
-        cn.eachRow(tx_sql) {row ->
+        cn.eachRow(tx_sql) { row ->
             eqpo = row.equipos
         }
         cn.close()
@@ -311,7 +311,7 @@ class ObraFPController {
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 2 "
         tx_sql += "order by item.itemcdgo"
         //println "manoDeObra: $tx_sql"
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             creaCampo(id, row.itemcmpo + "_U", "O")
             creaCampo(id, row.itemcmpo + "_T", "O")
         }
@@ -338,7 +338,7 @@ class ObraFPController {
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 1 "
         tx_sql += "order by item.itemcdgo"
         //println "materiales: " + tx_sql
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             creaCampo(id, row.itemcmpo + "_U", "M")
             creaCampo(id, row.itemcmpo + "_T", "M")
         }
@@ -370,7 +370,7 @@ class ObraFPController {
         }
         //println "rubros: " + tx_sql
         def contador = 1
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             insertaRubro("obra__id, codigo, rubro, unidad, cantidad, orden",
                     "${id},'${row.itemcdgo}', '${row.itemnmbr.size() > 60 ? row.itemnmbr[0..59] : row.itemnmbr}'," +
                             "'${row.unddcdgo}', ${row.vlobcntd}, ${contador}")
@@ -381,7 +381,7 @@ class ObraFPController {
         }
         tx_sql = "select distinct clmncdgo from mfcl where obra__id = ${id} and clmndscr like '%_T' or clmndscr like '%_U'"
         //println "2rubros: " + tx_sql
-        cn.eachRow(tx_sql.toString()) {d ->
+        cn.eachRow(tx_sql.toString()) { d ->
             //println "insert into mfvl (obra__id, clmncdgo, codigo, valor) select " +
             "obra__id, ${d.clmncdgo}, codigo, 0 from mfrb where obra__id = ${id}"
             ejecutaSQL("insert into mfvl (obra__id, clmncdgo, codigo, valor) select " +
@@ -410,7 +410,7 @@ class ObraFPController {
         }
         //println "descomposicion: " + tx_sql
         def contador = 1
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             if (obra.estado == 'N') {
 /*
                 tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios (${row.item__id}, "
@@ -421,7 +421,7 @@ class ObraFPController {
                 tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 2"
             }
             //println "descomposicion: tx_cr: " + tx_cr
-            cn1.eachRow(tx_cr.toString()) {cr ->
+            cn1.eachRow(tx_cr.toString()) { cr ->
                 poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
             }
         }
@@ -433,7 +433,7 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def tx_sql = "select clmncdgo from mfcl where obra__id = ${id} and clmndscr = '${cmpo}'"
         def posicion = 0
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             posicion = row.clmncdgo
         }
         cn.close()
@@ -445,7 +445,7 @@ class ObraFPController {
         def tx_sql = "select cantidad from mfrb where obra__id = ${id} and codigo = '${cdgo}'"
         //println "...rubroCantidad:" + tx_sql
         def cntd = 0.0
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             cntd = row.cantidad
         }
         cn.close()
@@ -500,7 +500,7 @@ class ObraFPController {
         }
         //println "des_Materiales: " + tx_sql
 
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             if (conTrnp) {
                 if (obra.estado == 'N') {
 /*
@@ -525,7 +525,7 @@ class ObraFPController {
                 }
             }
             //println "des_Materiales: " + tx_cr
-            cn1.eachRow(tx_cr.toString()) {cr ->
+            cn1.eachRow(tx_cr.toString()) { cr ->
                 poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
             }
         }
@@ -562,7 +562,7 @@ class ObraFPController {
             }
         }
 
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             clmn = columnaCdgo(id, 'TRANSPORTE_T')
             cntd = rubroCantidad(id, row.rbrocdgo)
             ejecutaSQL("update mfvl set valor = ${row.trnp * cntd} where obra__id = ${id} and codigo = '${row.rbrocdgo}' and " +
@@ -583,7 +583,7 @@ class ObraFPController {
         def clmn = columnaCdgo(id, columna)
         def tx_sql = "select sum(valor) suma from mfvl where obra__id = ${id} and clmncdgo = '${clmn}' and codigo not like 'sS%'"
         def totl = 0.0
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             totl = row.suma
         }
         //println "valor de total: $totl"
@@ -608,7 +608,7 @@ class ObraFPController {
             tx_sql += "vlobcntd > 0 and item.item__id = vlob.item__id"
         }
         //println "acEquipos: " + tx_sql
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             if (obra.estado == 'N') {
 /*
                 tx_cr = "select sum(parcial) pcun from rb_precios (${row.item__id}, ${obra.lugarId},"
@@ -618,7 +618,7 @@ class ObraFPController {
             } else {
                 tx_cr = "select sum(parcial) pcun from rb_precios_r (${id}, ${row.item__id}) where grpocdgo = 3 and cmbs = 'S'"
             }
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 if (d.pcun > 0) {
                     clmn = columnaCdgo(id, "EQUIPO_T")
                     cntd = rubroCantidad(id, row.itemcdgo)
@@ -638,7 +638,7 @@ class ObraFPController {
             } else {
                 tx_cr = "select sum(parcial) pcun from rb_precios_r (${id}, ${row.item__id}) where grpocdgo = 3 and cmbs = 'N'"
             }
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 if (d.pcun > 0) {
                     clmn = columnaCdgo(id, "SALDO_T")
                     cntd = rubroCantidad(id, row.itemcdgo)
@@ -660,7 +660,7 @@ class ObraFPController {
             } else {
                 tx_cr = "select sum(parcial) pcun from rb_precios_r (${id}, ${row.item__id}) where grpocdgo = 3"
             }
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 if (d.pcun > 0) {
                     clmn = columnaCdgo(id, "TOTAL_T")
                     cntd = rubroCantidad(id, row.itemcdgo)
@@ -679,15 +679,15 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def cn1 = dbConnectionService.getConnection()
         def tx_sql = ""
-        def tx_cr  = ""
+        def tx_cr = ""
         def clmn = ""
         def cntd = 0.0
         ejecutaSQL("update mfcl set clmntipo = null where obra__id = ${id} and clmndscr like '%U'")
-        tx_sql =  "select codigo from mfrb where obra__id = ${id} and codigo not like 'sS%'"
-        cn.eachRow(tx_sql.toString()) {row ->
-            tx_cr =  "select sum(valor) suma from mfvl v, mfcl c "
+        tx_sql = "select codigo from mfrb where obra__id = ${id} and codigo not like 'sS%'"
+        cn.eachRow(tx_sql.toString()) { row ->
+            tx_cr = "select sum(valor) suma from mfvl v, mfcl c "
             tx_cr += "where c.obra__id = ${id} and c.obra__id = v.obra__id and codigo = '${row.codigo}' and c.clmncdgo = v.clmncdgo and clmntipo = 'O'"
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 clmn = columnaCdgo(id, "MANO_OBRA_T")
                 ejecutaSQL("update mfvl set valor = ${d.suma} where obra__id = ${id} and codigo = '${row.codigo}' and " +
                         "clmncdgo = ${clmn}")
@@ -706,16 +706,16 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def cn1 = dbConnectionService.getConnection()
         def tx_sql = ""
-        def tx_cr  = ""
+        def tx_cr = ""
         def clmn = ""
         def cntd = 0.0
-        tx_sql =  "select codigo from mfrb where obra__id = ${id} and codigo not like 'sS%'"
-        cn.eachRow(tx_sql.toString()) {row ->
+        tx_sql = "select codigo from mfrb where obra__id = ${id} and codigo not like 'sS%'"
+        cn.eachRow(tx_sql.toString()) { row ->
             clmn = columnaCdgo(id, "TOTAL_T")
             cntd = rubroCantidad(id, row.codigo)
-            tx_cr =  "select valor from mfvl where obra__id = ${id} and codigo = '${row.codigo}' and clmncdgo = ${clmn}"
+            tx_cr = "select valor from mfvl where obra__id = ${id} and codigo = '${row.codigo}' and clmncdgo = ${clmn}"
             //println "acTotal...: " + tx_cr
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 clmn = columnaCdgo(id, "TOTAL_U")
                 ejecutaSQL("update mfvl set valor = ${d.valor / cntd} where obra__id = ${id} and codigo = '${row.codigo}' and " +
                         "clmncdgo = ${clmn}")
@@ -733,7 +733,7 @@ class ObraFPController {
         def total = 0.0
         tx_sql = "select valor from mfvl where obra__id = ${id} and clmncdgo = ${clmn} and codigo = '${sx}'"
         //println "totalSx: " + tx_sql
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             total = row.valor
         }
         cn.close()
@@ -747,16 +747,16 @@ class ObraFPController {
 
 
     def desgloseTrnp(id) {
-        def transporte  = totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, 'EQUIPO_T', 'sS1')
-        def saldo       = totalSx(id, 'SALDO_T', 'sS1')
-        def mecanico    = totalSx(id, 'MECANICO_T', 'sS1')
-        def repuestos   = totalSx(id, 'REPUESTOS_T', 'sS1')
+        def transporte = totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, 'EQUIPO_T', 'sS1')
+        def saldo = totalSx(id, 'SALDO_T', 'sS1')
+        def mecanico = totalSx(id, 'MECANICO_T', 'sS1')
+        def repuestos = totalSx(id, 'REPUESTOS_T', 'sS1')
         def combustible = totalSx(id, 'COMBUSTIBLE_T', 'sS1')
-        actualizaS2(id, 'EQUIPO_T', transporte  * 0.52)
-        actualizaS2(id, 'REPUESTOS_T',   transporte * 0.26 + repuestos)
+        actualizaS2(id, 'EQUIPO_T', transporte * 0.52)
+        actualizaS2(id, 'REPUESTOS_T', transporte * 0.26 + repuestos)
         actualizaS2(id, 'COMBUSTIBLE_T', transporte * 0.08 + combustible)
-        actualizaS2(id, 'MECANICO_T',    transporte * 0.11 + mecanico)
-        actualizaS2(id, 'SALDO_T',       transporte * 0.03 + saldo)
+        actualizaS2(id, 'MECANICO_T', transporte * 0.11 + mecanico)
+        actualizaS2(id, 'SALDO_T', transporte * 0.03 + saldo)
     }
 
     def completaTotalS2(id, hayEqpo) {
@@ -771,7 +771,7 @@ class ObraFPController {
         if (hayEqpo) {
             clmn = columnaCdgo(id, "MECANICO_T")
             tx_sql = "select valor from mfvl where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'"
-            cn.eachRow(tx_sql.toString()) {row ->
+            cn.eachRow(tx_sql.toString()) { row ->
                 clmn = columnaCdgo(id, "MANO_OBRA_T")
                 ejecutaSQL("update mfvl set valor = valor + ${row.valor} " +
                         " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'")
@@ -786,11 +786,11 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def tx_sql = ""
         def clmn = ""
-        tx_sql =  "select sum(valor) suma from mfcl c, mfvl v "
+        tx_sql = "select sum(valor) suma from mfcl c, mfvl v "
         tx_sql += "where c.clmncdgo = v.clmncdgo and c.obra__id = v.obra__id and c.obra__id = ${id} and codigo = 'sS2' and clmndscr like '%_T' and "
         tx_sql += "clmntipo in ('O', 'M', 'D')"
         //println "acTotal S2: sql: " + tx_sql
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             clmn = columnaCdgo(id, "TOTAL_T")
             ejecutaSQL("update mfvl set valor = ${row.suma} " +
                     " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'")
@@ -810,14 +810,14 @@ class ObraFPController {
         def item = ""
         def pcun = 0.0
         def tx = ""
-        tx_sql =  "select clmndscr from mfcl where obra__id = ${id} and clmntipo = 'O'"
-        cn.eachRow(tx_sql.toString()) {row ->
+        tx_sql = "select clmndscr from mfcl where obra__id = ${id} and clmntipo = 'O'"
+        cn.eachRow(tx_sql.toString()) { row ->
             tx_cr = "select item__id, itemcdgo, itemnmbr from item where itemcmpo = '${row.clmndscr[0..-3]}'"
             //println "tx_cr..... campo:" + tx_cr
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 item__id = d.item__id
-                item     = d.itemcdgo
-                tx       = d.itemnmbr
+                item = d.itemcdgo
+                tx = d.itemnmbr
             }
             if (obra.estado == 'N') {
 /*
@@ -832,17 +832,17 @@ class ObraFPController {
 
             //println "...... segunda: " + tx_cr
 
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 if (d.pcun == 0) errr = "No existe precio para el item ${item}: ${tx}"
                 pcun = d.pcun
             }
 
             clmn = columnaCdgo(id, row.clmndscr)
             tx_cr = "select valor from mfvl where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'"
-            cn1.eachRow(tx_cr.toString()) {d ->
+            cn1.eachRow(tx_cr.toString()) { d ->
                 ejecutaSQL("update mfvl set valor = ${pcun} " +
                         " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS4'")
-                if (pcun > 0){
+                if (pcun > 0) {
                     ejecutaSQL("update mfvl set valor = ${d.valor / pcun} " +
                             " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS6'")
                 }
@@ -865,19 +865,19 @@ class ObraFPController {
         def totalS6 = 0.0
         def suma = 0.0
 
-        tx_sql =  "select sum(valor) suma from mfcl c, mfvl v "
+        tx_sql = "select sum(valor) suma from mfcl c, mfvl v "
         tx_sql += "where c.clmncdgo = v.clmncdgo and c.obra__id = v.obra__id and c.obra__id = ${id} and codigo = 'sS2' and clmntipo = 'O'"
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             total = row.suma
         }
         clmn = columnaCdgo(id, 'TOTAL_T')
-        tx_sql =  "select valor from mfvl where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'"
-        cn.eachRow(tx_sql.toString()) {row ->
+        tx_sql = "select valor from mfvl where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'"
+        cn.eachRow(tx_sql.toString()) { row ->
             granTotal = row.valor
         }
-        tx_sql =  "select sum(valor) suma from mfcl c, mfvl v "
+        tx_sql = "select sum(valor) suma from mfcl c, mfvl v "
         tx_sql += "where c.clmncdgo = v.clmncdgo and c.obra__id = v.obra__id and c.obra__id = ${id} and codigo = 'sS6' and clmntipo = 'O'"
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             totalS6 = row.suma
         }
         if (totalS6 == 0) errr = "Error: La suma de componentes de Mano de Obra da CERO," +
@@ -887,11 +887,11 @@ class ObraFPController {
             ejecutaSQL("update mfvl set valor = ${totalS6} " +
                     " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS6'")
 
-            tx_sql =  "select clmncdgo, clmndscr from mfcl where obra__id = ${id} and clmntipo = 'O'"
+            tx_sql = "select clmncdgo, clmndscr from mfcl where obra__id = ${id} and clmntipo = 'O'"
             suma = 0
-            cn.eachRow(tx_sql.toString()) {row ->
+            cn.eachRow(tx_sql.toString()) { row ->
                 tx_cr = "select valor from mfvl where obra__id = ${id} and clmncdgo = ${row.clmncdgo} and codigo = 'sS6'"
-                cn1.eachRow(tx_cr.toString()) {d ->
+                cn1.eachRow(tx_cr.toString()) { d ->
                     ejecutaSQL("update mfvl set valor = ${d.valor / totalS6} " +
                             " where obra__id = ${id} and clmncdgo = ${row.clmncdgo} and codigo = 'sS5'")
                     suma += d.valor / totalS6
@@ -899,7 +899,7 @@ class ObraFPController {
             }
             clmn = columnaCdgo(id, 'MANO_OBRA_T')
             ejecutaSQL("update mfvl set valor = ${suma} where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS5'")
-            ejecutaSQL("update mfvl set valor = ${total/granTotal} where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS3'")
+            ejecutaSQL("update mfvl set valor = ${total / granTotal} where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS3'")
         }
         cn.close()
         cn1.close()
@@ -917,9 +917,9 @@ class ObraFPController {
 
         granTotal = totalSx(id, 'TOTAL_T', 'sS2')
         //println ".....1 el gran total es: $granTotal"
-        tx_sql =  "select clmncdgo, clmndscr from mfcl where obra__id = ${id} and clmntipo in ('M', 'D')"
+        tx_sql = "select clmncdgo, clmndscr from mfcl where obra__id = ${id} and clmntipo in ('M', 'D')"
         suma = 0
-        cn.eachRow(tx_sql.toString()) {row ->
+        cn.eachRow(tx_sql.toString()) { row ->
             parcial = totalSx(id, row.clmndscr, 'sS2')
             if (parcial > 0) valor = parcial / granTotal
             else valor = 0
@@ -932,6 +932,21 @@ class ObraFPController {
         ejecutaSQL("update mfvl set valor = ${suma + parcial} " +
                 " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS3'")
         cn.close()
+    }
+
+    def lazo = {
+        def inicia = new Date()
+        def suma = 0.0
+        for (i in (1..100000000)) {
+            suma += i
+        }
+        def fin = new Date()
+
+        println suma
+
+        println "tiempo ... ${fin.getTime() - inicia.getTime()}"
+
+        render "tiempo ... ${fin.getTime() - inicia.getTime()}"
     }
 
 }

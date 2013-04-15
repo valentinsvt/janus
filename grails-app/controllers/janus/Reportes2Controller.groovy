@@ -352,7 +352,12 @@ class Reportes2Controller {
 
         def p0s = []
         def tbodyP0 = "<tbody>"
-        def diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+//        def diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+        def diasPlanilla = 0
+
+        if (planilla.tipoPlanilla.codigo != "A") {
+            diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+        }
         def valorPlanilla = planilla.valor
 
         def acumuladoCrono = 0, acumuladoPlan = 0
