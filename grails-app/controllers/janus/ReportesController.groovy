@@ -1313,7 +1313,7 @@ class ReportesController {
 
     def reporteDocumentosObra() {
 
-//        println("--->" + params)
+        println("--->" + params)
 
         def cd
 
@@ -1337,7 +1337,18 @@ class ReportesController {
 
         def obra = Obra.get(params.id)
 
+        def paux = Parametros.get(1);
 
+
+        def ivaTotal = 0
+
+        def proyeccionTotal = 0
+
+        def presupuestoTotal = 0;
+
+        def inflacion = 0;
+
+        def meses = 0;
 
         def firma
 
@@ -1615,6 +1626,122 @@ class ReportesController {
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+
+        //solo IVA
+        if(params.iva == 'true' && params.proyeccion == 'false'){
+
+//            println("entroIva")
+//
+//            println(paux?.iva)
+//            println(totalPresupuesto)
+
+           ivaTotal = (totalPresupuesto * paux?.iva)/100
+           presupuestoTotal = totalPresupuesto + ivaTotal;
+
+
+            addCellTabla(tablaTotal, new Paragraph("IVA: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+        }
+        //solo Proyeccion del reajuste
+
+        if(params.proyeccion == 'true' && params.meses >= 1 && params.iva == 'false'){
+
+//            println("entroProyeccion")
+//
+//            println(paux?.inflacion)
+//            println(totalPresupuesto)
+
+            inflacion = paux.inflacion
+            meses = params.meses
+
+            proyeccionTotal = (totalPresupuesto*((inflacion/1200)*meses.toInteger()))
+            presupuestoTotal = totalPresupuesto + proyeccionTotal;
+
+
+            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+        }
+
+        if(params.proyeccion == 'true' && params.meses >= 1 && params.iva == 'true'){
+
+//            println("entroProyeccion + Iva")
+//
+//            println(paux?.inflacion)
+//            println(totalPresupuesto)
+
+            inflacion = paux.inflacion
+            meses = params.meses
+
+            proyeccionTotal = (totalPresupuesto*((inflacion/1200)*meses.toInteger()))
+
+
+            ivaTotal = ((totalPresupuesto + proyeccionTotal)*paux?.iva)/100;
+
+            presupuestoTotal = ((totalPresupuesto + proyeccionTotal) + ivaTotal)
+
+            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+            addCellTabla(tablaTotal, new Paragraph("IVA: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+
+
+        }
+
+
+
+
+
+
 
 
         Paragraph txtCondiciones = new Paragraph();

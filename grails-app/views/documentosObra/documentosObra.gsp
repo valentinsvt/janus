@@ -599,6 +599,28 @@
                 </fieldset>
             </div>
 
+        <div id="reajustePresupuestoDialog">
+
+            <fieldset>
+                <div class="span3" style="margin-top: 10px">
+
+                    Incluir Iva <g:checkBox name="reajusteIva" class="span3" style="margin-left: 150px"/>
+
+
+                </div>
+                <div class="span3" style="margin-top: 10px">
+                    Incluir Proyección del reajuste <g:checkBox name="proyeccionReajuste" style="margin-left: 20px"/>
+
+                </div>
+                <div class="span3" style="margin-top: 10px">
+
+                    Meses <g:textField name="mesesReajuste" style="width: 55px; margin-left: 20px"/>
+                </div>
+
+            </fieldset>
+        </div>
+
+
 
             <div id="maxFirmasDialog">
 
@@ -610,6 +632,18 @@
                     </div>
                 </fieldset>
             </div>
+
+
+        <div id="mesesCeroDialog">
+
+            <fieldset>
+                <div class="span3">
+
+                    Si se desea calcular la proyección de reajuste del presupuesto, se debe colocar un número válido en el campo MESES!!
+
+                </div>
+            </fieldset>
+        </div>
 
         </div>
 
@@ -636,6 +670,12 @@
 
             var reajusteMemo = 0;
 
+            var proyeccion;
+
+            var reajusteIva;
+
+            var reajusteMeses;
+
             function validarNum(ev) {
                 /*
                  48-57      -> numeros
@@ -654,6 +694,29 @@
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
+
+
+            $("#mesesReajuste").keydown(function (ev) {
+
+                return validarNum(ev);
+
+            }).keyup(function () {
+
+                        var enteros = $(this).val();
+
+                        if (parseFloat(enteros) > 100 ) {
+
+                            $(this).val(100)
+
+                        }
+                        if(parseFloat(enteros) <= 0){
+
+                            $(this).val(1)
+
+                        }
+
+                    });
+
 
             $("#porcentajeMemo").keydown(function (ev) {
 
@@ -857,8 +920,6 @@
                     notaValue = $("#piePaginaSel").val();
 
 
-                    console.log("notavalue" + notaValue)
-
                     if ($("#forzar").attr("checked") == "checked") {
 
                         forzarValue = 1;
@@ -875,10 +936,13 @@
 
                     } else {
 
-                        var tipoReporte = tipoClick;
 
-                        location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
-                                                + "&firmasId=" + firmasId
+                        $("#reajustePresupuestoDialog").dialog("open")
+
+                        %{--var tipoReporte = tipoClick;--}%
+
+                        %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue--}%
+                                                %{--+ "&firmasId=" + firmasId--}%
 
                     }
 
@@ -1137,6 +1201,71 @@
 
             });
 
+            $("#reajustePresupuestoDialog").dialog({
+
+                autoOpen  : false,
+                resizable : false,
+                modal     : true,
+                draggable : false,
+                width     : 350,
+                height    : 230,
+                position  : 'center',
+                title     : 'Reajuste del Presupuesto',
+                buttons   : {
+                    "Aceptar" : function () {
+
+
+
+                 proyeccion = $("#proyeccionReajuste").is(':checked');
+                 reajusteIva = $("#reajusteIva").is(':checked');
+                 reajusteMeses = $("#mesesReajuste").val();
+
+//
+//                        console.log(proyeccion)
+//                        console.log(reajusteMeses)
+
+//
+                        if(proyeccion == true && reajusteMeses == ""){
+
+
+//                            console.log("entro!!")
+
+                            $("#mesesCeroDialog").dialog("open")
+
+
+                        }else{
+
+
+
+                            var tipoReporte = tipoClick;
+
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
+                                    + "&firmasId=" + firmasId  + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses
+
+
+                              $("#reajustePresupuestoDialog").dialog("close");
+
+                        }
+
+
+
+
+
+                    },
+                    "Cancelar" : function () {
+
+
+                        $("#reajustePresupuestoDialog").dialog("close");
+
+                    }
+                }
+
+            });
+
+
+
+
+
             $("#maxFirmasDialog").dialog({
 
                 autoOpen  : false,
@@ -1156,6 +1285,29 @@
                 }
 
             });
+
+
+
+            $("#mesesCeroDialog").dialog({
+
+                autoOpen  : false,
+                resizable : false,
+                modal     : true,
+                draggable : false,
+                width     : 350,
+                height    : 180,
+                position  : 'center',
+                title     : 'No existe un valor en el campo Meses!',
+                buttons   : {
+                    "Aceptar" : function () {
+
+                        $("#mesesCeroDialog").dialog("close");
+
+                    }
+                }
+
+            });
+
 
 
 
