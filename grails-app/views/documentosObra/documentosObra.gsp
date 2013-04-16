@@ -649,9 +649,9 @@
         <div id="cambioMonedaExcel">
 
             <fieldset>
-                <div class="span3">
+                <div class="span3" style="margin-bottom: 20px">
 
-                    Coloque la tasa de cambio que se aplicará a los valores del reporte en excel
+                    Coloque la tasa de cambio que se aplicará a los valores del reporte en excel.
 
                 </div>
 
@@ -1275,7 +1275,7 @@
                 modal     : true,
                 draggable : false,
                 width     : 350,
-                height    : 250,
+                height    : 230,
                 position  : 'center',
                 title     : 'Tasa de cambio',
                 buttons   : {
