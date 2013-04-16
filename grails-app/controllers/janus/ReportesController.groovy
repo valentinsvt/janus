@@ -3226,7 +3226,10 @@ class ReportesController {
 
     def documentosObraExcel() {
 
+
         def obra = Obra.get(params.id)
+
+        def tasa = params.tasa
 
 
         def detalle
@@ -3381,18 +3384,122 @@ class ReportesController {
         }
 
 
-
-
-
-
-
-
-
-
         workbook.write();
         workbook.close();
         def output = response.getOutputStream()
         def header = "attachment; filename=" + "DocumentosObraExcel.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
+
+    }
+
+    def documentosObraTasaExcel() {
+
+
+
+       def obra = Obra.get(params.id)
+
+        def tasa = params.tasa
+
+
+        def detalle
+
+        detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+
+        def precios = [:]
+        def fecha = obra.fechaPreciosRubros
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+        def lugar = obra.lugar
+        def prch = 0
+        def prvl = 0
+
+        def indirecto = obra.totales / 100
+
+        def c;
+
+        def total1 = 0;
+
+        def totales
+
+        def totalPresupuesto;
+
+        //excel
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+//        println "paso"
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+        // fija el ancho de la columna
+        // sheet.setColumnView(1,40)
+        params.id = params.id.split(",")
+        if (params.id.class == java.lang.String) {
+            params.id = [params.id]
+        }
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        sheet.setColumnView(0, 60)
+        sheet.setColumnView(1, 12)
+        sheet.setColumnView(2, 25)
+        sheet.setColumnView(3, 25)
+        sheet.setColumnView(4, 30)
+        sheet.setColumnView(8, 20)
+        // inicia textos y numeros para asocias a columnas
+
+        def label
+        def nmro
+
+        def fila = 6;
+
+        label = new Label(0, 2, "Presupuesto de la Obra: " + obra?.nombre.toString(), times16format); sheet.addCell(label);
+
+        label = new Label(0, 4, "RUBRO", times16format); sheet.addCell(label);
+        label = new Label(1, 4, "NOMBRE", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "UNDD", times16format); sheet.addCell(label);
+        label = new Label(3, 4, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new Label(4, 4, "P_UNIT", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "SUBTOTAL", times16format); sheet.addCell(label);
+
+        detalle.each {
+
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+
+
+
+
+            def precioUnitario = (precios[it.id.toString()])*tasa.toDouble()
+
+            def subtotal = (((precios[it.id.toString()])*tasa.toDouble()) * it.cantidad)
+
+            label = new Label(0, fila, it?.item?.codigo.toString()); sheet.addCell(label);
+            label = new Label(1, fila, it?.item?.nombre.toString()); sheet.addCell(label);
+            label = new Label(2, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
+            label = new Label(3, fila, it?.cantidad.toString()); sheet.addCell(label);
+            label = new Label(4, fila, precioUnitario.toString()); sheet.addCell(label);
+            label = new Label(5, fila, subtotal.toString()); sheet.addCell(label);
+
+
+            fila++
+
+
+        }
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "DocumentosObraExcelTasa.xls";
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
@@ -3602,7 +3709,7 @@ class ReportesController {
         headerRubroTabla.setWidths(arregloEnteros([10, 40, 10, 40]))
 
 
-        addCellTabla(headerRubroTabla, new Paragraph("Obra:", times8bold), prmsHeaderHoja)
+        addCellTabla(headerRubroTabla, new Paragraph("Obra1:", times8bold), prmsHeaderHoja)
         addCellTabla(headerRubroTabla, new Paragraph(obra?.nombre + " " + obra?.descripcion, times8normal), prmsHeaderHoja)
 
         addCellTabla(headerRubroTabla, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -3642,7 +3749,11 @@ class ReportesController {
         anticipoTabla.setWidthPercentage(100);
         anticipoTabla.setWidths(arregloEnteros([50, 50]))
 
+
+
         if (planilla?.tipoPlanilla?.codigo == 'A') {
+
+
 
             addCellTabla(anticipoTabla, new Paragraph(contrato?.porcentajeAnticipo + " % de anticipo:", times8bold), prmsHeaderHoja)
 
@@ -3732,7 +3843,8 @@ class ReportesController {
 
 
         document.add(headerRubroTabla);
-        document.add(anticipoTabla)
+//        document.add(anticipoTexto);
+        document.add(anticipoTabla);
 
         document.close();
         pdfw.close()
@@ -4059,7 +4171,10 @@ class ReportesController {
             lt("fechaFin", planilla.fechaInicio)
         }
 
-        return [tbodyFr: tbodyFr, tbodyP0: tbodyP0, tbodyB0: tbodyB0, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos, detalle: detalle, planillasAnteriores: planillasAnteriores, precios: precios]
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+
+
+        return [tbodyFr: tbodyFr, tbodyP0: tbodyP0, tbodyB0: tbodyB0, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, pcs: pcs, data: data, periodos: periodos, detalle: detalle, planillasAnteriores: planillasAnteriores, precios: precios, numerosALetras: numerosALetras]
 
     }
 

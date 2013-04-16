@@ -54,7 +54,7 @@
 
 
         <a href="#" id="btnPdf" class="btn" title="Imprimir PDF"><i class="icon-print"></i>
-            PDF
+            Imprimir pedido de Pago
         </a>
 
 
@@ -268,11 +268,6 @@
     $(".datepicker").keydown(function () {
         return false;
     });
-
-    %{--$("#btnPdf").click(function () {--}%
-
-    %{--location.href="${createLink(controller: 'reportes', action: 'anticipoReporte', id: planillaInstance?.id)}"--}%
-    %{--});--}%
 
     $("#btnPdf").click(function () {
         var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=planilla.pdf&url=${createLink(controller: 'reportes', action: 'anticipoReporte')}";

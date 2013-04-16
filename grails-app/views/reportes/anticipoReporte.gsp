@@ -10,7 +10,7 @@
 
         html {
             font-family : Verdana, Arial, sans-serif;
-            font-size   : 8px;
+            font-size   : 10px;
         }
 
         .hoja {
@@ -109,7 +109,8 @@
         }
 
         .row {
-            margin-left : -20px;
+            /*margin-left : -20px;*/
+            clear: both;
         }
 
         .span5 {
@@ -118,7 +119,7 @@
         }
 
         .span3 {
-            width : 80px;
+            width : 100px;
             float : left;
         }
 
@@ -140,9 +141,9 @@
             border           : 1px solid #e3e3e3;
         }
 
-        .pago {
-            height : 80px;
-        }
+        /*.pago {*/
+            /*height : 50px;*/
+              /*}*/
 
         .noborder, table.noborder, table.noborder td, table.noborder th {
             border : none !important;
@@ -155,17 +156,66 @@
         .borderTop {
             border-top : double 3px !important;
         }
+            .salto{
+             page-break-after: always;
+
+            }
         </style>
     </head>
 
     <body>
         <div class="hoja">
-            <elm:headerPlanillaReporte planilla="${planilla}"/>
 
-            <div class="pago">
 
-                <div class="span12">
-                    <div class="span3" style="font-weight: bold">
+
+        %{--addCellTabla(anticipoTexto, new Paragraph(", según claúsula sexta, literal a) del citado documento, el detalle es el siguiente ", times8normal), prmsHeaderHoja)--}%
+
+
+
+        <elm:headerPlanillaReporte planilla="${planilla}"/>
+
+<g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
+        <div class="span12" style="">
+
+        De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}, por el valor de U$D <elm:numero number="${contrato?.monto}"/>  más IVA,
+
+        </div>
+
+        <div class="span12" style="">
+
+        para la ${contrato?.oferta?.concurso?.obra?.descripcion}, ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia},
+
+        </div>
+
+        <div class="span12" style="margin-bottom: 10px">
+
+        Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}
+
+
+
+        </div>
+
+        <div class="span12">
+
+
+          Sírvase disponer el trámite respectivo para el pago del ${contrato?.porcentajeAnticipo}% del anticipo, a favor de ${contrato?.oferta?.proveedor?.nombre},
+
+
+        </div>
+
+        <div class="span12" style="margin-bottom: 10px">
+
+            según claúsula sexta, literal a) del citado documento, el detalle es el siguiente:
+
+        </div>
+</g:if>
+
+
+
+        <div class="pago">
+
+                <div class="row">
+                    <div class="span3" style="font-weight: bold; width: 200px; font-size: 10px">
                         <g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
                             ${planilla.contrato?.porcentajeAnticipo} % de Anticipo
                         </g:if>
@@ -179,9 +229,9 @@
                     </div>
                 </div>
 
-                <div class="span12" style="margin-top: 10px">
-                    <div class="span3" style="font-weight: bold">
-                        (+) Reajuste provisional${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}
+                <div class="row">
+                    <div class="span3" style="font-weight: bold; width: 200px; font-size: 10px">
+                        (+) Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}
                     </div>
 
                     <div class="span3">
@@ -189,8 +239,8 @@
                     </div>
                 </div>
 
-                <div class="span12" style="margin-top: 10px">
-                    <div class="span3" style="font-weight: bold">
+                <div class="row">
+                    <div class="span3" style="font-weight: bold; width: 200px; font-size: 10px">
                         SUMA:
                     </div>
 
@@ -199,8 +249,8 @@
                     </div>
                 </div>
 
-                <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
-                    <div class="span3" style="font-weight: bold">
+                <div class="row" style="margin-bottom: 20px">
+                    <div class="span3" style="font-weight: bold; width: 200px; font-size: 10px">
                         A FAVOR DEL CONTRATISTA:
                     </div>
 
@@ -209,6 +259,32 @@
                     </div>
                 </div>
             </div>
+
+            <div class="span12" style="margin-bottom: 10px">
+
+                SON: ${numerosALetras}
+
+
+            </div>
+
+
+<g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
+
+
+
+
+            <div class="span12" style="">
+
+               A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta
+               Dirección la fecha de pago del anticipo reajustado y su valor.
+
+            </div>
+</g:if>
+
+          <div class="salto">
+
+
+          </div>
 
             <g:if test="${planilla.tipoPlanilla.codigo != 'A'}">
                 <div class="area">
@@ -303,7 +379,7 @@
                             </g:each>
                         </tbody>
                         <tfoot>
-                            <tr style="font-size: smaller">
+                            <tr style="er">
                                 <td colspan="5" class="borderTop">
                                     <b>OBSERVACIONES:</b>
                                 </td>

@@ -645,6 +645,41 @@
             </fieldset>
         </div>
 
+
+        <div id="cambioMonedaExcel">
+
+            <fieldset>
+                <div class="span3">
+
+                    Coloque la tasa de cambio que se aplicará a los valores del reporte en excel
+
+                </div>
+
+                <div class="span3">
+
+
+                    Tasa de Cambio: <g:textField name="cambioMoneda" style="width: 55px; margin-left: 20px"/>
+
+                </div>
+
+            </fieldset>
+        </div>
+
+
+        <div id="tasaCeroDialog">
+
+            <fieldset>
+                <div class="span3">
+
+                    Si desea que su reporte sea calculado con una tasa de cambio se debe colocar un número válido en el campo Tasa!!
+
+                </div>
+            </fieldset>
+        </div>
+
+
+
+
         </div>
 
         <script type="text/javascript">
@@ -675,6 +710,11 @@
             var reajusteIva;
 
             var reajusteMeses;
+
+            var tasaCambio;
+
+            var idObraMoneda;
+
 
             function validarNum(ev) {
                 /*
@@ -716,6 +756,29 @@
                         }
 
                     });
+
+
+            $("#cambioMoneda").keydown(function (ev) {
+
+                return validarNum(ev);
+
+            }).keyup(function () {
+
+                        var enteros = $(this).val();
+
+                        if (parseFloat(enteros) > 100 ) {
+
+                            $(this).val(100)
+
+                        }
+                        if(parseFloat(enteros) <= 0){
+
+                            $(this).val(1)
+
+                        }
+
+                    });
+
 
 
             $("#porcentajeMemo").keydown(function (ev) {
@@ -990,7 +1053,10 @@
 
             $("#btnExcel").click(function () {
 
-                location.href = "${g.createLink(controller: 'reportes',action: 'documentosObraExcel',id: obra?.id)}"
+
+                $("#cambioMonedaExcel").dialog("open")
+
+                %{--location.href = "${g.createLink(controller: 'reportes',action: 'documentosObraExcel',id: obra?.id)}"--}%
 
             });
 
@@ -1201,72 +1267,182 @@
 
             });
 
-            $("#reajustePresupuestoDialog").dialog({
+
+            $("#cambioMonedaExcel").dialog({
 
                 autoOpen  : false,
                 resizable : false,
                 modal     : true,
                 draggable : false,
                 width     : 350,
-                height    : 230,
+                height    : 250,
                 position  : 'center',
-                title     : 'Reajuste del Presupuesto',
+                title     : 'Tasa de cambio',
                 buttons   : {
                     "Aceptar" : function () {
 
+                        tasaCambio= $("#cambioMoneda").val()
+
+                        if(tasaCambio == ""){
+
+                             $("#tasaCeroDialog").dialog("open");
+
+                        }else {
+
+                        %{--$.ajax({--}%
+                            %{--type    : "POST",--}%
+                            %{--url     : "${g.createLink(controller: 'reportes', action:'documentosObraTasaExcel')}",--}%
+                            %{--data    : {id : ${obra?.id},--}%
+                                %{--tasa      : tasaCambio--}%
+
+                            %{--},--}%
+                            %{--success : function (msg) {--}%
 
 
-                 proyeccion = $("#proyeccionReajuste").is(':checked');
-                 reajusteIva = $("#reajusteIva").is(':checked');
-                 reajusteMeses = $("#mesesReajuste").val();
+                            %{--}--}%
+                        %{--});--}%
+
+                        var url = "${g.createLink(controller: 'reportes',action: 'documentosObraTasaExcel',id: obra?.id)}?tasa="+tasaCambio
+//                             console.log(url)
+                        location.href = url
+
+                        }
+
+                        $("#cambioMonedaExcel").dialog("close");
+
+
+
+                    },
+                    "Sin cambio" : function () {
+
+                        location.href = "${g.createLink(controller: 'reportes',action: 'documentosObraExcel',id: obra?.id)}"
+
+                        $("#cambioMonedaExcel").dialog("close");
+
+
+
+            },
+                "Cancelar" : function () {
+
+                $("#cambioMonedaExcel").dialog("close");
+
+}
+
+
+}
+
+
+});
+
+$("#reajustePresupuestoDialog").dialog({
+
+autoOpen  : false,
+resizable : false,
+modal     : true,
+draggable : false,
+width     : 350,
+height    : 230,
+position  : 'center',
+title     : 'Reajuste del Presupuesto',
+buttons   : {
+"Aceptar" : function () {
+
+
+
+proyeccion = $("#proyeccionReajuste").is(':checked');
+reajusteIva = $("#reajusteIva").is(':checked');
+reajusteMeses = $("#mesesReajuste").val();
 
 //
 //                        console.log(proyeccion)
 //                        console.log(reajusteMeses)
 
 //
-                        if(proyeccion == true && reajusteMeses == ""){
+if(proyeccion == true && reajusteMeses == ""){
 
 
 //                            console.log("entro!!")
 
-                            $("#mesesCeroDialog").dialog("open")
+   $("#mesesCeroDialog").dialog("open")
 
 
-                        }else{
-
-
-
-                            var tipoReporte = tipoClick;
-
-                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
-                                    + "&firmasId=" + firmasId  + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses
-
-
-                              $("#reajustePresupuestoDialog").dialog("close");
-
-                        }
+}else{
 
 
 
+   var tipoReporte = tipoClick;
+
+   location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
+           + "&firmasId=" + firmasId  + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses
 
 
-                    },
-                    "Cancelar" : function () {
+     $("#reajustePresupuestoDialog").dialog("close");
 
-
-                        $("#reajustePresupuestoDialog").dialog("close");
-
-                    }
-                }
-
-            });
+}
 
 
 
 
 
-            $("#maxFirmasDialog").dialog({
+},
+"Cancelar" : function () {
+
+
+$("#reajustePresupuestoDialog").dialog("close");
+
+}
+}
+
+});
+
+
+
+
+
+$("#maxFirmasDialog").dialog({
+
+autoOpen  : false,
+resizable : false,
+modal     : true,
+draggable : false,
+width     : 350,
+height    : 180,
+position  : 'center',
+title     : 'Máximo Número de Firmas',
+buttons   : {
+"Aceptar" : function () {
+
+$("#maxFirmasDialog").dialog("close");
+
+}
+}
+
+});
+
+
+
+$("#mesesCeroDialog").dialog({
+
+autoOpen  : false,
+resizable : false,
+modal     : true,
+draggable : false,
+width     : 350,
+height    : 180,
+position  : 'center',
+title     : 'No existe un valor en el campo Meses!',
+buttons   : {
+"Aceptar" : function () {
+
+$("#mesesCeroDialog").dialog("close");
+
+}
+}
+
+});
+
+
+            $("#tasaCeroDialog").dialog({
 
                 autoOpen  : false,
                 resizable : false,
@@ -1275,40 +1451,16 @@
                 width     : 350,
                 height    : 180,
                 position  : 'center',
-                title     : 'Máximo Número de Firmas',
+                title     : 'No existe una tasa de cambio!',
                 buttons   : {
                     "Aceptar" : function () {
 
-                        $("#maxFirmasDialog").dialog("close");
+                        $("#tasaCeroDialog").dialog("close");
 
                     }
                 }
 
             });
-
-
-
-            $("#mesesCeroDialog").dialog({
-
-                autoOpen  : false,
-                resizable : false,
-                modal     : true,
-                draggable : false,
-                width     : 350,
-                height    : 180,
-                position  : 'center',
-                title     : 'No existe un valor en el campo Meses!',
-                buttons   : {
-                    "Aceptar" : function () {
-
-                        $("#mesesCeroDialog").dialog("close");
-
-                    }
-                }
-
-            });
-
-
 
 
 
@@ -1316,5 +1468,5 @@
 
         </script>
 
-    </body>
+</body>
 </html>

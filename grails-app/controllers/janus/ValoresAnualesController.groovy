@@ -11,8 +11,8 @@ class ValoresAnualesController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-
-//        def num = 10250687.25
+//
+//        def num = 10687.25
 //
 //        println num
 //        println NumberToLetterConverter.convertNumberToLetter(num)
