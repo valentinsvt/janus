@@ -31,7 +31,7 @@
 
             </ul>
 
-            <div id="tab-presupuesto" class="tab">
+            <div id="tab-presupuesto" class="tab" style="padding-bottom: 750px">
 
                 <div class="tipoReporte">
 
@@ -190,7 +190,7 @@
 
             </div>
 
-            <div id="tab-memorando" class="tab">
+            <div id="tab-memorando" class="tab" style="padding-bottom: 750px">
 
                 <div class="tipoReporteMemo">
 
@@ -357,7 +357,7 @@
 
             </div>
 
-            <div id="tab-polinomica" class="tab">
+            <div id="tab-polinomica" class="tab" style="padding-bottom: 750px">
 
                 <div class="textoFormula">
 
@@ -467,7 +467,7 @@
 
             </div>
 
-            <div id="tab-textosFijos" class="tab">
+            <div id="tab-textosFijos" class="tab" style="padding-bottom: 750px">
 
                 <div class="cabecera">
 
@@ -735,6 +735,25 @@
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
 
+            function validarNumDec(ev) {
+                /*
+                 48-57      -> numeros
+                 96-105     -> teclado numerico
+                 188        -> , (coma)
+                 190        -> . (punto) teclado
+                 110        -> . (punto) teclado numerico
+                 8          -> backspace
+                 46         -> delete
+                 9          -> tab
+                 37         -> flecha izq
+                 39         -> flecha der
+                 */
+                return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                        ev.keyCode == 37 || ev.keyCode == 39 || ev.keyCode == 190 || ev.keyCode == 110);
+            }
+
 
             $("#mesesReajuste").keydown(function (ev) {
 
@@ -743,6 +762,7 @@
             }).keyup(function () {
 
                         var enteros = $(this).val();
+
 
                         if (parseFloat(enteros) > 100 ) {
 
@@ -759,12 +779,23 @@
 
 
             $("#cambioMoneda").keydown(function (ev) {
+//
+//              var val = $(this).val();
+//
+//                if(ev.keyCode == 110 || ev.keyCode == 188 || ev.keyCode == 190){
+//
+//
+//
+//
+//                }
 
-                return validarNum(ev);
+                return validarNumDec(ev);
 
             }).keyup(function () {
 
                         var enteros = $(this).val();
+
+
 
                         if (parseFloat(enteros) > 100 ) {
 

@@ -15,6 +15,9 @@ import jxl.write.*
 
 import java.awt.*
 
+
+import jxl.write.NumberFormat;
+
 //import java.awt.Label
 
 class ReportesController {
@@ -706,8 +709,8 @@ class ReportesController {
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
         Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
-        times8boldWhite.setColor(Color.WHITE)
-        times10boldWhite.setColor(Color.WHITE)
+        times8boldWhite.setColor(Color.BLACK)
+        times10boldWhite.setColor(Color.BLACK)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
                 times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal]
 
@@ -870,7 +873,7 @@ class ReportesController {
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
-            addCellTabla(tablaTotales, new Paragraph("Precio unitario", fonts.times8bold), prmsCellLeft)
+            addCellTabla(tablaTotales, new Paragraph("Precio unitario USD", fonts.times8bold), prmsCellLeft)
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsNum)
 
 
@@ -1313,7 +1316,7 @@ class ReportesController {
 
     def reporteDocumentosObra() {
 
-        println("--->" + params)
+//        println("--->" + params)
 
         def cd
 
@@ -1595,13 +1598,13 @@ class ReportesController {
 
 
             addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"), times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"), times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()] * it.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "#####.##", locale: "ec"), times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
 
             totales = precios[it.id.toString()] * it.cantidad
 
@@ -1625,7 +1628,7 @@ class ReportesController {
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -1646,7 +1649,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "###,###", locale: "ec",maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
             addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellHead)
@@ -1654,7 +1657,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
         }
@@ -1679,7 +1682,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -1688,7 +1691,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
         }
@@ -1715,15 +1718,15 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
             addCellTabla(tablaTotal, new Paragraph("IVA: ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "###,###", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -1732,7 +1735,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "####.##", locale: "ec"), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
 
 
         }
@@ -3303,8 +3306,15 @@ class ReportesController {
 
         def label
         def nmro
+        def number
 
         def fila = 6;
+
+
+
+        NumberFormat nf=new NumberFormat("#.##");
+        WritableCellFormat cf2obj=new WritableCellFormat(nf);
+
 
         label = new Label(0, 2, "Presupuesto de la Obra: " + obra?.nombre.toString(), times16format); sheet.addCell(label);
 
@@ -3343,9 +3353,16 @@ class ReportesController {
             label = new Label(0, fila, it?.item?.codigo.toString()); sheet.addCell(label);
             label = new Label(1, fila, it?.item?.nombre.toString()); sheet.addCell(label);
             label = new Label(2, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
-            label = new Label(3, fila, it?.cantidad.toString()); sheet.addCell(label);
-            label = new Label(4, fila, precioUnitario.toString()); sheet.addCell(label);
-            label = new Label(5, fila, subtotal.toString()); sheet.addCell(label);
+//            label = new Label(3, fila, it?.cantidad.toString()); sheet.addCell(label);
+//            label = new Label(4, fila, precioUnitario.toString()); sheet.addCell(label);
+//            label = new Label(5, fila, subtotal.toString()); sheet.addCell(label);
+
+            number = new jxl.write.Number(3, fila, it?.cantidad); sheet.addCell(number);
+            number = new jxl.write.Number(4, fila, precioUnitario,cf2obj); sheet.addCell(number);
+            number = new jxl.write.Number(5, fila, subtotal,cf2obj); sheet.addCell(number);
+
+
+
 //            label = new Label(6, fila, "0"); sheet.addCell(label);
 //            label = new Label(7, fila, obra?.nombre.toString()); sheet.addCell(label);
 //            label = new Label(8, fila, "0"); sheet.addCell(label);
@@ -3427,6 +3444,11 @@ class ReportesController {
 
         def totalPresupuesto;
 
+
+
+        NumberFormat nf=new NumberFormat("#.##");
+        WritableCellFormat cf2obj=new WritableCellFormat(nf);
+
         //excel
         WorkbookSettings workbookSettings = new WorkbookSettings()
         workbookSettings.locale = Locale.default
@@ -3459,6 +3481,7 @@ class ReportesController {
 
         def label
         def nmro
+        def number
 
         def fila = 6;
 
@@ -3486,9 +3509,9 @@ class ReportesController {
             label = new Label(0, fila, it?.item?.codigo.toString()); sheet.addCell(label);
             label = new Label(1, fila, it?.item?.nombre.toString()); sheet.addCell(label);
             label = new Label(2, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
-            label = new Label(3, fila, it?.cantidad.toString()); sheet.addCell(label);
-            label = new Label(4, fila, precioUnitario.toString()); sheet.addCell(label);
-            label = new Label(5, fila, subtotal.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(3, fila, it?.cantidad); sheet.addCell(number);
+            number = new jxl.write.Number(4, fila, precioUnitario,cf2obj); sheet.addCell(number);
+            number = new jxl.write.Number(5, fila, subtotal,cf2obj); sheet.addCell(number);
 
 
             fila++
@@ -3581,6 +3604,7 @@ class ReportesController {
         def fila = 9;
 
         def ultimaFila
+
 
 
         label = new Label(2, 2, "GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
