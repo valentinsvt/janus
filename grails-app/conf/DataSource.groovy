@@ -13,7 +13,7 @@ environments {
     development {
         dataSource {
             dbCreate = "update"
-//            url = "jdbc:postgresql://127.0.0.1:5432/janus3"
+            //url = "jdbc:postgresql://127.0.0.1:5432/gadpp"
             url = "jdbc:postgresql://10.0.0.3:5432/janus3"
             username = "postgres"
             password = "postgres"
@@ -39,14 +39,14 @@ environments {
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:postgresql://127.0.0.1:5432/gadpp"
+            url = "jdbc:postgresql://10.0.0.3:5432/gadpp"
             username = "postgres"
             password = "janus"
         }
         dataSource_oferentes {
             dialect = org.hibernate.dialect.PostgreSQLDialect
             driverClassName = 'org.postgresql.Driver'
-            url = "jdbc:postgresql://127.0.0.1:5432/oferentes"
+            url = "jdbc:postgresql://10.0.0.3:5432/oferentes"
             username = "postgres"
             password = "janus"
             dbCreate = 'update'

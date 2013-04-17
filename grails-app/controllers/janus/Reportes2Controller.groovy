@@ -275,6 +275,7 @@ class Reportes2Controller {
             }
         }
         def periodoOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
+        println "periodoOferta" + periodoOferta
         def periodos = []
         def data = [
                 c: [:],

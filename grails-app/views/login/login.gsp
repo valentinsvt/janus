@@ -79,7 +79,7 @@
     <span id="spanError"></span>
 </div>
 
-<div class="dialog ui-corner-all" style="height: 595px;background: #0C5994;;padding: 10px;width: 910px;margin: auto;margin-top: 5px" >
+<div class="dialog ui-corner-all" style="height: 595px;background: #31789f;;padding: 10px;width: 910px;margin: auto;margin-top: 5px" >
     <div style="text-align: center;">
         <h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#fff;">
             Control de Proyectos, Contratación, Ejecución y Seguimiento de Obras del GADPP
@@ -169,7 +169,7 @@
             Ingresar
         </a>
     </div>
-    <div style="text-align:right; color:#d95">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
+    <div style="text-align:right; color:#eea781">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
 </div>
 
 <div class="modal login hide fade " id="modal-ingreso" style=";overflow: hidden;">
