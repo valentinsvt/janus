@@ -940,7 +940,37 @@ class MantenimientoItemsController extends Shield {
         }
         precios = res
 
-        return [item: item, lugarNombre: lugarNombre, lugarId: lugarId, precios: precios, lgar: lugarId == "all", fecha: operador == "=" ? fecha.format("dd-MM-yyyy") : null, params: params]
+        def precioRef = false
+
+        def anio = new Date().format("yyyy").toInteger()
+        def anioRef = anio - 1
+        def precioActual = precios.findAll { it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anio}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anio}") }
+        precioActual = precioActual.sort { it.fecha }
+        if (precioActual) {
+            def newest = precioActual[precioActual.size() - 1]
+            println "Precio ${anio} al " + newest.fecha + " " + newest.precioUnitario + ": se muestra este?"
+            precioRef = newest.precioUnitario
+        } else {
+            println "no hay precio de este anio (${anio})"
+            def precioAnterior = precios.findAll { it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anioRef}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anioRef}") }
+            if (precioAnterior) {
+                def newest = precioAnterior[precioAnterior.size() - 1]
+                println "Precio ${anioRef} al " + newest.fecha + " " + newest.precioUnitario + ": se calcula"
+
+                def sbuAct = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
+                def sbuAnt = ValoresAnuales.findByAnio(anio - 1).sueldoBasicoUnificado
+
+                def delta = sbuAct / sbuAnt
+                def nuevoCosto = newest.precioUnitario * delta
+                precioRef = nuevoCosto
+                anioRef = anio - 1
+            } else {
+                println "no hay precio del anio pasado (${anioRef}): hay q pedir"
+            }
+        }
+
+        return [item: item, lugarNombre: lugarNombre, lugarId: lugarId, precios: precios, lgar: lugarId == "all", fecha: operador == "=" ? fecha.format("dd-MM-yyyy") : null,
+                params: params, precioRef: precioRef, anioRef: anioRef]
     }
 
     def formLg_ajax() {

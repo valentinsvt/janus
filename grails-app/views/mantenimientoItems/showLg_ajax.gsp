@@ -14,7 +14,20 @@
             <i class="icon-save"></i>
             Guardar
         </a>
+
+        <g:if test="${!precioRef}">
+            <a href="#" class="btn btn-ajax" id="btnCalc">
+                <i class="icon-money"></i>
+                Calcular precio
+            </a>
+        </g:if>
     </div>
+    <g:if test="${precioRef}">
+        <span style="margin-left: 10px;">
+            Precio ref:
+            <g:formatNumber number="${precioRef}" minFractionDigits="5" , maxFractionDigits="5" locale="ec"/>
+        </span>
+    </g:if>
 </div>
 
 <div id="divTabla" style="height: 630px; width: 100%; overflow-x: hidden; overflow-y: auto;">
@@ -91,6 +104,26 @@
 </div>
 
 <script type="text/javascript">
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                (ev.keyCode == 188 || ev.keyCode == 190 || ev.keyCode == 110) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
     $('[rel=tooltip]').tooltip();
 
     $(".editable").first().addClass("selected");
@@ -240,6 +273,56 @@
         $("#modalBody-tree1").html("Está seguro de querer eliminar este precio?");
         $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
         $("#modal-tree1").modal("show");
+        return false;
+    });
+
+    $("#btnCalc").click(function () {
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+        var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+        var a = "${anioRef}";
+
+        var $valor = $("<input type='number' placeholder='Precio " + a + "'/> ");
+
+        $valor.bind({
+            keydown : function (ev) {
+                var dec = 5;
+                var val = $(this).val();
+                if (ev.keyCode == 188 || ev.keyCode == 190 || ev.keyCode == 110) {
+                    if (!dec) {
+                        return false;
+                    } else {
+                        if (val.length == 0) {
+                            $(this).val("0");
+                        }
+                        if (val.indexOf(".") > -1 || val.indexOf(",") > -1) {
+                            return false;
+                        }
+                    }
+                } else {
+                    if (val.indexOf(".") > -1 || val.indexOf(",") > -1) {
+                        if (dec) {
+                            var parts = val.split(".");
+                            var l = parts[1].length;
+                            if (l >= dec) {
+                                return false;
+                            }
+                        }
+                    } else {
+                        return validarNum(ev);
+                    }
+                }
+            }
+        });
+        var $p1 = $("<p>").html("Por favor ingrese el precio unitario del año " + a);
+        var $p2 = $("<p>").html($valor);
+
+        var $div = $("<div>").append($p1).append($p2);
+
+        $("#modalTitle-tree1").html("Información");
+        $("#modalBody-tree1").html($div);
+        $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
+        $("#modal-tree1").modal("show");
+
         return false;
     });
 
