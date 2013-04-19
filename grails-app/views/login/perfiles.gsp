@@ -23,7 +23,7 @@
 
     <body>
 
-        <g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #525E67;background: #202328;color: #939Aa2;width: 300px;position: relative;padding-left: 70px">
+        <g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #525E67;background:#012a3a;color: #939Aa2;width: 300px;position: relative;padding-left: 70px">
             <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px">Sistema Janus</p>
 
             <div class="linea" style="height: 95%;left: 45px"></div>

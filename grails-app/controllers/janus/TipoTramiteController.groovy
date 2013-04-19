@@ -11,18 +11,17 @@ class TipoTramiteController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [tipoTramiteInstanceList: TipoTramite.list(params), tipoTramiteInstanceTotal: TipoTramite.count(), params: params]
+        [tipoTramiteInstanceList: TipoTramite.list(params), params: params]
     } //list
 
     def form_ajax() {
         def tipoTramiteInstance = new TipoTramite(params)
-        if (params.id) {
+        if(params.id) {
             tipoTramiteInstance = TipoTramite.get(params.id)
-            if (!tipoTramiteInstance) {
+            if(!tipoTramiteInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró TipoTramite con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Tipo Tramite con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -31,11 +30,11 @@ class TipoTramiteController extends janus.seguridad.Shield {
 
     def save() {
         def tipoTramiteInstance
-        if (params.id) {
+        if(params.id) {
             tipoTramiteInstance = TipoTramite.get(params.id)
-            if (!tipoTramiteInstance) {
+            if(!tipoTramiteInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró TipoTramite con id " + params.id
+                flash.message = "No se encontró Tipo Tramite con id " + params.id
                 redirect(action: 'list')
                 return
             }//no existe el objeto
@@ -46,7 +45,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
         } //es create
         if (!tipoTramiteInstance.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar TipoTramite " + (tipoTramiteInstance.id ? tipoTramiteInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar Tipo Tramite " + (tipoTramiteInstance.id ? tipoTramiteInstance.id : "") + "</h4>"
 
             str += "<ul>"
             tipoTramiteInstance.errors.allErrors.each { err ->
@@ -63,12 +62,12 @@ class TipoTramiteController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente TipoTramite " + tipoTramiteInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo Tramite " + tipoTramiteInstance.id
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente TipoTramite " + tipoTramiteInstance.id
+            flash.message = "Se ha creado correctamente Tipo Tramite " + tipoTramiteInstance.id
         }
         redirect(action: 'list')
     } //save
@@ -77,7 +76,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
         def tipoTramiteInstance = TipoTramite.get(params.id)
         if (!tipoTramiteInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró TipoTramite con id " + params.id
+            flash.message =  "No se encontró Tipo Tramite con id " + params.id
             redirect(action: "list")
             return
         }
@@ -88,7 +87,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
         def tipoTramiteInstance = TipoTramite.get(params.id)
         if (!tipoTramiteInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró TipoTramite con id " + params.id
+            flash.message =  "No se encontró Tipo Tramite con id " + params.id
             redirect(action: "list")
             return
         }
@@ -96,12 +95,12 @@ class TipoTramiteController extends janus.seguridad.Shield {
         try {
             tipoTramiteInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente TipoTramite " + tipoTramiteInstance.id
+            flash.message =  "Se ha eliminado correctamente Tipo Tramite " + tipoTramiteInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar TipoTramite " + (tipoTramiteInstance.id ? tipoTramiteInstance.id : "")
+            flash.message =  "No se pudo eliminar Tipo Tramite " + (tipoTramiteInstance.id ? tipoTramiteInstance.id : "")
             redirect(action: "list")
         }
     } //delete

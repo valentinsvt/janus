@@ -21,10 +21,12 @@ class RolTramite implements Serializable{
     }
 
     static constraints = {
-
         codigo(size: 1..4, blank: true, nullable: true, attributes: [title: 'numero'])
         descripcion(size: 1..63, blank: false, nullable: false, attributes: [title: 'descripcion'])
-
-
     }
+
+    String toString() {
+        "${descripcion}"
+    }
+
 }

@@ -1,19 +1,20 @@
 
-<%@ page import="janus.TipoTramite" %>
+<%@ page import="janus.DepartamentoTramite" %>
 
-<div id="create-TipoTramite" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-TipoTramite" action="save">
-        <g:hiddenField name="id" value="${tipoTramiteInstance?.id}"/>
+<div id="create-DepartamentoTramite" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-DepartamentoTramite" action="save">
+        <g:hiddenField name="id" value="${departamentoTramiteInstance?.id}"/>
                 
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Codigo
+                    Tipo de Trámite
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="4" class=" required" value="${tipoTramiteInstance?.codigo}"/>
+                <g:select id="tipoTramite" name="tipoTramite.id" from="${janus.TipoTramite.list()}" optionKey="id"
+                          class="many-to-one  required" value="${departamentoTramiteInstance?.tipoTramite?.id}" style="width: 400px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -22,12 +23,13 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Rol que desempeña
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class=" required" value="${tipoTramiteInstance?.descripcion}"/>
+                <g:select id="rolTramite" name="rolTramite.id" from="${janus.RolTramite.list()}" optionKey="id"
+                          class="many-to-one  required" value="${departamentoTramiteInstance?.rolTramite?.id}" style="width: 400px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -36,26 +38,13 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Padre
+                    Departamento
                 </span>
             </div>
 
             <div class="controls">
-                <g:select id="padre" name="padre.id" from="${janus.TipoTramite.list()}" optionKey="id" class="many-to-one " value="${tipoTramiteInstance?.padre?.id}" noSelection="['null': '']"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Tiempo
-                </span>
-            </div>
-
-            <div class="controls">
-                <g:field type="number" name="tiempo" class=" required" value="${fieldValue(bean: tipoTramiteInstance, field: 'tiempo')}"/>
+                <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id"
+                          class="many-to-one  required" value="${departamentoTramiteInstance?.departamento?.id}" style="width: 400px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -64,7 +53,7 @@
     </g:form>
 
 <script type="text/javascript">
-    $("#frmSave-TipoTramite").validate({
+    $("#frmSave-DepartamentoTramite").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },

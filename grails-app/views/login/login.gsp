@@ -175,13 +175,13 @@
 <div class="modal login hide fade " id="modal-ingreso" style=";overflow: hidden;">
     <div class="modal-body" id="modalBody" style="padding: 0px">
 
-        <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #525E67;background: #202328;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
+        <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #525E67;background: #012a3a;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
             <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px">Sistema Janus</p>
 
             <div class="linea" style="height: 95%;left: 45px"></div>
             <button type="button" class="close" data-dismiss="modal" style="color: white;opacity: 1;">×</button>
             <fieldset style="">
-                <legend style="color: white;border:none;font-family: 'Open Sans Condensed', serif;font-weight: bolder;font-size: 25px">Ingreso</legend>
+                <legend style="color:#c0c0c0;border:none;font-family: 'Open Sans Condensed', serif;font-weight: bolder;font-size: 25px">Ingreso</legend>
 
                 <g:if test="${flash.message}">
                     <div class="alert alert-info" role="status">
@@ -223,7 +223,7 @@
 </div>
 
 
-<div id="recuperarPass-dialog"  class="dialog ui-corner-all" style="height: 595px;background: #0C5994;;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
+<div id="recuperarPass-dialog"  class="dialog ui-corner-all" style="height: 595px;background: #d0d0d0;;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
 
     %{--<fieldset>--}%
 

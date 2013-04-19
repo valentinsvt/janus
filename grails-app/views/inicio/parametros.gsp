@@ -21,7 +21,7 @@
                 <li><a href="#ejec">Ejecución</a></li>
             </ul>
 
-            <div id="gnrl" class="ui-widget-content" style="height: 440px">
+            <div id="gnrl" class="ui-widget-content" style="height: 500px">
                 <div class="item" texto="grgf">
                     <g:link controller="canton"
                             action="arbol">Divisi&oacute;n geogr&aacute;fica del Pa&iacute;s</g:link> en cantones, parroquias y comunidades.
@@ -66,6 +66,13 @@
 
                 <div class="item" texto="tpin">
                     <g:link controller="tipoIndice" action="list">Tipo de Indice</g:link> según el INEC.
+                </div><br>
+                <div class="item" texto="tptr">
+                    <g:link controller="tipoTramite" action="list">Tipo de Trámite</g:link> para la gestión de procesos y flujo de trabajo
+                </div><br>
+                <div class="item" texto="rltr">
+                    <g:link controller="rolTramite" action="list">Rol de la persona en de Trámite</g:link>, por ejemplo, quien envía,
+                    quien recibe o si recibe una copia del documento.
                 </div><br>
             </div>
 
@@ -261,6 +268,16 @@
 
     <p>Según la clasificación del INEC que se aplica a la fórmula polinómica y cada uno de sus coeficientes.
     Tanto para la cuadrilla tipo como para fórmula general.</p>
+</div>
+
+<div id="tptr" style="display:none">
+    <h3>Tipo de Trámite</h3><br>
+    <p>Tipos de trámites a los cuales se asociarán los procesos y documentación. El tipo de trámite sirve para la
+    Gestión de procesos y Flujo de trabajo en concordancia con el Sistema de Administración Documental SAD. </p>
+</div>
+<div id="rltr" style="display:none">
+    <h3>Rol de la Persona en el Trámite</h3><br>
+    <p>Distintos roles que puede desempeñar una persona en el trámite. </p>
 </div>
 
 <div id="tpob" style="display:none">
