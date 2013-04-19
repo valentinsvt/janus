@@ -194,9 +194,9 @@ class Reportes3Controller {
         WritableCellFormat formatXls = new WritableCellFormat(font)
         def row = 0
         WritableSheet sheet = workbook.createSheet('MySheet', 0)
-        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
-        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, true);
+        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, false);
         WritableCellFormat times10 = new WritableCellFormat(times10Font);
         sheet.setColumnView(0, 20)
         sheet.setColumnView(1, 50)
@@ -253,18 +253,18 @@ class Reportes3Controller {
                 band=1
                 label = new Label(0, fila,r["itemcdgo"], times10); sheet.addCell(label);
                 label = new Label(1, fila,r["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(3, fila, r["rbpcpcun"]);sheet.addCell(number);
-                number = new Number(4, fila, r["rbpcpcun"]*r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(5, fila, r["rndm"]);sheet.addCell(number);
-                number = new Number(6, fila, r["parcial"]);sheet.addCell(number);
+                number = new Number(2, fila, r["rbrocntd"], times10);sheet.addCell(number);
+                number = new Number(3, fila, r["rbpcpcun"], times10);sheet.addCell(number);
+                number = new Number(4, fila, r["rbpcpcun"]*r["rbrocntd"], times10);sheet.addCell(number);
+                number = new Number(5, fila, r["rndm"], times10);sheet.addCell(number);
+                number = new Number(6, fila, r["parcial"], times10);sheet.addCell(number);
                 totalHer+=r["parcial"]
                 fila++
             }
             if(r["grpocdgo"]==2){
                 if(band==1){
                     label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
-                    number = new Number(6, fila, totalHer);sheet.addCell(number);
+                    number = new Number(6, fila, totalHer, times10);sheet.addCell(number);
                     fila++
                 }
                 if(band!=2){
@@ -284,11 +284,11 @@ class Reportes3Controller {
                 band=2
                 label = new Label(0, fila,r["itemcdgo"], times10); sheet.addCell(label);
                 label = new Label(1, fila,r["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(3, fila, r["rbpcpcun"]);sheet.addCell(number);
-                number = new Number(4, fila, r["rbpcpcun"]*r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(5, fila, r["rndm"]);sheet.addCell(number);
-                number = new Number(6, fila, r["parcial"]);sheet.addCell(number);
+                number = new Number(2, fila, r["rbrocntd"], times10);sheet.addCell(number);
+                number = new Number(3, fila, r["rbpcpcun"], times10);sheet.addCell(number);
+                number = new Number(4, fila, r["rbpcpcun"]*r["rbrocntd"], times10);sheet.addCell(number);
+                number = new Number(5, fila, r["rndm"], times10);sheet.addCell(number);
+                number = new Number(6, fila, r["parcial"], times10);sheet.addCell(number);
                 totalMan+=r["parcial"]
                 fila++
             }
@@ -319,10 +319,10 @@ class Reportes3Controller {
                 label = new Label(1, fila,r["itemnmbr"], times10); sheet.addCell(label);
 
                 label = new Label(2, fila,r["unddcdgo"], times10); sheet.addCell(label);
-                number = new Number(3, fila, r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(4, fila, r["rbpcpcun"]);sheet.addCell(number);
+                number = new Number(3, fila, r["rbrocntd"], times10);sheet.addCell(number);
+                number = new Number(4, fila, r["rbpcpcun"], times10);sheet.addCell(number);
 
-                number = new Number(6, fila, r["parcial"]);sheet.addCell(number);
+                number = new Number(6, fila, r["parcial"], times10);sheet.addCell(number);
                 totalMat+=r["parcial"]
                 fila++
 
@@ -356,11 +356,11 @@ class Reportes3Controller {
             rowsTrans.each {rt->
                 label = new Label(0, fila,rt["itemcdgo"], times10); sheet.addCell(label);
                 label = new Label(1, fila,rt["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, rt["itempeso"]);sheet.addCell(number);
-                number = new Number(3, fila, rt["rbrocntd"]);sheet.addCell(number);
-                number = new Number(4, fila, rt["distancia"]);sheet.addCell(number);
-                number = new Number(5, fila, rt["tarifa"]);sheet.addCell(number);
-                number = new Number(6, fila, rt["parcial_t"]);sheet.addCell(number);
+                number = new Number(2, fila, rt["itempeso"], times10);sheet.addCell(number);
+                number = new Number(3, fila, rt["rbrocntd"], times10);sheet.addCell(number);
+                number = new Number(4, fila, rt["distancia"], times10);sheet.addCell(number);
+                number = new Number(5, fila, rt["tarifa"], times10);sheet.addCell(number);
+                number = new Number(6, fila, rt["parcial_t"], times10);sheet.addCell(number);
                 fila++
             }
             label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
@@ -384,8 +384,8 @@ class Reportes3Controller {
         def totalIndi=totalRubro*indi/100
         label = new Label(0, fila, "Costos indirectos", times10); sheet.addCell(label);
         sheet.mergeCells(0,fila, 1, fila)
-        number = new Number(5, fila, indi);sheet.addCell(number);
-        number = new Number(6, fila, totalIndi);sheet.addCell(number);
+        number = new Number(5, fila, indi, times10);sheet.addCell(number);
+        number = new Number(6, fila, totalIndi, times10);sheet.addCell(number);
 
 
         /*Totales*/
@@ -398,10 +398,10 @@ class Reportes3Controller {
         sheet.mergeCells(4,fila+2, 5, fila+2)
         label = new Label(4, fila+3,"Precio unitario(\$USD)", times16format); sheet.addCell(label);
         sheet.mergeCells(4,fila+3, 5, fila+3)
-        number = new Number(6, fila, totalRubro.toDouble().round(5));sheet.addCell(number);
-        number = new Number(6, fila+1, (totalIndi).toDouble().round(5));sheet.addCell(number);
-        number = new Number(6, fila+2, (totalRubro+totalIndi).toDouble().round(5));sheet.addCell(number);
-        number = new Number(6, fila+3, (totalRubro+totalIndi).toDouble().round(2));sheet.addCell(number);
+        number = new Number(6, fila, totalRubro.toDouble().round(5), times10);sheet.addCell(number);
+        number = new Number(6, fila+1, (totalIndi).toDouble().round(5), times10);sheet.addCell(number);
+        number = new Number(6, fila+2, (totalRubro+totalIndi).toDouble().round(5), times10);sheet.addCell(number);
+        number = new Number(6, fila+3, (totalRubro+totalIndi).toDouble().round(2), times10);sheet.addCell(number);
 
 
         workbook.write();

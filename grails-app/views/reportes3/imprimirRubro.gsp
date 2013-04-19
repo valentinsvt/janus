@@ -34,7 +34,7 @@
         .hoja {
             /*background  : #e6e6fa;*/
             height      : 24.7cm; /*29.7-(1.5*2)*/
-            font-family : arial;
+            font-family : serif;
             font-size   : 10px;
             width       : 16cm;
         }
