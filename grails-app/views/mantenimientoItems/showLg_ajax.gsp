@@ -22,12 +22,12 @@
             </a>
         </g:if>
     </div>
-    <g:if test="${precioRef}">
-        <span style="margin-left: 10px;">
+    <span style="margin-left: 10px;" id="spanRef">
+        <g:if test="${precioRef}">
             Precio ref:
             <g:formatNumber number="${precioRef}" minFractionDigits="5" , maxFractionDigits="5" locale="ec"/>
-        </span>
-    </g:if>
+        </g:if>
+    </span>
 </div>
 
 <div id="divTabla" style="height: 630px; width: 100%; overflow-x: hidden; overflow-y: auto;">
@@ -277,8 +277,8 @@
     });
 
     $("#btnCalc").click(function () {
-        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-        var btnSave = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+        var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+        var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Calcular</a>');
         var a = "${anioRef}";
 
         var $valor = $("<input type='number' placeholder='Precio " + a + "'/> ");
@@ -307,12 +307,28 @@
                                 return false;
                             }
                         }
-                    } else {
-                        return validarNum(ev);
                     }
                 }
+                return validarNum(ev);
             }
         });
+
+        btnCalc.click(function () {
+            $(this).replaceWith(spinner);
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(action: 'calcPrecioRef_ajax')}",
+                data    : {
+                    precio : $valor.val()
+                },
+                success : function (msg) {
+                    $("#modal-tree1").modal("hide");
+                    $("#btnCalc").hide();
+                    $("#spanRef").text("Precio ref: " + msg);
+                }
+            });
+        });
+
         var $p1 = $("<p>").html("Por favor ingrese el precio unitario del año " + a);
         var $p2 = $("<p>").html($valor);
 
@@ -320,11 +336,13 @@
 
         $("#modalTitle-tree1").html("Información");
         $("#modalBody-tree1").html($div);
-        $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
+        $valor.focus();
+        $("#modalFooter-tree1").html("").append(btnCancel).append(btnCalc);
         $("#modal-tree1").modal("show");
 
         return false;
-    });
+    })
+    ;
 
     $(".btnDeleteReg").click(function () {
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');

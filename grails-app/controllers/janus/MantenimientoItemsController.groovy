@@ -888,49 +888,50 @@ class MantenimientoItemsController extends Shield {
         render oks + "_" + nos
     }
 
-    def showLg_ajax() {
-//        params.tipo = "C"
-//        params.operador = "<"
+    def calcPrecioRef_ajax() {
+        render formatNumber(number: calcPrecioRef(params.precio.toDouble()), maxFractionDigits: 5, minFractionDigits: 5)
+    }
+
+    def calcPrecioRef(precioAnt) {
+        def anio = new Date().format("yyyy").toInteger()
+        def sbuAct = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
+        def sbuAnt = ValoresAnuales.findByAnio(anio - 1).sueldoBasicoUnificado
+
+        def delta = sbuAct / sbuAnt
+        def nuevoCosto = precioAnt * delta
+
+
+        println precioAnt + " " + anio + " " + sbuAct + " " + sbuAnt + " " + delta + " " + nuevoCosto
+
+        return nuevoCosto
+    }
+
+    def calcPrecio(params) {
+//        println params
+        def lugar = []
+        def precios = []
+        def precioRef = false
+        def fecha = params.fecha
+
         if (params.fecha == "all") {
             params.todasLasFechas = "true"
         } else {
             params.todasLasFechas = "false"
-            params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+            params.fecha = new Date().parse("dd-MM-yyyy", fecha)
         }
-//        println "show lg" + params
-
-        def parts = params.id.split("_")
-        def itemId = parts[0]
-        def lugarId = parts[1]
-        def item = Item.get(itemId)
-        def lugar = []
-        def precios = []
-        def operador = params.operador
-        def fecha = params.fecha
-
-        def lugarNombre
-
         if (params.todasLasFechas == "true") {
             fecha = null
         }
-//        if (params.all == "true") {
-//            params.tipo = ['C', 'V']
-//            lugarTipo = " (C y V)"
-//        } else {
-//            params.tipo = ['C']
-//            lugarTipo = " (C)"
-//        }
-        if (lugarId == "all") {
-//            lugar = Lugar.findAllByTipoInList(params.tipo, [sort: "descripcion"])
+
+        if (params.lugarId == "all") {
             lugar = Lugar.list([sort: "descripcion"])
-            lugarNombre = "todos los lugares"
         } else {
-            lugar.add(Lugar.get(lugarId))
-            lugarNombre = lugar[0].descripcion + " <i>(" + (lugar[0].tipoLista ? lugar[0].tipoLista?.descripcion : 'sin tipo') + ")</i>"
+            lugar.add(Lugar.get(params.lugarId))
         }
-//        println "parametros busqueda "+fecha+" - "+itemId+" - "+operador
+
+//        println ">>> " + fecha + "   " + params.itemId + "    " + params.operador
         lugar.each {
-            def tmp = preciosService.getPrecioRubroItemOperador(fecha, it, itemId, operador)
+            def tmp = preciosService.getPrecioRubroItemOperador(fecha, it, params.itemId, params.operador)
             if (tmp.size() > 0)
                 precios += tmp
         }
@@ -940,38 +941,80 @@ class MantenimientoItemsController extends Shield {
         }
         precios = res
 
-        def precioRef = false
-
         def anio = new Date().format("yyyy").toInteger()
         def anioRef = anio - 1
         def precioActual = precios.findAll { it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anio}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anio}") }
         precioActual = precioActual.sort { it.fecha }
         if (precioActual) {
             def newest = precioActual[precioActual.size() - 1]
-            println "Precio ${anio} al " + newest.fecha + " " + newest.precioUnitario + ": se muestra este?"
+//            println "Precio ${anio} al " + newest.fecha + " " + newest.precioUnitario + ": se muestra este?"
             precioRef = newest.precioUnitario
         } else {
-            println "no hay precio de este anio (${anio})"
+//            println "no hay precio de este anio (${anio})"
             def precioAnterior = precios.findAll { it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anioRef}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anioRef}") }
             if (precioAnterior) {
                 def newest = precioAnterior[precioAnterior.size() - 1]
-                println "Precio ${anioRef} al " + newest.fecha + " " + newest.precioUnitario + ": se calcula"
+//                println "Precio ${anioRef} al " + newest.fecha + " " + newest.precioUnitario + ": se calcula"
 
-                def sbuAct = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
-                def sbuAnt = ValoresAnuales.findByAnio(anio - 1).sueldoBasicoUnificado
-
-                def delta = sbuAct / sbuAnt
-                def nuevoCosto = newest.precioUnitario * delta
-                precioRef = nuevoCosto
-                anioRef = anio - 1
+//                def sbuAct = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
+//                def sbuAnt = ValoresAnuales.findByAnio(anioRef).sueldoBasicoUnificado
+//
+//                def delta = sbuAct / sbuAnt
+//                def nuevoCosto = newest.precioUnitario * delta
+//                precioRef = nuevoCosto
+                precioRef = calcPrecioRef(newest.precioUnitario)
             } else {
-                println "no hay precio del anio pasado (${anioRef}): hay q pedir"
+//                println "no hay precio del anio pasado (${anioRef}): hay q pedir"
             }
         }
 
-        return [item: item, lugarNombre: lugarNombre, lugarId: lugarId, precios: precios, lgar: lugarId == "all", fecha: operador == "=" ? fecha.format("dd-MM-yyyy") : null,
-                params: params, precioRef: precioRef, anioRef: anioRef]
+        return [precios: precios, precioRef: precioRef, anioRef: anioRef]
     }
+
+    def showLg_ajax() {
+//        params.tipo = "C"
+//        params.operador = "<"
+        if (params.fecha == "all") {
+            params.todasLasFechas = "true"
+        } else {
+            params.todasLasFechas = "false"
+            params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        }
+        println "show lg" + params
+
+        def parts = params.id.split("_")
+        def itemId = parts[0]
+        def lugarId = parts[1]
+        def item = Item.get(itemId)
+        def operador = params.operador
+        def fecha = params.fecha
+
+        def lugarNombre
+
+        if (params.todasLasFechas == "true") {
+            fecha = null
+        }
+        if (lugarId == "all") {
+            lugarNombre = "todos los lugares"
+        } else {
+            def l = Lugar.get(lugarId)
+            lugarNombre = l.descripcion + " <i>(" + (l.tipoLista ? l.tipoLista?.descripcion : 'sin tipo') + ")</i>"
+        }
+
+//        println "parametros busqueda " + fecha + " - " + itemId + " - " + operador
+        def r = calcPrecio([
+                lugarId: lugarId,
+                fecha: params.fecha,
+                operador: operador,
+                todasLasFechas: params.todasLasFechas,
+                itemId: itemId
+        ])
+
+        return [item: item, lugarNombre: lugarNombre, lugarId: lugarId, precios: r.precios, lgar: lugarId == "all", fecha: operador == "=" ? fecha.format("dd-MM-yyyy") : null,
+                params: params, precioRef: r.precioRef, anioRef: r.anioRef]
+    }
+
+
 
     def formLg_ajax() {
         def lugarInstance = new Lugar()
