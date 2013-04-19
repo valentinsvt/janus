@@ -780,14 +780,41 @@
 
             $("#cambioMoneda").keydown(function (ev) {
 //
-//              var val = $(this).val();
-//
-//                if(ev.keyCode == 110 || ev.keyCode == 188 || ev.keyCode == 190){
-//
-//
-//
-//
-//                }
+              var val = $(this).val();
+              var dec = 2;
+
+
+                if(ev.keyCode == 110 || ev.keyCode == 190){
+
+                    if (!dec) {
+                        return false;
+                    } else {
+                        if (val.length == 0) {
+                            $(this).val("0");
+                        }
+                        if (val.indexOf(".") > -1) {
+                            return false;
+                        }
+                    }
+
+                } else {
+
+
+                    if (val.indexOf(".") > -1) {
+                        if (dec) {
+                            var parts = val.split(".");
+                            var l = parts[1].length;
+                            if (l >= dec) {
+                                return false;
+                            }
+                        }
+                    } else {
+                        return validarNumDec(ev);
+                    }
+
+
+
+                }
 
                 return validarNumDec(ev);
 
@@ -797,9 +824,9 @@
 
 
 
-                        if (parseFloat(enteros) > 100 ) {
+                        if (parseFloat(enteros) > 10000 ) {
 
-                            $(this).val(100)
+                            $(this).val(1)
 
                         }
                         if(parseFloat(enteros) <= 0){

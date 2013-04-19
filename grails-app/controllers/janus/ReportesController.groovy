@@ -1628,7 +1628,7 @@ class ReportesController {
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -1649,7 +1649,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "###,###", locale: "ec",maxFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "###,###", locale: "ec",maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
             addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellHead)
@@ -1657,7 +1657,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
         }
@@ -1682,7 +1682,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -1691,7 +1691,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
         }
@@ -1718,7 +1718,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
             addCellTabla(tablaTotal, new Paragraph("IVA: ", times8bold), prmsCellHead)
@@ -1726,7 +1726,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "###,###", locale: "ec"), times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -1735,7 +1735,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
         }

@@ -1,41 +1,61 @@
-
 <%@ page import="janus.Departamento" %>
 
-<div id="create-departamentoInstance" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-departamentoInstance" action="save">
-        <g:hiddenField name="id" value="${departamentoInstance?.id}"/>
-                
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Descripción
-                </span>
-            </div>
+<div id="create-Departamento" class="span" role="main">
+<g:form class="form-horizontal" name="frmSave-Departamento" action="save">
+    <g:hiddenField name="id" value="${departamentoInstance?.id}"/>
 
-            <div class="controls">
-                <g:textField name="descripcion" maxlength="31" style="width: 310px" class=" required" value="${departamentoInstance?.descripcion}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Descripcion
+            </span>
         </div>
-                
-    </g:form>
+
+        <div class="controls">
+            <g:textField name="descripcion" maxlength="31" class=" required"
+                         value="${departamentoInstance?.descripcion}"/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Direccion
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:select id="direccion" name="direccion.id" from="${janus.Direccion.list()}" optionKey="id"
+                      class="many-to-one  required" value="${departamentoInstance?.direccion?.id}"/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+</g:form>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-departamentoInstance").validate({
-        errorPlacement : function (error, element) {
+    $("#frmSave-Departamento").validate({
+        errorPlacement: function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
-        success        : function (label) {
+        success: function (label) {
             label.parent().hide();
         },
-        errorClass     : "label label-important",
-        submitHandler  : function(form) {
-            $("[name=btnSave-departamentoInstance]").replaceWith(spinner);
+        errorClass: "label label-important",
+        submitHandler: function (form) {
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

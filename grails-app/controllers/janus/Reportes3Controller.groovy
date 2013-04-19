@@ -190,7 +190,7 @@ class Reportes3Controller {
         def file = File.createTempFile('myExcelDocument', '.xls')
         file.deleteOnExit()
         WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
-        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableFont font = new WritableFont(WritableFont.TIMES, 12)
         WritableCellFormat formatXls = new WritableCellFormat(font)
         def row = 0
         WritableSheet sheet = workbook.createSheet('MySheet', 0)
@@ -227,7 +227,7 @@ class Reportes3Controller {
         sheet.mergeCells(5,6, 6, 6)
 
         def fila = 9
-        label = new Label(0, fila,"Herramientas", times16format); sheet.addCell(label);
+        label = new Label(0, fila,"Equipos", times16format); sheet.addCell(label);
         sheet.mergeCells(0,fila, 1, fila)
         fila++
         def number
@@ -303,20 +303,25 @@ class Reportes3Controller {
                     label = new Label(0, fila,"Materiales", times16format); sheet.addCell(label);
                     sheet.mergeCells(0,fila, 1, fila)
                     fila++
+
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
-                    label = new Label(2, fila, "Cantidad", times16format); sheet.addCell(label);
-                    label = new Label(3, fila, "Unitario", times16format); sheet.addCell(label);
-                    label = new Label(4, fila, "Unidad", times16format); sheet.addCell(label);
+                    label = new Label(2, fila, "Unidad", times16format); sheet.addCell(label);
+                    label = new Label(3, fila, "Cantidad", times16format); sheet.addCell(label);
+                    label = new Label(4, fila, "Unitario", times16format); sheet.addCell(label);
+
                     label = new Label(6, fila, "C.Total(\$)", times16format); sheet.addCell(label);
                     fila++
                 }
                 band=3
+
                 label = new Label(0, fila,r["itemcdgo"], times10); sheet.addCell(label);
                 label = new Label(1, fila,r["itemnmbr"], times10); sheet.addCell(label);
-                number = new Number(2, fila, r["rbrocntd"]);sheet.addCell(number);
-                number = new Number(3, fila, r["rbpcpcun"]);sheet.addCell(number);
-                label = new Label(4, fila,r["unddcdgo"], times10); sheet.addCell(label);
+
+                label = new Label(2, fila,r["unddcdgo"], times10); sheet.addCell(label);
+                number = new Number(3, fila, r["rbrocntd"]);sheet.addCell(number);
+                number = new Number(4, fila, r["rbpcpcun"]);sheet.addCell(number);
+
                 number = new Number(6, fila, r["parcial"]);sheet.addCell(number);
                 totalMat+=r["parcial"]
                 fila++
@@ -439,9 +444,10 @@ class Reportes3Controller {
         def total = 0,totalHer=0,totalMan=0,totalMat=0
         tablaTrans+="<thead><tr><th colspan='7'>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario(\$)</th><th>C.Total(\$)</th></tr></thead><tbody>"
 
-        tablaHer+="<thead><tr><th colspan='7'>Herramienta</th></tr><tr><th style='width: 80px'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa<br/> (\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr></thead><tbody>"
+        tablaHer+="<thead><tr><th colspan='7'>Equipos</th></tr><tr><th style='width: 80px'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa<br/> (\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr></thead><tbody>"
         tablaMano+="<thead><tr><th colspan='7'>Mano de obra</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Jornal<br/>(\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr></thead><tbody>"
-        tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Unitario(\$)</th><th>Unidad</th><th>Peso/Vol</th><th>C.Total(\$)</th></tr></thead><tbody>"
+//        tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Unitario(\$)</th><th>Unidad</th><th>Peso/Vol</th><th>C.Total(\$)</th></tr></thead><tbody>"
+        tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Unitario(\$)</th><th>Peso/Vol</th><th>C.Total(\$)</th></tr></thead><tbody>"
 //        println "rends "+rendimientos
 
 //        println "res "+res
@@ -477,18 +483,20 @@ class Reportes3Controller {
                 if(!params.trans){
                     tablaMat+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
                     tablaMat+="<td>"+r["itemnmbr"]+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbpcpcun"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
-                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+//                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
                     totalMat+=r["parcial"]
                 }else{
                     tablaMat+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
                     tablaMat+="<td>"+r["itemnmbr"]+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbpcpcun"]+r["parcial_t"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
-                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+//                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
                     tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
                     totalMat+=r["parcial"]+r["parcial_t"]
