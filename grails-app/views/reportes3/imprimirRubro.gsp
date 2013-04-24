@@ -87,6 +87,22 @@
             font-size : 10px !important;
         }
 
+        .theader {
+
+            /*border: 1px solid #000000;*/
+            border-bottom: 1px solid #000000;
+
+
+        }
+
+        .theaderup {
+
+            /*border: 1px solid #000000;*/
+            border-top: 1px solid #000000;
+
+
+        }
+
         .row-fluid {
             width  : 100%;
             height : 20px;

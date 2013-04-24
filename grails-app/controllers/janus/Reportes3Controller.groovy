@@ -442,12 +442,14 @@ class Reportes3Controller {
         def tablaTrans='<table class=""> '
         def tablaIndi='<table class=""> '
         def total = 0,totalHer=0,totalMan=0,totalMat=0
-        tablaTrans+="<thead><tr><th colspan='7'>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario(\$)</th><th>C.Total(\$)</th></tr></thead><tbody>"
+        tablaTrans+="<thead><tr><th colspan='7'>Transporte</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario(\$)</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
 
-        tablaHer+="<thead><tr><th colspan='7'>Equipos</th></tr><tr><th style='width: 80px'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa<br/> (\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr></thead><tbody>"
-        tablaMano+="<thead><tr><th colspan='7'>Mano de obra</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Jornal<br/>(\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr></thead><tbody>"
-//        tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Unitario(\$)</th><th>Unidad</th><th>Peso/Vol</th><th>C.Total(\$)</th></tr></thead><tbody>"
-        tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Unitario(\$)</th><th>Peso/Vol</th><th>C.Total(\$)</th></tr></thead><tbody>"
+        tablaHer+="<thead><tr><th colspan='7'>Equipos</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa<br/> (\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+        tablaMano+="<thead><tr><th colspan='7'>Mano de obra</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Jornal<br/>(\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+        tablaMat+="<thead><tr><th colspan='7'>Materiales</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Unitario(\$)</th><th>Peso/Vol</th><th>C.Total(\$)</th></tr> <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+
+
+
 //        println "rends "+rendimientos
 
 //        println "res "+res
