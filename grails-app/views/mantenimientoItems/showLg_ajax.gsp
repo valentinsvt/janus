@@ -379,6 +379,13 @@
                 $("#modal-tree2").modal("show");
             }
         });
+
+        btnCalc.click(function () {
+            $("#modal-tree2").modal("hide");
+            $("#btnCalc").hide();
+            $("#spanRef").text("Precio ref: " + number_format(data.ch, 2, ".", ""));
+        });
+
         return false;
     });
 

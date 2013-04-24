@@ -19,6 +19,14 @@ th, td {
     background : #5E5E5E;
     color      : #f5f5f5;
 }
+
+.totalParcial, .totalParcial td, .totalParcial th, .totalFinal, .totalFinal td, .totalFinal th {
+    font-weight : bold;
+}
+
+.num {
+    text-align : right;
+}
 </style>
 
 <h4>Datos del equipo</h4>
@@ -56,20 +64,20 @@ th, td {
                 </div>
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular" name="hvb"/>
+                <g:textField type="number" class="input-mini calcular prom" data-prom="hv" name="hvb"/>
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular" name="hva"/>
+                <g:textField type="number" class="input-mini calcular prom" data-prom="hv" name="hva"/>
             </td>
-            <td id="hv">
-            </td>
-            <td>
-                <g:textField type="number" class="input-mini calcular" name="hab"/>
+            <td id="hv" class="num">
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular" name="haa"/>
+                <g:textField type="number" class="input-mini calcular prom" data-prom="ha" name="hab"/>
             </td>
-            <td id="ha">
+            <td>
+                <g:textField type="number" class="input-mini calcular prom" data-prom="ha" name="haa"/>
+            </td>
+            <td id="ha" class="num">
             </td>
         </tr>
     </tbody>
@@ -93,11 +101,11 @@ th, td {
         <tr>
             <td>${valoresAnuales.anio}</td>
             <td>
-                <g:textField type="number" class="input-mini calcular" name="s" value="${g.formatNumber(number: valoresAnuales.seguro, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+                <g:textField type="number" class="input-mini calcular" name="cs" value="${g.formatNumber(number: valoresAnuales.seguro, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
             </td>
             <td>
                 <div class="input-append">
-                    <g:textField type="number" class="input-mini calcular" name="i" value="${g.formatNumber(number: valoresAnuales.tasaInteresAnual, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+                    <g:textField type="number" class="input-mini calcular" name="ci" value="${g.formatNumber(number: valoresAnuales.tasaInteresAnual, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
                     <span class="add-on">%</span>
                 </div>
             </td>
@@ -120,7 +128,7 @@ th, td {
     </tbody>
 </table>
 
-<h4>Cálculo del costo total de la hora <a href="#" class="btn btn-success" id="btnCalcular">Calcular</a></h4>
+<h4>Cálculo del costo total de la hora</h4> %{--<a href="#" class="btn btn-success" id="btnCalcular">Calcular</a></h4>--}%
 
 <div class="calculos">
     <div class="row">
@@ -129,22 +137,22 @@ th, td {
                 <tr>
                     <th>Valor de adquisición del equipo</th>
                     <th>Va</th>
-                    <td id="tdVa"></td>
+                    <td id="tdVa" class="num dol" data-dec="2"></td>
                 </tr>
                 <tr>
                     <th>Años de vida</th>
                     <th>Av</th>
-                    <td id="tdAv"></td>
+                    <td id="tdAv" class="num" data-dec="5"></td>
                 </tr>
                 <tr>
                     <th>Valor de rescate</th>
                     <th>Vr</th>
-                    <td id="tdVr"></td>
+                    <td id="tdVr" class="num dol" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Depreciación del equipo</th>
                     <th>D</th>
-                    <td id="tdD"></td>
+                    <td id="tdD" class="num dol" data-dec="2"></td>
                 </tr>
             </table>
         </div>
@@ -154,17 +162,17 @@ th, td {
                 <tr>
                     <th>Costo del dinero</th>
                     <th>i</th>
-                    <td id="tdCi"></td>
+                    <td id="tdCi" class="num" data-dec="2"></td>
                 </tr>
                 <tr>
                     <th>Factor de recuperación del capital</th>
                     <th>frc</th>
-                    <td id="tdFrc"></td>
+                    <td id="tdFrc" class="num" data-dec="5"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Intereses</th>
                     <th>I</th>
-                    <td id="tdI"></td>
+                    <td id="tdI" class="num" data-dec="5"></td>
                 </tr>
             </table>
         </div>
@@ -176,12 +184,12 @@ th, td {
                         <tr>
                             <th>Seguros</th>
                             <th>s</th>
-                            <td id="tdCs"></td>
+                            <td id="tdCs" class="num" data-dec="2"></td>
                         </tr>
                         <tr class="totalParcial">
                             <th>Costo de seguros</th>
                             <th>S</th>
-                            <td id="tdS"></td>
+                            <td id="tdS" class="num" data-dec="5"></td>
                         </tr>
                     </table>
                 </div>
@@ -193,7 +201,7 @@ th, td {
                         <tr class="totalParcial">
                             <th>Matrícula</th>
                             <th>m</th>
-                            <td id="tdM"></td>
+                            <td id="tdM" class="num" data-dec="5"></td>
                         </tr>
                     </table>
                 </div>
@@ -207,12 +215,12 @@ th, td {
                         <tr>
                             <th>Factor de costo de respuestos reparaciones</th>
                             <th>k</th>
-                            <td id="tdK"></td>
+                            <td id="tdK" class="num" data-dec="2"></td>
                         </tr>
                         <tr class="totalParcial">
                             <th>Costo de repuestos</th>
                             <th>R</th>
-                            <td id="tdR"></td>
+                            <td id="tdR" class="num" data-dec="5"></td>
                         </tr>
                     </table>
                 </div>
@@ -224,7 +232,7 @@ th, td {
                         <tr class="totalParcial">
                             <th>Costo M.O. reparaciones</th>
                             <th>MOR</th>
-                            <td id="tdMor"></td>
+                            <td id="tdMor" class="num" data-dec="5"></td>
                         </tr>
                     </table>
                 </div>
@@ -239,12 +247,12 @@ th, td {
                 <tr>
                     <th>Costo diesel - combustibles</th>
                     <th>Di</th>
-                    <td id="tdDi"></td>
+                    <td id="tdDi" class="num" data-dec="0"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Costo diesel</th>
                     <th>CD</th>
-                    <td id="tdCd"></td>
+                    <td id="tdCd" class="num" data-dec="5"></td>
                 </tr>
             </table>
         </div>
@@ -254,12 +262,12 @@ th, td {
                 <tr>
                     <th>Aceite lubricante</th>
                     <th>Ac</th>
-                    <td id="tdAc"></td>
+                    <td id="tdAc" class="num" data-dec="0"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Costo lubricante</th>
                     <th>CL</th>
-                    <td id="tdCl"></td>
+                    <td id="tdCl" class="num" data-dec="5"></td>
                 </tr>
             </table>
         </div>
@@ -269,31 +277,59 @@ th, td {
                 <tr>
                     <th>Grasa</th>
                     <th>Gr</th>
-                    <td id="tdGr"></td>
+                    <td id="tdGr" class="num" data-dec="0"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Costo grasa</th>
                     <th>CG</th>
-                    <td id="tdCg"></td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="span3">
-            <table border="1" style="margin-top: 15px;">
-                <tr class="totalFinal">
-                    <th>Costo total de la hora</th>
-                    <th>Ch</th>
-                    <td id="tdCh"></td>
+                    <td id="tdCg" class="num" data-dec="5"></td>
                 </tr>
             </table>
         </div>
     </div>
 </div>
 
+<table border="1">
+    <tr class="totalFinal">
+        <th>Costo total de la hora</th>
+        <th>Ch</th>
+        <td id="tdCh" class="num dol" data-dec="2"></td>
+    </tr>
+</table>
+
 <script type="text/javascript">
 
-    var va, av, vr, d, ci, frc, i, cs, s, m, k, r, mor, di, cd, ac, cl, gr, cg, ch;
+    var data = {
+        va  : 0,
+        av  : 0,
+        vr  : 0,
+        d   : 0,
+        ci  : ${valoresAnuales.tasaInteresAnual/100},
+        frc : 0,
+        i   : 0,
+        s   : 0,
+        cs  : ${valoresAnuales.seguro},
+        m   : 0,
+        k   : ${valoresAnuales.factorCostoRepuestosReparaciones},
+        r   : 0,
+        mor : 0,
+        di  : ${valoresAnuales.costoDiesel},
+        cd  : 0,
+        ac  : ${valoresAnuales.costoLubricante},
+        cl  : 0,
+        gr  : ${valoresAnuales.costoGrasa},
+        cg  : 0,
+        ch  : 0,
+        hp  : 0,
+        hvb : 0,
+        hva : 0,
+        hv  : 0,
+        hab : 0,
+        haa : 0,
+        ha  : 0
+    };
+
+    calc();
 
     function validarNum(ev) {
         /*
@@ -313,6 +349,46 @@ th, td {
                 ev.keyCode == 190 || ev.keyCode == 110 ||
                 ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                 ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+    function calc() {
+
+        data.av = data.hv / data.ha;
+        data.vr = 72.47 / (Math.pow(data.av, 0.32)) * data.va / 100;
+        data.d = (data.va - data.vr) / data.hv;
+
+        data.frc = 1 / data.av + (data.av + 1) / (2 * data.av) * data.ci;
+        data.i = data.va * data.frc * data.ci / data.hv;
+
+        data.s = (data.va + data.vr) * data.cs / (2 * data.ha);
+
+        data.m = 0.001 * (data.va - data.vr) * data.av / data.hv;
+
+        data.r = 0.7425 * data.d * data.k;
+
+        data.mor = 0.23 * data.d * data.k;
+
+        data.cd = 0.04 * data.di * data.hp;
+
+        data.cl = 0.00035 * data.ac * data.hp;
+
+        data.cg = 0.001 * data.gr * data.hp;
+
+        data.ch = data.d + data.i + data.s + data.m + data.r + data.mor + data.cd + data.cl + data.cg;
+
+        $.each(data, function (d, i) {
+            if (i != 0) {
+                var td = $("#td" + d.capitalize());
+                if (td) {
+                    var dec = parseInt(td.data("dec"));
+                    var t = number_format(i, dec, ".", ",");
+                    if (td.hasClass("dol")) {
+                        t = "$" + t
+                    }
+                    td.text(t);
+                }
+            }
+        });
     }
 
     $(".calcular").bind({
@@ -343,6 +419,28 @@ th, td {
                     return validarNum(ev);
                 }
             }
+        },
+        keyup   : function () {
+            var name = $(this).attr("name");
+            data[name] = parseFloat($(this).val());
+            if (name == "ci") {
+                data[name] = parseFloat($(this).val()) / 100;
+            }
+            if ($(this).hasClass("prom")) {
+                var prom = $(this).data("prom");
+
+                var b = $("#" + prom + "b").val();
+                var a = $("#" + prom + "a").val();
+
+                if (a != "" && b != "") {
+                    a = parseFloat(a);
+                    b = parseFloat(b);
+                    var m = (a + b) / 2;
+                    data[prom] = m;
+                    $("#" + prom).text(number_format(m, 2, ".", ""));
+                }
+            }
+            calc();
         }
     });
 
