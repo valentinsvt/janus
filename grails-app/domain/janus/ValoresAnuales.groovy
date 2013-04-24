@@ -4,6 +4,7 @@ class ValoresAnuales {
 
     Integer anio
     Double sueldoBasicoUnificado
+    Double seguro
     Double tasaInteresAnual
     Double factorCostoRepuestosReparaciones
     Double costoDiesel
@@ -20,6 +21,7 @@ class ValoresAnuales {
             id column: 'vlan__id'
             anio column: 'vlananio'
             sueldoBasicoUnificado column: 'vlan_sbu'
+            seguro column: 'vlansgro'
             tasaInteresAnual column: 'vlantasa'
             factorCostoRepuestosReparaciones column: 'vlanftrr'
             costoDiesel column: 'vlancsdi'

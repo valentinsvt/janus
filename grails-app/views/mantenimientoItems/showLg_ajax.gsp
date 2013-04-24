@@ -14,20 +14,23 @@
             <i class="icon-save"></i>
             Guardar
         </a>
-
-        <g:if test="${!precioRef}">
-            <a href="#" class="btn btn-ajax" id="btnCalc">
-                <i class="icon-money"></i>
-                Calcular precio
-            </a>
+        <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
+            <g:if test="${!precioRef}">
+                <a href="#" class="btn btn-ajax" id="btnCalc${item.departamento.subgrupo.grupoId}">
+                    <i class="icon-money"></i>
+                    Calcular precio
+                </a>
+            </g:if>
         </g:if>
     </div>
-    <span style="margin-left: 10px;" id="spanRef">
-        <g:if test="${precioRef}">
-            Precio ref:
-            <g:formatNumber number="${precioRef}" minFractionDigits="5" , maxFractionDigits="5" locale="ec"/>
-        </g:if>
-    </span>
+    <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
+        <span style="margin-left: 10px;" id="spanRef">
+            <g:if test="${precioRef}">
+                Precio ref:
+                <g:formatNumber number="${precioRef}" minFractionDigits="5" , maxFractionDigits="5" locale="ec"/>
+            </g:if>
+        </span>
+    </g:if>
 </div>
 
 <div id="divTabla" style="height: 630px; width: 100%; overflow-x: hidden; overflow-y: auto;">
@@ -100,6 +103,20 @@
     </div>
 
     <div class="modal-footer" id="modalFooter-tree1">
+    </div>
+</div>
+
+<div class="modal grandotote hide fade" id="modal-tree2">
+    <div class="modal-header" id="modal-header-tree2">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modalTitle-tree2"></h3>
+    </div>
+
+    <div class="modal-body" id="modalBody-tree2">
+    </div>
+
+    <div class="modal-footer" id="modalFooter-tree2">
     </div>
 </div>
 
@@ -276,7 +293,7 @@
         return false;
     });
 
-    $("#btnCalc").click(function () {
+    $("#btnCalc2").click(function () {
         var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
         var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Calcular</a>');
         var a = "${anioRef}";
@@ -315,6 +332,7 @@
 
         btnCalc.click(function () {
             $(this).replaceWith(spinner);
+
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(action: 'calcPrecioRef_ajax')}",
@@ -341,8 +359,28 @@
         $("#modal-tree1").modal("show");
 
         return false;
-    })
-    ;
+    });
+
+    $("#btnCalc3").click(function () {
+        var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+        var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Calcular</a>');
+        var a = "${anioRef}";
+
+        $.ajax({
+            type    : "POST",
+            url     : "${createLink(action: 'calcPrecEq')}",
+            data    : {
+                item : ${item.id}
+            },
+            success : function (msg) {
+                $("#modalTitle-tree2").html("Información");
+                $("#modalBody-tree2").html(msg);
+                $("#modalFooter-tree2").html("").append(btnCancel).append(btnCalc);
+                $("#modal-tree2").modal("show");
+            }
+        });
+        return false;
+    });
 
     $(".btnDeleteReg").click(function () {
         var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');

@@ -326,7 +326,7 @@ class ElementosTagLib {
         formatJs = formatJs.replaceAll("M", "m")
         formatJs = formatJs.replaceAll("yyyy", "yy")
 
-        str += "<input type='text' class='datepicker " + clase + "' name='" + name + "' id='" + id + "' value='" + g.formatDate(date: value, format: format) + "'"
+        str += "<input type='text'  autocomplete='off' class='datepicker " + clase + "' name='" + name + "' id='" + id + "' value='" + g.formatDate(date: value, format: format) + "'"
         str += renderAttributes(attrs)
         str += "/>"
 
