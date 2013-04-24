@@ -247,7 +247,7 @@ th, td {
                 <tr>
                     <th>Costo diesel - combustibles</th>
                     <th>Di</th>
-                    <td id="tdDi" class="num" data-dec="0"></td>
+                    <td id="tdDi" class="num" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Costo diesel</th>
@@ -262,7 +262,7 @@ th, td {
                 <tr>
                     <th>Aceite lubricante</th>
                     <th>Ac</th>
-                    <td id="tdAc" class="num" data-dec="0"></td>
+                    <td id="tdAc" class="num" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Costo lubricante</th>
@@ -277,7 +277,7 @@ th, td {
                 <tr>
                     <th>Grasa</th>
                     <th>Gr</th>
-                    <td id="tdGr" class="num" data-dec="0"></td>
+                    <td id="tdGr" class="num" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th>Costo grasa</th>

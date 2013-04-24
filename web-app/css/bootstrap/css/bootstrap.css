@@ -806,7 +806,8 @@ a.badge:hover {
 }
 .label-inverse,
 .badge-inverse {
-  background-color: #333333;
+  /*background-color: #073E6F;*/     /* gdo */
+  background-color: #145588;     /* gdo */
 }
 .label-inverse[href],
 .badge-inverse[href] {
@@ -2848,7 +2849,7 @@ input[type="submit"].btn.btn-mini {
   font-size: 20px;
   font-weight: 200;
   color: #777777;
-  text-shadow: -2px 2px 1px rgba(248, 148, 6,0.5) !important;
+  /*text-shadow: -2px 2px 1px rgba(248, 148, 6,0.5) !important;*/
 }
 .navbar .brand:hover {
   text-decoration: none;
@@ -3167,7 +3168,7 @@ input[type="submit"].btn.btn-mini {
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#222222), to(#111111));
   background-image: -webkit-linear-gradient(top, #222222, #111111);
   background-image: -o-linear-gradient(top, #222222, #111111);
-  background-image: linear-gradient(to bottom, #4cadc9, #002d49);     /*gdo*/
+  background-image: linear-gradient(to bottom, #3ca2ff, #002d49);     /*gdo*/
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff222222', endColorstr='#ff111111', GradientType=0);
   border-color: #252525;
@@ -3205,7 +3206,7 @@ input[type="submit"].btn.btn-mini {
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
-  background-color: #005d79;
+  background-color: #1c82df;  /*gdo*/
   color: #ff981f;
 }
 .navbar-inverse .nav li.dropdown > .dropdown-toggle .caret {
@@ -4113,7 +4114,7 @@ a.thumbnail:hover {
   text-decoration: none;
   color: #ffffff;
   background-color: #0088cc;
-  background-color: #0081c2;
+  background-color:#3ca2ff;  /*gdo*/
   background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
   background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);
@@ -4128,7 +4129,7 @@ a.thumbnail:hover {
   text-decoration: none;
   outline: 0;
   background-color: #0088cc;
-  background-color: #0081c2;
+  background-color: #3ca2ff;  /*gdo*/
   background-image: -moz-linear-gradient(top, #0088cc, #0077b3);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0077b3));
   background-image: -webkit-linear-gradient(top, #0088cc, #0077b3);

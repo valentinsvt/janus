@@ -15,7 +15,8 @@
     margin-left  : 15px;
     width        : 515px;
     height       : 690px;
-    border-color : #DC6816;
+    /*border-color : #DC6816;*/
+    border-color : #444444;
     background   : #e0e8f0;   /*gdo*/
     padding      : 15px;
 }
