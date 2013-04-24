@@ -158,6 +158,7 @@ class MantenimientoItemsController extends Shield {
                             }
                         }
                     }
+
                     desc = hijo.codigo + " " + hijo.nombre
 
                     def parts = tipo.split("_")
