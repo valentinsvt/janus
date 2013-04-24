@@ -26,7 +26,7 @@ class MantenimientoItemsController extends Shield {
             case "grupo_manoObra":
                 hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])[0].id
                 hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(hijos), [sort: 'codigo'])
-                println hijos.descripcion
+                println "grupo" + hijos.descripcion
                 break;
             case "grupo_material":
             case "grupo_equipo":
@@ -34,7 +34,7 @@ class MantenimientoItemsController extends Shield {
                 break;
             case "subgrupo_manoObra":
                 hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'codigo'])
-                println hijos.nombre
+                println  hijos.nombre
                 break;
             case "subgrupo_material":
             case "subgrupo_equipo":
@@ -95,14 +95,12 @@ class MantenimientoItemsController extends Shield {
             def hijosH, desc, liId
             switch (tipo) {
                 case "grupo_manoObra":
+//                    println("entro grupo")
                     hijosH = Item.findAllByDepartamento(hijo, [sort: 'codigo'])
                     desc = hijo.codigo.toString().padLeft(3, '0') + " " + hijo.descripcion
                     def parts = tipo.split("_")
-                    rel = "subgrupo_" + parts[1]
-                    liId = "sg" + "_" + hijo.id
-//                    println "_______________________"
-//                    println hijo.descripcion
-//                    println hijosH.descripcion
+                    rel = "departamento_" + parts[1]
+                    liId = "dp" + "_" + hijo.id
                     break;
                 case "grupo_material":
                 case "grupo_equipo":
@@ -113,7 +111,12 @@ class MantenimientoItemsController extends Shield {
                     liId = "sg" + "_" + hijo.id
                     break;
                 case "subgrupo_manoObra":
+//                    println("entro sub")
+
                     hijosH = []
+
+//                    hijosH = Item.findAllByDepartamento(hijo,[sort: 'codigo'])
+
                     def tipoLista = hijo.tipoLista
                     if (precios) {
                         if (ignore) {
@@ -125,6 +128,7 @@ class MantenimientoItemsController extends Shield {
                         }
                     }
                     desc = hijo.codigo + " " + hijo.nombre
+
                     def parts = tipo.split("_")
                     rel = "item_" + parts[1]
                     liId = "it" + "_" + hijo.id
@@ -138,32 +142,53 @@ class MantenimientoItemsController extends Shield {
                     liId = "dp" + "_" + hijo.id
                     break;
                 case "departamento_manoObra":
+                    //                    println("entro sub")
+
                     hijosH = []
+
+//                    hijosH = Item.findAllByDepartamento(hijo,[sort: 'codigo'])
+
+                    def tipoLista = hijo.tipoLista
                     if (precios) {
-                        hijosH = []
                         if (ignore) {
-                            desc = "Todos los lugares"
-                            rel = "lugar_all"
-                            liId = "lg_" + id + "_all"
+                            hijosH = ["Todos"]
                         } else {
-
-//                            println("entro")
-
-                            if (all) {
-                                desc = hijo.descripcion + " (" + hijo.tipo + ")"
-                            } else {
-                                desc = hijo.descripcion
+                            if (tipoLista) {
+                                hijosH = Lugar.findAllByTipoLista(tipoLista)
                             }
-//                            rel = "lugar_" + hijo.tipo
-                            rel = "lugar"
-                            liId = "lg_" + id + "_" + hijo.id
-
-                            def obras = Obra.countByLugar(hijo)
-//                            println "lugar " + hijo.tipo + " " + hijo.id + " " + hijo.descripcion + "    o: " + obras
-                            extra = "data-obras='${obras}'"
-
                         }
                     }
+                    desc = hijo.codigo + " " + hijo.nombre
+
+                    def parts = tipo.split("_")
+                    rel = "item_" + parts[1]
+                    liId = "it" + "_" + hijo.id
+//                    hijosH = []
+//                    if (precios) {
+//                        hijosH = []
+//                        if (ignore) {
+//                            desc = "Todos los lugares"
+//                            rel = "lugar_all"
+//                            liId = "lg_" + id + "_all"
+//                        } else {
+//
+////                            println("entro")
+//
+//                            if (all) {
+//                                desc = hijo.nombre + " (" + hijo.tipo + ")"
+//                            } else {
+//                                desc = hijo.nombre
+//                            }
+////                            rel = "lugar_" + hijo.tipo
+//                            rel = "lugar"
+//                            liId = "lg_" + id + "_" + hijo.id
+//
+//                            def obras = Obra.countByLugar(hijo)
+////                            println "lugar " + hijo.tipo + " " + hijo.id + " " + hijo.descripcion + "    o: " + obras
+//                            extra = "data-obras='${obras}'"
+//
+//                        }
+//                    }
                     break;
                 case "departamento_material":
                 case "departamento_equipo":
