@@ -37,6 +37,7 @@ class PlanillaController extends janus.seguridad.Shield {
         println "save orden pago "+params
         def planilla = Planilla.get(params.id)
         planilla.fechaOrdenPago = new Date().parse("dd-MM-yyyy", params.fechaOrdenPago)
+        planilla.memoOrdenPago = params.memoOrdenPago
         if (planilla.save(flush: true)){
             flash.message="Orden de pago registrada"
             redirect(action: "list",id: planilla.contrato.id)
@@ -49,6 +50,9 @@ class PlanillaController extends janus.seguridad.Shield {
     def savePago() {
         def planilla = Planilla.get(params.id)
         planilla.fechaPago = new Date().parse("dd-MM-yyyy", params.fechaPago)
+
+        planilla.memoPago = params.memoPago
+
         flash.message = ""
         if (!planilla.save(flush: true)) {
             println "ERROR al guardar el pago de la planilla " + planilla.errors

@@ -15,6 +15,8 @@ class Planilla {
     Date fechaIngreso
     Date fechaPago
     Date fechaOrdenPago
+    String memoOrdenPago
+    String memoPago
     String descripcion
     double valor
     double descuentos
@@ -74,6 +76,8 @@ class Planilla {
             aprobado column: 'plnlaprb'
 
             memoSalida column: 'plnlmmsl'
+            memoOrdenPago column: 'plnlmmop'
+            memoPago column: 'plnlmmpg'
             fechaMemoSalida column: 'plnlfcms'
 
             multaRetraso column: 'plnlmlrt'
@@ -110,5 +114,9 @@ class Planilla {
         fechaOrdenPago(blank:true,nullable: true)
         memoSalida(blank: true, nullable: true)
         fechaMemoSalida(blank: true, nullable: true)
+
+        memoOrdenPago(maxSize: 20, blank: true, nullable: true)
+        memoPago(maxSize: 20, blank: true, nullable: true)
+
     }
 }

@@ -221,9 +221,22 @@
             Fecha orden de pago
         </div>
 
-        <div class="span3"><g:formatDate date="${planillaInstance?.fechaOrdenPago}" format="dd-MM-yyyy"/>
-
+        <div class="span3">
+            <g:formatDate date="${planillaInstance?.fechaOrdenPago}" format="dd-MM-yyyy"/>
         </div>
+
+    </div>
+
+    <div class="span12" style="margin-bottom: 20px">
+        <div class="span3" style="font-weight: bold">
+            Memorando orden de Pago
+        </div>
+        <div class="span3">
+
+            ${planillaInstance?.memoOrdenPago}
+        </div>
+
+
     </div>
 
 
@@ -245,6 +258,18 @@
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
+        </div>
+
+        <div class="control-group">
+           <div>
+            <span class="control-label label label-inverse">
+                Memorando orden de pago
+            </span>
+           </div>
+          <div class="controls">
+          <g:textField name="memoOrdenPago" maxlength="20" value="${planillaInstance?.memoOrdenPago}"/>
+          </div>
+
         </div>
 
     </g:form>

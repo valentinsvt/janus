@@ -224,6 +224,19 @@
 
                 </div>
             </div>
+            <div class="span12" style="margin-bottom: 20px">
+                <div class="span3" style="font-weight: bold">
+
+                    Memorando Orden de Pago
+                </div>
+                <div class="span3">
+
+                    ${planillaInstance?.memoOrdenPago}
+                </div>
+
+            </div>
+
+
 
             <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
                 <div class="span3" style=" font-weight: bold">
@@ -233,6 +246,19 @@
                 <div class="span3"><g:formatDate date="${planillaInstance?.fechaPago}" format="dd-MM-yyyy"/>
 
                 </div>
+            </div>
+
+            <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+                <div class="span3" style="font-weight: bold">
+                    Memorando de Pago
+                </div>
+                <div class="span3">
+
+                    ${planillaInstance?.memoPago}
+
+                </div>
+
+
             </div>
 
             <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
@@ -253,6 +279,30 @@
             <g:form class="form-horizontal" name="frmSave-Planilla" action="savePago">
                 <g:hiddenField name="id" value="${planillaInstance?.id}"/>
 
+                <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+                    <div class="span3" style=" font-weight: bold">
+                        Fecha Pago
+                    </div>
+
+                    <div class="span3"><g:formatDate date="${planillaInstance?.fechaPago}" format="dd-MM-yyyy"/>
+
+                    </div>
+                </div>
+
+                <div class="span12" style="margin-top: 10px; margin-bottom: 20px">
+                    <div class="span3" style="font-weight: bold">
+                        Memorando de Pago
+                    </div>
+                    <div class="span3">
+
+                        ${planillaInstance?.memoPago}
+
+                    </div>
+
+
+                </div>
+
+
                 <div class="control-group">
                     <div>
                         <span class="control-label label label-inverse">
@@ -266,6 +316,22 @@
                         <p class="help-block ui-helper-hidden"></p>
                     </div>
                 </div>
+
+                <div class="control-group">
+                    <div>
+                        <span class="control-label label label-inverse">
+                            Memorando de Pago
+                        </span>
+                    </div>
+                    <div class="controls">
+                        <g:textField name="memoPago" value="${planillaInstance?.memoPago}" maxlength="20"/>
+                    </div>
+
+
+
+                </div>
+
+
 
                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                     <div class="control-group">
