@@ -14,6 +14,10 @@ input, select, textarea {
 Hasta aca se comenta para regresar a la version anterior
 */
 
+.add-on {
+    border : solid 1px #000000 !important;
+}
+
 .btn-group {
     display        : inline-block;
     font-size      : 0;
@@ -153,57 +157,6 @@ fieldset.borde legend {
     border : none;
 }
 
-.modal.large {
-    width       : 780px;
-    margin-left : -390px; /* - width/2 */
-}
-
-.modal.long {
-    width       : 1000px;
-    margin-left : -500px; /* - width/2 */
-}
-
-.modal.grande {
-    width       : 1000px;
-    height      : 600px;
-    margin-left : -500px; /* - width/2 */
-}
-
-.grande .modal-body {
-    height     : 560px;
-    max-height : 580px;
-}
-
-.modal.grande2 {
-    width       : 1016px;
-    margin-left : -508px; /* - width/2 */
-}
-
-.grande2 .modal-body {
-    height     : 545px;
-    max-height : 545px;
-}
-
-.modal.grandote {
-    width       : 1200px;
-    margin-left : -600px; /* - width/2 */
-    height      : 600px;
-    margin-top  : -300px;
-}
-
-.grandote .modal-body {
-    height     : 450px;
-    max-height : 450px;
-
-}
-
-.modal.login {
-    width       : 390px;
-    margin-left : -195px; /* - width/2 */
-    padding     : 0px;
-    background  : none;
-}
-
 .buscador {
     width : 800px
 }
@@ -338,4 +291,66 @@ th.desc a {
 .mediumModal {
     width  : 700px; /* SET THE WIDTH OF THE MODAL */
     margin : -250px 0 0 -350px; /* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
+}
+
+.modal.large {
+    width       : 780px;
+    margin-left : -390px; /* - width/2 */
+}
+
+.modal.long {
+    width       : 1000px;
+    margin-left : -500px; /* - width/2 */
+}
+
+.modal.grande {
+    width       : 1000px;
+    height      : 600px;
+    margin-left : -500px; /* - width/2 */
+}
+
+.grande .modal-body {
+    height     : 560px;
+    max-height : 580px;
+}
+
+.modal.grande2 {
+    width       : 1016px;
+    margin-left : -508px; /* - width/2 */
+}
+
+.grande2 .modal-body {
+    height     : 545px;
+    max-height : 545px;
+}
+
+.modal.grandote {
+    width       : 1200px;
+    margin-left : -600px; /* - width/2 */
+    height      : 600px;
+    margin-top  : -300px;
+}
+
+.grandote .modal-body {
+    height     : 460px;
+    max-height : 460px;
+}
+
+.modal.grandotote {
+    width       : 1200px;
+    margin-left : -600px; /* - width/2 */
+    height      : 700px;
+    margin-top  : -300px;
+}
+
+.grandotote .modal-body {
+    height     : 560px;
+    max-height : 560px;
+}
+
+.modal.login {
+    width       : 390px;
+    margin-left : -195px; /* - width/2 */
+    padding     : 0px;
+    background  : none;
 }

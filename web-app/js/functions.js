@@ -22,6 +22,9 @@ String.prototype.rpad = function(padString, length) {
     return str;
 };
 
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 jQuery.expr[":"].icontains = jQuery.expr.createPseudo(function (arg) {
     return function (elem) {

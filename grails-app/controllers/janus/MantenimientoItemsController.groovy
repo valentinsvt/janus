@@ -913,11 +913,19 @@ class MantenimientoItemsController extends Shield {
         render oks + "_" + nos
     }
 
+    def calcPrecEq() {
+        def anio = new Date().format("yyyy").toInteger()
+        def item = Item.get(params.item.toLong())
+        def valoresAnuales = ValoresAnuales.findByAnio(anio)
+        return [item: item, valoresAnuales: valoresAnuales]
+    }
+
     def calcPrecioRef_ajax() {
         render formatNumber(number: calcPrecioRef(params.precio.toDouble()), maxFractionDigits: 5, minFractionDigits: 5)
     }
 
     def calcPrecioRef(precioAnt) {
+
         def anio = new Date().format("yyyy").toInteger()
         def sbuAct = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
         def sbuAnt = ValoresAnuales.findByAnio(anio - 1).sueldoBasicoUnificado
@@ -925,8 +933,7 @@ class MantenimientoItemsController extends Shield {
         def delta = sbuAct / sbuAnt
         def nuevoCosto = precioAnt * delta
 
-
-        println precioAnt + " " + anio + " " + sbuAct + " " + sbuAnt + " " + delta + " " + nuevoCosto
+//        println precioAnt + " " + anio + " " + sbuAct + " " + sbuAnt + " " + delta + " " + nuevoCosto
 
         return nuevoCosto
     }
@@ -1005,7 +1012,7 @@ class MantenimientoItemsController extends Shield {
             params.todasLasFechas = "false"
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         }
-        println "show lg" + params
+//        println "show lg" + params
 
         def parts = params.id.split("_")
         def itemId = parts[0]
