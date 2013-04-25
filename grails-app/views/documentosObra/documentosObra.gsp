@@ -250,16 +250,16 @@
                                 <g:textField name="baseMemo" style="width: 100px" disabled="true" value="${formatNumber(number: totalPresupuesto, format: '####.##', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
                             </div>
 
-                            <div class="span1" style="margin-left: -30px">Valor de Reajuste:</div>
+                            %{--<div class="span1" style="margin-left: -30px">Valor de Reajuste:</div>--}%
 
-                            <div class="span2"><g:textField name="reajusteMemo" id="reajusteMemo" style="width: 100px; margin-left: -20px" value="" disabled="true"/></div>
+                            %{--<div class="span2"><g:textField name="reajusteMemo" id="reajusteMemo" style="width: 100px; margin-left: -20px" value="" disabled="true"/></div>--}%
 
-                            <div class="span2" style="margin-left: -45px"><g:textField name="porcentajeMemo" id="porcentajeMemo" style="width: 35px; margin-right: 10px" disabled="false"
-                                                                                       maxlength="3"/>
+                            %{--<div class="span2" style="margin-left: -45px"><g:textField name="porcentajeMemo" id="porcentajeMemo" style="width: 35px; margin-right: 10px" disabled="false"--}%
+                                                                                       %{--maxlength="3"/>--}%
 
-                                <button class="btn" id="btnCalBase" style="width: 35px; margin-top: -9px; margin-left: -14px"><i class="icon-table"></i>
-                                </button>
-                            </div>
+                                %{--<button class="btn" id="btnCalBase" style="width: 35px; margin-top: -9px; margin-left: -14px"><i class="icon-table"></i>--}%
+                                %{--</button>--}%
+                            %{--</div>--}%
 
                         </div>
 
@@ -680,6 +680,31 @@
 
 
 
+        <div id="reajusteMemoDialog">
+
+            <fieldset>
+                <div class="span3" style="margin-top: 10px">
+
+                    Incluir Iva <g:checkBox name="reajusteIvaMemo" class="span3" style="margin-left: 150px"/>
+
+
+                </div>
+                <div class="span3" style="margin-top: 10px">
+                    Incluir Proyección del reajuste <g:checkBox name="proyeccionReajusteMemo" style="margin-left: 20px"/>
+
+                </div>
+                <div class="span3" style="margin-top: 10px">
+
+                    Meses <g:textField name="mesesReajusteMemo" style="width: 55px; margin-left: 20px"/>
+                </div>
+
+            </fieldset>
+        </div>
+
+
+
+
+
         </div>
 
         <script type="text/javascript">
@@ -714,6 +739,12 @@
             var tasaCambio;
 
             var idObraMoneda;
+
+            var proyeccionMemo;
+
+            var reajusteIvaMemo;
+
+            var reajusteMesesMemo;
 
 
             function validarNum(ev) {
@@ -1082,11 +1113,14 @@
                         firmasIdMemo = "";
                     }
 
-                    var tipoReporte = tipoClickMemo;
 
-                    location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                                            + "&totalPresupuesto=" + totalPres
-                                            + "&reajusteMemo=" + reajusteMemo
+                    $("#reajusteMemoDialog").dialog("open")
+
+                    %{--var tipoReporte = tipoClickMemo;--}%
+
+                    %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo--}%
+                                            %{--+ "&totalPresupuesto=" + totalPres--}%
+                                            %{--+ "&reajusteMemo=" + reajusteMemo--}%
 
                 }
 
@@ -1452,6 +1486,59 @@ $("#reajustePresupuestoDialog").dialog("close");
 }
 
 });
+
+
+
+
+            $("#reajusteMemoDialog").dialog({
+
+                autoOpen  : false,
+                resizable : false,
+                modal     : true,
+                draggable : false,
+                width     : 350,
+                height    : 230,
+                position  : 'center',
+                title     : 'Reajuste Memorando',
+                buttons   : {
+                    "Aceptar" : function () {
+
+
+
+                        proyeccionMemo = $("#proyeccionReajusteMemo").is(':checked');
+                        reajusteIvaMemo = $("#reajusteIvaMemo").is(':checked');
+                        reajusteMesesMemo = $("#mesesReajusteMemo").val();
+
+                        if(proyeccionMemo == true && reajusteMesesMemo == ""){
+                            $("#mesesCeroDialog").dialog("open")
+
+
+                        }else{
+
+                            var tipoReporte = tipoClickMemo;
+
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
+                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo
+
+                            $("#reajusteMemoDialog").dialog("close");
+
+                        }
+
+
+
+
+
+                    },
+                    "Cancelar" : function () {
+
+
+                        $("#reajusteMemoDialog").dialog("close");
+
+                    }
+                }
+
+            });
+
 
 
 
