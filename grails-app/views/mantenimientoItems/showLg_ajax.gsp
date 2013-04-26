@@ -15,20 +15,20 @@
             Guardar
         </a>
         <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
-            <g:if test="${!precioRef}">
-                <a href="#" class="btn btn-ajax" id="btnCalc${item.departamento.subgrupo.grupoId}">
-                    <i class="icon-money"></i>
-                    Calcular precio
-                </a>
-            </g:if>
+        %{--<g:if test="${!precioRef}">--}%
+            <a href="#" class="btn btn-ajax" id="btnCalc${item.departamento.subgrupo.grupoId}">
+                <i class="icon-money"></i>
+                Calcular precio
+            </a>
+        %{--</g:if>--}%
         </g:if>
     </div>
     <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
         <span style="margin-left: 10px;" id="spanRef">
-            <g:if test="${precioRef}">
-                Precio ref:
-                <g:formatNumber number="${precioRef}" minFractionDigits="5" , maxFractionDigits="5" locale="ec"/>
-            </g:if>
+            %{--<g:if test="${precioRef}">--}%
+            %{--Precio ref:--}%
+            %{--<g:formatNumber number="${precioRef}" minFractionDigits="5" , maxFractionDigits="5" locale="ec"/>--}%
+            %{--</g:if>--}%
         </span>
     </g:if>
 </div>

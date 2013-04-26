@@ -26,7 +26,7 @@ class MantenimientoItemsController extends Shield {
             case "grupo_manoObra":
                 hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])[0].id
                 hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(hijos), [sort: 'codigo'])
-                println "grupo" + hijos.descripcion
+//                println "grupo" + hijos.descripcion
                 break;
             case "grupo_material":
             case "grupo_equipo":
@@ -34,7 +34,7 @@ class MantenimientoItemsController extends Shield {
                 break;
             case "subgrupo_manoObra":
                 hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'codigo'])
-                println  hijos.nombre
+//                println hijos.nombre
                 break;
             case "subgrupo_material":
             case "subgrupo_equipo":
@@ -113,25 +113,25 @@ class MantenimientoItemsController extends Shield {
                 case "subgrupo_manoObra":
 //                    println("entro sub")
 
-                    hijosH = []
-
-//                    hijosH = Item.findAllByDepartamento(hijo,[sort: 'codigo'])
-
-                    def tipoLista = hijo.tipoLista
-                    if (precios) {
-                        if (ignore) {
-                            hijosH = ["Todos"]
-                        } else {
-                            if (tipoLista) {
-                                hijosH = Lugar.findAllByTipoLista(tipoLista)
-                            }
-                        }
-                    }
-                    desc = hijo.codigo + " " + hijo.nombre
-
-                    def parts = tipo.split("_")
-                    rel = "item_" + parts[1]
-                    liId = "it" + "_" + hijo.id
+//                    hijosH = []
+//
+////                    hijosH = Item.findAllByDepartamento(hijo,[sort: 'codigo'])
+//
+//                    def tipoLista = hijo.tipoLista
+//                    if (precios) {
+//                        if (ignore) {
+//                            hijosH = ["Todos"]
+//                        } else {
+//                            if (tipoLista) {
+//                                hijosH = Lugar.findAllByTipoLista(tipoLista)
+//                            }
+//                        }
+//                    }
+//                    desc = "2 " + hijo.codigo + " " + hijo.nombre
+//
+//                    def parts = tipo.split("_")
+//                    rel = "item_" + parts[1]
+//                    liId = "it" + "_" + hijo.id
                     break;
                 case "subgrupo_material":
                 case "subgrupo_equipo":
@@ -529,6 +529,9 @@ class MantenimientoItemsController extends Shield {
         if (params.id) {
             departamentoItemInstance = DepartamentoItem.get(params.id)
         }
+
+//        println ">>>>>>>" + departamentoItemInstance.subgrupo.grupoId
+
         return [subgrupo: subgrupo, departamentoItemInstance: departamentoItemInstance]
     }
 
@@ -721,6 +724,7 @@ class MantenimientoItemsController extends Shield {
 
 
     def saveIt_ajax() {
+//        println 'SAVE ITEM: ' + params
         def dep = DepartamentoItem.get(params.departamento.id)
         params.tipoItem = TipoItem.findByCodigo("I")
         params.fechaModificacion = new Date()
@@ -728,7 +732,13 @@ class MantenimientoItemsController extends Shield {
         params.campo = params.campo.toString().toUpperCase()
         params.observaciones = params.observaciones.toString().toUpperCase()
         if (!params.codigo.contains(".")) {
-            params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+            if (dep.subgrupo.grupoId == 2) {
+//                println "?"
+                params.codigo = dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+//                println params.codigo
+            } else {
+                params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+            }
         }
         if (params.fecha) {
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
@@ -738,10 +748,7 @@ class MantenimientoItemsController extends Shield {
         }
 
         if (!params.tipoLista) {
-
             params.tipoLista = TipoLista.get(6)
-
-
         }
 
         def accion = "create"
@@ -841,7 +848,7 @@ class MantenimientoItemsController extends Shield {
                         precioRubrosItemsInstance.item = Item.get(params.item.id)
                         precioRubrosItemsInstance.fecha = params.fecha
                         if (precioRubrosItemsInstance.save(flush: true)) {
-                            println "OK"
+//                            println "OK"
                         } else {
                             println precioRubrosItemsInstance.errors
                             error++
@@ -889,14 +896,14 @@ class MantenimientoItemsController extends Shield {
         params.item.each {
             def parts = it.split("_")
 
-            println parts
+//            println parts
 
             def rubroId = parts[0]
             def nuevoPrecio = parts[1]
 
             def rubroPrecioInstance = PrecioRubrosItems.get(rubroId);
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
-            println rubroPrecioInstance.precioUnitario
+//            println rubroPrecioInstance.precioUnitario
             if (!rubroPrecioInstance.save(flush: true)) {
                 println "error " + parts
                 if (nos != "") {
@@ -1124,8 +1131,8 @@ class MantenimientoItemsController extends Shield {
     }
 
     def deleteLg_ajax() {
-        println "DELETE LUGAR "
-        println params
+//        println "DELETE LUGAR "
+//        println params
         def lugar = Lugar.get(params.id)
 
         def precios = PrecioRubrosItems.findAllByLugar(lugar)
@@ -1133,7 +1140,7 @@ class MantenimientoItemsController extends Shield {
         precios.each { p ->
             try {
                 p.delete(flush: true)
-                println "p deleted " + p.id
+//                println "p deleted " + p.id
                 cant++
             } catch (DataIntegrityViolationException e) {
                 println e

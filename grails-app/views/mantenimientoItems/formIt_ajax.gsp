@@ -60,7 +60,9 @@
                 <g:if test="${itemInstance.id && cd}">
                     <g:set var="cd" value="${cd?.replace(cd1 + ".", '').replace(cd2 + ".", '')}"/>
                 </g:if>
-                <span class="add-on">${cd1}</span>
+                <g:if test="${itemInstance.departamento.subgrupo.grupoId != 2}">
+                    <span class="add-on">${cd1}</span>
+                </g:if>
                 <span class="add-on">${cd2}</span>
                 <g:textField name="codigo" maxlength="20" class="allCaps required input-small" value="${cd}"/>
                 <span class="mandatory">*</span>
@@ -98,8 +100,8 @@
 
             <div class="controls">
                 %{--<g:select from="['P': 'Peso (capital de cantón)', 'P1': 'Peso (especial)', 'V': 'Volumen (materiales pétreos para hormigones)', 'V1': 'Volumen (materiales pétreos para mejoramiento)', 'V2': 'Volumen (materiales pétreos para carpeta asfáltica)']"--}%
-                          %{--name="transporte" class="span4" value="${itemInstance?.transporte}" optionKey="key" optionValue="value"/>--}%
-                <g:select from="${janus.TipoLista.list([sort:'descripcion'])}"
+                %{--name="transporte" class="span4" value="${itemInstance?.transporte}" optionKey="key" optionValue="value"/>--}%
+                <g:select from="${janus.TipoLista.list([sort: 'descripcion'])}"
                           name="tipoLista.id" class="span4" value="${itemInstance?.tipoListaId}" optionKey="id" optionValue="descripcion"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -115,7 +117,7 @@
             <div class="controls">
                 <div class="input-append">
                     %{--<g:field type="number" name="peso" maxlength="20" class=" required input-small peso" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>--}%
-                    <g:field type="number" name="peso" maxlength="20" class=" required input-small peso"  value="${formatNumber(number:itemInstance?.peso, format: '##,#####0', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}"/>
+                    <g:field type="number" name="peso" maxlength="20" class=" required input-small peso" value="${formatNumber(number: itemInstance?.peso, format: '##,#####0', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}"/>
 
 
                     <span class="add-on" id="spanPeso">
@@ -263,10 +265,6 @@
 
         }
     });
-
-
-
-
 
     $(".allCaps").blur(function () {
         this.value = this.value.toUpperCase();

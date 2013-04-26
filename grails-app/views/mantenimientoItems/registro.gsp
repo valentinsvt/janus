@@ -345,25 +345,48 @@
                         break;
                 }
 
+//                console.log(nodeNivel);
+
                 switch (nodeNivel) {
                     case "grupo":
-                        menuItems.crearHijo = createUpdate({
-                            action    : "create",
-                            label     : "Nuevo grupo",
-                            icon      : icons["subgrupo_" + nodeTipo],
-                            sepBefore : false,
-                            sepAfter  : false,
-                            url       : "${createLink(action:'formSg_ajax')}",
-                            data      : {
-                                grupo : nodeId
-                            },
-                            open      : false,
-                            nodeStrId : nodeStrId,
-                            where     : "first",
-                            tipo      : "sg",
-                            log       : "Grupo ",
-                            title     : "Nuevo grupo"
-                        });
+                        if (current == 2) {
+                            nodeId = 21;
+                            menuItems.crearHijo = createUpdate({
+                                action    : "create",
+                                label     : "Nuevo subgrupo",
+                                sepBefore : false,
+                                sepAfter  : false,
+                                icon      : icons["departamento_" + nodeTipo],
+                                url       : "${createLink(action:'formDp_ajax')}",
+                                data      : {
+                                    subgrupo : nodeId
+                                },
+                                open      : true,
+                                nodeStrId : nodeStrId,
+                                where     : "first",
+                                tipo      : "dp",
+                                log       : "Subgrupo ",
+                                title     : "Nuevo subgrupo"
+                            });
+                        } else {
+                            menuItems.crearHijo = createUpdate({
+                                action    : "create",
+                                label     : "Nuevo grupo",
+                                icon      : icons["subgrupo_" + nodeTipo],
+                                sepBefore : false,
+                                sepAfter  : false,
+                                url       : "${createLink(action:'formSg_ajax')}",
+                                data      : {
+                                    grupo : nodeId
+                                },
+                                open      : false,
+                                nodeStrId : nodeStrId,
+                                where     : "first",
+                                tipo      : "sg",
+                                log       : "Grupo ",
+                                title     : "Nuevo grupo"
+                            });
+                        }
                         break;
                     case "subgrupo":
                         menuItems.editar = createUpdate({
@@ -435,6 +458,11 @@
                         });
                         break;
                     case "departamento":
+
+                        if (current == 2) {
+                            parentId = 21;
+                        }
+
                         menuItems.editar = createUpdate({
                             action    : "update",
                             label     : "Editar subgrupo",
@@ -781,57 +809,57 @@
                         }).bind("select_node.jstree", function (NODE, REF_NODE) {
                             showInfo();
                         })
-                        %{--.bind("move_node.jstree", function (event, data) {--}%
-                            %{--//                            console.log('move', data);--}%
-                            %{--var oldParent = data.rslt.op;--}%
-                            %{--var newParent = data.rslt.np;--}%
-                            %{--var node = data.rslt.o;--}%
+                %{--.bind("move_node.jstree", function (event, data) {--}%
+                %{--//                            console.log('move', data);--}%
+                %{--var oldParent = data.rslt.op;--}%
+                %{--var newParent = data.rslt.np;--}%
+                %{--var node = data.rslt.o;--}%
 
-                            %{--var nodeId = node.attr("id");--}%
-                            %{--var newParentId = newParent.attr("id");--}%
+                %{--var nodeId = node.attr("id");--}%
+                %{--var newParentId = newParent.attr("id");--}%
 
-                            %{--if (oldParent.attr("id") != newParentId) {--}%
-                                %{--var html = "Está seguro de mover el item <b>" + $.trim(node.children("a").text()) + "</b> de <b>" + $.trim(oldParent.children("a").text()) + "</b>";--}%
-                                %{--html += " a <b>" + $.trim(newParent.children("a").text()) + "</b>?";--}%
-                                %{--$.box({--}%
-                                    %{--imageClass : "box_info",--}%
-                                    %{--text       : html,--}%
-                                    %{--title      : "Confirmación",--}%
-                                    %{--iconClose  : false,--}%
-                                    %{--dialog     : {--}%
-                                        %{--resizable     : false,--}%
-                                        %{--draggable     : false,--}%
-                                        %{--closeOnEscape : false,--}%
-                                        %{--buttons       : {--}%
-                                            %{--"Aceptar"  : function () {--}%
-                                                %{--$.ajax({--}%
-                                                    %{--type    : "POST",--}%
-                                                    %{--url     : "${createLink(action:'moveNode_ajax')}",--}%
-                                                    %{--data    : {--}%
-                                                        %{--node      : nodeId,--}%
-                                                        %{--newParent : newParentId--}%
-                                                    %{--},--}%
-                                                    %{--success : function (msg) {--}%
-                                                        %{--var parts = msg.split("_");--}%
-                                                        %{--log(parts[1], parts[0] == "NO");--}%
-                                                        %{--if (parts[0] == "NO") {--}%
-                                                            %{--$.jstree.rollback(data.rlbk);--}%
-                                                        %{--}--}%
-                                                    %{--}--}%
-                                                %{--});--}%
-                                            %{--},--}%
-                                            %{--"Cancelar" : function () {--}%
-                                                %{--$.jstree.rollback(data.rlbk);--}%
-                                            %{--}--}%
-                                        %{--}--}%
-                                    %{--}--}%
-                                %{--})--}%
-                                %{--;--}%
+                %{--if (oldParent.attr("id") != newParentId) {--}%
+                %{--var html = "Está seguro de mover el item <b>" + $.trim(node.children("a").text()) + "</b> de <b>" + $.trim(oldParent.children("a").text()) + "</b>";--}%
+                %{--html += " a <b>" + $.trim(newParent.children("a").text()) + "</b>?";--}%
+                %{--$.box({--}%
+                %{--imageClass : "box_info",--}%
+                %{--text       : html,--}%
+                %{--title      : "Confirmación",--}%
+                %{--iconClose  : false,--}%
+                %{--dialog     : {--}%
+                %{--resizable     : false,--}%
+                %{--draggable     : false,--}%
+                %{--closeOnEscape : false,--}%
+                %{--buttons       : {--}%
+                %{--"Aceptar"  : function () {--}%
+                %{--$.ajax({--}%
+                %{--type    : "POST",--}%
+                %{--url     : "${createLink(action:'moveNode_ajax')}",--}%
+                %{--data    : {--}%
+                %{--node      : nodeId,--}%
+                %{--newParent : newParentId--}%
+                %{--},--}%
+                %{--success : function (msg) {--}%
+                %{--var parts = msg.split("_");--}%
+                %{--log(parts[1], parts[0] == "NO");--}%
+                %{--if (parts[0] == "NO") {--}%
+                %{--$.jstree.rollback(data.rlbk);--}%
+                %{--}--}%
+                %{--}--}%
+                %{--});--}%
+                %{--},--}%
+                %{--"Cancelar" : function () {--}%
+                %{--$.jstree.rollback(data.rlbk);--}%
+                %{--}--}%
+                %{--}--}%
+                %{--}--}%
+                %{--})--}%
+                %{--;--}%
 
-                            %{--} else {--}%
-                                %{--$.jstree.rollback(data.rlbk);--}%
-                            %{--}--}%
-                        %{--})--}%
+                %{--} else {--}%
+                %{--$.jstree.rollback(data.rlbk);--}%
+                %{--}--}%
+                %{--})--}%
                 ;
             }
 
