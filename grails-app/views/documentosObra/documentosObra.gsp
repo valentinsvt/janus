@@ -31,7 +31,7 @@
 
             </ul>
 
-            <div id="tab-presupuesto" class="tab" style="padding-bottom: 750px">
+            <div id="tab-presupuesto" class="tab" style="height: 750px" >
 
                 <div class="tipoReporte">
 
@@ -39,7 +39,7 @@
 
                         <legend>Tipo de Reporte</legend>
 
-                        <div class="span6" style="margin-bottom: 10px">
+                        <div class="span6" style="margin-bottom: 10px; margin-top: -20px">
 
                             <input type="radio" name="tipoPresupuesto" class="radioPresupuesto" value="1"/>  Base de Contrato
 
@@ -69,7 +69,7 @@
 
                             <legend>Pie de Página</legend>
 
-                            <div class="span6">
+                            <div class="span6" style="margin-top: -20px">
 
                                 <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion" optionKey="id" style="width: 350px"/>
 
@@ -190,7 +190,7 @@
 
             </div>
 
-            <div id="tab-memorando" class="tab" style="padding-bottom: 750px">
+            <div id="tab-memorando" class="tab" style="">
 
                 <div class="tipoReporteMemo">
 
@@ -357,7 +357,7 @@
 
             </div>
 
-            <div id="tab-polinomica" class="tab" style="padding-bottom: 750px">
+            <div id="tab-polinomica" class="tab" style="">
 
                 <div class="textoFormula">
 
@@ -467,7 +467,7 @@
 
             </div>
 
-            <div id="tab-textosFijos" class="tab" style="padding-bottom: 750px">
+            <div id="tab-textosFijos" class="tab" style="">
 
                 <div class="cabecera">
 
@@ -604,7 +604,7 @@
             <fieldset>
                 <div class="span3" style="margin-top: 10px">
 
-                    Incluir Iva <g:checkBox name="reajusteIva" class="span3" style="margin-left: 150px"/>
+                    Incluir Iva <g:checkBox name="reajusteIva" style="margin-left: 150px"/>
 
 
                 </div>
@@ -639,7 +639,7 @@
             <fieldset>
                 <div class="span3">
 
-                    Si se desea calcular la proyección de reajuste del presupuesto, se debe colocar un número válido en el campo MESES!!
+                    Es necesario colocar un número válido en el campo Meses!!
 
                 </div>
             </fieldset>
@@ -685,7 +685,7 @@
             <fieldset>
                 <div class="span3" style="margin-top: 10px">
 
-                    Incluir Iva <g:checkBox name="reajusteIvaMemo" class="span3" style="margin-left: 150px"/>
+                    Incluir Iva <g:checkBox name="reajusteIvaMemo" style="margin-left: 150px"/>
 
 
                 </div>
@@ -809,6 +809,30 @@
                     });
 
 
+
+            $("#mesesReajusteMemo").keydown(function (ev) {
+
+                return validarNum(ev);
+
+            }).keyup(function () {
+
+                        var enteros = $(this).val();
+
+
+                        if (parseFloat(enteros) > 100 ) {
+
+                            $(this).val(100)
+
+                        }
+                        if(parseFloat(enteros) <= 0){
+
+                            $(this).val(1)
+
+                        }
+
+                    });
+
+
             $("#cambioMoneda").keydown(function (ev) {
 //
               var val = $(this).val();
@@ -906,9 +930,7 @@
 
             loadNota();
 
-            $("#tabs").tabs({
-                heightStyle : "fill"
-            });
+            $("#tabs").tabs();
 
             $("#btnSalir").click(function () {
 
@@ -1113,8 +1135,21 @@
                         firmasIdMemo = "";
                     }
 
+                    if(tipoClickMemo == 1){
 
-                    $("#reajusteMemoDialog").dialog("open")
+                        $("#reajusteMemoDialog").dialog("open")
+
+                    }
+                    else {
+
+                        var tipoReporte = tipoClickMemo;
+
+                        location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
+                                + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo
+
+                    }
+
+
 
                     %{--var tipoReporte = tipoClickMemo;--}%
 
@@ -1157,7 +1192,10 @@
                 $("#frm-memo").submit();
 
                 success_func(location.href = "${g.createLink(controller: 'documentosObra',action: 'documentosObra',id: obra?.id)}")
+                                                                                                                                                                        var tipoReporte = tipoClickMemo;
 
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
+                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo
             });
 
             $("#btnEditarFor").click(function () {
@@ -1551,7 +1589,7 @@ resizable : false,
 modal     : true,
 draggable : false,
 width     : 350,
-height    : 180,
+height    : 200,
 position  : 'center',
 title     : 'Máximo Número de Firmas',
 buttons   : {
@@ -1573,7 +1611,7 @@ resizable : false,
 modal     : true,
 draggable : false,
 width     : 350,
-height    : 180,
+height    : 200,
 position  : 'center',
 title     : 'No existe un valor en el campo Meses!',
 buttons   : {
@@ -1594,7 +1632,7 @@ $("#mesesCeroDialog").dialog("close");
                 modal     : true,
                 draggable : false,
                 width     : 350,
-                height    : 180,
+                height    : 200,
                 position  : 'center',
                 title     : 'No existe una tasa de cambio!',
                 buttons   : {
