@@ -493,13 +493,19 @@ class MantenimientoItemsController extends Shield {
     def saveSg_ajax() {
         def accion = "create"
         def subgrupo = new SubgrupoItems()
+        if (params.codigo) {
+            params.codigo = params.codigo.toString().toUpperCase()
+        }
+        if (params.descripcion) {
+            params.descripcion = params.descripcion.toString().toUpperCase()
+        }
         if (params.id) {
             subgrupo = SubgrupoItems.get(params.id)
             accion = "edit"
         }
         subgrupo.properties = params
         if (subgrupo.save(flush: true)) {
-            render "OK_" + accion + "_" + subgrupo.id + "_" + subgrupo.descripcion
+            render "OK_" + accion + "_" + subgrupo.id + "_" + subgrupo.codigo + " " + subgrupo.descripcion
         } else {
             def errores = g.renderErrors(bean: subgrupo)
             render "NO_" + errores
@@ -590,6 +596,12 @@ class MantenimientoItemsController extends Shield {
 //        println params
         def accion = "create"
         def departamento = new DepartamentoItem()
+        if (params.codigo) {
+            params.codigo = params.codigo.toString().toUpperCase()
+        }
+        if (params.descripcion) {
+            params.descripcion = params.descripcion.toString().toUpperCase()
+        }
         if (params.id) {
 //            println "EDIT!!!!"
             departamento = DepartamentoItem.get(params.id)
@@ -598,7 +610,7 @@ class MantenimientoItemsController extends Shield {
         }
         departamento.properties = params
         if (departamento.save(flush: true)) {
-            render "OK_" + accion + "_" + departamento.id + "_" + departamento.descripcion
+            render "OK_" + accion + "_" + departamento.id + "_" + departamento.codigo + " " + departamento.descripcion
         } else {
             println departamento.errors
             def errores = g.renderErrors(bean: departamento)
@@ -731,6 +743,7 @@ class MantenimientoItemsController extends Shield {
         params.nombre = params.nombre.toString().toUpperCase()
         params.campo = params.campo.toString().toUpperCase()
         params.observaciones = params.observaciones.toString().toUpperCase()
+        params.codigo = params.codigo.toString().toUpperCase()
         if (!params.codigo.contains(".")) {
             if (dep.subgrupo.grupoId == 2) {
 //                println "?"
@@ -760,7 +773,7 @@ class MantenimientoItemsController extends Shield {
 //        println "ITEM: " + params
         item.properties = params
         if (item.save(flush: true)) {
-            render "OK_" + accion + "_" + item.id + "_" + item.nombre
+            render "OK_" + accion + "_" + item.id + "_" + item.codigo + " " + item.nombre
         } else {
             println item.errors
             def errores = g.renderErrors(bean: item)

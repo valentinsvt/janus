@@ -60,7 +60,7 @@
                 <g:if test="${itemInstance.id && cd}">
                     <g:set var="cd" value="${cd?.replace(cd1 + ".", '').replace(cd2 + ".", '')}"/>
                 </g:if>
-                <g:if test="${itemInstance.departamento.subgrupo.grupoId != 2}">
+                <g:if test="${itemInstance?.departamento?.subgrupo?.grupoId != 2 && departamento.subgrupo.grupoId != 2}">
                     <span class="add-on">${cd1}</span>
                 </g:if>
                 <span class="add-on">${cd2}</span>

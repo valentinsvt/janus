@@ -724,7 +724,7 @@
                                         "icon"           : {
                                             "image" : icons.grupo_manoObra
                                         },
-                                        "valid_children" : [ "subgrupo_manoObra" ]
+                                        "valid_children" : [ "departamento_manoObra" ]
                                     },
                                     "subgrupo_manoObra"     : {
                                         "icon"           : {

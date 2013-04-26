@@ -25,7 +25,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance.codigo.toString().padLeft(3, '0')}"/>
+                <g:textField name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance.codigo.toString().padLeft(3, '0')}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -52,9 +52,9 @@
 
 <script type="text/javascript">
 
-//    $(".allCaps").keyup(function () {
-//        this.value = this.value.toUpperCase();
-//    });
+    //    $(".allCaps").keyup(function () {
+    //        this.value = this.value.toUpperCase();
+    //    });
 
     $("#frmSave").validate({
         rules          : {
