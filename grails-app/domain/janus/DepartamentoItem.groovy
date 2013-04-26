@@ -1,11 +1,11 @@
 package janus
+
 class DepartamentoItem implements Serializable {
 
     SubgrupoItems subgrupo
     Transporte transporte
-    Integer codigo
+    String codigo
     String descripcion
-
 
     static mapping = {
         table 'dprt'
@@ -24,7 +24,7 @@ class DepartamentoItem implements Serializable {
     static constraints = {
         descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
         transporte(blank: true, nullable: true)
-        codigo(blank: false)
+        codigo(size: 1..20, blank: false, unique: true, attributes: [title: 'numero'])
         subgrupo(blank: false)
     }
 }

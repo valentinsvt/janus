@@ -1,5 +1,7 @@
 package janus
+
 class Item implements Serializable {
+
     Unidad unidad
     TipoItem tipoItem
     DepartamentoItem departamento
@@ -60,8 +62,8 @@ class Item implements Serializable {
         }
     }
     static constraints = {
-        nombre(size: 1..160, blank: false,  attributes: [title: 'nombre'])
-        codigo(size: 1..20, blank: false, unique: true,attributes: [title: 'numero'])
+        nombre(size: 1..160, blank: false, attributes: [title: 'nombre'])
+        codigo(size: 1..20, blank: false, unique: true, attributes: [title: 'numero'])
         unidad(blank: true, nullable: true, attributes: [title: 'unidad'])
         tipoItem(blank: true, nullable: true, attributes: [title: 'tipoItem'])
         peso(blank: true, nullable: true, attributes: [title: 'peso'])
@@ -81,10 +83,11 @@ class Item implements Serializable {
         transporte(size: 1..2, blank: true, nullable: true, attributes: [title: 'transporte'])
         combustible(size: 1..1, blank: true, nullable: true, attributes: [title: 'combustible'])
         observaciones(size: 1..127, blank: true, nullable: true, attributes: [title: 'observaciones'])
-        foto(size: 1..100,blank: true,nullable: true)
-        tipoLista(blank:true,nullable: true)
-        especificaciones(blank: true,nullable: true,size: 1..1024)
+        foto(size: 1..100, blank: true, nullable: true)
+        tipoLista(blank: true, nullable: true)
+        especificaciones(blank: true, nullable: true, size: 1..1024)
     }
+
     String toString() {
         "${this.codigo} - ${this.nombre}"
     }
