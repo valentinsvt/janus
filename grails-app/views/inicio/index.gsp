@@ -60,6 +60,7 @@
     <div class="body" style="width: 100%;height: 540px;position: relative;margin: auto;overflow-y: auto;">
 
             %{--<g:link  controller="proyecto" action="list" title="Gestión de proyectos">--}%
+%{--
                 <div  class="ui-corner-all  item fuera">
                     <div  class="ui-corner-all ui-widget-content item">
                         <div class="imagen">
@@ -69,8 +70,10 @@
                         ítems y rubros. Análisis de precios, rendimientos y listas de precios...</div>
                     </div>
                 </div>
+--}%
             %{--</g:link>--}%
             %{--<g:link  controller="asignacion" action="asignacionesCorrientesv2"  id="${session.unidad.id}" title="Programación del gasto corriente">--}%
+%{--
                 <div  class="ui-corner-all item fuera">
                     <div  class="ui-corner-all ui-widget-content item">
                         <div class="imagen">
@@ -80,9 +83,11 @@
                         variables de transporte y costos indirectos ...</div>
                     </div>
                 </div>
+--}%
             %{--</g:link>--}%
 
             %{--<g:link  controller="entidad" action="arbol_asg"  id="${session.unidad.id}" title="Plan Anual de Compras - gasto corriente ">--}%
+%{--
                 <div  class="ui-corner-all item fuera">
                     <div  class="ui-corner-all ui-widget-content item">
                         <div class="imagen">
@@ -92,9 +97,11 @@
                         control y seguimiento del PAC de obras ...</div>
                     </div>
                 </div>
+--}%
             %{--</g:link>--}%
 
             %{--<g:link  controller="documento" action="list" title="Documentos de los Proyectos">--}%
+%{--
                 <div  class="ui-corner-all  item fuera">
                     <div  class="ui-corner-all ui-widget-content item">
                         <div class="imagen">
@@ -104,8 +111,10 @@
                         planillas, reajuste de precios, cronograma ...</div>
                     </div>
                 </div>
+--}%
             %{--</g:link>--}%
             %{--<g:link  controller="documento" action="list" title="Documentos de los Proyectos">--}%
+%{--
             <div  class="ui-corner-all  item fuera">
                 <div  class="ui-corner-all ui-widget-content item">
                     <div class="imagen">
@@ -115,8 +124,10 @@
                     obras, concursos, contratos, contratistas, avance de obra...</div>
                 </div>
             </div>
+--}%
             %{--</g:link>--}%
             %{--<g:link  controller="documento" action="list" title="Documentos de los Proyectos">--}%
+%{--
             <div  class="ui-corner-all  item fuera">
                 <div  class="ui-corner-all ui-widget-content item">
                     <div class="imagen">
@@ -126,9 +137,15 @@
                     rubros, volúmenes de obra y cronograma de las ofertas </div>
                 </div>
             </div>
+--}%
             %{--</g:link>--}%
-
-
+        <div style="text-align: center; margin-top: 60px; color: #810;">
+        <img src="${resource(dir: 'images', file: 'logo_gadpp.png')}" />
+        <br/>
+        Gobierno Autónomo Descentralizado PROVINCIA DE PICHINCHA
+        <br/>
+        EFICIENCIA Y SOLIDARIDAD
+    </div>
     </div>
     <div style="height: 25px;width: 100%;text-align: right;float: right;">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '0.1.0x')}</div>
 </div>

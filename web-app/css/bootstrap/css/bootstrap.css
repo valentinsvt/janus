@@ -3949,7 +3949,7 @@ a.thumbnail:hover {
 }
 .modal-backdrop,
 .modal-backdrop.fade.in {
-  opacity: 0.7;    /*gdo*/
+  opacity: 0.6;    /*gdo*/
   filter: alpha(opacity=80);
 }
 .modal {
