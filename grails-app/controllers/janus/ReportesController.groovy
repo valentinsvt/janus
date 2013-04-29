@@ -1359,6 +1359,9 @@ class ReportesController {
 
         def cuenta = 0;
 
+        def cantidadMeses = params.meses
+
+
 //        println(obra.revisor.nombre);
 //        println(obra.inspector.nombre);
 //        println(obra.responsableObra.nombre);
@@ -1644,7 +1647,7 @@ class ReportesController {
            presupuestoTotal = totalPresupuesto + ivaTotal;
 
 
-            addCellTabla(tablaTotal, new Paragraph("IVA: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph("IVA " + paux?.iva + "% : " , times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
@@ -1663,7 +1666,7 @@ class ReportesController {
         }
         //solo Proyeccion del reajuste
 
-        if(params.proyeccion == 'true' && params.meses >= 1 && params.iva == 'false'){
+        if(params.proyeccion == 'true' && cantidadMeses.toInteger() >= 1 && params.iva == 'false'){
 
 //            println("entroProyeccion")
 //
@@ -1677,7 +1680,7 @@ class ReportesController {
             presupuestoTotal = totalPresupuesto + proyeccionTotal;
 
 
-            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste (período: " + meses + " meses, inflación: " + inflacion + " % ) :", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
@@ -1696,7 +1699,7 @@ class ReportesController {
 
         }
 
-        if(params.proyeccion == 'true' && params.meses >= 1 && params.iva == 'true'){
+        if(params.proyeccion == 'true' && cantidadMeses.toInteger() >= 1 && params.iva == 'true'){
 
 //            println("entroProyeccion + Iva")
 //
@@ -1713,7 +1716,7 @@ class ReportesController {
 
             presupuestoTotal = ((totalPresupuesto + proyeccionTotal) + ivaTotal)
 
-            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste (período: " + meses + " meses, inflación: " + inflacion + " % ) :", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
@@ -1721,7 +1724,7 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
-            addCellTabla(tablaTotal, new Paragraph("IVA: ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph("IVA " + paux?.iva + "% : " , times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
@@ -2113,6 +2116,8 @@ class ReportesController {
 
         def proyeccionTotalMemo
 
+        def cantidadMesesMemo = params.reajusteMesesMemo
+
 
         if (obra?.oficioSalida == null) {
 
@@ -2390,7 +2395,7 @@ class ReportesController {
 
             //solo proyeccion del reajuste
 
-            if(params.proyeccionMemo == 'true' && params.reajusteMesesMemo >=1 && params.reajusteIvaMemo == 'false') {
+            if(params.proyeccionMemo == 'true' && cantidadMesesMemo >= '1' && params.reajusteIvaMemo == 'false') {
 
                inflacion = paux?.inflacion
                 mesesMemo = params.reajusteMesesMemo
@@ -2420,7 +2425,7 @@ class ReportesController {
 
             }
 
-            if(params.proyeccionMemo == 'true' && params.reajusteMesesMemo >= 1 && params.reajusteIvaMemo == 'true'){
+            if(params.proyeccionMemo == 'true' && cantidadMesesMemo>= '1' && params.reajusteIvaMemo == 'true'){
 
                 inflacion = paux?.inflacion
                 mesesMemo = params.reajusteMesesMemo
