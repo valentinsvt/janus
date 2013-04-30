@@ -2,7 +2,8 @@ package janus
 
 import org.springframework.dao.DataIntegrityViolationException
 
-import java.sql.*
+import groovy.sql.Sql
+
 
 class TramiteController extends janus.seguridad.Shield {
 
@@ -23,90 +24,54 @@ class TramiteController extends janus.seguridad.Shield {
         def memo = params.id
         def header=[:]
         def tramites = []
-        println "ver tramites "
 
-//        Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-//        println "cs "+"jdbc:odbc:DRIVER={Microsoft dBase Driver(*.dbf)};DBQ=\\\\10.0.0.13\\\\datos;";
-//        String database = "jdbc:odbc:DRIVER={Microsoft dBase Driver(*.dbf)};DBQ=/media";
-//        Connection conn = DriverManager.getConnection(database);
-//        Statement s = conn.createStatement();
-//        String selTable = "SELECT * FROM CARISTAT";
-//        println  conn
-
-
-
-//        try {
-//           def url="jdbc:odbc://GuidoPortatil/janus";
-//           def String className="sun.jdbc.odbc.JdbcOdbcDriver";
-//            Class.forName(className);
-//            def con = DriverManager.getConnection(url, "Guido", "gdo");
-//            System.out.println("success");
-//            def st = con.createStatement();
-//        } catch (Exception ex) {
-//            System.out.println(ex);
-//        }
         try {
+            /*mysql */
 
-//            String sql="SELECT * FROM table_name where condition";// usual sql query
-//            Statement stmt=connection.createStatement();
-//            ResultSet resultSet=stmt.executeQuery(sql);
-////            Driver={Microsoft Access Driver (*.mdb, *.accdb)};
-////            Dbq=\\serverName\shareName\folder\myAccess2007file.accdb;Uid=Admin;Pwd=
-//            while(resultSet.next())
-//            {
-//                System.out.println();
-//            }
-//            System.out.println();
 
-//
-//            // load the driver into memory
-//            Class.forName("jstels.jdbc.dbf.DBFDriver2");
-//            // be the directory in which the .dbf files are held
-//            Connection conn = DriverManager.getConnection("jdbc:jstels:dbf:/media" );
-//            Statement stmt = conn.createStatement();
-//            ResultSet rs = stmt.executeQuery("SELECT * FROM \"docmaster.DBF\" where NMASTER = '${memo}'".toString());
-////            println "sql "+ "SELECT * FROM \"docmaster.DBF\" where NMASTER = '${memo}'".toString()
-//            // read the data and put it to the console
-////            for (int j = 1; j <= rs.getMetaData().getColumnCount(); j++) {
-////                print "Columna "+rs.getMetaData().getColumnName(j) + "  "
-////            }
-//            def cont = 0
-//            while (rs.next()) {
-//                for (int j = 1; j <= rs.getMetaData().getColumnCount(); j++) {
-////                    print "Objeto ${cont} "+rs.getObject(j) + "  "
-//                    header.put(rs.getMetaData().getColumnName(j),rs.getObject(j))
-//                }
-//            }
-////            println "header "+header
-//
-////            println ">>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-//
-//            rs = stmt.executeQuery("SELECT * FROM \"doctrami.DBF\" where NMASTER = '${memo}' or Ntramite = '${memo}' ");
-//
-//
-//            while (rs.next()) {
-//                def temp=[:]
-//                for (int j = 1; j <= rs.getMetaData().getColumnCount(); j++) {
-//                    temp.put(rs.getMetaData().getColumnName(j),rs.getObject(j))
-//                }
-//                tramites.add(temp)
-//
-//            }
-////            println "tramites "+tramites
-//
-////            println "insert aa"+"insert into \"doctrami.DBF\" () values () "
-////            stmt.execute("insert into \"doctrami.DBF\" (NMASTER,NTRAMITE) values ('valentinsvt','valentinsvt')".toString())
-////             println "despues del insert"
-//            // close the objects
-//            rs.close();
-//            stmt.close();
-//            conn.close();
-//            println "fin "
+            def foo = 'cheese'
+            def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
+
+            sql.eachRow("select * from docmaster where NMASTER= '${memo}'".toString()) {r->
+                header.put("NMASTER",r["NMASTER"])
+                header.put("MFECHA",r["MFECHA"])
+                header.put("MPRIORI",r["MPRIORI"])
+                header.put("MDE",r["MDE"])
+                header.put("MPARA",r["MPARA"])
+                header.put("MASUNTO",r["MASUNTO"])
+            }
+            sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) {r->
+                def tmp =[:]
+                tmp.put("NMASTER",r["NMASTER"])
+                tmp.put("NTRAMITE",r["NTRAMITE"])
+                tmp.put("TFECHA",r["TFECHA"])
+                tmp.put("TFLIMITE",r["TFLIMITE"])
+                tmp.put("TASUNTO",r["TASUNTO"])
+                tmp.put("TRECIBIDO",r["TRECIBIDO"])
+                tmp.put("TFRECEP",r["TFRECEP"])
+                tramites.add(tmp)
+            }
+            sql.close()
         }catch ( e) {
             println "error "+e
             e.printStackTrace()
         }
         [memo:memo,header:header,tramites:tramites]
+    }
+
+    def cargarDatos(){
+        try{
+            def command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /media/docmaster.DBF"
+            def proc = command.execute()
+            proc.waitFor()
+            command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
+            proc = command.execute()
+            proc.waitFor()
+            println "fin comandos"
+            render "ok"
+        }catch(e){
+            render "Error. El archivo DBF no se encuentra disponible, comunique este error al administrador del sistema."
+        }
     }
 
 

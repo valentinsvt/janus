@@ -31,6 +31,12 @@
         </div>
     </div>
 </g:if>
+<div class="span12 btn-group" role="navigation" style="height: 60px;">
+    <a href="#" class="btn  " id="refresh">
+        <i class="icon-file"></i>
+        Actualizar la base de datos desde el sistema S.A.D.
+    </a>
+</div>
 <div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;margin-top: 20px;">
     <p class="css-vertical-text">Memo</p>
     <div class="linea" style="height: 100px;"></div>
@@ -39,7 +45,7 @@
             Documento:
         </div>
         <div class="span2">
-            ${header["NMASTER"]}
+            ${memo}
         </div>
         <div class="span1 campo">
             Fecha:
@@ -108,8 +114,20 @@
         </tbody>
     </table>
 </div>
-%{--${memo}--}%
-%{--${header}--}%
-%{--${tramites}--}%
+<script type="text/javascript">
+    $("#refresh").click(function(){
+       if(confirm("Esta seguro, Esta acción puede tardar varios minutos.")){
+           $("#dlgLoad").dialog("open")
+           $.ajax({type : "POST", url : "${g.createLink(controller: 'tramite',action:'cargarDatos')}",
+               data     : "",
+               success  : function (msg) {
+                   if(msg=="ok"){
+                       window.location.reload(true);
+                   }
+               }
+           });
+       }
+    });
+</script>
 </body>
 </html>
