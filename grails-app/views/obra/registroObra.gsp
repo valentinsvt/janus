@@ -114,8 +114,8 @@
         %{--<div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" id="departamentoObra"--}%
         %{--value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 450px" disabled="true" title="Departamento actual del usuario"/></div>--}%
 
-
-        <div class="span3"><g:textField name="departamento.id" id="departamentoObra" value="${persona?.departamento}" optionKey="${persona?.departamento?.id}" optionValue="descripcion" style="width: 670px" readonly="true" title="Dirección actual del usuario"/></div>
+                                                          <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
+        <div class="span3"><g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}" optionKey="id" optionValue="descripcion" style="width: 670px" readonly="true" title="Dirección actual del usuario"/></div>
 
 
         <div class="span1" style="margin-left: 480px; font-weight: bold">ESTADO</div>
@@ -773,7 +773,7 @@
     function loadPersonas() {
 //                var idDep = $("#departamentoObra").val();
 
-        var idDep = $("#departamentoObra").attr("optionKey")
+//        var idDep = $("#departamentoObra").attr("optionKey")
 
         var idObra = ${obra?.id}
 
@@ -783,7 +783,7 @@
                 $.ajax({
                     type    : "POST",
                     url     : "${g.createLink(action:'getPersonas')}",
-                    data    : {id : idDep,
+                    data    : {id : ${persona?.departamento?.id},
                         obra      : idObra
 
                     },

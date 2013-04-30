@@ -307,6 +307,8 @@ class ObraController extends janus.seguridad.Shield {
 
     def getPersonas() {
 
+        println(params)
+
         def obra = Obra.get(params.obra)
 
         def usuario = session.usuario.id
@@ -314,7 +316,6 @@ class ObraController extends janus.seguridad.Shield {
         def persona = Persona.get(usuario)
 
         def departamento = Departamento.get(params.id)
-
 
         def personas = Persona.findAllByDepartamento(departamento)
 
@@ -535,12 +536,15 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.properties = params
         }//es edit
         else {
+
             obraInstance = new Obra(params)
+
+//            def departamento = Departamento.get(params.departamento)
 
             obraInstance.departamento = persona.departamento
 
+//            obraInstance.properties = params
 
-            println("AQUIII" + obraInstance.departamento)
 
             def par = Parametros.list()
             if (par.size() > 0)
