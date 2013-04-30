@@ -74,6 +74,23 @@
             </div>
         </div>
     </g:if>
+
+    <g:if test="${tipoTramiteInstance?.tipo}">
+        <div class="control-group">
+            <div>
+                <span id="tipo-label" class="control-label label label-inverse">
+                    Tipo
+                </span>
+            </div>
+            <div class="controls">
+
+                <span aria-labelledby="tiempo-label">
+                    <g:fieldValue bean="${tipoTramiteInstance}" field="tipo"/>
+                </span>
+
+            </div>
+        </div>
+    </g:if>
     
     </form>
 </div>

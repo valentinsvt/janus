@@ -102,4 +102,8 @@ class Contrato implements Serializable {
         memo(blank: true, nullable: true)
         plazo(blank: true, nullable: true)
     }
+
+    def getObra() {
+        return this.oferta?.concurso?.obra
+    }
 }

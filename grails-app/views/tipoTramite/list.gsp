@@ -50,7 +50,9 @@
                         <th>Padre</th>
                     
                         <g:sortableColumn property="tiempo" title="Tiempo" />
-                    
+
+                        <g:sortableColumn property="tipo" title="Tipo" />
+
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
@@ -65,7 +67,9 @@
                         <td>${fieldValue(bean: tipoTramiteInstance, field: "padre")}</td>
                     
                         <td>${fieldValue(bean: tipoTramiteInstance, field: "tiempo")}</td>
-                    
+
+                        <td>${fieldValue(bean: tipoTramiteInstance, field: "tipo")}</td>
+
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoTramiteInstance.id}">
                                 <i class="icon-zoom-in icon-large"></i>

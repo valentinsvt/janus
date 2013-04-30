@@ -61,6 +61,20 @@
             </div>
         </div>
                 
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Tipo
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:select name="tipo" from="${tipoTramiteInstance.constraints.tipo.inList}" class=" required" value="${tipoTramiteInstance?.tipo}" valueMessagePrefix="tipoTramite.tipo"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
     </g:form>
 
 <script type="text/javascript">

@@ -5,7 +5,7 @@ body {
     background-color : #D7D7D7;
 }
 
-input, select, textarea {
+input, select, textarea, .datepicker {
     background-color : #E7E7E7 !important;
     border-color     : #404040 !important;
 }
@@ -109,16 +109,22 @@ body {
 }
 
 .datepicker {
-    background : url(../images/calendar.png) right no-repeat !important;
+    background-image    : url(../images/calendar.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
 }
 
 .datepicker.disabled {
-    background : url(../images/calendar_disabled.png) right no-repeat !important;
+    background-image    : url(../images/calendar_disabled.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
 }
 
 /************ para los autocomplete *************/
 .ui-autocomplete-loading {
-    background : white url('../images/spinner.gif') right center no-repeat;
+    background-image    : url(../images/spinner.gif) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
 }
 
 .ui-autocomplete {

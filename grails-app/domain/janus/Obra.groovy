@@ -260,4 +260,8 @@ class Obra implements Serializable {
         plazoPersonas(attributes: [title: 'Número de integrantes de cuadrillas'])
         plazoPersonas(attributes: [title: 'Número de equipos completos de maquinaria'])
     }
+
+    String toString() {
+        return this.nombre
+    }
 }

@@ -5,12 +5,14 @@ class Tramite implements Serializable {
     Obra obra
     TipoTramite tipoTramite
     Contrato contrato
-    int tramitePadre
+    Tramite tramitePadre
     String codigo
     Date fecha
     String descripcion
     Date fechaRecepcion
     String documentosAdjuntos
+    Date fechaEnvio
+    String memo
 
     static mapping = {
 
@@ -30,9 +32,9 @@ class Tramite implements Serializable {
             descripcion column: 'trmtdscr'
             fechaRecepcion column: 'trmtfcrc'
             documentosAdjuntos column: 'trmtadjn'
-
+            fechaEnvio column: 'trmtfcen'
+            memo column: 'trmtmemo'
         }
-
     }
 
     static constraints = {
@@ -45,7 +47,7 @@ class Tramite implements Serializable {
         descripcion(size: 1..4095, blank: true, nullable: true, attributes: [title: 'tramiteDescripcion'])
         fechaRecepcion(blank: true, nullable: true, attributes: [title: 'tipoFechaRecepcion'])
         documentosAdjuntos(size: 1..127, blank: true, nullable: true, attributes: [title: 'tramiteDocsAdjuntos'])
-
-
+        fechaEnvio(blank: true, nullable: true, attributes: [title: 'Fecha de envío'])
+        memo(maxSize: 20, blank: true, nullable: true, attributes: [title: 'numero de memo'])
     }
 }
