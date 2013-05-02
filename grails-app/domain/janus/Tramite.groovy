@@ -10,12 +10,15 @@ class Tramite implements Serializable {
     EstadoTramite estado
 
     String codigo
-    Date fecha
     String descripcion
-    Date fechaRecepcion
     String documentosAdjuntos
-    Date fechaEnvio
     String memo
+
+    Date fecha              //fecha creacion del tramite
+    Date fechaEnvio         //fecha de envio fisico de los documentos
+    Date fechaRecepcion     //fecha de recepcion
+    Date fechaRespuesta     //fecha de respuesta
+    Date fechaFinalizacion  //fecha de finalizacion
 
     static mapping = {
 
@@ -32,12 +35,15 @@ class Tramite implements Serializable {
             tramitePadre column: 'trmtpdre'
             estado column: 'ettr__id'
             codigo column: 'trmtcdgo'
-            fecha column: 'trmtfcha'
             descripcion column: 'trmtdscr'
-            fechaRecepcion column: 'trmtfcrc'
             documentosAdjuntos column: 'trmtadjn'
-            fechaEnvio column: 'trmtfcen'
             memo column: 'trmtmemo'
+
+            fecha column: 'trmtfcha'
+            fechaEnvio column: 'trmtfcen'
+            fechaRecepcion column: 'trmtfcrc'
+            fechaRespuesta column: 'trmtfcrs'
+            fechaFinalizacion column: 'trmtfcfn'
         }
     }
 
@@ -54,5 +60,8 @@ class Tramite implements Serializable {
         documentosAdjuntos(size: 1..127, blank: true, nullable: true, attributes: [title: 'tramiteDocsAdjuntos'])
         fechaEnvio(blank: true, nullable: true, attributes: [title: 'Fecha de envío'])
         memo(maxSize: 20, blank: true, nullable: true, attributes: [title: 'numero de memo'])
+
+        fechaRespuesta(blank: true, nullable: true, attributes: [title: 'tipoFechaRecepcion'])
+        fechaFinalizacion(blank: true, nullable: true, attributes: [title: 'tipoFechaRecepcion'])
     }
 }

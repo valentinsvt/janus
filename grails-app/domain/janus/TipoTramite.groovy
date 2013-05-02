@@ -7,6 +7,8 @@ class TipoTramite implements Serializable {
     String descripcion
     String tipo
 
+    String requiereRespuesta
+
     static mapping = {
         table 'tptr'
         cache usage: 'read-write', include: 'non-lazy'
@@ -20,6 +22,7 @@ class TipoTramite implements Serializable {
             padre column: 'tptrpdre'
             tiempo column: 'tptrtmpo'
             tipo column: 'tptrtipo'
+            requiereRespuesta column: 'tptrrqrs'
         }
     }
     static constraints = {
@@ -28,6 +31,7 @@ class TipoTramite implements Serializable {
         padre(blank: true, nullable: true, attributes: [title: 'trámite principal'])
         tiempo(blank: false, attributes: [title: 'tiempo de ejecución del trámite en días'])
         tipo(blank: false, nullable: false, inList: ["O", "C"], attributes: [title: 'tipo de trámite: O: Obra, C:Contrato'])
+        requiereRespuesta(blank: false, nullable: false, inList: ["S", "N"], attributes: [title: 'requiere respuesta: S: Si, N:No'])
     }
 
     String toString() {

@@ -1,4 +1,3 @@
-
 <%@ page import="janus.TipoTramite" %>
 <!doctype html>
 <html>
@@ -10,6 +9,7 @@
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
     </head>
+
     <body>
 
         <g:if test="${flash.message}">
@@ -30,6 +30,7 @@
                     Crear  Tipo Tramite
                 </a>
             </div>
+
             <div class="span3" id="busqueda-TipoTramite"></div>
         </div>
 
@@ -42,48 +43,52 @@
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                    
-                        <g:sortableColumn property="codigo" title="Codigo" />
-                    
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
-                    
-                        <th>Padre</th>
-                    
-                        <g:sortableColumn property="tiempo" title="Tiempo" />
 
-                        <g:sortableColumn property="tipo" title="Tipo" />
+                        <g:sortableColumn property="codigo" title="Codigo"/>
+
+                        <g:sortableColumn property="descripcion" title="Descripcion"/>
+
+                        <th>Padre</th>
+
+                        <g:sortableColumn property="tiempo" title="Tiempo"/>
+
+                        <g:sortableColumn property="tipo" title="Tipo"/>
+
+                        <g:sortableColumn property="requiereRespuesta" title="Requiere Respuesta"/>
 
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                <g:each in="${tipoTramiteInstanceList}" status="i" var="tipoTramiteInstance">
-                    <tr>
-                    
-                        <td>${fieldValue(bean: tipoTramiteInstance, field: "codigo")}</td>
-                    
-                        <td>${fieldValue(bean: tipoTramiteInstance, field: "descripcion")}</td>
-                    
-                        <td>${fieldValue(bean: tipoTramiteInstance, field: "padre")}</td>
-                    
-                        <td>${fieldValue(bean: tipoTramiteInstance, field: "tiempo")}</td>
+                    <g:each in="${tipoTramiteInstanceList}" status="i" var="tipoTramiteInstance">
+                        <tr>
 
-                        <td>${fieldValue(bean: tipoTramiteInstance, field: "tipo")}</td>
+                            <td>${fieldValue(bean: tipoTramiteInstance, field: "codigo")}</td>
 
-                        <td>
-                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoTramiteInstance.id}">
-                                <i class="icon-zoom-in icon-large"></i>
-                            </a>
-                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${tipoTramiteInstance.id}">
-                                <i class="icon-pencil icon-large"></i>
-                            </a>
+                            <td>${fieldValue(bean: tipoTramiteInstance, field: "descripcion")}</td>
 
-                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${tipoTramiteInstance.id}">
-                                <i class="icon-trash icon-large"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </g:each>
+                            <td>${fieldValue(bean: tipoTramiteInstance, field: "padre")}</td>
+
+                            <td>${fieldValue(bean: tipoTramiteInstance, field: "tiempo")}</td>
+
+                            <td>${fieldValue(bean: tipoTramiteInstance, field: "tipo")}</td>
+
+                            <td>${fieldValue(bean: tipoTramiteInstance, field: "requiereRespuesta")}</td>
+
+                            <td>
+                                <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoTramiteInstance.id}">
+                                    <i class="icon-zoom-in icon-large"></i>
+                                </a>
+                                <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${tipoTramiteInstance.id}">
+                                    <i class="icon-pencil icon-large"></i>
+                                </a>
+
+                                <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${tipoTramiteInstance.id}">
+                                    <i class="icon-trash icon-large"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </g:each>
                 </tbody>
             </table>
 

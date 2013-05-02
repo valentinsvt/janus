@@ -305,10 +305,25 @@ class TramitesController {
         render errores
     }
 
-    def lista() {
+    def list() {
         def usu = Persona.get(session.usuario.id)
         def tramites = PersonasTramite.findAllByPersona(usu).tramite.unique()
-        return [tramites: tramites]
+        tramites = tramites.sort {
+            it.fecha.plus(it.tipoTramite.tiempo)
+        }
+        return [tramites: tramites, usu: usu]
+    }
+
+    def updateEstado() {
+        def tramite = Tramite.get(params.id.toLong())
+        def estado = EstadoTramite.findByCodigo(params.tipo)
+        tramite.estado = estado
+        if (!tramite.save(flush: true)) {
+            println "Error al actualizar el estado del tramite ${tramite.id} a ${estado.codigo}: " + tramite.errors
+            render "NO"
+        } else {
+            render "OK"
+        }
     }
 
 }

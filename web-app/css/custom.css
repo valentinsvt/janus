@@ -360,3 +360,28 @@ th.desc a {
     padding     : 0px;
     background  : none;
 }
+
+/************************************* ALERTAS ********************************************************/
+tr td.alerta {
+    width               : 32px;
+    padding             : 4px;
+    background-position : 4px;
+    background-repeat   : no-repeat;
+}
+
+tr.success td.alerta {
+    /*background-color : darkgreen !important;*/
+    background-image : url(../images/semaforos/verdeH.png) !important;
+}
+
+tr.warning td.alerta {
+    /*background-color : darkgoldenrod !important;*/
+    background-image : url(../images/semaforos/amarilloH.png) !important;
+}
+
+tr.error td.alerta {
+    /*background-color : darkred !important;*/
+    background-image : url(../images/semaforos/rojoH.png) !important;
+}
+
+/************************************* FIN ALERTAS ********************************************************/
