@@ -354,6 +354,18 @@ th.desc a {
     max-height : 560px;
 }
 
+.modal.big {
+    width       : 1000px;
+    margin-left : -500px; /* - width/2 */
+    max-height  : 650px;
+    margin-top  : -300px;
+}
+
+.big .modal-body {
+    /*height     : 500px;*/
+    max-height : 510px;
+}
+
 .modal.login {
     width       : 390px;
     margin-left : -195px; /* - width/2 */
@@ -382,6 +394,11 @@ tr.warning td.alerta {
 tr.error td.alerta {
     /*background-color : darkred !important;*/
     background-image : url(../images/semaforos/rojoH.png) !important;
+}
+
+tr.info td.alerta {
+    /*background-color : darkred !important;*/
+    background-image : url(../images/semaforos/completo.png) !important;
 }
 
 /************************************* FIN ALERTAS ********************************************************/

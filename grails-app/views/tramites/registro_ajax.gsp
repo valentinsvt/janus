@@ -11,7 +11,6 @@
 <!doctype html>
 <html>
     <head>
-        <meta name="layout" content="main">
         <title>
             Registro de Trámites
         </title>
@@ -22,113 +21,110 @@
 
     <body>
 
-        <g:if test="${flash.message}">
-            <div class="row">
-                <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
-                    <a class="close" data-dismiss="alert" href="#">×</a>
-                    ${flash.message}
+        <g:form class="form-horizontal" name="frmRegistrar-tramite" action="registrar">
+            <g:if test="${padre}">
+                <div class="control-group">
+                    <div>
+                        <span class="control-label label label-inverse">
+                            Padre
+                        </span>
+                    </div>
+
+                    <div class="controls">
+                        ${padre.descripcion}
+                        <g:hiddenField name="tramitePadre.id" value="${padre.id}"/>
+                    </div>
+                </div>
+            </g:if>
+
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Tipo
+                    </span>
+                </div>
+
+                <div class="controls">
+                    <elm:select id="tipoTramite" name="tipoTramite.id" from="${janus.TipoTramite.list([sort: 'descripcion'])}"
+                                optionKey="id" optionClass="tipo"
+                                class="many-to-one required" noSelection="['': '']"/>
+
+                    <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
-        </g:if>
 
-        <div class="row btn-group" role="navigation">
-            <a href="#" class="btn btn-ajax btn-new" id="btnSave">
-                <i class="icon-save"></i>
-                Guardar
-            </a>
-        </div>
+            <div id="personas"></div>
 
-        <div id="registra-tramite" class="span12" role="main" style="margin-top: 10px;">
-            <g:form class="form-horizontal" name="frmRegistrar-tramite" action="registrar">
-                <div class="control-group">
-                    <div>
-                        <span class="control-label label label-inverse">
-                            Tipo
-                        </span>
-                    </div>
-
-                    <div class="controls">
-                        <elm:select id="tipoTramite" name="tipoTramite.id" from="${janus.TipoTramite.list([sort: 'descripcion'])}"
-                                    optionKey="id" optionClass="tipo"
-                                    class="many-to-one required" noSelection="['': '']"/>
-
-                        <p class="help-block ui-helper-hidden"></p>
-                    </div>
+            <div class="control-group hide" id="grupoTipo">
+                <div>
+                    <span class="control-label label label-inverse" id="lblTipo">
+                        Obra
+                    </span>
                 </div>
 
-                <div id="personas"></div>
+                <div class="controls">
+                    <g:textField name="txtTipo" class=" required span6"/>
+                    <g:hiddenField name="hddTipo"/>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </div>
 
-                <div class="control-group hide" id="grupoTipo">
-                    <div>
-                        <span class="control-label label label-inverse" id="lblTipo">
-                            Obra
-                        </span>
-                    </div>
-
-                    <div class="controls">
-                        <g:textField name="txtTipo" class=" required span6"/>
-                        <g:hiddenField name="hddTipo"/>
-                        <p class="help-block ui-helper-hidden"></p>
-                    </div>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Asunto
+                    </span>
                 </div>
 
-                <div class="control-group">
-                    <div>
-                        <span class="control-label label label-inverse">
-                            Asunto
-                        </span>
-                    </div>
+                <div class="controls">
+                    <g:textArea name="descripcion" class="span6 required"/>
 
-                    <div class="controls">
-                        <g:textArea name="descripcion" class="span6 required"/>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </div>
 
-                        <p class="help-block ui-helper-hidden"></p>
-                    </div>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Fecha creación
+                    </span>
                 </div>
 
-                <div class="control-group">
-                    <div>
-                        <span class="control-label label label-inverse">
-                            Fecha creación
-                        </span>
-                    </div>
+                <div class="controls">
+                    <elm:datepicker name="fecha" class=" required"/>
 
-                    <div class="controls">
-                        <elm:datepicker name="fecha" class=" required"/>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </div>
 
-                        <p class="help-block ui-helper-hidden"></p>
-                    </div>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        N<sup>o</sup> Memo S.A.D.
+                    </span>
                 </div>
 
-                <div class="control-group">
-                    <div>
-                        <span class="control-label label label-inverse">
-                            N<sup>o</sup> Memo S.A.D.
-                        </span>
-                    </div>
+                <div class="controls">
+                    <g:textField name="memo" class="required"/>
 
-                    <div class="controls">
-                        <g:textField name="memo" class="required"/>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </div>
 
-                        <p class="help-block ui-helper-hidden"></p>
-                    </div>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Docs. adjuntos
+                    </span>
                 </div>
 
-                <div class="control-group">
-                    <div>
-                        <span class="control-label label label-inverse">
-                            Docs. adjuntos
-                        </span>
-                    </div>
+                <div class="controls">
+                    <g:textArea name="documentosAdjuntos" class="span6"/>
 
-                    <div class="controls">
-                        <g:textArea name="documentosAdjuntos" class="span6"/>
-
-                        <p class="help-block ui-helper-hidden"></p>
-                    </div>
+                    <p class="help-block ui-helper-hidden"></p>
                 </div>
-            </g:form>
-        </div>
+            </div>
+        </g:form>
 
 
         <div class="modal grandote hide fade " id="modal-busca" style=";overflow: hidden;">
@@ -205,13 +201,6 @@
                 $('[rel=tooltip]').tooltip();
 
                 $("#frmRegistrar-tramite").validate();
-
-                $("#btnSave").click(function () {
-                    if ($("#frmRegistrar-tramite").valid()) {
-                        $("#btnSave").replaceWith(spinner);
-                        $("#frmRegistrar-tramite").submit();
-                    }
-                });
 
                 $tipoTramite.bind("keyup change", function () {
                     var box = $(this);

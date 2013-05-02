@@ -7,8 +7,21 @@ class TramitesController {
     def index() {}
 
     def registro() {
+        def padre = null
+        if (params.padre) {
+            padre = Tramite.get(params.padre.toLong())
+        }
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-        return [campos: campos]
+        return [campos: campos, padre: padre]
+    }
+
+    def registro_ajax() {
+        def padre = null
+        if (params.padre) {
+            padre = Tramite.get(params.padre.toLong())
+        }
+        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
+        return [campos: campos, padre: padre]
     }
 
     def personasPorTipo() {
@@ -311,18 +324,38 @@ class TramitesController {
         tramites = tramites.sort {
             it.fecha.plus(it.tipoTramite.tiempo)
         }
-        return [tramites: tramites, usu: usu]
+        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
+        return [tramites: tramites, usu: usu, campos: campos]
     }
 
     def updateEstado() {
         def tramite = Tramite.get(params.id.toLong())
         def estado = EstadoTramite.findByCodigo(params.tipo)
         tramite.estado = estado
+
+        def r = "OK"
+
+        switch (params.tipo) {
+            case "I":
+                tramite.fechaEnvio = new Date()
+                break;
+            case "P":
+                tramite.fechaRecepcion = new Date()
+                break;
+            case "F":
+                tramite.fechaFinalizacion = new Date()
+                break;
+            case "R":
+                tramite.fechaRespuesta = new Date()
+                r = "R"
+                break;
+        }
+
         if (!tramite.save(flush: true)) {
             println "Error al actualizar el estado del tramite ${tramite.id} a ${estado.codigo}: " + tramite.errors
             render "NO"
         } else {
-            render "OK"
+            render r
         }
     }
 

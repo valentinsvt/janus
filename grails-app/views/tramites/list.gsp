@@ -22,6 +22,10 @@
         .activo {
             font-weight : bold;
         }
+
+        th {
+            vertical-align : middle !important;
+        }
         </style>
 
     </head>
@@ -86,6 +90,10 @@
                             <g:set var="clase" value="error"/>
                         </g:elseif>
 
+                        <g:if test="${tramite.estado.codigo == 'F'}">
+                            <g:set var="clase" value="info"/>
+                        </g:if>
+
                         <tr class="${clase}">
                             <td class="alerta"></td>
                             <td>${tramite.estado.descripcion}</td>
@@ -104,32 +112,32 @@
                             <td>${tramite.tipoTramite.tiempo} días</td>
                             <td><g:formatDate date="${fechaTope}" format="dd-MM-yyyy"/></td>
                             <td>
-                            %{--<g:if test="${personaDe == usu}">--}%
-                                <g:if test="${tramite.estado.codigo == 'P'}">
-                                    <a href="#" class="btn btnEstado" data-tipo="F" data-id="${tramite.id}">Finalizar</a>
-                                </g:if>
-                                <g:elseif test="${tramite.estado.codigo == 'C'}">
-                                    <a href="#" class="btn btnEstado" data-tipo="I" data-id="${tramite.id}">Enviar</a>
-                                </g:elseif>
-                                <g:elseif test="${tramite.estado.codigo == 'P'}">
-                                    <g:if test="${tramite.tipoTramite.requiereRespuesta == 'N'}">
+                                <g:if test="${personaDe == usu}">
+                                    <g:if test="${tramite.estado.codigo == 'P'}">
                                         <a href="#" class="btn btnEstado" data-tipo="F" data-id="${tramite.id}">Finalizar</a>
                                     </g:if>
+                                    <g:elseif test="${tramite.estado.codigo == 'C'}">
+                                        <a href="#" class="btn btnEstado" data-tipo="I" data-id="${tramite.id}">Enviar</a>
+                                    </g:elseif>
+                                    <g:elseif test="${tramite.estado.codigo == 'P'}">
+                                        <g:if test="${tramite.tipoTramite.requiereRespuesta == 'N'}">
+                                            <a href="#" class="btn btnEstado" data-tipo="F" data-id="${tramite.id}">Finalizar</a>
+                                        </g:if>
+                                    </g:elseif>
+                                    <g:elseif test="${tramite.estado.codigo == 'R'}">
+                                        <a href="#" class="btn btnEstado" data-tipo="F" data-id="${tramite.id}">Finalizar</a>
+                                    </g:elseif>
+                                </g:if>
+                                <g:elseif test="${personaPara == usu}">
+                                    <g:if test="${tramite.estado.codigo == 'I'}">
+                                        <a href="#" class="btn btnEstado" data-tipo="P" data-id="${tramite.id}">Recibir</a>
+                                    </g:if>
+                                    <g:elseif test="${tramite.estado.codigo == 'P'}">
+                                        <g:if test="${tramite.tipoTramite.requiereRespuesta == 'S'}">
+                                            <a href="#" class="btn btnEstado" data-tipo="R" data-id="${tramite.id}">Responder</a>
+                                        </g:if>
+                                    </g:elseif>
                                 </g:elseif>
-                                <g:elseif test="${tramite.estado.codigo == 'R'}">
-                                    <a href="#" class="btn btnEstado" data-tipo="F" data-id="${tramite.id}">Finalizar</a>
-                                </g:elseif>
-                            %{--</g:if>--}%
-                            %{--<g:elseif test="${personaPara == usu}">--}%
-                            %{--<g:if test="${tramite.estado.codigo == 'I'}">--}%
-                            %{--<a href="#" class="btn btnEstado" data-tipo="P" data-id="${tramite.id}">Recibir</a>--}%
-                            %{--</g:if>--}%
-                            %{--<g:elseif test="${tramite.estado.codigo == 'P'}">--}%
-                            %{--<g:if test="${tramite.tipoTramite.requiereRespuesta == 'S'}">--}%
-                            %{--<a href="#" class="btn btnEstado" data-tipo="R" data-id="${tramite.id}">Responder</a>--}%
-                            %{--</g:if>--}%
-                            %{--</g:elseif>--}%
-                            %{--</g:elseif>--}%
                             </td>
                         </tr>
                     </g:each>
@@ -153,9 +161,41 @@
             </div>
         </div>
 
+        <div class="modal big hide fade" id="modal-new">
+            <div class="modal-header" id="modalHeader-new">
+                <button type="button" class="close darker" data-dismiss="modal">
+                    <i class="icon-remove-circle"></i>
+                </button>
+
+                <h3 id="modalTitle-new"></h3>
+            </div>
+
+            <div class="modal-body" id="modalBody-new">
+            </div>
+
+            <div class="modal-footer" id="modalFooter-new">
+            </div>
+        </div>
+
+        <div class="modal grandote hide fade " id="modal-busca" style=";overflow: hidden;">
+            <div class="modal-header btn-info">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+
+                <h3 id="modalTitle-busca"></h3>
+            </div>
+
+            <div class="modal-body" id="modalBody-busca">
+                <bsc:buscador name="obra" value="" accion="buscaObra" campos="${campos}" label="Obra" tipo="lista"/>
+            </div>
+
+            <div class="modal-footer" id="modalFooter-busca">
+            </div>
+        </div>
+
         <script type="text/javascript">
             $(function () {
                 $(".btnEstado").click(function () {
+                    $(this).replaceWith(spinner);
                     var tipo = $(this).data("tipo");
                     var id = $(this).data("id");
                     var txt = "", ttl = "";
@@ -172,12 +212,16 @@
                             ttl = "Finalizar trámite";
                             txt = "Esto cambiará el estado del trámite a 'Finalizado'.<br/>Desea continuar?";
                             break;
+                        case "R":
+                            ttl = "Responder trámite";
+                            txt = "Esto cambiará el estado del trámite a 'Respondido' y mostrará la pantalla de creación de trámite.<br/>Desea continuar?";
+                            break;
                     }
 
                     var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Aceptar</a>');
+                    var btnContinue = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Aceptar</a>');
 
-                    btnSave.click(function () {
+                    btnContinue.click(function () {
                         $(this).replaceWith(spinner);
                         $.ajax({
                             type    : "POST",
@@ -186,17 +230,51 @@
                                 id   : id,
                                 tipo : tipo
                             },
-                            success : function () {
-                                location.reload(true);
+                            success : function (msg) {
+                                if (msg == "OK") {
+                                    location.reload(true);
+                                } else if (msg == "R") {
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'registro_ajax')}",
+                                        data    : {
+                                            padre : id
+                                        },
+                                        success : function (msg) {
+                                            $("#modal-confirm").modal("hide");
+                                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                                            btnSave.click(function () {
+                                                if ($("#frmRegistrar-tramite").valid()) {
+                                                    $(this).replaceWith(spinner);
+                                                    $.ajax({
+                                                        type    : "POST",
+                                                        url     : "${createLink(action:'registrar')}",
+                                                        data    : $("#frmRegistrar-tramite").serialize(),
+                                                        success : function (msg) {
+                                                            if (msg == "OK") {
+                                                                location.reload(true);
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            });
+
+                                            $("#modalTitle-new").html("Responder trámite");
+                                            $("#modalBody-new").html(msg);
+                                            $("#modalFooter-new").html("").append(btnCancel).append(btnSave);
+                                            $("#modal-new").modal("show");
+                                        }
+                                    });
+                                }
                             }
                         });
-
                         return false;
                     });
 
                     $("#modalTitle-confirm").html(ttl);
                     $("#modalBody-confirm").html(txt);
-                    $("#modalFooter-confirm").html("").append(btnCancel).append(btnSave);
+                    $("#modalFooter-confirm").html("").append(btnCancel).append(btnContinue);
                     $("#modal-confirm").modal("show");
 
                     return false;
