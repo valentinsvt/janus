@@ -20,7 +20,7 @@ class TramiteController extends janus.seguridad.Shield {
 
 
     def verTramites(){
-        params.id="MEM-132-DGES-13"
+//        params.id="MEM-132-DGES-13"
         def memo = params.id
         def header=[:]
         def tramites = []
