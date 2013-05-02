@@ -383,21 +383,21 @@ tr td.alerta {
 
 tr.success td.alerta {
     /*background-color : darkgreen !important;*/
-    background-image : url(../images/semaforos/verdeH.png) !important;
+    background-image : url(../images/semaforos/verde.png) !important;
 }
 
 tr.warning td.alerta {
     /*background-color : darkgoldenrod !important;*/
-    background-image : url(../images/semaforos/amarilloH.png) !important;
+    background-image : url(../images/semaforos/amarillo.png) !important;
 }
 
 tr.error td.alerta {
     /*background-color : darkred !important;*/
-    background-image : url(../images/semaforos/rojoH.png) !important;
+    background-image : url(../images/semaforos/rojo.png) !important;
 }
 
 tr.info td.alerta {
-    /*background-color : darkred !important;*/
+    /*background-color : darkslategrey !important;*/
     background-image : url(../images/semaforos/completo.png) !important;
 }
 

@@ -8,11 +8,11 @@ class MenuTagLib {
         def items = [:]
         def usuario = session.usuario
         def perfil = session.perfil
-        if(usuario){
-            def acciones = janus.seguridad.Prms.findAllByPerfil(perfil).accion.sort{it.modulo.orden}
+        if (usuario) {
+            def acciones = janus.seguridad.Prms.findAllByPerfil(perfil).accion.sort { it.modulo.orden }
 //            println "Acciones:" + acciones
 
-            acciones.each {ac ->
+            acciones.each { ac ->
                 if (!items[ac.modulo.nombre]) {
                     items.put(ac.modulo.nombre, [ac.accnDescripcion, g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre)])
                 } else {
@@ -31,23 +31,23 @@ class MenuTagLib {
             }
 
 
-            items.each {item->
+            items.each { item ->
 //               println "item "+item.value
-               for(int i=0;i<item.value.size();i+=2){
-                   for(int j=2;j<item.value.size()-1;j+=2){
+                for (int i = 0; i < item.value.size(); i += 2) {
+                    for (int j = 2; j < item.value.size() - 1; j += 2) {
 //                       println "compare "+item.value[i]+" <<>> "+item.value[j]+" --> "+item.value[i].compareTo(item.value[j])
-                       def val = item.value[i].trim().compareTo(item.value[j].trim())
-                       if (val>0 && i<j){
-                           def tmp = [item.value[j],item.value[j+1]]
-                           item.value[j]=item.value[i]
-                           item.value[j+1]=item.value[i+1]
-                           item.value[i]=tmp[0]
-                           item.value[i+1]=tmp[1]
-                       }
+                        def val = item.value[i].trim().compareTo(item.value[j].trim())
+                        if (val > 0 && i < j) {
+                            def tmp = [item.value[j], item.value[j + 1]]
+                            item.value[j] = item.value[i]
+                            item.value[j + 1] = item.value[i + 1]
+                            item.value[i] = tmp[0]
+                            item.value[i + 1] = tmp[1]
+                        }
 
-                   }
+                    }
 //                   println "iteracion "+item.value
-               }
+                }
 //                println "item sort "+item.value
 
             }
@@ -55,7 +55,7 @@ class MenuTagLib {
 //            println items
 
             def strItems = ""
-            items.each {item ->
+            items.each { item ->
 
 
                 strItems += '<li class="dropdown">'
@@ -86,6 +86,8 @@ class MenuTagLib {
             html += '<ul class="nav">'
             html += strItems
             html += ' <li class="divider-vertical"></li>'
+            html += '<li><a href="' + g.createLink(controller: 'tramites', action: 'list') + '">Alertas</a></li>'
+            html += ' <li class="divider-vertical"></li>'
             html += '<li><a href="' + g.createLink(controller: 'login', action: 'logout') + '"><i class="icon-off icon-white"></i> Salir</a></li>'
 //        html += '<li><a href="#contact">Contact</a></li>'
             html += '</ul>'
@@ -96,7 +98,7 @@ class MenuTagLib {
             html += '</div>'
 
             out << html
-        }else{
+        } else {
 //            println "else "
 //            def html = ""
 //            html += '<div class="navbar navbar-static-top navbar-inverse">'

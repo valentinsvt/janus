@@ -320,12 +320,29 @@ class TramitesController {
 
     def list() {
         def usu = Persona.get(session.usuario.id)
-        def tramites = PersonasTramite.findAllByPersona(usu).tramite.unique()
+
+        def tramites
+
+        if (!params.finalizados || params.finalizados.toUpperCase() != "N") {
+            params.finalizados = "S"
+        }
+
+        if (params.finalizados.toUpperCase() == "N") {
+            tramites = PersonasTramite.withCriteria {
+                eq("persona", usu)
+                tramite {
+                    ne("estado", EstadoTramite.findByCodigo("F"))
+                }
+            }.tramite.unique()
+        } else {
+            tramites = PersonasTramite.findAllByPersona(usu).tramite.unique()
+        }
+
         tramites = tramites.sort {
             it.fecha.plus(it.tipoTramite.tiempo)
         }
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-        return [tramites: tramites, usu: usu, campos: campos]
+        return [tramites: tramites, usu: usu, campos: campos, finalizados: params.finalizados]
     }
 
     def updateEstado() {

@@ -7,7 +7,7 @@
 --%>
 
 
-<%@ page import="janus.Tramite" %>
+<%@ page import="janus.TipoTramite; janus.Tramite" %>
 <!doctype html>
 <html>
     <head>
@@ -45,10 +45,16 @@
                 </div>
 
                 <div class="controls">
-                    <elm:select id="tipoTramite" name="tipoTramite.id" from="${janus.TipoTramite.list([sort: 'descripcion'])}"
-                                optionKey="id" optionClass="tipo"
-                                class="many-to-one required" noSelection="['': '']"/>
-
+                    <g:if test="${padre}">
+                        <elm:select id="tipoTramite" name="tipoTramite.id" from="${TipoTramite.findAllByPadre(padre.tipoTramite, [sort: 'descripcion'])}"
+                                    optionKey="id" optionClass="tipo"
+                                    class="many-to-one required" noSelection="['': '']"/>
+                    </g:if>
+                    <g:else>
+                        <elm:select id="tipoTramite" name="tipoTramite.id" from="${TipoTramite.list([sort: 'descripcion'])}"
+                                    optionKey="id" optionClass="tipo"
+                                    class="many-to-one required" noSelection="['': '']"/>
+                    </g:else>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>

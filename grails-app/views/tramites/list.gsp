@@ -41,16 +41,28 @@
             </div>
         </g:if>
 
-    <div class="row btn-group" role="navigation" id="btnPrintProcesos">
-    <a href="#" class="btn btn-ajax btn-new">
-    <i class="icon-print"></i>
-    Imprimir Trámites en Proceso
-    </a>
-    <a href="#" class="btn btn-ajax btn-new" id="btnPrintTodos">
-    <i class="icon-print"></i>
-    Imprimir Trámites por Obra
-    </a>
-    </div>
+        <div class="row btn-group" role="navigation" id="btnPrintProcesos">
+            <a href="#" class="btn btn-ajax btn-new">
+                <i class="icon-print"></i>
+                Imprimir Trámites en Proceso
+            </a>
+            <a href="#" class="btn btn-ajax btn-new" id="btnPrintTodos">
+                <i class="icon-print"></i>
+                Imprimir Trámites por Obra
+            </a>
+
+            <g:if test="${finalizados == 'S'}">
+                <g:link action="list" params="[finalizados: 'N']" class="btn btn-ajax btn-new">
+                    Ocultar finalizados
+                </g:link>
+            </g:if>
+            <g:else>
+                <g:link action="list" params="[finalizados: 'S']" class="btn btn-ajax btn-new">
+                    Mostrar finalizados
+                </g:link>
+            </g:else>
+        </div>
+
 
         <div id="lista-tramite" class="span12" role="main" style="margin-top: 10px;">
             <table class="table table-bordered table-condensed table-hover">
@@ -193,21 +205,22 @@
         </div>
 
 
-    <div id="tramiteDialog">
+        <div id="tramiteDialog">
 
-        <fieldset>
-            <div class="span3">
+            <fieldset>
+                <div class="span3">
 
-                Elija la Obra:
+                    Elija la Obra:
 
-            </div>
-            <div class="span3">
+                </div>
 
-                   <g:select name="selectObra" from="${janus.Tramite.findAllByObraIsNotNull().obra.unique()}" optionKey="id" optionValue="descripcion"/>
-            </div>
+                <div class="span3">
 
-        </fieldset>
-    </div>
+                    <g:select name="selectObra" from="${janus.Tramite.findAllByObraIsNotNull().obra.unique()}" optionKey="id" optionValue="descripcion"/>
+                </div>
+
+            </fieldset>
+        </div>
 
 
         <script type="text/javascript">
@@ -311,21 +324,20 @@
 
             });
 
-
             $("#tramiteDialog").dialog({
 
-                autoOpen: false,
-                resizable: false,
-                modal: true,
-                draggable: false,
-                width: 350,
-                height: 180,
-                position: 'center',
-                title: 'Seleccione una Obra',
-                buttons: {
-                    "Aceptar": function () {
+                autoOpen  : false,
+                resizable : false,
+                modal     : true,
+                draggable : false,
+                width     : 350,
+                height    : 180,
+                position  : 'center',
+                title     : 'Seleccione una Obra',
+                buttons   : {
+                    "Aceptar" : function () {
 
-                         var obra = $("#selectObra").select()
+                        var obra = $("#selectObra").select()
 
                         console.log(obra)
 
