@@ -211,7 +211,10 @@
                 $("#frmRegistrar-tramite").validate();
 
                 $("#btnSave").click(function () {
-                    $("#frmRegistrar-tramite").submit();
+                    if ($("#frmRegistrar-tramite").valid()) {
+                        $("#btnSave").replaceWith(spinner);
+                        $("#frmRegistrar-tramite").submit();
+                    }
                 });
 
                 $tipoTramite.bind("keyup change", function () {

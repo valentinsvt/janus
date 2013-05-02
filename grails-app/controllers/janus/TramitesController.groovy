@@ -256,7 +256,7 @@ class TramitesController {
 
 
     def registrar() {
-        println params
+//        println params
 
         if (params.fecha) {
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
@@ -264,14 +264,16 @@ class TramitesController {
 
         def tipo = params.hddTipo
         def p = tipo.split("_")
-        println ">>" + p
+//        println ">>" + p
         if (p[0] == "ob") {
             params.obra = Obra.get(p[1].toLong())
         } else if (p[0] == "cn") {
             params.contrato = Contrato.get(p[1].toLong())
         }
-        println params
+//        println params
         def errores = ""
+
+        params.estado = EstadoTramite.findByCodigo("C")
 
         def tramite = new Tramite(params)
         if (!tramite.save(flush: true)) {
@@ -301,6 +303,12 @@ class TramitesController {
             errores = "OK"
         }
         render errores
+    }
+
+    def lista() {
+        def usu = Persona.get(session.usuario.id)
+        def tramites = PersonasTramite.findAllByPersona(usu).tramite.unique()
+        return [tramites: tramites]
     }
 
 }

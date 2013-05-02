@@ -6,6 +6,9 @@ class Tramite implements Serializable {
     TipoTramite tipoTramite
     Contrato contrato
     Tramite tramitePadre
+
+    EstadoTramite estado
+
     String codigo
     Date fecha
     String descripcion
@@ -27,6 +30,7 @@ class Tramite implements Serializable {
             tipoTramite column: 'tptr__id'
             contrato column: 'cntr__id'
             tramitePadre column: 'trmtpdre'
+            estado column: 'ettr__id'
             codigo column: 'trmtcdgo'
             fecha column: 'trmtfcha'
             descripcion column: 'trmtdscr'
@@ -41,6 +45,7 @@ class Tramite implements Serializable {
         obra(blank: true, nullable: true, attributes: [title: 'obra'])
         codigo(size: 1..31, blank: true, nullable: true, attributes: [title: 'tramiteCodigo'])
         tipoTramite(blank: true, nullable: true, attributes: [title: 'tipoTramite'])
+        estado(blank: false, nullable: false, attributes: [title: 'estado tramite'])
         contrato(blank: true, nullable: true, attributes: [title: 'contrato'])
         tramitePadre(blank: true, nullable: true, attributes: [title: 'tramitePadre'])
         fecha(blank: true, nullable: true, attributes: [title: 'tramiteFecha'])
