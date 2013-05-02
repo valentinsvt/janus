@@ -1282,11 +1282,6 @@ class ReportesController {
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
 
-//
-//        addCellTabla(tablaCoeficiente, new Paragraph("Referencias: ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(obra?.referencia, times10normal), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
-
         addCellTabla(tablaCoeficiente2, new Paragraph("Fecha de Registro: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(formatDate(date: obra?.fechaCreacionObra, format: "yyyy-MM-dd"), times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
@@ -1310,6 +1305,268 @@ class ReportesController {
 
 
     }
+
+    //reporte registroTramite
+
+    def reporteRegistroTramite() {
+
+//        println("--->" + params)
+
+        def usuario = session.usuario
+
+        def tramites = PersonasTramite.withCriteria {
+            eq("persona", usuario)
+            ne("rolTramite", RolTramite.findByCodigo("CC"))
+            tramite{
+                ne("estado",EstadoTramite.findByCodigo('F'))
+            }
+        }.tramite.unique()
+
+
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+
+
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+
+
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+
+
+
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight]
+
+
+
+        def baos = new ByteArrayOutputStream()
+        def name = "registroTramite_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal]
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Presupuesto " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("tramite, janus, registroTramite");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+
+        headers.add(new Paragraph("Gobierno Autónomo Descentralizado de la Provincia de Pichincha"))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("TRÁMITES EN PROCESO"))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
+        headers.add(new Paragraph(" ", times10bold));
+
+        PdfPTable tablaVolObra = new PdfPTable(8);
+        tablaVolObra.setWidthPercentage(100);
+
+
+        tablaVolObra.setWidths(arregloEnteros([10, 20, 20, 14, 9, 12, 8, 7]))
+
+        addCellTabla(tablaVolObra, new Paragraph("Tipo", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Envia", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Recibe", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Asunto", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Fecha", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Documentos", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("N° Memo SAD", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Estado", times8bold), prmsCellHead)
+
+
+        tramites.each {
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.tipoTramite?.descripcion, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('DE'), it).persona.nombre + " " + PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('DE'), it).persona.apellido, times8normal), prmsCellLeft)
+
+            addCellTabla(tablaVolObra, new Paragraph(PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('PARA'), it).persona.nombre + " " + PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('PARA'), it).persona.apellido , times8normal), prmsCellLeft)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.descripcion, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(formatDate(date: it?.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.documentosAdjuntos, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.memo, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.estado?.codigo, times8normal), prmsCellCenter)
+
+        }
+
+        document.add(headers)
+        document.add(tablaVolObra)
+
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+
+    }
+
+     ///////
+
+
+
+    //reporte registroTramite
+
+    def reporteRegistroTramitexObra() {
+
+        def obra = Obra.get(1417)
+
+        def usuario = session.usuario
+
+
+        def tramites = Tramite.findAllByObra(obra)
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+
+
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+
+
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+
+
+
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight]
+
+
+
+        def baos = new ByteArrayOutputStream()
+        def name = "registroTramite_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal]
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Presupuesto " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("tramite, janus, registroTramite");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+
+        headers.add(new Paragraph("Gobierno Autónomo Descentralizado de la Provincia de Pichincha"))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("TRÁMITES POR OBRA"))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
+        headers.add(new Paragraph(" ", times10bold));
+
+        PdfPTable tablaVolObra = new PdfPTable(8);
+        tablaVolObra.setWidthPercentage(100);
+
+
+        tablaVolObra.setWidths(arregloEnteros([10, 20, 20, 14, 9, 12, 8, 7]))
+
+        addCellTabla(tablaVolObra, new Paragraph("Tipo", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Envia", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Recibe", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Asunto", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Fecha", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Documentos", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("N° Memo SAD", times8bold), prmsCellHead)
+        addCellTabla(tablaVolObra, new Paragraph("Estado", times8bold), prmsCellHead)
+
+
+        tramites.each {
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.tipoTramite?.descripcion, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('DE'), it).persona.nombre + " " + PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('DE'), it).persona.apellido, times8normal), prmsCellLeft)
+
+            addCellTabla(tablaVolObra, new Paragraph(PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('PARA'), it).persona.nombre + " " + PersonasTramite.findByRolTramiteAndTramite(RolTramite.findByCodigo('PARA'), it).persona.apellido , times8normal), prmsCellLeft)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.descripcion, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(formatDate(date: it?.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.documentosAdjuntos, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.memo, times8normal), prmsCellCenter)
+
+            addCellTabla(tablaVolObra, new Paragraph(it?.estado?.codigo, times8normal), prmsCellCenter)
+
+        }
+
+        document.add(headers)
+        document.add(tablaVolObra)
+
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+
+    }
+
 
 
 

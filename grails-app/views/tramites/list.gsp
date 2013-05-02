@@ -41,16 +41,16 @@
             </div>
         </g:if>
 
-    %{--<div class="row btn-group" role="navigation">--}%
-    %{--<a href="#" class="btn btn-ajax btn-new">--}%
-    %{--<i class="icon-file"></i>--}%
-    %{--Nuevo Trámite--}%
-    %{--</a>--}%
-    %{--<a href="#" class="btn btn-ajax btn-new" id="btnSave">--}%
-    %{--<i class="icon-save"></i>--}%
-    %{--Guardar--}%
-    %{--</a>--}%
-    %{--</div>--}%
+    <div class="row btn-group" role="navigation" id="btnPrintProcesos">
+    <a href="#" class="btn btn-ajax btn-new">
+    <i class="icon-print"></i>
+    Imprimir Trámites en Proceso
+    </a>
+    <a href="#" class="btn btn-ajax btn-new" id="btnPrintTodos">
+    <i class="icon-print"></i>
+    Imprimir Trámites por Obra
+    </a>
+    </div>
 
         <div id="lista-tramite" class="span12" role="main" style="margin-top: 10px;">
             <table class="table table-bordered table-condensed table-hover">
@@ -192,6 +192,24 @@
             </div>
         </div>
 
+
+    <div id="tramiteDialog">
+
+        <fieldset>
+            <div class="span3">
+
+                Elija la Obra:
+
+            </div>
+            <div class="span3">
+
+                   <g:select name="selectObra" from="${janus.Tramite.findAllByObraIsNotNull().obra.unique()}" optionKey="id" optionValue="descripcion"/>
+            </div>
+
+        </fieldset>
+    </div>
+
+
         <script type="text/javascript">
             $(function () {
                 $(".btnEstado").click(function () {
@@ -280,6 +298,47 @@
                     return false;
                 });
             });
+
+            $("#btnPrintProcesos").click(function () {
+
+                location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistroTramite')}"
+
+            });
+
+            $("#btnPrintTodos").click(function () {
+
+                $("#tramiteDialog").dialog("open")
+
+            });
+
+
+            $("#tramiteDialog").dialog({
+
+                autoOpen: false,
+                resizable: false,
+                modal: true,
+                draggable: false,
+                width: 350,
+                height: 180,
+                position: 'center',
+                title: 'Seleccione una Obra',
+                buttons: {
+                    "Aceptar": function () {
+
+                         var obra = $("#selectObra").select()
+
+                        console.log(obra)
+
+                        %{--location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistroTramitexObra', id: )}"--}%
+                        $("#tramiteDialog").dialog("close");
+
+                    }
+                }
+
+            });
+
+
+
         </script>
 
     </body>

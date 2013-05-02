@@ -49,7 +49,7 @@
 
                 <div class="item" texto="dpto">
                     <g:link controller="departamento"
-                            action="list">Departamentos del personal</g:link> para la organización de los usuarios.
+                            action="list">Coordinación del personal</g:link> para la organización de los usuarios.
                 </div><br>
 
                 <div class="item" texto="tpus">
@@ -243,9 +243,9 @@
 </div>
 
 <div id="dpto" style="display:none">
-    <h3>Departamento</h3><br>
+    <h3>Coordinación</h3><br>
 
-    <p>Distribución administrativa de la institución: Departamentos que la conforman, para la asociación de los
+    <p>Distribución administrativa de la institución: Coordinaciones que la conforman, para la asociación de los
     empleados a cada uno de ellos.</p>
 </div>
 

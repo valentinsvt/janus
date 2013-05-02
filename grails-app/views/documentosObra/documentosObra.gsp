@@ -65,26 +65,22 @@
     </div>
 
 
-    <div style="margin-top: 10px; margin-bottom: 20px">
 
-        <g:checkBox name="forzar" checked="false"/> Forzar nueva Página para las Notas de Pie de Página
+    <div class="piePagina" style="margin-bottom: 10px">
 
-        <div class="span3">
-            Tipo de Obra <g:textField name="tipoObra" value="${obra?.tipo}" style="width: 15px;height: 15px"
-                                      disabled="true"/>
-        </div>
-
-    </div>
-
-
-    <div class="piePagina" style="margin-top: 5px; margin-bottom: 10px">
 
         <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
             <fieldset class="borde">
 
+                <div style="margin-top: -20px; margin-bottom: 20px; margin-left: 30px">
+
+                    <g:checkBox name="forzar" checked="false"/> Forzar nueva Página para las Notas de Pie de Página
+
+                </div>
+
                 <legend>Pie de Página</legend>
 
-                <div class="span6" style="margin-top: -20px">
+                <div class="span6" style="margin-top: -10px">
 
                     <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion"
                               optionKey="id" style="width: 350px"/>
@@ -1444,7 +1440,7 @@
         modal: true,
         draggable: false,
         width: 350,
-        height: 280,
+        height: 250,
         position: 'center',
         title: 'Tasa de cambio',
         buttons: {

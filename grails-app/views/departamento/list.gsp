@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        Lista de Departamentos
+        Lista de Coordinaciones
     </title>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
     <div class="span9 btn-group" role="navigation">
         <a href="#" class="btn btn-ajax btn-new">
             <i class="icon-file"></i>
-            Crear  Departamento
+            Crear  Coordinaciones
         </a>
     </div>
 
@@ -46,7 +46,7 @@
 
             <g:sortableColumn property="descripcion" title="Descripcion"/>
 
-            <th>Direccion</th>
+            <th>Dirección</th>
 
             <th width="150">Acciones</th>
         </tr>
@@ -131,7 +131,7 @@
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                    $("#modalTitle").html("Crear Departamento");
+                    $("#modalTitle").html("Crear Coordinación");
                     $("#modalBody").html(msg);
                     $("#modalFooter").html("").append(btnOk).append(btnSave);
                     $("#modal-Departamento").modal("show");
@@ -158,7 +158,7 @@
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                    $("#modalTitle").html("Editar Departamento");
+                    $("#modalTitle").html("Editar Coordinación");
                     $("#modalBody").html(msg);
                     $("#modalFooter").html("").append(btnOk).append(btnSave);
                     $("#modal-Departamento").modal("show");
@@ -178,7 +178,7 @@
                 success: function (msg) {
                     var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                    $("#modalTitle").html("Ver Departamento");
+                    $("#modalTitle").html("Ver Coordinación");
                     $("#modalBody").html(msg);
                     $("#modalFooter").html("").append(btnOk);
                     $("#modal-Departamento").modal("show");
@@ -200,8 +200,8 @@
             });
 
             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-            $("#modalTitle").html("Eliminar Departamento");
-            $("#modalBody").html("<p>¿Está seguro de querer eliminar este Departamento?</p>");
+            $("#modalTitle").html("Eliminar Coordinación");
+            $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Coordinación?</p>");
             $("#modalFooter").html("").append(btnOk).append(btnDelete);
             $("#modal-Departamento").modal("show");
             return false;

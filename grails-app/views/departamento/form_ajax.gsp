@@ -7,7 +7,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Descripcion
+                Descripción
             </span>
         </div>
 
@@ -23,7 +23,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Direccion
+                Dirección
             </span>
         </div>
 
