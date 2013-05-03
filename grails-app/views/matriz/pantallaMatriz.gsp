@@ -95,9 +95,9 @@
 
         <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px;width: 100%;max-width: 100%;overflow-x: hidden">
             <div style="width: 1000px;overflow-x: auto;max-width: 1000px;" class="scroll-pane">
-                <table class="table table-bordered table-condensed  " style="width: ${cols.size() * 150 - 140}px;max-width: ${cols.size() * 150 - 140}px;float:left">
+                <table class="table table-bordered table-condensed  " style="width: ${cols.size() * 160-140}px;max-width: ${cols.size() * 160-140}px;float:left">
                     <thead>
-                        <tr style="font-size: 10px !important;">
+                        <tr style="font-size: 10px !important;" id="ht">
                             <th style="width: 30px;max-width: 30px;font-size: 12px !important" class="h_0">#</th>
                             <th style="width: 100px;;font-size: 12px !important" class="h_1">Código</th>
                             <th style="width: 300px !important;;font-size: 12px !important">Rubro</th>
@@ -208,7 +208,9 @@
             }
             function copiaTabla() {
                 var tabla = $('<table class="table table-bordered  table-condensed " id="tablaHeaders" style="width:140px;max-width: 140px;float: left">')
-                tabla.append('<thead><th style="width: 30px;max-width: 30px;font-size: 12px !important">#</th><th style="width: 100px;;font-size: 12px !important" >Código</th></thead>')
+                var ht = $("#ht").innerHeight()
+                $("#ht").css({"height" : ht})
+                tabla.append('<thead><tr style="height:'+ht+'px ;" ><th style="width: 30px;max-width: 30px;font-size: 12px !important">#</th><th style="width: 100px;;font-size: 12px !important" >Código</th></tr></thead>')
                 var body = $('<tbody id="body_headers">')
                 var cnt = 0;
                 $(".item_row").each(function () {
