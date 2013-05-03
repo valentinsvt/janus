@@ -29,7 +29,6 @@ class TramiteController extends janus.seguridad.Shield {
             /*mysql */
 
 
-            def foo = 'cheese'
             def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
 
             sql.eachRow("select * from docmaster where NMASTER= '${memo}'".toString()) {r->

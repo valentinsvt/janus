@@ -243,37 +243,55 @@
 </g:if>
 
 <g:else>
-    <g:form class="form-horizontal" name="frmSave-Planilla" action="saveOrdenPago">
-        <g:hiddenField name="id" value="${planillaInstance?.id}"/>
+    <div id="div_form" style="display: none">
+        <g:form class="form-horizontal" name="frmSave-Planilla" action="saveOrdenPago">
+            <g:hiddenField name="id" value="${planillaInstance?.id}"/>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha orden de pago
-                </span>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Fecha orden de pago
+                    </span>
+                </div>
+
+                <div class="controls">
+                    <elm:datepicker name="fechaOrdenPago" class="required" value=""  onSelect="igual"/>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
             </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaOrdenPago" class="required" value=""  onSelect="igual"/>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Memorando orden de pago
+                    </span>
+                </div>
+                <div class="controls">
+                    <g:textField name="memoOrdenPago" maxlength="20" id="memorandoOP" value="${planillaInstance?.memoOrdenPago}"/>
+                </div>
 
-                <p class="help-block ui-helper-hidden"></p>
             </div>
-        </div>
 
-        <div class="control-group">
-           <div>
-            <span class="control-label label label-inverse">
-                Memorando orden de pago
-            </span>
-           </div>
-          <div class="controls">
-          <g:textField name="memoOrdenPago" maxlength="20" value="${planillaInstance?.memoOrdenPago}"/>
-          </div>
-
-        </div>
-
-    </g:form>
+        </g:form>
+    </div>
 </g:else>
+
+<div class="modal grande hide fade " id="modal-tramite" style=";overflow: hidden;">
+    <div class="modal-header btn-info">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <h3 id="modalTitle">Iniciar tramite</h3>
+    </div>
+
+    <div class="modal-body" id="modalBody" style="height: 465px">
+
+    </div>
+
+    <div class="modal-footer" id="modalFooter">
+
+    </div>
+</div>
 
 <script type="text/javascript">
 
@@ -281,9 +299,38 @@
     });
 
     $("#btnPagar").click(function () {
+        $("#modal-tramite").modal("show");
         $(this).replaceWith(spinner);
-        $("#frmSave-Planilla").submit();
-        return false;
+        var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+        btnSave.click(function () {
+            if ($("#frmRegistrar-tramite").valid()) {
+                $(this).replaceWith(spinner);
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(controller:'tramites' , action:'registrar')}",
+                    data    : $("#frmRegistrar-tramite").serialize()+"&planilla=${planillaInstance.id}",
+                    success : function (msg) {
+                        if (msg == "OK") {
+
+                            window.location.reload(true)
+
+                        }
+                    }
+                });
+            }
+        });
+        $("#modalFooter").append(btnSave)
+        $.ajax({type : "POST", url : "${g.createLink(controller: 'tramites',action:'registro_ajax')}",
+            data     : "id=${rubro?.id}",
+            success  : function (msg) {
+
+                $("#modalBody").html(msg)
+            }
+        });
+//
+//        $("#dlgLoad").dialog("open")
+//        $("#frmSave-Planilla").submit();
+//        return false;
     });
 
     function igual() {

@@ -34,7 +34,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def saveOrdenPago(){
-        println "save orden pago "+params
+        println "save orden pago!! "+params
         def planilla = Planilla.get(params.id)
         planilla.fechaOrdenPago = new Date().parse("dd-MM-yyyy", params.fechaOrdenPago)
         planilla.memoOrdenPago = params.memoOrdenPago

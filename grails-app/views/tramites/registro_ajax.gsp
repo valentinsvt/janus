@@ -111,7 +111,7 @@
                 </div>
 
                 <div class="controls">
-                    <g:textField name="memo" class="required"/>
+                    <g:textField name="memo" class="required" id="memo"/>
 
                     <p class="help-block ui-helper-hidden"></p>
                 </div>

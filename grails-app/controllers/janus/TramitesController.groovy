@@ -312,6 +312,15 @@ class TramitesController {
             }
         }
 
+        if(params.planilla){
+            println "grabando planilla "+params.planilla
+            def planilla= janus.ejecucion.Planilla.get(params.planilla)
+            planilla.fechaOrdenPago=tramite.fecha
+            planilla.memoOrdenPago=tramite.memo
+           if(!planilla.save(flush: true))
+               println "errores "+planilla.errors
+        }
+
         if (errores == "") {
             errores = "OK"
         }
