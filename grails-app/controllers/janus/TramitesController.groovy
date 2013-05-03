@@ -312,13 +312,13 @@ class TramitesController {
             }
         }
 
-        if(params.planilla){
-            println "grabando planilla "+params.planilla
-            def planilla= janus.ejecucion.Planilla.get(params.planilla)
-            planilla.fechaOrdenPago=tramite.fecha
-            planilla.memoOrdenPago=tramite.memo
-           if(!planilla.save(flush: true))
-               println "errores "+planilla.errors
+        if (params.planilla) {
+            println "grabando planilla " + params.planilla
+            def planilla = janus.ejecucion.Planilla.get(params.planilla)
+            planilla.fechaOrdenPago = tramite.fecha
+            planilla.memoOrdenPago = tramite.memo
+            if (!planilla.save(flush: true))
+                println "errores " + planilla.errors
         }
 
         if (errores == "") {
@@ -326,6 +326,17 @@ class TramitesController {
         }
         render errores
     }
+
+    def show_ajax() {
+        def tramiteInstance = Tramite.get(params.id)
+        if (!tramiteInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Tramite con id " + params.id
+            redirect(action: "list")
+            return
+        }
+        [tramiteInstance: tramiteInstance]
+    } //show
 
     def registrar2() {
 //        println params

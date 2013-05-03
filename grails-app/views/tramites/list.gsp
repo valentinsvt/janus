@@ -26,6 +26,11 @@
         th {
             vertical-align : middle !important;
         }
+
+        .center {
+            text-align     : center !important;
+            vertical-align : middle !important;
+        }
         </style>
 
     </head>
@@ -77,6 +82,7 @@
                         <th></th>
                         <th>Estado</th>
                         <th>Tipo</th>
+                        <th>Memo</th>
                         <th>Envía</th>
                         <th>Recibe</th>
                         <th>CC</th>
@@ -116,6 +122,7 @@
                             <td class="alerta"></td>
                             <td>${tramite.estado.descripcion}</td>
                             <td>${tramite.tipoTramite.descripcion}</td>
+                            <td>${tramite.memo}</td>
                             <td class="${personaDe == usu ? 'activo' : ''}">${personaDe.nombre + " " + personaDe.apellido} (${personaDe.departamento.descripcion})</td>
                             <td class="${personaPara == usu ? 'activo' : ''}">${personaPara.nombre + " " + personaPara.apellido} (${personaPara.departamento.descripcion})</td>
                             <td>
@@ -129,7 +136,11 @@
                             <td><g:formatDate date="${tramite.fecha}" format="dd-MM-yyyy"/></td>
                             <td>${tramite.tipoTramite.tiempo} días</td>
                             <td><g:formatDate date="${fechaTope}" format="dd-MM-yyyy"/></td>
-                            <td>
+                            <td class="center">
+                                <a class="btn btn-small btn-show btn-ajax btnVer" href="#" rel="tooltip" title="Ver" data-id="${tramite.id}" style="margin-bottom: 5px;">
+                                    <i class="icon-zoom-in"></i>
+                                </a>
+
                                 <g:if test="${personaDe == usu}">
                                     <g:if test="${tramite.estado.codigo == 'P'}">
                                         <a href="#" class="btn btnEstado" data-tipo="F" data-id="${tramite.id}">Finalizar</a>
@@ -212,22 +223,16 @@
 
 
         <div id="tramiteDialog">
-
             <fieldset>
                 <div class="span3">
-
                     Elija la Obra:
-
                 </div>
 
                 <div class="span3">
-
                     <g:select name="selectObra" from="${janus.Tramite.findAllByObraIsNotNull().obra.unique()}" optionKey="id" optionValue="descripcion" style="width: 370px"/>
                 </div>
-
             </fieldset>
         </div>
-
 
         <script type="text/javascript">
             $(function () {
@@ -260,6 +265,26 @@
                             $("#modalTitle-new").html("Crear trámite");
                             $("#modalBody-new").html(msg);
                             $("#modalFooter-new").html("").append(btnCancel).append(btnSave);
+                            $("#modal-new").modal("show");
+                        }
+                    });
+                    return false;
+                });
+                $(".btnVer").click(function () {
+                    var id = $(this).data("id");
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'show_ajax')}",
+                        data    : {
+                            id : id
+                        },
+                        success : function (msg) {
+                            $("#modal-confirm").modal("hide");
+                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
+
+                            $("#modalTitle-new").html("Ver trámite");
+                            $("#modalBody-new").html(msg);
+                            $("#modalFooter-new").html("").append(btnCancel);
                             $("#modal-new").modal("show");
                         }
                     });

@@ -1,9 +1,7 @@
 package janus
 
-import org.springframework.dao.DataIntegrityViolationException
-
 import groovy.sql.Sql
-
+import org.springframework.dao.DataIntegrityViolationException
 
 class TramiteController extends janus.seguridad.Shield {
 
@@ -19,56 +17,56 @@ class TramiteController extends janus.seguridad.Shield {
     } //list
 
 
-    def verTramites(){
+    def verTramites() {
 //        params.id="MEM-132-DGES-13"
         def memo = params.id
-        def header=[:]
+        def header = [:]
         def tramites = []
 
         try {
             /*mysql */
 
 
-            def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
+            def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root", "svt2579", "com.mysql.jdbc.Driver")
 
-            sql.eachRow("select * from docmaster where NMASTER= '${memo}'".toString()) {r->
-                header.put("NMASTER",r["NMASTER"])
-                header.put("MFECHA",r["MFECHA"])
-                header.put("MPRIORI",r["MPRIORI"])
-                header.put("MDE",r["MDE"])
-                header.put("MPARA",r["MPARA"])
-                header.put("MASUNTO",r["MASUNTO"])
+            sql.eachRow("select * from docmaster where NMASTER= '${memo}'".toString()) { r ->
+                header.put("NMASTER", r["NMASTER"])
+                header.put("MFECHA", r["MFECHA"])
+                header.put("MPRIORI", r["MPRIORI"])
+                header.put("MDE", r["MDE"])
+                header.put("MPARA", r["MPARA"])
+                header.put("MASUNTO", r["MASUNTO"])
             }
-            sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) {r->
-                def tmp =[:]
-                tmp.put("NMASTER",r["NMASTER"])
-                tmp.put("NTRAMITE",r["NTRAMITE"])
-                tmp.put("TFECHA",r["TFECHA"])
-                tmp.put("TFLIMITE",r["TFLIMITE"])
-                tmp.put("TASUNTO",r["TASUNTO"])
-                tmp.put("TRECIBIDO",r["TRECIBIDO"])
-                tmp.put("TFRECEP",r["TFRECEP"])
+            sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) { r ->
+                def tmp = [:]
+                tmp.put("NMASTER", r["NMASTER"])
+                tmp.put("NTRAMITE", r["NTRAMITE"])
+                tmp.put("TFECHA", r["TFECHA"])
+                tmp.put("TFLIMITE", r["TFLIMITE"])
+                tmp.put("TASUNTO", r["TASUNTO"])
+                tmp.put("TRECIBIDO", r["TRECIBIDO"])
+                tmp.put("TFRECEP", r["TFRECEP"])
                 tramites.add(tmp)
             }
             sql.close()
-        }catch ( e) {
-            println "error "+e
+        } catch (e) {
+            println "error " + e
             e.printStackTrace()
         }
-        [memo:memo,header:header,tramites:tramites]
+        [memo: memo, header: header, tramites: tramites]
     }
 
-    def cargarDatos(){
-        try{
-            def command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /media/docmaster.DBF"
+    def cargarDatos() {
+        try {
+            def command = "dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /media/docmaster.DBF"
             def proc = command.execute()
             proc.waitFor()
-            command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
+            command = "dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
             proc = command.execute()
             proc.waitFor()
             println "fin comandos"
             render "ok"
-        }catch(e){
+        } catch (e) {
             render "Error. El archivo DBF no se encuentra disponible, comunique este error al administrador del sistema."
         }
     }
@@ -111,7 +109,7 @@ class TramiteController extends janus.seguridad.Shield {
             str += "<ul>"
             tramiteInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
