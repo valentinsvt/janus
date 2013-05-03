@@ -53,14 +53,20 @@
 
             <g:if test="${finalizados == 'S'}">
                 <g:link action="list" params="[finalizados: 'N']" class="btn btn-ajax btn-new">
+                    <i class="icon-ok"></i>
                     Ocultar finalizados
                 </g:link>
             </g:if>
             <g:else>
                 <g:link action="list" params="[finalizados: 'S']" class="btn btn-ajax btn-new">
+                    <i class="icon-ok"></i>
                     Mostrar finalizados
                 </g:link>
             </g:else>
+            <a href="#" class="btn btn-ajax btn-new" id="btnNew">
+                <i class="icon-file"></i>
+                Nuevo trámite
+            </a>
         </div>
 
 
@@ -225,6 +231,41 @@
 
         <script type="text/javascript">
             $(function () {
+
+                $("#btnNew").click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'registro_ajax')}",
+                        success : function (msg) {
+                            $("#modal-confirm").modal("hide");
+                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                if ($("#frmRegistrar-tramite").valid()) {
+                                    $(this).replaceWith(spinner);
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'registrar')}",
+                                        data    : $("#frmRegistrar-tramite").serialize(),
+                                        success : function (msg) {
+                                            if (msg == "OK") {
+                                                location.reload(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+
+                            $("#modalTitle-new").html("Crear trámite");
+                            $("#modalBody-new").html(msg);
+                            $("#modalFooter-new").html("").append(btnCancel).append(btnSave);
+                            $("#modal-new").modal("show");
+                        }
+                    });
+                    return false;
+                });
+
                 $(".btnEstado").click(function () {
                     $(this).replaceWith(spinner);
                     var tipo = $(this).data("tipo");
@@ -312,8 +353,6 @@
                 });
             });
 
-
-
             $("#imprimirProcesos").click(function () {
 
                 location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistroTramite')}";
@@ -326,7 +365,6 @@
 
             });
 
-
             $("#tramiteDialog").dialog({
 
                 autoOpen  : false,
@@ -338,7 +376,7 @@
                 position  : 'center',
                 title     : 'Seleccione una Obra',
                 buttons   : {
-                    "Aceptar" : function () {
+                    "Aceptar"     : function () {
 
                         var obra = $("#selectObra").val();
 
@@ -347,7 +385,6 @@
                         $("#tramiteDialog").dialog("close");
 
                     }, "Cancelar" : function () {
-
 
                         $("#tramiteDialog").dialog("close");
 
