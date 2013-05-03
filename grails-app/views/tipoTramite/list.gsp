@@ -96,7 +96,7 @@
 
         </div>
 
-        <div class="modal hide fade" id="modal-TipoTramite">
+        <div class="modal hide mediumModal fade" id="modal-TipoTramite">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>

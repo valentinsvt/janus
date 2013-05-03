@@ -1,5 +1,6 @@
 package janus
 
+import groovy.json.JsonBuilder
 import org.springframework.dao.DataIntegrityViolationException
 
 class TipoTramiteController extends janus.seguridad.Shield {
@@ -14,10 +15,49 @@ class TipoTramiteController extends janus.seguridad.Shield {
         [tipoTramiteInstanceList: TipoTramite.list(params), params: params]
     } //list
 
+    def addDep() {
+        def dep = new DepartamentoTramite([
+                tipoTramite: TipoTramite.get(params.tipo.toLong()),
+                rolTramite: RolTramite.get(params.rol.toLong()),
+                departamento: Departamento.get(params.dep.toLong())
+        ])
+
+        if (dep.save(flush: true)) {
+            render "OK_" + dep.id
+        } else {
+            println "Error al guardar tipo tramite - rol - departamento: " + dep.errors
+            render "NO"
+        }
+    }
+
+    def delDep() {
+        def dep = DepartamentoTramite.get(params.id.toLong())
+        def ok = "OK"
+        try {
+            dep.delete(flush: true)
+        } catch (e) {
+            println e
+            ok = "NO"
+        }
+        render ok
+    }
+
     def departamentos_ajax() {
         def tipoTramite = TipoTramite.get(params.tramite.toLong())
 
-        return [tipoTramite: tipoTramite]
+        def dps = []
+        DepartamentoTramite.findAllByTipoTramite(tipoTramite).each { dep ->
+            dps.add([
+                    id: dep.id,
+                    departamento: dep.departamento.descripcion,
+                    departamento_id: dep.departamentoId,
+                    rol: dep.rolTramite.descripcion,
+                    rol_id: dep.rolTramiteId
+            ])
+        }
+        def json = new JsonBuilder(dps)
+
+        return [tipoTramite: tipoTramite, departamentos: json]
     }
 
     def form_ajax() {
