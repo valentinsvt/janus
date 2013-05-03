@@ -14,14 +14,20 @@ class TipoTramiteController extends janus.seguridad.Shield {
         [tipoTramiteInstanceList: TipoTramite.list(params), params: params]
     } //list
 
+    def departamentos_ajax() {
+        def tipoTramite = TipoTramite.get(params.tramite.toLong())
+
+        return [tipoTramite: tipoTramite]
+    }
+
     def form_ajax() {
         def tipoTramiteInstance = new TipoTramite(params)
-        if(params.id) {
+        if (params.id) {
             tipoTramiteInstance = TipoTramite.get(params.id)
-            if(!tipoTramiteInstance) {
+            if (!tipoTramiteInstance) {
                 flash.clase = "alert-error"
-                flash.message =  "No se encontró Tipo Tramite con id " + params.id
-                redirect(action:  "list")
+                flash.message = "No se encontró Tipo Tramite con id " + params.id
+                redirect(action: "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,9 +36,9 @@ class TipoTramiteController extends janus.seguridad.Shield {
 
     def save() {
         def tipoTramiteInstance
-        if(params.id) {
+        if (params.id) {
             tipoTramiteInstance = TipoTramite.get(params.id)
-            if(!tipoTramiteInstance) {
+            if (!tipoTramiteInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Tipo Tramite con id " + params.id
                 redirect(action: 'list')
@@ -50,7 +56,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
             str += "<ul>"
             tipoTramiteInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -62,7 +68,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
             return
         }
 
-        if(params.id) {
+        if (params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Tipo Tramite " + tipoTramiteInstance.id
         } else {
@@ -76,7 +82,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
         def tipoTramiteInstance = TipoTramite.get(params.id)
         if (!tipoTramiteInstance) {
             flash.clase = "alert-error"
-            flash.message =  "No se encontró Tipo Tramite con id " + params.id
+            flash.message = "No se encontró Tipo Tramite con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +93,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
         def tipoTramiteInstance = TipoTramite.get(params.id)
         if (!tipoTramiteInstance) {
             flash.clase = "alert-error"
-            flash.message =  "No se encontró Tipo Tramite con id " + params.id
+            flash.message = "No se encontró Tipo Tramite con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +101,12 @@ class TipoTramiteController extends janus.seguridad.Shield {
         try {
             tipoTramiteInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message =  "Se ha eliminado correctamente Tipo Tramite " + tipoTramiteInstance.id
+            flash.message = "Se ha eliminado correctamente Tipo Tramite " + tipoTramiteInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message =  "No se pudo eliminar Tipo Tramite " + (tipoTramiteInstance.id ? tipoTramiteInstance.id : "")
+            flash.message = "No se pudo eliminar Tipo Tramite " + (tipoTramiteInstance.id ? tipoTramiteInstance.id : "")
             redirect(action: "list")
         }
     } //delete

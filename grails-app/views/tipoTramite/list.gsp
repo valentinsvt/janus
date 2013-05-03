@@ -56,7 +56,7 @@
 
                         <g:sortableColumn property="requiereRespuesta" title="Requiere Respuesta"/>
 
-                        <th width="150">Acciones</th>
+                        <th width="160">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
@@ -69,11 +69,11 @@
 
                             <td>${fieldValue(bean: tipoTramiteInstance, field: "padre")}</td>
 
-                            <td>${fieldValue(bean: tipoTramiteInstance, field: "tiempo")}</td>
+                            <td>${fieldValue(bean: tipoTramiteInstance, field: "tiempo")} días</td>
 
-                            <td>${fieldValue(bean: tipoTramiteInstance, field: "tipo")}</td>
+                            <td>${tipoTramiteInstance.tipo == 'O' ? 'Obra' : 'Contrato'}</td>
 
-                            <td>${fieldValue(bean: tipoTramiteInstance, field: "requiereRespuesta")}</td>
+                            <td>${tipoTramiteInstance.requiereRespuesta == 'S' ? 'Sí' : 'No'}</td>
 
                             <td>
                                 <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoTramiteInstance.id}">
@@ -82,7 +82,9 @@
                                 <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${tipoTramiteInstance.id}">
                                     <i class="icon-pencil icon-large"></i>
                                 </a>
-
+                                <a class="btn btn-small btn-dep btn-ajax" href="#" rel="tooltip" title="Departamentos" data-id="${tipoTramiteInstance.id}">
+                                    <i class="icon-group icon-large"></i>
+                                </a>
                                 <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${tipoTramiteInstance.id}">
                                     <i class="icon-trash icon-large"></i>
                                 </a>
@@ -172,6 +174,33 @@
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
                             $("#modalTitle").html("Editar Tipo Tramite");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-TipoTramite").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn edit
+
+                $(".btn-dep").click(function () {
+                    var id = $(this).data("id");
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'departamentos_ajax')}",
+                        data    : {
+                            tramite : id
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                            $("#modalTitle").html("Departamentos de Tipo Tramite");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoTramite").modal("show");

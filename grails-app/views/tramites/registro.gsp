@@ -39,7 +39,7 @@
         </div>
 
         <div id="registra-tramite" class="span12" role="main" style="margin-top: 10px;">
-            <g:form class="form-horizontal" name="frmRegistrar-tramite" action="registrar">
+            <g:form class="form-horizontal" name="frmRegistrar-tramite" action="registrar2">
                 <div class="control-group">
                     <div>
                         <span class="control-label label label-inverse">

@@ -56,7 +56,11 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="tiempo" class=" required" value="${fieldValue(bean: tipoTramiteInstance, field: 'tiempo')}"/>
+            <div class="input-append">
+                <g:field type="number" name="tiempo" class=" required digits span1" value="${fieldValue(bean: tipoTramiteInstance, field: 'tiempo')}"/>
+                <span class="add-on">días</span>
+            </div>
+
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>

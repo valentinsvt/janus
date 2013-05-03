@@ -318,6 +318,56 @@ class TramitesController {
         render errores
     }
 
+    def registrar2() {
+//        println params
+
+        if (params.fecha) {
+            params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        }
+
+        def tipo = params.hddTipo
+        def p = tipo.split("_")
+//        println ">>" + p
+        if (p[0] == "ob") {
+            params.obra = Obra.get(p[1].toLong())
+        } else if (p[0] == "cn") {
+            params.contrato = Contrato.get(p[1].toLong())
+        }
+//        println params
+        def errores = ""
+
+        params.estado = EstadoTramite.findByCodigo("C")
+
+        def tramite = new Tramite(params)
+        if (!tramite.save(flush: true)) {
+            println "Error al guardar el tramite: "
+            println tramite.errors
+            errores += "<li>Ha ocurrido un error al guardar el trámite</li>"
+        }
+
+        def personas = params.findAll { it.key.contains("persona") }
+        personas.each { key, val ->
+            def parts = key.split("_")
+            def rolId = parts[1]
+            def rol = RolTramite.get(rolId.toLong())
+            def personaTramite = new PersonasTramite([
+                    tramite: tramite,
+                    rolTramite: rol,
+                    persona: Persona.get(val.toLong())
+            ])
+            if (!personaTramite.save(flush: true)) {
+                println "Error al guardar persona tramite: "
+                println personaTramite.errors
+                errores += "<li>Ha ocurrido un error al guardar el trámite</li>"
+            }
+        }
+
+        if (errores == "") {
+            errores = "OK"
+        }
+        redirect(action: "list")
+    }
+
     def list() {
         def usu = Persona.get(session.usuario.id)
 
