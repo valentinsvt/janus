@@ -22,7 +22,23 @@ class PersonaRolController extends janus.seguridad.Shield {
     }
 
 
+    def getPersonas () {
+
+        def departamento = Departamento.get(params.id)
+
+        def personas = Persona.findAllByDepartamento(departamento)
+
+
+        return [personas : personas]
+
+
+
+    }
+
+
     def obtenerFuncion (){
+
+
 
         def persona = Persona.get(params.id);
 

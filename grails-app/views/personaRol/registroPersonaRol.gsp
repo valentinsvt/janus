@@ -19,9 +19,16 @@
 
 <div class="span6">
 
-    <div class="span1" style="font-weight: bold">Persona:</div>
-    <g:select name="persona.id" class="persona" from="${janus.Persona?.list()}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"
-              style="width: 300px"/>
+    <div class="span1" style="font-weight: bold">Dirección:</div>
+
+
+    <g:select name="departamento" class="departamento" from="${janus.Departamento.list()}" optionValue="descripcion" optionKey="id" style="width: 300px" noSelection="['-1':'-Escoja el departamento-']"/>
+
+    <div class="span12" id="filaPersonas"></div>
+
+    %{--<div class="span1" style="font-weight: bold">Persona:</div>--}%
+    %{--<g:select name="persona.id" class="persona" from="${janus.Persona?.list()}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"--}%
+              %{--style="width: 300px"/>--}%
 
 
     <div class="span6" style="width: 500px">
@@ -72,78 +79,78 @@
 
 <script type="text/javascript">
 
-    //borrar
-    function borrar($btn) {
-        var tr = $btn.parents("tr");
-        var idRol = $btn.attr("id");
+    %{--//borrar--}%
+    %{--function borrar($btn) {--}%
+        %{--var tr = $btn.parents("tr");--}%
+        %{--var idRol = $btn.attr("id");--}%
 
-        $.box({
-            imageClass: "box_info",
-            text      : "Esta seguro que desea eliminar esta función de la persona seleccionada?",
-            title     : "Confirmación",
-            iconClose : false,
-            dialog    : {
-                resizable    : false,
-                draggable    : false,
-                closeOnEscape: false,
-                buttons      : {
-                    "Aceptar" : function () {
-                        $.ajax({
-                            type: "POST",
-                            url: "${g.createLink(controller: "personaRol", action: 'delete')}",
-                            data: { id:idRol},
-                            success: function (msg) {
-                                if(msg == "OK") {
-                                    tr.remove();
-                                }
-                            }
+        %{--$.box({--}%
+            %{--imageClass: "box_info",--}%
+            %{--text      : "Esta seguro que desea eliminar esta función de la persona seleccionada?",--}%
+            %{--title     : "Confirmación",--}%
+            %{--iconClose : false,--}%
+            %{--dialog    : {--}%
+                %{--resizable    : false,--}%
+                %{--draggable    : false,--}%
+                %{--closeOnEscape: false,--}%
+                %{--buttons      : {--}%
+                    %{--"Aceptar" : function () {--}%
+                        %{--$.ajax({--}%
+                            %{--type: "POST",--}%
+                            %{--url: "${g.createLink(controller: "personaRol", action: 'delete')}",--}%
+                            %{--data: { id:idRol},--}%
+                            %{--success: function (msg) {--}%
+                                %{--if(msg == "OK") {--}%
+                                    %{--tr.remove();--}%
+                                %{--}--}%
+                            %{--}--}%
 
-                        });
-                    },
-                    "Cancelar": function () {
-
-
-                    }
-                }
-            }
-        });
-    }
-
-    cargarFuncion();
-
-    $(".persona").change(function () {
+                        %{--});--}%
+                    %{--},--}%
+                    %{--"Cancelar": function () {--}%
 
 
-        cargarFuncion();
+                    %{--}--}%
+                %{--}--}%
+            %{--}--}%
+        %{--});--}%
+    %{--}--}%
 
-    });
+    %{--cargarFuncion();--}%
 
-    function cargarFuncion () {
-
-        var idPersona = $(".persona").val();
-
-
-
-        $.ajax({
-            type: "POST",
-            url: "${g.createLink(action: 'obtenerFuncion')}",
-            data : { id: idPersona
-
-            } ,
-
-            success: function (msg) {
-
-                $("#funcionPersona").html(msg);
+    %{--$(".persona").change(function () {--}%
 
 
-            }
+        %{--cargarFuncion();--}%
 
+    %{--});--}%
 
-        });
+    %{--function cargarFuncion () {--}%
+
+        %{--var idPersona = $(".persona").val();--}%
 
 
 
-    }
+        %{--$.ajax({--}%
+            %{--type: "POST",--}%
+            %{--url: "${g.createLink(action: 'obtenerFuncion')}",--}%
+            %{--data : { id: idPersona--}%
+
+            %{--} ,--}%
+
+            %{--success: function (msg) {--}%
+
+                %{--$("#funcionPersona").html(msg);--}%
+
+
+            %{--}--}%
+
+
+        %{--});--}%
+
+
+
+    %{--}--}%
 
     $("#adicionar").click(function () {
 
@@ -216,6 +223,36 @@
     $("#regresar").click(function () {
 
        location.href = "${createLink(controller: 'persona', action: 'list')}";
+
+
+    });
+
+    function loadPersonas() {
+                var idDep = $("#departamento").val();
+
+//                        console.log("dep-->>" + idDep)
+                $.ajax({
+                    type    : "POST",
+                    url     : "${g.createLink(controller: 'personaRol', action:'getPersonas')}",
+                    data    : {id : idDep
+
+                    },
+                    success : function (msg) {
+
+                        $("#filaPersonas").html(msg);
+                    }
+                });
+    }
+
+
+    $("#departamento").change(function () {
+
+        if($("#departamento").val() != -1){
+
+            loadPersonas();
+
+
+        }
 
 
     });
