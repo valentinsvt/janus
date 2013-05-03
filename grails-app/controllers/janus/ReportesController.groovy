@@ -1446,7 +1446,10 @@ class ReportesController {
 
     def reporteRegistroTramitexObra() {
 
-        def obra = Obra.get(1417)
+
+//        println("params" + params)
+
+        def obra = Obra.get(params.idObra)
 
         def usuario = session.usuario
 
@@ -1488,12 +1491,13 @@ class ReportesController {
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
         Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         times8boldWhite.setColor(Color.WHITE)
         times10boldWhite.setColor(Color.WHITE)
         def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal]
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
 
         Document document
         document = new Document(PageSize.A4);
@@ -1514,7 +1518,18 @@ class ReportesController {
         headers.add(new Paragraph("TRÁMITES POR OBRA"))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
-        headers.add(new Paragraph(" ", times10bold));
+//        headers.add(new Paragraph(" ", times10bold));
+
+
+        Paragraph txtObra = new Paragraph();
+        addEmptyLine(txtObra, 1);
+        txtObra.setAlignment(Element.ALIGN_LEFT);
+
+        txtObra.add(new Paragraph("Obra: " + obra?.nombre, times10normal))
+        txtObra.add(new Paragraph("Código: " + obra?.codigo , times10normal))
+        txtObra.add(new Paragraph("Estado de la Obra: " + obra?.estadoObra , times10normal))
+        txtObra.add(new Paragraph("Departamento: " + obra?.departamento , times10normal))
+        txtObra.add(new Paragraph(" "))
 
         PdfPTable tablaVolObra = new PdfPTable(8);
         tablaVolObra.setWidthPercentage(100);
@@ -1553,6 +1568,7 @@ class ReportesController {
         }
 
         document.add(headers)
+        document.add(txtObra)
         document.add(tablaVolObra)
 
 
