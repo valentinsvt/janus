@@ -94,14 +94,14 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def coeficientes() {
-//        println "coef " + params
+        println "coef " + params
 
         if (!params.tipo) {
             params.tipo = 'p'
         }
 
         if (params.tipo == 'p') {
-            params.filtro = "1,3"
+            params.filtro = "1"
         } else if (params.tipo == 'c') {
             params.filtro = '2'
         }
@@ -185,22 +185,14 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     "  i.item__id                            iid,\n" +
                     "  i.itemcdgo                            codigo,\n" +
                     "  i.itemnmbr                            item,\n" +
-                    "  v.voitcoef                            aporte,\n" +
-                    "  d.dprtdscr                            departamento,\n" +
-                    "  s.sbgrdscr                            subgrupo,\n" +
-                    "  g.grpodscr                            grupo,\n" +
-                    "  g.grpo__id                            grid  \n" +
+                    "  v.voitcoef                            aporte\n" +
                     "FROM vlobitem v\n" +
                     "  INNER JOIN item i ON v.item__id = i.item__id\n" +
-                    "  INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
-                    "  INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
-                    "  INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.filtro})\n" +
-                    "WHERE v.obra__id = ${obra.id}\n" +
-                    "  AND v.item__id NOT IN (SELECT\n" +
-                    "                           t.item__id\n" +
-                    "                         FROM itfp t\n" +
-                    "                           INNER JOIN fpob f ON t.fpob__id = f.fpob__id AND f.obra__id = ${obra.id});"
+                    "WHERE v.obra__id = ${obra.id} AND voitgrpo IN (${params.filtro})\n and v.item__id NOT IN (SELECT\n" +
+                    "      t.item__id FROM itfp t\n" +
+                    "      INNER JOIN fpob f ON t.fpob__id = f.fpob__id AND f.obra__id = ${obra.id});"
 
+            println "SQL items: " + sql
             def rows = cn.rows(sql.toString())
 
             [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total]
@@ -213,23 +205,32 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def cn2 = dbConnectionService.getConnection()
         def updates = dbConnectionService.getConnection()
-        def sql = "SELECT v.voit__id,v.obra__id,v.item__id,v.voitpcun,v.voitcntd,v.voitcoef,v.voitordn,v.voittrnp,v.voitrndm,i.itemnmbr,i.dprt__id,d.sbgr__id,s.grpo__id,o.clmndscr,o.clmncdgo from vlobitem v,dprt d,sbgr s,item i,mfcl o where v.item__id=i.item__id and i.dprt__id=d.dprt__id and d.sbgr__id=s.sbgr__id  and o.clmndscr = i.itemcmpo || '_T'  and  v.obra__id = ${params.obra} and o.obra__id=${params.obra} order by s.grpo__id"
-//        println "sql "+sql
+        def sql = "SELECT v.voit__id, v.obra__id, v.item__id, v.voitpcun, v.voitcntd, v.voitcoef, " +
+                "v.voitordn, v.voittrnp, v.voitrndm, i.itemnmbr, i.dprt__id, d.sbgr__id, " +
+                "s.grpo__id, o.clmndscr, o.clmncdgo " +
+                "from vlobitem v, dprt d, sbgr s, item i, mfcl o " +
+                "where v.item__id = i.item__id and i.dprt__id = d.dprt__id and " +
+                "d.sbgr__id = s.sbgr__id and o.clmndscr = i.itemcmpo || '_T' and " +
+                "v.obra__id = ${params.obra} and o.obra__id=${params.obra} " +
+                "order by s.grpo__id"
+        println "insertarVolumenesItem sql: "+sql
         cn.eachRow(sql.toString()) { r ->
-//            println "r-> "+r
+            println "r-> "+r
             def codigo = ""
             if (r['grpo__id'] == 1 || r['grpo__id'] == 3)
                 codigo = "sS3"
             else
                 codigo = "sS5"
             def select = "select valor from mfvl where clmncdgo=${r['clmncdgo']} and codigo='${codigo}' and obra__id =${params.obra} "
-            def valor = 0
+            println "cn2: " + select
+            def valor = 0.000000
             cn2.eachRow(select.toString()) { r2 ->
 //                println "r2 "+r2
                 valor = r2['valor']
                 if (!valor)
                     valor = 0
                 def sqlUpdate = "update vlobitem set voitcoef= ${valor} where voit__id = ${r['voit__id']}"
+                println "actualiza vlobitem con: " + sqlUpdate
                 updates.execute(sqlUpdate.toString())
             }
         }

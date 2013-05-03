@@ -175,7 +175,7 @@
                                         ${r.item}
                                     </td>
                                     <td class="numero">
-                                        <g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="3" minFractionDigits="3" format="##,###0" locale='ec'/>
+                                        <g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="5" minFractionDigits="5" format="##,###0" locale='ec'/>
                                     </td>
                                 </tr>
                             </g:each>

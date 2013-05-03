@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Tipo Tramites
+            Lista de Tipo Trámites
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Tipo Tramite
+                    Crear  Tipo Trámite
                 </a>
             </div>
 
@@ -44,9 +44,9 @@
                 <thead>
                     <tr>
 
-                        <g:sortableColumn property="codigo" title="Codigo"/>
+                        <g:sortableColumn property="codigo" title="Código"/>
 
-                        <g:sortableColumn property="descripcion" title="Descripcion"/>
+                        <g:sortableColumn property="descripcion" title="Descripción"/>
 
                         <th>Padre</th>
 
@@ -146,7 +146,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Tipo Tramite");
+                            $("#modalTitle").html("Crear Tipo Trámite");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoTramite").modal("show");
@@ -173,7 +173,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Tipo Tramite");
+                            $("#modalTitle").html("Editar Tipo Trámite");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoTramite").modal("show");
@@ -200,7 +200,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Departamentos de Tipo Tramite");
+                            $("#modalTitle").html("Departamentos de Tipo Trámite");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoTramite").modal("show");
@@ -242,7 +242,7 @@
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Tipo Tramite");
+                    $("#modalTitle").html("Eliminar Tipo Trámite");
                     $("#modalBody").html("<p>¿Está seguro de querer eliminar este Tipo Tramite?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-TipoTramite").modal("show");
