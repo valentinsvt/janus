@@ -98,14 +98,14 @@
                 <table class="table table-bordered table-condensed  " style="width: ${cols.size() * 160-140}px;max-width: ${cols.size() * 160-140}px;float:left">
                     <thead>
                         <tr style="font-size: 10px !important;" id="ht">
-                            <th style="width: 30px;max-width: 30px;font-size: 12px !important" class="h_0">#</th>
-                            <th style="width: 100px;;font-size: 12px !important" class="h_1">Código</th>
+                            <th style="width: 20px;max-width: 30px;font-size: 12px !important" class="h_0">#</th>
+                            <th style="width: 80px;;font-size: 12px !important" class="h_1">Código</th>
                             <th style="width: 300px !important;;font-size: 12px !important">Rubro</th>
-                            <th style="width: 40px;;font-size: 12px !important">Unidad</th>
-                            <th style="width: 70px;;font-size: 12px !important">Cantidad</th>
+                            <th style="width: 30px;;font-size: 12px !important">Unidad</th>
+                            <th style="width: 60px;;font-size: 12px !important">Cantidad</th>
                             <g:each in="${cols}" var="c" status="k">
                                 <g:if test="${c[2] != 'R'}">
-                                    <th style="width: 150px;font-size: 12px !important" class="col_${k}" col="${k}">${c[1]}</th>
+                                    <th style="width: 80px;font-size: 12px !important" class="col_${k}" col="${k}">${c[1]}</th>
                                 </g:if>
                             </g:each>
                         </tr>
@@ -125,14 +125,14 @@
             <table class="table table-bordered table-condensed  " style="width: ${cols.size() * 150 - 140}px;max-width: ${cols.size() * 150 - 140}px;float:left">
                 <thead>
                     <tr style="font-size: 10px !important;">
-                        <th style="width: 30px;max-width: 30px;font-size: 12px !important" class="h_0">#</th>
-                        <th style="width: 100px;;font-size: 12px !important" class="h_1">Código</th>
+                        <th style="width: 20px;max-width: 30px;font-size: 12px !important" class="h_0">#</th>
+                        <th style="width: 80px;;font-size: 12px !important" class="h_1">Código</th>
                         <th style="width: 300px !important;;font-size: 12px !important">Rubro</th>
-                        <th style="width: 40px;;font-size: 12px !important">Unidad</th>
-                        <th style="width: 70px;;font-size: 12px !important">Cantidad</th>
+                        <th style="width: 30px;;font-size: 12px !important">Unidad</th>
+                        <th style="width: 60px;;font-size: 12px !important">Cantidad</th>
                         <g:each in="${cols}" var="c">
                             <g:if test="${c[2] != 'R'}">
-                                <th style="width: 150px;font-size: 12px !important">${c[1]}</th>
+                                <th style="width: 80px;font-size: 12px !important">${c[1]}</th>
                             </g:if>
                         </g:each>
                     </tr>

@@ -9,7 +9,7 @@ class MatrizController extends janus.seguridad.Shield {
 
 
     def coeficientes(){
-        println "coef "+params
+        //println "coef "+params
         def obra = Obra.get(params.id)
         def fp = FormulaPolinomica.findAllByObra(obra,[order:"numero"])
         [obra:obra,fp:fp]
@@ -26,7 +26,7 @@ class MatrizController extends janus.seguridad.Shield {
             def col=r[1]
             if(r[2]!="R"){
                 def parts = col.split("_")
-                println "parts "+parts
+                //println "parts "+parts
                 def num
                 try{
                     col=parts[0].toLong()
@@ -35,8 +35,8 @@ class MatrizController extends janus.seguridad.Shield {
                 }catch (e){
                     col=parts[0]
                 }
-                if(col!="TOTAL")
-                    col=col+" "+parts[1]?.replaceAll("T","TOTAL")?.replaceAll("U","UNITARIO")
+
+                col = col + " " + parts[1]?.replaceAll("T","<br/>Total")?.replaceAll("U","<br/>Unitario")
             }
 
             columnas.add([r[0],col,r[2]])
@@ -45,7 +45,7 @@ class MatrizController extends janus.seguridad.Shield {
     }
 
     def matrizPolinomica(){
-        println "matriz "+params
+        //println "matriz "+params
         def obra = params.id
         def offset = params.inicio
         if (!offset)
@@ -64,7 +64,7 @@ class MatrizController extends janus.seguridad.Shield {
             columnas.add([r[0],r[1],r[2]])
         }
         sql ="SELECT * from mfrb where obra__id =${obra} order by orden limit ${limit} offset ${offset}"
-        println "sql desc "+sql
+        //println "sql desc "+sql
         def cont = offset+1
         cn.eachRow(sql.toString()){r->
             def tmp = [cont,r[0].trim(),r[2],r[3],r[4]]
@@ -131,10 +131,10 @@ class MatrizController extends janus.seguridad.Shield {
                     fpx.numero="p0"+(it+1)
                     if (it==0){
                         fpx.indice=indiMano
-                        def select = "select clmncdgo from mfcl where clmndscr = 'MANO_OBRA_T' and obra__id = ${params.obra} "
+                        def select = "select clmncdgo from mfcl where clmndscr = 'MANO DE OBRA_T' and obra__id = ${params.obra} "
                         def columna
                         def valor = 0
-                        println "sql it 0 mfcl "+select
+                        //println "sql it 0 mfcl "+select
                         cn.eachRow(select.toString()){r->
                             columna=r[0]
                         }
@@ -157,7 +157,7 @@ class MatrizController extends janus.seguridad.Shield {
                     fpx.valor=0
                 }
                 if (!fpx.save(flush: true))
-                    println "erroe save fpx "+fpx.errors
+                    println "error save fpx "+fpx.errors
 
                 if(it<10){
                     def cuadrilla = new FormulaPolinomica()

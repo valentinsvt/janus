@@ -2,12 +2,15 @@ package janus
 
 class ObraFPController {
     def dbConnectionService
+    //static ArrayList rg_cmpo = []
     def rg_cmpo = []
     def numeroCampos = 0
     def id_equipo = 0
     def id_repuestos = 0
     def id_combustible = 0
     def id_saldo = 0
+    def id_mecanico = 0
+    def id_herramientas = 0
 
     def index() {}
 
@@ -19,25 +22,37 @@ class ObraFPController {
             id_equipo = row.item__id
             cont = true
         }
-        if (!cont) er += "No se ha registrado el item EQUIPO"
+        if (!cont) er += "No se ha registrado el item EQUIPO: 'EQPO'"
 
         cn.eachRow("select item__id from item where itemcdgo = 'REP'") { row ->
             id_repuestos = row.item__id
             cont = true
         }
-        if (!cont) er += "No se ha registrado el item REPUESTOS"
+        if (!cont) er += "No se ha registrado el item REPUESTOS: 'REP'"
 
         cn.eachRow("select item__id from item where itemcdgo = 'COMB'") { row ->
             id_combustible = row.item__id
             cont = true
         }
-        if (!cont) er += "No se ha registrado el item COMBUSTIBLE"
+        if (!cont) er += "No se ha registrado el item COMBUSTIBLE: 'COMB'"
 
         cn.eachRow("select item__id from item where itemcdgo = 'SLDO'") { row ->
             id_saldo = row.item__id
             cont = true
         }
-        if (!cont) er += "No se ha registrado el item SALDO"
+        if (!cont) er += "No se ha registrado el item SALDO: 'SLDO'"
+
+        cn.eachRow("select item__id from item where itemcdgo = '009.001'") { row ->
+            id_mecanico = row.item__id
+            cont = true
+        }
+        if (!cont) er += "No se ha registrado el item MECANICO: '009.001'"
+
+        cn.eachRow("select item__id from item where itemcdgo = '103.001.009'") { row ->
+            id_herramientas = row.item__id
+            cont = true
+        }
+        if (!cont) er += "No se ha registrado el item HERRAMIENTAS: '103.001.009'"
 
         cn.close()
         return er
@@ -50,7 +65,8 @@ class ObraFPController {
         def res
 
         res = pone_ids()
-        //println "equipo: ${id_equipo}, repuestos: ${id_repuestos}, combustible: ${id_combustible}, saldo: ${id_saldo}"
+        println "equipo: ${id_equipo}, repuestos: ${id_repuestos}, combustible: ${id_combustible}, " +
+                "saldo: ${id_saldo}, mecanico: ${id_mecanico}, herramientas: ${id_herramientas} "
 
         if (res) {
             render "Error: " + res
@@ -153,7 +169,7 @@ class ObraFPController {
         /* campos de Mano de Obra que figuran en la obra --------------------------------------- */
 
         manoDeObra(obra__id, sbpr, hayEquipos)
-        materiales(obra__id, sbpr)   // crea columnas de materiales
+        materiales(obra__id, sbpr, hayEquipos)   // crea columnas de materiales
         if (hayEquipos) {
             creaCampo(obra__id, id_equipo + "_U", "D")
             creaCampo(obra__id, id_equipo + "_T", "D")
@@ -352,6 +368,7 @@ class ObraFPController {
     }
 
     def manoDeObra(id, sbpr, hayEq) { //sólo una fórmula por todos los sbpr
+        def obra = Obra.get(id)
         def cn = dbConnectionService.getConnection()
         def tx_wh = ""
         if (sbpr != 0) tx_wh = "sbpr__id = ${sbpr} and "
@@ -372,21 +389,26 @@ class ObraFPController {
         }
         if (hayEq) {
             //println rg_cmpo
-            if (!rg_cmpo.contains("MECANICO_U")) {
-                creaCampo(id, 'MECANICO_U', 'O')
-                creaCampo(id, 'MECANICO_T', 'O')
+            if (!rg_cmpo.contains(id_mecanico + "_U")) {
+                //println "crea mecanico"
+                creaCampo(id, "${id_mecanico}_U", "O")
+                creaCampo(id, "${id_mecanico}_T", "O")
 /*
                 creaCampo(id, '3978_U', 'O')
                 creaCampo(id, '3978_T', 'O')
 */
             }
+            if (!rg_cmpo.contains(obra.chofer.id + "_U")) {
+                creaCampo(id, "${obra.chofer.id}_U", "O")
+                creaCampo(id, "${obra.chofer.id}_T", "O")
+            }
         }
-        creaCampo(id, 'MANO_OBRA_U', 'T')
-        creaCampo(id, 'MANO_OBRA_T', 'T')
+        creaCampo(id, 'MANO DE OBRA_U', "T")
+        creaCampo(id, 'MANO DE OBRA_T', "T")
         cn.close()
     }
 
-    def materiales(id, sbpr) {
+    def materiales(id, sbpr, hayEq) {
         def cn = dbConnectionService.getConnection()
         def tx_wh = ""
         if (sbpr != 0) tx_wh = "sbpr__id = ${sbpr} and "
@@ -408,6 +430,14 @@ class ObraFPController {
         creaCampo(id, id_saldo + "_U", "M")
         creaCampo(id, id_saldo + "_T", "M")
         cn.close()
+
+        if (hayEq) {
+            if (!rg_cmpo.contains(id_herramientas + "_U")) {
+                creaCampo(id, "${id_herramientas}_U", "M")
+                creaCampo(id, "${id_herramientas}_T", "M")
+            }
+        }
+
     }
 
     def insertaRubro(campos, valores) {
@@ -485,7 +515,7 @@ class ObraFPController {
                 //tx_cr = "select itemcdgo, parcial pcun, cmpo from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 2"
                 tx_cr = "select item__id, itemcdgo, parcial pcun from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 2"
             }
-            println "descomposicion: tx_cr: " + tx_cr
+            //println "descomposicion: tx_cr: " + tx_cr
             cn1.eachRow(tx_cr.toString()) { cr ->
                 //poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
                 poneValores(id, cr.item__id, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
@@ -709,14 +739,17 @@ class ObraFPController {
             } else {
                 tx_cr = "select sum(parcial) pcun from rb_precios_r (${id}, ${row.item__id}) where grpocdgo = 3 and cmbs = 'N'"
             }
+            //println "calculo de herramientas: " + tx_cr
             cn1.eachRow(tx_cr.toString()) { d ->
                 if (d.pcun > 0) {
-                    clmn = columnaCdgo(id, id_saldo + "_T")
+//                    clmn = columnaCdgo(id, id_saldo + "_T")
+                    clmn = columnaCdgo(id, id_herramientas + "_T")
                     cntd = rubroCantidad(id, row.itemcdgo)
                     ejecutaSQL("update mfvl set valor = ${d.pcun * cntd} where obra__id = ${id} and codigo = '${row.itemcdgo}' " +
                             " and clmncdgo = ${clmn}")
 
-                    clmn = columnaCdgo(id, id_saldo + "_U")
+                    //clmn = columnaCdgo(id, id_saldo + "_U")
+                    clmn = columnaCdgo(id, id_herramientas + "_U")
                     ejecutaSQL("update mfvl set valor = ${d.pcun} where obra__id = ${id} and codigo = '${row.itemcdgo}' " +
                             " and clmncdgo = ${clmn}")
                 }
@@ -744,6 +777,9 @@ class ObraFPController {
         cn1.close()
         actualizaS1(id, "${id_equipo}_T")
         actualizaS1(id, "${id_saldo}_T")
+
+        actualizaS1(id, "${id_herramientas}_T")
+        actualizaS1(id, "${id_herramientas}_T")
     }
 
     def acManoDeObra(id) {
@@ -818,16 +854,53 @@ class ObraFPController {
 
 
     def desgloseTrnp(id) {
-        def transporte = totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1")
+        def obra = Obra.get(id)
+        def cn = dbConnectionService.getConnection()
+        def tx_sql = ""
+        def pu_chfr = 0.0
+        def pu_vlqt = 0.0
+        tx_sql = "select rbpcpcun pcun from item_pcun_v2 (${obra.chofer.id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
+                "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
+        //println "desgloseTrnp: " + tx_sql
+        cn.eachRow(tx_sql.toString()) { row ->
+            pu_chfr = row.pcun
+        }
+        tx_sql = "select rbpcpcun pcun from item_pcun_v2 (${obra.volquete.id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
+                "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
+        //println "desgloseTrnp: " + tx_sql
+        cn.eachRow(tx_sql.toString()) { row ->
+            pu_vlqt = row.pcun
+        }
+        cn.close()
+
+        println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}"
+
+        def fraccion = pu_vlqt/(pu_chfr + pu_vlqt)
+
+        println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}, fraccion: ${fraccion}"
+
+        def totalTrnp = (totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1"))
+        def transporte = (totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1")) * fraccion
+
         def saldo = totalSx(id, "${id_saldo}_T", "sS1")
-        def mecanico = totalSx(id, "MECANICO_T", "sS1")
+        def mecanico = totalSx(id, "${id_mecanico}_T", "sS1")
         def repuestos = totalSx(id, "${id_repuestos}_T", "sS1")
         def combustible = totalSx(id, "${id_combustible}_T", "sS1")
+        def chofer = totalSx(id, "${obra.chofer.id}_T", "sS1")
+/*
         actualizaS2(id, "${id_equipo}_T", transporte * 0.52)
         actualizaS2(id, "${id_repuestos}_T", transporte * 0.26 + repuestos)
         actualizaS2(id, "${id_combustible}_T", transporte * 0.08 + combustible)
-        actualizaS2(id, "MECANICO_T", transporte * 0.11 + mecanico)
+        actualizaS2(id, "${id_mecanico}_T", transporte * 0.11 + mecanico)
         actualizaS2(id, "${id_saldo}_T", transporte * 0.03 + saldo)
+*/
+        actualizaS2(id, "${id_equipo}_T", transporte * obra.desgloseEquipo)
+        actualizaS2(id, "${id_repuestos}_T", transporte * obra.desgloseRepuestos + repuestos)
+        actualizaS2(id, "${id_combustible}_T", transporte * obra.desgloseCombustible + combustible)
+        actualizaS2(id, "${id_mecanico}_T", transporte * obra.desgloseMecanico + mecanico)
+        actualizaS2(id, "${id_saldo}_T", transporte * obra.desgloseSaldo + saldo)
+
+        actualizaS2(id, "${obra.chofer.id}_T", totalTrnp * (1 - fraccion) + chofer)
     }
 
     def completaTotalS2(id, hayEqpo) {
@@ -840,7 +913,7 @@ class ObraFPController {
                 "codigo = 'sS2' and clmncdgo in (select clmncdgo from mfcl where clmndscr like '%_T')")
 
         if (hayEqpo) {
-            clmn = columnaCdgo(id, "MECANICO_T")
+            clmn = columnaCdgo(id, "${id_mecanico}_T")
             tx_sql = "select valor from mfvl where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'"
             cn.eachRow(tx_sql.toString()) { row ->
                 clmn = columnaCdgo(id, "MANO_OBRA_T")
@@ -881,20 +954,19 @@ class ObraFPController {
         def item = ""
         def pcun = 0.0
         def tx = ""
-        def nooo = ['MECANICO', 'SALDO']
+        //def nooo = ['MECANICO', 'SALDO']
         tx_sql = "select clmndscr from mfcl where obra__id = ${id} and clmntipo = 'O'"
         cn.eachRow(tx_sql.toString()) { row ->
             //tx_cr = "select item__id, itemcdgo, itemnmbr from item where itemcmpo = '${row.clmndscr[0..-3]}'"
-            if (!nooo.contains(row.clmndscr[0..-3])) {
+            //if (!nooo.contains(row.clmndscr[0..-3])) {
                 tx_cr = "select item__id, itemcdgo, itemnmbr from item where item__id = '${row.clmndscr[0..-3]}'"
 
-                println "tx_cr..... campo:" + tx_cr
+                //println "tx_cr..... campo:" + tx_cr
                 cn1.eachRow(tx_cr.toString()) { d ->
                     item__id = d.item__id
                     item = d.itemcdgo
                     tx = d.itemnmbr
                 }
-            }
             if (obra.estado == 'N') {
 /*
                 tx_cr = "select rbpcpcun pcun from item_pcun (${item__id}, ${obra.lugarId}, '${obra.fechaPreciosRubros}')"

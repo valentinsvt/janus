@@ -83,6 +83,13 @@ class Obra implements Serializable {
     int plazoPersonas = 1
     int plazoMaquinas = 8
 
+    double desgloseEquipo
+    double desgloseRepuestos
+    double desgloseCombustible
+    double desgloseMecanico
+    double desgloseSaldo
+
+
     static mapping = {
         table 'obra'
         cache usage: 'read-write', include: 'non-lazy'
@@ -173,6 +180,12 @@ class Obra implements Serializable {
 
             plazoPersonas column: 'obraplpr'
             plazoMaquinas column: 'obraplmq'
+
+            desgloseEquipo      column: 'obradseq'
+            desgloseRepuestos   column: 'obradsrp'
+            desgloseCombustible column: 'obradscb'
+            desgloseMecanico    column: 'obradsmc'
+            desgloseSaldo       column: 'obradssl'
         }
     }
     static constraints = {
@@ -259,6 +272,12 @@ class Obra implements Serializable {
 
         plazoPersonas(attributes: [title: 'Número de integrantes de cuadrillas'])
         plazoPersonas(attributes: [title: 'Número de equipos completos de maquinaria'])
+
+        desgloseEquipo(attributes: [title: 'Desglose del transporte y equipos en Equipos'])
+        desgloseRepuestos(attributes: [title: 'Desglose del transporte y equipos en Repuestos'])
+        desgloseCombustible(attributes: [title: 'Desglose del transporte y equipos en Combustible'])
+        desgloseMecanico(attributes: [title: 'Desglose del transporte y equipos en Mecánico'])
+        desgloseSaldo(attributes: [title: 'Desglose del transporte y equipos en Saldo'])
     }
 
     String toString() {
