@@ -795,10 +795,10 @@ class ObraFPController {
             tx_cr = "select sum(valor) suma from mfvl v, mfcl c "
             tx_cr += "where c.obra__id = ${id} and c.obra__id = v.obra__id and codigo = '${row.codigo}' and c.clmncdgo = v.clmncdgo and clmntipo = 'O'"
             cn1.eachRow(tx_cr.toString()) { d ->
-                clmn = columnaCdgo(id, "MANO_OBRA_T")
+                clmn = columnaCdgo(id, "MANO DE OBRA_T")
                 ejecutaSQL("update mfvl set valor = ${d.suma} where obra__id = ${id} and codigo = '${row.codigo}' and " +
                         "clmncdgo = ${clmn}")
-                clmn = columnaCdgo(id, "MANO_OBRA_U")
+                clmn = columnaCdgo(id, "MANO DE OBRA_U")
                 cntd = rubroCantidad(id, row.codigo)
                 ejecutaSQL("update mfvl set valor = ${d.suma / cntd} where obra__id = ${id} and codigo = '${row.codigo}' and " +
                         "clmncdgo = ${clmn}")
@@ -806,7 +806,7 @@ class ObraFPController {
         }
         cn.close()
         cn1.close()
-        actualizaS1(id, "MANO_OBRA_T")
+        actualizaS1(id, "MANO DE OBRA_T")
     }
 
     def acTotal(id) {
@@ -916,7 +916,7 @@ class ObraFPController {
             clmn = columnaCdgo(id, "${id_mecanico}_T")
             tx_sql = "select valor from mfvl where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'"
             cn.eachRow(tx_sql.toString()) { row ->
-                clmn = columnaCdgo(id, "MANO_OBRA_T")
+                clmn = columnaCdgo(id, "MANO DE OBRA_T")
                 ejecutaSQL("update mfvl set valor = valor + ${row.valor} " +
                         " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS2'")
             }
@@ -1031,7 +1031,7 @@ class ObraFPController {
         if (totalS6 == 0) errr = "Error: La suma de componentes de Mano de Obra da CERO," +
                 "revise los parámetros de Precios"
         else {
-            clmn = columnaCdgo(id, 'MANO_OBRA_T')
+            clmn = columnaCdgo(id, 'MANO DE OBRA_T')
             ejecutaSQL("update mfvl set valor = ${totalS6} " +
                     " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS6'")
 
@@ -1045,7 +1045,7 @@ class ObraFPController {
                     suma += d.valor / totalS6
                 }
             }
-            clmn = columnaCdgo(id, 'MANO_OBRA_T')
+            clmn = columnaCdgo(id, 'MANO DE OBRA_T')
             ejecutaSQL("update mfvl set valor = ${suma} where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS5'")
             ejecutaSQL("update mfvl set valor = ${total / granTotal} where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS3'")
         }
@@ -1075,7 +1075,7 @@ class ObraFPController {
                     " where obra__id = ${id} and clmncdgo = ${row.clmncdgo} and codigo = 'sS3'")
             suma += parcial / granTotal
         }
-        parcial = totalSx(id, 'MANO_OBRA_T', 'sS3')
+        parcial = totalSx(id, 'MANO DE OBRA_T', 'sS3')
         clmn = columnaCdgo(id, 'TOTAL_T')
         ejecutaSQL("update mfvl set valor = ${suma + parcial} " +
                 " where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS3'")
