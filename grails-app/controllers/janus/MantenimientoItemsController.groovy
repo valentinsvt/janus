@@ -3,6 +3,8 @@ package janus
 import janus.seguridad.Shield
 import org.springframework.dao.DataIntegrityViolationException
 
+import java.text.DecimalFormat
+
 class MantenimientoItemsController extends Shield {
 
     def preciosService
@@ -948,13 +950,24 @@ class MantenimientoItemsController extends Shield {
     def calcPrecioRef(precioAnt) {
 
         def anio = new Date().format("yyyy").toInteger()
-        def sbuAct = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
-        def sbuAnt = ValoresAnuales.findByAnio(anio - 1).sueldoBasicoUnificado
-
-        def delta = sbuAct / sbuAnt
-        def nuevoCosto = precioAnt * delta
+//        def sbuAct = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
+//        def sbuAnt = ValoresAnuales.findByAnio(anio - 1).sueldoBasicoUnificado
+//
+//        def delta = sbuAct / sbuAnt
+//        def nuevoCosto = precioAnt * delta
 
 //        println precioAnt + " " + anio + " " + sbuAct + " " + sbuAnt + " " + delta + " " + nuevoCosto
+
+        def u = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
+        def b = precioAnt
+
+        def ap = b * 12 * 0.1215
+        ap = new DecimalFormat("#.##").format(ap).toDouble()
+        def ta = 14 * b + u + ap
+        def jr = ta / 235
+
+        def nuevoCosto = jr / 8
+        nuevoCosto = new DecimalFormat("#.##").format(nuevoCosto).toDouble()
 
         return nuevoCosto
     }

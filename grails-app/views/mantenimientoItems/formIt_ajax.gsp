@@ -101,13 +101,13 @@
             <div class="controls">
                 %{--<g:select from="['P': 'Peso (capital de cantón)', 'P1': 'Peso (especial)', 'V': 'Volumen (materiales pétreos para hormigones)', 'V1': 'Volumen (materiales pétreos para mejoramiento)', 'V2': 'Volumen (materiales pétreos para carpeta asfáltica)']"--}%
                 %{--name="transporte" class="span4" value="${itemInstance?.transporte}" optionKey="key" optionValue="value"/>--}%
-                <g:select from="${janus.TipoLista.list([sort: 'descripcion'])}"
-                          name="tipoLista.id" class="span4" value="${itemInstance?.tipoListaId}" optionKey="id" optionValue="descripcion"/>
+                <elm:select from="${janus.TipoLista.list([sort: 'descripcion'])}" optionClass="unidad" id="tipoLista"
+                            name="tipoLista.id" class="span4" value="${itemInstance?.tipoListaId}" optionKey="id" optionValue="descripcion"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
 
-        <div class="control-group">
+        <div class="control-group" id="grupoPeso">
             <div>
                 <span class="control-label label label-inverse">
                     Peso
@@ -263,6 +263,16 @@
                 }
             }
 
+        }
+    });
+
+    $("#tipoLista").change(function () {
+        var c = $(this).children("option:selected").attr("class");
+        if (c == "null") {
+            $("#grupoPeso").hide();
+        } else {
+            $("#grupoPeso").show();
+            $("#spanPeso").text(c);
         }
     });
 

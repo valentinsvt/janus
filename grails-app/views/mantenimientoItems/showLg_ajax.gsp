@@ -298,7 +298,7 @@
         var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Calcular</a>');
         var a = "${anioRef}";
 
-        var $valor = $("<input type='number' placeholder='Precio " + a + "'/> ");
+        var $valor = $("<input type='number' placeholder='Sueldo " + (new Date().getFullYear()) + "'/> ");
 
         $valor.bind({
             keydown : function (ev) {
@@ -347,7 +347,7 @@
             });
         });
 
-        var $p1 = $("<p>").html("Por favor ingrese el precio unitario del año " + a);
+        var $p1 = $("<p>").html("Por favor ingrese el sueldo básico  del año " + (new Date().getFullYear()));
         var $p2 = $("<p>").html($valor);
 
         var $div = $("<div>").append($p1).append($p2);
