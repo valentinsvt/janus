@@ -25,6 +25,7 @@
             <li><a href="#tab-transporte">Variables de Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>
             <li><a href="#tab-indirecto">Costos Indirectos</a></li>
+            <li><a href="#tab-desglose">Desglose de Transporte</a></li>
         </ul>
 
         <div id="tab-transporte" class="tab">
@@ -410,6 +411,63 @@
             </div>
 
         </div>
+    <div id="tab-desglose" class="tab">
+
+        <div class="row-fluid">
+            <div class="span3">
+               Desglose Equipos
+            </div>
+
+            <div class="span3">
+                <g:textField type="text" name="desgloseEquipo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            </div>
+
+            <div class="span3">
+                Desglose Repuestos
+            </div>
+
+            <div class="span3">
+                <g:textField type="text" name="desgloseRepuestos" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseRepuestos), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            </div>
+        </div>
+
+
+        <div class="row-fluid">
+            <div class="span3">
+                Desglose Combustibles
+            </div>
+
+            <div class="span3">
+                <g:textField type="text" name="desgloseCombustibles" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseCombustible), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            </div>
+
+            <div class="span3">
+                Desglose Mecánico
+            </div>
+
+            <div class="span3">
+                <g:textField type="text" name="desgloseMecanico" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseMecanico), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span3">
+               Desglose Saldo
+            </div>
+
+            <div class="span3">
+                <g:textField type="text" name="desgloseSaldo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
     </div>
 </g:form>
 
