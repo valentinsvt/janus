@@ -261,23 +261,23 @@
         </div>
     </g:if>
 
-    <g:if test="${itemInstance?.campo}">
-        <div class="control-group">
-            <div>
-                <span id="campo-label" class="control-label label label-inverse">
-                    Nombre corto
-                </span>
-            </div>
+    %{--<g:if test="${itemInstance?.campo}">--}%
+        %{--<div class="control-group">--}%
+            %{--<div>--}%
+                %{--<span id="campo-label" class="control-label label label-inverse">--}%
+                    %{--Nombre corto--}%
+                %{--</span>--}%
+            %{--</div>--}%
 
-            <div class="controls">
+            %{--<div class="controls">--}%
 
-                <span aria-labelledby="campo-label">
-                    <g:fieldValue bean="${itemInstance}" field="campo"/>
-                </span>
+                %{--<span aria-labelledby="campo-label">--}%
+                    %{--<g:fieldValue bean="${itemInstance}" field="campo"/>--}%
+                %{--</span>--}%
 
-            </div>
-        </div>
-    </g:if>
+            %{--</div>--}%
+        %{--</div>--}%
+    %{--</g:if>--}%
 
     <g:if test="${itemInstance?.registro}">
         <div class="control-group">

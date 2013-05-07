@@ -31,19 +31,19 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Nombre corto
-            </span>
-        </div>
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span class="control-label label label-inverse">--}%
+%{--Nombre corto--}%
+%{--</span>--}%
+%{--</div>--}%
 
-        <div class="controls">
-            <g:textField name="campo" maxlength="29" style="width: 300px" class="allCaps" value="${itemInstance?.campo}"/>
+%{--<div class="controls">--}%
+%{--<g:textField name="campo" maxlength="29" style="width: 300px" class="allCaps" value="${itemInstance?.campo}"/>--}%
 
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
+%{--<p class="help-block ui-helper-hidden"></p>--}%
+%{--</div>--}%
+%{--</div>--}%
 
     <div class="control-group">
         <div>
@@ -53,25 +53,31 @@
         </div>
 
         <div class="controls">
-            <div class="input-prepend">
-                <g:set var="cd1" value="${departamento.subgrupo.codigo.toString().padLeft(3, '0')}"/>
-                <g:set var="cd2" value="${departamento.codigo.toString().padLeft(3, '0')}"/>
-                <g:set var="cd" value="${itemInstance?.codigo}"/>
-                <g:if test="${itemInstance.id && cd}">
-                    <g:set var="cd" value="${cd?.replace(cd1 + ".", '').replace(cd2 + ".", '')}"/>
-                </g:if>
+            <g:set var="cd1" value="${departamento.subgrupo.codigo.toString().padLeft(3, '0')}"/>
+            <g:set var="cd2" value="${departamento.codigo.toString().padLeft(3, '0')}"/>
+            <g:set var="cd" value="${itemInstance?.codigo}"/>
+            <g:if test="${itemInstance.id && cd}">
+                <g:set var="cd" value="${cd?.replace(cd1 + ".", '').replace(cd2 + ".", '')}"/>
+            </g:if>
+            <g:if test="${itemInstance.id}">
                 <g:if test="${itemInstance?.departamento?.subgrupo?.grupoId != 2 && departamento.subgrupo.grupoId != 2}">
-                    <span class="add-on">${cd1}</span>
-                </g:if>
-                <span class="add-on">${cd2}</span>
-                <g:textField name="codigo" maxlength="20" class="allCaps required input-small" value="${cd}"/>
-                <span class="mandatory">*</span>
+                    ${cd1}.</g:if>${cd2}.${cd}
+            </g:if>
+            <g:else>
+                <div class="input-prepend">
+                    <g:if test="${itemInstance?.departamento?.subgrupo?.grupoId != 2 && departamento.subgrupo.grupoId != 2}">
+                        <span class="add-on">${cd1}</span>
+                    </g:if>
+                    <span class="add-on">${cd2}</span>
+                    <g:textField name="codigo" maxlength="20" class="allCaps required input-small" value="${cd}"/>
+                    <span class="mandatory">*</span>
 
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-            %{--<span class="mandatory">*</span>--}%
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:else>
+        %{--<span class="mandatory">*</span>--}%
 
-            %{--<p class="help-block ui-helper-hidden"></p>--}%
+        %{--<p class="help-block ui-helper-hidden"></p>--}%
         </div>
     </div>
 
@@ -110,7 +116,7 @@
         <div class="control-group" id="grupoPeso">
             <div>
                 <span class="control-label label label-inverse">
-                    Peso
+                    Peso/Volumen
                 </span>
             </div>
 
@@ -121,12 +127,12 @@
 
 
                     <span class="add-on" id="spanPeso">
-                        <g:if test="${itemInstance && itemInstance.id}">
-                            ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}
-                        </g:if>
-                        <g:else>
-                            Ton
-                        </g:else>
+                        %{--<g:if test="${itemInstance && itemInstance.id}">--}%
+                        %{--${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'm<sup>3</sup>'}--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                        %{--Ton--}%
+                        %{--</g:else>--}%
                     </span>
                 </div>
                 <span class="mandatory">*</span>
@@ -215,7 +221,15 @@
 
 <script type="text/javascript">
 
-
+    function label() {
+        var c = $("#tipoLista").children("option:selected").attr("class");
+        if (c == "null") {
+            $("#grupoPeso").hide();
+        } else {
+            $("#grupoPeso").show();
+            $("#spanPeso").text(c);
+        }
+    }
 
     function validarNum(ev) {
         /*
@@ -236,6 +250,8 @@
                 ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                 ev.keyCode == 37 || ev.keyCode == 39);
     }
+
+    label();
 
     $(".peso").bind({
         keydown : function (ev) {
@@ -267,36 +283,30 @@
     });
 
     $("#tipoLista").change(function () {
-        var c = $(this).children("option:selected").attr("class");
-        if (c == "null") {
-            $("#grupoPeso").hide();
-        } else {
-            $("#grupoPeso").show();
-            $("#spanPeso").text(c);
-        }
+        label();
     });
 
     $(".allCaps").blur(function () {
         this.value = this.value.toUpperCase();
     });
 
-    $("#nombre").keyup(function () {
-        var orig = $(this).val().toUpperCase();
-
-        var cleanString = orig.replace(/[|&;$%@"<>()+,'\[\]\{\}=]/g, "");
-        cleanString = cleanString.replace(/[ ]/g, "_");
-        cleanString = cleanString.replace(/[áàâäãÁÀÂÄÃ]/g, "A");
-        cleanString = cleanString.replace(/[éèêëẽÉÈÊËẼ]/g, "E");
-        cleanString = cleanString.replace(/[íìîïĩÍÌÎÏĨ]/g, "I");
-        cleanString = cleanString.replace(/[óòôöõÓÒÔÖÕ]/g, "O");
-        cleanString = cleanString.replace(/[úùûüũÚÙÛÜŨ]/g, "U");
-        cleanString = cleanString.replace(/[ñÑ]/g, "N");
-
-        if (cleanString.length > 20) {
-            cleanString = cleanString.substring(0, 19);
-        }
-        $("#campo").val(cleanString);
-    });
+    //    $("#nombre").keyup(function () {
+    //        var orig = $(this).val().toUpperCase();
+    //
+    //        var cleanString = orig.replace(/[|&;$%@"<>()+,'\[\]\{\}=]/g, "");
+    //        cleanString = cleanString.replace(/[ ]/g, "_");
+    //        cleanString = cleanString.replace(/[áàâäãÁÀÂÄÃ]/g, "A");
+    //        cleanString = cleanString.replace(/[éèêëẽÉÈÊËẼ]/g, "E");
+    //        cleanString = cleanString.replace(/[íìîïĩÍÌÎÏĨ]/g, "I");
+    //        cleanString = cleanString.replace(/[óòôöõÓÒÔÖÕ]/g, "O");
+    //        cleanString = cleanString.replace(/[úùûüũÚÙÛÜŨ]/g, "U");
+    //        cleanString = cleanString.replace(/[ñÑ]/g, "N");
+    //
+    //        if (cleanString.length > 20) {
+    //            cleanString = cleanString.substring(0, 19);
+    //        }
+    //        $("#campo").val(cleanString);
+    //    });
 
     $("#transporte").change(function () {
         var v = $(this).val();

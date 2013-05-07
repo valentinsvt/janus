@@ -26,21 +26,27 @@
             </div>
 
             <div class="controls">
-                <g:if test="${subgrupo.id != 21}">
-                    <div class="input-prepend">
-                        <g:set var="cd1" value="${subgrupo.codigo.toString().padLeft(3, '0')}"/>
-                        <span class="add-on">${cd1}</span>
-                        <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}"/>
+                <g:set var="cd1" value="${subgrupo.codigo.toString().padLeft(3, '0')}"/>
+                <g:if test="${subgrupo.id}">
+                    <g:if test="${subgrupo.id != 21}">
+                        ${cd1}.</g:if>${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}
+                </g:if>
+                <g:else>
+                    <g:if test="${subgrupo.id != 21}">
+                        <div class="input-prepend">
+                            <span class="add-on">${cd1}</span>
+                            <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}"/>
+                            <span class="mandatory">*</span>
+
+                            <p class="help-block ui-helper-hidden"></p>
+                        </div>
+                    </g:if>
+                    <g:else>
+                        <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.codigo.toString().padLeft(3, '0')}"/>
                         <span class="mandatory">*</span>
 
                         <p class="help-block ui-helper-hidden"></p>
-                    </div>
-                </g:if>
-                <g:else>
-                    <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.codigo.toString().padLeft(3, '0')}"/>
-                    <span class="mandatory">*</span>
-
-                    <p class="help-block ui-helper-hidden"></p>
+                    </g:else>
                 </g:else>
             </div>
         </div>
@@ -61,20 +67,22 @@
             </div>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Transporte
-                </span>
-            </div>
+        <g:if test="${departamentoItemInstance.subgrupo.grupo.codigo.toInteger() != 1}">
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Grupo asociado a transporte
+                    </span>
+                </div>
 
-            <div class="controls">
-                <g:select id="transporte" name="transporte.id" from="${janus.Transporte.list()}" optionKey="id" optionValue="descripcion"
-                          class="many-to-one " value="${departamentoItemInstance?.transporte?.id}" noSelection="['null': '']"/>
+                <div class="controls">
+                    <g:select id="transporte" name="transporte.id" from="${janus.Transporte.list()}" optionKey="id" optionValue="descripcion"
+                              class="many-to-one " value="${departamentoItemInstance?.transporte?.id}" noSelection="['null': '']"/>
 
-                <p class="help-block ui-helper-hidden"></p>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
             </div>
-        </div>
+        </g:if>
     </g:form>
 </div>
 <script type="text/javascript">
