@@ -8,6 +8,10 @@
 .inputVar {
     width : 65px;
 }
+.margen {
+    margin-left: 40px;
+    width: 500px;
+}
 
     /*.sum1 {*/
     /*background : #adff2f !important;*/
@@ -20,9 +24,9 @@
 
 <g:form controller="variables" action="saveVar_ajax" name="frmSave-var">
     <g:hiddenField name="id_lgarMO" value="${obra?.listaManoObra?.id}"/>
-    <div id="tabs" style="height: 455px;">
+    <div id="tabs" style="height: 465px;">
         <ul>
-            <li><a href="#tab-transporte">Variables de Transporte</a></li>
+            <li><a href="#tab-transporte">Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>
             <li><a href="#tab-indirecto">Costos Indirectos</a></li>
             <li><a href="#tab-desglose">Desglose de Transporte</a></li>
@@ -30,44 +34,46 @@
 
         <div id="tab-transporte" class="tab">
             <div class="row-fluid">
-                <div class="span3">
+                <div class="span2">
                     Volquete
                 </div>
 
-                <div class="span5">
+                <div class="span6">
                     <g:select name="volquete.id" id="cmb_vol" from="${volquetes}" optionKey="id" optionValue="nombre" class="num"
-                              noSelection="${['': 'Seleccione']}" value="${(obra.volquete) ? obra?.volqueteId : par?.volquete?.id}"/>
+                              noSelection="${['': 'Seleccione']}" value="${(obra.volquete) ? obra?.volqueteId : par?.volquete?.id}"
+                              style="width: 300px;"/>
                 </div>
 
-                <div class="span1">
+                <div class="span1" style="margin-left: 50px;">
                     Costo
                 </div>
 
                 <div class="span2">
                     %{--<div class="input-append">--}%
-                    <g:textField class="inputVar num" style="" disabled="" name="costo_volqueta" value=""/>
+                    <g:textField class="inputVar num" style="width: 80px" disabled="" name="costo_volqueta" value=""/>
                     %{--<span class="add-on">$</span>--}%
                     %{--</div>--}%
                 </div>
             </div>
 
             <div class="row-fluid">
-                <div class="span3">
+                <div class="span2">
                     Chofer
                 </div>
 
-                <div class="span5">
+                <div class="span6">
                     <g:select name="chofer.id" id="cmb_chof" from="${choferes}" optionKey="id" optionValue="nombre" class="num"
-                              noSelection="${['': 'Seleccione']}" value="${(obra.chofer) ? obra?.choferId : par?.chofer?.id}"/>
+                              noSelection="${['': 'Seleccione']}" value="${(obra.chofer) ? obra?.choferId : par?.chofer?.id}"
+                              style="width: 300px;"/>
                 </div>
 
-                <div class="span1">
+                <div class="span1" style="margin-left: 50px;">
                     Costo
                 </div>
 
                 <div class="span2">
                     %{--<div class="input-append">--}%
-                    <g:textField class="inputVar num" name="costo_chofer" disabled=""/>
+                    <g:textField class="inputVar num" name="costo_chofer" disabled="" style="width: 80px"/>
                     %{--<span class="add-on">$</span>--}%
                     %{--</div>--}%
                 </div>
@@ -91,23 +97,17 @@
                     Capital de Cantón
                 </div>
 
-                <div class="span3">
-                    %{--<div class="input-append">--}%
+                <div class="span2">
                     <g:textField type="text" name="distanciaPeso" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaPeso, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-                    %{--<span class="add-on">km</span>--}%
-                    %{--</div>--}%
                 </div>
 
 
-                <div class="span3">
+                <div class="span5">
                     Materiales Petreos Hormigones
                 </div>
 
                 <div class="span1">
-                    %{--<div class="input-append">--}%
                     <g:textField type="text" name="distanciaVolumen" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaVolumen, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-                    %{--<span class="add-on">km</span>--}%
-                    %{--</div>--}%
                 </div>
 
             </div>
@@ -118,14 +118,14 @@
                     Especial
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     %{--<div class="input-append">--}%
                     <g:textField type="text" name="distanciaPesoEspecial" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaPesoEspecial, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
                 </div>
 
-                <div class="span3">
+                <div class="span5">
                     Materiales Mejoramiento
                 </div>
 
@@ -142,10 +142,10 @@
 
                 <div class="span3"></div>
 
-                <div class="span3"></div>
+                <div class="span2"></div>
 
 
-                <div class="span3">
+                <div class="span5">
                     Materiales Carpeta Asfáltica
                 </div>
 
@@ -158,58 +158,66 @@
 
             </div>
 
-            <div class="span6" style="margin-bottom: 20px; margin-top: 5px">
-                <div class="span4" style="font-weight: bold;">
+            <div style="margin: 5px; font-weight: bold; text-align: center">
                 Listas de Precios para Peso y Volumen
-                </div>
             </div>
-            <div class="row-fluid" style="margin-top: 10px">
+            <div class="row-fluid" style="margin-top: 10px; width: 640px">
 
-                <div class="span3">
+                <div class="span2" style="width: 70px;">
                     Cantón
                 </div>
 
-                <div class="span4" style="margin-left: -60px">
-                    <g:select name="lugar.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" value="${obra?.lugar?.id}" class="span10" noSelection="['null': 'Seleccione...']" />
+                <div class="span4">
+                    <g:select name="lugar.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}"
+                              optionKey="id" optionValue="descripcion" value="${obra?.lugar?.id}" class="span10"
+                              noSelection="['null': 'Seleccione...']" />
                 </div>
 
-                <div class="span3" style="margin-left: -20px">
+                <div class="span4" style="margin-left: -20px; width: 150px;">
                     Petreos Hormigones
                 </div>
                 <div class="span4">
-                    <g:select name="listaVolumen0.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen0?.id}" class="span10" noSelection="['null': 'Seleccione...']"/>
+                    <g:select name="listaVolumen0.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}"
+                              optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen0?.id}"
+                              class="span10" noSelection="['null': 'Seleccione...']" style="margin-left: -10px;"/>
                 </div>
 
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 10px; width: 640px">
 
-                <div class="span3">
+                <div class="span2" style="width: 70px;">
                     Especial
                 </div>
 
-                <div class="span4" style="margin-left: -60px">
-                    <g:select name="listaPeso1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" value="${obra?.listaPeso1?.id}" class="span10" noSelection="['null': 'Seleccione...']"/>
+                <div class="span4">
+                    <g:select name="listaPeso1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}"
+                              optionKey="id" optionValue="descripcion" value="${obra?.listaPeso1?.id}" class="span10"
+                              noSelection="['null': 'Seleccione...']" />
                 </div>
 
-                <div class="span3" style="margin-left: -20px">
+                <div class="span4" style="margin-left: -20px; width: 150px;">
                     Mejoramiento
                 </div>
 
                 <div class="span4">
-                     <g:select name="listaVolumen1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen1?.id}" class="span10" noSelection="['null': 'Seleccione...']"/>
+                     <g:select name="listaVolumen1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}"
+                               optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen1?.id}"
+                               class="span10" noSelection="['null': 'Seleccione...']" style="margin-left: -10px;"/>
                 </div>
 
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 10px; width: 640px">
 
-                <div class="span3" style="margin-left: 250px">
+                <div class="span3" style="margin-left: 265px">
                     Carpeta Asfáltica
                 </div>
 
                 <div class="span4">
-                    <g:select name="listaVolumen2.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen2?.id}" class="span10" noSelection="['null': 'Seleccione...']"/>
+                    <g:select name="listaVolumen2.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}"
+                              optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen2?.id}"
+                              class="span10" noSelection="['null': 'Seleccione...']"/>
                 </div>
 
             </div>
@@ -217,56 +225,60 @@
         </div>
 
         <div id="tab-factores" class="tab">
-            <div class="row-fluid">
-                <div class="span3">
+            <div class="row-fluid margen" style="margin-top: 20px;">
+                <div class="span5">
                     Factor de reducción
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <g:textField type="text" name="factorReduccion" class="inputVar num" value="${g.formatNumber(number: (obra?.factorReduccion) ?: par.factorReduccion, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
-
-                <div class="span3">
+            </div>
+            <div class="row-fluid margen">
+                <div class="span5">
                     Velocidad
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <g:textField type="text" name="factorVelocidad" class="inputVar num" value="${g.formatNumber(number: (obra?.factorVelocidad) ?: par.factorVelocidad, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
 
-            <div class="row-fluid">
-                <div class="span3">
+            <div class="row-fluid margen">
+                <div class="span5">
                     Capacidad Volquete
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <g:textField type="text" name="capacidadVolquete" class="inputVar num" value="${g.formatNumber(number: (obra?.capacidadVolquete) ?: par.capacidadVolquete, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
+            </div>
+            <div class="row-fluid margen">
 
-                <div class="span3">
+                <div class="span5">
                     Reducción/Tiempo
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <g:textField type="text" name="factorReduccionTiempo" class="inputVar num" value="${g.formatNumber(number: (obra?.factorReduccionTiempo) ?: par.factorReduccionTiempo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
 
-            <div class="row-fluid">
-                <div class="span3">
+            <div class="row-fluid margen">
+                <div class="span5">
                     Factor Volumen
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <g:textField type="text" name="factorVolumen" class="inputVar num" value="${g.formatNumber(number: (obra?.factorVolumen) ?: par.factorVolumen, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
-
-                <div class="span3">
+            </div>
+            <div class="row-fluid margen">
+                <div class="span5">
                     Factor Peso
                 </div>
 
-                <div class="span3">
+                <div class="span2">
                     <g:textField type="text" name="factorPeso" class="inputVar num" value="${g.formatNumber(number: (obra?.factorPeso) ?: par.factorPeso, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
@@ -302,7 +314,7 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 20px;">
                 <div class="span4">
                     Dirección de obra
                 </div>
@@ -320,7 +332,7 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 10px;">
                 <div class="span4">
                     Mantenimiento y gastos de oficina
                 </div>
@@ -338,7 +350,7 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 10px;">
                 <div class="span4">
                     Administrativos
                 </div>
@@ -356,7 +368,7 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 10px;">
                 <div class="span4">
                     Garantías
                 </div>
@@ -374,7 +386,7 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 10px;">
                 <div class="span4">
                     Costos financieros
                 </div>
@@ -392,7 +404,7 @@
                 </div>
             </div>
 
-            <div class="row-fluid">
+            <div class="row-fluid" style="margin-top: 10px;">
                 <div class="span4">
                     Vehículos
                 </div>
@@ -413,49 +425,52 @@
         </div>
     <div id="tab-desglose" class="tab">
 
-        <div class="row-fluid">
-            <div class="span3">
+        <div class="row-fluid margen">
+            <div class="span5">
                Desglose Equipos
             </div>
 
-            <div class="span3">
+            <div class="span2">
                 <g:textField type="text" name="desgloseEquipo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
-
-            <div class="span3">
+        </div>
+        <div class="row-fluid margen">
+            <div class="span5">
                 Desglose Repuestos
             </div>
 
-            <div class="span3">
+            <div class="span2">
                 <g:textField type="text" name="desgloseRepuestos" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseRepuestos), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
         </div>
 
 
-        <div class="row-fluid">
-            <div class="span3">
+        <div class="row-fluid margen">
+            <div class="span5">
                 Desglose Combustibles
             </div>
 
-            <div class="span3">
+            <div class="span2">
                 <g:textField type="text" name="desgloseCombustibles" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseCombustible), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
+        </div>
+        <div class="row-fluid margen">
 
-            <div class="span3">
+            <div class="span5">
                 Desglose Mecánico
             </div>
 
-            <div class="span3">
+            <div class="span2">
                 <g:textField type="text" name="desgloseMecanico" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseMecanico), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
         </div>
 
-        <div class="row-fluid">
-            <div class="span3">
+        <div class="row-fluid margen">
+            <div class="span5">
                Desglose Saldo
             </div>
 
-            <div class="span3">
+            <div class="span2">
                 <g:textField type="text" name="desgloseSaldo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
 

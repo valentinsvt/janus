@@ -119,8 +119,6 @@
 
         }
 
-
-
         paginar("paginate",${(paginas)?paginas:10})
 
     </script>

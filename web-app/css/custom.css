@@ -263,7 +263,8 @@ th.desc a {
 }
 
 .table th {
-    background  : #49AFCD;
+    /*background  : #49AFCD;*/
+    background  : #498FCD;
     font-family : "Open Sans Condensed";
     font-size   : 15px;
     font-weight : bolder;
@@ -402,3 +403,8 @@ tr.info td.alerta {
 }
 
 /************************************* FIN ALERTAS ********************************************************/
+
+.ui-button-text-only .ui-button-text {
+    background: #1484a8 !important;
+}
+
