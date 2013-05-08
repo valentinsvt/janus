@@ -331,10 +331,10 @@
                     $(".btnPdf").click(function () {
                         var url = $(this).attr("href");
                         url = url.replace("&", "W");
-//                        console.log(url);
+//                        //console.log(url);
 
                         var actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=composicion.pdf&url=" + url;
-//                        console.log(actionUrl);
+//                        //console.log(actionUrl);
                         location.href = actionUrl;
 
                         return false;

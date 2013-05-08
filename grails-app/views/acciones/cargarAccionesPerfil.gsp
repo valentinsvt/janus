@@ -85,8 +85,8 @@
                     success: function(msg) {
                         if(msg=="ok"){
                             var tr = sel.parent().parent();
-                            ////console.log(tr);
-                            ////console.log($("#tabla_"+sel.val()));
+                            //////console.log(tr);
+                            //////console.log($("#tabla_"+sel.val()));
                             $("#tabla_"+sel.val()).prepend(tr);
                         }
                     }

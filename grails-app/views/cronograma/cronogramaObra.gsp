@@ -506,7 +506,7 @@
             //            var plot, redraw = false;
 
             function log(msg) {
-                console.log(msg);
+//                //console.log(msg);
             }
 
             function updateTotales() {
@@ -572,7 +572,7 @@
                     $(".total.mes" + i + ".prctParcial").text(number_format(prc, 2, ".", ",")).data("val", prc);
 
                     var prcAcum = totAcum * 100 / parseFloat("${sum}");
-//                    console.log($(".total.mes" + i + ".totalAcumulado"), totAcum, $(".total.mes" + i + ".prctAcumulado"), prcAcum);
+//                    //console.log($(".total.mes" + i + ".totalAcumulado"), totAcum, $(".total.mes" + i + ".prctAcumulado"), prcAcum);
                     $(".total.mes" + i + ".totalAcumulado").text(number_format(totAcum, 2, ".", ",")).data("val", totAcum);
                     $(".total.mes" + i + ".prctAcumulado").text(number_format(prcAcum, 2, ".", ",")).data("val", prcAcum);
                 }
@@ -644,7 +644,7 @@
                     }
 
                 } catch (e) {
-                    console.log(e);
+//                    //console.log(e);
                     return false;
                 }
                 return true;
@@ -691,7 +691,7 @@
                     }
 
                 } catch (e) {
-                    console.log(e);
+//                    //console.log(e);
                     return false;
                 }
                 return true;
@@ -708,7 +708,7 @@
                  46         -> delete
                  9          -> tab
                  */
-//        console.log(ev.keyCode);
+//        //console.log(ev.keyCode);
                 return ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 190 || ev.keyCode == 110 || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9);
             }
 
@@ -804,7 +804,7 @@
                                     $("#tf_cant").val(val).data("val", val);
                                 }
                             } catch (e) {
-                                console.log(e);
+//                                //console.log(e);
                             }
                         }
                     }
@@ -835,7 +835,7 @@
                                         $("#tf_prct").val(prct).data("val", prct);
                                     }
                                 } catch (e) {
-                                    console.log(e);
+//                                    //console.log(e);
                                 }
                             } //if $sel.lenght = 1
                             else {
@@ -850,7 +850,7 @@
                                         $("#tf_precio").val("").data("val", null);
                                     }
                                 } catch (e) {
-                                    console.log(e);
+//                                    //console.log(e);
                                 }
                             } //$sel.lenght > 1
                         }
@@ -881,7 +881,7 @@
                                     $("#tf_precio").val(dol).data("val", dol);
                                 }
                             } catch (e) {
-                                console.log(e);
+//                                //console.log(e);
                             }
                         }
                     }
@@ -895,7 +895,7 @@
                         $tr = $tr.prev().prev();
                     }
 
-                    //                    console.log($tr);
+                    //                    //console.log($tr);
 
                     var mes = $celda.data("mes");
                     var tipo = $celda.data("tipo");
@@ -905,8 +905,8 @@
                     $("#periodosDesde").val(mes);
                     $("#periodosHasta").val("${meses}");
 
-                    //                    console.log($celda, mes, tipo, valor, rubro);
-                    //                    console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
+                    //                    //console.log($celda, mes, tipo, valor, rubro);
+                    //                    //console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
 
                     $("#divRubro").hide();
                     $("#frmRubro").show();
@@ -1025,7 +1025,7 @@
                                         updateTotales();
                                         $("#modal-cronograma").modal("hide");
                                     } else {
-                                        console.log("ERROR");
+                                        //console.log("ERROR");
                                     }
                                 }
                             });
@@ -1143,7 +1143,7 @@
                                                 updateTotales();
                                                 $("#modal-cronograma").modal("hide");
                                             } else {
-                                                console.log("ERROR");
+//                                                //console.log("ERROR");
                                             }
                                         }
                                     });
@@ -1252,7 +1252,7 @@
                                             obra : ${obra.id}
                                         },
                                         success : function (msg) {
-//                                            console.log("Data Saved: " + msg);
+//                                            //console.log("Data Saved: " + msg);
                                             $(".mes").text("").data("val", 0);
                                             updateTotales();
                                         }
@@ -1322,7 +1322,7 @@
                     d += "&obra=${obra.id}";
 
                     var url = "${createLink(action: 'graficos2')}?" + d;
-//                    console.log(url);
+//                    //console.log(url);
                     location.href = url;
 
                     %{--$.ajax({--}%
@@ -1344,7 +1344,7 @@
                     %{--colorf  : "#5F81AA"--}%
                     %{--},--}%
                     %{--success : function (msg) {--}%
-                    %{--console.log("Data Saved: " + msg);--}%
+                    %{--//console.log("Data Saved: " + msg);--}%
                     %{--$("#modalTitle-graf").html("Gráfico del Cronograma");--}%
                     %{--$("#modalBody-graf").html(msg);--}%
                     %{--$("#modal-graf").modal("show");--}%
@@ -1391,7 +1391,7 @@
                 %{--color  : "#5FAB78"--}%
                 %{--},--}%
                 %{--success : function (msg) {--}%
-                %{--console.log("Data Saved: " + msg);--}%
+                %{--//console.log("Data Saved: " + msg);--}%
                 %{--$("#modalTitle-graf").html("Gráfico del Cronograma");--}%
                 %{--$("#modalBody-graf").html(msg);--}%
                 %{--$("#modal-graf").modal("show");--}%
@@ -1449,7 +1449,7 @@
                 %{--}--}%
                 %{--,--}%
                 %{--success : function (msg) {--}%
-                %{--console.log("Data Saved: " + msg);--}%
+                %{--//console.log("Data Saved: " + msg);--}%
                 %{--$("#modalTitle-graf").html("Gráfico del Cronograma");--}%
                 %{--$("#modalBody-graf").html(msg);--}%
                 %{--$("#modal-graf").modal("show");--}%
@@ -1476,7 +1476,7 @@
                 //                    }
                 //                    var dato = [mes, val];
                 //                    serie.push(dato);
-                ////                        console.log(mes, val);
+                ////                        //console.log(mes, val);
                 //                });
                 //                data.push(serie);
                 //
@@ -1513,10 +1513,10 @@
                 //                    }
                 //                    var dato = [mes, val];
                 //                    serie.push(dato);
-                ////                        console.log(mes, val);
+                ////                        //console.log(mes, val);
                 //                });
                 //                data.push(serie);
-                //                console.log(serie, max);
+                //                //console.log(serie, max);
                 //                grafico({
                 //                    target : "grafFis",
                 //                    titulo : 'Avance físico de la obra',

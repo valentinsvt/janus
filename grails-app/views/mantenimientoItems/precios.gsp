@@ -215,7 +215,7 @@
 
             function cambiaFecha(dateText, inst) {
                 showLugar.fecha = dateText;
-//                console.log(showLugar);
+//                //console.log(showLugar);
             }
 
             function log(msg, error) {
@@ -552,8 +552,8 @@
                                     success : function (data) {
                                     },
                                     error   : function (data) {
-                                        ////console.log("error");
-                                        ////console.log(data);
+                                        //////console.log("error");
+                                        //////console.log(data);
                                     }
                                 }
                             },
@@ -765,10 +765,10 @@
             }
 
             function doSearch() {
-//                console.log("1");
+//                //console.log("1");
                 var val = $.trim($("#search").val());
                 if (val != "") {
-//                    console.log("2");
+//                    //console.log("2");
                     $("#btnSearch").replaceWith(sp);
                     $("#tree").jstree("search", val);
                 }
@@ -785,7 +785,7 @@
                 $(".toggle").click(function () {
                     var tipo = $(this).attr("id");
                     if (tipo != current) {
-//                        console.log(tipo);
+//                        //console.log(tipo);
                         current = tipo;
                         initTree(current);
                         $("#info").html("");
@@ -826,7 +826,7 @@
                         $("#divFecha").hide();
                     }
                     showLugar.operador = op;
-//                    console.log(showLugar);
+//                    //console.log(showLugar);
                 });
 
                 initTree("1");

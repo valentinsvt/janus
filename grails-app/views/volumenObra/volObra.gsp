@@ -247,13 +247,13 @@
                 });
 
                 $("#item_codigo").blur(function () {
-//            console.log($("#item_id").val()=="")
+//            //console.log($("#item_id").val()=="")
                     if ($("#item_id").val() == "" && $("#item_codigo").val() != "") {
                         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'buscarRubroCodigo')}",
                             data     : "codigo=" + $("#item_codigo").val(),
                             success  : function (msg) {
                                 if (msg != "-1") {
-//                            console.log("msg "+msg)
+//                            //console.log("msg "+msg)
                                     var parts = msg.split("&&")
                                     $("#item_id").val(parts[0])
                                     $("#item_nombre").val(parts[2])
@@ -273,7 +273,7 @@
                         $("#item_nombre").val("")
 
                     } else {
-//                console.log("no reset")
+//                //console.log("no reset")
                     }
 
                 });

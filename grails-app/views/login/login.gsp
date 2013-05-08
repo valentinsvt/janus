@@ -330,7 +330,7 @@
 
                       var emailPass = $.trim(email.value)
 
-//                    console.log(emailPass)
+//                    //console.log(emailPass)
 
                     if (email != "") {
 //                        btnSend.replaceWith(spinner);

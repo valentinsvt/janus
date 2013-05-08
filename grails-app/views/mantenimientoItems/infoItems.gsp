@@ -203,12 +203,12 @@
 
     $("#btnEliminar").click(function () {
 
-       console.log("entro");
+       //console.log("entro");
 
 
         var idItem = ("it_") + ${item?.id};
 
-        console.log(idItem);
+        //console.log(idItem);
 
         $.ajax({
 

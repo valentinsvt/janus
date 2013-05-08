@@ -55,10 +55,10 @@
         }/*,
         keyup   : function () {
             if ($.trim($(this).val() == "")) {
-                console.log("aqui", $(this).val());
+                //console.log("aqui", $(this).val());
                 $(this).val("0");
             } else {
-                console.log("?");
+                //console.log("?");
             }
         }*/
     });

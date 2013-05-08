@@ -297,7 +297,7 @@
                             }
                         });
                         data += "id=${planilla.id}&total=" + $(".totalAct").data("valor");
-//                    console.log(data);
+//                    //console.log(data);
                         location.href = "${createLink(action:'saveDetalle')}?" + data;
                     }
                     return false;

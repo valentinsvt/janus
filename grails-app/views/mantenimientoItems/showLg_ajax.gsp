@@ -158,7 +158,7 @@
                 ignore      : "${params.ignore}"
             },
             success : function (msg) {
-                //console.log($("#fcDefecto").val())
+                ////console.log($("#fcDefecto").val())
                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                 var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 

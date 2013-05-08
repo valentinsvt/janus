@@ -155,7 +155,7 @@
 
                     var fcha = $("#fecha").val();
 
-//                    console.log("fecha" + fcha)
+//                    //console.log("fecha" + fcha)
 
                     $(".editable").each(function () {
                         var id = $(this).data("id");
@@ -163,8 +163,8 @@
                         var item = $(this).data("item");
                         var valor = $(this).data("valor");
                         var data1 = $(this).data("original");
-//                        console.log(chk);
-//                        console.log(data1)
+//                        //console.log(chk);
+//                        //console.log(data1)
 
                         if ((parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
                             if (data != "") {

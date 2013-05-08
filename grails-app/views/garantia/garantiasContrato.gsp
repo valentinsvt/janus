@@ -396,7 +396,7 @@
             }
 
             function updateRow(data) {
-//                console.log("update row");
+//                //console.log("update row");
                 var $tr = $("#" + data.id);
                 $.each(data, function (k, v) {
                     if (k == "monto") {
@@ -408,7 +408,7 @@
             }
 
             function addRow(data, position) {
-//                console.log("add row");
+//                //console.log("add row");
                 var $tr = $("<tr></tr>").data(data).attr("id", data.id).addClass(data.estadoTxt);
                 //Tipo  #   aseguradora     docu        estado      emision     vencimiento     monto
                 var $tipo = $("<td class='tipoGarantiaTxt'></td>").text(data.tipoGarantiaTxt);
@@ -499,7 +499,7 @@
                             data.tipo = "renew";
                         }
                         if (continua) {
-//                            console.log(data);
+//                            //console.log(data);
                             $.ajax({
                                 type    : "POST",
                                 url     : "${createLink(action:'addGarantiaContrato')}",
@@ -521,10 +521,10 @@
                                             data.id = parts[1];
                                             addRow(data, "selected");
                                             botones("create");
-//                                            console.log(data);
+//                                            //console.log(data);
                                         }
                                     } else {
-//                                        console.log("ERROR!!!!");
+//                                        //console.log("ERROR!!!!");
                                     }
                                 }
                             });

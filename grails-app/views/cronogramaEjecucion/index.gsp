@@ -240,7 +240,7 @@
             }
 
             function log(msg) {
-                console.log(msg);
+                //console.log(msg);
             }
 
             $(function () {
@@ -307,7 +307,7 @@
                                             fin  : $("#fin").val()
                                         },
                                         success : function (msg) {
-//                                            console.log(msg);
+//                                            //console.log(msg);
                                             $("#modal-forms").modal("hide");
                                             updateTabla();
                                         }
@@ -341,7 +341,7 @@
 //                                closeOnEscape : false,
 //                                buttons       : {
 //                                    "Aceptar"  : function () {
-//                                        console.log("KK")
+//                                        //console.log("KK")
 //                                    },
 //                                    "Cancelar" : function () {
 //                                    }
@@ -374,7 +374,7 @@
                                             fecha : $("#fecha").val()
                                         },
                                         success : function (msg) {
-                                            //                                            console.log(msg);
+                                            //                                            //console.log(msg);
                                             $("#modal-forms").modal("hide");
                                             updateTabla();
                                         }

@@ -232,14 +232,14 @@
 
                 if (tipo == 'fp') {
                     //padres
-                    %{--console.log("${tipo}", index, "${tipo}" == 'p', index == 0, "${tipo}" == 'p' && index == 0);--}%
+                    %{--//console.log("${tipo}", index, "${tipo}" == 'p', index == 0, "${tipo}" == 'p' && index == 0);--}%
 //                    if (index) { //el primero (p01) de la formula no es seleccionable (el de cuadrilla tipo si es)
                     if ("${tipo}" == 'p' && index == 0) { //el primero (p01) de la formula no es seleccionable (el de cuadrilla tipo si es)
-//                        console.log("true");
+//                        //console.log("true");
                         $seleccionados.removeClass("selected editable");
                         $parent.children("a, .jstree-grid-cell").addClass("editable parent");
                     } else {
-//                        console.log("false");
+//                        //console.log("false");
                         $seleccionados.removeClass("selected editable");
                         $parent.children("a, .jstree-grid-cell").addClass("selected editable parent");
                         updateCoef($item.parents("li"));
@@ -315,7 +315,7 @@
 
                             if (valor != "") {
                                 btnSave.replaceWith(spinner);
-//                                console.log("SI!!");
+//                                //console.log("SI!!");
                                 $.ajax({
                                     type    : "POST",
                                     url     : "${createLink(action: 'guardarGrupo')}",
@@ -333,7 +333,7 @@
                                     }
                                 });
                             } else {
-//                                console.log("NO");
+//                                //console.log("NO");
                             }
                         });
 
@@ -518,7 +518,7 @@
                             obra : ${obra.id}
                         },
                         success : function (msg) {
-//                            console.log(msg);
+//                            //console.log(msg);
                             $.ajax({
                                 async   : false,
                                 type    : "POST",
@@ -527,7 +527,7 @@
                                     obra : ${obra.id}
                                 },
                                 success : function (msg) {
-//                                    console.log(msg);
+//                                    //console.log(msg);
                                     location.reload(true);
                                 }
                             });
@@ -557,7 +557,7 @@
                             dataAdd.items.push(data.item + "_" + data.valor);
                         });
 
-//                        console.log(dataAdd);
+//                        //console.log(dataAdd);
 
                         $.ajax({
                             async   : false,
@@ -565,7 +565,7 @@
                             url     : "${createLink(action:'addItemFormula')}",
                             data    : dataAdd,
                             success : function (msg) {
-//                                console.log(msg);
+//                                //console.log(msg);
                                 var msgParts = msg.split("_");
                                 if (msgParts[0] == "OK") {
 
@@ -581,7 +581,7 @@
                                         }
                                     }
 
-//                                    console.log("insertados", insertados);
+//                                    //console.log("insertados", insertados);
                                     for (i = 0; i < rows2add.length; i++) {
                                         var it = rows2add[i];
                                         var add = it.add;
@@ -589,7 +589,7 @@
 
                                         add.attr.id = "it_" + insertados[add.attr.item];
                                         totalInit += parseFloat(add.attr.valor);
-//                                        console.log(add.attr.item, add);
+//                                        //console.log(add.attr.item, add);
 
                                         $tree.jstree("create_node", $target, "first", add);
                                         if (!$target.hasClass("jstree-open")) {

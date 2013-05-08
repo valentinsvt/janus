@@ -214,7 +214,7 @@
                     $.ajax({type : "POST", url : "${g.createLink(controller: 'presupuesto',action:'saveAjax')}",
                         data     :   $("#frmSave-presupuestoInstance").serialize(),
                         success  : function (msg) {
-//                            console.log(msg)
+//                            //console.log(msg)
                             var parts = msg.split("&")
                             $("#item_prsp").val(parts[0])
                             $("#item_presupuesto").val(parts[1])
