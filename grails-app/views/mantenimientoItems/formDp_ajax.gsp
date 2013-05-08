@@ -27,7 +27,7 @@
 
             <div class="controls">
                 <g:set var="cd1" value="${subgrupo.codigo.toString().padLeft(3, '0')}"/>
-                <g:if test="${subgrupo.id}">
+                <g:if test="${departamentoItemInstance.id}">
                     <g:if test="${subgrupo.id != 21}">
                         ${cd1}.</g:if>${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}
                 </g:if>
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <g:if test="${departamentoItemInstance.subgrupo.grupo.codigo.toInteger() != 1}">
+        <g:if test="${subgrupo?.grupo?.codigo?.toInteger() != 1}">
             <div class="control-group">
                 <div>
                     <span class="control-label label label-inverse">

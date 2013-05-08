@@ -612,7 +612,7 @@ class MantenimientoItemsController extends Shield {
         }
         departamento.properties = params
         if (departamento.save(flush: true)) {
-            render "OK_" + accion + "_" + departamento.id + "_" + departamento.codigo + " " + departamento.descripcion
+            render "OK_" + accion + "_" + departamento.id + "_" + departamento.subgrupo.codigo + "." + departamento.codigo + " " + departamento.descripcion
         } else {
             println departamento.errors
             def errores = g.renderErrors(bean: departamento)
