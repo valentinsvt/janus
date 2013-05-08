@@ -64,21 +64,30 @@
 
 
         <div id="treeArea" class="hide">
-            <form class="form-search" style="width: 500px;">
+            <form class="form-search" style="width: 600px; position: fixed; margin-left: 420px; margin-top: -58px; ">
                 <div class="input-append">
                     <input type="text" class="input-medium search-query" id="search"/>
                     <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
                 </div>
                 <span id="cantRes"></span>
-                <input type="button" class="btn pull-right" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
-            </form>
+                <input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
 
+            </form>
+            <div style="position: absolute; top:55px; left: 840px; margin-left: 40px;">
+                Fecha por Defecto:
+                <elm:datepicker name="fecha" id="fcDefecto" class="datepicker required" style="width: 90px"
+                                yearRange="${(new Date().format('yyyy').toInteger() - 10).toString() + ':' + new Date().format('yyyy')}"
+                                maxDate="new Date()" value="${new Date()}"/>
+
+            </div>
+
+            %{--Poner fechapr defecto--}%
             %{--<div class="btn-group">--}%
             %{--<input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">--}%
             %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
             %{--</div>--}%
 
-            <div class="btn-toolbar">
+            <div class="btn-toolbar" style="margin-top: 60px;">
                 <div class="btn-group" data-toggle="buttons-checkbox">
                     %{--<a href="#" id="all" class="btn toggleTipo">--}%
                     %{--Todas las listas--}%

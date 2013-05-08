@@ -798,6 +798,7 @@ class MantenimientoItemsController extends Shield {
     def formPrecio_ajax() {
         def item = Item.get(params.item)
         def lugar = null
+        println "formPrecio_ajax" + params
         if (params.lugar != "all") {
             lugar = Lugar.get(params.lugar)
         }
