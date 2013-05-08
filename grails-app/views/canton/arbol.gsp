@@ -378,7 +378,7 @@
                                 id: id
                             },
                             "success": function(msg) {
-                                console.log(msg)
+                                //console.log(msg)
 
                                 if (msg == "OK") {
                                     $("#infoCont").html("");
@@ -521,7 +521,7 @@
     } //init tree
 
     function reloadTree() {
-       console.log("reloadTree")
+       //console.log("reloadTree")
     }
 
 

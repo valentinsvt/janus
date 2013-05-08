@@ -88,7 +88,7 @@
             %{--<input type="button" class="btn" value="Abrir todo" onclick="$('#tree').jstree('open_all');">--}%
             %{--</div>--}%
 
-            <div class="btn-toolbar" style="margin-top: -40px;">
+            <div class="btn-toolbar" style="margin-top: -30px;">
                 <div class="btn-group" data-toggle="buttons-checkbox">
                     %{--<a href="#" id="all" class="btn toggleTipo">--}%
                     %{--Todas las listas--}%
