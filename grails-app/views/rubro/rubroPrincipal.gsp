@@ -675,8 +675,8 @@
     function calculaHerramientas(){
 //        //console.log("calc herramientas")
         var h2 = $("#i_3490")
-        var h3 = $("#i_3492")
-        var h5 = $("#i_3491")
+        var h3 = $("#i_5124")
+        var h5 = $("#i_5125")
         var h
         if(h2.html())
             h=h2
