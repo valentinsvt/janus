@@ -21,4 +21,7 @@ class Grupo implements Serializable {
         codigo(size: 1..20, blank: false, attributes: [title: 'numero'])
         descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
     }
+    String toString() {
+        descripcion
+    }
 }

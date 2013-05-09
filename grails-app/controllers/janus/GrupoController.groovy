@@ -12,7 +12,8 @@ class GrupoController extends janus.seguridad.Shield {
 
     def list() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [grupoInstanceList: Grupo.list(params), grupoInstanceTotal: Grupo.count(), params: params]
+//        [grupoInstanceList: Grupo.list(params), grupoInstanceTotal: Grupo.count(), params: params]
+        [grupoInstanceList: Grupo.findAll('from Grupo  where codigo >= "10"'), grupoInstanceTotal: Grupo.count(), params: params]
     } //list
 
     def form_ajax() {

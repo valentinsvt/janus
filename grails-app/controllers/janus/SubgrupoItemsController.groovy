@@ -11,8 +11,19 @@ class SubgrupoItemsController extends janus.seguridad.Shield {
     } //index
 
     def list() {
+        def grupos = Grupo.list()
+        def gr = []
+        grupos.each {
+            if (it.codigo.toInteger() >= 10) {
+                gr.add(Grupo.get(it.id))
+            }
+        }
+        println gr
+        def lista = SubgrupoItems.findAllByGrupoInList(gr)
+
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [subgrupoItemsInstanceList: SubgrupoItems.list(params), subgrupoItemsInstanceTotal: SubgrupoItems.count(), params: params]
+//      [subgrupoItemsInstanceList: SubgrupoItems.list(params), subgrupoItemsInstanceTotal: SubgrupoItems.count(), params: params]
+        [subgrupoItemsInstanceList: lista, subgrupoItemsInstanceTotal: SubgrupoItems.count(), params: params]
     } //list
 
     def form_ajax() {
