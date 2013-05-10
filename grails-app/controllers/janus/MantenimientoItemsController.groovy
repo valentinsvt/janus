@@ -746,14 +746,18 @@ class MantenimientoItemsController extends Shield {
         params.campo = params.campo.toString().toUpperCase()
         params.observaciones = params.observaciones.toString().toUpperCase()
         params.codigo = params.codigo.toString().toUpperCase()
-        if (!params.codigo.contains(".")) {
-            if (dep.subgrupo.grupoId == 2) {
+        if (!params.id) {
+            if (!params.codigo.contains(".")) {
+                if (dep.subgrupo.grupoId == 2) {
 //                println "?"
-                params.codigo = dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+                    params.codigo = dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
 //                println params.codigo
-            } else {
-                params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+                } else {
+                    params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+                }
             }
+        } else {
+            params.remove("codigo")
         }
         if (params.fecha) {
             params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
