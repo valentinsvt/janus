@@ -267,14 +267,14 @@
         <tbody id="tabla_equipo">
         <g:each in="${items}" var="rub" status="i">
             <g:if test="${rub.item.departamento.subgrupo.grupo.id == 3}">
-                <tr class="item_row" id="${rub.id}">
+                <tr class="item_row " id="${rub.id}">
                     <td class="cdgo">${rub.item.codigo}</td>
                     <td>${rub.item.nombre}</td>
                     <td style="text-align: right" class="cant">
                         <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"  locale="ec"  />
                     </td>
 
-                    <td class="col_tarifa" style="display: none;text-align: right" id="i_${rub.item.id}"></td>
+                    <td class="col_tarifa cod_${rub.item.codigo?.replaceAll('\\.','_')}" style="display: none;text-align: right" id="i_${rub.item.id}" ></td>
                     <td class="col_hora" style="display: none;text-align: right"></td>
                     <td class="col_rend rend" style="width: 50px;text-align: right">
                         <g:formatNumber number="${rub.rendimiento}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec" />
@@ -674,9 +674,10 @@
 
     function calculaHerramientas(){
 //        //console.log("calc herramientas")
-        var h2 = $("#i_3490")
-        var h3 = $("#i_5124")
-        var h5 = $("#i_5125")
+        var h2 = $(".i_3490")
+        var h3 = $(".cod_103_001_001")
+        var h5 = $(".cod_103_001_002")
+//        console.log($(".cod_103_001_001"))
         var h
         if(h2.html())
             h=h2
