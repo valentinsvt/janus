@@ -398,7 +398,7 @@ class RubroController extends janus.seguridad.Shield {
     } //delete
 
     def getPrecios() {
-        println "get precios " + params
+//        println "get precios " + params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -422,7 +422,7 @@ class RubroController extends janus.seguridad.Shield {
 
         }
         def precios = ""
-//        println "items " + items + "  con lista " + conLista
+//        println "items " + items + "  con lista " + conLista+"  fecha "+fecha
         if (items.size() > 0) {
             precios = preciosService.getPrecioItemsString(fecha, lugar, items)
         }
@@ -434,7 +434,7 @@ class RubroController extends janus.seguridad.Shield {
             precios += preciosService.getPrecioItemStringListaDefinida(fecha, listas[it.tipoLista.id.toInteger() - 1], it.id)
         }
 
-//        println "precios final " + precios
+//        println "precios final !! " + precios
 //        println "--------------------------------------------------------------------------"
         render precios
     }

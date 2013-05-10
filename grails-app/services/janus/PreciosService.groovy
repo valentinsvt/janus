@@ -50,11 +50,13 @@ class PreciosService {
         def res = ""
 //        println "get Precios string "+fecha+"  "+fecha.format('yyyy-MM-dd')
         def sql = "SELECT r1.item__id,(SELECT r2.rbpcpcun from rbpc r2 where r2.item__id=r1.item__id and r2.rbpcfcha = max(r1.rbpcfcha) and r2.lgar__id=${lugar}) from rbpc r1 where r1.item__id = ${item} and r1.lgar__id=${lugar} and r1.rbpcfcha <= '${fecha.format('yyyy-MM-dd')}' group by 1"
-//        println "sql precios string "+sql
+//        println "sql precios string DEfinida "+sql
         cn.eachRow(sql.toString()) { row ->
 
             res += "" + row[0] + ";" + row[1] + "&"
         }
+        if(res=="")
+            res=""+item+";"+"0.00&"
         cn.close()
         return res
     }

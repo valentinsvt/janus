@@ -176,7 +176,7 @@
         <div class="span6" style="width: 500px;">
             Lista de precios: MO y Equipos
             <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" class="span10" id="ciudad" style="width: 300px"/>
-       </div>
+        </div>
         <div class="span3" style="width: 180px;">
             % costos indirectos
             <input type="text" style="width: 30px;" id="costo_indi" value="21">
@@ -194,12 +194,12 @@
                 </a>
             </div>
         </g:if>
-%{--
-        <div class="span3">
-            % costos indirectos
-            <input type="text" style="width: 30px;" id="costo_indi" value="21">
-        </div>
---}%
+    %{--
+            <div class="span3">
+                % costos indirectos
+                <input type="text" style="width: 30px;" id="costo_indi" value="21">
+            </div>
+    --}%
 
     </div>
 
@@ -1240,21 +1240,25 @@
                         $.each(items, function () {
                             datos += $(this).attr("id") + "#"
                         });
-
+//                        console.log(datos)
                         $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPrecios')}",
                             data     : datos,
                             success  : function (msg) {
-                                var precios = msg.split("&")
-                                for(i=0;i<precios.length;i++){
-                                    var parts = precios[i].split(";")
-                                    var celda =$("#i_"+parts[0])
-                                    celda.html(number_format(parts[1], 5, ".", ""))
-                                    var padre = celda.parent()
-//                                    //console.log(parts,padre)
-                                    var celdaRend = padre.find(".col_rend")
-                                    var celdaTotal = padre.find(".col_total")
-                                    var celdaCant = padre.find(".cant")
-                                    var celdaHora =  padre.find(".col_hora")
+                                var precios = []
+                                precios=msg.split("&")
+//                                console.log(precios)
+                                if(precios.length>1)
+                                    for(i=0;i<precios.length;i++){
+
+                                        var parts = precios[i].split(";")
+                                        var celda =$("#i_"+parts[0])
+                                        celda.html(number_format(parts[1], 5, ".", ""))
+                                        var padre = celda.parent()
+//                                    console.log(parts,padre)
+                                        var celdaRend = padre.find(".col_rend")
+                                        var celdaTotal = padre.find(".col_total")
+                                        var celdaCant = padre.find(".cant")
+                                        var celdaHora =  padre.find(".col_hora")
 //                                    //console.log(celdaHora)
 //                                    //console.log(,,"rend "+celdaRend.html(),"total "+ celdaTotal.html(),"multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
 //                                    //console.log("----")
@@ -1262,16 +1266,16 @@
 //                                    //console.log("cant sin mun "+celdaCant.html() )
 //                                    //console.log("cant "+parseFloat(celdaCant.html()) )
 //                                    //console.log(" multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
-                                    var rend = 1
-                                    if(celdaHora.hasClass("col_hora")){
-                                        celdaHora.html(number_format(parseFloat(celda.html())*parseFloat(celdaCant.html()), 5, ".", ""))
-                                    }
-                                    if(celdaRend.html()){
-                                        rend=celdaRend.html()*1
-                                    }
-                                    celdaTotal.html(number_format(parseFloat(celda.html())*parseFloat(celdaCant.html())*parseFloat(rend), 5, ".", ""))
+                                        var rend = 1
+                                        if(celdaHora.hasClass("col_hora")){
+                                            celdaHora.html(number_format(parseFloat(celda.html())*parseFloat(celdaCant.html()), 5, ".", ""))
+                                        }
+                                        if(celdaRend.html()){
+                                            rend=celdaRend.html()*1
+                                        }
+                                        celdaTotal.html(number_format(parseFloat(celda.html())*parseFloat(celdaCant.html())*parseFloat(rend), 5, ".", ""))
 
-                                }
+                                    }
                                 calcularTotales()
 
                             }
@@ -1367,7 +1371,7 @@
                     success  : function (msg) {
                         if (msg !="-1") {
 //                            //console.log("msg "+msg)
-                           var parts = msg.split("&&")
+                            var parts = msg.split("&&")
                             $("#item_tipoLista").val(parts[1])
                             $("#item_id").val(parts[0])
                             $("#item_desc").val(parts[2])
@@ -1619,7 +1623,7 @@
                                 }
                             }
 
-                           tr.bind("dblclick",function(){
+                            tr.bind("dblclick",function(){
                                 var hijos = $(this).children()
                                 var desc=$(hijos[1]).html()
                                 var cant
