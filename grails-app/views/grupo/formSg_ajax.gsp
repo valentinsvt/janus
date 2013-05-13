@@ -7,7 +7,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Grupo
+                    <g:if test="${subgrupoItemsInstance?.grupo?.codigo?.toInteger() > 3}">
+                        Solicitante
+                    </g:if>
+                    <g:else>
+                        Grupo
+                    </g:else>
                 </span>
             </div>
 

@@ -777,6 +777,7 @@
             $(function () {
 
                 $(".modal").draggable({
+                    handle: $(".modal-header"),
                     cancel : '.btn, input, select'
                 });
 

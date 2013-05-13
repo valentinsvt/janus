@@ -7,7 +7,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Subgrupo
+                    <g:if test="${subgrupo?.grupo?.codigo?.toInteger() > 3}">
+                        Grupo
+                    </g:if>
+                    <g:else>
+                        Subgrupo
+                    </g:else>
                 </span>
             </div>
 
@@ -67,7 +72,7 @@
             </div>
         </div>
 
-        <g:if test="${subgrupo?.grupo?.codigo?.toInteger() != 1}">
+        <g:if test="${subgrupo?.grupo?.codigo?.toInteger() != 1 && subgrupo?.grupo?.codigo?.toInteger() < 10}">
             <div class="control-group">
                 <div>
                     <span class="control-label label label-inverse">
