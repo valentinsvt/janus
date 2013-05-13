@@ -291,6 +291,9 @@ class GrupoController extends janus.seguridad.Shield {
 
 
 
+
+
+
     String makeBasicTree(params) {
 
         def id = params.id.toLong()
@@ -373,6 +376,84 @@ class GrupoController extends janus.seguridad.Shield {
 
     def loadTreePart() {
         render(makeBasicTree(params))
+    }
+
+
+    def searchTree_ajax() {
+//        println params
+//        def parts = params.search_string.split("~")
+        def search = params.search.trim()
+        if (search != "") {
+            def id = params.tipo
+            def find = Item.withCriteria {
+                departamento {
+                    subgrupo {
+                        grupo {
+                            eq("id", id.toLong())
+                        }
+                    }
+                }
+                ilike("nombre", "%" + search + "%")
+            }
+            def departamentos = [], subgrupos = [], grupos = []
+            find.each { item ->
+                if (!departamentos.contains(item.departamento))
+                    departamentos.add(item.departamento)
+                if (!subgrupos.contains(item.departamento.subgrupo))
+                    subgrupos.add(item.departamento.subgrupo)
+                if (!grupos.contains(item.departamento.subgrupo.grupo))
+                    grupos.add(item.departamento.subgrupo.grupo)
+            }
+
+            def ids = "["
+
+            if (find.size() > 0) {
+                ids += "\"#materiales_1\","
+
+                grupos.each { gr ->
+                    ids += "\"#gr_" + gr.id + "\","
+                }
+                subgrupos.each { sg ->
+                    ids += "\"#sg_" + sg.id + "\","
+                }
+                departamentos.each { dp ->
+                    ids += "\"#dp_" + dp.id + "\","
+                }
+                ids = ids[0..-2]
+            }
+            ids += "]"
+//            println ">>>>>>"
+//            println ids
+//            println "<<<<<<<"
+            render ids
+        } else {
+            render ""
+        }
+    }
+
+
+    def search_ajax() {
+        def search = params.search.trim()
+        def id = params.tipo
+        def find = Item.withCriteria {
+            departamento {
+                subgrupo {
+                    grupo {
+                        eq("id", id.toLong())
+                    }
+                }
+            }
+            ilike("nombre", "%" + search + "%")
+        }
+        def json = "["
+        find.each { item ->
+            if (json != "[") {
+                json += ","
+            }
+            json += "\"" + item.nombre + "\""
+        }
+        json += "]"
+        render json
     }
 
 

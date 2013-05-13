@@ -329,7 +329,7 @@
 
                 menuItems.crearHijo = createUpdate({
                     action    : "create",
-                    label     : "Nuevo grupo",
+                    label     : "Nuevo Solicitante",
                     icon      : icons.grupo,
 //                    icon      : icons[nodeRel],
                     sepBefore : false,
@@ -343,14 +343,14 @@
                     where     : "first",
                     tipo      : "sg",
                     log       : "Grupo ",
-                    title     : "Nuevo grupo"
+                    title     : "Nuevo Solicitante"
                 });
 
                 break;
             case "grupo":
                 menuItems.editar = createUpdate({
                     action    : "update",
-                    label     : "Editar grupo",
+                    label     : "Editar Solicitante",
                     icon      : icons.edit,
                     sepBefore : false,
                     sepAfter  : false,
@@ -362,15 +362,15 @@
                     open      : false,
                     nodeStrId : nodeStrId,
                     log       : "Grupo ",
-                    title     : "Editar grupo"
+                    title     : "Editar Solicitante"
                 });
                 if (!nodeHasChildren) {
                     menuItems.eliminar = remove({
-                        label       : "Eliminar grupo",
+                        label       : "Eliminar Solicitante",
                         sepBefore   : false,
                         sepAfter    : false,
                         icon        : icons.delete,
-                        title       : "Eliminar grupo",
+                        title       : "Eliminar Solicitante",
                         confirm     : "grupo",
                         url         : "${createLink(action:'deleteGr_ajax')}",
                         data        : {
@@ -383,7 +383,7 @@
                 }
                 menuItems.crearHermano = createUpdate({
                     action    : "create",
-                    label     : "Nuevo grupo",
+                    label     : "Nuevo Solicitante",
                     icon      : icons[nodeRel],
                     sepBefore : true,
                     sepAfter  : true,
@@ -396,11 +396,11 @@
                     where     : "after",
                     tipo      : "sg",
                     log       : "Grupo ",
-                    title     : "Nuevo grupo"
+                    title     : "Nuevo Solicitante"
                 });
                 menuItems.crearHijo = createUpdate({
                     action    : "create",
-                    label     : "Nuevo subgrupo",
+                    label     : "Nuevo Grupo",
                     sepBefore : false,
                     sepAfter  : false,
                     icon      : icons.subgrupo,
@@ -413,14 +413,14 @@
                     where     : "first",
                     tipo      : "sg",
                     log       : "Subgrupo ",
-                    title     : "Nuevo subgrupo"
+                    title     : "Nuevo Grupo"
                 });
                 break;
 
             case "subgrupo":
                 menuItems.editar = createUpdate({
                     action    : "update",
-                    label     : "Editar subgrupo",
+                    label     : "Editar Grupo",
                     icon      : icons.edit,
                     sepBefore : false,
                     sepAfter  : false,
@@ -432,15 +432,15 @@
                     open      : false,
                     nodeStrId : nodeStrId,
                     log       : "Subgrupo ",
-                    title     : "Editar subgrupo"
+                    title     : "Editar Grupo"
                 });
                 if (!nodeHasChildren) {
                     menuItems.eliminar = remove({
-                        label       : "Eliminar subgrupo",
+                        label       : "Eliminar Grupo",
                         sepBefore   : false,
                         sepAfter    : false,
                         icon        : icons.delete,
-                        title       : "Eliminar subgrupo",
+                        title       : "Eliminar Grupo",
                         confirm     : "grupo",
                         url         : "${createLink(action:'deleteSg_ajax')}",
                         data        : {
@@ -453,7 +453,7 @@
                 }
                 menuItems.crearHermano = createUpdate({
                     action    : "create",
-                    label     : "Nuevo subgrupo",
+                    label     : "Nuevo Grupo",
                     icon      : icons[nodeRel],
                     sepBefore : true,
                     sepAfter  : true,
@@ -466,11 +466,11 @@
                     where     : "after",
                     tipo      : "sg",
                     log       : "Subgrupo ",
-                    title     : "Nuevo subgrupo"
+                    title     : "Nuevo Grupo"
                 });
                 menuItems.crearHijo = createUpdate({
                     action    : "create",
-                    label     : "Nuevo departamento",
+                    label     : "Nuevo subgrupo",
                     sepBefore : false,
                     sepAfter  : false,
 //                    icon      : icons["departamento_" + nodeTipo],
@@ -484,14 +484,14 @@
                     where     : "first",
                     tipo      : "dp",
                     log       : "Departamento ",
-                    title     : "Nuevo departamento"
+                    title     : "Nuevo subgrupo"
                 });
                 break;
             case "departamento":
 
                 menuItems.editar = createUpdate({
                     action    : "update",
-                    label     : "Editar departamento",
+                    label     : "Editar subgrupo",
                     icon      : icons.edit,
                     sepBefore : false,
                     sepAfter  : false,
@@ -503,15 +503,15 @@
                     open      : false,
                     nodeStrId : nodeStrId,
                     log       : "Departamento ",
-                    title     : "Editar departamento"
+                    title     : "Editar subgrupo"
                 });
                 if (!nodeHasChildren) {
                     menuItems.eliminar = remove({
-                        label       : "Eliminar departamento",
+                        label       : "Eliminar subgrupo",
                         sepBefore   : false,
                         sepAfter    : false,
                         icon        : icons.delete,
-                        title       : "Eliminar departamento",
+                        title       : "Eliminar subgrupo",
                         confirm     : "departamento",
                         url         : "${createLink(action:'deleteDp_ajax')}",
                         data        : {
@@ -524,7 +524,7 @@
                 }
                 menuItems.crearHermano = createUpdate({
                     action    : "create",
-                    label     : "Nuevo Departamento",
+                    label     : "Nuevo subgrupo",
                     sepBefore : true,
                     sepAfter  : true,
                     icon      : icons[nodeRel],
@@ -537,7 +537,7 @@
                     where     : "after",
                     tipo      : "dp",
                     log       : "Departamento ",
-                    title     : "Nuevo departamento"
+                    title     : "Nuevo subgrupo"
                 });
                 break;
 
