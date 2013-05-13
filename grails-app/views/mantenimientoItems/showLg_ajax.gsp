@@ -1,4 +1,4 @@
-<div class="tituloTree">Precios de ${item.nombre} en ${lugarNombre}</div>
+<div class="tituloTree">Precios de ${item.nombre} (${item.unidad.descripcion}) en ${lugarNombre}</div>
 
 <div style="height: 35px; width: 100%;">
     <div class="btn-group pull-left">
