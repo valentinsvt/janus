@@ -568,7 +568,7 @@ class Reportes2Controller {
 //        params.lugar = "4"
 //        params.grupo = "1"
 //
-//        println params
+        println ("params" + params)
 
         def orden = "itemnmbr"
         if (params.orden == "n") {
@@ -576,6 +576,9 @@ class Reportes2Controller {
         }
         def lugar = Lugar.get(params.lugar.toLong())
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        println("fecha:" + fecha)
+
         def items = ""
         def lista = Item.withCriteria {
             eq("tipoItem", TipoItem.findByCodigo("I"))
