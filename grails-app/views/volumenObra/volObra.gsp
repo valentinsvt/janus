@@ -95,7 +95,7 @@
                     <div class="span4">
                         <b>Subpresupuesto:</b>
                         <span id="sp">
-                            <g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>
+                            <g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>
                         </span>
                         <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-plus"></i>

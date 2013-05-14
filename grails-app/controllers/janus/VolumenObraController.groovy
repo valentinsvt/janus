@@ -28,7 +28,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     def addItem(){
-        println "addItem "+params
+//        println "addItem "+params
         def obra= Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
         def sbpr = SubPresupuesto.get(params.sub)
@@ -54,12 +54,17 @@ class VolumenObraController extends janus.seguridad.Shield{
         }
     }
 
+
     def tabla(){
-//        println "paramms "+params
+        println "params "+params
         def obra = Obra.get(params.obra)
         def detalle
-        if (params.sub && params.sub !="null")
+        if (params.sub && params.sub != "null") {
             detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+
+//            detalle= VolumenesObra.findAllBySubPresupuesto(SubPresupuesto.get(params.sub))
+            println("detalle" + detalle)
+        }
         else
             detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()

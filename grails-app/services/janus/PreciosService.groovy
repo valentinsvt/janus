@@ -347,7 +347,7 @@ class PreciosService {
     def actualizaOrden(volumen, tipo) {
 
         def vlob = VolumenesObra.findAll("from VolumenesObra where obra = ${volumen.obra.id} order by orden asc,id desc")
-        println "actualizar orden !!!!! /n" + vlob
+//        println "actualizar orden !!!!! /n" + vlob
         def dist = 1
         def prev = null
         def i = 0
@@ -375,7 +375,7 @@ class PreciosService {
             } else {
 
                 dist = vlob[i].orden - prev.orden
-                println " ${i} prev "+prev.id+"  "+prev.orden+" i "+vlob[i].id+"  "+vlob[i].orden+"  dist  "+dist+" --- > "+i +"  actual !!! "+volumen.id
+//                println " ${i} prev "+prev.id+"  "+prev.orden+" i "+vlob[i].id+"  "+vlob[i].orden+"  dist  "+dist+" --- > "+i +"  actual !!! "+volumen.id
                 if (dist > 1) {
                     vlob[i].orden -= (dist - 1)
                     band = true
