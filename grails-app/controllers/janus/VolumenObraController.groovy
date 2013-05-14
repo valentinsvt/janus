@@ -28,15 +28,16 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     def addItem(){
-//        println "addItem "+params
+        println "addItem "+params
         def obra= Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
+        def sbpr = SubPresupuesto.get(params.sub)
         def volumen
         if (params.id)
-            volumen=VolumenesObra.get(params.id)
-        else{
-            volumen=VolumenesObra.findByObraAndItem(obra,rubro)
-            if(!volumen)
+            volumen = VolumenesObra.get(params.id)
+        else {
+            volumen = VolumenesObra.findByObraAndItemAndSubPresupuesto(obra, rubro, sbpr)
+            if (!volumen)
                 volumen=new VolumenesObra()
         }
         volumen.cantidad=params.cantidad.toDouble()
