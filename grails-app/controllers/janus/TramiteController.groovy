@@ -1,7 +1,6 @@
 package janus
 
 import org.springframework.dao.DataIntegrityViolationException
-import com.mysql.jdbc.Driver
 
 import groovy.sql.Sql
 
