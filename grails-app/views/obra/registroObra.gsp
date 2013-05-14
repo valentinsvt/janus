@@ -565,7 +565,7 @@
                             Fórmula Pol.
                         </g:link>
                     </li>
-                    <li><a href="#">FP Liquidación</a></li>
+                    %{--<li><a href="#">FP Liquidación</a></li>--}%
                     <li><a href="#" id="btnRubros"><i class="icon-money"></i>Rubros</a></li>
                     <li><a href="#" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>
                     %{--<li><a href="${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}" id="btnDocumentos"><i class="icon-file"></i>Documentos</a></li>--}%
@@ -584,7 +584,7 @@
                         <a href="#" id="btnMapa"><i class="icon-flag"></i>Mapa</a>
                     </li>
                     <li>
-                        <a href="#" id="btnVeri"><i class=""></i>Verificación de Precios</a>
+                        <a href="#" id="btnVeri"><i class="icon-ok"></i>Verifica Precios</a>
                     </li>
 
 

@@ -10,7 +10,7 @@ class VerificacionPreciosController {
 
         def vol = janus.VolumenesObra.findAllByObra(obra)
 
-        println("params:" + params)
+//        println("params:" + params)
 
         def sql = "SELECT\n" +
                   "itemcdgo                     codigo,\n"      +
@@ -22,7 +22,7 @@ class VerificacionPreciosController {
                   "ORDER BY item ASC"
 
 
-        println("sql:" + sql)
+//        println("sql:" + sql)
 
         def cn = dbConnectionService.getConnection()
 

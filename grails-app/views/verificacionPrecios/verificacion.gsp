@@ -41,13 +41,15 @@
                     </thead>
                     <tbody>
                         <g:each in="${res}" var="r">
+                            <g:if test="${r?.fecha != null}">
                             <tr>
                                 <td>${r?.codigo}</td>
                                 <td>${r?.item}</td>
-                                <td>${r?.unidad}</td>
-                                <td><g:formatNumber number="${r?.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/></td>
-                                <td><g:formatDate date="${r?.fecha}" format="dd-MM-yyyy"/></td>
+                                <td style="text-align: center">${r?.unidad}</td>
+                                <td style="text-align: right"><g:formatNumber number="${r?.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/></td>
+                                <td style="text-align: center"><g:formatDate date="${r?.fecha}" format="dd-MM-yyyy"/></td>
                             </tr>
+                            </g:if>
                         </g:each>
                     </tbody>
                 </table>
