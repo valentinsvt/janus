@@ -263,16 +263,41 @@
                                     <g:formatNumber number="${r.costo}" minFractionDigits="4" maxFractionDigits="4" format="##,####0" locale="ec"/>
                                 </td>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.total}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>
+                                    <g:formatNumber number="${r?.total}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>
 
-                                    <g:if test="${r.grid == 1}">
-                                        <g:set var="totalMaterial" value="${totalMaterial + r.total}"/>
+                                    <g:if test="${r?.grid == 1}">
+
+                                        <g:if test="${r?.total == null}">
+
+                                        <g:set var="totalMaterial" value="${totalMaterial}"/>
+
+                                        </g:if>
+                                        <g:else>
+
+                                        <g:set var="totalMaterial" value="${totalMaterial + r?.total}"/>
+                                        </g:else>
+
                                     </g:if>
-                                    <g:elseif test="${r.grid == 2}">
-                                        <g:set var="totalMano" value="${totalMano + r.total}"/>
+                                    <g:elseif test="${r?.grid == 2}">
+                                        <g:if test="${r?.total == null}">
+                                        <g:set var="totalMano" value="${totalMano}"/>
+                                        </g:if>
+                                        <g:else>
+                                        <g:set var="totalMano" value="${totalMano + r?.total}"/>
+                                        </g:else>
                                     </g:elseif>
-                                    <g:elseif test="${r.grid == 3}">
-                                        <g:set var="totalEquipo" value="${totalEquipo + r.total}"/>
+                                    <g:elseif test="${r?.grid == 3}">
+                                        <g:if test="${r?.total == null}">
+                                            <g:set var="totalEquipo" value="${totalEquipo}"/>
+
+                                        </g:if>
+                                        <g:else>
+                                        <g:set var="totalEquipo" value="${totalEquipo + r?.total}"/>
+
+                                        </g:else>
+
+
+
                                     </g:elseif>
 
                                 </td>

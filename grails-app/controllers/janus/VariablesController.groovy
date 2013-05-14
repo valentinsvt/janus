@@ -102,7 +102,10 @@ class VariablesController {
         def cn = dbConnectionService.getConnection()
 
         if (params.rend == "screen" || params.rend == "pdf") {
+
+
             def res = cn.rows(sql.toString())
+
             def sp = cn.rows(sqlSP.toString())
             return [res: res, obra: obra, tipo: params.tipo, rend: params.rend, sp: sp, spsel: params.sp]
         }
