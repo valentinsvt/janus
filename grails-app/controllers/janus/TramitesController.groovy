@@ -411,6 +411,7 @@ class TramitesController {
         tramites = tramites.sort {
             it.fecha.plus(it.tipoTramite.tiempo)
         }
+        println tramites
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
         return [tramites: tramites, usu: usu, campos: campos, finalizados: params.finalizados]
     }
