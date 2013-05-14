@@ -540,7 +540,7 @@
         <div class="span3">
             No se puede generar la Verificación de Precios, porque la obra no cuenta con la Matriz!
         </div>
-            </fieldset>
+    </fieldset>
 
 </div>
 
@@ -1001,16 +1001,16 @@
 
         $("#btnVeri").click(function () {
 
-            if(${verifOK}){
+
+            %{--var verificar = ${verifOK}--}%
+
+            if (${verifOK == true}){
 
                 location.href = "${g.createLink(controller: 'verificacionPrecios', action: 'verificacion', id: obra?.id)}"
 
-
-            } else {
-
-
-                $("#dlgVerificacion").dialog("open");
-
+            }
+            else {
+              $("#dlgVerificacion").dialog("open");
             }
 
         });
