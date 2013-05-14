@@ -170,11 +170,25 @@ class ObraController extends janus.seguridad.Shield {
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
+
             def subs = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
             def volumen = VolumenesObra.findByObra(obra)
+
             def formula = FormulaPolinomica.findByObra(obra)
 
             def cn = dbConnectionService.getConnection()
+
+            def sqlVer =  "SELECT\n" +
+                          "voit__id             id\n" +
+                           "FROM  vlobitem \n" +
+                           "WHERE obra__id= ${params.obra} \n"
+            def verif = cn.rows(sqlVer.toString())
+            def verifOK = false
+
+            if (verif != []){
+
+                verifOK = true
+            }
 
             def sqlMatriz = "select count(*) cuantos from mfcl where obra__id=${params.obra}"
             def matriz = cn.rows(sqlMatriz.toString())[0].cuantos
@@ -182,7 +196,7 @@ class ObraController extends janus.seguridad.Shield {
                 matrizOk = true
             }
             println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK]
         } else {
             [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk]
         }

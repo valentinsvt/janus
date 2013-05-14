@@ -535,6 +535,15 @@
 
 </div>
 
+<div id="dlgVerificacion">
+    <fieldset>
+        <div class="span3">
+            No se puede generar la Verificación de Precios, porque la obra no cuenta con la Matriz!
+        </div>
+            </fieldset>
+
+</div>
+
 
 
 
@@ -574,6 +583,10 @@
                     <li>
                         <a href="#" id="btnMapa"><i class="icon-flag"></i>Mapa</a>
                     </li>
+                    <li>
+                        <a href="#" id="btnVeri"><i class=""></i>Verificación de Precios</a>
+                    </li>
+
 
                 </ul>
 
@@ -983,6 +996,22 @@
         $("#btnMapa").click(function () {
 
             location.href = "${g.createLink(action: 'mapaObra', id: obra?.id)}"
+
+        });
+
+        $("#btnVeri").click(function () {
+
+            if(${verifOK}){
+
+                location.href = "${g.createLink(controller: 'verificacionPrecios', action: 'verificacion', id: obra?.id)}"
+
+
+            } else {
+
+
+                $("#dlgVerificacion").dialog("open");
+
+            }
 
         });
 
@@ -1462,6 +1491,28 @@
 
                     $("#eliminarObraDialog").dialog("close");
                     $("#noEliminarDialog").dialog("close");
+
+                }
+            }
+
+
+        });
+
+
+        $("#dlgVerificacion").dialog({
+
+            autoOpen  : false,
+            resizable : false,
+            modal     : true,
+            draggable : false,
+            width     : 350,
+            height    : 220,
+            position  : 'center',
+            title     : 'No se ha generado la Matriz!',
+            buttons   : {
+                "Aceptar" : function () {
+
+                    $("#dlgVerificacion").dialog("close");
 
                 }
             }
