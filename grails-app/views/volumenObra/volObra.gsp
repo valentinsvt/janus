@@ -250,6 +250,11 @@
 
                 });
 
+                $("#reporteGrupos").click(function () {
+
+                   location.href="${g.createLink(controller: 'reportes',action: 'reporteSubgrupos',id: obra?.id)}"
+                });
+
                 $("#item_codigo").blur(function () {
 //            //console.log($("#item_id").val()=="")
                     if ($("#item_id").val() == "" && $("#item_codigo").val() != "") {

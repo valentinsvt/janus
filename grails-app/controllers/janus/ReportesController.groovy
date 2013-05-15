@@ -20,12 +20,15 @@ import jxl.write.NumberFormat;
 
 //import java.awt.Label
 
+
+
 class ReportesController {
 
     def index() {}
 
     def buscadorService
     def preciosService
+    def dbConnectionService
 
     def garantiasContrato() {
         def contrato = Contrato.get(params.id)
@@ -445,6 +448,112 @@ class ReportesController {
 
         return ia
     }
+
+    def reporteSubgrupos () {
+
+        def obra = Obra.get(params.id)
+
+        def sql ="SELECT\n" +
+                 "dprtdscr          descripcion,\n" +
+                 "itemnmbr          nombre,\n" +
+                 "vlobcntd          cantidad,\n" +
+                 "sbprdscr          subpresupuesto\n" +
+                 "FROM vlob,item,dprt,sbpr\n" +
+                 "where item.item__id=vlob.item__id AND\n" +
+                 "dprt.dprt__id=item.dprt__id AND\n"  +
+                 "sbpr.sbpr__id=vlob.sbpr__id AND\n"  +
+                 "obra__id= ${params.id}\n"+
+                 "order by dprtdscr, itemnmbr"
+
+//        println("sql:" + sql)
+
+        def cn = dbConnectionService.getConnection()
+
+        def res = cn.rows(sql.toString())
+
+//        return [res: res, obra: obra]
+
+        def baos = new ByteArrayOutputStream()
+        def name = "subgrupos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.BLACK)
+        times10boldWhite.setColor(Color.BLACK)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal]
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Subgrupos " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, rubros");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeader = [border: Color.WHITE, colspan: 7,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellIzquierda = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.WHITE, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum]
+
+            Paragraph headers = new Paragraph();
+            addEmptyLine(headers, 1);
+            headers.setAlignment(Element.ALIGN_CENTER);
+            headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
+            headers.add(new Paragraph("SUBGRUPOS", times10bold));
+            headers.add(new Paragraph("OBRA:" + obra?.descripcion, times10bold));
+            headers.add(new Paragraph("FECHA:" + new Date().format("dd-MM-yyyy"), times10bold));
+
+            addEmptyLine(headers, 1);
+            document.add(headers);
+
+        PdfPTable table = new PdfPTable(4);
+        table.setWidthPercentage(100);
+        table.setWidths(arregloEnteros([25, 40, 15, 20]))
+        addCellTabla(table, new Paragraph("Descripción", times10boldWhite), prmsCellHead)
+        addCellTabla(table, new Paragraph("Item", times10boldWhite), prmsCellHead)
+        addCellTabla(table, new Paragraph("Cantidad", times10boldWhite), prmsCellHead)
+        addCellTabla(table, new Paragraph("Subpresupuesto", times10boldWhite), prmsCellHead)
+
+        res.each {r->
+
+            addCellTabla(table, new Paragraph(r?.descripcion, times8normal), prmsCellIzquierda)
+            addCellTabla(table, new Paragraph(r?.nombre, times8normal), prmsCellIzquierda)
+            addCellTabla(table, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits: 3, maxFractionDigits: 3, format: "##,###0", locale: "ec"), times8normal), prmsNum)
+            addCellTabla(table, new Paragraph(r?.subpresupuesto, times8normal), prmsCellIzquierda)
+//            addCellTabla(table, new Paragraph(g.formatNumber(number: r?.subpresupuesto?.descripcion, minFractionDigits: 0, maxFractionDigits: 0, format: "##,#0", locale: "ec"), times8normal), prmsNum)
+
+        }
+
+        document.add(table);
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+    }
+
 
 
     def imprimirRubrosExcel() {
@@ -3019,26 +3128,6 @@ class ReportesController {
 
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor;
-
-
-//        def valorCoef = 0;
-//
-//
-//        ps.valor.each { i ->
-//
-//
-//            valorCoef = i
-//
-//            valorCoef += valorCoef
-//
-////            println(i)
-////            println(valorCoef)
-//
-////            return valorCoef
-//
-//        }
-
-
 
 
         if (params.firmasIdFormu.trim().size() > 0) {
