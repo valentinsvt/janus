@@ -92,9 +92,10 @@
     <table  class="table table-bordered table-striped table-condensed table-hover" style="font-size: 10px !important;">
         <thead>
         <tr>
-            <th>Tramite</th>
+            <th width="110px;">Trámite Principal</th>
+            <th width="110px;">Trámite</th>
             <th>Fecha</th>
-            <th>Limite</th>
+            <th>Límite</th>
             <th>Asunto</th>
             <th>Recibido</th>
             <th>Fec. Recibido</th>
@@ -103,6 +104,7 @@
         <tbody>
         <g:each in="${tramites}" var="t">
             <tr>
+                <td>${t["NMASTER"]}</td>
                 <td>${t["NTRAMITE"]}</td>
                 <td>${t["TFECHA"]}</td>
                 <td>${t["TFLIMITE"]}</td>

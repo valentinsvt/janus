@@ -29,8 +29,8 @@ class TramiteController extends janus.seguridad.Shield {
             /*mysql */
 
 
-            //def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
-            def sql = Sql.newInstance("jdbc:mysql://127.0.0.1:3306/dbf", "root","root", "com.mysql.jdbc.Driver")
+            def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
+            //def sql = Sql.newInstance("jdbc:mysql://127.0.0.1:3306/dbf", "root","root", "com.mysql.jdbc.Driver")
 
             sql.eachRow("select * from docmaster where NMASTER= '${memo}'".toString()) {r->
                 header.put("NMASTER",r["NMASTER"])
@@ -52,11 +52,11 @@ class TramiteController extends janus.seguridad.Shield {
                 tramites.add(tmp)
             }
             sql.close()
-        }catch ( e) {
+        } catch (e) {
             println "error "+e
             e.printStackTrace()
         }
-        [memo:memo,header:header,tramites:tramites]
+        [memo: memo, header: header, tramites: tramites]
     }
 
     def cargarDatos(){
