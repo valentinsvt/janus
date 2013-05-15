@@ -979,17 +979,17 @@
 
         $("#btnDocumentos").click(function () {
 
-            if (${obra?.estado == 'R'}) {
+            %{--if (${obra?.estado == 'R'}) {--}%
 
-                $("#dlgLoad").dialog("open");
+                %{--$("#dlgLoad").dialog("open");--}%
 
                 location.href = "${g.createLink(controller: 'documentosObra', action: 'documentosObra', id: obra?.id)}"
-
-            }
-            else {
-                $("#documentosDialog").dialog("open")
-
-            }
+//
+//            }
+//            else {
+//                $("#documentosDialog").dialog("open")
+//
+//            }
 
         });
 
@@ -1053,9 +1053,7 @@
                     resizable : false,
                     draggable : false,
                     buttons   : {
-                        "Cancelar"         : function () {
 
-                        },
                         "Sí"               : function () {
                             url += "1";
                             location.href = url;
@@ -1072,6 +1070,10 @@
                         "Especificaciones" : function () {
                             var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}";
                             location.href = url;
+                        },
+
+                        "Cancelar"         : function () {
+
                         }
                     }
                 }

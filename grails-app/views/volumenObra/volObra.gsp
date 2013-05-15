@@ -59,6 +59,10 @@
                 <i class="icon-table"></i>
                 Calcular
             </a>
+            <a href="#" class="btn btn-ajax btn-new" id="reporteGrupos" title="Reporte Grupos/Subgrupos">
+                <i class="icon-table"></i>
+                Reporte Grupos/Subgrupos
+            </a>
             %{--<a href="#" class="btn btn-ajax btn-new" id="transporte" title="Transporte">--}%
             %{--<i class="icon-truck"></i>--}%
             %{--Transporte--}%
