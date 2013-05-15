@@ -457,13 +457,17 @@ class ReportesController {
                  "dprtdscr          descripcion,\n" +
                  "itemnmbr          nombre,\n" +
                  "vlobcntd          cantidad,\n" +
-                 "sbprdscr          subpresupuesto\n" +
-                 "FROM vlob,item,dprt,sbpr\n" +
+                 "sbprdscr          subpresupuesto,\n" +
+                 "grpodscr          grupo,\n"   +
+                 "sbgrdscr          subgrupo\n" +
+                 "FROM vlob,item,dprt,sbpr,grpo,sbgr\n" +
                  "where item.item__id=vlob.item__id AND\n" +
                  "dprt.dprt__id=item.dprt__id AND\n"  +
                  "sbpr.sbpr__id=vlob.sbpr__id AND\n"  +
+                 "sbgr.sbgr__id=dprt.sbgr__id AND\n"  +
+                 "grpo.grpo__id=sbgr.grpo__id AND\n"  +
                  "obra__id= ${params.id}\n"+
-                 "order by dprtdscr, itemnmbr"
+                 "order by sbprdscr,grpodscr,sbgrdscr,dprtdscr,itemnmbr"
 
 //        println("sql:" + sql)
 
@@ -525,20 +529,26 @@ class ReportesController {
             addEmptyLine(headers, 1);
             document.add(headers);
 
-        PdfPTable table = new PdfPTable(4);
+        PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
-        table.setWidths(arregloEnteros([25, 40, 15, 20]))
-        addCellTabla(table, new Paragraph("Descripción", times10boldWhite), prmsCellHead)
+        table.setWidths(arregloEnteros([16,15,15,20,25,9]))
+
+        addCellTabla(table, new Paragraph("Subpresupuesto", times10boldWhite), prmsCellHead)
+        addCellTabla(table, new Paragraph("Solicitante", times10boldWhite), prmsCellHead)
+        addCellTabla(table, new Paragraph("Grupo", times10boldWhite), prmsCellHead)
+        addCellTabla(table, new Paragraph("Subgrupo", times10boldWhite), prmsCellHead)
         addCellTabla(table, new Paragraph("Item", times10boldWhite), prmsCellHead)
         addCellTabla(table, new Paragraph("Cantidad", times10boldWhite), prmsCellHead)
-        addCellTabla(table, new Paragraph("Subpresupuesto", times10boldWhite), prmsCellHead)
+
 
         res.each {r->
-
+            addCellTabla(table, new Paragraph(r?.subpresupuesto, times8normal), prmsCellIzquierda)
+            addCellTabla(table, new Paragraph(r?.grupo, times8normal), prmsCellIzquierda)
+            addCellTabla(table, new Paragraph(r?.subgrupo, times8normal), prmsCellIzquierda)
             addCellTabla(table, new Paragraph(r?.descripcion, times8normal), prmsCellIzquierda)
             addCellTabla(table, new Paragraph(r?.nombre, times8normal), prmsCellIzquierda)
             addCellTabla(table, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits: 3, maxFractionDigits: 3, format: "##,###0", locale: "ec"), times8normal), prmsNum)
-            addCellTabla(table, new Paragraph(r?.subpresupuesto, times8normal), prmsCellIzquierda)
+
 //            addCellTabla(table, new Paragraph(g.formatNumber(number: r?.subpresupuesto?.descripcion, minFractionDigits: 0, maxFractionDigits: 0, format: "##,#0", locale: "ec"), times8normal), prmsNum)
 
         }
