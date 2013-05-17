@@ -82,18 +82,25 @@ class VolumenObraController extends janus.seguridad.Shield{
 //        println "indirecto "+indirecto
         preciosService.ac_rbroObra(obra.id)
 
-        detalle.each{
+        def valores = preciosService.rbro_pcun_v2(obra.id)
 
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-//            println "res "+res+" "+it.item.id+"  "+obra.id
-//            println "r->" + (res["precio"][0]+res["precio"][0]*indirecto)+"   <<<>>> "+res
-            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+        valores.each {
+
+//           println(it)
+
+
         }
+
+//        detalle.each{
 //
-//        println "precios "+precios
-
-
-        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100]
+//            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
+////            println "res "+res+" "+it.item.id+"  "+obra.id
+////            println "r->" + (res["precio"][0]+res["precio"][0]*indirecto)+"   <<<>>> "+res
+//            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+//        }
+//
+//        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
+        [subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
 
     }
 
@@ -106,6 +113,39 @@ class VolumenObraController extends janus.seguridad.Shield{
         redirect(action: "tabla",params: [obra:obra.id])
 
     }
+
+    def copiarRubros () {
+
+        def obra = Obra.get(params.obra)
+        def detalle
+        if (params.sub && params.sub != "null") {
+            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+        }
+        else
+            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
+        def precios = [:]
+        def fecha = obra.fechaPreciosRubros
+        def dsps = obra.distanciaPeso
+        def dsvl = obra.distanciaVolumen
+        def lugar = obra.lugar
+        def prch = 0
+        def prvl = 0
+        def indirecto = obra.totales/100
+
+        preciosService.ac_rbroObra(obra.id)
+
+        detalle.each{
+
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
+            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+        }
+
+        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100]
+
+    }
+
 
     def buscaRubro() {
 

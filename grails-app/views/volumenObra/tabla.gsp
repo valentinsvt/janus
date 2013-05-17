@@ -12,7 +12,12 @@
     </div>
 
 
-    <div class="span4">
+    <div class="span4" style="width: 500px">
+
+        <a href="#" class="btn  " id="copiar_rubros">
+            <i class="icon-copy"></i>
+            Copiar Rubros
+        </a>
         <a href="#" class="btn  " id="imprimir_sub">
             <i class="icon-file"></i>
             Imprimir Subpresupuesto
@@ -34,10 +39,13 @@
         <th style="width: 20px;">
             #
         </th>
+        <th style="width: 200px;">
+            Subpresupuesto
+        </th>
         <th style="width: 80px;">
             Código
         </th>
-        <th style="width: 600px;">
+        <th style="width: 400px;">
             Rubro
         </th>
         <th style="width: 60px" class="col_unidad">
@@ -53,27 +61,50 @@
     </thead>
     <tbody id="tabla_material">
 
-    <g:each in="${detalle}" var="vol" status="i">
+    %{--<g:each in="${detalle}" var="vol" status="i">--}%
 
-        <tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">
-            <td style="width: 20px" class="orden">${vol.orden}</td>
-            <td class="cdgo">${vol.item.codigo}</td>
-            <td class="nombre">${vol.item.nombre}</td>
-            <td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>
+        %{--<tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">--}%
+            %{--<td style="width: 20px" class="orden">${vol.orden}</td>--}%
+            %{--<td style="width: 200px" class="sub">${vol?.subPresupuesto?.descripcion}</td>--}%
+            %{--<td class="cdgo">${vol.item.codigo}</td>--}%
+            %{--<td class="nombre">${vol.item.nombre}</td>--}%
+            %{--<td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>--}%
+            %{--<td style="text-align: right" class="cant">--}%
+                %{--<g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+            %{--</td>--}%
+            %{--<td class="col_precio" style="display: none;text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
+            %{--<td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${precios[vol.id.toString()]*vol.cantidad}" format="##,##0" roundingMode="HALF_UP" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
+            %{--<td style="width: 40px;text-align: center" class="col_delete">--}%
+                %{--<a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${vol.id}">--}%
+                    %{--<i class="icon-trash"></i></a>--}%
+            %{--</td>--}%
+        %{--</tr>--}%
+
+    %{--</g:each>--}%
+
+    <g:each in="${valores}" var="val" status="j">
+        <tr class="item_row" id="${val.item__id}" item="${val}">
+
+            <td style="width: 20px" class="orden"></td>
+            <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
+            <td class="cdgo">${val.rbrocdgo.trim()}</td>
+            <td class="nombre">${val.rbronmbr.trim()}</td>
+            <td style="width: 60px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
             <td style="text-align: right" class="cant">
-                <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
             </td>
-            <td class="col_precio" style="display: none;text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-            <td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${precios[vol.id.toString()]*vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+             <td class="col_precio" style="display: none;text-align: right" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+            <td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
             <td style="width: 40px;text-align: center" class="col_delete">
-                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${vol.id}">
+                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${val.item__id}">
                     <i class="icon-trash"></i></a>
             </td>
-        </tr>
 
+        </tr>
     </g:each>
     </tbody>
 </table>
+
 <script type="text/javascript">
 
     $.contextMenu({
@@ -239,4 +270,15 @@
             });
         }
     });
+
+$("#copiar_rubros").click(function () {
+
+
+    location.href="${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" + ${obra?.id}
+
+});
+
+
+
+
 </script>

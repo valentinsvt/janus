@@ -344,6 +344,20 @@ class PreciosService {
         return result
     }
 
+
+    def rbro_pcun_v2(obra){
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rbro_pcun_v2(" + obra + ") "
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+
+    }
+
     def actualizaOrden(volumen, tipo) {
 
         def vlob = VolumenesObra.findAll("from VolumenesObra where obra = ${volumen.obra.id} order by orden asc,id desc")

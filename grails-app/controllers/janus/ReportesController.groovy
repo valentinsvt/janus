@@ -1977,40 +1977,130 @@ class ReportesController {
 
         def totalPresupuesto = 0;
 
-        detalle.each {
+        def valores = preciosService.rbro_pcun_v2(obra.id)
 
-//            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
-//            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
-            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
-//            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
+//        println("-->>>>" + subPres.descripcion)
+//
+//        subPres.each {
+//
+//            println("externo:" + it)
+
+            valores.each {
+
+//                println("interno:" + it.sbprdscr)
+//
+//               if(it.sbprdscr == subPres.descripcion){
 
 
-            addCellTabla(tablaVolObra, new Paragraph(it?.item?.codigo, times8normal), prmsCellCenter)
+                addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellCenter)
 
 
-            addCellTabla(tablaVolObra, new Paragraph(it?.item?.nombre, times8normal), prmsCellLeft)
+                addCellTabla(tablaVolObra, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)
 
 
-            addCellTabla(tablaVolObra, new Paragraph(it?.item?.unidad?.codigo, times8normal), prmsCellCenter)
+                addCellTabla(tablaVolObra, new Paragraph(it.unddcdgo, times8normal), prmsCellCenter)
 
 
-            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
+                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
+                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
 
-            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
-                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
+                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
+                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
 
-            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()] * it.cantidad, minFractionDigits:
-                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
+                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
+                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
 
-            totales = precios[it.id.toString()] * it.cantidad
+                totales =  it.totl
+
+                totalPresupuesto = (total1 += totales);
+
+
+//               }else{
+//
+//
+//
+//               }
+
+//
+
+            }
+
+
+//        }
+
+
+
+
+//        detalle.each {
+//
+////            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
+////            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+//            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+//            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+////            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
+//
+//
+//            addCellTabla(tablaVolObra, new Paragraph(it?.item?.codigo, times8normal), prmsCellCenter)
+//
+//
+//            addCellTabla(tablaVolObra, new Paragraph(it?.item?.nombre, times8normal), prmsCellLeft)
+//
+//
+//            addCellTabla(tablaVolObra, new Paragraph(it?.item?.unidad?.codigo, times8normal), prmsCellCenter)
+//
+//
+//            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it?.cantidad, minFractionDigits:
+//                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
+//
+//            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()], minFractionDigits:
+//                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
+//
+//            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: precios[it.id.toString()] * it.cantidad, minFractionDigits:
+//                    2, maxFractionDigits: 2, format: "###,###", locale: "ec"), times8normal), prmsCellRight)
+//
+//            totales = precios[it.id.toString()] * it.cantidad
+//
+//            totalPresupuesto = (total1 += totales);
+//
+////
+//
+//        }
+
+
+        //nuevo
+
+        valores.each {
+
+
+            addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellCenter)
+
+
+            addCellTabla(tablaVolObra, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)
+
+
+            addCellTabla(tablaVolObra, new Paragraph(it.unddcdgo, times8normal), prmsCellCenter)
+
+
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
+                    2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
+                    2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
+                    2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+
+            totales =  it.totl
 
             totalPresupuesto = (total1 += totales);
 
 //
 
         }
+
+
 
 //        println("TP" + totalPresupuesto)
 
@@ -4043,10 +4133,7 @@ class ReportesController {
     def reporteExcelVolObra() {
 
         def obra = Obra.get(params.id)
-
-
         def detalle
-
         detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
@@ -4059,15 +4146,17 @@ class ReportesController {
         def prvl = 0
         preciosService.ac_rbroObra(obra.id)
 
+        def valores = preciosService.rbro_pcun_v2(obra.id)
+
         def indirecto = obra.totales / 100
 
         def c;
 
         def total1 = 0;
 
-        def totales
+        def totales = 0
 
-        def totalPresupuesto;
+        def totalPresupuesto = 0;
 
         //excel
 
@@ -4132,29 +4221,34 @@ class ReportesController {
         label = new Label(5, 8, "UNITARIO", times16format); sheet.addCell(label);
         label = new Label(6, 8, "C.TOTAL", times16format); sheet.addCell(label);
 
-        detalle.each {
+        valores.each {
 
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
-            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+//            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//
+//            def precioUnitario = precios[it.id.toString()]
+//
+//            def subtotal = (precios[it.id.toString()] * it.cantidad)
 
-            def precioUnitario = precios[it.id.toString()]
-
-            def subtotal = (precios[it.id.toString()] * it.cantidad)
+//            number = new Number(0, fila, numero++); sheet.addCell(number);
+//            label = new Label(1, fila, it?.item?.codigo.toString()); sheet.addCell(label);
+//            label = new Label(2, fila, it?.item?.nombre.toString()); sheet.addCell(label);
+//            label = new Label(3, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
+//            number = new Number(4, fila, it?.cantidad); sheet.addCell(number);
+//            number = new Number(5, fila, precioUnitario); sheet.addCell(number);
+//            number = new Number(6, fila, subtotal); sheet.addCell(number);
 
             number = new Number(0, fila, numero++); sheet.addCell(number);
-            label = new Label(1, fila, it?.item?.codigo.toString()); sheet.addCell(label);
-            label = new Label(2, fila, it?.item?.nombre.toString()); sheet.addCell(label);
-            label = new Label(3, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
-            number = new Number(4, fila, it?.cantidad); sheet.addCell(number);
-            number = new Number(5, fila, precioUnitario); sheet.addCell(number);
-            number = new Number(6, fila, subtotal); sheet.addCell(number);
+            label = new Label(1, fila, it.rbrocdgo.toString()); sheet.addCell(label);
+            label = new Label(2, fila, it.rbronmbr.toString()); sheet.addCell(label);
+            label = new Label(3, fila, it.unddcdgo.toString()); sheet.addCell(label);
+            number = new Number(4, fila, it.vlobcntd); sheet.addCell(number);
+            number = new Number(5, fila, it.pcun); sheet.addCell(number);
+            number = new Number(6, fila, it.totl); sheet.addCell(number);
 
             fila++
-
-            totales = precios[it.id.toString()] * it.cantidad
-
+            totales = it.totl
             totalPresupuesto = (total1 += totales);
-
             ultimaFila = fila
 
         }

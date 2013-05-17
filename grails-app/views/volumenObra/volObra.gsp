@@ -60,7 +60,7 @@
                 Calcular
             </a>
             <a href="#" class="btn btn-ajax btn-new" id="reporteGrupos" title="Reporte Grupos/Subgrupos">
-                <i class="icon-table"></i>
+                <i class="icon-print"></i>
                 Reporte Grupos/Subgrupos
             </a>
             %{--<a href="#" class="btn btn-ajax btn-new" id="transporte" title="Transporte">--}%
@@ -96,13 +96,16 @@
                 </div>
 
                 <div class="row-fluid" style="margin-left: 0px">
-                    <div class="span4">
-                        <b>Subpresupuesto:</b>
+                    <div class="span4" style="width: 400px">
+                        <b>Crear Subpresupuesto / Ingresar Rubros:</b>
                         <span id="sp">
                             <g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>
                         </span>
                         <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-plus"></i>
+                        </a>
+                        <a href="#" class="btn" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">
+                            <i class="icon-minus"></i>
                         </a>
                     </div>
 
@@ -118,17 +121,17 @@
 
                     </div>
 
-                    <div class="span2" style="margin-left: 20px; width: 100px;">
+                    <div class="span2" style="margin-left: 10px; width: 100px;">
                         <b>Cantidad</b>
                         <input type="text" style="width: 100px;text-align: right" id="item_cantidad" value="1">
                     </div>
 
-                    <div class="span1" style="margin-left: 20px; width: 60px;">
+                    <div class="span1" style="margin-left: 10px; width: 60px;">
                         <b>Orden</b>
                         <input type="text" style="width: 30px;text-align: right" id="item_orden" value="${(volumenes?.size() > 0) ? volumenes.size() + 1 : 1}">
                     </div>
 
-                    <div class="span1" style="margin-left: 15px;padding-top:30px">
+                    <div class="span1" style="margin-left: 5px;padding-top:30px">
                         <input type="hidden" value="" id="vol_id">
                         <g:if test="${obra?.estado != 'R'}">
                             <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
@@ -185,7 +188,19 @@
             </div>
         </div>
 
-        <script type="text/javascript">
+    <div id="borrarSPDialog">
+        <fieldset>
+            <div class="span3">
+                Está seguro que desea borrar el subpresupuesto?
+            </div>
+        </fieldset>
+
+    </div>
+
+
+
+
+    <script type="text/javascript">
             function loading(div) {
                 y = 0;
                 $("#" + div).html("<div class='tituloChevere' id='loading'>Sistema Janus - Cargando, Espere por favor</div>")
@@ -217,7 +232,7 @@
             }
             $(function () {
                 %{--$("#detalle").html("<img src='${resource(dir: 'images',file: 'loadingText.gif')}' width='300px' height='45px'>")--}%
-
+//                var total = 0
                 cargarTabla();
                 $("#vol_id").val("")
                 $("#calcular").click(function () {
@@ -233,10 +248,13 @@
                         $(".col_precio").show()
                         $(".col_total").show()
                         var total = 0
+//                        var total1 = 0
+
                         $(".total").each(function () {
+
                             total += parseFloat(str_replace(",", "", $(this).html()))
                         })
-                        $("#divTotal").html(number_format(total, 2, ".", " "))
+                        $("#divTotal").html(number_format(total, 2, ".", ""))
                     }
                 });
 
@@ -337,6 +355,65 @@
                     });
                     return false;
                 });
+
+                $("#btnBorrarSP").click (function () {
+
+                    $("#borrarSPDialog").dialog("open")
+
+
+
+                });
+
+
+                $("#borrarSPDialog").dialog({
+
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 350,
+                    height    : 180,
+                    position  : 'center',
+                    title     : 'Borrar Subpresupuesto',
+                    buttons   : {
+                        "Aceptar" : function () {
+
+                            var id = $("#subPres").val();
+
+                            console.log("id:" + id)
+
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(controller:"subPresupuesto",action:'delete')}",
+                                data    : {
+                                      id: id
+                                },
+                                success : function (msg) {
+
+                                    if (msg != "NO") {
+                                        $("#sp").html(msg);
+                                        location.href = "${createLink(controller: "volumenObra" ,action: 'volObra',id: obra?.id )}"
+
+                                    }else {
+
+                                        location.href = "${createLink(controller: "volumenObra" ,action: 'volObra',id: obra?.id )}"
+
+                                    }
+
+                                }
+                            });
+
+                            $("#borrarSPDialog").dialog("close");
+                        },
+                        "Cancelar" : function (){
+
+                            $("#borrarSPDialog").dialog("close");
+
+                        }
+                    }
+
+                });
+
 
                 $("#item_agregar").click(function () {
                     $("#calcular").removeClass("active")
