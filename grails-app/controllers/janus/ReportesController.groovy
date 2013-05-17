@@ -70,7 +70,22 @@ class ReportesController {
         def columnas = []
         def filas = []
         cn.eachRow(sql.toString()) { r ->
-            columnas.add([r[0], r[1], r[2]])
+            def col = r[1]
+            if (r[2] != "R") {
+                def parts = col.split("_")
+                //println "parts "+parts
+                try {
+                    col = parts[0].toLong()
+                    col = Item.get(col).nombre
+
+                } catch (e){
+                    col = parts[0]
+                }
+
+                col += parts[1]?.replaceAll("T"," Total")?.replaceAll("U"," Unitario")
+            }
+
+            columnas.add([r[0], col, r[2]])
         }
         sql = "SELECT * from mfrb where obra__id=${params.id} order by orden"
         def cont = 1

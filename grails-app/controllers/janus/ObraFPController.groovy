@@ -377,7 +377,7 @@ class ObraFPController {
         //tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and sbpr__id = ${sbpr} and "
         tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and ${tx_wh}"
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 2 "
-        tx_sql += "order by item.itemcdgo"
+        tx_sql += "group by item.item__id, grpo__id order by item.itemcdgo"       //gdo --group by item.item__id, grpo__id
         //println "manoDeObra: $tx_sql"
         cn.eachRow(tx_sql.toString()) { row ->
 /*
@@ -417,7 +417,7 @@ class ObraFPController {
         //tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and sbpr__id = ${sbpr} and "
         tx_sql += "where item.item__id = vlobitem.item__id and obra__id = ${id} and ${tx_wh}"
         tx_sql += "dprt.dprt__id = item.dprt__id and sbgr.sbgr__id = dprt.sbgr__id and grpo__id = 1 "
-        tx_sql += "order by item.itemcdgo"
+        tx_sql += "group by item.item__id, grpo__id order by item.itemcdgo"  //gdo --
         //println "materiales: " + tx_sql
         cn.eachRow(tx_sql.toString()) { row ->
 /*
@@ -557,7 +557,7 @@ class ObraFPController {
         ejecutaSQL("update mfvl set valor = valor + ${pcun * cntd} where obra__id = ${id} and clmncdgo = ${clmn} and codigo = 'sS1'")
 
         clmn = columnaCdgo(id, "TOTAL_T")
-        //println "aumenta a TOTAL_T:  campo: $cmpo columna: $clmn incr:" +  incr
+        //if (rbro == "C-0020") println "aumenta a TOTAL_T:  campo: $cmpo columna: $clmn incr:" +  incr
         //println "update mfvl set valor = valor + ${incr} where clmncdgo = ${clmn} and codigo = '${rbro}'"
         ejecutaSQL("update mfvl set valor = valor + ${incr} where obra__id = ${id} and clmncdgo = ${clmn} and codigo = '${rbro}'")
     }
@@ -628,6 +628,7 @@ class ObraFPController {
             cn1.eachRow(tx_cr.toString()) { cr ->
                 //poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
                 poneValores(id, cr.item__id, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
+                //if (row.itemcdgo == "C-0020") println "${cr.pcun}  +  ${cr.pcun * row.vlobcntd}"
             }
         }
         cn.close()
@@ -642,7 +643,7 @@ class ObraFPController {
         def cntd = 0.0
         if (sbpr == 0) {
             if (obra.estado == 'N') {
-                tx_sql = "select rbrocdgo, trnp from rbro_pcun_v2(${id})"
+                tx_sql = "select distinct rbrocdgo, trnp from rbro_pcun_v2(${id})"
             } else {
 /*
                 tx_sql  = "select itemcdgo rbrocdgo, coalesce(sum(rbrocntd * itemdstn * itemtrfa * obit.itempeso),0) trnp "
@@ -655,7 +656,7 @@ class ObraFPController {
             }
         } else {
             if (obra.estado == 'N') {
-                tx_sql = "select rbrocdgo, trnp from rbro_pcun_v2(${id}) where sbpr__id = ${sbpr}"
+                tx_sql = "select dictinct rbrocdgo, trnp from rbro_pcun_v2(${id}) where sbpr__id = ${sbpr}"
             } else {    /* TODO --- seguir con proceso de genera matrizFP */
                 tx_sql = "select distinct itemcdgo rbrocdgo, rbrotrnp trnp from obrb, item, vlob "
                 tx_sql += "where obrb.obra__id = ${id} and item.item__id = obrb.rbrocdgo and "
@@ -672,6 +673,7 @@ class ObraFPController {
             ejecutaSQL("update mfvl set valor = ${row.trnp} where obra__id = ${id} and codigo = '${row.rbrocdgo}' and " +
                     "clmncdgo = ${clmn}")
             clmn = columnaCdgo(id, 'TOTAL_T');
+            //if (row.rbrocdgo == "C-0020") println "aumenta a ..TOTAL_T:  incr:" +  row.trnp * cntd
             ejecutaSQL("update mfvl set valor = valor + ${row.trnp * cntd} where obra__id = ${id} and codigo = '${row.rbrocdgo}' and " +
                     "clmncdgo = ${clmn}")
         }
@@ -703,10 +705,10 @@ class ObraFPController {
         def cntd = 0.0
         if (sbpr == 0) {
             tx_sql = "select item.item__id, itemcdgo from vlob, item where obra__id = ${id} and vlobcntd > 0 and "
-            tx_sql += "item.item__id = vlob.item__id"
+            tx_sql += "item.item__id = vlob.item__id group by item.item__id, itemcdgo"
         } else {
             tx_sql = "select item.item__id, itemcdgo from vlob, item where obra__id = ${id} and sbpr__id = ${sbpr} and "
-            tx_sql += "vlobcntd > 0 and item.item__id = vlob.item__id"
+            tx_sql += "vlobcntd > 0 and item.item__id = vlob.item__id group by item.item__id, itemcdgo"
         }
         //println "acEquipos: " + tx_sql
         cn.eachRow(tx_sql.toString()) { row ->
@@ -770,6 +772,7 @@ class ObraFPController {
                     cntd = rubroCantidad(id, row.itemcdgo)
                     ejecutaSQL("update mfvl set valor = valor + ${d.pcun * cntd} where obra__id = ${id} and codigo = '${row.itemcdgo}' " +
                             " and clmncdgo = ${clmn}")
+                    //if (row.itemcdgo == "C-0020") println "aumenta a eqTOTAL_T:  incr:" +  d.pcun * cntd
                 }
             }
         }
@@ -887,18 +890,19 @@ class ObraFPController {
         def repuestos = totalSx(id, "${id_repuestos}_T", "sS1")
         def combustible = totalSx(id, "${id_combustible}_T", "sS1")
         def chofer = totalSx(id, "${obra.chofer.id}_T", "sS1")
-/*
+
         actualizaS2(id, "${id_equipo}_T", transporte * 0.52)
         actualizaS2(id, "${id_repuestos}_T", transporte * 0.26 + repuestos)
         actualizaS2(id, "${id_combustible}_T", transporte * 0.08 + combustible)
         actualizaS2(id, "${id_mecanico}_T", transporte * 0.11 + mecanico)
         actualizaS2(id, "${id_saldo}_T", transporte * 0.03 + saldo)
-*/
+/*
         actualizaS2(id, "${id_equipo}_T", transporte * obra.desgloseEquipo)
         actualizaS2(id, "${id_repuestos}_T", transporte * obra.desgloseRepuestos + repuestos)
         actualizaS2(id, "${id_combustible}_T", transporte * obra.desgloseCombustible + combustible)
         actualizaS2(id, "${id_mecanico}_T", transporte * obra.desgloseMecanico + mecanico)
         actualizaS2(id, "${id_saldo}_T", transporte * obra.desgloseSaldo + saldo)
+*/
 
         actualizaS2(id, "${obra.chofer.id}_T", totalTrnp * (1 - fraccion) + chofer)
     }
@@ -1082,6 +1086,7 @@ class ObraFPController {
         cn.close()
     }
 
+/*
     def lazo = {
         def inicia = new Date()
         def suma = 0.0
@@ -1096,5 +1101,6 @@ class ObraFPController {
 
         render "tiempo ... ${fin.getTime() - inicia.getTime()}"
     }
+*/
 
 }
