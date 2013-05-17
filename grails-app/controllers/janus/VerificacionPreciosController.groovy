@@ -12,13 +12,13 @@ class VerificacionPreciosController {
 
 //        println("params:" + params)
 
-        def sql = "SELECT\n" +
+        def sql = "SELECT distinct\n" +
                   "itemcdgo                     codigo,\n"      +
                   "itemnmbr                     item,\n"      +
                   "unddcdgo                     unidad,\n"      +
                   "rbpcpcun                     punitario,\n"      +
                   "rbpcfcha                     fecha\n"      +
-                  "FROM obra_rbpc(${params.id})\n"  +
+                  "FROM obra_rbpc(${params.id}) \n"  +
                   "ORDER BY item ASC"
 
 
