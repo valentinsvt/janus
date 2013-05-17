@@ -451,7 +451,7 @@
             </div>
 
             <div class="span2">
-                <g:textField type="text" name="desgloseCombustibles" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseCombustible), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                <g:textField type="text" name="desgloseCombustible" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseCombustible), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
         </div>
         <div class="row-fluid margen">
