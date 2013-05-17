@@ -2002,49 +2002,49 @@ class ReportesController {
 //
 //            println("externo:" + it)
 
-            valores.each {
-
-//                println("interno:" + it.sbprdscr)
+//            valores.each {
 //
-//               if(it.sbprdscr == subPres.descripcion){
-
-
-                addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellCenter)
-
-
-                addCellTabla(tablaVolObra, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)
-
-
-                addCellTabla(tablaVolObra, new Paragraph(it.unddcdgo, times8normal), prmsCellCenter)
-
-
-                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
-
-                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
-
-                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
-
-                totales =  it.totl
-
-                totalPresupuesto = (total1 += totales);
-
-
-//               }else{
+////                println("interno:" + it.sbprdscr)
+////
+////               if(it.sbprdscr == subPres.descripcion){
 //
 //
+//                addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellCenter)
 //
-//               }
-
 //
-
-            }
-
-
-//        }
-
+//                addCellTabla(tablaVolObra, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)
+//
+//
+//                addCellTabla(tablaVolObra, new Paragraph(it.unddcdgo, times8normal), prmsCellCenter)
+//
+//
+//                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
+//                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+//
+//                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
+//                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+//
+//                addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
+//                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+//
+//                totales =  it.totl
+//
+//                totalPresupuesto = (total1 += totales);
+//
+//
+////               }else{
+////
+////
+////
+////               }
+//
+////
+//
+//            }
+//
+//
+////        }
+//
 
 
 
