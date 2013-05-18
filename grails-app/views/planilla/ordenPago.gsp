@@ -246,6 +246,7 @@
     <div id="div_form" style="display: none">
         <g:form class="form-horizontal" name="frmSave-Planilla" action="saveOrdenPago">
             <g:hiddenField name="id" value="${planillaInstance?.id}"/>
+            <g:hiddenField name="contrato_id" value="${planillaInstance?.contrato.id}"/>
 
             <div class="control-group">
                 <div>
@@ -300,11 +301,11 @@
 
     $("#btnPagar").click(function () {
         $("#modal-tramite").modal("show");
-        $(this).replaceWith(spinner);
+        //$(this).replaceWith(spinner);
         var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
         btnSave.click(function () {
             if ($("#frmRegistrar-tramite").valid()) {
-                $(this).replaceWith(spinner);
+                //$(this).replaceWith(spinner);
                 $.ajax({
                     type    : "POST",
                     url     : "${createLink(controller:'tramites' , action:'registrar')}",
@@ -325,8 +326,10 @@
             success  : function (msg) {
 
                 $("#modalBody").html(msg)
+
             }
         });
+
 //
 //        $("#dlgLoad").dialog("open")
 //        $("#frmSave-Planilla").submit();

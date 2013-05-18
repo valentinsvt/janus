@@ -233,6 +233,10 @@
                         $("#modal-busca").modal("show");
                     }
                 });
+
+                //$("#tipoTramite").val('4');
+                //$("#tipoTramite").trigger("change")
+
             });
 
         </script>
