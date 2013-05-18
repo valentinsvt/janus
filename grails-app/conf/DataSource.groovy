@@ -39,7 +39,7 @@ environments {
     production {
         dataSource {
             dbCreate = "update"
-            url = "jdbc:postgresql://127.0.0.1:5432/gadpp"
+            url = "jdbc:postgresql://127.0.0.1:5432/janus"
             username = "postgres"
             password = "janus"
         }
