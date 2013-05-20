@@ -1964,6 +1964,9 @@ class ReportesController {
         tablaVolObra.setWidthPercentage(100);
 
 
+        PdfPTable tablaTotalSub = new PdfPTable(6);
+        tablaVolObra.setWidthPercentage(100);
+
         def detalle
 
         detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
@@ -1977,21 +1980,24 @@ class ReportesController {
         def c;
 
         def total1 = 0;
+        def total2 = 0;
 
         def totales
 
         def totalPresupuesto = 0;
         def totalPrueba = 0
+        def totalPrueba1 = 0
 
         def valores = preciosService.rbro_pcun_v2(obra.id)
 
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
-        tablaVolObra.setWidths(arregloEnteros([10, 40, 5, 15, 15, 15]))
+        tablaVolObra.setWidths(arregloEnteros([10, 40, 8, 12, 15, 15]))
+
 
         subPres.each { s->
 
-
+            total2 = 0
 
         addCellTabla(tablaVolObra, new Paragraph("Presupuesto:", times8bold), prmsCellHead)
         addCellTabla(tablaVolObra, new Paragraph(s.descripcion, times8bold), prmsCellHead)
@@ -2011,9 +2017,10 @@ class ReportesController {
 
             valores.each {
 
-                totalPrueba=0
 
                if(it.sbprdscr == s.descripcion){
+
+
 
 
                 addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellCenter)
@@ -2038,7 +2045,9 @@ class ReportesController {
 
                 totalPresupuesto = (total1 += totales);
 
-//                   totalPrueba
+
+                   totalPrueba = total2 += totales
+
 
 
                }else{
@@ -2053,12 +2062,12 @@ class ReportesController {
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellHead)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellHead)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellHead)
-            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
-    }
 
+        }
 
 //        detalle.each {
 //
