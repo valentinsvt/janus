@@ -130,7 +130,7 @@ class IndiceController extends janus.seguridad.Shield {
                                                 }
                                             }
                                             indice = new Indice([
-                                                    tipoInstitucion: TipoInstitucion.get(1),
+                                                    tipoIndice: TipoIndice.get(1),
                                                     descripcion: descripcion,
                                                     codigo: codigo
                                             ])
