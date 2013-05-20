@@ -141,22 +141,42 @@
                 </thead>
                 <tbody id="tabla_material">
                     <g:set var="total" value="${0}"></g:set>
-                    <g:each in="${detalle}" var="vol" status="i">
 
-                        <tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">
-                            <td style="width: 20px" class="orden">${vol.orden}</td>
-                            <td class="cdgo">${vol.item.codigo}</td>
-                            <td class="nombre">${vol.item.nombre.replaceAll("<", "(Menor)").replaceAll(">", "(Mayor)")}</td>
-                            <td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>
-                            <td style="text-align: right" class="cant">
-                                <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
-                            </td>
-                            <td class="col_precio" style=";text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                            <td class="col_total total" style=";text-align: right"><g:formatNumber number="${precios[vol.id.toString()] * vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                            <g:set var="total" value="${total.toDouble() + (precios[vol.id.toString()] * vol.cantidad)}"></g:set>
-                        </tr>
+                <g:each in="${valores}" var="val" status="j">
+                    <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
 
-                    </g:each>
+                        <td style="width: 20px" class="orden">${val.vlobordn}</td>
+                        %{--<td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>--}%
+                        <td class="cdgo">${val.rbrocdgo.trim()}</td>
+                        <td class="nombre">${val.rbronmbr.trim()}</td>
+                        <td style="width: 60px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
+                        <td style="text-align: right" class="cant">
+                            <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                        </td>
+                        <td class="col_precio" style="text-align: right" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                        <td class="col_total total" style="text-align: right"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+
+                        <g:set var="total" value="${total.toDouble() + val.totl}"></g:set>
+                    </tr>
+                </g:each>
+
+
+                    %{--<g:each in="${detalle}" var="vol" status="i">--}%
+
+                        %{--<tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">--}%
+                            %{--<td style="width: 20px" class="orden">${vol.orden}</td>--}%
+                            %{--<td class="cdgo">${vol.item.codigo}</td>--}%
+                            %{--<td class="nombre">${vol.item.nombre.replaceAll("<", "(Menor)").replaceAll(">", "(Mayor)")}</td>--}%
+                            %{--<td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>--}%
+                            %{--<td style="text-align: right" class="cant">--}%
+                                %{--<g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                            %{--</td>--}%
+                            %{--<td class="col_precio" style=";text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
+                            %{--<td class="col_total total" style=";text-align: right"><g:formatNumber number="${precios[vol.id.toString()] * vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
+                            %{--<g:set var="total" value="${total.toDouble() + (precios[vol.id.toString()] * vol.cantidad)}"></g:set>--}%
+                        %{--</tr>--}%
+
+                    %{--</g:each>--}%
                     <tr>
                         <td colspan="5"></td>
                         <td><b>Total:</b></td>

@@ -83,9 +83,9 @@
     %{--</g:each>--}%
 
     <g:each in="${valores}" var="val" status="j">
-        <tr class="item_row" id="${val.item__id}" item="${val}">
+        <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
 
-            <td style="width: 20px" class="orden"></td>
+            <td style="width: 20px" class="orden">${val.vlobordn}</td>
             <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
             <td class="cdgo">${val.rbrocdgo.trim()}</td>
             <td class="nombre">${val.rbronmbr.trim()}</td>
@@ -96,12 +96,13 @@
              <td class="col_precio" style="display: none;text-align: right" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
             <td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
             <td style="width: 40px;text-align: center" class="col_delete">
-                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${val.item__id}">
+                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${val.vlob__id}">
                     <i class="icon-trash"></i></a>
             </td>
 
         </tr>
     </g:each>
+
     </tbody>
 </table>
 
@@ -201,6 +202,8 @@
         $("#calcular").removeClass("active")
 
         var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
+
+
         var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
             data     : datos,
@@ -260,10 +263,14 @@
 
     });
     $(".borrarItem").click(function(){
+
+        var interval = loading("detalle")
+
         if(confirm("Esta seguro de eliminar el rubro?")){
             $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",
                 data     : "id=" + $(this).attr("iden"),
                 success  : function (msg) {
+                    clearInterval(interval)
                     $("#detalle").html(msg)
 
                 }
@@ -274,7 +281,7 @@
 $("#copiar_rubros").click(function () {
 
 
-    location.href="${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" + ${obra?.id}
+    %{--location.href="${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" + ${obra?.id}--}%
 
 });
 

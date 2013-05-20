@@ -26,10 +26,19 @@ class Reportes3Controller {
 //        println "imprimir tabla sub "+params
         def obra = Obra.get(params.obra)
         def detalle
+        def valores
+
         if (params.sub)
-            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+//            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+
+        valores = preciosService.rbro_pcun_v3(obra.id,params.sub)
+
         else
-            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+//            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+            valores = preciosService.rbro_pcun_v2(obra.id)
+
+
+
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
         def precios = [:]
@@ -38,21 +47,21 @@ class Reportes3Controller {
         preciosService.ac_rbroObra(obra.id)
 //        println "indirecto "+indirecto
 
-        detalle.each{
-//            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-//            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
-        }
+//        detalle.each{
+////            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
+//
+//            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
+////            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
+//            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
+//        }
 //
 //        println "precios "+precios
 
 
-        [detalle:detalle,precios:precios,subPres:subPres,subPre:SubPresupuesto.get(params.sub).descripcion,obra: obra,indirectos:indirecto*100]
+        [detalle:detalle,precios:precios,subPres:subPres,subPre:SubPresupuesto.get(params.sub).descripcion,obra: obra,indirectos:indirecto*100, valores: valores]
     }
     def imprimirRubroVolObra(){
-//        println "imprimir rubro "+params
+        println "imprimir rubro "+params
         def rubro =Item.get(params.id)
         def obra=Obra.get(params.obra)
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)

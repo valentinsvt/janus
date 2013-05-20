@@ -59,14 +59,21 @@ class VolumenObraController extends janus.seguridad.Shield{
         println "params "+params
         def obra = Obra.get(params.obra)
         def detalle
-        if (params.sub && params.sub != "null") {
-            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+        def valores
 
-//            detalle= VolumenesObra.findAllBySubPresupuesto(SubPresupuesto.get(params.sub))
-            println("detalle" + detalle)
+        if (params.sub && params.sub != "null") {
+//            println("entro1")
+//        detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+         valores = preciosService.rbro_pcun_v3(obra.id,params.sub)
+//          detalle= VolumenesObra.findAllBySubPresupuesto(SubPresupuesto.get(params.sub))
+//            println("detalle" + detalle)
         }
-        else
-            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        else  {
+//            println("entro2")
+//        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        valores = preciosService.rbro_pcun_v2(obra.id)
+        }
+
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
         def precios = [:]
@@ -79,18 +86,8 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 //        /*Todo ver como mismo es esta suma*/
         def indirecto = obra.totales/100
-//        println "indirecto "+indirecto
+
         preciosService.ac_rbroObra(obra.id)
-
-        def valores = preciosService.rbro_pcun_v2(obra.id)
-
-        valores.each {
-
-//           println(it)
-
-
-        }
-
 //        detalle.each{
 //
 //            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
@@ -98,6 +95,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 ////            println "r->" + (res["precio"][0]+res["precio"][0]*indirecto)+"   <<<>>> "+res
 //            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
 //        }
+
 //
 //        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
         [subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
