@@ -1,19 +1,19 @@
 
 <%@ page import="janus.Indice" %>
 
-<div id="create-indiceInstance" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave-indiceInstance" action="save">
+<div id="create-Indice" class="span" role="main">
+    <g:form class="form-horizontal" name="frmSave-Indice" action="save">
         <g:hiddenField name="id" value="${indiceInstance?.id}"/>
                 
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Tipo de Institución
+                    Tipo Indice
                 </span>
             </div>
 
             <div class="controls">
-                <g:select id="tipoInstitucion" name="tipoInstitucion.id" from="${janus.TipoInstitucion.list()}" optionKey="id" class="many-to-one " value="${indiceInstance?.tipoInstitucion?.id}" noSelection="['null': '']"/>
+                <g:select id="tipoIndice" name="tipoIndice.id" from="${janus.TipoIndice.list()}" optionKey="id" class="many-to-one " value="${indiceInstance?.tipoIndice?.id}" noSelection="['null': '']"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -22,13 +22,13 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Código
+                    Codigo
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="20" style="width: 170px" class=" required" value="${indiceInstance?.codigo}"/>
-                <span class="mandatory">*</span>
+                <g:textField name="codigo" maxlength="20" class="" value="${indiceInstance?.codigo}"/>
+                
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -36,12 +36,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripción
+                    Descripcion
                 </span>
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="2" name="descripcion" maxlength="40" style="resize: none;height: 50px" class=" required" value="${indiceInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="131" class=" required" value="${indiceInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -50,10 +50,7 @@
     </g:form>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-indiceInstance").validate({
+    $("#frmSave-Indice").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
@@ -62,8 +59,14 @@
         },
         errorClass     : "label label-important",
         submitHandler  : function(form) {
-            $("[name=btnSave-indiceInstance]").replaceWith(spinner);
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

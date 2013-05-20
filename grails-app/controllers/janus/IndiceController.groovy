@@ -1,7 +1,7 @@
 package janus
 
 import janus.ejecucion.ValorIndice
-import janus.pac.PeriodoValidez
+//import janus.pac.PeriodoValidez
 import jxl.Cell
 import jxl.Sheet
 import jxl.Workbook
@@ -11,7 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException
 class IndiceController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
     def dbConnectionService
 
     def index() {
@@ -19,8 +18,7 @@ class IndiceController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 15, 100)
-        [indiceInstanceList: Indice.list(params), indiceInstanceTotal: Indice.count(), params: params]
+        [indiceInstanceList: Indice.list(params), params: params]
     } //list
 
     def form_ajax() {
@@ -36,8 +34,6 @@ class IndiceController extends janus.seguridad.Shield {
         } //es edit
         return [indiceInstance: indiceInstance]
     } //form_ajax
-
-    //subir Archivo
 
     def subirIndice() {
     }
@@ -197,7 +193,6 @@ class IndiceController extends janus.seguridad.Shield {
                         } //rows.each
                     } //hoja !hidden
                 } //hojas.each
-
                 println(html)
 
 //              render html
@@ -214,6 +209,9 @@ class IndiceController extends janus.seguridad.Shield {
 //            println "NO FILE"
         }
     }
+
+
+
 
 
     def save() {
@@ -293,7 +291,6 @@ class IndiceController extends janus.seguridad.Shield {
         }
     } //delete
 
-
     def valorIndice = {
         def cn = dbConnectionService.getConnection()
         def tx_sql = "select * from sp_vlin(2013)"
@@ -306,18 +303,18 @@ class IndiceController extends janus.seguridad.Shield {
         cn.eachRow(tx_sql.toString()) { row ->
             tabla += "<tr>"
             tabla += "<td style='width: 300px;'>" + row.indcdscr + "</td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.enero? row.enero:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.febrero? row.febrero:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.marzo? row.marzo:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.abril? row.abril:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.mayo? row.mayo:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.junio? row.junio:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.julio? row.julio:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.agosto? row.agosto:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.septiembre? row.septiembre:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.octubre? row.octubre:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.noviembre? row.noviembre:''} </td>"
-            tabla += "<td style='width: 50px;text-align: right'> ${row.diciembre? row.diciembre:''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.enero ? row.enero : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.febrero ? row.febrero : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.marzo ? row.marzo : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.abril ? row.abril : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.mayo ? row.mayo : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.junio ? row.junio : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.julio ? row.julio : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.agosto ? row.agosto : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.septiembre ? row.septiembre : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.octubre ? row.octubre : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.noviembre ? row.noviembre : ''} </td>"
+            tabla += "<td style='width: 50px;text-align: right'> ${row.diciembre ? row.diciembre : ''} </td>"
             tabla += "</tr>"
         }
         cn.close()

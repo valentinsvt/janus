@@ -180,8 +180,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 //            println data
             def json = new JsonBuilder(data)
 //            println json.toPrettyString()
-            def sql = "SELECT\n" +
-                    "  v.voit__id                            id,\n" +
+            def sql = "SELECT distinct\n" +
+//                    "  v.voit__id                            id,\n" +
                     "  i.item__id                            iid,\n" +
                     "  i.itemcdgo                            codigo,\n" +
                     "  i.itemnmbr                            item,\n" +
@@ -249,7 +249,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     fpx.numero = "p0" + (it + 1)
                     if (it == 0) {
                         fpx.indice = indiMano
-                        def select = "select clmncdgo from mfcl where clmndscr = 'MANO_OBRA_T' and obra__id = ${params.obra} "
+                        def select = "select clmncdgo from mfcl where clmndscr = (select item__id||'_T' from item where itemcdgo = 'MO') and obra__id = ${params.obra} "
                         def columna
                         def valor = 0
                         println "sql it 0 mfcl " + select

@@ -5,18 +5,18 @@
 
     <form class="form-horizontal">
     
-    <g:if test="${indiceInstance?.tipoInstitucion}">
+    <g:if test="${indiceInstance?.tipoIndice}">
         <div class="control-group">
             <div>
-                <span id="tipoInstitucion-label" class="control-label label label-inverse">
-                    Tipo Institución
+                <span id="tipoIndice-label" class="control-label label label-inverse">
+                    Tipo Indice
                 </span>
             </div>
             <div class="controls">
         
-                <span aria-labelledby="tipoInstitucion-label">
-        %{--<g:link controller="tipoInstitucion" action="show" id="${indiceInstance?.tipoInstitucion?.id}">--}%
-                    ${indiceInstance?.tipoInstitucion?.encodeAsHTML()}
+                <span aria-labelledby="tipoIndice-label">
+        %{--<g:link controller="tipoIndice" action="show" id="${indiceInstance?.tipoIndice?.id}">--}%
+                    ${indiceInstance?.tipoIndice?.encodeAsHTML()}
         %{--</g:link>--}%
                 </span>
         
@@ -28,7 +28,7 @@
         <div class="control-group">
             <div>
                 <span id="codigo-label" class="control-label label label-inverse">
-                    Código
+                    Codigo
                 </span>
             </div>
             <div class="controls">
@@ -45,7 +45,7 @@
         <div class="control-group">
             <div>
                 <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripción
+                    Descripcion
                 </span>
             </div>
             <div class="controls">

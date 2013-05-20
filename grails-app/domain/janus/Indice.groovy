@@ -1,6 +1,6 @@
 package janus
 class Indice implements Serializable {
-    TipoInstitucion tipoInstitucion
+    TipoIndice tipoIndice
     String codigo
     String descripcion
     static mapping = {
@@ -11,14 +11,14 @@ class Indice implements Serializable {
         version false
         columns {
             id column: 'indc__id'
-            tipoInstitucion column: 'tpin__id'
+            tipoIndice column: 'tpin__id'
             codigo column: 'indccdgo'
             descripcion column: 'indcdscr'
         }
     }
     static constraints = {
-        tipoInstitucion(blank: true, nullable: true, attributes: [title: 'tipoInstitucion'])
-        codigo(size: 1..20, blank: false, attributes: [title: 'numero'])
-        descripcion(size: 1..131, blank: false, attributes: [title: 'descripcion'])
+        tipoIndice(blank: true, nullable: true, attributes: [title: 'tipo de Indice'])
+        codigo(size: 1..20, blank: true, nullable: true, attributes: [title: 'código'])
+        descripcion(size: 1..131, blank: false, attributes: [title: 'descripción'])
     }
 }
