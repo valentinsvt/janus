@@ -21,4 +21,7 @@ class Indice implements Serializable {
         codigo(size: 1..20, blank: true, nullable: true, attributes: [title: 'código'])
         descripcion(size: 1..131, blank: false, attributes: [title: 'descripción'])
     }
+    String toString(){
+        descripcion
+    }
 }

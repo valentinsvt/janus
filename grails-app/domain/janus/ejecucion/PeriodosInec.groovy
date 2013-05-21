@@ -1,4 +1,7 @@
 package janus.ejecucion
+
+import org.codehaus.groovy.runtime.DateGroovyMethods
+
 class PeriodosInec implements Serializable {
     String descripcion
     Date fechaInicio
@@ -23,5 +26,9 @@ class PeriodosInec implements Serializable {
         fechaInicio(blank: false, attributes: [title: 'fechaInicio'])
         fechaFin(blank: true, nullable: true, attributes: [title: 'fechaFin'])
         periodoCerrado(size: 1..1, blank: false, attributes: [title: 'periodoCerrado'])
+    }
+
+    String toString(){
+        "${descripcion}: ${DateGroovyMethods.format(fechaInicio, 'yyyy/MM/dd')} - ${DateGroovyMethods.format(fechaFin, 'yyyy/MM/dd')}"
     }
 }
