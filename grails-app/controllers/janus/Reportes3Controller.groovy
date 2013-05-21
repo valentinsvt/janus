@@ -61,11 +61,12 @@ class Reportes3Controller {
         [detalle:detalle,precios:precios,subPres:subPres,subPre:SubPresupuesto.get(params.sub).descripcion,obra: obra,indirectos:indirecto*100, valores: valores]
     }
     def imprimirRubroVolObra(){
-        println "imprimir rubro "+params
+        println "----->>>>" + params
         def rubro =Item.get(params.id)
         def obra=Obra.get(params.obra)
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
         def indi = obra.totales
+
         try{
             indi=indi.toDouble()
         } catch (e){
@@ -116,6 +117,7 @@ class Reportes3Controller {
                 tablaMano+="</tr>"
             }
             if(r["grpocdgo"]==1){
+                if(params.desglose == '1'){
                 tablaMat+="<tr>"
                 tablaMat+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
                 tablaMat+="<td>"+r["itemnmbr"]+"</td>"
@@ -126,8 +128,25 @@ class Reportes3Controller {
                 tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
                 totalMat+=r["parcial"]
                 tablaMat+="</tr>"
+               }else {
+                }
+                if (params.desglose != '1'){
+                    tablaMat+="<tr>"
+                    tablaMat+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
+                    tablaMat+="<td>"+r["itemnmbr"]+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:r["rbrocntd"] ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:(r["rbpcpcun"] + r["parcial_t"]/ r["rbrocntd"]) ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'></td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'></td>"
+//                    tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
+                    tablaMat+="<td style='width: 50px;text-align: right'>"+g.formatNumber(number:(r["parcial"] + r["parcial_t"]) ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")+"</td>"
+
+                    totalMat+=(r["parcial"]+r["parcial_t"])
+                    tablaMat+="</tr>"
+                }
             }
-            if(r["parcial_t"]>0){
+            if(r["parcial_t"]>0 && params.desglose == '1'){
+//            if(r["parcial_t"]>0){
                 tablaTrans+="<tr>"
                 tablaTrans+="<td style='width: 80px;'>"+r["itemcdgo"]+"</td>"
                 tablaTrans+="<td>"+r["itemnmbr"]+"</td>"
@@ -150,8 +169,14 @@ class Reportes3Controller {
         tablaMano+="</tbody></table>"
         tablaMat+="<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${g.formatNumber(number:totalMat ,format:"##,#####0", minFractionDigits:"5", maxFractionDigits:"5", locale: "ec")}</td></tr>"
         tablaMat+="</tbody></table>"
+
+
+
         def totalRubro=total+totalHer+totalMan+totalMat
         totalRubro=totalRubro.toDouble().round(5)
+
+
+
         def totalIndi=totalRubro*indi/100
         totalIndi=totalIndi.toDouble().round(5)
         tablaIndi+="<thead><tr><th colspan='3'>Costos indirectos</th></tr><tr><th style='width:550px'>Descripción</th><th>Porcentaje</th><th>Valor</th></tr></thead>"

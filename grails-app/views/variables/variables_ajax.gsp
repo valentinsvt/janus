@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="span6">
-                    <g:select name="volquete.id" id="cmb_vol" from="${volquetes}" optionKey="id" optionValue="nombre" class="num"
+                    <g:select name="volquete.id" id="cmb_vol" from="${volquetes2}" optionKey="id" optionValue="nombre" class="num"
                               noSelection="${['': 'Seleccione']}" value="${(obra.volquete) ? obra?.volqueteId : par?.volquete?.id}"
                               style="width: 300px;"/>
                 </div>

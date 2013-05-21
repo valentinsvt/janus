@@ -433,7 +433,7 @@
                 Volquete
             </div>
             <div class="span5">
-                <g:select name="volquetes" from="${volquetes}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1':'Seleccione']}" value="${aux.volquete.id}"></g:select>
+                <g:select name="volquetes" from="${volquetes2}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1':'Seleccione']}" value="${aux.volquete.id}"></g:select>
             </div>
             <div class="span2">
                 Costo

@@ -61,27 +61,6 @@
     </thead>
     <tbody id="tabla_material">
 
-    %{--<g:each in="${detalle}" var="vol" status="i">--}%
-
-        %{--<tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">--}%
-            %{--<td style="width: 20px" class="orden">${vol.orden}</td>--}%
-            %{--<td style="width: 200px" class="sub">${vol?.subPresupuesto?.descripcion}</td>--}%
-            %{--<td class="cdgo">${vol.item.codigo}</td>--}%
-            %{--<td class="nombre">${vol.item.nombre}</td>--}%
-            %{--<td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>--}%
-            %{--<td style="text-align: right" class="cant">--}%
-                %{--<g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
-            %{--</td>--}%
-            %{--<td class="col_precio" style="display: none;text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
-            %{--<td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${precios[vol.id.toString()]*vol.cantidad}" format="##,##0" roundingMode="HALF_UP" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
-            %{--<td style="width: 40px;text-align: center" class="col_delete">--}%
-                %{--<a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${vol.id}">--}%
-                    %{--<i class="icon-trash"></i></a>--}%
-            %{--</td>--}%
-        %{--</tr>--}%
-
-    %{--</g:each>--}%
-
     <g:each in="${valores}" var="val" status="j">
         <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
 
@@ -106,6 +85,20 @@
     </tbody>
 </table>
 
+
+
+<div id="desgloseDialog">
+
+    <fieldset>
+        <div class="span3">
+
+            Imprimir el rubro con desglose de transporte?
+
+        </div>
+    </fieldset>
+</div>
+
+
 <script type="text/javascript">
 
     $.contextMenu({
@@ -115,18 +108,28 @@
                 $(this).dblclick()
             }
             if(key=="print"){
-                var dsps=${obra.distanciaPeso}
-                var dsvs=${obra.distanciaVolumen}
-                var volqueta=${precioVol}
-                var chofer=${precioChof}
+                %{--var dsps=${obra.distanciaPeso}--}%
+                %{--var dsvs=${obra.distanciaVolumen}--}%
+                %{--var volqueta=${precioVol}--}%
+                %{--var chofer=${precioChof}--}%
                 %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
                 %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
-                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(this).attr("item")+"Wobra=${obra.id}"
-                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos
-                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(this).attr("item")+"Wobra=${obra.id}"--}%
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(this).attr("id") +"Wobra=${obra.id}"--}%
+
+                %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos--}%
+                %{--location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url--}%
+
+                $("#desgloseDialog").dialog("open");
+
+
+
             }
+
+
             if(key=="foto"){
-                var child = window.open('${createLink(controller:"rubro",action:"showFoto")}/'+$(this).attr("item"), 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
+                %{--var child = window.open('${createLink(controller:"rubro",action:"showFoto")}/'+$(this).attr("item"), 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');--}%
+                var child = window.open('${createLink(controller:"rubro",action:"showFoto")}/'+$(this).attr("id"), 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
                 if (child.opener == null)
                     child.opener = self;
                 window.toolbar.visible = false;
@@ -245,6 +248,7 @@
         return false
 
     }) ;
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" +
 
 
     $(".item_row").dblclick(function(){
@@ -284,6 +288,60 @@ $("#copiar_rubros").click(function () {
     %{--location.href="${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" + ${obra?.id}--}%
 
 });
+
+
+    $("#desgloseDialog").dialog({
+
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 350,
+        height    : 150,
+        position  : 'center',
+        title     : 'Imprimir con desglose de transporte',
+        buttons   : {
+            "Si" : function () {
+
+
+                var dsps=${obra.distanciaPeso}
+                var dsvs=${obra.distanciaVolumen}
+                var volqueta=${precioVol}
+                var chofer=${precioChof}
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"
+
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos
+                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+
+
+
+                $("#desgloseDialog").dialog("close");
+
+            },
+            "No" : function () {
+
+
+
+                var dsps=${obra.distanciaPeso}
+                var dsvs=${obra.distanciaVolumen}
+                var volqueta=${precioVol}
+                var chofer=${precioChof}
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"
+
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos
+                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+
+
+
+
+                $("#desgloseDialog").dialog("close");
+
+            }
+        }
+
+
+    });
+
 
 
 

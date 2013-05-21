@@ -115,12 +115,26 @@ class VolumenObraController extends janus.seguridad.Shield{
     def copiarRubros () {
 
         def obra = Obra.get(params.obra)
-        def detalle
+        def volumenes = VolumenesObra.findAllByObra(obra)
+
+        return[obra: obra, volumenes:  volumenes]
+
+    }
+
+    def tablaCopiarRubro () {
+
+        def obra = Obra.get(params.obra)
+
+        def valores
         if (params.sub && params.sub != "null") {
-            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
+            valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
+
         }
-        else
-            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        else{
+            valores = preciosService.rbro_pcun_v2(obra.id)
+
+        }
+
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
         def precios = [:]
@@ -134,13 +148,10 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         preciosService.ac_rbroObra(obra.id)
 
-        detalle.each{
+        [precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
 
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
-        }
 
-        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100]
+
 
     }
 

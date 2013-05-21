@@ -64,6 +64,7 @@ class RubroController extends janus.seguridad.Shield {
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
         def grupos = []
         def volquetes = []
+        def volquetes2 = []
         def choferes = []
         def aux = Parametros.get(1)
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
@@ -72,7 +73,11 @@ class RubroController extends janus.seguridad.Shield {
                 choferes = Item.findAllByDepartamento(it)
             if (it.transporte.codigo == "T")
                 volquetes = Item.findAllByDepartamento(it)
+
+                volquetes2 += volquetes
+
         }
+
         grupos.add(Grupo.get(4))
         grupos.add(Grupo.get(5))
         grupos.add(Grupo.get(6))
@@ -80,9 +85,9 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.idRubro)
             def items = Rubro.findAllByRubro(rubro)
             items.sort { it.item.codigo }
-            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux]
+            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2]
         } else {
-            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux]
+            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2]
         }
     }
 

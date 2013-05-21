@@ -13,16 +13,26 @@ class VariablesController {
             par = par.pop()
 
         def volquetes = []
+        def volquetes2 = []
         def choferes = []
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
+
         grupoTransporte.each {
             if (it.transporte.codigo == "H")
                 choferes = Item.findAllByDepartamento(it)
             if (it.transporte.codigo == "T")
                 volquetes = Item.findAllByDepartamento(it)
+
+            volquetes2 += volquetes
+
+//            println("volquetes" + volquetes)
+
+
         }
 
-        [choferes: choferes, volquetes: volquetes, obra: obra, par: par]
+//        println("volquetes2" + volquetes2)
+
+        [choferes: choferes, volquetes: volquetes, obra: obra, par: par, volquetes2: volquetes2]
     }
 
     def saveVar_ajax() {
