@@ -1,21 +1,28 @@
 
+<g:if test="${flash.message}">
+    <div class="span12" style="height: 35px;margin-bottom: 10px; margin-left: -25px">
+        <div class="alert ${flash.clase ?: 'alert-info'}" role="status" style="text-align: center">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            ${flash.message}
+        </div>
+    </div>
+</g:if>
+
+
+
 <div class="row-fluid" style="margin-left: 0px">
     <div class="span5" style="width: 550px">
         <b>Subpresupuesto de origen:</b>
-        <g:select name="subpresupuestoOrg" from="${subPres}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px; margin-left: 50px" id="subPres_desc" value="${subPre}"></g:select>
+        <g:select name="subpresupuestoOrg" from="${subPres}" optionKey="id" optionValue="descripcion"  noSelection="['' : ' - Seleccione un subpresupuesto - ']" style="width: 300px;font-size: 10px; margin-left: 50px" id="subPres_desc" value="${subPre}"></g:select>
     </div>
 
-    <div class="span4" style="width: 500px">
 
-        <a href="#" class="btn  " id="copiar_todos">
-            <i class="icon-copy"></i>
-            Copiar Todos los Rubros
-        </a>
-        <a href="#" class="btn  " id="copiar_sel">
-            <i class="icon-copy"></i>
-            Copiar rubros seleccionados
-        </a>
 
+    <div class="span4" style="width: 200px">
+        <a href="#" class="btn" id="regresar">
+            <i class="icon-arrow-left"></i>
+            Regresar
+        </a>
 
     </div>
 
@@ -28,6 +35,19 @@
         <b>Subpresupuesto de destino:</b>
         <g:select name="subpresupuestoDes" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px; margin-left: 45px" id="subPres_destino"
                   noSelection="['' : ' - Seleccione un subpresupuesto - ']"></g:select>
+    </div>
+    <div class="span4" style="width: 500px">
+
+        <a href="#" class="btn  " id="copiar_todos">
+            <i class="icon-copy"></i>
+            Copiar Todos los Rubros
+        </a>
+        <a href="#" class="btn  " id="copiar_sel">
+            <i class="icon-copy"></i>
+            Copiar rubros seleccionados
+        </a>
+
+
     </div>
 </div>
 
@@ -68,7 +88,8 @@
 
         <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
 
-            <td style="width: 10px" class="sel"><g:checkBox name="selec" checked="false" id="seleccionar"/></td>
+            <td style="width: 10px" class="sel"><g:checkBox class="chec" name="selec" checked="false" id="seleccionar1" value="${val.item__id}"/></td>
+            %{--<td style="width: 10px" class="sel"><input type="checkbox" id="seleccionar1" class="chec" checked="false" value="${val.item__id}"></td>--}%
             <td style="width: 20px" class="orden">${val.vlobordn}</td>
             <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
             <td class="cdgo">${val.rbrocdgo.trim()}</td>
@@ -86,7 +107,22 @@
 </table>
 
 
+<div id="faltaOrigenDialog">
+
+    <fieldset>
+        <div class="span3">
+
+            Es necesario elegir los subpresupuesto de Origen y de Destino
+
+        </div>
+    </fieldset>
+</div>
+
+
+
 <script type="text/javascript">
+
+    var checkeados = []
 
     $("#subPres_desc").change(function(){
 
@@ -104,42 +140,82 @@
 
     $("#copiar_todos").click(function () {
 
-    var tbody = $("#tabla_material");
 
 
-        tbody.children("tr").each(function () {
+        var tbody = $("#tabla_material");
+        var datos
+        var subPresDest = $("#subPres_destino").val()
+        var subPre = $("#subPres_desc").val()
 
-           var trId = $(this).attr("id")
+        if(subPre == "" || subPresDest == ""){
 
-            console.log("id:" + trId)
-        });
+            $("#faltaOrigenDialog").dialog("open")
+
+
+        } else {
+
+            tbody.children("tr").each(function () {
+
+                var trId = $(this).attr("id")
+
+
+                datos ="rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
+
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'copiarItem')}",
+                    data     : datos,
+                    success  : function (msg) {
+                        $("#detalle").html(msg)
+
+                    }
+                });
+
+
+            });
+
+
+
+
+
+
+        }
+
 
 
 
     });
 
 
-
     $("#copiar_sel").click(function () {
 
         var tbody = $("#tabla_material");
-        var trP = $("#item_row")
-        var valor = []
+//        var trP = $("#item_row")
+        var datos
+        var subPresDest = $("#subPres_destino").val()
+        var subPre = $("#subPres_desc").val()
 
-        tbody.children("tr").each(function (i) {
+        tbody.children("tr").each(function () {
 
-            valor[i]=$(this).children("td").eq(0)
+//            console.log($(this).children("td").children().get(1))
 
-          console.log($(this).children("td").eq(0))
-
-
-            if($(this).children("td").eq(0).data("checked") == "checked"){
+            if(($(this).children("td").children().get(1).checked) == true){
 
                 var trId = $(this).attr("id")
-                console.log("id:" + trId)
+
+                datos ="rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
+
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'copiarItem')}",
+                    data     : datos,
+                    success  : function (msg) {
+                        $("#detalle").html(msg)
+
+                    }
+                });
+
+
+//                console.log("id:" + trId)
             } else {
 
-//                    console.log("nada")
+
             }
 
 
@@ -184,22 +260,42 @@
     %{--}) ;--}%
 
 
-    $(".item_row").dblclick(function(){
-        $("#calcular").removeClass("active")
-        $(".col_delete").show()
-        $(".col_precio").hide()
-        $(".col_total").hide()
-        $("#divTotal").html("")
-        $("#vol_id").val($(this).attr("id"))
-        $("#item_codigo").val($(this).find(".cdgo").html())
-        $("#item_id").val($(this).attr("item"))
-        $("#subPres").val($(this).attr("sub"))
-        $("#item_nombre").val($(this).find(".nombre").html())
-        $("#item_cantidad").val($(this).find(".cant").html().toString().trim())
-        $("#item_orden").val($(this).find(".orden").html() )
+//    $(".item_row").dblclick(function(){
+//        $("#calcular").removeClass("active")
+//        $(".col_delete").show()
+//        $(".col_precio").hide()
+//        $(".col_total").hide()
+//        $("#divTotal").html("")
+//        $("#vol_id").val($(this).attr("id"))
+//        $("#item_codigo").val($(this).find(".cdgo").html())
+//        $("#item_id").val($(this).attr("item"))
+//        $("#subPres").val($(this).attr("sub"))
+//        $("#item_nombre").val($(this).find(".nombre").html())
+//        $("#item_cantidad").val($(this).find(".cant").html().toString().trim())
+//        $("#item_orden").val($(this).find(".orden").html() )
+//
+//    });
+
+    $("#faltaOrigenDialog").dialog({
+
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
+        width     : 350,
+        height    : 150,
+        position  : 'center',
+        title     : 'Elegir subpresupuestos!',
+        buttons   : {
+            "Aceptar" : function () {
+
+
+                $("#faltaOrigenDialog").dialog("close");
+
+            }
+        }
+
 
     });
-
-
 
 </script>

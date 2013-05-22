@@ -285,7 +285,7 @@
 $("#copiar_rubros").click(function () {
 
 
-    %{--location.href="${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" + ${obra?.id}--}%
+    location.href="${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" + ${obra?.id}
 
 });
 

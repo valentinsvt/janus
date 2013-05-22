@@ -19,6 +19,15 @@
 
 <body>
 
+<g:if test="${flash.message}">
+    <div class="span12" style="height: 35px;margin-bottom: 10px;">
+        <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            ${flash.message}
+        </div>
+    </div>
+</g:if>
+
 <div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
 
 <script type="text/javascript">

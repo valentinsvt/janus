@@ -28,7 +28,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     def addItem(){
-//        println "addItem "+params
+        println "addItem "+params
         def obra= Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
         def sbpr = SubPresupuesto.get(params.sub)
@@ -53,6 +53,67 @@ class VolumenObraController extends janus.seguridad.Shield{
             redirect(action: "tabla",params: [obra:obra.id,sub:volumen.subPresupuesto.id])
         }
     }
+
+    def copiarItem () {
+
+        println "copiarItem "+params
+        def obra= Obra.get(params.obra)
+        def rubro = Item.get(params.rubro)
+        def sbprDest = SubPresupuesto.get(params.subDest)
+        def sbpr = SubPresupuesto.get(params.sub)
+        def itemVolumen = VolumenesObra.findByItemAndSubPresupuesto(rubro,sbpr)
+        def itemVolumenDest = VolumenesObra.findByItemAndSubPresupuesto(rubro,sbprDest)
+        def volumen
+
+        def volu = VolumenesObra.list()
+
+        if (params.id)
+            volumen = VolumenesObra.get(params.id)
+        else {
+            if (itemVolumenDest){
+
+                flash.clase = "alert-error"
+                flash.message = "No se puede copiar el rubro " + rubro.nombre
+                redirect(action: "tablaCopiarRubro", params: [obra: obra.id])
+                return
+
+            } else {
+            volumen = VolumenesObra.findByObraAndItemAndSubPresupuesto(obra, rubro, sbprDest)
+            if (!volumen)
+                volumen=new VolumenesObra()
+
+
+
+
+            }
+        }
+
+        volumen.cantidad=itemVolumen.cantidad.toDouble()
+        volumen.orden=(volu.orden.size().toInteger())+1
+        volumen.subPresupuesto=SubPresupuesto.get(params.subDest)
+        volumen.obra=obra
+        volumen.item=rubro
+//
+        if (!volumen.save(flush: true)){
+//            println "error volumen obra "+volumen.errors
+
+            flash.clase = "alert-error"
+            flash.message = "Error, no es posible completar la acción solicitada "
+
+            redirect(action: "tablaCopiarRubro",params: [obra:obra.id])
+
+//            render "error"
+        }else{
+            preciosService.actualizaOrden(volumen,"insert")
+            flash.clase = "alert-success"
+            flash.message = "Copiado rubro " + rubro.nombre
+
+            redirect(action: "tablaCopiarRubro",params: [obra:obra.id,sub:volumen.subPresupuesto.id])
+        }
+
+
+    }
+
 
 
     def tabla(){
