@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: fabricio
-  Date: 1/24/13
-  Time: 3:55 PM
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page import="janus.ejecucion.ValorIndice" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
@@ -15,8 +7,13 @@
 </head>
 
 <body>
-<div class="registro box menu-1">
-    <strong>right click me</strong>
+<div class="btn-toolbar" style="margin-top: 5px;">
+    <div class="btn-group">
+        <a href="${g.createLink(action: 'editarIndices')}" class="btn " title="Regresar">
+            <i class="icon-arrow-left"></i>
+            Editar Valores
+        </a>
+    </div>
 </div>
 
 <div>
@@ -78,55 +75,5 @@
     <div class="modal-footer" id="modalFooter">
     </div>
 </div>
-
-<script type="text/javascript">
-
-    $(function () {
-        var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-        var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
-
-
-        $('[rel=tooltip]').tooltip();
-
-        $(".paginate").paginate({
-            maxRows: 15,
-            searchPosition: $("#busqueda-Indice"),
-            float: "right"
-        });
-
-        function submitForm(btn) {
-            $("#frmSave-ValorIndice").submit();
-        }
-
-        $(".btn-edit").click(function () {
-            var id = $(this).data("id");
-            console.log(id)
-            $.ajax({
-                type: "POST",
-                url: "${createLink(controller: 'valorIndice', action:'form_ajax')}",
-                data: {
-                    indc_id: id
-                },
-                success: function (msg) {
-                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                    btnSave.click(function () {
-                        $("#frmSave-ValorIndice").submit();
-                        return false;
-                    });
-
-                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                    $("#modalTitle").html("Editar Indice");
-                    $("#modalBody").html(msg);
-                    $("#modalFooter").html("").append(btnOk).append(btnSave);
-                    $("#modal-Indice").modal("show");
-                }
-            });
-            return false;
-        }); //click btn edit
-    });
-
-</script>
 </body>
 </html>

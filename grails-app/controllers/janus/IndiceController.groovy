@@ -304,5 +304,95 @@ class IndiceController extends janus.seguridad.Shield {
         [datos: datos]
     }
 
+    def editarIndices() {
 
+    }
+
+    def tablaValores() {
+        println params
+        if (!params.max || params.max == 0) {
+            params.max = 100
+        } else {
+            params.max = params.max.toInteger()
+        }
+        if (!params.pag) {
+            params.pag = 1;
+        } else {
+            params.pag = params.pag.toInteger()
+        }
+        params.offset = params.max * (params.pag - 1)
+
+        def prin = "1, 3"
+        def sqlPrin = "SELECT prin__id, prindscr from prin " +
+                "where prin__id in (${prin}) and princrre = 'N' order by prin__id"
+
+        def sqlVlin = "SELECT vlin.vlin__id, indcdscr, vlinvalr " +
+                "from vlin, prin, indc " +
+                "where prin.prin__id = vlin.prin__id and princrre = 'N' and indc.indc__id = vlin.indc__id and vlin.prin__id = 1 " +
+                "order by indcdscr limit 10"
+
+        println "sqlPrin: " + sqlPrin
+        println "sqlVlin: " + sqlVlin
+
+        def periodos = []
+
+        def html = "<table class=\"table table-bordered table-striped table-hover table-condensed\" id=\"tablaPrecios\">"
+
+        html += "<thead>"
+        html += "<tr>"
+        html += "<th>ID</th>"
+        html += "<th>prin__id</th>"
+        html += "<th>indc__id</th>"
+        html += "<th>Valor</th>"
+        def cn = dbConnectionService.getConnection()
+        def arr = cn.rows(sqlPrin.toString())
+        def precios = cn.rows(sqlVlin.toString())
+        cn.close()
+
+        def r1 = "", r2 = ""
+
+        arr.eachWithIndex { row, i ->
+            periodos.add(row.prin__id)
+            r2 += "<th>${row.prindscr}</th>"
+        }
+        r2 += "</tr>"
+
+        html += r1
+        html += r2
+        html += "</tr>"
+        html += "</thead>"
+        html += "<tbody>"
+        println html
+        def body = ""
+
+        precios.eachWithIndex { row, int index ->
+                body += "<tr>"
+                body += "<td>${row.vlin__id}</td>"
+                body += "<td>${row.indcdscr}</td>"
+                body += "<td>${row.indc__id}</td>"
+                periodos.each { prinId ->
+                    def prec = "", p = 0, rubro = "new"
+                    if (row.vlinvalr) {
+                        prec = g.formatNumber(number: row.vlinvalr, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                        p = row.vlinvalr
+                        rubro = row.vlin__id
+                    }
+                    def clase = ""
+                    clase = "editable"
+                    body += "<td class='editable number' data-original='${p}' data-lugar='${prinId}' " +
+                            "data-id='${rubro}' data-item='${row.indc__id}' data-valor='${row.vlinvalr}'>" + prec + '</td>'
+                }
+        }
+        html += body
+        html += "</tbody>"
+
+        html += "</table>"
+
+        println html
+        [html: html]
+    }
+
+    def actualizaVlin(){
+        /* TODO hacer función y mejorar presentación de valores */
+    }
 } //fin controller
