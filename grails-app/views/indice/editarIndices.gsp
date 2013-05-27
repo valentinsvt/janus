@@ -41,9 +41,9 @@
     <body>
         <div class="btn-toolbar" style="margin-top: 5px;">
             <div class="btn-group">
-                <a href="${g.createLink(controller: 'mantenimientoItems', action: 'precios')}" class="btn " title="Regresar">
+                <a href="${g.createLink(action: 'valorIndice')}" class="btn " title="Regresar">
                     <i class="icon-arrow-left"></i>
-                    Regresar
+                    Ver valores de Indices
                 </a>
             </div>
         </div>
