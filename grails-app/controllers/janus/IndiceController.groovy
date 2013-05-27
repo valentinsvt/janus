@@ -1,5 +1,6 @@
 package janus
 
+import janus.ejecucion.PeriodosInec
 import janus.ejecucion.ValorIndice
 //import janus.pac.PeriodoValidez
 import jxl.Cell
@@ -309,90 +310,101 @@ class IndiceController extends janus.seguridad.Shield {
     }
 
     def tablaValores() {
-        println params
-        if (!params.max || params.max == 0) {
-            params.max = 100
-        } else {
-            params.max = params.max.toInteger()
-        }
-        if (!params.pag) {
-            params.pag = 1;
-        } else {
-            params.pag = params.pag.toInteger()
-        }
-        params.offset = params.max * (params.pag - 1)
+        def cn = dbConnectionService.getConnection()
+        def cn1 = dbConnectionService.getConnection()
+        //println params
 
-        def prin = "1, 3"
-        def sqlPrin = "SELECT prin__id, prindscr from prin " +
-                "where prin__id in (${prin}) and princrre = 'N' order by prin__id"
-
-        def sqlVlin = "SELECT vlin.vlin__id, indcdscr, vlinvalr " +
-                "from vlin, prin, indc " +
-                "where prin.prin__id = vlin.prin__id and princrre = 'N' and indc.indc__id = vlin.indc__id and vlin.prin__id = 1 " +
-                "order by indcdscr limit 10"
-
-        println "sqlPrin: " + sqlPrin
-        println "sqlVlin: " + sqlVlin
-
-        def periodos = []
+//        def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by indcdscr limit 10"
+        def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by indcdscr"
+        def cont = 0
+        def prin = params.prin.toInteger()
+        // obtiene el periodo anterior
+        def fcha = PeriodosInec.get(prin).fechaInicio - 1
+        def prinAnterior = PeriodosInec.findByFechaFinBetween(fcha, fcha + 2).id
+        println prinAnterior
 
         def html = "<table class=\"table table-bordered table-striped table-hover table-condensed\" id=\"tablaPrecios\">"
-
         html += "<thead>"
         html += "<tr>"
-        html += "<th>ID</th>"
-        html += "<th>prin__id</th>"
-        html += "<th>indc__id</th>"
-        html += "<th>Valor</th>"
-        def cn = dbConnectionService.getConnection()
-        def arr = cn.rows(sqlPrin.toString())
-        def precios = cn.rows(sqlVlin.toString())
-        cn.close()
+        html += "<th>Indice_id</th>"
+        html += "<th>Nombre del Indice</th>"
+        html += "<th>${PeriodosInec.get(prinAnterior).descripcion}</th>"
+        html += "<th>${PeriodosInec.get(prin).descripcion}</th>"
 
-        def r1 = "", r2 = ""
+        def body = ""
+        cn.eachRow(sqlTx.toString()) { d ->
+            body += "<tr>"
+            body += "<td>${d.indc__id}</td>"
+            body += "<td>${d.indcdscr}</td>"
 
-        arr.eachWithIndex { row, i ->
-            periodos.add(row.prin__id)
-            r2 += "<th>${row.prindscr}</th>"
+            cont = 0
+            def prec = "", p = 0, rubro = "new"
+            def txValor = "select vlin__id, vlinvalr from vlin,prin where vlin.prin__id in (${prinAnterior}, ${prin}) and " +
+                    "vlin.indc__id = ${d.indc__id} and prin.prin__id = vlin.prin__id order by prinfcin"
+            //println txValor
+            cn1.eachRow(txValor.toString()) { v ->
+                if (v.vlinvalr) {
+                    prec = g.formatNumber(number: v.vlinvalr, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                    p = v.vlinvalr
+                    rubro = v.vlin__id
+                    cont++
+                }
+                body += "<td class='editable number' data-original='${p}' data-prin='${prinAnterior}' " +
+                        "data-id='${rubro}' data-indc='${d.indc__id}' data-valor='${v.vlinvalr}'>" + prec + '</td>'
+            }
+            while (cont < 2) {
+                prec = g.formatNumber(number: 0.0, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                p = 0.0
+                body += "<td class='editable number' data-original='${p}' data-prin='${prinAnterior}' " +
+                    "data-id='${rubro}' data-indc='${d.indc__id}' data-valor='0.0'>" + prec + '</td>'
+                cont++
+            }
+
         }
-        r2 += "</tr>"
-
-        html += r1
-        html += r2
         html += "</tr>"
         html += "</thead>"
         html += "<tbody>"
-        println html
-        def body = ""
+        //println html
 
-        precios.eachWithIndex { row, int index ->
-                body += "<tr>"
-                body += "<td>${row.vlin__id}</td>"
-                body += "<td>${row.indcdscr}</td>"
-                body += "<td>${row.indc__id}</td>"
-                periodos.each { prinId ->
-                    def prec = "", p = 0, rubro = "new"
-                    if (row.vlinvalr) {
-                        prec = g.formatNumber(number: row.vlinvalr, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
-                        p = row.vlinvalr
-                        rubro = row.vlin__id
-                    }
-                    def clase = ""
-                    clase = "editable"
-                    body += "<td class='editable number' data-original='${p}' data-lugar='${prinId}' " +
-                            "data-id='${rubro}' data-item='${row.indc__id}' data-valor='${row.vlinvalr}'>" + prec + '</td>'
-                }
-        }
+        cn.close()
+        cn1.close()
         html += body
         html += "</tbody>"
-
         html += "</table>"
-
-        println html
+        //println html
         [html: html]
     }
 
-    def actualizaVlin(){
+    def actualizaVlin() {
         /* TODO hacer función y mejorar presentación de valores */
+        //println "actualizaVlin: " + params
+        // formato de id:###/new _ prin _ indc _ valor
+        def oks = "", nos = ""
+        params.item.each {
+            //println "Procesa: " + it
+            def vlor = it.split("_")
+            def nuevo = new ValorIndice()
+            if (vlor[0] != "new") {
+                nuevo = ValorIndice.get(vlor[0])
+            }
+            nuevo.periodo = PeriodosInec.get(vlor[1])
+            nuevo.indice = Indice.get(vlor[2])
+            nuevo.valor = vlor[3].toDouble()
+
+            if (!nuevo.save(flush: true)) {
+                println "error " + vlor
+                if (nos != "") {
+                    nos += ","
+                }
+                nos += "#" + vlor[0]
+            } else {
+                if (oks != "") {
+                    oks += ","
+                }
+                oks += "#" + vlor[0]
+            }
+            //println nuevo.valor
+        }
+        render "ok"
     }
 } //fin controller
