@@ -71,7 +71,7 @@
                     <g:link controller="tipoTramite" action="list">Tipo de Trámite</g:link> para la gestión de procesos y flujo de trabajo
                 </div><br>
                 <div class="item" texto="rltr">
-                    <g:link controller="rolTramite" action="list">Rol de la persona en de Trámite</g:link>, por ejemplo, quien envía,
+                    <g:link controller="rolTramite" action="list">Rol de la persona en el Trámite</g:link>, por ejemplo, quien envía,
                     quien recibe o si recibe una copia del documento.
                 </div><br>
             </div>

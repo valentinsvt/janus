@@ -5,12 +5,30 @@ class VolumenObraController extends janus.seguridad.Shield{
     def preciosService
     def volObra(){
 
+
+        def usuario = session.usuario.id
+
+        def persona = Persona.get(usuario)
+
+        def direccion = Direccion.get(persona?.departamento?.direccion?.id)
+
+        def grupo = Grupo.findAllByDireccion(direccion)
+
+
+        def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
+
+
+
+
         def obra = Obra.get(params.id)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
+
+
+
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra:obra,volumenes:volumenes,campos:campos]
+        [obra:obra,volumenes:volumenes,campos:campos, subPresupuesto1: subPresupuesto1]
 
 
 
@@ -117,6 +135,18 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     def tabla(){
+
+        def usuario = session.usuario.id
+
+        def persona = Persona.get(usuario)
+
+        def direccion = Direccion.get(persona?.departamento?.direccion?.id)
+
+        def grupo = Grupo.findAllByDireccion(direccion)
+
+
+        def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
+
         println "params "+params
         def obra = Obra.get(params.obra)
         def detalle
@@ -159,7 +189,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 //
 //        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
-        [subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
+        [subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
 
     }
 
@@ -184,6 +214,19 @@ class VolumenObraController extends janus.seguridad.Shield{
 
     def tablaCopiarRubro () {
 
+
+        def usuario = session.usuario.id
+
+        def persona = Persona.get(usuario)
+
+        def direccion = Direccion.get(persona?.departamento?.direccion?.id)
+
+        def grupo = Grupo.findAllByDireccion(direccion)
+
+
+        def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
+
+
         def obra = Obra.get(params.obra)
 
         def valores
@@ -198,6 +241,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
+
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
         def dsps = obra.distanciaPeso
@@ -209,7 +253,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         preciosService.ac_rbroObra(obra.id)
 
-        [precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
+        [precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
 
 
 

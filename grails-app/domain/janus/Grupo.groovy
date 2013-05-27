@@ -4,6 +4,7 @@ class Grupo implements Serializable {
 
     String codigo
     String descripcion
+    Direccion direccion
 
     static mapping = {
         table 'grpo'
@@ -15,11 +16,13 @@ class Grupo implements Serializable {
             id column: 'grpo__id'
             codigo column: 'grpocdgo'
             descripcion column: 'grpodscr'
+            direccion column: 'dire__id'
         }
     }
     static constraints = {
         codigo(size: 1..3, blank: false, attributes: [title: 'numero'])
         descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
+//        direccion(blank: false, attributes: [title: 'direccion'])
     }
     String toString() {
         descripcion

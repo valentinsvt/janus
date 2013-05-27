@@ -23,6 +23,25 @@
 %{--</div>--}%
 %{--</g:if>--}%
 
+
+    <g:if test="${grupoInstance?.direccion}">
+        <div class="control-group">
+            <div>
+                <span id="direccion-label" class="control-label label label-inverse">
+                    Dirección
+                </span>
+            </div>
+
+            <div class="controls">
+
+                <span aria-labelledby="codigo-label">
+                    <g:fieldValue bean="${grupoInstance}" field="direccion"/>
+                </span>
+
+            </div>
+        </div>
+    </g:if>
+
     <g:if test="${grupoInstance?.codigo}">
         <div class="control-group">
             <div>

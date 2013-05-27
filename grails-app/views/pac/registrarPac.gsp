@@ -83,7 +83,7 @@
                 <input type="text" id="item_memo" style="width: 156px;">
             </div>
             <div class="span4">
-                <b>Departamento:</b>
+                <b>Coordinación:</b>
                 <input type="hidden" id="item_id">
                 <g:select name="presupuesto.id" from="${janus.Departamento.list([order:'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 250px;;font-size: 10px" id="item_depto"></g:select>
             </div>

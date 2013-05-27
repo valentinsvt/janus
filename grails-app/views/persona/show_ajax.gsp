@@ -94,7 +94,7 @@
         <div class="control-group">
             <div>
                 <span id="departamento-label" class="control-label label label-inverse">
-                    Departamento
+                    Coordinación
                 </span>
             </div>
             <div class="controls">

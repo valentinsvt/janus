@@ -44,7 +44,7 @@
                     
                         <th>Rol Tramite</th>
                     
-                        <th>Departamento</th>
+                        <th>Coordinación</th>
                     
                         <th width="150">Acciones</th>
                     </tr>

@@ -56,6 +56,7 @@ class GrupoController extends janus.seguridad.Shield {
 
     def formGr_ajax() {
         def grupo = Grupo.get(params.id)
+//        def direcciones = Dir
         def subgrupoItemsInstance = new SubgrupoItems()
         if (params.id) {
             subgrupoItemsInstance = SubgrupoItems.get(params.id)
@@ -89,6 +90,8 @@ class GrupoController extends janus.seguridad.Shield {
 
 
     def saveGr_ajax() {
+        println("params-->>" + params)
+
         def accion = "create"
         def grupo = new Grupo()
         if (params.codigo) {

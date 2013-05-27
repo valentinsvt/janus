@@ -18,7 +18,7 @@
         </a>
     </div>
     <div class="span4">
-        <b>Departamento:</b> ${dep}
+        <b>Coordinación:</b> ${dep}
     </div>
     <div class="span2">
         <b>Año:</b> ${anio}

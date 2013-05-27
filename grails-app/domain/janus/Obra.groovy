@@ -83,11 +83,11 @@ class Obra implements Serializable {
     int plazoPersonas = 1
     int plazoMaquinas = 8
 
-    double desgloseEquipo
-    double desgloseRepuestos
-    double desgloseCombustible
-    double desgloseMecanico
-    double desgloseSaldo
+    double desgloseEquipo = 0.52
+    double desgloseRepuestos = 0.26
+    double desgloseCombustible = 0.08
+    double desgloseMecanico = 0.11
+    double desgloseSaldo = 0.03
 
 
     static mapping = {

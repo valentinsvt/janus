@@ -60,7 +60,7 @@
             </td>
             <td>
                 <span class="control-label label label-inverse">
-                    Departamento
+                    Coordinación
                 </span>
             </td>
             <td>

@@ -477,6 +477,25 @@
 
         </div>
 
+        <div class="row-fluid margen" style="margin-bottom: 5px">
+        ______________________________________
+
+        </div>
+
+        <div class="row-fluid margen">
+
+            <div class="span5">
+                Total Desglose:
+            </div>
+
+            <div class="span2">
+                <g:textField type="text" name="totalDesglose" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo + obra?.desgloseMecanico + obra?.desgloseCombustible + obra?.desgloseRepuestos + obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            </div>
+
+
+        </div>
+
+
 
 
     </div>

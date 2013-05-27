@@ -4,18 +4,21 @@
     <g:form class="form-horizontal" name="frmSave" action="saveGr_ajax">
         <g:hiddenField name="id" value="${subgrupoItemsInstance?.id}"/>
 
-        %{--<div class="control-group">--}%
-            %{--<div>--}%
-                %{--<span class="control-label label label-inverse">--}%
-                    %{--Grupo--}%
-                %{--</span>--}%
-            %{--</div>--}%
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Dirección
+                </span>
+            </div>
 
-            %{--<div class="controls">--}%
-                %{--${grupo?.descripcion}--}%
-                %{--<g:hiddenField name="grupo.id" value="${grupo?.id}"/>--}%
-            %{--</div>--}%
-        %{--</div>--}%
+            <div class="controls">
+                    <g:select name="direccion.id" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 540px"/>
+                    <span class="mandatory">*</span>
+
+                    <p class="help-block ui-helper-hidden"></p>
+
+            </div>
+        </div>
 
         <div class="control-group">
             <div>
@@ -29,7 +32,7 @@
                     ${grupo?.codigo?.toString()?.padLeft(3, '0')}
                 </g:if>
                 <g:else>
-                    <g:textField name="codigo" class="allCaps required input-small" value="${grupo?.codigo?.toString()?.padLeft(3, '0')}"/>
+                    <g:textField name="codigo" class="allCaps required input-small" value="${grupo?.codigo?.toString()?.padLeft(3, '0')}" maxlength="3"/>
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>
@@ -45,7 +48,7 @@
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="3" style="height: 65px; resize: none;" name="descripcion" maxlength="63" class="allCaps required input-xxlarge" value="${grupo?.descripcion}"/>
+                <g:textArea cols="5" rows="3" style="height: 65px; resize: none;" name="descripcion" maxlength="31" class="allCaps required input-xxlarge" value="${grupo?.descripcion}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>

@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Departamentos por Trámites
+            Lista de Coordinaciones por Trámites
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear un Departamento por Trámite
+                    Crear una Coordinación por Trámite
                 </a>
             </div>
             <div class="span3" id="busqueda-DepartamentoTramite"></div>
@@ -47,7 +47,7 @@
                     
                         <th>Rol Trámite</th>
                     
-                        <th>Departamento</th>
+                        <th>Coordinación</th>
                     
                         <th width="150">Acciones</th>
                     </tr>

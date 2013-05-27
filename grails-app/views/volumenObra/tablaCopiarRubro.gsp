@@ -14,6 +14,9 @@
     <div class="span5" style="width: 550px">
         <b>Subpresupuesto de origen:</b>
         <g:select name="subpresupuestoOrg" from="${subPres}" optionKey="id" optionValue="descripcion"  noSelection="['' : ' - Seleccione un subpresupuesto - ']" style="width: 300px;font-size: 10px; margin-left: 50px" id="subPres_desc" value="${subPre}"></g:select>
+
+        %{--todo descomentar esto--}%
+        %{--<g:select name="subpresupuestoOrg" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion"  noSelection="['' : ' - Seleccione un subpresupuesto - ']" style="width: 300px;font-size: 10px; margin-left: 50px" id="subPres_desc" value="${subPre}"></g:select>--}%
     </div>
 
 
@@ -35,6 +38,12 @@
         <b>Subpresupuesto de destino:</b>
         <g:select name="subpresupuestoDes" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px; margin-left: 45px" id="subPres_destino"
                   noSelection="['' : ' - Seleccione un subpresupuesto - ']"></g:select>
+
+        %{--todo descomentar esto--}%
+        %{--<g:select name="subpresupuestoDes" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px; margin-left: 45px" id="subPres_destino"--}%
+                  %{--noSelection="['' : ' - Seleccione un subpresupuesto - ']"></g:select>--}%
+
+
     </div>
     <div class="span4" style="width: 500px">
 
@@ -295,6 +304,12 @@
             }
         }
 
+
+    });
+
+    $("#regresar").click(function () {
+
+       location.href = "${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"
 
     });
 

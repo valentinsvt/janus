@@ -71,7 +71,7 @@
 
             <h1>GOBIERNO DE LA PROVINCIA DE PICHINCHA</h1>
 
-            <h2>Departamento de Costos</h2>
+            <h2>Coordinación de Costos</h2>
 
             <h2>Análisis de Precios Unitarios de Presupuesto</h2>
 

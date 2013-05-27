@@ -38,7 +38,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Departamento
+                    Coordinación
                 </span>
             </div>
 

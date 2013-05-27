@@ -93,11 +93,11 @@
 
             <div class="tituloPdf">
                 <p>
-                    <b>GOBIERNO DE LA PROVINCIA DE PICHINCHA</b>
+                    <b>GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA</b>
                 </p>
 
                 <p>
-                    DEPARTAMENTO DE COSTOS
+                    COORDINACIÓN DE COSTOS
                 </p>
 
                 <p>

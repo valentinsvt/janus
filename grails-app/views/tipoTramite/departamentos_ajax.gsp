@@ -1,4 +1,4 @@
-<h5>Departamentos de ${tipoTramite}</h5>
+<h5>Coordinación de ${tipoTramite}</h5>
 
 <div class="well">
     <div class="row">
@@ -11,7 +11,7 @@
     </div>
 
     <div class="row">
-        <div class="span1 bold">Departamento</div>
+        <div class="span1 bold">Coordinación</div>
 
         <div class="span4">
             <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id"
