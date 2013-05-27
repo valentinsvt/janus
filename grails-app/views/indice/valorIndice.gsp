@@ -20,7 +20,9 @@
     <table class="table table-bordered table-striped table-condensed table-hover">
         <thead>
         <tr>
+%{--
         <th width='35px;'>Editar</th>
+--}%
         <th>Índice</th>
         <th>Enero</th>
         <th>Febrero</th>
@@ -38,9 +40,11 @@
         <tbody>
         <g:each in="${datos}" var="val" status="j">
             <tr class="item_row">
+%{--
                 <td><a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar"
                        data-id="${val.indc__id}">
                     <i class="icon-pencil icon-large"></i></a></td>
+--}%
                 <td style="width: 300px;">${val.indcdscr}</td>
                 <td style="width: 50px;text-align: right">${val.enero ?: ''}</td>
                 <td style="width: 50px;text-align: right">${val.febrero ?: ''}</td>
