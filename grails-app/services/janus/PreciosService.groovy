@@ -360,10 +360,40 @@ class PreciosService {
 
     def rbro_pcun_v3(obra,subpres){
 
-//        println("sb" + subpres)
-
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rbro_pcun_v2(" + obra + ") where sbpr__id= ${subpres} order by vlobordn asc"
+//      println(sql)
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+
+    }
+
+    def rbro_pcun_v4(obra,orden){
+
+
+//        println("ordenv4:" + orden)
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rbro_pcun_v2(" + obra + ") order by vlobordn ${orden}"
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+
+    }
+
+    def rbro_pcun_v5(obra,subpres,orden){
+
+//        println("ordenv3:" + orden)
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rbro_pcun_v2(" + obra + ") where sbpr__id= ${subpres} order by vlobordn ${orden}"
 //        println(sql)
         def result = []
         cn.eachRow(sql.toString()) { r ->

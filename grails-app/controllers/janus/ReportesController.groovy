@@ -63,6 +63,9 @@ class ReportesController {
     }
 
     def imprimeMatriz() {
+
+        def obra = Obra.get(params.id)
+
         println "imprime matriz"
         def cn = buscadorService.dbConnectionService.getConnection()
         def cn2 = buscadorService.dbConnectionService.getConnection()
@@ -102,6 +105,7 @@ class ReportesController {
 
             }
 //            println "fila  "+tmp
+            println("col" + columnas)
             filas.add(tmp)
             cont++
         }
@@ -109,6 +113,7 @@ class ReportesController {
         def baos = new ByteArrayOutputStream()
         def name = "matriz_polinomica_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
 //            println "name "+name
+        Font titleFont = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
         Document document
@@ -120,23 +125,29 @@ class ReportesController {
         document.addKeywords("reporte, janus,matriz");
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
-//        Paragraph preface = new Paragraph();
-//        addEmptyLine(preface, 1);
-//        preface.add(new Paragraph("Matriz polinómica", catFont));
-//        preface.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-//        addEmptyLine(preface, 1);
-//        document.add(preface);
         Font small = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", titleFont));
+        headers.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA", titleFont));
+        headers.add(new Paragraph("OBRA: " + obra?.descripcion, titleFont));
+        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), titleFont));
+        addEmptyLine(headers, 1);
+        document.add(headers);
+
 
         /*table*/
 
         def parcial = []
-        def anchos = [5, 10, 30, 5, 10, 10, 10, 10]
+        def anchos = [4, 7, 35, 5, 10, 10, 10, 9]
         def inicio = 0
         def fin = 8
-//        println "size "+columnas.size()
+        def vr = 0
+        println "size "+columnas.size()
         while (fin <= columnas.size()) {
-//            println "inicio "+inicio+"  fin  "+fin
+            println "inicio "+inicio+"  fin  "+fin
             if (inicio != 0)
                 anchos = [12, 12, 12, 12, 12, 12, 12, 12]
             if (fin - inicio < 8) {
@@ -146,25 +157,74 @@ class ReportesController {
                 }
             }
             def parrafo = new Paragraph("")
+
             PdfPTable table = new PdfPTable((fin - inicio).toInteger());
             table.setWidthPercentage(100);
             table.setWidths(arregloEnteros(anchos))
             (fin - inicio).toInteger().times { i ->
-                PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio + i][1], small));
-                c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                table.addCell(c1);
+
+
+
+                if(inicio != 0){
+
+                    println("entro" + i)
+                    println("--->>>"  + i)
+                    println("%%%%"  + inicio)
+                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i)-1][1], small));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+
+                }
+                if(inicio == 0){
+
+                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                }
+//
+//                PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
+//                c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                table.addCell(c1);
+
             }
             table.setHeaderRows(1);
             filas.each { f ->
                 (fin - inicio).toInteger().times { i ->
-                    def dato = f[inicio + i]
-                    if (!dato)
-                        dato = "0.00"
-                    else
-                        dato = dato.toString()
-                    def cell = new PdfPCell(new Phrase(dato, small));
-                    cell.setFixedHeight(28f);
-                    table.addCell(cell);
+
+                    if(inicio != 0) {
+
+                        def dato = f[(inicio + i)-1]
+                        if (!dato)
+                            dato = "0.00"
+                        else
+                            dato = dato.toString()
+                        def cell = new PdfPCell(new Phrase(dato, small));
+                        cell.setFixedHeight(16f);
+                        table.addCell(cell);
+
+                    }
+                    if(inicio == 0){
+
+                        def dato = f[inicio + i]
+                        if (!dato)
+                            dato = "0.00"
+                        else
+                            dato = dato.toString()
+                        def cell = new PdfPCell(new Phrase(dato, small));
+                        cell.setFixedHeight(16f);
+                        table.addCell(cell);
+
+                    }
+//                    def dato = f[inicio + i]
+//                    if (!dato)
+//                        dato = "0.00"
+//                    else
+//                        dato = dato.toString()
+//                    def cell = new PdfPCell(new Phrase(dato, small));
+//                    cell.setFixedHeight(16f);
+//                    table.addCell(cell);
                 }
             }
             parrafo.add(table);

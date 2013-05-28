@@ -63,14 +63,8 @@
                 <i class="icon-print"></i>
                 Reporte Grupos/Subgrupos
             </a>
-            %{--<a href="#" class="btn btn-ajax btn-new" id="transporte" title="Transporte">--}%
-            %{--<i class="icon-truck"></i>--}%
-            %{--Transporte--}%
-            %{--</a>--}%
-            %{--<a href="#" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
-            %{--</a>--}%
+
+
         </div>
 
         <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
@@ -221,12 +215,13 @@
                 return interval
             }
             function cargarTabla() {
+
                 var interval = loading("detalle")
                 var datos = ""
                 if ($("#subPres_desc").val() * 1 > 0) {
-                    datos = "obra=${obra.id}&sub=" + $("#subPres_desc").val()
+                    datos = "obra=${obra.id}&sub=" + $("#subPres_desc").val() + "&ord=" + 1
                 } else {
-                    datos = "obra=${obra.id}"
+                    datos = "obra=${obra.id}&ord=" + 1
                 }
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
                     data     : datos,
@@ -313,7 +308,7 @@
 
                 $("#btnCrearSP").click(function () {
                     var $btnOrig = $(this).clone(true);
-                    $(this).replaceWith(spinner);
+//                    $(this).replaceWith(spinner);
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(controller:"subPresupuesto",action:'form_ajax')}",

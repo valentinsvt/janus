@@ -1,11 +1,30 @@
 <div class="row-fluid" style="margin-left: 0px">
-    <div class="span5">
+    <div class="span5" style="margin-bottom: 5px">
         <b>Subpresupuesto:</b>
         <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>
 
         %{--todo descomentar esto--}%
         %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>--}%
+
+
+        <a href="#" class="btn btn-ajax btn-new" id="ordenarAsc" title="Ordenar Ascendentemente">
+            <i class="icon-arrow-up"></i>
+            Ascendentemente
+        </a>
+        <a href="#" class="btn btn-ajax btn-new" id="ordenarDesc" title="Ordenar Descendentemente">
+            <i class="icon-arrow-down"></i>
+            Descendentemente
+        </a>
+
+
+
+
     </div>
+
+    %{--<div class="span2">--}%
+
+    %{--</div>--}%
+
     <div class="span1">
         <div class="btn-group" data-toggle="buttons-checkbox">
             <button type="button" id="ver_todos" class="btn btn-info ${(!subPre)?'active':''} " style="font-size: 10px">Ver todos</button>
@@ -16,6 +35,8 @@
 
 
     <div class="span4" style="width: 500px">
+
+
 
         <a href="#" class="btn  " id="copiar_rubros">
             <i class="icon-copy"></i>
@@ -155,6 +176,7 @@
     });
 
     $("#imprimir_sub").click(function(){
+
         var dsps=${obra.distanciaPeso}
         var dsvs=${obra.distanciaVolumen}
         var volqueta=${precioVol}
@@ -164,9 +186,12 @@
         var datos = "?obra=${obra.id}Wsub="+$("#subPres_desc").val()
         var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}"+datos
         location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+
     });
 
     $("#imprimir_excel").click(function () {
+//        var $boton = $(this).clone(true)
+//        $(this).replaceWith(spinner);
 
         %{--var dsps=${obra.distanciaPeso}--}%
         %{--var dsvs=${obra.distanciaVolumen}--}%
@@ -190,7 +215,7 @@
                location.href = "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra',id: obra?.id)}";
                 $("#dlgLoad").dialog("close");
 
-
+//                spinner.replaceWith($boton);
 
             }
 
@@ -207,7 +232,7 @@
         $("#divTotal").html("")
         $("#calcular").removeClass("active")
 
-        var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
+        var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()+"&ord=" + 1
 
 
         var interval = loading("detalle")
@@ -291,6 +316,51 @@ $("#copiar_rubros").click(function () {
     location.href="${createLink(controller: 'volumenObra', action: 'copiarRubros', id: obra?.id)}?obra=" + ${obra?.id}
 
 });
+
+ $("#ordenarAsc").click(function () {
+
+     $("#ver_todos").removeClass("active")
+     $("#divTotal").html("")
+     $("#calcular").removeClass("active")
+
+     var orden = 1;
+
+     var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden
+
+
+     var interval = loading("detalle")
+     $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+         data     : datos,
+         success  : function (msg) {
+             clearInterval(interval)
+             $("#detalle").html(msg)
+         }
+     });
+
+ });
+
+ $("#ordenarDesc").click(function () {
+
+     $("#ver_todos").removeClass("active")
+     $("#divTotal").html("")
+     $("#calcular").removeClass("active")
+
+     var orden = 2;
+
+     var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden
+
+
+     var interval = loading("detalle")
+     $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+         data     : datos,
+         success  : function (msg) {
+             clearInterval(interval)
+             $("#detalle").html(msg)
+         }
+     });
+
+ });
+
 
 
     $("#desgloseDialog").dialog({

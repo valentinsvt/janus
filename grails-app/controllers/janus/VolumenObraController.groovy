@@ -147,22 +147,33 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
 
-        println "params "+params
+//        println "params "+params
         def obra = Obra.get(params.obra)
         def detalle
         def valores
+        def orden
+
+        if (params.ord == '1'){
+
+            orden = 'asc'
+
+        }else{
+
+             orden = 'desc'
+
+        }
 
         if (params.sub && params.sub != "null") {
 //            println("entro1")
 //        detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
-         valores = preciosService.rbro_pcun_v3(obra.id,params.sub)
+         valores = preciosService.rbro_pcun_v5(obra.id,params.sub,orden)
 //          detalle= VolumenesObra.findAllBySubPresupuesto(SubPresupuesto.get(params.sub))
 //            println("detalle" + detalle)
         }
         else  {
 //            println("entro2")
 //        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-        valores = preciosService.rbro_pcun_v2(obra.id)
+        valores = preciosService.rbro_pcun_v4(obra.id,orden)
         }
 
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()

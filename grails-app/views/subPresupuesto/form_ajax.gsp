@@ -8,6 +8,22 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
+                Grupo
+            </span>
+        </div>
+
+        <div class="controls">
+
+            <g:select name="grupo.id" from="${janus.Grupo.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+
+           <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
                 Tipo
             </span>
         </div>
