@@ -114,7 +114,7 @@ class ObraFPController {
         /* --------------------- parámetros que se requieren para correr el proceso  --------------------- */
         def obra__id = params.obra.toInteger()         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
         def sbpr = params.sub.toInteger()              // todos los subpresupuestos
-        def conTransporte = params.trans       // parámetro leido de la interfaz
+        boolean conTransporte = (params.trans == "true")      // parámetro leido de la interfaz
         /* ----------------------------------- FIN de parámetros  ---------------------------------------- */
         println "con transporte:" + conTransporte
         pone_ids()
@@ -202,7 +202,7 @@ class ObraFPController {
         descomposicion(obra__id, sbpr)
         println "completa descomposicion"
         des_Materiales(obra__id, sbpr, conTransporte)
-        println "completa des_Materiales"
+        println "completa des_Materiales, conTranp: $conTransporte"
         if (hayEquipos) {
             if (conTransporte) acTransporte(obra__id, sbpr)
             acEquipos(obra__id, sbpr)

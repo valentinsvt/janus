@@ -871,7 +871,7 @@
             var sp = $("#mtariz_sub").val();
 //            var tr = $("#si_trans").attr("checked");
             var tr = $("#si_trans").is(':checked');
-            console.log(sp,tr)
+            //console.log(sp,tr)
 //                    if (sp != "-1")
 
             $("#dlgLoad").dialog("open");
