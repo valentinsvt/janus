@@ -637,17 +637,25 @@
 
         <div class="modal-body" id="modal_body_matriz">
             <div id="msg_matriz">
+                <g:if test="${obra.desgloseTransporte == 'S'}">
+                    <p style="font-size: 14px; text-align: center;"> Ya existe una matriz generada <b>con</b> desglose transporte</p>
+                </g:if>
+                <g:else>
+                    <g:if test="${obra.desgloseTransporte == 'N'}">
+                        <p style="font-size: 14px; text-align: center;"> Ya existe una matriz generada <b>sin</b> desglose transporte</p>
+                    </g:if>
+                </g:else>
                 <p>Desea volver a generar la matriz? Esta acción podria tomar varios minutos</p>
                 <a href="#" class="btn btn-info" id="no">No</a>
                 <a href="#" class="btn btn-danger" id="si">Si</a>
 
             </div>
 
-            <div id="datos_matriz">
-                <p>Si no escoge un subpresupuesto se generará con todos</p>
-                <g:select name="mtariz_sub" from="${subs}" noSelection="['0': 'Seleccione...']" optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
-                Generar con transporte <input type="checkbox" id="si_trans" style="margin-top: -3px" checked="true">
-                <a href="#" class="btn btn-success" id="ok_matiz" style="margin-left: 10px">Generar</a>
+            <div id="datos_matriz" style="text-align: center">
+                <span>Seleccione el subpresupuesto:</span>
+                <g:select name="mtariz_sub" from="${subs}" noSelection="['0': 'Todos los subpresupuestos']" optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
+                <p>Generar con desglose de Transporte <input type="checkbox" id="si_trans" style="margin-top: -3px" checked="true"></p>
+                <a href="#" class="btn btn-success" id="ok_matiz">Generar</a>
             </div>
         </div>
 
@@ -880,7 +888,7 @@
                             }
                         });
                     } else {
-                        location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',params:[id:obra.id,inicio:0,limit:40])}"
+                        location.href = "${g.createLink(controller: 'matriz',action: 'pantallaMatriz',params:[id:obra.id,inicio:0,limit:40, trnp: tr])}"
                     }
                 },
                 error   : function () {

@@ -127,11 +127,14 @@ class ReportesController {
         document.addCreator("Tedein SA");
         Font small = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
 
+        def titulo = obra.desgloseTransporte == "S" ? '(Con desglose de Transporte)' : '(Sin desglose de Transporte)'
+        println titulo
+
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", titleFont));
-        headers.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA", titleFont));
+        headers.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA " + titulo, titleFont));
         headers.add(new Paragraph("OBRA: " + obra?.descripcion, titleFont));
         headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), titleFont));
         addEmptyLine(headers, 1);
@@ -170,28 +173,31 @@ class ReportesController {
 
 
 
-//                if(inicio != 0){
-//
+                if(inicio != 0){
+
 //                    println("entro" + i)
 //                    println("--->>>"  + i)
 //                    println("%%%%"  + inicio)
-//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i)][1], small));
-//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                    table.addCell(c1);
-//
-//
-//                }
-//                if(inicio == 0){
-//
-//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
-//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                    table.addCell(c1);
-//
-//                }
-//
-                PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i)-1][1], small));
+                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i -1)][1], small));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+
+                }
+                if(inicio == 0){
+
+                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                }
+
+/*
+                println columnas
+                PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio + i][1], small));
                 c1.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(c1);
+*/
 
             }
             table.setHeaderRows(1);
@@ -205,8 +211,9 @@ class ReportesController {
                             dato = "0.00"
                         else
                             dato = dato.toString()
-                        def cell = new PdfPCell(new Phrase(dato, small));
+                        def cell = new PdfPCell(new Phrase(dato, small))
                         cell.setFixedHeight(16f);
+                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
                         table.addCell(cell);
 
                     }
@@ -217,8 +224,9 @@ class ReportesController {
                             dato = "0.00"
                         else
                             dato = dato.toString()
-                        def cell = new PdfPCell(new Phrase(dato, small));
+                        def cell = new PdfPCell(new Phrase(dato, small))
                         cell.setFixedHeight(16f);
+                        if (i > 3) cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
                         table.addCell(cell);
 
                     }

@@ -89,6 +89,8 @@ class Obra implements Serializable {
     double desgloseMecanico = 0.11
     double desgloseSaldo = 0.03
 
+    String desgloseTransporte
+
 
     static mapping = {
         table 'obra'
@@ -186,6 +188,7 @@ class Obra implements Serializable {
             desgloseCombustible column: 'obradscb'
             desgloseMecanico    column: 'obradsmc'
             desgloseSaldo       column: 'obradssl'
+            desgloseTransporte  column: 'obratrnp'
         }
     }
     static constraints = {
@@ -278,6 +281,7 @@ class Obra implements Serializable {
         desgloseCombustible(attributes: [title: 'Desglose del transporte y equipos en Combustible'])
         desgloseMecanico(attributes: [title: 'Desglose del transporte y equipos en Mecánico'])
         desgloseSaldo(attributes: [title: 'Desglose del transporte y equipos en Saldo'])
+        desgloseTransporte(size: 1..1, blank: true, nullable: true, attributes: [title: 'Desglose de transporte'])
     }
 
     String toString() {

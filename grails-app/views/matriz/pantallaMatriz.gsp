@@ -1,10 +1,10 @@
-<%@ page import="janus.Grupo" %>
+<%@ page import="janus.Obra" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            MatrizFP
+            ${titulo}
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>

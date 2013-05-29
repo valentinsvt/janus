@@ -22,6 +22,7 @@ class MatrizController extends janus.seguridad.Shield {
 //        println "sql desc "+sql
         def columnas = []
         def filas = []
+
         cn.eachRow(sql.toString()){r->
             def col = ""
             if (r[2] != "R") {
@@ -43,7 +44,8 @@ class MatrizController extends janus.seguridad.Shield {
             //println col
             columnas.add([r[0], col, r[2]])
         }
-        [obra: obra, cols: columnas]
+        def titulo = Obra.get(obra).desgloseTransporte == "S" ? 'Matriz con desglose de Transporte' : 'Matriz sin desglose de Transporte'
+        [obra: obra, cols: columnas, titulo: titulo]
     }
 
     def matrizPolinomica(){

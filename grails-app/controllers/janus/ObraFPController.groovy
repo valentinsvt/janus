@@ -115,6 +115,12 @@ class ObraFPController {
         def obra__id = params.obra.toInteger()         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
         def sbpr = params.sub.toInteger()              // todos los subpresupuestos
         boolean conTransporte = (params.trans == "true")      // parámetro leido de la interfaz
+        def obra = Obra.get(obra__id)
+        if (conTransporte)
+            obra.desgloseTransporte = "S"
+        else
+            obra.desgloseTransporte = "N"
+        obra.save(flush: true)
         /* ----------------------------------- FIN de parámetros  ---------------------------------------- */
         println "con transporte:" + conTransporte
         pone_ids()
@@ -214,7 +220,7 @@ class ObraFPController {
         acTotal(obra__id)                           /* cambio obra__id */
         println "completa acTotal"
 
-        if (hayEquipos) desgloseTrnp(obra__id)      /* cambio obra__id */
+        if (hayEquipos) desgloseTrnp(obra__id, conTransporte)      /* cambio obra__id */
         println "completa desgloseTrnp"
 
         completaTotalS2(obra__id, hayEquipos)
@@ -229,8 +235,6 @@ class ObraFPController {
         formulaPolinomica(obra__id)                 /* cambio obra__id */
         println "fin matriz"
         render "ok"
-        return
-
     }
 
     def verificaMatriz(id) {
@@ -864,30 +868,34 @@ class ObraFPController {
     }
 
 
-    def desgloseTrnp(id) {
+    def desgloseTrnp(id, conTrnp) {
         def obra = Obra.get(id)
         def cn = dbConnectionService.getConnection()
         def tx_sql = ""
         def pu_chfr = 0.0
         def pu_vlqt = 0.0
-        tx_sql = "select rbpcpcun pcun from item_pcun_v2 (${obra.chofer.id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
-                "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
-        //println "desgloseTrnp: " + tx_sql
-        cn.eachRow(tx_sql.toString()) { row ->
-            pu_chfr = row.pcun
+        def fraccion = 0.0
+        if (conTrnp) {
+            tx_sql = "select rbpcpcun pcun from item_pcun_v2 (${obra.chofer.id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
+                    "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
+            //println "desgloseTrnp: " + tx_sql
+            cn.eachRow(tx_sql.toString()) { row ->
+                pu_chfr = row.pcun
+            }
+            tx_sql = "select rbpcpcun pcun from item_pcun_v2 (${obra.volquete.id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
+                    "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
+            //println "desgloseTrnp: " + tx_sql
+            cn.eachRow(tx_sql.toString()) { row ->
+                pu_vlqt = row.pcun
+            }
+            cn.close()
+
+            println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}"
+
+            fraccion = pu_vlqt / (pu_chfr + pu_vlqt)
+        } else {
+            fraccion = 1.0
         }
-        tx_sql = "select rbpcpcun pcun from item_pcun_v2 (${obra.volquete.id}, '${obra.fechaPreciosRubros}', ${obra.lugar.id}," +
-                "${obra.listaPeso1.id}, ${obra.listaVolumen0.id}, ${obra.listaVolumen1.id}, ${obra.listaVolumen2.id}, ${obra.listaManoObra.id})"
-        //println "desgloseTrnp: " + tx_sql
-        cn.eachRow(tx_sql.toString()) { row ->
-            pu_vlqt = row.pcun
-        }
-        cn.close()
-
-        println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}"
-
-        def fraccion = pu_vlqt/(pu_chfr + pu_vlqt)
-
         println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}, fraccion: ${fraccion}"
 
         def totalTrnp = (totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1"))
@@ -982,14 +990,14 @@ class ObraFPController {
         cn.eachRow(tx_sql.toString()) { row ->
             //tx_cr = "select item__id, itemcdgo, itemnmbr from item where itemcmpo = '${row.clmndscr[0..-3]}'"
             //if (!nooo.contains(row.clmndscr[0..-3])) {
-                tx_cr = "select item__id, itemcdgo, itemnmbr from item where item__id = '${row.clmndscr[0..-3]}'"
+            tx_cr = "select item__id, itemcdgo, itemnmbr from item where item__id = '${row.clmndscr[0..-3]}'"
 
-                //println "tx_cr..... campo:" + tx_cr
-                cn1.eachRow(tx_cr.toString()) { d ->
-                    item__id = d.item__id
-                    item = d.itemcdgo
-                    tx = d.itemnmbr
-                }
+            //println "tx_cr..... campo:" + tx_cr
+            cn1.eachRow(tx_cr.toString()) { d ->
+                item__id = d.item__id
+                item = d.itemcdgo
+                tx = d.itemnmbr
+            }
             if (obra.estado == 'N') {
 /*
                 tx_cr = "select rbpcpcun pcun from item_pcun (${item__id}, ${obra.lugarId}, '${obra.fechaPreciosRubros}')"
