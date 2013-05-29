@@ -5,6 +5,27 @@ class VolumenObraController extends janus.seguridad.Shield{
     def preciosService
     def volObra(){
 
+        def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
+
+        def subpreFiltrado = []
+
+        def var
+
+
+        grupoFiltrado.each { i->
+
+           var = SubPresupuesto.findAllByGrupo(i)
+
+//            subpreFiltrado.add(var)
+
+            subpreFiltrado += var
+
+
+        }
+
+
+        println("-->>" + subpreFiltrado)
+
 
         def usuario = session.usuario.id
 
@@ -28,7 +49,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra:obra,volumenes:volumenes,campos:campos, subPresupuesto1: subPresupuesto1]
+        [obra:obra,volumenes:volumenes,campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado]
 
 
 

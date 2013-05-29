@@ -2,7 +2,7 @@
 <div class="row-fluid" style="margin-left: 0px">
     <div class="span-6" style="margin-bottom: 5px">
         <b>Subpresupuesto:</b>
-        <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>
+        <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}" noSelection="['': 'TODOS']"></g:select>
 
         %{--todo descomentar esto--}%
         %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>--}%
@@ -15,10 +15,10 @@
             <i class="icon-arrow-down"></i>
         </a>
 
-        <div class="btn-group" data-toggle="buttons-checkbox">
-            <button type="button" id="ver_todos" class="btn btn-tabla ${(!subPre)?'active':''} " style="font-size: 10px">Ver todos</button>
+        %{--<div class="btn-group" data-toggle="buttons-checkbox">--}%
+            %{--<button type="button" id="ver_todos" class="btn btn-tabla ${(!subPre)?'active':''} " style="font-size: 10px">Ver todos</button>--}%
 
-        </div>
+        %{--</div>--}%
 
 
 
@@ -180,15 +180,24 @@
 
     $("#imprimir_sub").click(function(){
 
-        var dsps=${obra.distanciaPeso}
-        var dsvs=${obra.distanciaVolumen}
-        var volqueta=${precioVol}
-        var chofer=${precioChof}
-        %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
-        %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
-        var datos = "?obra=${obra.id}Wsub="+$("#subPres_desc").val()
-        var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}"+datos
-        location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+       if($("#subPres_desc").val() != ''){
+
+           var dsps=${obra.distanciaPeso}
+           var dsvs=${obra.distanciaVolumen}
+           var volqueta=${precioVol}
+           var chofer=${precioChof}
+           %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
+           %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
+           var datos = "?obra=${obra.id}Wsub="+$("#subPres_desc").val()
+           var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}"+datos
+           location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+       } else {
+
+
+
+       }
+
+
 
     });
 
@@ -248,41 +257,41 @@
         });
     });
 
-    $("#ver_todos").click(function(){
-        $("#calcular").removeClass("active")
-        $("#divTotal").html("")
-        if ($(this).hasClass("active")) {
-            $(this).removeClass("active")
+    %{--$("#ver_todos").click(function(){--}%
+        %{--$("#calcular").removeClass("active")--}%
+        %{--$("#divTotal").html("")--}%
+        %{--if ($(this).hasClass("active")) {--}%
+            %{--$(this).removeClass("active")--}%
 
-            var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()+"&ord=" + 1
-            var interval = loading("detalle")
-            $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-                data     : datos,
-                success  : function (msg) {
-                    clearInterval(interval)
-                    $("#detalle").html(msg)
-                }
-            });
+            %{--var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()+"&ord=" + 1--}%
+            %{--var interval = loading("detalle")--}%
+            %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
+                %{--data     : datos,--}%
+                %{--success  : function (msg) {--}%
+                    %{--clearInterval(interval)--}%
+                    %{--$("#detalle").html(msg)--}%
+                %{--}--}%
+            %{--});--}%
 
-        }else{
-            $(this).addClass("active")
-//
-//            console.log("--->>>" + $(this).addClass("active"))
+        %{--}else{--}%
+            %{--$(this).addClass("active")--}%
+%{--//--}%
+%{--//            console.log("--->>>" + $(this).addClass("active"))--}%
 
 
-            var datos = "obra=${obra.id}"+"&ord=" + 1
-            var interval = loading("detalle")
-            $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-                data     : datos,
-                success  : function (msg) {
-                    clearInterval(interval)
-                    $("#detalle").html(msg)
-                }
-            });
-        }
-        return false
+            %{--var datos = "obra=${obra.id}"+"&ord=" + 1--}%
+            %{--var interval = loading("detalle")--}%
+            %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
+                %{--data     : datos,--}%
+                %{--success  : function (msg) {--}%
+                    %{--clearInterval(interval)--}%
+                    %{--$("#detalle").html(msg)--}%
+                %{--}--}%
+            %{--});--}%
+        %{--}--}%
+        %{--return false--}%
 
-    }) ;
+    %{--}) ;--}%
                 var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" +
 
 
@@ -331,24 +340,24 @@ $("#copiar_rubros").click(function () {
      $("#calcular").removeClass("active")
 
 
-     if($("#ver_todos").hasClass("active")){
+     %{--if($("#ver_todos").hasClass("active")){--}%
 
-         var orden = 1;
+         %{--var orden = 1;--}%
 
-         var datos = "obra=${obra.id}&ord=" + orden
-
-
-         var interval = loading("detalle")
-         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-             data     : datos,
-             success  : function (msg) {
-                 clearInterval(interval)
-                 $("#detalle").html(msg)
-             }
-         });
+         %{--var datos = "obra=${obra.id}&ord=" + orden--}%
 
 
-     }else{
+         %{--var interval = loading("detalle")--}%
+         %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
+             %{--data     : datos,--}%
+             %{--success  : function (msg) {--}%
+                 %{--clearInterval(interval)--}%
+                 %{--$("#detalle").html(msg)--}%
+             %{--}--}%
+         %{--});--}%
+
+
+     %{--}else{--}%
 
          var orden = 1;
 
@@ -365,7 +374,7 @@ $("#copiar_rubros").click(function () {
          });
 
 
-     }
+//     }
 
 
 
@@ -378,24 +387,24 @@ $("#copiar_rubros").click(function () {
      $("#calcular").removeClass("active")
 
 
-     if($("#ver_todos").hasClass("active")){
+     %{--if($("#ver_todos").hasClass("active")){--}%
 
-         var orden = 2;
+         %{--var orden = 2;--}%
 
-         var datos = "obra=${obra.id}&ord=" + orden
-
-
-         var interval = loading("detalle")
-         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-             data     : datos,
-             success  : function (msg) {
-                 clearInterval(interval)
-                 $("#detalle").html(msg)
-             }
-         });
+         %{--var datos = "obra=${obra.id}&ord=" + orden--}%
 
 
-     }else{
+         %{--var interval = loading("detalle")--}%
+         %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
+             %{--data     : datos,--}%
+             %{--success  : function (msg) {--}%
+                 %{--clearInterval(interval)--}%
+                 %{--$("#detalle").html(msg)--}%
+             %{--}--}%
+         %{--});--}%
+
+
+     %{--}else{--}%
 
 
          var orden = 2;
@@ -414,7 +423,7 @@ $("#copiar_rubros").click(function () {
 
 
 
-     }
+//     }
 
 
 

@@ -105,7 +105,7 @@ class ReportesController {
 
             }
 //            println "fila  "+tmp
-            println("col" + columnas)
+//            println("col" + columnas)
             filas.add(tmp)
             cont++
         }
@@ -145,7 +145,7 @@ class ReportesController {
         def inicio = 0
         def fin = 10
         def vr = 0
-        println "size "+columnas.size()
+//        println "size "+columnas.size()
         while (fin  <= columnas.size() + 1) {  //gdo  <= antes
 //            println "inicio "+inicio+"  fin  "+fin
             if (inicio != 0)

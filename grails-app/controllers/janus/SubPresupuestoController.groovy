@@ -15,7 +15,11 @@ class SubPresupuestoController extends janus.seguridad.Shield {
     } //list
 
     def form_ajax() {
+
+        def grupo = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
+
         def subPresupuestoInstance = new SubPresupuesto(params)
+
         if (params.id) {
             subPresupuestoInstance = SubPresupuesto.get(params.id)
             if (!subPresupuestoInstance) {
@@ -25,10 +29,33 @@ class SubPresupuestoController extends janus.seguridad.Shield {
                 return
             } //no existe el objeto
         } //es edit
-        return [subPresupuestoInstance: subPresupuestoInstance]
+        return [subPresupuestoInstance: subPresupuestoInstance, grupo: grupo]
     } //form_ajax
 
     def save() {
+
+
+
+        def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
+
+        def subpreFiltrado = []
+
+        def var
+
+
+        grupoFiltrado.each { i->
+
+            var = SubPresupuesto.findAllByGrupo(i)
+
+//            subpreFiltrado.add(var)
+
+            subpreFiltrado += var
+
+
+        }
+
+
+
         println "save sp: " + params
         def subPresupuestoInstance
         if (params.id) {
@@ -80,9 +107,13 @@ class SubPresupuestoController extends janus.seguridad.Shield {
             flash.message = "Se ha creado correctamente Sub Presupuesto " + subPresupuestoInstance.id
         }
         if (params.volob.toString() == "1") {
-            def sel = g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 300px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
+//            def sel = g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 300px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
+
+            def sel = g.select (name:"subpresupuesto", from: subpreFiltrado , optionKey:"id", optionValue:"descripcion", style:"width: 300px;;font-size: 10px", id:"subPres", value: subPresupuestoInstance.id)
+
             render sel
-        } else {
+
+                } else {
             redirect(action: 'list')
         }
     } //save

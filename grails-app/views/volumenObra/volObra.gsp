@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Volumenes de obra
+            Volúmenes de obra
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -93,7 +93,12 @@
                     <div class="span4" style="width: 400px">
                         <b>Crear Subpresupuesto / Ingresar Rubros:</b>
                         <span id="sp">
-                            <g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>
+                            %{--<g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
+
+
+                            <g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>
+
+
 
                             %{--todo descomentar esto--}%
                             %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
