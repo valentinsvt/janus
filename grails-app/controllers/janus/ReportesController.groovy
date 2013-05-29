@@ -141,24 +141,29 @@ class ReportesController {
         /*table*/
 
         def parcial = []
-        def anchos = [4, 7, 35, 5, 10, 10, 10, 9]
+        def anchos = [4, 7, 35, 5, 8, 8, 8, 8, 8, 8]     // , 9
         def inicio = 0
-        def fin = 8
+        def fin = 10
         def vr = 0
         println "size "+columnas.size()
-        while (fin <= columnas.size()) {
+        while (fin  <= columnas.size() + 1) {  //gdo  <= antes
             println "inicio "+inicio+"  fin  "+fin
             if (inicio != 0)
-                anchos = [12, 12, 12, 12, 12, 12, 12, 12]
-            if (fin - inicio < 8) {
+                anchos = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+            if (fin - inicio < 10) {
                 anchos = []
                 (fin - inicio).toInteger().times { i ->
                     anchos.add((100 / (fin - inicio)).toInteger())
                 }
             }
             def parrafo = new Paragraph("")
+/*
+            if (inicio == fin)
+               inicio -= 2       //gdo
+*/
 
-            PdfPTable table = new PdfPTable((fin - inicio).toInteger());
+            PdfPTable table = new PdfPTable((fin - inicio).toInteger());       //gdo
+
             table.setWidthPercentage(100);
             table.setWidths(arregloEnteros(anchos))
             (fin - inicio).toInteger().times { i ->
@@ -230,10 +235,12 @@ class ReportesController {
             parrafo.add(table);
             document.add(parrafo);
             document.newPage();
-            inicio = fin + 1
-            fin = inicio + 8
-            if (fin > columnas.size())
-                fin = columnas.size()
+//            inicio = fin + 1
+            inicio = fin
+            fin = inicio + 10
+            if (fin > columnas.size() + 1){
+                fin = columnas.size() + 1
+            }
             if (inicio > columnas.size())
                 break;
 
