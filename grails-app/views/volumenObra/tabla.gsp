@@ -1,5 +1,6 @@
+
 <div class="row-fluid" style="margin-left: 0px">
-    <div class="span5" style="margin-bottom: 5px">
+    <div class="span-6" style="margin-bottom: 5px">
         <b>Subpresupuesto:</b>
         <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>
 
@@ -9,32 +10,15 @@
 
         <a href="#" class="btn btn-ajax btn-new" id="ordenarAsc" title="Ordenar Ascendentemente">
             <i class="icon-arrow-up"></i>
-            Ascendentemente
         </a>
         <a href="#" class="btn btn-ajax btn-new" id="ordenarDesc" title="Ordenar Descendentemente">
             <i class="icon-arrow-down"></i>
-            Descendentemente
         </a>
 
-
-
-
-    </div>
-
-    %{--<div class="span2">--}%
-
-    %{--</div>--}%
-
-    <div class="span1">
         <div class="btn-group" data-toggle="buttons-checkbox">
-            <button type="button" id="ver_todos" class="btn btn-info ${(!subPre)?'active':''} " style="font-size: 10px">Ver todos</button>
+            <button type="button" id="ver_todos" class="btn btn-tabla ${(!subPre)?'active':''} " style="font-size: 10px">Ver todos</button>
 
         </div>
-
-    </div>
-
-
-    <div class="span4" style="width: 500px">
 
 
 
@@ -52,7 +36,26 @@
             Excel
         </a>
 
+
+
+
+
+
+
     </div>
+
+
+    %{--<div class="span1">--}%
+
+
+    %{--</div>--}%
+
+
+    %{--<div class="span4" style="width: 500px">--}%
+
+
+
+    %{--</div>--}%
 
 
 
@@ -251,7 +254,7 @@
         if ($(this).hasClass("active")) {
             $(this).removeClass("active")
 
-            var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()
+            var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()+"&ord=" + 1
             var interval = loading("detalle")
             $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
                 data     : datos,
@@ -263,7 +266,11 @@
 
         }else{
             $(this).addClass("active")
-            var datos = "obra=${obra.id}"
+//
+//            console.log("--->>>" + $(this).addClass("active"))
+
+
+            var datos = "obra=${obra.id}"+"&ord=" + 1
             var interval = loading("detalle")
             $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
                 data     : datos,
@@ -319,45 +326,113 @@ $("#copiar_rubros").click(function () {
 
  $("#ordenarAsc").click(function () {
 
-     $("#ver_todos").removeClass("active")
+//     $("#ver_todos").removeClass("active")
      $("#divTotal").html("")
      $("#calcular").removeClass("active")
 
-     var orden = 1;
 
-     var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden
+     if($("#ver_todos").hasClass("active")){
+
+         var orden = 1;
+
+         var datos = "obra=${obra.id}&ord=" + orden
 
 
-     var interval = loading("detalle")
-     $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-         data     : datos,
-         success  : function (msg) {
-             clearInterval(interval)
-             $("#detalle").html(msg)
-         }
-     });
+         var interval = loading("detalle")
+         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+             data     : datos,
+             success  : function (msg) {
+                 clearInterval(interval)
+                 $("#detalle").html(msg)
+             }
+         });
+
+
+     }else{
+
+         var orden = 1;
+
+         var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden
+
+
+         var interval = loading("detalle")
+         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+             data     : datos,
+             success  : function (msg) {
+                 clearInterval(interval)
+                 $("#detalle").html(msg)
+             }
+         });
+
+
+     }
+
+
 
  });
 
  $("#ordenarDesc").click(function () {
 
-     $("#ver_todos").removeClass("active")
+//     $("#ver_todos").removeClass("active")
      $("#divTotal").html("")
      $("#calcular").removeClass("active")
 
-     var orden = 2;
 
-     var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden
+     if($("#ver_todos").hasClass("active")){
+
+         var orden = 2;
+
+         var datos = "obra=${obra.id}&ord=" + orden
 
 
-     var interval = loading("detalle")
-     $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
-         data     : datos,
-         success  : function (msg) {
-             clearInterval(interval)
-             $("#detalle").html(msg)
-         }
-     });
+         var interval = loading("detalle")
+         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+             data     : datos,
+             success  : function (msg) {
+                 clearInterval(interval)
+                 $("#detalle").html(msg)
+             }
+         });
+
+
+     }else{
+
+
+         var orden = 2;
+
+         var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden
+
+
+         var interval = loading("detalle")
+         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",
+             data     : datos,
+             success  : function (msg) {
+                 clearInterval(interval)
+                 $("#detalle").html(msg)
+             }
+         });
+
+
+
+     }
+
+
+
+
+
+     %{--var orden = 2;--}%
+
+     %{--var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden--}%
+
+
+     %{--var interval = loading("detalle")--}%
+     %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
+         %{--data     : datos,--}%
+         %{--success  : function (msg) {--}%
+             %{--clearInterval(interval)--}%
+             %{--$("#detalle").html(msg)--}%
+         %{--}--}%
+     %{--});--}%
 
  });
 

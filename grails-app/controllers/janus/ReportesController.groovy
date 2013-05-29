@@ -147,7 +147,7 @@ class ReportesController {
         def vr = 0
         println "size "+columnas.size()
         while (fin  <= columnas.size() + 1) {  //gdo  <= antes
-            println "inicio "+inicio+"  fin  "+fin
+//            println "inicio "+inicio+"  fin  "+fin
             if (inicio != 0)
                 anchos = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
             if (fin - inicio < 10) {
@@ -170,28 +170,28 @@ class ReportesController {
 
 
 
-                if(inicio != 0){
-
-                    println("entro" + i)
-                    println("--->>>"  + i)
-                    println("%%%%"  + inicio)
-                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i)-1][1], small));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
-
-
-                }
-                if(inicio == 0){
-
-                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
-
-                }
+//                if(inicio != 0){
 //
-//                PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
-//                c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                table.addCell(c1);
+//                    println("entro" + i)
+//                    println("--->>>"  + i)
+//                    println("%%%%"  + inicio)
+//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i)][1], small));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//
+//                }
+//                if(inicio == 0){
+//
+//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//                }
+//
+                PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i)-1][1], small));
+                c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(c1);
 
             }
             table.setHeaderRows(1);
@@ -604,9 +604,9 @@ class ReportesController {
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
             headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
-            headers.add(new Paragraph("SUBGRUPOS", times10bold));
-            headers.add(new Paragraph("OBRA:" + obra?.descripcion, times10bold));
-            headers.add(new Paragraph("FECHA:" + new Date().format("dd-MM-yyyy"), times10bold));
+            headers.add(new Paragraph("REPORTE GRUPOS Y SUBGRUPOS", times10bold));
+            headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
+            headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
 
             addEmptyLine(headers, 1);
             document.add(headers);

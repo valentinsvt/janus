@@ -36,6 +36,9 @@
     -webkit-font-smoothing : antialiased;
 }
 
+
+
+
 .btn-show {
     background-color       : hsl(214, 37%, 56%) !important;
     background-repeat      : repeat-x;
@@ -48,6 +51,24 @@
     background-image       : -o-linear-gradient(top, #dce4ee, #6589b8);
     background-image       : linear-gradient(#dce4ee, #6589b8);
     border-color           : #6589b8 #6589b8 hsl(214, 37%, 47.5%);
+    color                  : #333 !important;
+    text-shadow            : 0 1px 1px rgba(255, 255, 255, 0.56);
+    -webkit-font-smoothing : antialiased;
+}
+
+
+.btn-tabla {
+    background-color       : #0047CC !important;
+    background-repeat      : repeat-x;
+    filter                 : progid:DXImageTransform.Microsoft.gradient(startColorstr="#dce4ee", endColorstr="#ECECEC");
+    background-image       : -khtml-gradient(linear, left top, left bottom, from(#dce4ee), to(#ECECEC));
+    background-image       : -moz-linear-gradient(top, #dce4ee, #ECECEC);
+    background-image       : -ms-linear-gradient(top, #dce4ee, #ECECEC);
+    background-image       : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #dce4ee), color-stop(100%, #ECECEC));
+    background-image       : -webkit-linear-gradient(top, #dce4ee, #ECECEC);
+    background-image       : -o-linear-gradient(top, #dce4ee, #ECECEC);
+    background-image       : linear-gradient(#dce4ee, #ECECEC);
+    /*border-color           : #ECECEC #ECECEC #ECECEC;*/
     color                  : #333 !important;
     text-shadow            : 0 1px 1px rgba(255, 255, 255, 0.56);
     -webkit-font-smoothing : antialiased;

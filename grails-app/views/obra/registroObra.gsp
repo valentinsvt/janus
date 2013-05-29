@@ -73,7 +73,7 @@
 
     <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
     <g:if test="${obra?.estado != 'R'}">
-        <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+    <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
     </g:if>
 
     <g:if test="${obra?.id != null}">
@@ -114,11 +114,11 @@
         %{--<div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" id="departamentoObra"--}%
         %{--value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 450px" disabled="true" title="Departamento actual del usuario"/></div>--}%
 
-                                                          <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
-        <div class="span3"><g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}" optionKey="id" optionValue="descripcion" style="width: 670px" readonly="true" title="Dirección actual del usuario"/></div>
+        <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
+        <div class="span3"><g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}" optionKey="id" optionValue="descripcion" style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/></div>
 
 
-        <div class="span1" style="margin-left: 480px; font-weight: bold">ESTADO</div>
+        <div class="span1" style="margin-left: 506px; font-weight: bold">ESTADO</div>
 
         <div class="span1">
 
@@ -179,7 +179,7 @@
 
     <div class="span1">Nombre</div>
 
-    <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 608px" value="${obra?.nombre}" maxlength="127" title="Nombre de la Obra"/></div>
+    <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 610px" value="${obra?.nombre}" maxlength="127" title="Nombre de la Obra"/></div>
 </div>
 
 <div class="span12">
@@ -187,43 +187,23 @@
 
     <div class="span3"><g:select name="programacion.id" class="programacion required" from="${janus.Programacion?.list()}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/></div>
 
-    <div class="span1">Tipo</div>
+    <div class="span1" style="margin-left: -20px">Tipo</div>
 
-    <div class="span2" id="divTipoObra"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px" title="Tipo de Obra"/></div>
+    <div class="span2" id="divTipoObra"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/></div>
 
-    <div class="span2" style="margin-left:0px;"><a href="#" class="btn btn-info" id="btnCrearTipoObra"><i class="icon-user"></i> Crear Tipo
+    <div class="span2" style="margin-left:78px;"><a href="#" class="btn btn-info" id="btnCrearTipoObra"><i class="icon-user"></i> Crear Tipo
     </a></div>
 
 
-    <div class="span1" style="margin-left: -35px">Clase</div>
+    <div class="span1" style="margin-left: -40px">Clase</div>
 
-    <div class="span1"><g:select name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px" title="Clase de Obra"/></div>
+    <div class="span1"><g:select name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/></div>
 </div>
 
 <div class="span12">
     <div class="span3" style="width: 200px;">Referencias adicionales del lugar</div>
 
-    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 810px" value="${obra?.referencia}" maxlength="127" title="Referencia del Lugar o de la Obra"/></div>
-
-    %{--<div class="span1" style="margin-left: 130px">Estado</div>--}%
-
-    %{--<div class="span1">--}%
-
-    %{--<g:if test="${obra?.estado == null}">--}%
-
-    %{--<g:textField name="estadoNom" class="estado" value="${'N'}" disabled="true"/>--}%
-    %{--<g:hiddenField name="estado" id="estado" class="estado" value="${'N'}"/>--}%
-
-    %{--</g:if>--}%
-
-    %{--<g:else>--}%
-
-    %{--<g:textField name="estadoNom" class="estado" value="${obra?.estado}" disabled="true"/>--}%
-    %{--<g:hiddenField name="estado" id="estado" class="estado" value="${obra?.estado}"/>--}%
-
-    %{--</g:else>--}%
-
-    %{--</div>--}%
+    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 880px" value="${obra?.referencia}" maxlength="127" title="Referencia del Lugar o de la Obra"/></div>
 </div>
 
 <div class="span12">
