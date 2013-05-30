@@ -463,15 +463,17 @@ class ObraFPController {
             tx_sql += "from vlob, item, undd "
             tx_sql += "where item.item__id = vlob.item__id and obra__id = ${id} and "
             tx_sql += "vlobcntd > 0 and undd.undd__id = item.undd__id "
+            tx_sql += "group by itemcdgo, itemnmbr, unddcdgo"
+/*   no es posible ordenar los rubros porque si existen en varios subpresupuestos, no existe un listado único
             tx_sql += "group by itemcdgo, itemnmbr, unddcdgo, vlobordn "
             tx_sql += "order by vlobordn"
+*/
         } else {
             tx_sql = "select itemcdgo, sum(vlobcntd) vlobcntd, itemnmbr, unddcdgo "
             tx_sql += "from vlob, item, undd "
             tx_sql += "where item.item__id = vlob.item__id and obra__id = ${id} and "
             tx_sql += "vlobcntd > 0 and undd.undd__id = item.undd__id and sbpr__id = ${sbpr} "
-            tx_sql += "group by itemcdgo, itemnmbr, unddcdgo, vlobordn "
-            tx_sql += "order by vlobordn"
+            tx_sql += "group by itemcdgo, itemnmbr, unddcdgo"
         }
         println "rubros: " + tx_sql
         def contador = 1

@@ -65,6 +65,7 @@
     //    });
 
     $("#frmSave").validate({
+        //$("#descripcion").val($("#direccion.id").val())
         rules          : {
             descripcion : {
                 remote : {
