@@ -96,7 +96,8 @@
         <div class="row-fluid">
             <div class="span2">
                 Código
-                <input type="text" name="rubro.codigo" class="span24" value="${rubro?.codigo}" id="input_codigo">
+                <input type="text" name="rubro.codigo" class="span24 allCaps required input-small" value="${rubro?.codigo}" id="input_codigo">
+                <p class="help-block ui-helper-hidden"></p>
             </div>
 
             <div class="span6">
@@ -415,7 +416,7 @@
     </div>
 
     <div class="modal-footer" id="modalFooter-detalle">
-        <a href="#"id="save-espc" class="btn btn-info">Guardar</a>
+        <a href="#" id="save-espc" class="btn btn-info">Guardar</a>
     </div>
 </div>
 <div class="modal large hide fade " id="modal-transporte" style=";overflow: hidden;">
@@ -835,13 +836,14 @@
         $("#tabla_costos").show("slide")
     }
 
+
     $(function () {
         $("#detalle").click(function(){
             $("#modal-detalle").modal("show");
         });
         $("#save-espc").click(function(){
             if($("#especificaciones").val().trim().length<1024){
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'saveEspc')}",
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro', action:'saveEspc')}",
                     data     : "id=${rubro?.id}&espc="+$("#especificaciones").val().trim(),
                     success  : function (msg) {
                         if(msg=="ok"){
@@ -1388,6 +1390,7 @@
                 });
             }
         });
+
         $("#cdgo_buscar").keydown(function(ev){
 
             if(ev.keyCode*1!=9 && (ev.keyCode*1<37 || ev.keyCode*1>40)){
@@ -1435,42 +1438,58 @@
             var subGr = $("#selSubgrupo").val()
             var msg =""
 //            //console.log(desc,desc.trim(),desc.trim().length)
+
             if(cod.trim().length>20 || cod.trim().length<1){
                 msg="<br>Error: La propiedad código debe tener entre 1 y 20 caracteres."
             }
 
-            if(desc.trim().length>160 || desc.trim().length<1){
-                if(msg=="")
-                    msg="<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
-                else
-                    msg+="<br>La propiedad descripción debe tener entre 1 y 160 caracteres."
-            }
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro', action:'repetido')}",
+                data     : "codigo=" + cod + "&id=" + $("#rubro__id").val(),
+                success  : function (retorna) {
+                    console.log("retorna: " + retorna)
+                    if (retorna == "repetido") {
+                        msg += "el código " + cod.toUpperCase() + " está repetido"
 
-            if(isNaN(subGr) || subGr*1<1){
-                if(msg=="")
-                    msg="<br>Error: Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
-                else
-                    msg+="<br>Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
-            }
-            if(msg==""){
-                $(".frmRubro").submit()
-            }else{
-                $.box({
-                    imageClass : "box_info",
-                    text       : msg,
-                    title      : "Errores de validación",
-                    iconClose  : false,
-                    dialog     : {
-                        resizable : false,
-                        draggable : false,
-                        width      :600,
-                        buttons   : {
-                            "Aceptar" : function () {
-                            }
+                        if(desc.trim().length>160 || desc.trim().length<1){
+                            if(msg=="")
+                                msg="<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
+                            else
+                                msg+="<br>La propiedad descripción debe tener entre 1 y 160 caracteres."
                         }
+
+                        if(isNaN(subGr) || subGr*1<1){
+                            if(msg=="")
+                                msg="<br>Error: Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
+                            else
+                                msg+="<br>Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
+                        }
+
+                        console.log("al final de la validacion: " + msg)
+
+                        $.box({
+                            imageClass : "box_info",
+                            text       : msg,
+                            title      : "Errores de validación",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable : false,
+                                draggable : false,
+                                width      :600,
+                                buttons   : {
+                                    "Aceptar" : function () {
+                                    }
+                                }
+                            }
+                        });
+
+                    } else {
+
+                        $(".frmRubro").submit()
                     }
-                });
-            }
+                }
+            });
+
+
         });
 
         <g:if test="${rubro}">

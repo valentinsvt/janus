@@ -91,6 +91,9 @@ class RubroController extends janus.seguridad.Shield {
         }
     }
 
+
+
+
     def getDatosItem() {
 //        println "get datos items "+params
         def item = Item.get(params.id)
@@ -296,6 +299,7 @@ class RubroController extends janus.seguridad.Shield {
 
     def save() {
         println "save rubro " + params.rubro
+        params.rubro.codigo = params.rubro.codigo.toUpperCase()
         def rubro
         if (params.rubro.id) {
             rubro = Item.get(params.rubro.id)
@@ -323,6 +327,17 @@ class RubroController extends janus.seguridad.Shield {
 
         redirect(action: 'rubroPrincipal', params: [idRubro: rubro.id])
     } //save
+
+    def repetido = {
+        // verifica codigo
+        println "Repetido:" + params
+        if (!params.id) {
+            def hayOtros = Item.findAllByCodigo(params.codigo?.toUpperCase()).size() > 0
+//        println "repetido: " + hayOtros
+            render hayOtros ? "repetido" : "ok"
+        } else
+          render "ok"
+    }
 
     def show_ajax() {
         def rubroInstance = Rubro.get(params.id)
