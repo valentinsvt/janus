@@ -112,44 +112,21 @@
     </tbody>
 </table>
 
-
-
-<div id="desgloseDialog">
-
-    <fieldset>
-        <div class="span3">
-
-            Imprimir el rubro con desglose de transporte?
-
-        </div>
-    </fieldset>
-</div>
-
-
 <script type="text/javascript">
 
     $.contextMenu({
         selector: '.item_row',
         callback: function(key, options) {
+
+            var m = "clicked: " + $(this).attr("id");
+//            window.console && console.log(m) || alert(m)
+
             if(key=="edit"){
                 $(this).dblclick()
             }
+
+
             if(key=="print"){
-                %{--var dsps=${obra.distanciaPeso}--}%
-                %{--var dsvs=${obra.distanciaVolumen}--}%
-                %{--var volqueta=${precioVol}--}%
-                %{--var chofer=${precioChof}--}%
-                %{--var datos = "?dsps="+dsps+"&dsvs="+dsvs+"&prvl="+volqueta+"&prch="+chofer+"&fecha="+$("#fecha_precios").val()+"&id=${rubro?.id}&lugar="+$("#ciudad").val()--}%
-                %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
-                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(this).attr("item")+"Wobra=${obra.id}"--}%
-                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(this).attr("id") +"Wobra=${obra.id}"--}%
-
-                %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos--}%
-                %{--location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url--}%
-
-                $("#desgloseDialog").dialog("open");
-
-
 
             }
 
@@ -162,11 +139,62 @@
                 window.toolbar.visible = false;
                 window.menubar.visible = false;
             }
+
+            if(key == 'print-key1'){
+
+
+
+                var dsps=${obra.distanciaPeso}
+                var dsvs=${obra.distanciaVolumen}
+                var volqueta=${precioVol}
+                var chofer=${precioChof}
+                var clickImprimir = $(this).attr("id");
+
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"--}%
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+clickImprimir +"Wobra=${obra.id}"
+
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos
+                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+
+
+
+            }
+
+            if(key == 'print-key2'){
+
+
+
+                var dsps=${obra.distanciaPeso}
+                var dsvs=${obra.distanciaVolumen}
+                var volqueta=${precioVol}
+                var chofer=${precioChof}
+                var clickImprimir = $(this).attr("id");
+
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+clickImprimir +"Wobra=${obra.id}" + "Wdesglose=${1}"
+
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos
+                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+
+
+
+            }
         },
         <g:if test="${obra?.estado!='R'}">
         items: {
             "edit": {name: "Editar", icon: "edit"},
-            "print": {name: "Imprimir", icon: "print"},
+            "print": {name: "Imprimir", icon: "print",
+
+                items: {
+
+                    "print-key1": {"name": "Imprimir sin Desglose", icon: "print",
+
+                                       },
+                    "print-key2": {"name": "Imprimir con Desglose", icon: "print"}
+
+                }
+
+            },
             "foto":{name:"Ilustración",icon:"doc"}
         }
         </g:if>
@@ -447,57 +475,57 @@ $("#copiar_rubros").click(function () {
 
 
 
-    $("#desgloseDialog").dialog({
+    %{--$("#desgloseDialog").dialog({--}%
 
-        autoOpen  : false,
-        resizable : false,
-        modal     : true,
-        draggable : false,
-        width     : 350,
-        height    : 150,
-        position  : 'center',
-        title     : 'Imprimir con desglose de transporte',
-        buttons   : {
-            "Si" : function () {
-
-
-                var dsps=${obra.distanciaPeso}
-                var dsvs=${obra.distanciaVolumen}
-                var volqueta=${precioVol}
-                var chofer=${precioChof}
-                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"
-
-                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos
-                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+        %{--autoOpen  : false,--}%
+        %{--resizable : false,--}%
+        %{--modal     : true,--}%
+        %{--draggable : false,--}%
+        %{--width     : 350,--}%
+        %{--height    : 150,--}%
+        %{--position  : 'center',--}%
+        %{--title     : 'Imprimir con desglose de transporte',--}%
+        %{--buttons   : {--}%
+            %{--"Si" : function () {--}%
 
 
+                %{--var dsps=${obra.distanciaPeso}--}%
+                %{--var dsvs=${obra.distanciaVolumen}--}%
+                %{--var volqueta=${precioVol}--}%
+                %{--var chofer=${precioChof}--}%
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
 
-                $("#desgloseDialog").dialog("close");
-
-            },
-            "No" : function () {
+                %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos--}%
+                %{--location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url--}%
 
 
 
-                var dsps=${obra.distanciaPeso}
-                var dsvs=${obra.distanciaVolumen}
-                var volqueta=${precioVol}
-                var chofer=${precioChof}
-                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"
+                %{--$("#desgloseDialog").dialog("close");--}%
 
-                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos
-                location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url
+            %{--},--}%
+            %{--"No" : function () {--}%
 
 
 
+                %{--var dsps=${obra.distanciaPeso}--}%
+                %{--var dsvs=${obra.distanciaVolumen}--}%
+                %{--var volqueta=${precioVol}--}%
+                %{--var chofer=${precioChof}--}%
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"--}%
 
-                $("#desgloseDialog").dialog("close");
-
-            }
-        }
+                %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos--}%
+                %{--location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url--}%
 
 
-    });
+
+
+                %{--$("#desgloseDialog").dialog("close");--}%
+
+            %{--}--}%
+        %{--}--}%
+
+
+    %{--});--}%
 
 
 

@@ -15,7 +15,7 @@ class TipoObra implements Serializable {
         }
     }
     static constraints = {
-        codigo(size: 1..1, unique: true, blank: false, attributes: [title: 'numero'])
+        codigo(size: 1..4, unique: true, blank: false, attributes: [title: 'numero'])
         descripcion(size: 1..63, unique: true, blank: false, attributes: [title: 'descripcion'])
     }
 }

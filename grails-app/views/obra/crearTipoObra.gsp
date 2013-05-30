@@ -12,7 +12,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="codigo" maxlength="1" class=" required" value="${tipoObraInstance?.codigo}" style="width: 40px;"/>
+            <g:textField name="codigo" maxlength="4" class=" required" value="${tipoObraInstance?.codigo}" style="width: 40px;"/>
             <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>

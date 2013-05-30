@@ -167,6 +167,8 @@
 
                 var trId = $(this).attr("id")
 
+                console.log("ID:" + trId)
+
 
                 datos ="rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
 
@@ -180,16 +182,7 @@
 
 
             });
-
-
-
-
-
-
         }
-
-
-
 
     });
 
@@ -210,6 +203,8 @@
 
                 var trId = $(this).attr("id")
 
+                console.log("ids: " + trId)
+
                 datos ="rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
 
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'copiarItem')}",
@@ -221,7 +216,7 @@
                 });
 
 
-//                console.log("id:" + trId)
+                console.log("id:" + trId)
             } else {
 
 
