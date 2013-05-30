@@ -145,19 +145,43 @@ class ReportesController {
 
         def parcial = []
         def anchos = [4, 7, 35, 5, 8, 8, 8, 8, 8, 8]     // , 9
+        def anchos2 = [4, 7, 35, 5, 8, 8, 8, 8, 8]     // , 9
+
         def inicio = 0
         def fin = 10
-        def vr = 0
+
+        def inicioCab = 1
+        def finCab = 10
+
+
+
 //        println "size "+columnas.size()
         while (fin  <= columnas.size() + 1) {  //gdo  <= antes
+
 //            println "inicio "+inicio+"  fin  "+fin
-            if (inicio != 0)
+//            println "iniciocab "+inicioCab+"  fincab  "+finCab
+//
+//
+
+
+
+            if (inicio != 0){
+
                 anchos = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+                anchos2 = [10, 10, 10, 10, 10, 10, 10, 10, 10]
+            }
+
             if (fin - inicio < 10) {
                 anchos = []
                 (fin - inicio).toInteger().times { i ->
                     anchos.add((100 / (fin - inicio)).toInteger())
                 }
+
+                anchos2 = []
+                ((fin - inicio).toInteger()-1).times { i ->
+                    anchos2.add((100 / (((fin-inicio).toInteger())-1)).toInteger())
+                }
+
             }
             def parrafo = new Paragraph("")
 /*
@@ -165,89 +189,166 @@ class ReportesController {
                inicio -= 2       //gdo
 */
 
+
+
             PdfPTable table = new PdfPTable((fin - inicio).toInteger());       //gdo
+
+//            println("-->>" + (fin-inicio))
+
+            PdfPTable table2 = new PdfPTable(((fin-inicio).toInteger())-1);
+
+
+
+
 
             table.setWidthPercentage(100);
             table.setWidths(arregloEnteros(anchos))
-            (fin - inicio).toInteger().times { i ->
+
+            table2.setWidthPercentage(100);
+            table2.setWidths(arregloEnteros(anchos2))
 
 
 
-                if(inicio != 0){
+            if (inicio == 0) {
 
+
+
+                (finCab - inicioCab).toInteger().times { i ->
+
+//                if(inicio != 0){
+//
 //                    println("entro" + i)
 //                    println("--->>>"  + i)
 //                    println("%%%%"  + inicio)
-                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicio+i -1)][1], small));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
+//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[((inicio+i)-1)][1], small));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//
+//                }
+//                if(inicio == 0){
+//
+//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//
+//                }
+
+
+
+
+//                    println columnas
+                    PdfPCell c0 = new PdfPCell(new Phrase(columnas[(inicioCab + i)-1][1], small));
+                    c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table2.addCell(c0);
 
 
                 }
-                if(inicio == 0){
+                table2.setHeaderRows(1);
+                filas.each { f ->
+                    (finCab - inicioCab).toInteger().times { i ->
 
-                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
-                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-                    table.addCell(c1);
-
+//                    if(inicio != 0) {
+//
+//                        def dato = f[(inicio + i)-1]
+//                        if (!dato)
+//                            dato = "0.00"
+//                        else
+//                            dato = dato.toString()
+//                        def cell = new PdfPCell(new Phrase(dato, small))
+//                        cell.setFixedHeight(16f);
+//                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//                        table2.addCell(cell);
+//
+//                    }
+//
+//                    if(inicio == 0){
+//
+//
+//
+//                        def dato = f[(inicio + i)]
+//                        if (!dato)
+//                            dato = "0.00"
+//                        else
+//                            dato = dato.toString()
+//                        def cell = new PdfPCell(new Phrase(dato, small))
+//                        cell.setFixedHeight(16f);
+////                        if (i > 3) cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//                        table2.addCell(cell);
+//
+//                    }
+                        def dato = f[(inicio + i)]
+                        if (!dato)
+                            dato = "0.00"
+                        else
+                            dato = dato.toString()
+                        def cell = new PdfPCell(new Phrase(dato, small));
+                        cell.setFixedHeight(16f);
+                        table2.addCell(cell);
+                    }
                 }
 
-/*
-                println columnas
-                PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio + i][1], small));
+
+
+
+
+
+            }else {
+
+
+
+                (finCab - inicioCab).toInteger().times { i ->
+
+//                println columnas
+                PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicioCab + i)-1][1], small));
                 c1.setHorizontalAlignment(Element.ALIGN_CENTER);
                 table.addCell(c1);
-*/
 
-            }
-            table.setHeaderRows(1);
-            filas.each { f ->
-                (fin - inicio).toInteger().times { i ->
 
-                    if(inicio != 0) {
+                }
+
+
+                table.setHeaderRows(1);
+                filas.each { f ->
+                    (fin - inicio).toInteger().times { i ->
 
                         def dato = f[(inicio + i)-1]
                         if (!dato)
                             dato = "0.00"
                         else
                             dato = dato.toString()
-                        def cell = new PdfPCell(new Phrase(dato, small))
+                        def cell = new PdfPCell(new Phrase(dato, small));
                         cell.setFixedHeight(16f);
-                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
                         table.addCell(cell);
-
                     }
-                    if(inicio == 0){
-
-                        def dato = f[inicio + i]
-                        if (!dato)
-                            dato = "0.00"
-                        else
-                            dato = dato.toString()
-                        def cell = new PdfPCell(new Phrase(dato, small))
-                        cell.setFixedHeight(16f);
-                        if (i > 3) cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
-                        table.addCell(cell);
-
-                    }
-//                    def dato = f[inicio + i]
-//                    if (!dato)
-//                        dato = "0.00"
-//                    else
-//                        dato = dato.toString()
-//                    def cell = new PdfPCell(new Phrase(dato, small));
-//                    cell.setFixedHeight(16f);
-//                    table.addCell(cell);
                 }
+
+
+
+
+
+
             }
+
+
+
+            parrafo.add(table2)
             parrafo.add(table);
             document.add(parrafo);
             document.newPage();
 //            inicio = fin + 1
             inicio = fin
             fin = inicio + 10
+
+            inicioCab = finCab
+            finCab = inicioCab + 10
+
+
             if (fin > columnas.size() + 1){
                 fin = columnas.size() + 1
+            }
+            if (finCab > columnas.size() + 1){
+                finCab = columnas.size() + 1
             }
             if (inicio > columnas.size())
                 break;
@@ -2352,7 +2453,7 @@ class ReportesController {
 
 
         addCellTabla(tablaCondiciones, new Paragraph("Plazo de Ejecución :", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.plazo, format: "##", locale: "ec") + " mes(es)", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.plazoEjecucionMeses, format: "##", locale: "ec") + " mes(es)", times8normal), prmsHeaderHoja)
 
         addCellTabla(tablaCondiciones, new Paragraph("Anticipo :", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.porcentajeAnticipo, format: "###", locale: "ec") + " %", times8normal), prmsHeaderHoja)
