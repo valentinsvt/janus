@@ -94,6 +94,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def coeficientes() {
+
         println "coef " + params
 
         if (!params.tipo) {
