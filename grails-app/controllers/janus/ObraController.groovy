@@ -107,6 +107,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def calculaPlazo() {
+        println "calculaPlazo: " + params
         def obra = Obra.get(params.id)
 
         if (!params.personas) params.personas = obra.plazoPersonas
@@ -115,7 +116,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def sqlM = "select sbpr__id, itemcdgo, itemnmbr, itemcntd, itemcntd/8 dias from obra_comp(${params.id}) where grpo__id = 2"
         def sqlR = "select itemcdgo, itemnmbr, unddcdgo, rbrocntd, dias from plazo(${params.id},${params.personas},${params.maquinas},${params.save})"
-
+        println sqlR
         def cn = dbConnectionService.getConnection()
         def resultM = cn.rows(sqlM.toString())
         def resultR = cn.rows(sqlR.toString())

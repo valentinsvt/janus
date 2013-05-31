@@ -3425,13 +3425,12 @@ class ReportesController {
 
         def formula = FormulaPolinomica.findAllByObra(obra)
 
-        def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%')
-
+        def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%', [sort: "numero"])
 
 
         def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%')
 //
-//        println("---->>>>>"+ps)
+        println("---->>>>>" + ps)
 
         def c
 
@@ -3601,113 +3600,64 @@ class ReportesController {
         def formulaCompleta
 
         def valorP
-
+        println "anmtes del each " + ps
         ps.each {j->
 
             if(j.valor != 0.0 || j.valor != 0) {
 
-                println(j.numero)
+                println j.numero
 
                 if(j.numero == 'p01'){
-
-                    def p01valores = j.valor + "B1/Bo"
-
-//                    textoFormula = textoFormula+p01valores
-
-                    tx[0] = (p01valores)
+                    tx[0] = j.valor + "B1/Bo"
                     valores[0] = j
-
                 }
                 if(j.numero == 'p02'){
-
                     def p02valores = j.valor + "C1/Co"
-
-//                    textoFormula = textoFormula + " + " + p02valores
-
                     tx[1] = p02valores
                     valores[1] = j
-
                 }
-
                 if(j.numero == 'p03'){
-
                     def p03valores = j.valor + "D1/Do"
-
-//                    textoFormula = textoFormula + " + " + p03valores
-
                     tx[2] = p03valores
                     valores[2] = j
-
-
                 }
                 if(j.numero == 'p04'){
-
                     def p04valores = j.valor + "E1/Eo"
-
-//                    textoFormula = textoFormula + " + " + p04valores
-
                     tx[3] = p04valores
                     valores[3] = j
                 }
                 if(j.numero == 'p05'){
-
                     def p05valores = j.valor + "F1/Fo"
-
-//                    textoFormula = textoFormula + " + " + p05valores
-
                     tx[4] = p05valores
                     valores[4] = j
-
                 }
                 if(j.numero == 'p06'){
-
                     def p06valores = j.valor + "G1/Go"
-
-//                    textoFormula = textoFormula + " + " + p06valores
-
                     tx[5] = p06valores
                     valores[5] = j
-
                 }
                 if(j.numero == 'p07'){
-
                     def p07valores = j.valor + "H1/Ho"
-
-//                    textoFormula = textoFormula + " + " + p07valores
-
                     tx[6] = p07valores
                     valores[6] = j
-
                 }
                 if(j.numero == 'p08'){
-
                     def p08valores = j.valor + "I1/Io"
-
-//                    textoFormula = textoFormula + " + " + p08valores
-
                     tx[7] = p08valores
                     valores[7] = j
                 }
                 if(j.numero == 'p09'){
-
                     def p09valores = j.valor + "J1/Jo"
-
-//                    textoFormula = textoFormula + " + " + p09valores
-
                     tx[8] = p09valores
                     valores[8] = j
 
                 }
                 if(j.numero == 'p10'){
-
                     def p10valores = j.valor + "K1/Ko"
-
-//                    textoFormula = textoFormula + " + " + p10valores
-
                     tx[9] = p10valores
                     valores[9] = j
                 }
-                if(j.numero == 'px'){
+                if(j.numero.trim() == 'px'){
 
                     def pxvalores = j.valor + "X1/Xo"
 
@@ -3715,9 +3665,6 @@ class ReportesController {
 
                     tx[10] = pxvalores
                     valores[10] = j
-
-                }else {
-
 
                 }
 
