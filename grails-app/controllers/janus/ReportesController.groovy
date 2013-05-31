@@ -3427,6 +3427,8 @@ class ReportesController {
 
         def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%')
 
+
+
         def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%')
 //
 //        println("---->>>>>"+ps)
@@ -3574,7 +3576,7 @@ class ReportesController {
 
         txtIzqHeader.add(new Paragraph("Los costos se reajustarán para efecto de pago, mediante la fórmula general: ", times10normal));
 
-        txtIzqHeader.add(new Paragraph(" ", times10bold));
+//        txtIzqHeader.add(new Paragraph(" ", times10bold));
 
 
 
@@ -3585,6 +3587,17 @@ class ReportesController {
 
         def textoFormula = "Pr=Po(";
 
+
+
+
+        def txInicio = "Pr=Po(";
+        def txFin = ")";
+        def txSuma = "+"
+        def txExtra = ""
+        def tx = []
+        def valores = []
+
+//        tx += txInicio
         def formulaCompleta
 
         def valorP
@@ -3593,105 +3606,134 @@ class ReportesController {
 
             if(j.valor != 0.0 || j.valor != 0) {
 
+                println(j.numero)
+
                 if(j.numero == 'p01'){
 
                     def p01valores = j.valor + "B1/Bo"
 
-                    textoFormula = textoFormula+p01valores
+//                    textoFormula = textoFormula+p01valores
 
+                    tx[0] = (p01valores)
+                    valores[0] = j
 
                 }
                 if(j.numero == 'p02'){
 
                     def p02valores = j.valor + "C1/Co"
 
-                    textoFormula = textoFormula + " + " + p02valores
+//                    textoFormula = textoFormula + " + " + p02valores
+
+                    tx[1] = p02valores
+                    valores[1] = j
+
                 }
 
                 if(j.numero == 'p03'){
 
                     def p03valores = j.valor + "D1/Do"
 
-                    textoFormula = textoFormula + " + " + p03valores
+//                    textoFormula = textoFormula + " + " + p03valores
+
+                    tx[2] = p03valores
+                    valores[2] = j
+
 
                 }
                 if(j.numero == 'p04'){
 
                     def p04valores = j.valor + "E1/Eo"
 
-                    textoFormula = textoFormula + " + " + p04valores
+//                    textoFormula = textoFormula + " + " + p04valores
+
+                    tx[3] = p04valores
+                    valores[3] = j
                 }
                 if(j.numero == 'p05'){
 
                     def p05valores = j.valor + "F1/Fo"
 
-                    textoFormula = textoFormula + " + " + p05valores
+//                    textoFormula = textoFormula + " + " + p05valores
+
+                    tx[4] = p05valores
+                    valores[4] = j
 
                 }
                 if(j.numero == 'p06'){
 
                     def p06valores = j.valor + "G1/Go"
 
-                    textoFormula = textoFormula + " + " + p06valores
+//                    textoFormula = textoFormula + " + " + p06valores
+
+                    tx[5] = p06valores
+                    valores[5] = j
 
                 }
                 if(j.numero == 'p07'){
 
                     def p07valores = j.valor + "H1/Ho"
 
-                    textoFormula = textoFormula + " + " + p07valores
+//                    textoFormula = textoFormula + " + " + p07valores
+
+                    tx[6] = p07valores
+                    valores[6] = j
+
                 }
                 if(j.numero == 'p08'){
 
                     def p08valores = j.valor + "I1/Io"
 
-                    textoFormula = textoFormula + " + " + p08valores
+//                    textoFormula = textoFormula + " + " + p08valores
+
+                    tx[7] = p08valores
+                    valores[7] = j
                 }
                 if(j.numero == 'p09'){
 
                     def p09valores = j.valor + "J1/Jo"
 
-                    textoFormula = textoFormula + " + " + p09valores
+//                    textoFormula = textoFormula + " + " + p09valores
+
+                    tx[8] = p09valores
+                    valores[8] = j
 
                 }
                 if(j.numero == 'p10'){
 
                     def p10valores = j.valor + "K1/Ko"
 
-                    textoFormula = textoFormula + " + " + p10valores
+//                    textoFormula = textoFormula + " + " + p10valores
+
+                    tx[9] = p10valores
+                    valores[9] = j
                 }
                 if(j.numero == 'px'){
 
-
                     def pxvalores = j.valor + "X1/Xo"
 
-                    textoFormula = textoFormula + " + " + pxvalores
+//                    textoFormula = textoFormula + " + " + pxvalores
+
+                    tx[10] = pxvalores
+                    valores[10] = j
+
+                }else {
+
 
                 }
-
-
-                formulaCompleta =  textoFormula + ")";
-
 
             }else {
 
 
-                formulaCompleta = textoFormula + ")"
-
-
             }
 
-
-
-
-
-
         }
-
+//        println("TX:" + txInicio+tx[0]+txSuma+tx[1]+txSuma+tx[2]+txSuma+tx[3]+txSuma+tx[4]+txSuma+tx[5]+txSuma+tx[6]+txSuma+tx[7]+txSuma+tx[8]+txSuma+tx[9]+txSuma+tx[10]+txFin)
+//        println(valores)
 //        txtIzqHeader.add(new Paragraph("Pr= Po(${p01valor}B1/Bo + ${p02valor}C1/Co + ${p03valor}D1/Do + ${p04valor}E1/Eo + ${p05valor}F1/Fo +" +
 //                " ${p06valor}G1/Go + ${p07valor}H1/Ho + ${p08valor}I1/Io + ${p09valor}J1/Jo + ${p10valor}K1/Ko + ${pxvalor}X1/Xo) ", times10bold));
 
-        txtIzqHeader.add(new Paragraph(formulaCompleta, times10bold));
+//        txtIzqHeader.add(new Paragraph(formulaCompleta, times10bold));
+        txtIzqHeader.add(new Paragraph(txInicio+tx[0]+txSuma+tx[1]+txSuma+tx[2]+txSuma+tx[3]+txSuma+tx[4]+txSuma+tx[5]+txSuma+tx[6]+txSuma+tx[7]+txSuma+tx[8]+txSuma+tx[9]+txSuma+tx[10]+txFin, times10bold));
 
         document.add(txtIzqHeader)
 
@@ -3708,7 +3750,9 @@ class ReportesController {
 
         def valorTotal = 0
 
-        ps.each {i->
+        println(valores)
+
+        valores.each {i->
 
                       if(i.valor != 0.0 || i.valor != 0) {
 
@@ -3717,10 +3761,6 @@ class ReportesController {
                          addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: i.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
                          addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
                          addCellTabla(tablaCoeficiente, new Paragraph(i?.indice?.descripcion, times10normal), prmsHeaderHoja)
-
-
-
-
 
                        valorTotal = i.valor + valorTotal
 
@@ -3741,7 +3781,7 @@ class ReportesController {
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph("SUMAN : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: valorTotal, format: "##.####", locale: "ec"), times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: valorTotal, format: "##.###", locale: "ec"), times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
