@@ -80,8 +80,8 @@ class Obra implements Serializable {
     Lugar listaVolumen2
     Lugar listaManoObra
 
-    int plazoPersonas = 1
-    int plazoMaquinas = 8
+    int plazoPersonas = 8
+    int plazoMaquinas = 1
 
     double desgloseEquipo = 0.52
     double desgloseRepuestos = 0.26
