@@ -1050,7 +1050,7 @@ class ReportesController {
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum]
 
-        VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.each { rubro ->
+        VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique().each { rubro ->
 
             Paragraph headers = new Paragraph();
             addEmptyLine(headers, 1);
@@ -3425,12 +3425,13 @@ class ReportesController {
 
         def formula = FormulaPolinomica.findAllByObra(obra)
 
-        def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%', [sort: "numero"])
+        def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%', [sort:'numero'])
+
 
 
         def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%')
 //
-        println("---->>>>>" + ps)
+//        println("---->>>>>"+ps)
 
         def c
 
@@ -3534,39 +3535,36 @@ class ReportesController {
 
         document.add(txtIzq);
 
-        PdfPTable tablaHeader = new PdfPTable(2);
+        PdfPTable tablaObra = new PdfPTable(2);
+        tablaObra.setWidthPercentage(100);
+        tablaObra.setWidths(arregloEnteros([15,85]))
+
+        addCellTabla(tablaObra, new Paragraph("Nombre: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaObra, new Paragraph(obra?.nombre, times10normal), prmsHeaderHoja)
+
+        PdfPTable tablaHeader = new PdfPTable(4);
         tablaHeader.setWidthPercentage(100);
-        tablaHeader.setWidths(arregloEnteros([15, 85]))
-
-        addCellTabla(tablaHeader, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph(" ", times10bold), prmsHeaderHoja)
-
-        addCellTabla(tablaHeader, new Paragraph("Nombre: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph(obra?.nombre, times10normal), prmsHeaderHoja)
-
-        addCellTabla(tablaHeader, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        tablaHeader.setWidths(arregloEnteros([25, 25, 25 , 25]))
 
         addCellTabla(tablaHeader, new Paragraph("Tipo de Obra: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.tipoObjetivo?.descripcion, times10normal), prmsHeaderHoja)
-
         addCellTabla(tablaHeader, new Paragraph("Ubicación : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.sitio, times10normal), prmsHeaderHoja)
 
+
         addCellTabla(tablaHeader, new Paragraph("Cantón : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.parroquia?.canton?.nombre, times10normal), prmsHeaderHoja)
-
         addCellTabla(tablaHeader, new Paragraph("Parroquia : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.parroquia?.nombre, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaHeader, new Paragraph("Latitud :", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.latitud, minFractionDigits:
                 1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
-
         addCellTabla(tablaHeader, new Paragraph("Longitud :", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.longitud, minFractionDigits:
                 1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
 
+        document.add(tablaObra)
         document.add(tablaHeader)
 
         Paragraph txtIzqHeader = new Paragraph();
@@ -3575,13 +3573,9 @@ class ReportesController {
 
         txtIzqHeader.add(new Paragraph("Los costos se reajustarán para efecto de pago, mediante la fórmula general: ", times10normal));
 
-//        txtIzqHeader.add(new Paragraph(" ", times10bold));
-
-
-
         txtIzqHeader.add(new Paragraph("Pr= Po(p01B1/Bo + p02C1/Co + p03D1/Do + p04E1/Eo + p05F1/Fo + p06G1/Go + p07H1/Ho + p08I1/Io + p09J1/Jo + p10K1/Ko + pxX1/Xo) ", times10normal));
 
-        txtIzqHeader.add(new Paragraph(" ", times10bold));
+//        txtIzqHeader.add(new Paragraph(" ", times10bold));
 
 
         def textoFormula = "Pr=Po(";
@@ -3595,91 +3589,69 @@ class ReportesController {
         def txExtra = ""
         def tx = []
         def valores = []
-
-//        tx += txInicio
         def formulaCompleta
 
         def valorP
-        println "anmtes del each " + ps
+
         ps.each {j->
 
             if(j.valor != 0.0 || j.valor != 0) {
-
-                println j.numero
-
                 if(j.numero == 'p01'){
                     tx[0] = j.valor + "B1/Bo"
                     valores[0] = j
                 }
                 if(j.numero == 'p02'){
-                    def p02valores = j.valor + "C1/Co"
-                    tx[1] = p02valores
+                    tx[1] = j.valor + "C1/Co"
                     valores[1] = j
                 }
                 if(j.numero == 'p03'){
-                    def p03valores = j.valor + "D1/Do"
-                    tx[2] = p03valores
+                    tx[2] = j.valor + "D1/Do"
                     valores[2] = j
                 }
                 if(j.numero == 'p04'){
-                    def p04valores = j.valor + "E1/Eo"
-                    tx[3] = p04valores
+                    tx[3] = j.valor + "E1/Eo"
                     valores[3] = j
                 }
                 if(j.numero == 'p05'){
-                    def p05valores = j.valor + "F1/Fo"
-                    tx[4] = p05valores
+
+                    tx[4] = j.valor + "F1/Fo"
                     valores[4] = j
                 }
                 if(j.numero == 'p06'){
-                    def p06valores = j.valor + "G1/Go"
-                    tx[5] = p06valores
+                    tx[5] = j.valor + "G1/Go"
                     valores[5] = j
                 }
                 if(j.numero == 'p07'){
-                    def p07valores = j.valor + "H1/Ho"
-                    tx[6] = p07valores
+
+                    def p07valores =
+                    tx[6] = j.valor + "H1/Ho"
                     valores[6] = j
                 }
                 if(j.numero == 'p08'){
-                    def p08valores = j.valor + "I1/Io"
-                    tx[7] = p08valores
+
+                    tx[7] = j.valor + "I1/Io"
                     valores[7] = j
                 }
                 if(j.numero == 'p09'){
-                    def p09valores = j.valor + "J1/Jo"
-                    tx[8] = p09valores
+
+                    tx[8] = j.valor + "J1/Jo"
                     valores[8] = j
 
                 }
                 if(j.numero == 'p10'){
-                    def p10valores = j.valor + "K1/Ko"
-                    tx[9] = p10valores
+
+                    tx[9] =j.valor + "K1/Ko"
                     valores[9] = j
                 }
-                if(j.numero.trim() == 'px'){
-
-                    def pxvalores = j.valor + "X1/Xo"
-
-//                    textoFormula = textoFormula + " + " + pxvalores
-
-                    tx[10] = pxvalores
+                if(j.numero.trim() ==  'px'){
+                    tx[10] =j.valor + "X1/Xo"
                     valores[10] = j
-
                 }
-
-            }else {
-
 
             }
 
         }
-//        println("TX:" + txInicio+tx[0]+txSuma+tx[1]+txSuma+tx[2]+txSuma+tx[3]+txSuma+tx[4]+txSuma+tx[5]+txSuma+tx[6]+txSuma+tx[7]+txSuma+tx[8]+txSuma+tx[9]+txSuma+tx[10]+txFin)
-//        println(valores)
-//        txtIzqHeader.add(new Paragraph("Pr= Po(${p01valor}B1/Bo + ${p02valor}C1/Co + ${p03valor}D1/Do + ${p04valor}E1/Eo + ${p05valor}F1/Fo +" +
-//                " ${p06valor}G1/Go + ${p07valor}H1/Ho + ${p08valor}I1/Io + ${p09valor}J1/Jo + ${p10valor}K1/Ko + ${pxvalor}X1/Xo) ", times10bold));
 
-//        txtIzqHeader.add(new Paragraph(formulaCompleta, times10bold));
         txtIzqHeader.add(new Paragraph(txInicio+tx[0]+txSuma+tx[1]+txSuma+tx[2]+txSuma+tx[3]+txSuma+tx[4]+txSuma+tx[5]+txSuma+tx[6]+txSuma+tx[7]+txSuma+tx[8]+txSuma+tx[9]+txSuma+tx[10]+txFin, times10bold));
 
         document.add(txtIzqHeader)
@@ -3732,18 +3704,18 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-
-
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//
+//
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
 
         PdfPTable tablaCuadrilla = new PdfPTable(3);
@@ -3756,10 +3728,6 @@ class ReportesController {
 
         addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCuadrilla, new Paragraph("CLASE OBRERO ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-
-        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         def valorTotalCuadrilla = 0;
@@ -3808,30 +3776,23 @@ class ReportesController {
 
         document.add(txtIzqPie)
 
-        PdfPTable tablaPie = new PdfPTable(2);
+        PdfPTable tablaPie = new PdfPTable(4);
         tablaPie.setWidthPercentage(100);
-
-        addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph("Fecha de actualizacion: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(formatDate(date: obra?.fechaPreciosRubros, format: "dd-MM-yyyy"), times10normal), prmsHeaderHoja)
-
-        addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
-
         addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "###,###", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph("Atentamente,  ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10normal), prmsHeaderHoja)
-
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
-
 
         document.add(tablaPie)
 
