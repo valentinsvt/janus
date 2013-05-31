@@ -3516,10 +3516,7 @@ class ReportesController {
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times12bold));
-
-        headers.add(new Paragraph(" ", times12bold));
-
-
+//        headers.add(new Paragraph(" ", times12bold));
         headers.add(new Paragraph("FÓRMULA POLINÓMICA N°:" + obra?.formulaPolinomica, times12bold))
 
 
@@ -3532,7 +3529,7 @@ class ReportesController {
 
         txtIzq.add(new Paragraph("De existir variaciones en los costos de los componentes de precios unitarios estipulados en el contrato para la contrucción de: ", times10normal));
 
-        txtIzq.add(new Paragraph(" ", times10bold));
+//        txtIzq.add(new Paragraph(" ", times10bold));
 
         document.add(txtIzq);
 

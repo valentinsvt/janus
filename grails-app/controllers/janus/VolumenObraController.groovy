@@ -95,13 +95,15 @@ class VolumenObraController extends janus.seguridad.Shield{
 
     def copiarItem () {
 
-        println "copiarItem "+params
+//        println "copiarItem "+params
         def obra= Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
         def sbprDest = SubPresupuesto.get(params.subDest)
         def sbpr = SubPresupuesto.get(params.sub)
+
         def itemVolumen = VolumenesObra.findByItemAndSubPresupuesto(rubro,sbpr)
-        def itemVolumenDest = VolumenesObra.findByItemAndSubPresupuesto(rubro,sbprDest)
+        def itemVolumenDest = VolumenesObra.findByItemAndSubPresupuestoAndObra(rubro,sbprDest,obra)
+
         def volumen
 
         def volu = VolumenesObra.list()
@@ -118,11 +120,10 @@ class VolumenObraController extends janus.seguridad.Shield{
 
             } else {
             volumen = VolumenesObra.findByObraAndItemAndSubPresupuesto(obra, rubro, sbprDest)
-            if (!volumen)
+
+
+            if (volumen == null)
                 volumen=new VolumenesObra()
-
-
-
 
             }
         }
@@ -132,7 +133,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         volumen.subPresupuesto=SubPresupuesto.get(params.subDest)
         volumen.obra=obra
         volumen.item=rubro
-//
+
         if (!volumen.save(flush: true)){
 //            println "error volumen obra "+volumen.errors
 
@@ -144,6 +145,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 //            render "error"
         }else{
             preciosService.actualizaOrden(volumen,"insert")
+
             flash.clase = "alert-success"
             flash.message = "Copiado rubro " + rubro.nombre
 
@@ -168,7 +170,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
 
-//        println "params "+params
+//        println "params --->>>> "+params
         def obra = Obra.get(params.obra)
         def detalle
         def valores
@@ -211,16 +213,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         def indirecto = obra.totales/100
 
         preciosService.ac_rbroObra(obra.id)
-//        detalle.each{
-//
-//            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-////            println "res "+res+" "+it.item.id+"  "+obra.id
-////            println "r->" + (res["precio"][0]+res["precio"][0]*indirecto)+"   <<<>>> "+res
-//            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
-//        }
 
-//
-//        [detalle:detalle,precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores]
         [subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
 
     }
@@ -231,7 +224,8 @@ class VolumenObraController extends janus.seguridad.Shield{
         def orden = vol.orden
         preciosService.actualizaOrden(vol,"delete")
         vol.delete()
-        redirect(action: "tabla",params: [obra:obra.id])
+        redirect(action: "tabla",params: [obra:obra.id, sub: vol.subPresupuesto.id, ord: 1])
+
 
     }
 

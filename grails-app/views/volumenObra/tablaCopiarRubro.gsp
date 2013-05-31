@@ -203,9 +203,9 @@
 
                 var trId = $(this).attr("id")
 
-                console.log("ids: " + trId)
+//                console.log("ids: " + trId)
 
-                datos ="rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
+                datos ="&rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
 
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'copiarItem')}",
                     data     : datos,
@@ -216,8 +216,11 @@
                 });
 
 
-                console.log("id:" + trId)
+//                console.log("id:" + trId)
             } else {
+
+
+                console.log("entro else")
 
 
             }
