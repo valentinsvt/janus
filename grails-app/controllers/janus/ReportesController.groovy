@@ -3429,7 +3429,7 @@ class ReportesController {
 
 
 
-        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%')
+        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%', [sort: 'numero'])
 //
 //        println("---->>>>>"+ps)
 
@@ -3530,8 +3530,7 @@ class ReportesController {
         txtIzq.setAlignment(Element.ALIGN_CENTER);
 
         txtIzq.add(new Paragraph("De existir variaciones en los costos de los componentes de precios unitarios estipulados en el contrato para la contrucción de: ", times10normal));
-
-//        txtIzq.add(new Paragraph(" ", times10bold));
+        txtIzq.add(new Paragraph(" ", times10bold));
 
         document.add(txtIzq);
 
@@ -3544,7 +3543,7 @@ class ReportesController {
 
         PdfPTable tablaHeader = new PdfPTable(4);
         tablaHeader.setWidthPercentage(100);
-        tablaHeader.setWidths(arregloEnteros([25, 25, 25 , 25]))
+        tablaHeader.setWidths(arregloEnteros([15, 35, 15 , 35]))
 
         addCellTabla(tablaHeader, new Paragraph("Tipo de Obra: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.tipoObjetivo?.descripcion, times10normal), prmsHeaderHoja)
@@ -3658,7 +3657,7 @@ class ReportesController {
 
         PdfPTable tablaCoeficiente = new PdfPTable(5);
         tablaCoeficiente.setWidthPercentage(100);
-        tablaCoeficiente.setWidths(arregloEnteros([10, 10, 15, 25, 40]))
+        tablaCoeficiente.setWidths(arregloEnteros([10, 10, 10, 30, 40]))
 
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -3704,31 +3703,22 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//
-//
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        PdfPTable tablaCuadrillaHeader = new PdfPTable(2);
+        tablaCuadrillaHeader.setWidthPercentage(100);
+        tablaCuadrillaHeader.setWidths(arregloEnteros([15,85]))
+
+        addCellTabla(tablaCuadrillaHeader, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrillaHeader, new Paragraph("CUADRILLA TIPO ", times10bold), prmsHeaderHoja)
 
 
-        PdfPTable tablaCuadrilla = new PdfPTable(3);
+        addCellTabla(tablaCuadrillaHeader, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCuadrillaHeader, new Paragraph("CLASE OBRERO ", times10bold), prmsHeaderHoja)
+
+
+
+        PdfPTable tablaCuadrilla = new PdfPTable(4);
         tablaCuadrilla.setWidthPercentage(100);
-        tablaCuadrilla.setWidths(arregloEnteros([10,60,30]))
-
-        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCuadrilla, new Paragraph("CUADRILLA TIPO ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-
-        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCuadrilla, new Paragraph("CLASE OBRERO ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCuadrilla, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        tablaCuadrilla.setWidths(arregloEnteros([10,10,60,10]))
 
         def valorTotalCuadrilla = 0;
 
@@ -3738,6 +3728,7 @@ class ReportesController {
             if(i.valor != 0.0 || i.valor != 0) {
 
                 addCellTabla(tablaCuadrilla, new Paragraph(" ", times10normal), prmsHeaderHoja)
+                addCellTabla(tablaCuadrilla, new Paragraph(i?.numero, times10normal), prmsHeaderHoja)
                 addCellTabla(tablaCuadrilla, new Paragraph(i?.indice?.descripcion, times10normal),prmsHeaderHoja)
                 addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
 
@@ -3764,6 +3755,7 @@ class ReportesController {
 
 
         document.add(tablaCoeficiente)
+        document.add(tablaCuadrillaHeader)
         document.add(tablaCuadrilla)
 
         Paragraph txtIzqPie = new Paragraph();
@@ -4963,6 +4955,222 @@ class ReportesController {
     def aseguradoras() {
         def asg = janus.pac.Aseguradora.list()
         [asg: asg]
+    }
+
+
+    def reporteComposicion () {
+
+        def obra = Obra.get(params.id)
+
+        def totales
+
+        def valorTotal
+
+        def total1 = 0
+
+
+        if (!params.tipo) {
+            params.tipo = "-1"
+        }
+        if (!params.rend) {
+            params.rend = "screen"
+        }
+        if (!params.sp) {
+            params.sp = '-1'
+        }
+        if (params.tipo == "-1") {
+            params.tipo = "1,2,3"
+        }
+        def wsp = ""
+        if (params.sp.toString() != "-1") {
+            wsp = "      AND v.sbpr__id = ${params.sp} \n"
+        }
+
+
+
+        def sql = "SELECT i.itemcdgo codigo, i.itemnmbr item, u.unddcdgo unidad, sum(v.voitcntd) cantidad, \n" +
+                "v.voitpcun punitario, v.voittrnp transporte, v.voitpcun + v.voittrnp  costo, \n" +
+                "sum((v.voitpcun + v.voittrnp) * v.voitcntd)  total, g.grpodscr grupo, g.grpo__id grid \n" +
+                "FROM vlobitem v INNER JOIN item i ON v.item__id = i.item__id\n" +
+                "INNER JOIN undd u ON i.undd__id = u.undd__id\n" +
+                "INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
+                "INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
+                "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo}) \n" +
+                "WHERE v.obra__id = ${params.id} and v.voitcntd >0 \n" + wsp +
+                "group by i.itemcdgo, i.itemnmbr, u.unddcdgo, v.voitpcun, v.voittrnp, v.voitpcun, \n" +
+                "g.grpo__id, g.grpodscr " +
+                "ORDER BY g.grpo__id ASC, i.itemcdgo"
+
+
+        def cn = dbConnectionService.getConnection()
+        def res = cn.rows(sql.toString())
+
+
+        def baos = new ByteArrayOutputStream()
+        def name = "composicion_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.BLACK)
+        times10boldWhite.setColor(Color.BLACK)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal]
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Composicion " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, composicion");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeader = [border: Color.WHITE, colspan: 7,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsRight = [border: Color.WHITE, colspan: 7,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellIzquierda = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellDerecha = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.WHITE, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
+                prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
+        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
+        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
+        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
+
+        addEmptyLine(headers, 1);
+        document.add(headers);
+
+       PdfPTable tablaComposicion = new PdfPTable(8)
+       tablaComposicion.setWidthPercentage(100)
+       tablaComposicion.setWidths(arregloEnteros([15,30,8,9,9,9,10,10]))
+
+
+
+       addCellTabla(tablaComposicion, new Paragraph("Código", times8bold), prmsCellHead)
+       addCellTabla(tablaComposicion, new Paragraph("Item", times8bold), prmsCellHead)
+       addCellTabla(tablaComposicion, new Paragraph("Unidad", times8bold), prmsCellHead)
+       addCellTabla(tablaComposicion, new Paragraph("Cantidad", times8bold), prmsCellHead)
+       addCellTabla(tablaComposicion, new Paragraph("Precio Unitario", times8bold), prmsCellHead)
+       addCellTabla(tablaComposicion, new Paragraph("Transporte", times8bold), prmsCellHead)
+       addCellTabla(tablaComposicion, new Paragraph("Costo", times8bold), prmsCellHead)
+       addCellTabla(tablaComposicion, new Paragraph("Total", times8bold), prmsCellHead)
+
+
+       res.each { r->
+
+          while(r?.grid == 1){
+
+
+              addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
+              addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
+              addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+
+              totales = r?.total
+
+              valorTotal =  (total1 += totales)
+
+
+           break
+          }
+
+           println("-->>" + valorTotal)
+
+           while(r?.grid == 2){
+
+
+               addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+
+
+
+               break
+           }
+
+           while(r?.grid == 3){
+
+
+               addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+
+
+
+               break
+           }
+
+
+
+
+       }
+
+
+
+
+        document.add(tablaComposicion);
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+
+
     }
 
 

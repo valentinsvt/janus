@@ -56,9 +56,9 @@ class VolumenObraController extends janus.seguridad.Shield{
     def addItem(){
         println "addItem " + params
         def obra = Obra.get(params.obra)
-        //def rubro = Item.get(params.rubro)
-        def rubro = Item.get(params.id)
-        println "rubro: " + rubro
+//        def rubro2 = Item.get(params.rubro)
+//        def rubro = Item.get(params.id)
+        def rubro = Item.findByCodigo(params.cod)
         def sbpr = SubPresupuesto.get(params.sub)
         def volumen
 //        if (params.vlob_id)
@@ -69,7 +69,7 @@ class VolumenObraController extends janus.seguridad.Shield{
             if (!volumen)
                 volumen=new VolumenesObra()
         }
-        println "volumn :" + volumen
+//        println "volumn :" + volumen
         volumen.cantidad = params.cantidad.toDouble()
         volumen.orden    = params.orden.toInteger()
         volumen.subPresupuesto = SubPresupuesto.get(params.sub)
@@ -80,7 +80,7 @@ class VolumenObraController extends janus.seguridad.Shield{
             render "error"
         }else{
             preciosService.actualizaOrden(volumen,"insert")
-            redirect(action: "tabla",params: [obra:obra.id,sub:volumen.subPresupuesto.id])
+            redirect(action: "tabla",params: [obra:obra.id,sub:volumen.subPresupuesto.id,ord: 1])
         }
     }
 
@@ -156,7 +156,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         def grupo = Grupo.findAllByDireccion(direccion)
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
 
-//        println "params --->>>> "+params
+        println "params --->>>> "+params
         def obra = Obra.get(params.obra)
         def detalle
         def valores

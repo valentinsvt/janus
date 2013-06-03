@@ -74,6 +74,13 @@
 
             th, td {
                 font-size : 10px !important;
+
+            }
+
+            .sorting_desc{
+
+              class : sorting !important;
+
             }
 
             .row-fluid {
@@ -192,11 +199,16 @@
                     </div>
 
                     <div class="btn-group">
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: tipo, rend: 'pdf']" class="btn btn-print btnPdf">
-                            <i class="icon-print"></i>
-                            Pdf
-                        </g:link>
+                        %{--<g:link action="composicion" id="${obra?.id}" params="[tipo: tipo, rend: 'pdf']" class="btn btn-print btnPdf">--}%
+                            %{--<i class="icon-print"></i>--}%
+                            %{--Pdf--}%
+                        %{--</g:link>--}%
                     %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel"> </g:link>--}%
+
+                        <a href="#" class="btn  " id="imprimirPdf">
+                            <i class="icon-print"></i>
+                            PDF
+                        </a>
                         <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel" id="${obra?.id}"><i class="icon-table"></i>Excel</g:link>
                     </div>
                 </div>
@@ -207,6 +219,8 @@
                     <thead>
                         <tr>
                             <g:if test="${tipo.contains(",") || tipo == '1'}">
+
+                                %{--<g:sortableColumn defaultOrder="desc" title="codigo" property="codigo">Código</g:sortableColumn>--}%
                                 <th>Código</th>
                                 <th>Item</th>
                                 <th>U</th>
@@ -220,6 +234,8 @@
                                 </g:if>
                             </g:if>
                             <g:elseif test="${tipo == '2'}">
+                                %{--<g:sortableColumn defaultOrder="desc" title="codigo" property="codigo">Código</g:sortableColumn>--}%
+
                                 <th>Código</th>
                                 <th>Mano de obra</th>
                                 <th>U</th>
@@ -229,6 +245,8 @@
                                 <th>Total</th>
                             </g:elseif>
                             <g:elseif test="${tipo == '3'}">
+                                %{--<g:sortableColumn defaultOrder="desc" title="codigo" property="codigo">Código</g:sortableColumn>--}%
+
                                 <th>Código</th>
                                 <th>Equipo</th>
                                 <th>U</th>
@@ -237,13 +255,14 @@
                                 <th>Costo</th>
                                 <th>Total</th>
                             </g:elseif>
+
                         </tr>
                     </thead>
                     <tbody>
                         <g:set var="totalEquipo" value="${0}"/>
                         <g:set var="totalMano" value="${0}"/>
                         <g:set var="totalMaterial" value="${0}"/>
-                        <g:each in="${res}" var="r">
+                        <g:each in="${res}" var="r" >
                             <tr>
                                 <td>${r.codigo}</td>
                                 <td>${r.item}</td>
@@ -302,7 +321,7 @@
 
                                 </td>
                                 <g:if test="${tipo.contains(",")}">
-                                    <td>${r.grupo}</td>
+                                    <td>${r?.grupo}</td>
                                 </g:if>
                             </tr>
                         </g:each>
@@ -353,16 +372,20 @@
                         }
                     });
 
-                    $(".btnPdf").click(function () {
-                        var url = $(this).attr("href");
-                        url = url.replace("&", "W");
-                        console.log(url);
+                    $("#imprimirPdf").click(function () {
+                        %{--var url = $(this).attr("href");--}%
+                        %{--url = url.replace("&", "W");--}%
+%{--//                        console.log(url);--}%
 
-                        var actionUrl = "${createLink(controller:'pdf', action:'pdfLink')}?filename=composicion.pdf&url=" + url;
-//                        //console.log(actionUrl);
-                        location.href = actionUrl;
+                        %{--var actionUrl = "${createLink(controller:'pdf', action:'pdfLink')}?filename=composicion.pdf&url=" + url;--}%
+%{--//                        //console.log(actionUrl);--}%
+                        %{--location.href = actionUrl;--}%
 
-                        return false;
+                        %{--return false;--}%
+
+//                        $("#dlgLoad").dialog("open");
+
+                        location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}"
                     });
 
                 });

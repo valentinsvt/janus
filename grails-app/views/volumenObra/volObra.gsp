@@ -206,6 +206,7 @@
 
 
     <script type="text/javascript">
+
             function loading(div) {
                 y = 0;
                 $("#" + div).html("<div class='tituloChevere' id='loading'>Sistema Janus - Cargando, Espere por favor</div>")
@@ -386,7 +387,7 @@
 
                             var id = $("#subPres").val();
 
-                            console.log("id:" + id)
+//                            console.log("id:" + id)
 
                             $.ajax({
                                 type    : "POST",
@@ -427,10 +428,13 @@
                     $(".col_precio").hide()
                     $(".col_total").hide()
                     $("#divTotal").html("")
+
+
                     var cantidad = $("#item_cantidad").val()
                     cantidad = str_replace(",", "", cantidad)
                     var orden = $("#item_orden").val()
                     var rubro = $("#item_id").val()
+                    var cod = $("#item_codigo").val()
                     var sub = $("#subPres").val()
                     if (isNaN(cantidad))
                         cantidad = 0
@@ -444,11 +448,11 @@
                         msn = "seleccione un rubro"
 
                     if (msn.length == 0) {
-                        var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&orden=" + orden + "&sub=" + sub + "&obra=${obra.id}"
-                        console.log(datos)
+                        var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&orden=" + orden + "&sub=" + sub + "&obra=${obra.id}" + "&cod=" + cod + "&ord=" + '1'
+//                        console.log(datos)
                         if ($("#vol_id").val() * 1 > 0)
                             datos += "&id=" + $("#vol_id").val()
-                        console.log(datos)
+//                        console.log(datos)
 
                         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'addItem')}",
                             data     : datos,

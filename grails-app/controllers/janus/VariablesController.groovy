@@ -108,12 +108,12 @@ class VariablesController {
                         "INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
                         "INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
                         "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo}) \n" +
-                  "WHERE v.obra__id = ${params.id} \n" + wsp +
+                  "WHERE v.obra__id = ${params.id} and v.voitcntd >0 \n" + wsp +
                   "group by i.itemcdgo, i.itemnmbr, u.unddcdgo, v.voitpcun, v.voittrnp, v.voitpcun, \n" +
                              "g.grpo__id, g.grpodscr " +
                   "ORDER BY g.grpo__id ASC, i.itemcdgo"
 
-        println "composicion" + sql
+//        println "composicion" + sql
         def sqlSP = "SELECT\n" +
                 "  DISTINCT v.sbpr__id      id,\n" +
                 "  s.sbprdscr               dsc,\n" +
