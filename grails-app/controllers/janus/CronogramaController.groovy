@@ -12,8 +12,8 @@ class CronogramaController extends janus.seguridad.Shield {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def saveCrono_ajax() {
-//        println ">>>>>>>>>>>>>>>>>"
-//        println params
+        println ">>>>>>>>>>>>>>>>>"
+        println params
         def saved = ""
         def ok = ""
         if (params.crono.class == java.lang.String) {

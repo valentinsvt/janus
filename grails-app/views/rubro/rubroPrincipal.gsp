@@ -149,6 +149,10 @@
                 <g:select name="rubro.unidad.id" from="${janus.Unidad.list()}" class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.unidad?.id}"/>
             </div>
 
+            <div class="span2" style="color: #01a">
+                Responsable:
+                <input type="text" name="rubro.nombre" class="span12" value="${session.usuario}" readonly="" style="color: #01a">
+            </div>
 
             %{--<div class="span2"  >--}%
             %{--Rendimiento--}%

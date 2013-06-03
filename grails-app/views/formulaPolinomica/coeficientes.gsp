@@ -354,6 +354,8 @@
                                         $("#modalBody-formula").html(msg);
                                         $("#modalFooter-formula").html("").append(btnCancel).append(btnSave);
                                         $("#modal-formula").modal("show");
+
+
                                     }
                                 });
                             }

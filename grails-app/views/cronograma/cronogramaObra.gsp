@@ -975,7 +975,7 @@
                                 $(".dol.mes" + periodoIni + ".rubro" + rubro).text(number_format(dol, 2, ".", ",")).data("val", dol);
                                 $(".prct.mes" + periodoIni + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
                                 $(".fis.mes" + periodoIni + ".rubro" + rubro).text(number_format(cant, 2, ".", ",")).data("val", cant);
-                                dataAjax += "crono=" + rubro + "_" + periodoIni + "_" + dol + "_" + prct + "_" + cant;
+                                dataAjax += "&crono=" + rubro + "_" + periodoIni + "_" + dol + "_" + prct + "_" + cant;
                             } else {
                                 var meses = periodoFin - periodoIni + 1;
                                 dol = subtotal * (prct / 100);
@@ -1003,7 +1003,7 @@
                                     $(".prct.mes" + i + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
                                     $(".fis.mes" + i + ".rubro" + rubro).text(number_format(cant, 2, ".", ",")).data("val", cant);
 
-                                    dataAjax += "crono=" + rubro + "_" + i + "_" + dol + "_" + prct + "_" + cant + "&";
+                                    dataAjax += "&crono=" + rubro + "_" + i + "_" + dol + "_" + prct + "_" + cant + "&";
                                 }
                             }
                             $.ajax({
@@ -1094,7 +1094,7 @@
                                             $(".dol.mes" + periodoIni + ".rubro" + rubro).text(number_format(precCal, 2, ".", ",")).data("val", precCal);
                                             $(".prct.mes" + periodoIni + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
                                             $(".fis.mes" + periodoIni + ".rubro" + rubro).text(number_format(cantCal, 2, ".", ",")).data("val", cantCal);
-                                            dataAjax += "crono=" + rubro + "_" + periodoIni + "_" + precCal + "_" + prct + "_" + cantCal;
+                                            dataAjax += "&crono=" + rubro + "_" + periodoIni + "_" + precCal + "_" + prct + "_" + cantCal;
                                         } else {
                                             var meses = periodoFin - periodoIni + 1;
 
@@ -1118,7 +1118,7 @@
                                                 $(".prct.mes" + i + ".rubro" + rubro).text(number_format(pr, 2, ".", ",")).data("val", pr);
                                                 $(".fis.mes" + i + ".rubro" + rubro).text(number_format(cn, 2, ".", ",")).data("val", cn);
 
-                                                dataAjax += "crono=" + rubro + "_" + i + "_" + pe + "_" + pr + "_" + cn + "&";
+                                                dataAjax += "&crono=" + rubro + "_" + i + "_" + pe + "_" + pr + "_" + cn + "&";
                                             }
                                         }
                                     });

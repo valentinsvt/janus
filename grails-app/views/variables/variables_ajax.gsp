@@ -29,7 +29,7 @@
             <li><a href="#tab-transporte">Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>
             <li><a href="#tab-indirecto">Costos Indirectos</a></li>
-            <li><a href="#tab-desglose">Desglose de Transporte</a></li>
+            <li class="desglose"><a href="#tab-desglose">Desglose de Transporte</a></li>
         </ul>
 
         <div id="tab-transporte" class="tab">
@@ -489,17 +489,11 @@
             </div>
 
             <div class="span2">
-                <g:textField type="text" name="totalDesglose" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo + obra?.desgloseMecanico + obra?.desgloseCombustible + obra?.desgloseRepuestos + obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                %{--<g:textField type="text" name="totalDesglose" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo + obra?.desgloseMecanico + obra?.desgloseCombustible + obra?.desgloseRepuestos + obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
+                <input type="text" id="totalDesglose" class="inputVar num" value="0.0", maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
-
-
         </div>
-
-
-
-
     </div>
-
 
 
     </div>
@@ -605,5 +599,38 @@
             costoItem($(this), $("#costo_chofer"));
         });
     });
+
+    $(function () {
+/*
+        $(".desglose").click(function() {
+            sumaDesglose();
+        });
+*/
+        $("#desgloseEquipo").keyup(function() {
+            sumaDesglose();
+        });
+        $("#desgloseRepuestos").keyup(function() {
+            sumaDesglose();
+        });
+        $("#desgloseCombustible").keyup(function() {
+            sumaDesglose();
+        });
+        $("#desgloseMecanico").keyup(function() {
+            sumaDesglose();
+        });
+        $("#desgloseSaldo").keyup(function() {
+            sumaDesglose();
+        });
+    });
+
+    function sumaDesglose() {
+        var smDesglose = 0.0
+        console.log("sumadesglose")
+        smDesglose = parseFloat($("#desgloseEquipo").val()) + parseFloat($("#desgloseRepuestos").val()) +
+                parseFloat($("#desgloseCombustible").val()) + parseFloat($("#desgloseMecanico").val()) +
+                parseFloat($("#desgloseSaldo").val())
+        $("#totalDesglose").val(number_format(smDesglose, 2, ".", ""));
+    }
+
 
 </script>
