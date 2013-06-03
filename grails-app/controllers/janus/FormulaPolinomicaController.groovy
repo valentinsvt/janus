@@ -140,7 +140,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
             def obra = Obra.get(params.id)
             def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
-
+            println "fp: " + fp
             def total = 0
 
             fp.each { f ->

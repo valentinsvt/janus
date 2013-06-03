@@ -445,8 +445,11 @@
 
                     if (msn.length == 0) {
                         var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&orden=" + orden + "&sub=" + sub + "&obra=${obra.id}"
+                        console.log(datos)
                         if ($("#vol_id").val() * 1 > 0)
                             datos += "&id=" + $("#vol_id").val()
+                        console.log(datos)
+
                         $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'addItem')}",
                             data     : datos,
                             success  : function (msg) {

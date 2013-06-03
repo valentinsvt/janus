@@ -3,24 +3,17 @@ package janus
 class VolumenObraController extends janus.seguridad.Shield{
     def buscadorService
     def preciosService
+
     def volObra(){
 
         def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
-
         def subpreFiltrado = []
-
         def var
 
-
         grupoFiltrado.each { i->
-
            var = SubPresupuesto.findAllByGrupo(i)
-
 //            subpreFiltrado.add(var)
-
             subpreFiltrado += var
-
-
         }
 
 
@@ -35,11 +28,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def grupo = Grupo.findAllByDireccion(direccion)
 
-
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
-
-
-
 
         def obra = Obra.get(params.id)
         def volumenes = VolumenesObra.findAllByObra(obra)
@@ -49,11 +38,9 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra:obra,volumenes:volumenes,campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado]
-
-
-
+        [obra:obra, volumenes:volumenes, campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado]
     }
+
     def buscarRubroCodigo(){
         def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(),TipoItem.get(2))
         if (rubro){
@@ -67,11 +54,14 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     def addItem(){
-        println "addItem "+params
-        def obra= Obra.get(params.obra)
-        def rubro = Item.get(params.rubro)
+        println "addItem " + params
+        def obra = Obra.get(params.obra)
+        //def rubro = Item.get(params.rubro)
+        def rubro = Item.get(params.id)
+        println "rubro: " + rubro
         def sbpr = SubPresupuesto.get(params.sub)
         def volumen
+//        if (params.vlob_id)
         if (params.id)
             volumen = VolumenesObra.get(params.id)
         else {
@@ -79,13 +69,14 @@ class VolumenObraController extends janus.seguridad.Shield{
             if (!volumen)
                 volumen=new VolumenesObra()
         }
-        volumen.cantidad=params.cantidad.toDouble()
-        volumen.orden=params.orden.toInteger()
-        volumen.subPresupuesto=SubPresupuesto.get(params.sub)
-        volumen.obra=obra
-        volumen.item=rubro
+        println "volumn :" + volumen
+        volumen.cantidad = params.cantidad.toDouble()
+        volumen.orden    = params.orden.toInteger()
+        volumen.subPresupuesto = SubPresupuesto.get(params.sub)
+        volumen.obra = obra
+        volumen.item = rubro
         if (!volumen.save(flush: true)){
-            println "error volumen obra "+volumen.errors
+            println "error volumen obra " + volumen.errors
             render "error"
         }else{
             preciosService.actualizaOrden(volumen,"insert")
@@ -160,14 +151,9 @@ class VolumenObraController extends janus.seguridad.Shield{
     def tabla(){
 
         def usuario = session.usuario.id
-
         def persona = Persona.get(usuario)
-
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
-
         def grupo = Grupo.findAllByDireccion(direccion)
-
-
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
 
 //        println "params --->>>> "+params
@@ -177,13 +163,9 @@ class VolumenObraController extends janus.seguridad.Shield{
         def orden
 
         if (params.ord == '1'){
-
             orden = 'asc'
-
-        }else{
-
+        } else {
              orden = 'desc'
-
         }
 
         if (params.sub && params.sub != "null") {
@@ -214,7 +196,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         preciosService.ac_rbroObra(obra.id)
 
-        [subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
+        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
 
     }
 
