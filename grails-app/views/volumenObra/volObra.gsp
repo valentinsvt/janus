@@ -72,7 +72,7 @@
         <div class="linea" style="height: 98%;"></div>
 
         <div class="row-fluid" style="margin-left: 0px">
-            <div class="span3">
+            <div class="span2">
                 <b>Memo:</b> ${obra?.memoCantidadObra}
             </div>
 
@@ -84,8 +84,11 @@
                 <b style="">Dist. peso:</b> ${obra?.distanciaPeso}
             </div>
 
-            <div class="span2">
+            <div class="span2" style="margin-left: -40px;">
                 <b>Dist. volúmen:</b> ${obra?.distanciaVolumen}
+            </div>
+            <div class="span3" style="width: 320px; margin-top: -8px;">
+            <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion" style="margin-left: 20px;"></g:select>
             </div>
         </div>
 
@@ -95,9 +98,6 @@
                 <span id="sp">
                     %{--<g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
 
-
-
-                    <g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion"></g:select>
 
 
                        <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 250px;;font-size: 10px" id="subPres"/>   </span>
@@ -116,7 +116,7 @@
 
             </div>
 
-            <div class="span7" style="height: 38px"></div>
+            %{--<div class="span7" style="height: 38px"></div> --}%
             <div class="span1" style="margin-left: 0px; width: 100px;">
                 <b>Código</b>
                 <input type="text" style="width: 100px;;font-size: 10px" id="item_codigo">
@@ -499,6 +499,10 @@
             }
 
         });
+
+        $(document).ready(function() {
+            $("#grupos").trigger("change");
+            });
 
     });
 </script>

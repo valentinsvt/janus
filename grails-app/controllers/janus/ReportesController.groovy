@@ -5278,5 +5278,39 @@ class ReportesController {
 
     }
 
+    def matrizExcel() {
+        def obra = Obra.get(params.obra.toLong())
+        def lugar = obra.lugar
+        def fecha = obra.fechaPreciosRubros
+        def itemsChofer = [obra.chofer]
+        def itemsVolquete = [obra.volquete]
+        def indi = obra.totales
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+        def file = File.createTempFile('matrizFP' + obra.codigo, '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 10)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+        def row = 0
+
+        // crea columnas
+
+
+        VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.eachWithIndex { rubro, i ->
+            def res = preciosService.presioUnitarioVolumenObra("* ", obra.id, rubro.id)
+            WritableSheet sheet = workbook.createSheet(rubro.codigo, i)
+            rubroAExcel(sheet, res, rubro, fecha, indi)
+        }
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "rubro.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
+    }
+
 
 }
