@@ -275,6 +275,15 @@
                 });
             }
 
+            function updateSumaTotal() {
+                var total = 0;
+
+                $("#tree").children("ul").children("li").each(function () {
+                    total += parseFloat($(this).attr("valor"));
+                });
+                $("#spanTotal").text(number_format(total, 3, ".", "")).data("valor", total);
+            }
+
             function createContextmenu(node) {
                 var parent = node.parent().parent();
 
@@ -329,6 +338,7 @@
                                             node.attr("nombre", indiceNombre).trigger("change_node.jstree");
                                             node.attr("valor", valor).trigger("change_node.jstree");
                                             $("#modal-formula").modal("hide");
+                                            updateSumaTotal();
                                         }
                                     }
                                 });
@@ -354,8 +364,6 @@
                                         $("#modalBody-formula").html(msg);
                                         $("#modalFooter-formula").html("").append(btnCancel).append(btnSave);
                                         $("#modal-formula").modal("show");
-
-
                                     }
                                 });
                             }
@@ -657,6 +665,8 @@
                             treeNodeEvents($(".jstree-grid-cell"));
 
                             $("#rightContents").show();
+
+                            updateSumaTotal();
                         }).jstree({
                             plugins     : ["themes", "json_data", "grid", "types", "contextmenu", "search", "crrm", "cookies", "types" ],
                             json_data   : {data : ${json.toString()}},
