@@ -2209,13 +2209,13 @@ class ReportesController {
 
 
                 addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "###,#####0", locale: "ec"), times8normal), prmsCellRight)
 
                 addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "###,#####0", locale: "ec"), times8normal), prmsCellRight)
 
                 addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "###,#####0", locale: "ec"), times8normal), prmsCellRight)
 
                 totales =  it.totl
 
@@ -2238,7 +2238,7 @@ class ReportesController {
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellHead)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellHead)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellHead)
-            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -2327,7 +2327,7 @@ class ReportesController {
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
 
@@ -5058,6 +5058,15 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
+
+        Anchor anchor = new Anchor("Materiales", times10bold);
+        anchor.setName("Materiales");
+
+        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
+
+        document.add(catPart);
+
+
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
@@ -5069,14 +5078,7 @@ class ReportesController {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-//
-//        Anchor anchor = new Anchor("Materiales", times10bold);
-//        anchor.setName("Materiales");
-//
-//        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
-//
-//        document.add(catPart);
-//
+
 
 
 
