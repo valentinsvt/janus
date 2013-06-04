@@ -1,0 +1,1 @@
+<g:select name="subpresupuesto" from="${subs}" value="${sub.id}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>

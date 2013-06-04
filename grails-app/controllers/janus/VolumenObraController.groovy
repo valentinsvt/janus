@@ -10,14 +10,9 @@ class VolumenObraController extends janus.seguridad.Shield{
         def subpreFiltrado = []
         def var
 
-        grupoFiltrado.each { i->
-           var = SubPresupuesto.findAllByGrupo(i)
-//            subpreFiltrado.add(var)
-            subpreFiltrado += var
-        }
-
-
-        println("-->>" + subpreFiltrado)
+//        def grupos = Grupo.list([sort: "descripcion"])
+        subpreFiltrado=SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
+//        println("-->>" + subpreFiltrado)
 
 
         def usuario = session.usuario.id
@@ -38,8 +33,23 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra:obra, volumenes:volumenes, campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado]
+        [obra:obra, volumenes:volumenes, campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado,grupos:grupoFiltrado]
     }
+
+    def cargarSubpres(){
+        def grupo = Grupo.get(params.grupo)
+        def subs = SubPresupuesto.findAllByGrupo(grupo)
+        [subs:subs]
+    }
+
+    def cargaCombosEditar(){
+
+        def sub = SubPresupuesto.get(params.id)
+        def grupo=sub?.grupo
+        def subs= SubPresupuesto.findAllByGrupo(grupo)
+        [subs:subs,sub:sub]
+    }
+
 
     def buscarRubroCodigo(){
         def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(),TipoItem.get(2))

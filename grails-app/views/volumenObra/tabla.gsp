@@ -82,7 +82,7 @@
     <tbody id="tabla_material">
 
     <g:each in="${valores}" var="val" status="j">
-        %{--<tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">--}%
+    %{--<tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">--}%
         <tr class="item_row" id="${val.vlob__id}" item="${val}" sub="${val.sbpr__id}">
 
             <td style="width: 20px" class="orden">${val.vlobordn}</td>
@@ -326,25 +326,31 @@
     %{--return false--}%
 
     %{--}) ;--}%
-    var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + $(".item_row").attr("id") + "Wobra=${obra.id}" +
+    var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + $(".item_row").attr("id") + "Wobra=${obra.id}"
 
 
-            $(".item_row").dblclick(function () {
-                $("#calcular").removeClass("active")
-                $(".col_delete").show()
-                $(".col_precio").hide()
-                $(".col_total").hide()
-                $("#divTotal").html("")
-                //$("#vol_id").val($(this).attr("id"))     /* gdo: id del registro a editar */
-                $("#vol_id").val($(this).attr("id"))     /* gdo: id del registro a editar */
-                $("#item_codigo").val($(this).find(".cdgo").html())
-                $("#item_id").val($(this).attr("item"))
-                $("#subPres").val($(this).attr("sub"))
-                $("#item_nombre").val($(this).find(".nombre").html())
-                $("#item_cantidad").val($(this).find(".cant").html().toString().trim())
-                $("#item_orden").val($(this).find(".orden").html())
-                console.log($(this).attr("id"))
-            });
+    $(".item_row").dblclick(function () {
+        $("#calcular").removeClass("active")
+        $(".col_delete").show()
+        $(".col_precio").hide()
+        $(".col_total").hide()
+        $("#divTotal").html("")
+        //$("#vol_id").val($(this).attr("id"))     /* gdo: id del registro a editar */
+        $("#vol_id").val($(this).attr("id"))     /* gdo: id del registro a editar */
+        $("#item_codigo").val($(this).find(".cdgo").html())
+        $("#item_id").val($(this).attr("item"))
+        $("#subPres").val($(this).attr("sub"))
+        $("#item_nombre").val($(this).find(".nombre").html())
+        $("#item_cantidad").val($(this).find(".cant").html().toString().trim())
+        $("#item_orden").val($(this).find(".orden").html())
+        $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'cargaCombosEditar')}",
+            data: "id=" + $(this).attr("sub"),
+            success: function (msg) {
+                $("#div_cmb_sub").html(msg)
+            }
+        });
+//        console.log($(this).attr("id"))
+    });
     $(".borrarItem").click(function () {
 
         var interval = loading("detalle")
