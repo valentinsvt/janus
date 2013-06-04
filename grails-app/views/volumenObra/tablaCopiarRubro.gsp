@@ -197,7 +197,7 @@
 
         tbody.children("tr").each(function () {
 
-//            console.log($(this).children("td").children().get(1))
+//            console.log($(this).children("td").children().get(1).is(":checked"))
 
             if(($(this).children("td").children().get(1).checked) == true){
 

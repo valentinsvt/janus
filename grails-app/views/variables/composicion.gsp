@@ -219,8 +219,6 @@
                     <thead>
                         <tr>
                             <g:if test="${tipo.contains(",") || tipo == '1'}">
-
-                                %{--<g:sortableColumn defaultOrder="desc" title="codigo" property="codigo">Código</g:sortableColumn>--}%
                                 <th>Código</th>
                                 <th>Item</th>
                                 <th>U</th>
@@ -234,8 +232,6 @@
                                 </g:if>
                             </g:if>
                             <g:elseif test="${tipo == '2'}">
-                                %{--<g:sortableColumn defaultOrder="desc" title="codigo" property="codigo">Código</g:sortableColumn>--}%
-
                                 <th>Código</th>
                                 <th>Mano de obra</th>
                                 <th>U</th>
@@ -245,8 +241,6 @@
                                 <th>Total</th>
                             </g:elseif>
                             <g:elseif test="${tipo == '3'}">
-                                %{--<g:sortableColumn defaultOrder="desc" title="codigo" property="codigo">Código</g:sortableColumn>--}%
-
                                 <th>Código</th>
                                 <th>Equipo</th>
                                 <th>U</th>
@@ -264,8 +258,8 @@
                         <g:set var="totalMaterial" value="${0}"/>
                         <g:each in="${res}" var="r" >
                             <tr>
-                                <td>${r.codigo}</td>
-                                <td>${r.item}</td>
+                                <td class="">${r.codigo}</td>
+                                <td class="">${r.item}</td>
                                 <td>${r.unidad}</td>
                                 <td class="numero">
                                     <g:formatNumber number="${r.cantidad}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/>
@@ -359,6 +353,7 @@
                         bPaginate       : false,
                         bScrollCollapse : true,
                         bFilter         : false,
+                                bSort: false,
                         oLanguage       : {
                             sZeroRecords : "No se encontraron datos",
                             sInfo        : "",
@@ -373,17 +368,7 @@
                     });
 
                     $("#imprimirPdf").click(function () {
-                        %{--var url = $(this).attr("href");--}%
-                        %{--url = url.replace("&", "W");--}%
-%{--//                        console.log(url);--}%
 
-                        %{--var actionUrl = "${createLink(controller:'pdf', action:'pdfLink')}?filename=composicion.pdf&url=" + url;--}%
-%{--//                        //console.log(actionUrl);--}%
-                        %{--location.href = actionUrl;--}%
-
-                        %{--return false;--}%
-
-//                        $("#dlgLoad").dialog("open");
 
                         location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}"
                     });
