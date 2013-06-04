@@ -137,6 +137,13 @@
             </g:if>
         </div>
 
+        <div style="margin-bottom: 5px;">
+            Subpresupuesto: <g:select name="subpresupuesto" from="${subpres}" optionKey="id" optionValue="descripcion"
+                                      style="width: 300px;font-size: 10px" id="subpres" value="${subpre}"
+                                      noSelection="['-1': 'TODOS']"/>
+            <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
+        </div>
+
         <g:if test="${meses > 0 && plazoOk}">
             <table class="table table-bordered table-condensed table-hover">
                 <thead>
@@ -209,7 +216,7 @@
                                 <g:set var="sum" value="${sum + parcial}"/>
                             </td>
                             <td style="text-align: center">
-                               <span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>
+                                <span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>
                             </td>
                             <td>
                                 $
@@ -718,7 +725,26 @@
             }
 
             $(function () {
+
+                $("#subpres").val(${subpre});
+
                 updateTotales();
+
+                $("#btnSubpre").click(function () {
+                    $.box({
+                        imageClass : "box_info",
+                        text       : "Cargando... Por favor espere...",
+                        title      : "Cargando",
+                        iconClose  : false,
+                        dialog     : {
+                            resizable     : false,
+                            draggable     : false,
+                            closeOnEscape : false,
+                            buttons       : false
+                        }
+                    });
+                    location.href = "${createLink(action: 'cronogramaObra')}/${obra.id}?subpre=" + $("#subpres").val();
+                });
 
                 $("#tabla_material").children("tr").click(function () {
                     //                    $(".rowSelected").removeClass("rowSelected");
