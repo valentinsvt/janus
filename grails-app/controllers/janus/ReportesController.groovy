@@ -2209,13 +2209,13 @@ class ReportesController {
 
 
                 addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,#####0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
                 addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,#####0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
                 addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
-                        2, maxFractionDigits: 2, format: "###,#####0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
                 totales =  it.totl
 
@@ -5059,12 +5059,10 @@ class ReportesController {
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
 
-        Anchor anchor = new Anchor("Materiales", times10bold);
-        anchor.setName("Materiales");
-
-        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
-
-        document.add(catPart);
+//        Anchor anchor = new Anchor("Materiales", times10bold);
+//        anchor.setName("Materiales");
+//        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
+//        document.add(catPart);
 
 
         Paragraph headers = new Paragraph();
@@ -5146,15 +5144,11 @@ class ReportesController {
         addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
         addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
 
+//        Anchor anchor2 = new Anchor("Mano de Obra", times10bold);
+//        anchor2.setName("Mano de Obra");
+//        Chapter catPart2 = new Chapter(new Paragraph(anchor2), 2);
+//        document.add(catPart2)
 
-
-//
-//        anchor = new Anchor("Mano de Obra", times10bold);
-//        anchor.setName("Mano de Obra");
-//
-//        catPart = new Chapter(new Paragraph(anchor), 2);
-//
-//        document.add(catPart)
 
 
         PdfPTable tablaTitulo2 = new PdfPTable(2)
@@ -5169,6 +5163,7 @@ class ReportesController {
         tablaTotalesMano.setWidthPercentage(100)
         tablaTotalesMano.setWidths(arregloEnteros([70,30]))
 
+        println("h:" + tablaTitulo2.getHeaderHeight())
 
         addCellTabla(tablaTitulo2, new Paragraph("Mano de obra ", times10bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo2, new Paragraph(" ", times10bold), prmsCellIzquierda)
@@ -5255,6 +5250,7 @@ class ReportesController {
         addCellTabla(tablaTotalesEquipos, new Paragraph(g.formatNumber(number: valorTotalEquipos, minFractionDigits:
                 3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
 
+        println("size: " + document.pageSize.getHeight())
 
         document.add(tablaHeader);
         document.add(tablaTitulo);
