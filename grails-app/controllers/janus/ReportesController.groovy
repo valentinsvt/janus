@@ -5350,7 +5350,7 @@ class ReportesController {
             4.times {
                 label = new Label(it, fila, r[it]?.toString() ?: "", times08format); sheet.addCell(label);
             }
-            number = new Number(4, fila, r.cantidad?.toFloat() ?: 0, times08format); sheet.addCell(number);
+            number = new Number(4, fila, r.cantidad?.toDouble()?.round(3) ?: 0, times08format); sheet.addCell(number);
 
             fila++
         }
@@ -5367,7 +5367,7 @@ class ReportesController {
                     //println subSql
                     cn2.eachRow(subSql.toString()) { v ->
 //                        label = new Label(clmn++, fila, v.valor.toString(), times08format); sheet.addCell(label);
-                        number = new Number(clmn++, fila, v.valor?.toFloat() ?: 0.00000, times08format); sheet.addCell(number);
+                        number = new Number(clmn++, fila, v.valor?.toDouble()?.round(5) ?: 0.00000, times08format); sheet.addCell(number);
                     }
                 }
             }

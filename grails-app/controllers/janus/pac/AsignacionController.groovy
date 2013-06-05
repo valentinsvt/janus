@@ -23,8 +23,6 @@ class AsignacionController extends janus.seguridad.Shield {
             actual=Anio.list([sort: "id"])?.pop()
         }
 
-
-
         def asignacionInstance = new Asignacion(params)
         if (params.id) {
             asignacionInstance = Asignacion.get(params.id)
@@ -37,6 +35,7 @@ class AsignacionController extends janus.seguridad.Shield {
         } //es edit
         return [asignacionInstance: asignacionInstance,campos:campos,actual:actual]
     } //form_ajax
+
     def tabla(){
 //        println "tabla "+params
         def anio = new Date().format("yyyy")
@@ -98,9 +97,9 @@ class AsignacionController extends janus.seguridad.Shield {
             asgn.anio=anio
         }
         asgn.valor=params.valor.toDouble()
-        if (!asgn.save())
+        if (!asgn.save()) {
 //            println "asgn  errors "+asgn.errors
-        else{
+        } else {
             flash.message="Datos guardados"
             redirect(action: "form_ajax")
         }

@@ -601,11 +601,9 @@
     });
 
     $(function () {
-/*
         $(".desglose").click(function() {
             sumaDesglose();
         });
-*/
         $("#desgloseEquipo").keyup(function() {
             sumaDesglose();
         });
