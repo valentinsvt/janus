@@ -1296,8 +1296,9 @@
 
                 $("#btnGrafico").click(function () {
                     var dataEco = "[[";
-                    var ticksXEco = "[";
-                    var ticksYEco = "[";
+                    dataEco += "[0,0],";
+                    var ticksXEco = "[0,";
+                    var ticksYEco = "[0,";
                     var maxEco = 0;
 
                     $(".totalAcumulado.total").each(function () {
@@ -1318,8 +1319,9 @@
                     ticksYEco += "]";
 
                     var dataFis = "[[";
-                    var ticksXFis = "[";
-                    var ticksYFis = "[";
+                    dataFis += "[0,0],";
+                    var ticksXFis = "[0,";
+                    var ticksYFis = "[0,";
                     var maxFis = 0;
                     $(".prctAcumulado.total").each(function () {
                         var mes = $(this).data("mes");
