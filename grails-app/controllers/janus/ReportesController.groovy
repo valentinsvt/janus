@@ -4981,6 +4981,14 @@ class ReportesController {
 
         def total1 = 0
 
+        def totalesMano
+        def valorTotalMano
+        def total2 =0
+
+        def totalesEquipos
+        def valorTotalEquipos
+        def total3 = 0
+
 
         if (!params.tipo) {
             params.tipo = "-1"
@@ -5076,104 +5084,188 @@ class ReportesController {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaComposicion = new PdfPTable(8)
-        tablaComposicion.setWidthPercentage(100)
-        tablaComposicion.setWidths(arregloEnteros([15,30,8,9,9,9,10,10]))
 
 
 
-        addCellTabla(tablaComposicion, new Paragraph("Código", times8bold), prmsCellHead)
-        addCellTabla(tablaComposicion, new Paragraph("Item", times8bold), prmsCellHead)
-        addCellTabla(tablaComposicion, new Paragraph("Unidad", times8bold), prmsCellHead)
-        addCellTabla(tablaComposicion, new Paragraph("Cantidad", times8bold), prmsCellHead)
-        addCellTabla(tablaComposicion, new Paragraph("Precio Unitario", times8bold), prmsCellHead)
-        addCellTabla(tablaComposicion, new Paragraph("Transporte", times8bold), prmsCellHead)
-        addCellTabla(tablaComposicion, new Paragraph("Costo", times8bold), prmsCellHead)
-        addCellTabla(tablaComposicion, new Paragraph("Total", times8bold), prmsCellHead)
+
+        PdfPTable tablaHeader = new PdfPTable(8)
+        tablaHeader.setWidthPercentage(100)
+        tablaHeader.setWidths(arregloEnteros([12,36,5,9,9,9,10,10]))
+
+        PdfPTable tablaTitulo = new PdfPTable(2)
+        tablaTitulo.setWidthPercentage(100)
+        tablaTitulo.setWidths(arregloEnteros([90,10]))
+
+       PdfPTable tablaComposicion = new PdfPTable(8)
+       tablaComposicion.setWidthPercentage(100)
+       tablaComposicion.setWidths(arregloEnteros([12,36,5,9,9,9,10,10]))
+
+        PdfPTable tablaTotales = new PdfPTable(2)
+        tablaTotales.setWidthPercentage(100)
+        tablaTotales.setWidths(arregloEnteros([70,30]))
+
+
+       addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead)
+       addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead)
+       addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead)
+       addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead)
+       addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha)
+       addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha)
+       addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha)
+       addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha)
+
+
+        addCellTabla(tablaTitulo, new Paragraph("Materiales ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo, new Paragraph(" ", times10bold), prmsCellIzquierda)
+
 
 
         res.each { r->
 
-            while(r?.grid == 1){
+           if(r?.grid ==1){
 
+              addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
+              addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
+              addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
+                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
 
-                addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
-                addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
-                addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+              totales = r?.total
 
-                totales = r?.total
+              valorTotal =  (total1 += totales)
+           }
 
-                valorTotal =  (total1 += totales)
+       }
 
+        addCellTabla(tablaTotales, new Paragraph("Total Materiales", times10bold), prmsCellDerecha)
+        addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: valorTotal, minFractionDigits:
+                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
 
-                break
-            }
-
-            println("-->>" + valorTotal)
-
-            while(r?.grid == 2){
-
-
-                addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
-                addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
-                addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+        addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
+        addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
 
 
 
-                break
-            }
 
-            while(r?.grid == 3){
+        PdfPTable tablaTitulo2 = new PdfPTable(2)
+        tablaTitulo2.setWidthPercentage(100)
+        tablaTitulo2.setWidths(arregloEnteros([90,10]))
 
+        PdfPTable tablaComposicion2 = new PdfPTable(8)
+        tablaComposicion2.setWidthPercentage(100)
+        tablaComposicion2.setWidths(arregloEnteros([12,36,5,9,9,9,10,10]))
 
-                addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
-                addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
-                addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+        PdfPTable tablaTotalesMano = new PdfPTable(2)
+        tablaTotalesMano.setWidthPercentage(100)
+        tablaTotalesMano.setWidths(arregloEnteros([70,30]))
+
+        println("h:" + tablaTitulo2.getHeaderHeight())
+
+        addCellTabla(tablaTitulo2, new Paragraph("Mano de obra ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo2, new Paragraph(" ", times10bold), prmsCellIzquierda)
 
 
 
-                break
-            }
+        res.each {j->
 
 
+           if(j?.grid == 2) {
+               addCellTabla(tablaComposicion2, new Paragraph(j?.codigo, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion2, new Paragraph(j?.item, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion2, new Paragraph(j?.unidad, times8normal), prmsCellHead)
+               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.cantidad, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.punitario, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.transporte, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.costo, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.total, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
 
+               totalesMano = j?.total
+               valorTotalMano = (total2 += totalesMano)
+
+
+           }
 
         }
 
+        addCellTabla(tablaTotalesMano, new Paragraph("Total Mano de Obra:", times10bold), prmsCellDerecha)
+        addCellTabla(tablaTotalesMano, new Paragraph(g.formatNumber(number: valorTotalMano, minFractionDigits:
+                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+
+        addCellTabla(tablaTotalesMano, new Paragraph(" ", times10bold), prmsNum)
+        addCellTabla(tablaTotalesMano, new Paragraph(" ", times10bold), prmsNum)
 
 
+        PdfPTable tablaTitulo3 = new PdfPTable(2)
+        tablaTitulo3.setWidthPercentage(100)
+        tablaTitulo3.setWidths(arregloEnteros([90,10]))
 
+        PdfPTable tablaComposicion3 = new PdfPTable(8)
+        tablaComposicion3.setWidthPercentage(100)
+        tablaComposicion3.setWidths(arregloEnteros([12,36,5,9,9,9,10,10]))
+
+        PdfPTable tablaTotalesEquipos = new PdfPTable(2)
+        tablaTotalesEquipos.setWidthPercentage(100)
+        tablaTotalesEquipos.setWidths(arregloEnteros([70,30]))
+
+
+        addCellTabla(tablaTitulo3, new Paragraph("Equipos ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo3, new Paragraph(" ", times10bold), prmsCellIzquierda)
+
+
+        res.each {k->
+
+         if(k?.grid == 3){
+               addCellTabla(tablaComposicion3, new Paragraph(k?.codigo, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion3, new Paragraph(k?.item, times8normal), prmsCellIzquierda)
+               addCellTabla(tablaComposicion3, new Paragraph(k?.unidad, times8normal), prmsCellHead)
+               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.cantidad, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.punitario, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.transporte, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.costo, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.total, minFractionDigits:
+                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+
+             totalesEquipos = k?.total
+             valorTotalEquipos = (total3 += totalesEquipos)
+
+
+           }
+
+        }
+
+        addCellTabla(tablaTotalesEquipos, new Paragraph("Total Equipos:", times10bold), prmsCellDerecha)
+        addCellTabla(tablaTotalesEquipos, new Paragraph(g.formatNumber(number: valorTotalEquipos, minFractionDigits:
+                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+
+        println("size: " + document.pageSize.getHeight())
+
+        document.add(tablaHeader);
+        document.add(tablaTitulo);
         document.add(tablaComposicion);
+        document.add(tablaTotales)
+        document.add(tablaTitulo2)
+        document.add(tablaComposicion2);
+        document.add(tablaTotalesMano)
+        document.add(tablaTitulo3)
+        document.add(tablaComposicion3);
+        document.add(tablaTotalesEquipos)
         document.close();
         pdfw.close()
         byte[] b = baos.toByteArray();
