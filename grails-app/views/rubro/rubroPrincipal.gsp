@@ -29,22 +29,25 @@
         <i class="icon-file"></i>
         Lista
     </a>
-    <a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">
-        <i class="icon-file"></i>
-        Nuevo
-    </a>
-    <a href="#" class="btn btn-ajax btn-new" id="guardar">
-        <i class="icon-file"></i>
-        Guardar
-    </a>
+    <g:if test="${modifica}">
+        <a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">
+            <i class="icon-file"></i>
+            Nuevo
+        </a>
+        <a href="#" class="btn btn-ajax btn-new" id="guardar">
+            <i class="icon-file"></i>
+            Guardar
+        </a>
+        <a href="#" class="btn btn-ajax btn-new" id="borrar">
+            <i class="icon-file"></i>
+            Borrar
+        </a>
+    </g:if>
     <a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">
         <i class="icon-file"></i>
         Cancelar
     </a>
-    <a href="#" class="btn btn-ajax btn-new" id="borrar">
-        <i class="icon-file"></i>
-        Borrar
-    </a>
+
     <a href="#" class="btn btn-ajax btn-new" id="calcular" title="Calcular precios">
         <i class="icon-table"></i>
         Calcular
@@ -150,8 +153,9 @@
             </div>
 
             <div class="span2" style="color: #01a">
-                Responsable:
-                <input type="text" name="rubro.nombre" class="span12" value="${session.usuario}" readonly="" style="color: #01a">
+                Responsable: <br>
+                Dpto. ${dpto?.descripcion}
+                %{--<input type="text" name="rubro.nombre" class="span12" value="${session.usuario}" readonly="" style="color: #01a">--}%
             </div>
 
             %{--<div class="span2"  >--}%
@@ -236,11 +240,13 @@
             <input type="text" name="item.rendimiento" class="span12" id="item_rendimiento" value="1" style="text-align: right">
         </div>
 
-        <div class="span1" style="border: 0px solid black;height: 45px;padding-top: 22px">
-            <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Agregar" id="btn_agregarItem">
-                <i class="icon-plus"></i>
-            </a>
-        </div>
+        <g:if test="${modifica}">
+            <div class="span1" style="border: 0px solid black;height: 45px;padding-top: 22px">
+                <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Agregar" id="btn_agregarItem">
+                    <i class="icon-plus"></i>
+                </a>
+            </div>
+        </g:if>
 
     </div>
 </div>
@@ -286,8 +292,10 @@
                     </td>
                     <td class="col_total" style="display: none;text-align: right"></td>
                     <td style="width: 40px;text-align: center" class="col_delete">
-                        <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
-                            <i class="icon-trash"></i></a>
+                        <g:if test="${modifica}">
+                            <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
+                                <i class="icon-trash"></i></a>
+                        </g:if>
                     </td>
                 </tr>
             </g:if>
@@ -331,8 +339,10 @@
                     </td>
                     <td class="col_total" style="display: none;text-align: right"></td>
                     <td style="width: 40px;text-align: center" class="col_delete">
-                        <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
-                            <i class="icon-trash"></i></a>
+                        <g:if test="${modifica}">
+                            <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
+                                <i class="icon-trash"></i></a>
+                        </g:if>
                     </td>
                 </tr>
             </g:if>
@@ -376,8 +386,10 @@
                     <td class="col_vacio" style="width: 50px;display: none"></td>
                     <td class="col_total" style="display: none;text-align: right"></td>
                     <td style="width: 40px;text-align: center" class="col_delete">
-                        <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
-                            <i class="icon-trash"></i></a>
+                        <g:if test="${modifica}">
+                            <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar" iden="${rub.id}">
+                                <i class="icon-trash"></i></a>
+                        </g:if>
                     </td>
                 </tr>
             </g:if>

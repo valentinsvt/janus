@@ -68,6 +68,15 @@ class RubroController extends janus.seguridad.Shield {
         def choferes = []
         def aux = Parametros.get(1)
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
+        def dpto = Departamento.findByPermisosIlike("APU")
+//        println "depto "+dpto
+        def dptoUser = Persona.get(session.usuario.id).departamento
+        def modifica = false
+        if(dpto){
+            if(dpto.id.toInteger()==dptoUser.id.toInteger())
+                modifica=true
+        }
+
         grupoTransporte.each {
             if (it.transporte.codigo == "H")
                 choferes = Item.findAllByDepartamento(it)
@@ -85,9 +94,9 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.idRubro)
             def items = Rubro.findAllByRubro(rubro)
             items.sort { it.item.codigo }
-            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2]
+            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica]
         } else {
-            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2]
+            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica]
         }
     }
 
