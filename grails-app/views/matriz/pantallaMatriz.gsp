@@ -91,6 +91,10 @@
                 <i class="icon-refresh"></i>
                 Limpiar selección
             </a>
+            <a href="${g.createLink(controller: 'reportes', action: 'matrizExcel', id: "${obra}")}" class="btn btn-ajax btn-new" id="reset" title="Resetear">
+                <i class="icon-print"></i>
+                a Excel
+            </a>
         </div>
 
         <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px;width: 100%;max-width: 100%;overflow-x: hidden">

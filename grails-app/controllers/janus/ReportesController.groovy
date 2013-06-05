@@ -5186,5 +5186,119 @@ class ReportesController {
 
     }
 
+    def matrizExcel() {
+        def cn = dbConnectionService.getConnection()
+        def cn1 = dbConnectionService.getConnection()
+        def cn2 = dbConnectionService.getConnection()
+        def obra = Obra.get(params.id)
+        def lugar = obra.lugar
+        def fecha = obra.fechaPreciosRubros
+        def itemsChofer = [obra.chofer]
+        def itemsVolquete = [obra.volquete]
+        def indi = obra.totales
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+        def file = File.createTempFile('matrizFP' + obra.codigo, '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD, true);
+        WritableCellFormat times10format = new WritableCellFormat(times10Font);
+        WritableFont times10Normal = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD, false);
+        WritableCellFormat times10formatNormal = new WritableCellFormat(times10Normal);
+
+        WritableFont times08font = new WritableFont(WritableFont.TIMES, 8, WritableFont.NO_BOLD, false);
+        WritableCellFormat times08format = new WritableCellFormat(times08font);
+
+        def fila = 6
+
+        WritableSheet sheet = workbook.createSheet("PAC", 0)
+
+        sheet.setColumnView(0, 8)
+        sheet.setColumnView(1, 12)
+        sheet.setColumnView(2, 50)
+        sheet.setColumnView(3, 8)
+        sheet.setColumnView(4, 12)
+        sheet.setColumnView(5, 15)
+        sheet.setColumnView(6, 15)
+        sheet.setColumnView(7, 15)
+        sheet.setColumnView(8, 15)
+        sheet.setColumnView(9, 15)
+        sheet.setColumnView(10, 15)
+        sheet.setColumnView(11, 15)
+        sheet.setColumnView(12, 15)  // el resto por defecto..
+
+        def label = new Label(0, 1, "Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times10format); sheet.addCell(label);
+        label = new Label(0, 2, "Matriz de la Fórmula Polinómica", times10format); sheet.addCell(label);
+        label = new Label(0, 3, "Obra: ${obra.nombre}", times10format); sheet.addCell(label);
+
+        // crea columnas
+
+        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra.id} order by  1"
+        println "sql desc " + sql
+        def subSql = ""
+        def sqlVl = ""
+        def clmn = 0
+        def col = ""
+        cn.eachRow(sql.toString()) { r ->
+            col = r[1]
+            if (r[2] != "R") {
+                def parts = r[1].split("_")
+                try {
+                    col = Item.get(parts[0].toLong()).nombre
+                } catch (e) {
+                    println "error: " + e
+                    col = parts[0]
+                }
+                col += " " + parts[1]?.replaceAll("T", " Total")?.replaceAll("U", " Unitario")
+            }
+            label = new Label(clmn++, fila, "${col}", times10formatNormal); sheet.addCell(label);
+        }
+        fila++
+        def sqlRb = "SELECT orden, codigo, rubro, unidad, cantidad from mfrb where obra__id = ${obra.id} order by orden"
+        println "sql desc " + sqlRb
+        def number
+        cn.eachRow(sqlRb.toString()) { r ->
+            4.times {
+                label = new Label(it, fila, r[it]?.toString() ?: "", times08format); sheet.addCell(label);
+            }
+            number = new Number(4, fila, r.cantidad?.toFloat() ?: 0, times08format); sheet.addCell(number);
+
+            fila++
+        }
+
+        fila = 7
+        clmn = 5
+
+        sql = "SELECT clmncdgo, clmntipo from mfcl where obra__id = ${obra.id} order by  1"
+        cn.eachRow(sqlRb.toString()) { rb ->
+            cn1.eachRow(sql.toString()) { r ->
+                if (r.clmntipo != "R") {
+                    subSql = "select valor from mfvl where clmncdgo = ${r.clmncdgo} and codigo='${rb.codigo.trim()}' and " +
+                            "obra__id = ${obra.id}"
+                    //println subSql
+                    cn2.eachRow(subSql.toString()) { v ->
+//                        label = new Label(clmn++, fila, v.valor.toString(), times08format); sheet.addCell(label);
+                        number = new Number(clmn++, fila, v.valor?.toFloat() ?: 0.00000, times08format); sheet.addCell(number);
+                    }
+                }
+            }
+            clmn = 5
+            fila++
+        }
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "matriz.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
+        // crea columnas
+
+
+    }
+
 
 }
