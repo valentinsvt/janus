@@ -3679,25 +3679,24 @@ class ReportesController {
 
         def valorTotal = 0
 
-        println(valores)
+//        println "valores " +valores
 
         valores.each {i->
-
-            if(i.valor != 0.0 || i.valor != 0) {
+            if(i){
+                if(i.valor != 0.0 || i.valor != 0) {
 
 //                         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
-                addCellTabla(tablaCoeficiente, new Paragraph(i.numero + " = ", times10normal), prmsHeaderHoja)
-                addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: i.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
-                addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
-                addCellTabla(tablaCoeficiente, new Paragraph(i?.indice?.descripcion, times10normal), prmsHeaderHoja)
+                    addCellTabla(tablaCoeficiente, new Paragraph(i.numero + " = ", times10normal), prmsHeaderHoja)
+                    addCellTabla(tablaCoeficiente, new Paragraph(g.formatNumber(number: i.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
+                    addCellTabla(tablaCoeficiente, new Paragraph("Coeficiente del Componente ", times10normal), prmsHeaderHoja)
+                    addCellTabla(tablaCoeficiente, new Paragraph(i?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
-                valorTotal = i.valor + valorTotal
+                    valorTotal = i.valor + valorTotal
 
+                }
             }
-            else{
 
 
-            }
 
         }
 
