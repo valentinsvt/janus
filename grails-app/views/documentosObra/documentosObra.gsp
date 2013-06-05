@@ -33,7 +33,7 @@
 
 <body>
 
-<div id="tabs" style="width: 800px; height: 900px">
+<div id="tabs" style="width: 800px; height: 850px">
 
 <ul>
 
