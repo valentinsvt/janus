@@ -2209,13 +2209,13 @@ class ReportesController {
 
 
                     addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
-                            2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
                     addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
-                            2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
                     addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
-                            2, maxFractionDigits: 2, format: "###,###0", locale: "ec"), times8normal), prmsCellRight)
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
                     totales =  it.totl
 
