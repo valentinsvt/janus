@@ -47,7 +47,7 @@
 
                 %{--var file = $("#file").val()--}%
 
-                %{--//        //console.log("---->>>"+file)--}%
+                %{--//        ////console.log("---->>>"+file)--}%
 
                 %{--$.ajax({--}%
                 %{--type    : "POST",--}%

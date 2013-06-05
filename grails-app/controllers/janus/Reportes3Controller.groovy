@@ -1,16 +1,8 @@
 package janus
 
-
 import jxl.Workbook
 import jxl.WorkbookSettings
-import jxl.write.Label
-import jxl.write.Number
-import jxl.write.WritableCellFormat
-import jxl.write.WritableFont
-import jxl.write.WritableSheet
-import jxl.write.WritableWorkbook
-import jxl.LabelCell.*
-import jxl.*
+import jxl.write.*
 
 class Reportes3Controller {
 
@@ -61,7 +53,7 @@ class Reportes3Controller {
         [detalle:detalle,precios:precios,subPres:subPres,subPre:SubPresupuesto.get(params.sub).descripcion,obra: obra,indirectos:indirecto*100, valores: valores]
     }
     def imprimirRubroVolObra(){
-        println "----->>>>" + params
+//        println "----->>>>" + params
         def rubro =Item.get(params.id)
         def obra=Obra.get(params.obra)
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
@@ -191,7 +183,7 @@ class Reportes3Controller {
             tablaMano=""
         if(totalMat==0)
             tablaMat=""
-        println "fin reporte rubro"
+//        println "fin reporte rubro"
         [rubro:rubro,fechaPrecios:fecha,tablaTrans:tablaTrans,tablaHer:tablaHer,tablaMano:tablaMano,tablaMat:tablaMat,tablaIndi:tablaIndi,totalRubro:totalRubro,totalIndi:totalIndi]
 
 
@@ -450,7 +442,7 @@ class Reportes3Controller {
     }
 
     def imprimirRubro(){
-        println "imprimir rubro "+params
+//        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
         def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
         def lugar = params.lugar
@@ -581,7 +573,7 @@ class Reportes3Controller {
             tablaMano=""
         if(totalMat==0)
             tablaMat=""
-        println "fin reporte rubro"
+//        println "fin reporte rubro"
         [rubro:rubro,fechaPrecios:fecha,tablaTrans:tablaTrans,tablaHer:tablaHer,tablaMano:tablaMano,tablaMat:tablaMat,tablaIndi:tablaIndi,totalRubro:totalRubro,totalIndi:totalIndi,obra: obra]
 
 

@@ -543,7 +543,7 @@
         var fecha = $("#fechaPreciosRubros").val();
         /*var ciudad = $("#lugar\\.id").val();*/
         var ciudad = $("#id_lgarMO").val();
-//        //console.log(id, fecha, ciudad);
+//        ////console.log(id, fecha, ciudad);
         if (id != "" && fecha != "" && ciudad != "") {
             $.ajax({
                 type    : "POST",
@@ -625,7 +625,7 @@
 
     function sumaDesglose() {
         var smDesglose = 0.0
-        console.log("sumadesglose")
+        //console.log("sumadesglose")
         smDesglose = parseFloat($("#desgloseEquipo").val()) + parseFloat($("#desgloseRepuestos").val()) +
                 parseFloat($("#desgloseCombustible").val()) + parseFloat($("#desgloseMecanico").val()) +
                 parseFloat($("#desgloseSaldo").val())

@@ -102,7 +102,7 @@ class ReajustePreciosController {
         }
 //        println "cs "+cs.numero
         datos.each {
-            println "it " + it
+//            println "it " + it
         }
 
         def cant = []

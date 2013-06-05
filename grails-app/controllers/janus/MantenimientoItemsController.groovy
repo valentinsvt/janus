@@ -390,9 +390,9 @@ class MantenimientoItemsController extends Shield {
 
                 def cod = item.codigo
                 def codItem = cod.split("\\.")[2]
-                println "codigo anterior: " + cod
+//                println "codigo anterior: " + cod
                 cod = "" + item.departamento.subgrupo.codigo.toString().padLeft(3, '0') + "." + item.departamento.codigo.toString().padLeft(3, '0') + "." + codItem.toString().padLeft(3, '0')
-                println "codigo nuevo: " + cod
+//                println "codigo nuevo: " + cod
 
                 if (item.save(flush: true)) {
                     def tipo
@@ -521,7 +521,7 @@ class MantenimientoItemsController extends Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println e
+            println "mantenimiento items controller l 524: "+e
             render "NO"
         }
     }
@@ -614,7 +614,7 @@ class MantenimientoItemsController extends Shield {
         if (departamento.save(flush: true)) {
             render "OK_" + accion + "_" + departamento.id + "_" + departamento.subgrupo.codigo + "." + departamento.codigo + " " + departamento.descripcion
         } else {
-            println departamento.errors
+            println "mantenimiento items controller l 617: "+departamento.errors
             def errores = g.renderErrors(bean: departamento)
             render "NO_" + errores
         }
@@ -627,13 +627,13 @@ class MantenimientoItemsController extends Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println e
+            println "mantenimiento items controller l 630: "+e
             render "NO"
         }
     }
 
     def showIt_ajax() {
-        println "showIt_ajax" + params
+//        println "showIt_ajax" + params
         def itemInstance = Item.get(params.id)
         return [itemInstance: itemInstance]
     }
@@ -650,7 +650,7 @@ class MantenimientoItemsController extends Shield {
     def checkCdIt_ajax() {
         def dep = DepartamentoItem.get(params.dep)
         params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
-        println params
+//        println params
         if (params.id) {
             def item = Item.get(params.id)
             if (params.codigo.toString().trim() == item.codigo.toString().trim()) {
@@ -781,7 +781,7 @@ class MantenimientoItemsController extends Shield {
         if (item.save(flush: true)) {
             render "OK_" + accion + "_" + item.id + "_" + item.codigo + " " + item.nombre
         } else {
-            println item.errors
+            println "mantenimiento items controller l 784: "+item.errors
             def errores = g.renderErrors(bean: item)
             render "NO_" + errores
         }
@@ -794,7 +794,7 @@ class MantenimientoItemsController extends Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println e
+            println "mantenimiento items controller l 797: "+e
             render "NO"
         }
     }
@@ -802,7 +802,7 @@ class MantenimientoItemsController extends Shield {
     def formPrecio_ajax() {
         def item = Item.get(params.item)
         def lugar = null
-        println "formPrecio_ajax" + params
+//        println "formPrecio_ajax" + params
         if (params.lugar != "all") {
             lugar = Lugar.get(params.lugar)
         }
@@ -843,7 +843,7 @@ class MantenimientoItemsController extends Shield {
             if (precioRubrosItemsInstance.save(flush: true)) {
                 render "OK"
             } else {
-                println precioRubrosItemsInstance.errors
+                println "mantenimiento items controller l 846: "+precioRubrosItemsInstance.errors
                 render "NO"
             }
         } else {
@@ -870,7 +870,7 @@ class MantenimientoItemsController extends Shield {
                         if (precioRubrosItemsInstance.save(flush: true)) {
 //                            println "OK"
                         } else {
-                            println precioRubrosItemsInstance.errors
+                            println "mantenimiento items controller l 873: "+precioRubrosItemsInstance.errors
                             error++
                         }
                     }
@@ -900,7 +900,7 @@ class MantenimientoItemsController extends Shield {
                 render "OK"
             }
             catch (DataIntegrityViolationException e) {
-                println e
+                println "mantenimiento items controller l 903: "+e
                 render "No se pudo eliminar el precio."
             }
         }
@@ -925,7 +925,7 @@ class MantenimientoItemsController extends Shield {
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
 //            println rubroPrecioInstance.precioUnitario
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "error " + parts
+                println "mantenimiento items controller l 928: "+"error " + parts
                 if (nos != "") {
                     nos += ","
                 }
@@ -1155,7 +1155,7 @@ class MantenimientoItemsController extends Shield {
         if (lugar.save(flush: true)) {
             render "OK_" + accion + "_" + lugar.id + "_" + (lugar.descripcion + (params.all.toString().toBoolean() ? " (" + lugar.tipo + ")" : "")) + "_c"
         } else {
-            println lugar.errors
+            println "mantenimiento items controller l 1158: "+lugar.errors
             def errores = g.renderErrors(bean: lugar)
             render "NO_" + errores
         }
@@ -1174,7 +1174,7 @@ class MantenimientoItemsController extends Shield {
 //                println "p deleted " + p.id
                 cant++
             } catch (DataIntegrityViolationException e) {
-                println e
+                println "mantenimiento items controller l 1177: "+e
                 println "p not deleted " + p.id
             }
         }
@@ -1183,7 +1183,7 @@ class MantenimientoItemsController extends Shield {
             lugar.delete(flush: true)
             render "OK"
         } catch (DataIntegrityViolationException e) {
-            println e
+            println "mantenimiento items controller l 1186: "+e
             render "NO"
         }
     }

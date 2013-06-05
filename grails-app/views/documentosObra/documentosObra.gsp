@@ -982,7 +982,7 @@
 
         var maxFirmas = (tbody.children("tr").length) + 1;
 
-//        //console.log(maxFirmas)
+//        ////console.log(maxFirmas)
 
         if (maxFirmas > 3) {
 
@@ -1087,26 +1087,26 @@
         $("#reajusteMemo").val(number_format(base, 2, ".", ""))
 
 //
-//        //console.log(porcentajeCal)
-//        //console.log(totalPres)
-//        //console.log(base)
-//        //console.log("entro cal!")
+//        ////console.log(porcentajeCal)
+//        ////console.log(totalPres)
+//        ////console.log(base)
+//        ////console.log("entro cal!")
 
     });
 
     var active2 = $("#tabs").tabs("option", "event")
 
-    //    //console.log(active2)
+    //    ////console.log(active2)
 
     $("#btnImprimir").click(function () {
 
         reajusteMemo = $("#reajusteMemo").val()
 
-//        //console.log("Memo:" + reajusteMemo)
+//        ////console.log("Memo:" + reajusteMemo)
 
         var active = $("#tabs").tabs("option", "active");
 
-//        //console.log(active)
+//        ////console.log(active)
 
         if (active == 0) {
 
@@ -1117,11 +1117,11 @@
 
                 firmasId[i] = $(this).data("id")
 
-//          //console.log(firmasId[i])
+//          ////console.log(firmasId[i])
 
-//          //console.log(  $(this).data("id") )
-//        //console.log(  $(this).data("nombre") )
-//        //console.log(  $(this).data("puesto") )
+//          ////console.log(  $(this).data("id") )
+//        ////console.log(  $(this).data("nombre") )
+//        ////console.log(  $(this).data("puesto") )
 
             })
 
@@ -1273,7 +1273,7 @@
     $("#piePaginaSel").change(function () {
 
 
-//        //console.log("entro")
+//        ////console.log("entro")
 
         loadNota();
 
@@ -1296,7 +1296,7 @@
 
         var nombreFirmas = $("#setFirmasMemo").val()
 
-//        //console.log(nombreFirmas)
+//        ////console.log(nombreFirmas)
 
         var tbody = $("#bodyFirmasMemo")
 
@@ -1317,7 +1317,7 @@
 
         var nombreFirmas = $("#setFirmasFor").val()
 
-//        //console.log(nombreFirmas)
+//        ////console.log(nombreFirmas)
 
         var tbody = $("#bodyFirmasFor")
 
@@ -1394,18 +1394,18 @@
     $("#notaAdicional").click(function () {
 
 
-//        //console.log("click")
+//        ////console.log("click")
 
         if ($("#notaAdicional").attr("checked") == "checked") {
 
-//            //console.log("checked")
+//            ////console.log("checked")
             $("#adicional").attr("disabled", false)
 
         }
 
         else {
 
-//            //console.log(" no checked")
+//            ////console.log(" no checked")
             $("#adicional").attr("disabled", true)
 //            $("#adicional").val("");
         }
@@ -1455,7 +1455,7 @@
                 } else {
 
                      var url = "${g.createLink(controller: 'reportes',action: 'documentosObraTasaExcel',id: obra?.id)}?tasa=" + tasaCambio
-//                             //console.log(url)
+//                             ////console.log(url)
                     location.href = url
 
                 }
@@ -1503,14 +1503,14 @@
                 reajusteMeses = $("#mesesReajuste").val();
 
 //
-//                        //console.log(proyeccion)
-//                        //console.log(reajusteMeses)
+//                        ////console.log(proyeccion)
+//                        ////console.log(reajusteMeses)
 
 //
                 if (proyeccion == true && reajusteMeses == "") {
 
 
-//                            //console.log("entro!!")
+//                            ////console.log("entro!!")
 
                     $("#mesesCeroDialog").dialog("open")
 

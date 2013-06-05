@@ -159,7 +159,7 @@
             $(function () {
 //        $("#todos").click(function () {
 //            var fecha2 = new Date().toString("dd-MM-yyyy");
-////            //console.log(fecha2);
+////            ////console.log(fecha2);
 //            if ($("#todos").attr("checked") == "checked") {
 ////
 //                $("#fecha").attr("value", fecha2);
@@ -196,7 +196,7 @@
 
                     var fcha = $("#fecha").val();
 
-//                    //console.log("fecha" + fcha)
+//                    ////console.log("fecha" + fcha)
 
                     $(".editable").each(function () {
                         var id = $(this).attr("id");
@@ -204,8 +204,8 @@
                         var data1 = $(this).data("original");
 
                         var chk = $(this).siblings(".chk").children("input").is(":checked");
-//                        //console.log(chk);
-//                        //console.log(data1)
+//                        ////console.log(chk);
+//                        ////console.log(data1)
 
                         if (chk || (parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
                             if (data != "") {

@@ -20,7 +20,7 @@ class PdfController {
             else{
 //                println "sin plugin --> params url "+params.url
                 def url = baseUri + params.url
-                println "url pdf "+url
+//                println "url pdf "+url
                 b = pdfService.buildPdf(url)
             }
             response.setContentType("application/pdf")
@@ -32,7 +32,7 @@ class PdfController {
             println "there was a problem with PDF generation 2 ${e}"
             //if(params.template) render(template:params.template)
             if(params.pdfController){
-                println "no"
+//                println "no"
                 redirect(controller:params.pdfController, action:params.pdfAction, params:params)
             }else{
                 redirect(action: "index",controller: "reportes",params: [msn:"Hubo un error en la genración del reporte. Si este error vuelve a ocurrir comuniquelo al administrador del sistema."])

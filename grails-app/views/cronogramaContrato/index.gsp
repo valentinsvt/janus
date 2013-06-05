@@ -481,7 +481,7 @@
             //            var plot, redraw = false;
 
             function log(msg) {
-                //console.log(msg);
+                ////console.log(msg);
             }
 
             function updateTotales() {
@@ -547,7 +547,7 @@
                     $(".total.mes" + i + ".prctParcial").text(number_format(prc, 2, ".", ",")).data("val", prc);
 
                     var prcAcum = totAcum * 100 / parseFloat("${sum}");
-//                    //console.log($(".total.mes" + i + ".totalAcumulado"), totAcum, $(".total.mes" + i + ".prctAcumulado"), prcAcum);
+//                    ////console.log($(".total.mes" + i + ".totalAcumulado"), totAcum, $(".total.mes" + i + ".prctAcumulado"), prcAcum);
                     $(".total.mes" + i + ".totalAcumulado").text(number_format(totAcum, 2, ".", ",")).data("val", totAcum);
                     $(".total.mes" + i + ".prctAcumulado").text(number_format(prcAcum, 2, ".", ",")).data("val", prcAcum);
                 }
@@ -619,7 +619,7 @@
                     }
 
                 } catch (e) {
-                    //console.log(e);
+                    ////console.log(e);
                     return false;
                 }
                 return true;
@@ -636,7 +636,7 @@
                  46         -> delete
                  9          -> tab
                  */
-//        //console.log(ev.keyCode);
+//        ////console.log(ev.keyCode);
                 return ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9);
             }
 
@@ -708,7 +708,7 @@
                                     $("#tf_cant").val(val).data("val", val);
                                 }
                             } catch (e) {
-                                //console.log(e);
+                                ////console.log(e);
                             }
                         }
                     }
@@ -737,7 +737,7 @@
                                     $("#tf_prct").val(prct).data("val", prct);
                                 }
                             } catch (e) {
-                                //console.log(e);
+                                ////console.log(e);
                             }
                         }
                     }
@@ -767,7 +767,7 @@
                                     $("#tf_precio").val(dol).data("val", dol);
                                 }
                             } catch (e) {
-                                //console.log(e);
+                                ////console.log(e);
                             }
                         }
                     }
@@ -783,7 +783,7 @@
                         $tr = $tr.prev().prev();
                     }
 
-//                    //console.log($tr);
+//                    ////console.log($tr);
 
                     var mes = $celda.data("mes");
                     var tipo = $celda.data("tipo");
@@ -793,8 +793,8 @@
                     $("#periodosDesde").val(mes);
                     $("#periodosHasta").val("${meses}");
 
-//                    //console.log($celda, mes, tipo, valor, rubro);
-//                    //console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
+//                    ////console.log($celda, mes, tipo, valor, rubro);
+//                    ////console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
 
                     $("#rd_cant").attr("checked", true);
 
@@ -869,13 +869,13 @@
 //                                cant /= meses;
 
                                 var prcnd = Math.round(prct);
-//                                //console.log(prct, prcnd);
+//                                ////console.log(prct, prcnd);
 
 //                                var resto = 100;
 
                                 for (i = periodoIni; i <= periodoFin; i++) {
                                     var df, pf, cf;
-//                                    //console.log(i, prcnd, resto);
+//                                    ////console.log(i, prcnd, resto);
                                     if (i < periodoFin) {
                                         pf = prcnd;
                                         resto -= pf;
@@ -883,7 +883,7 @@
                                         pf = resto;
                                         resto -= pf;
                                     }
-//                                    //console.log(i, prcnd, pf, resto);
+//                                    ////console.log(i, prcnd, pf, resto);
                                     df = subtotal * (pf / 100);
                                     cf = cant * (pf / 100);
 
@@ -913,7 +913,7 @@
                                         updateTotales();
                                         $("#modal-cronograma").modal("hide");
                                     } else {
-                                        //console.log("ERROR");
+                                        ////console.log("ERROR");
                                     }
                                 }
                             });
@@ -1022,7 +1022,7 @@
                                             obra : ${obra.id}
                                         },
                                         success : function (msg) {
-//                                            //console.log("Data Saved: " + msg);
+//                                            ////console.log("Data Saved: " + msg);
                                             $(".mes").text("").data("val", 0);
                                             updateTotales();
                                         }
@@ -1092,7 +1092,7 @@
                     d += "&obra=${obra.id}&contrato=${contrato.id}";
 
                     var url = "${createLink(action: 'graficos2')}?" + d;
-//                    //console.log(url);
+//                    ////console.log(url);
                     location.href = url;
 
                     return false;

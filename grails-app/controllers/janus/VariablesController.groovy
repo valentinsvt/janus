@@ -36,8 +36,8 @@ class VariablesController {
     }
 
     def saveVar_ajax() {
-        println "save vars aqui"
-        println params
+//        println "save vars aqui"
+//        println params
 
         def obra = Obra.get(params.id)
         obra.properties = params

@@ -66,7 +66,7 @@ class GarantiaController extends janus.seguridad.Shield {
     }
 
     def addGarantiaContrato() {
-        println params
+//        println params
         def garantia, datos = true
 
         switch (params.tipo.toString().trim().toLowerCase()) {
@@ -127,7 +127,7 @@ class GarantiaController extends janus.seguridad.Shield {
             lista.pop()
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Aseguradora
             session.funciones = funciones

@@ -175,7 +175,7 @@
 
                     }
                 });
-//        //console.log("return "+band)
+//        ////console.log("return "+band)
                 return band
             }
             function cargarDatosAsinc(inicio, interval, limite) {
@@ -207,7 +207,7 @@
 
                     }
                 });
-//        //console.log("return "+band)
+//        ////console.log("return "+band)
                 return band
             }
             function copiaTabla() {
@@ -258,7 +258,7 @@
                     tr.css({"height" : $(this).innerHeight()})
                     tr.attr("color", $(this).attr("color"))
                     $(this).css({"height" : $(this).innerHeight()})
-//            //console.log($(this),$(this).innerHeight())
+//            ////console.log($(this),$(this).innerHeight())
                     c0.removeClass("col_0").addClass("estaticas")
                     c1.removeClass("col_1").addClass("estaticas")
 
@@ -287,7 +287,7 @@
                 var fin = false
                 var ultimo = 1
 //        var interval=setInterval(function(){
-////            //console.log("interval" + inicio)
+////            ////console.log("interval" + inicio)
 //            cargarDatos(inicio,interval,20)
 //            inicio++
 //
@@ -305,7 +305,7 @@
                 });
                 var ctrl = 0
                 $("body").keydown(function (ev) {
-//            //console.log(ev.keyCode)
+//            ////console.log(ev.keyCode)
                     if (ev.keyCode == 17)
                         ctrl = 600
                     if (ev.keyCode == 16)
@@ -326,17 +326,17 @@
                             }
 
                         } else {
-//                    //console.log("clear interval!")
+//                    ////console.log("clear interval!")
                             clearInterval(interval)
                         }
 
-//                //console.log("scroll!!")
+//                ////console.log("scroll!!")
                     }
 
                 }, 2000);
 
 //        $(document).scroll(function(){
-////            //console.log($("#bandera:onScreen"))
+////            ////console.log($("#bandera:onScreen"))
 //
 //
 //        })
@@ -348,7 +348,7 @@
                         $("." + clase).addClass("selectedColumna")
                     }
 
-//            //console.log("click th"+clase)
+//            ////console.log("click th"+clase)
 
                 });
 
@@ -395,7 +395,7 @@
                         if (primero) {
                             var leftPos = $('.scroll-pane').scrollLeft() + 500;
                             var pos = primero.position().left - 500
-//                //console.log($('.scroll-pane').scrollLeft(),leftPos,primero.position().left,primero,primero.offsetParent())
+//                ////console.log($('.scroll-pane').scrollLeft(),leftPos,primero.position().left,primero,primero.offsetParent())
                             $(".scroll-pane").animate({scrollLeft : leftPos + pos - 500}, 800);
                         }
                     }

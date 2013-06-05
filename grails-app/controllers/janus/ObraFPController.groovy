@@ -72,9 +72,9 @@ class ObraFPController {
         def res
 
         res = pone_ids()
-        println "equipo: ${id_equipo}, repuestos: ${id_repuestos}, combustible: ${id_combustible}, " +
-                "saldo: ${id_saldo}, mecanico: ${id_mecanico}, herramientas: ${id_herramientas} " +
-                "mano de obra: ${id_manoDeObra}"
+//        println "equipo: ${id_equipo}, repuestos: ${id_repuestos}, combustible: ${id_combustible}, " +
+//                "saldo: ${id_saldo}, mecanico: ${id_mecanico}, herramientas: ${id_herramientas} " +
+//                "mano de obra: ${id_manoDeObra}"
 
         if (res) {
             render "Error: " + res
@@ -110,7 +110,7 @@ class ObraFPController {
     }
 
     def matrizFP() {
-        println "matriz fp " + params
+//        println "matriz fp " + params
         /* --------------------- parámetros que se requieren para correr el proceso  --------------------- */
         def obra__id = params.obra.toInteger()         // obra de pruebas dos rubros: 550, varios 921. Pruebas 886
         def sbpr = params.sub.toInteger()              // todos los subpresupuestos
@@ -122,7 +122,7 @@ class ObraFPController {
             obra.desgloseTransporte = "N"
         obra.save(flush: true)
         /* ----------------------------------- FIN de parámetros  ---------------------------------------- */
-        println "con transporte:" + conTransporte
+//        println "con transporte:" + conTransporte
         pone_ids()
         //def obra = Obra.get(obra__id)
 
@@ -204,36 +204,36 @@ class ObraFPController {
 
         /* ---- ejecuta Rubros(subPrsp) y Descomposicion(subPrsp) ----------------------------- */
         rubros(obra__id, sbpr)
-        println "completa rubros"
+//        println "completa rubros"
         descomposicion(obra__id, sbpr)
-        println "completa descomposicion"
+//        println "completa descomposicion"
         des_Materiales(obra__id, sbpr, conTransporte)
-        println "completa des_Materiales, conTranp: $conTransporte"
+//        println "completa des_Materiales, conTranp: $conTransporte"
         if (hayEquipos) {
             if (conTransporte) acTransporte(obra__id, sbpr)
             acEquipos(obra__id, sbpr)
         }
-        println "completa hayEquipos"
+//        println "completa hayEquipos"
 
         acManoDeObra(obra__id)                      /* cambio obra__id */
-        println "completa acManoDeObra"
+//        println "completa acManoDeObra"
         acTotal(obra__id)                           /* cambio obra__id */
-        println "completa acTotal"
+//        println "completa acTotal"
 
         if (hayEquipos) desgloseTrnp(obra__id, conTransporte)      /* cambio obra__id */
-        println "completa desgloseTrnp"
+//        println "completa desgloseTrnp"
 
         completaTotalS2(obra__id, hayEquipos)
-        println "completa completaTotalS2"
+//        println "completa completaTotalS2"
         acTotalS2(obra__id)                         /* cambio obra__id */
-        println "completa acTotalS2"
+//        println "completa acTotalS2"
 
 
         tarifaHoraria(obra__id)
         cuadrillaTipo(obra__id)            /* cambio obra__id */
 
         formulaPolinomica(obra__id)                 /* cambio obra__id */
-        println "fin matriz"
+//        println "fin matriz"
         render "ok"
     }
 
@@ -475,7 +475,7 @@ class ObraFPController {
             tx_sql += "vlobcntd > 0 and undd.undd__id = item.undd__id and sbpr__id = ${sbpr} "
             tx_sql += "group by itemcdgo, itemnmbr, unddcdgo"
         }
-        println "rubros: " + tx_sql
+//        println "rubros: " + tx_sql
         def contador = 1
         cn.eachRow(tx_sql.toString()) { row ->
             insertaRubro("obra__id, codigo, rubro, unidad, cantidad, orden",
@@ -892,13 +892,13 @@ class ObraFPController {
             }
             cn.close()
 
-            println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}"
+//            println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}"
 
             fraccion = pu_vlqt / (pu_chfr + pu_vlqt)
         } else {
             fraccion = 1.0
         }
-        println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}, fraccion: ${fraccion}"
+//        println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}, fraccion: ${fraccion}"
 
         def totalTrnp = (totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1"))
         def transporte = (totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1")) * fraccion
@@ -1049,7 +1049,7 @@ class ObraFPController {
 
         tx_sql = "select sum(valor) suma from mfcl c, mfvl v "
         tx_sql += "where c.clmncdgo = v.clmncdgo and c.obra__id = v.obra__id and c.obra__id = ${id} and codigo = 'sS2' and clmntipo = 'O'"
-        println "suma: " + tx_sql
+//        println "suma: " + tx_sql
         cn.eachRow(tx_sql.toString()) { row ->
             total = row.suma
         }
@@ -1107,7 +1107,7 @@ class ObraFPController {
         def suma = 0.0
 
         granTotal = totalSx(id, 'TOTAL_T', 'sS2')
-        println ".....1 el gran total es: $granTotal"
+//        println ".....1 el gran total es: $granTotal"
         tx_sql = "select clmncdgo, clmndscr from mfcl where obra__id = ${id} and clmntipo in ('M', 'D')"
         suma = 0
         cn.eachRow(tx_sql.toString()) { row ->

@@ -35,12 +35,12 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             if (itemFormula.save(flush: true)) {
                 saved += itemFormula.itemId + ":" + itemFormula.id + ","
             } else {
-                println itemFormula.errors
+                println "formula polinomica controller l 38: "+"Error aqui: "+itemFormula.errors
             }
         }
         formula.valor = formula.valor + total
         if (!formula.save(flush: true)) {
-            println "ERROR:: " + formula.errors
+            println "formula polinomica controller l 43 "+"ERROR:: " + formula.errors
         }
         if (saved == "") {
             render "NO"
@@ -72,7 +72,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             itemFormulaPolinomica.delete(flush: true)
             render "OK_" + formula.valor
         } else {
-            println "error: " + formula.errors
+            println "formula polinomica controller l 75 "+"error: " + formula.errors
             render "NO"
         }
     }
@@ -95,7 +95,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
     def coeficientes() {
 
-        println "coef " + params
+//        println "coef " + params
 
         if (!params.tipo) {
             params.tipo = 'p'
@@ -116,22 +116,22 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             redirect(controller: "obra", action: "registroObra", params: ["obra": params.id])
             return
         } else {
-            println "VERIFICA"
+//            println "VERIFICA"
             def sqlValidacion = "select count(*) cuantos from vlobitem where obra__id = ${params.id} and voitcoef is not null"
-            println sqlValidacion
+//            println sqlValidacion
             def validacion = cn.rows(sqlValidacion.toString())[0].cuantos
-            println "validacion: " + validacion
+//            println "validacion: " + validacion
             if (validacion == 0) {
                 def sqlSubPresupuestos = "select distinct(sbpr__id) id from vlob where obra__id = ${params.id}"
-                println sqlSubPresupuestos
+//                println sqlSubPresupuestos
                 cn.eachRow(sqlSubPresupuestos.toString()) { row ->
-                    println ">>" + row
+//                    println ">>" + row
                     def cn2 = dbConnectionService.getConnection()
                     def idSp = row.id
                     def sqlLlenaDatos = "select * from sp_fpoli(${params.id}, ${idSp})"
-                    println sqlLlenaDatos
+//                    println sqlLlenaDatos
                     cn2.eachRow(sqlLlenaDatos.toString()) { row2 ->
-                        println "++" + row2
+//                        println "++" + row2
                     }
                 }
             }
@@ -140,7 +140,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
             def obra = Obra.get(params.id)
             def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
-            println "fp: " + fp
+//            println "fp: " + fp
             def total = 0
 
             fp.each { f ->
@@ -151,7 +151,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                                     id: "fp_" + f.id,
                                     numero: f.numero,
                                     nombre: f.indice?.descripcion,
-                                    valor: f.valor,
+                                    valor: g.formatNumber(number:f.valor, maxFractionDigits: 3, minFractionDigits: 3),
+//                                    valor: f.valor,
                                     rel: "fp"
                             ]
                     ]
@@ -167,7 +168,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                                             numero: ch.item.codigo,
                                             nombre: ch.item.nombre,
                                             item: ch.itemId,
-                                            valor: ch.valor,
+                                            valor: g.formatNumber(number:ch.valor, maxFractionDigits: 5, minFractionDigits: 5),
+//                                            valor: ch.valor,
                                             rel: "it"
                                     ]
                             ]
@@ -193,7 +195,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     "      t.item__id FROM itfp t\n" +
                     "      INNER JOIN fpob f ON t.fpob__id = f.fpob__id AND f.obra__id = ${obra.id});"
 
-            println "SQL items: " + sql
+//            println "SQL items: " + sql
             def rows = cn.rows(sql.toString())
 
             [obra: obra, json: json, tipo: params.tipo, rows: rows, total: total]
@@ -201,7 +203,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     }
 
     def insertarVolumenesItem() {
-        println "insert vlobitem " + params
+//        println "insert vlobitem " + params
         def obra = Obra.get(params.obra)
         def cn = dbConnectionService.getConnection()
         def cn2 = dbConnectionService.getConnection()
@@ -214,16 +216,16 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                 "d.sbgr__id = s.sbgr__id and o.clmndscr = i.itemcmpo || '_T' and " +
                 "v.obra__id = ${params.obra} and o.obra__id=${params.obra} " +
                 "order by s.grpo__id"
-        println "insertarVolumenesItem sql: "+sql
+//        println "insertarVolumenesItem sql: " + sql
         cn.eachRow(sql.toString()) { r ->
-            println "r-> "+r
+//            println "r-> " + r
             def codigo = ""
             if (r['grpo__id'] == 1 || r['grpo__id'] == 3)
                 codigo = "sS3"
             else
                 codigo = "sS5"
             def select = "select valor from mfvl where clmncdgo=${r['clmncdgo']} and codigo='${codigo}' and obra__id =${params.obra} "
-            println "cn2: " + select
+//            println "cn2: " + select
             def valor = 0.000000
             cn2.eachRow(select.toString()) { r2 ->
 //                println "r2 "+r2
@@ -231,7 +233,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                 if (!valor)
                     valor = 0
                 def sqlUpdate = "update vlobitem set voitcoef= ${valor} where voit__id = ${r['voit__id']}"
-                println "actualiza vlobitem con: " + sqlUpdate
+//                println "actualiza vlobitem con: " + sqlUpdate
                 updates.execute(sqlUpdate.toString())
             }
         }
@@ -253,7 +255,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                         def select = "select clmncdgo from mfcl where clmndscr = (select item__id||'_T' from item where itemcdgo = 'MO') and obra__id = ${params.obra} "
                         def columna
                         def valor = 0
-                        println "sql it 0 mfcl " + select
+//                        println "sql it 0 mfcl " + select
                         cn.eachRow(select.toString()) { r ->
                             columna = r[0]
                         }
@@ -276,7 +278,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     fpx.valor = 0
                 }
                 if (!fpx.save(flush: true))
-                    println "erroe save fpx " + fpx.errors
+//                    println "erroe save fpx " + fpx.errors
 
                 if (it < 10) {
                     def cuadrilla = new FormulaPolinomica()
@@ -286,8 +288,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                         cuadrilla.numero = "c" + (it + 1)
                     cuadrilla.valor = 0
                     cuadrilla.indice = indiPeon
-                    if (!cuadrilla.save(flush: true))
-                        println "error save cuadrilla " + cuadrilla.errors
+                    if (!cuadrilla.save(flush: true)) {
+//                        println "error save cuadrilla " + cuadrilla.errors
+                    }
                 }
             }
         }
@@ -402,15 +405,15 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         def ok = true
 
         fp.each { f ->
-            println f.indice.descripcion + '    ' + f.valor
+//            println f.indice.descripcion + '    ' + f.valor
             def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
             children.each { ch ->
-                println "\t" + ch.item.nombre + '     ' + ch.valor
+//                println "\t" + ch.item.nombre + '     ' + ch.valor
                 try {
                     ch.delete(flush: true)
                 } catch (e) {
                     ok = false
-                    println "error al borrar hijo ${ch.id}"
+                    println "formula polinomica controller l 416 "+"error al borrar hijo ${ch.id}"
                     println e.printStackTrace()
                 }
             }
@@ -418,7 +421,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                 f.delete(flush: true)
             } catch (e) {
                 ok = false
-                println "error al borrar ${f.id}"
+                println "formula polinomica controller l 424 "+"error al borrar ${f.id}"
                 println e.printStackTrace()
             }
         }

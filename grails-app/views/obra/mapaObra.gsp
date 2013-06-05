@@ -187,7 +187,7 @@
 
         if(latitudObra == 0 || longitudObra == 0){
 
-//            //console.log("entro")
+//            ////console.log("entro")
 
             posicion = new google.maps.LatLng(-0.21, -78.52)
 

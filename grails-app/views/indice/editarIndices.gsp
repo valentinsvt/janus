@@ -98,7 +98,7 @@
 
                 var prin = $("#periodoIndices").val();
 
-//                console.log("antes de ajax .. periodo de indices:" + prin);
+//                //console.log("antes de ajax .. periodo de indices:" + prin);
 
                 $.ajax({
                     type    : "POST",
@@ -130,7 +130,7 @@
                         var indc = $(this).data("indc");
                         var valor = $(this).data("valor");
                         var data1 = $(this).data("original");
-                        //console.log(chk);
+                        ////console.log(chk);
 
                         if ((parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
                             if (data != "") {
@@ -139,7 +139,7 @@
                             var val = valor ? valor : data1;
                             data += "item=" + id + "_" + prin + "_" + indc + "_" + valor;
                         }
-                        console.log("item: " + data)
+                        //console.log("item: " + data)
                     });
 
 

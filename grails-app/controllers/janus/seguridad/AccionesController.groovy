@@ -38,7 +38,7 @@ class AccionesController extends janus.seguridad.Shield  {
         } else {
             titulos[0] = ['Permisos']+['Acción']+['Proceso']+['Controlador']
         }
-        println "ajaxPermisos SQL: ${tx}"
+//        println "ajaxPermisos SQL: ${tx}"
         cn.eachRow(tx) { d ->
             resultado.add([d.accn__id] + [d.accnnmbr] + [d.accndscr] +[d.ctrlnmbr] + [d.mdlo__id])
         }
@@ -69,13 +69,13 @@ class AccionesController extends janus.seguridad.Shield  {
     }
 
     def moverAccn = {
-       println "moverAccn---------parametros: ${params}"
+//       println "moverAccn---------parametros: ${params}"
         def mdlo = params.mdlo
         def ids  = params.ids
         if(params.ids?.size() > 0) ids = params.ids; else ids = "null"
         def cn = dbConnectionService.getConnection()
         def tx = "update accn set mdlo__id = " + mdlo + " where accn__id in (" + ids +")"
-        println "modificado.... ${tx}"
+//        println "modificado.... ${tx}"
         try {
             cn.execute(tx)
         }
@@ -87,7 +87,7 @@ class AccionesController extends janus.seguridad.Shield  {
     }
 
     def sacarAccn = {
-        println "sacarAccn---------parametros: ${params}"
+//        println "sacarAccn---------parametros: ${params}"
         def ids  = params.ids
         if(params.ids?.size() > 0) ids = params.ids; else ids = "null"
         def cn = dbConnectionService.getConnection()
@@ -106,7 +106,7 @@ class AccionesController extends janus.seguridad.Shield  {
     }
 
     def cambiaAccn = {
-        println "cambia---------parametros: ${params}"
+//        println "cambia---------parametros: ${params}"
         def ids  = params.ids
         def tipo = params.tipo
         def tp = 0
@@ -115,14 +115,14 @@ class AccionesController extends janus.seguridad.Shield  {
         def cn = dbConnectionService.getConnection()
         def modulo = Modulo.findByDescripcionLike("no%asignado")
         def tx = "update accn set mdlo__id = " + modulo.id + ", tpac__id = " + tp + " where accn__id in (" + ids +")"
-        println "modificado.... ${tx}"
+//        println "modificado.... ${tx}"
         try {
             cn.execute(tx)
         }
         catch(Exception ex){
             println "Error al insertar:" + ex.getMessage()
         }
-        println "-----------modificado"
+//        println "-----------modificado"
         cn.close()
         redirect(action: "ajaxAcciones", params: params)
     }
@@ -139,7 +139,7 @@ class AccionesController extends janus.seguridad.Shield  {
         cn.eachRow("select tpac__id from tpac where upper(tpacdscr) like '%MENU%'"){
             tp = it.tpac__id
         }
-        println tp
+//        println tp
 
         [modulos:modulos, controladores:controladores, tipo_tpac:tp, titulo:'Men&uacute;s por M&oacute;dulo']
     }
@@ -167,7 +167,7 @@ class AccionesController extends janus.seguridad.Shield  {
 
 
     def guardarPermisos = {
-        println "guardar permisos " + params
+//        println "guardar permisos " + params
         def perfil = Prfl.get(params.perfil)
         def permisos = Prms.findAllByPerfil(perfil).accion
         //println "permisos "+permisos+" "+params.chk.clazz
@@ -175,18 +175,18 @@ class AccionesController extends janus.seguridad.Shield  {
             params.chk.each {
 
                 def accn = Accn.get(it)
-                println "each accn "+it + " "+permisos.contains(accn)
+//                println "each accn "+it + " "+permisos.contains(accn)
                 if(!(permisos.contains(accn))){
-                    println "paso el if"
+//                    println "paso el if"
                     def perm = new Prms([accion:accn,perfil:perfil])
                     perm.save(flush:true)
                     println "errors "+perm.errors
                 }
             }
             permisos.each {
-                println "quitar "+it+" "+params.chk.toList()
+//                println "quitar "+it+" "+params.chk.toList()
                 if(!(params.chk.toList().contains(it.id.toString()))) {
-                    println "entro if del"
+//                    println "entro if del"
                     def perm = Prms.findByAccionAndPerfil(it,perfil).delete(flush:true)
                 }
             }
@@ -210,21 +210,21 @@ class AccionesController extends janus.seguridad.Shield  {
     }
 
     def cambiarTipo = {
-        println "cambiar tipo "+params
+//        println "cambiar tipo "+params
         def accn = Accn.get(params.accn)
         accn.tipo= Tpac.get(params.val)
         render "ok"
     }
 
     def cambiarModulo = {
-        println "cambiar tipo "+params
+//        println "cambiar tipo "+params
         def accn = Accn.get(params.accn)
         accn.modulo=Modulo.get(params.val)
         render "ok"
     }
 
     def cambiarModuloControlador = {
-        println "cmc "+params
+//        println "cmc "+params
         def ctrl = Ctrl.findByCtrlNombre(params.ctrl)
         def acs = Accn.findAllByControl(ctrl)
         def modulo = Modulo.get(params.val)
@@ -236,7 +236,7 @@ class AccionesController extends janus.seguridad.Shield  {
     }
 
     def cargarControladores = {
-        println "cargar controladores"
+//        println "cargar controladores"
         def i = 0
         grailsApplication.controllerClasses.each {
             //def  lista = Ctrl.list()
@@ -251,8 +251,8 @@ class AccionesController extends janus.seguridad.Shield  {
     }
 
     def cargarAcciones = {
-
-        println "cargar acciones"
+//
+//        println "cargar acciones"
         def ac = []
         def accs = [:]
         def i=0
@@ -269,7 +269,7 @@ class AccionesController extends janus.seguridad.Shield  {
                                 def accn = Accn.findByAccnNombreAndControl(s[2],Ctrl.findByCtrlNombre(ct.getName()))
 
                                 if(accn == null){
-                                    println "if 2";
+//                                    println "if 2";
                                     accn = new Accn()
                                     accn.accnNombre = s[2]
                                     accn.control = Ctrl.findByCtrlNombre(ct.getName())

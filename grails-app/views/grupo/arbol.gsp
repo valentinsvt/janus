@@ -322,7 +322,7 @@
                 break;
         }
 
-//                //console.log(nodeNivel);
+//                ////console.log(nodeNivel);
 
         switch (nodeNivel) {
             case "root":
@@ -583,8 +583,8 @@
 
                             },
                             error   : function (data) {
-                                //////console.log("error");
-                                //////console.log(data);
+                                ////////console.log("error");
+                                ////////console.log(data);
                             }
                         }
                     },

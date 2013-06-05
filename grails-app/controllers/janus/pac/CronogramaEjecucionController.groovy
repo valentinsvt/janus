@@ -843,7 +843,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         if (!contrato) {
             flash.message = "No se encontró el contrato"
             flash.clase = "alert-error"
-            println flash.message
+//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
             return
         }
@@ -851,7 +851,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         if (!obra) {
             flash.message = "No se encontró la obra"
             flash.clase = "alert-error"
-            println flash.message
+//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
 //            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
@@ -859,7 +859,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         if (!obra.fechaInicio) {
             flash.message = "La obra no tiene fecha de inicio. Por favor solucione el problema. " + obra.id
             flash.clase = "alert-error"
-            println flash.message
+//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
 //            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
@@ -899,7 +899,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                     }
 
                     if (periodo.size() == 0) {
-                        println "crea el periodo"
+//                        println "crea el periodo"
                         periodo = new PeriodoEjecucion([
                                 obra: obra,
                                 numero: crono.periodo,
@@ -912,7 +912,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             continua = false
                         }
                     } else if (periodo.size() == 1) {
-                        println "existe un periodo"
+//                        println "existe un periodo"
                         periodo = periodo[0]
                     } else {
                         println "WTF existe mas de un periodo"
@@ -930,7 +930,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                             println "Error al guardar el crono ejecucion del crono " + crono.id
                             println cronoEjecucion.errors
                         } else {
-                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
+//                            println "ok " + crono.id + "  =>  " + cronoEjecucion.id
                         }
                     }//if continua
                 } //cronogramaContrato.each
@@ -953,7 +953,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         if (!contrato) {
             flash.message = "No se encontró el contrato"
             flash.clase = "alert-error"
-            println flash.message
+//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
             return
         }
@@ -961,7 +961,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         if (!obra) {
             flash.message = "No se encontró la obra"
             flash.clase = "alert-error"
-            println flash.message
+//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
 //            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
@@ -969,7 +969,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         if (!obra.fechaInicio) {
             flash.message = "La obra no tiene fecha de inicio. Por favor solucione el problema. " + obra.id
             flash.clase = "alert-error"
-            println flash.message
+//            println flash.message
             redirect(action: "errores", params: [contrato: params.id])
 //            redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
@@ -1009,7 +1009,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         println "Error al guardar el crono ejecucion del crono " + crono.id
                         println cronoEjecucion.errors
                     } else {
-                        println "ok " + crono.id + "  =>  " + cronoEjecucion.id
+//                        println "ok " + crono.id + "  =>  " + cronoEjecucion.id
                     }
                 } else {
 //                    println "Ya hay"

@@ -778,8 +778,8 @@
 
         var idObra = ${obra?.id}
 
-//                        //console.log("dep-->>" + idDep)
-//                        //console.log("obra-->>" + idObra)
+//                        ////console.log("dep-->>" + idDep)
+//                        ////console.log("obra-->>" + idObra)
 
                 $.ajax({
                     type    : "POST",
@@ -859,7 +859,7 @@
             var sp = $("#mtariz_sub").val();
 //            var tr = $("#si_trans").attr("checked");
             var tr = $("#si_trans").is(':checked');
-            //console.log(sp,tr)
+            ////console.log(sp,tr)
 //                    if (sp != "-1")
 
             $("#dlgLoad").dialog("open");
@@ -1101,15 +1101,15 @@
                         var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();//+"&lang=en_US";
                         var url = $("#frmSave-var").attr("action");
 
-//                                //console.log(url);
-//                                //console.log(data);
+//                                ////console.log(url);
+//                                ////console.log(data);
 
                         $.ajax({
                             type    : "POST",
                             url     : url,
                             data    : data,
                             success : function (msg) {
-//                                //console.log("Data Saved: " + msg);
+//                                ////console.log("Data Saved: " + msg);
                                 $("#modal-var").modal("hide");
                             }
                         });
@@ -1145,7 +1145,7 @@
 
                     %{--var url = "${createLink(action: 'saveCopia')}?"+data;--}%
 
-                    %{--//console.log(url);--}%
+                    %{--////console.log(url);--}%
 
                     //location.href = url;
 
@@ -1265,7 +1265,7 @@
                             url     : "${g.createLink(action: 'regitrarObra')}",
                             data    : "id=${obra?.id}",
                             success : function (msg) {
-//                                //console.log(msg)
+//                                ////console.log(msg)
                                 if (msg != "ok") {
                                     $.box({
                                         imageClass : "box_info",
@@ -1518,9 +1518,9 @@
 
             var ordenar = $("#ordenar").val();
 
-//                   //console.log("buscar" + buscarPor)
-//                    //console.log("criterio" + criterio)
-//                    //console.log("ordenar" + ordenar)
+//                   ////console.log("buscar" + buscarPor)
+//                    ////console.log("criterio" + criterio)
+//                    ////console.log("ordenar" + ordenar)
 
             $.ajax({
                 type    : "POST",

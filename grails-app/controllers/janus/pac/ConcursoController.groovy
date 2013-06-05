@@ -70,7 +70,7 @@ class ConcursoController extends janus.seguridad.Shield {
         concurso.objeto = pac.descripcion
 
         if (concurso.save(flush: true)) {
-            println "saved ok"
+//            println "saved ok"
             def codigo = generaCodigo(concurso)
             concurso.codigo = codigo
             if (!concurso.save(flush: true)) {
@@ -128,7 +128,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Pac
             session.funciones = funciones
@@ -138,7 +138,7 @@ class ConcursoController extends janus.seguridad.Shield {
     }
 
     def form_ajax() {
-        println "aqui "
+//        println "aqui "
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"]]
         def concursoInstance = new Concurso(params)
         if (params.id) {
@@ -271,7 +271,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
     def save() {
-        println "save concurso "+params
+//        println "save concurso "+params
         def concursoInstance
         if (params.id) {
             concursoInstance = Concurso.get(params.id)
@@ -361,7 +361,7 @@ class ConcursoController extends janus.seguridad.Shield {
     } //delete
 
     def registrar() {
-        println "registrar " + params
+//        println "registrar " + params
         def con = Concurso.get(params.id)
         con.estado = params.estado
         if (!con.save(flush: true))

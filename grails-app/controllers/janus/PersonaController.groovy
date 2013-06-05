@@ -131,7 +131,7 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def savePass() {
-        println params
+//        println params
         def user = Persona.get(params.id)
         if (params.password.trim() != "") {
             user.password = params.password.trim().encodeAsMD5()
@@ -172,11 +172,11 @@ class PersonaController extends janus.seguridad.Shield {
 
     def cambiarEstado () {
 
-         println(params.id)
+//         println(params.id)
 
             def persona = Persona.get(params.id)
 
-          println(persona)
+//          println(persona)
 
             persona.activo = params.activo.toInteger()
 
@@ -273,7 +273,7 @@ class PersonaController extends janus.seguridad.Shield {
 
     def save() {
 
-        println(params.password)
+//        println(params.password)
 
         if (params.fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
@@ -350,9 +350,9 @@ class PersonaController extends janus.seguridad.Shield {
             }
         }
 
-        println("por agregar" + perfilesAdd)
-        println("nuevos" + perfilesNue)
-        println("actuales"+ perfilesAct2)
+//        println("por agregar" + perfilesAdd)
+//        println("nuevos" + perfilesNue)
+//        println("actuales"+ perfilesAct2)
 
         perfilesNue.each { i->
 
@@ -374,7 +374,7 @@ class PersonaController extends janus.seguridad.Shield {
 
                     if (!perfilesAct2.contains(i)) {
 
-                        println("entro2")
+//                        println("entro2")
 
                         def sesn = new Sesn()
                         sesn.perfil = Prfl.get(i)
@@ -432,7 +432,7 @@ class PersonaController extends janus.seguridad.Shield {
 
         def personaInstance
 
-        println(params.id)
+//        println(params.id)
 
         if (params.id) {
             personaInstance = Persona.get(params.id)
@@ -477,8 +477,8 @@ class PersonaController extends janus.seguridad.Shield {
         def perfilesAct = Sesn.findAllByUsuario(personaInstance).id*.toString()
         //perfiles q llegaron como parametro
         def perfilesNue = params.perfiles
-
-        println("-->>>" + params.perfiles)
+//
+//        println("-->>>" + params.perfiles)
         def perfilesAdd = [], perfilesDel = []
 
         perfilesAct.each { per ->
@@ -499,8 +499,8 @@ class PersonaController extends janus.seguridad.Shield {
 //            println("sesiones:" + sesiones.id)
 
             if (!sesiones){
-
-                println("no")
+//
+//                println("no")
 
                 def sesn = new Sesn()
                 sesn.perfil = Prfl.get(it)

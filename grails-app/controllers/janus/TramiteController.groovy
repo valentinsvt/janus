@@ -1,9 +1,7 @@
 package janus
 
-import org.springframework.dao.DataIntegrityViolationException
-
 import groovy.sql.Sql
-
+import org.springframework.dao.DataIntegrityViolationException
 
 class TramiteController extends janus.seguridad.Shield {
 
@@ -67,7 +65,7 @@ class TramiteController extends janus.seguridad.Shield {
             command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
             proc = command.execute()
             proc.waitFor()
-            println "fin comandos"
+//            println "fin comandos"
             render "ok"
         }catch(e){
             render "Error. El archivo DBF no se encuentra disponible, comunique este error al administrador del sistema."

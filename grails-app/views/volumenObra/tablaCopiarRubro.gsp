@@ -167,7 +167,7 @@
 
                 var trId = $(this).attr("id")
 
-                console.log("ID:" + trId)
+                //console.log("ID:" + trId)
 
 
                 datos ="rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
@@ -197,13 +197,13 @@
 
         tbody.children("tr").each(function () {
 
-//            console.log($(this).children("td").children().get(1).is(":checked"))
+//            //console.log($(this).children("td").children().get(1).is(":checked"))
 
             if(($(this).children("td").children().get(1).checked) == true){
 
                 var trId = $(this).attr("id")
 
-//                console.log("ids: " + trId)
+//                //console.log("ids: " + trId)
 
                 datos ="&rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
 
@@ -216,11 +216,11 @@
                 });
 
 
-//                console.log("id:" + trId)
+//                //console.log("id:" + trId)
             } else {
 
 
-                console.log("entro else")
+                //console.log("entro else")
 
 
             }

@@ -35,7 +35,7 @@ class PrflController extends janus.seguridad.Shield  {
     def ajaxPermisos = {
         def prfl = params.prfl.toInteger()
         def tpac = params.tpac
-        println "---------parametros: ${params}"
+//        println "---------parametros: ${params}"
         def resultado = []
         def i = 0
         def ids = params.ids
@@ -50,7 +50,7 @@ class PrflController extends janus.seguridad.Shield  {
                 "from (accn left join prms on prms.accn__id = accn.accn__id and prfl__id = ${prfl}), ctrl " +
                 "where mdlo__id in (" + ids + ") and " +
                 "accn.ctrl__id = ctrl.ctrl__id and tpac__id = " + tpac + " order by ctrlnmbr, accndscr"
-        println "ajaxPermisos SQL: ${tx}"
+//        println "ajaxPermisos SQL: ${tx}"
         cn.eachRow(tx) { d ->
           resultado[i] = [d.accn__id] + [d.accndscr] + [d.accnnmbr] + [d.ctrlnmbr] + [d.prms]
           i++
@@ -67,7 +67,7 @@ class PrflController extends janus.seguridad.Shield  {
     }
 
     def editMdlo = {
-      println "------editMdlo: " + params
+//      println "------editMdlo: " + params
       def mdloInstance = Modulo.get(params.id)
       //println mdloInstance
       render(view: 'creaMdlo', model: ['mdloInstance': mdloInstance])
@@ -180,7 +180,7 @@ class PrflController extends janus.seguridad.Shield  {
     * **/
 
     def grabar = {
-      println "parametros grabar: ${params}"
+//      println "parametros grabar: ${params}"
       def ids = params.ids
       def modulo = params.menu
       def prfl = params.prfl
@@ -198,8 +198,8 @@ class PrflController extends janus.seguridad.Shield  {
               "prms.accn__id not in (select accn__id " +
               "from accn where mdlo__id = " + modulo + " and  " +
               "accn__id in (${ids})) and prfl__id = ${prfl}"
-
-      println "grabar SQL: ${tx}"
+//
+//      println "grabar SQL: ${tx}"
       cn.eachRow(tx) { d ->
         Prms.get(d.prms__id).delete()
       }
@@ -227,7 +227,7 @@ class PrflController extends janus.seguridad.Shield  {
         try {
           cn.execute(tx1)
           insertaKerveros(prfl.toInteger(), session.usuario, session.perfil)
-          println "insertando.... ${tx1}"
+//          println "insertando.... ${tx1}"
         }
         catch (Exception ex) {
           println ex.getMessage()

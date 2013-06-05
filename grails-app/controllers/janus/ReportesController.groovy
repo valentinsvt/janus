@@ -15,9 +15,6 @@ import jxl.write.*
 
 import java.awt.*
 
-
-import jxl.write.NumberFormat;
-
 //import java.awt.Label
 
 
@@ -38,7 +35,7 @@ class ReportesController {
 
 
     def rubro = {
-        println "rep!!!  rubro " + params
+//        println "rep!!!  rubro " + params
 //        def rubro
 //        def grupos = []
 //        def volquetes = []
@@ -65,8 +62,8 @@ class ReportesController {
     def imprimeMatriz() {
 
         def obra = Obra.get(params.id)
-
-        println "imprime matriz"
+//
+//        println "imprime matriz"
         def cn = buscadorService.dbConnectionService.getConnection()
         def cn2 = buscadorService.dbConnectionService.getConnection()
         def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id=${params.id} order by 1"
@@ -128,7 +125,7 @@ class ReportesController {
         Font small = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
 
         def titulo = obra.desgloseTransporte == "S" ? '(Con desglose de Transporte)' : '(Sin desglose de Transporte)'
-        println titulo
+//        println titulo
 
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
@@ -422,7 +419,7 @@ class ReportesController {
     }
 
     def pac() {
-        println "params REPORTE " + params
+//        println "params REPORTE " + params
         def pac
         def dep
         def anio
@@ -448,7 +445,7 @@ class ReportesController {
     }
 
     def pacExcel() {
-        println "params REPORTE " + params
+//        println "params REPORTE " + params
         def pac
         def dep
         def anio
@@ -5165,8 +5162,8 @@ class ReportesController {
         PdfPTable tablaTotalesMano = new PdfPTable(2)
         tablaTotalesMano.setWidthPercentage(100)
         tablaTotalesMano.setWidths(arregloEnteros([70,30]))
-
-        println("h:" + tablaTitulo2.getHeaderHeight())
+//
+//        println("h:" + tablaTitulo2.getHeaderHeight())
 
         addCellTabla(tablaTitulo2, new Paragraph("Mano de obra ", times10bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo2, new Paragraph(" ", times10bold), prmsCellIzquierda)
@@ -5252,8 +5249,8 @@ class ReportesController {
         addCellTabla(tablaTotalesEquipos, new Paragraph("Total Equipos:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalesEquipos, new Paragraph(g.formatNumber(number: valorTotalEquipos, minFractionDigits:
                 3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
-
-        println("size: " + document.pageSize.getHeight())
+//
+//        println("size: " + document.pageSize.getHeight())
 
         document.add(tablaHeader);
         document.add(tablaTitulo);
@@ -5326,7 +5323,7 @@ class ReportesController {
         // crea columnas
 
         def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id = ${obra.id} order by  1"
-        println "sql desc " + sql
+//        println "sql desc " + sql
         def subSql = ""
         def sqlVl = ""
         def clmn = 0
@@ -5347,7 +5344,7 @@ class ReportesController {
         }
         fila++
         def sqlRb = "SELECT orden, codigo, rubro, unidad, cantidad from mfrb where obra__id = ${obra.id} order by orden"
-        println "sql desc " + sqlRb
+//        println "sql desc " + sqlRb
         def number
         cn.eachRow(sqlRb.toString()) { r ->
             4.times {

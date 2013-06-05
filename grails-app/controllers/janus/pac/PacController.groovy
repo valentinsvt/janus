@@ -28,7 +28,7 @@ class PacController extends janus.seguridad.Shield{
             lista.pop()
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = CodigoComprasPublicas
             session.funciones = funciones
@@ -127,7 +127,7 @@ class PacController extends janus.seguridad.Shield{
     }
 
     def eliminarPac(){
-        println "eliminar pac "+params
+//        println "eliminar pac "+params
         def pac = Pac.get(params.id)
         pac.delete(flush: true)
         render "ok"

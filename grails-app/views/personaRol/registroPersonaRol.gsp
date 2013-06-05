@@ -230,7 +230,7 @@
     function loadPersonas() {
                 var idDep = $("#departamento").val();
 
-//                        //console.log("dep-->>" + idDep)
+//                        ////console.log("dep-->>" + idDep)
                 $.ajax({
                     type    : "POST",
                     url     : "${g.createLink(controller: 'personaRol', action:'getPersonas')}",

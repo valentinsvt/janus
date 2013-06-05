@@ -266,7 +266,7 @@
 
                 var nodeHasChildren = node.children("ul").size() > 0;
 
-//                //console.log(nodeRel, dsp);
+//                ////console.log(nodeRel, dsp);
 
                 if ((nodeRel != "node2" && dsp > 0) || isNaN(dsp)) {
                     var cant = node.children("ul").children("li").size();
@@ -329,13 +329,13 @@
 
                                 if (msg == "") {
                                     btnSave.replaceWith(spinner);
-//                                    //console.log(data);
+//                                    ////console.log(data);
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'addParametro')}",
                                         data    : data,
                                         success : function (msg) {
-                                            //                                            //console.log(msg);
+                                            //                                            ////console.log(msg);
                                             var parts = msg.split("_");
                                             if (parts[0] == "OK") {
                                                 $tree.jstree("create_node", node, ord, {
@@ -405,7 +405,7 @@
                         }
                     };
                 }
-//                //console.log(menuItems);
+//                ////console.log(menuItems);
                 return menuItems;
             }
 

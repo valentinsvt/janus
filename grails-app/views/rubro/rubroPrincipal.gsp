@@ -664,7 +664,7 @@
     }
 
     function totalEquipos(){
-//        //console.log("tot equipo")
+//        ////console.log("tot equipo")
         var trE=$("<tr id='total_equipo' class='total'>")
         var equipos = $("#tabla_equipo").children()
         var totalE= 0
@@ -677,7 +677,7 @@
         }
 
         equipos.each(function(){
-//            //console.log("each ",$(this))
+//            ////console.log("each ",$(this))
             totalE+=parseFloat($(this).find(".col_total").html())
         })
 
@@ -690,11 +690,11 @@
 
 
     function calculaHerramientas(){
-//        //console.log("calc herramientas")
+//        ////console.log("calc herramientas")
         var h2 = $(".i_3490")
         var h3 = $(".cod_103_001_001")
         var h5 = $(".cod_103_001_002")
-//        console.log($(".cod_103_001_001"))
+//        //console.log($(".cod_103_001_001"))
         var h
         if(h2.html())
             h=h2
@@ -714,16 +714,16 @@
 //                datos += $(this).attr("id") + "#"
 //            });
 //            var datos = "fecha=" + $("#fecha_precios").val() + "&ciudad=" + $("#ciudad").val() + "&ids="+ str_replace("i_","",h.attr("id"))
-//            //console.log("si h",h,h.attr("id"))
-//            //console.log("si h",str_replace("i_","",h.attr("id")) )
+//            ////console.log("si h",h,h.attr("id"))
+//            ////console.log("si h",str_replace("i_","",h.attr("id")) )
             $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPreciosItem')}",
                 data     : datos,
                 success  : function (msg) {
                     var precios = msg.split("&")
-//                     //console.log(msg)
+//                     ////console.log(msg)
                     for(i=0;i<precios.length;i++){
                         var parts = precios[i].split(";")
-//                        //console.log(parts,parts.length)
+//                        ////console.log(parts,parts.length)
                         if(parts.length>1){
                             precio = parseFloat(parts[1].trim())
 
@@ -739,13 +739,13 @@
                     var tarifa = padre.find(".col_tarifa")
                     rend.html(number_format(1, 5, ".", ""))
                     cant.html(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
-//                    //console.log("cantidad",$("#total_mano").find(".valor_total").html())
-//                    //console.log(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
+//                    ////console.log("cantidad",$("#total_mano").find(".valor_total").html())
+//                    ////console.log(number_format($("#total_mano").find(".valor_total").html(), 5, ".", ""))
                     tarifa.html(number_format(precio, 5, ".", ""))
                     hora.html(number_format(parseFloat(cant.html())*parseFloat(tarifa.html()), 5, ".", ""))
                     total.html(number_format(parseFloat(hora.html())*parseFloat(rend.html()), 5, ".", ""))
                     totalEquipos()
-//                    //console.log("total herramienta",parseFloat(hora.html())*parseFloat(rend.html()),total)
+//                    ////console.log("total herramienta",parseFloat(hora.html())*parseFloat(rend.html()),total)
 
                 }
             });
@@ -788,13 +788,13 @@
         td=$("<td>")
         trM.append(td)
         materiales.each(function(){
-//            //console.log($(this),$(this).find(".col_total").html())
+//            ////console.log($(this),$(this).find(".col_total").html())
             var val =$(this).find(".col_total").html()
             if(val=="")
                 val=0
             if(isNaN(val))
                 val=0
-//            //console.log(val)
+//            ////console.log(val)
             totalM+=parseFloat(val)
         })
         manos.each(function(){
@@ -808,7 +808,7 @@
         trMa.append(td)
         $("#tabla_material").append(trM)
         $("#tabla_mano").append(trMa)
-//        //console.log(totalMa)
+//        ////console.log(totalMa)
         $("#totMat_h").val(totalMa)
         calculaHerramientas()
 //        window.setTimeout(vacio,2000)
@@ -924,7 +924,7 @@
                         if(msg=="ok"){
                             location.href="${createLink(action: 'rubroPrincipal')}"
                         }else{
-//                            //console.log(msg)
+//                            ////console.log(msg)
                             $.box({
                                 imageClass : "box_info",
                                 text       : "Error: el rubro seleccionado no se pudo eliminar. Esta referenciado en las siguientes obras: <br>"+msg,
@@ -1072,7 +1072,7 @@
 
                         for(i=0;i<precios.length;i++){
                             var parts = precios[i].split(";")
-//                        //console.log(parts,parts.length)
+//                        ////console.log(parts,parts.length)
                             if(parts.length>1)
                                 $("#costo_volqueta").val(parts[1].trim())
 
@@ -1137,7 +1137,7 @@
 //            $("#item_cantidad").val(1.22852)
             $("#item_cantidad").val(cant.toString().trim())
 
-//            //console.log(item)
+//            ////console.log(item)
             if(rendimiento)
                 $("#item_rendimiento").val(rendimiento.toString().trim())
             $("#item_id").val(item)
@@ -1259,13 +1259,13 @@
                         $.each(items, function () {
                             datos += $(this).attr("id") + "#"
                         });
-//                        console.log(datos)
+//                        //console.log(datos)
                         $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'getPrecios')}",
                             data     : datos,
                             success  : function (msg) {
                                 var precios = []
                                 precios=msg.split("&")
-//                                console.log(precios)
+//                                //console.log(precios)
                                 if(precios.length>1)
                                     for(i=0;i<precios.length;i++){
 
@@ -1273,18 +1273,18 @@
                                         var celda =$("#i_"+parts[0])
                                         celda.html(number_format(parts[1], 5, ".", ""))
                                         var padre = celda.parent()
-//                                    console.log(parts,padre)
+//                                    //console.log(parts,padre)
                                         var celdaRend = padre.find(".col_rend")
                                         var celdaTotal = padre.find(".col_total")
                                         var celdaCant = padre.find(".cant")
                                         var celdaHora =  padre.find(".col_hora")
-//                                    //console.log(celdaHora)
-//                                    //console.log(,,"rend "+celdaRend.html(),"total "+ celdaTotal.html(),"multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
-//                                    //console.log("----")
-//                                    //console.log("celda "+parseFloat(celda.html()))
-//                                    //console.log("cant sin mun "+celdaCant.html() )
-//                                    //console.log("cant "+parseFloat(celdaCant.html()) )
-//                                    //console.log(" multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
+//                                    ////console.log(celdaHora)
+//                                    ////console.log(,,"rend "+celdaRend.html(),"total "+ celdaTotal.html(),"multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
+//                                    ////console.log("----")
+//                                    ////console.log("celda "+parseFloat(celda.html()))
+//                                    ////console.log("cant sin mun "+celdaCant.html() )
+//                                    ////console.log("cant "+parseFloat(celdaCant.html()) )
+//                                    ////console.log(" multi "+parseFloat(celda.html())*parseFloat(celdaCant.html()))
                                         var rend = 1
                                         if(celdaHora.hasClass("col_hora")){
                                             celdaHora.html(number_format(parseFloat(celda.html())*parseFloat(celdaCant.html()), 5, ".", ""))
@@ -1383,13 +1383,13 @@
             $("#buscarDialog").bind("click", enviarItem)
         });
         $("#cdgo_buscar").blur(function(){
-//            //console.log($("#item_id").val()=="")
+//            ////console.log($("#item_id").val()=="")
             if($("#item_id").val()=="" && $("#cdgo_buscar").val()!=""){
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'buscarRubroCodigo')}",
                     data     : "codigo=" + $("#cdgo_buscar").val(),
                     success  : function (msg) {
                         if (msg !="-1") {
-//                            //console.log("msg "+msg)
+//                            ////console.log("msg "+msg)
                             var parts = msg.split("&&")
                             $("#item_tipoLista").val(parts[1])
                             $("#item_id").val(parts[0])
@@ -1415,7 +1415,7 @@
                 $("#item_desc").val("")
                 $("#item_unidad").val("")
             }else{
-//                //console.log("no reset")
+//                ////console.log("no reset")
             }
 
 
@@ -1453,7 +1453,7 @@
             var desc = $("#input_descripcion").val()
             var subGr = $("#selSubgrupo").val()
             var msg =""
-//            //console.log(desc,desc.trim(),desc.trim().length)
+//            ////console.log(desc,desc.trim(),desc.trim().length)
 
             if(cod.trim().length>20 || cod.trim().length<1){
                 msg="<br>Error: La propiedad código debe tener entre 1 y 20 caracteres."
@@ -1462,7 +1462,7 @@
             $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro', action:'repetido')}",
                 data     : "codigo=" + cod + "&id=" + $("#rubro__id").val(),
                 success  : function (retorna) {
-                    console.log("retorna: " + retorna)
+                    //console.log("retorna: " + retorna)
                     if (retorna == "repetido") {
                         msg += "el código " + cod.toUpperCase() + " está repetido"
 
@@ -1480,7 +1480,7 @@
                                 msg+="<br>Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
                         }
 
-                        console.log("al final de la validacion: " + msg)
+                        //console.log("al final de la validacion: " + msg)
 
                         $.box({
                             imageClass : "box_info",
@@ -1557,7 +1557,7 @@
 
                             if (parts[0] == "1") {
                                 $("#tabla_material").children().find(".cdgo").each(function () {
-//                                    //console.log($(this))
+//                                    ////console.log($(this))
                                     if ($(this).html() == $("#cdgo_buscar").val()) {
                                         var tdCant = $(this).parent().find(".cant")
                                         var tdRend = $(this).parent().find(".rend")
@@ -1593,7 +1593,7 @@
                                 if (parts[0] == "2") {
 
                                     $("#tabla_mano").children().find(".cdgo").each(function () {
-//                                        //console.log("mano de obra ",parts)
+//                                        ////console.log("mano de obra ",parts)
                                         if ($(this).html() == $("#cdgo_buscar").val()) {
                                             var tdCant = $(this).parent().find(".cant")
                                             var tdRend = $(this).parent().find(".rend")

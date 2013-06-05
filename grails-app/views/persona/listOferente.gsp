@@ -369,11 +369,11 @@
 
                             var id = ${sesion2?.usuario?.id}
 
-//                            //console.log("-->>" + id)
+//                            ////console.log("-->>" + id)
 
                             var estado = ${sesion2?.usuario?.activo}
 
-//                            //console.log("estado:" + estado)
+//                            ////console.log("estado:" + estado)
 
 
                             if (estado == 0) {

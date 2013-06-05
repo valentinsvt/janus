@@ -258,7 +258,7 @@ class TramitesController {
 
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Contrato
             session.funciones = funciones
@@ -313,7 +313,7 @@ class TramitesController {
         }
 
         if (params.planilla) {
-            println "grabando planilla " + params.planilla
+//            println "grabando planilla " + params.planilla
             def planilla = janus.ejecucion.Planilla.get(params.planilla)
             planilla.fechaOrdenPago = tramite.fecha
             planilla.memoOrdenPago = tramite.memo
@@ -411,7 +411,7 @@ class TramitesController {
         tramites = tramites.sort {
             it.fecha.plus(it.tipoTramite.tiempo)
         }
-        println tramites
+//        println tramites
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
         return [tramites: tramites, usu: usu, campos: campos, finalizados: params.finalizados]
     }

@@ -55,8 +55,8 @@ class SubPresupuestoController extends janus.seguridad.Shield {
         }
 
 
-
-        println "save sp: " + params
+//
+//        println "save sp: " + params
         def subPresupuestoInstance
         if (params.id) {
             subPresupuestoInstance = SubPresupuesto.get(params.id)
@@ -131,9 +131,9 @@ class SubPresupuestoController extends janus.seguridad.Shield {
 
     def delete() {
         def subPresupuestoInstance = SubPresupuesto.get(params.id)
-
-        println("paramsdelete:" + params)
-        println("sub" + subPresupuestoInstance)
+//
+//        println("paramsdelete:" + params)
+//        println("sub" + subPresupuestoInstance)
 
         if (!subPresupuestoInstance) {
             flash.clase = "alert-error"

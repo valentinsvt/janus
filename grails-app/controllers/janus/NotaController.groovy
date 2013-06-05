@@ -29,7 +29,7 @@ class NotaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-         println "params "+params
+//         println "params "+params
         if (params.piePaginaSel) {
 
             params.id = params.piePaginaSel

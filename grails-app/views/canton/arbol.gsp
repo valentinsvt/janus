@@ -378,7 +378,7 @@
                                 id: id
                             },
                             "success": function(msg) {
-                                ////console.log(msg)
+                                //////console.log(msg)
 
                                 if (msg == "OK") {
                                     $("#infoCont").html("");
@@ -427,8 +427,8 @@
 
                     },
                     error : function (data) {
-                        //////console.log("error");
-                        //////console.log(data);
+                        ////////console.log("error");
+                        ////////console.log(data);
                     }
                 }
             },
@@ -480,8 +480,8 @@
         })//js tree
                 .bind("select_node.jstree", function (event, data) {
                     // `data.rslt.obj` is the jquery extended node that was clicked
-//                        ////console.log(data.rslt.obj);
-//                        ////console.log(data.rslt.obj.attr("id"));
+//                        //////console.log(data.rslt.obj);
+//                        //////console.log(data.rslt.obj.attr("id"));
                     var obj = data.rslt.obj;
                     $("#tree").jstree("toggle_node", "#" + obj.attr("id"));
                     var title = obj.children("a").text();
@@ -521,7 +521,7 @@
     } //init tree
 
     function reloadTree() {
-       ////console.log("reloadTree")
+       //////console.log("reloadTree")
     }
 
 

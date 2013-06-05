@@ -120,7 +120,7 @@
         callback: function (key, options) {
 
             var m = "clicked: " + $(this).attr("id");
-//            window.console && console.log(m) || alert(m)
+//            window.console && //console.log(m) || alert(m)
 
             if (key == "edit") {
                 $(this).dblclick()
@@ -310,7 +310,7 @@
     %{--}else{--}%
     %{--$(this).addClass("active")--}%
     %{--//--}%
-    %{--//            console.log("--->>>" + $(this).addClass("active"))--}%
+    %{--//            //console.log("--->>>" + $(this).addClass("active"))--}%
 
 
     %{--var datos = "obra=${obra.id}"+"&ord=" + 1--}%
@@ -349,7 +349,7 @@
                 $("#div_cmb_sub").html(msg)
             }
         });
-//        console.log($(this).attr("id"))
+//        //console.log($(this).attr("id"))
     });
     $(".borrarItem").click(function () {
 

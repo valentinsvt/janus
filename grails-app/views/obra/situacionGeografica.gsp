@@ -56,15 +56,15 @@
         $("#cantNombre").val($(this).attr("cantN"));
 
 
-//        //console.log("comunidadId:" + comunidad);
+//        ////console.log("comunidadId:" + comunidad);
 
         var parroquia = $(this).attr("parroquia");
 
-//        //console.log ("parroquia:" + parroquia);
+//        ////console.log ("parroquia:" + parroquia);
 
         var canton = $(this).attr("canton");
 
-//        //console.log("canton:" + canton);
+//        ////console.log("canton:" + canton);
 
 
         $("#busqueda").dialog("close");

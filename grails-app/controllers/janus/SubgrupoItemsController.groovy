@@ -18,7 +18,7 @@ class SubgrupoItemsController extends janus.seguridad.Shield {
                 gr.add(Grupo.get(it.id))
             }
         }
-        println gr
+//        println gr
         def lista = SubgrupoItems.findAllByGrupoInList(gr)
 
         params.max = Math.min(params.max ? params.int('max') : 10, 100)

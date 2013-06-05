@@ -120,7 +120,7 @@
             $(function () {
 //        $("#todos").click(function () {
 //            var fecha2 = new Date().toString("dd-MM-yyyy");
-////            //console.log(fecha2);
+////            ////console.log(fecha2);
 //            if ($("#todos").attr("checked") == "checked") {
 ////
 //                $("#fecha").attr("value", fecha2);

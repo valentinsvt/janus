@@ -64,7 +64,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     def addItem(){
-        println "addItem " + params
+//        println "addItem " + params
         def obra = Obra.get(params.obra)
 //        def rubro2 = Item.get(params.rubro)
 //        def rubro = Item.get(params.id)
@@ -165,8 +165,8 @@ class VolumenObraController extends janus.seguridad.Shield{
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
         def grupo = Grupo.findAllByDireccion(direccion)
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
-
-        println "params --->>>> "+params
+//
+//        println "params --->>>> "+params
         def obra = Obra.get(params.obra)
         def detalle
         def valores
@@ -296,7 +296,7 @@ class VolumenObraController extends janus.seguridad.Shield{
             lista.pop()
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Item
             session.funciones = funciones

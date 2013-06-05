@@ -29,7 +29,7 @@ class DepartamentoTramiteController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-        println params
+//        println params
         def departamentoTramiteInstance
         if (params.id) {
             departamentoTramiteInstance = DepartamentoTramite.get(params.id)
@@ -45,7 +45,7 @@ class DepartamentoTramiteController extends janus.seguridad.Shield {
             departamentoTramiteInstance = new DepartamentoTramite(params)
         } //es create
         if (!departamentoTramiteInstance.save(flush: true)) {
-            println departamentoTramiteInstance.errors
+            println "departamentoTramite controller, l.48: "+departamentoTramiteInstance.errors
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Departamento Tramite " + (departamentoTramiteInstance.id ? departamentoTramiteInstance.id : "") + "</h4>"
 

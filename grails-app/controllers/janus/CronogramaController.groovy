@@ -12,8 +12,8 @@ class CronogramaController extends janus.seguridad.Shield {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def saveCrono_ajax() {
-        println ">>>>>>>>>>>>>>>>>"
-        println params
+//        println ">>>>>>>>>>>>>>>>>"
+//        println params
         def saved = ""
         def ok = ""
         if (params.crono.class == java.lang.String) {
@@ -38,7 +38,7 @@ class CronogramaController extends janus.seguridad.Shield {
             } else if (crono.size() == 0) {
                 crono = new Cronograma()
             } else {
-                println "WTF MAS DE UN CRONOGRAMA volumen obra " + vol.id + " periodo " + per + " hay " + crono.size()
+                println "cronogramaController, l 41: WTF MAS DE UN CRONOGRAMA volumen obra " + vol.id + " periodo " + per + " hay " + crono.size()
                 cont = false
             }
 
@@ -53,7 +53,7 @@ class CronogramaController extends janus.seguridad.Shield {
                     ok = "OK"
                 } else {
                     ok = "NO"
-                    println crono.errors
+                    println "cronograma controller, l.56: " + crono.errors
                 }
             }
         }
@@ -61,8 +61,8 @@ class CronogramaController extends janus.seguridad.Shield {
     }
 
     def deleteRubro_ajax() {
-
-        println params
+//
+//        println params
         def ok = 0, no = 0
         def vol = VolumenesObra.get(params.id)
         Cronograma.findAllByVolumenObra(vol).each { cr ->

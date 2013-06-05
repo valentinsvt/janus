@@ -31,7 +31,7 @@ class PeriodosInecController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-        println "save3 "+params
+//        println "save3 "+params
         def periodosInecInstance
         if (params.fechaInicio){
             params.fechaInicio=new Date().parse("dd-MM-yyyy",params.fechaInicio)

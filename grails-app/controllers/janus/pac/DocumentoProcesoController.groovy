@@ -76,8 +76,8 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
 
         /***************** file upload ************************************************/
         //handle uploaded file
-        println "upload....."
-        println params
+//        println "upload....."
+//        println params
         def folder = "archivos"
         def path = servletContext.getRealPath("/") + folder   //web-app/archivos
         new File(path).mkdirs()

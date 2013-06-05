@@ -366,7 +366,7 @@
         $.ajax({type : "POST", url : "${g.createLink(controller: 'concurso',action:'datosObra')}",
             data     : "obra="+$("#obra_id").val(),
             success  : function (msg) {
-//                //console.log(msg)
+//                ////console.log(msg)
                 var parts=msg.split("&&")
                 $("#presupuestoReferencial").val(number_format(parts[3], 2, ".", " "))
                 $("#obra_busqueda").val(parts[0]).attr("title",parts[1])

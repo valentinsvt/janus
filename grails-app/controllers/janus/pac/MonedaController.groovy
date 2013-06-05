@@ -29,7 +29,7 @@ class MonedaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-        println params
+//        println params
         def monedaInstance
         if (params.id) {
             monedaInstance = Moneda.get(params.id)

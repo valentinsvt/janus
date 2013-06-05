@@ -34,7 +34,7 @@ class MatrizController extends janus.seguridad.Shield {
                     col = Item.get(parts[0].toLong()).nombre
 
                 }catch (e){
-                    println "error: " + e
+                    println "matriz controller l 37: "+"error: " + e
                     col = parts[0]
                 }
 
@@ -96,7 +96,7 @@ class MatrizController extends janus.seguridad.Shield {
     }
 
     def insertarVolumenesItem(){
-        println "insert vlobitem "+params
+//        println "insert vlobitem "+params
         def obra = Obra.get(params.obra)
         def cn = dbConnectionService.getConnection()
         def cn2 = dbConnectionService.getConnection()
@@ -161,7 +161,7 @@ class MatrizController extends janus.seguridad.Shield {
                     fpx.valor=0
                 }
                 if (!fpx.save(flush: true))
-                    println "error save fpx "+fpx.errors
+                    println "matriz controller l 164: "+"error save fpx "+fpx.errors
 
                 if(it<10){
                     def cuadrilla = new FormulaPolinomica()
@@ -172,7 +172,7 @@ class MatrizController extends janus.seguridad.Shield {
                     cuadrilla.valor=0
                     cuadrilla.indice=indiPeon
                     if (!cuadrilla.save(flush: true))
-                        println "error save cuadrilla "+cuadrilla.errors
+                        println "matriz controller l 175: "+"error save cuadrilla "+cuadrilla.errors
                 }
 
 

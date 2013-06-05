@@ -345,7 +345,7 @@
                         break;
                 }
 
-//                //console.log(nodeNivel);
+//                ////console.log(nodeNivel);
 
                 switch (nodeNivel) {
                     case "grupo":
@@ -687,8 +687,8 @@
 
                                     },
                                     error   : function (data) {
-                                        //////console.log("error");
-                                        //////console.log(data);
+                                        ////////console.log("error");
+                                        ////////console.log(data);
                                     }
                                 }
                             },
@@ -810,7 +810,7 @@
                             showInfo();
                         })
                 %{--.bind("move_node.jstree", function (event, data) {--}%
-                %{--//                            //console.log('move', data);--}%
+                %{--//                            ////console.log('move', data);--}%
                 %{--var oldParent = data.rslt.op;--}%
                 %{--var newParent = data.rslt.np;--}%
                 %{--var node = data.rslt.o;--}%
@@ -883,7 +883,7 @@
                 $(".toggle").click(function () {
                     var tipo = $(this).attr("id");
                     if (tipo != current) {
-//                        //console.log(tipo);
+//                        ////console.log(tipo);
                         current = tipo;
                         initTree(current);
                     }

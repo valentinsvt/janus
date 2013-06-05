@@ -38,7 +38,7 @@ class AsignacionController extends janus.seguridad.Shield {
         return [asignacionInstance: asignacionInstance,campos:campos,actual:actual]
     } //form_ajax
     def tabla(){
-        println "tabla "+params
+//        println "tabla "+params
         def anio = new Date().format("yyyy")
         if (params.anio)
             anio=params.anio
@@ -99,7 +99,7 @@ class AsignacionController extends janus.seguridad.Shield {
         }
         asgn.valor=params.valor.toDouble()
         if (!asgn.save())
-            println "asgn  errors "+asgn.errors
+//            println "asgn  errors "+asgn.errors
         else{
             flash.message="Datos guardados"
             redirect(action: "form_ajax")

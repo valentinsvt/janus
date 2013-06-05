@@ -306,7 +306,7 @@ class RegistroParametrosController {
             def p = params.data.split(";")
             p.each {
                 def parts = it
-                println "parts "+parts.class
+//                println "parts "+parts.class
                 parts=it.split("&")
                 def pe= ParametroEvaluacion.get(parts[0])
                 def calif = janus.pac.Evaluacion.findByOfertaAndParametroEvaluacion(oferta,pe)

@@ -111,7 +111,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def addItem() {
-        println "add item " + params
+//        println "add item " + params
         def rubro = Item.get(params.rubro)
         def item = Item.get(params.item)
         def detalle
@@ -138,7 +138,7 @@ class RubroController extends janus.seguridad.Shield {
         if (detalle.item.departamento.subgrupo.grupo.id == 1)
             detalle.rendimiento = 1
         if (!detalle.save(flush: true)) {
-            println "detalle " + detalle.errors
+//            println "detalle " + detalle.errors
         } else {
             rubro.fechaModificacion = new Date()
             rubro.save(flush: true)
@@ -174,7 +174,7 @@ class RubroController extends janus.seguridad.Shield {
             lista.pop()
             render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Item
             session.funciones = funciones
@@ -200,7 +200,7 @@ class RubroController extends janus.seguridad.Shield {
             lista.pop()
             render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Item
             session.funciones = funciones
@@ -250,7 +250,7 @@ class RubroController extends janus.seguridad.Shield {
             lista.pop()
             render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Item
             session.funciones = funciones
@@ -260,7 +260,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def copiarComposicion() {
-        println "copiar " + params
+//        println "copiar " + params
         if (request.method == "POST") {
             def rubro = Item.get(params.rubro)
             def copiar = Item.get(params.copiar)
@@ -307,7 +307,7 @@ class RubroController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-        println "save rubro " + params.rubro
+//        println "save rubro " + params.rubro
         params.rubro.codigo = params.rubro.codigo.toUpperCase()
         def rubro
         if (params.rubro.id) {
@@ -329,7 +329,7 @@ class RubroController extends janus.seguridad.Shield {
         }
         rubro.properties = params.rubro
         rubro.tipoItem = TipoItem.get(2)
-        println "ren " + rubro.rendimiento
+//        println "ren " + rubro.rendimiento
         if (!rubro.save(flush: true)) {
             println "error " + rubro.errors
         }
@@ -339,7 +339,7 @@ class RubroController extends janus.seguridad.Shield {
 
     def repetido = {
         // verifica codigo
-        println "Repetido:" + params
+//        println "Repetido:" + params
         if (!params.id) {
             def hayOtros = Item.findAllByCodigo(params.codigo?.toUpperCase()).size() > 0
 //        println "repetido: " + hayOtros
@@ -511,7 +511,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def getPreciosTransporte() {
-        println "get precios "+params
+//        println "get precios "+params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo

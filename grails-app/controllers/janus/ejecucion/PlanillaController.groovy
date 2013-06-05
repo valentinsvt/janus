@@ -18,7 +18,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def obra = contrato.oferta.concurso.obra
 
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
-        println fp
+//        println fp
 
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
@@ -34,7 +34,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def saveOrdenPago(){
-        println "save orden pago!! "+params
+//        println "save orden pago!! "+params
         def planilla = Planilla.get(params.id)
         planilla.fechaOrdenPago = new Date().parse("dd-MM-yyyy", params.fechaOrdenPago)
         planilla.memoOrdenPago = params.memoOrdenPago
@@ -456,7 +456,7 @@ println periodos
                     if (!vr.save(flush: true)) {
                         println "vr errors " + vr.errors
                     } else {
-                        println "crea vr ${vr.id}"
+//                        println "crea vr ${vr.id}"
                     }
                     def pos = "p"
                     if (c.numero.contains("c")) {
@@ -482,7 +482,7 @@ println periodos
                         tot[pos] += (v.valor * c.valor).round(3)
 //                        println "\t\t" + pos + "   " + (v.valor * c.valor)
                         if (!data2[pos][perNum]) {
-                            println "\t\tCrea data2[${pos}][${perNum}]"
+//                            println "\t\tCrea data2[${pos}][${perNum}]"
                             data2[pos][perNum] = [valores: [], total: 0, periodo: per]
                         }
                         data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: v])
@@ -1071,7 +1071,7 @@ println periodos
                 order("numero", "asc")
             }
         }
-        println pcs.numero
+//        println pcs.numero
 
         def datos = [], datosP = [], periodos = []
         def periodoOferta = PeriodosInec.findAllByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
@@ -1116,7 +1116,7 @@ println periodos
                         tmp.put(c.numero, vr.valor)
                         tot += vr.valor * c.valor
                     } else if (c.numero.contains("p")) {
-                        println "\t\t" + c + "\t" + val
+//                        println "\t\t" + c + "\t" + val
                         tmpP.put(c.numero, vr.valor)
                         totP += vr.valor * c.valor
                     }
@@ -1142,7 +1142,7 @@ println periodos
                                 tmp.put(c.numero, v.valor)
                                 tot += v.valor * c.valor
                             } else if (c.numero.contains("p")) {
-                                println "\t\t" + c + "\t" + v
+//                                println "\t\t" + c + "\t" + v
                                 tmpP.put(c.numero, v.valor)
                                 totP += v.valor * c.valor
                             }
@@ -1160,14 +1160,14 @@ println periodos
                 }
             } //else
         } //periodos.each
-        println "DATOS:"
-        datos.each {
-            println "it " + it
-        }
-        println "DATOSP:"
-        datosP.each {
-            println "it " + it
-        }
+//        println "DATOS:"
+//        datos.each {
+//            println "it " + it
+//        }
+//        println "DATOSP:"
+//        datosP.each {
+//            println "it " + it
+//        }
 
         def cant = []
         0.upto(datos.size() - 1) {
@@ -1208,7 +1208,7 @@ println periodos
 //        println planillasAnteriores
 
         def editable = planilla.fechaOrdenPago == null
-        println editable
+//        println editable
 
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
 
@@ -1298,7 +1298,7 @@ println periodos
             lista.pop()
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Item
             session.funciones = funciones
@@ -1308,21 +1308,21 @@ println periodos
     }
 
     def saveDetalle() {
-        println params
+//        println params
         def pln = Planilla.get(params.id)
         def err = 0
 
         if (params.d.class == java.lang.String) {
             params.d = [params.d]
         }
-
-        println params
+//
+//        println params
 
         params.d.each { p ->
             def parts = p.split("_")
             if (parts.size() == 3) {
                 //create
-                println "CREATE"
+//                println "CREATE"
                 def vol = VolumenesObra.get(parts[0])
                 def cant = parts[1].toDouble()
                 def val = parts[2].toDouble()
@@ -1339,7 +1339,7 @@ println periodos
                 }
             } else if (parts.size() == 4) {
                 //update
-                println "UPDATE"
+//                println "UPDATE"
                 def cant = parts[1].toDouble()
                 def val = parts[2].toDouble()
 

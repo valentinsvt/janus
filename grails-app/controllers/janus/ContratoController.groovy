@@ -152,7 +152,7 @@ class ContratoController extends janus.seguridad.Shield {
 
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
-            println "entro reporte"
+//            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Contrato
             session.funciones = funciones
@@ -208,9 +208,9 @@ class ContratoController extends janus.seguridad.Shield {
         def obra = Obra.get(params.id)
         def concurso = janus.pac.Concurso.findByObraAndEstado(obra, "R")
         def ofertas = janus.pac.Oferta.findAllByConcurso(concurso)
-        println ofertas
-        println ofertas.monto
-        println ofertas.plazo
+//        println ofertas
+//        println ofertas.monto
+//        println ofertas.plazo
         return [ofertas: ofertas]
     }
 
@@ -237,7 +237,7 @@ class ContratoController extends janus.seguridad.Shield {
     def save() {
         def contratoInstance
 
-        println("-->>" + params)
+//        println("-->>" + params)
 
         if (params.id) {
             contratoInstance = Contrato.get(params.id)

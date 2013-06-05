@@ -32,7 +32,7 @@ class ShieldController {
     }
     def comprobarPassword = {
         if(request.method=='POST'){
-            println "comprobar password "+params
+//            println "comprobar password "+params
             def resp=loginService.autorizaciones(session.usuario,params.atrz)
             render(resp)
         }else{

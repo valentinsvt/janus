@@ -107,7 +107,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def calculaPlazo() {
-        println "calculaPlazo: " + params
+//        println "calculaPlazo: " + params
         def obra = Obra.get(params.id)
 
         if (!params.personas) params.personas = obra.plazoPersonas
@@ -116,7 +116,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def sqlM = "select sbpr__id, itemcdgo, itemnmbr, itemcntd, itemcntd/8 dias from obra_comp(${params.id}) where grpo__id = 2"
         def sqlR = "select itemcdgo, itemnmbr, unddcdgo, rbrocntd, dias from plazo(${params.id},${params.personas},${params.maquinas},${params.save})"
-        println sqlR
+//        println sqlR
         def cn = dbConnectionService.getConnection()
         def resultM = cn.rows(sqlM.toString())
         def resultR = cn.rows(sqlR.toString())
@@ -196,7 +196,7 @@ class ObraController extends janus.seguridad.Shield {
             if (matriz > 0) {
                 matrizOk = true
             }
-            println matriz + "matriz ok: " + matrizOk
+//            println matriz + "matriz ok: " + matrizOk
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK]
         } else {
             [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk]
@@ -322,7 +322,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def getPersonas() {
 
-        println(params)
+//        println(params)
 
         def obra = Obra.get(params.obra)
 
@@ -439,7 +439,7 @@ class ObraController extends janus.seguridad.Shield {
                 colorParr = "#00008B";
 
                 if (params.criterio != "") {
-                    println params
+//                    println params
                     comunidades = Comunidad.withCriteria {
                         parroquia {
                             ilike("nombre", "%" + params.criterio + "%")
@@ -495,15 +495,15 @@ class ObraController extends janus.seguridad.Shield {
 
     def save() {
 
-        println "save " + params
+//        println "save " + params
 
         def usuario = session.usuario.id
 
         def persona = Persona.get(usuario)
 
 
-        println("usuario" + usuario)
-        println("dep" + persona.departamento.id)
+//        println("usuario" + usuario)
+//        println("dep" + persona.departamento.id)
 
 
         if (params.fechaOficioSalida) {
@@ -540,7 +540,7 @@ class ObraController extends janus.seguridad.Shield {
 
             if ((params.crono == "1" || params.crono == 1) && (oriM.toDouble() != valM.toDouble() || oriD.toDouble() != valD.toDouble())) {
                 //Elimina el cronograma
-                println "Elimina el cronograma"
+//                println "Elimina el cronograma"
                 VolumenesObra.findAllByObra(obraInstance, [sort: "orden"]).each { vol ->
                     Cronograma.findAllByVolumenObra(vol).each { crono ->
                         crono.delete()
@@ -650,7 +650,7 @@ class ObraController extends janus.seguridad.Shield {
 
         if (revisarCodigo != null) {
 
-            println("entro1")
+//            println("entro1")
 
             render "NO_No se puede copiar la Obra " + " " + obra.nombre + " " + "porque posee un codigo ya existente."
             return
@@ -658,7 +658,7 @@ class ObraController extends janus.seguridad.Shield {
 
         } else {
 
-            println("entro2")
+//            println("entro2")
 
 
             obraInstance = new Obra()
@@ -691,11 +691,11 @@ class ObraController extends janus.seguridad.Shield {
             volumenes.each { volOr ->
                 volumenInstance = new VolumenesObra()
 
-                println("VO:" + volOr)
+//                println("VO:" + volOr)
 
                 volumenInstance.properties = volOr.properties
 
-                println("VI:" + volumenInstance)
+//                println("VI:" + volumenInstance)
                 //
 
                 volumenInstance.obra = obraInstance
@@ -721,7 +721,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def crearTipoObra() {
 
-        println(params)
+//        println(params)
 
         def tipoObraInstance = new TipoObra(params)
         if (params.id) {
@@ -743,7 +743,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def delete() {
 
-        println("delete:" + params.id)
+//        println("delete:" + params.id)
 
         def obraInstance = Obra.get(params.id)
         if (!obraInstance) {

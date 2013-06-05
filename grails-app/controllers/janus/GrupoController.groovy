@@ -90,7 +90,7 @@ class GrupoController extends janus.seguridad.Shield {
 
 
     def saveGr_ajax() {
-        println("params-->>" + params)
+//        println("params-->>" + params)
 
         def accion = "create"
         def grupo = new Grupo()
@@ -169,7 +169,7 @@ class GrupoController extends janus.seguridad.Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println e
+            println "grupo controller l 172: "+e
             render "NO"
         }
     }
@@ -182,7 +182,7 @@ class GrupoController extends janus.seguridad.Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println e
+            println "grupo controller l 185: "+e
             render "NO"
         }
     }
@@ -272,7 +272,7 @@ class GrupoController extends janus.seguridad.Shield {
         if (departamento.save(flush: true)) {
             render "OK_" + accion + "_" + departamento.id + "_"  + departamento.descripcion
         } else {
-            println departamento.errors
+            println "grupo controller l 275: "+departamento.errors
             def errores = g.renderErrors(bean: departamento)
             render "NO_" + errores
         }
@@ -285,23 +285,17 @@ class GrupoController extends janus.seguridad.Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println e
+            println "grupo controller l 288: "+e
             render "NO"
         }
     }
-
-
-
-
-
-
 
 
     String makeBasicTree(params) {
 
         def id = params.id.toLong()
         def tipo = params.tipo
-        println(params)
+//        println(params)
 
 //        println "all:" + all + "     ignore:" + ignore
 

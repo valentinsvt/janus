@@ -130,7 +130,7 @@ class ItemController extends janus.seguridad.Shield {
             }
             cn.close()
         } else {
-            println("entro2")
+//            println("entro2")
             if (!params.totalRows) {
                 sql = "select count(distinct rbpc.item__id) "
                 sql += "from rbpc, item "
@@ -339,7 +339,7 @@ class ItemController extends janus.seguridad.Shield {
 //        println("tipo" + params.tipo)
 
         if (t == "1") {
-            println "AQUI " + params
+//            println "AQUI " + params
 
 //            lugar = Lugar.get(params.lgar)
 //
@@ -476,7 +476,7 @@ class ItemController extends janus.seguridad.Shield {
                 }
                 cn.close()
             } else {
-                println("entro2")
+//                println("entro2")
                 if (!params.totalRows) {
                     sql = "select count(distinct rbpc.item__id) "
                     sql += "from rbpc, item "
@@ -544,7 +544,7 @@ class ItemController extends janus.seguridad.Shield {
             rubroPrecioInstance.registrado = reg
 
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "error " + parts
+                println "item controller l 547: "+"error " + parts
                 if (nos != "") {
                     nos += ","
                 }
@@ -598,7 +598,7 @@ class ItemController extends janus.seguridad.Shield {
             rubroPrecioInstance.registrado = "N"
 
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "error " + parts
+                println "item controller l 601: "+"error " + parts
                 if (nos != "") {
                     nos += ","
                 }
@@ -627,7 +627,7 @@ class ItemController extends janus.seguridad.Shield {
 
         params.item.each {
             def parts = it.split("_")
-            println ">>" + parts
+//            println ">>" + parts
 
             def rubroId = parts[0]
             def nuevoPrecio = parts[1]
@@ -653,7 +653,7 @@ class ItemController extends janus.seguridad.Shield {
             rubroPrecioInstance.fecha = nuevaFecha
 
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "error " + parts
+                println "item controller l 656: "+"error " + parts
                 if (nos != "") {
                     nos += ","
                 }
