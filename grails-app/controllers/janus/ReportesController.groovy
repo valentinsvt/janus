@@ -2804,6 +2804,9 @@ class ReportesController {
 
         def cantidadMesesMemo = params.reajusteMesesMemo
 
+        def valores = preciosService.rbro_pcun_v2(obra.id)
+
+
 
         if (obra?.oficioSalida == null) {
 
@@ -5249,7 +5252,17 @@ class ReportesController {
         addCellTabla(tablaTotalesEquipos, new Paragraph("Total Equipos:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalesEquipos, new Paragraph(g.formatNumber(number: valorTotalEquipos, minFractionDigits:
                 3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+
 //
+        PdfPTable tablaTotalGeneral= new PdfPTable(2)
+        tablaTotalGeneral.setWidthPercentage(100)
+        tablaTotalGeneral.setWidths(arregloEnteros([70,30]))
+
+        addCellTabla(tablaTotalGeneral, new Paragraph("Total General:", times10bold), prmsCellDerecha)
+        addCellTabla(tablaTotalGeneral, new Paragraph(g.formatNumber(number: (valorTotal + valorTotalMano + valorTotalEquipos), minFractionDigits:
+                3, maxFractionDigits: 3, format: "###,##0", locale: "ec"), times10bold), prmsNum)
+
+
 //        println("size: " + document.pageSize.getHeight())
 
         document.add(tablaHeader);
@@ -5262,6 +5275,7 @@ class ReportesController {
         document.add(tablaTitulo3)
         document.add(tablaComposicion3);
         document.add(tablaTotalesEquipos)
+        document.add(tablaTotalGeneral)
         document.close();
         pdfw.close()
         byte[] b = baos.toByteArray();

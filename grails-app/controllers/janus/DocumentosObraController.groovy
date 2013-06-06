@@ -12,10 +12,7 @@ class DocumentosObraController {
 
     def documentosObra () {
 
-
-
         def pr = janus.ReportesController
-
 
         def nota = new Nota();
 
@@ -23,14 +20,7 @@ class DocumentosObraController {
 
         def auxiliarFijo = Auxiliar.get(1);
 
-
-
-
-
-
-
 //        println(params)
-
 
         def obra = Obra.get(params.id)
 
@@ -42,32 +32,16 @@ class DocumentosObraController {
 
 //        println("departamento: " + obra?.departamento?.id)
 
-
-
-
         def personas = Persona.list()
 
         def departamentos = Departamento.list()
 
-//
-//        def firmas
-//
-//        def firmasViales
-
-//
-//        def personasFirmas = Persona.get(48);
-//
-//
-//        def personasFirmas2 = Persona.get(21);
-
-
-
-        //totalPresupuesto
+       //totalPresupuesto
 
         def detalle
 
         detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
 
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
@@ -95,19 +69,38 @@ class DocumentosObraController {
         def indirecto = obra.totales/100
 
 
-//        def total1 = 0;
+        def total1 = 0;
+        def total2 = 0;
+        def totalPrueba = 0
 
         def totales
 
         def totalPresupuesto=0;
+        def totalPresupuestoBien=0;
 
+        def valores = preciosService.rbro_pcun_v2(obra.id)
+
+        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+
+
+        subPres.each { s->
+
+            total2 = 0
+
+            valores.each {
+
+              if(it.sbprdscr == s.descripcion){
+
+                totales = it.totl
+                totalPresupuestoBien = (total1 += totales)
+                totalPrueba = total2 += totales
+
+              }
+            }
+
+        }
 
         detalle.each {
-
-//            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-//            preciosService.ac_rbro(it.item.id,lugar.id,fecha.format("yyyy-MM-dd"))
-//            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-//            precios.put(it.id.toString(),res["precio"][0]+res["precio"][0]*indirecto)
 
             def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
             precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
@@ -118,9 +111,8 @@ class DocumentosObraController {
 
             totalPresupuesto+=totales;
 
-
-
         }
+
 
 
         def firmasAdicionales = Persona.findAllByDepartamento(departamento)
@@ -131,50 +123,11 @@ class DocumentosObraController {
 
         def firmas = PersonaRol.findAllByFuncionAndPersonaInList(funcionFirmar, firmasAdicionales)
 
-//
-//        println("lista:" + firmas?.persona?.nombre)
-
-
-
-//        def c = Persona.createCriteria()
-//        firmas = c.list {
-//
-//            or{
-//                ilike("cargo", "%Director%")
-//                ilike("cargo","%Jefe%")
-//                ilike("cargo", "%Subdirector%")
-//                ilike("cargo", "%subd%")
-//            }
-//            or{
-//                eq("departamento", Departamento.get(3))
-//                eq("departamento", Departamento.get(10))
-//            }
-//            maxResults(20)
-//            order("nombre", "desc")
-//        }
-//
-//        def d = Persona.createCriteria()
-//        firmasViales = d.list {
-//
-//            or{
-//                ilike("cargo", "%Director%")
-//                ilike("cargo","%Jefe%")
-//                ilike("cargo", "%Subdirector%")
-//                ilike("cargo", "%subd%")
-//            }
-//            or{
-//                eq("departamento", Departamento.get(4))
-//                eq("departamento", Departamento.get(10))
-//            }
-//            maxResults(20)
-//            order("nombre", "desc")
-//        }
-
 
 
 
 //        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, personasFirmas: personasFirmas, personasFirmas2: personasFirmas2, totalPresupuesto: totalPresupuesto]
-        [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona]
+        [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona, totalPresupuestoBien: totalPresupuestoBien]
 
 
 
