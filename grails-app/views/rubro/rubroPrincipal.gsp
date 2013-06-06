@@ -154,7 +154,12 @@
 
             <div class="span2" style="color: #01a">
                 Responsable: <br>
-                Dpto. ${dpto?.descripcion}
+                <g:if test="${modifica}">
+                    <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id}" id="responsable" optionKey="id" noSelection="['-1':'Seleccione..']"></g:select>
+                </g:if>
+                <g:else>
+                    ${rubro?.responsable}
+                </g:else>
                 %{--<input type="text" name="rubro.nombre" class="span12" value="${session.usuario}" readonly="" style="color: #01a">--}%
             </div>
 
@@ -1453,35 +1458,50 @@
             var desc = $("#input_descripcion").val()
             var subGr = $("#selSubgrupo").val()
             var msg =""
-//            ////console.log(desc,desc.trim(),desc.trim().length)
-
+            var resp = $("#responsable").val()
+//            console.log(desc,desc.trim(),desc.trim().length,resp)
             if(cod.trim().length>20 || cod.trim().length<1){
                 msg="<br>Error: La propiedad código debe tener entre 1 y 20 caracteres."
             }
+            if(resp=="-1"){
+                if(msg=="")
+                    msg="<br>Error: Seleccione un responsable."
+                else
+                    msg+="<br>Error: Seleccione un responsable."
+            }
 
+//            console.log("antes del ajax")
             $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro', action:'repetido')}",
+                async : false,
                 data     : "codigo=" + cod + "&id=" + $("#rubro__id").val(),
                 success  : function (retorna) {
+//                    console.log("secces ",retorna)
                     //console.log("retorna: " + retorna)
                     if (retorna == "repetido") {
-                        msg += "el código " + cod.toUpperCase() + " está repetido"
+                        if(msg=="")
+                            msg= "<br>Error: el código " + cod.toUpperCase() + " está repetido"
+                        else
+                            msg += "<br>Error: el código " + cod.toUpperCase() + " está repetido"
 
-                        if(desc.trim().length>160 || desc.trim().length<1){
-                            if(msg=="")
-                                msg="<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
-                            else
-                                msg+="<br>La propiedad descripción debe tener entre 1 y 160 caracteres."
-                        }
 
-                        if(isNaN(subGr) || subGr*1<1){
-                            if(msg=="")
-                                msg="<br>Error: Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
-                            else
-                                msg+="<br>Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
-                        }
+                    }
+                    if(desc.trim().length>160 || desc.trim().length<1){
+                        if(msg=="")
+                            msg="<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
+                        else
+                            msg+="<br>La propiedad descripción debe tener entre 1 y 160 caracteres."
+                    }
 
-                        //console.log("al final de la validacion: " + msg)
+                    if(isNaN(subGr) || subGr*1<1){
+                        if(msg=="")
+                            msg="<br>Error: Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
+                        else
+                            msg+="<br>Seleccione un subgrupo usando las listas de Clase, Grupo y Subgrupo"
+                    }
 
+//                    console.log("al final de la validacion: " + msg)
+                    if(msg!=""){
+//                        console.log("no sub")
                         $.box({
                             imageClass : "box_info",
                             text       : msg,
@@ -1498,14 +1518,17 @@
                             }
                         });
 
-                    } else {
-
+                    } else{
+//                        console.log("sub")
                         $(".frmRubro").submit()
                     }
+
+
+
                 }
             });
 
-
+//            console.log("fin")
         });
 
         <g:if test="${rubro}">

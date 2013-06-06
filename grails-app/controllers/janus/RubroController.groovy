@@ -69,6 +69,7 @@ class RubroController extends janus.seguridad.Shield {
         def aux = Parametros.get(1)
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
         def dpto = Departamento.findByPermisosIlike("APU")
+        def resps = Persona.findAllByDepartamento(dpto)
 //        println "depto "+dpto
         def dptoUser = Persona.get(session.usuario.id).departamento
         def modifica = false
@@ -94,9 +95,9 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.idRubro)
             def items = Rubro.findAllByRubro(rubro)
             items.sort { it.item.codigo }
-            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica]
+            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica,resps:resps]
         } else {
-            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica]
+            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica,resps:resps]
         }
     }
 
@@ -327,6 +328,10 @@ class RubroController extends janus.seguridad.Shield {
         } else {
             rubro.fechaRegistro = new Date()
         }
+        if(params.responsable && params.responsable!="-1"){
+            rubro.responsable=Persona.get(params.responsable)
+        }
+
         rubro.properties = params.rubro
         rubro.tipoItem = TipoItem.get(2)
 //        println "ren " + rubro.rendimiento

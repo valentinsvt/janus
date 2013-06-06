@@ -1,7 +1,7 @@
 package janus
 
 class Item implements Serializable {
-
+    Persona responsable
     Unidad unidad
     TipoItem tipoItem
     DepartamentoItem departamento
@@ -35,6 +35,7 @@ class Item implements Serializable {
         version false
         columns {
             id column: 'item__id'
+            responsable column: 'prsn__id'
             unidad column: 'undd__id'
             tipoItem column: 'tpit__id'
             departamento column: 'dprt__id'
@@ -62,6 +63,7 @@ class Item implements Serializable {
         }
     }
     static constraints = {
+        responsable(nullable: true,blank:true)
         nombre(size: 1..160, blank: false, attributes: [title: 'nombre'])
         codigo(size: 1..20, blank: false, unique: true, attributes: [title: 'numero'])
         unidad(blank: true, nullable: true, attributes: [title: 'unidad'])
