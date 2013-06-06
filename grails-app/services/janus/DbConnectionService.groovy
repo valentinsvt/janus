@@ -28,10 +28,10 @@ class DbConnectionService {
     def ejecutarProcedure(nombre, parametros,condiciones) {
 
         def sql = " select " + nombre + "(" + parametros + ")"+condiciones
-        println "ejecutar Procedure " + sql
+//        println "ejecutar Procedure " + sql
         def template = new JdbcTemplate(dataSource)
         def result = template.queryForMap(sql)
-        println "result " + result
+//        println "result " + result
         return result
     }
 

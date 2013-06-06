@@ -1133,11 +1133,8 @@ class ObraFPController {
             suma += i
         }
         def fin = new Date()
-
         println suma
-
         println "tiempo ... ${fin.getTime() - inicia.getTime()}"
-
         render "tiempo ... ${fin.getTime() - inicia.getTime()}"
     }
 */

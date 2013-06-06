@@ -1175,7 +1175,7 @@ class MantenimientoItemsController extends Shield {
                 cant++
             } catch (DataIntegrityViolationException e) {
                 println "mantenimiento items controller l 1177: "+e
-                println "p not deleted " + p.id
+                println "\tp not deleted " + p.id
             }
         }
 

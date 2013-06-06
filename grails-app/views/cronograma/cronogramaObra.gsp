@@ -80,7 +80,6 @@
     </head>
 
     <body>
-        %{--Todo excel--}%
         <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
         <g:set var="plazoOk" value="${detalle.findAll { it.dias && it.dias > 0 }.size() > 0}"/>
         <g:set var="sum" value="${0}"/>
@@ -121,18 +120,18 @@
                         <i class="icon-bar-chart"></i>
                         Gráficos de avance
                     </a>
-                %{--<a href="#" class="btn" id="btnGraficoEco">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance económico--}%
-                %{--</a>--}%
-                %{--<a href="#" class="btn" id="btnGraficoFis">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance físico--}%
-                %{--</a>--}%
-                    <g:link action="excel" class="btn" id="${obra.id}">
-                        <i class="icon-table"></i>
-                        Exportar a Excel
-                    </g:link>
+                    %{--<a href="#" class="btn" id="btnGraficoEco">--}%
+                    %{--<i class="icon-bar-chart"></i>--}%
+                    %{--Gráfico de avance económico--}%
+                    %{--</a>--}%
+                    %{--<a href="#" class="btn" id="btnGraficoFis">--}%
+                    %{--<i class="icon-bar-chart"></i>--}%
+                    %{--Gráfico de avance físico--}%
+                    %{--</a>--}%
+                    <a href="#" id="btnReporte" class="btn">
+                        <i class="icon-print"></i>
+                        Imprimir
+                    </a>
                 </div>
             </g:if>
         </div>
@@ -142,6 +141,8 @@
                                       style="width: 300px;font-size: 10px" id="subpres" value="${subpre}"
                                       noSelection="['-1': 'TODOS']"/>
             <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
+
+            <a href="#" class="btn" style="position: fixed; top:225px; right:200px;" id="btnDesmarcar">Desmarcar todo</a>
         </div>
 
         <g:if test="${meses > 0 && plazoOk}">
@@ -730,6 +731,10 @@
 
                 updateTotales();
 
+                $("#btnDesmarcar").click(function () {
+                    $(".rowSelected").removeClass("rowSelected");
+                });
+
                 $("#btnSubpre").click(function () {
                     $.box({
                         imageClass : "box_info",
@@ -1168,6 +1173,9 @@
                                                 }
                                                 updateTotales();
                                                 $("#modal-cronograma").modal("hide");
+
+                                                $(".rowSelected").removeClass("rowSelected");
+
                                             } else {
 //                                                ////console.log("ERROR");
                                             }
@@ -1188,7 +1196,7 @@
                     if (!$(this).hasClass("disabled")) {
                         $.box({
                             imageClass : "box_info",
-                            text       : "Se limpiará el cronograma del rubro seleccionado, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
+                            text       : "Se limpiará el cronograma de los rubros seleccionado, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
                             title      : "Confirmación",
                             iconClose  : false,
                             dialog     : {
@@ -1196,8 +1204,14 @@
                                 draggable : false,
                                 buttons   : {
                                     "Aceptar"  : function () {
-                                        var id = $(".item_row.rowSelected").data("id");
-                                        $(".mes.rubro" + id).text("").data("val", 0);
+//                                        var id = $(".item_row.rowSelected").data("id");
+//                                        $(".mes.rubro" ge+ id).text("").data("val", 0);
+//                                        updateTotales();
+
+                                        $(".item_row.rowSelected").each(function () {
+                                            var id = $(this).data("id");
+                                            $(".mes.rubro" + id).text("").data("val", 0);
+                                        });
                                         updateTotales();
                                     },
                                     "Cancelar" : function () {
@@ -1232,7 +1246,7 @@
                 $("#btnDeleteRubro").click(function () {
                     $.box({
                         imageClass : "box_info",
-                        text       : "Se eliminará el rubro, continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
+                        text       : "Se eliminarán los rubros marcados, continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
                         title      : "Confirmación",
                         iconClose  : false,
                         dialog     : {
@@ -1240,18 +1254,34 @@
                             draggable : false,
                             buttons   : {
                                 "Aceptar"  : function () {
-                                    var id = $(".item_row.rowSelected").data("id");
-                                    $.ajax({
-                                        type    : "POST",
-                                        url     : "${createLink(action:'deleteRubro_ajax')}",
-                                        data    : {
-                                            id : id
-                                        },
-                                        success : function (msg) {
-                                            $(".mes.rubro" + id).text("").data("val", 0);
-                                            updateTotales();
-                                        }
+                                    %{--var id = $(".item_row.rowSelected").data("id");--}%
+                                    %{--$.ajax({--}%
+                                    %{--type    : "POST",--}%
+                                    %{--url     : "${createLink(action:'deleteRubro_ajax')}",--}%
+                                    %{--data    : {--}%
+                                    %{--id : id--}%
+                                    %{--},--}%
+                                    %{--success : function (msg) {--}%
+                                    %{--$(".mes.rubro" + id).text("").data("val", 0);--}%
+                                    %{--updateTotales();--}%
+                                    %{--}--}%
+                                    %{--});--}%
+
+                                    $(".item_row.rowSelected").each(function () {
+                                        var id = $(this).data("id");
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : "${createLink(action:'deleteRubro_ajax')}",
+                                            data    : {
+                                                id : id
+                                            },
+                                            success : function (msg) {
+                                                $(".mes.rubro" + id).text("").data("val", 0);
+                                                updateTotales();
+                                            }
+                                        });
                                     });
+
                                 },
                                 "Cancelar" : function () {
                                 }
@@ -1291,7 +1321,9 @@
                     });
                 });
 
-                $("#btnXls").click(function () {
+                $("#btnReporte").click(function () {
+                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes2',action: 'reporteCronograma', id:obra.id)}&filename=cronograma_${new Date().format('ddMMyyyy_HHmm')}.pdf";
+                    return false;
                 });
 
                 $("#btnGrafico").click(function () {
@@ -1315,7 +1347,10 @@
                     dataEco += "]]";
                     ticksXEco = ticksXEco.substr(0, ticksXEco.length - 1);
                     ticksXEco += "]";
-                    ticksYEco = ticksYEco.substr(0, ticksYEco.length - 1);
+//                    ticksYEco = ticksYEco.substr(0, ticksYEco.length - 1);
+
+                    ticksYEco += number_format(${sum}, 2, ".", "");
+
                     ticksYEco += "]";
 
                     var dataFis = "[[";
@@ -1337,7 +1372,10 @@
                     dataFis += "]]";
                     ticksXFis = ticksXFis.substr(0, ticksXFis.length - 1);
                     ticksXFis += "]";
-                    ticksYFis = ticksYFis.substr(0, ticksYFis.length - 1);
+//                    ticksYFis = ticksYFis.substr(0, ticksYFis.length - 1);
+
+                    ticksYFis += number_format(100, 2, ".", "");
+
                     ticksYFis += "]";
 
                     var tituloe = "Avance económico de la obra";
@@ -1345,9 +1383,13 @@
                     var titulof = "Avance físico de la obra";
                     var colorf = "5F81AA";
 
+                    maxFis = 100;
+                    maxEco = ${sum};
+
                     var d = "datae=" + dataEco + "&txe=" + ticksXEco + "&tye=" + ticksYEco + "&me=" + maxEco + "&tituloe=" + tituloe + "&colore=" + colore;
                     d += "&dataf=" + dataFis + "&txf=" + ticksXFis + "&tyf=" + ticksYFis + "&mf=" + maxFis + "&titulof=" + titulof + "&colorf=" + colorf;
                     d += "&obra=${obra.id}";
+                    d += "&subpre=${subpre}";
 
                     var url = "${createLink(action: 'graficos2')}?" + d;
 //                    ////console.log(url);

@@ -576,8 +576,7 @@ class Reportes2Controller {
         }
         def lugar = Lugar.get(params.lugar.toLong())
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-
-        println("fecha:" + fecha)
+//        println("fecha:" + fecha)
 
         def items = ""
         def lista = Item.withCriteria {
@@ -840,6 +839,25 @@ class Reportes2Controller {
         output.write(file.getBytes());
 
 
+    }
+
+    def reporteCronograma() {
+        def obra = Obra.get(params.id.toLong())
+        def meses = obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)
+
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+
+        def precios = [:]
+        def indirecto = obra.totales / 100
+
+        preciosService.ac_rbroObra(obra.id)
+
+        detalle.each {
+            it.refresh()
+            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+        }
+        return [detalle: detalle, precios: precios, obra: obra, meses: meses]
     }
 
 

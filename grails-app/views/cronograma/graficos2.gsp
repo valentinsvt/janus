@@ -16,7 +16,7 @@
     <body>
         <div class="btn-toolbar">
             <div class="btn-group">
-                <g:link action="cronogramaObra" id="${obra.id}" class="btn">
+                <g:link action="cronogramaObra" id="${obra.id}" params="[subpre: params.subpre]" class="btn">
                     <i class="icon-caret-left"></i>
                     Cronograma
                 </g:link>
@@ -33,7 +33,7 @@
                         title       : "Avance económico de la obra ${obra.descripcion}",
                         axes        : {
                             xaxis : {
-                                min           : 1,
+                                min           : 0,
                                 ticks         : ${params.txe},
                                 pad           : 5.5,
                                 label         : 'Mes',
@@ -66,7 +66,7 @@
                         title       : "Avance físico de la obra ${obra.descripcion}",
                         axes        : {
                             xaxis : {
-                                min           : 1,
+                                min           : 0,
                                 ticks         : ${params.txf},
                                 pad           : 5.5,
                                 label         : 'Mes',
