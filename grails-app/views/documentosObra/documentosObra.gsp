@@ -241,28 +241,19 @@
                 <div class="span1">DE:</div>
 
 
-                <g:if test="${obra?.tipo == 'C'}">
-
                     <div class="span3"><g:textField name="deMemo" style="width: 470px"
-                                                    value="${"Dpto. Infraestructura Comunitaria"}"
+                                                    value="${persona?.departamento?.descripcion}"
                                                     disabled="true"/></div>
-
-                </g:if>
-
-                <g:if test="${obra?.tipo == 'V'}">
-
-                    <div class="span3"><g:textField name="deMemo" style="width: 470px"
-                                                    value="${"Dpto de Estudios Viales"}" disabled="true"/></div>
-
-                </g:if>
 
             </div>
 
             <div class="span6">
                 <div class="span1">PARA:</div>
 
-                <div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.descripcion}"
-                                                style="width: 470px" disabled="true"/></div>
+                %{--<div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.descripcion}"--}%
+                                                %{--style="width: 470px" disabled="true"/></div>--}%
+
+                <div class="span3"><g:select name="paraMemo" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>
             </div>
 
             <div class="span7">
@@ -786,6 +777,8 @@
 
     var reajusteMesesMemo;
 
+    var paraMemo1;
+
 
     function validarNum(ev) {
         /*
@@ -1161,6 +1154,7 @@
         if (active == 1) {
 
             firmasIdMemo = [];
+            var paraMemo =  $("#paraMemo").val()
 
             $("#bodyFirmas_memo").children("tr").each(function (i) {
                 firmasIdMemo[i] = $(this).data("id")
@@ -1181,7 +1175,7 @@
                 var tipoReporte = tipoClickMemo;
 
                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo
+                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo
 
             }
 
@@ -1558,6 +1552,7 @@
                 proyeccionMemo = $("#proyeccionReajusteMemo").is(':checked');
                 reajusteIvaMemo = $("#reajusteIvaMemo").is(':checked');
                 reajusteMesesMemo = $("#mesesReajusteMemo").val();
+                paraMemo1 = $("#paraMemo").val()
 
                 if (proyeccionMemo == true && reajusteMesesMemo == "") {
                     $("#mesesCeroDialog").dialog("open")
@@ -1568,7 +1563,7 @@
                     var tipoReporte = tipoClickMemo;
 
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo
+                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo  + "&para=" + paraMemo1
 
                     $("#reajusteMemoDialog").dialog("close");
 

@@ -20,6 +20,10 @@ class DocumentosObraController {
 
         def auxiliarFijo = Auxiliar.get(1);
 
+        def usuario = session.usuario.id
+
+        def persona = Persona.get(usuario)
+
 //        println(params)
 
         def obra = Obra.get(params.id)
@@ -127,7 +131,7 @@ class DocumentosObraController {
 
 
 //        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, personasFirmas: personasFirmas, personasFirmas2: personasFirmas2, totalPresupuesto: totalPresupuesto]
-        [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona, totalPresupuestoBien: totalPresupuestoBien]
+        [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona, totalPresupuestoBien: totalPresupuestoBien, persona: persona]
 
 
 
