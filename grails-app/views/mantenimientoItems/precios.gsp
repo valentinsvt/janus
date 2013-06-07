@@ -54,6 +54,16 @@
                 <i class="icon-truck"></i>
                 Equipos
             </a>
+
+            <form class="form-search" style="width: 400px; position: relative; margin-left: 420px; margin-top: -22px; ">
+                <div class="input-append">
+                    <input type="text" class="input-medium search-query" id="search"/>
+                    <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
+                </div>
+                <span id="cantRes"></span>
+                <input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
+
+            </form>
         </div>
 
         <div id="loading" style="text-align:center;">
@@ -64,17 +74,8 @@
 
 
         <div id="treeArea" class="hide">
-            <form class="form-search" style="width: 600px; position: fixed; margin-left: 420px; margin-top: 2px; ">
-                <div class="input-append">
-                    <input type="text" class="input-medium search-query" id="search"/>
-                    <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
-                </div>
-                <span id="cantRes"></span>
-                <input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
 
-            </form>
-
-            <div style="margin-left: 40px; position: relative; top:-38px; left: 800px; ">
+            <div style="margin-left: 40px; position: relative; top:-60px; left: 800px; ">
                 Fecha por Defecto:
                 <elm:datepicker name="fecha" id="fcDefecto" class="datepicker required" style="width: 90px"
                                 yearRange="${(new Date().format('yyyy').toInteger() - 10).toString() + ':' + new Date().format('yyyy')}"

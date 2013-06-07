@@ -1069,7 +1069,7 @@ class MantenimientoItemsController extends Shield {
             lugarNombre = "todos los lugares"
         } else {
             def l = Lugar.get(lugarId)
-            lugarNombre = l.descripcion + " <i>(" + (l.tipoLista ? l.tipoLista?.descripcion : 'sin tipo') + ")</i>"
+            lugarNombre = l.descripcion + " (" + (l.tipoLista ? l.tipoLista?.descripcion : 'sin tipo') + ")"
         }
 
 //        println "parametros busqueda " + fecha + " - " + itemId + " - " + operador
