@@ -204,8 +204,8 @@
                         var data1 = $(this).data("original");
 
                         var chk = $(this).siblings(".chk").children("input").is(":checked");
-//                        ////console.log(chk);
-//                        ////console.log(data1)
+//                        console.log(chk);
+//                        console.log(data1);
 
                         if (chk || (parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
                             if (data != "") {
@@ -215,7 +215,7 @@
                             data += "item=" + id + "_" + val + "_" + fcha;// + "_" + chk;
                         }
                     });
-
+//                    console.log(data);
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action: 'actualizar')}",

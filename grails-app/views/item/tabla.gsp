@@ -21,8 +21,9 @@
                         <th>Item</th>
                         <th>Nombre del Item</th>
                         <th>U</th>
-                        <th>Precio</th>
-                        <th class="precioAL hidden">Precio Anterior</th>
+                        <th style="width:120px;">Precio</th>
+                        <th style="width:80px;">Copiar</th>
+                        <th class=" precioAL hidden">Precio Anterior</th>
                         <th>Fecha</th>
                         %{--<th>Registrar</th>--}%
                     </tr>
@@ -43,6 +44,9 @@
                             <td class="editable alineacion" id="${rubro?.id}"
                                 data-original="${rubro?.precioUnitario}" data-valor="${rubro?.precioUnitario}"
                                 style="width:150px"><g:formatNumber number="${rubro?.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,#####0" locale="ec"/>
+                            </td>
+                            <td style="text-align: center;" class="chk">
+                                <input type="checkbox"/>
                             </td>
                             <td class="precioAnterior hidden" align="center" style="width: 105px">
                                 0.00

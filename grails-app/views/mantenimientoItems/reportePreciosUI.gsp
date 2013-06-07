@@ -10,9 +10,11 @@ fieldset {
         <legend>Columnas a imprimir</legend>
 
         <div class="btn-group" data-toggle="buttons-checkbox">
-            <a href="#" id="t" class="col btn">
-                Transporte
-            </a>
+            <g:if test="${grupo.id == 1}">
+                <a href="#" id="t" class="col btn">
+                    Transporte
+                </a>
+            </g:if>
             <a href="#" id="u" class="col btn active">
                 Unidad
             </a>
@@ -47,7 +49,15 @@ fieldset {
         %{--Vial--}%
         %{--</a>--}%
         %{--</div>--}%
-        <g:select name="lugarRep" from="${janus.Lugar.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+        <g:set var="tipoMQ" value="${janus.TipoLista.findAllByCodigo('MQ')}"/>
+
+        <g:if test="${grupo.id == 1}">
+            <g:select name="lugarRep" from="${janus.Lugar.findAllByTipoListaNotInList(tipoMQ, [sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+        </g:if>
+        <g:else>
+            <g:select name="lugarRep" from="${janus.Lugar.findAllByTipoListaInList(tipoMQ, [sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+        </g:else>
+
 
         <elm:datepicker name="fechaRep" class="datepicker required" style="width: 90px" value="${new Date()}"
                         yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"
@@ -56,7 +66,7 @@ fieldset {
         %{--<div class="row-fluid" style="margin-top: 10px">--}%
 
         %{--<div class="span3">--}%
-            %{--Cantón--}%
+        %{--Cantón--}%
         %{--</div>--}%
 
 
@@ -64,30 +74,30 @@ fieldset {
 
         %{--<g:select name="lugar.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']" />--}%
 
-    %{--</div>--}%
-    %{--</div>--}%
+        %{--</div>--}%
+        %{--</div>--}%
 
         %{--<div class="row-fluid" style="margin-top: 10px">--}%
 
-            %{--<div class="span3">--}%
-                %{--Petreos Hormigones--}%
-            %{--</div>--}%
+        %{--<div class="span3">--}%
+        %{--Petreos Hormigones--}%
+        %{--</div>--}%
 
-            %{--<div class="span6">--}%
+        %{--<div class="span6">--}%
 
-            %{--<g:select name="listaVolumen0.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
+        %{--<g:select name="listaVolumen0.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
         %{--</div>--}%
         %{--</div>--}%
 
 
         %{--<div class="row-fluid" style="margin-top: 10px">--}%
-            %{--<div class="span3">--}%
-                %{--Especial--}%
-            %{--</div>--}%
-            %{--<div class="span6">--}%
+        %{--<div class="span3">--}%
+        %{--Especial--}%
+        %{--</div>--}%
+        %{--<div class="span6">--}%
 
-                %{--<g:select name="listaPeso1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
-            %{--</div>--}%
+        %{--<g:select name="listaPeso1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
+        %{--</div>--}%
 
 
 
@@ -96,23 +106,23 @@ fieldset {
 
         %{--<div class="row-fluid" style="margin-top: 10px">--}%
         %{--<div class="span3">--}%
-            %{--Mejoramiento--}%
+        %{--Mejoramiento--}%
         %{--</div>--}%
-            %{--<div class="span6">--}%
-            %{--<g:select name="listaVolumen1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion"  class="span6" noSelection="['null': 'Seleccione...']"/>--}%
-              %{--</div>--}%
+        %{--<div class="span6">--}%
+        %{--<g:select name="listaVolumen1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}" optionKey="id" optionValue="descripcion"  class="span6" noSelection="['null': 'Seleccione...']"/>--}%
+        %{--</div>--}%
         %{--</div>--}%
 
         %{--<div class="row-fluid" style="margin-top: 10px">--}%
 
         %{--<div class="span3">--}%
-            %{--Carpeta Asfáltica--}%
+        %{--Carpeta Asfáltica--}%
         %{--</div>--}%
 
-            %{--<div class="span6">--}%
+        %{--<div class="span6">--}%
         %{--<g:select name="listaVolumen2.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=5')}" optionKey="id" optionValue="descripcion" class="span6" noSelection="['null': 'Seleccione...']"/>--}%
 
-            %{--</div>--}%
+        %{--</div>--}%
         %{--</div>--}%
 
     </fieldset>
