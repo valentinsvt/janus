@@ -14,19 +14,36 @@ class GrupoController extends janus.seguridad.Shield {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 //        [grupoInstanceList: Grupo.list(params), grupoInstanceTotal: Grupo.count(), params: params]
 
-
 //        def grupo = Grupo.findAllByCodigoGreaterThanEquals("10")
-
 
 
         [grupoInstanceList: Grupo.findAll('from Grupo  where codigo >= "10" '), grupoInstanceTotal: Grupo.count(), params: params]
 //        [grupoInstanceList: grupo, grupoInstanceTotal: Grupo.count(), params: params]
     } //list
 
-    def arbol () {
+    def arbol() {
+        def aux = Parametros.get(1)
+        def volquetes = []
+        def volquetes2 = []
+        def choferes = []
+        def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
+        grupoTransporte.each {
+            if (it.transporte.codigo == "H") {
+                choferes = Item.findAllByDepartamento(it)
+            }
+            if (it.transporte.codigo == "T") {
+                volquetes = Item.findAllByDepartamento(it)
+            }
+            volquetes2 += volquetes
+        }
+        return [volquetes2: volquetes2, choferes: choferes, aux: aux]
+    }
 
-
-
+    def showRb_ajax() {
+        def rubro = Item.get(params.id)
+        def items = Rubro.findAllByRubro(rubro)
+        items.sort { it.item.codigo }
+        return [rubro: rubro, items: items]
     }
 
     def showDp_ajax() {
@@ -169,7 +186,7 @@ class GrupoController extends janus.seguridad.Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println "grupo controller l 172: "+e
+            println "grupo controller l 172: " + e
             render "NO"
         }
     }
@@ -182,7 +199,7 @@ class GrupoController extends janus.seguridad.Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println "grupo controller l 185: "+e
+            println "grupo controller l 185: " + e
             render "NO"
         }
     }
@@ -270,9 +287,9 @@ class GrupoController extends janus.seguridad.Shield {
         }
         departamento.properties = params
         if (departamento.save(flush: true)) {
-            render "OK_" + accion + "_" + departamento.id + "_"  + departamento.descripcion
+            render "OK_" + accion + "_" + departamento.id + "_" + departamento.descripcion
         } else {
-            println "grupo controller l 275: "+departamento.errors
+            println "grupo controller l 275: " + departamento.errors
             def errores = g.renderErrors(bean: departamento)
             render "NO_" + errores
         }
@@ -285,7 +302,7 @@ class GrupoController extends janus.seguridad.Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println "grupo controller l 288: "+e
+            println "grupo controller l 288: " + e
             render "NO"
         }
     }
@@ -319,6 +336,7 @@ class GrupoController extends janus.seguridad.Shield {
                 hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(id), [sort: 'codigo'])
                 break;
             case "departamento":
+                hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'nombre'])
                 break;
         }
 
@@ -345,18 +363,18 @@ class GrupoController extends janus.seguridad.Shield {
                     break;
 
                 case "subgrupo":
-                    hijosH = []
+                    hijosH = Item.findAllByDepartamento(hijo)
                     desc = hijo.descripcion
                     rel = "departamento"
                     liId = "dp" + "_" + hijo.id
                     break;
                 case "departamento":
-                    //                    println("entro sub")
-
+//                    println("entro sub")
                     hijosH = []
-
+                    desc = hijo.nombre
+                    rel = "rubro"
+                    liId = "rb" + "_" + hijo.id
                     break;
-
             }
 
             clase = (hijosH.size() > 0) ? "jstree-closed hasChildren" : ""
@@ -492,7 +510,7 @@ class GrupoController extends janus.seguridad.Shield {
             str += "<ul>"
             grupoInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
