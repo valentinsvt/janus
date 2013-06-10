@@ -31,7 +31,7 @@ class ReportesController {
 
     private String printFecha(Date fecha) {
         if (fecha) {
-             return (fecha.format("dd")+' de '+ meses[fecha.format("MM").toInteger()]+' de '+fecha.format("yyyy")).toUpperCase()
+            return (fecha.format("dd")+' de '+ meses[fecha.format("MM").toInteger()]+' de '+fecha.format("yyyy")).toUpperCase()
         } else {
             return "Error: no hay fecha que mostrar"
         }
@@ -1041,7 +1041,7 @@ class ReportesController {
         def itemsVolquete = [obra.volquete]
 
         def indi = obra.totales
-
+//         println "aqui es el reporte"
         preciosService.ac_rbroObra(obra.id)
 
         def baos = new ByteArrayOutputStream()
@@ -1069,11 +1069,11 @@ class ReportesController {
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeader = [border: Color.WHITE, colspan: 7,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
-                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE,bordeTop:"1",bordeBot:"1"]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
@@ -1104,8 +1104,8 @@ class ReportesController {
             def res = preciosService.presioUnitarioVolumenObra("* ", obra.id, id)
 
             PdfPTable headerRubroTabla = new PdfPTable(4); // 4 columns.
-            headerRubroTabla.setWidthPercentage(100);
-            headerRubroTabla.setWidths(arregloEnteros([10, 68, 12, 10]))
+            headerRubroTabla.setWidthPercentage(90);
+            headerRubroTabla.setWidths(arregloEnteros([12, 66, 12, 10]))
 
             addCellTabla(headerRubroTabla, new Paragraph("Fecha:", times8bold), prmsHeaderHoja)
             addCellTabla(headerRubroTabla, new Paragraph(new Date().format("dd-MM-yyyy"), times8normal), prmsHeaderHoja)
@@ -1115,7 +1115,7 @@ class ReportesController {
 
 
             addCellTabla(headerRubroTabla, new Paragraph("Presupuesto:", times8bold), prmsHeaderHoja)
-            addCellTabla(headerRubroTabla, new Paragraph(obra.descripcion, times8normal), prmsHeaderHoja)
+            addCellTabla(headerRubroTabla, new Paragraph(obra.descripcion?.toUpperCase(), times8normal), prmsHeaderHoja)
 
             addCellTabla(headerRubroTabla, new Paragraph("Fecha Act. PU:", times8bold), prmsHeaderHoja)
             addCellTabla(headerRubroTabla, new Paragraph(fecha.format("dd-MM-yyyy"), times8normal), prmsHeaderHoja)
@@ -1141,13 +1141,13 @@ class ReportesController {
             PdfPTable tablaIndirectos = new PdfPTable(3);
             PdfPTable tablaTotales = new PdfPTable(3);
 
-            creaHeadersTabla(tablaHerramientas, fonts, prms, "Herramientas")
-            creaHeadersTabla(tablaManoObra, fonts, prms, "Mano de obra")
-            creaHeadersTabla(tablaMateriales, fonts, prms, "Materiales")
+            creaHeadersTabla(tablaHerramientas, fonts, prms, "EQUIPO")
+            creaHeadersTabla(tablaManoObra, fonts, prms, "MANO DE OBRAS")
+            creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES")
             if (params.transporte == "1") {
-                creaHeadersTabla(tablaTransporte, fonts, prms, "Transporte")
+                creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
             }
-            creaHeadersTabla(tablaIndirectos, fonts, prms, "Costos Indirectos")
+            creaHeadersTabla(tablaIndirectos, fonts, prms, "COSTOS INDIRECTOS")
 
             def totalTrans = 0, totalHer = 0, totalMan = 0, totalMat = 0
             def totalRubro
@@ -1200,13 +1200,16 @@ class ReportesController {
             addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: indi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec") + "%", fonts.times8normal), prmsNum)
             addCellTabla(tablaIndirectos, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
 
-            tablaTotales.setWidthPercentage(100);
-            tablaTotales.setWidths(arregloEnteros([70, 20, 10]))
+            tablaTotales.setWidthPercentage(90);
+            tablaTotales.setWidths(arregloEnteros([70,20, 10]))
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            prmsCellLeft.put("bordeTop","1")
+            prmsNum.put("bordeTop","1")
             addCellTabla(tablaTotales, new Paragraph("Costo unitario directo", fonts.times8bold), prmsCellLeft)
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
-
+            prmsCellLeft.remove("bordeTop")
+            prmsNum.remove("bordeTop")
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(tablaTotales, new Paragraph("Costos indirectos", fonts.times8bold), prmsCellLeft)
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
@@ -1216,22 +1219,25 @@ class ReportesController {
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+
+            prmsCellLeft.put("bordeBot","1")
+            prmsNum.put("bordeBot","1")
             addCellTabla(tablaTotales, new Paragraph("Precio unitario USD", fonts.times8bold), prmsCellLeft)
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsNum)
-
-
+            prmsCellLeft.remove("bordeBot")
+            prmsNum.remove("bordeBot")
 
             PdfPTable pieTabla = new PdfPTable(2);
-            pieTabla.setWidthPercentage(100);
-            pieTabla.setWidths(arregloEnteros([30, 70]))
+            pieTabla.setWidthPercentage(90);
+            pieTabla.setWidths(arregloEnteros([ 99,1]))
 
 
-            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+
             addCellTabla(pieTabla, new Paragraph("Parámetros para los datos de presupuesto obtenidos de la obra: " + obra?.nombre, fonts.times8bold), prmsHeaderHoja)
-
             addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
-            addCellTabla(pieTabla, new Paragraph("Nota: Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.   ", fonts.times8bold), prmsHeaderHoja)
 
+            addCellTabla(pieTabla, new Paragraph("Nota: Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.   ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
 
             addTablaHoja(document, headerRubroTabla, false)
             addTablaHoja(document, tablaHerramientas, false)
@@ -1299,8 +1305,8 @@ class ReportesController {
     }
 
     def creaHeadersTabla(PdfPTable table, fonts, params, String tipo) {
-        table.setWidthPercentage(100);
-        if (tipo == "Costos Indirectos") {
+        table.setWidthPercentage(90);
+        if (tipo == "COSTOS INDIRECTOS") {
             table.setWidths(arregloEnteros([70, 15, 15]))
             addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader2)
 
@@ -1308,7 +1314,7 @@ class ReportesController {
             addCellTabla(table, new Paragraph("Porcentaje", fonts.times8boldWhite), params.prmsCellHead)
             addCellTabla(table, new Paragraph("Valor", fonts.times8boldWhite), params.prmsCellHead)
         } else {
-            if (tipo == "Materiales") {
+            if (tipo == "EQUIPO") {
                 table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 10, 8]))
                 addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
 
@@ -1348,8 +1354,12 @@ class ReportesController {
 
     def addCellTabla(PdfPTable table, Paragraph paragraph, params) {
         PdfPCell cell = new PdfPCell(paragraph);
+//        println "params "+params
+        cell.setBorderColor(Color.BLACK);
         if (params.border) {
-            cell.setBorderColor(params.border);
+            if(!params.bordeBot)
+                if(!params.bordeTop)
+                    cell.setBorderColor(params.border);
         }
         if (params.bg) {
             cell.setBackgroundColor(params.bg);
@@ -1365,6 +1375,20 @@ class ReportesController {
         }
         if (params.w) {
             cell.setBorderWidth(params.w);
+        }
+        if(params.bordeTop){
+            cell.setBorderWidthTop(0.5)
+            cell.setBorderWidthLeft(0)
+            cell.setBorderWidthRight(0)
+            cell.setBorderWidthBottom(0)
+        }
+        if(params.bordeBot){
+            cell.setBorderWidthBottom(0.5)
+            cell.setBorderWidthLeft(0)
+            cell.setBorderWidthRight(0)
+            if(!params.bordeTop){
+                cell.setBorderWidthTop(0)
+            }
         }
         table.addCell(cell);
     }
