@@ -35,7 +35,7 @@ class AuxiliarController extends janus.seguridad.Shield {
             if(!auxiliarInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Auxiliar con id " + params.id
-                redirect(action: 'list')
+                redirect(action: '')
                 return
             }//no existe el objeto
             auxiliarInstance.properties = params
@@ -71,6 +71,54 @@ class AuxiliarController extends janus.seguridad.Shield {
         }
         redirect(action: 'list')
     } //save
+
+
+    def saveDoc() {
+        def auxiliarInstance
+        if(params.id) {
+            auxiliarInstance = Auxiliar.get(params.id)
+            if(!auxiliarInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Auxiliar con id " + params.id
+                redirect(controller: 'documentosObra', action: 'documentosObra', id: params.obra)
+                return
+            }//no existe el objeto
+            auxiliarInstance.properties = params
+        }//es edit
+        else {
+            auxiliarInstance = new Auxiliar(params)
+        } //es create
+        if (!auxiliarInstance.save(flush: true)) {
+            flash.clase = "alert-error"
+            def str = "<h4>No se pudo guardar Auxiliar " + (auxiliarInstance.id ? auxiliarInstance.id : "") + "</h4>"
+
+            str += "<ul>"
+            auxiliarInstance.errors.allErrors.each { err ->
+                def msg = err.defaultMessage
+                err.arguments.eachWithIndex {  arg, i ->
+                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                }
+                str += "<li>" + msg + "</li>"
+            }
+            str += "</ul>"
+
+            flash.message = str
+            redirect(controller: 'documentosObra', action: 'documentosObra', id: params.obra)
+            return
+        }
+
+        if(params.id) {
+            flash.clase = "alert-success"
+            flash.message = "Se ha actualizado correctamente Auxiliar " + auxiliarInstance.id
+        } else {
+            flash.clase = "alert-success"
+            flash.message = "Se ha creado correctamente Auxiliar " + auxiliarInstance.id
+        }
+        redirect(controller: 'documentosObra', action: 'documentosObra', id: params.obra)
+    } //save
+
+
+
 
     def show_ajax() {
         def auxiliarInstance = Auxiliar.get(params.id)

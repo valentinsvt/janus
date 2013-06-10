@@ -286,7 +286,7 @@
         <fieldset class="borde">
             <legend>Texto</legend>
 
-            <g:form class="memoGrabar" name="frm-memo" controller="auxiliar" action="save">
+            <g:form class="memoGrabar" name="frm-memo" controller="auxiliar" action="saveDoc">
 
                 <g:hiddenField name="id" value="${"1"}"/>
 
@@ -417,7 +417,7 @@
         <fieldset class="borde">
             <legend>Nota</legend>
 
-            <g:form class="memoGrabar" name="frm-formula" controller="auxiliar" action="save">
+            <g:form class="memoGrabar" name="frm-formula" controller="auxiliar" action="saveDoc">
 
                 <g:hiddenField name="id" value="${"1"}"/>
 
@@ -574,19 +574,19 @@
         <fieldset class="borde">
             <legend>Pie de Página</legend>
 
-            <g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="save">
+            <g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="saveDoc">
 
                 <g:hiddenField name="id" value="${"1"}"/>
 
                 <g:hiddenField name="obra" value="${obra?.id}"/>
 
-                <div class="span6">
-                    <div class="span1">Retenciones</div>
+                %{--<div class="span6">--}%
+                    %{--<div class="span1">Retenciones</div>--}%
 
-                    <div class="span3"><g:textField name="retencion" value="${auxiliarFijo?.retencion}"
-                                                    style="width: 560px" disabled="true"/></div>
+                    %{--<div class="span3"><g:textField name="retencion" value="${auxiliarFijo?.retencion}"--}%
+                                                    %{--style="width: 560px" disabled="true"/></div>--}%
 
-                </div>
+                %{--</div>--}%
 
 
                 <div class="span6">
@@ -1220,11 +1220,11 @@
 
         $("#frm-memo").submit();
 
-        success_func(location.href = "${g.createLink(controller: 'documentosObra',action: 'documentosObra',id: obra?.id)}")
-        var tipoReporte = tipoClickMemo;
+        %{--success_func(location.href = "${g.createLink(controller: 'documentosObra',action: 'documentosObra',id: obra?.id)}")--}%
+        %{--var tipoReporte = tipoClickMemo;--}%
 
-        location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo
+        %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo--}%
+                %{--+ "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo--}%
     });
 
     $("#btnEditarFor").click(function () {
@@ -1250,6 +1250,7 @@
     $("#btnAceptarTextoF").click(function () {
 
         $("#frm-textoFijo").submit();
+
     });
 
     $("#btnEditarTextoRet").click(function () {
