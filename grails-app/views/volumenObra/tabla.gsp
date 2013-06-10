@@ -230,7 +230,7 @@
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
         } else {
 
-
+            alert("Escoja un subpresupuesto")
         }
 
 

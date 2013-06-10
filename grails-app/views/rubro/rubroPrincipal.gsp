@@ -121,7 +121,7 @@
         </div>
         <div class="row-fluid">
             <div class="span2"  >
-                Solicitante
+                Dirección responsable
                 <g:select name="rubro.grupo.id" id="selClase" from="${grupos}" class="span12" optionKey="id" optionValue="descripcion"
                           value="${rubro?.departamento?.subgrupo?.grupo?.id}" noSelection="['': '--Seleccione--']"/>
             </div>
@@ -155,7 +155,7 @@
             <div class="span2" style="color: #01a">
                 Responsable: <br>
                 <g:if test="${modifica}">
-                    <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id}" id="responsable" optionKey="id" noSelection="['-1':'Seleccione..']"></g:select>
+                    <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id}" id="responsable" optionKey="id" noSelection="['-1':'Seleccione..']" style="width:100%;"></g:select>
                 </g:if>
                 <g:else>
                     ${rubro?.responsable}
@@ -227,26 +227,26 @@
 
         <div class="span6">
             Descripción
-            <input type="text" name="item.descripcion" id="item_desc" class="span72">
+            <input type="text" name="item.descripcion" id="item_desc" class="span11">
         </div>
 
-        <div class="span1">
+        <div class="span1" style="margin-right: 0px;margin-left: -30px;">
             Unidad
             <input type="text" name="item.unidad" id="item_unidad" class="span8">
         </div>
 
-        <div class="span1">
+        <div class="span1" style="margin-left: -5px !important;">
             Cantidad
             <input type="text" name="item.cantidad" class="span12" id="item_cantidad" value="1" style="text-align: right">
         </div>
 
-        <div class="span1">
+        <div class="span2">
             Rendimiento
-            <input type="text" name="item.rendimiento" class="span12" id="item_rendimiento" value="1" style="text-align: right">
+            <input type="text" name="item.rendimiento" class="span8" id="item_rendimiento" value="1" style="text-align: right">
         </div>
 
         <g:if test="${modifica}">
-            <div class="span1" style="border: 0px solid black;height: 45px;padding-top: 22px">
+            <div class="span1" style="border: 0px solid black;height: 45px;padding-top: 22px;margin-left: -5px">
                 <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Agregar" id="btn_agregarItem">
                     <i class="icon-plus"></i>
                 </a>
@@ -1754,7 +1754,7 @@
                             $("#item_cantidad").val("1")
                             $("#cdgo_buscar").val("")
                             $("#cdgo_unidad").val("")
-                            $("#item_rendimiento").val("1")
+//                            $("#item_rendimiento").val("1")
                         }
                     });
                 } else {

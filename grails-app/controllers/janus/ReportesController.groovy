@@ -143,7 +143,7 @@ class ReportesController {
         headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", titleFont));
         headers.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA " + titulo, titleFont));
         headers.add(new Paragraph("OBRA: " + obra?.descripcion, titleFont));
-        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), titleFont));
+        headers.add(new Paragraph("MEMO CANT. OBRA: ${obra.memoCantidadObra}                                                                                           FECHA: " + new Date().format("dd-MM-yyyy"), titleFont));
         addEmptyLine(headers, 1);
         document.add(headers);
 
@@ -151,8 +151,8 @@ class ReportesController {
         /*table*/
 
         def parcial = []
-        def anchos = [4, 7, 35, 5, 8, 8, 8, 8, 8, 8]     // , 9
-        def anchos2 = [4, 7, 35, 5, 8, 8, 8, 8, 8]     // , 9
+        def anchos = [5, 6, 35, 5, 8, 8, 8, 8, 8, 8]     // , 9
+        def anchos2 = [5, 6, 35, 5, 8, 8, 8, 8, 8]     // , 9
 
         def inicio = 0
         def fin = 10
@@ -196,6 +196,9 @@ class ReportesController {
                inicio -= 2       //gdo
 */
 
+
+//            println "anchos "+anchos
+//            println "anchos2 "+anchos2
 
 
             PdfPTable table = new PdfPTable((fin - inicio).toInteger());       //gdo
@@ -284,13 +287,24 @@ class ReportesController {
 //                        table2.addCell(cell);
 //
 //                    }
+                        def fuente = small
+                        def borde = 1.5
+                        if(f[1]=~"sS"){
+                            fuente= new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+                        }
+
+
                         def dato = f[(inicio + i)]
                         if (!dato)
                             dato = "0.00"
                         else
                             dato = dato.toString()
-                        def cell = new PdfPCell(new Phrase(dato, small));
+                        def cell = new PdfPCell(new Phrase(dato, fuente));
                         cell.setFixedHeight(16f);
+                        if(f[1]=="sS1")
+                            cell.setBorderWidthTop(borde)
+                        if(f[1]=="sS2")
+                            cell.setBorderWidthBottom(borde)
                         table2.addCell(cell);
                     }
                 }
@@ -306,7 +320,7 @@ class ReportesController {
 
                 (finCab - inicioCab).toInteger().times { i ->
 
-//                println columnas
+//                println "columnas "+columnas[(inicioCab + i)-1][1]
                     PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicioCab + i)-1][1], small));
                     c1.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(c1);
@@ -317,6 +331,14 @@ class ReportesController {
 
                 table.setHeaderRows(1);
                 filas.each { f ->
+//                    println "f "+f[1]
+                    def fuente = small
+                    def borde = 1.5
+                    if(f[1]=~"sS"){
+                        fuente= new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+                    }
+                    if(f[1]=="sS1" || f[1]=="sS2")
+                        borde=1.5
                     (fin - inicio).toInteger().times { i ->
 
                         def dato = f[(inicio + i)-1]
@@ -324,8 +346,12 @@ class ReportesController {
                             dato = "0.00"
                         else
                             dato = dato.toString()
-                        def cell = new PdfPCell(new Phrase(dato, small));
+                        def cell = new PdfPCell(new Phrase(dato, fuente));
                         cell.setFixedHeight(16f);
+                        if(f[1]=="sS1")
+                            cell.setBorderWidthTop(borde)
+                        if(f[1]=="sS2")
+                            cell.setBorderWidthBottom(borde)
                         table.addCell(cell);
                     }
                 }
@@ -5220,23 +5246,23 @@ class ReportesController {
         tablaTitulo.setWidthPercentage(100)
         tablaTitulo.setWidths(arregloEnteros([90,10]))
 
-       PdfPTable tablaComposicion = new PdfPTable(8)
-       tablaComposicion.setWidthPercentage(100)
-       tablaComposicion.setWidths(arregloEnteros([12,36,5,9,9,9,10,10]))
+        PdfPTable tablaComposicion = new PdfPTable(8)
+        tablaComposicion.setWidthPercentage(100)
+        tablaComposicion.setWidths(arregloEnteros([12,36,5,9,9,9,10,10]))
 
         PdfPTable tablaTotales = new PdfPTable(2)
         tablaTotales.setWidthPercentage(100)
         tablaTotales.setWidths(arregloEnteros([70,30]))
 
 
-       addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead)
-       addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead)
-       addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead)
-       addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead)
-       addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha)
-       addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha)
-       addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha)
-       addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead)
+        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead)
+        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead)
+        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead)
+        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha)
 
 
         addCellTabla(tablaTitulo, new Paragraph("Materiales ", times10bold), prmsCellIzquierda)
@@ -5246,28 +5272,28 @@ class ReportesController {
 
         res.each { r->
 
-           if(r?.grid ==1){
+            if(r?.grid ==1){
 
-              addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
-              addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
-              addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
-              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
-                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
-                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
-                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
-                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-              addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
-                      3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion, new Paragraph(r?.codigo, times8normal), prmsCellIzquierda)
+                addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
+                addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
+                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
 
-              totales = r?.total
+                totales = r?.total
 
-              valorTotal =  (total1 += totales)
-           }
+                valorTotal =  (total1 += totales)
+            }
 
-       }
+        }
 
         addCellTabla(tablaTotales, new Paragraph("Total Materiales", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: valorTotal, minFractionDigits:
@@ -5301,26 +5327,26 @@ class ReportesController {
         res.each {j->
 
 
-           if(j?.grid == 2) {
-               addCellTabla(tablaComposicion2, new Paragraph(j?.codigo, times8normal), prmsCellIzquierda)
-               addCellTabla(tablaComposicion2, new Paragraph(j?.item, times8normal), prmsCellIzquierda)
-               addCellTabla(tablaComposicion2, new Paragraph(j?.unidad, times8normal), prmsCellHead)
-               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.cantidad, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.punitario, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.transporte, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.costo, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.total, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+            if(j?.grid == 2) {
+                addCellTabla(tablaComposicion2, new Paragraph(j?.codigo, times8normal), prmsCellIzquierda)
+                addCellTabla(tablaComposicion2, new Paragraph(j?.item, times8normal), prmsCellIzquierda)
+                addCellTabla(tablaComposicion2, new Paragraph(j?.unidad, times8normal), prmsCellHead)
+                addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.cantidad, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.punitario, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.transporte, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.costo, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.total, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
 
-               totalesMano = j?.total
-               valorTotalMano = (total2 += totalesMano)
+                totalesMano = j?.total
+                valorTotalMano = (total2 += totalesMano)
 
 
-           }
+            }
 
         }
 
@@ -5351,26 +5377,26 @@ class ReportesController {
 
         res.each {k->
 
-         if(k?.grid == 3){
-               addCellTabla(tablaComposicion3, new Paragraph(k?.codigo, times8normal), prmsCellIzquierda)
-               addCellTabla(tablaComposicion3, new Paragraph(k?.item, times8normal), prmsCellIzquierda)
-               addCellTabla(tablaComposicion3, new Paragraph(k?.unidad, times8normal), prmsCellHead)
-               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.cantidad, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.punitario, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.transporte, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.costo, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
-               addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.total, minFractionDigits:
-                       3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+            if(k?.grid == 3){
+                addCellTabla(tablaComposicion3, new Paragraph(k?.codigo, times8normal), prmsCellIzquierda)
+                addCellTabla(tablaComposicion3, new Paragraph(k?.item, times8normal), prmsCellIzquierda)
+                addCellTabla(tablaComposicion3, new Paragraph(k?.unidad, times8normal), prmsCellHead)
+                addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.cantidad, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.punitario, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.transporte, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.costo, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.total, minFractionDigits:
+                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
 
-             totalesEquipos = k?.total
-             valorTotalEquipos = (total3 += totalesEquipos)
+                totalesEquipos = k?.total
+                valorTotalEquipos = (total3 += totalesEquipos)
 
 
-           }
+            }
 
         }
 
