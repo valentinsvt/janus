@@ -550,7 +550,7 @@
         var id, rel, label;
         id = "root";
         rel = "root";
-        label = "Dirección Responsable";
+        label = "Dirección Responsable"
 
 
 
