@@ -99,53 +99,59 @@
                         Lista de precios: MO y Equipos
                     </div>
 
-                    <div class="span5">
-                        <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" id="ciudad" style="width: 200px"/>
+                    <div class="span3">
+                        <g:select name="item.ciudad.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=6')}" optionKey="id" optionValue="descripcion" id="ciudad" style="width: 170px"/>
                     </div>
 
-                    <div class="span2">
+                    <div class="span1">
                         Fecha
                     </div>
 
-                    <div class="span3">
-                        <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
+                    <div class="span2">
+                        <elm:datepicker name="item.fecha" class="" style="width: 90px;" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
+                    </div>
+
+                    <div class="span2" style="width: 120px;">
+                        % costos indirectos
+                    </div>
+
+                    <div class="span1">
+                        <input type="text" style="width: 30px;" id="costo_indi" value="21">
                     </div>
                 </div>
-                <hr/>
+                <hr style="margin: 5px 0 10px 0;"/>
 
                 <div class="row-fluid">
-                    <div class="span2">
+                    <div class="span1">
                         Volquete
                     </div>
 
-                    <div class="span5">
-                        <g:select name="volquetes" from="${volquetes2}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1': 'Seleccione']}" value="${aux.volquete.id}"/>
+                    <div class="span3" style="margin-left: 10px;">
+                        <g:select style="width: 165px;" name="volquetes" from="${volquetes2}" optionKey="id" optionValue="nombre" id="cmb_vol" noSelection="${['-1': 'Seleccione']}" value="${aux.volquete.id}"/>
                     </div>
 
-                    <div class="span2">
+                    <div class="span1" style="width: 35px; margin-left: 5px;">
                         Costo
                     </div>
 
-                    <div class="span3">
-                        <input type="text" style="width: 60px;text-align: right" disabled="" id="costo_volqueta">
+                    <div class="span1" style="margin-left: 5px; width: 90px;">
+                        <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_volqueta">
                     </div>
-                </div>
 
-                <div class="row-fluid">
-                    <div class="span2">
+                    <div class="span1" style="margin-left: 5px;">
                         Chofer
                     </div>
 
-                    <div class="span5">
-                        <g:select name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" style="" noSelection="${['-1': 'Seleccione']}" value="${aux.chofer.id}"/>
+                    <div class="span3" style="margin-left: 5px;">
+                        <g:select style="width: 165px;" name="volquetes" from="${choferes}" optionKey="id" optionValue="nombre" id="cmb_chof" noSelection="${['-1': 'Seleccione']}" value="${aux.chofer.id}"/>
                     </div>
 
-                    <div class="span2">
+                    <div class="span1" style="width: 35px;margin-left: 5px;">
                         Costo
                     </div>
 
-                    <div class="span3">
-                        <input type="text" style="width: 60px;text-align: right" disabled="" id="costo_chofer">
+                    <div class="span1" style="margin-left: 5px; width: 90px;">
+                        <input type="text" style="width: 69px;text-align: right" disabled="" id="costo_chofer">
                     </div>
                 </div>
 
