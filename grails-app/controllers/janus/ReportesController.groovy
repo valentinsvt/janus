@@ -21,7 +21,9 @@ import java.awt.*
 
 class ReportesController {
 
-    def index() {}
+    def index() {
+
+    }
 
     def buscadorService
     def preciosService

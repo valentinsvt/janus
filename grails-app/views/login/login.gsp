@@ -79,97 +79,21 @@
     <span id="spanError"></span>
 </div>
 
-<div class="dialog ui-corner-all" style="height: 595px;background: #31789f;;padding: 10px;width: 910px;margin: auto;margin-top: 5px" >
-    <div style="text-align: center;">
-        <h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#fff;">
-            Control de Proyectos, Contratación, Ejecución y Seguimiento de Obras del GADPP
-        </h1>
+<div style="text-align: center;"><h1 style="font-family: 'open sans condensed';font-weight: bold;font-size:
+25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#0088CC; margin-top: 60px;">
+    Control de Proyectos, Contratación, Ejecución y Seguimiento de Obras del GADPP</h1></div>
+<div class="dialog ui-corner-all" style="height: 595px;background: #d7d7d7;;padding: 10px;width: 910px;margin: auto;margin-top: 5px" >
+    <div style="text-align: center; margin-top: 50px; color: #810;">
+        <img src="${resource(dir: 'images', file: 'logo_gpp3.png')}" />
     </div>
-    <div class="body" style="width: 850px;position: relative;margin: auto;margin-top: 0px;height: 480px">
-
-        %{--<g:link  controller="proyecto" action="list" title="Gestión de proyectos">--}%
-        <div  class="ui-corner-all  item fuera">
-            <div  class="ui-corner-all ui-widget-content item">
-                <div class="imagen">
-                    <img src="${resource(dir: 'images', file: 'apu1.png')}" width="100%" height="100%"/>
-                </div>
-                <div class="texto"><b>Precios unitarios y análisis de precios</b>: registro y mantenimiento de
-                ítems y rubros. Análisis de precios, rendimientos y listas de precios...</div>
-            </div>
-        </div>
-        %{--</g:link>--}%
-        %{--<g:link  controller="asignacion" action="asignacionesCorrientesv2"  id="${session.unidad.id}" title="Programación del gasto corriente">--}%
-        <div  class="ui-corner-all item fuera">
-            <div  class="ui-corner-all ui-widget-content item">
-                <div class="imagen">
-                    <img src="${resource(dir: 'images', file: 'obra100.png')}" width="100%" height="100%"/>
-                </div>
-                <div class="texto"><b>Obras</b>: registro de Obras, georeferen-ciación, los volúmenes de obra,
-                variables de transporte y costos indirectos ...</div>
-            </div>
-        </div>
-        %{--</g:link>--}%
-
-        %{--<g:link  controller="entidad" action="arbol_asg"  id="${session.unidad.id}" title="Plan Anual de Compras - gasto corriente ">--}%
-        <div  class="ui-corner-all item fuera">
-            <div  class="ui-corner-all ui-widget-content item">
-                <div class="imagen">
-                    <img src="${resource(dir: 'images', file: 'compras.png')}" width="100%" height="100%"/>
-                </div>
-                <div class="texto"><b>Compras Públicas</b>: plan anual de contrataciones, gestión de pliegos y
-                control y seguimiento del PAC de obras ...</div>
-            </div>
-        </div>
-        %{--</g:link>--}%
-
-        %{--<g:link  controller="documento" action="list" title="Documentos de los Proyectos">--}%
-        <div  class="ui-corner-all  item fuera">
-            <div  class="ui-corner-all ui-widget-content item">
-                <div class="imagen">
-                    <img src="${resource(dir: 'images', file: 'fiscalizar.png')}" width="100%" height="100%"/>
-                </div>
-                <div class="texto"><b>Fiscalización</b>: seguimiento a la ejecución de las obras: incio de obra,
-                planillas, reajuste de precios, cronograma ...</div>
-            </div>
-        </div>
-        %{--</g:link>--}%
-        %{--<g:link  controller="documento" action="list" title="Documentos de los Proyectos">--}%
-        <div  class="ui-corner-all  item fuera">
-            <div  class="ui-corner-all ui-widget-content item">
-                <div class="imagen">
-                    <img src="${resource(dir: 'images', file: 'reporte.png')}" width="100%" height="100%"/>
-                </div>
-                <div class="texto"><b>Reportes</b>: formatos pdf, hoja de cálculo, texto plano y html.
-                obras, concursos, contratos, contratistas, avance de obra...</div>
-            </div>
-        </div>
-        %{--</g:link>--}%
-        %{--<g:link  controller="documento" action="list" title="Documentos de los Proyectos">--}%
-        <div  class="ui-corner-all  item fuera">
-            <div  class="ui-corner-all ui-widget-content item">
-                <div class="imagen">
-                    <img src="${resource(dir: 'images', file: 'oferta.png')}" width="100%" height="100%"/>
-                </div>
-                <div class="texto"><b>Oferentes ganadores</b>:registro en línea los valores de precios unitarios,
-                rubros, volúmenes de obra y cronograma de las ofertas </div>
-            </div>
-        </div>
-        %{--</g:link>--}%
-        %{--<div  class="ui-corner-all  item fuera" style="width: 543px">--}%
-        %{--<div  class="ui-corner-all ui-widget-content item" style="width: 543px">--}%
-        %{--<img src="${resource(dir: 'images', file: 'logo_gpp.png')}" style="width: 543px;height: 217px;" class="ui-corner-all"/>--}%
-        %{--</div>--}%
-        %{--</div>--}%
-
-
-    </div>
-    <div style="width: 100%;height: 30px;float: left;margin-top: 10px;text-align: center">
+    <div style="width: 100%;height: 30px;float: left;margin-top: 30px;text-align: center">
         <a href="#" id="ingresar" class="btn btn-inverse">
             <i class="icon-off icon-white"></i>
             Ingresar
         </a>
     </div>
-    <div style="text-align:right; color:#eea781">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
+
+</div>
 </div>
 
 <div class="modal login hide fade " id="modal-ingreso" style=";overflow: hidden;">

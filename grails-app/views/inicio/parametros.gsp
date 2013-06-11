@@ -209,6 +209,7 @@
     <div id="tool" style="float:left; width: 160px; height: 300px; margin: 30px; display: none; padding:25px;"
          class="ui-widget-content ui-corner-all">
     </div>
+
 </div>
 
 <div id="grgf" style="display:none">
