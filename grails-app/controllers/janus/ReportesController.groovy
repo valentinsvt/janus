@@ -4522,11 +4522,12 @@ class ReportesController {
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 12)
         sheet.setColumnView(1, 25)
-        sheet.setColumnView(2, 60)
-        sheet.setColumnView(3, 25)
+        sheet.setColumnView(2, 25)
+        sheet.setColumnView(3, 60)
         sheet.setColumnView(4, 25)
         sheet.setColumnView(5, 25)
         sheet.setColumnView(6, 25)
+        sheet.setColumnView(7, 25)
 
 
         def label
@@ -4552,11 +4553,12 @@ class ReportesController {
 
         label = new Label(0, 8, "#", times16format); sheet.addCell(label);
         label = new Label(1, 8, "CÓDIGO", times16format); sheet.addCell(label);
-        label = new Label(2, 8, "RUBRO", times16format); sheet.addCell(label);
-        label = new Label(3, 8, "UNIDAD", times16format); sheet.addCell(label);
-        label = new Label(4, 8, "CANTIDAD", times16format); sheet.addCell(label);
-        label = new Label(5, 8, "UNITARIO", times16format); sheet.addCell(label);
-        label = new Label(6, 8, "C.TOTAL", times16format); sheet.addCell(label);
+        label = new Label(2, 8, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
+        label = new Label(3, 8, "RUBRO", times16format); sheet.addCell(label);
+        label = new Label(4, 8, "UNIDAD", times16format); sheet.addCell(label);
+        label = new Label(5, 8, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new Label(6, 8, "UNITARIO", times16format); sheet.addCell(label);
+        label = new Label(7, 8, "C.TOTAL", times16format); sheet.addCell(label);
 
         valores.each {
 
@@ -4577,11 +4579,12 @@ class ReportesController {
 
             number = new Number(0, fila, numero++); sheet.addCell(number);
             label = new Label(1, fila, it.rbrocdgo.toString()); sheet.addCell(label);
-            label = new Label(2, fila, it.rbronmbr.toString()); sheet.addCell(label);
-            label = new Label(3, fila, it.unddcdgo.toString()); sheet.addCell(label);
-            number = new Number(4, fila, it.vlobcntd); sheet.addCell(number);
-            number = new Number(5, fila, it.pcun); sheet.addCell(number);
-            number = new Number(6, fila, it.totl); sheet.addCell(number);
+            label = new Label(2, fila, it.sbprdscr.toString()); sheet.addCell(label);
+            label = new Label(3, fila, it.rbronmbr.toString()); sheet.addCell(label);
+            label = new Label(4, fila, it.unddcdgo.toString()); sheet.addCell(label);
+            number = new Number(5, fila, it.vlobcntd); sheet.addCell(number);
+            number = new Number(6, fila, it.pcun); sheet.addCell(number);
+            number = new Number(7, fila, it.totl); sheet.addCell(number);
 
             fila++
             totales = it.totl
