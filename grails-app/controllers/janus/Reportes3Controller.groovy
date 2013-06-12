@@ -55,9 +55,15 @@ class Reportes3Controller {
 
     def imprimirRubroVolObra() {
 //        println "----->>>>" + params
-        def rubro = Item.get(params.id)
+//        def rubro = Item.get(params.id)
         def obra = Obra.get(params.obra)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+
+
+        def vol1 = VolumenesObra.get(params.id)
+        def rubro = Item.get(vol1.item.id)
+
+
         def indi = obra.totales
 
         try {

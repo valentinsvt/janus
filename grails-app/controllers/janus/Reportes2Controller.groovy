@@ -861,4 +861,181 @@ class Reportes2Controller {
     }
 
 
+    def reporteDesgloseEquipos () {
+
+
+        def obra = Obra.get(1430)
+
+        def transTotal
+        def eqTotal
+        def eqDesglosado
+        def b = []
+        def c =[]
+        def sqlEquipoTotal1
+        def et1 = []
+        def et2
+        def et3
+        def ed1 = []
+        def ed2
+        def ed3
+        def valores = []
+        def desglose = []
+        def columnas = [5051,5050,5052,3978,5049]
+
+        def sqlTransTotal = "SELECT\n" +
+                "valor\n" +
+                "FROM mfvl, mfcl\n" +
+                "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
+                "mfvl.obra__id = 1430 AND\n" +
+                "mfcl.clmndscr = 'TRANSPORTE_T' AND\n" +
+                "codigo = 'sS1' AND\n"+
+                "mfvl.clmncdgo = mfcl.clmncdgo"
+
+//        select valor
+//        from mfvl, mfcl
+//        where mfvl.obra__id = mfcl.obra__id and mfvl.obra__id = 1430
+//        and mfcl.clmndscr = 'TRANSPORTE_T' and
+//        codigo = 'sS1'  and mfvl.clmncdgo = mfcl.clmncdgo;
+
+//            select valor
+//        from mfvl, mfcl
+//        where mfvl.obra__id = mfcl.obra__id and mfvl.obra__id = 1430
+//        and mfcl.clmndscr = '5051_T' and
+//        codigo = 'sS1'  and mfvl.clmncdgo = mfcl.clmncdgo;
+
+//
+//        select valor
+//        from mfvl, mfcl
+//        where mfvl.obra__id = mfcl.obra__id
+//        and mfvl.obra__id = 1430 and mfcl.clmndscr = '5051_T' and
+//        codigo = 'sS2'
+//        and mfvl.clmncdgo = mfcl.clmncdgo;
+
+        def cn = dbConnectionService.getConnection()
+
+
+        columnas.each {
+
+            //equipoTotal
+
+            sqlEquipoTotal1 = "SELECT\n" +
+                    "valor\n" +
+                    "from mfvl, mfcl\n" +
+                    "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
+                    "mfvl.obra__id = 1430 AND\n" +
+                    "mfcl.clmndscr = '${it}_T' AND \n" +
+                    "codigo = 'sS1' AND\n "+
+                    "mfvl.clmncdgo = mfcl.clmncdgo"
+
+
+              et3 = cn.rows(sqlEquipoTotal1.toString())
+
+              et3.each {
+
+
+                  et2 = it?.valor
+
+              }
+
+
+            et1 += et2
+
+            //equipoDesglosado
+
+            def sqlEquipoDesglosado1 = "SELECT\n" +
+                    "valor\n" +
+                    "from mfvl, mfcl\n" +
+                    "where mfvl.obra__id = mfcl.obra__id AND\n" +
+                    "mfvl.obra__id = 1430 AND\n" +
+                    "mfcl.clmndscr = '${it}_T' AND\n" +
+                    "codigo= 'sS2' AND\n" +
+                    "mfvl.clmncdgo = mfcl.clmncdgo"
+
+
+            ed3 = cn.rows(sqlEquipoDesglosado1.toString())
+
+            ed3.each {
+
+
+                ed2 = it?.valor
+
+            }
+
+
+            ed1 += ed2
+
+
+
+
+        }
+
+
+        def tt = cn.rows(sqlTransTotal.toString())
+
+        println("A:" + et1)
+        println("D:" + ed1)
+
+
+        tt.each {
+
+             transTotal = it?.valor
+
+        }
+
+      valores += (obra?.desgloseEquipo)
+      valores += (obra?.desgloseRepuestos)
+      valores += (obra?.desgloseCombustible)
+      valores += (obra?.desgloseMecanico)
+      valores += (obra?.desgloseSaldo)
+
+        println("coeficientes:" + valores)
+
+      valores.eachWithIndex { item, i->
+
+          b += (( ((-ed1[i])/(item)) + et1[i])* (-1))
+
+      }
+
+        println("B:" + b)
+
+       b.eachWithIndex {valor1, j->
+
+
+       c += (valor1 + et1[j])
+
+
+       }
+
+      println("C:" + c)
+
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight]
+
+
+
+
+
+
+    }
+
+
+
+
 }
