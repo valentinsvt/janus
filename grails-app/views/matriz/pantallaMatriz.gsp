@@ -95,6 +95,10 @@
                 <i class="icon-print"></i>
                 a Excel
             </a>
+            <a href="${g.createLink(controller: 'reportes2', action: 'reporteDesgloseEquipos', id: "${obra}")}" class="btn btn-ajax btn-new" id="desglose" title="Desglose Equipos">
+                <i class="icon-print"></i>
+                Imprimir Desglose
+            </a>
         </div>
 
         <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px;width: 100%;max-width: 100%;overflow-x: hidden">

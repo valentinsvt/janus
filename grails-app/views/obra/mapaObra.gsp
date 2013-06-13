@@ -180,6 +180,12 @@
 
         limites2();
 
+
+
+        var kmzLayer = new google.maps.KmlLayer("http://www.nth-development.com/fine/Vias_Principales.kmz");
+        kmzLayer.setMap(map);
+
+
 //        limites();
 
 

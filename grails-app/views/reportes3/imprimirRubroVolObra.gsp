@@ -80,11 +80,23 @@
             /*background : none repeat scroll 0 0 #F5F5F5;*/
             /*}*/
         thead tr {
-            margin : 0px
+            margin : 0px;
+
         }
 
         th, td {
             font-size : 10px !important;
+
+
+        }
+
+
+        thead th{
+
+            background : #FFFFFF !important;
+            color: #000000 !important;
+
+
         }
 
         .row-fluid {

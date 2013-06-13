@@ -5,6 +5,12 @@ import com.lowagie.text.Element
 import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.*
+import com.itextpdf.text.BadElementException
+import com.lowagie.text.*
+import com.lowagie.text.pdf.PdfPCell
+import com.lowagie.text.pdf.PdfPTable
+import com.lowagie.text.pdf.PdfWriter
+
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -863,8 +869,9 @@ class Reportes2Controller {
 
     def reporteDesgloseEquipos () {
 
+        println("params" + params)
 
-        def obra = Obra.get(1430)
+        def obra = Obra.get(params.id)
 
         def transTotal
         def eqTotal
@@ -897,6 +904,16 @@ class Reportes2Controller {
 //        and mfcl.clmndscr = 'TRANSPORTE_T' and
 //        codigo = 'sS1'  and mfvl.clmncdgo = mfcl.clmncdgo;
 
+        //equipoTotal
+        sqlEquipoTotal1 = "SELECT\n" +
+                "valor\n" +
+                "from mfvl, mfcl\n" +
+                "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
+                "mfvl.obra__id = 1430 AND\n" +
+                "mfcl.clmndscr = '5051_T' AND \n" +
+                "codigo = 'sS1' AND\n "+
+                "mfvl.clmncdgo = mfcl.clmncdgo"
+
 //            select valor
 //        from mfvl, mfcl
 //        where mfvl.obra__id = mfcl.obra__id and mfvl.obra__id = 1430
@@ -911,34 +928,14 @@ class Reportes2Controller {
 //        codigo = 'sS2'
 //        and mfvl.clmncdgo = mfcl.clmncdgo;
 
+
+
+
+
         def cn = dbConnectionService.getConnection()
 
 
         columnas.each {
-
-            //equipoTotal
-
-            sqlEquipoTotal1 = "SELECT\n" +
-                    "valor\n" +
-                    "from mfvl, mfcl\n" +
-                    "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
-                    "mfvl.obra__id = 1430 AND\n" +
-                    "mfcl.clmndscr = '${it}_T' AND \n" +
-                    "codigo = 'sS1' AND\n "+
-                    "mfvl.clmncdgo = mfcl.clmncdgo"
-
-
-              et3 = cn.rows(sqlEquipoTotal1.toString())
-
-              et3.each {
-
-
-                  et2 = it?.valor
-
-              }
-
-
-            et1 += et2
 
             //equipoDesglosado
 
@@ -971,9 +968,9 @@ class Reportes2Controller {
 
 
         def tt = cn.rows(sqlTransTotal.toString())
+        et1 = cn.rows(sqlEquipoTotal1.toString())
 
-        println("A:" + et1)
-        println("D:" + ed1)
+
 
 
         tt.each {
@@ -982,26 +979,40 @@ class Reportes2Controller {
 
         }
 
-      valores += (obra?.desgloseEquipo)
-      valores += (obra?.desgloseRepuestos)
-      valores += (obra?.desgloseCombustible)
-      valores += (obra?.desgloseMecanico)
-      valores += (obra?.desgloseSaldo)
+        et1.each {
+
+            eqTotal = it?.valor
+
+        }
+
+        println("A:" + eqTotal)
+        println("D:" + ed1)
+//
+
+//        valores += (obra?.desgloseEquipo)
+//      valores += (obra?.desgloseRepuestos)
+//      valores += (obra?.desgloseCombustible)
+//      valores += (obra?.desgloseMecanico)
+//      valores += (obra?.desgloseSaldo)
+
+        valores.add(obra?.desgloseEquipo)
 
         println("coeficientes:" + valores)
 
       valores.eachWithIndex { item, i->
 
-          b += (( ((-ed1[i])/(item)) + et1[i])* (-1))
+          b += (((ed1[i])/(item)) - eqTotal)
+
+
 
       }
 
         println("B:" + b)
 
-       b.eachWithIndex {valor1, j->
+       b.each {
 
 
-       c += (valor1 + et1[j])
+       c += (it + eqTotal)
 
 
        }
@@ -1029,8 +1040,104 @@ class Reportes2Controller {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight]
 
 
+        def baos = new ByteArrayOutputStream()
+        def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
 
 
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+//        document.setMargins(2,2,2,2)
+        document.addTitle("Desglose de Equipos " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
+        headers.add(new Paragraph("DESGLOSE DE EQUIPOS", times12bold));
+        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times12bold));
+
+        addEmptyLine(headers, 1);
+        document.add(headers);
+
+        PdfPTable tablaDesglose = new PdfPTable(3);
+        tablaDesglose.setWidthPercentage(90);
+        tablaDesglose.setWidths(arregloEnteros([25,2,30]))
+
+        addCellTabla(tablaDesglose, new Paragraph("Valor de Equipos", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: eqTotal, minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+
+        addCellTabla(tablaDesglose, new Paragraph("________________________ "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph("________"), prmsHeaderHoja)
+
+        addCellTabla(tablaDesglose, new Paragraph("Total Equipos + Transporte", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: c[0], minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesglose, new Paragraph("Distribución de Equipos", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[0], minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph("Distribución de Repuestos", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[1], minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph("Distribución de Combustibles", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[2], minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph("Distribución de Mecánico", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[3], minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph("Distribución de Saldo", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[4], minFractionDigits:
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+
+
+        document.add(tablaDesglose)
+        document.close();
+        pdfw.close()
+        byte[] b1 = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b1.length)
+        response.getOutputStream().write(b1)
 
 
     }
