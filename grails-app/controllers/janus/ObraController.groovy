@@ -180,9 +180,9 @@ class ObraController extends janus.seguridad.Shield {
             def cn = dbConnectionService.getConnection()
 
             def sqlVer =  "SELECT\n" +
-                          "voit__id             id\n" +
-                           "FROM  vlobitem \n" +
-                           "WHERE obra__id= ${params.obra} \n"
+                    "voit__id             id\n" +
+                    "FROM  vlobitem \n" +
+                    "WHERE obra__id= ${params.obra} \n"
             def verif = cn.rows(sqlVer.toString())
             def verifOK = false
 
@@ -206,7 +206,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def buscarObra() {
-
+        println "buscar obra"
         def extraParr = ""
         def extraCom = ""
         if (params.campos instanceof java.lang.String) {
@@ -293,11 +293,20 @@ class ObraController extends janus.seguridad.Shield {
         funcionJs += 'location.href="' + g.createLink(action: 'registroObra', controller: 'obra') + '?obra="+$(this).attr("regId");'
         funcionJs += '}'
         def numRegistros = 20
+        println "params "+params.reporte+"  "+params.excel
 
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-            lista.pop()
-            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+            if(params.excel){
+                session.dominio = Obra
+                session.funciones = funciones
+                def anchos = [15, 50, 70, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20] /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
+            }else{
+                def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "obra", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+            }
+
         } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/

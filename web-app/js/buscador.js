@@ -43,6 +43,24 @@ $("#btn_reporte").button().click(function(){
     }
 
 });
+$("#btn_excel").button().click(function(){
+    if($("#tablaBuscador").html()){
+        var data = "";
+        $(".crit").each(function(){
+            data+="&campos="+$(this).attr("campo");
+            data+="&operadores="+$(this).attr("operador");
+            data+="&criterios="+$(this).attr("criterio");
+        });
+        if(data.length<2){
+            data="tc="+$("#tipoCampo").val()+"&campos="+$("#campo :selected").val()+"&operadores="+$("#operador :selected").val()+"&criterios="+$("#criterio").val()
+        }
+        data+="&ordenado="+$("#campoOrdn :selected").val()+"&orden="+$("#orden :selected").val();
+
+        var div = $("#tablaBuscador").parent()
+        location.href =div.attr("url")+"?"+data+"&excel=1"
+    }
+
+});
 
 $("#campo").change(function() {
     cambiaOperador()

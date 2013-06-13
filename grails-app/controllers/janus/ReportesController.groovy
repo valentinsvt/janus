@@ -403,6 +403,77 @@ class ReportesController {
 
     }
 
+
+    def reporteBuscadorExcel(){
+//        println "reporte buscador excel "+params
+        def listaTitulos = params.listaTitulos
+        def listaCampos = params.listaCampos
+        def lista = buscadorService.buscar(session.dominio, params.tabla, "excluyente", params, true, params.extras)
+        def funciones = session.funciones
+        session.dominio = null
+        session.funciones = null
+        lista.pop()
+        def baos = new ByteArrayOutputStream()
+        def name = "reporte_de_" + params.titulo.replaceAll(" ", "_") + "_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+        def file = File.createTempFile(name, '.xls')
+        file.deleteOnExit()
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, true);
+        WritableCellFormat times10 = new WritableCellFormat(times10Font);
+        WritableFont times10FontB = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD, true);
+        WritableCellFormat times10b = new WritableCellFormat(times10FontB);
+        def fila = 4
+
+        WritableSheet sheet = workbook.createSheet("Reporte", 0)
+        params.anchos.eachWithIndex{p,i->
+            sheet.setColumnView(i, p.toInteger())
+        }
+
+
+
+        def label = new Label(0, 1, "Reporte de " + params.titulo.toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2,"Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), times16format); sheet.addCell(label);
+        listaTitulos.eachWithIndex { h, i ->
+            //write cell
+            label = new Label(i, 4, ""+h, times10b); sheet.addCell(label);
+//            fila++
+        }
+        fila++
+
+        def tagLib = new BuscadorTagLib()
+        lista.each { d ->
+            listaCampos.eachWithIndex { c, j ->
+                def campo
+                if (funciones) {
+                    if (funciones[j])
+                        campo = tagLib.operacion([propiedad: c, funcion: funciones[j], registro: d]).toString()
+                    else
+                        campo = d.properties[c].toString()
+                } else {
+                    campo = d.properties[c].toString()
+                }
+                if(campo=="null" || campo==null)
+                    campo=""
+                label = new Label(j, fila, ""+campo, times10); sheet.addCell(label);
+//write cell
+            }
+          fila++
+        }
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + ""+name+".xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
+    }
+
     def reporteBuscador = {
 
         // println "reporte buscador params !! "+params
