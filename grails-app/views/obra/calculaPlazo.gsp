@@ -141,7 +141,9 @@
         </g:form>
 
         <div class="area">
-            <div class="tituloTree">Plazos en base a la duración de cada rubro</div>
+            <div class="tituloTree">Plazos en base a la duración de cada rubro
+                <span style="font-size: small; color: #222; font-weight: normal"> &nbsp; Los valores de los plazos en días corresponden a jornadas de trabajo de 8 horas, en días calendario.</span></div>
+
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
@@ -181,6 +183,7 @@
                     <g:set var="meses" value="${meses + 1}"/>
                     <g:set var="dias" value="${0}"/>
                 </g:if>
+
 
                 <b>Plazo recomendado: <g:formatNumber locale="ec" number="${sum}" maxFractionDigits="1"/> días,
                 es decir, ${meses} meses y ${dias} días</b>
@@ -258,7 +261,7 @@
                 });
 
                 $(".table").each(function () {
-                    var maxHeight = 210;
+                    var maxHeight = 250;
                     var $table = $(this);
                     var $head = $table.children("thead");
                     var $body = $table.children("tbody");

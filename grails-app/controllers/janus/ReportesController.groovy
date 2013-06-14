@@ -880,7 +880,7 @@ class ReportesController {
         def row = 0
 
         preciosService.ac_rbroObra(obra.id)
-        VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.eachWithIndex { rubro, i ->
+        VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique().eachWithIndex { rubro, i ->
             def res = preciosService.presioUnitarioVolumenObra("* ", obra.id, rubro.id)
             WritableSheet sheet = workbook.createSheet(rubro.codigo, i)
             rubroAExcel(sheet, res, rubro, fecha, indi)
