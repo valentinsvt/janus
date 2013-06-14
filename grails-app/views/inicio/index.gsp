@@ -137,7 +137,7 @@
 
 
         </div>
-        <div style="text-align: center ; color:#004060">&copy; TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
+        <div style="text-align: center ; color:#004060">Desarrollado por: TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
 
 </div>
 <script type="text/javascript">

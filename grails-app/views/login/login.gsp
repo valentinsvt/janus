@@ -92,6 +92,7 @@
             Ingresar
         </a>
     </div>
+    <div style="text-align: center ; color:#004060; margin-top:90px; ">Desarrollado por: TEDEIN S.A. Versión ${message(code: 'version', default: '1.1.0x')}</div>
 
 </div>
 </div>

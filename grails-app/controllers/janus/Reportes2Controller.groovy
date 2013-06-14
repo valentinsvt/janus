@@ -639,13 +639,31 @@ class Reportes2Controller {
                 "INNER JOIN sbpr b ON v.sbpr__id = b.sbpr__id\n" +
                 "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo})\n" +
                 "WHERE v.obra__id = ${params.id} \n" +
-                "  ORDER BY grid ASC"
+                "ORDER BY v.sbpr__id, grid ASC, i.itemnmbr"
+
+/*
+        def sql = "SELECT i.itemcdgo codigo, i.itemnmbr item, u.unddcdgo unidad, sum(v.voitcntd) cantidad, \n" +
+                "v.voitpcun punitario, v.voittrnp transporte, v.voitpcun + v.voittrnp  costo, \n" +
+                "sum((v.voitpcun + v.voittrnp) * v.voitcntd)  total, g.grpodscr grupo, g.grpo__id grid,\n" +
+                "FROM vlobitem v INNER JOIN item i ON v.item__id = i.item__id\n" +
+                "INNER JOIN undd u ON i.undd__id = u.undd__id\n" +
+                "INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
+                "INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
+                "INNER JOIN sbpr b ON v.sbpr__id = b.sbpr__id\n" +
+                "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo}) \n" +
+                "WHERE v.obra__id = ${params.id} and v.voitcntd >0 \n" +
+                "group by i.itemcdgo, i.itemnmbr, u.unddcdgo, v.voitpcun, v.voittrnp, v.voitpcun, \n" +
+                "g.grpo__id, g.grpodscr " +
+                "ORDER BY g.grpo__id ASC, i.itemcdgo"
+*/
+
+        //println sql
 
         def cn = dbConnectionService.getConnection()
 
         def res = cn.rows(sql.toString())
 
-//        println(res)
+//        println("--->>" + res)
 
         //excel
         WorkbookSettings workbookSettings = new WorkbookSettings()
@@ -700,6 +718,36 @@ class Reportes2Controller {
         label = new jxl.write.Label(9, 6, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
 
         res.each {
+
+            if(it?.item == null){
+
+                it?.item = " "
+            }
+
+            if(it?.cantidad == null){
+
+
+                it?.cantidad = 0
+            }
+            if(it?.punitario == null){
+
+                it?.punitario = 0
+
+            }
+            if(it?.transporte == null){
+
+                it?.transporte = 0
+            }
+            if(it?.costo == null){
+
+                it?.costo = 0
+
+            }
+            if(it?.total == null){
+
+                it?.total = 0
+            }
+
             label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
             label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
             label = new jxl.write.Label(2, fila, it?.unidad.toString()); sheet.addCell(label);
@@ -869,7 +917,7 @@ class Reportes2Controller {
 
     def reporteDesgloseEquipos () {
 
-        println("params" + params)
+//        println("params" + params)
 
         def obra = Obra.get(params.id)
 
@@ -985,19 +1033,19 @@ class Reportes2Controller {
 
         }
 
-        println("A:" + eqTotal)
-        println("D:" + ed1)
+//        println("A:" + eqTotal)
+//        println("D:" + ed1)
 //
 
-//        valores += (obra?.desgloseEquipo)
-//      valores += (obra?.desgloseRepuestos)
-//      valores += (obra?.desgloseCombustible)
-//      valores += (obra?.desgloseMecanico)
-//      valores += (obra?.desgloseSaldo)
+        valores += (obra?.desgloseEquipo)
+      valores += (obra?.desgloseRepuestos)
+      valores += (obra?.desgloseCombustible)
+      valores += (obra?.desgloseMecanico)
+      valores += (obra?.desgloseSaldo)
 
-        valores.add(obra?.desgloseEquipo)
+//        valores.add(obra?.desgloseEquipo)
 
-        println("coeficientes:" + valores)
+//        println("coeficientes:" + valores)
 
       valores.eachWithIndex { item, i->
 
@@ -1007,7 +1055,7 @@ class Reportes2Controller {
 
       }
 
-        println("B:" + b)
+//        println("B:" + b)
 
        b.each {
 
@@ -1017,7 +1065,7 @@ class Reportes2Controller {
 
        }
 
-      println("C:" + c)
+//      println("C:" + c)
 
 
         def prmsHeaderHoja = [border: Color.WHITE]
@@ -1033,11 +1081,12 @@ class Reportes2Controller {
         def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsDerecha = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_RIGHT]
         def prmsSubtotal = [border: Color.BLACK, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight]
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsDerecha: prmsDerecha]
 
 
         def baos = new ByteArrayOutputStream()
@@ -1077,15 +1126,17 @@ class Reportes2Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaDesglose = new PdfPTable(3);
+        PdfPTable tablaDesglose = new PdfPTable(4);
         tablaDesglose.setWidthPercentage(90);
-        tablaDesglose.setWidths(arregloEnteros([25,2,30]))
+        tablaDesglose.setWidths(arregloEnteros([35,2,15,30]))
 
         addCellTabla(tablaDesglose, new Paragraph("Valor de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: eqTotal, minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
@@ -1093,17 +1144,21 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
-
-        addCellTabla(tablaDesglose, new Paragraph("________________________ "), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph("________"), prmsHeaderHoja)
+
+        addCellTabla(tablaDesglose, new Paragraph("____________________________"), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph("________"), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph("Total Equipos + Transporte", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: c[0], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
@@ -1111,23 +1166,32 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[0], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Repuestos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[1], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Combustibles", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[2], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Mecánico", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[3], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Saldo", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[4], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsHeaderHoja)
+                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
 
         document.add(tablaDesglose)

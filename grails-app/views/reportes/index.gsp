@@ -36,6 +36,16 @@
     .linkHover {
         text-decoration: overline underline;
     }
+    .leyenda {
+        float: left;
+        width: 260px;
+        height: 360px;
+        margin-top: -20px;
+        margin-left: 30px;
+        display: none;
+        padding:15px;
+    }
+
     </style>
 
 </head>
@@ -51,217 +61,112 @@
 
 
 
-<div class="ui-widget-content ui-corner-all lista">
-    <ul class="noBullet">
-        <li text="plcn" class="item" texto="uno">
-            <g:link controller="reportes" action="planDeCuentas" file="Plan_de_Cuentas.pdf" class="link"
-                    dialog="dlgContabilidad">
-                Plan de cuentas
+    <div class="ui-widget-content ui-corner-all lista">
+      <ul class="noBullet">
+        <li text="obraprsp" class="item" texto="obraprsp">
+            <g:link controller="reportes" action="planDeCuentas" file="Plan_de_Cuentas.pdf" class="link" dialog="dlgContabilidad">
+                Obras presupuestadas:
             </g:link>
-            Plan de cuentas o catálogo de cuentas de la contabilidad.
+            Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
+            contratación.
         </li>
 
-        <li text="gscn">
-            <g:link controller="reportes" action="gestorContable" file="Gestor_Contable.pdf" class="link"
-                    dialog="dlgContabilidad">
-                Gestor contable
+        <li text="obracntr" class="item" texto="obracntr">
+            <g:link controller="reportes" action="gestorContable" file="Gestor_Contable.pdf" class="link" dialog="dlgContabilidad">
+                Obras contratadas
             </g:link>
             Sirve para determinar las cuentas que son afectadas en un proceso contable
         </li>
 
-        <li text="prsp">
-            <g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link"
-                    dialog="dlgContabilidad">
-                Presupuesto
+        <li text="obrargst" class="item" texto="obrargst">
+            <g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link" dialog="dlgContabilidad">
+                Obras registradas
             </g:link>
             Reporta el presupuesto anual.
         </li>
 
-        <li text="cmpr">
-            <g:link controller="reportes" action="comprobante" file="Comprobante.pdf" class="link"
-                    dialog="dlgComprobante">
-                Comprobante
+        <li text="obracntn" class="item" texto="obracntn">
+            <g:link controller="reportes" action="comprobante" file="Comprobante.pdf" class="link" dialog="dlgComprobante">
+                Obras contratadas por cantón
             </g:link>
             Permite imprimir un comprobante
         </li>
 
-        <li text="blcm">
-            <g:link controller="reportes" action="balanceComprobacion" file="Balance_Comprobacion.pdf" class="link"
-                    dialog="dlgContabilidadPeriodo">
-                Balance de comprobaci&oacute;n
+        <li text="cncr" class="item" texto="cncr">
+            <g:link controller="reportes" action="balanceComprobacion" file="Balance_Comprobacion.pdf" class="link" dialog="dlgContabilidadPeriodo">
+                Concursos
             </g:link>
             Muestra el balance de comprobaci&oacute;n en detalle a todos los niveles
         </li>
 
-        <li text="stfn">
-            <g:link controller="reportes" action="situacionFinanciera" file="Situacion_Financiera.pdf" class="link"
-                    dialog="dlgContabilidadPeriodo">
-                Estado de situaci&oacute;n financiera
+        <li text="cntr" class="item" texto="cntr">
+            <g:link controller="reportes" action="situacionFinanciera" file="Situacion_Financiera.pdf" class="link" dialog="dlgContabilidadPeriodo">
+                Contratos
             </g:link>
             Conocido anteriormente como Balance General
         </li>
 
-        <li text="rsin">
-            <g:link controller="reportes" action="resultadoIntegral" file="Estado_Resultado_Integral.pdf" class="link"
-                    dialog="dlgContabilidadPeriodo">
-                Estado del resultado integral
+        <li text="prve" class="item" texto="prve">
+            <g:link controller="reportes" action="resultadoIntegral" file="Estado_Resultado_Integral.pdf" class="link" dialog="dlgContabilidadPeriodo">
+                Contratistas
             </g:link>
             Este reporte se conocía como Estado de Pérdidas y Ganancias
         </li>
 
-        <li text="fldf">
-            <g:link controller="reportes" action="flujoEfectivo" file="Estado_Flujos_Efectivo.pdf" class="link"
-                    dialog="dlgContabilidadPeriodo">
-                Estado de flujos de efectivo
+        <li text="fldf" class="item" texto="obraprsp">
+            <g:link controller="reportes" action="flujoEfectivo" file="Estado_Flujos_Efectivo.pdf" class="link" dialog="dlgContabilidadPeriodo">
+                Aseguradoras
             </g:link>
             Estado de flujo defectivo en función del año anterior
         </li>
 
-        <li text="patr">
-            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link"
-                    dialog="dlgContabilidadPeriodo">
-                Estado de Cambios en el Patrimonio
+        <li text="patr" class="item" texto="obraprsp">
+            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgContabilidadPeriodo">
+                Garantías por contrato y contratistas
             </g:link>
             Estado de cambio sen el patrimonio durante el ejercicio fiscal
         </li>
-        <li text="vnts">
-            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link"
-                    dialog="dlgVentas">
-                Ventas
+        <li text="vnts" class="item" texto="obraprsp">
+            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgVentas">
+                Transferencias y/o cheques pagados
             </g:link>
             Ventas
         </li>
-    </ul>
-</div>
+        <li text="vnts" class="item" texto="obraprsp">
+            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgVentas">
+                Avance de obras
+            </g:link>
+            Ventas
+        </li>
+        <li text="vnts" class="item" texto="obraprsp">
+            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgVentas">
+                Obras finalizadas
+            </g:link>
+            Ventas
+        </li>
+      </ul>
+   </div>
 
+   <div id="tool" class="leyenda ui-widget-content ui-corner-all">
+   </div>
 
-<div id="tool" style="float:left; width: 260px; height: 360px; margin-top: -20px; margin-left: 30px;
-display: none; padding:15px;" class="ui-widget-content ui-corner-all">
-</div>
+   <div id="obraprsp" style="display:none">
+    <h3>Obras Presupuestadas</h3><br>
 
-<div id="uno" style="display:none">
-    <h3>Plan de cuentas</h3><br>
+    <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
+    contratación.
+    </p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
+    polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios
+  </div>
+   <div id="obracntr" style="display:none">
+    <h3>Obras Contratadas</h3><br>
 
-    <p>Se fija un catálogo de cuentas para cada periodo contable. Usualmente, el catálogo se conserva
-    de un período a otro, si hubieran cambios, se debe indicar las nuevas cuentas y su relación con las
-    cuentas del periodo anterior.
-    </p>
+    <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
+    contratación.
+    </p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
+    polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios
+  </div>
 
-    <p>Reporta el plan de cuentas con sus números de cuenta, cuenta padre, nivel y descripción o nombre de la cuenta.</p>
-
-    <p>El sistema requiere que se seleccione la contabilidad o período contable.</p>
-</div>
-
-
-<div class="desc">
-    <div id="plcn11" class="notice ui-helper-hidden ui-corner-all" style="background-color: #ffd; margin-top: -10px;
-    border: 1px solid #AAAAAA; padding: 10px;">
-        <h2>Plan de cuentas</h2><br>
-
-        <p>Se fija un catálogo de cuentas para cada periodo contable. Usualmente, el catálogo se conserva
-        de un período a otro, si hubieran cambios, se debe indicar las nuevas cuentas y su relación con las
-        cuentas del periodo anterior.
-        </p>
-
-        <p>Reporta el plan de cuentas con sus números de cuenta, cuenta padre, nivel y descripción o nombre de la cuenta.</p>
-
-        <p>El sistema requiere que se seleccione la contabilidad o período contable.</p>
-    </div>
-
-    <div id="info" class="notice ui-helper-hidden ui-corner-all" style="background-color: #ffd; margin-top: -10px;
-    border: 1px solid #AAAAAA; padding: 10px;">
-        <h2>Plan de cuentas</h2><br>
-
-        <p>Se fija un catálogo de cuentas para cada periodo contable. Usualmente, el catálogo se conserva
-        de un período a otro, si hubieran cambios, se debe indicar las nuevas cuentas y su relación con las
-        cuentas del periodo anterior.
-        </p>
-
-        <p>Reporta el plan de cuentas con sus números de cuenta, cuenta padre, nivel y descripción o nombre de la cuenta.</p>
-
-        <p>El sistema requiere que se seleccione la contabilidad o período contable.</p>
-    </div>
-
-    <div id="gscn" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Gestor</h1><br>
-
-        <p>Para cada proceso contable es necesario definir las cuentas que van a participar.</p>
-
-        <p>El gestor permite la creación de comprobantes y asientos contables en forma automática.</p>
-
-        <p>Se reprotan todos los gestores contables que se hallen activos en el sistema.</p>
-    </div>
-
-    <div id="prsp" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Presupuesto</h1><br>
-
-        <p>Para cada una de las partidas se fija un presupuesto es una estructura jeráquica</p>
-
-        <p>El reporte requiere de la selección del periodo presupuestario.</p>
-
-        <p>Se muestra el número de la partida, el nombre y el valor asignado.</p>
-    </div>
-
-    <div id="cmpr" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Comprobante</h1><br>
-
-        <p>Reporta los comprobantes registrados en el sistema.</p>
-
-        <p>Se requiere del número de comprobante o de la descripción. El reporteador cuenta con un buscador para ayudarle
-        a localizar el comprobante a imprimir</p>
-
-        <p>Use el botón "Buscar" para acceder al buscador. Se puede ingreasar parte del concepto del comprobante o el número.</p>
-
-        <p>Desde la lista de comprobantes, use el botón marcado con un visto para seleccionarlo.</p>
-    </div>
-
-    <div id="blcm" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Balance de Comprobaci&oacute;n</h1><br>
-
-        <p>Reporte el Balance de Comprobación para un mes determinado.</p>
-
-        <p>Este reporte muestra el total de los movimientos al debe y haber de todas las cuentas de movimiento, y
-        presenta también los saldos deudor o acreedor de cada una de ellas.</p>
-
-        <p>El reporte es hasta la fecha final del periodo seleccionado.</p>
-    </div>
-
-    <div id="stfn" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Situaci&oacute;n Financiera</h1><br>
-
-        <p>Este reporte muesta el resultado del ejercicio financiero. Anteriormente era conocido como Balance General</p>
-
-        <p>No es necesario cerrar la contabilidad para obtener este reporte. En el caso de períodos contables anteriores,
-        el resultado queda registrado dentro de la cuenta de utilidades correspondiente</p>
-    </div>
-
-    <div id="rsin" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Resultado Integral</h1><br>
-
-        <p>En este reporte se detallan todos los ingresos y egresos que han existido dentro del periodo contable, con lo
-        cual se llega de determinar la utilidad del período</p>
-
-        <p>El valor final reportado es el resultado de utilidades</p>
-    </div>
-
-    <div id="fldf" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Flujo de Efectivo</h1><br>
-
-        <p>El reporte de Flujo de Efectivo muestra el efectivo generado por la actividad operacional, el generado por
-        las actividades de inversión y el generado por las actividades de financiamiento.</p>
-
-        <p>El valor final muestra el aumento neto del efectivo y sus valores al inicio y fin del período.</p>
-    </div>
-
-    <div id="patr" class="notice ui-helper-hidden ui-corner-all ">
-        <h1>Cambios en el Patrimonio</h1><br>
-
-        <p>El reporte muestra las variaciones sufridas en el patrimonio con respecto al inicio de periodo contable.</p>
-
-        <p>Los cambios visualizados son: aumentos y disminuciones patrimoniales y los saldos finales.</p>
-    </div>
-</div>
-</div>
 </div>
 
 <div id="dlgContabilidad" class="ui-helper-hidden">

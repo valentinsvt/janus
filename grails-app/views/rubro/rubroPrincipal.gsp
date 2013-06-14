@@ -108,7 +108,7 @@
                 <input type="text" name="rubro.nombre" class="span72" value="${rubro?.nombre}" id="input_descripcion">
             </div>
 
-            <div class="span2" style="">
+            <div class="span2" style="width: 120px;">
                 Fecha Creación
                 <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fecha}" disabled="true" id="fechaCreacion"/>
             </div>
@@ -147,12 +147,12 @@
                 </g:else>
             </div>
 
-            <div class="span3">
+            <div class="span1">
                 Unidad
-                <g:select name="rubro.unidad.id" from="${janus.Unidad.list()}" class="span12" optionKey="id" optionValue="descripcion" value="${rubro?.unidad?.id}"/>
+                <g:select name="rubro.unidad.id" from="${janus.Unidad.list()}" class="span12" optionKey="id" optionValue="codigo" value="${rubro?.unidad?.id}"/>
             </div>
 
-            <div class="span2" style="color: #01a">
+            <div class="span3" style="color: #01a">
                 Responsable: <br>
                 <g:if test="${modifica}">
                     <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id}" id="responsable" optionKey="id" noSelection="['-1':'Seleccione..']" style="width:100%;"></g:select>
@@ -242,7 +242,7 @@
 
         <div class="span2">
             Rendimiento
-            <input type="text" name="item.rendimiento" class="span8" id="item_rendimiento" value="1" style="text-align: right">
+            <input type="text" name="item.rendimiento" class="span8" id="item_rendimiento" value="1" style="text-align: right; color: #44a">
         </div>
 
         <g:if test="${modifica}">

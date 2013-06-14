@@ -4,7 +4,6 @@
     <facet type="web" name="GrailsWeb">
       <configuration>
         <webroots>
-          <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/grails-app/views" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/web-app" relative="/" />
           <root url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/grails-app/views" relative="/" />
         </webroots>
@@ -27,11 +26,6 @@
       <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/grails-app/i18n" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/grails-app/services" isTestSource="false" />
       <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/jquery-1.7.1/grails-app/taglib" isTestSource="false" />
-    </content>
-    <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7">
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/src/groovy" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/grails-app/domain" isTestSource="false" />
-      <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/kerberos-0.7/grails-app/services" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1">
       <sourceFolder url="file://$USER_HOME$/.grails/2.1.1/projects/janus/plugins/mail-1.0.1/src/groovy" isTestSource="false" />
