@@ -82,6 +82,7 @@
         thead tr {
             margin : 0px;
 
+
         }
 
         th, td {
@@ -89,6 +90,13 @@
 
 
         }
+        .theader{
+
+            border-bottom: 1px solid #000000 !important;
+            border-top: 1px solid #000000 !important;
+
+        }
+
 
 
         thead th{
@@ -180,10 +188,10 @@
                 ${tablaMat}
                 ${tablaTrans}
                 ${tablaIndi}
-                <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;">
+                <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                     <tbody>
                         <tr>
-                            <td style="width: 350px;">
+                            <td style="width: 350px; border-bottom: #000000">
                                 <b>Costo unitario directo</b>
                             </td>
                             <td style="text-align: right">

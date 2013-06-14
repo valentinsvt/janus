@@ -81,11 +81,11 @@ class Reportes3Controller {
         def tablaTrans = '<table class="table table-bordered table-striped table-condensed table-hover"> '
         def tablaIndi = '<table class="table table-bordered table-striped table-condensed table-hover"> '
         def total = 0, totalHer = 0, totalMan = 0, totalMat = 0
-        tablaTrans += "<thead><tr><th colspan='7'>Transporte</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario</th><th>C.Total</th></tr></thead><tbody>"
+        tablaTrans += "<thead><tr><th colspan='1'>Transporte</th></tr><tr><th style='width: 80px;' class='theader'>Código</th><th style='width:610px' class='theader'>Descripción</th><th class='theader'>Pes/Vol</th><th class='theader'>Cantidad</th><th class='theader'>Distancia</th><th class='theader'>Unitario</th><th class='theader'>C.Total</th></tr></thead><tbody>"
 
-        tablaHer += "<thead><tr><th colspan='7'>Herramienta</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
-        tablaMano += "<thead><tr><th colspan='7'>Mano de obra</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Jornal</th><th>Costo</th><th>Rendimiento</th><th>C.Total</th></tr></thead><tbody>"
-        tablaMat += "<thead><tr><th colspan='7'>Materiales</th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Unitario</th><th></th><th></th><th>C.Total</th></tr></thead><tbody>"
+        tablaHer += "<thead><tr><th colspan='1'>Equipo</th></tr><tr><th style='width: 80px;' class='theader'>Código</th><th style='width:610px' class='theader'>Descripción</th><th class='theader'>Cantidad</th><th class='theader'>Tarifa</th><th class='theader'>Costo</th><th class='theader'>Rendimiento</th><th class='theader'>C.Total</th></tr></thead><tbody>"
+        tablaMano += "<thead><tr><th colspan='1'>Mano de obra</th></tr><tr><th style='width: 80px;' class='theader'>Código</th><th style='width:610px' class='theader'>Descripción</th><th class='theader'>Cantidad</th><th class='theader'>Jornal</th><th class='theader'>Costo</th><th class='theader'>Rendimiento</th><th class='theader'>C.Total</th></tr></thead><tbody>"
+        tablaMat += "<thead><tr><th colspan='1'>Materiales</th></tr><tr><th style='width: 80px;' class='theader'>Código</th><th style='width:610px' class='theader'>Descripción</th><th class='theader'>Cantidad</th><th class='theader'>Unitario</th><th class='theader'></th><th class='theader'></th><th class='theader'>C.Total</th></tr></thead><tbody>"
 //        println "rends "+rendimientos
 
 //        println "res "+res
@@ -178,7 +178,7 @@ class Reportes3Controller {
 
         def totalIndi = totalRubro * indi / 100
         totalIndi = totalIndi.toDouble().round(5)
-        tablaIndi += "<thead><tr><th colspan='3'>Costos indirectos</th></tr><tr><th style='width:550px'>Descripción</th><th>Porcentaje</th><th>Valor</th></tr></thead>"
+        tablaIndi += "<thead><tr><th style='text-align: left; width: 200px'>Costos indirectos</th></tr><tr><th style='width:610px' class='theader'>Descripción</th><th class='theader'>Porcentaje</th><th class='theader'>Valor</th></tr></thead>"
         tablaIndi += "<tbody><tr><td>Costos indirectos</td><td style='text-align:right'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr></tbody>"
         tablaIndi += "</table>"
 
