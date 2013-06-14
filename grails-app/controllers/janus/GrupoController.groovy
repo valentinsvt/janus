@@ -399,44 +399,111 @@ class GrupoController extends janus.seguridad.Shield {
 //        def parts = params.search_string.split("~")
         def search = params.search.trim()
         if (search != "") {
-            def id = params.tipo
-            def find = Item.withCriteria {
-                departamento {
-                    subgrupo {
-                        grupo {
-                            eq("id", id.toLong())
-                        }
+//            def id = params.tipo
+//            def find = Item.withCriteria {
+//                departamento {
+//                    subgrupo {
+//                        grupo {
+//                            eq("id", id.toLong())
+//                        }
+//                    }
+//                }
+//                ilike("nombre", "%" + search + "%")
+//            }
+//            def departamentos = [], subgrupos = [], grupos = []
+//            find.each { item ->
+//                if (!departamentos.contains(item.departamento))
+//                    departamentos.add(item.departamento)
+//                if (!subgrupos.contains(item.departamento.subgrupo))
+//                    subgrupos.add(item.departamento.subgrupo)
+//                if (!grupos.contains(item.departamento.subgrupo.grupo))
+//                    grupos.add(item.departamento.subgrupo.grupo)
+//            }
+//
+//            def ids = "["
+//
+//            if (find.size() > 0) {
+//                ids += "\"#materiales_1\","
+//
+//                grupos.each { gr ->
+//                    ids += "\"#gr_" + gr.id + "\","
+//                }
+//                subgrupos.each { sg ->
+//                    ids += "\"#sg_" + sg.id + "\","
+//                }
+//                departamentos.each { dp ->
+//                    ids += "\"#dp_" + dp.id + "\","
+//                }
+//                ids = ids[0..-2]
+//            }
+//            ids += "]"
+
+            def grupos = Grupo.withCriteria {
+                or {
+                    ilike("codigo", "%" + search + "%")
+                    ilike("descripcion", "%" + search + "%")
+                }
+            }
+            def subgrupos = SubgrupoItems.withCriteria {
+                or {
+                    ilike("codigo", "%" + search + "%")
+                    ilike("descripcion", "%" + search + "%")
+                }
+            }
+            def departamentos = DepartamentoItem.withCriteria {
+                or {
+                    ilike("codigo", "%" + search + "%")
+                    ilike("descripcion", "%" + search + "%")
+                }
+            }
+            def rubros = Item.withCriteria {
+                and {
+                    eq("tipoItem", TipoItem.get(2))
+                    or {
+                        ilike("codigo", "%" + search + "%")
+                        ilike("nombre", "%" + search + "%")
                     }
                 }
-                ilike("nombre", "%" + search + "%")
             }
-            def departamentos = [], subgrupos = [], grupos = []
-            find.each { item ->
-                if (!departamentos.contains(item.departamento))
-                    departamentos.add(item.departamento)
-                if (!subgrupos.contains(item.departamento.subgrupo))
-                    subgrupos.add(item.departamento.subgrupo)
-                if (!grupos.contains(item.departamento.subgrupo.grupo))
-                    grupos.add(item.departamento.subgrupo.grupo)
-            }
+
+
 
             def ids = "["
-
-            if (find.size() > 0) {
-                ids += "\"#materiales_1\","
-
-                grupos.each { gr ->
-                    ids += "\"#gr_" + gr.id + "\","
-                }
-                subgrupos.each { sg ->
-                    ids += "\"#sg_" + sg.id + "\","
-                }
-                departamentos.each { dp ->
-                    ids += "\"#dp_" + dp.id + "\","
-                }
-                ids = ids[0..-2]
+            if (grupos.size() > 0 || subgrupos.size() > 0 || departamentos.size() > 0 || rubros.size() > 0) {
+                ids += "\"#root\","
             }
+            rubros.each { rb ->
+                def dep = rb.departamento
+                if (!departamentos.contains(dep)) {
+                    departamentos.add(dep)
+                }
+                ids += "\"#rb_" + rb.id + "\","
+            }
+            departamentos.each { dp ->
+                def subg = dp.subgrupo
+                if (!subgrupos.contains(subg)) {
+                    subgrupos.add(subg)
+                }
+                ids += "\"#dp_" + dp.id + "\","
+            }
+            subgrupos.each { sg ->
+                def grp = sg.grupo
+                if (!grupos.contains(grp)) {
+                    grupos.add(grp)
+                }
+                ids += "\"#sg_" + sg.id + "\","
+            }
+            grupos.each { gr ->
+                ids += "\"#gr_" + gr.id + "\","
+            }
+            ids = ids[0..-2]
             ids += "]"
+
+//            println grupos
+//            println subgrupos
+//            println departamentos
+//            println rubros
+
 //            println ">>>>>>"
 //            println ids
 //            println "<<<<<<<"
@@ -449,30 +516,52 @@ class GrupoController extends janus.seguridad.Shield {
 
     def search_ajax() {
         def search = params.search.trim()
-        def id = params.tipo
-        def find = Item.withCriteria {
-            departamento {
-                subgrupo {
-                    grupo {
-                        eq("id", id.toLong())
-                    }
+
+        def arr = []
+
+        def grupos = Grupo.withCriteria {
+            or {
+                ilike("codigo", "%" + search + "%")
+                ilike("descripcion", "%" + search + "%")
+            }
+        }
+        def subgrupos = SubgrupoItems.withCriteria {
+            or {
+                ilike("codigo", "%" + search + "%")
+                ilike("descripcion", "%" + search + "%")
+            }
+        }
+        def departamentos = DepartamentoItem.withCriteria {
+            or {
+                ilike("codigo", "%" + search + "%")
+                ilike("descripcion", "%" + search + "%")
+            }
+        }
+        def rubros = Item.withCriteria {
+            and {
+                eq("tipoItem", TipoItem.get(2))
+                or {
+                    ilike("codigo", "%" + search + "%")
+                    ilike("nombre", "%" + search + "%")
                 }
             }
-            ilike("nombre", "%" + search + "%")
         }
+        arr += grupos.descripcion
+        arr += subgrupos.descripcion
+        arr += departamentos.descripcion
+        arr += rubros.nombre
+        arr = arr.unique()
+
         def json = "["
-        find.each { item ->
+        arr.each { item ->
             if (json != "[") {
                 json += ","
             }
-            json += "\"" + item.nombre + "\""
+            json += "\"" + item + "\""
         }
         json += "]"
         render json
     }
-
-
-
 
     def form_ajax() {
         def grupoInstance = new Grupo(params)

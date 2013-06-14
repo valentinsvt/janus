@@ -127,6 +127,12 @@ body {
     background-repeat   : no-repeat;
 }
 
+.ui-autocomplete-loading-error {
+    background-image    : url(../images/exclamation.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
+}
+
 .ui-autocomplete {
     max-height : 300px;
     overflow-y : auto;
@@ -405,6 +411,6 @@ tr.info td.alerta {
 /************************************* FIN ALERTAS ********************************************************/
 
 .ui-button-text-only .ui-button-text {
-    background: #1484a8 !important;
+    background : #1484a8 !important;
 }
 

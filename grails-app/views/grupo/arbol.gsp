@@ -993,8 +993,11 @@
                                 tipo   : current
                             },
                             success  : function (data) {
+                                $("#search").removeClass("ui-autocomplete-loading-error");
                                 cache[ term ] = data;
                                 response(data);
+                            }, error : function () {
+                                $("#search").removeClass("ui-autocomplete-loading").addClass("ui-autocomplete-loading-error");
                             }
                         });
 

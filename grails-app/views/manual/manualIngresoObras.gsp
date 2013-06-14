@@ -1835,7 +1835,7 @@ materiales, mano de obra y equipos.
     </p>
     <div class="centrado">
         <br><img src="${resource(dir:'images/imagenesManuales/imagenesIngreso', file:'img241.png')}"/><br> <!--67-->
-        <img src="${resource(dir:'images/imagenesManuales/imagenesIngreso', file: 'img242.png')}"/>    
+        <img src="${resource(dir:'images/imagenesManuales/imagenesIngreso', file: 'img242.png')}"/>
     </div>
     <p><br>Regresar, retorna a la pantalla de registro de obra.</p>
     <p>Imprimir, imprimir&aacute un documento diferente dependiendo del tab
