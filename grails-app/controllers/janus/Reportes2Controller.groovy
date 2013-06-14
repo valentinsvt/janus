@@ -645,7 +645,7 @@ class Reportes2Controller {
 
         def res = cn.rows(sql.toString())
 
-//        println(res)
+//        println("--->>" + res)
 
         //excel
         WorkbookSettings workbookSettings = new WorkbookSettings()
@@ -700,6 +700,36 @@ class Reportes2Controller {
         label = new jxl.write.Label(9, 6, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
 
         res.each {
+
+            if(it?.item == null){
+
+                it?.item = " "
+            }
+
+            if(it?.cantidad == null){
+
+
+                it?.cantidad = 0
+            }
+            if(it?.punitario == null){
+
+                it?.punitario = 0
+
+            }
+            if(it?.transporte == null){
+
+                it?.transporte = 0
+            }
+            if(it?.costo == null){
+
+                it?.costo = 0
+
+            }
+            if(it?.total == null){
+
+                it?.total = 0
+            }
+
             label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
             label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
             label = new jxl.write.Label(2, fila, it?.unidad.toString()); sheet.addCell(label);
