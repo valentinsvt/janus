@@ -35,12 +35,12 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             if (itemFormula.save(flush: true)) {
                 saved += itemFormula.itemId + ":" + itemFormula.id + ","
             } else {
-                println "formula polinomica controller l 38: "+"Error aqui: "+itemFormula.errors
+                println "formula polinomica controller l 38: " + "Error aqui: " + itemFormula.errors
             }
         }
         formula.valor = formula.valor + total
         if (!formula.save(flush: true)) {
-            println "formula polinomica controller l 43 "+"ERROR:: " + formula.errors
+            println "formula polinomica controller l 43 " + "ERROR:: " + formula.errors
         }
         if (saved == "") {
             render "NO"
@@ -72,7 +72,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             itemFormulaPolinomica.delete(flush: true)
             render "OK_" + formula.valor
         } else {
-            println "formula polinomica controller l 75 "+"error: " + formula.errors
+            println "formula polinomica controller l 75 " + "error: " + formula.errors
             render "NO"
         }
     }
@@ -140,7 +140,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
             def obra = Obra.get(params.id)
             def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
-//            println "fp: " + fp
+            println "fp: " + fp
             def total = 0
 
             fp.each { f ->
@@ -151,7 +151,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                                     id: "fp_" + f.id,
                                     numero: f.numero,
                                     nombre: f.indice?.descripcion,
-                                    valor: g.formatNumber(number:f.valor, maxFractionDigits: 3, minFractionDigits: 3),
+                                    valor: g.formatNumber(number: f.valor, maxFractionDigits: 3, minFractionDigits: 3),
 //                                    valor: f.valor,
                                     rel: "fp"
                             ]
@@ -168,7 +168,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                                             numero: ch.item.codigo,
                                             nombre: ch.item.nombre,
                                             item: ch.itemId,
-                                            valor: g.formatNumber(number:ch.valor, maxFractionDigits: 5, minFractionDigits: 5),
+                                            valor: g.formatNumber(number: ch.valor, maxFractionDigits: 5, minFractionDigits: 5),
 //                                            valor: ch.valor,
                                             rel: "it"
                                     ]
@@ -277,8 +277,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     fpx.indice = indiSldo
                     fpx.valor = 0
                 }
-                if (!fpx.save(flush: true))
-//                    println "erroe save fpx " + fpx.errors
+                if (!fpx.save(flush: true)) {
+                    println "erroe save fpx " + fpx.errors
+                }
 
                 if (it < 10) {
                     def cuadrilla = new FormulaPolinomica()
@@ -413,7 +414,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     ch.delete(flush: true)
                 } catch (e) {
                     ok = false
-                    println "formula polinomica controller l 416 "+"error al borrar hijo ${ch.id}"
+                    println "formula polinomica controller l 416 " + "error al borrar hijo ${ch.id}"
                     println e.printStackTrace()
                 }
             }
@@ -421,7 +422,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                 f.delete(flush: true)
             } catch (e) {
                 ok = false
-                println "formula polinomica controller l 424 "+"error al borrar ${f.id}"
+                println "formula polinomica controller l 424 " + "error al borrar ${f.id}"
                 println e.printStackTrace()
             }
         }

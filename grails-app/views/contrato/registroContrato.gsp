@@ -167,7 +167,7 @@
                         <div class="span2 formato">Oferta</div>
 
                         <div class="span3" id="div_ofertas">
-                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione una obra']" id="oferta" optionKey="id"></g:select>
+                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione']" id="oferta" optionKey="id"></g:select>
                         </div>
                     </div>
 

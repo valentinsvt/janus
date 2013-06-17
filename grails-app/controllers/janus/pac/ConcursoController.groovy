@@ -21,7 +21,7 @@ class ConcursoController extends janus.seguridad.Shield {
         def lst = Concurso.list([sort: "id", order: "desc"])
 //        println "________________________________________________________"
 //        println lst
-        if (lst.size() > 0) {
+        if (lst.size() > 1) {
             def last = lst[1].codigo?.split("-")
 //            println last
             if (last?.size() > 2) {
@@ -47,9 +47,9 @@ class ConcursoController extends janus.seguridad.Shield {
 
     def list() {
         def campos = ["descripcion": ["Descripción", "string"]]
-        if (!params.sort){
-            params.sort="id"
-            params.order="desc"
+        if (!params.sort) {
+            params.sort = "id"
+            params.order = "desc"
         }
         return [concursoInstanceList: Concurso.list(params), params: params, campos: campos]
     } //list
@@ -150,9 +150,8 @@ class ConcursoController extends janus.seguridad.Shield {
                 return
             } //no existe el objeto
         } //es edit
-        return [concursoInstance: concursoInstance,campos:campos]
+        return [concursoInstance: concursoInstance, campos: campos]
     } //form_ajax
-
 
 
     def buscarObra() {
@@ -228,7 +227,7 @@ class ConcursoController extends janus.seguridad.Shield {
         if (extraCom.size() > 1)
             extras += " and comunidad in (${extraCom})"
 
-        extras+=" and estado='R' "
+        extras += " and estado='R' "
 
         def parr = { p ->
             return p.parroquia?.nombre
@@ -261,17 +260,52 @@ class ConcursoController extends janus.seguridad.Shield {
         }
     }
 
-    def datosObra(){
+    def datosObra() {
         def obra = Obra.get(params.obra)
         def monto = obraService.montoObra(obra)
-        def plazo = obra.plazoEjecucionMeses*30+obra.plazoEjecucionDias
-        render ""+obra.codigo+"&&"+obra.nombre+"&&"+plazo+"&&"+monto
+        def plazo = obra.plazoEjecucionMeses * 30 + obra.plazoEjecucionDias
+        render "" + obra.codigo + "&&" + obra.nombre + "&&" + plazo + "&&" + monto
     }
 
 
 
     def save() {
-//        println "save concurso "+params
+        println "save concurso " + params
+
+        if (params.fechaInicio) {
+            params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        }
+        if (params.fechaLimitePreguntas) {
+            params.fechaLimitePreguntas = new Date().parse("dd-MM-yyyy", params.fechaLimitePreguntas)
+        }
+        if (params.fechaPublicacion) {
+            params.fechaPublicacion = new Date().parse("dd-MM-yyyy", params.fechaPublicacion)
+        }
+        if (params.fechaLimiteEntregaOfertas) {
+            params.fechaLimiteEntregaOfertas = new Date().parse("dd-MM-yyyy", params.fechaLimiteEntregaOfertas)
+        }
+        if (params.fechaLimiteRespuestas) {
+            params.fechaLimiteRespuestas = new Date().parse("dd-MM-yyyy", params.fechaLimiteRespuestas)
+        }
+        if (params.fechaLimiteRespuestaConvalidacion) {
+            params.fechaLimiteRespuestaConvalidacion = new Date().parse("dd-MM-yyyy", params.fechaLimiteRespuestaConvalidacion)
+        }
+        if (params.fechaLimiteSolicitarConvalidacion) {
+            params.fechaLimiteSolicitarConvalidacion = new Date().parse("dd-MM-yyyy", params.fechaLimiteSolicitarConvalidacion)
+        }
+        if (params.fechaInicioPuja) {
+            params.fechaInicioPuja = new Date().parse("dd-MM-yyyy", params.fechaInicioPuja)
+        }
+        if (params.fechaCalificacion) {
+            params.fechaCalificacion = new Date().parse("dd-MM-yyyy", params.fechaCalificacion)
+        }
+        if (params.fechaAdjudicacion) {
+            params.fechaAdjudicacion = new Date().parse("dd-MM-yyyy", params.fechaAdjudicacion)
+        }
+        if (params.fechaFinPuja) {
+            params.fechaFinPuja = new Date().parse("dd-MM-yyyy", params.fechaFinPuja)
+        }
+
         def concursoInstance
         if (params.id) {
             concursoInstance = Concurso.get(params.id)
@@ -289,7 +323,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
         if (!concursoInstance.save(flush: true)) {
-            println "errores concurso "+concursoInstance.errors
+            println "errores concurso " + concursoInstance.errors
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Concurso " + (concursoInstance.id ? concursoInstance.id : "") + "</h4>"
 
