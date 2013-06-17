@@ -36,14 +36,15 @@
     .linkHover {
         text-decoration: overline underline;
     }
+
     .leyenda {
         float: left;
         width: 260px;
         height: 360px;
-        margin-top: -20px;
+        margin-top: 20px;
         margin-left: 30px;
         display: none;
-        padding:15px;
+        padding: 15px;
     }
 
     </style>
@@ -55,117 +56,130 @@
 <div class="contenedor">
     <h2>Reportes del Sistema</h2>
     <g:if test="${flash.message}">
-         <div class="message ${flash.clase}" role="status"><span class="ss_sprite ${flash.ico}">&nbsp;</span>${flash.message}
-         </div>
+        <div class="message ${flash.clase}" role="status"><span
+                class="ss_sprite ${flash.ico}">&nbsp;</span>${flash.message}
+        </div>
     </g:if>
 
-
-
     <div class="ui-widget-content ui-corner-all lista">
-      <ul class="noBullet">
-        <li text="obraprsp" class="item" texto="obraprsp">
-            <g:link controller="reportes" action="planDeCuentas" file="Plan_de_Cuentas.pdf" class="link" dialog="dlgContabilidad">
-                Obras presupuestadas:
-            </g:link>
-            Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
-            contratación.
-        </li>
+        <ul class="noBullet">
+            <li text="obraprsp" class="item" texto="obraprsp">
+                <g:link controller="reportes" action="planDeCuentas" file="Plan_de_Cuentas.pdf" class="link"
+                        dialog="dlgContabilidad">
+                    Obras presupuestadas:
+                </g:link>
+                Listado de obras que se hallan elaboradas los presupuestos y se hallan listas para entrar en el proceso de
+                contratación.
+            </li>
 
-        <li text="obracntr" class="item" texto="obracntr">
-            <g:link controller="reportes" action="gestorContable" file="Gestor_Contable.pdf" class="link" dialog="dlgContabilidad">
-                Obras contratadas
-            </g:link>
-            Sirve para determinar las cuentas que son afectadas en un proceso contable
-        </li>
+            <li text="obracntr" class="item" texto="obracntr">
+                <g:link controller="reportes" action="gestorContable" file="Gestor_Contable.pdf" class="link"
+                        dialog="dlgContabilidad">
+                    Obras contratadas
+                </g:link>
+                Listado de obras que se hallan contratadas
+            </li>
 
-        <li text="obrargst" class="item" texto="obrargst">
-            <g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link" dialog="dlgContabilidad">
-                Obras registradas
-            </g:link>
-            Reporta el presupuesto anual.
-        </li>
+            <li text="obrargst" class="item" texto="obrargst">
+                <g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link"
+                        dialog="dlgContabilidad">
+                    Obras registradas
+                </g:link>
+                Listado de obras que se hallan regsitradas en el sistema, están an la fase inicial de estructuración de presupuestos
+                y más documentos precontractuales.
+            </li>
 
-        <li text="obracntn" class="item" texto="obracntn">
-            <g:link controller="reportes" action="comprobante" file="Comprobante.pdf" class="link" dialog="dlgComprobante">
-                Obras contratadas por cantón
-            </g:link>
-            Permite imprimir un comprobante
-        </li>
+            <li text="obracntn" class="item" texto="obracntn">
+                <g:link controller="reportes" action="comprobante" file="Comprobante.pdf" class="link"
+                        dialog="dlgComprobante">
+                    Obras contratadas por cantón
+                </g:link>
+                Listado de obras que han contratado, organizadas por canton.
+            </li>
 
-        <li text="cncr" class="item" texto="cncr">
-            <g:link controller="reportes" action="balanceComprobacion" file="Balance_Comprobacion.pdf" class="link" dialog="dlgContabilidadPeriodo">
-                Concursos
-            </g:link>
-            Muestra el balance de comprobaci&oacute;n en detalle a todos los niveles
-        </li>
+            <li text="cncr" class="item" texto="cncr">
+                <g:link controller="reportes" action="balanceComprobacion" file="Balance_Comprobacion.pdf" class="link"
+                        dialog="dlgContabilidadPeriodo">
+                    Concursos
+                </g:link>
+                Listado de concursos para la contratación de obras y otros servicios.
+            </li>
 
-        <li text="cntr" class="item" texto="cntr">
-            <g:link controller="reportes" action="situacionFinanciera" file="Situacion_Financiera.pdf" class="link" dialog="dlgContabilidadPeriodo">
-                Contratos
-            </g:link>
-            Conocido anteriormente como Balance General
-        </li>
+            <li text="cntr" class="item" texto="cntr">
+                <g:link controller="reportes" action="situacionFinanciera" file="Situacion_Financiera.pdf" class="link"
+                        dialog="dlgContabilidadPeriodo">
+                    Contratos
+                </g:link>
+                Listado de contratos registrados en el sistema.
+            </li>
 
-        <li text="prve" class="item" texto="prve">
-            <g:link controller="reportes" action="resultadoIntegral" file="Estado_Resultado_Integral.pdf" class="link" dialog="dlgContabilidadPeriodo">
-                Contratistas
-            </g:link>
-            Este reporte se conocía como Estado de Pérdidas y Ganancias
-        </li>
+            <li text="prve" class="item" texto="prve">
+                <g:link controller="reportes" action="resultadoIntegral" file="Estado_Resultado_Integral.pdf"
+                        class="link" dialog="dlgContabilidadPeriodo">
+                    Contratistas
+                </g:link>
+                Listado de contrtistas que han firmado contratos con el GADPP.
+            </li>
 
-        <li text="fldf" class="item" texto="obraprsp">
-            <g:link controller="reportes" action="flujoEfectivo" file="Estado_Flujos_Efectivo.pdf" class="link" dialog="dlgContabilidadPeriodo">
-                Aseguradoras
-            </g:link>
-            Estado de flujo defectivo en función del año anterior
-        </li>
+            <li text="fldf" class="item" texto="obraprsp">
+                <g:link controller="reportes" action="flujoEfectivo" file="Estado_Flujos_Efectivo.pdf" class="link"
+                        dialog="dlgContabilidadPeriodo">
+                    Aseguradoras
+                </g:link>
+                Listado de aseguradoras que se hallan registradas en el ssitema.
+            </li>
 
-        <li text="patr" class="item" texto="obraprsp">
-            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgContabilidadPeriodo">
-                Garantías por contrato y contratistas
-            </g:link>
-            Estado de cambio sen el patrimonio durante el ejercicio fiscal
-        </li>
-        <li text="vnts" class="item" texto="obraprsp">
-            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgVentas">
-                Transferencias y/o cheques pagados
-            </g:link>
-            Ventas
-        </li>
-        <li text="vnts" class="item" texto="obraprsp">
-            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgVentas">
-                Avance de obras
-            </g:link>
-            Ventas
-        </li>
-        <li text="vnts" class="item" texto="obraprsp">
-            <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf" class="link" dialog="dlgVentas">
-                Obras finalizadas
-            </g:link>
-            Ventas
-        </li>
-      </ul>
-   </div>
+            <li text="patr" class="item" texto="obraprsp">
+                <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
+                        class="link" dialog="dlgContabilidadPeriodo">
+                    Garantías por contrato y contratistas
+                </g:link>
+                Listado de garantías detalladas por contrato.
+            </li>
+            <li text="vnts" class="item" texto="obraprsp">
+                <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
+                        class="link" dialog="dlgVentas">
+                    Transferencias y/o cheques pagados
+                </g:link>
+                Listado de pagos realizados a partir de la solicitud depagos relativos a las obras.
+            </li>
+            <li text="vnts" class="item" texto="obraprsp">
+                <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
+                        class="link" dialog="dlgVentas">
+                    Avance de obras
+                </g:link>
+                Listado de obras con el respectivo porcentaje de avance.
+            </li>
+            <li text="vnts" class="item" texto="obraprsp">
+                <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
+                        class="link" dialog="dlgVentas">
+                    Obras finalizadas
+                </g:link>
+                Listado de obras finalizadas.
+            </li>
+        </ul>
+    </div>
 
-   <div id="tool" class="leyenda ui-widget-content ui-corner-all">
-   </div>
+    <div id="tool" class="leyenda ui-widget-content ui-corner-all">
+    </div>
 
-   <div id="obraprsp" style="display:none">
-    <h3>Obras Presupuestadas</h3><br>
+    <div id="obraprsp" style="display: none;">
+        <h3>Obras Presupuestadas</h3><br>
 
-    <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
-    contratación.
-    </p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
-    polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios
-  </div>
-   <div id="obracntr" style="display:none">
-    <h3>Obras Contratadas</h3><br>
+        <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
+        contratación.
+        </p><p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
+        polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios</p>
+    </div>
 
-    <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
-    contratación.
-    </p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
-    polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios
-  </div>
+    <div id="obracntr" style="display: none">
+        <h3>Obras Contratadas</h3><br>
+
+        <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
+        contratación.
+        </p><p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
+        polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios</p>
+    </div>
 
 </div>
 
@@ -249,14 +263,18 @@
 
         $(".link").hover(
                 function () {
+/*
                     $(this).addClass("linkHover");
                     $(".notice").hide();
                     var id = $(this).parent().attr("text");
                     $("#" + id).show();
+*/
                 },
                 function () {
+/*
                     $(this).removeClass("linkHover");
                     $(".notice").hide();
+*/
                 }).click(function () {
                     var url = $(this).attr("href");
                     var file = $(this).attr("file");

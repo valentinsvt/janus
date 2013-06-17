@@ -113,7 +113,7 @@
         <h3 id="modalTitle-tree2"></h3>
     </div>
 
-    <div class="modal-body" id="modalBody-tree2">
+    <div class="modal-body" id="modalBody-tree2" style="width: 1000px;">
     </div>
 
     <div class="modal-footer" id="modalFooter-tree2">
@@ -349,12 +349,12 @@
             });
         });
 
-        var $p1 = $("<p>").html("Por favor ingrese el sueldo básico  del año " + (new Date().getFullYear()));
+        var $p1 = $("<p>").html("Por favor ingrese el sueldo básico para el Obrero del año " + (new Date().getFullYear()));
         var $p2 = $("<p>").html($valor);
 
         var $div = $("<div>").append($p1).append($p2);
 
-        $("#modalTitle-tree1").html("Información");
+        $("#modalTitle-tree1").html("Cálculo del valor por Hora");
         $("#modalBody-tree1").html($div);
         $valor.focus();
         $("#modalFooter-tree1").html("").append(btnCancel).append(btnCalc);
@@ -375,7 +375,7 @@
                 item : ${item.id}
             },
             success : function (msg) {
-                $("#modalTitle-tree2").html("Información");
+                $("#modalTitle-tree2").html("Cálculo del valor por Hora de Equipos");
                 $("#modalBody-tree2").html(msg);
                 $("#modalFooter-tree2").html("").append(btnCancel).append(btnCalc);
                 $("#modal-tree2").modal("show");

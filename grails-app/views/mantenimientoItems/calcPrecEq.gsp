@@ -12,6 +12,7 @@ h4 {
 
 .calculos {
     height     : 240px;
+    width      : 990px;
     overflow-x : hidden;
     overflow-y : auto;
 }
@@ -47,15 +48,28 @@ h4 {
     width     : 70px;
     font-size : 12px;
 }
+.campo01 {
+    width: 30px;
+}
+.campo02 {
+    width: 40px;
+}
+.campo03 {
+    width: 60px;
+}
+.campo04 {
+    width: 70px;
+}
+
 </style>
 
 <h4>Datos del equipo</h4>
-<table border="1">
+<table border="1" width="960px;">
     <thead>
         <tr>
-            <th>Equipo</th>
-            <th>Potencia</th>
-            <th>Valor de adquisición del equipo</th>
+            <th width="180px;">Equipo</th>
+            <th width="50px;">Potencia</th>
+            <th width="130px;">Valor Eq. Nuevo</th>
             <th>Llantas</th>
             <th colspan="3">Vida Económica (h)</th>
             <th colspan="3">Horas al año (h)</th>
@@ -64,60 +78,63 @@ h4 {
         <tr>
             <th>&nbsp;</th>
             <th>(HP)</th>
-            <th>$ (V<sub>C</sub>)</th>
-            <th>$ (V<sub>LL</sub>)</th>
+            <th>$</th>
+            <th>$</th>
             <th>Baja</th>
             <th>Alta</th>
-            <th>Prom (H<sub>V</sub>)</th>
+            %{--<th>Prom (H<sub>V</sub>)</th>--}%
+            <th>Prom</th>
             <th>Baja</th>
             <th>Alta</th>
-            <th>Prom (H<sub>a</sub>)</th>
+            %{--<th>Prom (H<sub>a</sub>)</th>--}%
+            <th>Prom</th>
             <th>Baja</th>
             <th>Alta</th>
-            <th>Prom (H<sub>LL</sub>)</th>
+            %{--<th>Prom (H<sub>LL</sub>)</th>--}%
+            <th>Prom</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>${item.nombre}</td>
             <td>
-                <g:textField type="number" class="input-mini calcular" name="hp"/>
+                <g:textField type="number" class="campo01 calcular" name="hp"/>
             </td>
             <td>
                 <div class="input-append">
-                    <g:textField class="input-mini calcular" name="vc" type="text"/>
+                    <g:textField class="campo03 calcular" name="vc" type="text"/>
                     <span class="add-on">$</span>
                 </div>
             </td>
             <td>
                 <div class="input-append">
-                    <g:textField class="input-mini calcular" name="vll" type="text"/>
+                    <g:textField class="campo02 calcular" name="vll" type="text"/>
                     <span class="add-on">$</span>
                 </div>
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular prom" data-prom="hv" name="hvb"/>
+                <g:textField type="number" class="campo02 calcular prom" data-prom="hv" name="hvb"/>
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular prom" data-prom="hv" name="hva"/>
+                <g:textField type="number" class="campo02 calcular prom" data-prom="hv" name="hva"/>
             </td>
-            <td id="hv" class="num">
-            </td>
-            <td>
-                <g:textField type="number" class="input-mini calcular prom" data-prom="ha" name="hab"/>
+            <td id="hv" class="num campo02">
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular prom" data-prom="ha" name="haa"/>
-            </td>
-            <td id="ha" class="num">
+                <g:textField type="number" class="campo02 calcular prom" data-prom="ha" name="hab"/>
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular prom" data-prom="hll" name="hllb"/>
+                <g:textField type="number" class="campo02 calcular prom" data-prom="ha" name="haa"/>
+            </td>
+            <td id="ha" class="num campo02">
             </td>
             <td>
-                <g:textField type="number" class="input-mini calcular prom" data-prom="hll" name="hlla"/>
+                <g:textField type="number" class="campo02 calcular prom" data-prom="hll" name="hllb"/>
             </td>
-            <td id="hll" class="num">
+            <td>
+                <g:textField type="number" class="campo02 calcular prom" data-prom="hll" name="hlla"/>
+            </td>
+            <td id="hll" class="num campo02">
             </td>
         </tr>
     </tbody>
@@ -126,19 +143,19 @@ h4 {
 <h4>Valores anuales</h4>
 <table border="1">
     <thead>
-        <tr>
+        <tr bgcolor="#bba">
             <th>Año</th>
-            <th>Seguro (s)</th>
-            <th>Tasa interés anual (i)</th>
-            <th>Factor costo respuestos reparaciones (k)</th>
-            <th>Costo diesel (Di)</th>
-            <th>Costo lubricante (Ac)</th>
-            <th>Costo grasa (Gr)</th>
+            <th>Seguro</th>
+            <th>Tasa interés anual</th>
+            <th>Factor costo respuestos y reparaciones</th>
+            <th>Costo diesel</th>
+            <th>Costo lubricantes</th>
+            <th>Costo grasa</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr bgcolor="#e0e0d8">
             <td>${valoresAnuales.anio}</td>
             <td>
                 <g:textField type="number" class="input-mini calcular" name="cs" value="${g.formatNumber(number: valoresAnuales.seguro, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
@@ -168,125 +185,120 @@ h4 {
     </tbody>
 </table>
 
-<h4>Cálculo del costo total de la hora %{--<a href="#" class="btn btn-success" id="btnCalcular">Calcular</a></h4>--}%</h4>
+<h4>Cálculo del costo de la hora %{--<a href="#" class="btn btn-success" id="btnCalcular">Calcular</a></h4>--}%</h4>
 
 <div class="calculos">
     <div class="row">
-        <div class="span3">
-            <table border="1">
+        <div class="span3" style="width:240px;">
+            <table border="1" width="240px;">
                 <tr>
                     <th class="st-title">Valor comercial equipo</th>
-                    <th class="st-cod">Vc</th>
+                    %{--<th class="st-cod">Vc</th>--}%
                     <td class="tdVc num dol st-total" data-dec="2"></td>
                 </tr>
                 <tr>
                     <th class="st-title">Precio de las llantas nuevas</th>
-                    <th class="st-cod">V<sub>LL</sub></th>
+                    %{--<th class="st-cod">V<sub>LL</sub></th>--}%
                     <td class="tdVll num dol st-total" data-dec="2"></td>
                 </tr>
                 <tr>
                     <th class="st-title">Valor adquisición equipo</th>
-                    <th class="st-cod">Va</th>
+                    %{--<th class="st-cod">Va</th>--}%
                     <td class="tdVa num dol st-total" data-dec="2"></td>
                 </tr>
                 <tr>
                     <th class="st-title">Años de vida</th>
-                    <th class="st-cod">Av</th>
+                    %{--<th class="st-cod">Av</th>--}%
                     <td class="tdAv num st-total" data-dec="5"></td>
                 </tr>
                 <tr>
                     <th class="st-title">Valor de rescate</th>
-                    <th class="st-cod">Vr</th>
+                    %{--<th class="st-cod">Vr</th>--}%
                     <td class="tdVr num dol st-total" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Depreciación del equipo</th>
-                    <th class="st-cod">D</th>
+                    %{--<th class="st-cod">D</th>--}%
                     <td class="tdD num dol st-total" data-dec="2"></td>
                 </tr>
             </table>
         </div>
 
-        <div class="span3">
-            <table border="1">
+        <div class="span3" style="width:240px; margin-left: 10px;">
+            <table border="1" width="240px;">
                 <tr>
                     <th class="st-title">Costo del dinero</th>
-                    <th class="st-cod">i</th>
+                    %{--<th class="st-cod">i</th>--}%
                     <td class="tdCi num st-total" data-dec="2"></td>
                 </tr>
                 <tr>
                     <th class="st-title">Factor de recuperación del capital</th>
-                    <th class="st-cod">frc</th>
+                    %{--<th class="st-cod">frc</th>--}%
                     <td class="tdFrc num st-total" data-dec="5"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Intereses</th>
-                    <th class="st-cod">I</th>
+                    %{--<th class="st-cod">I</th>--}%
                     <td class="tdI num st-total" data-dec="5"></td>
                 </tr>
             </table>
         </div>
 
-        <div class="span2">
-            <div class="row">
-                <div class="span2">
+        <div class="span2" style="width:200px; margin-left: 10px;">
+            %{--<div class="row">--}%
                     <table border="1">
                         <tr>
                             <th class="st-title">Seguros</th>
-                            <th class="st-cod">s</th>
+                            %{--<th class="st-cod">s</th>--}%
                             <td class="tdCs num st-total" data-dec="2"></td>
                         </tr>
                         <tr class="totalParcial">
                             <th class="st-title">Costo de seguros</th>
-                            <th class="st-cod">S</th>
+                            %{--<th class="st-cod">S</th>--}%
                             <td class="tdS num st-total" data-dec="5"></td>
                         </tr>
                     </table>
-                </div>
-            </div>
+            %{--</div>--}%
 
-            <div class="row" style="margin-top: 5px;">
-                <div class="span2">
+            %{--<div class="span2" style="margin-top: 5px; width: 180px; margin-left: 10px;">--}%
                     <table border="1">
                         <tr class="totalParcial">
                             <th class="st-title">Matrícula</th>
-                            <th class="st-cod">m</th>
+                            %{--<th class="st-cod">m</th>--}%
                             <td class="tdM num st-total" data-dec="5"></td>
                         </tr>
                     </table>
-                </div>
-            </div>
         </div>
-
-        <div class="span3">
-            <div class="row">
-                <div class="span3">
-                    <table border="1">
-                        <tr>
-                            <th class="st-title">Factor de costo de respuestos reparaciones</th>
-                            <th class="st-cod">k</th>
-                            <td class="tdK num st-total" data-dec="2"></td>
-                        </tr>
-                        <tr class="totalParcial">
-                            <th class="st-title">Costo de repuestos</th>
-                            <th class="st-cod">R</th>
-                            <td class="tdR num st-total" data-dec="5"></td>
-                        </tr>
-                    </table>
-                </div>
+            %{--</div>--}%
+            %{--<div class="row">--}%
+        <div class="span2" style="width:180px; margin-left: 10px;">
+            <div class="span2" style="width: 240px;">
+            <table border="1">
+                <tr>
+                    <th class="st-title">Factor de costo de respuestos reparaciones</th>
+                    %{--<th class="st-cod">k</th>--}%
+                    <td class="tdK num st-total" data-dec="2"></td>
+                </tr>
+                <tr class="totalParcial">
+                    <th class="st-title">Costo de repuestos</th>
+                    %{--<th class="st-cod">R</th>--}%
+                    <td class="tdR num st-total" data-dec="5"></td>
+                </tr>
+            </table>
             </div>
+            %{--</div>--}%
 
-            <div class="row" style="margin-top: 5px;">
+        <div class="span3" style="width: 240px; margin-left: 10px;">
                 <div class="span3">
                     <table border="1">
                         <tr class="totalParcial">
                             <th class="st-title">Costo M.O. reparaciones</th>
-                            <th class="st-cod">MOR</th>
+                            %{--<th class="st-cod">MOR</th>--}%
                             <td class="tdMor num st-total" data-dec="5"></td>
                         </tr>
                     </table>
                 </div>
-            </div>
+        </div>
         </div>
     </div>
 
@@ -296,12 +308,12 @@ h4 {
             <table border="1">
                 <tr>
                     <th class="st-title">Costo diesel - combustibles</th>
-                    <th class="st-cod">Di</th>
+                    %{--<th class="st-cod">Di</th>--}%
                     <td class="tdDi num st-total" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Costo diesel</th>
-                    <th class="st-cod">CD</th>
+                    %{--<th class="st-cod">CD</th>--}%
                     <td class="tdCd num st-total" data-dec="5"></td>
                 </tr>
             </table>
@@ -311,12 +323,12 @@ h4 {
             <table border="1">
                 <tr>
                     <th class="st-title">Aceite lubricante</th>
-                    <th class="st-cod">Ac</th>
+                    %{--<th class="st-cod">Ac</th>--}%
                     <td class="tdAc num st-total" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Costo lubricante</th>
-                    <th class="st-cod">CL</th>
+                    %{--<th class="st-cod">CL</th>--}%
                     <td class="tdCl num st-total" data-dec="5"></td>
                 </tr>
             </table>
@@ -326,12 +338,12 @@ h4 {
             <table border="1">
                 <tr>
                     <th class="st-title">Grasa</th>
-                    <th class="st-cod">Gr</th>
+                    %{--<th class="st-cod">Gr</th>--}%
                     <td class="tdGr num st-total" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Costo grasa</th>
-                    <th class="st-cod">CG</th>
+                    %{--<th class="st-cod">CG</th>--}%
                     <td class="tdCg num st-total" data-dec="5"></td>
                 </tr>
             </table>
@@ -341,17 +353,17 @@ h4 {
             <table border="1">
                 <tr>
                     <th class="st-title">Precio de las llantas</th>
-                    <th class="st-cod">V<sub>LL</sub></th>
+                    %{--<th class="st-cod">V<sub>LL</sub></th>--}%
                     <td class="tdVll num st-total" data-dec="2"></td>
                 </tr>
                 <tr>
                     <th class="st-title">Horas de vida útil de las llantas</th>
-                    <th class="st-cod">H<sub>LL</sub></th>
+                    %{--<th class="st-cod">H<sub>LL</sub></th>--}%
                     <td class="tdHll num st-total" data-dec="2"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Costo horario por llantas</th>
-                    <th class="st-cod">C<sub>LL</sub></th>
+                    %{--<th class="st-cod">C<sub>LL</sub></th>--}%
                     <td class="tdCll num st-total" data-dec="5"></td>
                 </tr>
             </table>
