@@ -11,8 +11,8 @@ h4 {
 }
 
 .calculos {
-    height     : 240px;
-    width      : 990px;
+    height     : 220px;
+    width      : 980px;
     overflow-x : hidden;
     overflow-y : auto;
 }
@@ -22,8 +22,8 @@ h4 {
 }
 
 .totalFinal, .totalFinal td, .totalFinal th {
-    background : #5E5E5E;
-    color      : #f5f5f5;
+    background : #6E6E77;
+    color      : #f5f5f0;
 }
 
 .totalParcial, .totalParcial td, .totalParcial th, .totalFinal, .totalFinal td, .totalFinal th {
@@ -45,7 +45,7 @@ h4 {
 }
 
 .st-total {
-    width     : 70px;
+    width     : 50px;
     font-size : 12px;
 }
 .campo01 {
@@ -63,8 +63,22 @@ h4 {
 
 </style>
 
-<h4>Datos del equipo</h4>
-<table border="1" width="960px;">
+<div class="span7" style="width: 900px;">
+    <div class="span3" style="width: 300px; margin-top: -10px;">
+        <h4>Datos del equipo</h4>
+    </div>
+    <div class="span3" style="width: 360px; margin-left: 100px; margin-top: -10px;">
+    <table border="1" width="360px;">
+        <tr class="totalFinal">
+            <th>Costo total de la hora</th>
+            <td class="tdCh num dol" data-dec="2"></td>
+        </tr>
+    </table>
+    </div>
+
+</div>
+
+<table border="1" width="980px;">
     <thead>
         <tr>
             <th width="180px;">Equipo</th>
@@ -224,8 +238,8 @@ h4 {
             </table>
         </div>
 
-        <div class="span3" style="width:240px; margin-left: 10px;">
-            <table border="1" width="240px;">
+        <div class="span3" style="width:280px; margin-left: 10px;">
+            <table border="1" width="280px;">
                 <tr>
                     <th class="st-title">Costo del dinero</th>
                     %{--<th class="st-cod">i</th>--}%
@@ -260,7 +274,7 @@ h4 {
                     </table>
             %{--</div>--}%
 
-            %{--<div class="span2" style="margin-top: 5px; width: 180px; margin-left: 10px;">--}%
+            <div class="span2" style="margin-top: 5px; width: 200px; margin-top: 12px; margin-left: 0px;">
                     <table border="1">
                         <tr class="totalParcial">
                             <th class="st-title">Matrícula</th>
@@ -268,11 +282,10 @@ h4 {
                             <td class="tdM num st-total" data-dec="5"></td>
                         </tr>
                     </table>
+            </div>
         </div>
-            %{--</div>--}%
             %{--<div class="row">--}%
-        <div class="span2" style="width:180px; margin-left: 10px;">
-            <div class="span2" style="width: 240px;">
+        <div class="span2" style="height: 110px; width:200px; margin-left: 10px;">
             <table border="1">
                 <tr>
                     <th class="st-title">Factor de costo de respuestos reparaciones</th>
@@ -285,31 +298,14 @@ h4 {
                     <td class="tdR num st-total" data-dec="5"></td>
                 </tr>
             </table>
-            </div>
+        </div>
             %{--</div>--}%
-
-        <div class="span3" style="width: 240px; margin-left: 10px;">
-                <div class="span3">
-                    <table border="1">
-                        <tr class="totalParcial">
-                            <th class="st-title">Costo M.O. reparaciones</th>
-                            %{--<th class="st-cod">MOR</th>--}%
-                            <td class="tdMor num st-total" data-dec="5"></td>
-                        </tr>
-                    </table>
-                </div>
-        </div>
-        </div>
-    </div>
-
-
-    <div class="row" style="margin-top: 10px;">
-        <div class="span3">
-            <table border="1">
+        <div class="span3" style="width: 280px; margin-left: 10px;">
+            <table border="1" width="280px;">
                 <tr>
                     <th class="st-title">Costo diesel - combustibles</th>
                     %{--<th class="st-cod">Di</th>--}%
-                    <td class="tdDi num st-total" data-dec="2"></td>
+                    <td class="tdDi num st-total" data-dec="2" width="50px;"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Costo diesel</th>
@@ -319,7 +315,16 @@ h4 {
             </table>
         </div>
 
-        <div class="span3">
+        <div class="span3" style="width: 200px; margin-left: 10px;">
+                    <table border="1" width="240px;>
+                        <tr class="totalParcial">
+                            <th class="st-title">Costo M.O. reparaciones</th>
+                            %{--<th class="st-cod">MOR</th>--}%
+                            <td class="tdMor num st-total" data-dec="5"></td>
+                        </tr>
+                    </table>
+        </div>
+        <div class="span3" style="width: 200px; margin-left: 10px;">
             <table border="1">
                 <tr>
                     <th class="st-title">Aceite lubricante</th>
@@ -333,9 +338,12 @@ h4 {
                 </tr>
             </table>
         </div>
+    </div>
 
-        <div class="span2">
-            <table border="1">
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="span2" style="width: 240px;">
+            <table border="1" width="240px;">
                 <tr>
                     <th class="st-title">Grasa</th>
                     %{--<th class="st-cod">Gr</th>--}%
@@ -349,12 +357,12 @@ h4 {
             </table>
         </div>
 
-        <div class="span3">
-            <table border="1">
+        <div class="span3" style="width: 320px; margin-left: 10px;">
+            <table border="1" width="320px">
                 <tr>
-                    <th class="st-title">Precio de las llantas</th>
+                    <th class="st-title" width="270px;">Precio de las llantas</th>
                     %{--<th class="st-cod">V<sub>LL</sub></th>--}%
-                    <td class="tdVll num st-total" data-dec="2"></td>
+                    <td class="tdVll num st-total" data-dec="2" width="50px;"></td>
                 </tr>
                 <tr>
                     <th class="st-title">Horas de vida útil de las llantas</th>
@@ -370,13 +378,6 @@ h4 {
         </div>
     </div>
 </div>
-<table border="1">
-    <tr class="totalFinal">
-        <th>Costo total de la hora</th>
-        <th>Ch</th>
-        <td class="tdCh num dol" data-dec="2"></td>
-    </tr>
-</table>
 
 <script type="text/javascript">
 

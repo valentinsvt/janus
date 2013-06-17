@@ -106,14 +106,14 @@
     </div>
 </div>
 
-<div class="modal grandotote hide fade" id="modal-tree2">
+<div class="modal big hide fade" id="modal-tree2">
     <div class="modal-header" id="modal-header-tree2">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
         <h3 id="modalTitle-tree2"></h3>
     </div>
 
-    <div class="modal-body" id="modalBody-tree2" style="width: 1000px;">
+    <div class="modal-body" id="modalBody-tree2" style="width: 970px;">
     </div>
 
     <div class="modal-footer" id="modalFooter-tree2">
