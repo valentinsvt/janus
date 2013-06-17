@@ -1,4 +1,4 @@
-<%@ page import="janus.TipoTramite" %>
+<%@ page import="janus.RolTramite; janus.TipoTramite" %>
 <!doctype html>
 <html>
     <head>
@@ -56,6 +56,8 @@
 
                         <g:sortableColumn property="requiereRespuesta" title="Requiere Respuesta"/>
 
+                        <th>Configurado</th>
+
                         <th width="160">Acciones</th>
                     </tr>
                 </thead>
@@ -74,6 +76,12 @@
                             <td>${tipoTramiteInstance.tipo == 'O' ? 'Obra' : 'Contrato'}</td>
 
                             <td>${tipoTramiteInstance.requiereRespuesta == 'S' ? 'Sí' : 'No'}</td>
+
+                            <td>
+                                <g:set var="de" value="${janus.DepartamentoTramite.findAllByTipoTramiteAndRolTramite(tipoTramiteInstance, RolTramite.findByCodigo('DE'))}"/>
+                                <g:set var="para" value="${janus.DepartamentoTramite.findAllByTipoTramiteAndRolTramite(tipoTramiteInstance, RolTramite.findByCodigo('PARA'))}"/>
+                                ${de.size() > 0 && para.size() > 0 ? 'Sí' : 'No'}
+                            </td>
 
                             <td>
                                 <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoTramiteInstance.id}">
@@ -165,7 +173,7 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+                            var btnSave = $('<a href="#" class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
                                 submitForm(btnSave);
@@ -192,12 +200,12 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+                            var btnSave = $('<a href="#"  data-dismiss="modal" class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
-                            btnSave.click(function () {
-                                submitForm(btnSave);
-                                return false;
-                            });
+//                            btnSave.click(function () {
+//                                submitForm(btnSave);
+//                                return false;
+//                            });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle").html("Departamentos de Tipo Trámite");

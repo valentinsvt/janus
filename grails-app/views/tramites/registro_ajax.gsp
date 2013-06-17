@@ -51,9 +51,15 @@
                                     class="many-to-one required" noSelection="['': '']"/>
                     </g:if>
                     <g:else>
-                        <elm:select id="tipoTramite" name="tipoTramite.id" from="${TipoTramite.list([sort: 'descripcion'])}"
-                                    optionKey="id" optionClass="tipo"
-                                    class="many-to-one required" noSelection="['': '']"/>
+                        <g:if test="${tramite.tipoTramite}">
+                            ${tramite.tipoTramite.descripcion}
+                            <g:hiddenField id="tipoTramite" name="tipoTramite.id" value="${tramite.tipoTramiteId}"/>
+                        </g:if>
+                        <g:else>
+                            <elm:select id="tipoTramite" name="tipoTramite.id" from="${TipoTramite.list([sort: 'descripcion'])}"
+                                        optionKey="id" optionClass="tipo"
+                                        class="many-to-one required" noSelection="['': '']"/>
+                        </g:else>
                     </g:else>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
@@ -69,8 +75,14 @@
                 </div>
 
                 <div class="controls">
-                    <g:textField name="txtTipo" class=" required span6"/>
-                    <g:hiddenField name="hddTipo"/>
+                    <g:if test="${tramite.contrato}">
+                        ${tramite.contrato.obra.nombre}
+                        <g:hiddenField name="hddTipo" value="cn_${tramite.contratoId}"/>
+                    </g:if>
+                    <g:else>
+                        <g:textField name="txtTipo" class=" required span6" autocomplete="off"/>
+                        <g:hiddenField name="hddTipo"/>
+                    </g:else>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
@@ -97,7 +109,7 @@
                 </div>
 
                 <div class="controls">
-                    <elm:datepicker name="fecha" class=" required"/>
+                    <elm:datepicker name="fecha" class=" required" value="${new Date()}"/>
 
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
@@ -176,53 +188,68 @@
                 });
             }
 
-            function getPersonas(box, cur) {
-                $("#lblTipo").html(lblTipo);
-                var val = box.val();
-                if (val != cur) {
-                    cur = val;
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'personasPorTipo')}",
-                        data    : {
-                            tipo : cur
-                        },
-                        success : function (msg) {
-                            if (msg != "") {
-                                $("#personas").html(msg);
-                                $("#grupoTipo").show();
-                            } else {
-                                $("#grupoTipo").hide();
-                                $("#personas").html("<div class='row'><div class='alert alert-danger span7'>El tipo de trámite no ha sido configurado. Por favor seleccione otro.</div></div>");
-                            }
-                        }
-                    });
-                }
-            }
-
             $(function () {
-                $tipoTramite.val("");
                 var cur = $tipoTramite.val();
+                <g:if test="${tramite.tipoTramite}">
+                updateData("${init}");
+                </g:if>
+                <g:else>
+                $tipoTramite.val("");
+                </g:else>
+
+                function getPersonas(override) {
+                    $("#lblTipo").html(lblTipo);
+                    var val = $tipoTramite.val();
+                    if (override || val != cur) {
+                        cur = val;
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(action:'personasPorTipo')}",
+                            data    : {
+                                tipo : cur
+                            },
+                            success : function (msg) {
+                                if (msg != "") {
+                                    $("#personas").html(msg);
+                                    $("#grupoTipo").show();
+                                } else {
+                                    $("#grupoTipo").hide();
+                                    $("#personas").html("<div class='row'><div class='alert alert-danger span7'>El tipo de trámite no ha sido configurado. Por favor seleccione otro.</div></div>");
+                                }
+                            }
+                        });
+                    }
+                }
+
+                function updateData(init) {
+                    var tipo;
+                    var override = false;
+                    if (init) {
+                        tipo = init;
+                        override = true;
+                    } else {
+                        tipo = $("#tipoTramite option:selected").attr("class");
+                    }
+                    $("#buscarDialog").unbind("click");
+                    if (tipo == "C") {
+                        lblTipo = "Contrato";
+                        $("#modalTitle-busca").html("Lista de contratos");
+                        $("#buscarDialog").bind("click", buscarContrato);
+                        getPersonas(override);
+                    } else if (tipo == "O") {
+                        lblTipo = "Obra";
+                        $("#modalTitle-busca").html("Lista de obras");
+                        $("#buscarDialog").bind("click", enviar);
+                        getPersonas(override);
+                    }
+                }
 
                 $('[rel=tooltip]').tooltip();
 
                 $("#frmRegistrar-tramite").validate();
 
                 $tipoTramite.bind("keyup change", function () {
-                    var box = $(this);
-                    var tipo = $("#tipoTramite option:selected").attr("class");
-                    $("#buscarDialog").unbind("click");
-                    if (tipo == "C") {
-                        lblTipo = "Contrato";
-                        $("#modalTitle-busca").html("Lista de contratos");
-                        $("#buscarDialog").bind("click", buscarContrato);
-                        getPersonas(box, cur);
-                    } else if (tipo == "O") {
-                        lblTipo = "Obra";
-                        $("#modalTitle-busca").html("Lista de obras");
-                        $("#buscarDialog").bind("click", enviar);
-                        getPersonas(box, cur);
-                    }
+                    updateData(null);
                 });
 
                 $("#txtTipo").click(function () {

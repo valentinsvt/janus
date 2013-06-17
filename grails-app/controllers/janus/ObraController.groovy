@@ -40,8 +40,8 @@ class ObraController extends janus.seguridad.Shield {
             tmp.each { tm ->
                 crono += tm.porcentaje
             }
-//            println "tmp "+tmp.volumenObra.id+"  "+tmp.porcentaje+"  "+tmp.precio+"  "+tmp.cantidad
-//            println "crono "+crono
+//            println "volObra: " + it.item.codigo + " tmp " + tmp.volumenObra.id + "  " + tmp.porcentaje + "  " + tmp.precio + "  " + tmp.cantidad
+//            println "crono " + crono
             if (crono.toDouble().round(2) != 100.00) {
                 msg += "<br><span class='label-azul'>Error:</span> La suma de porcentajes de el volumen de obra: ${it.item.codigo} (${crono.toDouble().round(2)}) en el cronograma es diferente de 100%"
 
@@ -181,14 +181,14 @@ class ObraController extends janus.seguridad.Shield {
 
             def cn = dbConnectionService.getConnection()
 
-            def sqlVer =  "SELECT\n" +
+            def sqlVer = "SELECT\n" +
                     "voit__id             id\n" +
                     "FROM  vlobitem \n" +
                     "WHERE obra__id= ${params.obra} \n"
             def verif = cn.rows(sqlVer.toString())
             def verifOK = false
 
-            if (verif != []){
+            if (verif != []) {
 
                 verifOK = true
             }
@@ -295,15 +295,15 @@ class ObraController extends janus.seguridad.Shield {
         funcionJs += 'location.href="' + g.createLink(action: 'registroObra', controller: 'obra') + '?obra="+$(this).attr("regId");'
         funcionJs += '}'
         def numRegistros = 20
-        println "params "+params.reporte+"  "+params.excel
+        println "params " + params.reporte + "  " + params.excel
 
         if (!params.reporte) {
-            if(params.excel){
+            if (params.excel) {
                 session.dominio = Obra
                 session.funciones = funciones
                 def anchos = [15, 50, 70, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20] /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
-            }else{
+            } else {
                 def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
                 render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "obra", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
@@ -511,7 +511,6 @@ class ObraController extends janus.seguridad.Shield {
         def usuario = session.usuario.id
 
         def persona = Persona.get(usuario)
-
 
 //        println("usuario" + usuario)
 //        println("dep" + persona.departamento.id)

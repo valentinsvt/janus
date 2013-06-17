@@ -26,7 +26,7 @@ class TipoTramite implements Serializable {
         }
     }
     static constraints = {
-        codigo(size: 4..4, blank: false, attributes: [title: 'código'])
+        codigo(size: 4..4, blank: false, unique: true, attributes: [title: 'código'])
         descripcion(size: 1..63, blank: false, attributes: [title: 'descripción'])
         padre(blank: true, nullable: true, attributes: [title: 'trámite principal'])
         tiempo(blank: false, attributes: [title: 'tiempo de ejecución del trámite en días'])

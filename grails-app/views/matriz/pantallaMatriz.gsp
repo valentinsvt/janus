@@ -101,7 +101,7 @@
             </a>
         </div>
 
-        <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px;width: 100%;max-width: 100%;overflow-x: hidden">
+        <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0;width: 100%;max-width: 100%;overflow-x: hidden">
             <div style="width: 1060px;overflow-x: auto;max-width: 1060px;" class="scroll-pane">
                 <table class="table table-bordered table-condensed  " style="width: ${cols.size() * 120 - 90}px;max-width: ${cols.size() * 120 - 90}px;float:left">
                     <thead>

@@ -102,6 +102,22 @@
 
 <script type="text/javascript">
     $("#frmSave-TipoTramite").validate({
+        rules          : {
+            codigo : {
+                remote : {
+                    url  : "${createLink(action:'checkCd_ajax')}",
+                    type : "post",
+                    data : {
+                        id : "${tipoTramiteInstance?.id}"
+                    }
+                }
+            }
+        },
+        messages       : {
+            codigo : {
+                remote : "El código ya se ha ingresado para otro tipo de trámite"
+            }
+        },
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },

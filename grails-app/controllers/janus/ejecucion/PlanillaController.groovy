@@ -28,22 +28,23 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         return [planillaInstance: planilla]
     }
+
     def ordenPago() {
         def planilla = Planilla.get(params.id)
         return [planillaInstance: planilla]
     }
 
-    def saveOrdenPago(){
+    def saveOrdenPago() {
 //        println "save orden pago!! "+params
         def planilla = Planilla.get(params.id)
         planilla.fechaOrdenPago = new Date().parse("dd-MM-yyyy", params.fechaOrdenPago)
         planilla.memoOrdenPago = params.memoOrdenPago
-        if (planilla.save(flush: true)){
-            flash.message="Orden de pago registrada"
-            redirect(action: "list",id: planilla.contrato.id)
-        }else{
-            flash.message="Error al registrar la orden de pago"
-            redirect(action: "ordenPago",id: params.id)
+        if (planilla.save(flush: true)) {
+            flash.message = "Orden de pago registrada"
+            redirect(action: "list", id: planilla.contrato.id)
+        } else {
+            flash.message = "Error al registrar la orden de pago"
+            redirect(action: "ordenPago", id: params.id)
         }
     }
 
@@ -139,11 +140,18 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def periodos = []
         if (!esAnticipo) {
-            def ultimoPeriodo = planillasAvance.last().fechaFin
+            println "********************* " + planillasAvance
+            println "********************* " + planillas.last().fechaPresentacion
+            def ultimoPeriodo
+            if (planillasAvance.size() > 0) {
+                ultimoPeriodo = planillasAvance.last().fechaFin
 //            if (!ultimoPeriodo) {
 //                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
 //            }
 //            println planillasAvance
+            } else {
+                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
+            }
             PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: 'fechaInicio']).each { pe ->
                 if (pe.tipo == "P") {
                     periodos += PeriodosInec.withCriteria {
@@ -424,7 +432,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
-println periodos
+        println periodos
 //        render periodos.descripcion
 
 //        println "Aqui empieza las inserciones"

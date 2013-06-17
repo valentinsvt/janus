@@ -14,9 +14,9 @@ class CronogramaContratoController extends janus.seguridad.Shield {
 
     def index() {
 
-        if (!params.id) {
-            params.id = "5"
-        }
+//        if (!params.id) {
+//            params.id = "5"
+//        }
 
         def contrato = Contrato.get(params.id)
         if (!contrato) {

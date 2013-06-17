@@ -60,6 +60,34 @@ class TipoTramiteController extends janus.seguridad.Shield {
         return [tipoTramite: tipoTramite, departamentos: json]
     }
 
+    def checkCd_ajax() {
+        //        println params
+        if (params.id) {
+            def tipoTramite = TipoTramite.get(params.id)
+//            println params.codigo
+//            println params.codigo.class
+//            println departamento.codigo
+//            println departamento.codigo.class
+            if (params.codigo == tipoTramite.codigo.toString()) {
+                render true
+            } else {
+                def tiposTramite = TipoTramite.findAllByCodigoIlike(params.codigo)
+                if (tiposTramite.size() == 0) {
+                    render true
+                } else {
+                    render false
+                }
+            }
+        } else {
+            def tiposTramite = TipoTramite.findAllByCodigoIlike(params.codigo)
+            if (tiposTramite.size() == 0) {
+                render true
+            } else {
+                render false
+            }
+        }
+    }
+
     def form_ajax() {
         def tipoTramiteInstance = new TipoTramite(params)
         if (params.id) {
@@ -76,6 +104,7 @@ class TipoTramiteController extends janus.seguridad.Shield {
 
     def save() {
         def tipoTramiteInstance
+        params.codigo = params.codigo.toUpperCase()
         if (params.id) {
             tipoTramiteInstance = TipoTramite.get(params.id)
             if (!tipoTramiteInstance) {

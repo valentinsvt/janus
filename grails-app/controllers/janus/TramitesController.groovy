@@ -1,5 +1,7 @@
 package janus
 
+import janus.ejecucion.Planilla
+
 class TramitesController {
 
     def buscadorService
@@ -17,11 +19,21 @@ class TramitesController {
 
     def registro_ajax() {
         def padre = null
+        def init = null
+        def tramite = new Tramite()
         if (params.padre) {
             padre = Tramite.get(params.padre.toLong())
         }
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-        return [campos: campos, padre: padre]
+
+        if (params.planilla) {
+            def planilla = Planilla.get(params.planilla)
+            tramite.tipoTramite = TipoTramite.findByCodigoIlike('PGPL');
+            tramite.contrato = planilla.contrato
+            init = "C"
+        }
+
+        return [campos: campos, padre: padre, tramite: tramite, init: init]
     }
 
     def personasPorTipo() {
