@@ -33,7 +33,7 @@
 
 <body>
 
-<div id="tabs" style="width: 800px; height: 850px">
+<div id="tabs" style="width: 800px; height: 970px">
 
 <ul>
 
@@ -170,29 +170,76 @@
 
                     </thead>
 
+
+                    <tbody id="firmasFijasPresu">
+
+                        <g:if test="${obra?.inspector}">
+
+                            <tr data-id="${obra?.inspector?.id}">
+
+                          <td>
+
+                          </td>
+
+                          <td>
+
+                              ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
+
+                          </td>
+                          <td>
+                              ${obra?.inspector?.cargo}
+
+                          </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
+                            </td>
+
+                            </tr>
+                        </g:if>
+
+
+                        <g:if test="${obra?.revisor}">
+                      <tr data-id="${obra?.revisor?.id}">
+
+                    <td>
+
+                    </td>
+                    <td>
+                    ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
+                    </td>
+                    <td>
+                    ${obra?.revisor?.cargo}
+                    </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
+                            </td>
+
+                      </tr>
+                    </g:if>
+                        <g:if test="${obra?.responsableObra}">
+
+                            <tr data-id="${obra?.responsableObra?.id}">
+
+                            <td>
+
+                            </td>
+                            <td>
+                                ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
+                            </td>
+                            <td>
+                                ${obra?.responsableObra?.cargo}
+                            </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
+                            </td>
+                            </tr>
+
+                        </g:if>
+
+                    </tbody>
+
                     <tbody id="bodyFirmas_presupuesto">
 
-                    %{--<tr>--}%
-                    %{--<th style="width: 50px">1</th>--}%
-                    %{--<th style="width: 350px">${personasFirmas?.nombre + " " + personasFirmas?.apellido}</th>--}%
-                    %{--<th style="width: 250px">${personasFirmas?.cargo}</th>--}%
-                    %{--<th style="width: 20px"> </th>--}%
-
-                    %{--</tr>--}%
-
-
-                    %{--<tr>--}%
-                    %{--<th style="width: 50px">2</th>--}%
-                    %{--<th style="width: 350px">${personasFirmas2?.nombre + " " + personasFirmas2?.apellido}</th>--}%
-                    %{--<th style="width: 250px">${personasFirmas2?.cargo}</th>--}%
-                    %{--<th style="width: 20px"> </th>--}%
-
-                    %{--</tr>--}%
-
-                    %{--<tr id="bodyFirmas_tr">--}%
-
-
-                    %{--</tr>--}%
 
                     </tbody>
 
@@ -362,7 +409,77 @@
 
                     </thead>
 
+                    <tbody id="firmasFijasMemo">
+
+                    <g:if test="${obra?.inspector}">
+
+                        <tr data-id="${obra?.inspector?.id}">
+
+                            <td>
+
+                            </td>
+
+                            <td>
+
+                                ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
+
+                            </td>
+                            <td>
+                                ${obra?.inspector?.cargo}
+
+                            </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
+                            </td>
+
+                        </tr>
+                    </g:if>
+
+
+                    <g:if test="${obra?.revisor}">
+                        <tr data-id="${obra?.revisor?.id}">
+
+                            <td>
+
+                            </td>
+                            <td>
+                                ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
+                            </td>
+                            <td>
+                                ${obra?.revisor?.cargo}
+                            </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
+                            </td>
+
+                        </tr>
+                    </g:if>
+                    <g:if test="${obra?.responsableObra}">
+
+                        <tr data-id="${obra?.responsableObra?.id}">
+
+                            <td>
+
+                            </td>
+                            <td>
+                                ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
+                            </td>
+                            <td>
+                                ${obra?.responsableObra?.cargo}
+                            </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
+                            </td>
+                        </tr>
+
+                    </g:if>
+
+                    </tbody>
+
+
+
                     <tbody id="bodyFirmas_memo">
+
 
                     </tbody>
 
@@ -479,6 +596,76 @@
                     </tr>
 
                     </thead>
+
+                    <tbody id="firmasFijasPoli">
+
+                    <g:if test="${obra?.inspector}">
+
+                        <tr data-id="${obra?.inspector?.id}">
+
+                            <td>
+
+                            </td>
+
+                            <td>
+
+                                ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
+
+                            </td>
+                            <td>
+                                ${obra?.inspector?.cargo}
+
+                            </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>
+                            </td>
+
+                        </tr>
+                    </g:if>
+
+
+                    <g:if test="${obra?.revisor}">
+                        <tr data-id="${obra?.revisor?.id}">
+
+                            <td>
+
+                            </td>
+                            <td>
+                                ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
+                            </td>
+                            <td>
+                                ${obra?.revisor?.cargo}
+                            </td>
+                            <td>
+                                <a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>
+                            </td>
+
+                        </tr>
+                    </g:if>
+                    <g:if test="${obra?.responsableObra}">
+
+                        <tr data-id="${obra?.responsableObra?.id}">
+
+                            <td>
+
+                            </td>
+                            <td>
+                                ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
+                            </td>
+                            <td>
+                                ${obra?.responsableObra?.cargo}
+                            </td>
+                            <td>
+                             <a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>
+
+                            </td>
+                        </tr>
+
+                    </g:if>
+
+                    </tbody>
+
+
 
                     <tbody id="bodyFirmas_polinomica">
 
@@ -664,7 +851,7 @@
     <fieldset>
         <div class="span3">
 
-            A ingresado el número máximo de firmas para este documento!!
+            A ingresado el número máximo de firmas para este documento.
 
         </div>
     </fieldset>
@@ -756,6 +943,12 @@
     var firmasIdMemo = []
 
     var firmasIdFormu = []
+
+    var firmasFijas = []
+
+    var firmasFijasMemo = []
+
+    var firmasFijasFormu = []
 
     var totalPres = $("#baseMemo").val()
 
@@ -967,7 +1160,37 @@
 
     });
 
+    $(".borrarFirmaPresu").click(function () {
+
+        $(this).parents("tr").remove()
+
+        return false;
+
+    });
+
+    $(".borrarFirmaMemo").click(function () {
+
+        $(this).parents("tr").remove()
+
+        return false;
+
+    });
+
+    $(".borrarFirmaPoli").click(function () {
+
+        $(this).parents("tr").remove()
+
+        return false;
+
+    });
+
+
+
+
+
     $(".btnAdicionar").click(function () {
+
+
 
         var tipo = $(this).attr("id");
         var tbody = $("#bodyFirmas_" + tipo);
@@ -975,9 +1198,9 @@
 
         var maxFirmas = (tbody.children("tr").length) + 1;
 
-//        ////console.log(maxFirmas)
+        console.log(maxFirmas)
 
-        if (maxFirmas > 3) {
+        if (maxFirmas > 4) {
 
             $("#maxFirmasDialog").dialog("open");
 
@@ -986,6 +1209,8 @@
             var cont = true;
 
             tbody.children("tr").each(function () {
+
+
                 var curId = $(this).data("id");
 
                 if (curId.toString() == id.toString()) {
@@ -994,10 +1219,8 @@
             });
 
             if (cont) {
-
                 var nombre = $.trim($("#cmb_" + tipo + " option:selected").text());
                 var puesto = $.trim($("#cmb_" + tipo + " option:selected").attr("class"));
-
                 var rows = tbody.children("tr").length;
 
                 var num = rows + 3;
@@ -1013,6 +1236,7 @@
                 tdNombre.html(nombre);
                 tdPuesto.html(puesto);
                 tdDel.append(btnDel);
+
 
                 tr.append(tdNumero).append(tdNombre).append(tdPuesto).append(tdDel).data({nombre: nombre, puesto: puesto, id: id});
                 tbody.append(tr);
@@ -1104,21 +1328,23 @@
         if (active == 0) {
 
             firmasId = [];
+            firmasFijas = [];
 
             $("#bodyFirmas_presupuesto").children("tr").each(function (i) {
-//      $("#bodyFirmas_tr").each(function(i){
-
                 firmasId[i] = $(this).data("id")
 
-//          ////console.log(firmasId[i])
 
-//          ////console.log(  $(this).data("id") )
-//        ////console.log(  $(this).data("nombre") )
-//        ////console.log(  $(this).data("puesto") )
+            });
 
-            })
+            $("#firmasFijasPresu").children("tr").each(function (i) {
 
-//                    notaValue = $("#piePaginaSel").attr("value");
+
+                firmasFijas[i] = $(this).data("id")
+
+
+            });
+
+//           console.log("1:" + firmasFijas)
 
             notaValue = $("#piePaginaSel").val();
 
@@ -1154,16 +1380,33 @@
         if (active == 1) {
 
             firmasIdMemo = [];
+            firmasFijasMemo = [];
+
             var paraMemo =  $("#paraMemo").val()
 
             $("#bodyFirmas_memo").children("tr").each(function (i) {
-                firmasIdMemo[i] = $(this).data("id")
 
+                firmasIdMemo[i] = $(this).data("id")
             })
 
+            $("#firmasFijasMemo").children("tr").each(function (i) {
+
+
+                firmasFijasMemo[i] = $(this).data("id")
+
+            });
+
+//            console.log("2:" + firmasFijasMemo)
+
             if (firmasIdMemo.length == 0) {
+
                 firmasIdMemo = "";
             }
+            if(firmasFijasMemo.length == 0){
+
+                firmasFijasMemo = "";
+            }
+
 
             if (tipoClickMemo == 1) {
 
@@ -1175,7 +1418,7 @@
                 var tipoReporte = tipoClickMemo;
 
                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo
+                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo
 
             }
 
@@ -1191,17 +1434,34 @@
         if (active == 2) {
 
             firmasIdFormu = [];
+            firmasFijasFormu = [];
 
             $("#bodyFirmas_polinomica").children("tr").each(function (i) {
                 firmasIdFormu[i] = $(this).data("id")
 
             })
 
+            $("#firmasFijasPoli").children("tr").each(function (i) {
+
+
+                firmasFijasFormu[i] = $(this).data("id")
+
+            });
+
+//            console.log("3:" + firmasFijasFormu)
+
+
+
             if (firmasIdFormu.length == 0) {
                 firmasIdFormu = "";
             }
+            if(firmasFijasFormu.length == 0){
 
-            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres
+                firmasFijasFormu="";
+
+            }
+
+            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
 
         }
 
@@ -1516,7 +1776,7 @@
                     var tipoReporte = tipoClick;
 
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
-                            + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses
+                            + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas
 
 
                     $("#reajustePresupuestoDialog").dialog("close");
@@ -1564,7 +1824,7 @@
                     var tipoReporte = tipoClickMemo;
 
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo  + "&para=" + paraMemo1
+                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo  + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo
 
                     $("#reajusteMemoDialog").dialog("close");
 
