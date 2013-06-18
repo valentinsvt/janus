@@ -5,12 +5,6 @@ import com.lowagie.text.Element
 import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.*
-import com.itextpdf.text.BadElementException
-import com.lowagie.text.*
-import com.lowagie.text.pdf.PdfPCell
-import com.lowagie.text.pdf.PdfPTable
-import com.lowagie.text.pdf.PdfWriter
-
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -574,7 +568,9 @@ class Reportes2Controller {
 //        params.lugar = "4"
 //        params.grupo = "1"
 //
-//        println ("params" + params)
+//        println "params" + params
+
+        def grupo = Grupo.get(params.grupo.toLong())
 
         def orden = "itemnmbr"
         if (params.orden == "n") {
@@ -589,7 +585,7 @@ class Reportes2Controller {
             eq("tipoItem", TipoItem.findByCodigo("I"))
             departamento {
                 subgrupo {
-                    eq("grupo", Grupo.get(params.grupo.toLong()))
+                    eq("grupo", grupo)
                 }
             }
         }
@@ -606,7 +602,7 @@ class Reportes2Controller {
             res.add(PrecioRubrosItems.get(it))
         }
 
-        return [lugar: lugar, cols: params.col, precios: res]
+        return [lugar: lugar, cols: params.col, precios: res, grupo: grupo]
     }
 
 
@@ -719,31 +715,31 @@ class Reportes2Controller {
 
         res.each {
 
-            if(it?.item == null){
+            if (it?.item == null) {
 
                 it?.item = " "
             }
 
-            if(it?.cantidad == null){
+            if (it?.cantidad == null) {
 
 
                 it?.cantidad = 0
             }
-            if(it?.punitario == null){
+            if (it?.punitario == null) {
 
                 it?.punitario = 0
 
             }
-            if(it?.transporte == null){
+            if (it?.transporte == null) {
 
                 it?.transporte = 0
             }
-            if(it?.costo == null){
+            if (it?.costo == null) {
 
                 it?.costo = 0
 
             }
-            if(it?.total == null){
+            if (it?.total == null) {
 
                 it?.total = 0
             }
@@ -802,6 +798,7 @@ class Reportes2Controller {
         if (params.orden == "n") {
             orden = "itemcdgo"
         }
+        def grupo = Grupo.get(params.grupo.toLong())
         def lugar = Lugar.get(params.lugar.toLong())
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def items = ""
@@ -809,7 +806,7 @@ class Reportes2Controller {
             eq("tipoItem", TipoItem.findByCodigo("I"))
             departamento {
                 subgrupo {
-                    eq("grupo", Grupo.get(params.grupo.toLong()))
+                    eq("grupo", grupo)
                 }
             }
         }
@@ -857,27 +854,31 @@ class Reportes2Controller {
         def fila = 8;
 
         label = new jxl.write.Label(2, 1, "Gobierno Autónomo Descentralizado de la Provincia de Pichincha".toUpperCase(), times16format); sheet.addCell(label);
-        label = new jxl.write.Label(2, 2, "Reporte de Costos de Materiales", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 2, "Reporte de Costos de ${grupo.descripcion.toLowerCase()}", times16format); sheet.addCell(label);
 
         label = new jxl.write.Label(1, 4, lugar?.descripcion, times16format); sheet.addCell(label);
         label = new jxl.write.Label(4, 4, "Fecha Consulta: " + new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
 
-
-        label = new jxl.write.Label(0, 6, "CODIGO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 6, "MATERIAL", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(2, 6, "UNIDAD", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(3, 6, "PESO/VOL", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(4, 6, "COSTO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(5, 6, "FECHA ACT.", times16format); sheet.addCell(label);
+        def col = 0
+        label = new jxl.write.Label(col, 6, "CODIGO", times16format); sheet.addCell(label); col++;
+        label = new jxl.write.Label(col, 6, grupo.descripcion.toUpperCase(), times16format); sheet.addCell(label); col++;
+        label = new jxl.write.Label(col, 6, "UNIDAD", times16format); sheet.addCell(label); col++;
+        if (grupo.id == 1) {
+            label = new jxl.write.Label(col, 6, "PESO/VOL", times16format); sheet.addCell(label); col++;
+        }
+        label = new jxl.write.Label(col, 6, "COSTO", times16format); sheet.addCell(label); col++;
+        label = new jxl.write.Label(col, 6, "FECHA ACT.", times16format); sheet.addCell(label); col++;
 
         res.each {
-
-            label = new jxl.write.Label(0, fila, it?.item?.codigo.toString()); sheet.addCell(label);
-            label = new jxl.write.Label(1, fila, it?.item?.nombre.toString()); sheet.addCell(label);
-            label = new jxl.write.Label(2, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label);
-            number = new jxl.write.Number(3, fila, it?.item?.peso); sheet.addCell(number);
-            number = new jxl.write.Number(4, fila, it?.precioUnitario); sheet.addCell(number);
-            label = new jxl.write.Label(5, fila, it?.fecha.format("dd-MM-yyyy")); sheet.addCell(label);
+            col = 0
+            label = new jxl.write.Label(col, fila, it?.item?.codigo.toString()); sheet.addCell(label); col++;
+            label = new jxl.write.Label(col, fila, it?.item?.nombre.toString()); sheet.addCell(label); col++;
+            label = new jxl.write.Label(col, fila, it?.item?.unidad?.codigo.toString()); sheet.addCell(label); col++;
+            if (grupo.id == 1) {
+                number = new jxl.write.Number(col, fila, it?.item?.peso); sheet.addCell(number); col++;
+            }
+            number = new jxl.write.Number(col, fila, it?.precioUnitario); sheet.addCell(number); col++;
+            label = new jxl.write.Label(col, fila, it?.fecha.format("dd-MM-yyyy")); sheet.addCell(label); col++;
 
             fila++
 
@@ -915,7 +916,7 @@ class Reportes2Controller {
     }
 
 
-    def reporteDesgloseEquipos () {
+    def reporteDesgloseEquipos() {
 
 //        println("params" + params)
 
@@ -925,7 +926,7 @@ class Reportes2Controller {
         def eqTotal
         def eqDesglosado
         def b = []
-        def c =[]
+        def c = []
         def sqlEquipoTotal1
         def et1 = []
         def et2
@@ -935,7 +936,7 @@ class Reportes2Controller {
         def ed3
         def valores = []
         def desglose = []
-        def columnas = [5051,5050,5052,3978,5049]
+        def columnas = [5051, 5050, 5052, 3978, 5049]
 
         def sqlTransTotal = "SELECT\n" +
                 "valor\n" +
@@ -943,7 +944,7 @@ class Reportes2Controller {
                 "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
                 "mfvl.obra__id = 1430 AND\n" +
                 "mfcl.clmndscr = 'TRANSPORTE_T' AND\n" +
-                "codigo = 'sS1' AND\n"+
+                "codigo = 'sS1' AND\n" +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
 
 //        select valor
@@ -959,7 +960,7 @@ class Reportes2Controller {
                 "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
                 "mfvl.obra__id = 1430 AND\n" +
                 "mfcl.clmndscr = '5051_T' AND \n" +
-                "codigo = 'sS1' AND\n "+
+                "codigo = 'sS1' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
 
 //            select valor
@@ -975,9 +976,6 @@ class Reportes2Controller {
 //        and mfvl.obra__id = 1430 and mfcl.clmndscr = '5051_T' and
 //        codigo = 'sS2'
 //        and mfvl.clmncdgo = mfcl.clmncdgo;
-
-
-
 
 
         def cn = dbConnectionService.getConnection()
@@ -1010,8 +1008,6 @@ class Reportes2Controller {
             ed1 += ed2
 
 
-
-
         }
 
 
@@ -1023,7 +1019,7 @@ class Reportes2Controller {
 
         tt.each {
 
-             transTotal = it?.valor
+            transTotal = it?.valor
 
         }
 
@@ -1038,32 +1034,31 @@ class Reportes2Controller {
 //
 
         valores += (obra?.desgloseEquipo)
-      valores += (obra?.desgloseRepuestos)
-      valores += (obra?.desgloseCombustible)
-      valores += (obra?.desgloseMecanico)
-      valores += (obra?.desgloseSaldo)
+        valores += (obra?.desgloseRepuestos)
+        valores += (obra?.desgloseCombustible)
+        valores += (obra?.desgloseMecanico)
+        valores += (obra?.desgloseSaldo)
 
 //        valores.add(obra?.desgloseEquipo)
 
 //        println("coeficientes:" + valores)
 
-      valores.eachWithIndex { item, i->
+        valores.eachWithIndex { item, i ->
 
-          b += (((ed1[i])/(item)) - eqTotal)
+            b += (((ed1[i]) / (item)) - eqTotal)
 
 
-
-      }
+        }
 
 //        println("B:" + b)
 
-       b.each {
+        b.each {
 
 
-       c += (it + eqTotal)
+            c += (it + eqTotal)
 
 
-       }
+        }
 
 //      println("C:" + c)
 
@@ -1128,7 +1123,7 @@ class Reportes2Controller {
 
         PdfPTable tablaDesglose = new PdfPTable(4);
         tablaDesglose.setWidthPercentage(90);
-        tablaDesglose.setWidths(arregloEnteros([35,2,15,30]))
+        tablaDesglose.setWidths(arregloEnteros([35, 2, 15, 30]))
 
         addCellTabla(tablaDesglose, new Paragraph("Valor de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
@@ -1205,8 +1200,6 @@ class Reportes2Controller {
 
 
     }
-
-
 
 
 }

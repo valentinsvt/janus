@@ -90,7 +90,7 @@
         <div class="hoja">
             <h1>Gobierno Autónomo Descentralizado de la Provincia de Pichincha</h1>
 
-            <h2>Reporte de costos de materiales</h2>
+            <h2>Reporte de costos de ${grupo.descripcion.toLowerCase()}</h2>
 
             <div style="height: 30px;">
                 <div class="left strong">${lugar.descripcion}</div>
@@ -105,7 +105,7 @@
                             CODIGO
                         </th>
                         <th>
-                            MATERIAL
+                            ${grupo.descripcion.toUpperCase()}
                         </th>
                         <g:if test="${cols.contains('u')}">
                             <th>
