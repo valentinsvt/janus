@@ -1,0 +1,141 @@
+.lz-pane {
+    /*background : orchid;*/
+    overflow : hidden;
+    position : relative;
+}
+
+.lz-content {
+    /*background : red;*/
+    overflow : hidden;
+    position : absolute;
+    top      : 0;
+    left     : 0;
+}
+
+.lz-nav {
+    position : absolute;
+}
+
+.lz-nav-left, .lz-nav-right {
+    width             : 43px;
+    height            : 43px;
+    background-repeat : no-repeat;
+    cursor            : pointer;
+    display           : none;
+}
+
+.lz-nav-left {
+    background-image : url("../images/nav/previous.png");
+    left             : 0;
+}
+
+.lz-nav-right {
+    background-image : url("../images/nav/next.png");
+    right            : 0;
+}
+
+.lz-nav-left:hover {
+    background-image : url("../images/nav/previous_hover.png");
+    left             : 0;
+}
+
+.lz-nav-right:hover {
+    background-image : url("../images/nav/next_hover.png");
+    right            : 0;
+}
+
+.lz-timeline {
+    background : #E0E0E0;
+    border-top : solid 2px #999;
+    position   : absolute;
+    bottom     : 0;
+    left       : 0;
+    cursor     : e-resize;
+}
+
+.lz-timelineText {
+    /*background : #002a80;*/
+    border-top    : solid 1px #999;
+    border-bottom : solid 1px #999;
+    position      : absolute;
+    bottom        : 0;
+    left          : 0;
+}
+
+.lz-currentLabel {
+    font-weight : bold;
+}
+
+.lz-timetextLabel {
+    position   : absolute;
+    background : #1d66a1;
+    color      : white;
+    /*background : #a9dba9;*/
+    /*border     : solid 1px darkgreen;*/
+    text-align : center;
+    cursor     : pointer;
+}
+
+.lz-timetextLabel.lz-currentLabel {
+    background : #eb8f00;
+    /*background : darkgreen;*/
+}
+
+.lz-timetextLabel:hover {
+    /*background : green;*/
+    background : #EDB663;
+    color      : #000000;
+}
+
+.lz-timelineLabel {
+    position   : absolute;
+    /*background : #fbcb09;*/
+    /*background : #1d66a1;*/
+    background : #7CA9CC;
+    /*border     : solid 1px #eb8f00;*/
+    /*background : #EFC340;*/
+    color      : #000000;
+    text-align : center;
+    cursor     : pointer;
+}
+
+.lz-timelineLabel.lz-currentLabel {
+    /*background : #eb8f00;*/
+    /*background : #C99D24;*/
+    background : #EFC340;
+}
+
+.lz-timelineLabel:hover {
+    background : #ebb734;
+    color      : #000000;
+}
+
+.lz-linea {
+    position   : absolute;
+    background : black;
+    z-index    : 1000;
+}
+
+.lz-division {
+    position   : absolute;
+    background : darkgray;
+    z-index    : 2000;
+}
+
+.lz-item {
+    /*background : pink;*/
+    float    : left;
+    overflow : auto;
+}
+
+/*.lz-item:nth-child(2) {*/
+/*background : hotpink;*/
+/*}*/
+
+/*.lz-item:nth-child(3) {*/
+/*background : mediumpurple;*/
+/*}*/
+
+/*.lz-item:nth-child(4) {*/
+/*background : purple;*/
+/*}*/
