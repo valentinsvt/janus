@@ -161,7 +161,7 @@
 
                     <thead>
                     <tr>
-                        <th style="width: 50px">N°</th>
+                        %{--<th style="width: 50px">N°</th>--}%
                         <th style="width: 350px">Nombre</th>
                         <th style="width: 250px">Puesto</th>
                         <th style="width: 20px"></th>
@@ -177,11 +177,11 @@
 
                             <tr data-id="${obra?.inspector?.id}">
 
-                          <td>
+                          %{--<td>--}%
+                              %{--1--}%
+                          %{--</td>--}%
 
-                          </td>
-
-                          <td>
+                          <td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
 
                               ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
 
@@ -201,17 +201,17 @@
                         <g:if test="${obra?.revisor}">
                       <tr data-id="${obra?.revisor?.id}">
 
-                    <td>
+                           %{--<td>--}%
 
-                    </td>
-                    <td>
-                    ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
-                    </td>
-                    <td>
-                    ${obra?.revisor?.cargo}
-                    </td>
+                          %{--</td>--}%
+                             <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
+                                    ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
+                            </td>
                             <td>
-                                <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
+                                    ${obra?.revisor?.cargo}
+                             </td>
+                            <td>
+                                     <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
                             </td>
 
                       </tr>
@@ -220,10 +220,10 @@
 
                             <tr data-id="${obra?.responsableObra?.id}">
 
-                            <td>
+                            %{--<td>--}%
 
-                            </td>
-                            <td>
+                            %{--</td>--}%
+                            <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
                                 ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
                             </td>
                             <td>
@@ -400,7 +400,7 @@
 
                     <thead>
                     <tr>
-                        <th style="width: 50px">N°</th>
+                        %{--<th style="width: 50px">N°</th>--}%
                         <th style="width: 350px">Nombre</th>
                         <th style="width: 250px">Puesto</th>
                         <th style="width: 20px"></th>
@@ -415,11 +415,11 @@
 
                         <tr data-id="${obra?.inspector?.id}">
 
-                            <td>
+                            %{--<td>--}%
 
-                            </td>
+                            %{--</td>--}%
 
-                            <td>
+                            <td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
 
                                 ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
 
@@ -439,10 +439,10 @@
                     <g:if test="${obra?.revisor}">
                         <tr data-id="${obra?.revisor?.id}">
 
-                            <td>
+                            %{--<td>--}%
 
-                            </td>
-                            <td>
+                            %{--</td>--}%
+                            <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
                                 ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
                             </td>
                             <td>
@@ -458,10 +458,10 @@
 
                         <tr data-id="${obra?.responsableObra?.id}">
 
-                            <td>
+                            %{--<td>--}%
 
-                            </td>
-                            <td>
+                            %{--</td>--}%
+                            <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
                                 ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
                             </td>
                             <td>
@@ -588,7 +588,7 @@
 
                     <thead>
                     <tr>
-                        <th style="width: 50px">N°</th>
+                        %{--<th style="width: 50px">N°</th>--}%
                         <th style="width: 350px">Nombre</th>
                         <th style="width: 250px">Puesto</th>
                         <th style="width: 20px"></th>
@@ -603,11 +603,11 @@
 
                         <tr data-id="${obra?.inspector?.id}">
 
-                            <td>
+                            %{--<td>--}%
 
-                            </td>
+                            %{--</td>--}%
 
-                            <td>
+                            <td id="  ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
 
                                 ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
 
@@ -627,10 +627,10 @@
                     <g:if test="${obra?.revisor}">
                         <tr data-id="${obra?.revisor?.id}">
 
-                            <td>
+                            %{--<td>--}%
 
-                            </td>
-                            <td>
+                            %{--</td>--}%
+                            <td id="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
                                 ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
                             </td>
                             <td>
@@ -646,10 +646,10 @@
 
                         <tr data-id="${obra?.responsableObra?.id}">
 
-                            <td>
+                            %{--<td>--}%
 
-                            </td>
-                            <td>
+                            %{--</td>--}%
+                            <td id="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
                                 ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
                             </td>
                             <td>
@@ -899,6 +899,31 @@
         </div>
     </fieldset>
 </div>
+
+
+<div id="borrarFirmaPresuDialog">
+    <fieldset>
+        <div class="span3">
+            Está seguro que desea remover esta firma del documento a ser impreso?
+        </div>
+    </fieldset>
+</div>
+
+
+<div class="modal hide fade" id="modal-borrarFirma">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+
+        <div id="modalTitle"></div>
+    </div>
+
+    <div class="modal-body" id="modalBody">
+    </div>
+
+    <div class="modal-footer" id="modalFooter">
+    </div>
+</div>
+
 
 
 <div id="reajusteMemoDialog" class="texto">
@@ -1162,7 +1187,33 @@
 
     $(".borrarFirmaPresu").click(function () {
 
-        $(this).parents("tr").remove()
+
+//        $("#borrarFirmaPresuDialog").dialog("open")
+//        $(this).parents("tr").remove()
+
+        var ob = $(this)
+
+        var obNombre =  ob.parents("tr").children("td").first().attr("id")
+
+        //modal
+
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn"> Cancelar</a>');
+        var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+
+        btnDelete.click(function () {
+
+            $(ob).parents("tr").remove()
+            $("#modal-borrarFirma").modal("hide");
+
+
+
+            return false;
+        });
+
+        $("#modalTitle").html("Eliminar Firma");
+        $("#modalBody").html("<p>¿Está seguro que desea remover esta firma del documento ha ser impreso?</p>" + obNombre);
+        $("#modalFooter").html("").append(btnDelete).append(btnOk);
+        $("#modal-borrarFirma").modal("show");
 
         return false;
 
@@ -1170,15 +1221,66 @@
 
     $(".borrarFirmaMemo").click(function () {
 
-        $(this).parents("tr").remove()
+//        $(this).parents("tr").remove()
+
+        var ob = $(this)
+
+        var obNombre =  ob.parents("tr").children("td").first().attr("id")
+
+        //modal
+
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn"> Cancelar</a>');
+        var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+
+        btnDelete.click(function () {
+
+            $(ob).parents("tr").remove()
+            $("#modal-borrarFirma").modal("hide");
+
+
+
+            return false;
+        });
+
+        $("#modalTitle").html("Eliminar Firma");
+        $("#modalBody").html("<p>¿Está seguro que desea remover esta firma del documento ha ser impreso?</p>" + obNombre);
+        $("#modalFooter").html("").append(btnDelete).append(btnOk);
+        $("#modal-borrarFirma").modal("show");
 
         return false;
+
 
     });
 
     $(".borrarFirmaPoli").click(function () {
 
-        $(this).parents("tr").remove()
+//        $(this).parents("tr").remove()
+
+        var ob = $(this)
+
+        var obNombre =  ob.parents("tr").children("td").first().attr("id")
+
+        //modal
+
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn"> Cancelar</a>');
+        var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+
+        btnDelete.click(function () {
+
+            $(ob).parents("tr").remove()
+            $("#modal-borrarFirma").modal("hide");
+
+
+
+            return false;
+        });
+
+        $("#modalTitle").html("Eliminar Firma");
+        $("#modalBody").html("<p>¿Está seguro que desea remover esta firma del documento ha ser impreso?</p>" + obNombre);
+        $("#modalFooter").html("").append(btnDelete).append(btnOk);
+        $("#modal-borrarFirma").modal("show");
+
+
 
         return false;
 
@@ -1190,15 +1292,29 @@
 
     $(".btnAdicionar").click(function () {
 
-
+        var maxFirmas
 
         var tipo = $(this).attr("id");
         var tbody = $("#bodyFirmas_" + tipo);
         var id = $("#cmb_" + tipo).val();
 
-        var maxFirmas = (tbody.children("tr").length) + 1;
+        var tbodyPresu = $("#firmasFijasPresu");
+        var tbodyMemo  = $("#firmasFijasMemo");
+        var tbodyPoli  = $("#firmasFijasPoli");
 
-        console.log(maxFirmas)
+        var active = $("#tabs").tabs("option", "active");
+
+        if(active == 0){
+            maxFirmas = (tbody.children("tr").length) + (tbodyPresu.children("tr").length) + 1;
+        }
+        if(active == 1){
+            maxFirmas = (tbody.children("tr").length) + (tbodyMemo.children("tr").length) + 1;
+        }
+        if(active == 2){
+            maxFirmas = (tbody.children("tr").length) + (tbodyPoli.children("tr").length) + 1;
+        }
+
+//        console.log(maxFirmas)
 
         if (maxFirmas > 4) {
 
@@ -1226,28 +1342,34 @@
                 var num = rows + 3;
 
                 var tr = $("<tr>");
-                var tdNumero = $("<td>");
+//                var tdNumero = $("<td>");
                 var tdNombre = $("<td>");
                 var tdPuesto = $("<td>");
                 var tdDel = $("<td>");
                 var btnDel = $("<a href='#' class='btn btn-danger'><i class='icon-trash icon-large'></i></a>");
 
-                tdNumero.html(num);
+//                tdNumero.html(num);
                 tdNombre.html(nombre);
                 tdPuesto.html(puesto);
                 tdDel.append(btnDel);
 
 
-                tr.append(tdNumero).append(tdNombre).append(tdPuesto).append(tdDel).data({nombre: nombre, puesto: puesto, id: id});
+//                tr.append(tdNumero).append(tdNombre).append(tdPuesto).append(tdDel).data({nombre: nombre, puesto: puesto, id: id});
+                tr.append(tdNombre).append(tdPuesto).append(tdDel).data({nombre: nombre, puesto: puesto, id: id});
+
+
                 tbody.append(tr);
 
                 btnDel.click(function () {
                     tr.remove();
+
+                    return false
                 });
 
             }
 
         }
+
 
     });
 
@@ -1666,6 +1788,39 @@
         }
 
     });
+
+
+    $("#borrarFirmaPresuDialog").dialog({
+
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        width: 350,
+        height: 180,
+        position: 'center',
+        title: 'Eliminar firma',
+        buttons: {
+            "Aceptar": function () {
+
+                $("#borrarFirmaPresu").parents("tr").remove();
+                console.log($("#borrarFirmaPresu").children("tr"))
+
+                $("#borrarFirmaPresuDialog").dialog("close");
+                return false;
+            },
+            "Cancelar" : function () {
+
+                $("#borrarFirmaPresuDialog").dialog("close");
+
+            }
+        }
+
+
+
+    }) ;
+
+
 
     $("#tipoReporteDialog").dialog({
 

@@ -39,6 +39,22 @@
             font-weight : bold;
         }
 
+        .theader{
+
+            border-bottom: 1px solid #000000 !important;
+            border-top: 1px solid #000000 !important;
+
+        }
+
+        thead th{
+
+            background : #FFFFFF !important;
+            color: #000000 !important;
+
+
+        }
+
+
         .num {
             text-align : right;
         }
@@ -47,6 +63,8 @@
             background : #333333 !important;
             color      : #AAAAAA;
         }
+
+
 
         .total {
             /*background : #000000 !important;*/
@@ -117,7 +135,7 @@
                 </div>
 
             </div>
-            <table class="table table-bordered table-striped table-condensed table-hover">
+            <table class="table table-bordered table-striped table-condensed table-hover" %{--style="border-top: 1px solid #000000;  border-bottom: 1px solid #000000"--}%>
                 <thead>
                     <tr>
                         <th style="width: 20px;">

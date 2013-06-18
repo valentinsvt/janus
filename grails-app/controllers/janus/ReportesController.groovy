@@ -2090,6 +2090,7 @@ class ReportesController {
 
         if (params.firmasId.trim().size() > 0) {
             firma = params.firmasId.split(",")
+            firma = firma.toList().unique()
         } else {
             firma = []
         }
@@ -2100,6 +2101,7 @@ class ReportesController {
         if(params.firmasFijas.trim().size() > 0){
 
             firmaFija = params.firmasFijas.split(",")
+            firmaFija=firmaFija.toList().unique()
         }else {
 
             firmaFija = []
@@ -2108,7 +2110,7 @@ class ReportesController {
 
         cuenta = firma.size() + firmaFija.size()
 
-        println("#:" + cuenta)
+//        println("#:" + cuenta)
 
         def prmsHeaderHoja = [border: Color.WHITE]
 
@@ -3126,6 +3128,7 @@ class ReportesController {
 
         if (params.firmasIdMemo.trim().size() > 0) {
             firma = params.firmasIdMemo.split(",")
+            firma = firma.toList().unique()
         } else {
             firma = []
         }
@@ -3133,6 +3136,7 @@ class ReportesController {
         if (params.firmasFijasMemo.trim().size() > 0) {
 
             firmaFijaMemo = params.firmasFijasMemo.split(",")
+            firmaFijaMemo=firmaFijaMemo.toList().unique()
         } else {
 
             firmaFijaMemo = []
@@ -3555,7 +3559,7 @@ class ReportesController {
 
 
             PdfPTable tablaFirmas = new PdfPTable(1);
-            tablaFirmas.setWidthPercentage(100);
+            tablaFirmas.setWidthPercentage(90);
 
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -3621,7 +3625,7 @@ class ReportesController {
 
 
             PdfPTable tablaFirmas = new PdfPTable(2);
-            tablaFirmas.setWidthPercentage(100);
+            tablaFirmas.setWidthPercentage(90);
 
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -3689,7 +3693,7 @@ class ReportesController {
 
 
             PdfPTable tablaFirmas = new PdfPTable(3);
-            tablaFirmas.setWidthPercentage(100);
+            tablaFirmas.setWidthPercentage(90);
 
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -3757,7 +3761,7 @@ class ReportesController {
 
 
             PdfPTable tablaFirmas = new PdfPTable(4);
-            tablaFirmas.setWidthPercentage(100);
+            tablaFirmas.setWidthPercentage(90);
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -3899,6 +3903,8 @@ class ReportesController {
 
         if (params.firmasIdFormu.trim().size() > 0) {
             firma = params.firmasIdFormu.split(",")
+            firma = firma.toList().unique()
+
         } else {
             firma = []
         }
@@ -3906,6 +3912,8 @@ class ReportesController {
         if (params.firmasFijasFormu.trim().size() > 0) {
 
             firmaFijaFormu = params.firmasFijasFormu.split(",")
+            firmaFijaFormu=firmaFijaFormu.toList().unique()
+
         } else {
 
             firmaFijaFormu = []
@@ -4364,7 +4372,6 @@ class ReportesController {
 
 
             firma.each { f ->
-
 
                 firmas = Persona.get(f)
 
