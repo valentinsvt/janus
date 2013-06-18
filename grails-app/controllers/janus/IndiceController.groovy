@@ -20,7 +20,14 @@ class IndiceController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [indiceInstanceList: Indice.list(params), params: params]
+//        [indiceInstanceList: Indice.list(params), params: params]
+        def indiceInstance = Indice.withCriteria {
+            and {
+                order('tipoIndice', 'desc')
+                order('descripcion', 'asc')
+            }
+        }
+        [indiceInstanceList: indiceInstance, params: params]
     } //list
 
     def form_ajax() {
@@ -294,8 +301,9 @@ class IndiceController extends janus.seguridad.Shield {
     } //delete
 
     def valorIndice = {
+        println params
         def cn = dbConnectionService.getConnection()
-        def tx_sql = "select * from sp_vlin(2013)"
+        def tx_sql = "select * from sp_vlin(${janus.pac.Anio.get(params.anio?:3).anio})"
         def datos = []
         cn.eachRow(tx_sql.toString()) { row ->
             datos.add(row.toRowResult())
@@ -303,7 +311,7 @@ class IndiceController extends janus.seguridad.Shield {
         cn.close()
 
         //println datos
-        [datos: datos]
+        [datos: datos, anio: params.anio]
     }
 
     def editarIndices() {
@@ -316,12 +324,15 @@ class IndiceController extends janus.seguridad.Shield {
         //println params
 
 //        def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by indcdscr limit 10"
-        def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by indcdscr"
+        def sqlTx = "SELECT indc__id, indcdscr, 0 valor from indc order by tpin__id desc, indcdscr"
+        def txValor = ""
         def cont = 0
+        def editar = ""
         def prin = params.prin.toInteger()
         // obtiene el periodo anterior
         def fcha = PeriodosInec.get(prin).fechaInicio - 1
-        def prinAnterior = PeriodosInec.findByFechaFinBetween(fcha, fcha + 2).id
+        def prinAnterior = PeriodosInec.findByFechaFinBetween(fcha, fcha + 2)?.id
+        def periodos = [prinAnterior, prin]
 //        println prinAnterior
 
         def html = "<table class=\"table table-bordered table-striped table-hover table-condensed\" id=\"tablaPrecios\">"
@@ -329,7 +340,7 @@ class IndiceController extends janus.seguridad.Shield {
         html += "<tr>"
         html += "<th>Indice_id</th>"
         html += "<th>Nombre del Indice</th>"
-        html += "<th>${PeriodosInec.get(prinAnterior).descripcion}</th>"
+        html += "<th>${PeriodosInec.get(prinAnterior)?.descripcion}</th>"
         html += "<th>${PeriodosInec.get(prin).descripcion}</th>"
 
         def body = ""
@@ -340,26 +351,34 @@ class IndiceController extends janus.seguridad.Shield {
 
             cont = 0
             def prec = "", p = 0, rubro = "new"
-            def txValor = "select vlin__id, vlinvalr from vlin,prin where vlin.prin__id in (${prinAnterior}, ${prin}) and " +
+            while (cont < 2) {
+                txValor = "select vlin__id, vlinvalr, vlin.prin__id from vlin, prin where vlin.prin__id = ${periodos[cont]} and " +
                     "vlin.indc__id = ${d.indc__id} and prin.prin__id = vlin.prin__id order by prinfcin"
-            //println txValor
-            cn1.eachRow(txValor.toString()) { v ->
-                if (v.vlinvalr) {
-                    prec = g.formatNumber(number: v.vlinvalr, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
-                    p = v.vlinvalr
-                    rubro = v.vlin__id
-                    cont++
+                //println txValor
+                prec = g.formatNumber(number: 0.0, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                p = 0.0
+                editar = periodos[cont]? "editable" : ""
+                cn1.eachRow(txValor.toString()) { v ->
+                    if (v.vlinvalr) {
+                        prec = g.formatNumber(number: v.vlinvalr, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                        p = v.vlinvalr
+                        rubro = v.vlin__id
+                    }
                 }
-                body += "<td class='editable number' data-original='${p}' data-prin='${prinAnterior}' " +
-                        "data-id='${rubro}' data-indc='${d.indc__id}' data-valor='${v.vlinvalr}'>" + prec + '</td>'
+                body += "<td class='${editar} number' data-original='${p}' data-prin='${periodos[cont]}' " +
+                        "data-id='${rubro}' data-indc='${d.indc__id}' data-valor='${p}'>" + prec + '</td>'
+                cont++
             }
+/*
             while (cont < 2) {
                 prec = g.formatNumber(number: 0.0, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
                 p = 0.0
-                body += "<td class='editable number' data-original='${p}' data-prin='${prinAnterior}' " +
+                editar = periodos[cont]? "editable" : ""
+                body += "<td class='${editar} number' data-original='${p}' data-prin='${periodos[cont]}' " +
                     "data-id='${rubro}' data-indc='${d.indc__id}' data-valor='0.0'>" + prec + '</td>'
                 cont++
             }
+*/
 
         }
         html += "</tr>"
@@ -378,20 +397,25 @@ class IndiceController extends janus.seguridad.Shield {
 
     def actualizaVlin() {
         /* TODO hacer función y mejorar presentación de valores */
-        //println "actualizaVlin: " + params
+        println "actualizaVlin: " + params
         // formato de id:###/new _ prin _ indc _ valor
+        if(params.item.class == java.lang.String) {
+            params.item = [params.item]
+        }
+
         def oks = "", nos = ""
         params.item.each {
             //println "Procesa: " + it
             def vlor = it.split("_")
             def nuevo = new ValorIndice()
+            println "vlor: " + vlor
             if (vlor[0] != "new") {
-                nuevo = ValorIndice.get(vlor[0])
+                nuevo = ValorIndice.get(vlor[0].toInteger())
             }
             nuevo.periodo = PeriodosInec.get(vlor[1])
             nuevo.indice = Indice.get(vlor[2])
             nuevo.valor = vlor[3].toDouble()
-
+            println "periodo: ${nuevo.periodo}, indice: ${nuevo.indice}, valor: ${nuevo.valor}"
             if (!nuevo.save(flush: true)) {
                 println "indice controller l 395: "+"error " + vlor
                 if (nos != "") {

@@ -8,11 +8,19 @@
 
 <body>
 <div class="btn-toolbar" style="margin-top: 5px;">
-    <div class="btn-group">
+    <div class="btn-group" style="height: 35px;">
         <a href="${g.createLink(action: 'editarIndices')}" class="btn " title="Regresar">
             <i class="icon-arrow-left"></i>
             Editar Valores
         </a>
+        <div style="margin-left: 400px; margin-top:-30px;">
+           <g:form name="forma" action="valorIndice">
+           <g:select id="id" name="anio" from="${janus.pac.Anio.list([sort: 'anio'])}" optionKey="id" class="many-to-one "
+                     value="${anio}" style="width: 80px;"/>
+            <a id="consultar" href="#" class="btn " title="Consultar" style="margin-top: -10px;">
+                <i class="icon-zoom-in"></i>Consultar</a>
+            </g:form>
+        </div>
     </div>
 </div>
 
@@ -79,5 +87,12 @@
     <div class="modal-footer" id="modalFooter">
     </div>
 </div>
+<script type="text/javascript">
+    $(function() {
+        $("#consultar").click(function () {
+            forma.submit();
+        });
+    });
+</script>
 </body>
 </html>

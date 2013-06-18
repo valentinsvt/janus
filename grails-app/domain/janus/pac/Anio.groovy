@@ -20,4 +20,9 @@ class Anio {
     static constraints = {
         anio(nullable: true,blank: true,size: 1..4)
     }
+
+    String toString() {
+        anio
+    }
 }
+
