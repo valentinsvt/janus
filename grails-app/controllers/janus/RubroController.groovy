@@ -84,7 +84,7 @@ class RubroController extends janus.seguridad.Shield {
             if (it.transporte.codigo == "T")
                 volquetes = Item.findAllByDepartamento(it)
 
-                volquetes2 += volquetes
+            volquetes2 += volquetes
 
         }
 
@@ -218,15 +218,8 @@ class RubroController extends janus.seguridad.Shield {
         def funcionJs = "function(){"
         funcionJs += 'if($("#rubro__id").val()*1>0){ '
         funcionJs += '   if(confirm("Esta seguro?")){'
-        funcionJs += '        var idReg = $(this).attr("regId");'
-        funcionJs += '        var datos="rubro="+$("#rubro__id").val()+"&copiar="+idReg;'
-        funcionJs += '       $.ajax({type: "POST",url: "' + g.createLink(controller: 'rubro', action: 'copiarComposicion') + '",'
-        funcionJs += '            data: datos, '
-        funcionJs += '            success: function(msg){ '
-        funcionJs += '            $("#modal-rubro").modal("hide");'
-        funcionJs += '               window.location.reload(true) '
-        funcionJs += '           }   '
-        funcionJs += '        });'
+        funcionJs += '        $("#rub_select").val($(this).attr("regId"));'
+        funcionJs += '        $("#copiar_dlg").dialog("open");$("#modal-rubro").modal("hide");'
         funcionJs += '    } '
         funcionJs += '}else{ '
         funcionJs += '    $.box({ '
@@ -261,27 +254,46 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def copiarComposicion() {
-//        println "copiar " + params
+        println "copiar!!! " + params +"  "+request.method
         if (request.method == "POST") {
             def rubro = Item.get(params.rubro)
             def copiar = Item.get(params.copiar)
             def detalles = Rubro.findAllByRubro(copiar)
+
+            def factor
+            if(!params.factor)
+                params.factor="1"
+            factor=params.factor?.toDouble()
             detalles.each {
                 def tmp = Rubro.findByRubroAndItem(rubro, it.item)
                 if (!tmp) {
                     def nuevo = new Rubro()
                     nuevo.rubro = rubro
                     nuevo.item = it.item
-                    nuevo.cantidad = it.cantidad
+                    if(!it.item.nombre=~"HERRAMIENTA MENOR"){
+                        nuevo.cantidad = it.cantidad * factor
+                    }
                     nuevo.fecha = new Date()
-                    if (!nuevo.save(flush: true))
+                    if (!nuevo.save(flush: true)){
                         println "Error: copiar composicion " + nuevo.errors
+                    }
+                    rubro.fecha = new Date()
+                    rubro.save(flush: true)
 
+                }else{
+                    println "else si hay "
+                    if(!(it.item.nombre=~"HERRAMIENTA MENOR")){
+                        println "else no herra "
+                        tmp.cantidad=tmp.cantidad+it.cantidad*factor
+                        tmp.fecha = new Date()
+                        tmp.save(flush: true)
+
+                    }
                 }
             }
-            rubro.fechaModificacion = new Date()
-            rubro.save(flush: true)
             render "ok"
+            return
+
         } else {
             response.sendError(403)
         }
@@ -350,7 +362,7 @@ class RubroController extends janus.seguridad.Shield {
 //        println "repetido: " + hayOtros
             render hayOtros ? "repetido" : "ok"
         } else
-          render "ok"
+            render "ok"
     }
 
     def show_ajax() {
@@ -398,11 +410,11 @@ class RubroController extends janus.seguridad.Shield {
 //        println "obras "+obras
         def ob = [:]
         if (vo.size() + obras.size() > 0) {
-             vo.each {v->
+            vo.each {v->
 
-                    ob.put(v.obra.codigo,v.obra.nombre)
+                ob.put(v.obra.codigo,v.obra.nombre)
 
-             }
+            }
             obras.each {o->
                 ob.put(o.codigo,o.nombre)
             }

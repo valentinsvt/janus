@@ -201,7 +201,7 @@
             <elm:datepicker name="item.fecha" class="span8" id="fecha_precios" value="${new java.util.Date()}" format="dd-MM-yyyy"/>
         </div>
 
-        <g:if test="${!items}">
+        <g:if test="${rubro && modifica}">
             <div class="span2">
                 <a class="btn btn-small btn-warning " href="#" rel="tooltip" title="Copiar " id="btn_copiarComp">
                     Copiar composición
@@ -596,6 +596,11 @@
     </div>
 
 
+    <div id="copiar_dlg">
+        <input type="hidden" id="rub_select">
+        Factor: <input type="text" id="factor" class="ui-corner-all" style="width:150px;">
+    </div>
+
 
 
 
@@ -908,6 +913,55 @@
 
         });
 
+
+        $("#copiar_dlg").dialog({
+            autoOpen:false,
+            width:400,
+            height:200,
+            title:"Copiar composición",
+            modal:true,
+            buttons:{
+                "Cancelar":function(){
+                    $("#copiar_dlg").dialog("close")
+                },
+                "Copiar":function(){
+                    $("#dlgLoad").dialog("open")
+                    var factor =$("#factor").val()
+                    if(isNaN(factor))
+                        factor=0;
+                    else
+                        factor=factor*1;
+                    if(factor>0){
+
+                        var idReg = $("#rub_select").val();
+                        var datos="rubro="+$("#rubro__id").val()+"&copiar="+idReg+"&factor="+factor;
+                        $.ajax({type: "POST",url: "${g.createLink(controller: 'rubro', action: 'copiarComposicion')}",
+                            data: datos,
+                            success: function(msg){
+                                $("#modal-rubro").modal("hide");
+                                window.location.reload(true)
+                            }
+                        });
+
+                    }else{
+                        $("#dlgLoad").dialog("close")
+                        $.box({
+                            imageClass: "box_info",
+                            text      : "El factor debe ser un número positivo",
+                            title     : "Alerta",
+                            iconClose : false,
+                            dialog    : {
+                                resizable    : false,
+                                draggable    : false,
+                                buttons      : {
+                                    "Aceptar" : function () {}
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        })
 
         $("#foto").click(function () {
             var child = window.open('${createLink(controller:"rubro",action:"showFoto",id: rubro?.id)}', 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
