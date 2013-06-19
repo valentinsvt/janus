@@ -941,10 +941,7 @@ class ReportesController {
         def band = 0
         def rowsTrans = []
         res.each { r ->
-            println "r "+r
-
-
-
+//            println "r "+r
             if (r["grpocdgo"] == 3) {
                 if (band == 0) {
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
