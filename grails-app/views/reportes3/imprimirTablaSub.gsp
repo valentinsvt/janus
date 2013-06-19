@@ -135,26 +135,26 @@
                 </div>
 
             </div>
-            <table class="table table-bordered table-striped table-condensed table-hover" %{--style="border-top: 1px solid #000000;  border-bottom: 1px solid #000000"--}%>
+            <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
-                        <th style="width: 20px;">
+                        <th style="width: 20px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                             #
                         </th>
-                        <th style="width: 80px;">
+                        <th style="width: 80px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                             Código
                         </th>
-                        <th style="width: 600px;">
+                        <th style="width: 600px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                             Rubro
                         </th>
-                        <th style="width: 60px" class="col_unidad">
+                        <th style="width: 60px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000" class="col_unidad">
                             Unidad
                         </th>
-                        <th style="width: 80px">
+                        <th style="width: 80px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                             Cantidad
                         </th>
-                        <th class="col_precio" style=";">Unitario</th>
-                        <th class="col_total" style=";">C.Total</th>
+                        <th class="col_precio" style="border-top: 1px solid #000000;  border-bottom: 1px solid #000000">Unitario</th>
+                        <th class="col_total" style="border-top: 1px solid #000000;  border-bottom: 1px solid #000000">C.Total</th>
                     </tr>
                 </thead>
                 <tbody id="tabla_material">
@@ -197,8 +197,8 @@
                     %{--</g:each>--}%
                     <tr>
                         <td colspan="5"></td>
-                        <td><b>Total:</b></td>
-                        <td style="text-align: right"><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                        <td style="border-top: 1px solid #000000;  border-bottom: 1px solid #000000"><b>Total:</b></td>
+                        <td style="text-align: right; border-top: 1px solid #000000;  border-bottom: 1px solid #000000"><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
                     </tr>
                 </tbody>
             </table>
