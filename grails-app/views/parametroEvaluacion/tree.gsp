@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Parametro Evaluacions
+            Lista de Parametro Evaluaciones
         </title>
 
         <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jquery.jstree.js')}"></script>
@@ -347,6 +347,12 @@
                                                     data : data.par
                                                 });
                                                 $tree.jstree("open_node", node);
+                                                var asig = parseFloat(node.data("asig"));
+                                                if (isNaN(asig)) {
+                                                    asig = 0;
+                                                }
+                                                asig += parseFloat(data.pnt);
+                                                node.data("asig", asig);
                                                 reset();
                                                 updateInfo();
                                                 $("#modal-Form").modal("hide");
@@ -380,6 +386,11 @@
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnDelete = $('<a href="#"  class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
 
+                            var nodeParent = node.parent().parent();
+                            var tot = parseFloat(node.data("total"));
+                            var padreAsig = parseFloat(nodeParent.data("asig"));
+                            var nT = padreAsig - tot;
+
                             btnDelete.click(function () {
                                 btnDelete.replaceWith(spinner);
                                 $.ajax({
@@ -391,6 +402,7 @@
                                     success : function (msg) {
                                         $("#tree").jstree('delete_node', node);
                                         $("#modal-del").modal("hide");
+                                        nodeParent.data("asig", nT);
                                         updateInfo();
                                     }
                                 });
