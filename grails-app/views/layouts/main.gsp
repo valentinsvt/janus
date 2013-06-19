@@ -28,7 +28,7 @@
         <!-- Le styles -->
         <link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap.css')}" rel="stylesheet">
 
-        <link href="${resource(dir: 'css', file: 'font-awesome.css')}" rel="stylesheet">
+        <link href="${resource(dir: 'fontawsome/css', file: 'font-awesome.css')}" rel="stylesheet">
 
         <link href="${resource(dir: 'css', file: 'mobile2.css')}" rel="stylesheet">
         <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.highlight.js')}"></script>
