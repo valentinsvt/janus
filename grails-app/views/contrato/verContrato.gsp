@@ -25,30 +25,22 @@
         .formato {
             font-weight : bolder;
         }
-
-        .titulo {
-            font-size : 20px;
-        }
-
-        .error {
-            background : #c17474;
-        }
         </style>
 
 
-        <title>Registro de Contratos</title>
+        <title>Ver Contrato</title>
     </head>
 
     <body>
 
         <div class="row">
-            <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">
+            <div class="span12 btn-group" role="navigation" style="margin-left: 0;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
-                <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
-                <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-ok"></i> Aceptar</button>
-                <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
-                <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
-                <button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>
+                %{--<button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>--}%
+                %{--<button class="btn" id="btn-aceptar" disabled="true"><i class="icon-ok"></i> Aceptar</button>--}%
+                %{--<button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>--}%
+                %{--<button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>--}%
+                %{--<button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>--}%
             </div>
         </div>
 
@@ -57,19 +49,19 @@
 
             <g:hiddenField name="id" value="${contrato?.id}"/>
 
-            <fieldset class="" style="position: relative; height: 50px; border-bottom: 1px solid black; width: 100%;">
+            <fieldset class="" style="position: relative; border-bottom: 1px solid black; width: 100%;">
 
-                <div class="span12" style="margin-top: 10px" align="center">
+                <div class="span12" style="margin-top: 10px">
 
                     <g:if test="${contrato?.codigo != null}">
 
                         <div class="span2 formato">Contrato N°</div>
 
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
+                        <div class="span3">${contrato?.codigo}</div>
 
                         <div class="span2 formato">Memo de Distribución</div>
 
-                        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
+                        <div class="span3">${contrato?.memo}</div>
 
 
                     %{--</div>--}%
@@ -80,11 +72,11 @@
 
                         <div class="span2 formato">Contrato N°</div>
 
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
+                        <div class="span3">${contrato?.codigo}</div>
 
                         <div class="span2 formato">Memo de Distribución</div>
 
-                        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
+                        <div class="span3">${contrato?.memo}</div>
 
                     </g:else>
 
@@ -102,43 +94,43 @@
 
                 <g:if test="${contrato?.codigo != null}">
 
-                    <div class="span12" align="center">
+                    <div class="span12">
 
                         <div class="span2 formato">Obra</div>
 
-                        <div class="span3"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.codigo}</div>
 
                         <div class="span1 formato">Nombre</div>
 
-                        <div class="span3"><g:textField name="nombre" class="nombreObra" value="${contrato?.oferta?.concurso?.obra?.nombre}" style="width: 400px" disabled="true"/></div>
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.nombre}</div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
                         <div class="span2 formato">Parroquia</div>
 
-                        <div class="span3"><g:textField name="parroquia" class="parroquia" value="${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}" disabled="true"/></div>
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}</div>
 
                         <div class="span1 formato">Cantón</div>
 
-                        <div class="span2"><g:textField name="canton" class="canton" value="${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.nombre}" disabled="true"/></div>
+                        <div class="span2">${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.nombre}</div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
                         <div class="span2 formato">Clase Obra</div>
 
-                        <div class="span3"><g:textField name="claseObra" class="claseObra" value="${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}" disabled="true"/></div>
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}</div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
                         <div class="span2 formato">Contratista</div>
 
-                        <div class="span3"><g:textField name="contratista" class="contratista" value="${contrato?.oferta?.proveedor?.nombre}" disabled="true"/></div>
+                        <div class="span3">${contrato?.oferta?.proveedor?.nombre}</div>
 
                     </div>
 
@@ -146,60 +138,59 @@
 
                 <g:else>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
                         <div class="span2 formato">Obra</div>
 
                         <div class="span3">
-                            <input type="hidden" id="obraId" value="${contrato?.oferta?.concurso?.obra?.codigo}" name="obra.id">
-                            <g:textField name="obra" id="obraCodigo" class="obraCodigo required txtBusqueda" value="${contrato?.oferta?.concurso?.obra?.codigo}"/>
+                            ${contrato?.oferta?.concurso?.obra?.codigo}
                         </div>
 
                         <div class="span1 formato">Nombre</div>
 
                         <div class="span5">
-                            <g:textField name="nombre" class="nombreObra" id="nombreObra" style="width: 400px" disabled="true"/>
+                            ${contrato?.oferta?.concurso?.obra?.nombre}
                         </div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
                         <div class="span2 formato">Oferta</div>
 
                         <div class="span3" id="div_ofertas">
-                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione']" id="oferta" optionKey="id"></g:select>
+                            ${contrato?.oferta?.descripcion}
                         </div>
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
                         <div class="span2 formato">Contratista</div>
 
                         <div class="span3">
-                            <g:textField name="contratista" class="contratista" id="contratista" disabled="true"/>
+                            ${contrato?.oferta?.proveedor?.nombreContacto ? (contrato?.oferta?.proveedor?.nombreContacto + " " + contrato?.oferta?.proveedor?.apellidoContacto) : contrato?.oferta?.proveedor?.nombre}
                         </div>
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
                         <div class="span2 formato">Parroquia</div>
 
-                        <div class="span3"><g:textField name="parroquia" class="parroquia" id="parr"/></div>
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.parroquia?.nombre}</div>
 
                         <div class="span1 formato">Cantón</div>
 
-                        <div class="span2"><g:textField name="canton" class="canton" id="canton"/></div>
+                        <div class="span2">${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.nombre}</div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
                         <div class="span2 formato">Clase Obra</div>
 
-                        <div class="span3"><g:textField name="claseObra" class="claseObra" id="clase"/></div>
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.claseObra?.descripcion}</div>
 
                     </div>
 
-                    <div class="span12" style="margin-top: 5px" align="center">
+                    <div class="span12" style="margin-top: 5px">
 
                     </div>
 
@@ -207,46 +198,44 @@
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 150px; border-bottom: 1px solid black;padding: 10px;">
+            <fieldset class="" style="position: relative;  border-bottom: 1px solid black;padding: 10px;">
 
-                <div class="span12" style="margin-top: 10px" align="center">
+                <div class="span12" style="margin-top: 10px">
 
                     <div class="span2 formato">Tipo</div>
 
-                    <div class="span3"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContratoId}" optionKey="id" optionValue="descripcion"/></div>
+                    <div class="span3">${contrato?.tipoContrato?.descripcion}</div>
 
                     <div class="span2 formato">Fecha de Suscripción</div>
 
-                    <div class="span2"><elm:datepicker name="fechaSuscripcion" class="fechaSuscripcion datepicker input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
+                    <div class="span2">${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}</div>
 
                 </div>
 
-                <div class="span12" style="margin-top: 5px" align="center">
+                <div class="span12" style="margin-top: 5px">
 
                     <div class="span2 formato">Objeto del Contrato</div>
 
-                    <div class="span3"><g:textArea name="objeto" class="activo" rows="5" cols="5" style="height: 79px; width: 800px; resize: none" value="${contrato?.objeto}"/></div>
+                    <div class="span3">${contrato?.objeto}</div>
 
                 </div>
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 190px; padding: 10px;border-bottom: 1px solid black;">
+            <fieldset class="" style="position: relative;  padding: 10px;border-bottom: 1px solid black;">
 
                 <div class="span12" style="margin-top: 10px">
 
                     <div class="span2 formato">Multa por retraso</div>
 
                     <div class="span3">
-                        <g:textField name="multaRetraso" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>&#8240;
+                        ${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
                     </div>
 
                     <div class="span2 formato">Multa por no presentación de planilla</div>
 
                     <div class="span3">
-                        <g:textField name="multaPlanilla" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>&#8240;
+                        ${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
                     </div>
 
                 </div>
@@ -255,13 +244,11 @@
 
                     <div class="span2 formato">Monto</div>
 
-                    <div class="span3"><g:textField name="monto" class="monto activo"
-                                                    value="${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/></div>
+                    <div class="span3">${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}</div>
 
                     <div class="span2 formato">Plazo</div>
 
-                    <div class="span3"><g:textField name="plazo" class="plazo activo" style="width: 50px" maxlength="4"
-                                                    value="${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> Días</div>
+                    <div class="span3">${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} Días</div>
 
                 </div>
 
@@ -270,19 +257,16 @@
                     <div class="span2 formato">Anticipo</div>
 
                     <div class="span1">
-                        <g:textField name="porcentajeAnticipo" class="anticipo activo"
-                                     value="${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"
-                                     style="width: 30px; text-align: right"/> %
+                        ${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} %
                     </div>
 
                     <div class="span2">
-                        <g:textField name="anticipo" class="anticipoValor activo" style="width: 105px; text-align: right"
-                                     value="${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                        ${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}
                     </div>
 
                     <div class="span2 formato">Indices de la Oferta</div>
 
-                    <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list()}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id"/></div>
+                    <div class="span3">value="${contrato?.periodoValidez?.descripcion}</div>
 
                 </div>
 
@@ -291,11 +275,11 @@
 
                     <div class="span2 formato">Financiamiento</div>
 
-                    <div class="span3"><g:textField name="financiamiento" class="financiamiento activo" value="${contrato?.financiamiento}"/></div>
+                    <div class="span3">${contrato?.financiamiento}</div>
 
-                    <div class="span2 formato">Financiado Por</div>
+                    %{--<div class="span2 formato">Financiado Por</div>--}%
 
-                    <div class="span3"><g:textField name="financiadoPor" class="financiadoPor activo"/></div>
+                    %{--<div class="span3">${contrato?.financiadoPor}</div>--}%
 
                 </div>
 
@@ -305,70 +289,70 @@
 
 
 
-    %{--<g:if test="${contrato}">--}%
-    %{--<div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;" align="center">--}%
+        <g:if test="${contrato}">
+            <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;">
 
-    %{--<div class="navbar-inner">--}%
-    %{--<div class="botones">--}%
+                <div class="navbar-inner">
+                    <div class="botones">
 
-    %{--<ul class="nav">--}%
-    %{--<li>--}%
-    %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
-    %{--<i class="icon-pencil"></i>Garantías--}%
-    %{--</g:link>--}%
-    %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
-    %{--<g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">--}%
-    %{--<i class="icon-pencil"></i> Garantías--}%
-    %{--</g:link>--}%
+                        <ul class="nav">
+                            <li>
+                            %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
+                            %{--<i class="icon-pencil"></i>Garantías--}%
+                            %{--</g:link>--}%
+                            %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
+                                <g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">
+                                    <i class="icon-pencil"></i> Garantías
+                                </g:link>
 
-    %{--</li>--}%
-    %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
-    %{--</a></li>--}%
-    %{--<li>--}%
-    %{--<a href="#" id="btnCronograma">--}%
-    %{--<g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">--}%
-    %{--<i class="icon-th"></i>Cronograma contrato--}%
-    %{--</g:link>--}%
-    %{--</a>--}%
-    %{--</li>--}%
-    %{--<g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">--}%
-    %{--<li>--}%
-    %{--<g:link controller="cronogramaEjecucion" action="index" id="${contrato?.id}">--}%
-    %{--<i class="icon-th"></i>Cronograma ejecucion--}%
-    %{--</g:link>--}%
-    %{--</li>--}%
-    %{--</g:if>--}%
-    %{--<li>--}%
-    %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
-    %{--Fórmula Pol.--}%
-    %{--</g:link>--}%
-    %{--</li>--}%
-    %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
-    %{--<li>--}%
-    %{--<a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}">--}%
-    %{--<i class="icon-calendar"></i> F. Polinómica--}%
-    %{--</a>--}%
-    %{--</li>--}%
+                            </li>
+                            %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
+                            %{--</a></li>--}%
+                            <li>
+                            %{--<a href="#" id="btnCronograma">--}%
+                                <g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">
+                                    <i class="icon-th"></i>Cronograma contrato
+                                </g:link>
+                            %{--</a>--}%
+                            </li>
+                            <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
+                                <li>
+                                    <g:link controller="cronogramaEjecucion" action="index" id="${contrato?.id}">
+                                        <i class="icon-th"></i>Cronograma ejecucion
+                                    </g:link>
+                                </li>
+                            </g:if>
+                        %{--<li>--}%
+                        %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
+                        %{--Fórmula Pol.--}%
+                        %{--</g:link>--}%
+                        %{--</li>--}%
+                        %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
+                            <li>
+                                <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}">
+                                    <i class="icon-calendar"></i> F. Polinómica
+                                </a>
+                            </li>
 
-    %{--<li>--}%
-    %{--<g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">--}%
-    %{--<i class="icon-book"></i>Biblioteca--}%
-    %{--</g:link>--}%
-    %{--</li>--}%
+                            <li>
+                                <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
+                                    <i class="icon-book"></i>Biblioteca
+                                </g:link>
+                            </li>
 
-    %{--<li>--}%
-    %{--<g:link controller="planilla" action="list" id="${contrato?.id}">--}%
-    %{--<i class=" icon-file-alt"></i>Planillas--}%
-    %{--</g:link>--}%
-    %{--</li>--}%
+                            <li>
+                                <g:link controller="planilla" action="list" id="${contrato?.id}">
+                                    <i class=" icon-file-alt"></i>Planillas
+                                </g:link>
+                            </li>
 
-    %{--</ul>--}%
+                        </ul>
 
-    %{--</div>--}%
-    %{--</div>--}%
+                    </div>
+                </div>
 
-    %{--</div>--}%
-    %{--</g:if>--}%
+            </div>
+        </g:if>
 
 
         <div class="modal hide fade mediumModal" id="modal-var" style="overflow: hidden">
@@ -386,7 +370,7 @@
             </div>
 
             <div class="modal-footer" id="modal_footer_var">
-
+                registro
             </div>
 
         </div>
@@ -400,7 +384,7 @@
             </div>
 
             <div class="modal-body" id="modalBody">
-                <bsc:buscador name="contratos" value="" accion="buscarContrato" controlador="contrato" campos="${campos}" label="Contrato" tipo="lista"/>
+                <bsc:buscador name="contratos" value="" accion="buscarContrato2" controlador="contrato" campos="${campos}" label="Contrato" tipo="lista"/>
 
             </div>
 
@@ -408,21 +392,6 @@
 
             </div>
 
-        </div>
-
-
-
-    </div>
-
-
-        <div id="borrarContrato">
-
-            <fieldset>
-                <div class="span3">
-                    Está seguro de que desea borrar el contrato: <div style="font-weight: bold;">${contrato?.codigo} ?</div>
-
-                </div>
-            </fieldset>
         </div>
 
         <script type="text/javascript">

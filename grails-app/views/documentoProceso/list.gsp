@@ -13,7 +13,12 @@
     <body>
 
         <div class="tituloTree">
-            Documentos de <span style="font-weight: bold; font-style: italic;">${concurso.objeto}</span>
+            <g:if test="${contrato}">
+                Documentos del contrato de la oba <span style="font-weight: bold; font-style: italic;">${contrato.obra.descripcion}</span>
+            </g:if>
+            <g:else>
+                Documentos de <span style="font-weight: bold; font-style: italic;">${concurso.objeto}</span>
+            </g:else>
         </div>
 
         <g:if test="${flash.message}">
@@ -30,7 +35,7 @@
         <div class="row">
             <div class="span9 btn-group" role="navigation">
                 <g:if test="${contrato}">
-                    <g:link controller="contrato" action="registroContrato" class="btn" params="[contrato: contrato.id]">
+                    <g:link controller="contrato" action="verContrato" class="btn" params="[contrato: contrato.id]">
                         <i class="icon-caret-left"></i>
                         Regresar
                     </g:link>

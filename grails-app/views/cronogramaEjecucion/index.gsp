@@ -112,7 +112,7 @@
 
         <div class="btn-toolbar hide" id="toolbar">
             <div class="btn-group">
-                <a href="${g.createLink(controller: 'contrato', action: 'registroContrato', params: [contrato: contrato?.id])}" class="btn btn-ajax btn-new" id="atras" rel="tooltip" title="Regresar al contrato">
+                <a href="${g.createLink(controller: 'contrato', action: 'verContrato', params: [contrato: contrato?.id])}" class="btn btn-ajax btn-new" id="atras" rel="tooltip" title="Regresar al contrato">
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>

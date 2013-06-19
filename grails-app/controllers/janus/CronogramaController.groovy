@@ -330,7 +330,7 @@ class CronogramaController extends janus.seguridad.Shield {
         detalle.each {
             it.refresh()
 
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
         return [detalle: detalle, precios: precios, obra: obra, subpres: subpres, subpre: subpre]
@@ -351,7 +351,7 @@ class CronogramaController extends janus.seguridad.Shield {
         preciosService.ac_rbroObra(obra.id)
 
         detalle.each {
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
         return [detalle: detalle, precios: precios, obra: obra]

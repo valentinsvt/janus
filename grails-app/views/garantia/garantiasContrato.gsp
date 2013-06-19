@@ -44,7 +44,7 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
+                <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
                     <i class="icon-double-angle-left"></i>
                     Contrato
                 </g:link>

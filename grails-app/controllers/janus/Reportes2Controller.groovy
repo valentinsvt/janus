@@ -909,7 +909,7 @@ class Reportes2Controller {
 
         detalle.each {
             it.refresh()
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
         return [detalle: detalle, precios: precios, obra: obra, meses: meses]

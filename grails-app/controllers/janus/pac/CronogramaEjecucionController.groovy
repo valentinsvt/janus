@@ -342,7 +342,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
         detalle.each { vol ->
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
 //            precios.put(vol.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
 //            println indirecto
 //            println res
@@ -571,7 +571,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         detalle.each { vol ->
-            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
 //            precios.put(vol.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
             def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
             def mapaVol = [

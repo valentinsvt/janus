@@ -29,7 +29,7 @@
 
         <div class="row">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
+                <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
                     <i class="icon-arrow-left"></i>
                     Contrato
                 </g:link>
@@ -88,9 +88,9 @@
                                 <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
                             </td>
                             <td>
-                                %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">--}%
-                                    %{--<i class="icon-zoom-in icon-large"></i>--}%
-                                %{--</a>--}%
+                            %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-zoom-in icon-large"></i>--}%
+                            %{--</a>--}%
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
