@@ -1387,6 +1387,8 @@ class ReportesController {
             addCellTabla(table, new Paragraph("Descripción", fonts.times8boldWhite), params.prmsCellHead)
             addCellTabla(table, new Paragraph("Porcentaje", fonts.times8boldWhite), params.prmsCellHead)
             addCellTabla(table, new Paragraph("Valor", fonts.times8boldWhite), params.prmsCellHead)
+
+            addCellTabla(table, new Paragraph(" ", fonts.times10boldWhite), params.prmsHeader)
         } else {
             if (tipo == "MATERIALES") {
                 table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 12, 8]))
@@ -1399,7 +1401,11 @@ class ReportesController {
                 addCellTabla(table, new Paragraph("Tarifa", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("C.Total", fonts.times8boldWhite), params.prmsCellHead)
-            }else{
+
+                addCellTabla(table, new Paragraph(" ", fonts.times10boldWhite), params.prmsHeader)
+            }
+            if(tipo == "EQUIPOS"){
+
                 table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 12, 8]))
                 addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
 
@@ -1410,7 +1416,24 @@ class ReportesController {
                 addCellTabla(table, new Paragraph("Costo", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("Rendimiento", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("C.Total", fonts.times8boldWhite), params.prmsCellHead)
+
+                addCellTabla(table, new Paragraph(" ", fonts.times10boldWhite), params.prmsHeader)
             }
+            else{
+                table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 12, 8]))
+                addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
+
+                addCellTabla(table, new Paragraph("Código", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Descripción", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Cantidad", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Tarifa", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Costo", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("Rendimiento", fonts.times8boldWhite), params.prmsCellHead)
+                addCellTabla(table, new Paragraph("C.Total", fonts.times8boldWhite), params.prmsCellHead)
+
+                addCellTabla(table, new Paragraph(" ", fonts.times10boldWhite), params.prmsHeader)
+            }
+
 
         }
     }

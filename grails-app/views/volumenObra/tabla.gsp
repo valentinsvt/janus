@@ -121,10 +121,10 @@
 
             var m = "clicked: " + $(this).attr("id");
 //            window.console && //console.log(m) || alert(m)
-
-            if (key == "edit") {
-                $(this).dblclick()
-            }
+//
+//            if (key == "edit") {
+//                $(this).dblclick()
+//            }
 
 
             if (key == "print") {
@@ -185,14 +185,14 @@
 
             }
         },
-        <g:if test="${obra?.estado!='R'}">
+        %{--<g:if test="${obra?.estado!='R'}">--}%
         items: {
-            "edit": {name: "Editar", icon: "edit"},
+//            "edit": {name: "Editar", icon: "edit"},
             "print": {name: "Imprimir", icon: "print",
 
                 items: {
 
-                    "print-key1": {"name": "Imprimir sin Desglose", icon: "print",
+                    "print-key1": {"name": "Imprimir sin Desglose", icon: "print"
 
                     },
                     "print-key2": {"name": "Imprimir con Desglose", icon: "print"}
@@ -202,13 +202,13 @@
             },
             "foto": {name: "Ilustración", icon: "doc"}
         }
-        </g:if>
-        <g:else>
-        items: {
-            "print": {name: "Imprimir", icon: "print"},
-            "foto": {name: "Foto", icon: "doc"}
-        }
-        </g:else>
+        %{--</g:if>--}%
+        %{--<g:else>--}%
+        %{--items: {--}%
+            %{--"print": {name: "Imprimir", icon: "print"},--}%
+            %{--"foto": {name: "Foto", icon: "doc"}--}%
+        %{--}--}%
+        %{--</g:else>--}%
     });
 
     $("#imprimir_sub").click(function () {
