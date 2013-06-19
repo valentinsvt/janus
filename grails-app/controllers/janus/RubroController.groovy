@@ -73,9 +73,9 @@ class RubroController extends janus.seguridad.Shield {
 //        println "depto "+dpto
         def dptoUser = Persona.get(session.usuario.id).departamento
         def modifica = false
-        if(dpto){
-            if(dpto.id.toInteger()==dptoUser.id.toInteger())
-                modifica=true
+        if (dpto) {
+            if (dpto.id.toInteger() == dptoUser.id.toInteger())
+                modifica = true
         }
 
         grupoTransporte.each {
@@ -95,9 +95,9 @@ class RubroController extends janus.seguridad.Shield {
             rubro = Item.get(params.idRubro)
             def items = Rubro.findAllByRubro(rubro)
             items.sort { it.item.codigo }
-            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica,resps:resps]
+            [campos: campos, rubro: rubro, grupos: grupos, items: items, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
         } else {
-            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2,dpto:dpto,modifica:modifica,resps:resps]
+            [campos: campos, grupos: grupos, choferes: choferes, volquetes: volquetes, aux: aux, volquetes2: volquetes2, dpto: dpto, modifica: modifica, resps: resps]
         }
     }
 
@@ -254,37 +254,37 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def copiarComposicion() {
-        println "copiar!!! " + params +"  "+request.method
+        println "copiar!!! " + params + "  " + request.method
         if (request.method == "POST") {
             def rubro = Item.get(params.rubro)
             def copiar = Item.get(params.copiar)
             def detalles = Rubro.findAllByRubro(copiar)
 
             def factor
-            if(!params.factor)
-                params.factor="1"
-            factor=params.factor?.toDouble()
+            if (!params.factor)
+                params.factor = "1"
+            factor = params.factor?.toDouble()
             detalles.each {
                 def tmp = Rubro.findByRubroAndItem(rubro, it.item)
                 if (!tmp) {
                     def nuevo = new Rubro()
                     nuevo.rubro = rubro
                     nuevo.item = it.item
-                    if(!it.item.nombre=~"HERRAMIENTA MENOR"){
+                    if (!it.item.nombre =~ "HERRAMIENTA MENOR") {
                         nuevo.cantidad = it.cantidad * factor
                     }
                     nuevo.fecha = new Date()
-                    if (!nuevo.save(flush: true)){
+                    if (!nuevo.save(flush: true)) {
                         println "Error: copiar composicion " + nuevo.errors
                     }
                     rubro.fecha = new Date()
                     rubro.save(flush: true)
 
-                }else{
+                } else {
                     println "else si hay "
-                    if(!(it.item.nombre=~"HERRAMIENTA MENOR")){
+                    if (!(it.item.nombre =~ "HERRAMIENTA MENOR")) {
                         println "else no herra "
-                        tmp.cantidad=tmp.cantidad+it.cantidad*factor
+                        tmp.cantidad = tmp.cantidad + it.cantidad * factor
                         tmp.fecha = new Date()
                         tmp.save(flush: true)
 
@@ -340,8 +340,8 @@ class RubroController extends janus.seguridad.Shield {
         } else {
             rubro.fechaRegistro = new Date()
         }
-        if(params.responsable && params.responsable!="-1"){
-            rubro.responsable=Persona.get(params.responsable)
+        if (params.responsable && params.responsable != "-1") {
+            rubro.responsable = Persona.get(params.responsable)
         }
 
         rubro.properties = params.rubro
@@ -410,15 +410,15 @@ class RubroController extends janus.seguridad.Shield {
 //        println "obras "+obras
         def ob = [:]
         if (vo.size() + obras.size() > 0) {
-            vo.each {v->
+            vo.each { v ->
 
-                ob.put(v.obra.codigo,v.obra.nombre)
+                ob.put(v.obra.codigo, v.obra.nombre)
 
             }
-            obras.each {o->
-                ob.put(o.codigo,o.nombre)
+            obras.each { o ->
+                ob.put(o.codigo, o.nombre)
             }
-            render ""+ob.collect{"<span class='label-azul'>"+it.key+"</span>: "+it.value}.join('<br>')
+            render "" + ob.collect { "<span class='label-azul'>" + it.key + "</span>: " + it.value }.join('<br>')
             return
         } else {
             try {
@@ -544,13 +544,13 @@ class RubroController extends janus.seguridad.Shield {
     }
 
 
-    def buscarRubroCodigo(){
+    def buscarRubroCodigo() {
 //        println "buscar rubro "+params
-        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(),TipoItem.get(1))
-        if (rubro){
-            render ""+rubro.id+"&&"+rubro.tipoLista?.id+"&&"+rubro.nombre+"&&"+rubro.unidad?.codigo
+        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(), TipoItem.get(1))
+        if (rubro) {
+            render "" + rubro.id + "&&" + rubro.tipoLista?.id + "&&" + rubro.nombre + "&&" + rubro.unidad?.codigo
             return
-        } else{
+        } else {
             render "-1"
             return
         }
@@ -578,25 +578,25 @@ class RubroController extends janus.seguridad.Shield {
                 tabla += "<tr>"
                 tabla += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tabla += "<td>" + r["itemnmbr"] + "</td>"
-                if(r["tplscdgo"]=~"P"){
+                if (r["tplscdgo"] =~ "P") {
                     tabla += "<td style='width: 50px;text-align: right'>" + r["itempeso"] + "</td>"
                     tabla += "<td></td>"
                 }
-                if(r["tplscdgo"]=~"V"){
+                if (r["tplscdgo"] =~ "V") {
                     tabla += "<td></td>"
                     tabla += "<td style='width: 50px;text-align: right'>" + r["itempeso"] + "</td>"
                 }
 
                 tabla += "<td style='width: 50px;text-align: right'>" + r["rbrocntd"] + "</td>"
                 tabla += "<td style='width: 50px;text-align: right'>" + r["distancia"] + "</td>"
-                tabla += "<td style='width: 50px;text-align: right'>" +  g.formatNumber(number: r["tarifa"],format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec")  + "</td>"
-                tabla += "<td style='width: 50px;text-align: right'>" +  g.formatNumber(number: r["parcial_t"],format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec") + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["tarifa"], format: "##,#####0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") + "</td>"
+                tabla += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"], format: "##,#####0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") + "</td>"
                 total += r["parcial_t"]
                 tabla += "</tr>"
             }
 //            <g:formatNumber number="${rub.cantidad}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7"  locale="ec"  />
         }
-        tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${g.formatNumber(number: total,format:"##,#####0", minFractionDigits: 5,maxFractionDigits: 5 ,locale: "ec")}</td>"
+        tabla += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right;font-weight: bold' class='valor_total'>${g.formatNumber(number: total, format: "##,#####0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec")}</td>"
         tabla += "</tbody></table>"
 
         render(tabla)
@@ -606,28 +606,54 @@ class RubroController extends janus.seguridad.Shield {
 
     def showFoto() {
         def rubro = Item.get(params.id)
+        def tipo = params.tipo
+
+        def filePath
+        def titulo
+        switch (tipo) {
+            case "il":
+                titulo = "Ilustración"
+                filePath = rubro.foto
+                break;
+            case "dt":
+                titulo = "Especificaciones"
+                filePath = rubro.especificaciones
+                break;
+        }
 
         def ext = ""
 
-        if (rubro.foto) {
-            ext = rubro.foto.split("\\.")
+        if (filePath) {
+            ext = filePath.split("\\.")
             ext = ext[ext.size() - 1]
         }
-        return [rubro: rubro, ext: ext]
+        return [rubro: rubro, ext: ext, tipo: tipo, titulo: titulo, filePath: filePath]
     }
 
     def downloadFile() {
         def rubro = Item.get(params.id)
 
-        def ext = rubro.foto.split("\\.")
+        def tipo = params.tipo
+        def filePath
+
+        switch (tipo) {
+            case "il":
+                filePath = rubro.foto
+                break;
+            case "dt":
+                filePath = rubro.especificaciones
+                break;
+        }
+
+        def ext = filePath.split("\\.")
         ext = ext[ext.size() - 1]
         def folder = "rubros"
-        def path = servletContext.getRealPath("/") + folder + File.separatorChar + rubro.foto
+        def path = servletContext.getRealPath("/") + folder + File.separatorChar + filePath
 
         def file = new File(path)
         def b = file.getBytes()
         response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
-        response.setHeader("Content-disposition", "attachment; filename=" + rubro.foto)
+        response.setHeader("Content-disposition", "attachment; filename=" + filePath)
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
@@ -636,6 +662,8 @@ class RubroController extends janus.seguridad.Shield {
 //        println "upload "+params
 
         def acceptedExt = ["jpg", "png", "gif", "jpeg", "pdf"]
+
+        def tipo = params.tipo
 
         def path = servletContext.getRealPath("/") + "rubros/"   //web-app/rubros
         new File(path).mkdirs()
@@ -655,13 +683,13 @@ class RubroController extends janus.seguridad.Shield {
             }
             if (acceptedExt.contains(ext.toLowerCase())) {
                 def ahora = new Date()
-                fileName = "r_" + rubro.id + "_" + ahora.format("dd_MM_yyyy_hh_mm_ss")
+                fileName = "r_" + tipo + "_" + rubro.id + "_" + ahora.format("dd_MM_yyyy_hh_mm_ss")
                 fileName = fileName + "." + ext
                 def pathFile = path + fileName
                 def file = new File(pathFile)
                 f.transferTo(file)
 
-                def old = rubro.foto
+                def old = tipo == "il" ? rubro.foto : rubro.especificaciones
                 if (old && old.trim() != "") {
                     def oldPath = servletContext.getRealPath("/") + "rubros/" + old
                     def oldFile = new File(oldPath)
@@ -670,7 +698,16 @@ class RubroController extends janus.seguridad.Shield {
                     }
                 }
 
-                rubro.foto = /*g.resource(dir: "rubros") + "/" + */ fileName
+                switch (tipo) {
+                    case "il":
+                        rubro.foto = /*g.resource(dir: "rubros") + "/" + */ fileName
+                        break;
+                    case "dt":
+                        rubro.especificaciones = /*g.resource(dir: "rubros") + "/" + */ fileName
+                        break;
+                }
+
+
                 rubro.save(flush: true)
             } else {
                 flash.clase = "alert-error"
@@ -680,7 +717,7 @@ class RubroController extends janus.seguridad.Shield {
             flash.clase = "alert-error"
             flash.message = "Error: Seleccione un archivo JPG, JPEG, GIF, PNG ó PDF"
         }
-        redirect(action: "showFoto", id: rubro.id)
+        redirect(action: "showFoto", id: rubro.id, params: [tipo: tipo])
         return
 
 

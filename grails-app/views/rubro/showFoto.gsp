@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <title>Foto - ${rubro?.nombre}</title>
+        <title>${titulo} - ${rubro?.nombre}</title>
 
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-1.8.2.js')}"></script>
         <script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.9.1.custom.min.js')}"></script>
@@ -13,35 +13,10 @@
 
         <link href="${resource(dir: 'css', file: 'mobile2.css')}" rel="stylesheet">
         <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.highlight.js')}"></script>
-        <style>
 
-        .hasCountdown {
-            background : none !important;
-            border     : none !important;
-        }
-
-        .countdown_amount {
-            font-size : 150% !important;
-        }
-
-        .highlight {
-            color : red !important;
-        }
-
-        .container {
-            width     : 1200px !important;
-            min-width : 1200px !important;
-            max-width : 1200px !important;
-            resize    : none;
-
-        }
-
-        @media (min-width: 1200px)
-        </style>
         %{--<link href="${resource(dir: 'css/bootstrap/css', file: 'bootstrap-responsive.css')}" rel="stylesheet">--}%
 
         <link href="${resource(dir: 'js/jquery/css/twitBoot', file: 'jquery-ui-1.9.1.custom.min.css')}" rel="stylesheet">
-
 
         <script src="${resource(dir: 'js', file: 'functions.js')}"></script>
         <link href="${resource(dir: 'css', file: 'custom.css')}" rel="stylesheet">
@@ -60,24 +35,27 @@
             </div>
         </g:if>
         <div class="tituloTree" style="width: 720px;">
-            Rubro: ${rubro?.nombre}
+            ${titulo} del Rubro: ${rubro?.nombre}
         </div>
         <fieldset class="borde_abajo" style="position: relative;width: 670px;padding-left: 50px;">
             <div class="linea" style="height: 98%;"></div>
             <g:uploadForm action="uploadFile" method="post" name="frmUpload" enctype="multipart/form-data">
+                <g:hiddenField name="tipo" value="${tipo}"/>
+                <g:hiddenField name="rubro" value="${rubro?.id}"/>
                 <div class="fieldcontain required">
                     <b>Archivo:</b>
                     <input type="file" id="file" name="file" class=""/>
-                    <input type="hidden" name="rubro" value="${rubro?.id}">
 
                     <div class="btn-group">
                         %{--<input type="submit" value="Guardar" class="btn btn-primary">--}%
                         <a href="#" id="submit" class="btn ">
                             <i class="icon-save"></i> Guardar
                         </a>
-                        <g:link action="downloadFile" id="${rubro.id}" class="btn ">
-                            <i class="icon-download-alt"></i> Descargar
-                        </g:link>
+                        <g:if test="${filePath}">
+                            <g:link action="downloadFile" id="${rubro.id}" params="[tipo: tipo]" class="btn ">
+                                <i class="icon-download-alt"></i> Descargar
+                            </g:link>
+                        </g:if>
                         <a href="#" id="salir" class="btn ">
                             <i class="icon-minus-sign"></i> Salir
                         </a>
@@ -100,7 +78,7 @@
                 </p>
 
                 <div class="linea" style="height: 98%;"></div>
-                <img src="${resource(dir: 'rubros', file: rubro?.foto)}" alt="" style="margin-bottom: 10px;max-width: 600px"/>
+                <img src="${resource(dir: 'rubros', file: filePath)}" alt="" style="margin-bottom: 10px;max-width: 600px"/>
             </fieldset>
         </g:elseif>
         <script type="text/javascript">

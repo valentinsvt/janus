@@ -930,7 +930,7 @@ class ReportesController {
         sheet.mergeCells(5, 6, 6, 6)
 
         def fila = 9
-        label = new Label(0, fila, "Herramientas", times16format); sheet.addCell(label);
+        label = new Label(0, fila, "Equipos", times16format); sheet.addCell(label);
         sheet.mergeCells(0, fila, 1, fila)
         fila++
         def number
@@ -941,7 +941,10 @@ class ReportesController {
         def band = 0
         def rowsTrans = []
         res.each { r ->
-//            println "r "+r
+            println "r "+r
+
+
+
             if (r["grpocdgo"] == 3) {
                 if (band == 0) {
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
@@ -995,6 +998,7 @@ class ReportesController {
                 totalMan += r["parcial"]
                 fila++
             }
+
             if (r["grpocdgo"] == 1) {
                 if (band == 2) {
                     label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
@@ -1083,6 +1087,7 @@ class ReportesController {
         number = new Number(5, fila, indi); sheet.addCell(number);
         number = new Number(6, fila, totalIndi); sheet.addCell(number);
 
+
         /*Totales*/
         fila += 4
         label = new Label(4, fila, "Costo unitario directo", times16format); sheet.addCell(label);
@@ -1141,6 +1146,7 @@ class ReportesController {
         document.addCreator("Tedein SA");
 
         def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHojaLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsHeader = [border: Color.WHITE, colspan: 7,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def prmsHeader2 = [border: Color.WHITE, colspan: 3,
@@ -1154,7 +1160,7 @@ class ReportesController {
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum]
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHojaLeft: prmsHeaderHojaLeft]
 
         VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique().each { rubro ->
 
@@ -1214,8 +1220,8 @@ class ReportesController {
             PdfPTable tablaIndirectos = new PdfPTable(3);
             PdfPTable tablaTotales = new PdfPTable(3);
 
-            creaHeadersTabla(tablaHerramientas, fonts, prms, "EQUIPO")
-            creaHeadersTabla(tablaManoObra, fonts, prms, "MANO DE OBRAS")
+            creaHeadersTabla(tablaHerramientas, fonts, prms, "EQUIPOS")
+            creaHeadersTabla(tablaManoObra, fonts, prms, "MANO DE OBRA")
             creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES")
             if (params.transporte == "1") {
                 creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
@@ -1295,7 +1301,7 @@ class ReportesController {
 
             prmsCellLeft.put("bordeBot","1")
             prmsNum.put("bordeBot","1")
-            addCellTabla(tablaTotales, new Paragraph("Precio unitario USD", fonts.times8bold), prmsCellLeft)
+            addCellTabla(tablaTotales, new Paragraph("Precio unitario \$USD", fonts.times8bold), prmsCellLeft)
             addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsNum)
             prmsCellLeft.remove("bordeBot")
             prmsNum.remove("bordeBot")
@@ -1304,13 +1310,11 @@ class ReportesController {
             pieTabla.setWidthPercentage(90);
             pieTabla.setWidths(arregloEnteros([ 99,1]))
 
+            addCellTabla(pieTabla, new Paragraph("Parámetros para los datos de presupuesto obtenidos de la obra: " + obra?.nombre, fonts.times8normal), prmsHeaderHojaLeft)
+            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8normal), prmsHeaderHojaLeft)
 
-
-            addCellTabla(pieTabla, new Paragraph("Parámetros para los datos de presupuesto obtenidos de la obra: " + obra?.nombre, fonts.times8bold), prmsHeaderHoja)
-            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
-
-            addCellTabla(pieTabla, new Paragraph("Nota: Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.   ", fonts.times8bold), prmsHeaderHoja)
-            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
+            addCellTabla(pieTabla, new Paragraph("Nota: Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.   ", fonts.times8normal), prmsHeaderHojaLeft)
+            addCellTabla(pieTabla, new Paragraph(" ", fonts.times8normal), prmsHeaderHojaLeft)
 
             addTablaHoja(document, headerRubroTabla, false)
             addTablaHoja(document, tablaHerramientas, false)
@@ -1387,8 +1391,8 @@ class ReportesController {
             addCellTabla(table, new Paragraph("Porcentaje", fonts.times8boldWhite), params.prmsCellHead)
             addCellTabla(table, new Paragraph("Valor", fonts.times8boldWhite), params.prmsCellHead)
         } else {
-            if (tipo == "EQUIPO") {
-                table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 10, 8]))
+            if (tipo == "MATERIALES") {
+                table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 12, 8]))
                 addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
 
                 addCellTabla(table, new Paragraph("Código", fonts.times8boldWhite), params.prmsCellHead)
@@ -1399,7 +1403,7 @@ class ReportesController {
                 addCellTabla(table, new Paragraph("", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("C.Total", fonts.times8boldWhite), params.prmsCellHead)
             }else{
-                table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 10, 8]))
+                table.setWidths(arregloEnteros([10, 48, 8, 8, 8, 12, 8]))
                 addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
 
                 addCellTabla(table, new Paragraph("Código", fonts.times8boldWhite), params.prmsCellHead)
@@ -4049,12 +4053,7 @@ class ReportesController {
 
         txtIzqHeader.add(new Paragraph(" ", times10bold));
 
-
         def textoFormula = "Pr=Po(";
-
-
-
-
         def txInicio = "Pr = Po (";
         def txFin = ")";
         def txSuma = " + "
@@ -4135,6 +4134,7 @@ class ReportesController {
         formulaStr+=txFin
 //        println "forstr "+formulaStr
         txtIzqHeader.add(new Paragraph(formulaStr, times10bold));
+        txtIzqHeader.add(new Paragraph(" ", times10bold));
 
         document.add(txtIzqHeader)
 
@@ -4252,7 +4252,8 @@ class ReportesController {
 
         Paragraph txtIzqPie = new Paragraph();
 //        addEmptyLine(txtIzqPie, 1);
-        txtIzqPie.setAlignment(Element.ALIGN_CENTER);
+        txtIzqPie.setAlignment(Element.ALIGN_LEFT);
+        txtIzqPie.setIndentationLeft(28);
 
         txtIzqPie.add(new Paragraph(auxiliarFijo?.notaFormula, times10normal));
 
