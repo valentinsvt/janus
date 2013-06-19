@@ -673,7 +673,7 @@ class Reportes2Controller {
         WritableCellFormat formatXls = new WritableCellFormat(font)
 
         def row = 0
-        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+        WritableSheet sheet = workbook.createSheet('Composicion', 0)
 
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
@@ -836,7 +836,7 @@ class Reportes2Controller {
         WritableCellFormat formatXls = new WritableCellFormat(font)
 
         def row = 0
-        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+        WritableSheet sheet = workbook.createSheet('Presupuesto', 0)
 
         WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
