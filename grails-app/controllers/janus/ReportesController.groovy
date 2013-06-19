@@ -1087,6 +1087,7 @@ class ReportesController {
         number = new Number(5, fila, indi); sheet.addCell(number);
         number = new Number(6, fila, totalIndi); sheet.addCell(number);
 
+
         /*Totales*/
         fila += 4
         label = new Label(4, fila, "Costo unitario directo", times16format); sheet.addCell(label);
