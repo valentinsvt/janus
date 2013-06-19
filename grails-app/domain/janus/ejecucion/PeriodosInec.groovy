@@ -6,7 +6,8 @@ class PeriodosInec implements Serializable {
     String descripcion
     Date fechaInicio
     Date fechaFin
-    String periodoCerrado
+    String periodoCerrado = "N"
+
     static mapping = {
         table 'prin'
         cache usage: 'read-write', include: 'non-lazy'
@@ -25,7 +26,7 @@ class PeriodosInec implements Serializable {
         descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
         fechaInicio(blank: false, attributes: [title: 'fechaInicio'])
         fechaFin(blank: true, nullable: true, attributes: [title: 'fechaFin'])
-        periodoCerrado(size: 1..1, blank: false, attributes: [title: 'periodoCerrado'])
+        periodoCerrado(size: 1..1, blank: false, attributes: [title: 'periodoCerrado'], inList: ["N", "S"]  )
     }
 
     String toString(){
