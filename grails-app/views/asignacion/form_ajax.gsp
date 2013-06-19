@@ -34,39 +34,39 @@
     </g:if>
 </div>
 <div class="tituloTree" style="width: 800px;">
-    Asignacion de techos anuales a partidas presupuestarias
+    Asignación de techos anuales a partidas presupuestarias
 </div>
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
 
-    <div id="create-Asignacion"  style="border-bottom: 1px solid black;width: 800px;margin-bottom: 10px" >
+    <div id="create-Asignacion"  style="border-bottom: 1px solid black;width: 900px;margin-bottom: 10px" >
         <g:form class="form-horizontal frm_asgn" name="frmSave-Asignacion" action="save" >
             <g:hiddenField name="id" value="${asignacionInstance?.id}"/>
 
             <div class="control-group">
                 <div>
-                    <span class="control-label label label-inverse">
+                    <span class="control-label label label-inverse" style="width: 120px;">
                         Partida
                     </span>
                 </div>
 
-                <div class="controls">
+                <div class="controls" style="width: 800px;">
 
-                    <input type="text" style="width: 190px;;font-size: 10px" id="item_presupuesto">
+                    <input class="span3" type="text" style="width: 150px;;font-size: 10px" id="item_presupuesto">
 
-                    <input type="hidden" style="width: 60px" id="item_prsp" name="prespuesto.id">
-                    <a href="#" class="btn btn-warning" title="Crear nueva partida" style="margin-top: -10px" id="item_agregar_prsp">
+                    <input type="hidden" id="item_prsp" name="prespuesto.id">
+                    %{--<br>--}%
+                    <input class="span4" type="text" style="width: 370px;;font-size: 10px;margin-top: 0px;" id="item_desc" disabled="true">
+                    <a href="#" class="btn btn-warning" title="Crear nueva partida" id="item_agregar_prsp">
                         <i class="icon-edit"></i>
                         Crear nueva partida
                     </a>
-                    <br>
-                    <input type="text" style="width: 370px;;font-size: 10px;margin-top: 5px;" id="item_desc" disabled="true">
 
                 </div>
             </div>
 
             <div class="control-group">
                 <div>
-                    <span class="control-label label label-inverse">
+                    <span class="control-label label label-inverse" style="width: 120px;">
                         Anio
                     </span>
                 </div>
@@ -80,7 +80,7 @@
 
             <div class="control-group">
                 <div>
-                    <span class="control-label label label-inverse">
+                    <span class="control-label label label-inverse" style="width: 120px;">
                         Valor
                     </span>
                 </div>
@@ -89,18 +89,17 @@
                     <g:field type="number" name="valor" id="valor" class=" required" value="0.00"/>
                     <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
-                </div>
-            </div>
-            <div class="control-group">
-                <div>
-                    <a href="#"  id="guardar"  class="btn btn-primary">Guardar </a>
+
+                    <span style="margin-left: 400px;">
+                        <a href="#"  id="guardar"  class="btn btn-primary">Guardar </a>
+                    </span>
                 </div>
             </div>
 
         </g:form>
     </div>
 
-    <div id="list-Asignacion" style="width: 800px;">
+    <div id="list-Asignacion" style="width: 900px;">
 
     </div>
 </div>
