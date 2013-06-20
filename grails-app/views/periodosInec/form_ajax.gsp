@@ -8,7 +8,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
 
@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <elm:datepicker name="fechaInicio" class=" required" value="${periodosInecInstance?.fechaInicio}"/>
+                <elm:datepicker name="fechaInicio" class=" required" value="${periodosInecInstance?.fechaInicio}" style="width: 120px;"/>
 
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
@@ -42,7 +42,7 @@
             </div>
 
             <div class="controls">
-                <elm:datepicker name="fechaFin" class="" value="${periodosInecInstance?.fechaFin}"/>
+                <elm:datepicker name="fechaFin" class="" value="${periodosInecInstance?.fechaFin}" style="width: 120px;"/>
 
                 
                 <p class="help-block ui-helper-hidden"></p>
@@ -57,7 +57,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="periodoCerrado" maxlength="1" class=" required" value="${periodosInecInstance?.periodoCerrado}"/>
+                <g:select name="periodoCerrado" from="${periodosInecInstance.constraints.periodoCerrado.inList}" class=" required" value="${periodosInecInstance?.periodoCerrado}" valueMessagePrefix="periodosInec.periodoCerrado" style="width: 60px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

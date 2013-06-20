@@ -13,7 +13,10 @@ class PeriodosInecController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [periodosInecInstanceList: PeriodosInec.list(params), params: params]
+        println params
+        def periodos = PeriodosInec.list([sort: 'descripcion'])
+//        [periodosInecInstanceList: PeriodosInec.list(params), params: params]
+        [periodosInecInstanceList: periodos, params: params]
     } //list
 
     def form_ajax() {

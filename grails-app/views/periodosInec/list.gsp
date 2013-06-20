@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Periodos Inecs
+            Lista de Periodos de Índices
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Periodos Inec
+                    Crear  Periodos de Índices
                 </a>
             </div>
             <div class="span3" id="busqueda-PeriodosInec"></div>
@@ -43,7 +43,7 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción" />
                     
                         <g:sortableColumn property="fechaInicio" title="Fecha Inicio" />
                     
@@ -116,7 +116,7 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows        : 10,
+                    maxRows        : 15,
                     searchPosition : $("#busqueda-PeriodosInec"),
                     float          : "right"
                 });
@@ -135,7 +135,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Periodos Inec");
+                            $("#modalTitle").html("Crear Periodos de Índices");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-PeriodosInec").modal("show");
@@ -162,7 +162,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Periodos Inec");
+                            $("#modalTitle").html("Editar Periodos de Índices");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-PeriodosInec").modal("show");
@@ -182,7 +182,7 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Periodos Inec");
+                            $("#modalTitle").html("Ver Periodos de Índices");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
                             $("#modal-PeriodosInec").modal("show");
