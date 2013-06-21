@@ -6,7 +6,6 @@
         <meta name="layout" content="main">
         <title>Mantenimiento de Precios</title>
 
-
         <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
         <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
 
@@ -108,9 +107,7 @@
                 var fcha = $("#fecha").val();
 
                 if (fcha == "") {
-
-                    fcha = new Date().toString("dd-MM-yyyy")
-
+                    fcha = new Date().toString("dd-MM-yyyy");
                     $("#fecha").val(fcha);
                 }
 

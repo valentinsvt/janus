@@ -4,8 +4,10 @@ class TipoProcedimiento {
 
     String descripcion
     String sigla
-    double bases=0
-    double techo=0
+    double bases = 0
+    double techo = 0
+
+    String fuente
 
     static mapping = {
         table 'tppc'
@@ -19,11 +21,13 @@ class TipoProcedimiento {
             sigla column: 'tppcsgla'
             bases column: 'tppcbase'
             techo column: 'tppctcho'
+            fuente column: 'tppcfnte'
         }
     }
     static constraints = {
-        descripcion(nullable: true,blank: true,size: 1..64)
-        sigla(nullable: false,blank: false,size: 1..5)
+        descripcion(nullable: true, blank: true, size: 1..64)
+        sigla(nullable: false, blank: false, size: 1..5)
+        fuente(size: 2..2, inList: ['OF', 'OB'])
     }
 
 }

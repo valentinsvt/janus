@@ -110,7 +110,7 @@
         <div class="modal login hide fade " id="modal-ingreso" style=";overflow: hidden;">
             <div class="modal-body" id="modalBody" style="padding: 0px">
 
-                <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #2080B0;background: #a7a7a5;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
+                <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #2080B0;background:#C7C7C5 /*#a7a7a5*/;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
                     <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px; color: #334">Sistema Janus</p>
 
                     <div class="linea" style="height: 95%;left: 45px; border-left-color: #334"></div>

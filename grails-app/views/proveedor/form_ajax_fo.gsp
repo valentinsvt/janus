@@ -27,8 +27,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="tipo" maxlength="1" class="" value="${proveedorInstance?.tipo}"/>
-
+            %{--<g:textField name="tipo" maxlength="1" class="" value="${proveedorInstance?.tipo}"/>--}%
+            <g:select name="tipo" from="${proveedorInstance.constraints.tipo.inList}" class=" required" value="${proveedorInstance?.tipo}" valueMessagePrefix="proveedor.tipo"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>

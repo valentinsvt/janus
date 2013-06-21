@@ -52,7 +52,7 @@ class Proveedor {
     }
     static constraints = {
         especialidad(blank: true, nullable: true)
-        tipo(blank: true, nullable: true, maxSize: 1)
+        tipo(blank: true, nullable: true, maxSize: 1, inList: ['N', 'J'])
         ruc(blank: true, nullable: true, maxSize: 13)
         nombre(blank: true, nullable: true, maxSize: 20)
         nombreContacto(blank: true, nullable: true, maxSize: 31)
@@ -70,7 +70,7 @@ class Proveedor {
         observaciones(blank: true, nullable: true, maxSize: 127)
     }
 
-    String toString(){
+    String toString() {
         return "${this.nombre}"
     }
 }

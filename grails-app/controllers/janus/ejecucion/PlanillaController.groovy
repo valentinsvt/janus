@@ -2,10 +2,7 @@ package janus.ejecucion
 
 import groovy.json.JsonBuilder
 import groovy.time.TimeCategory
-import janus.Contrato
-import janus.Item
-import janus.Obra
-import janus.VolumenesObra
+import janus.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
 
@@ -315,7 +312,7 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-        def fp = janus.FormulaPolinomica.findAllByObra(obra)
+        def fp = FormulaPolinomica.findAllByObra(obra)
         def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
         def tipo = TipoFormulaPolinomica.get(1)
         def oferta = contrato.oferta
@@ -432,7 +429,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
-        println periodos
+//        println periodos
 //        render periodos.descripcion
 
 //        println "Aqui empieza las inserciones"

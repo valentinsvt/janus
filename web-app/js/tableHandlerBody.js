@@ -6,6 +6,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+var tabla = $('#tablaPrecio');
+
 function doHighlight(params) {
     if (!params.tiempo) {
         params.tiempo = 2000;
@@ -46,13 +48,16 @@ $(document).keyup(function (ev) {
         case 40: //abajo
             var target = $(ev.target);
             if (!target.hasClass("editando")) {
-                var cant = $('#tablaPrecios > tbody > tr').size();
+//                var cant = $('#tablaPrecios > tbody > tr').size();
+                var cant = tabla.children("tbody").children("tr").size();
                 if (filaIndex < cant - 1) {
                     ev.stopPropagation();
                     ntr = tr.next();
-//                console.log(sel, celdaIndex, tr, filaIndex, ntr);
-                    seleccionar(ntr.children().eq(celdaIndex));
-                    scroll();
+//                    console.log(sel, celdaIndex, tr, filaIndex, ntr, ntr.children().eq(celdaIndex));
+                    if (ntr.length > 0 && ntr.children().eq(celdaIndex).length > 0) {
+                        seleccionar(ntr.children().eq(celdaIndex));
+                        scroll();
+                    }
                 }
             }
             break;
@@ -61,8 +66,9 @@ $(document).keyup(function (ev) {
             if (target.hasClass("editando")) {
 //                stopEdit();
                 var value = target.val();
-                $(".selected").html(number_format(value, 5, ".", ""));
+                $(".selected").html(number_format(value, decimales, ".", ""));
                 sel.data("valor", value);
+                afterStopEdit();
             } else {
                 doEdit(sel);
             }

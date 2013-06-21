@@ -46,6 +46,7 @@
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
                 <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
                 <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-ok"></i> Aceptar</button>
+                <g:link action="copiarPolinomica" class="btn" id="${contrato.id}"><i class="icon-superscript"></i> Fórmula polinómica</g:link>
                 <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
                 <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
                 <button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>

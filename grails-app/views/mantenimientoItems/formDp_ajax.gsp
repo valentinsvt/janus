@@ -60,7 +60,7 @@
             </div>
 
             <div class="controls">
-                <g:textArea cols="5" rows="3" name="descripcion" style="resize: none; height: 50px" maxlength="50" class="allCaps required input-xxlarge" value="${departamentoItemInstance?.descripcion}"/>
+                <g:textArea cols="5" rows="3" name="descripcion" style="resize: none; height: 50px" maxlength="63" class="allCaps required input-xxlarge" value="${departamentoItemInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>

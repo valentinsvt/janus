@@ -521,7 +521,7 @@ class MantenimientoItemsController extends Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println "mantenimiento items controller l 524: "+e
+            println "mantenimiento items controller l 524: " + e
             render "NO"
         }
     }
@@ -614,7 +614,7 @@ class MantenimientoItemsController extends Shield {
         if (departamento.save(flush: true)) {
             render "OK_" + accion + "_" + departamento.id + "_" + departamento.subgrupo.codigo + "." + departamento.codigo + " " + departamento.descripcion
         } else {
-            println "mantenimiento items controller l 617: "+departamento.errors
+            println "mantenimiento items controller l 617: " + departamento.errors
             def errores = g.renderErrors(bean: departamento)
             render "NO_" + errores
         }
@@ -627,7 +627,7 @@ class MantenimientoItemsController extends Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println "mantenimiento items controller l 630: "+e
+            println "mantenimiento items controller l 630: " + e
             render "NO"
         }
     }
@@ -781,7 +781,7 @@ class MantenimientoItemsController extends Shield {
         if (item.save(flush: true)) {
             render "OK_" + accion + "_" + item.id + "_" + item.codigo + " " + item.nombre
         } else {
-            println "mantenimiento items controller l 784: "+item.errors
+            println "mantenimiento items controller l 784: " + item.errors
             def errores = g.renderErrors(bean: item)
             render "NO_" + errores
         }
@@ -794,7 +794,7 @@ class MantenimientoItemsController extends Shield {
             render "OK"
         }
         catch (DataIntegrityViolationException e) {
-            println "mantenimiento items controller l 797: "+e
+            println "mantenimiento items controller l 797: " + e
             render "NO"
         }
     }
@@ -843,7 +843,7 @@ class MantenimientoItemsController extends Shield {
             if (precioRubrosItemsInstance.save(flush: true)) {
                 render "OK"
             } else {
-                println "mantenimiento items controller l 846: "+precioRubrosItemsInstance.errors
+                println "mantenimiento items controller l 846: " + precioRubrosItemsInstance.errors
                 render "NO"
             }
         } else {
@@ -870,7 +870,7 @@ class MantenimientoItemsController extends Shield {
                         if (precioRubrosItemsInstance.save(flush: true)) {
 //                            println "OK"
                         } else {
-                            println "mantenimiento items controller l 873: "+precioRubrosItemsInstance.errors
+                            println "mantenimiento items controller l 873: " + precioRubrosItemsInstance.errors
                             error++
                         }
                     }
@@ -900,7 +900,7 @@ class MantenimientoItemsController extends Shield {
                 render "OK"
             }
             catch (DataIntegrityViolationException e) {
-                println "mantenimiento items controller l 903: "+e
+                println "mantenimiento items controller l 903: " + e
                 render "No se pudo eliminar el precio."
             }
         }
@@ -925,7 +925,7 @@ class MantenimientoItemsController extends Shield {
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
 //            println rubroPrecioInstance.precioUnitario
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "mantenimiento items controller l 928: "+"error " + parts
+                println "mantenimiento items controller l 928: " + "error " + parts
                 if (nos != "") {
                     nos += ","
                 }
@@ -978,7 +978,11 @@ class MantenimientoItemsController extends Shield {
     }
 
     def calcPrecio(params) {
-//        println params
+//        println ">>" + params
+//        println params.fecha
+//        println params.fecha.class
+
+        //TODO: WTF la fecha llega como Date y no como String??????
         def lugar = []
         def precios = []
         def precioRef = false
@@ -988,7 +992,7 @@ class MantenimientoItemsController extends Shield {
             params.todasLasFechas = "true"
         } else {
             params.todasLasFechas = "false"
-            params.fecha = new Date().parse("dd-MM-yyyy", fecha)
+            params.fecha = new Date()/*.parse("dd-MM-yyyy", fecha)*/
         }
         if (params.todasLasFechas == "true") {
             fecha = null
@@ -1155,7 +1159,7 @@ class MantenimientoItemsController extends Shield {
         if (lugar.save(flush: true)) {
             render "OK_" + accion + "_" + lugar.id + "_" + (lugar.descripcion + (params.all.toString().toBoolean() ? " (" + lugar.tipo + ")" : "")) + "_c"
         } else {
-            println "mantenimiento items controller l 1158: "+lugar.errors
+            println "mantenimiento items controller l 1158: " + lugar.errors
             def errores = g.renderErrors(bean: lugar)
             render "NO_" + errores
         }
@@ -1174,7 +1178,7 @@ class MantenimientoItemsController extends Shield {
 //                println "p deleted " + p.id
                 cant++
             } catch (DataIntegrityViolationException e) {
-                println "mantenimiento items controller l 1177: "+e
+                println "mantenimiento items controller l 1177: " + e
                 println "\tp not deleted " + p.id
             }
         }
@@ -1183,7 +1187,7 @@ class MantenimientoItemsController extends Shield {
             lugar.delete(flush: true)
             render "OK"
         } catch (DataIntegrityViolationException e) {
-            println "mantenimiento items controller l 1186: "+e
+            println "mantenimiento items controller l 1186: " + e
             render "NO"
         }
     }

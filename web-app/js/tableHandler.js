@@ -6,6 +6,21 @@
  * To change this template use File | Settings | File Templates.
  */
 
+var decimales = 5;
+
+var beforeStopEdit = function (selected) {
+};
+var afterStopEdit = function (selected) {
+};
+
+var beforeDoEdit = function (selected, textField) {
+};
+var afterDoEdit = function (selected, textField) {
+};
+
+var textFieldBinds = {
+};
+
 function doEdit(sel) {
     var texto = $.trim(sel.text());
 //    console.log("doEdit", sel,sel.text(), texto, sel.data("valor"));
@@ -16,15 +31,19 @@ function doEdit(sel) {
     var w = 100;
     var textField = $('<input type="text" class="editando" value="' + texto + '"/>');
     textField.width(w - 5);
+    textField.bind(textFieldBinds);
+    beforeDoEdit(sel, textField);
     sel.html(textField);
     textField.focus();
     sel.data("valor", texto);
+    afterDoEdit(sel, textField);
 //    console.log(sel, texto, sel.data("valor"));
 }
 
 function stopEdit() {
 //    var value = $(".editando").val(); //valor del texfield (despues de editar)
     var $sel = $(".selected");
+    beforeStopEdit($sel);
 //    if (parseFloat(value) == 0 || value == "") {
     var value = $sel.data("valor"); //valor antes de la edicion
 
@@ -32,13 +51,14 @@ function stopEdit() {
 
 //    }
     if (value) {
-        $sel.html(number_format(value, 5, ".", ""));
+        $sel.html(number_format(value, decimales, ".", ""));
         if ($sel.data("original") != $sel.data("valor")) {
             $sel.addClass("changed");
         }
     } else {
         $sel.html("");
     }
+    afterStopEdit($sel);
 }
 
 function seleccionar(elm) {

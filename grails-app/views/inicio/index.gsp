@@ -78,7 +78,7 @@
                     <div class="imagen">
                         <img src="${resource(dir: 'images', file: 'obra100.png')}" width="100%" height="100%"/>
                     </div>
-                    <div class="texto"><b>Obras</b>: registro de Obras, georeferen-ciación, los volúmenes de obra,
+                    <div class="texto"><b>Obras</b>: registro de Obras, georeferenciación, los volúmenes de obra,
                     variables de transporte y costos indirectos ...</div>
                 </div>
             </div>

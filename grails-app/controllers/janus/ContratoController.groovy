@@ -1,6 +1,7 @@
 package janus
 
 import janus.ejecucion.FormulaPolinomicaContractual
+import janus.ejecucion.TipoFormulaPolinomica
 import org.springframework.dao.DataIntegrityViolationException
 
 class ContratoController extends janus.seguridad.Shield {
@@ -46,11 +47,124 @@ class ContratoController extends janus.seguridad.Shield {
         }
     }
 
+    def saveCambiosPolinomica() {
+        if (params.valor.class == java.lang.String) {
+            params.valor = [params.valor]
+        }
+        def errores = ""
+        def oks = ""
+        def nos = ""
+        params.valor.each { par ->
+            def parts = par.split("_")
+            def id = parts[0]
+            def val = parts[1]
+
+            def fp = FormulaPolinomicaContractual.get(id.toLong())
+            fp.valor = val.toDouble()
+            if (!fp.save(flush: true)) {
+                println "error al guardar fp contrato id " + id + ":  " + fp.errors
+                errores += fp.errors
+                if (nos != "") {
+                    nos += ","
+                }
+                nos += "#" + id
+            } else {
+                if (oks != "") {
+                    oks += ","
+                }
+                oks += "#" + id
+            }
+        }
+        render oks + "_" + nos
+    }
+
+    def copiarPolinomica() {
+        def contrato = Contrato.get(params.id)
+        def pac = contrato.oferta.concurso.pac.tipoProcedimiento.fuente
+        def obra = contrato.oferta.concurso.obra
+
+        def fp = FormulaPolinomica.findAllByObra(obra)
+        def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
+        def tipo = TipoFormulaPolinomica.get(1)
+        def fpB0
+        //copia la formula polinomica a la formula polinomica contractual si esta no existe
+        if (fr.size() < 5) {
+            if (pac == 'OB') {
+                //copia de la obra
+            } else if (pac == 'OF') {
+                //copia del oferente ganador
+            }
+
+            //esto copia de la obra
+            fr.each {
+                it.delete(flush: true)
+            }
+            fp.each {
+                if (it.valor > 0) {
+                    def frpl = new FormulaPolinomicaContractual()
+                    frpl.valor = it.valor
+                    frpl.contrato = contrato
+                    frpl.indice = it.indice
+                    frpl.tipoFormulaPolinomica = tipo
+                    frpl.numero = it.numero
+                    if (!frpl.save(flush: true)) {
+                        println "error frpl" + frpl.errors
+                    }
+                }
+            }
+            def fpP0 = new FormulaPolinomicaContractual()
+            fpP0.valor = 0
+            fpP0.contrato = contrato
+            fpP0.indice = null
+            fpP0.tipoFormulaPolinomica = tipo
+            fpP0.numero = "P0"
+            if (!fpP0.save(flush: true)) {
+                println "error fpP0" + fpP0.errors
+            }
+            fpB0 = new FormulaPolinomicaContractual()
+            fpB0.valor = 0
+            fpB0.contrato = contrato
+            fpB0.indice = null
+            fpB0.tipoFormulaPolinomica = tipo
+            fpB0.numero = "B0"
+            if (!fpB0.save(flush: true)) {
+                println "error fpB0" + fpB0.errors
+            }
+            def fpFr = new FormulaPolinomicaContractual()
+            fpFr.valor = 0
+            fpFr.contrato = contrato
+            fpFr.indice = null
+            fpFr.tipoFormulaPolinomica = tipo
+            fpFr.numero = "Fr"
+            if (!fpFr.save(flush: true)) {
+                println "error fpFr" + fpFr.errors
+            }
+        }
+
+        //return la tabla para editar
+//        def ps = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "p%", [sort: 'numero'])
+
+        def ps = FormulaPolinomicaContractual.withCriteria {
+            eq("contrato", contrato)
+            ilike("numero", "p%")
+            ne("numero", "P0")
+            order("numero", "asc")
+        }
+
+        def cuadrilla = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, 'c%', [sort: 'numero'])
+        return [ps: ps, cuadrilla: cuadrilla, contrato: contrato]
+    }
 
     def polinomicaContrato() {
         def contrato = Contrato.get(params.id)
-        def ps = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "p%")
-        def cuadrilla = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, 'c%')
+//        def ps = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "p%", [sort: 'numero'])
+        def ps = FormulaPolinomicaContractual.withCriteria {
+            eq("contrato", contrato)
+            ilike("numero", "p%")
+            ne("numero", "P0")
+            order("numero", "asc")
+        }
+        def cuadrilla = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, 'c%', [sort: 'numero'])
         return [ps: ps, cuadrilla: cuadrilla, contrato: contrato]
     }
 

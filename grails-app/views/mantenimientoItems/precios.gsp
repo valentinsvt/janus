@@ -216,7 +216,7 @@
 
             function cambiaFecha(dateText, inst) {
                 showLugar.fecha = dateText;
-//                ////console.log(showLugar);
+//                console.log(showLugar, dateText);
             }
 
             function log(msg, error) {

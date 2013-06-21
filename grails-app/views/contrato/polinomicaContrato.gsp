@@ -73,7 +73,7 @@
                                     <tr>
                                         <td>${i?.numero}</td>
                                         <td>${i?.indice?.descripcion}</td>
-                                        <td style="text-align: right; width: 40px">${i?.valor}</td>
+                                        <td style="text-align: right; width: 40px">${g.formatNumber(number: i?.valor, maxFractionDigits: 3, minFractionDigits: 3)}</td>
 
                                     </tr>
 
@@ -113,7 +113,7 @@
                                 <tr>
                                     <td>${i?.numero}</td>
                                     <td>${i?.indice?.descripcion}</td>
-                                    <td style="text-align: right; width: 40px">${i?.valor}</td>
+                                    <td style="text-align: right; width: 40px">${g.formatNumber(number: i?.valor, maxFractionDigits: 3, minFractionDigits: 3)}</td>
 
                                 </tr>
 
