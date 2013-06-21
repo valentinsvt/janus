@@ -134,7 +134,7 @@
                 <input type="text" style="width: 100px;text-align: right" id="item_cantidad" value="1">
             </div>
 
-            <div class="span1" style="margin-left: 10px; width: 60px;">
+            <div class="span1" style="margin-left: 20px; width: 60px;">
                 <b>Orden</b>
                 <input type="text" style="width: 30px;text-align: right" id="item_orden" value="${(volumenes?.size() > 0) ? volumenes.size() + 1 : 1}">
             </div>
