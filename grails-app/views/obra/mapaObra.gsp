@@ -45,7 +45,7 @@
 
 
 
-<div id="mapaPichincha" style="width: 700px; height: 500px">
+<div id="mapaPichincha" style="width: 900px; height: 650px">
 
 
 
@@ -172,6 +172,7 @@
             scaleControl:false,
             streetViewControl:false,
             overviewMapControl:false,
+
 
             mapTypeId:google.maps.MapTypeId.ROADMAP //SATELLITE, ROADMAP, HYBRID, TERRAIN
         };
