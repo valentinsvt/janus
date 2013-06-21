@@ -110,13 +110,13 @@
         <div class="modal login hide fade " id="modal-ingreso" style=";overflow: hidden;">
             <div class="modal-body" id="modalBody" style="padding: 0px">
 
-                <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #525E67;background: #012a3a;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
-                    <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px">Sistema Janus</p>
+                <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #2080B0;background: #a7a7a5;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
+                    <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px; color: #334">Sistema Janus</p>
 
-                    <div class="linea" style="height: 95%;left: 45px"></div>
+                    <div class="linea" style="height: 95%;left: 45px; border-left-color: #334"></div>
                     <button type="button" class="close" data-dismiss="modal" style="color: white;opacity: 1;">×</button>
                     <fieldset style="">
-                        <legend style="color:#c0c0c0;border:none;font-family: 'Open Sans Condensed', serif;font-weight: bolder;font-size: 25px">Ingreso</legend>
+                        <legend style="color: #334;border:none;font-family: 'Open Sans Condensed', serif;font-weight: bolder;font-size: 25px">Ingreso</legend>
 
                         <g:if test="${flash.message}">
                             <div class="alert alert-info" role="status">
@@ -126,7 +126,7 @@
                         </g:if>
 
                         <div class="control-group" style="margin-top: 0">
-                            <label class="control-label" for="login" style="width: 100%;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder">Usuario:</label>
+                            <label class="control-label" for="login" style="width: 100%;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder; color: #334">Usuario:</label>
 
                             <div class="controls" style="width: 100%;margin-left: 5px">
                                 <g:textField name="login" class="span2" style="width: 90%"/>
@@ -135,7 +135,7 @@
                         </div>
 
                         <div class="control-group">
-                            <label class="control-label" for="login" style="width: 100%;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder">Password:</label>
+                            <label class="control-label" for="login" style="width: 100%;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder; color:#334;">Password:</label>
 
                             <div class="controls" style="width: 100%;margin-left: 5px">
                                 <g:passwordField name="pass" class="span2" style="width: 90%"/>
@@ -146,7 +146,7 @@
                         <div class="control-group">
 
                             <a href="#" class="btn btn-primary" id="btnLogin">Continuar</a>
-                            <a href="#" id="btnOlvidoPass" style="color: #ffffff;margin-left: 70px;text-decoration: none;font-family: 'Open Sans Condensed', serif;font-weight: bold">
+                            <a href="#" id="btnOlvidoPass" style="color: #223;margin-left: 70px;text-decoration: none;font-family: 'Open Sans Condensed', serif;font-weight: bold">
                                 Olvidó su contraseña?
                             </a>
                         </div>

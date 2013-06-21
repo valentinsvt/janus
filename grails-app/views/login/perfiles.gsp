@@ -21,14 +21,15 @@
         <link href='${resource(dir: "css", file: "custom.css")}' rel='stylesheet' type='text/css'>
     </head>
 
-    <body>
+    <body style="background-color: #d7d7d7">
+    <div class="dialog ui-corner-all" style="height: 595px;background: #d7d7d7;;padding: 10px;width: 910px; margin: auto;">
+        %{--<g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #2080B0; background:#c7c7c5;color: #939Aa2; width: 300px; margin-left: 240px; margin-top: 180px; position: relative; padding-left: 100px">--}%
+        <g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #2080B0; background:#c7c7c5;color: #939Aa2; width: 300px; margin-left: 360px; margin-top: 180px; position: relative; padding-left: 100px">
+            <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px; color:#334;">Sistema Janus</p>
 
-        <g:form class="well form-horizontal span" action="savePer" name="frmLogin" style="border: 5px solid #525E67;background:#012a3a;color: #939Aa2;width: 300px;position: relative;padding-left: 70px">
-            <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px">Sistema Janus</p>
-
-            <div class="linea" style="height: 95%;left: 45px"></div>
+            <div class="linea" style="height: 95%;left: 45px; border-left-color: #334"></div>
             <fieldset>
-                <legend style="color: white;border:none;font-family: 'Open Sans Condensed', serif;font-weight: bolder;font-size: 25px">Ingreso</legend>
+                <legend style="color: white;border:none;font-family: 'Open Sans Condensed', serif;font-weight: bolder;font-size: 25px; color:#334;">Ingreso</legend>
 
                 <g:if test="${flash.message}">
                     <div class="alert alert-info" role="status">
@@ -38,7 +39,7 @@
                 </g:if>
 
                 <div class="control-group">
-                    <label class="control-label" style="width: 50px;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder;float: left;">Perfil:</label>
+                    <label class="control-label" style="width: 50px;text-align: left;font-size: 25px;font-family: 'Tulpen One',cursive;font-weight: bolder;float: left; color:#334">Perfil:</label>
 
                     <div class="controls" style="width: 150px;margin-left: 5px;float: right;margin-right: 60px">
                         <g:select name="perfiles" from="${perfilesUsr}" class="span2" required="" optionKey="id" style="width: 180px;"/>
@@ -52,7 +53,7 @@
                 </div>
             </fieldset>
         </g:form>
-
+    </div>
         <script type="text/javascript">
             $(function () {
 

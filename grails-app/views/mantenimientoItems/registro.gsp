@@ -112,21 +112,27 @@
                 delete : "${resource(dir: 'images/tree', file: 'delete.gif')}",
                 info   : "${resource(dir: 'images/tree', file: 'info.png')}",
 
-                grupo_material : "${resource(dir: 'images/tree', file: 'grupo_material.png')}",
-                grupo_manoObra : "${resource(dir: 'images/tree', file: 'grupo_manoObra.png')}",
-                grupo_equipo   : "${resource(dir: 'images/tree', file: 'grupo_equipo.png')}",
+                %{--grupo_material : "${resource(dir: 'images/tree', file: 'grupo_material.png')}",--}%
+                grupo_material : "${resource(dir: 'images/tree', file: 'carpeta2.png')}",
+                %{--grupo_manoObra : "${resource(dir: 'images/tree', file: 'grupo_manoObra.png')}",--}%
+                grupo_manoObra : "${resource(dir: 'images/tree', file: 'carpeta5.png')}",
+                %{--grupo_equipo   : "${resource(dir: 'images/tree', file: 'grupo_equipo.png')}",--}%
+                grupo_equipo   : "${resource(dir: 'images/tree', file: 'carpeta6.png')}",
 
-                subgrupo_material : "${resource(dir: 'images/tree', file: 'subgrupo_material.png')}",
+                %{--subgrupo_material : "${resource(dir: 'images/tree', file: 'subgrupo_material.png')}",--}%
+                subgrupo_material : "${resource(dir: 'images/tree', file: 'carpeta.png')}",
                 subgrupo_manoObra : "${resource(dir: 'images/tree', file: 'subgrupo_manoObra.png')}",
-                subgrupo_equipo   : "${resource(dir: 'images/tree', file: 'subgrupo_equipo.png')}",
+                %{--subgrupo_equipo   : "${resource(dir: 'images/tree', file: 'subgrupo_equipo.png')}",--}%
+                subgrupo_equipo   : "${resource(dir: 'images/tree', file: 'item_equipo.png')}",
 
-                departamento_material : "${resource(dir: 'images/tree', file: 'departamento_material.png')}",
+                %{--departamento_material : "${resource(dir: 'images/tree', file: 'departamento_material.png')}",--}%
+                departamento_material : "${resource(dir: 'images/tree', file: 'carpeta3.png')}",
                 departamento_manoObra : "${resource(dir: 'images/tree', file: 'departamento_manoObra.png')}",
                 departamento_equipo   : "${resource(dir: 'images/tree', file: 'departamento_equipo.png')}",
 
                 item_material : "${resource(dir: 'images/tree', file: 'item_material.png')}",
                 item_manoObra : "${resource(dir: 'images/tree', file: 'item_manoObra.png')}",
-                item_equipo   : "${resource(dir: 'images/tree', file: 'item_equipo.png')}"
+                item_equipo   : "${resource(dir: 'images/tree', file: 'item_material.png')}"
             };
 
             function log(msg, error) {
