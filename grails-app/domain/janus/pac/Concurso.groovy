@@ -27,6 +27,9 @@ class Concurso {
 
     Double presupuestoReferencial = 0
 
+    Date fechaAceptacionProveedor
+    String memoRequerimiento
+
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
@@ -57,6 +60,9 @@ class Concurso {
             observaciones column: 'cncrobsr'
 
             presupuestoReferencial column: 'cncrprrf'
+
+            fechaAceptacionProveedor column: 'cncrfcap'
+            memoRequerimiento column: 'cncrmmrq'
         }
     }
     static constraints = {
@@ -79,5 +85,8 @@ class Concurso {
         fechaAdjudicacion(blank: true, nullable: true)
         estado(blank: true, nullable: true, maxSize: 1)
         observaciones(blank: true, nullable: true, maxSize: 127)
+
+        fechaAceptacionProveedor(blank: true, nullable: true)
+        memoRequerimiento(blank: true, nullable: true)
     }
 }
