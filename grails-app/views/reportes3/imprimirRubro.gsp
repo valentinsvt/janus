@@ -139,11 +139,11 @@
                 </p>
 
                 <p>
-                    GESTIÓN DE PRESUPUESTOS
+                    <b>GESTIÓN DE PRESUPUESTOS</b>
                 </p>
 
                 <p>
-                    ANÁLISIS DE PRECIOS UNITARIOS
+                    <b>ANÁLISIS DE PRECIOS UNITARIOS</b>
                 </p>
             </div>
 
@@ -184,11 +184,11 @@
                 ${tablaMat}
                 ${tablaTrans}
                 ${tablaIndi}
-                <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;">
+                <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                     <tbody>
-                        <tr>
+                        <tr style="">
                             <td style="width: 350px;">
-                                <b>Costo unitario directo</b>
+                                <b>COSTO UNITARIO DIRECTO</b>
                             </td>
                             <td style="text-align: right">
                                 <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
@@ -196,7 +196,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <b>Costos indirectos</b>
+                                <b>COSTOS INDIRECTOS</b>
                             </td>
                             <td style="text-align: right">
                                 <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
@@ -204,7 +204,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <b>Costo total del rubro</b>
+                                <b>COSTO TOTAL DEL RUBRO</b>
                             </td>
                             <td style="text-align: right">
                                 <g:formatNumber number="${totalRubro + totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
@@ -212,7 +212,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <b>Precio unitario ($USD)</b>
+                                <b>PRECIO UNITARIO ($USD)</b>
                             </td>
                             <td style="text-align: right"><g:formatNumber number="${totalRubro + totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
 
@@ -224,13 +224,13 @@
 
             </div>
 
-            <div style="width: 100%;float: left;height: 30px;margin-top: 40px;text-align: right">
-                Parámetros para los datos de presupuesto  obtenidos de la obra: ${obra}
-            </div>
+            %{--<div style="width: 100%;float: left;height: 30px;margin-top: 40px;text-align: left">--}%
+                %{--Parámetros para los datos de presupuesto  obtenidos de la obra:--}%
+            %{--</div>--}%
 
-            <div style="width: 100%;float: left;height: 20px;margin-top: 10px;text-align: right">
-                <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.
-            </div>
+            %{--<div style="width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left">--}%
+                %{--<b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.--}%
+            %{--</div>--}%
 
         </div>
     </body>

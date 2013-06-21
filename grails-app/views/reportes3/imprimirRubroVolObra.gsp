@@ -90,12 +90,23 @@
 
 
         }
-        .theader{
 
-            border-bottom: 1px solid #000000 !important;
-            border-top: 1px solid #000000 !important;
+        .theader {
+
+            /*border: 1px solid #000000;*/
+            border-bottom: 1px solid #000000;
+
 
         }
+
+        .theaderup {
+
+            /*border: 1px solid #000000;*/
+            border-top: 1px solid #000000;
+
+
+        }
+
 
 
 
@@ -143,11 +154,11 @@
                 </p>
 
                 <p>
-                    COORDINACIÓN DE COSTOS
+                    <b>COORDINACIÓN DE COSTOS</b>
                 </p>
 
                 <p>
-                    ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO
+                    <b>ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO</b>
                 </p>
             </div>
 
@@ -192,7 +203,7 @@
                     <tbody>
                         <tr>
                             <td style="width: 350px; border-bottom: #000000">
-                                <b>Costo unitario directo</b>
+                                <b>COSTO UNITARIO DIRECTO</b>
                             </td>
                             <td style="text-align: right">
                                 <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
@@ -200,7 +211,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <b>Costos indirectos</b>
+                                <b>COSTOS INDIRECTOS</b>
                             </td>
                             <td style="text-align: right">
                                 <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
@@ -208,7 +219,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <b>Costo total del rubro</b>
+                                <b>COSTO TOTAL DEL RUBRO</b>
                             </td>
                             <td style="text-align: right">
                                 <g:formatNumber number="${totalRubro + totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/>
@@ -216,7 +227,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <b>Precio unitario</b>
+                                <b>PRECIO UNITARIO $USD</b>
                             </td>
                             <td style="text-align: right"><g:formatNumber number="${(totalRubro + totalIndi).toDouble().round(2)}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
 

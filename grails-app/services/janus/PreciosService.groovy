@@ -279,6 +279,17 @@ class PreciosService {
         }
         return result
     }
+
+    def rb_preciosAsc(parametros, condicion) {
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rb_precios_v2(" + parametros + ") order by itemcdgo asc " + condicion
+//        println "sql " + sql
+        def result = []
+        cn.eachRow(sql) { r ->
+            result.add(r.toRowResult())
+        }
+        return result
+    }
 //    def rb_precios(parametros,condicion){
 //        def cn = dbConnectionService.getConnection()
 //        def sql = "select * from rb_precios("+parametros+") "+condicion
@@ -310,6 +321,19 @@ class PreciosService {
         cn.close()
         return result
     }
+
+    def precioUnitarioVolumenObraAsc(select, obra, item) {
+        def cn = dbConnectionService.getConnection()
+        def sql = "select ${select} from vlob_pcun_v2(${obra},${item}) order by itemcdgo asc "
+//        println "sql pcvl "+sql
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+    }
+
 
     def precioUnitarioVolumenObraSinOrderBy(select, obra, item) {
         def cn = dbConnectionService.getConnection()
