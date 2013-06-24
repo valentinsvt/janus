@@ -99,7 +99,7 @@
         <div class="row-fluid">
             <div class="span2">
                 Código
-                <input type="text" name="rubro.codigo" class="span24 allCaps required input-small" value="${rubro?.codigo}" id="input_codigo">
+                <input type="text" name="rubro.codigo" class="span24 allCaps required input-small" value="${rubro?.codigo}" id="input_codigo" maxlength="30">
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -231,12 +231,12 @@
 
         <div class="span6">
             DESCRIPCION
-            <input type="text" name="item.descripcion" id="item_desc" class="span11">
+            <input type="text" name="item.descripcion" id="item_desc" class="span11" disabled="disabled">
         </div>
 
         <div class="span1" style="margin-right: 0px;margin-left: -30px;">
             UNIDAD
-            <input type="text" name="item.unidad" id="item_unidad" class="span8">
+            <input type="text" name="item.unidad" id="item_unidad" class="span8" disabled="true">
         </div>
 
         <div class="span1" style="margin-left: -5px !important;">
@@ -1543,8 +1543,8 @@
             var msg = ""
             var resp = $("#responsable").val()
 //            console.log(desc,desc.trim(),desc.trim().length,resp)
-            if (cod.trim().length > 20 || cod.trim().length < 1) {
-                msg = "<br>Error: La propiedad código debe tener entre 1 y 20 caracteres."
+            if (cod.trim().length > 30 || cod.trim().length < 1) {
+                msg = "<br>Error: La propiedad código debe tener entre 1 y 30 caracteres."
             }
             if (resp == "-1") {
                 if (msg == "")
@@ -1836,6 +1836,7 @@
                             $("#item_cantidad").val("1")
                             $("#cdgo_buscar").val("")
                             $("#cdgo_unidad").val("")
+                            $("#cdgo_buscar").focus()
 //                            $("#item_rendimiento").val("1")
                         }
                     });

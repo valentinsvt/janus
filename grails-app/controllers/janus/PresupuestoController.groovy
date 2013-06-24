@@ -30,6 +30,7 @@ class PresupuestoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def saveAjax() {
+       // println "save prsp "+params
         def presupuestoInstance
         if (params.id) {
             presupuestoInstance = Presupuesto.get(params.id)
@@ -43,6 +44,7 @@ class PresupuestoController extends janus.seguridad.Shield {
             presupuestoInstance = new Presupuesto(params)
         } //es create
         if (!presupuestoInstance.save(flush: true)) {
+           // println "error save prsp "+presupuestoInstance.errors
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Presupuesto " + (presupuestoInstance.id ? presupuestoInstance.id : "") + "</h4>"
 
@@ -66,6 +68,7 @@ class PresupuestoController extends janus.seguridad.Shield {
     } //save
 
     def save() {
+
         def presupuestoInstance
         if (params.id) {
             presupuestoInstance = Presupuesto.get(params.id)
@@ -81,6 +84,7 @@ class PresupuestoController extends janus.seguridad.Shield {
             presupuestoInstance = new Presupuesto(params)
         } //es create
         if (!presupuestoInstance.save(flush: true)) {
+
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Presupuesto " + (presupuestoInstance.id ? presupuestoInstance.id : "") + "</h4>"
 

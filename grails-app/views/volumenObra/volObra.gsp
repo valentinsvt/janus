@@ -125,11 +125,11 @@
 
             <div class="span4" style="margin-left: 15px;">
                 <b>Rubro</b>
-                <input type="text" style="width: 350px;font-size: 10px" id="item_nombre" disabled="true">
+                <input type="text" style="width: 340px;font-size: 10px" id="item_nombre" disabled="true">
 
             </div>
 
-            <div class="span2" style="margin-left: 10px; width: 100px;">
+            <div class="span2" style="margin-left: 0px; width: 100px;">
                 <b>Cantidad</b>
                 <input type="text" style="width: 100px;text-align: right" id="item_cantidad" value="1">
             </div>

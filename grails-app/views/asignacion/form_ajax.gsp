@@ -119,7 +119,7 @@
     <div class="modal-footer" id="modalFooter">
     </div>
 </div>
-<div class="modal hide fade" id="modal-presupuesto">
+<div class="modal large hide fade" id="modal-presupuesto">
     <div class="modal-header btn-warning">
         <button type="button" class="close" data-dismiss="modal">×</button>
 

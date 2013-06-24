@@ -414,7 +414,7 @@ class ReportesController {
         session.funciones = null
         lista.pop()
         def baos = new ByteArrayOutputStream()
-        def name = "reporte_de_" + params.titulo.replaceAll(" ", "_") + "_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        def name = "reporte_de_" + params.titulo.replaceAll(" ", "_") + "_" + new Date().format("ddMMyyyy_hhmm") + "";
         WorkbookSettings workbookSettings = new WorkbookSettings()
         workbookSettings.locale = Locale.default
         def file = File.createTempFile(name, '.xls')

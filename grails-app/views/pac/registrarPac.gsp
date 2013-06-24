@@ -65,7 +65,7 @@
                 <input type="text" id="techo" disabled="true" style="width: 120px;;text-align: right">
             </div>
             <div class="span2" >
-                <b>Usado:</b>
+                <b>Comprometido:</b>
                 <input type="text" id="usado" disabled="true" style="width: 120px;;text-align: right">
             </div>
             <div class="span2" >

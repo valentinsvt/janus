@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="numero" maxlength="31" style="width: 208px" class=" required" value="${presupuestoInstance?.numero}"/>
+                <g:textField name="numero" maxlength="40" style="width: 300px" class=" required" value="${presupuestoInstance?.numero}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -22,30 +22,83 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Nivel
+                    Año
                 </span>
             </div>
 
             <div class="controls">
-                <g:field type="number" name="nivel" class=" required" value="${fieldValue(bean: presupuestoInstance, field: 'nivel')}"/>
+                <g:select name="anio.id" from="${janus.pac.Anio.list([sort: "anio"])}" optionKey="id" optionValue="anio"></g:select>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Actividad
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textArea name="descripcion" cols="40" rows="7" maxlength="255" class=" required" style="resize: none;width: 300px;" value="${presupuestoInstance?.descripcion}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Fuente financiamiento
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:select name="fuente.id" from="${janus.FuenteFinanciamiento.list([sort: 'descripcion'])}" optionValue="descripcion" optionKey="id"></g:select>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Programa
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="programa"  maxlength="255" class=" required" style="resize: none;width: 300px;" value="${presupuestoInstance?.programa}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Subprograma
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="subPrograma" maxlength="255" class=" required" style="resize: none;width: 300px;" value="${presupuestoInstance?.subPrograma}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Proyecto
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="proyecto"  maxlength="255" class=" required" style="resize: none;width: 300px;" value="${presupuestoInstance?.proyecto}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
                 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Descripción
-                </span>
-            </div>
 
-            <div class="controls">
-                <g:textArea name="descripcion" cols="40" rows="7" maxlength="255" class=" required" style="resize: none;" value="${presupuestoInstance?.descripcion}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
                 
     </g:form>
 
