@@ -69,6 +69,10 @@ class ConcursoController extends janus.seguridad.Shield {
         concurso.costoBases = 0
         concurso.objeto = pac.descripcion
 
+        if (concurso.objeto.size() > 255) {
+            concurso.objeto = concurso.objeto[0..254]
+        }
+
         if (concurso.save(flush: true)) {
 //            println "saved ok"
             def codigo = generaCodigo(concurso)
@@ -83,6 +87,7 @@ class ConcursoController extends janus.seguridad.Shield {
             redirect(action: 'list')
         } else {
             println "not saved"
+            println concurso.errors
             flash.clase = "alert-error"
             flash.message = "Ha ocurrido un error al crear el proceso"
             redirect(action: 'list')
