@@ -111,7 +111,7 @@
 
             <div class="tituloPdf">
                 <p>
-                    <b>GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA</b>
+                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
                 <p>

@@ -142,7 +142,7 @@ class ReportesController {
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", titleFont));
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont));
         headers.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA " + titulo, titleFont));
         headers.add(new Paragraph("OBRA: " + obra?.descripcion, titleFont));
         headers.add(new Paragraph("MEMO CANT. OBRA: ${obra.memoCantidadObra}                                                                                           FECHA: " + new Date().format("dd-MM-yyyy"), titleFont));
@@ -603,7 +603,7 @@ class ReportesController {
         sheet.setColumnView(11, 5)
         sheet.setColumnView(12, 5)
 
-        def label = new Label(0, 1, "Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 2, "Departamento de compras públicas".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Plan anual de compras".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 4, "Departamento: ${dep}".toUpperCase(), times16format); sheet.addCell(label);
@@ -818,7 +818,7 @@ class ReportesController {
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
         headers.add(new Paragraph("REPORTE GRUPOS Y SUBGRUPOS", times10bold));
         headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
         headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
@@ -911,7 +911,7 @@ class ReportesController {
 
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
-        def label = new Label(0, 1, "Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 2, "Departamento de costos".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 
@@ -1154,17 +1154,19 @@ class ReportesController {
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotalMat = [border: Color.WHITE, colspan: 5,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHojaLeft: prmsHeaderHojaLeft]
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHojaLeft: prmsHeaderHojaLeft, prmsSubtotalMat: prmsSubtotalMat]
 
         VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique().each { rubro ->
 
             Paragraph headers = new Paragraph();
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
-            headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
+            headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
             headers.add(new Paragraph("GESTIÓN DE PRESUPUESTOS", times10bold));
             headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times10bold));
 //            headers.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el " + new Date().format("dd/MM/yyyy hh:mm"), times8normal))
@@ -1184,7 +1186,7 @@ class ReportesController {
             headerRubroTabla.setWidths(arregloEnteros([12, 66, 12, 10]))
 
             addCellTabla(headerRubroTabla, new Paragraph("Fecha:", times8bold), prmsHeaderHoja)
-            addCellTabla(headerRubroTabla, new Paragraph(new Date().format("dd-MM-yyyy"), times8normal), prmsHeaderHoja)
+            addCellTabla(headerRubroTabla, new Paragraph(printFecha(new Date()), times8normal), prmsHeaderHoja)
 
             addCellTabla(headerRubroTabla, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(headerRubroTabla, new Paragraph(" ", times8normal), prmsHeaderHoja)
@@ -1212,7 +1214,7 @@ class ReportesController {
 
             PdfPTable tablaHerramientas = new PdfPTable(7);
             PdfPTable tablaManoObra = new PdfPTable(7);
-            PdfPTable tablaMateriales = new PdfPTable(7);
+            PdfPTable tablaMateriales = new PdfPTable(6);
             PdfPTable tablaTransporte = new PdfPTable(7);
             PdfPTable tablaIndirectos = new PdfPTable(3);
             PdfPTable tablaTotales = new PdfPTable(3);
@@ -1267,7 +1269,7 @@ class ReportesController {
 
             addSubtotal(tablaHerramientas, totalHer, fonts, prms)
             addSubtotal(tablaManoObra, totalMan, fonts, prms)
-            addSubtotal(tablaMateriales, totalMat, fonts, prms)
+            addSubtotalMat(tablaMateriales, totalMat, fonts, prms)
             if (params.transporte == "1") {
                 addSubtotal(tablaTransporte, totalTrans, fonts, prms)
             }
@@ -1283,23 +1285,23 @@ class ReportesController {
             prmsCellLeft.put("bordeTop","1")
             prmsNum.put("bordeTop","1")
             addCellTabla(tablaTotales, new Paragraph("COSTO UNITARIO DIRECTO", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), prmsNum)
             prmsCellLeft.remove("bordeTop")
             prmsNum.remove("bordeTop")
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(tablaTotales, new Paragraph("COSTOS INDIRECTOS", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), prmsNum)
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
             addCellTabla(tablaTotales, new Paragraph("COSTO TOTAL DEL RUBRO", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), prmsNum)
 
             addCellTabla(tablaTotales, new Paragraph(" ", fonts.times8bold), prmsHeaderHoja)
 
             prmsCellLeft.put("bordeBot","1")
             prmsNum.put("bordeBot","1")
             addCellTabla(tablaTotales, new Paragraph("PRECIO UNITARIO (\$USD)", fonts.times8bold), prmsCellLeft)
-            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8normal), prmsNum)
+            addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: totalRubro + totalIndi, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times8bold), prmsNum)
             prmsCellLeft.remove("bordeBot")
             prmsNum.remove("bordeBot")
 
@@ -1352,7 +1354,7 @@ class ReportesController {
                 addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
+//                addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "MNT":
@@ -1378,13 +1380,22 @@ class ReportesController {
         addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), params.prmsNum)
     }
 
+
+    def addSubtotalMat(PdfPTable table, subtotal, fonts, params) {
+        addCellTabla(table, new Paragraph("TOTAL", fonts.times8bold), params.prmsSubtotalMat)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), params.prmsNum)
+    }
+
+
+
+
     def creaHeadersTabla(PdfPTable table, fonts, params, String tipo) {
         table.setWidthPercentage(90);
         if (tipo == "COSTOS INDIRECTOS") {
 
 
             addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
-            table.setWidths(arregloEnteros([68, 12, 20]))
+            table.setWidths(arregloEnteros([65, 15, 20]))
             addCellTabla(table, new Paragraph("DESCRIPCIÓN", fonts.times8boldWhite), params.prmsCellHead)
             addCellTabla(table, new Paragraph("PORCENTAJE", fonts.times8boldWhite), params.prmsCellHead)
             addCellTabla(table, new Paragraph("VALOR", fonts.times8boldWhite), params.prmsCellHead)
@@ -1407,14 +1418,14 @@ class ReportesController {
             }else{
             if (tipo == "MATERIALES") {
 
-                table.setWidths(arregloEnteros([10, 38, 12, 13, 13, 15, 13]))
+                table.setWidths(arregloEnteros([12, 38, 12, 13, 13, 15]))
                 addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
                 addCellTabla(table, new Paragraph("CÓDIGO", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("DESCRIPCIÓN", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("UNIDAD", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("CANTIDAD", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("TARIFA(\$/H)", fonts.times8boldWhite), params.prmsCellHead)
-                addCellTabla(table, new Paragraph("", fonts.times8boldWhite), params.prmsCellHead)
+//                addCellTabla(table, new Paragraph("", fonts.times8boldWhite), params.prmsCellHead)
                 addCellTabla(table, new Paragraph("C.TOTAL(\$)", fonts.times8boldWhite), params.prmsCellHead)
 
             }
@@ -1847,7 +1858,7 @@ class ReportesController {
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
 
-        headers.add(new Paragraph("Gobierno Autónomo Descentralizado de la Provincia de Pichincha"))
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("TRÁMITES EN PROCESO"))
         headers.add(new Paragraph(" "))
@@ -1980,7 +1991,7 @@ class ReportesController {
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
 
-        headers.add(new Paragraph("Gobierno Autónomo Descentralizado de la Provincia de Pichincha"))
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("TRÁMITES POR OBRA"))
         headers.add(new Paragraph(" "))
@@ -4982,7 +4993,7 @@ class ReportesController {
 
 
 
-        label = new Label(2, 2, "GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(2, 2, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
 
 
         label = new Label(2, 4, "DEPARTAMENTO DE COSTOS", times16format); sheet.addCell(label);
@@ -5696,7 +5707,7 @@ class ReportesController {
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
         headers.add(new Paragraph("COMPOSICIÓN", times10bold));
         headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
         headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
@@ -5951,7 +5962,7 @@ class ReportesController {
         sheet.setColumnView(11, 15)
         sheet.setColumnView(12, 15)  // el resto por defecto..
 
-        def label = new Label(0, 1, "Gobierno Autónomo Descentralizado de la provincia de pichincha".toUpperCase(), times10format); sheet.addCell(label);
+        def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times10format); sheet.addCell(label);
         label = new Label(0, 2, "Matriz de la Fórmula Polinómica", times10format); sheet.addCell(label);
         label = new Label(0, 3, "Obra: ${obra.nombre}", times10format); sheet.addCell(label);
 

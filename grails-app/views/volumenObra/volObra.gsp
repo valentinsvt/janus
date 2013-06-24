@@ -93,14 +93,14 @@
         </div>
 
         <div class="row-fluid" style="margin-left: 0px">
-            <div class="span4" style="width: 400px">
+            <div class="span4" style="width: 440px">
                 <b>Crear Subpresupuesto / Ingresar Rubros:</b>
                 <span id="sp">
                     %{--<g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
 
 
 
-                       <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 250px;;font-size: 10px" id="subPres"/>   </span>
+                       <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 250px;font-size: 10px" id="subPres"/>   </span>
 
 
                     %{--todo descomentar esto--}%
@@ -113,11 +113,14 @@
                 <a href="#" class="btn" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">
                     <i class="icon-minus"></i>
                 </a>
+                <a href="#" class="btn" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">
+                    <i class="icon-edit"></i>
+                </a>
 
             </div>
 
             %{--<div class="span7" style="height: 38px"></div> --}%
-            <div class="span1" style="margin-left: 0px; width: 100px;">
+            <div class="span1" style="margin-left: -17px; width: 100px;">
                 <b>Código</b>
                 <input type="text" style="width: 100px;;font-size: 10px" id="item_codigo">
                 <input type="hidden" style="width: 60px" id="item_id">
@@ -131,15 +134,15 @@
 
             <div class="span2" style="margin-left: 0px; width: 100px;">
                 <b>Cantidad</b>
-                <input type="text" style="width: 100px;text-align: right" id="item_cantidad" value="1">
+                <input type="text" style="width: 95px;text-align: right" id="item_cantidad" value="1">
             </div>
 
-            <div class="span1" style="margin-left: 20px; width: 60px;">
+            <div class="span1" style="margin-left: 10px; width: 60px;">
                 <b>Orden</b>
                 <input type="text" style="width: 30px;text-align: right" id="item_orden" value="${(volumenes?.size() > 0) ? volumenes.size() + 1 : 1}">
             </div>
 
-            <div class="span1" style="margin-left: 5px;padding-top:30px">
+            <div class="span1" style="margin-left: -13px;padding-top:30px">
                 <input type="hidden" value="" id="vol_id">
                 <g:if test="${obra?.estado != 'R'}">
                     <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
@@ -381,6 +384,64 @@
 
             $("#borrarSPDialog").dialog("open")
 
+
+
+        });
+
+        $("#btnEditarSP").click (function () {
+            var $btnOrig = $(this).clone(true);
+
+            var idSp = $("#subPres").val();
+            $.ajax({
+                type    : "POST",
+                url     : "${createLink(controller:"subPresupuesto",action:'form_ajax')}",
+                data    : {
+                    id: idSp
+                },
+                success : function (msg) {
+                    $("#modalBody-sp").html(msg);
+
+                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                    var $frm = $("#frmSave-SubPresupuesto");
+
+                    btnSave.click(function () {
+                        spinner.replaceWith($btnOrig);
+                        if ($frm.valid()) {
+                            btnSave.replaceWith(spinner);
+                        }
+                        var data = $frm.serialize();
+//                        var data =
+
+                        $.ajax({
+                            type    : "POST",
+                            url     : $frm.attr("action"),
+                            data    : data,
+                            success : function (msg) {
+                                if (msg != "NO") {
+                                    $("#sp").html(msg);
+                                    $("#modal-SubPresupuesto").modal("hide");
+                                }
+                            }
+                        });
+
+                        return false;
+                    });
+
+                    btnOk.click(function () {
+                        spinner.replaceWith($btnOrig);
+                    });
+
+                    $("#modalHeader-sp").removeClass("btn-edit btn-show btn-delete");
+                    $("#modalTitle-sp").html("Editar Sub Presupuesto");
+                    $("#modalFooter-sp").html("").append(btnOk).append(btnSave);
+                    $("#modal-SubPresupuesto").modal("show");
+
+                    $("#volob").val("1");
+                }
+            });
+            return false;
 
 
         });

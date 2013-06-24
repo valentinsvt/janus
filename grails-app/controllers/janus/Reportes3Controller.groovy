@@ -8,6 +8,20 @@ class Reportes3Controller {
 
     def preciosService
 
+
+    def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+
+    private String printFecha(Date fecha) {
+        if (fecha) {
+            return (fecha.format("dd")+' de '+ meses[fecha.format("MM").toInteger()]+' de '+fecha.format("yyyy")).toUpperCase()
+        } else {
+            return "Error: no hay fecha que mostrar"
+        }
+    }
+
+
+
+
     def index() {}
 
     def test() {
@@ -59,6 +73,8 @@ class Reportes3Controller {
         def obra = Obra.get(params.obra)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
 
+        def fechaPal = printFecha(new Date());
+
 
         def vol1 = VolumenesObra.get(params.id)
         def rubro = Item.get(vol1.item.id)
@@ -91,9 +107,9 @@ class Reportes3Controller {
         def total = 0, totalHer = 0, totalMan = 0, totalMat = 0
         tablaTrans += "<thead><tr><th colspan='8'>TRANSPORTE</th></tr><tr><th colspan='8' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>PES/VOL</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='8' class='theaderup'></th></tr> </thead><tbody>"
 //        tablaTrans += "<thead><tr><th colspan='7'>TRANSPORTE</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>Pes/Vol</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-        tablaHer += "<thead><tr><th colspan='7'>EQUIPOS</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th>TARIFA<br/> (\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-        tablaMano += "<thead><tr><th colspan='7'>MANO DE OBRA</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th>JORNAL<br/>(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-        tablaMat += "<thead><tr><th colspan='7'>MATERIALES</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>CANTIDAD</th><th>UNITARIO(\$)</th><th></th><th>C.TOTAL(\$)</th></tr> <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+        tablaHer += "<thead><tr><th colspan='7'>EQUIPOS</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th style='width:70px'>TARIFA(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+        tablaMano += "<thead><tr><th colspan='7'>MANO DE OBRA</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th style='width:70px'>JORNAL(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+        tablaMat += "<thead><tr><th colspan='6'>MATERIALES</th></tr><tr><th colspan='6' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>CANTIDAD</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr> <tr><th colspan='6' class='theaderup'></th></tr> </thead><tbody>"
 
 
 //        println "rends "+rendimientos
@@ -133,7 +149,7 @@ class Reportes3Controller {
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
+//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
                     totalMat += r["parcial"]
@@ -147,7 +163,7 @@ class Reportes3Controller {
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
+//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
 //                    tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["parcial"] + r["parcial_t"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -178,23 +194,14 @@ class Reportes3Controller {
         tablaHer += "</tbody></table>"
         tablaMano += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMan, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
         tablaMano += "</tbody></table>"
-        tablaMat += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMat, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
+        tablaMat += "<tr><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMat, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
         tablaMat += "</tbody></table>"
-
-
-
 
         def totalRubro = total + totalHer + totalMan + totalMat
         totalRubro = totalRubro.toDouble().round(5)
 
-
-
         def totalIndi = totalRubro * indi / 100
         totalIndi = totalIndi.toDouble().round(5)
-//        tablaIndi += "<thead><tr><th style='text-align: left; width: 200px'>COSTOS INDIRECTOS</th></tr><tr><th style='width:610px' class='theader'>Descripción</th><th class='theader'>Porcentaje</th><th class='theader'>Valor</th></tr></thead>"
-//        tablaIndi += "<tbody><tr><td>Costos indirectos</td><td style='text-align:right'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr></tbody>"
-//        tablaIndi += "</table>"
-
         tablaIndi += "<thead><tr><th>COSTOS INDIRECTOS</th></tr><tr><th colspan='3' class='theader'></th></tr><tr><th style='width:550px'>DESCRIPCIÓN</th><th>PORCENTAJE</th><th>VALOR</th></tr>    <tr><th colspan='3' class='theaderup'></th></tr>  </thead>"
         tablaIndi += "<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align:right'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
         tablaIndi += "</table>"
@@ -209,7 +216,7 @@ class Reportes3Controller {
         if (totalMat == 0)
             tablaMat = ""
 //        println "fin reporte rubro"
-        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi]
+        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, fechPal: fechaPal]
 
 
     }
@@ -257,7 +264,7 @@ class Reportes3Controller {
 
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
-        def label = new Label(0, 1, "GOBIERNO  AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
+        def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 2, "GESTIÓN DE PRESUPUESTOS".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "ANÁLISIS DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
 
@@ -467,6 +474,8 @@ class Reportes3Controller {
 //        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def fechaPala = printFecha(new Date());
+
         def lugar = params.lugar
         def indi = params.indi
         def listas = params.listas
@@ -490,19 +499,11 @@ class Reportes3Controller {
         def tablaTrans = '<table class=""> '
         def tablaIndi = '<table class=""> '
         def total = 0, totalHer = 0, totalMan = 0, totalMat = 0
-//        tablaTrans += "<thead><tr><th colspan='7'>TRANSPORTE</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario(\$)</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-//
-//        tablaHer += "<thead><tr><th colspan='7'>EQUIPOS</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa<br/> (\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-//        tablaMano += "<thead><tr><th colspan='7'>MANO DE OBRA</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Jornal<br/>(\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-//        tablaMat += "<thead><tr><th colspan='7'>MATERIALES</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Unidad</th><th>Cantidad</th><th>Unitario(\$)</th><th>Peso/Vol</th><th>C.Total(\$)</th></tr> <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-
 
         tablaTrans += "<thead><tr><th colspan='8'>TRANSPORTE</th></tr><tr><th colspan='8' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>PES/VOL</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='8' class='theaderup'></th></tr> </thead><tbody>"
-        tablaHer += "<thead><tr><th colspan='7'>EQUIPOS</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th>TARIFA<br/> (\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-        tablaMano += "<thead><tr><th colspan='7'>MANO DE OBRA</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th>JORNAL<br/>(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-        tablaMat += "<thead><tr><th colspan='7'>MATERIALES</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>CANTIDAD</th><th>UNITARIO(\$)</th><th></th><th>C.TOTAL(\$)</th></tr> <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
-
-
+        tablaHer += "<thead><tr><th colspan='7'>EQUIPOS</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th style='width:70px'>TARIFA(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+        tablaMano += "<thead><tr><th colspan='7'>MANO DE OBRA</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th style='width:70px'>JORNAL(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+        tablaMat += "<thead><tr><th colspan='6'>MATERIALES</th></tr><tr><th colspan='6' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>CANTIDAD</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr> <tr><th colspan='6' class='theaderup'></th></tr> </thead><tbody>"
 
 //        println "rends "+rendimientos
 
@@ -544,7 +545,7 @@ class Reportes3Controller {
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
+//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
                     totalMat += r["parcial"]
                 } else {
@@ -555,7 +556,7 @@ class Reportes3Controller {
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] + r["parcial_t"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
+//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
                     totalMat += r["parcial"] + r["parcial_t"]
                 }
@@ -582,7 +583,7 @@ class Reportes3Controller {
         tablaHer += "</tbody></table>"
         tablaMano += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMan, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
         tablaMano += "</tbody></table>"
-        tablaMat += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMat, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
+        tablaMat += "<tr><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMat, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
         tablaMat += "</tbody></table>"
 
 
@@ -613,7 +614,7 @@ class Reportes3Controller {
         if (totalMat == 0)
             tablaMat = ""
 //        println "fin reporte rubro"
-        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra]
+        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra, fechaPala: fechaPala]
     }
 
     def imprimirRubros() {

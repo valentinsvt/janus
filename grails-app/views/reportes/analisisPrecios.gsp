@@ -69,7 +69,7 @@
 
         <div class="hoja">
 
-            <h1>GOBIERNO DE LA PROVINCIA DE PICHINCHA</h1>
+            <h1>G.A.D. PROVINCIA DE PICHINCHA</h1>
 
             <h2>Coordinación de Costos</h2>
 

@@ -98,7 +98,7 @@
 
     <body>
         <div class="hoja">
-            <h1>Gobierno Autónomo Descentralizado de la Provincia de Pichincha</h1>
+            <h1>G.A.D. PROVINCIA DE PICHINCHA</h1>
 
             <h2>Cronograma</h2>
 

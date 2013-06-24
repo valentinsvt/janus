@@ -150,7 +150,8 @@
             <div style="margin-top: 20px">
                 <div class="row-fluid">
                     <div class="span7">
-                        <b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}
+                        %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
+                        <b>Fecha:</b> ${fechaPala}
                     </div>
 
                     <div class="span3">
@@ -191,7 +192,7 @@
                                 <b>COSTO UNITARIO DIRECTO</b>
                             </td>
                             <td style="text-align: right">
-                                <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                                <b><g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/></b>
                             </td>
                         </tr>
                         <tr>
@@ -199,7 +200,7 @@
                                 <b>COSTOS INDIRECTOS</b>
                             </td>
                             <td style="text-align: right">
-                                <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                               <b> <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/></b>
                             </td>
                         </tr>
                         <tr>
@@ -207,14 +208,15 @@
                                 <b>COSTO TOTAL DEL RUBRO</b>
                             </td>
                             <td style="text-align: right">
-                                <g:formatNumber number="${totalRubro + totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/>
+                                <b><g:formatNumber number="${totalRubro + totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="5" locale="ec"/></b>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <b>PRECIO UNITARIO ($USD)</b>
                             </td>
-                            <td style="text-align: right"><g:formatNumber number="${totalRubro + totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                            <td style="text-align: right">
+                                <b><g:formatNumber number="${totalRubro + totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
 
                             </td>
                         </tr>

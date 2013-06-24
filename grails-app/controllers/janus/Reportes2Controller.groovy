@@ -141,7 +141,7 @@ class Reportes2Controller {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", catFont));
+        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
         preface.add(new Paragraph("ANEXO DE ESPECIFICACIÓN DE RUBROS DE LA OBRA " + obra.nombre, catFont));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
@@ -853,7 +853,7 @@ class Reportes2Controller {
         def number
         def fila = 8;
 
-        label = new jxl.write.Label(2, 1, "Gobierno Autónomo Descentralizado de la Provincia de Pichincha".toUpperCase(), times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
         label = new jxl.write.Label(2, 2, "Reporte de Costos de ${grupo.descripcion.toLowerCase()}", times16format); sheet.addCell(label);
 
         label = new jxl.write.Label(1, 4, lugar?.descripcion, times16format); sheet.addCell(label);
@@ -1114,7 +1114,7 @@ class Reportes2Controller {
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("GOBIERNO AUTÓNOMO DESCENTRALIZADO DE LA PROVINCIA DE PICHINCHA", times12bold));
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
         headers.add(new Paragraph("DESGLOSE DE EQUIPOS", times12bold));
         headers.add(new Paragraph("OBRA: " + obra?.descripcion, times12bold));
 

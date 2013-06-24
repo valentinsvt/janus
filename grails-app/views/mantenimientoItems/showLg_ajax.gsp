@@ -23,6 +23,7 @@
         %{--</g:if>--}%
         </g:if>
     </div>
+
     <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
         <span style="margin-left: 10px;" id="spanRef">
             %{--<g:if test="${precioRef}">--}%
@@ -31,6 +32,14 @@
             %{--</g:if>--}%
         </span>
     </g:if>
+
+
+    <div class="btn-group pull-left">
+    <a href="#" class="btn btn-ajax" id="btnPrint">
+        <i class="icon-print"></i>
+        Imprimir
+    </a>
+    </div>
 </div>
 
 <div id="divTabla" style="height: 630px; width: 100%; overflow-x: hidden; overflow-y: auto;">
@@ -345,6 +354,7 @@
                     $("#modal-tree1").modal("hide");
                     $("#btnCalc").hide();
                     $("#spanRef").text("Precio ref: " + msg);
+                    $("#btnPrint").show();
                 }
             });
         });
