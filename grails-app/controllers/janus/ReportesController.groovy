@@ -1362,7 +1362,7 @@ class ReportesController {
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
 //                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: ((r.parcial + r.parcial_t)/r.rbrocntd), minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
-                addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
+//                addCellTabla(table, new Paragraph("", fonts.times8normal), params.prmsCell)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: (r.parcial + r.parcial_t), minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "T":
