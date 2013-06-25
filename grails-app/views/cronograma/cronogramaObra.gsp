@@ -142,7 +142,7 @@
                                       noSelection="['-1': 'TODOS']"/>
             <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
 
-            <a href="#" class="btn" style="position: fixed; top:225px; right:200px;" id="btnDesmarcar">Desmarcar todo</a>
+            <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>
         </div>
 
         <g:if test="${meses > 0 && plazoOk}">
