@@ -887,7 +887,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                         ini = inicioObra + dias.days
                     }
                     use(TimeCategory) {
-                        fin = ini + 30.days
+                        fin = ini + 29.days        // 30 - 1 para contar el dia inicial
                     }
 
                     def periodo = PeriodoEjecucion.withCriteria {

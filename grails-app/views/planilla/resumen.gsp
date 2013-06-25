@@ -41,6 +41,9 @@
         .bold {
             font-weight : bold;
         }
+            .tal {
+                text-align: left !important;
+            }
         </style>
 
     </head>

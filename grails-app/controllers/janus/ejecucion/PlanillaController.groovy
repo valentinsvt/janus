@@ -137,8 +137,8 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def periodos = []
         if (!esAnticipo) {
-            println "********************* " + planillasAvance
-            println "********************* " + planillas.last().fechaPresentacion
+//            println "********************* " + planillasAvance
+//            println "********************* " + planillas.last().fechaPresentacion
             def ultimoPeriodo
             if (planillasAvance.size() > 0) {
                 ultimoPeriodo = planillasAvance.last().fechaFin
@@ -300,7 +300,6 @@ class PlanillaController extends janus.seguridad.Shield {
         def contrato = planilla.contrato
 //        def planillas = Planilla.findAllByContrato(contrato, [sort: "id"])
 
-
         def planillas = Planilla.withCriteria {
             and {
                 eq("contrato", contrato)
@@ -405,9 +404,11 @@ class PlanillaController extends janus.seguridad.Shield {
 //                println "\t" + m1 + "   " + m2
                 if (m1 == m2) {
                     if (pl.periodoIndices) {
+                        println "++ "+pl.periodoIndices
                         periodos.add(pl.periodoIndices)
                     }
                     if (pl == planilla) {
+                        println "-- "+pl
                         periodosPlanilla.add(pl)
                     }
                 } else {
@@ -473,24 +474,30 @@ class PlanillaController extends janus.seguridad.Shield {
 //                        println "\t\tCrea data2[${pos}][${perNum}]"
                         data2[pos][perNum] = [valores: [], total: 0, periodo: per]
                     }
-                    data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: vr])
+                    data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: vr, valorTabla:vr.valor])
                 } //pcs.each
             } //valRea.size == 0
             else {
                 valRea.each { v ->
                     def c = pcs.find { it.indice == v.formulaPolinomica.indice }
                     if (c) {
+                        def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
+                        if(!val) {
+                            val = 1
+                        }
+//                        println "\t\t"+per.descripcion+"   "+c.indice+"   "+val+"   "+c.id
                         def pos = "p"
                         if (c.numero.contains("c")) {
                             pos = "c"
                         }
-                        tot[pos] += (v.valor * c.valor).round(3)
+                        tot[pos] += (val * c.valor).round(3)
 //                        println "\t\t" + pos + "   " + (v.valor * c.valor)
                         if (!data2[pos][perNum]) {
 //                            println "\t\tCrea data2[${pos}][${perNum}]"
                             data2[pos][perNum] = [valores: [], total: 0, periodo: per]
                         }
-                        data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: v])
+
+                        data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: v, valorTabla: val])
                     }
                 }
             } //valRea.size == 0
@@ -522,7 +529,7 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-        def tableWidth = 150 * periodos.size() + 250
+        def tableWidth = 150 * periodos.size() + 400
 
         def tablaBo = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${tableWidth}px;'>"
         tablaBo += "<thead>"
@@ -553,9 +560,11 @@ class PlanillaController extends janus.seguridad.Shield {
             totC += c.valor
             data2.c.each { cp ->
                 def act = cp.value.valores.find { it.formulaPolinomica.indice == c.indice }
-                def val = act.valorReajuste.valor
-                tbodyB0 += "<td class='number'>" + elm.numero(number: val) + "</td>"
-                tbodyB0 += "<td class='number'>" + elm.numero(number: val * c.valor, decimales: 3) + "</td>"
+//                def val = act.valorReajuste.valor
+                def val = act.valorTabla
+                def valReajuste =act.valorReajuste.valor
+                tbodyB0 += "<td class='number'>" + elm.numero(number: val,decimales: 3) + "</td>"
+                tbodyB0 += "<td class='number'>" + elm.numero(number: valReajuste, decimales: 3) + "</td>"
             }
             tbodyB0 += "</tr>"
         }
@@ -566,7 +575,7 @@ class PlanillaController extends janus.seguridad.Shield {
         tbodyB0 += "<td class='number bold'>" + elm.numero(number: totC, decimales: 3) + "</td>"
         data2.c.each { cp ->
             tbodyB0 += "<td></td>"
-            tbodyB0 += "<td class='number bold'>" + elm.numero(number: cp.value.total) + "</td>"
+            tbodyB0 += "<td class='number bold'>" + elm.numero(number: cp.value.total, decimales: 3) + "</td>"
         }
         tbodyB0 += "</tr>"
         tbodyB0 += "</tfoot>"
@@ -597,7 +606,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def diasPlanilla = 0
 
         if (planilla.tipoPlanilla.codigo != "A") {
-            diasPlanilla = planilla.fechaFin - planilla.fechaInicio
+            diasPlanilla = planilla.fechaFin - planilla.fechaInicio + 1
         }
         def valorPlanilla = planilla.valor
 
@@ -606,6 +615,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def diasAll = 0
 
         def totalMultaRetraso = 0, valorTotalPeriodoActual = 0
+
+//        println "periodos "+periodos
 
         periodos.eachWithIndex { per, i ->
             if (i > 0) {
@@ -639,20 +650,35 @@ class PlanillaController extends janus.seguridad.Shield {
                     p0s[i - 1] = vrP0.valor
                 } else {
 //                    def periodosEjecucion = PeriodoEjecucion.findAllByObra(obra)
+//                    def periodosEjecucion = PeriodoEjecucion.withCriteria {
+//                        and {
+//                            eq("obra", obra)
+//                                or {
+//                                    between("fechaInicio", per.fechaInicio, per.fechaFin)
+//                                    between("fechaFin", per.fechaInicio, per.fechaFin)
+//                                }
+//                            order("fechaInicio")
+//                        }
+//                    }
+//                    println "planilla fin: "+planilla.fechaFin
+
                     def periodosEjecucion = PeriodoEjecucion.withCriteria {
                         and {
                             eq("obra", obra)
-                            if (per) {
-                                or {
-                                    between("fechaInicio", per.fechaInicio, per.fechaFin)
-                                    between("fechaFin", per.fechaInicio, per.fechaFin)
-                                }
+                            or {
+                                between("fechaInicio", per.fechaInicio, per.fechaFin)
+                                between("fechaFin", per.fechaInicio, per.fechaFin)
                             }
+                            le("fechaFin", planilla.fechaFin)
                             order("fechaInicio")
                         }
                     }
+
+
                     def diasTotal = 0, valorTotal = 0
-//                    println per.fechaInicio.format("dd-MM-yyyy") + "  " + per.fechaFin.format("dd-MM-yyyy")
+//                    println "\t\t++ "+per.fechaInicio.format("dd-MM-yyyy") + "  " + per.fechaFin.format("dd-MM-yyyy")
+//                    println "\t\t-- "+periodosEjecucion
+
                     tbodyP0 += "<th>"
                     tbodyP0 += per?.descripcion
                     tbodyP0 += "</th>"
@@ -660,7 +686,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //                        println "\t" + pe.tipo + "  " + pe.fechaInicio.format("dd-MM-yyyy") + "   " + pe.fechaFin.format("dd-MM-yyyy")
                         if (pe.tipo == "P") {
                             def diasUsados = 0
-                            def diasPeriodo = pe.fechaFin - pe.fechaInicio
+                            def diasPeriodo = pe.fechaFin - pe.fechaInicio + 1
 //                            println "\t\tdias periodo: " + diasPeriodo
                             def crono = CronogramaEjecucion.findAllByPeriodo(pe)
                             def valorPeriodo = crono.sum { it.precio }
@@ -670,17 +696,17 @@ class PlanillaController extends janus.seguridad.Shield {
                                     diasUsados = pe.fechaFin - per.fechaInicio + 1
 //                                if (diasUsados == 0) diasUsados = 1
                                     diasTotal += diasUsados
-//                                println "\t\tdias usados: " + diasUsados
+//                                println "\t\t1 dias usados: " + diasUsados
                                 } else if (pe.fechaInicio > per.fechaInicio && pe.fechaFin < per.fechaFin) {
                                     diasUsados = pe.fechaFin - pe.fechaInicio + 1
 //                                if (diasUsados == 0) diasUsados = 1
                                     diasTotal += diasUsados
-//                                println "\t\tdias usados: " + diasUsados
+//                                println "\t\t2 dias usados: " + diasUsados
                                 } else if (pe.fechaFin >= per.fechaFin) {
                                     diasUsados = per.fechaFin - pe.fechaInicio + 1
 //                                if (diasUsados == 0) diasUsados = 1
                                     diasTotal += diasUsados
-//                                println "\t\tdias usados: " + diasUsados
+//                                println "\t\t3 dias usados: " + diasUsados
                                 }
                             }
                             def valorUsado = (valorPeriodo / diasPeriodo) * diasUsados
@@ -689,6 +715,7 @@ class PlanillaController extends janus.seguridad.Shield {
                         }
                     }
                     acumuladoCrono += valorTotal
+//                    println "***** "+valorPlanilla+"  "+diasPlanilla+"  "+diasTotal
                     def planillado = (valorPlanilla / diasPlanilla) * diasTotal
                     acumuladoPlan += planillado
 //                    println "TOTAL: " + diasTotal + " dias"
@@ -825,7 +852,10 @@ class PlanillaController extends janus.seguridad.Shield {
                 def act = cp.value.valores.find { it.formulaPolinomica.indice == p.indice }
                 if (j == 0) {
                     c = act.formulaPolinomica.valor
-                    b = act.valorReajuste.valor
+                    b=act.valorTabla
+                    if(i==0) {
+                        b = act.valorReajuste.valor
+                    }
                     tbodyFr += "<td class='number'>"
                     tbodyFr += "<div>"
                     tbodyFr += elm.numero(number: c, decimales: 3)
@@ -837,6 +867,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 } //j==0
                 else {
                     a = act.valorReajuste.valor
+                    if(i>0) {
+                        a=act.valorTabla
+                    }
                     d = (a / b) * c
                     tbodyFr += "<td class='number'>"
                     tbodyFr += "<div>"
@@ -879,7 +912,8 @@ class PlanillaController extends janus.seguridad.Shield {
             if (!vrFr1.save(flush: true)) {
                 println "ERROR guardando Fr-1: " + vrFr1.errors
             }
-            def pr = (t.total - 1) * p0s[i]
+            def pr = (t.total - 1).round(3) * p0s[i]
+
             totalReajuste += pr
             filaFr += "<td class='number'>" + elm.numero(number: t.total, decimales: 3) + "</td>"
             filaFr1 += "<td class='number'>" + elm.numero(number: t.total - 1, decimales: 3) + "</td>"
@@ -960,9 +994,25 @@ class PlanillaController extends janus.seguridad.Shield {
             def diasMax = 5
             def fechaFinPer = planilla.periodoIndices?.fechaFin
             def fechaMax = fechaFinPer
-            use(TimeCategory) {
-                fechaMax = fechaFinPer + diasMax.days
+//            use(TimeCategory) {
+//                fechaMax = fechaFinPer + diasMax.days
+//            }
+
+            def noLaborables = ["Sat", "Sun"]
+
+//            println fechaMax
+            diasMax.times {
+                fechaMax++
+//                println fechaMax
+                def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
+                while (noLaborables.contains(fmt.format(fechaMax))) {
+//                    println fmt.format(fechaMax)
+                    fechaMax++
+//                    println fechaMax
+                }
             }
+//            println "***** "+fechaMax
+
             def fechaPresentacion = planilla.fechaPresentacion
             def retraso = fechaPresentacion - fechaMax
 
@@ -979,22 +1029,22 @@ class PlanillaController extends janus.seguridad.Shield {
 
             pMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
             pMl += "<tr>"
-            pMl += '<th>Fecha presentación planilla</th><td>' + fechaPresentacion.format("dd-MM-yyyy") + ' </td>'
+            pMl += '<th class="tal">Fecha presentación planilla</th><td>' + fechaPresentacion.format("dd-MM-yyyy") + ' </td>'
             pMl += "</tr>"
             pMl += "<tr>"
-            pMl += '<th>Periodo planilla</th><td>' + planilla.fechaInicio.format("dd-MM-yyyy") + " a " + planilla.fechaFin.format("dd-MM-yyyy") + ' </td>'
+            pMl += '<th class="tal">Periodo planilla</th><td>' + planilla.fechaInicio.format("dd-MM-yyyy") + " a " + planilla.fechaFin.format("dd-MM-yyyy") + ' </td>'
             pMl += "</tr>"
             pMl += "<tr>"
-            pMl += '<th>Fecha máximo presentación:</th> <td>' + fechaMax.format("dd-MM-yyyy") + ' </td>'
+            pMl += '<th class="tal">Fecha máximo presentación</th> <td>' + fechaMax.format("dd-MM-yyyy") + ' </td>'
             pMl += "</tr>"
             pMl += "<tr>"
-            pMl += '<th>Días de retraso</th> <td>' + retraso + "</td>"
+            pMl += '<th class="tal">Días de retraso</th> <td>' + retraso + "</td>"
             pMl += "</tr>"
             pMl += "<tr>"
-            pMl += '<th>Multa</th> <td>' + elm.numero(number: prmlMulta) + "&#8240; de \$" + elm.numero(number: totalContrato) + "</td>"
+            pMl += '<th class="tal">Multa</th> <td>' + elm.numero(number: prmlMulta) + "&#8240; de \$" + elm.numero(number: totalContrato) + "</td>"
             pMl += "</tr>"
             pMl += "<tr>"
-            pMl += '<th>Total multa</th> <td>$' + elm.numero(number: totalMulta) + "</td>"
+            pMl += '<th class="tal">Total multa</th> <td>$' + elm.numero(number: totalMulta) + "</td>"
             pMl += "</tr>"
             pMl += '</table>'
         }

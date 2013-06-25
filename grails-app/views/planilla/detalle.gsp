@@ -106,8 +106,8 @@
                     <g:set var="val" value="${det?.monto ?: 0}"/>
 
                     <g:set var="totalAnterior" value="${totalAnterior + valAnt}"/>
-                    <g:set var="totalActual" value="${totalActual + val}"/>
-                    <g:set var="totalAcumulado" value="${totalAcumulado + val + valAnt}"/>
+                    <g:set var="totalActual" value="${totalActual + val.toDouble().round(2)}"/>
+                    <g:set var="totalAcumulado" value="${totalAcumulado + val.toDouble().round(2) + valAnt}"/>
 
                     <g:if test="${sp != vol.subPresupuestoId}">
                         <tr>

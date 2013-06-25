@@ -266,7 +266,7 @@
 
                     <div class="span2 formato">Indices de la Oferta</div>
 
-                    <div class="span3">value="${contrato?.periodoValidez?.descripcion}</div>
+                    <div class="span3">${contrato?.periodoValidez?.descripcion}</div>
 
                 </div>
 
