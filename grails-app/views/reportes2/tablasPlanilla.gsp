@@ -1,15 +1,9 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: luz
-  Date: 2/22/13
-  Time: 5:05 PM
-  To change this template use File | Settings | File Templates.
---%>
-
-<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <title>Planilla</title>
+        <title>
+            Planilla
+        </title>
+
         <style type="text/css">
         @page {
             size   : 21cm 29.7cm ;  /*width height */
@@ -40,6 +34,10 @@
             font-size : 12px;
         }
 
+        h3 {
+            font-size : 11px;
+        }
+
         table {
             border-collapse : collapse;
             width           : 100%;
@@ -47,11 +45,8 @@
         }
 
         td, th {
-            border : solid 1px black;
-        }
-
-        th, td {
-            vertical-align : middle;
+            border         : solid 1px black;
+            vertical-align : middle !important;
         }
 
         th {
@@ -61,34 +56,6 @@
 
         td {
             font-size : 8px;
-        }
-
-        .even {
-            background : #ddd;
-        }
-
-        .odd {
-            background : #efefef;
-        }
-
-        .strong {
-            font-weight : bold;
-        }
-
-        table {
-            border-collapse : collapse;
-        }
-
-        .tright {
-            text-align : right;
-        }
-
-        .tcenter {
-            text-align : center;
-        }
-
-        th {
-            vertical-align : middle !important;
         }
 
         tbody th {
@@ -101,11 +68,11 @@
         }
 
         .area {
-            border-bottom : 1px solid black;
-            /*padding-left  : 50px;*/
+            /*border-bottom : 1px solid black;*/
+            padding-left  : 50px;
             position      : relative;
             overflow-x    : auto;
-            min-height    : 150px;
+            /*min-height    : 150px;*/
         }
 
         .nb {
@@ -116,126 +83,48 @@
             font-weight : bold;
         }
 
-        .row {
-            margin-left : -20px;
-        }
-
-        .span5 {
-            width : 250px;
-            float : left;
-        }
-
-        .span3 {
-            width : 120px;
-            float : left;
-        }
-
-        .span2 {
-            width : 70px;
-            float : left;
-        }
-
-        .span1 {
-            width : 60px;
-            float : left;
-        }
-
-        .well {
-            min-height       : 20px;
-            padding          : 19px;
-            margin-bottom    : 20px;
-            background-color : #f5f5f5;
-            border           : 1px solid #e3e3e3;
-        }
-
         .noborder, table.noborder, table.noborder td, table.noborder th {
             border : none !important;
         }
+
+        .tal {
+            text-align : left !important;
+        }
         </style>
+
     </head>
 
     <body>
         <div class="hoja">
             <elm:headerPlanillaReporte planilla="${planilla}"/>
 
-            <div class="area">
+            <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: -10px">
+                <div class="area">
+                    <h2>Cálculo de B<sub>0</sub></h2>
+                    ${tablaB0}
+                </div> <!-- B0 -->
 
-                <h2>Cálculo de B<sub>0</sub></h2>
+                <div class="area">
+                    <h2>Cálculo de P<sub>0</sub></h2>
+                    ${tablaP0}
+                </div> <!-- P0 -->
 
-                <table border="1" style="">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Cuadrilla Tipo</th>
-                            <th>Oferta</th>
-                            <th class="nb">${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            <th>Variación</th>
-                            <th class="nb">Anticipo <br/>${planilla.fechaPresentacion.format("MMM-yy")}</th>
-                            <g:if test="${periodos.size() > 2}">
-                                <g:each in="${2..periodos.size() - 1}" var="per">
-                                    <th>Variación</th>
-                                    <th class="nb">${periodos[per].fechaInicio.format("MMM-yy")}</th>
-                                </g:each>
-                            </g:if>
-                        </tr>
-                    </thead>
-                    ${tbodyB0}
-                </table>
-            </div> <!-- B0 -->
-            <div class="area">
+                <div class="area" style="min-height: 190px; margin-bottom: 10px;">
+                    <h2>Cálculo de F<sub>r</sub> y P<sub>r</sub></h2>
+                    ${tablaFr}
+                </div> <!-- Fr y Pr -->
 
-                <h2>Cálculo de P<sub>0</sub></h2>
+                <g:if test="${planilla.tipoPlanilla.codigo != 'A'}">
+                    <div class="area" style="min-height: 190px; margin-bottom: 10px;">
+                        <h2>Multas</h2>
 
-                <table border="1" style="margin-top: 10px;">
-                    <thead>
-                        <tr>
-                            <th colspan="2" rowspan="2">Mes y año</th>
-                            <th colspan="2">Cronograma</th>
-                            <th colspan="2">Planillado</th>
-                            <th colspan="2" rowspan="2">Valor P<sub>0</sub></th>
-                        </tr>
-                        <tr>
-                            <th>Parcial</th>
-                            <th>Acumulado</th>
-                            <th>Parcial</th>
-                            <th>Acumulado</th>
-                        </tr>
-                    </thead>
-                    ${tbodyP0}
-                </table>
-            </div> <!-- P0 -->
-
-            <div class="area" style="min-height: 190px; margin-bottom: 30px; border: none;">
-
-                <h2>Cálculo de F<sub>r</sub> y P<sub>r</sub></h2>
-
-                <table border="1" style=" margin-top: 10px; margin-bottom: 10px;">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">Componentes</th>
-                            <th>Oferta</th>
-                            <th colspan="${periodos.size() - 1}">Periodo de variación y aplicación de fórmula polinómica</th>
-                        </tr>
-                        <tr>
-                            <th>${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            <th>Anticipo <br/>${planilla.fechaPresentacion.format("MMM-yy")}</th>
-                            <g:if test="${periodos.size() > 2}">
-                                <g:each in="${2..periodos.size() - 1}" var="per">
-                                    <th rowspan="2">${periodos[per].fechaInicio.format("MMM-yy")}</th>
-                                </g:each>
-                            </g:if>
-                        </tr>
-                        <tr>
-                            <th>Anticipo</th>
-                            <th>
-                                <elm:numero number="${contrato.porcentajeAnticipo}" decimales="0"/>%
-                            </th>
-                            <th>Anticipo</th>
-                        </tr>
-                    </thead>
-                    ${tbodyFr}
-                </table>
-
-            </div> <!-- Fr y Pr -->
+                        <h3>Multa por no presentación de planilla</h3>
+                        ${pMl}
+                        <h3>Multa por retraso de obra</h3>
+                        ${tablaMl}
+                    </div> <!-- Multas -->
+                </g:if>
+            </div>
 
         </div>
     </body>

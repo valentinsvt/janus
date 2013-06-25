@@ -797,6 +797,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 tbodyP0 += "</tr>"
             }
         }
+        tbodyMl += "</tbody>"
         tbodyP0 += "</tbody>"
         if (planilla.tipoPlanilla.codigo != "A") {
             tbodyP0 += "<tfoot>"
@@ -824,7 +825,7 @@ class PlanillaController extends janus.seguridad.Shield {
         tablaFr += '</tr>'
         tablaFr += '<tr>'
         tablaFr += '<th>' + (oferta.fechaEntrega.format("MMM-yy")) + '</th>'
-        tablaFr += '<th>Anticipo <br>' + planillaAnticipo.fechaPresentacion.format("MMM-yy") + '</th>'
+        tablaFr += '<th>Anticipo <br/>' + planillaAnticipo.fechaPresentacion.format("MMM-yy") + '</th>'
         if (periodos.size() > 2) {
             periodos.eachWithIndex { per, i ->
                 if (i > 1) {
