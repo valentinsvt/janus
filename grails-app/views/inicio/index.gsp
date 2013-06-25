@@ -96,7 +96,7 @@
             </div>
             </g:link>
 
-            <g:link  controller="contrato" action="registroContrato" title="Contratos y Ejecución de Obras">
+            <g:link  controller="contrato" action="verContrato" title="Contratos y Ejecución de Obras">
             <div  class="ui-corner-all  item fuera">
                 <div  class="ui-corner-all ui-widget-content item">
                     <div class="imagen">
