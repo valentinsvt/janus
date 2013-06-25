@@ -83,7 +83,7 @@ class ObraController extends janus.seguridad.Shield {
             }
         }
 //        println "totp "+totalP
-        if (totalP != 1.000) {
+        if (totalP.toDouble().round(6) != 1.000) {
             render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
             return
         }
