@@ -88,6 +88,7 @@
 
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
+            %{--var url = "${resource(dir:'images', file:'spinnerLogin_24.gif')}";--}%
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
             var urlBg = "${resource(dir:'images', file:'spinner64.gif')}";
             var spinnerBg = $("<img src='" + url + "' alt='Cargando...'/>");

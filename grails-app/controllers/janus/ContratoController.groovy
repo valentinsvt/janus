@@ -19,6 +19,27 @@ class ContratoController extends janus.seguridad.Shield {
         [contratoInstanceList: Contrato.list(params), params: params]
     } //list
 
+    def fechasPedidoRecepcion() {
+        def contrato = Contrato.get(params.id)
+        return [contrato: contrato]
+    }
+
+    def saveFechas() {
+        def contrato = Contrato.get(params.id)
+        contrato.fechaPedidoRecepcionContratista = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionContratista)
+        contrato.fechaPedidoRecepcionFiscalizador = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionFiscalizador)
+
+        if (!contrato.save(flush: true)) {
+            println "Error al guardar fechas de pedido de recepcion (contrato controller l.33): " + contrato.errors
+            flash.clase = "alert-error"
+            flash.message = "Ha ocurrido un error al guardar las fechas de pedido de repción: "
+            flash.message += g.renderErrors(bean: contrato)
+        } else {
+            flash.clase = "alert-success"
+            flash.message = "Fechas de pedido de recepción guardadas correctamente"
+        }
+        redirect(action: "fechasPedidoRecepcion", id: contrato.id)
+    }
 
     def verContrato() {
         def contrato

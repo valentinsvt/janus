@@ -50,7 +50,8 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="${resource(dir: 'css/bootstrap/js', file: 'bootstrap.js')}"></script>
         <script type="text/javascript">
-            var url = "${resource(dir:'images', file:'spinner_24.gif')}";
+            %{--var url = "${resource(dir:'images', file:'spinner_24.gif')}";--}%
+            var url = "${resource(dir:'images', file:'spinnerLogin_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
             var urlLogin = "${resource(dir:'images', file:'spinnerLogin_24.gif')}";
             var spinnerLogin = $("<img style='margin-left:15px;' src='" + urlLogin + "' alt='Cargando...'/>");

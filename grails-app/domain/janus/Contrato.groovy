@@ -35,6 +35,9 @@ class Contrato implements Serializable {
     Double multaRetraso
     Double multaPlanilla
 
+    Date fechaPedidoRecepcionContratista
+    Date fechaPedidoRecepcionFiscalizador
+
     static mapping = {
 
         table 'cntr'
@@ -73,6 +76,9 @@ class Contrato implements Serializable {
             multaRetraso column: "cntrmlrt"
             multaPlanilla column: "cntrmlpl"
 
+            fechaPedidoRecepcionContratista column: 'cntrfccn'
+            fechaPedidoRecepcionFiscalizador column: 'cntrfcfs'
+
         }
     }
 
@@ -101,6 +107,9 @@ class Contrato implements Serializable {
         observaciones(blank: true, nullable: true)
         memo(blank: true, nullable: true)
         plazo(blank: true, nullable: true)
+
+        fechaPedidoRecepcionContratista(blank: true, nullable: true)
+        fechaPedidoRecepcionFiscalizador(blank: true, nullable: true)
     }
 
     def getObra() {

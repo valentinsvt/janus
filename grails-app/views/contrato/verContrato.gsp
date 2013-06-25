@@ -18,15 +18,12 @@
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
-
-
         <style type="text/css">
 
         .formato {
             font-weight : bolder;
         }
         </style>
-
 
         <title>Ver Contrato</title>
     </head>
@@ -36,11 +33,6 @@
         <div class="row">
             <div class="span12 btn-group" role="navigation" style="margin-left: 0;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
-                %{--<button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>--}%
-                %{--<button class="btn" id="btn-aceptar" disabled="true"><i class="icon-ok"></i> Aceptar</button>--}%
-                %{--<button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>--}%
-                %{--<button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>--}%
-                %{--<button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>--}%
             </div>
         </div>
 
@@ -343,6 +335,12 @@
                             <li>
                                 <g:link controller="planilla" action="list" id="${contrato?.id}">
                                     <i class=" icon-file-alt"></i>Planillas
+                                </g:link>
+                            </li>
+
+                            <li>
+                                <g:link action="fechasPedidoRecepcion" id="${contrato?.id}">
+                                    <i class=" icon-calendar-empty"></i>Fechas de pedido de recepción
                                 </g:link>
                             </li>
 
