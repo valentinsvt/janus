@@ -51,7 +51,7 @@
         <tr class="item_row" id="${p.id}"  dpto="${p.departamento.id}" req="${p.requiriente}" memo="${p.memo}" tipoP="${p.tipoProcedimiento?.id}">
             <td style="text-align: center" title="Requiriente: ${p.requiriente}, Memo: ${p.memo}">${i+1}</td>
             <td style="width: 40px" class="anio" anio="${p.anio.id}">${p.anio.anio}</td>
-            <td class="prsp" prsp="${p.presupuesto.id}" title="${p.presupuesto.descripcion}">${p.presupuesto.numero}</td>
+            <td class="prsp" prsp="${p.presupuesto.id}" title="${p.presupuesto.descripcion} - Fuente: ${p.presupuesto.fuente} - Programa: ${p.presupuesto.programa} - Subprograma: ${p.presupuesto.subPrograma} - Proyecto: ${p.presupuesto.proyecto}">${p.presupuesto.numero}</td>
             <td class="cpac" cpac="${p.cpp.id}" title="${p.cpp.descripcion}">${p.cpp.numero}</td>
             <td class="tipo" tipo="${p.tipoCompra.id}">${p.tipoCompra.descripcion}</td>
             <td class="desc">${p.descripcion}</td>

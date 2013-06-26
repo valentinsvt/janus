@@ -60,6 +60,13 @@
                         <i class="icon-edit"></i>
                         Crear nueva partida
                     </a>
+                    <br>
+                    <div style="width: 150px;">Fuente:</div> <input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_fuente" disabled="true"> <br>
+                    <div style="width: 150px;">Programa:</div> <input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_prog" disabled="true">  <br>
+                    <div style="width: 150px;">Subprograma: </div><input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_spro" disabled="true">   <br>
+                    <div style="width: 150px;">Proyecto: </div><input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_proy" disabled="true">   <br>
+
+
 
                 </div>
             </div>
@@ -219,6 +226,10 @@
                             $("#item_presupuesto").val(parts[1])
                             $("#item_presupuesto").attr("title",parts[2])
                             $("#item_desc").val(parts[2])
+                            $("#item_fuente").val(parts[3])
+                            $("#item_prog").val(parts[4])
+                            $("#item_spro").val(parts[5])
+                            $("#item_proy").val(parts[6])
                             $("#modal-presupuesto").modal("hide");
                         }
                     });
@@ -246,7 +257,7 @@
     $.ajax({type : "POST", url : "${g.createLink(controller: 'asignacion',action:'tabla')}",
         data     :   "",
         success  : function (msg) {
-           $("#list-Asignacion").html(msg)
+            $("#list-Asignacion").html(msg)
         }
     });
 

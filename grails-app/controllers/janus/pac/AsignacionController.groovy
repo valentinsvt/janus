@@ -52,13 +52,13 @@ class AsignacionController extends janus.seguridad.Shield {
     }
 
     def buscaPrsp(){
-        def listaTitulos = ["Código", "Descripción"]
-        def listaCampos = ["numero", "descripcion"]
+        def listaTitulos = ["Código", "Descripción","Fuente","programa","Subprograma","Proyecto"]
+        def listaCampos = ["numero", "descripcion","fuente","programa","subPrograma","proyecto"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaCpac", controller: "pac")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-ccp").modal("hide");'
-        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"));$("#item_desc").val($(this).attr("prop_descripcion"));cargarTecho();'
+        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"));$("#item_desc").val($(this).attr("prop_descripcion"));$("#item_fuente").val($(this).attr("prop_fuente"));$("#item_prog").val($(this).attr("prop_programa"));$("#item_spro").val($(this).attr("prop_subprograma"));$("#item_proy").val($(this).attr("prop_proyecto"));cargarTecho();'
         funcionJs += '}'
         def numRegistros = 20
         def extras = ""
@@ -68,7 +68,7 @@ class AsignacionController extends janus.seguridad.Shield {
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
-            session.dominio = Presupuesto
+            session.dominio = janus.Presupuesto
             session.funciones = funciones
             def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Partidas presupuestarias", anchos: anchos, extras: extras, landscape: false])

@@ -30,7 +30,7 @@ class PresupuestoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def saveAjax() {
-       // println "save prsp "+params
+       println "save prsp "+params
         def presupuestoInstance
         if (params.id) {
             presupuestoInstance = Presupuesto.get(params.id)
@@ -43,6 +43,7 @@ class PresupuestoController extends janus.seguridad.Shield {
         else {
             presupuestoInstance = new Presupuesto(params)
         } //es create
+        println "sprog "+presupuestoInstance.subPrograma
         if (!presupuestoInstance.save(flush: true)) {
            // println "error save prsp "+presupuestoInstance.errors
             flash.clase = "alert-error"
@@ -63,7 +64,7 @@ class PresupuestoController extends janus.seguridad.Shield {
             return
         }
 
-        render "${presupuestoInstance.id}&${presupuestoInstance.numero}&${presupuestoInstance.descripcion}"
+        render "${presupuestoInstance.id}&${presupuestoInstance.numero}&${presupuestoInstance.descripcion}&${presupuestoInstance.fuente}&${presupuestoInstance.programa}&${presupuestoInstance.subPrograma}&${presupuestoInstance.proyecto}"
         return
     } //save
 

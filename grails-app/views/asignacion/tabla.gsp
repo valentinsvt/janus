@@ -5,6 +5,10 @@
     <thead>
     <tr>
         <th>Partida</th>
+        <th>Fuente</th>
+        <th>Programa</th>
+        <th>Subprograma</th>
+        <th>Proyecto</th>
         <th>Año</th>
         <th>Valor</th>
     </tr>
@@ -13,6 +17,10 @@
     <g:each in="${asignaciones}" var="asg">
         <tr>
             <td>${asg.prespuesto.descripcion} (${asg.prespuesto.numero})</td>
+            <td>${asg.prespuesto.fuente}</td>
+            <td>${asg.prespuesto.programa}</td>
+            <td>${asg.prespuesto.subPrograma}</td>
+            <td>${asg.prespuesto.proyecto}</td>
             <td style="text-align: center">${asg.anio.anio}</td>
             <td style="text-align: right">
                 <g:formatNumber number="${asg.valor}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>

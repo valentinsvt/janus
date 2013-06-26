@@ -38,13 +38,13 @@ class PacController extends janus.seguridad.Shield{
     }
 
     def buscaPrsp(){
-        def listaTitulos = ["Código", "Descripción"]
-        def listaCampos = ["numero", "descripcion"]
+        def listaTitulos = ["Código", "Descripción","Fuente","programa","Subprograma","Proyecto"]
+        def listaCampos = ["numero", "descripcion","fuente","programa","subPrograma","proyecto"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaCpac", controller: "pac")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-ccp").modal("hide");'
-        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"));cargarTecho();'
+        funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion")+" Fuente: "+$(this).attr("prop_fuente")+" - Programa: "+$(this).attr("prop_programa")+" - Subprograma: "+$(this).attr("prop_subPrograma")+" - Proyecto: "+$(this).attr("prop_proyecto"));cargarTecho();'
         funcionJs += '}'
         def numRegistros = 20
         def extras = ""
