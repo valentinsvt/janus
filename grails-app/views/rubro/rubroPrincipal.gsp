@@ -1717,6 +1717,7 @@
                                         td = $('<td class="col_hora" style="display: none;text-align: right"></td>');
                                         tr.append(td)
                                         td = $("<td style='text-align: right' class='col_rend rend'>")
+                                        td.attr("valor",parts[4]);
                                         td.html(number_format(parts[4], 5, ".", ""))
                                         tr.append(td)
                                         td = $('<td class="col_total" style="display: none;text-align: right"></td>');
@@ -1750,7 +1751,8 @@
                                         tr.append(td)
                                         td = $('<td class="col_hora" style="display: none;text-align: right"></td>');
                                         tr.append(td)
-                                        td = $("<td style='text-align: right' class='col_rend rend'>")
+                                        td = $("<td style='text-align: right' class='col_rend rend'>");
+                                        td.attr("valor",parts[4]);
                                         td.html(number_format(parts[4], 5, ".", ""))
                                         tr.append(td)
                                         td = $('<td class="col_total" style="display: none;text-align: right"></td>');

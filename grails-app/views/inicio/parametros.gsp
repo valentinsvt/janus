@@ -164,8 +164,9 @@
                 </div><br>
                 <div class="item" texto="tpcp">
                     <g:link controller="tipoCompra" action="list">Tipo de Compra</g:link>
-
-
+                </div><br>
+                <div class="item" texto="ff">
+                    <g:link controller="fuenteFinanciamiento" action="list">Fuente de financiamiento</g:link>
                 </div><br>
 
 
@@ -349,10 +350,7 @@
 <div id="itun" style="display: none">
     <h3>Unidad del item</h3>
     <p>Unidad del item</p>
-
-
 </div>
-
 <div id="tppr" style="display:none">
     <h3>Tipo de Procedimiento</h3><br>
     <p>Tipo de Procedimiento</p>
@@ -361,6 +359,11 @@
     <h3>Tipo de Compra</h3>
        <p>Tipo de Compra</p>
 </div>
+<div id="ff" style="display: none">
+    <h3>Fuente de financiamiento</h3>
+    <p>Fuente de financiamiento para partidas presupuestarias</p>
+</div>
+
 
 
 
