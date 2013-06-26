@@ -1071,7 +1071,7 @@ class Reportes3Controller {
     def imprimirValorHoraEquipos () {
 
 
-        println("params" + params)
+//        println("params" + params)
 
         //
 
@@ -1143,7 +1143,7 @@ class Reportes3Controller {
 
         headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
         headers.add(new Paragraph(" "))
-        headers.add(new Paragraph("CÁLCULO DEL VALOR (MANO DE OBRA)"))
+        headers.add(new Paragraph("CÁLCULO DEL VALOR (EQUIPOS)"))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
         headers.add(new Paragraph(" ", times10bold));
@@ -1156,6 +1156,11 @@ class Reportes3Controller {
         PdfPTable table = new PdfPTable(5);
         table.setWidthPercentage(90);
         table.setWidths(arregloEnteros([15,15,5,10,20]))
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor Equipo Nuevo", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.vc, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph("Potencia", times10normal), prmsCellLeft2)
@@ -1164,19 +1169,7 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("Valor Equipo Nuevo", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph(g.formatNumber(number: params.ven, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
-        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
-        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("Llantas", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph(g.formatNumber(number: params.llantas, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
-        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
-        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("Vida Económica", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Vida Económica", times10bold), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
@@ -1200,9 +1193,8 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
 
-
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("Horas al año", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Horas al año", times10bold), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
@@ -1227,7 +1219,7 @@ class Reportes3Controller {
 
 
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("Vida Llantas al año", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Vida Llantas al año", times10bold), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
@@ -1250,13 +1242,167 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(g.formatNumber(number: params.vlp, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("Costo Total de la hora", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Años de Vida", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph(g.formatNumber(number: params.ch, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.av, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor de rescate", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.vr, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Depreciación del equipo", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.d, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo del dinero", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.ci, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Factor de recuperación de capital", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.frc, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Intereses", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.i, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Seguros", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.cs, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo de Seguros", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.s, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Matrícula", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.m, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Factor de costo de repuestos y reparaciones", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.k, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo de Repuestos", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.r, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo M.O. Reparaciones", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.mor, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo Diesel - Combustibles", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.di, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo Diesel", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.cd, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Aceite Lubricante", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.ac, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo Lubricante", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.cl, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Grasa", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.gr, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo Grasa", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.cg, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Precio de las llantas", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.vll, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Horas de Vida útil de las llantas", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.hll, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo Horario por llantas", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.cll, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo Total de la hora", times10bold), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: params.ch, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8bold), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         document.add(table)
         document.close();

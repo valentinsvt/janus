@@ -389,6 +389,17 @@ h4 {
     </div>
 </div>
 
+<div id="imprimirDialog">
+
+    <fieldset>
+        <div class="span3">
+
+            Debe llenar todos los datos de la forma antes de imprimir el reporte!
+
+        </div>
+    </fieldset>
+</div>
+
 <script type="text/javascript">
 
     var data = {
@@ -551,11 +562,43 @@ h4 {
 
    $("#btnImprimir").click(function () {
 
-       console.log(data)
+//       console.log(data)
+      if(data.ch) {
 
-       location.href="${g.createLink(controller: 'reportes3',action: 'imprimirValorHoraEquipos', id: item.id)}?potencia=" + data.hp + "&ven=" + data.vc + "&llantas=" + data.vll + "&veb=" + data.hvb +
-               "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch
+          location.href="${g.createLink(controller: 'reportes3',action: 'imprimirValorHoraEquipos', id: item.id)}?potencia=" + data.hp + "&vc=" + data.vc + "&veb=" + data.hvb +
+                  "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch +
+                  "&av=" + data.av + "&vr=" + data.vr + "&d=" + data.d + "&i=" + data.i + "&frc=" + data.frc + "&cs=" + data.cs + "&s=" + data.s + "&m=" + data.m + "&va=" + data.va  + "&ci=" + data.ci +
+                  "&k=" + data.k + "&r=" +data.r + "&mor=" + data.mor + "&di=" + data.di + "&cd=" + data.cd +
+                  "&ac=" + data.ac + "&cl=" + data.cl + "&gr=" + data.gr + "&cg=" + data.cg + "&vll=" + data.vll +
+                  "&hll=" + data.hll + "&cll=" + data.cll
+      }else {
 
+          $("#imprimirDialog").dialog("open");
+
+      }
    });
+
+    $("#imprimirDialog").dialog({
+
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        width: 350,
+        height: 180,
+        position: 'center',
+        title: 'Imprimir reporte',
+        buttons: {
+            "Aceptar": function () {
+
+                $("#imprimirDialog").dialog("close");
+
+            }
+        }
+
+    });
+
+
+
 
 </script>
