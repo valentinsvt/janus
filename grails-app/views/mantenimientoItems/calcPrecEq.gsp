@@ -67,14 +67,24 @@ h4 {
     <div class="span3" style="width: 300px; margin-top: -10px;">
         <h4>Datos del equipo</h4>
     </div>
-    <div class="span3" style="width: 360px; margin-left: 100px; margin-top: -10px;">
+    <div class="span3" style="width: 360px; margin-left: 70px; margin-top: -10px;">
     <table border="1" width="360px;">
         <tr class="totalFinal">
             <th>Costo total de la hora</th>
             <td class="tdCh num dol" data-dec="2"></td>
         </tr>
     </table>
+
     </div>
+
+     <div style="margin-top: -10px;">
+    <a href="#" class="btn btn-ajax" id="btnImprimir" style="margin-left: 20px">
+        <i class="icon-print"></i>
+        Imprimir
+    </a>
+     </div>
+
+
 
 </div>
 
@@ -316,7 +326,7 @@ h4 {
         </div>
 
         <div class="span3" style="width: 200px; margin-left: 10px;">
-                    <table border="1" width="240px;>
+                    <table border="1" width="240px">
                         <tr class="totalParcial">
                             <th class="st-title">Costo M.O. reparaciones</th>
                             %{--<th class="st-cod">MOR</th>--}%
@@ -481,6 +491,9 @@ h4 {
                 }
             }
         });
+
+        return data
+
     }
 
     $(".calcular").bind({
@@ -535,5 +548,14 @@ h4 {
             calc();
         }
     });
+
+   $("#btnImprimir").click(function () {
+
+       console.log(data)
+
+       location.href="${g.createLink(controller: 'reportes3',action: 'imprimirValorHoraEquipos', id: item.id)}?potencia=" + data.hp + "&ven=" + data.vc + "&llantas=" + data.vll + "&veb=" + data.hvb +
+               "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch
+
+   });
 
 </script>

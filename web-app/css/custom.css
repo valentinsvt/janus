@@ -344,6 +344,12 @@ th.desc a {
     margin-top  : -300px;
 }
 
+.topModal{
+
+    margin-top: -430px;
+
+}
+
 .grandote .modal-body {
     height     : 460px;
     max-height : 460px;

@@ -577,7 +577,7 @@
 </g:if>
 
 
-<div class="modal hide fade mediumModal tallModal2" id="modal-var" style=";overflow: hidden;">
+<div class="modal hide fade mediumModal tallModal2 topModal" id="modal-var">
     <div class="modal-header btn-primary">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -1083,7 +1083,15 @@
 
         });
 
+//        $("#modal-var").draggable({
+//
+////            handle:".modal-header",
+////            containment: "document"
+//        });
+
         $("#btnVar").click(function () {
+
+
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(controller: 'variables', action:'variables_ajax')}",
@@ -1091,7 +1099,7 @@
                     obra : "${obra?.id}"
                 },
                 success : function (msg) {
-                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                    var btnCancel = $('<a href="#" data-dismiss="modal" class="btn" >Cancelar</a>');
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
                     btnSave.click(function () {
