@@ -173,16 +173,16 @@
                                 location.href = "${g.createLink(controller: 'documentoProceso',action: 'list')}/" + $(this).attr("id")
                             }
                         },
-                        "eval"   : {
-                            name     : "Evaluación",
-                            icon     : "eval",
-                            callback : function (key, options) {
-                                location.href = "${g.createLink(controller: 'parametroEvaluacion',action: 'tree')}/" + $(this).attr("id")
-                            },
-                            disabled : function (key, opt) {
-                                return opt.$trigger.attr("reg") != 'R'
-                            }
-                        },
+                        %{--"eval"   : {--}%
+                            %{--name     : "Evaluación",--}%
+                            %{--icon     : "eval",--}%
+                            %{--callback : function (key, options) {--}%
+                                %{--location.href = "${g.createLink(controller: 'parametroEvaluacion',action: 'tree')}/" + $(this).attr("id")--}%
+                            %{--},--}%
+                            %{--disabled : function (key, opt) {--}%
+                                %{--return opt.$trigger.attr("reg") != 'R'--}%
+                            %{--}--}%
+                        %{--},--}%
                         "ofrt"   : {
                             name     : "Ofertas",
                             icon     : "ofrt",
