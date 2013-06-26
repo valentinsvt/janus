@@ -151,333 +151,395 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;height: 590px;margin-bottom: 10px;">
             <p class="css-vertical-text">Concurso</p>
 
             <div class="linea" style="height: 100%"></div>
+
             <g:form class="form-horizontal" name="frmSave-Concurso" action="save" id="${concursoInstance?.id}">
-                <div class="row">
-                    <div class="span10">
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Objeto
-                                </span>
+                <ul class="nav nav-pills" id="myTab">
+                    <li class="active"><a href="#datos">Datos concurso</a></li>
+                    <li><a href="#fechas">Fechas de control del proceso</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="datos">
+                        <div class="row">
+                            <div class="span10">
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Objeto
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <g:textField name="objeto" class="span8" value="${concursoInstance?.objeto}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="controls">
-                                <g:textField name="objeto" class="span8" value="${concursoInstance?.objeto}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-                    </div>
+                            <div class="span5">
 
-                    <div class="span5">
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Memo de requerimiento
-                                </span>
-                            </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Estado
+                                        </span>
+                                    </div>
 
-                            <div class="controls">
-                                <g:textField name="objeto" value="${concursoInstance?.memoRequerimiento}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                    <div class="controls">
+                                        %{--
+                                        <g:textField name="estado" class="" value="${concursoInstance?.estado}"/>
+                                        --}%
+                                        %{--<p class="help-block ui-helper-hidden"></p>--}%
+                                        <g:hiddenField name="estado" value="${concursoInstance?.estado}"/>
+                                        ${concursoInstance?.estado == 'R' ? 'Registrado' : 'No registrado'}
+                                    </div>
+                                </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Obra requerida
-                                </span>
-                            </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Memo de requerimiento
+                                        </span>
+                                    </div>
 
-                            <div class="controls">
-                                <input type="hidden" id="obra_id" name="obra.id" value="${concursoInstance?.obra?.id}">
-                                <input type="text" id="obra_busqueda" value="${concursoInstance?.obra?.codigo}" title="${concursoInstance?.obra?.nombre}">
-                                %{--<g:select id="obra" name="obra.id" from="${janus.Obra.list([sort: 'nombre'])}" optionKey="id" class="many-to-one " value="${concursoInstance?.obra?.id}"--}%
-                                %{--noSelection="['null': '']" optionValue="${{ it.descripcion && it.descripcion.size() > 55 ? it.nombre + " " + it.descripcion[0..45] + '...' : it.nombre + " " + it.descripcion }}"/>--}%
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                    <div class="controls">
+                                        <g:textField name="memoRequerimiento" value="${concursoInstance?.memoRequerimiento}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Pac
-                                </span>
-                            </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Obra requerida
+                                        </span>
+                                    </div>
 
-                            <div class="controls">
-                                <g:select id="pac" name="pac.id" from="${janus.pac.Pac.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.pac?.id}"
-                                          noSelection="['null': '']" optionValue="${{ it.descripcion && it.descripcion.size() > 55 ? it.descripcion[0..55] + '...' : it.descripcion }}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                    <div class="controls">
+                                        <input type="hidden" id="obra_id" name="obra.id" value="${concursoInstance?.obra?.id}">
+                                        <input type="text" id="obra_busqueda" value="${concursoInstance?.obra?.codigo}" title="${concursoInstance?.obra?.nombre}">
+                                        %{--
+                                        <g:select id="obra" name="obra.id" from="${janus.Obra.list([sort: 'nombre'])}" optionKey="id" class="many-to-one " value="${concursoInstance?.obra?.id}"
+                                        --}%
+                                        %{--noSelection="['null': '']"
+                                        optionValue="${{ it.descripcion && it.descripcion.size() > 55 ? it.nombre + " " + it.descripcion[0..45] + '...' : it.nombre + " " + it.descripcion }}"/>--}%
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fecha Inicio
-                                </span>
-                            </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Pac
+                                        </span>
+                                    </div>
 
-                            <div class="controls">
-                                <elm:datepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                    <div class="controls">
+                                        <g:select id="pac" name="pac.id" from="${janus.pac.Pac.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.pac?.id}"
+                                                  noSelection="['null': '']" optionValue="${{ it.descripcion && it.descripcion.size() > 55 ? it.descripcion[0..55] + '...' : it.descripcion }}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fe. Lím. Preguntas
-                                </span>
-                            </div>
+                            </div> <!-- fin col 1-->
 
-                            <div class="controls">
-                                <elm:datepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Administración
+                                        </span>
+                                    </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fec. Lím. Entrega Ofertas
-                                </span>
-                            </div>
+                                    <div class="controls">
+                                        %{--
+                                        <g:select id="administracion" name="administracion.id" from="${janus.Administracion.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.administracion?.id}" noSelection="['null': '']"/>
+                                        --}%
+                                        <g:hiddenField name="administracion.id" value="${concursoInstance?.administracion?.id}"/>
+                                        ${concursoInstance?.administracion?.fechaInicio?.format("dd-MM-yyyy")} a
+                                        ${concursoInstance?.administracion?.fechaFin?.format("dd-MM-yyyy")}
+                                        (${concursoInstance?.administracion?.nombrePrefecto})
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
 
-                            <div class="controls">
-                                <elm:datepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Código
+                                        </span>
+                                    </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fec. Lím. Res. Convalidación
-                                </span>
-                            </div>
+                                    <div class="controls">
+                                        %{--
+                                        <g:textField name="codigo" class="" value="${concursoInstance?.codigo}"/>
+                                        --}%
+                                        %{--<span class="uneditable-input">${concursoInstance?.codigo}</span>--}%
+                                        <g:textField name="codigo" value="${concursoInstance?.codigo}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
 
-                            <div class="controls">
-                                <elm:datepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Costo Bases
+                                        </span>
+                                    </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fecha Inicio Puja
-                                </span>
-                            </div>
+                                    <div class="controls">
+                                        <g:field type="number" name="costoBases" class="" value="${fieldValue(bean: concursoInstance, field: 'costoBases')}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
 
-                            <div class="controls">
-                                <elm:datepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Monto adjudicado
+                                        </span>
+                                    </div>
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fecha Adjudicación
-                                </span>
-                            </div>
+                                    <div class="controls">
+                                        <div class="input-append">
+                                            <g:field type="number" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right;width: 180px;"/>
+                                            <span class="add-on">$</span>
+                                        </div>
 
-                            <div class="controls">
-                                <elm:datepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+                            </div> <!-- fin col 2-->
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fecha aceptación proveedor
-                                </span>
-                            </div>
+                            <div class="span10">
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Observaciones
+                                        </span>
+                                    </div>
 
-                            <div class="controls">
-                                <elm:datepicker name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        %{--<div class="control-group">--}%
-                        %{--<div>--}%
-                        %{--<span class="control-label label label-inverse">--}%
-                        %{--Presupuesto referencial--}%
-                        %{--</span>--}%
-                        %{--</div>--}%
-
-                        %{--<div class="controls">--}%
-                        %{--<g:field type="number" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right"   />--}%
-                        %{--<p class="help-block ui-helper-hidden"></p>--}%
-                        %{--</div>--}%
-                        %{--</div>--}%
-
-                    </div>
-
-                    <div class="span5">
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Estado
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                %{--<g:textField name="estado" class="" value="${concursoInstance?.estado}" />--}%
-                                %{--<p class="help-block ui-helper-hidden"></p>--}%
-                                <g:hiddenField name="estado" value="${concursoInstance?.estado}"/>   ${concursoInstance?.estado}
+                                    <div class="controls">
+                                        <g:textField name="observaciones" class="span8" value="${concursoInstance?.observaciones}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div> <!-- fin tab datos -->
 
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Administración
-                                </span>
-                            </div>
+                    <div class="tab-pane" id="fechas">
+                        <div id="cols" style="float: left;">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Publicación
+                                        </span>
+                                    </div>
 
-                            <div class="controls">
-                                %{--<g:select id="administracion" name="administracion.id" from="${janus.Administracion.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.administracion?.id}" noSelection="['null': '']"/>--}%
-                                <g:hiddenField name="administracion.id" value="${concursoInstance?.administracion?.id}"/>
-                                ${concursoInstance?.administracion?.fechaInicio?.format("dd-MM-yyyy")} a ${concursoInstance?.administracion?.fechaFin?.format("dd-MM-yyyy")} (${concursoInstance?.administracion?.nombrePrefecto})
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Lím. Preguntas
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Lím. Respuestas
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Lím. Entrega Ofertas
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Apertura Ofertas
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaAperturaOfertas" class="" value="${concursoInstance?.fechaAperturaOfertas}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Sol. Convalidación
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Recibir Convalidación
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Ini. Eval. Oferta
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaInicioEvaluacionOferta" class="" value="${concursoInstance?.fechaInicioEvaluacionOferta}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+                            </div> <!-- fin col 1 -->
+
+                            <div class="span5">
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Límite res. fin.
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaLimiteResultadosFinales" class="" value="${concursoInstance?.fechaLimiteResultadosFinales}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Adjudicación
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Inicio
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Calificación
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Inicio Puja
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Fin Puja
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha aceptación proveedor
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+                            </div> <!-- fin col 2-->
                         </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Código
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                %{--<g:textField name="codigo" class="" value="${concursoInstance?.codigo}"/>--}%
-                                %{--<span class="uneditable-input">${concursoInstance?.codigo}</span>--}%
-                                <g:textField name="codigo" value="${concursoInstance?.codigo}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Costo Bases
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <g:field type="number" name="costoBases" class="" value="${fieldValue(bean: concursoInstance, field: 'costoBases')}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fecha Publicación
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <elm:datepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fec. Lím. Respuestas
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <elm:datepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fec. Lím. Sol. Convalidación
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <elm:datepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fecha Calificación
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <elm:datepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Fecha Fin Puja
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <elm:datepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Monto adjudicado
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <g:field type="number" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="span10">
-                        <div class="control-group">
-                            <div>
-                                <span class="control-label label label-inverse">
-                                    Observaciones
-                                </span>
-                            </div>
-
-                            <div class="controls">
-                                <g:textField name="observaciones" class="span8" value="${concursoInstance?.observaciones}"/>
-                                <p class="help-block ui-helper-hidden"></p>
-                            </div>
-                        </div>
-                    </div>
+                    </div> <!-- fin tab fechas -->
                 </div>
             </g:form>
+
         </div>
 
         <div class="modal grandote hide fade" id="modal-busqueda" style="overflow: hidden">
@@ -513,6 +575,12 @@
                     }
                 });
             }
+
+            $('#myTab a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+
             $("#frmSave-Concurso").validate({
                 errorPlacement : function (error, element) {
                     element.parent().find(".help-block").html(error).show();
@@ -530,7 +598,7 @@
             $("#min").click(function () {
                 if ($(this).hasClass("active")) {
                     $(".header").hide("slide");
-                    $("#msg").hide()
+                    $("#msg").hide();
                     $("#min").removeClass("icon-arrow-left").removeClass("active").addClass("icon-arrow-right");
                     $(this).attr("title", "Mostrar");
                     $(this).parent().parent().animate({
@@ -539,10 +607,10 @@
                     $("#mostrar").show()
                 } else {
                     $(".header").show("slide");
-                    $("#msg").show()
+                    $("#msg").show();
                     $("#min").removeClass("icon-arrow-right").addClass("active").addClass("icon-arrow-left");
                     $(this).attr("title", "Ocultar");
-                    $("#mostrar").hide("")
+                    $("#mostrar").hide("");
                     $(this).parent().parent().animate({
                         height : 150
                     })
@@ -551,10 +619,10 @@
             });
             $("#msg").click(function () {
                 $("#min").click();
-            })
+            });
             $("#mostrar").click(function () {
                 $("#min").click();
-            })
+            });
 
             $("#obra_busqueda").dblclick(function () {
                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');

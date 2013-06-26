@@ -30,6 +30,10 @@ class Concurso {
     Date fechaAceptacionProveedor
     String memoRequerimiento
 
+    Date fechaAperturaOfertas
+    Date fechaInicioEvaluacionOferta
+    Date fechaLimiteResultadosFinales
+
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
@@ -63,6 +67,10 @@ class Concurso {
 
             fechaAceptacionProveedor column: 'cncrfcap'
             memoRequerimiento column: 'cncrmmrq'
+
+            fechaAperturaOfertas column: 'cncrfcao'
+            fechaInicioEvaluacionOferta column: 'cncrfcvo'
+            fechaLimiteResultadosFinales column: 'cncrfclr'
         }
     }
     static constraints = {
@@ -88,5 +96,9 @@ class Concurso {
 
         fechaAceptacionProveedor(blank: true, nullable: true)
         memoRequerimiento(blank: true, nullable: true)
+
+        fechaAperturaOfertas(blank: true, nullable: true)
+        fechaInicioEvaluacionOferta(blank: true, nullable: true)
+        fechaLimiteResultadosFinales(blank: true, nullable: true)
     }
 }
