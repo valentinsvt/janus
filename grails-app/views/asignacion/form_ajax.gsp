@@ -47,30 +47,30 @@
 
             <div class="control-group">
                 <div>
-                    <span class="control-label label label-inverse" style="width: 120px;">
+                    <span class="control-label label label-inverse" style="width: 110px;">
                         Partida
                     </span>
                 </div>
 
-                <div class="controls" style="width: 900px;">
+                <div class="controls" style="width: 1000px; margin-left: 140px;">
 
-                    <input class="span3" type="text" style="width: 150px;;font-size: 10px" id="item_presupuesto">
+                    <input class="span3" type="text" style="width: 240px;;font-size: 12px" id="item_presupuesto">
 
                     <input type="hidden" id="item_prsp" name="prespuesto.id">
                     %{--<br>--}%
-                    <input class="span4" type="text" style="width: 370px;;font-size: 10px;margin-top: 0px;" id="item_desc" disabled="true">
+                    <input class="span4" type="text" style="width: 400px;;font-size: 12px;margin-top: 0px;" id="item_desc" disabled="true">
                     <a href="#" class="btn btn-warning" title="Crear nueva partida" id="item_agregar_prsp">
                         <i class="icon-edit"></i>
-                        Crear nueva partida
+                        Nueva partida
                     </a>
                     <a href="#" class="btn btn-warning" title="Crear nueva partida" id="prsp_editar">
                         <i class="icon-edit"></i>
                         Editar
                     </a>
-                    <div class="span2 dato">Fuente:</div> <input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_fuente" disabled="true"> <br>
-                    <div class="span2 dato">Programa:</div> <input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_prog" disabled="true">  <br>
-                    <div class="span2 dato">Subprograma: </div><input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_spro" disabled="true">   <br>
-                    <div class="span2 dato">Proyecto: </div><input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_proy" disabled="true">   <br>
+                    <div class="span2 dato" style="width: 100px;">Fuente:</div> <input class="span4 dato" type="text" style="width: 360px;;font-size: 12px;margin-top: 0px;" id="item_fuente" disabled="true"> <br>
+                    <div class="span2 dato" style="width: 100px;">Programa:</div> <input class="span4 dato" type="text" style="width: 510px;;font-size: 12px;margin-top: 0px;" id="item_prog" disabled="true">  <br>
+                    <div class="span2 dato" style="width: 100px;">Subprograma: </div><input class="span4 dato" type="text" style="width: 510px;;font-size: 12px;margin-top: 0px;" id="item_spro" disabled="true">   <br>
+                    <div class="span2 dato" style="width: 100px;">Proyecto: </div><input class="span4 dato" type="text" style="width: 510px;;font-size: 12px;margin-top: 0px;" id="item_proy" disabled="true">   <br>
 
 
                 </div>
@@ -111,7 +111,7 @@
         </g:form>
     </div>
 
-    <div id="list-Asignacion" style="width: 900px;">
+    <div id="list-Asignacion" style="width: 1100px;">
 
     </div>
 </div>
