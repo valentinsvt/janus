@@ -33,30 +33,16 @@ class SubPresupuestoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
-
+//
+//        println "save sp: " + params
 
 
         def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
-
         def subpreFiltrado = []
-
         def var
+        subpreFiltrado=SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
 
 
-        grupoFiltrado.each { i->
-
-            var = SubPresupuesto.findAllByGrupo(i)
-
-//            subpreFiltrado.add(var)
-
-            subpreFiltrado += var
-
-
-        }
-
-
-//
-//        println "save sp: " + params
         def subPresupuestoInstance
         if (params.id) {
             subPresupuestoInstance = SubPresupuesto.get(params.id)
@@ -100,22 +86,42 @@ class SubPresupuestoController extends janus.seguridad.Shield {
         }
 
         if (params.id) {
-            flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Sub Presupuesto " + subPresupuestoInstance.id
+
+//            def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
+//            def subpreFiltrado = []
+//            def var
+//            subpreFiltrado=SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
+
+//            flash.clase = "alert-success"
+            def message = "Se ha actualizado correctamente Sub Presupuesto " + subPresupuestoInstance.descripcion
+
+            render "ok_"+ message + '_' + g.select (name:"subpresupuesto", from: subpreFiltrado , optionKey:"id", optionValue:"descripcion", style:"width: 280px;;font-size: 10px", id:"subPres", value: subPresupuestoInstance.id)
+
+
         } else {
-            flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Sub Presupuesto " + subPresupuestoInstance.id
+
+//            def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
+//            def subpreFiltrado = []
+//            def var
+//            subpreFiltrado=SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
+
+
+//            flash.clase = "alert-success"
+             def message = "Se ha creado correctamente Sub Presupuesto " + subPresupuestoInstance.descripcion
+//            render "ok_"+flash.message + '_' +  g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 300px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
+            render "ok_"+ message + '_' + g.select (name:"subpresupuesto", from: subpreFiltrado , optionKey:"id", optionValue:"descripcion", style:"width: 280px;;font-size: 10px", id:"subPres", value: subPresupuestoInstance.id)
+
         }
-        if (params.volob.toString() == "1") {
-//            def sel = g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 300px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
-
-            def sel = g.select (name:"subpresupuesto", from: subpreFiltrado , optionKey:"id", optionValue:"descripcion", style:"width: 300px;;font-size: 10px", id:"subPres", value: subPresupuestoInstance.id)
-
-            render sel
-
-                } else {
-            redirect(action: 'list')
-        }
+//        if (params.volob.toString() == "1") {
+////            def sel = g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 300px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
+//
+//            def sel = g.select (name:"subpresupuesto", from: subpreFiltrado , optionKey:"id", optionValue:"descripcion", style:"width: 280px;;font-size: 10px", id:"subPres", value: subPresupuestoInstance.id)
+//
+//            render sel
+//
+//                } else {
+//            redirect(action: 'list')
+//        }
     } //save
 
     def show_ajax() {
@@ -146,7 +152,7 @@ class SubPresupuestoController extends janus.seguridad.Shield {
             subPresupuestoInstance.delete(flush: true)
             flash.clase = "alert-success"
             flash.message = "Se ha eliminado correctamente Sub Presupuesto " + subPresupuestoInstance.descripcion
-            def sel = g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion', sort: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 300px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
+            def sel = g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion', sort: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 280px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
             render sel
         }
         catch (DataIntegrityViolationException e) {
@@ -156,4 +162,44 @@ class SubPresupuestoController extends janus.seguridad.Shield {
 //            redirect(action: "list")
         }
     } //delete
+
+
+
+    def delete2() {
+
+        def subPresupuestoInstance = SubPresupuesto.get(params.id)
+//
+//        println("paramsdelete:" + params)
+//        println("sub" + subPresupuestoInstance)
+
+        if (!subPresupuestoInstance) {
+            flash.clase = "alert-error"
+            flash.message = "No se encontró Sub Presupuesto con id " + params.id
+            render "NO_"+flash.message
+            return
+        }
+
+        try {
+            subPresupuestoInstance.delete(flush: true)
+
+            def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
+            def subpreFiltrado = []
+            def var
+            subpreFiltrado=SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
+
+
+//            flash.clase = "alert-success"
+            def message = "Se ha eliminado correctamente Sub Presupuesto " + subPresupuestoInstance.descripcion
+
+            render "ok_"+ message + '_' + g.select (name:"subpresupuesto", from: subpreFiltrado , optionKey:"id", optionValue:"descripcion", style:"width: 280px;;font-size: 10px", id:"subPres", value: subPresupuestoInstance.id)
+//            render "ok_"+flash.message + '_' + g.select(name: "subpresupuesto", from: SubPresupuesto.list([order: 'descripcion', sort: 'descripcion']), optionKey: "id", optionValue: "descripcion", style: "width: 280px;font-size: 10px", id: "subPres", value: subPresupuestoInstance.id)
+        }
+        catch (DataIntegrityViolationException e) {
+            flash.clase = "alert-error"
+            flash.message = "No se pudo eliminar Sub Presupuesto:  " + (subPresupuestoInstance.descripcion ? subPresupuestoInstance.descripcion : "")
+            render "NO_"+flash.message
+//            redirect(action: "list")
+        }
+    } //delete
+
 } //fin controller

@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<div class="span12">
+<div class="span12" id="mensaje">
     <g:if test="${flash.message}">
         <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
             <a class="close" data-dismiss="alert" href="#">×</a>
@@ -355,10 +355,28 @@
                             url     : $frm.attr("action"),
                             data    : data,
                             success : function (msg) {
+                                var p = msg.split("_");
+                                var alerta;
+
                                 if (msg != "NO") {
-                                    $("#sp").html(msg);
+//                                    $("#sp").html(msg);
+
+                                    alerta = '<div class="alert alert-success" role="status"><a class="close" data-dismiss="alert" href="#">×</a>';
+                                    alerta += p[1];
+                                    alerta += '</div>';
                                     $("#modal-SubPresupuesto").modal("hide");
+                                    $("#div_cmb_sub").html(p[2])
+
                                 }
+                                else {
+
+                                    alerta = '<div class="alert alert-error" role="status"><a class="close" data-dismiss="alert" href="#">×</a>';
+                                    alerta += p[1];
+                                    alerta += '</div>';
+
+                                }
+
+                                $("#mensaje").html(alerta);
                             }
                         });
 
@@ -419,10 +437,28 @@
                             url     : $frm.attr("action"),
                             data    : data,
                             success : function (msg) {
+
+                                var p = msg.split("_");
+                                var alerta;
+
                                 if (msg != "NO") {
-                                    $("#sp").html(msg);
+//                                    $("#sp").html(msg);
                                     $("#modal-SubPresupuesto").modal("hide");
+
+                                    alerta = '<div class="alert alert-success" role="status"><a class="close" data-dismiss="alert" href="#">×</a>';
+                                    alerta += p[1];
+                                    alerta += '</div>';
+                                    $("#modal-SubPresupuesto").modal("hide");
+                                    $("#div_cmb_sub").html(p[2])
+
+                                }else {
+                                    alerta = '<div class="alert alert-error" role="status"><a class="close" data-dismiss="alert" href="#">×</a>';
+                                    alerta += p[1];
+                                    alerta += '</div>';
                                 }
+
+                                $("#mensaje").html(alerta);
+
                             }
                         });
 
@@ -466,22 +502,26 @@
 
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(controller:"subPresupuesto",action:'delete')}",
+                        url     : "${createLink(controller:"subPresupuesto",action:'delete2')}",
                         data    : {
                             id: id
                         },
                         success : function (msg) {
-
+                            var p = msg.split("_");
+                            var alerta;
                             if (msg != "NO") {
-                                $("#sp").html(msg);
-                                location.href = "${createLink(controller: "volumenObra" ,action: 'volObra',id: obra?.id )}"
 
+                                alerta = '<div class="alert alert-success" role="status"><a class="close" data-dismiss="alert" href="#">×</a>';
+                                alerta += p[1];
+                                alerta += '</div>';
+
+                               $("#div_cmb_sub").html(p[2])
                             }else {
-
-                                location.href = "${createLink(controller: "volumenObra" ,action: 'volObra',id: obra?.id )}"
-
+                                alerta = '<div class="alert alert-error" role="status"><a class="close" data-dismiss="alert" href="#">×</a>';
+                                alerta += p[1];
+                                alerta += '</div>';
                             }
-
+                           $("#mensaje").html(alerta);
                         }
                     });
 

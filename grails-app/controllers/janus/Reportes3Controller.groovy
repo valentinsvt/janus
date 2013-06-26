@@ -1,8 +1,22 @@
 package janus
 
+import com.lowagie.text.Document
+import com.lowagie.text.Element
+import com.lowagie.text.PageSize
+import com.lowagie.text.Paragraph
+import com.lowagie.text.pdf.PdfPCell
+import com.lowagie.text.pdf.PdfPTable
+import com.lowagie.text.pdf.PdfWriter
+import com.lowagie.text.Font;
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.*
+
+import java.awt.Color
+//import java.awt.Font
+import java.text.DecimalFormat
+//import java.awt.*
+import com.itextpdf.text.BadElementException
 
 class Reportes3Controller {
 
@@ -840,4 +854,223 @@ class Reportes3Controller {
 
         [html: html]
     }
+
+
+    static arregloEnteros(array) {
+        int[] ia = new int[array.size()]
+        array.eachWithIndex { it, i ->
+            ia[i] = it.toInteger()
+        }
+
+        return ia
+    }
+
+
+    def addCellTabla(PdfPTable table, Paragraph paragraph, params) {
+        PdfPCell cell = new PdfPCell(paragraph);
+//        println "params "+params
+        cell.setBorderColor(Color.BLACK);
+        if (params.border) {
+            if(!params.bordeBot)
+                if(!params.bordeTop)
+                    cell.setBorderColor(params.border);
+        }
+        if (params.bg) {
+            cell.setBackgroundColor(params.bg);
+        }
+        if (params.colspan) {
+            cell.setColspan(params.colspan);
+        }
+        if (params.align) {
+            cell.setHorizontalAlignment(params.align);
+        }
+        if (params.valign) {
+            cell.setVerticalAlignment(params.valign);
+        }
+        if (params.w) {
+            cell.setBorderWidth(params.w);
+        }
+        if(params.bordeTop){
+            cell.setBorderWidthTop(0.5)
+            cell.setBorderWidthLeft(0)
+            cell.setBorderWidthRight(0)
+            cell.setBorderWidthBottom(0)
+        }
+        if(params.bordeBot){
+            cell.setBorderWidthBottom(0.5)
+            cell.setBorderWidthLeft(0)
+            cell.setBorderWidthRight(0)
+            if(!params.bordeTop){
+                cell.setBorderWidthTop(0)
+            }
+        }
+        table.addCell(cell);
+    }
+
+
+
+
+    def imprimirCalculoValor () {
+
+
+//        println("params" + params)
+
+        def anio = new Date().format("yyyy").toInteger()
+        def u = ValoresAnuales.findByAnio(anio).sueldoBasicoUnificado
+        def c = params.valor.toDouble()
+        def ap = c * 12 * 0.1215
+        ap = new DecimalFormat("#.##").format(ap).toDouble()
+        def ta = 14 * c + u + ap
+        def jr = ta / 235
+
+        def nuevoCosto = jr / 8
+        nuevoCosto = new DecimalFormat("#.##").format(nuevoCosto).toDouble()
+
+        //
+
+        def item = Item.get(params.id)
+
+        def obra = Obra.get(params.id)
+
+        def auxiliar = Auxiliar.get(1)
+
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+
+
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+
+
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+
+
+
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2,
+                prmsCellRight: prmsCellRight, prmsCellHead2: prmsCellHead2, prmsCellLeft2: prmsCellLeft2]
+
+
+
+        def baos = new ByteArrayOutputStream()
+        def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Registro " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph headers = new Paragraph();
+//        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("CÁLCULO DEL VALOR (MANO DE OBRA)"))
+        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
+        headers.add(new Paragraph(" ", times10bold));
+        headers.add(new Paragraph(item.nombre, times10bold));
+        headers.add(new Paragraph(" ", times10bold));
+
+
+        document.add(headers)
+
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(90);
+        table.setWidths(arregloEnteros([15,15,5,10,20]))
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Sueldo Unificado", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: c, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Décimo Tercer", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: c, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Décimo Cuarto", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: u, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Aporte Patronal", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: ap, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Fondo Reserva", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: u, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Total Anual", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: ta, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Jornal Real", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: jr, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Costo Horario", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: nuevoCosto, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
+
+        document.add(table)
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+
+
+
+    }
+
 }

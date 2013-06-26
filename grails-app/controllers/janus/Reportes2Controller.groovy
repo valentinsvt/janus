@@ -5,6 +5,7 @@ import com.lowagie.text.Element
 import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.*
+import com.lowagie.text.Font;
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -15,7 +16,8 @@ import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
 
-import java.awt.*
+import java.awt.Color;
+import java.util.prefs.Preferences
 
 class Reportes2Controller {
 

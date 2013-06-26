@@ -33,13 +33,14 @@
         </span>
     </g:if>
 
-
+<g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
     <div class="btn-group pull-left">
-    <a href="#" class="btn btn-ajax" id="btnPrint">
+    <a href="#" class="btn btn-ajax" id="btnPrint" style="display: none; margin-left: 10px">
         <i class="icon-print"></i>
         Imprimir
     </a>
     </div>
+</g:if>
 </div>
 
 <div id="divTabla" style="height: 630px; width: 100%; overflow-x: hidden; overflow-y: auto;">
@@ -304,12 +305,16 @@
         return false;
     });
 
+    var valorSueldo
+
     $("#btnCalc2").click(function () {
         var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
         var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Calcular</a>');
         var a = "${anioRef}";
 
         var $valor = $("<input type='number' placeholder='Sueldo " + (new Date().getFullYear()) + "'/> ");
+
+
 
         $valor.bind({
             keydown : function (ev) {
@@ -342,6 +347,10 @@
         });
 
         btnCalc.click(function () {
+
+
+           valorSueldo = $valor.val();
+
             $(this).replaceWith(spinner);
 
             $.ajax({
@@ -355,8 +364,12 @@
                     $("#btnCalc").hide();
                     $("#spanRef").text("Precio ref: " + msg);
                     $("#btnPrint").show();
+
                 }
             });
+
+          return valorSueldo
+
         });
 
         var $p1 = $("<p>").html("Por favor ingrese el sueldo básico para el Obrero del año " + (new Date().getFullYear()));
@@ -372,6 +385,9 @@
 
         return false;
     });
+
+
+
 
     $("#btnCalc3").click(function () {
         var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -458,6 +474,23 @@
         $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
         $("#modal-tree1").modal("show");
         return false;
+    });
+
+    $("#btnPrint").click(function () {
+
+        location.href="${g.createLink(controller: 'reportes3',action: 'imprimirCalculoValor', id: item.id)}?valor=" + valorSueldo
+
+
+        %{--var datos = "item=${item.nombre}&valor=" + $("spanRef").val()--}%
+        %{--$.ajax({type: "POST", url: "${g.createLink(controller: 'reportes3',action:'imprimirCalculoValor')}",--}%
+            %{--data: datos,--}%
+            %{--success: function (msg) {--}%
+
+            %{--}--}%
+        %{--});--}%
+
+
+
     });
 
 </script>
