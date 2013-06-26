@@ -20,6 +20,16 @@
         .row {
             height : 35px;;
         }
+
+        .tab-content {
+            padding : 10px;
+            border  : solid 1px #555;
+        }
+
+        #myTab {
+            margin-bottom : 0;
+            border        : solid 1px #555;
+        }
         </style>
     </head>
 
@@ -159,12 +169,12 @@
             <div class="linea" style="height: 100%"></div>
 
             <g:form class="form-horizontal" name="frmSave-Concurso" action="save" id="${concursoInstance?.id}">
-                <ul class="nav nav-pills" id="myTab">
+                <ul class="nav nav-pills ui-corner-top" id="myTab">
                     <li class="active"><a href="#datos">Datos concurso</a></li>
                     <li><a href="#fechas">Fechas de control del proceso</a></li>
                 </ul>
 
-                <div class="tab-content">
+                <div class="tab-content ui-corner-bottom">
                     <div class="tab-pane active" id="datos">
                         <div class="row">
                             <div class="span10">
@@ -176,7 +186,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <g:textField name="objeto" class="span8" value="${concursoInstance?.objeto}"/>
+                                        <g:textArea name="objeto" class="span8" value="${concursoInstance?.objeto}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -262,9 +272,9 @@
                                         <g:select id="administracion" name="administracion.id" from="${janus.Administracion.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.administracion?.id}" noSelection="['null': '']"/>
                                         --}%
                                         <g:hiddenField name="administracion.id" value="${concursoInstance?.administracion?.id}"/>
-                                        ${concursoInstance?.administracion?.fechaInicio?.format("dd-MM-yyyy")} a
-                                        ${concursoInstance?.administracion?.fechaFin?.format("dd-MM-yyyy")}
-                                        (${concursoInstance?.administracion?.nombrePrefecto})
+                                        %{--${concursoInstance?.administracion?.fechaInicio?.format("dd-MM-yyyy")} a--}%
+                                        %{--${concursoInstance?.administracion?.fechaFin?.format("dd-MM-yyyy")}--}%
+                                        ${concursoInstance?.administracion?.nombrePrefecto}
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -335,7 +345,8 @@
                     </div> <!-- fin tab datos -->
 
                     <div class="tab-pane" id="fechas">
-                        <div id="cols" style="float: left;">
+                        %{--<div id="cols" style="float: left;">--}%
+                        <div class="row">
                             <div class="span5">
                                 <div class="control-group">
                                     <div>
