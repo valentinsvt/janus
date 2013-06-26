@@ -55,7 +55,7 @@
                 Equipos
             </a>
 
-            <form class="form-search" style="width: 400px; position: relative; margin-left: 420px; margin-top: -22px; ">
+            <form class="form-search" style="width: 740px; margin-left: 380px; margin-top: -22px; ">
                 <div class="input-append">
                     <input type="text" class="input-medium search-query" id="search"/>
                     <a href='#' class='btn' id="btnSearch"><i class='icon-zoom-in'></i> Buscar</a>
@@ -63,25 +63,27 @@
                 <span id="cantRes"></span>
                 <input type="button" class="btn" value="Cerrar todo" onclick="$('#tree').jstree('close_all');">
 
+                <span style="font-size: 12px; margin-left: 20px; ">Fecha por Defecto:</span>
+                <span style="width: 120px; margin: 5px;">
+                <elm:datepicker name="fecha" id="fcDefecto" class="datepicker required" style="width: 90px"
+                                yearRange="${(new Date().format('yyyy').toInteger() - 10).toString() + ':' + new Date().format('yyyy')}"
+                                maxDate="new Date()" value="${new Date()}"/>
+                </span>
             </form>
         </div>
 
-        <div id="loading" style="text-align:center;">
+
+
+
+    <div id="loading" style="text-align:center;">
             <img src="${resource(dir: 'images', file: 'spinner_24.gif')}" alt="Cargando..."/>
 
             <p>Cargando... Por favor espere.</p>
         </div>
 
 
-        <div id="treeArea" class="hide">
+        <div id="treeArea" class="hide" style="float: left;margin-top: 15px;">
 
-            <div style="margin-left: 40px; position: relative; top:-60px; left: 800px; ">
-                Fecha por Defecto:
-                <elm:datepicker name="fecha" id="fcDefecto" class="datepicker required" style="width: 90px"
-                                yearRange="${(new Date().format('yyyy').toInteger() - 10).toString() + ':' + new Date().format('yyyy')}"
-                                maxDate="new Date()" value="${new Date()}"/>
-
-            </div>
 
             %{--Poner fechapr defecto--}%
             %{--<div class="btn-group">--}%
@@ -150,7 +152,9 @@
                         <i class="icon-ok"></i> Registrar
                     </g:link>
                 </div>
-            </div>
+
+
+        </div>
 
             <div id="tree" class="ui-corner-all"></div>
 

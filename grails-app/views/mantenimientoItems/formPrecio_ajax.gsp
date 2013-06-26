@@ -9,7 +9,8 @@
         <g:hiddenField name="ignore" value="${params.ignore}"/>
 
         <div class="tituloTree">
-            Nuevo precio de ${precioRubrosItemsInstance.item.nombre} en ${lugarNombre}%{--${lugar ? precioRubrosItemsInstance.lugar.descripcion : "todos los lugares"}--}%
+            Item:  ${precioRubrosItemsInstance.item.nombre} <br>
+            Lista: ${lugarNombre}%{--${lugar ? precioRubrosItemsInstance.lugar.descripcion : "todos los lugares"}--}%
         </div>
 
         <div class="control-group">
@@ -25,7 +26,7 @@
                     <g:hiddenField name="fecha" value="${fecha}"/>
                 </g:if>
                 <g:else>
-                    <elm:datepicker name="fecha" id="fechaPrecio" class="datepicker required" style="width: 90px"
+                    <elm:datepicker name="fecha" id="fechaPrecio" class="datepicker required" style="width: 100px"
                                     yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"
                                     maxDate="new Date()"/>
                 </g:else>
@@ -50,7 +51,7 @@
                         $
                     </span>
                 </div>
-                por ${precioRubrosItemsInstance.item.unidad.descripcion}
+                Unidad: <span style="font-weight: bold"> ${precioRubrosItemsInstance.item.unidad.codigo} </span>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>

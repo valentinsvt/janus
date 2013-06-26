@@ -355,12 +355,12 @@ class IndiceController extends janus.seguridad.Shield {
                 txValor = "select vlin__id, vlinvalr, vlin.prin__id from vlin, prin where vlin.prin__id = ${periodos[cont]} and " +
                     "vlin.indc__id = ${d.indc__id} and prin.prin__id = vlin.prin__id order by prinfcin"
                 //println txValor
-                prec = g.formatNumber(number: 0.0, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                prec = g.formatNumber(number: 0.0, maxFractionDigits: 2, minFractionDigits: 2, locale: "ec")
                 p = 0.0
                 editar = periodos[cont]? "editable" : ""
                 cn1.eachRow(txValor.toString()) { v ->
                     if (v.vlinvalr) {
-                        prec = g.formatNumber(number: v.vlinvalr, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
+                        prec = g.formatNumber(number: v.vlinvalr, maxFractionDigits: 2, minFractionDigits: 2, locale: "ec")
                         p = v.vlinvalr
                         rubro = v.vlin__id
                     }

@@ -1,5 +1,5 @@
 <div class="tituloTree" style="width: 800px;">
-    Asignaciones del año   <g:select name="anios" id="tabla_anio" from="${janus.pac.Anio.list(sort: 'anio')}" value="${actual.anio}" optionKey="anio" optionValue="anio"></g:select>
+    Asignaciones del año   <g:select name="anios" id="tabla_anio" from="${janus.pac.Anio.list(sort: 'anio')}" value="${actual.anio}" optionKey="anio" optionValue="anio" style="width: 80px;"></g:select>
 </div>
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>

@@ -26,4 +26,7 @@ class Administracion implements Serializable {
         fechaFin(blank: true, nullable: true, attributes: [title: 'fechaFin'])
 
     }
+    String toString() {
+          nombrePrefecto
+    }
 }

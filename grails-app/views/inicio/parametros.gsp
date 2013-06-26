@@ -21,7 +21,10 @@
                 <li><a href="#ejec">Ejecución</a></li>
             </ul>
 
-            <div id="gnrl" class="ui-widget-content" style="height: 500px">
+            <div id="gnrl" class="ui-widget-content" style="height: 560px">
+                <div class="item" texto="admn">
+                    <g:link controller="administracion" action="list">Administración</g:link> del GADPP, autoridad principal.
+                </div><br>
                 <div class="item" texto="grgf">
                     <g:link controller="canton"
                             action="arbol">Divisi&oacute;n geogr&aacute;fica del Pa&iacute;s</g:link> en cantones, parroquias y comunidades.
@@ -76,7 +79,7 @@
                 </div><br>
             </div>
 
-            <div id="obra" class="ui-widget-content" style="height: 440px">
+            <div id="obra" class="ui-widget-content" style="height: 560px">
                 <div class="item" texto="tpob">
                     <g:link controller="tipoObra" action="list">Tipo de Obras</g:link> a ejecutarse en un proyecto.
                 </div><br>
@@ -116,7 +119,7 @@
                 </div><br>
             </div>
 
-            <div id="cntr" class="ui-widget-content" style="height: 440px">
+            <div id="cntr" class="ui-widget-content" style="height: 560px">
                 <div class="item" texto="tpcr">
                     <g:link controller="tipoContrato"
                             action="list">Tipo de contrato</g:link> que puede registrarse en el sistema para
@@ -155,24 +158,26 @@
 
                 <div class="item" texto="itun">
                     <g:link controller="unidadIncop" action="list">Unidad del Item</g:link>
-
+                    Unidades que se emplean en el INCOP
                 </div><br>
 
                 <div class="item" texto="tppt">
                     <g:link controller="tipoProcedimiento" action="list">Tipo de Procedimiento</g:link>
-
+                    de contratación, se diferencian según el monto a contratar
                 </div><br>
                 <div class="item" texto="tpcp">
                     <g:link controller="tipoCompra" action="list">Tipo de Compra</g:link>
+                    Bien, Obra o Servicio a adquirir
                 </div><br>
-                <div class="item" texto="ff">
+                <div class="item" texto="fnfn">
                     <g:link controller="fuenteFinanciamiento" action="list">Fuente de financiamiento</g:link>
+                    Entidad que financia la adquisición o construcción.
                 </div><br>
 
 
             </div>
 
-            <div id="ejec" class="ui-widget-content" style="height: 440px">
+            <div id="ejec" class="ui-widget-content" style="height: 560px">
                 <div class="item" texto="edpl">
                     <g:link controller="estadoPlanilla" action="list">Estado de la planilla</g:link> que puede
                     tener dentro del proceso de ejecución de la obra: ingresada, pagada, anulada.
@@ -196,7 +201,7 @@
 
                 <div class="item" texto="tpml">
                     <g:link controller="tipoMulta" action="list">Tipo de multa</g:link> que se puede
-                    aplicar a una planilla.
+                    aplicar a una planilla, distintos de a retraso en obra y presentación de la planilla
                 </div><br>
 
                 %{--<div class="item" texto="tppo">--}%
@@ -213,6 +218,11 @@
 
 </div>
 
+<div id="admn" style="display:none">
+    <h3>Autoridad del GADPP</h3><br>
+
+    <p>Administración presente del GADPP</p>
+</div>
 <div id="grgf" style="display:none">
     <h3>Divisi&oacute;n geogr&aacute;fica del Pa&iacute;s</h3><br>
 
@@ -349,19 +359,22 @@
 </div>
 <div id="itun" style="display: none">
     <h3>Unidad del item</h3>
-    <p>Unidad del item</p>
+    <p>Unidades que se emplean en el Pan Anual de Compras Públicas</p>
+    <p>Adquisiciones según el INCOP</p>
 </div>
-<div id="tppr" style="display:none">
+<div id="tppt" style="display:none">
     <h3>Tipo de Procedimiento</h3><br>
-    <p>Tipo de Procedimiento</p>
+    <p>Tipo de Procedimiento de contratación según el monto a contratarse.</p>
+    <p>Pueden ser: Ínfima Cuantía, Subasta, Licitación, etc.</p>
 </div>
 <div id="tpcp" style="display: none">
     <h3>Tipo de Compra</h3>
-       <p>Tipo de Compra</p>
+       <p>Tipo de bien que se va a adquirir, pudiendo ser: Bien, Obra, Servcios, Consultoría, etc.</p>
 </div>
-<div id="ff" style="display: none">
+<div id="fnfn" style="display: none">
     <h3>Fuente de financiamiento</h3>
-    <p>Fuente de financiamiento para partidas presupuestarias</p>
+    <p>Fuente de financiamiento de las partidas presupuestarias</p>
+    <p>Entidad que financia la adquisición o construcción.</p>
 </div>
 
 
@@ -389,7 +402,7 @@
 </div>
 <div id="tpml" style="display:none">
     <h3>Tipo de multa</h3><br>
-    <p>Tipo de multa que puede tener una planilla. Pueden ser: retraso de obra, atraso de planilla, etc.</p>
+    <p>Tipo de multa que puede tener una planilla, según el contrato, distintos de retraso en obra y presentación de la planilla.</p>
 </div>
 %{--<div id="tppo" style="display:none">--}%
     %{--<h3>Tipo de prórroga</h3><br>--}%

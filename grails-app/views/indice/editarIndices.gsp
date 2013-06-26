@@ -56,7 +56,7 @@
             <div class="row">
                 <div class="span4" align="center">
                     <g:select class="span2" name="periodoIndices"
-                              from="${janus.ejecucion.PeriodosInec.findAllByPeriodoCerrado("N", [sort: 'id'])}" optionKey="id"
+                              from="${janus.ejecucion.PeriodosInec.findAllByPeriodoCerrado("N", [sort: 'fechaInicio'])}" optionKey="id"
                               optionValue="${{ it.descripcion }}"
                               disabled="false" style="margin-left: 20px; width: 300px; margin-right: 50px"/>
                 </div>
@@ -68,7 +68,7 @@
             </div>
         </fieldset>
 
-        <fieldset class="borde" %{--style="width: 1170px"--}%>
+        <fieldset class="borde" style="width: 1000px">
 
             <div id="divTabla" style="height: 760px; overflow-y:auto; overflow-x: hidden;">
 

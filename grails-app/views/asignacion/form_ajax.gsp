@@ -22,6 +22,9 @@
     th{
         font-size: 11px !important;
     }
+    .dato {
+        margin-top: 5px !important;
+    }
     </style>
 </head>
 <body>
@@ -49,7 +52,7 @@
                     </span>
                 </div>
 
-                <div class="controls" style="width: 800px;">
+                <div class="controls" style="width: 900px;">
 
                     <input class="span3" type="text" style="width: 150px;;font-size: 10px" id="item_presupuesto">
 
@@ -60,12 +63,14 @@
                         <i class="icon-edit"></i>
                         Crear nueva partida
                     </a>
-                    <br>
-                    <div style="width: 150px;">Fuente:</div> <input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_fuente" disabled="true"> <br>
-                    <div style="width: 150px;">Programa:</div> <input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_prog" disabled="true">  <br>
-                    <div style="width: 150px;">Subprograma: </div><input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_spro" disabled="true">   <br>
-                    <div style="width: 150px;">Proyecto: </div><input class="span4" type="text" style="width: 150px;;font-size: 10px;margin-top: 0px;" id="item_proy" disabled="true">   <br>
-
+                    <a href="#" class="btn btn-warning" title="Crear nueva partida" id="prsp_editar">
+                        <i class="icon-edit"></i>
+                        Editar
+                    </a>
+                    <div class="span2 dato">Fuente:</div> <input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_fuente" disabled="true"> <br>
+                    <div class="span2 dato">Programa:</div> <input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_prog" disabled="true">  <br>
+                    <div class="span2 dato">Subprograma: </div><input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_spro" disabled="true">   <br>
+                    <div class="span2 dato">Proyecto: </div><input class="span4 dato" type="text" style="width: 360px;;font-size: 10px;margin-top: 0px;" id="item_proy" disabled="true">   <br>
 
 
                 </div>
@@ -78,8 +83,8 @@
                     </span>
                 </div>
 
-                <div class="controls">
-                    <g:select id="anio" name="anio.id" from="${janus.pac.Anio.list()}" optionKey="id" optionValue="anio" class="many-to-one  required" value="${actual}"/>
+                <div class="controls" style="width: 240px;">
+                    <g:select id="anio" name="anio.id" from="${janus.pac.Anio.list()}" optionKey="id" optionValue="anio" class="many-to-one required" value="${actual}" style="width: 100px;"/>
                     <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
@@ -93,7 +98,7 @@
                 </div>
 
                 <div class="controls">
-                    <g:field type="number" name="valor" id="valor" class=" required" value="0.00"/>
+                    <g:field type="number" name="valor" id="valor" class=" required" value="0.00" style="width: 150px;"/>
                     <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
 
@@ -167,6 +172,50 @@
         }
 
     }
+
+    $("#prsp_editar").click(function () {
+        $.ajax({
+            type    : "POST",
+            data    : {
+                id  : $("#item_prsp").val()
+            },
+            url     : "${createLink(action:'form_ajax',controller: 'presupuesto')}",
+            success : function (msg) {
+                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                btnSave.click(function () {
+                    if ($("#frmSave-presupuestoInstance").valid()) {
+                        btnSave.replaceWith(spinner);
+                    }
+                    $.ajax({type : "POST", url : "${g.createLink(controller: 'presupuesto',action:'saveAjax')}",
+                        data     :   $("#frmSave-presupuestoInstance").serialize(),
+                        success  : function (msg) {
+//                            ////console.log(msg)
+                            var parts = msg.split("&")
+                            $("#item_prsp").val(parts[0])
+                            $("#item_presupuesto").val(parts[1])
+                            $("#item_presupuesto").attr("title",parts[2])
+                            $("#item_desc").val(parts[2])
+                            $("#item_fuente").val(parts[3])
+                            $("#item_prog").val(parts[4])
+                            $("#item_spro").val(parts[5])
+                            $("#item_proy").val(parts[6])
+                            $("#modal-presupuesto").modal("hide");
+                        }
+                    });
+
+                    return false;
+                });
+
+                $("#modalTitle-presupuesto").html("Crear Presupuesto");
+                $("#modalBody-presupuesto").html(msg);
+                $("#modalFooter-presupuesto").html("").append(btnOk).append(btnSave);
+                $("#modal-presupuesto").modal("show");
+            }
+        });
+        return false;
+    });
 
     $("#guardar").click(function(){
         var msn =""
