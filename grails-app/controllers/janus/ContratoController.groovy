@@ -512,6 +512,15 @@ class ContratoController extends janus.seguridad.Shield {
 
 //        println("-->>" + params)
 
+        if (params.codigo) {
+            params.codigo = params.codigo.toString().toUpperCase()
+        }
+
+        if (params.memo) {
+            params.memo = params.memo.toString().toUpperCase()
+        }
+
+
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
             if (!contratoInstance) {

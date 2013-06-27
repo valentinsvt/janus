@@ -33,6 +33,10 @@
         .error {
             background : #c17474;
         }
+
+        .caps {
+            text-transform : uppercase;
+        }
         </style>
 
 
@@ -45,11 +49,12 @@
             <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
                 <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
-                <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-ok"></i> Aceptar</button>
-                <g:link action="copiarPolinomica" class="btn" id="${contrato?.id}"><i class="icon-superscript"></i> Fórmula polinómica</g:link>
+                <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-save"></i> Guardar</button>
                 <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
-                <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
-                <button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>
+                <g:if test="${contrato?.id}">
+                    <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
+                </g:if>
+            %{--<button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>--}%
             </div>
         </div>
 
@@ -62,32 +67,32 @@
 
                 <div class="span12" style="margin-top: 10px" align="center">
 
-                    <g:if test="${contrato?.codigo != null}">
+                    %{--<g:if test="${contrato?.codigo != null}">--}%
 
-                        <div class="span2 formato">Contrato N°</div>
+                    <div class="span2 formato">Contrato N°</div>
 
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
+                    <div class="span3"><g:textField name="codigo" class="codigo required caps" value="${contrato?.codigo}"/></div>
 
-                        <div class="span2 formato">Memo de Distribución</div>
+                    <div class="span2 formato">Memo de Distribución</div>
 
-                        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
+                    <div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}"/></div>
 
 
                     %{--</div>--}%
 
-                    </g:if>
+                    %{--</g:if>--}%
 
-                    <g:else>
+                    %{--<g:else>--}%
 
-                        <div class="span2 formato">Contrato N°</div>
+                    %{--<div class="span2 formato">Contrato N°</div>--}%
 
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${contrato?.codigo}"/></div>
+                    %{--<div class="span3"><g:textField name="codigo" class="codigo required caps" value="${contrato?.codigo}"/></div>--}%
 
-                        <div class="span2 formato">Memo de Distribución</div>
+                    %{--<div class="span2 formato">Memo de Distribución</div>--}%
 
-                        <div class="span3"><g:textField name="memo" class="memo" value="${contrato?.memo}"/></div>
+                    %{--<div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}"/></div>--}%
 
-                    </g:else>
+                    %{--</g:else>--}%
 
                 </div> <!--DSAFSD-->
             </fieldset>
@@ -232,7 +237,7 @@
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 190px; padding: 10px;border-bottom: 1px solid black;">
+            <fieldset class="" style="position: relative; height: 160px; padding: 10px;border-bottom: 1px solid black;">
 
                 <div class="span12" style="margin-top: 10px">
 
@@ -262,7 +267,7 @@
                     <div class="span2 formato">Plazo</div>
 
                     <div class="span3"><g:textField name="plazo" class="plazo activo" style="width: 50px" maxlength="4"
-                                                    value="${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> Días</div>
+                                                    value="${g.formatNumber(number: contrato?.plazo, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"/> Días</div>
 
                 </div>
 
@@ -288,22 +293,93 @@
                 </div>
 
 
-                <div class="span12" style="margin-top: 10px">
+                %{--<div class="span12" style="margin-top: 10px">--}%
 
-                    <div class="span2 formato">Financiamiento</div>
+                %{--<div class="span2 formato">Financiamiento</div>--}%
 
-                    <div class="span3"><g:textField name="financiamiento" class="financiamiento activo" value="${contrato?.financiamiento}"/></div>
+                %{--<div class="span3"><g:textField name="financiamiento" class="financiamiento activo" value="${contrato?.financiamiento}"/></div>--}%
 
-                    <div class="span2 formato">Financiado Por</div>
+                %{--<div class="span2 formato">Financiado Por</div>--}%
 
-                    <div class="span3"><g:textField name="financiadoPor" class="financiadoPor activo"/></div>
+                %{--<div class="span3"><g:textField name="financiadoPor" class="financiadoPor activo"/></div>--}%
 
-                </div>
+                %{--</div>--}%
 
             </fieldset>
 
         </g:form>
 
+        <g:if test="${contrato}">
+            <div class="navbar navbar-inverse" style="margin-top: 20px;padding-left: 5px;">
+
+                <div class="navbar-inner">
+                    <div class="botones">
+
+                        <ul class="nav">
+                            <li>
+                            %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
+                            %{--<i class="icon-pencil"></i>Garantías--}%
+                            %{--</g:link>--}%
+                            %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
+                                <g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">
+                                    <i class="icon-pencil"></i> Garantías
+                                </g:link>
+
+                            </li>
+                            %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
+                            %{--</a></li>--}%
+                            <li>
+                            %{--<a href="#" id="btnCronograma">--}%
+                                <g:link controller="cronogramaContrato" action="index" id="${contrato?.id}">
+                                    <i class="icon-th"></i>Cronograma contrato
+                                </g:link>
+                            %{--</a>--}%
+                            </li>
+                            %{--<g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">--}%
+                                %{--<li>--}%
+                                    %{--<g:link controller="cronogramaEjecucion" action="index" id="${contrato?.id}">--}%
+                                        %{--<i class="icon-th"></i>Cronograma ejecucion--}%
+                                    %{--</g:link>--}%
+                                %{--</li>--}%
+                            %{--</g:if>--}%
+                        %{--<li>--}%
+                        %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
+                        %{--Fórmula Pol.--}%
+                        %{--</g:link>--}%
+                        %{--</li>--}%
+                        %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
+                            <li>
+                                %{--<a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}">--}%
+                                    %{--<i class="icon-calendar"></i> F. Polinómica--}%
+                                %{--</a>--}%
+                                <g:link action="copiarPolinomica" id="${contrato?.id}"><i class="icon-superscript"></i> F. polinómica</g:link>
+                            </li>
+
+                            <li>
+                                <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
+                                    <i class="icon-book"></i>Biblioteca
+                                </g:link>
+                            </li>
+
+                            %{--<li>--}%
+                            %{--<g:link controller="planilla" action="list" id="${contrato?.id}">--}%
+                            %{--<i class=" icon-file-alt"></i>Planillas--}%
+                            %{--</g:link>--}%
+                            %{--</li>--}%
+
+                            %{--<li>--}%
+                            %{--<g:link action="fechasPedidoRecepcion" id="${contrato?.id}">--}%
+                            %{--<i class=" icon-calendar-empty"></i>Fechas de pedido de recepción--}%
+                            %{--</g:link>--}%
+                            %{--</li>--}%
+
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+        </g:if>
 
 
     %{--<g:if test="${contrato}">--}%
