@@ -2198,6 +2198,7 @@ class ReportesController {
         document = new Document(PageSize.A4);
         def pdfw = PdfWriter.getInstance(document, baos);
         document.open();
+
 //        document.setMargins(2,2,2,2)
         document.addTitle("Presupuesto " + new Date().format("dd_MM_yyyy"));
         document.addSubject("Generado por el sistema Janus");
@@ -2251,6 +2252,7 @@ class ReportesController {
         addEmptyLine(headers, 1);
         document.add(headers);
         document.add(txtIzq);
+
 
 
         PdfPTable tablaPresupuesto = new PdfPTable(7);
@@ -2774,9 +2776,12 @@ class ReportesController {
 
         }
 
+//        document.newPage();
+//        document.getCurrentDocumentSize()
+
+//        println("--->>>" + document.getPageSize())
 
         if (cuenta == 1) {
-
 
             PdfPTable tablaFirmas = new PdfPTable(1);
             tablaFirmas.setWidthPercentage(100);
@@ -2833,20 +2838,11 @@ class ReportesController {
 
             }
 
-
-
-
-
-//            addCellTabla(tablaFirmas, new Paragraph("Responsable de la Obra", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph("Revisor de la Obra", times8bold), prmsHeaderHoja)
-
-
-
-
             document.add(tablaFirmas);
 
-
         }
+
+
 
 
 
@@ -3076,6 +3072,8 @@ class ReportesController {
 
 
         }
+
+//        println("--->>>2" + document.getPageSize())
 
         document.close();
         pdfw.close()

@@ -61,6 +61,12 @@ h4 {
     width: 70px;
 }
 
+    .ui-front{
+
+
+        z-index: 1100 !important;
+    }
+
 </style>
 
 <div class="span7" style="width: 900px;">
@@ -563,7 +569,12 @@ h4 {
    $("#btnImprimir").click(function () {
 
 //       console.log(data)
-      if(data.ch) {
+      if(!data.ch || !data.hp || !data.vc || !data.vll || !data.hvb || !data.hva || !data.hab || !data.haa || !data.hllb || !data.hlla) {
+
+          $("#imprimirDialog").dialog("open");
+
+      }else {
+
 
           location.href="${g.createLink(controller: 'reportes3',action: 'imprimirValorHoraEquipos', id: item.id)}?potencia=" + data.hp + "&vc=" + data.vc + "&veb=" + data.hvb +
                   "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch +
@@ -571,10 +582,6 @@ h4 {
                   "&k=" + data.k + "&r=" +data.r + "&mor=" + data.mor + "&di=" + data.di + "&cd=" + data.cd +
                   "&ac=" + data.ac + "&cl=" + data.cl + "&gr=" + data.gr + "&cg=" + data.cg + "&vll=" + data.vll +
                   "&hll=" + data.hll + "&cll=" + data.cll
-      }else {
-
-          $("#imprimirDialog").dialog("open");
-
       }
    });
 
@@ -584,6 +591,7 @@ h4 {
         resizable: false,
         modal: true,
         draggable: false,
+
         width: 350,
         height: 180,
         position: 'center',
