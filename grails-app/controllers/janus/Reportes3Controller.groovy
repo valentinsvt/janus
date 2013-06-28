@@ -615,7 +615,7 @@ class Reportes3Controller {
             totalRubro = totalHer + totalMan + totalMat
         }
         def totalIndi = totalRubro * indi / 100
-        tablaIndi += "<thead><tr><th>COSTOS INDIRECTOS</th></tr><tr><th colspan='3' class='theader'></th></tr><tr><th style='width:550px'>Descripción</th><th>Porcentaje</th><th>Valor</th></tr>    <tr><th colspan='3' class='theaderup'></th></tr>  </thead>"
+        tablaIndi += "<thead><tr><th>COSTOS INDIRECTOS</th></tr><tr><th colspan='3' class='theader'></th></tr><tr><th style='width:550px'>DESCRIPCIÓN</th><th>PORCENTAJE</th><th>VALOR</th></tr>    <tr><th colspan='3' class='theaderup'></th></tr>  </thead>"
         tablaIndi += "<tbody><tr><td>Costos indirectos</td><td style='text-align:right'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
         tablaIndi += "</table>"
 

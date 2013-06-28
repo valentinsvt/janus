@@ -223,14 +223,14 @@
 
                 <div class="row-fluid" style="margin-bottom: 5px">
                     <div class="span2">
-                        CODIGO
+                        CÓDIGO
                         <input type="text" name="item.codigo" id="cdgo_buscar" class="span24">
                         <input type="hidden" id="item_id">
                         <input type="hidden" id="item_tipoLista">
                     </div>
 
                     <div class="span6">
-                        DESCRIPCION
+                        DESCRIPCIÓN
                         <input type="text" name="item.descripcion" id="item_desc" class="span11" disabled="disabled">
                     </div>
 
@@ -270,7 +270,7 @@
                     <thead>
                         <tr>
                             <th style="width: 80px;">
-                                CODIGO
+                                CÓDIGO
                             </th>
                             <th style="width: 600px;">
                                 EQUIPO
@@ -316,7 +316,7 @@
                     <thead>
                         <tr>
                             <th style="width: 80px;">
-                                CODIGO
+                                CÓDIGO
                             </th>
                             <th style="width: 600px;">
                                 MANO DE OBRA
@@ -363,7 +363,7 @@
                     <thead>
                         <tr>
                             <th style="width: 80px;">
-                                CODIGO
+                                CÓDIGO
                             </th>
                             <th style="width: 600px;">
                                 MATERIAL

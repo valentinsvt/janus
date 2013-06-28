@@ -49,11 +49,32 @@
             <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
                 <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
+                <g:if test="${planilla == []}">
                 <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-save"></i> Guardar</button>
+                </g:if>
                 <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
                 <g:if test="${contrato?.id}">
                     <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
                 </g:if>
+
+                <g:if test="${contrato?.estado = 'R' && planilla == []}">
+                <button class="btn" id="btn-desregistrar"><i class="icon-exclamation"></i> Cambiar Estado</button>
+                </g:if>
+                <g:if test="${!contrato?.id}">
+                <button class="btn" id="btn-registrar"><i class="icon-exclamation"></i> Registrar</button>
+                </g:if>
+
+
+
+                %{--<g:if test="${contrato?.estado != 'R' && }">--}%
+
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+
+                %{--</g:else>--}%
+
+
+
             %{--<button class="btn" id="btn-salir"><i class="icon-ban-circle"></i> Salir</button>--}%
             </div>
         </div>

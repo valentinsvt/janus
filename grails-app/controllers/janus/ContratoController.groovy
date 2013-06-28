@@ -1,6 +1,7 @@
 package janus
 
 import janus.ejecucion.FormulaPolinomicaContractual
+import janus.ejecucion.Planilla
 import janus.ejecucion.TipoFormulaPolinomica
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -57,15 +58,25 @@ class ContratoController extends janus.seguridad.Shield {
 
     def registroContrato() {
         def contrato
+        def planilla
         def obra = Obra.get(params.obra)
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
+
+            planilla = Planilla.findAllByContrato(contrato)
+
+//            println(planilla)
+
+
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
-            [campos: campos, contrato: contrato]
+            [campos: campos, contrato: contrato, planilla: planilla]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             [campos: campos]
         }
+
+
+
     }
 
     def saveCambiosPolinomica() {

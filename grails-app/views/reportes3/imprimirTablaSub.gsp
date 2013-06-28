@@ -144,17 +144,17 @@
                         <th style="width: 80px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                             Rubro
                         </th>
-                        <th style="width: 600px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+                        <th style="width: 550px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                             Descripción
                         </th>
-                        <th style="width: 60px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000" class="col_unidad">
+                        <th style="width: 35px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000" class="col_unidad">
                             Unidad
                         </th>
                         <th style="width: 80px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                             Cantidad
                         </th>
-                        <th class="col_precio" style="border-top: 1px solid #000000;  border-bottom: 1px solid #000000">P. U.</th>
-                        <th class="col_total" style="border-top: 1px solid #000000;  border-bottom: 1px solid #000000">C.Total</th>
+                        <th class="col_precio" style="width:110px ;border-top: 1px solid #000000;  border-bottom: 1px solid #000000">P. U.</th>
+                        <th class="col_total" style="width:110px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">C.Total</th>
                     </tr>
                 </thead>
                 <tbody id="tabla_material">
@@ -197,8 +197,8 @@
                     %{--</g:each>--}%
                     <tr>
                         <td colspan="5"></td>
-                        <td><b>Total:</b></td>
-                        <td><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                        <td style="text-align: right"><b>Total:</b></td>
+                        <td style="text-align: right"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
                     </tr>
                 </tbody>
             </table>

@@ -32,6 +32,12 @@
     .error {
         background : #c17474;
     }
+
+    .mover {
+
+
+
+    }
     </style>
 
     <title>Registro de Obras</title>
@@ -577,7 +583,7 @@
 </g:if>
 
 
-<div class="modal hide fade mediumModal tallModal2 topModal" id="modal-var">
+<div class="modal hide fade mediumModal tallModal2 " id="modal-var">
     <div class="modal-header btn-primary">
         <button type="button" class="close" data-dismiss="modal">×</button>
 

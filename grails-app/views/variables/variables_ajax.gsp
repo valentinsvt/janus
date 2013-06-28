@@ -41,7 +41,7 @@
                 <div class="span6">
                     <g:select name="volquete.id" id="cmb_vol" from="${volquetes2}" optionKey="id" optionValue="nombre" class="num"
                               noSelection="${['': 'Seleccione']}" value="${(obra.volquete) ? obra?.volqueteId : par?.volquete?.id}"
-                              style="width: 300px;"/>
+                              style="width: 300px; margin-left: -30px"/>
                 </div>
 
                 <div class="span1" style="margin-left: 50px;">
@@ -51,8 +51,13 @@
                 <div class="span2">
                     %{--<div class="input-append">--}%
                     <g:textField class="inputVar num" style="width: 80px" disabled="" name="costo_volqueta" value=""/>
+
                     %{--<span class="add-on">$</span>--}%
                     %{--</div>--}%
+                </div>
+
+                <div class="span2">
+                    <g:textField name="unidad_volqueta" value="${(obra.volquete) ? obra?.volqueteId : par?.volquete?.id}" readonly="true"  style="width: 20px"/>
                 </div>
             </div>
 
