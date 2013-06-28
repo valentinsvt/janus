@@ -870,7 +870,30 @@ class Reportes2Controller {
             pMl += '</table>'
         }
 
-        return [tablaB0: tablaBo, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato]
+
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+
+        def precios = [:]
+        def indirecto = obra.totales / 100
+
+        preciosService.ac_rbroObra(obra.id)
+
+        detalle.each {
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+            precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+        }
+
+        def planillasAnteriores = Planilla.withCriteria {
+            eq("contrato", contrato)
+            lt("fechaFin", planilla.fechaInicio)
+        }
+//        println planillasAnteriores
+
+
+
+
+
+        return [tablaB0: tablaBo, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato,detalle: detalle, precios: precios, planillasAnteriores: planillasAnteriores,imprimeDetalle:params.imprimeDetalle]
     }
 
 

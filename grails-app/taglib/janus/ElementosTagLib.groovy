@@ -113,7 +113,7 @@ class ElementosTagLib {
     Closure headerPlanillaReporte = { attrs ->
         def str = ""
         Planilla planilla = attrs.planilla
-        Obra obra = planilla.contrato.oferta.concurso.obra
+        Obra obra = planilla.contrato?.oferta?.concurso?.obra
 
         str += "<div class='well'>"
 
