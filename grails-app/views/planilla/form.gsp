@@ -102,8 +102,8 @@
                         </div>
 
                         <div class="span4">
-                            %{--<g:field type="number" name="numero" class=" required" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>--}%
-                            <span class="uneditable-input span3">${planillaInstance.numero}</span>
+                            <g:field type="number" name="numero" class=" required" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
+                            %{--<span class="uneditable-input span3">${planillaInstance.numero}</span>--}%
 
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
