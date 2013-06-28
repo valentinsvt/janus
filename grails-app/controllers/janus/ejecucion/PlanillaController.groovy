@@ -157,15 +157,15 @@ class PlanillaController extends janus.seguridad.Shield {
                             between("fechaInicio", pe.fechaInicio, pe.fechaFin)
                             between("fechaFin", pe.fechaInicio, pe.fechaFin)
                         }
-//                        if (ultimoPeriodo) {
-//                            and {
-//                                gt("fechaInicio", ultimoPeriodo)
-//                            }
-//                        }
+                        if (ultimoPeriodo) {
+                            and {
+                                gt("fechaInicio", ultimoPeriodo)
+                            }
+                        }
                     }
                 }
             }
-
+            println periodos
             periodos = periodos.unique().sort { it.fechaInicio }
         }
 
@@ -221,6 +221,11 @@ class PlanillaController extends janus.seguridad.Shield {
 
                     planillaInstance.fechaInicio = ini
                     planillaInstance.fechaFin = fin
+
+                    /* ************** La fecha inicio y fecha fin se vuelven las fechas del periodo ***************************/
+                    planillaInstance.fechaInicio = planillaInstance.periodoIndices.fechaInicio
+                    planillaInstance.fechaFin = planillaInstance.periodoIndices.fechaFin
+
                     break;
                 case 'A':
                     //es anticipo hay q ingresar el valor de la planilla
@@ -416,7 +421,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 } else {
                     def y = pl.fechaInicio.format("yyyy")
                     (m1.toInteger()..m2.toInteger()).each {
-//                        println "\t\t" + it + " - " + y
+                        println "\t\t" + it + " - " + y
                         def fi = new Date().parse("dd-MM-yyyy", "01-" + it + "-" + y)
 //                        if (pl.periodoIndices.fechaFin >= fi) {
                         def prin = PeriodosInec.findByFechaInicio(fi)
