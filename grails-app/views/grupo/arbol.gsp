@@ -275,6 +275,7 @@
 
             <div class="modal-footer" id="modal_trans_footer">
                 <g:hiddenField name="nodeId" val=""/>
+                <a href="#" data-dismiss="modal" class="btn btn-primary" id="print_totales" data-transporte="true">Consolidado</a>
                 <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="true">Imprimir con transporte</a>
                 <a href="#" data-dismiss="modal" class="btn btnPrint" data-transporte="false">Imprimir sin transporte</a>
                 <a href="#" data-dismiss="modal" class="btn" id="btnCancel">Cancelar</a>
@@ -968,6 +969,25 @@
 
                     var datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=" + nodeId + "Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubros')}?" + datos;
+                    location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=rubros_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
+
+                    $("#modal-transporte").modal("hide");
+                    return false;
+                });
+                $("#print_totales").click(function () {
+                    var dsp0 = $("#dist_p1").val();
+                    var dsp1 = $("#dist_p2").val();
+                    var dsv0 = $("#dist_v1").val();
+                    var dsv1 = $("#dist_v2").val();
+                    var dsv2 = $("#dist_v3").val();
+                    var listas = $("#lista_1").val() + "," + $("#lista_2").val() + "," + $("#lista_3").val() + "," + $("#lista_4").val() + "," + $("#lista_5").val() + "," + $("#ciudad").val();
+                    var volqueta = $("#costo_volqueta").val();
+                    var chofer = $("#costo_chofer").val();
+                    var trans = $(this).data("transporte");
+                    var nodeId = $("#nodeId").val();
+
+                    var datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=" + nodeId + "Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=" + trans;
+                    var url = "${g.createLink(controller: 'reportes2',action: 'imprimirRubrosConsolidado')}?" + datos;
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=rubros_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
 
                     $("#modal-transporte").modal("hide");

@@ -895,6 +895,50 @@ class Reportes2Controller {
     }
 
 
+
+
+    def imprimirRubrosConsolidado (){
+//        println "rep rubros "+params
+        def rubros = []
+
+        def parts = params.id.split("_")
+
+        switch (parts[0]) {
+            case "sg":
+                def departamentos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(parts[1].toLong()))
+                rubros = Item.findAllByDepartamentoInList(departamentos,[sort:"nombre"])
+                break;
+            case "dp":
+                rubros = Item.findAllByDepartamento(DepartamentoItem.get(parts[1].toLong()),[sort:"nombre"])
+                break;
+            case "rb":
+                rubros = [Item.get(parts[1].toLong())]
+                break;
+        }
+
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def lugar = params.lugar
+        def indi = params.indi
+        def listas = params.listas
+        try {
+            indi = indi.toDouble()
+        } catch (e) {
+            println "error parse " + e
+            indi = 21.5
+        }
+
+        def datos=[]
+        rubros.each {rubro->
+            def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
+            preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
+            def res = preciosService.rb_precios(parametros, "")
+            datos.add(res.collect())
+        }
+
+        [datos:datos]
+    }
+
+
     def tablasPlanilla_bck() {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra

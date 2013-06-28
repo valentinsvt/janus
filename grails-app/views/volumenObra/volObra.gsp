@@ -59,7 +59,7 @@
         <i class="icon-table"></i>
         Calcular
     </a>
-    <a href="#" class="btn btn-ajax btn-new" id="reporteGrupos" title="Reporte Grupos/Subgrupos">
+    <a href="#" class="btn btn-ajax btn-new" id="reporteGrupos" title="Reporte Grupos/Subgrupos" style="display: none">
         <i class="icon-print"></i>
         Reporte Grupos/Subgrupos
     </a>
@@ -239,7 +239,8 @@
             data     : datos,
             success  : function (msg) {
                 clearInterval(interval)
-                $("#detalle").html(msg)
+                $("#detalle").html(msg);
+                $("#reporteGrupos").show()
             }
         });
     }
