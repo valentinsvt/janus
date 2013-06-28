@@ -10,6 +10,11 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def preciosService, buscadorService
 
+    def errorIndice() {
+        def planilla = Planilla.get(params.id)
+        return [planilla: planilla, errores: params.errores, alertas: params.alertas]
+    }
+
     def list() {
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
@@ -302,6 +307,9 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def resumen() {
+        //para volver a generar los valores de reajuste poner esta variable en true!!
+        def override = false
+
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
@@ -443,39 +451,82 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println periodos
 //        render periodos.descripcion
 
-        def errorIndice = ""
-
+        def erroresIndice = "", alertasIndice = ""
+        def failIndice = false
 //        println "Aqui empieza las inserciones"
         periodos.eachWithIndex { per, perNum ->
             def pl = planilla
             if (perNum == 0) {
                 pl = null
             }
-            def valRea = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
+//            def valRea = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
 
 //            println ">>>Periodo " + per.descripcion + " (${perNum}) hay " + valRea.size() + " valRea: " + valRea.id + " (obra: ${obra.id})"
 
             def tot = [c: 0, p: 0]
             //si no existen valores de reajuste, se crean
 
-            if (valRea.size() == 0) {
-                pcs.each { c ->
-                    def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
-                    if (!val) {
-                        println per
-                        val = 1
-                    }
-                    def vr = new ValorReajuste([
-                            valor: val * c.valor,
-                            formulaPolinomica: FormulaPolinomicaContractual.findByIndiceAndContrato(c.indice, contrato),
-                            obra: obra,
-                            periodoIndice: per,
-                            planilla: pl
-                    ])
-                    if (!vr.save(flush: true)) {
-                        println "vr errors " + vr.errors
+//            println "" + per + "   " + valRea
+
+//            if (valRea.size() == 0) {
+            pcs.each { c ->
+                def failed = false, alert = ""
+                def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
+                if (!val) {
+                    def valores = ValorIndice.findAllByIndice(c.indice, [sort: "periodo"])
+                    if (valores.size() > 0) {
+                        val = valores.last().valor
+                        alert = "ALERTA - No se encontró un valor de índice para " + per.descripcion + " para " + c.indice.descripcion + ", se utilizó el de " + valores.last().periodo.descripcion + "<br/>"
                     } else {
-//                        println "crea vr ${vr.id}"
+                        erroresIndice += "ERROR - No se encontró un valor de índice para " + c.indice.descripcion + "<br/>"
+                        failIndice = true
+                        failed = true
+                    }
+                }
+                if (!failed) {
+//                    println "Per: " + perNum + "    planilla: " + pl
+                    def formulaTmp = FormulaPolinomicaContractual.findByIndiceAndContrato(c.indice, contrato)
+                    def vr = ValorReajuste.withCriteria {
+                        eq("formulaPolinomica", formulaTmp)
+                        eq("obra", obra)
+                        eq("periodoIndice", per)
+                        if (pl) {
+                            eq("planilla", pl)
+                        } else {
+                            isNull("planilla")
+                        }
+                    }
+                    println "vr: " + vr + "\n\n\n"
+                    if (vr.size() == 0) {
+//                        println "???? " + vr
+                        if (alert != "") {
+                            alertasIndice += alert
+                        }
+                        vr = new ValorReajuste([
+                                valor: val * c.valor,
+                                formulaPolinomica: formulaTmp,
+                                obra: obra,
+                                periodoIndice: per,
+                                planilla: pl
+                        ])
+                        if (!vr.save(flush: true)) {
+                            println "vr errors " + vr.errors
+                        } else {
+//                            println "crea vr ${vr.id}"
+                        }
+                    } else if (vr.size() == 1) {
+                        vr = vr[0]
+                        if (override) {
+                            vr.valor = val * c.valor
+                        }
+                        if (!vr.save(flush: true)) {
+                            println "vr errors " + vr.errors
+                        } else {
+//                            println "actualiza vr ${vr.id}"
+                        }
+                    } else if (vr.size() > 1) {
+                        erroresIndice += "Se encontró más de un valor de reajuste "
+                        failIndice = true
                     }
                     def pos = "p"
                     if (c.numero.contains("c")) {
@@ -488,32 +539,45 @@ class PlanillaController extends janus.seguridad.Shield {
                         data2[pos][perNum] = [valores: [], total: 0, periodo: per]
                     }
                     data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: vr, valorTabla: vr.valor])
-                } //pcs.each
-            } //valRea.size == 0
-            else {
-                valRea.each { v ->
-                    def c = pcs.find { it.indice == v.formulaPolinomica.indice }
-                    if (c) {
-                        def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
-                        if (!val) {
-                            val = 1
-                        }
-//                        println "\t\t"+per.descripcion+"   "+c.indice+"   "+val+"   "+c.id
-                        def pos = "p"
-                        if (c.numero.contains("c")) {
-                            pos = "c"
-                        }
-                        tot[pos] += (val * c.valor).round(3)
-//                        println "\t\t" + pos + "   " + (v.valor * c.valor)
-                        if (!data2[pos][perNum]) {
-//                            println "\t\tCrea data2[${pos}][${perNum}]"
-                            data2[pos][perNum] = [valores: [], total: 0, periodo: per]
-                        }
-
-                        data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: v, valorTabla: val])
-                    }
                 }
-            } //valRea.size == 0
+            } //pcs.each
+//            } //valRea.size == 0
+//            else {
+//                valRea.each { v ->
+//                    def failed = false
+//                    def c = pcs.find { it.indice == v.formulaPolinomica.indice }
+//                    if (c) {
+//                        def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
+//                        if (!val) {
+////                            val = 1
+//                            def valores = ValorIndice.findAllByIndice(c.indice, [sort: "periodo"])
+//                            if (valores.size() > 0) {
+//                                val = valores.last().valor
+//                                erroresIndice += "No se encontró un valor de índice para " + per.descripcion + " para " + c.indice.descripcion + ", se utilizó el de " + valores.last().periodo.descripcion + "<br/>"
+//                            } else {
+//                                erroresIndice += "No se encontró un valor de índice para " + c.indice.descripcion + "<br/>"
+//                                failIndice = true
+//                                failed = true
+//                            }
+//                        }
+//                        if (!failed) {
+////                        println "\t\t"+per.descripcion+"   "+c.indice+"   "+val+"   "+c.id
+//                            def pos = "p"
+//                            if (c.numero.contains("c")) {
+//                                pos = "c"
+//                            }
+//                            tot[pos] += (val * c.valor).round(3)
+////                        println "\t\t" + pos + "   " + (v.valor * c.valor)
+//                            if (!data2[pos][perNum]) {
+////                            println "\t\tCrea data2[${pos}][${perNum}]"
+//                                data2[pos][perNum] = [valores: [], total: 0, periodo: per]
+//                            }
+//
+//                            data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: v, valorTabla: val])
+//                        }
+//                    }
+//                }
+//            } //valRea.size == 0
 
 //            println "data[c][${perNum}][total]=${tot['c']}"
             data2["c"][perNum]["total"] = tot["c"]
@@ -535,11 +599,18 @@ class PlanillaController extends janus.seguridad.Shield {
             def p01 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "p01")
             if (p01) {
                 def vrP01 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p01)
-                vrP01.valor = tot["c"]
-                if (!vrP01.save(flush: true)) {
-                    println "error al guardar valor de p01: " + tot["c"] + "\n" + vrP01.errors
+                if (vrP01) {
+                    vrP01.valor = tot["c"]
+                    if (!vrP01.save(flush: true)) {
+                        println "error al guardar valor de p01: " + tot["c"] + "\n" + vrP01.errors
+                    }
                 }
             }
+        }
+
+        if (failIndice) {
+            redirect(action: "errorIndice", params: [id: planilla.id, errores: erroresIndice, alertas: alertasIndice])
+            return
         }
 
         def tableWidth = 150 * periodos.size() + 400
@@ -1058,7 +1129,7 @@ class PlanillaController extends janus.seguridad.Shield {
             pMl += "</tr>"
             pMl += '</table>'
         }
-        return [tablaB0: tablaBo, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato]
+        return [tablaB0: tablaBo, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, errores: erroresIndice, alertas: alertasIndice]
     }
 
     private String formatoFecha(Date fecha, String format) {
