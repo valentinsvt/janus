@@ -49,7 +49,7 @@
             <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
                 <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
-                <g:if test="${planilla == []}">
+                <g:if test="${contrato?.estado != 'R'}">
                 <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-save"></i> Guardar</button>
                 </g:if>
                 <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
@@ -57,10 +57,10 @@
                     <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
                 </g:if>
 
-                <g:if test="${contrato?.estado = 'R' && planilla == []}">
+                <g:if test="${contrato?.estado == 'R' && planilla == []}">
                 <button class="btn" id="btn-desregistrar"><i class="icon-exclamation"></i> Cambiar Estado</button>
                 </g:if>
-                <g:if test="${!contrato?.id}">
+                <g:if test="${contrato?.id && contrato?.estado!='R'}">
                 <button class="btn" id="btn-registrar"><i class="icon-exclamation"></i> Registrar</button>
                 </g:if>
 
@@ -791,6 +791,38 @@
             $("#btn-aceptar").click(function () {
 
                 $("#frm-registroContrato").submit();
+
+            });
+
+            $("#btn-registrar").click(function () {
+
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(action: 'saveRegistrar')}",
+                    data    : "id=${contrato?.id}",
+                    success : function (msg) {
+
+                        %{--location.href = "${g.createLink(action: 'registroContrato')}";--}%
+                        location.href = "${g.createLink(controller: 'contrato', action: 'registroContrato')}" + "?contrato=" + "${contrato?.id}";
+                    }
+                });
+//
+
+            });
+
+
+            $("#btn-desregistrar").click( function () {
+
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(action: 'cambiarEstado')}",
+                    data    : "id=${contrato?.id}",
+                    success : function (msg) {
+
+                        %{--location.href = "${g.createLink(action: 'registroContrato')}";--}%
+                        location.href = "${g.createLink(controller: 'contrato', action: 'registroContrato')}" + "?contrato=" + "${contrato?.id}";
+                    }
+                });
 
             });
 

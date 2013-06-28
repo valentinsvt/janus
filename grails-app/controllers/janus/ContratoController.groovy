@@ -55,6 +55,24 @@ class ContratoController extends janus.seguridad.Shield {
         }
     }
 
+    def saveRegistrar() {
+        def contrato = Contrato.get(params.id)
+        contrato.estado = "R"
+        if (contrato.save(flush: true))
+            render "ok"
+        return
+    }
+
+    def cambiarEstado() {
+
+        def contrato = Contrato.get(params.id)
+        contrato.estado = "N"
+        if (contrato.save(flush: true))
+            render "ok"
+        return
+
+    }
+
 
     def registroContrato() {
         def contrato

@@ -551,6 +551,15 @@ class RubroController extends janus.seguridad.Shield {
         render precios
     }
 
+    def getUnidad () {
+
+        def item = Item.get(params.id)
+
+        render item.unidad
+
+
+    }
+
 
     def buscarRubroCodigo() {
 //        println "buscar rubro "+params

@@ -44,7 +44,7 @@
                               style="width: 300px; margin-left: -30px"/>
                 </div>
 
-                <div class="span1" style="margin-left: 50px;">
+                <div class="span1" style="margin-left: -20px;">
                     Costo
                 </div>
 
@@ -56,8 +56,8 @@
                     %{--</div>--}%
                 </div>
 
-                <div class="span2">
-                    <g:textField name="unidad_volqueta" value="${(obra.volquete) ? obra?.volqueteId : par?.volquete?.id}" readonly="true"  style="width: 20px"/>
+                <div class="span1">
+                    <g:textField name="unidad_volqueta" id="uni_vol" value="${(obra.volquete.unidad) ? obra?.volquete?.unidad : par?.volquete?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
                 </div>
             </div>
 
@@ -69,10 +69,10 @@
                 <div class="span6">
                     <g:select name="chofer.id" id="cmb_chof" from="${choferes}" optionKey="id" optionValue="nombre" class="num"
                               noSelection="${['': 'Seleccione']}" value="${(obra.chofer) ? obra?.choferId : par?.chofer?.id}"
-                              style="width: 300px;"/>
+                              style="width: 300px; margin-left: -30px"/>
                 </div>
 
-                <div class="span1" style="margin-left: 50px;">
+                <div class="span1" style="margin-left: -20px;">
                     Costo
                 </div>
 
@@ -81,6 +81,10 @@
                     <g:textField class="inputVar num" name="costo_chofer" disabled="" style="width: 80px"/>
                     %{--<span class="add-on">$</span>--}%
                     %{--</div>--}%
+                </div>
+
+                <div class="span1">
+                    <g:textField name="unidad_chofer" id="uni_chof" value="${(obra.chofer.unidad) ? obra?.chofer?.unidad : par?.chofer?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
                 </div>
             </div>
 
@@ -575,6 +579,34 @@
         }
     }
 
+    function unidadItem ($campo, $update){
+        var id = $campo.val();
+
+        if(id != ""){
+
+            $.ajax({
+                type:"POST",
+                url     : "${g.createLink(controller: 'rubro',action:'getUnidad')}",
+                data    : {
+                    id    : id
+                },
+                success : function (msg){
+
+
+                    $update.val(msg.toString().trim());
+                }
+            })
+
+
+
+        }else {
+
+            $update.val(" ");
+        }
+
+
+    }
+
     $(function () {
         $(".sum1").keyup(function (ev) {
             suma($(".sum1"), $("#indiceGastosGenerales"));
@@ -599,9 +631,11 @@
 
         $("#cmb_vol").change(function () {
             costoItem($(this), $("#costo_volqueta"));
+            unidadItem($(this), $("#uni_vol"))
         });
         $("#cmb_chof").change(function () {
             costoItem($(this), $("#costo_chofer"));
+            unidadItem($(this), $("#uni_chof"))
         });
     });
 
