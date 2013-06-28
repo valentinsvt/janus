@@ -324,10 +324,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (!params.reporte) {
             def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-
-
             lista.pop()
-
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
 //            println "entro reporte"
@@ -491,6 +488,18 @@ class ContratoController extends janus.seguridad.Shield {
         if (!params.reporte) {
             def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
+//            println "lista "+lista
+            for(int i=lista.size()-1;i>0;i--){
+                 def concurso = janus.pac.Concurso.findByObra(lista[i])
+                if(concurso){
+                    def oferta = janus.pac.Oferta.findAllByConcurso(concurso)
+                    if(oferta.size()<1)
+                        lista.remove(i);
+                }else{
+                    lista.remove(i);
+                }
+            }
+//            println "lista2 "+lista
             render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
         } else {
 //            println "entro reporte"
