@@ -45,7 +45,7 @@
 
 
 
-<div id="mapaPichincha" style="width: 900px; height: 650px">
+<div id="mapaPichincha" style="width: 800px; height: 600px">
 
 
 
@@ -117,7 +117,9 @@
     %{--<form>--}%
         %{--<input type="button" value="Print this page" onClick="window.print()">--}%
     %{--</form>--}%
-    <button class="btn noprint" id="btnImprimir" onClick="window.print()"><i class="icon-print"></i> Imprimir</button>
+    %{--<button class="btn noprint" id="btnImprimir" onClick="window.print()"><i class="icon-print"></i> Imprimir</button>--}%
+    <button class="btn noprint" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+
     %{--<img src="images/print.png" class="print" alt="print" title="print" onclick="window.open('print.html')" />--}%
 
 </div>
@@ -434,6 +436,10 @@
 
 
     });
+
+    $("#btnImprimir").click(function() {
+        window.print()
+    })
 
 </script>
 

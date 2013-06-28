@@ -100,7 +100,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Transporte
+                    Lista de Precios
                 </span>
             </div>
 

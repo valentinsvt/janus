@@ -43,11 +43,11 @@
 
         <div class="span12 btn-group" data-toggle="buttons-radio">
             <a href="#" id="1" class="btn btn-info toggle active">
-                <i class="icon-briefcase"></i>
+                <i class="icon-folder-open-alt"></i>
                 Materiales <!--grpo--><!--sbgr -> Grupo--><!--dprt -> Subgrupo--><!--item-->
             </a>
             <a href="#" id="2" class="btn btn-info toggle">
-                <i class="icon-group"></i>
+                <i class="icon-user"></i>
                 Mano de obra
             </a>
             <a href="#" id="3" class="btn btn-info toggle">
