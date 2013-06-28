@@ -53,7 +53,7 @@
             </div>
 
             <div class="controls">
-                <g:select name="fuente.id" from="${janus.FuenteFinanciamiento.list([sort: 'descripcion'])}" optionValue="descripcion" optionKey="id"></g:select>
+                <g:select name="fuente.id" from="${janus.FuenteFinanciamiento.list([sort: 'descripcion'])}" optionValue="descripcion" optionKey="id" value="${presupuestoInstance?.fuente.id}"></g:select>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
