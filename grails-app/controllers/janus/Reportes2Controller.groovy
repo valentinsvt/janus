@@ -1,11 +1,7 @@
 package janus
 
-import com.lowagie.text.Document
-import com.lowagie.text.Element
-import com.lowagie.text.PageSize
-import com.lowagie.text.Paragraph
+import com.lowagie.text.*
 import com.lowagie.text.pdf.*
-import com.lowagie.text.Font;
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -16,8 +12,7 @@ import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
 
-import java.awt.Color;
-import java.util.prefs.Preferences
+import java.awt.*
 
 class Reportes2Controller {
 
@@ -862,7 +857,7 @@ class Reportes2Controller {
             pMl += '<th class="tal">Días de retraso</th> <td>' + retraso + "</td>"
             pMl += "</tr>"
             pMl += "<tr>"
-            pMl += '<th class="tal">Multa</th> <td>' + elm.numero(number: prmlMulta) + "por mil de \$" + elm.numero(number: totalContrato) + "</td>"
+            pMl += '<th class="tal">Multa</th> <td>' + elm.numero(number: prmlMulta) + "‰ de \$" + elm.numero(number: totalContrato) + "</td>"
             pMl += "</tr>"
             pMl += "<tr>"
             pMl += '<th class="tal">Total multa</th> <td>$' + elm.numero(number: totalMulta) + "</td>"

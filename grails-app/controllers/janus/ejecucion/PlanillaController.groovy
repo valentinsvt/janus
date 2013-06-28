@@ -443,6 +443,8 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println periodos
 //        render periodos.descripcion
 
+        def errorIndice = ""
+
 //        println "Aqui empieza las inserciones"
         periodos.eachWithIndex { per, perNum ->
             def pl = planilla
@@ -460,6 +462,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 pcs.each { c ->
                     def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
                     if (!val) {
+                        println per
                         val = 1
                     }
                     def vr = new ValorReajuste([
