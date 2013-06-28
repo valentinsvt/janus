@@ -1,6 +1,9 @@
 package janus
 
-import com.lowagie.text.*
+import com.lowagie.text.Document
+import com.lowagie.text.Element
+import com.lowagie.text.PageSize
+import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.*
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
@@ -314,11 +317,11 @@ class Reportes2Controller {
 //                println "\t" + m1 + "   " + m2
                 if (m1 == m2) {
                     if (pl.periodoIndices) {
-                        println "++ " + pl.periodoIndices
+//                        println "++ " + pl.periodoIndices
                         periodos.add(pl.periodoIndices)
                     }
                     if (pl == planilla) {
-                        println "-- " + pl
+//                        println "-- " + pl
                         periodosPlanilla.add(pl)
                     }
                 } else {
