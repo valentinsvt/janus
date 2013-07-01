@@ -113,15 +113,32 @@
         height : 100%;
     }
 
+    .label{
+        font-weight: bold;
+        width: 110px;
+        float: left;
+        height: 20px;
+    }
+    .dato{
+        width: 430px;
+        float: left;
+        height: 20px;
+        text-align: left;
+    }
 
     </style>
 </head>
 <body>
 <div class="hoja">
     <div class="titulo" style="text-align: center;margin-bottom: 15px;">
-       G.A.D. PROVINCIA DE PICHINCHA <br/>
-       GESTIÓN DE PRESUPUESTOS <br/>
-       ANÁLISIS DE PRECIOS UNITARIOS  <br/>
+        G.A.D. PROVINCIA DE PICHINCHA <br/>
+        GESTIÓN DE PRESUPUESTOS <br/>
+        ANÁLISIS DE PRECIOS UNITARIOS  <br/>
+    </div>
+    <div style="height: 45px">
+        <div class="label">Fecha Act. P.U: </div> <div class="dato">${fecha.format("dd-MM-yyyy")}</div>
+        <div class="label">% costos indirectos: </div> <div class="dato">${indi}</div>
+
     </div>
     <table class="table table-bordered table-striped table-condensed table-hover" style="width: 100%;">
         <thead>
@@ -136,17 +153,17 @@
         <g:set var="total" value="${0}"></g:set>
         <g:each in="${datos}" var="rubro">
             <tr>
-                <td>${rubro[0]["itemcdgo"]}</td>
-                <td>${rubro[0]["itemnmbr"]}</td>
-                <td>${rubro[0]["unddcdgo"]}</td>
-                <td style="text-align: right"><g:formatNumber number="${rubro[0]["parcial"]+rubro[0]["parcial_t"]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                <g:set var="total" value="${total+rubro[0]["parcial"]+rubro[0]["parcial_t"]}"></g:set>
+                <td>${rubro["codigo"]}</td>
+                <td>${rubro["nombre"]}</td>
+                <td>${rubro["unidad"]}</td>
+                <td style="text-align: right"><g:formatNumber number="${rubro["total"]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                <g:set var="total" value="${total+rubro["total"]}"></g:set>
             </tr>
         </g:each>
-        <tr >
-            <td colspan="3" style="border-top: 1px solid black !important;"><b>TOTAL</b></td>
-            <td style="text-align: right;border-top: 1px solid black !important;"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
-        </tr>
+        %{--<tr >--}%
+            %{--<td colspan="3" style="border-top: 1px solid black !important;"><b>TOTAL</b></td>--}%
+            %{--<td style="text-align: right;border-top: 1px solid black !important;"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>--}%
+        %{--</tr>--}%
         </tbody>
     </table>
 </div>

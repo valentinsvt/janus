@@ -900,7 +900,7 @@ class Reportes2Controller {
 
 
     def imprimirRubrosConsolidado (){
-//        println "rep rubros "+params
+        println "rep rubros "+params
         def rubros = []
 
         def parts = params.id.split("_")
@@ -934,10 +934,22 @@ class Reportes2Controller {
             def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
             preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
             def res = preciosService.rb_precios(parametros, "")
-            datos.add(res.collect())
+            def temp = [:]
+            def total=0
+            res.each {r->
+                total+=r["parcial"]+r["parcial_t"]
+            }
+            total=total*(1+indi/100)
+            temp.put("codigo",rubro.codigo)
+            temp.put("nombre",rubro.nombre)
+            temp.put("unidad",rubro.unidad.codigo)
+            temp.put("total",total)
+            datos.add(temp)
+//            println "res "+res
+
         }
 
-        [datos:datos]
+        [datos:datos,fecha:fecha,indi:indi]
     }
 
 
