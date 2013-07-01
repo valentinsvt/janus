@@ -1089,11 +1089,10 @@
 
         });
 
-//        $("#modal-var").draggable({
-//
-////            handle:".modal-header",
-////            containment: "document"
-//        });
+
+        $("#modal-var").draggable({
+//            handle: ".modal-header"
+        });
 
         $("#btnVar").click(function () {
 

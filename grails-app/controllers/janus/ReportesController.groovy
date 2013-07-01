@@ -2682,6 +2682,8 @@ class ReportesController {
 
 
 
+
+
             Paragraph headerForzar = new Paragraph();
             addEmptyLine(headerForzar, 1);
             headerForzar.setAlignment(Element.ALIGN_CENTER);
@@ -2776,12 +2778,15 @@ class ReportesController {
 
         }
 
-//        document.newPage();
-//        document.getCurrentDocumentSize()
 
-//        println("--->>>" + document.getPageSize())
+
 
         if (cuenta == 1) {
+
+//            document.setBoxSize(String crop,
+//                    Rectangle size)
+
+            println("--->>>" + document.getPageSize())
 
             PdfPTable tablaFirmas = new PdfPTable(1);
             tablaFirmas.setWidthPercentage(100);
