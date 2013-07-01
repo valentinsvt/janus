@@ -909,18 +909,19 @@ class ObraFPController {
         def combustible = totalSx(id, "${id_combustible}_T", "sS1")
         def chofer = totalSx(id, "${obra.chofer.id}_T", "sS1")
 
+/*
         actualizaS2(id, "${id_equipo}_T", transporte * 0.52)
         actualizaS2(id, "${id_repuestos}_T", transporte * 0.26 + repuestos)
         actualizaS2(id, "${id_combustible}_T", transporte * 0.08 + combustible)
         actualizaS2(id, "${id_mecanico}_T", transporte * 0.11 + mecanico)
         actualizaS2(id, "${id_saldo}_T", transporte * 0.03 + saldo)
-/*
+*/
+
         actualizaS2(id, "${id_equipo}_T", transporte * obra.desgloseEquipo)
         actualizaS2(id, "${id_repuestos}_T", transporte * obra.desgloseRepuestos + repuestos)
         actualizaS2(id, "${id_combustible}_T", transporte * obra.desgloseCombustible + combustible)
         actualizaS2(id, "${id_mecanico}_T", transporte * obra.desgloseMecanico + mecanico)
         actualizaS2(id, "${id_saldo}_T", transporte * obra.desgloseSaldo + saldo)
-*/
 
         actualizaS2(id, "${obra.chofer.id}_T", totalTrnp * (1 - fraccion) + chofer)
     }
