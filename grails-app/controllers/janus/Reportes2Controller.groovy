@@ -1610,12 +1610,15 @@ class Reportes2Controller {
         def b = []
         def c = []
         def sqlEquipoTotal1
+        def sqlVerificarTransporte
         def et1 = []
         def et2
         def et3
         def ed1 = []
         def ed2
         def ed3
+        def ed4
+        def varTrans
         def valores = []
         def desglose = []
         def columnas = [5051, 5050, 5052, 3978, 5049]
@@ -1645,6 +1648,17 @@ class Reportes2Controller {
                 "codigo = 'sS1' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
 
+        sqlVerificarTransporte =   "SELECT\n" +
+                "valor\n" +
+                "from mfvl, mfcl\n" +
+                "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
+                "mfvl.obra__id = ${obra.id} AND\n" +
+                "mfcl.clmndscr = 'TRANSPORTE_T' AND \n" +
+                "codigo = 'sS1' AND\n " +
+                "mfvl.clmncdgo = mfcl.clmncdgo"
+
+//        println("--><" + sqlVerificarTransporte)
+
 //            select valor
 //        from mfvl, mfcl
 //        where mfvl.obra__id = mfcl.obra__id and mfvl.obra__id = 1430
@@ -1661,6 +1675,13 @@ class Reportes2Controller {
 
 
         def cn = dbConnectionService.getConnection()
+
+        ed4 = cn.rows(sqlVerificarTransporte.toString())
+        ed4.each {
+
+           varTrans = it?.valor
+
+        }
 
 
         columnas.each {
@@ -1724,13 +1745,28 @@ class Reportes2Controller {
 //        valores.add(obra?.desgloseEquipo)
 
 //        println("coeficientes:" + valores)
+//
+//        println("ed1" + ed1)
+//        println("eqTotal:" + eqTotal)
 
-        valores.eachWithIndex { item, i ->
 
-            b += (((ed1[i]) / (item)) - eqTotal)
+        if (varTrans > 0){
+            valores.eachWithIndex { item, i ->
 
+                b += (((ed1[i]) / (item)) - eqTotal)
+
+                println(b[0])
+            }
+
+        }else {
+
+
+
+            b[0] = 0.00
 
         }
+
+
 
 //        println("B:" + b)
 
@@ -1818,11 +1854,29 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
-        addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        if(b[0] > 0){
+
+
+            addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+            addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
+                    1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+            addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
+        }else {
+
+
+
+            addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+            addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
+                    1, maxFractionDigits: 1, format: "##.##", locale: "ec"), times10normal), prmsDerecha)
+            addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+
+
+        }
+
+
 
         addCellTabla(tablaDesglose, new Paragraph("____________________________"), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
