@@ -5,6 +5,7 @@ import com.lowagie.text.Element
 import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
 import com.lowagie.text.pdf.*
+import com.lowagie.text.Font;
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -14,8 +15,9 @@ import jxl.write.WritableCellFormat
 import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
+import java.awt.Color
 
-import java.awt.*
+//import java.awt.*
 
 class Reportes2Controller {
 
@@ -1622,7 +1624,7 @@ class Reportes2Controller {
                 "valor\n" +
                 "FROM mfvl, mfcl\n" +
                 "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
-                "mfvl.obra__id = 1430 AND\n" +
+                "mfvl.obra__id = ${obra.id} AND\n" +
                 "mfcl.clmndscr = 'TRANSPORTE_T' AND\n" +
                 "codigo = 'sS1' AND\n" +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
@@ -1638,7 +1640,7 @@ class Reportes2Controller {
                 "valor\n" +
                 "from mfvl, mfcl\n" +
                 "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
-                "mfvl.obra__id = 1430 AND\n" +
+                "mfvl.obra__id = ${obra.id} AND\n" +
                 "mfcl.clmndscr = '5051_T' AND \n" +
                 "codigo = 'sS1' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
@@ -1669,7 +1671,7 @@ class Reportes2Controller {
                     "valor\n" +
                     "from mfvl, mfcl\n" +
                     "where mfvl.obra__id = mfcl.obra__id AND\n" +
-                    "mfvl.obra__id = 1430 AND\n" +
+                    "mfvl.obra__id = ${obra.id} AND\n" +
                     "mfcl.clmndscr = '${it}_T' AND\n" +
                     "codigo= 'sS2' AND\n" +
                     "mfvl.clmncdgo = mfcl.clmncdgo"
