@@ -1767,7 +1767,7 @@ class Reportes2Controller {
 
                 b += (((ed1[i]) / (item)) - eqTotal)
 
-                println(b[0])
+//                println(b[0])
             }
 
         }else {
@@ -1882,7 +1882,7 @@ class Reportes2Controller {
             addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
             addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
             addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
-                    1, maxFractionDigits: 1, format: "##.##", locale: "ec"), times10normal), prmsDerecha)
+                    5, maxFractionDigits: 5, format: "##.##", locale: "ec"), times10normal), prmsDerecha)
             addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
 
