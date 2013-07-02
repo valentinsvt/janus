@@ -115,15 +115,27 @@
 
     .label{
         font-weight: bold;
-        width: 110px;
+        width: 120px;
         float: left;
         height: 20px;
+        line-height: 20px;
     }
     .dato{
-        width: 430px;
+
         float: left;
         height: 20px;
         text-align: left;
+        line-height: 20px;;
+    }
+    .large{
+        width: 240px;
+    }
+    .small{
+        width: 120px;
+
+    }
+    .half{
+        width: 50px;
     }
 
     </style>
@@ -135,9 +147,29 @@
         GESTIÓN DE PRESUPUESTOS <br/>
         ANÁLISIS DE PRECIOS UNITARIOS  <br/>
     </div>
-    <div style="height: 45px">
-        <div class="label">Fecha Act. P.U: </div> <div class="dato">${fecha.format("dd-MM-yyyy")}</div>
-        <div class="label">% costos indirectos: </div> <div class="dato">${indi}</div>
+    <div style="height: 192px;border-bottom: 1px solid black;margin-bottom: 10px;">
+
+        <div class="label">Fecha Act. P.U: </div> <div class="dato large">${fecha.format("dd-MM-yyyy")}</div>
+        <div class="label">% costos indirectos: </div> <div class="dato small">${indi}</div>
+        <div class="dato" style="width: 100%;font-weight: bold;border-bottom: black solid 1px;margin-bottom: 5px;border-top: 1px solid black">Listas de precios y distancias</div>
+        <div class="label">Mano de obra y Equipos: </div> <div class="dato large">${listas[5]}</div>
+        <div class="label"></div> <div class="dato small"></div>
+        <div class="label">Canton: </div> <div class="dato large ">${listas[0]}</div>
+        <div class="label half">Distancia: </div> <div class="dato small">${params.dsp0}</div>
+        <div class="label">Especial: </div> <div class="dato large">${listas[1]}</div>
+        <div class="label half">Distancia: </div> <div class="dato small ">${params.dsp1}</div>
+        <div class="label">Mejoramiento: </div> <div class="dato large">${listas[3]}</div>
+        <div class="label half">Distancia: </div> <div class="dato small">${params.dsv0}</div>
+        <div class="label">Petreos Hormigones:</div> <div class="dato large">${listas[2]}</div>
+        <div class="label half">Distancia: </div> <div class="dato small">${params.dsv1}</div>
+        <div class="label">Carpeta Asfáltica: </div> <div class="dato large">${listas[4]}</div>
+        <div class="label half">Distancia: </div> <div class="dato small">${params.dsv2}</div>
+        <div class="dato" style="width: 100%;font-weight: bold;border-top: 1px solid black;height: 1px"></div>
+        <div class="label">Chofer: </div> <div class="dato large">${janus.Item.get(params.chof).nombre} <b>($${params.prch.toDouble().round(2)})</b></div>
+        <div class="label half">Volquete: </div> <div class="dato small">${janus.Item.get(params.volq).nombre} <b>($${params.prvl.toDouble().round(2)})</b></div>
+
+
+        %{--<div class="label">Distancia 2:</div> <div class="dato">${indi}</div>--}%
 
     </div>
     <table class="table table-bordered table-striped table-condensed table-hover" style="width: 100%;">
@@ -161,8 +193,8 @@
             </tr>
         </g:each>
         %{--<tr >--}%
-            %{--<td colspan="3" style="border-top: 1px solid black !important;"><b>TOTAL</b></td>--}%
-            %{--<td style="text-align: right;border-top: 1px solid black !important;"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>--}%
+        %{--<td colspan="3" style="border-top: 1px solid black !important;"><b>TOTAL</b></td>--}%
+        %{--<td style="text-align: right;border-top: 1px solid black !important;"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>--}%
         %{--</tr>--}%
         </tbody>
     </table>
