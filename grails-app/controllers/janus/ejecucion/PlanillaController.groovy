@@ -347,7 +347,21 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //        println "================" + oferta.id + "  " + oferta.fechaEntrega + "  " + (oferta.fechaEntrega - 30) + "   " + periodoOferta
 
-        def periodos = [], periodosPlanilla = []
+
+        def planillaAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("A"))
+//        println pcs.numero
+
+        def fechaPlanillaAnticipo
+        // utilizamos siempre la fecha de presentacion del anticipo y se hace una planilla de reajuste final
+        // para reajustar el anticipo a la fecha de pago en las planillas de avnace descomentar esta parte
+//        if (planilla.tipoPlanilla.codigo == "A") {
+        fechaPlanillaAnticipo = planillaAnticipo.fechaPresentacion
+//        } else {
+//            fechaPlanillaAnticipo = planillaAnticipo.fechaPago
+//        }
+        def periodoAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaPlanillaAnticipo, fechaPlanillaAnticipo)
+
+        def periodos = [], periodosTmp = [], periodosPlanilla = []
         def data2 = [
                 c: [:],
                 p: [:]
@@ -416,17 +430,25 @@ class PlanillaController extends janus.seguridad.Shield {
                 order("numero", "asc")
             }
         }
-        def planillaAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("A"))
-//        println pcs.numero
 
         //llena el arreglo de periodos
         //el periodo que corresponde a la fecha de entrega de la oferta
         periodos.add(periodoOferta)
+        //el periodo que corresponde a la fecha del anticipo
+        periodos.add(periodoAnticipo)
+
         planillas.each { pl ->
             if (pl.tipoPlanilla.codigo == 'A') {
-                //si es anticipo: el periodo q corresponde a la fecha del anticipo
-                def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPresentacion, pl.fechaPresentacion)
-                periodos.add(prin)
+//                //si es anticipo: el periodo q corresponde a la fecha del anticipo
+
+//                if (planilla.tipoPlanilla.codigo == "A") {
+//                    fechaPlanillaAnticipo = pl.fechaPresentacion
+//                } else {
+//                    fechaPlanillaAnticipo = pl.fechaPago
+//                }
+//                println pl.fechaPresentacion.format("dd-MM-yyyy") + "   " + pl.fechaPago.format("dd-MM-yyyy") + "   " + fechaPlanillaAnticipo.format("dd-MM-yyyy")
+//                def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaPlanillaAnticipo, fechaPlanillaAnticipo)
+//                periodos.add(prin)
             } else {
 //                println pl.id + "   " + pl.fechaInicio.format("dd-MM-yyyy") + " a " + pl.fechaFin.format("dd-MM-yyyy")
                 def m1 = pl.fechaInicio.format("MM")
@@ -435,7 +457,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 if (m1 == m2) {
                     if (pl.periodoIndices) {
 //                        println "++ " + pl.periodoIndices
-                        periodos.add(pl.periodoIndices)
+                        periodosTmp.add(pl.periodoIndices)
                     }
                     if (pl == planilla) {
 //                        println "-- " + pl
@@ -449,7 +471,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //                        if (pl.periodoIndices.fechaFin >= fi) {
                         def prin = PeriodosInec.findByFechaInicio(fi)
                         if (prin) {
-                            periodos.add(prin)
+                            periodosTmp.add(prin)
                         }
                         if (pl == planilla) {
                             periodosPlanilla.add(prin)
@@ -462,7 +484,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
-        periodos = periodos.unique()
+        periodosTmp = periodosTmp.unique()
+        periodos = periodos + periodosTmp
+//        periodos = periodos.unique()
 //        println periodos
 //        render periodos.descripcion
 
@@ -488,7 +512,6 @@ class PlanillaController extends janus.seguridad.Shield {
             pcs.each { c ->
                 def failed = false, alert = ""
                 def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
-                println c.numero
                 if (!val) {
                     if (c.numero == "p01") {
                         val = 1
@@ -659,7 +682,7 @@ class PlanillaController extends janus.seguridad.Shield {
         tablaBo += "<th>Oferta</th>"
         tablaBo += "<th class='nb'>" + fechaConFormato(fechaEntregaOferta, "MMM-yy") + "</th>"
         tablaBo += "<th>Variación</th>"
-        tablaBo += "<th class='nb'>Anticipo (" + fechaConFormato(planillaAnticipo.fechaPresentacion, "MMM-yy") + ")</th>"
+        tablaBo += "<th class='nb'>Anticipo (" + fechaConFormato(fechaPlanillaAnticipo, "MMM-yy") + ")</th>"
         if (periodos.size() > 2) {
             periodos.eachWithIndex { per, i ->
                 if (i > 1) {
@@ -746,7 +769,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 if (i == 1) {
                     tbodyP0 += "<th>ANTICIPO</th>"
                     tbodyP0 += "<th>"
-                    tbodyP0 += fechaConFormato(planillaAnticipo.fechaPresentacion, "MMM-yy")
+                    tbodyP0 += fechaConFormato(fechaPlanillaAnticipo, "MMM-yy")
                     tbodyP0 += "</th>"
                     tbodyP0 += "<td colspan='4'></td>"
                     tbodyP0 += "<td class='number'>"
@@ -949,7 +972,7 @@ class PlanillaController extends janus.seguridad.Shield {
         tablaFr += '</tr>'
         tablaFr += '<tr>'
         tablaFr += '<th>' + fechaConFormato(fechaEntregaOferta, "MMM-yy") + '</th>'
-        tablaFr += '<th>Anticipo <br/>' + fechaConFormato(planillaAnticipo.fechaPresentacion, "MMM-yy") + '</th>'
+        tablaFr += '<th>Anticipo <br/>' + fechaConFormato(fechaPlanillaAnticipo, "MMM-yy") + '</th>'
         if (periodos.size() > 2) {
             periodos.eachWithIndex { per, i ->
                 if (i > 1) {
