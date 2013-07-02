@@ -590,7 +590,7 @@ class RubroController extends janus.seguridad.Shield {
 
 //        println "res "+res
         res.each { r ->
-            if (r["parcial_t"] > 0) {
+            if (r["grpocdgo"] == 1) {
 //                println "en tabla "+r
                 tabla += "<tr>"
                 tabla += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"

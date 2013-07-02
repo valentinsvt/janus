@@ -651,9 +651,10 @@
                         <p style="font-size: 14px; text-align: center;"> Ya existe una matriz generada <b>sin</b> desglose transporte</p>
                     </g:if>
                 </g:else>
-                <p>Desea volver a generar la matriz? Esta acción podria tomar varios minutos</p>
+                <p>Desea generar la matriz? Esta acción podria tomar varios minutos</p>
                 <a href="#" class="btn btn-info" id="no">No</a>
                 <a href="#" class="btn btn-danger" id="si">Si</a>
+                <a href="#" class="btn btn-info" id="cancela" style="margin-left: 400px;">Cancelar</a>
 
             </div>
 
@@ -859,6 +860,9 @@
         $("#si").click(function () {
             $("#datos_matriz").show();
             $("#msg_matriz").hide()
+        });
+        $("#cancela").click(function () {
+            $("#modal-matriz").modal("hide")
         });
 
         $("#ok_matiz").click(function () {

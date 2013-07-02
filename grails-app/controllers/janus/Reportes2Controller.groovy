@@ -900,7 +900,7 @@ class Reportes2Controller {
 
 
     def imprimirRubrosConsolidado (){
-        println "rep rubros "+params
+//        println "rep rubros "+params
         def rubros = []
 
         def parts = params.id.split("_")
@@ -948,8 +948,15 @@ class Reportes2Controller {
 //            println "res "+res
 
         }
+        def l = listas.split(",")
+//        println "listas str "+listas+" "+l
+        listas=[]
+        l.each {
+            listas.add(Lugar.get(it).descripcion)
+        }
+//        println "listas "+listas
 
-        [datos:datos,fecha:fecha,indi:indi]
+        [datos:datos,fecha:fecha,indi:indi,params: params,listas:listas]
     }
 
 
