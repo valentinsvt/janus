@@ -64,7 +64,8 @@
             <div>
                 <span id="peso-label" class="control-label label label-inverse">
                     %{--Peso--}%
-                    ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Peso' : 'Volumen'}
+                    %{--${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Peso' : 'Volumen'}--}%
+                    ${(itemInstance?.tipoLista?.codigo[0] == 'P') ? 'Peso' : 'Volumen'}
                 </span>
             </div>
 
@@ -72,7 +73,8 @@
 
                 <span aria-labelledby="peso-label">
                     <g:formatNumber number="${itemInstance.peso}" maxFractionDigits="5" minFractionDigits="5" format='##,#####0' locale='ec'/>
-                    ${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}
+                    %{--${(itemInstance?.transporte == 'P' || itemInstance?.transporte == 'P1') ? 'Ton' : 'M<sup>3</sup>'}--}%
+                    ${itemInstance?.tipoLista?.unidad}
                 </span>
 
             </div>

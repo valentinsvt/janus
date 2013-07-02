@@ -16,20 +16,6 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Nombre
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="nombre" maxlength="160" class="allCaps required input-xxlarge" value="${itemInstance?.nombre}"/>
-            <span class="mandatory">*</span>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
 
 %{--<div class="control-group">--}%
 %{--<div>--}%
@@ -78,6 +64,21 @@
         %{--<span class="mandatory">*</span>--}%
 
         %{--<p class="help-block ui-helper-hidden"></p>--}%
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Nombre
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="nombre" maxlength="160" class="allCaps required input-xxlarge" value="${itemInstance?.nombre}"/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
 
