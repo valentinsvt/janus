@@ -117,6 +117,10 @@
                     <g:link controller="tipoFormulaPolinomica" action="list">Tipo de fórmula polinómica</g:link> de reajuste de
                     precios que puede tener un contrato.
                 </div><br>
+
+                <div class="item" texto="var">
+                    <g:link controller="inicio" action="variables">Variables</g:link>
+                </div><br>
             </div>
 
             <div id="cntr" class="ui-widget-content" style="height: 560px">

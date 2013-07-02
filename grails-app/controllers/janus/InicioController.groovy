@@ -34,4 +34,16 @@ class InicioController extends janus.seguridad.Shield {
     }
 
 
+    def variables () {
+
+        def paux = Parametros.get(1);
+
+        def par = Parametros.list()
+
+        return[paux: paux, par: par]
+
+
+    }
+
+
 }

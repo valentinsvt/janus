@@ -1865,7 +1865,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph("Valor de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: eqTotal, minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
@@ -1879,7 +1879,7 @@ class Reportes2Controller {
             addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
             addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
             addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
-                    1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                    5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
             addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         }else {
@@ -1905,7 +1905,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph("Total Equipos + Transporte", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: c[0], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
@@ -1916,31 +1916,31 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[0], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Repuestos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[1], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Combustibles", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[2], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Mecánico", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[3], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph("Distribución de Saldo", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[4], minFractionDigits:
-                1, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
 
