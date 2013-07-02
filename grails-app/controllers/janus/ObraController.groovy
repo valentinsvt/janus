@@ -22,7 +22,6 @@ class ObraController extends janus.seguridad.Shield {
 
     }
 
-
     def regitrarObra() {
         def obra = Obra.get(params.id)
         def obrafp = new ObraFPController()
@@ -44,11 +43,8 @@ class ObraController extends janus.seguridad.Shield {
 //            println "crono " + crono
             if (crono.toDouble().round(2) != 100.00) {
                 msg += "<br><span class='label-azul'>Error:</span> La suma de porcentajes de el volumen de obra: ${it.item.codigo} (${crono.toDouble().round(2)}) en el cronograma es diferente de 100%"
-
             }
             crono = 0
-
-
         }
         if (msg != "") {
             render msg
@@ -72,7 +68,6 @@ class ObraController extends janus.seguridad.Shield {
         }
 //        println "2 res "+msg
 
-
         def fps = FormulaPolinomica.findAllByObra(obra)
 //        println "fps "+fps
         def totalP = 0
@@ -82,16 +77,28 @@ class ObraController extends janus.seguridad.Shield {
                 totalP += fp.valor
             }
         }
+
+        def totalC = 0
+        fps.each { fp ->
+            if (fp.numero =~ "c") {
+//                println "sumo "+fp.numero+"  "+fp.valor
+                totalC += fp.valor
+            }
+        }
 //        println "totp "+totalP
         if (totalP.toDouble().round(6) != 1.000) {
             render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
             return
         }
-
+        if (totalC.toDouble().round(6) != 1.000) {
+            render "La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000"
+            return
+        }
 
 
         obraService.registrarObra(obra)
         obra.estado = "R"
+        obra.desgloseTransporte = null  //obliga a genrar matriz con valores históricos almacenado spor grst_obra
         if (obra.save(flush: true)) {
             render "ok"
             return
