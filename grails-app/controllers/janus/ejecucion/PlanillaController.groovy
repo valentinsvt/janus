@@ -306,9 +306,20 @@ class PlanillaController extends janus.seguridad.Shield {
         render html
     }
 
+    def fechaConFormato(fecha, formato) {
+        def meses = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+        def strFecha
+        switch (formato) {
+            case "MMM-yy":
+                strFecha = meses[fecha.format("MM").toInteger()] + "-" + fecha.format("yy")
+                break;
+        }
+        return strFecha
+    }
+
     def resumen() {
         //para volver a generar los valores de reajuste poner esta variable en true!!
-        def override = false
+        def override = true
 
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
@@ -330,7 +341,11 @@ class PlanillaController extends janus.seguridad.Shield {
         def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
         def tipo = TipoFormulaPolinomica.get(1)
         def oferta = contrato.oferta
+
+
         def periodoOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
+
+//        println "================" + oferta.id + "  " + oferta.fechaEntrega
 
         def periodos = [], periodosPlanilla = []
         def data2 = [
@@ -429,7 +444,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 } else {
                     def y = pl.fechaInicio.format("yyyy")
                     (m1.toInteger()..m2.toInteger()).each {
-                        println "\t\t" + it + " - " + y
+//                        println "\t\t" + it + " - " + y
                         def fi = new Date().parse("dd-MM-yyyy", "01-" + it + "-" + y)
 //                        if (pl.periodoIndices.fechaFin >= fi) {
                         def prin = PeriodosInec.findByFechaInicio(fi)
@@ -453,7 +468,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def erroresIndice = "", alertasIndice = ""
         def failIndice = false
-//        println "Aqui empieza las inserciones"
+//        println "Aqui empieza las inserciones " + periodos
         periodos.eachWithIndex { per, perNum ->
             def pl = planilla
             if (perNum == 0) {
@@ -461,7 +476,8 @@ class PlanillaController extends janus.seguridad.Shield {
             }
 //            def valRea = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
 
-//            println ">>>Periodo " + per.descripcion + " (${perNum}) hay " + valRea.size() + " valRea: " + valRea.id + " (obra: ${obra.id})"
+//            println ">>>>>" + per
+//            println ">>>Periodo " + per?.descripcion + " (${perNum}) hay " + valRea.size() + " valRea: " + valRea.id + " (obra: ${obra.id})"
 
             def tot = [c: 0, p: 0]
             //si no existen valores de reajuste, se crean
@@ -473,30 +489,37 @@ class PlanillaController extends janus.seguridad.Shield {
                 def failed = false, alert = ""
                 def val = ValorIndice.findByPeriodoAndIndice(per, c.indice)?.valor
                 if (!val) {
+//                    println "--------------------------"
+//                    println "\t\tval: " + val + "   per:" + per + "   indice: " + c.indice
                     def valores = ValorIndice.findAllByIndice(c.indice, [sort: "periodo"])
+//                    println "\t\tvalores: " + valores.id + "  " + valores.periodo + "  " + valores.valor
                     if (valores.size() > 0) {
                         val = valores.last().valor
-                        alert = "ALERTA - No se encontró un valor de índice para " + per.descripcion + " para " + c.indice.descripcion + ", se utilizó el de " + valores.last().periodo.descripcion + "<br/>"
+                        alert = "ALERTA - No se encontró un valor de índice para " + per?.descripcion + " para " + c.indice.descripcion + ", se utilizó el de " + valores.last().periodo.descripcion + "<br/>"
                     } else {
+                        println "ERROR!!!!!"
                         erroresIndice += "ERROR - No se encontró un valor de índice para " + c.indice.descripcion + "<br/>"
                         failIndice = true
                         failed = true
                     }
+                } else {
+//                    println "\t\tSi val: " + val + "   " + per + "   " + c.indice
                 }
                 if (!failed) {
-//                    println "Per: " + perNum + "    planilla: " + pl
+//                    println "Per: " + perNum + "    planilla: " + pl + "     val: " + val
                     def formulaTmp = FormulaPolinomicaContractual.findByIndiceAndContrato(c.indice, contrato)
                     def vr = ValorReajuste.withCriteria {
                         eq("formulaPolinomica", formulaTmp)
                         eq("obra", obra)
                         eq("periodoIndice", per)
-                        if (pl) {
-                            eq("planilla", pl)
-                        } else {
-                            isNull("planilla")
-                        }
+//                        if (pl) {
+//                            eq("planilla", pl)
+//                        } else {
+//                            isNull("planilla")
+//                        }
                     }
-                    println "vr: " + vr + "\n\n\n"
+//                    println
+//                    println "vr: " + vr.id + "   pl " + vr.planilla.id + "   >" + vr.valor + "<\t" + val + " * " + c.valor + " = " + (val * c.valor) + "    planilla " + pl?.id
                     if (vr.size() == 0) {
 //                        println "???? " + vr
                         if (alert != "") {
@@ -512,17 +535,20 @@ class PlanillaController extends janus.seguridad.Shield {
                         if (!vr.save(flush: true)) {
                             println "vr errors " + vr.errors
                         } else {
-//                            println "crea vr ${vr.id}"
+//                            println "\tcrea vr ${vr.id}"
                         }
                     } else if (vr.size() == 1) {
                         vr = vr[0]
                         if (override) {
-                            vr.valor = val * c.valor
-                        }
-                        if (!vr.save(flush: true)) {
-                            println "vr errors " + vr.errors
-                        } else {
-//                            println "actualiza vr ${vr.id}"
+                            if (vr.planilla == planilla) {
+//                                println "Planillas iguales " + vr.id
+                                vr.valor = val * c.valor
+                                if (!vr.save(flush: true)) {
+                                    println "vr errors " + vr.errors
+                                } else {
+//                                        println "\tactualiza vr ${vr.id} valor: " + vr.valor
+                                }
+                            }
                         }
                     } else if (vr.size() > 1) {
                         erroresIndice += "Se encontró más de un valor de reajuste "
@@ -532,13 +558,14 @@ class PlanillaController extends janus.seguridad.Shield {
                     if (c.numero.contains("c")) {
                         pos = "c"
                     }
-                    tot[pos] += (vr.valor * c.valor).round(3)
-//                    println "\t\t" + pos + "   " + (vr.valor * c.valor)
+                    tot[pos] += (vr.valor /** c.valor*/).round(3)
+//                    println "\t\t" + pos + "   " + (vr.valor /** c.valor*/)
                     if (!data2[pos][perNum]) {
 //                        println "\t\tCrea data2[${pos}][${perNum}]"
                         data2[pos][perNum] = [valores: [], total: 0, periodo: per]
                     }
-                    data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: vr, valorTabla: vr.valor])
+//                    data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: vr, valorTabla: vr.valor])
+                    data2[pos][perNum]["valores"].add([formulaPolinomica: c, valorReajuste: vr, valorTabla: val])
                 }
             } //pcs.each
 //            } //valRea.size == 0
@@ -595,8 +622,11 @@ class PlanillaController extends janus.seguridad.Shield {
             vrB0.valor = tot["c"]
             if (!vrB0.save(flush: true)) {
                 println "error al guardar valor de B0: " + tot["c"] + "\n" + vrB0.errors
+            } else {
+//                println "valor bo " + vrB0.valor + " per!!! " + per
             }
             def p01 = FormulaPolinomicaContractual.findByContratoAndNumero(contrato, "p01")
+//            println "p01 " + p01.valor
             if (p01) {
                 def vrP01 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p01)
                 if (vrP01) {
@@ -605,7 +635,9 @@ class PlanillaController extends janus.seguridad.Shield {
                         println "error al guardar valor de p01: " + tot["c"] + "\n" + vrP01.errors
                     }
                 }
+//                println "p01 2 " + vrP01.valor + " " + vrP01.id
             }
+
         }
 
         if (failIndice) {
@@ -620,9 +652,9 @@ class PlanillaController extends janus.seguridad.Shield {
         tablaBo += "<tr>"
         tablaBo += "<th colspan=\"2\">Cuadrilla Tipo</th>"
         tablaBo += "<th>Oferta</th>"
-        tablaBo += "<th class='nb'>" + oferta.fechaEntrega.format("MMM-yy") + "</th>"
+        tablaBo += "<th class='nb'>" + fechaConFormato(oferta.fechaEntrega, "MMM-yy") + "</th>"
         tablaBo += "<th>Variación</th>"
-        tablaBo += "<th class='nb'>Anticipo (" + planillaAnticipo.fechaPresentacion.format("MMM-yy") + ")</th>"
+        tablaBo += "<th class='nb'>Anticipo (" + fechaConFormato(planillaAnticipo.fechaPresentacion, "MMM-yy") + ")</th>"
         if (periodos.size() > 2) {
             periodos.eachWithIndex { per, i ->
                 if (i > 1) {
@@ -641,7 +673,7 @@ class PlanillaController extends janus.seguridad.Shield {
             tbodyB0 += "<tr>"
             tbodyB0 += "<td>" + c.indice.descripcion + " (" + c.numero + ")</td>"
             tbodyB0 += "<td class='number'>" + elm.numero(number: c.valor, decimales: 3) + "</td>"
-            totC += c.valor
+            totC += (c.valor).round(3)
             data2.c.each { cp ->
                 def act = cp.value.valores.find { it.formulaPolinomica.indice == c.indice }
 //                def val = act.valorReajuste.valor
@@ -709,7 +741,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 if (i == 1) {
                     tbodyP0 += "<th>ANTICIPO</th>"
                     tbodyP0 += "<th>"
-                    tbodyP0 += planillaAnticipo.fechaPresentacion.format("MMM-yy")
+                    tbodyP0 += fechaConFormato(planillaAnticipo.fechaPresentacion, "MMM-yy")
                     tbodyP0 += "</th>"
                     tbodyP0 += "<td colspan='4'></td>"
                     tbodyP0 += "<td class='number'>"
@@ -744,7 +776,16 @@ class PlanillaController extends janus.seguridad.Shield {
 //                            order("fechaInicio")
 //                        }
 //                    }
-//                    println "planilla fin: "+planilla.fechaFin
+//                    println "obra: " + obra.id
+//                    println "per " + per.fechaInicio.format("dd-MM-yyyy") + "  " + per.fechaFin.format("dd-MM-yyyy")
+//                    println "planilla fin: " + planilla.fechaFin
+
+                    /*
+                    obra: 1430
+                    per 01-04-2012  30-04-2012
+                    planilla fin: 2012-04-30 00:00:00.0
+                     */
+
 
                     def periodosEjecucion = PeriodoEjecucion.withCriteria {
                         and {
@@ -753,15 +794,13 @@ class PlanillaController extends janus.seguridad.Shield {
                                 between("fechaInicio", per.fechaInicio, per.fechaFin)
                                 between("fechaFin", per.fechaInicio, per.fechaFin)
                             }
-                            le("fechaFin", planilla.fechaFin)
-                            order("fechaInicio")
+//                            le("fechaFin", planilla.fechaFin)
+                            order("fechaInicio", "asc")
                         }
                     }
 
-
                     def diasTotal = 0, valorTotal = 0
-//                    println "\t\t++ "+per.fechaInicio.format("dd-MM-yyyy") + "  " + per.fechaFin.format("dd-MM-yyyy")
-//                    println "\t\t-- "+periodosEjecucion
+//                    println "\t\t-- " + periodosEjecucion
 
                     tbodyP0 += "<th>"
                     tbodyP0 += per?.descripcion
@@ -904,8 +943,8 @@ class PlanillaController extends janus.seguridad.Shield {
         tablaFr += '<th colspan="' + (periodos.size() - 1) + '">Periodo de variación y aplicación de fórmula polinómica</th>'
         tablaFr += '</tr>'
         tablaFr += '<tr>'
-        tablaFr += '<th>' + (oferta.fechaEntrega.format("MMM-yy")) + '</th>'
-        tablaFr += '<th>Anticipo <br/>' + planillaAnticipo.fechaPresentacion.format("MMM-yy") + '</th>'
+        tablaFr += '<th>' + fechaConFormato(oferta.fechaEntrega, "MMM-yy") + '</th>'
+        tablaFr += '<th>Anticipo <br/>' + fechaConFormato(planillaAnticipo.fechaPresentacion, "MMM-yy") + '</th>'
         if (periodos.size() > 2) {
             periodos.eachWithIndex { per, i ->
                 if (i > 1) {
@@ -947,10 +986,12 @@ class PlanillaController extends janus.seguridad.Shield {
                     tbodyFr += "</td>"
                 } //j==0
                 else {
-                    a = act.valorReajuste.valor
-                    if (i > 0) {
-                        a = act.valorTabla
+//                    println i + "  -  " + act.valorReajuste.id + "  " + act.valorReajuste.valor + "    " + act.valorTabla
+                    a = act.valorTabla
+                    if (i == 0) {
+                        a = act.valorReajuste.valor
                     }
+//                    println "\t\t" + a
                     d = (a / b) * c
                     tbodyFr += "<td class='number'>"
                     tbodyFr += "<div>"
