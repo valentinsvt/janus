@@ -690,7 +690,7 @@
             <legend>Cabecera</legend>
 
 
-            <g:form class="memoGrabar" name="frm-textoFijo" controller="auxiliar" action="save">
+            <g:form class="memoGrabar" name="frm-textoFijo" controller="auxiliar" action="saveTextoFijo">
 
                 <g:hiddenField name="id" value="${"1"}"/>
 

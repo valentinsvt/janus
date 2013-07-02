@@ -2639,6 +2639,8 @@ class ReportesController {
 
         }
 
+
+
         Paragraph txtCondiciones = new Paragraph();
         addEmptyLine(txtCondiciones, 1);
         txtCondiciones.setAlignment(Element.ALIGN_LEFT);
@@ -2670,6 +2672,7 @@ class ReportesController {
         document.add(tablaPresupuesto)
         document.add(tablaVolObra)
         document.add(tablaTotal);
+        document.newPage();
         document.add(txtCondiciones);
         document.add(tablaCondiciones)
 
@@ -2734,6 +2737,7 @@ class ReportesController {
             addEmptyLine(txtRetenciones, 1);
             txtRetenciones.setAlignment(Element.ALIGN_LEFT);
             txtRetenciones.add(new Paragraph("Atentamente, ", times8bold));
+            txtRetenciones.add(new Paragraph(" ", times8bold));
 
 
             document.add(headerForzar);
@@ -2772,6 +2776,7 @@ class ReportesController {
             addEmptyLine(txtRetenciones, 1);
             txtRetenciones.setAlignment(Element.ALIGN_LEFT);
             txtRetenciones.add(new Paragraph("Atentamente, ", times8bold));
+            txtRetenciones.add(new Paragraph(" ", times8bold));
 
             document.add(tablaRetenciones);
             document.add(txtRetenciones);

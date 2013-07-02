@@ -110,7 +110,7 @@
 
                 <div class="item" texto="auxl">
                     <g:link controller="auxiliar"
-                            action="list">Textos fijos</g:link> para la generación de los documentos precontractuales.
+                            action="textosFijos">Textos fijos</g:link> para la generación de los documentos precontractuales.
                 </div><br>
 
                 <div class="item" texto="tpfp">

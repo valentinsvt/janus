@@ -996,7 +996,7 @@ class Reportes3Controller {
 
         headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
         headers.add(new Paragraph(" "))
-        headers.add(new Paragraph("CÁLCULO DEL VALOR (MANO DE OBRA)"))
+        headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE MANO DE OBRA"))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
         headers.add(new Paragraph(" ", times10bold));
@@ -1143,7 +1143,7 @@ class Reportes3Controller {
 
         headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
         headers.add(new Paragraph(" "))
-        headers.add(new Paragraph("CÁLCULO DEL VALOR (EQUIPOS)"))
+        headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE EQUIPOS"))
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
         headers.add(new Paragraph(" ", times10bold));
