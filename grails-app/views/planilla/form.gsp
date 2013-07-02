@@ -108,15 +108,15 @@
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
 
-                        <div class="span2 formato">
-                            Número Factura
-                        </div>
+                        %{--<div class="span2 formato">--}%
+                        %{--Número Factura--}%
+                        %{--</div>--}%
 
-                        <div class="span4">
-                            <g:textField name="numeroFactura" maxlength="15" class=" span3" value="${planillaInstance?.numeroFactura}"/>
+                        %{--<div class="span4">--}%
+                        %{--<g:textField name="numeroFactura" maxlength="15" class=" span3" value="${planillaInstance?.numeroFactura}"/>--}%
 
-                            <p class="help-block ui-helper-hidden"></p>
-                        </div>
+                        %{--<p class="help-block ui-helper-hidden"></p>--}%
+                        %{--</div>--}%
                     </div>
 
                     <div class="row">
@@ -191,26 +191,26 @@
                     %{--</div>--}%
                     %{--</div>--}%
 
-                    <div class="row">
-                        <div class="span2 formato">
-                            Memo Salida
-                        </div>
+                    %{--<div class="row">--}%
+                    %{--<div class="span2 formato">--}%
+                    %{--Memo Salida--}%
+                    %{--</div>--}%
 
-                        <div class="span4">
-                            <g:textField name="memoSalida" maxlength="12" class=" span3" value="${planillaInstance?.memoSalida}"/>
+                    %{--<div class="span4">--}%
+                    %{--<g:textField name="memoSalida" maxlength="12" class=" span3" value="${planillaInstance?.memoSalida}"/>--}%
 
-                            <p class="help-block ui-helper-hidden"></p>
-                        </div>
+                    %{--<p class="help-block ui-helper-hidden"></p>--}%
+                    %{--</div>--}%
 
-                        <div class="span2 formato">
-                            Fecha Memo Salida
-                        </div>
+                    %{--<div class="span2 formato">--}%
+                    %{--Fecha Memo Salida--}%
+                    %{--</div>--}%
 
-                        <div class="span4">
-                            <elm:datepicker name="fechaMemoSalida" class=" span3" value="${planillaInstance?.fechaMemoSalida}"/>
-                            <p class="help-block ui-helper-hidden"></p>
-                        </div>
-                    </div>
+                    %{--<div class="span4">--}%
+                    %{--<elm:datepicker name="fechaMemoSalida" class=" span3" value="${planillaInstance?.fechaMemoSalida}"/>--}%
+                    %{--<p class="help-block ui-helper-hidden"></p>--}%
+                    %{--</div>--}%
+                    %{--</div>--}%
 
                     <div class="row">
                         <div class="span2 formato">
@@ -218,7 +218,7 @@
                         </div>
 
                         <div class="span10">
-                            <g:textField name="observaciones" maxlength="127" class="span9" value="${planillaInstance?.observaciones}"/>
+                            <g:textArea name="observaciones" maxlength="127" class="span9" value="${planillaInstance?.observaciones}"/>
 
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
