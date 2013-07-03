@@ -374,22 +374,17 @@
 
                         if($(".pdf.active").hasClass("1") == true){
 
-                            console.log("entro1")
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}"
                         }else {
-
-
-
                         }
                         if($(".pdf.active").hasClass("2") == true){
-
-                            console.log("entro2")
-
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}"
                         }else {
 
 
                         }
                         if($(".pdf.active").hasClass("3") == true){
-                            console.log("entro3")
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}"
 
                         }else {
 

@@ -573,7 +573,7 @@ class Reportes3Controller {
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] + r["parcial_t"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"

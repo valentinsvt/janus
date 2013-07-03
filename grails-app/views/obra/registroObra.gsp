@@ -1273,7 +1273,7 @@
             buttons   : {
                 "Aceptar"  : function () {
 
-                    $(this).replaceWith(spinner);
+                    $("#dlgLoad").dialog("open");
 //
                     var estadoCambiado = $("#estado").val();
 
@@ -1297,11 +1297,13 @@
                                             width     : 900,
                                             buttons   : {
                                                 "Aceptar" : function () {
+                                                    $("#dlgLoad").dialog("close");
                                                 }
                                             }
                                         }
                                     });
                                 } else {
+                                    $("#dlgLoad").dialog("close");
                                     location.reload(true)
                                 }
                             }
@@ -1326,11 +1328,13 @@
                                             width     : 900,
                                             buttons   : {
                                                 "Aceptar" : function () {
+                                                    $("#dlgLoad").dialog("close");
                                                 }
                                             }
                                         }
                                     });
                                 } else {
+                                    $("#dlgLoad").dialog("close");
                                     location.reload(true)
                                 }
                             }
