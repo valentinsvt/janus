@@ -186,7 +186,7 @@ class Reportes3Controller {
                     tablaMat += "</tr>"
                 }
             }
-            if (r["parcial_t"] > 0 && params.desglose == '1') {
+            if (r["grpocdgo"] == 1 && params.desglose == '1') {
 //            if(r["parcial_t"]>0){
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
@@ -195,7 +195,8 @@ class Reportes3Controller {
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["distancia"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"] / (r["itempeso"] * r["rbrocntd"] * r["distancia"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+//                tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"] / (r["itempeso"] * r["rbrocntd"] * r["distancia"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["tarifa"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 total += r["parcial_t"]
                 tablaTrans += "</tr>"
@@ -485,7 +486,7 @@ class Reportes3Controller {
     }
 
     def imprimirRubro() {
-//        println "imprimir rubro "+params
+        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def fechaPala = printFecha(new Date());
@@ -493,6 +494,7 @@ class Reportes3Controller {
         def lugar = params.lugar
         def indi = params.indi
         def listas = params.listas
+
         try {
             indi = indi.toDouble()
         } catch (e) {
@@ -551,7 +553,7 @@ class Reportes3Controller {
             }
             if (r["grpocdgo"] == 1) {
                 tablaMat += "<tr>"
-                if (!params.trans) {
+                if (params.trans != 'no') {
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
@@ -563,6 +565,10 @@ class Reportes3Controller {
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
                     totalMat += r["parcial"]
                 } else {
+
+                }
+                if(params.trans == 'no'){
+
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
@@ -571,12 +577,14 @@ class Reportes3Controller {
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
+//                    tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
+                    tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["parcial"] + r["parcial_t"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+
                     totalMat += r["parcial"] + r["parcial_t"]
                 }
                 tablaMat += "</tr>"
             }
-            if (r["parcial_t"] > 0) {
+            if (r["grpocdgo"]== 1 ) {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tablaTrans += "<td>" + r["itemnmbr"] + "</td>"

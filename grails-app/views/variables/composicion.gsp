@@ -148,19 +148,19 @@
                     </div>
 
                     <div class="btn-group" data-toggle="buttons-radio">
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: -1, sp: spsel]" class="btn btn-info toggle ${tipo.contains(',') ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: -1, sp: spsel]" class="btn btn-info toggle pdf ${tipo.contains(',') ? 'active' : ''} -1">
                             <i class="icon-cogs"></i>
                             Todos
                         </g:link>
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 1, sp: spsel]" class="btn btn-info toggle ${tipo == '1' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 1, sp: spsel]" class="btn btn-info toggle pdf ${tipo == '1' ? 'active' : ''} 1">
                             <i class="icon-briefcase"></i>
                             Materiales
                         </g:link>
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 2, sp: spsel]" class="btn btn-info toggle ${tipo == '2' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 2, sp: spsel]" class="btn btn-info toggle pdf ${tipo == '2' ? 'active' : ''} 2">
                             <i class="icon-group"></i>
                             Mano de obra
                         </g:link>
-                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 3, sp: spsel]" class="btn btn-info toggle ${tipo == '3' ? 'active' : ''}">
+                        <g:link action="composicion" id="${obra?.id}" params="[tipo: 3, sp: spsel]" class="btn btn-info toggle pdf ${tipo == '3' ? 'active' : ''} 3">
                             <i class="icon-truck"></i>
                             Equipos
                         </g:link>
@@ -369,8 +369,37 @@
 
                     $("#imprimirPdf").click(function () {
 
+//                       console.log("-->" + $(".pdf.active").attr("class"))
+//                       console.log("-->" + $(".pdf.active").hasClass('2'))
 
-                        location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}"
+                        if($(".pdf.active").hasClass("1") == true){
+
+                            console.log("entro1")
+                        }else {
+
+
+
+                        }
+                        if($(".pdf.active").hasClass("2") == true){
+
+                            console.log("entro2")
+
+                        }else {
+
+
+                        }
+                        if($(".pdf.active").hasClass("3") == true){
+                            console.log("entro3")
+
+                        }else {
+
+
+                        }
+                        if($(".pdf.active").hasClass("-1") == true){
+
+
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}"
+                        }
                     });
 
                 });

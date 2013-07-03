@@ -68,7 +68,7 @@
         </div>
 
         <div class="span2">
-            <g:textField type="text" name="factorReduccion" class="inputVar num" value="${g.formatNumber(number: (paux?.factorReduccion) ?: par.factorReduccion, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            <g:textField type="text" name="factorReduccion" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.factorReduccion) ?: par.factorReduccion, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
         </div>
     </div>
     <div class="row-fluid margen">
@@ -77,7 +77,7 @@
         </div>
 
         <div class="span2">
-            <g:textField type="text" name="factorVelocidad" class="inputVar num" value="${g.formatNumber(number: (paux?.factorVelocidad) ?: par.factorVelocidad, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            <g:textField type="text" name="factorVelocidad" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.factorVelocidad) ?: par.factorVelocidad, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
         </div>
     </div>
 
@@ -87,7 +87,7 @@
         </div>
 
         <div class="span2">
-            <g:textField type="text" name="capacidadVolquete" class="inputVar num" value="${g.formatNumber(number: (paux?.capacidadVolquete) ?: par.capacidadVolquete, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            <g:textField type="text" name="capacidadVolquete" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.capacidadVolquete) ?: par.capacidadVolquete, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
         </div>
     </div>
     <div class="row-fluid margen">
@@ -97,7 +97,7 @@
         </div>
 
         <div class="span2">
-            <g:textField type="text" name="factorReduccionTiempo" class="inputVar num" value="${g.formatNumber(number: (paux?.factorReduccionTiempo) ?: par.factorReduccionTiempo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+            <g:textField type="text" name="factorReduccionTiempo" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.factorReduccionTiempo) ?: par.factorReduccionTiempo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
         </div>
     </div>
 
@@ -122,16 +122,6 @@
 </div>
 
 <div id="tab-indirecto" class="tab">
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span10">--}%
-            %{--Control y Administración (Fiscalización) - no se usa en obras nuevas--}%
-        %{--</div>--}%
-
-        %{--<div class="span2">--}%
-            %{--<g:textField type="text" name="contrato" class="inputVar num" value="${g.formatNumber(number: obra?.contrato, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-
     <div class="row-fluid" style="margin-top: 20px;">
         <div class="span3">
             Dirección de obra
@@ -281,6 +271,15 @@
             if ($(this).val().indexOf(".") > -1) {
                 return false
             }
+        }
+        return validarNum(ev);
+    });
+
+    $(".num2").keydown(function (ev) {
+        if (ev.keyCode == 190 || ev.keyCode == 188 || ev.keyCode == 110) {
+//            if ($(this).val().indexOf(".") > -1) {
+                return false
+//            }
         }
         return validarNum(ev);
     });
