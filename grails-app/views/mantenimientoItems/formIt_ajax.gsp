@@ -273,8 +273,8 @@
             // esta parte valida q no ingrese mas de 2 decimales
             var parts = val.split(".");
             if (parts.length > 1) {
-                if (parts[1].length > 5) {
-                    parts[1] = parts[1].substring(0, 5);
+                if (parts[1].length > 6) {
+                    parts[1] = parts[1].substring(0, 6);
                     val = parts[0] + "." + parts[1];
                     $(this).val(val);
                 }

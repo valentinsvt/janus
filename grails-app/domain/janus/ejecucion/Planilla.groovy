@@ -8,15 +8,10 @@ class Planilla {
     TipoPlanilla tipoPlanilla
     EstadoPlanilla estadoPlanilla
     PeriodosInec periodoIndices
-
     int numero
     String numeroFactura
     Date fechaPresentacion
     Date fechaIngreso
-    Date fechaPago
-    Date fechaOrdenPago
-    String memoOrdenPago
-    String memoPago
     String descripcion
     double valor
     double descuentos
@@ -27,17 +22,32 @@ class Planilla {
     String observaciones
     Date fechaInicio
     Date fechaFin
-    String oficioSalida
-    Date fechaOficioSalida
-    String oficioPago
-    Date fechaOficioPago
     String aprobado
-
-    String memoSalida
-    Date fechaMemoSalida
 
     Double multaRetraso = 0
     Double multaPlanilla = 0
+
+    String memoSalida
+    String memoOrdenPago
+    String memoPago
+    String oficioSalida
+    String oficioPago
+
+    Date fechaOficioPago
+    Date fechaMemoSalida
+    Date fechaPago
+    Date fechaOficioSalida
+    Date fechaOrdenPago
+
+    String oficioEntradaPlanilla
+    String memoSalidaPlanilla
+    String memoPedidoPagoPlanilla
+    String memoPagoPlanilla
+
+    Date fechaOficioEntradaPlanilla
+    Date fechaMemoSalidaPlanilla
+    Date fechaMemoPedidoPagoPlanilla
+    Date fechaMemoPagoPlanilla
 
     static mapping = {
         table 'plnl'
@@ -82,6 +92,16 @@ class Planilla {
 
             multaRetraso column: 'plnlmlrt'
             multaPlanilla column: 'plnlmlpl'
+
+            oficioEntradaPlanilla column: 'plnlofen'
+            memoSalidaPlanilla column: 'plnlmmad'
+            memoPedidoPagoPlanilla column: 'plnlmmpp'
+            memoPagoPlanilla column: 'plnlmmfi'
+
+            fechaOficioEntradaPlanilla column: 'plnlfcen'
+            fechaMemoSalidaPlanilla column: 'plnlfcad'
+            fechaMemoPedidoPagoPlanilla column: 'plnlfcpp'
+            fechaMemoPagoPlanilla column: 'plnlfcfi'
         }
     }
 
@@ -111,12 +131,22 @@ class Planilla {
         oficioPago(maxSize: 12, blank: true, nullable: true)
         fechaOficioPago(blank: true, nullable: true)
         aprobado(blank: true, nullable: true)
-        fechaOrdenPago(blank:true,nullable: true)
+        fechaOrdenPago(blank: true, nullable: true)
         memoSalida(blank: true, nullable: true)
         fechaMemoSalida(blank: true, nullable: true)
 
         memoOrdenPago(maxSize: 20, blank: true, nullable: true)
         memoPago(maxSize: 20, blank: true, nullable: true)
+
+        oficioEntradaPlanilla(maxSize: 20, blank: true, nullable: true)
+        memoSalidaPlanilla(maxSize: 20, blank: true, nullable: true)
+        memoPedidoPagoPlanilla(maxSize: 20, blank: true, nullable: true)
+        memoPagoPlanilla(maxSize: 20, blank: true, nullable: true)
+
+        fechaOficioEntradaPlanilla(blank: true, nullable: true)
+        fechaMemoSalidaPlanilla(blank: true, nullable: true)
+        fechaMemoPedidoPagoPlanilla(blank: true, nullable: true)
+        fechaMemoPagoPlanilla(blank: true, nullable: true)
 
     }
 }
