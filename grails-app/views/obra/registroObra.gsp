@@ -1272,6 +1272,8 @@
             title     : 'Cambiar estado de la Obra',
             buttons   : {
                 "Aceptar"  : function () {
+
+                    $(this).replaceWith(spinner);
 //
                     var estadoCambiado = $("#estado").val();
 
