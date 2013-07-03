@@ -272,7 +272,7 @@ class PreciosService {
     def rb_precios(parametros, condicion) {
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rb_precios_v2(" + parametros + ") " + condicion
-//        println "sql " + sql
+        println "sql " + sql
         def result = []
         cn.eachRow(sql) { r ->
             result.add(r.toRowResult())
@@ -418,6 +418,7 @@ class PreciosService {
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rbro_pcun_v2(" + obra + ") order by vlobordn ${orden}"
         def result = []
+        println "rbro_pcun_v4 " + sql
         cn.eachRow(sql.toString()) { r ->
             result.add(r.toRowResult())
         }
@@ -432,7 +433,7 @@ class PreciosService {
 
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rbro_pcun_v2(" + obra + ") where sbpr__id= ${subpres} order by vlobordn ${orden}"
-//        println(sql)
+        println "rbro_pcun_v5 " + sql
         def result = []
         cn.eachRow(sql.toString()) { r ->
             result.add(r.toRowResult())
