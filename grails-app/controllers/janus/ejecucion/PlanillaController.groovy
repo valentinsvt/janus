@@ -79,6 +79,71 @@ class PlanillaController extends janus.seguridad.Shield {
         }
     }
 
+    def pago_ajax() {
+        def planilla = Planilla.get(params.id)
+        def tipo = params.tipo
+        def lblMemo, lblFecha
+        switch (tipo) {
+            case "2":
+                lblMemo = "Memo de salida"
+                lblFecha = "Fecha de memo de salida"
+                break;
+            case "3":
+                lblMemo = "Memo de pedido de pago"
+                lblFecha = "Fecha de memo de pedido de pago"
+                break;
+            case "4":
+                lblMemo = "Memo de pago"
+                lblFecha = "Fecha de memo de pago"
+                break;
+        }
+        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha]
+    }
+
+    def savePagoPlanilla() {
+        def planilla = Planilla.get(params.id)
+        def tipo = params.tipo
+        def memo = params.memo.toString().toUpperCase()
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        def str = "", str2 = ""
+
+        switch (tipo) {
+            case "2":
+                planilla.memoSalidaPlanilla = memo
+                planilla.fechaMemoSalidaPlanilla = fecha
+                str = "Reajuste enviado exitosamente"
+                str2 = "No se pudo enviar el reajuste"
+                break;
+            case "3":
+                planilla.memoPedidoPagoPlanilla = memo
+                planilla.fechaMemoPedidoPagoPlanilla = fecha
+                str = "Pago pedido existosamente"
+                str2 = "No se pudo pedir el pago"
+                break;
+            case "4":
+                planilla.memoPagoPlanilla = memo
+                planilla.fechaMemoPagoPlanilla = fecha
+                str = "Pago informado exitosamente"
+                str2 = "No se pudo informar el pago"
+                break;
+        }
+        if (planilla.save(flush: true)) {
+            flash.clase = "alert-success"
+            flash.message = str
+            redirect(action: "list", id: planilla.contratoId)
+        } else {
+            println "Error al grabar la fecha y el memo en la planilla: " + planilla.errors
+            flash.clase = "alert-error"
+            str = "<h4>" + str2 + "</h4>"
+
+            str += g.renderErrors(bean: planilla)
+
+            flash.message = str
+            redirect(action: "list", id: planilla.contratoId)
+        }
+    }
+
     def form() {
         def contrato = Contrato.get(params.contrato)
         def planillaInstance = new Planilla(params)

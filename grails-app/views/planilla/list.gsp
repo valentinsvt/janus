@@ -61,6 +61,7 @@
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="valor" title="Valor"/>
                         <th width="160">Acciones</th>
+                        <th>Pagos</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
@@ -124,13 +125,44 @@
                                         </g:link>
                                     </g:else>
                                 </g:else>
-
                             %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
                             %{--<i class="icon-pencil icon-large"></i>--}%
                             %{--</a>--}%
                             %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
                             %{--<i class="icon-trash icon-large"></i>--}%
                             %{--</a>--}%
+                            </td>
+                            <td style="text-align: center;">
+                                <g:set var="lblBtn" value="${-1}"/>
+                                <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
+                                    <g:set var="lblBtn" value="${2}"/>
+                                    <g:if test="${planillaInstance.fechaMemoSalidaPlanilla}">
+                                        <g:set var="lblBtn" value="${3}"/>
+                                        <g:if test="${planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                            <g:set var="lblBtn" value="${4}"/>
+                                            <g:if test="${planillaInstance.fechaMemoPagoPlanilla}">
+                                                <g:set var="lblBtn" value="${-5}"/>
+                                            </g:if>
+                                        </g:if>
+                                    </g:if>
+                                </g:if>
+
+                                <g:if test="${lblBtn > 0}">
+                                    <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                        <g:if test="${lblBtn == 2}">
+                                            Enviar reajuste
+                                        </g:if>
+                                        <g:elseif test="${lblBtn == 3}">
+                                            Pedir pago
+                                        </g:elseif>
+                                        <g:elseif test="${lblBtn == 4}">
+                                            Informar pago
+                                        </g:elseif>
+                                    </a>
+                                </g:if>
+                                <g:elseif test="${lblBtn == -5}">
+                                    <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
+                                </g:elseif>
                             </td>
                         </tr>
                     </g:each>
@@ -139,7 +171,7 @@
 
         </div>
 
-        <div class="modal hide fade" id="modal-Planilla">
+        <div class="modal hide fade mediumModal" id="modal-Planilla">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>
@@ -174,6 +206,47 @@
                     searchPosition : $("#busqueda-Planilla"),
                     float          : "right"
                 });
+
+                $(".btn-pagar").click(function () {
+                    var $btn = $(this);
+                    var tipo = $btn.data("tipo").toString();
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'pago_ajax')}",
+                        data    : {
+                            id   : $btn.data("id"),
+                            tipo : tipo
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            switch (tipo) {
+                                case "2":
+                                    $("#modalTitle").html("Enviar reajuste");
+                                    break;
+                                case "3":
+                                    $("#modalTitle").html("Pedir pago");
+                                    break;
+                                case "4":
+                                    $("#modalTitle").html("Informar pago");
+                                    break;
+                            }
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-Planilla").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn new
 
                 $(".btn-new").click(function () {
                     $.ajax({

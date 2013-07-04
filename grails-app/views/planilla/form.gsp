@@ -121,6 +121,30 @@
 
                     <div class="row">
                         <div class="span2 formato">
+                            Oficio de entrada
+                        </div>
+
+                        <div class="span4">
+                            <g:textField name="oficioEntradaPlanilla" class="span3 required" value="${planillaInstance.oficioEntradaPlanilla}" maxlength="20"/>
+                            <span class="mandatory">*</span>
+
+                            <p class="help-block ui-helper-hidden"></p>
+                        </div>
+
+                        <div class="span2 formato">
+                            Fecha de oficio de entrada
+                        </div>
+
+                        <div class="span4">
+                            <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" maxDate="new Date()" value="${planillaInstance?.fechaOficioEntradaPlanilla}"/>
+                            <span class="mandatory">*</span>
+
+                            <p class="help-block ui-helper-hidden"></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="span2 formato">
                             Fecha Presentacion
                         </div>
 
