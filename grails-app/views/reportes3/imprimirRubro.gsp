@@ -230,9 +230,9 @@
                 %{--Parámetros para los datos de presupuesto  obtenidos de la obra:--}%
             %{--</div>--}%
 
-            %{--<div style="width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left">--}%
-                %{--<b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.--}%
-            %{--</div>--}%
+            <div style="width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left">
+                <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.
+            </div>
 
         </div>
     </body>

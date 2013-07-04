@@ -239,8 +239,17 @@
 
                     </tbody>
                 </table>
-            </div>
 
-        </div>
+
+            </div>
+            <table style="margin-top: 130px">
+                <tbody>
+                        <div>
+                          <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.
+                        </div>
+                </tbody>
+            </table>
+            </div>
     </body>
+
 </html>

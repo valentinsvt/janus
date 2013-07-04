@@ -62,7 +62,15 @@
     %{--<li class="desglose"><a href="#tab-desglose">Desglose de Transporte</a></li>--}%
 </ul>
 <div id="tab-factores" class="tab">
+
+
     <div class="row-fluid margen" style="margin-top: 20px;">
+        <div class="span5" style="margin-left: 400px">
+            <b>Valores por defecto</b>
+        </div>
+    </div>
+
+    <div class="row-fluid margen" style="margin-top: 10px;">
         <div class="span5">
             Factor de reducción
         </div>
@@ -70,6 +78,11 @@
         <div class="span2">
             <g:textField type="text" name="factorReduccion" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.factorReduccion) ?: par.factorReduccion, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
         </div>
+
+        <div class="span2" style="margin-left: 140px">
+            <g:textField type="text" name="factorReduccionOr" class="inputVar" autocomplete='off' value="${"10"}" readonly="true"/>
+        </div>
+
     </div>
     <div class="row-fluid margen">
         <div class="span5">
@@ -78,6 +91,10 @@
 
         <div class="span2">
             <g:textField type="text" name="factorVelocidad" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.factorVelocidad) ?: par.factorVelocidad, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
+        </div>
+
+        <div class="span2" style="margin-left: 140px">
+            <g:textField type="text" name="factorVelocidadOr" class="inputVar" autocomplete='off' value="${"40"}" readonly="true"/>
         </div>
     </div>
 
@@ -89,6 +106,10 @@
         <div class="span2">
             <g:textField type="text" name="capacidadVolquete" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.capacidadVolquete) ?: par.capacidadVolquete, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
         </div>
+
+        <div class="span2" style="margin-left: 140px">
+            <g:textField type="text" name="capacidadVolqueteOr" class="inputVar" autocomplete='off' value="${"8"}" readonly="true"/>
+        </div>
     </div>
     <div class="row-fluid margen">
 
@@ -98,6 +119,10 @@
 
         <div class="span2">
             <g:textField type="text" name="factorReduccionTiempo" class="inputVar num2" autocomplete='off' value="${g.formatNumber(number: (paux?.factorReduccionTiempo) ?: par.factorReduccionTiempo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>
+        </div>
+
+        <div class="span2" style="margin-left: 140px">
+            <g:textField type="text" name="factorReduccionTiempoOr" class="inputVar" autocomplete='off' value="${"24"}" readonly="true"/>
         </div>
     </div>
 
@@ -109,6 +134,10 @@
         <div class="span2">
             <g:textField type="text" name="factorVolumen" class="inputVar num" value="${g.formatNumber(number: (paux?.factorVolumen) ?: par.factorVolumen, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
         </div>
+
+        <div class="span2" style="margin-left: 140px">
+            <g:textField type="text" name="factorVolumenOr" class="inputVar" value="${"0.80"}" readonly="true"/>
+        </div>
     </div>
     <div class="row-fluid margen">
         <div class="span5">
@@ -117,6 +146,10 @@
 
         <div class="span2">
             <g:textField type="text" name="factorPeso" class="inputVar num" value="${g.formatNumber(number: (paux?.factorPeso) ?: par.factorPeso, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+        </div>
+
+        <div class="span2" style="margin-left: 140px">
+            <g:textField type="text" name="factorPesoOr" class="inputVar " value="${"1.70"}" readonly="true"/>
         </div>
     </div>
 </div>
