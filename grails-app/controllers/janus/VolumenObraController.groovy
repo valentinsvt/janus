@@ -75,8 +75,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (params.id)
             volumen = VolumenesObra.get(params.id)
         else {
-            volumen = VolumenesObra.findByObraAndItemAndSubPresupuesto(obra, rubro, sbpr)
-            if (!volumen)
+
                 volumen=new VolumenesObra()
         }
 //        println "volumn :" + volumen

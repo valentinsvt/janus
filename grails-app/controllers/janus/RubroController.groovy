@@ -741,4 +741,56 @@ class RubroController extends janus.seguridad.Shield {
     }
 
 
+    def verificaRubro(){
+        println "verifica rubro "+params
+        def rubro = Item.get(params.id)
+        def volumenes = VolumenesObra.findAllByItem(rubro);
+        println "vol " +volumenes
+        if(volumenes.size()>0)
+            render "1"
+        else
+            render "0"
+    }
+
+    def copiaRubro(){
+//        println "copia rubro "+params
+        def rubro = Item.get(params.id)
+        def nuevo = new Item()
+        nuevo.properties=rubro.properties
+        def codigo ="H"
+        def copias = Item.findAllByCodigo(codigo+rubro.codigo)
+        def error =false
+        if(copias.size()>0){
+            while(copias.size()!=0){
+                codigo=codigo+"H"
+                copias = Item.findAllByCodigo(codigo+rubro.codigo)
+            }
+        }
+
+
+        nuevo.codigo=codigo+rubro.codigo;
+        if(!nuevo.save(flush: true)){
+            println "erro copiar rubro "+nuevo.errors
+            error=true
+        }else{
+//            println "nuevo "+nuevo.id
+            Rubro.findAllByRubro(rubro).each{
+//                println "copia comp "+it
+                def r = new Rubro()
+                r.rubro=nuevo
+                r.item=it.item
+                r.cantidad=it.cantidad
+                r.fecha=it.fecha
+                r.rendimiento=it.rendimiento
+                if(!r.save(flush: true)){
+                    println "error copiar comp "+r.errors
+                    error=true
+                }
+            }
+        }
+        render error
+
+    }
+
+
 } //fin controller
