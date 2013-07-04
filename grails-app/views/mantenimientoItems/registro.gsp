@@ -108,22 +108,22 @@
             var current = "1";
 
             var icons = {
-                edit   : "${resource(dir: 'images/tree', file: 'edit.png')}",
-                delete : "${resource(dir: 'images/tree', file: 'delete.gif')}",
-                info   : "${resource(dir: 'images/tree', file: 'info.png')}",
+                edit                  : "${resource(dir: 'images/tree', file: 'edit.png')}",
+                delete                : "${resource(dir: 'images/tree', file: 'delete.gif')}",
+                info                  : "${resource(dir: 'images/tree', file: 'info.png')}",
 
                 %{--grupo_material : "${resource(dir: 'images/tree', file: 'grupo_material.png')}",--}%
-                grupo_material : "${resource(dir: 'images/tree', file: 'carpeta2.png')}",
+                grupo_material        : "${resource(dir: 'images/tree', file: 'carpeta2.png')}",
                 %{--grupo_manoObra : "${resource(dir: 'images/tree', file: 'grupo_manoObra.png')}",--}%
-                grupo_manoObra : "${resource(dir: 'images/tree', file: 'carpeta5.png')}",
+                grupo_manoObra        : "${resource(dir: 'images/tree', file: 'carpeta5.png')}",
                 %{--grupo_equipo   : "${resource(dir: 'images/tree', file: 'grupo_equipo.png')}",--}%
-                grupo_equipo   : "${resource(dir: 'images/tree', file: 'carpeta6.png')}",
+                grupo_equipo          : "${resource(dir: 'images/tree', file: 'carpeta6.png')}",
 
                 %{--subgrupo_material : "${resource(dir: 'images/tree', file: 'subgrupo_material.png')}",--}%
-                subgrupo_material : "${resource(dir: 'images/tree', file: 'carpeta.png')}",
-                subgrupo_manoObra : "${resource(dir: 'images/tree', file: 'subgrupo_manoObra.png')}",
+                subgrupo_material     : "${resource(dir: 'images/tree', file: 'carpeta.png')}",
+                subgrupo_manoObra     : "${resource(dir: 'images/tree', file: 'subgrupo_manoObra.png')}",
                 %{--subgrupo_equipo   : "${resource(dir: 'images/tree', file: 'subgrupo_equipo.png')}",--}%
-                subgrupo_equipo   : "${resource(dir: 'images/tree', file: 'item_equipo.png')}",
+                subgrupo_equipo       : "${resource(dir: 'images/tree', file: 'item_equipo.png')}",
 
                 %{--departamento_material : "${resource(dir: 'images/tree', file: 'departamento_material.png')}",--}%
                 departamento_material : "${resource(dir: 'images/tree', file: 'carpeta3.png')}",
@@ -203,10 +203,10 @@
                     icon             : params.icon,
                     action           : function (obj) {
                         $.ajax({
-                            type    : "POST",
-                            url     : params.url,
-                            data    : params.data,
-                            success : function (msg) {
+                            type     : "POST",
+                            url      : params.url,
+                            data     : params.data,
+                            success  : function (msg) {
                                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                                 var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
@@ -254,6 +254,9 @@
                                 $("#modalBody").html(msg);
                                 $("#modalFooter").html("").append(btnOk).append(btnSave);
                                 $("#modal-tree").modal("show");
+                            },
+                            complete : function () {
+                                $('#modalBody').animate({scrollTop : $('#frmSave').offset().top}, 'slow');
                             }
                         });
                     }
@@ -880,7 +883,7 @@
             $(function () {
 
                 $(".modal").draggable({
-                    handle: $(".modal-header"),
+                    handle : $(".modal-header"),
                     cancel : '.btn, input, select'
                 });
 
