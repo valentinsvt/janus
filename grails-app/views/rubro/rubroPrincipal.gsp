@@ -1888,7 +1888,7 @@
                     if(msg=="1"){
                        var d =   $.box({
                             imageClass : "box_info",
-                            text       : "Este rubro tiene volumenes de obra. Desea generar un historico?",
+                            text       : "Este rubro ya forma parte de una obra. Desea crear una nueva versión de este rubro, y hacer una versión historia?",
                             title      : "Alerta",
                             iconClose  : false,
                             dialog     : {
