@@ -275,10 +275,13 @@ class RubroController extends janus.seguridad.Shield {
             detalles.each {
                 def tmp = Rubro.findByRubroAndItem(rubro, it.item)
                 if (!tmp) {
+//                    println "no temnp "
                     def nuevo = new Rubro()
                     nuevo.rubro = rubro
                     nuevo.item = it.item
-                    if (!it.item.nombre =~ "HERRAMIENTA MENOR") {
+//                    println " asd "  +it.item.nombre
+                    if (!(it.item.nombre =~ "HERRAMIENTA MENOR")) {
+//                        println "entro 1 "+factor
                         nuevo.cantidad = it.cantidad * factor
                     }
                     nuevo.fecha = new Date()
@@ -289,9 +292,9 @@ class RubroController extends janus.seguridad.Shield {
                     rubro.save(flush: true)
 
                 } else {
-                    println "else si hay "
+//                    println "else si hay "
                     if (!(it.item.nombre =~ "HERRAMIENTA MENOR")) {
-                        println "else no herra "
+//                        println "entro 2 "+factor
                         tmp.cantidad = tmp.cantidad + it.cantidad * factor
                         tmp.fecha = new Date()
                         tmp.save(flush: true)
