@@ -124,7 +124,7 @@
             <div class="controls">
                 <div class="input-append">
                     %{--<g:field type="number" name="peso" maxlength="20" class=" required input-small peso" value="${fieldValue(bean: itemInstance, field: 'peso')}"/>--}%
-                    <g:field type="number" name="peso" maxlength="20" class=" required input-small peso" value="${formatNumber(number: itemInstance?.peso, format: '##,#####0', minFractionDigits: 5, maxFractionDigits: 5, locale: 'ec')}"/>
+                    <g:field type="number" name="peso" maxlength="20" class=" required input-small peso" value="${formatNumber(number: itemInstance?.peso, format: '##,######0', minFractionDigits: 6, maxFractionDigits: 6, locale: 'ec')}"/>
 
 
                     <span class="add-on" id="spanPeso">

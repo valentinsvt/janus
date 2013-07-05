@@ -257,6 +257,8 @@
                             },
                             complete : function () {
                                 $('#modalBody').animate({scrollTop : $('#frmSave').offset().top}, 'slow');
+//                                console.log($('#nombre').focus())
+//                                $('input').first().focus();
                             }
                         });
                     }
