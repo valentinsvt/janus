@@ -763,8 +763,8 @@ class RubroController extends janus.seguridad.Shield {
         def codigo ="H"
         def copias = Item.findAllByCodigo(codigo+rubro.codigo)
         def error =false
-        if(copias.size()>0){
-            while(copias.size()!=0){
+        if(copias.size() > 0){
+            while(copias.size()!= 0){
                 codigo=codigo+"H"
                 copias = Item.findAllByCodigo(codigo+rubro.codigo)
             }
