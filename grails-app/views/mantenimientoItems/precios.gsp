@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>Precios y mantenimiento de items</title>
+        <title>PRECIOS Y MANT. DE ITEMS</title>
 
         <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree', file: 'jquery.jstree.js')}"></script>
         <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins/jstree/_lib', file: 'jquery.cookie.js')}"></script>

@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Ajuste de la fórmula polinómica y cuadrilla tipo
+            AJUSTE DE LA F.P. Y C. TIPO
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>

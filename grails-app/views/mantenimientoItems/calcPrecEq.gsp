@@ -48,24 +48,26 @@ h4 {
     width     : 50px;
     font-size : 12px;
 }
+
 .campo01 {
-    width: 30px;
+    width : 30px;
 }
+
 .campo02 {
-    width: 40px;
+    width : 40px;
 }
+
 .campo03 {
-    width: 60px;
+    width : 60px;
 }
+
 .campo04 {
-    width: 70px;
+    width : 70px;
 }
 
-    .ui-front{
-
-
-        z-index: 1100 !important;
-    }
+.ui-front {
+    z-index : 1100 !important;
+}
 
 </style>
 
@@ -73,24 +75,23 @@ h4 {
     <div class="span3" style="width: 300px; margin-top: -10px;">
         <h4>Datos del equipo</h4>
     </div>
+
     <div class="span3" style="width: 360px; margin-left: 70px; margin-top: -10px;">
-    <table border="1" width="360px;">
-        <tr class="totalFinal">
-            <th>Costo total de la hora</th>
-            <td class="tdCh num dol" data-dec="2"></td>
-        </tr>
-    </table>
+        <table border="1" width="360px;">
+            <tr class="totalFinal">
+                <th>Costo total de la hora</th>
+                <td class="tdCh num dol" data-dec="2"></td>
+            </tr>
+        </table>
 
     </div>
 
-     <div style="margin-top: -10px;">
-    <a href="#" class="btn btn-ajax" id="btnImprimir" style="margin-left: 20px">
-        <i class="icon-print"></i>
-        Imprimir
-    </a>
-     </div>
-
-
+    <div style="margin-top: -10px;">
+        <a href="#" class="btn btn-ajax" id="btnImprimir" style="margin-left: 20px">
+            <i class="icon-print"></i>
+            Imprimir
+        </a>
+    </div>
 
 </div>
 
@@ -276,31 +277,31 @@ h4 {
 
         <div class="span2" style="width:200px; margin-left: 10px;">
             %{--<div class="row">--}%
-                    <table border="1">
-                        <tr>
-                            <th class="st-title">Seguros</th>
-                            %{--<th class="st-cod">s</th>--}%
-                            <td class="tdCs num st-total" data-dec="2"></td>
-                        </tr>
-                        <tr class="totalParcial">
-                            <th class="st-title">Costo de seguros</th>
-                            %{--<th class="st-cod">S</th>--}%
-                            <td class="tdS num st-total" data-dec="5"></td>
-                        </tr>
-                    </table>
+            <table border="1">
+                <tr>
+                    <th class="st-title">Seguros</th>
+                    %{--<th class="st-cod">s</th>--}%
+                    <td class="tdCs num st-total" data-dec="2"></td>
+                </tr>
+                <tr class="totalParcial">
+                    <th class="st-title">Costo de seguros</th>
+                    %{--<th class="st-cod">S</th>--}%
+                    <td class="tdS num st-total" data-dec="5"></td>
+                </tr>
+            </table>
             %{--</div>--}%
 
             <div class="span2" style="margin-top: 5px; width: 200px; margin-top: 12px; margin-left: 0px;">
-                    <table border="1">
-                        <tr class="totalParcial">
-                            <th class="st-title">Matrícula</th>
-                            %{--<th class="st-cod">m</th>--}%
-                            <td class="tdM num st-total" data-dec="5"></td>
-                        </tr>
-                    </table>
+                <table border="1">
+                    <tr class="totalParcial">
+                        <th class="st-title">Matrícula</th>
+                        %{--<th class="st-cod">m</th>--}%
+                        <td class="tdM num st-total" data-dec="5"></td>
+                    </tr>
+                </table>
             </div>
         </div>
-            %{--<div class="row">--}%
+        %{--<div class="row">--}%
         <div class="span2" style="height: 110px; width:200px; margin-left: 10px;">
             <table border="1">
                 <tr>
@@ -315,7 +316,7 @@ h4 {
                 </tr>
             </table>
         </div>
-            %{--</div>--}%
+        %{--</div>--}%
         <div class="span3" style="width: 280px; margin-left: 10px;">
             <table border="1" width="280px;">
                 <tr>
@@ -332,14 +333,15 @@ h4 {
         </div>
 
         <div class="span3" style="width: 200px; margin-left: 10px;">
-                    <table border="1" width="240px">
-                        <tr class="totalParcial">
-                            <th class="st-title">Costo M.O. reparaciones</th>
-                            %{--<th class="st-cod">MOR</th>--}%
-                            <td class="tdMor num st-total" data-dec="5"></td>
-                        </tr>
-                    </table>
+            <table border="1" width="240px">
+                <tr class="totalParcial">
+                    <th class="st-title">Costo M.O. reparaciones</th>
+                    %{--<th class="st-cod">MOR</th>--}%
+                    <td class="tdMor num st-total" data-dec="5"></td>
+                </tr>
+            </table>
         </div>
+
         <div class="span3" style="width: 200px; margin-left: 10px;">
             <table border="1">
                 <tr>
@@ -490,13 +492,14 @@ h4 {
         data.cl = 0.00035 * data.ac * data.hp;
 
         data.cg = 0.001 * data.gr * data.hp;
-
-        data.cll = data.vll / data.hll;
-
+        if (data.hll > 0) {
+            data.cll = data.vll / data.hll;
+        } else {
+            data.cll = 0;
+        }
         data.ch = data.d + data.i + data.s + data.m + data.r + data.mor + data.cd + data.cl + data.cg + data.cll;
-
         $.each(data, function (d, i) {
-            if (i != 0) {
+            if (i != 0 || d == 'hll' || d == 'cll') {
                 var td = $(".td" + d.capitalize());
                 if (td) {
                     var dec = parseInt(td.data("dec"));
@@ -566,38 +569,37 @@ h4 {
         }
     });
 
-   $("#btnImprimir").click(function () {
+    $("#btnImprimir").click(function () {
 
 //       console.log(data)
-      if(!data.ch || !data.hp || !data.vc || !data.vll || !data.hvb || !data.hva || !data.hab || !data.haa || !data.hllb || !data.hlla) {
+        if (!data.ch || !data.hp || !data.vc || !data.hvb || !data.hva || !data.hab || !data.haa) {
 
-          $("#imprimirDialog").dialog("open");
+            $("#imprimirDialog").dialog("open");
 
-      }else {
+        } else {
 
-
-          location.href="${g.createLink(controller: 'reportes3',action: 'imprimirValorHoraEquipos', id: item.id)}?potencia=" + data.hp + "&vc=" + data.vc + "&veb=" + data.hvb +
-                  "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch +
-                  "&av=" + data.av + "&vr=" + data.vr + "&d=" + data.d + "&i=" + data.i + "&frc=" + data.frc + "&cs=" + data.cs + "&s=" + data.s + "&m=" + data.m + "&va=" + data.va  + "&ci=" + data.ci +
-                  "&k=" + data.k + "&r=" +data.r + "&mor=" + data.mor + "&di=" + data.di + "&cd=" + data.cd +
-                  "&ac=" + data.ac + "&cl=" + data.cl + "&gr=" + data.gr + "&cg=" + data.cg + "&vll=" + data.vll +
-                  "&hll=" + data.hll + "&cll=" + data.cll
-      }
-   });
+            location.href = "${g.createLink(controller: 'reportes3',action: 'imprimirValorHoraEquipos', id: item.id)}?potencia=" + data.hp + "&vc=" + data.vc + "&veb=" + data.hvb +
+                            "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch +
+                            "&av=" + data.av + "&vr=" + data.vr + "&d=" + data.d + "&i=" + data.i + "&frc=" + data.frc + "&cs=" + data.cs + "&s=" + data.s + "&m=" + data.m + "&va=" + data.va + "&ci=" + data.ci +
+                            "&k=" + data.k + "&r=" + data.r + "&mor=" + data.mor + "&di=" + data.di + "&cd=" + data.cd +
+                            "&ac=" + data.ac + "&cl=" + data.cl + "&gr=" + data.gr + "&cg=" + data.cg + "&vll=" + data.vll +
+                            "&hll=" + data.hll + "&cll=" + data.cll
+        }
+    });
 
     $("#imprimirDialog").dialog({
 
-        autoOpen: false,
-        resizable: false,
-        modal: true,
-        draggable: false,
+        autoOpen  : false,
+        resizable : false,
+        modal     : true,
+        draggable : false,
 
-        width: 350,
-        height: 180,
-        position: 'center',
-        title: 'Imprimir reporte',
-        buttons: {
-            "Aceptar": function () {
+        width    : 350,
+        height   : 180,
+        position : 'center',
+        title    : 'Imprimir reporte',
+        buttons  : {
+            "Aceptar" : function () {
 
                 $("#imprimirDialog").dialog("close");
 
