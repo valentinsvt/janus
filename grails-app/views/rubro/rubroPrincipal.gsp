@@ -421,6 +421,11 @@
     </div>
 
     <div class="modal-body" id="modalBody">
+        <div id="tipos" class="btn-group" data-toggle="buttons-radio">
+            <button type="button" class="btn btn-primary tipo active" tipo="3">Equipos</button>
+            <button type="button" class="btn btn-primary tipo" tipo="2">Mano de obra</button>
+            <button type="button" class="btn btn-primary tipo" tipo="1">Materiales</button>
+        </div>
         <bsc:buscador name="rubro.buscador.id" value="" accion="buscaRubro" controlador="rubro" campos="${campos}" label="Rubro" tipo="lista"/>
     </div>
 
@@ -650,7 +655,7 @@
             rend = 1
         if ($("#item_id").val() * 1 > 0) {
             if (cant > 0) {
-                var data = "rubro=${rubro.id}&item=" + $("#item_id").val() + "&cantidad=" + cant + "&rendimiento=" + rend
+                var data = "rubro=${rubro?.id}&item=" + $("#item_id").val() + "&cantidad=" + cant + "&rendimiento=" + rend
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'addItem')}",
                     data     : data,
                     success  : function (msg) {
@@ -902,6 +907,8 @@
             data = "tc=" + $("#tipoCampo").val() + "&campos=" + $("#campo :selected").val() + "&operadores=" + $("#operador :selected").val() + "&criterios=" + $("#criterio").val()
         }
         data += "&ordenado=" + $("#campoOrdn :selected").val() + "&orden=" + $("#orden :selected").val();
+        var tipo = $(".tipo.active").attr("tipo")
+        data+="&tipo="+tipo
         $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'buscaItem')}",
             data     : data,
             success  : function (msg) {
@@ -1144,6 +1151,8 @@
 //                $("#detalle").click(function () {
 //                    $("#modal-detalle").modal("show");
 //                });
+
+
         $("#save-espc").click(function () {
             if ($("#especificaciones").val().trim().length < 1024) {
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro', action:'saveEspc')}",
@@ -1658,6 +1667,9 @@
                 $("#modalTitle").html("Lista de rubros");
                 $("#modalFooter").html("").append(btnOk);
                 $(".contenidoBuscador").html("")
+                $("#tipos").hide()
+                $("#btn_reporte").show()
+                $("#btn_excel").show()
                 $("#modal-rubro").modal("show");
                 $("#buscarDialog").unbind("click")
                 $("#buscarDialog").bind("click", enviarCopiar)
@@ -1717,6 +1729,9 @@
             $("#modalTitle").html("Lista de items");
             $("#modalFooter").html("").append(btnOk);
             $(".contenidoBuscador").html("")
+            $("#tipos").show()
+            $("#btn_reporte").hide()
+            $("#btn_excel").hide()
             $("#modal-rubro").modal("show");
             $("#buscarDialog").unbind("click")
             $("#buscarDialog").bind("click", enviarItem)
@@ -1765,6 +1780,9 @@
 //        $("#modalBody").html($("#buscador_rubro").html());
             $("#modalFooter").html("").append(btnOk);
             $(".contenidoBuscador").html("")
+            $("#tipos").hide()
+            $("#btn_reporte").show()
+            $("#btn_excel").show()
             $("#modal-rubro").modal("show");
             $("#buscarDialog").unbind("click")
             $("#buscarDialog").bind("click", enviar)

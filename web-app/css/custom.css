@@ -318,12 +318,12 @@ th.desc a {
 
 .modal.grande {
     width       : 1000px;
-    height      : 600px;
+    height      : 650px;
     margin-left : -500px; /* - width/2 */
 }
 
 .grande .modal-body {
-    height     : 560px;
+    height     : 610px;
     max-height : 580px;
 }
 

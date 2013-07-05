@@ -148,7 +148,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def buscaItem() {
-//        println "busca item "+params
+        println "busca item "+params
         def listaTitulos = ["Código", "Descripción"]
         def listaCampos = ["codigo", "nombre"]
         def funciones = [null, null]
@@ -169,7 +169,18 @@ class RubroController extends janus.seguridad.Shield {
         funcionJs += '});'
         funcionJs += '}'
         def numRegistros = 20
-        def extras = " and tipoItem = 1"
+
+        def tipo=params.tipo
+        def extras = " and tipoItem = 1 and departamento in ("
+
+        SubgrupoItems.findAllByGrupo(Grupo.get(tipo)).each {
+            DepartamentoItem.findAllBySubgrupo(it).each{dp->
+                        extras+=dp.id+","
+            }
+        }
+        extras+="-1)";
+//        println "extras "+extras
+
         if (!params.reporte) {
             def lista = buscadorService.buscar(Item, "Item", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
