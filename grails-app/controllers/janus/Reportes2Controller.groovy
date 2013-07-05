@@ -1637,6 +1637,7 @@ class Reportes2Controller {
         def ed2
         def ed3
         def ed4
+        def items = []
         def varTrans
         def valores = []
         def desglose = []
@@ -1773,8 +1774,7 @@ class Reportes2Controller {
             valores.eachWithIndex { item, i ->
 
                 b += (((ed1[i]) / (item)) - eqTotal)
-
-//                println(b[0])
+            //                println(b[0])
             }
 
         }else {
@@ -1913,38 +1913,64 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
-        addCellTabla(tablaDesglose, new Paragraph("Distribución de Equipos", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[0], minFractionDigits:
-                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        PdfPTable tablaDesgloseBody = new PdfPTable(6);
+        tablaDesgloseBody.setWidthPercentage(90);
+        tablaDesgloseBody.setWidths(arregloEnteros([20,20,8,5,16,40]))
 
-        addCellTabla(tablaDesglose, new Paragraph("Distribución de Repuestos", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[1], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph("Equipos", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[0]*100, minFractionDigits:
+                0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[0], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
-        addCellTabla(tablaDesglose, new Paragraph("Distribución de Combustibles", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[2], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph("Repuestos", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[1]*100, minFractionDigits:
+                0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[1], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
-        addCellTabla(tablaDesglose, new Paragraph("Distribución de Mecánico", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[3], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph("Combustibles", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[2]*100, minFractionDigits:
+                0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[2], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
-        addCellTabla(tablaDesglose, new Paragraph("Distribución de Saldo", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: ed1[4], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph("Mecánico", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[3]*100, minFractionDigits:
+                0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[3], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph("Saldo", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[4]*100, minFractionDigits:
+                0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[4], minFractionDigits:
+                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
+        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
 
         document.add(tablaDesglose)
+        document.add(tablaDesgloseBody)
         document.close();
         pdfw.close()
         byte[] b1 = baos.toByteArray();
