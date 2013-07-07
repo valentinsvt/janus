@@ -76,9 +76,9 @@ class OferentesService {
 //        println "\nsql " + sql
         def cn = dbConnectionService.getConnectionOferentes()
         def count = 0
-        println "validacion " + validacion
+        //println "validacion " + validacion
         cn.eachRow(validacion.toString()) { r ->
-            println "r " + r
+            //println "r " + r
             count = r[0]
         }
         if (count == 0) {

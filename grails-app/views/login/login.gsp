@@ -88,7 +88,7 @@
 
         <div style="text-align: center;"><h1 style="font-family: 'open sans condensed';font-weight: bold;font-size:
         25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#0088CC; margin-top: 60px;">
-            CONTROL DE PROYECTOS<br>CONTRATACION, EJECUCIÓN Y SEGUIMIENTO DE OBRAS<br>G.A.D. PROVINCIA DE PICHINCHA</h1></div>
+            CONTROL DE PROYECTOS<br>CONTRATACION, EJECUCIÓN, SEGUIMIENTO DE OBRAS Y CONSULTORÍAS<br>G.A.D. PROVINCIA DE PICHINCHA</h1></div>
 
         <div class="dialog ui-corner-all" style="height: 595px;background: #d7d7d7;;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
             <div style="text-align: center; margin-top: 50px; color: #810;">

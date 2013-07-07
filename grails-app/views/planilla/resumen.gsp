@@ -167,7 +167,7 @@
         <script type="text/javascript">
             $("#dlg_reporte").dialog({
                 modal     : true,
-                width     : 250,
+                width     : 340,
                 height    : 150,
                 title     : "Reporte",
                 resizable : false,
