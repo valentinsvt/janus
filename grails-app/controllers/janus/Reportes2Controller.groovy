@@ -301,6 +301,7 @@ class Reportes2Controller {
                 order("numero", "asc")
             }
         }
+
         def planillaAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("A"))
 //        println pcs.numero
 
@@ -390,7 +391,9 @@ class Reportes2Controller {
             } //valRea.size == 0
 
 //            println "data[c][${perNum}][total]=${tot['c']}"
+            println "tot[c]: ${tot['c']}, ${tot['p']}"
             data2["c"][perNum]["total"] = tot["c"]
+            println "${data2["c"][perNum]["total"]}"
 //            println "data[p][${perNum}][total]=${tot['p']}"
             data2["p"][perNum]["total"] = tot["p"]
             def vrB0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, fpB0)

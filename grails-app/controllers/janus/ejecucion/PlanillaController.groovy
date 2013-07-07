@@ -145,6 +145,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def form() {
+        println params
         def contrato = Contrato.get(params.contrato)
         def planillaInstance = new Planilla(params)
         planillaInstance.contrato = contrato
@@ -254,6 +255,9 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         if (params.fechaMemoSalida) {
             params.fechaMemoSalida = new Date().parse("dd-MM-yyyy", params.fechaMemoSalida)
+        }
+        if (params.fechaOficioEntradaPlanilla) {
+            params.fechaOficioEntradaPlanilla = new Date().parse("dd-MM-yyyy", params.fechaOficioEntradaPlanilla)
         }
 
         def planillaInstance
