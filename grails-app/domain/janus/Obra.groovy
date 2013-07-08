@@ -91,6 +91,7 @@ class Obra implements Serializable {
 
     String desgloseTransporte
 
+    String coordenadas //coordenadas en sistema WGS84: -0.21,-78.5199 => S 0 12.5999999 W 78 31.194
 
     static mapping = {
         table 'obra'
@@ -183,12 +184,14 @@ class Obra implements Serializable {
             plazoPersonas column: 'obraplpr'
             plazoMaquinas column: 'obraplmq'
 
-            desgloseEquipo      column: 'obradseq'
-            desgloseRepuestos   column: 'obradsrp'
+            desgloseEquipo column: 'obradseq'
+            desgloseRepuestos column: 'obradsrp'
             desgloseCombustible column: 'obradscb'
-            desgloseMecanico    column: 'obradsmc'
-            desgloseSaldo       column: 'obradssl'
-            desgloseTransporte  column: 'obratrnp'
+            desgloseMecanico column: 'obradsmc'
+            desgloseSaldo column: 'obradssl'
+            desgloseTransporte column: 'obratrnp'
+
+            coordenadas column: 'obracrdn'
         }
     }
     static constraints = {
@@ -282,6 +285,8 @@ class Obra implements Serializable {
         desgloseMecanico(attributes: [title: 'Desglose del transporte y equipos en Mecánico'])
         desgloseSaldo(attributes: [title: 'Desglose del transporte y equipos en Saldo'])
         desgloseTransporte(size: 1..1, blank: true, nullable: true, attributes: [title: 'Desglose de transporte'])
+
+        coordenadas(size: 0..254, blank: true, nullable: true, attributes: [title: 'Coordenadas en formato WGS84'])
     }
 
     String toString() {

@@ -1,11 +1,7 @@
 package janus
 
-import com.lowagie.text.Document
-import com.lowagie.text.Element
-import com.lowagie.text.PageSize
-import com.lowagie.text.Paragraph
+import com.lowagie.text.*
 import com.lowagie.text.pdf.*
-import com.lowagie.text.Font;
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -15,7 +11,8 @@ import jxl.write.WritableCellFormat
 import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
-import java.awt.Color
+
+import java.awt.*
 
 //import java.awt.*
 
@@ -279,9 +276,12 @@ class Reportes2Controller {
         }
 
         def oferta = contrato.oferta
-        def periodoOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(oferta.fechaEntrega, oferta.fechaEntrega)
+        def fechaEntregaOferta = oferta.fechaEntrega - 30
 
-        def periodos = [], periodosPlanilla = []
+        def periodoOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaEntregaOferta, fechaEntregaOferta)
+
+
+        def periodos = [], periodosPlanilla = [], periodosTmp = []
         def data2 = [
                 c: [:],
                 p: [:]
@@ -303,16 +303,28 @@ class Reportes2Controller {
         }
 
         def planillaAnticipo = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("A"))
+        def fechaPlanillaAnticipo
+        // utilizamos siempre la fecha de presentacion del anticipo y se hace una planilla de reajuste final
+        // para reajustar el anticipo a la fecha de pago en las planillas de avnace descomentar esta parte
+//        if (planilla.tipoPlanilla.codigo == "A") {
+        fechaPlanillaAnticipo = planillaAnticipo.fechaPresentacion
+//        } else {
+//            fechaPlanillaAnticipo = planillaAnticipo.fechaPago
+//        }
+        def periodoAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaPlanillaAnticipo, fechaPlanillaAnticipo)
+
 //        println pcs.numero
 
         //llena el arreglo de periodos
         //el periodo que corresponde a la fecha de entrega de la oferta
         periodos.add(periodoOferta)
+        periodos.add(periodoAnticipo)
+
         planillas.each { pl ->
             if (pl.tipoPlanilla.codigo == 'A') {
                 //si es anticipo: el periodo q corresponde a la fecha del anticipo
-                def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPresentacion, pl.fechaPresentacion)
-                periodos.add(prin)
+//                def prin = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPresentacion, pl.fechaPresentacion)
+//                periodos.add(prin)
             } else {
 //                println pl.id + "   " + pl.fechaInicio.format("dd-MM-yyyy") + " a " + pl.fechaFin.format("dd-MM-yyyy")
                 def m1 = pl.fechaInicio.format("MM")
@@ -321,7 +333,7 @@ class Reportes2Controller {
                 if (m1 == m2) {
                     if (pl.periodoIndices) {
 //                        println "++ " + pl.periodoIndices
-                        periodos.add(pl.periodoIndices)
+                        periodosTmp.add(pl.periodoIndices)
                     }
                     if (pl == planilla) {
 //                        println "-- " + pl
@@ -334,7 +346,7 @@ class Reportes2Controller {
                         def fi = new Date().parse("dd-MM-yyyy", "01-" + it + "-" + y)
                         def prin = PeriodosInec.findByFechaInicio(fi)
                         if (prin) {
-                            periodos.add(prin)
+                            periodosTmp.add(prin)
                         }
                         if (pl == planilla) {
                             periodosPlanilla.add(prin)
@@ -348,6 +360,8 @@ class Reportes2Controller {
         }
 //        println periodos
 //        render periodos.descripcion
+        periodosTmp = periodosTmp.unique()
+        periodos = periodos + periodosTmp
 
 //        println "Aqui empieza las inserciones"
         periodos.eachWithIndex { per, perNum ->
@@ -356,6 +370,9 @@ class Reportes2Controller {
                 pl = null
             }
             def valRea = ValorReajuste.findAllByObraAndPeriodoIndice(obra, per)
+//            println ">>>>>>>>>>>>>>>>>>>obra: " + obra.id
+//            println ">>>>>>>>>>>>>>>>>>>per: " + per.id
+//            println ">>>>>>>>>>>>>>>>>>>valRea: " + valRea
 
 //            println ">>>Periodo " + per.descripcion + " (${perNum}) hay " + valRea.size() + " valRea: " + valRea.id + " (obra: ${obra.id})"
 
@@ -893,16 +910,13 @@ class Reportes2Controller {
 //        println planillasAnteriores
 
 
-
-
-
-        return [tablaB0: tablaBo, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato,detalle: detalle, precios: precios, planillasAnteriores: planillasAnteriores,imprimeDetalle:params.imprimeDetalle]
+        return [tablaB0: tablaBo, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, detalle: detalle, precios: precios, planillasAnteriores: planillasAnteriores, imprimeDetalle: params.imprimeDetalle]
     }
 
 
 
 
-    def imprimirRubrosConsolidado (){
+    def imprimirRubrosConsolidado() {
 //        println "rep rubros "+params
         def rubros = []
 
@@ -911,10 +925,10 @@ class Reportes2Controller {
         switch (parts[0]) {
             case "sg":
                 def departamentos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(parts[1].toLong()))
-                rubros = Item.findAllByDepartamentoInList(departamentos,[sort:"nombre"])
+                rubros = Item.findAllByDepartamentoInList(departamentos, [sort: "nombre"])
                 break;
             case "dp":
-                rubros = Item.findAllByDepartamento(DepartamentoItem.get(parts[1].toLong()),[sort:"nombre"])
+                rubros = Item.findAllByDepartamento(DepartamentoItem.get(parts[1].toLong()), [sort: "nombre"])
                 break;
             case "rb":
                 rubros = [Item.get(parts[1].toLong())]
@@ -932,34 +946,34 @@ class Reportes2Controller {
             indi = 21.5
         }
 
-        def datos=[]
-        rubros.each {rubro->
+        def datos = []
+        rubros.each { rubro ->
             def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
             preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
             def res = preciosService.rb_precios(parametros, "")
             def temp = [:]
-            def total=0
-            res.each {r->
-                total+=r["parcial"]+r["parcial_t"]
+            def total = 0
+            res.each { r ->
+                total += r["parcial"] + r["parcial_t"]
             }
-            total=total*(1+indi/100)
-            temp.put("codigo",rubro.codigo)
-            temp.put("nombre",rubro.nombre)
-            temp.put("unidad",rubro.unidad.codigo)
-            temp.put("total",total)
+            total = total * (1 + indi / 100)
+            temp.put("codigo", rubro.codigo)
+            temp.put("nombre", rubro.nombre)
+            temp.put("unidad", rubro.unidad.codigo)
+            temp.put("total", total)
             datos.add(temp)
 //            println "res "+res
 
         }
         def l = listas.split(",")
 //        println "listas str "+listas+" "+l
-        listas=[]
+        listas = []
         l.each {
             listas.add(Lugar.get(it).descripcion)
         }
 //        println "listas "+listas
 
-        [datos:datos,fecha:fecha,indi:indi,params: params,listas:listas]
+        [datos: datos, fecha: fecha, indi: indi, params: params, listas: listas]
     }
 
 
@@ -1671,7 +1685,7 @@ class Reportes2Controller {
                 "codigo = 'sS1' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
 
-        sqlVerificarTransporte =   "SELECT\n" +
+        sqlVerificarTransporte = "SELECT\n" +
                 "valor\n" +
                 "from mfvl, mfcl\n" +
                 "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
@@ -1702,7 +1716,7 @@ class Reportes2Controller {
         ed4 = cn.rows(sqlVerificarTransporte.toString())
         ed4.each {
 
-           varTrans = it?.valor
+            varTrans = it?.valor
 
         }
 
@@ -1773,22 +1787,19 @@ class Reportes2Controller {
 //        println("eqTotal:" + eqTotal)
 
 
-        if (varTrans > 0){
+        if (varTrans > 0) {
             valores.eachWithIndex { item, i ->
 
                 b += (((ed1[i]) / (item)) - eqTotal)
-            //                println(b[0])
+                //                println(b[0])
             }
 
-        }else {
-
+        } else {
 
 
             b[0] = 0.00
 
         }
-
-
 
 //        println("B:" + b)
 
@@ -1876,7 +1887,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
-        if(b[0] > 0){
+        if (b[0] > 0) {
 
 
             addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
@@ -1885,8 +1896,7 @@ class Reportes2Controller {
                     5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
             addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
-        }else {
-
+        } else {
 
 
             addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
@@ -1918,10 +1928,10 @@ class Reportes2Controller {
 
         PdfPTable tablaDesgloseBody = new PdfPTable(6);
         tablaDesgloseBody.setWidthPercentage(90);
-        tablaDesgloseBody.setWidths(arregloEnteros([20,20,8,5,16,40]))
+        tablaDesgloseBody.setWidths(arregloEnteros([20, 20, 8, 5, 16, 40]))
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Equipos", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[0]*100, minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[0] * 100, minFractionDigits:
                 0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
@@ -1930,7 +1940,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Repuestos", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[1]*100, minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[1] * 100, minFractionDigits:
                 0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
@@ -1939,7 +1949,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Combustibles", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[2]*100, minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[2] * 100, minFractionDigits:
                 0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
@@ -1948,7 +1958,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Mecánico", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[3]*100, minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[3] * 100, minFractionDigits:
                 0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
@@ -1957,7 +1967,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Saldo", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[4]*100, minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[4] * 100, minFractionDigits:
                 0, maxFractionDigits: 0, format: "###,###", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)

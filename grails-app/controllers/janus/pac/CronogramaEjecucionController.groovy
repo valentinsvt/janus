@@ -834,9 +834,9 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         /**
          * TODO: se entra por contrato? por obra?
          */
-        if (!params.id) {
-            params.id = "5"
-        }
+//        if (!params.id) {
+//            params.id = "5"
+//        }
 //println params
         def contrato = Contrato.get(params.id)
 //println contrato

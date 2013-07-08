@@ -18,6 +18,8 @@
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
+        <script src="${resource(dir: 'js/jquery/plugins/editable/bootstrap-editable/js', file: 'bootstrap-editable.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/editable/bootstrap-editable/css', file: 'bootstrap-editable.css')}" rel="stylesheet"/>
 
         <style type="text/css">
 
@@ -35,6 +37,10 @@
 
         .mover {
 
+        }
+
+        .editable {
+            border-bottom : 1px dashed;
         }
         </style>
 
@@ -322,31 +328,42 @@
 
                     <div class="span1">Fecha</div>
 
-                    <div class="span2" style="margin-left: 0px;"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
+                    <div class="span2" style="margin-left: 0;"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
 
+                    <div class="span1" style="margin-left: -20px">Coordenadas</div>
 
-                    <g:if test="${obra?.id != null}">
+                    <div class="span2">
+                        <g:set var="coords" value="${obra?.coordenadas}"/>
+                        <g:if test="${obra?.id == null}">
+                            <g:set var="coords" value="${'S 0 12.5999999 W 78 31.194'}"/>
+                        </g:if>
+                        <g:hiddenField name="coordenadas" value="${coords}"/>
+                        <a href="#" id="coords" class="editable">
+                            ${coords}
+                        </a>
+                    </div>
+                    %{--<g:if test="${obra?.id != null}">--}%
 
-                        <div class="span1" style="margin-left: -20px">Latitud</div>
+                    %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
 
-                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number: obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Latitud de la Obra"/></div>
+                    %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" style="width: 100px" value="${formatNumber(number: obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Latitud de la Obra"/></div>--}%
 
-                        <div class="span1" style="margin-left: 60px">Longitud</div>
+                    %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
 
-                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number: obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Longitud de la Obra"/></div>
+                    %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" style="width: 100px" value="${formatNumber(number: obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" title="Longitud de la Obra"/></div>--}%
 
-                    </g:if>
-                    <g:else>
+                    %{--</g:if>--}%
+                    %{--<g:else>--}%
 
-                        <div class="span1" style="margin-left: -20px">Latitud</div>
+                    %{--<div class="span1" style="margin-left: -20px">Latitud</div>--}%
 
-                        <div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}" style="width: 100px" maxlength="11" title="Latitud de la Obra"/></div>
+                    %{--<div class="span1" style="margin-left: -20px"><g:textField name="latitud" class="latitud number" value="${"-0.21"}" style="width: 100px" maxlength="11" title="Latitud de la Obra"/></div>--}%
 
-                        <div class="span1" style="margin-left: 60px">Longitud</div>
+                    %{--<div class="span1" style="margin-left: 60px">Longitud</div>--}%
 
-                        <div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11" title="Longitud de la Obra"/></div>
+                    %{--<div class="span1" style="margin-left: -10px"><g:textField name="longitud" class="longitud number" value="${"-78.5199"}" style="width: 100px" maxlength="11" title="Longitud de la Obra"/></div>--}%
 
-                    </g:else>
+                    %{--</g:else>--}%
 
                 </div>
 
@@ -803,6 +820,14 @@
             }
 
             $(function () {
+
+                $('#coords').editable({
+                    type    : 'text',
+                    title   : 'Registre las coordenadas',
+                    success : function (response, newValue) {
+                        $("#coordenadas").val(newValue);
+                    }
+                });
 
                 loadPersonas();
 

@@ -166,6 +166,10 @@ class ObraController extends janus.seguridad.Shield {
         redirect(action: "registroObra", params: [obra: obra.id])
     }
 
+    def updateCoords() {
+
+    }
+
     def registroObra() {
 
         def obra

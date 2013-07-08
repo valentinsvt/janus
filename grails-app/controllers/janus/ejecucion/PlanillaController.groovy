@@ -616,7 +616,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //                        }
                     }
 //                    println
-//                    println "vr: " + vr.id + "   pl " + vr.planilla.id + "   >" + vr.valor + "<\t" + val + " * " + c.valor + " = " + (val * c.valor) + "    planilla " + pl?.id
+//                    println "vr: " + vr.id + "   pl " + vr.planilla.id + "   >" + vr.valor + "<\t" + val + " * " + c.valor + " = " + (val * c.valor) + "    planilla " + pl?.id + "   obra: " + obra.id + "   per:" + per.id
                     if (vr.size() == 0) {
 //                        println "???? " + vr
                         if (alert != "") {

@@ -36,7 +36,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         //copia el cronograma de la obra a la tabla cronograma contrato (crng)
         /**
          * TODO: esto hay q cambiar cuando haya el modulo de oferente ganador:
-         *  no se copia el cronograma de la obra sino del oferente ganador
+         *  no se deberia copiar el cronograma de la obra sino del oferente ganador
          */
 
         //solo copia si esta vacio el cronograma del contrato
