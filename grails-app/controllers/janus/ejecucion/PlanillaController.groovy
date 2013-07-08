@@ -62,12 +62,14 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.message = "Ha ocurrido un error al efectuar el pago:"
             flash.message += g.renderErrors(bean: planilla)
         } else {
-            def obra = Obra.get(planilla.contrato.oferta.concurso.obraId)
-            obra.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaPago)
-            if (!obra.save(flush: true)) {
-                println "ERROR al guardar el pago de la planilla (fecha inicio obra) " + obra.errors
-                flash.message = "Ha ocurrido un error al efectuar el pago:"
-                flash.message += g.renderErrors(bean: obra)
+            if (planilla.tipoPlanilla.codigo == "A") {
+                def obra = Obra.get(planilla.contrato.oferta.concurso.obraId)
+                obra.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaPago)
+                if (!obra.save(flush: true)) {
+                    println "ERROR al guardar el pago de la planilla (fecha inicio obra) " + obra.errors
+                    flash.message = "Ha ocurrido un error al efectuar el pago:"
+                    flash.message += g.renderErrors(bean: obra)
+                }
             }
         }
         if (flash.message == "") {
@@ -80,24 +82,39 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
+        def fechaMin, fechaMax
         def planilla = Planilla.get(params.id)
         def tipo = params.tipo
-        def lblMemo, lblFecha
+        def lblMemo, lblFecha, extra
         switch (tipo) {
             case "2":
                 lblMemo = "Memo de salida"
                 lblFecha = "Fecha de memo de salida"
+//                fechaMin = planilla.fechaOficioEntradaPlanilla
+//                extra = "Fecha de oficio de entrada: " + fechaMin.format("dd-MM-yyyy")
                 break;
             case "3":
                 lblMemo = "Memo de pedido de pago"
                 lblFecha = "Fecha de memo de pedido de pago"
+//                fechaMin = planilla.fechaMemoSalida
+//                extra = "Fecha de memo de salida: " + fechaMin.format("dd-MM-yyyy")
                 break;
             case "4":
                 lblMemo = "Memo de pago"
                 lblFecha = "Fecha de memo de pago"
+//                fechaMin = planilla.fechaMemoPedidoPagoPlanilla
+//                extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")
                 break;
         }
-        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha]
+//        println tipo + "  " + fechaMin
+//        def y = fechaMin.format("yyyy").toInteger()
+//        def m = fechaMin.format("MM").toInteger() - 1
+//        def d = fechaMin.format("dd").toInteger()
+//        //js: new Date(year, month, day, hours, minutes, seconds, milliseconds)
+//        fechaMin = "new Date(${y},${m},${d})"
+//        fechaMax = "new Date(${y + 1},${m},${d})"
+
+        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha]//, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra]
     }
 
     def savePagoPlanilla() {
@@ -131,6 +148,8 @@ class PlanillaController extends janus.seguridad.Shield {
         if (planilla.save(flush: true)) {
             flash.clase = "alert-success"
             flash.message = str
+
+
             redirect(action: "list", id: planilla.contratoId)
         } else {
             println "Error al grabar la fecha y el memo en la planilla: " + planilla.errors
@@ -218,7 +237,8 @@ class PlanillaController extends janus.seguridad.Shield {
 //            }
 //            println planillasAvance
             } else {
-                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
+//                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
+                ultimoPeriodo = null
             }
             println ultimoPeriodo
             PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: 'fechaInicio']).each { pe ->
@@ -707,6 +727,11 @@ class PlanillaController extends janus.seguridad.Shield {
             data2["c"][perNum]["total"] = tot["c"]
 //            println "data[p][${perNum}][total]=${tot['p']}"
             data2["p"][perNum]["total"] = tot["p"]
+
+//            println "------" + per + "   " + fpB0
+//            println per.class
+//            println fpB0.class
+//            println "\n\n"
             def vrB0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, fpB0)
             if (!vrB0) {
                 vrB0 = new ValorReajuste([
