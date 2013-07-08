@@ -24,7 +24,8 @@
         <style type="text/css">
         @page {
             size   : 21cm 29.7cm;  /*width height */
-            margin : 2cm;
+            margin-left : 2cm;
+            margin-top: 1cm;
         }
 
         body {
@@ -33,7 +34,7 @@
 
         .hoja {
             /*background  : #e6e6fa;*/
-            height      : 24.7cm; /*29.7-(1.5*2)*/
+            height      : 20.7cm !important; /*29.7-(1.5*2)*/
             font-family : serif;
             font-size   : 10px;
             width       : 16cm;
@@ -46,6 +47,7 @@
             text-align    : center;
             margin-bottom : 5px;
             width         : 95%;
+
             /*font-family       : 'Tulpen One', cursive !important;*/
             /*font-family : "Open Sans Condensed" !important;*/
         }
@@ -90,13 +92,12 @@
         .theader {
 
             /*border: 1px solid #000000;*/
+            margin-bottom: 30px !important;
             border-bottom: 1px solid #000000;
-
-
         }
 
         .theaderup {
-
+            margin-top: 30px !important;
             /*border: 1px solid #000000;*/
             border-top: 1px solid #000000;
 
@@ -147,7 +148,7 @@
                 </p>
             </div>
 
-            <div style="margin-top: 20px">
+            <div style="margin-top: -20px">
                 <div class="row-fluid">
                     <div class="span7">
                         %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
@@ -155,7 +156,7 @@
                     </div>
 
                     <div class="span3">
-                        <b>Fecha Act. P.U:</b> ${fechaPrecios?.format("dd-MM-yyyy")}
+                        <b>Fecha Act. P.U:</b> ${fechaPrecios}
                     </div>
                 </div>
 

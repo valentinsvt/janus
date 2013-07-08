@@ -1393,7 +1393,7 @@ class Reportes2Controller {
         def row = 0
         WritableSheet sheet = workbook.createSheet('Composicion', 0)
 
-        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableFont times16font = new WritableFont(WritableFont.ARIAL, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 20)
         sheet.setColumnView(1, 60)
@@ -1556,7 +1556,7 @@ class Reportes2Controller {
         def row = 0
         WritableSheet sheet = workbook.createSheet('Presupuesto', 0)
 
-        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 20)
         sheet.setColumnView(1, 60)

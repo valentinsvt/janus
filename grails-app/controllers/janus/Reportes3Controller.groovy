@@ -85,7 +85,11 @@ class Reportes3Controller {
 //        println "----->>>>" + params
 //        def rubro = Item.get(params.id)
         def obra = Obra.get(params.obra)
-        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def fecha1 = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        def fecha2 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
+        def fechaSalida = printFecha(fecha2)
+        def fecha = printFecha(fecha1)
 
         def fechaPal = printFecha(new Date());
 
@@ -160,7 +164,18 @@ class Reportes3Controller {
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                    if(r["unddcdgo"].trim() =='m3'){
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
+                    }
+                    if(r["unddcdgo"].trim() =='kg'){
+
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
+                    }
+                    else {
+
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                    }
+
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
@@ -174,7 +189,18 @@ class Reportes3Controller {
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                    tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                    if(r["unddcdgo"].trim() == 'm3'){
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
+                    }
+                    if(r["unddcdgo"].trim() == 'kg'){
+
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
+                    }
+                    else {
+
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                    }
+
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
@@ -191,7 +217,18 @@ class Reportes3Controller {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
-                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                if(r["unddcdgo"].trim() == 'm3'){
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
+                }
+                if(r["unddcdgo"].trim() == 'kg'){
+
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
+                }
+                else {
+
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                }
+//                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["distancia"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -231,7 +268,7 @@ class Reportes3Controller {
         if (totalMat == 0)
             tablaMat = ""
 //        println "fin reporte rubro"
-        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, fechPal: fechaPal]
+        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, fechPal: fechaPal, fechaSalida: fechaSalida]
 
 
     }
@@ -486,10 +523,16 @@ class Reportes3Controller {
     }
 
     def imprimirRubro() {
-        println "imprimir rubro "+params
+//        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-        def fechaPala = printFecha(new Date());
+        def fecha1 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
+
+//        def fechaPala = printFecha(new Date());
+        def fechaPala = printFecha(fecha1);
+        def fecha2 = printFecha(fecha)
+
+
 
         def lugar = params.lugar
         def indi = params.indi
@@ -556,7 +599,19 @@ class Reportes3Controller {
                 if (params.trans != 'no') {
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                    tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+
+                    if(r["unddcdgo"].trim() == 'm3'){
+                        tablaMat += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
+                    }
+                    if(r["unddcdgo"].trim() == 'kg'){
+
+                        tablaMat += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
+                    }
+                    else {
+
+                        tablaMat += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                    }
+//                    tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
@@ -571,7 +626,19 @@ class Reportes3Controller {
 
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                    tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+
+                    if(r["unddcdgo"].trim() == 'm3'){
+                        tablaMat += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
+                    }
+                    if(r["unddcdgo"].trim() == 'kg'){
+
+                        tablaMat += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
+                    }
+                    else {
+
+                        tablaMat += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                    }
+//                    tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
@@ -588,7 +655,19 @@ class Reportes3Controller {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
-                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+
+                if(r["unddcdgo"].trim() == 'm3'){
+                    tablaTrans += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
+                }
+                if(r["unddcdgo"].trim() == 'kg'){
+
+                    tablaTrans += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
+                }
+                else {
+
+                    tablaTrans += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                }
+//                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["distancia"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -636,7 +715,7 @@ class Reportes3Controller {
         if (totalMat == 0)
             tablaMat = ""
 //        println "fin reporte rubro"
-        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra, fechaPala: fechaPala]
+        [rubro: rubro, fechaPrecios: fecha2, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra, fechaPala: fechaPala]
     }
 
     def imprimirRubros() {
@@ -754,7 +833,18 @@ class Reportes3Controller {
                     if (!params.trans) {
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                         tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                        tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+                        if(r["unddcdgo"].trim() == 'm3'){
+                            tablaMat += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
+                        }
+                        if(r["unddcdgo"].trim() == 'kg'){
+
+                            tablaMat += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
+                        }
+                        else {
+
+                            tablaMat += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                        }
+//                        tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
@@ -764,7 +854,18 @@ class Reportes3Controller {
                     } else {
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                         tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                        tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
+                        if(r["unddcdgo"].trim() == 'm3'){
+                            tablaMat += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
+                        }
+                        if(r["unddcdgo"].trim() == 'kg'){
+
+                            tablaMat += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
+                        }
+                        else {
+
+                            tablaMat += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                        }
+//                        tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] + r["parcial_t"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"

@@ -632,6 +632,11 @@
 
             </div>
 
+            <div class="span2" style="margin-top: 10px">
+              Fecha:
+              <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${new java.util.Date()}" style="width: 100px"/>
+            </div>
+
         </fieldset>
 
     </div>
@@ -1978,6 +1983,9 @@
             height    : 220,
             position  : 'center',
             title     : 'Imprimir con o sin transporte',
+//            open: function( event, ui ) {
+//                $( "#fechaSalidaId" ).datepicker( "hide" );
+//            },
             buttons   : {
                 "Si" : function () {
                     var dsp0 = $("#dist_p1").val()
@@ -1988,8 +1996,12 @@
                     var listas = $("#lista_1").val() + "," + $("#lista_2").val() + "," + $("#lista_3").val() + "," + $("#lista_4").val() + "," + $("#lista_5").val() + "," + $("#ciudad").val()
                     var volqueta = $("#costo_volqueta").val()
                     var chofer = $("#costo_chofer").val()
+                    var fechaSalida = $("#fechaSalidaId").val();
 
-                    datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val()
+                    console.log(fechaSalida)
+
+                    datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq="
+                            + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "WfechaSalida=" + fechaSalida
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}?" + datos
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");
@@ -2003,8 +2015,11 @@
                     var listas = $("#lista_1").val() + "," + $("#lista_2").val() + "," + $("#lista_3").val() + "," + $("#lista_4").val() + "," + $("#lista_5").val() + "," + $("#ciudad").val()
                     var volqueta = $("#costo_volqueta").val()
                     var chofer = $("#costo_chofer").val()
+                    var fechaSalida = $("#fechaSalidaId").val();
 
-                    datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val() + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val() + "Windi=" + $("#costo_indi").val() + "Wtrans=no"
+                    datos = "dsp0=" + dsp0 + "Wdsp1=" + dsp1 + "Wdsv0=" + dsv0 + "Wdsv1=" + dsv1 + "Wdsv2=" + dsv2 + "Wprvl=" + volqueta + "Wprch=" + chofer + "Wfecha=" + $("#fecha_precios").val()
+                            + "Wid=${rubro?.id}Wlugar=" + $("#ciudad").val() + "Wlistas=" + listas + "Wchof=" + $("#cmb_chof").val() + "Wvolq=" + $("#cmb_vol").val()
+                            + "Windi=" + $("#costo_indi").val() + "Wtrans=no" + "WfechaSalida=" + fechaSalida
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}?" + datos
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");

@@ -166,11 +166,11 @@
                 <div class="row-fluid">
                     <div class="span7">
                         %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
-                        <b>Fecha:</b> ${fechPal}
+                        <b>Fecha:</b> ${fechaSalida}
                     </div>
 
                     <div class="span3">
-                        <b>Fecha Act. P.U:</b> ${fechaPrecios?.format("dd-MM-yyyy")}
+                        <b>Fecha Act. P.U:</b> ${fechaPrecios}
                     </div>
                 </div>
 
