@@ -393,7 +393,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
             row2 += "<th class='${per.tipo} click' data-periodo='${per.id}'>"
             row2 += (per.tipo == 'P' ? 'Periodo' : (per.tipo == 'S' ? 'Susp.' : '')) + " " + per.numero
-            row2 += " (" + (per.fechaFin - per.fechaInicio) + " días)"
+            row2 += " (" + (per.fechaFin - per.fechaInicio + 1) + " días)"
             row2 += "</th>"
 
             totalesDol[i] = 0
@@ -831,9 +831,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     }
 
     def index() {
-        /**
-         * TODO: se entra por contrato? por obra?
-         */
+
 //        if (!params.id) {
 //            params.id = "5"
 //        }
@@ -879,7 +877,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             detalle.each { vol ->
                 CronogramaContrato.findAllByVolumenObra(vol).eachWithIndex { crono, cont ->
 
-                    def dias = (crono.periodo - 1) * 30 + (crono.periodo - 1)
+                    def dias = (crono.periodo - 1) * 30 //+ (crono.periodo - 1)
 //                    println ">>>" + dias
                     def ini
                     def fin

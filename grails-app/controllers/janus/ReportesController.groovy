@@ -898,9 +898,9 @@ class ReportesController {
 
 
     def rubroAExcel(sheet, res, rubro, fecha, indi) {
-        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
-        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, true);
+        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, false);
         WritableCellFormat times10 = new WritableCellFormat(times10Font);
         sheet.setColumnView(0, 20)
         sheet.setColumnView(1, 50)
@@ -1352,6 +1352,21 @@ class ReportesController {
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "M":
+//                if (r.unddcdgo.trim() == 'm3'){
+//
+//                    addCellTabla(table, new Paragraph('m3-km', fonts.times8normal), params.prmsNum)
+//
+//                }
+//                if(r.unddcdgo.trim() == 'kg'){
+//
+//                    addCellTabla(table, new Paragraph('ton-kg', fonts.times8normal), params.prmsNum)
+//
+//                }
+//                else{
+//
+//                    addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
+//
+//                }
                 addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
@@ -1359,6 +1374,21 @@ class ReportesController {
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "MNT":
+//                if (r.unddcdgo.trim() == 'm3'){
+//
+//                    addCellTabla(table, new Paragraph('m3-km', fonts.times8normal), params.prmsNum)
+//
+//                }
+//                if(r.unddcdgo.trim() == 'kg'){
+//
+//                    addCellTabla(table, new Paragraph('ton-kg', fonts.times8normal), params.prmsNum)
+//
+//                }
+//                else{
+//
+//                    addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
+//
+//                }
                 addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
 //                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
@@ -4638,7 +4668,7 @@ class ReportesController {
         if (params.id.class == java.lang.String) {
             params.id = [params.id]
         }
-        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 60)
         sheet.setColumnView(1, 12)
@@ -4930,7 +4960,7 @@ class ReportesController {
         if (params.id.class == java.lang.String) {
             params.id = [params.id]
         }
-        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
         sheet.setColumnView(0, 12)
         sheet.setColumnView(1, 25)

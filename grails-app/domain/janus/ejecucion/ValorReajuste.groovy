@@ -3,7 +3,7 @@ package janus.ejecucion
 //import janus.Indice
 //import janus.pac.PeriodoValidez
 
-class ValorReajuste {
+class  ValorReajuste {
 
     janus.Obra obra
     Planilla planilla

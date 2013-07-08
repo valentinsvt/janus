@@ -154,9 +154,11 @@
                 var chofer =
                 ${precioChof}
                 var clickImprimir = $(this).attr("id");
+                var fechaSalida1 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
+
 
                 %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"--}%
-                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}"
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "WfechaSalida=" + fechaSalida1
 
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}" + datos
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
@@ -177,8 +179,10 @@
                 ${precioChof}
                 var clickImprimir = $(this).attr("id");
 
+                var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
+
                 %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
-                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "Wdesglose=${1}"
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "Wdesglose=${1}" + "WfechaSalida=" + fechaSalida2
 
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}" + datos
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
