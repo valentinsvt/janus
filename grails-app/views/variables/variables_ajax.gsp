@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="span1">
-                    <g:textField name="unidad_volqueta" id="uni_vol" value="${(obra.volquete.unidad) ? obra?.volquete?.unidad : par?.volquete?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+                    <g:textField name="unidad_volqueta" id="uni_vol" value="${(obra.volquete?.unidad) ? obra?.volquete?.unidad : par?.volquete?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
                 </div>
             </div>
 
@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="span1">
-                    <g:textField name="unidad_chofer" id="uni_chof" value="${(obra.chofer.unidad) ? obra?.chofer?.unidad : par?.chofer?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+                    <g:textField name="unidad_chofer" id="uni_chof" value="${(obra.chofer?.unidad) ? obra?.chofer?.unidad : par?.chofer?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
                 </div>
             </div>
 
