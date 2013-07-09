@@ -130,6 +130,22 @@
     </div>
 </div>
 
+
+<div id="imprimirDialog">
+
+    <fieldset>
+        <div class="span3">
+            Elija la fecha de validez del cálculo:
+            <div class="span2" style="margin-top: 20px; margin-left: 50px">
+            <elm:datepicker name="fechaCalculo" class="span24" id="fechaCalculoId" value="${new java.util.Date()}" style="width: 100px" minDate="new Date(${new Date().format('yyyy')},0,1)" maxDate="new Date(${new Date().format('yyyy')},11,31)"
+            readonly="true" />
+        </div>
+
+        </div>
+    </fieldset>
+</div>
+
+
 <script type="text/javascript">
     function validarNum(ev) {
         /*
@@ -478,7 +494,9 @@
 
     $("#btnPrint").click(function () {
 
-        location.href="${g.createLink(controller: 'reportes3',action: 'imprimirCalculoValor', id: item.id)}?valor=" + valorSueldo
+        %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirCalculoValor', id: item.id)}?valor=" + valorSueldo--}%
+
+        $("#imprimirDialog").dialog("open");
 
 
         %{--var datos = "item=${item.nombre}&valor=" + $("spanRef").val()--}%
@@ -489,9 +507,36 @@
             %{--}--}%
         %{--});--}%
 
-
-
     });
+
+  $("#imprimirDialog").dialog({
+
+          autoOpen  : false,
+          resizable : false,
+          modal     : true,
+          dragable  : false,
+          width     : 320,
+          height    : 220,
+          position  : 'center',
+          title     : 'Elegir fecha de validez de cálculo',
+          buttons   : {
+              "Aceptar" : function () {
+
+                  location.href="${g.createLink(controller: 'reportes3',action: 'imprimirCalculoValor', id: item.id)}?valor=" + valorSueldo + "&fechaCalculo=" + $("#fechaCalculoId").val()
+                  $("#imprimirDialog").dialog("close");
+
+              },
+              "Cancelar" : function () {
+
+                  $("#imprimirDialog").dialog("close");
+
+              }
+
+
+
+          }
+
+  })
 
 </script>
 <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>

@@ -199,6 +199,7 @@
                 ${tablaMano}
                 ${tablaMat}
                 ${tablaTrans}
+                ${tablaTrans2}
                 ${tablaIndi}
                 <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                     <tbody>

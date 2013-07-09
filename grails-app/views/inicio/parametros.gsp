@@ -329,6 +329,10 @@
     <h3>Tipo de fórmula polinómica</h3><br>
     <p>Tipo de forma polínomica que tiene el contrato, puede ser contractual o de liquidación.</p>
 </div>
+<div id="var" style="display:none">
+    <h3>Variables</h3><br>
+    <p>Variables.</p>
+</div>
 
 <div id="tpcr" style="display:none">
     <h3>Tipo de contrato</h3><br>

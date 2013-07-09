@@ -1223,9 +1223,11 @@ class ReportesController {
             creaHeadersTabla(tablaHerramientas, fonts, prms, "EQUIPOS")
             creaHeadersTabla(tablaManoObra, fonts, prms, "MANO DE OBRA")
             creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES")
-            if (params.transporte == "1") {
+//            if (params.transporte == "1") {
+//                creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
+//            }else{
                 creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
-            }
+//            }
             creaHeadersTabla(tablaIndirectos, fonts, prms, "COSTOS INDIRECTOS")
 
             def totalTrans = 0, totalHer = 0, totalMan = 0, totalMat = 0
@@ -1251,6 +1253,7 @@ class ReportesController {
                         llenaDatos(tablaMateriales, r, fonts, prms, "M")
                     } else {
                         llenaDatos(tablaMateriales, r, fonts, prms, "MNT")
+
                     }
                     totalMat += r.parcial
                     if (params.transporte != "1") {
@@ -1339,7 +1342,7 @@ class ReportesController {
 
     }
 
-    def llenaDatos(PdfPTable table, r, fonts, params, tipo) {
+    def llenaDatos( table, r, fonts, params, tipo) {
         addCellTabla(table, new Paragraph(r.itemcdgo, fonts.times8normal), params.prmsCellLeft)
         addCellTabla(table, new Paragraph(r.itemnmbr, fonts.times8normal), params.prmsCellLeft)
         switch (tipo) {
@@ -1352,21 +1355,9 @@ class ReportesController {
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "M":
-//                if (r.unddcdgo.trim() == 'm3'){
-//
-//                    addCellTabla(table, new Paragraph('m3-km', fonts.times8normal), params.prmsNum)
-//
-//                }
-//                if(r.unddcdgo.trim() == 'kg'){
-//
-//                    addCellTabla(table, new Paragraph('ton-kg', fonts.times8normal), params.prmsNum)
-//
-//                }
-//                else{
-//
-//                    addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
-//
-//                }
+
+
+
                 addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
@@ -1374,21 +1365,8 @@ class ReportesController {
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.parcial, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
                 break;
             case "MNT":
-//                if (r.unddcdgo.trim() == 'm3'){
-//
-//                    addCellTabla(table, new Paragraph('m3-km', fonts.times8normal), params.prmsNum)
-//
-//                }
-//                if(r.unddcdgo.trim() == 'kg'){
-//
-//                    addCellTabla(table, new Paragraph('ton-kg', fonts.times8normal), params.prmsNum)
-//
-//                }
-//                else{
-//
-//                    addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
-//
-//                }
+
+
                 addCellTabla(table, new Paragraph(r.unddcdgo, fonts.times8normal), params.prmsNum)
                 addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbrocntd, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
 //                addCellTabla(table, new Paragraph(g.formatNumber(number: r.rbpcpcun, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8normal), params.prmsNum)
@@ -1407,13 +1385,13 @@ class ReportesController {
         }
     }
 
-    def addSubtotal(PdfPTable table, subtotal, fonts, params) {
+    def addSubtotal( table, subtotal, fonts, params) {
         addCellTabla(table, new Paragraph("TOTAL", fonts.times8bold), params.prmsSubtotal)
         addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), params.prmsNum)
     }
 
 
-    def addSubtotalMat(PdfPTable table, subtotal, fonts, params) {
+    def addSubtotalMat( table, subtotal, fonts, params) {
         addCellTabla(table, new Paragraph("TOTAL", fonts.times8bold), params.prmsSubtotalMat)
         addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), params.prmsNum)
     }
@@ -1421,7 +1399,7 @@ class ReportesController {
 
 
 
-    def creaHeadersTabla(PdfPTable table, fonts, params, String tipo) {
+    def creaHeadersTabla( table, fonts, params, String tipo) {
         table.setWidthPercentage(90);
         if (tipo == "COSTOS INDIRECTOS") {
 
@@ -1483,7 +1461,7 @@ class ReportesController {
         }
     }
 
-    def addTablaHoja(Document document, PdfPTable table, boolean right) {
+    def addTablaHoja( document,  table,  right) {
         Paragraph paragraph = new Paragraph()
         if (right) {
             paragraph.setAlignment(Element.ALIGN_RIGHT);
@@ -1494,7 +1472,7 @@ class ReportesController {
         document.add(paragraph);
     }
 
-    def addCellTabla(PdfPTable table, Paragraph paragraph, params) {
+    def addCellTabla( table,  paragraph, params) {
         PdfPCell cell = new PdfPCell(paragraph);
 //        println "params "+params
         cell.setBorderColor(Color.BLACK);

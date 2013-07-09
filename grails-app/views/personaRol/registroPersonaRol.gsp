@@ -67,7 +67,7 @@
     </div>
 
     <div class="span2 btn-group" style="margin-left: -10px">
-        <button class="btn btnAdicionar" id="adicionar">Adicionar</button>
+        <button class="btn btnAdicionar" id="adicionar"><i class="icon-plus"></i> Adicionar</button>
         <button class="btn btnRegresar"  id="regresar"><i class="icon-arrow-left"></i> Regresar</button>
 
     </div>

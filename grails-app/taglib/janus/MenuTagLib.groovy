@@ -79,7 +79,7 @@ class MenuTagLib {
             html += '<span class="icon-bar"></span>'
             html += '</a>'
             html += '<a class="brand titulo" href="#">'
-            html += attrs.title
+            html += attrs.title.toUpperCase()
             html += '</a>'
 
             html += '<div class="nav-collapse">'

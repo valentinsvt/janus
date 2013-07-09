@@ -109,25 +109,21 @@ class Reportes3Controller {
 
         preciosService.ac_rbroObra(obra.id)
         def res = preciosService.precioUnitarioVolumenObraAsc("*", obra.id, rubro.id)
-//        def tablaHer = '<table class="table table-bordered table-striped table-condensed table-hover"> '
-//        def tablaMano = '<table class="table table-bordered table-striped table-condensed table-hover"> '
-//        def tablaMat = '<table class="table table-bordered table-striped table-condensed table-hover"> '
-//        def tablaTrans = '<table class="table table-bordered table-striped table-condensed table-hover"> '
-//        def tablaIndi = '<table class="table table-bordered table-striped table-condensed table-hover"> '
 
         def tablaHer = '<table class=""> '
         def tablaMano = '<table class=""> '
         def tablaMat = '<table class=""> '
         def tablaTrans = '<table class=""> '
         def tablaIndi = '<table class=""> '
+        def tablaTrans2 = '<table class=""> '
 
 
         def total = 0, totalHer = 0, totalMan = 0, totalMat = 0
-        tablaTrans += "<thead><tr><th colspan='8'>TRANSPORTE</th></tr><tr><th colspan='8' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>PES/VOL</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='8' class='theaderup'></th></tr> </thead><tbody>"
-//        tablaTrans += "<thead><tr><th colspan='7'>TRANSPORTE</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>Pes/Vol</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
+
         tablaHer += "<thead><tr><th colspan='7'>EQUIPOS</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th style='width:70px'>TARIFA(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
         tablaMano += "<thead><tr><th colspan='7'>MANO DE OBRA</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>CANTIDAD</th><th style='width:70px'>JORNAL(\$/H)</th><th>COSTO(\$)</th><th>RENDIMIENTO</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
         tablaMat += "<thead><tr><th colspan='6'>MATERIALES</th></tr><tr><th colspan='6' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>CANTIDAD</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr> <tr><th colspan='6' class='theaderup'></th></tr> </thead><tbody>"
+        tablaTrans += "<thead><tr><th colspan='8'>TRANSPORTE</th></tr><tr><th colspan='8' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>PES/VOL</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='8' class='theaderup'></th></tr> </thead><tbody>"
 
 
 //        println "rends "+rendimientos
@@ -164,69 +160,43 @@ class Reportes3Controller {
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                    if(r["unddcdgo"].trim() =='m3'){
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
-                    }
-                    if(r["unddcdgo"].trim() =='kg'){
-
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
-                    }
-                    else {
-
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
-                    }
-
+                    tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
                     totalMat += r["parcial"]
                     tablaMat += "</tr>"
-                } else {
                 }
-                if (params.desglose != '1') {
+//                if (params.desglose != '1') {
+                else{
                     tablaMat += "<tr>"
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-                    if(r["unddcdgo"].trim() == 'm3'){
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
-                    }
-                    if(r["unddcdgo"].trim() == 'kg'){
-
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
-                    }
-                    else {
-
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
-                    }
-
+                    tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
-//                    tablaMat+="<td style='width: 50px;text-align: right'>"+r["parcial"]+"</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["parcial"] + r["parcial_t"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-
                     totalMat += (r["parcial"] + r["parcial_t"])
                     tablaMat += "</tr>"
                 }
             }
-            if (r["grpocdgo"] == 1 && params.desglose == '1') {
-//            if(r["parcial_t"]>0){
+            if (r["grpocdgo"] == 1 && params.desglose == "1") {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
-                if(r["unddcdgo"].trim() == 'm3'){
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
-                }
-                if(r["unddcdgo"].trim() == 'kg'){
+                if(r["tplscdgo"].trim() =='P' || r["tplscdgo"].trim() =='P1' ){
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
+                } else{
 
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
-                }
-                else {
+                    if(r["tplscdgo"].trim() =='V' || r["tplscdgo"].trim() =='V1' || r["tplscdgo"].trim() =='V2'){
 
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                        tablaTrans += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
+                    }
+                    else {
+
+                        tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                    }
+
                 }
 //                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -237,6 +207,7 @@ class Reportes3Controller {
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                 total += r["parcial_t"]
                 tablaTrans += "</tr>"
+            } else {
             }
 
         }
@@ -251,6 +222,15 @@ class Reportes3Controller {
 
         def totalRubro = total + totalHer + totalMan + totalMat
         totalRubro = totalRubro.toDouble().round(5)
+
+        if (params.desglose != '1'){
+            tablaTrans2 += "<thead><tr><th colspan='8'>TRANSPORTE</th></tr><tr><th colspan='8' class='theader'></th></tr><tr><th style='width: 80px;'>CÓDIGO</th><th style='width:610px'>DESCRIPCIÓN</th><th>UNIDAD</th><th>PES/VOL</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO(\$)</th><th>C.TOTAL(\$)</th></tr>  <tr><th colspan='8' class='theaderup'></th></tr> </thead>"
+            tablaTrans2 += "<tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody>"
+            tablaTrans2 += "</table>"
+
+        }
+
+
 
         def totalIndi = totalRubro * indi / 100
         totalIndi = totalIndi.toDouble().round(5)
@@ -268,7 +248,7 @@ class Reportes3Controller {
         if (totalMat == 0)
             tablaMat = ""
 //        println "fin reporte rubro"
-        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, fechPal: fechaPal, fechaSalida: fechaSalida]
+        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaTrans2: tablaTrans2, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, fechPal: fechaPal, fechaSalida: fechaSalida]
 
 
     }
@@ -600,16 +580,19 @@ class Reportes3Controller {
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
 
-                    if(r["unddcdgo"].trim() == 'm3'){
-                        tablaMat += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
-                    }
-                    if(r["unddcdgo"].trim() == 'kg'){
+                    if(r["unddcdgo"].trim() =='m3'){
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
+                    } else{
 
-                        tablaMat += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
-                    }
-                    else {
+                        if(r["unddcdgo"].trim() =='kg'){
 
-                        tablaMat += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                            tablaMat += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
+                        }
+                        else {
+
+                            tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                        }
+
                     }
 //                    tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -627,16 +610,19 @@ class Reportes3Controller {
                     tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMat += "<td>" + r["itemnmbr"] + "</td>"
 
-                    if(r["unddcdgo"].trim() == 'm3'){
-                        tablaMat += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
-                    }
-                    if(r["unddcdgo"].trim() == 'kg'){
+                    if(r["unddcdgo"].trim() =='m3'){
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
+                    } else{
 
-                        tablaMat += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
-                    }
-                    else {
+                        if(r["unddcdgo"].trim() =='kg'){
 
-                        tablaMat += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                            tablaMat += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
+                        }
+                        else {
+
+                            tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                        }
+
                     }
 //                    tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                     tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -655,17 +641,19 @@ class Reportes3Controller {
                 tablaTrans += "<tr>"
                 tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                 tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+                if(r["unddcdgo"].trim() =='m3'){
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
+                } else{
 
-                if(r["unddcdgo"].trim() == 'm3'){
-                    tablaTrans += "<td style='width: 50px;text-align: center'>" + "m3-km" + "</td>"
-                }
-                if(r["unddcdgo"].trim() == 'kg'){
+                    if(r["unddcdgo"].trim() =='kg'){
 
-                    tablaTrans += "<td style='width: 50px;text-align: center'>" + "ton-kg" + "</td>"
-                }
-                else {
+                        tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-kg" + "</td>"
+                    }
+                    else {
 
-                    tablaTrans += "<td style='width: 50px;text-align: center'>" + r["unddcdgo"] + "</td>"
+                        tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
+                    }
+
                 }
 //                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
                 tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
@@ -1035,7 +1023,8 @@ class Reportes3Controller {
         def nuevoCosto = jr / 8
         nuevoCosto = new DecimalFormat("#.##").format(nuevoCosto).toDouble()
 
-        //
+        def fecha1 = new Date().parse("dd-MM-yyyy", params.fechaCalculo)
+        def fechaCalculo = printFecha(fecha1)
 
         def item = Item.get(params.id)
 
@@ -1107,7 +1096,8 @@ class Reportes3Controller {
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE MANO DE OBRA"))
         headers.add(new Paragraph(" "))
-        headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
+//        headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
+        headers.add(new Paragraph("QUITO, " + fechaCalculo, times10normal));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(item.nombre, times10bold));
         headers.add(new Paragraph(" ", times10bold));
