@@ -174,22 +174,18 @@
             </fieldset>
             <fieldset class="borde" style="float: left">
                 <div class="span12" style="margin-top: 10px">
-                    <div class="span1">Código</div>
+                    <div class="span1">Código:</div>
 
                     <g:if test="${obra?.codigo != null}">
-
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20" title="Código de la Obra"/></div>
-
+                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20" title="Código de la Obra" /></div>
                     </g:if>
                     <g:else>
-
                         <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" maxlength="20" title="Código de la Obra"/></div>
-
                     </g:else>
 
-                    <div class="span1">Nombre</div>
+                    <div class="span1" style="margin-left: -20px;">Nombre</div>
 
-                    <div class="span6"><g:textField name="nombre" class="nombre required" style="width: 610px" value="${obra?.nombre}" maxlength="127" title="Nombre de la Obra"/></div>
+                    <div class="span6"><g:textField name="nombre" class="nombre required" style="margin-left: -40px; width: 700px" value="${obra?.nombre}" maxlength="127" title="Nombre de la Obra"/></div>
                 </div>
 
                 <div class="span12">
@@ -211,9 +207,9 @@
                 </div>
 
                 <div class="span12">
-                    <div class="span3" style="width: 200px;">Referencias adicionales del lugar</div>
+                    <div class="span3" style="width: 200px;">Referencia (Gestión/Disposición):</div>
 
-                    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 880px" value="${obra?.referencia}" maxlength="127" title="Referencia del Lugar o de la Obra"/></div>
+                    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 880px" value="${obra?.referencia}" maxlength="127" title="Referencia de la disposición para realizar la Obra"/></div>
                 </div>
 
                 <div class="span12">
