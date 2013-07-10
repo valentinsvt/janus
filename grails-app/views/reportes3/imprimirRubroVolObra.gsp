@@ -107,6 +107,18 @@
 
         }
 
+        .marginTop{
+
+            margin-top:20px !important;
+        }
+
+        .tituloHeader{
+
+            font-size: 14px !important;
+
+
+        }
+
 
 
 
@@ -148,7 +160,7 @@
     <body>
         <div class="hoja">
 
-            <div class="tituloPdf">
+            <div class="tituloPdf tituloHeader">
                 <p>
                     <b>G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
@@ -198,8 +210,14 @@
                 ${tablaHer}
                 ${tablaMano}
                 ${tablaMat}
+                <g:if test="${bandMat != 1}">
+                    ${tablaMat2}
+                </g:if>
                 ${tablaTrans}
-                ${tablaTrans2}
+                <g:if test="${band != 1}">
+
+                    ${tablaTrans2}
+                </g:if>
                 ${tablaIndi}
                 <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
                     <tbody>
