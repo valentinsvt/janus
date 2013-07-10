@@ -70,10 +70,10 @@ class BuscadorTagLib {
 
     def lista(name, value, campos, controlador, accion) {
         def salida = ""
-        salida += '<div style="border:1px solid black;margin-top:10px;float:left;width:95%;font-size:10px !important" class="ui-corner-all">'
+        salida += '<div style="border:1px solid black;margin-top:10px;float:left;width:95%;font-size:12px !important" class="ui-corner-all">'
         salida += '<div class="filaBuscador ui-corner-all" style="margin-left:15px;margin-top:10px;width:100%" >'
         salida += '<div id="campo" style="float: left; margin-right:  5px;">'
-        salida += 'Buscar por: <select name="campo" id="campo" style="width: 80px;font-size:10px" >'
+        salida += 'Buscar por: <select name="campo" id="campo" style="width: 110px;font-size:12px" >'
         def i = 0
         campos.each {
             if (i == 0)
@@ -85,11 +85,11 @@ class BuscadorTagLib {
         salida += '</select>'
         salida += '</div>'
         salida += '<div id="Doperador" style="float: left; margin-right: 5px;">'
-        salida += '<select name="operador" style="width: 80px;;font-size:10px" id="operador"></select>'
+        salida += '<select name="operador" style="width: 90px;;font-size:12px" id="operador"></select>'
         salida += '</div>'
         salida += '<input type="hidden" name="tipoCampo" id="tipoCampo" value="string">'
-        salida += 'Criterio:<input type="text" size="8" style="margin-right:5px" name="criterio" id="criterio">'
-        salida += 'Ordenado por: <select name="campoOrdn" id="campoOrdn" style="width: 80px;font-size:10px;" >'
+        salida += 'Criterio:<input type="text" size="8" style="margin-right:5px; width:120px" name="criterio" id="criterio">'
+        salida += 'Ordenado por: <select name="campoOrdn" id="campoOrdn" style="width: 100px;font-size:12px;" >'
         i = 0
         campos.each {
             if (i == 0)
@@ -100,7 +100,7 @@ class BuscadorTagLib {
         }
         def url = resource(dir: 'images', file: 'spinner_24.gif')
         salida += '</select>'
-        salida += '<select name="orden" id="orden" style="width: 100px;;font-size:10px" ><option value="asc" selected>Ascendente</option><option value="desc">Descendente</option></select>'
+        salida += '<select name="orden" id="orden" style="width: 100px;;font-size:12px" ><option value="asc" selected>Ascendente</option><option value="desc">Descendente</option></select>'
         salida += '<a href="#" id="mas" style="margin-left:5px">Agregar condición</a>'
         salida += '<a href="#" id="reset" style="margin-left:5px">Resetear</a>'
         salida += '<input id="buscarDialog" type="button" value="Buscar" style="width:80px;margin-left:10px" class="tbbtn " ><img class="hide" id="spinner" style="margin-left:15px;" src=' + url + ' alt="Cargando..."/>'

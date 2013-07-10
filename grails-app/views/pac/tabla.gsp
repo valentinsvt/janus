@@ -2,7 +2,7 @@
 
     <div class="span1">
         <div class="btn-group" data-toggle="buttons-checkbox">
-            <button type="button" id="ver_todos" class="btn btn-info ${(todos=="1")?'active':''} " style="font-size: 10px">Ver todos</button>
+            <button type="button" id="ver_todos" class="btn btn-info ${(todos=="1")?'active':''} " style="font-size: 14px">Ver todos</button>
 
         </div>
 
@@ -169,6 +169,11 @@
         $("#item_req").val($(this).attr("req"))
         $("#item_memo").val($(this).attr("memo"))
         $("#item_tipoProc").val($(this).attr("tipoP"))
+
+        $("#item_c1").removeClass("active")
+        $("#item_c2").removeClass("active")
+        $("#item_c3").removeClass("active")
+
         if($(this).find(".c1").html()=="S")
             $("#item_c1").addClass("active")
         if($(this).find(".c2").html()=="S")
