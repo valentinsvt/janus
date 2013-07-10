@@ -214,7 +214,7 @@
                     ${tablaMat2}
                 </g:if>
                 ${tablaTrans}
-                <g:if test="${band != 1}">
+                <g:if test="${band == 0 && bandTrans == '1'}">
 
                     ${tablaTrans2}
                 </g:if>

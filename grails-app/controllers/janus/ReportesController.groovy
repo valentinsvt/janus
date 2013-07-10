@@ -1226,7 +1226,11 @@ class ReportesController {
             creaHeadersTabla(tablaHerramientas, fonts, prms, "EQUIPOS")
             creaHeadersTabla(tablaManoObra, fonts, prms, "MANO DE OBRA")
             creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES")
-            creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
+            if(params.transporte == '1'){
+                creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
+
+            }
+
             creaHeadersTabla(tablaIndirectos, fonts, prms, "COSTOS INDIRECTOS")
 
             def totalTrans = 0, totalHer = 0, totalMan = 0, totalMat = 0

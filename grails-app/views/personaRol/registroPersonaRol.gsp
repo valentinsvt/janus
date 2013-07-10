@@ -24,14 +24,20 @@
 
     <g:select name="departamento" class="departamento" from="${janus.Departamento.list()}" optionValue="descripcion" optionKey="id" style="width: 300px" noSelection="['-1':'-Escoja el departamento-']"/>
 
+
+
+
     <div class="span12" id="filaPersonas"></div>
+
+
+
 
     %{--<div class="span1" style="font-weight: bold">Persona:</div>--}%
     %{--<g:select name="persona.id" class="persona" from="${janus.Persona?.list()}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"--}%
               %{--style="width: 300px"/>--}%
 
 
-    <div class="span6" style="width: 500px">
+    <div class="span12" style="width: 500px">
 
         <table class="table table-bordered table-striped table-hover table-condensed " id="tablaFuncion">
 
@@ -54,16 +60,11 @@
 
     </div>
 
-
-
-</div>
-
-<div class="span6">
-
-    <div class="span3" style="margin-left: -40px">
-        <div class="span1" style="margin-left: -40px; font-weight: bold">Función: </div>
+    <div class="span4">
+        <div class="span2" style="margin-left: -40px; font-weight: bold">Nueva Función: </div>
         <elm:select name="funcion" id="funcion"  from="${janus.Funcion?.list()}" optionValue="descripcion" optionKey="id"
                     optionClass="${{it?.descripcion}}"/>
+
     </div>
 
     <div class="span2 btn-group" style="margin-left: -10px">
@@ -71,6 +72,25 @@
         <button class="btn btnRegresar"  id="regresar"><i class="icon-arrow-left"></i> Regresar</button>
 
     </div>
+
+
+
+</div>
+
+<div class="span6">
+
+    %{--<div class="span4" style="margin-left: -40px">--}%
+        %{--<div class="span2" style="margin-left: -40px; font-weight: bold">Nueva Función: </div>--}%
+        %{--<elm:select name="funcion" id="funcion"  from="${janus.Funcion?.list()}" optionValue="descripcion" optionKey="id"--}%
+                    %{--optionClass="${{it?.descripcion}}"/>--}%
+   %{----}%
+    %{--</div>--}%
+
+    %{--<div class="span2 btn-group" style="margin-left: -10px">--}%
+        %{--<button class="btn btnAdicionar" id="adicionar"><i class="icon-plus"></i> Adicionar</button>--}%
+        %{--<button class="btn btnRegresar"  id="regresar"><i class="icon-arrow-left"></i> Regresar</button>--}%
+
+    %{--</div>--}%
 
 
 </div>
