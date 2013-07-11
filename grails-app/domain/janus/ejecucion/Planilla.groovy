@@ -17,6 +17,7 @@ class Planilla {
     double descuentos
     String reajustada
     double reajuste
+    double reajusteLiq=0
     Date fechaReajuste
     double diferenciaReajuste
     String observaciones
@@ -74,6 +75,7 @@ class Planilla {
             descuentos column: 'plnldsct'
             reajustada column: 'plnlrjtd'
             reajuste column: 'plnlrjst'
+            reajusteLiq column: 'plnlrjlq'
             fechaReajuste column: 'plnlfcrj'
             diferenciaReajuste column: 'plnldfrj'
             observaciones column: 'plnlobsr'

@@ -11,13 +11,28 @@ class Planilla2Controller {
         def override = true
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
+        def planillasAnterioresTot = Planilla.withCriteria {
+            eq("contrato", contrato)
+            and{
+                or {
+                    lt("fechaInicio", planilla.fechaInicio)
+                    isNull("fechaInicio")
+                }
+                or {
+                    eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
+                    eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
+                }
+            }
+        }
         def planillasAnteriores = Planilla.withCriteria {
             eq("contrato", contrato)
             or {
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
                 eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
             }
+            order("id","asc")
         }
+        def planillaAnterior=  planillasAnteriores[planillasAnteriores.size()-1]
         def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra,[sort:"fechaFin"])
         def finalObraCrono=periodosEjec.pop().fechaFin
         def tarde = false
@@ -121,12 +136,14 @@ class Planilla2Controller {
         tablaBo += "<tr>"
         tablaBo += "<th colspan=\"2\">Cuadrilla Tipo</th>"
         periodosAnticipo.each {
+            it.planilla.reajusteLiq =0
             it.totalLiq=0
             it.frLiq=0
             tablaBo += "<th>${it.titulo}</th>"
             tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio, "MMM-yy") + "</th>"
         }
         periodosAvances.each {
+            it.planilla.reajusteLiq =0
             it.totalLiq=0
             it.frLiq=0
             tablaBo += "<th>${it.titulo}</th>"
@@ -400,12 +417,27 @@ class Planilla2Controller {
                     }
                     tablaFr+="<td class='number'><div>${vlin}</div><div class='bold'>${valor}</div></td>"
                 }
+
             }
 
 
             tablaFr+="</tr>"
         }
-        tablaFr+="</tbody>"
+
+        (periodosAnticipo+periodosAvances).each {p->
+            def fr1 = (p.frLiq-1).round(3)
+            p.planilla.reajusteLiq+=(p.p0*fr1).round(2)
+            p.planilla.save(flush: true)
+         }
+
+        planillasAnteriores.eachWithIndex {p,i->
+            if(i>0){
+                p.reajusteLiq+=planillasAnteriores[i-1].reajusteLiq
+                p.save(flush: true)
+            }
+
+        }
+
 
         tr1="<tr>"
         tr2="<tr>"
@@ -425,8 +457,8 @@ class Planilla2Controller {
 
         (periodosAnticipo+periodosAvances).eachWithIndex { per, i->
             if(i>0) {
-                def fr1 = (per.fr-1).round(3)
-                tr1+="<th class='number'>${per.fr}</th>"
+                def fr1 = (per.frLiq-1).round(3)
+                tr1+="<th class='number'>${per.frLiq}</th>"
                 tr2+="<th class='number'>${fr1}</th>"
                 tr3+="<th class='number'>${per.p0}</th>"
                 def t = (per.p0*fr1).round(2)
@@ -437,7 +469,7 @@ class Planilla2Controller {
 
         reajusteTotal=reajusteTotal.toDouble().round(2)
 
-        def reajusteAnterior = (planillasAnteriores.sum {it.reajuste}).toDouble().round(2)
+        def reajusteAnterior = (planillaAnterior.reajusteLiq).toDouble().round(2)
 
         tr5+="<th colspan='2'>REAJUSTE TOTAL</th><th colspan='${periodosAnticipo.size()+periodosAvances.size()-1}' class='number'>"+reajusteTotal+"</th>"
         tr6+="<th colspan='2'>REAJUSTE ANTERIOR</th><th colspan='${periodosAnticipo.size()+periodosAvances.size()-1}' class='number'>"+reajusteAnterior+"</th>"
@@ -460,11 +492,11 @@ class Planilla2Controller {
             println "error planilla reajuste "+planilla.id
         }
 
-        tr5+="<th colspan='2'>REAJUSTE TOTAL</th><th class='number'>"+reajusteTotal+"</th>"
-
-        tablaFr+="<tfoot>"
-        tablaFr+=tr1+tr2+tr3+tr4+tr5
-        tablaFr+="</tfoot></table>"
+//        tr5+="<th colspan='2'>REAJUSTE TOTAL</th><th class='number'>"+reajusteTotal+"</th>"
+//
+//        tablaFr+="<tfoot>"
+//        tablaFr+=tr1+tr2+tr3+tr4+tr5
+//        tablaFr+="</tfoot></table>"
 
         //////////////////////////////////////////fin anticipo//////////////////////////////////////////////////////////////////////////////////////////////////
         tablaBo.replaceAll("&&",""+tableWidth)
@@ -492,7 +524,9 @@ class Planilla2Controller {
                     eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
                 }
             }
+            order("id","asc")
         }
+        def planillaAnterior=planillasAnteriores.get(planillasAnteriores.size()-1)
         println "planillas "+planillasAnteriores
         def periodos = PeriodoPlanilla.findAllByPlanillaInList(planillasAnteriores, [sort:"id"])
         def periodos2=[]
@@ -929,7 +963,7 @@ class Planilla2Controller {
 
         reajusteTotal=reajusteTotal.toDouble().round(2)
 
-        def reajusteAnterior = (planillasAnteriores.sum {it.reajuste}).toDouble().round(2)
+        def reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
 
         tr5+="<th colspan='2'>REAJUSTE TOTAL</th><th colspan='${periodos.size()+periodos2.size()-1}' class='number'>"+reajusteTotal+"</th>"
         tr6+="<th colspan='2'>REAJUSTE ANTERIOR</th><th colspan='${periodos.size()+periodos2.size()-1}' class='number'>"+reajusteAnterior+"</th>"
