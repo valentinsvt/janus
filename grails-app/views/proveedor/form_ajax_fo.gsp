@@ -92,7 +92,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Garante
+                Gerente
             </span>
         </div>
 
