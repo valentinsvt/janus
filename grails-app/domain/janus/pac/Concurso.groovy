@@ -34,6 +34,13 @@ class Concurso {
     Date fechaInicioEvaluacionOferta
     Date fechaLimiteResultadosFinales
 
+    Date fechaInicioPreparatorio
+    Date fechaFinPreparatorio
+    Date fechaInicioPrecontractual
+    Date fechaFinPrecontractual
+    Date fechaInicioContractual
+    Date fechaFinContractual
+
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
@@ -71,6 +78,13 @@ class Concurso {
             fechaAperturaOfertas column: 'cncrfcao'
             fechaInicioEvaluacionOferta column: 'cncrfcvo'
             fechaLimiteResultadosFinales column: 'cncrfclr'
+
+            fechaInicioPreparatorio column: 'cncrfipp'
+            fechaFinPreparatorio column: 'cncrffpp'
+            fechaInicioPrecontractual column: 'cncrfipc'
+            fechaFinPrecontractual column: 'cncrffpc'
+            fechaInicioContractual column: 'cncrfict'
+            fechaFinContractual column: 'cncrffct'
         }
     }
     static constraints = {

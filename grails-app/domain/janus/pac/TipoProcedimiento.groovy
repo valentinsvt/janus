@@ -7,6 +7,10 @@ class TipoProcedimiento {
     double bases = 0
     double techo = 0
 
+    int preparatorio = 0
+    int precontractual = 0
+    int contractual = 0
+
     String fuente
 
     static mapping = {
@@ -22,6 +26,9 @@ class TipoProcedimiento {
             bases column: 'tppcbase'
             techo column: 'tppctcho'
             fuente column: 'tppcfnte'
+            preparatorio column: 'tppcprpt'
+            precontractual column: 'tppcprct'
+            contractual column: 'tppccntr'
         }
     }
     static constraints = {
