@@ -324,6 +324,25 @@ class ConcursoController extends janus.seguridad.Shield {
             params.fechaAceptacionProveedor = new Date().parse("dd-MM-yyyy", params.fechaAceptacionProveedor)
         }
 
+        if (params.fechaInicioPreparatorio) {
+            params.fechaInicioPreparatorio = new Date().parse("dd-MM-yyyy", params.fechaInicioPreparatorio)
+        }
+        if (params.fechaFinPreparatorio) {
+            params.fechaFinPreparatorio = new Date().parse("dd-MM-yyyy", params.fechaFinPreparatorio)
+        }
+        if (params.fechaInicioPrecontractual) {
+            params.fechaInicioPrecontractual = new Date().parse("dd-MM-yyyy", params.fechaInicioPrecontractual)
+        }
+        if (params.fechaFinPrecontractual) {
+            params.fechaFinPrecontractual = new Date().parse("dd-MM-yyyy", params.fechaFinPrecontractual)
+        }
+        if (params.fechaInicioContractual) {
+            params.fechaInicioContractual = new Date().parse("dd-MM-yyyy", params.fechaInicioContractual)
+        }
+        if (params.fechaFinContractual) {
+            params.fechaFinContractual = new Date().parse("dd-MM-yyyy", params.fechaFinContractual)
+        }
+
         def concursoInstance
         if (params.id) {
             concursoInstance = Concurso.get(params.id)

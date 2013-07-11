@@ -114,5 +114,12 @@ class Concurso {
         fechaAperturaOfertas(blank: true, nullable: true)
         fechaInicioEvaluacionOferta(blank: true, nullable: true)
         fechaLimiteResultadosFinales(blank: true, nullable: true)
+
+        fechaInicioPreparatorio(blank: true, nullable: true)
+        fechaFinPreparatorio(blank: true, nullable: true)
+        fechaInicioPrecontractual(blank: true, nullable: true)
+        fechaFinPrecontractual(blank: true, nullable: true)
+        fechaInicioContractual(blank: true, nullable: true)
+        fechaFinContractual(blank: true, nullable: true)
     }
 }
