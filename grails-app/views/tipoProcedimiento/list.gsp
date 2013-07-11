@@ -43,29 +43,35 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción" />
                     
                         <g:sortableColumn property="sigla" title="Sigla" />
                     
-                        <g:sortableColumn property="bases" title="Bases" />
-                    
+                        <g:sortableColumn property="bases" title="Costo de Bases" />
                         <g:sortableColumn property="techo" title="Techo" />
-                    
+
+                        <g:sortableColumn property="preparatorio" title="Preparatorio (d)" />
+                        <g:sortableColumn property="precontractual" title="Precontractual (d)" />
+                        <g:sortableColumn property="contractual" title="Contractual (d)" />
+
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
                 <g:each in="${tipoProcedimientoInstanceList}" status="i" var="tipoProcedimientoInstance">
                     <tr>
-                    
                         <td>${fieldValue(bean: tipoProcedimientoInstance, field: "descripcion")}</td>
                     
                         <td>${fieldValue(bean: tipoProcedimientoInstance, field: "sigla")}</td>
                     
                         <td>${fieldValue(bean: tipoProcedimientoInstance, field: "bases")}</td>
-                    
-                        <td>${fieldValue(bean: tipoProcedimientoInstance, field: "techo")}</td>
-                    
+                        <td style="text-align: right" >${fieldValue(bean: tipoProcedimientoInstance, field: "techo")}</td>
+
+                        <td>${fieldValue(bean: tipoProcedimientoInstance, field: "preparatorio")}</td>
+                        <td>${fieldValue(bean: tipoProcedimientoInstance, field: "precontractual")}</td>
+                        <td>${fieldValue(bean: tipoProcedimientoInstance, field: "contractual")}</td>
+
+
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoProcedimientoInstance.id}">
                                 <i class="icon-zoom-in icon-large"></i>

@@ -11,7 +11,7 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [tipoProcedimientoInstanceList: TipoProcedimiento.list(params), params: params]
+        [tipoProcedimientoInstanceList: TipoProcedimiento.list([sort: 'id']), params: params]
     } //list
 
     def form_ajax() {

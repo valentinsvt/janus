@@ -39,6 +39,23 @@
         </div>
     </g:if>
     
+    <g:if test="${tipoProcedimientoInstance?.fuente}">
+        <div class="control-group">
+            <div>
+                <span id="fuente-label" class="control-label label label-inverse">
+                    Fuente
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="fuente-label">
+                    <g:fieldValue bean="${tipoProcedimientoInstance}" field="fuente"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
     <g:if test="${tipoProcedimientoInstance?.bases}">
         <div class="control-group">
             <div>
@@ -50,6 +67,57 @@
         
                 <span aria-labelledby="bases-label">
                     <g:fieldValue bean="${tipoProcedimientoInstance}" field="bases"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${tipoProcedimientoInstance?.contractual}">
+        <div class="control-group">
+            <div>
+                <span id="contractual-label" class="control-label label label-inverse">
+                    Contractual
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="contractual-label">
+                    <g:fieldValue bean="${tipoProcedimientoInstance}" field="contractual"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${tipoProcedimientoInstance?.precontractual}">
+        <div class="control-group">
+            <div>
+                <span id="precontractual-label" class="control-label label label-inverse">
+                    Precontractual
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="precontractual-label">
+                    <g:fieldValue bean="${tipoProcedimientoInstance}" field="precontractual"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
+    <g:if test="${tipoProcedimientoInstance?.preparatorio}">
+        <div class="control-group">
+            <div>
+                <span id="preparatorio-label" class="control-label label label-inverse">
+                    Preparatorio
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="preparatorio-label">
+                    <g:fieldValue bean="${tipoProcedimientoInstance}" field="preparatorio"/>
                 </span>
         
             </div>

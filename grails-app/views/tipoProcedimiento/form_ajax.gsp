@@ -8,7 +8,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
 
@@ -36,6 +36,20 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
+                    Fuente
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:select name="fuente" from="${tipoProcedimientoInstance.constraints.fuente.inList}" class="" value="${tipoProcedimientoInstance?.fuente}" valueMessagePrefix="tipoProcedimiento.fuente" noSelection="['': '']"/>
+                
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
                     Bases
                 </span>
             </div>
@@ -47,6 +61,49 @@
             </div>
         </div>
                 
+
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Período Preparatorio (d)
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="preparatorio" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'preparatorio')}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Período Precontractual (d)
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="precontractual" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'precontractual')}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Período Contractual (d)
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="contractual" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'contractual')}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
