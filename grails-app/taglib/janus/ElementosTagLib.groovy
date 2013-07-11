@@ -93,7 +93,11 @@ class ElementosTagLib {
         if (planilla.tipoPlanilla.codigo == "A") {
             str += 'Anticipo (' + PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion).descripcion + ")"
         } else {
-            str += 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')
+            if(planilla.tipoPlanilla.codigo == "L") {
+                str+= "Liquidación del reajuste (${planilla.fechaPresentacion.format('dd-MM-yyyy')})"
+            } else {
+                str += 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')
+            }
 //            str += planilla.periodoIndices.descripcion
         }
         str += "</div>"

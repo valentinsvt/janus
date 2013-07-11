@@ -220,10 +220,11 @@
                     val = parseFloat(val);
                     //si no es vacio calcula
                     var precio = $row.find(".precioU").data("valor");
-                    var total = parseFloat(val) * parseFloat(precio);
+                    var total = (parseFloat(val) * parseFloat(precio));
+                    total = parseFloat(number_format(total, 2, ".", ","))
 
                     //el valor actual
-                    $row.find(".act.num.val").text(number_format(total, 2, ".", ",")).data("valor", total);
+                    $row.find(".act.num.val").text(total).data("valor", total);
 
                     //los acumulados
                     var anterior = parseFloat($antCant.data("valor"));

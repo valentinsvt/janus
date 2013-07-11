@@ -164,7 +164,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def form() {
-        println params
+//        println params
         def contrato = Contrato.get(params.contrato)
         def planillaInstance = new Planilla(params)
         planillaInstance.contrato = contrato
@@ -173,11 +173,15 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         def anticipo = TipoPlanilla.findByCodigo('A')
+        def avance = TipoPlanilla.findByCodigo('P')
         def liquidacion = TipoPlanilla.findByCodigo('L')
         def reajusteDefinitivo = TipoPlanilla.findByCodigo('R')
         def costoPorcentaje = TipoPlanilla.findByCodigo('C')
 
         def tiposPlanilla = TipoPlanilla.list([sort: 'nombre'])
+
+        def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra,[sort:"fechaFin"])
+        def finalObra=periodosEjec.pop().fechaFin
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
         def anticipoPagado = false
@@ -189,13 +193,13 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-        def planillas = Planilla.findAllByContrato(contrato, [sort: 'periodoIndices', order: "asc"])
+        def planillas = Planilla.findAllByContrato(contrato, [sort: 'fechaInicio', order: "asc"])
         def planillasAvance = Planilla.withCriteria {
             eq("contrato", contrato)
             tipoPlanilla {
-                ne("codigo", "A")
+                eq("codigo", "P")
             }
-            order("periodoIndices", "asc")
+            order("fechaInicio", "asc")
         }
         def cPlanillas = planillas.size()
 
@@ -221,46 +225,112 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
+        if(planillasAvance.size()>0){
+            if(planillasAvance.pop().fechaFin == finalObra){
+                def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
+                tiposPlanilla -= plp.tipoPlanilla
+            }
+        }
+
         if (!params.id) {
             planillaInstance.numero = cPlanillas + 1
         }
 
-        def periodos = []
-        if (!esAnticipo) {
-//            println "********************* " + planillasAvance
-//            println "********************* " + planillas.last().fechaPresentacion
-            def ultimoPeriodo
-            if (planillasAvance.size() > 0) {
-                ultimoPeriodo = planillasAvance.last().fechaFin
-//            if (!ultimoPeriodo) {
-//                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
+        def periodos = [:]
+//        if (!esAnticipo) {
+////            println "********************* " + planillasAvance
+////            println "********************* " + planillas.last().fechaPresentacion
+//            def ultimoPeriodo
+//            if (planillasAvance.size() > 0) {
+//                ultimoPeriodo = planillasAvance.last().fechaFin
+////            if (!ultimoPeriodo) {
+////                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
+////            }
+////            println planillasAvance
+//            } else {
+////                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
+//                ultimoPeriodo = null
 //            }
-//            println planillasAvance
-            } else {
-//                ultimoPeriodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planillas.last().fechaPresentacion, planillas.last().fechaPresentacion).fechaFin
-                ultimoPeriodo = null
+//            println ultimoPeriodo
+//            PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: 'fechaInicio']).each { pe ->
+//                if (pe.tipo == "P") {
+//                    periodos += PeriodosInec.withCriteria {
+//                        or {
+//                            between("fechaInicio", pe.fechaInicio, pe.fechaFin)
+//                            between("fechaFin", pe.fechaInicio, pe.fechaFin)
+//                        }
+//                        if (ultimoPeriodo) {
+//                            and {
+//                                gt("fechaInicio", ultimoPeriodo)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            println periodos
+//            periodos = periodos.unique().sort { it.fechaInicio }
+//        }
+
+        if(planillasAvance.size() == 0) {
+            /* cuando es la primera planilla de avance:
+                    si la fecha de inicio de obra < 15: debe hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin de mes
+                    si la fecha de inicio de obra >=15: puede hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin de mes
+                                                     o  puede hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin del mes siguiente
+            */
+
+            def inicioObra = contrato.oferta.concurso.obra.fechaInicio
+            def finMes = getLastDayOfMonth(inicioObra)
+            def dias = inicioObra.format("dd").toInteger()
+
+            periodos.put((inicioObra.format("dd-MM-yyyy")+"_"+finMes.format("dd-MM-yyyy")),inicioObra.format("dd-MM-yyyy")+" a "+finMes.format("dd-MM-yyyy"))
+            if(dias>=15) {
+                def inicio =finMes.plus(1)
+                finMes=  getLastDayOfMonth(inicio)
+                periodos.put((inicioObra.format("dd-MM-yyyy")+"_"+finMes.format("dd-MM-yyyy")),inicioObra.format("dd-MM-yyyy")+" a "+finMes.format("dd-MM-yyyy"))
             }
-            println ultimoPeriodo
-            PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: 'fechaInicio']).each { pe ->
-                if (pe.tipo == "P") {
-                    periodos += PeriodosInec.withCriteria {
-                        or {
-                            between("fechaInicio", pe.fechaInicio, pe.fechaFin)
-                            between("fechaFin", pe.fechaInicio, pe.fechaFin)
-                        }
-                        if (ultimoPeriodo) {
-                            and {
-                                gt("fechaInicio", ultimoPeriodo)
-                            }
-                        }
+
+        }else{
+            def planillasAnt = Planilla.findAllByContratoAndTipoPlanilla(contrato,TipoPlanilla.findByCodigo("P"),[sort:"fechaFin"])
+
+            def inicio,fin
+//            println "planillas ant "+planillasAnt+" per ejec "+periodosEjec
+            if(planillasAnt.size()>0){
+                 inicio=planillasAnt.pop().fechaFin+1
+                 fin=getLastDayOfMonth(inicio)
+                if(fin>finalObra){
+                    periodos.put((inicio.format("dd-MM-yyyy")+"_"+finalObra.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+finalObra.format("dd-MM-yyyy"))
+                }else{
+                    if(finalObra-fin<=30){
+                        periodos.put((inicio.format("dd-MM-yyyy")+"_"+finalObra.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+finalObra.format("dd-MM-yyyy"))
+                        periodos.put((inicio.format("dd-MM-yyyy")+"_"+fin.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+fin.format("dd-MM-yyyy"))
+                    } else{
+                        periodos.put((inicio.format("dd-MM-yyyy")+"_"+fin.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+fin.format("dd-MM-yyyy"))
                     }
                 }
+
+            } else{
+                println "error wtf no hay planillas"
             }
-            println periodos
-            periodos = periodos.unique().sort { it.fechaInicio }
         }
 
+//        println "PERIODOS: "+periodos
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado]
+    }
+
+
+    def getLastDayOfMonth(fecha) {
+        Date today = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha);
+
+        calendar.add(Calendar.MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DATE, -1);
+
+        Date firstDayOfMonth = calendar.getTime();
+
+        return  firstDayOfMonth
     }
 
     def save() {
@@ -296,34 +366,41 @@ class PlanillaController extends janus.seguridad.Shield {
             planillaInstance = new Planilla(params)
 
             switch (planillaInstance.tipoPlanilla.codigo) {
-                case 'P':
-                    //avance de obra: hay q poner fecha inicio y fecha fin
-
-                    //las planillas q no son de avance para ver cual es el ultimo periodo planillado
-                    def otrasPlanillas = Planilla.findAllByContratoAndTipoPlanillaNotEqual(planillaInstance.contrato, TipoPlanilla.findByCodigo("A"), [sort: 'periodoIndices', order: 'asc'])
-
-                    def ini
-                    if (otrasPlanillas.size() > 0) {
-                        def ultimoPeriodo = otrasPlanillas?.last().fechaFin
-                        use(TimeCategory) {
-                            ini = ultimoPeriodo + 1.days
-                        }
-                    } else {
-                        ini = planillaInstance.contrato.oferta.concurso.obra.fechaInicio
-                    }
-                    def fin = planillaInstance.periodoIndices.fechaFin
-
-                    planillaInstance.fechaInicio = ini
-                    planillaInstance.fechaFin = fin
-
-                    /* ************** La fecha inicio y fecha fin se vuelven las fechas del periodo ***************************/
-                    planillaInstance.fechaInicio = planillaInstance.periodoIndices.fechaInicio
-                    planillaInstance.fechaFin = planillaInstance.periodoIndices.fechaFin
-
-                    break;
                 case 'A':
                     //es anticipo hay q ingresar el valor de la planilla
                     planillaInstance.valor = planillaInstance.contrato.anticipo
+                    break;
+                case 'P':
+                    //avance de obra: hay q poner fecha inicio y fecha fin
+
+//                    //las planillas q no son de avance para ver cual es el ultimo periodo planillado
+//                    def otrasPlanillas = Planilla.findAllByContratoAndTipoPlanillaNotEqual(planillaInstance.contrato, TipoPlanilla.findByCodigo("A"), [sort: 'periodoIndices', order: 'asc'])
+//
+//                    def ini
+//                    if (otrasPlanillas.size() > 0) {
+//                        def ultimoPeriodo = otrasPlanillas?.last().fechaFin
+//                        use(TimeCategory) {
+//                            ini = ultimoPeriodo + 1.days
+//                        }
+//                    } else {
+//                        ini = planillaInstance.contrato.oferta.concurso.obra.fechaInicio
+//                    }
+//                    def fin = planillaInstance.periodoIndices.fechaFin
+//
+//                    planillaInstance.fechaInicio = ini
+//                    planillaInstance.fechaFin = fin
+//
+//                    /* ************** La fecha inicio y fecha fin se vuelven las fechas del periodo ***************************/
+//                    planillaInstance.fechaInicio = planillaInstance.periodoIndices.fechaInicio
+//                    planillaInstance.fechaFin = planillaInstance.periodoIndices.fechaFin
+
+                    def periodoPlanilla = params.periodoPlanilla
+                    def fechas = periodoPlanilla.split("_")
+                    planillaInstance.fechaInicio=new Date().parse("dd-MM-yyyy", fechas[0])
+                    planillaInstance.fechaFin=new Date().parse("dd-MM-yyyy", fechas[1])
+                    break;
+                case "L":
+
                     break;
                 case "C":
                     //es de costo y porcentaje: fecha inicio y fecha fin se ponen la fecha de presentacion (?)
@@ -356,7 +433,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         switch (planillaInstance.tipoPlanilla.codigo) {
             case 'A':
-                redirect(action: 'resumen', id: planillaInstance.id)
+                redirect(action: 'anticipo', controller: 'planilla2', id: planillaInstance.id)
                 break;
             case 'L':
                 redirect(action: 'list', id: planillaInstance.contratoId)
@@ -405,6 +482,10 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         return strFecha
     }
+
+
+
+
 
     def resumen() {
         //para volver a generar los valores de reajuste poner esta variable en true!!

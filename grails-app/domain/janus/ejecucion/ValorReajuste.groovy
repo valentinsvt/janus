@@ -10,6 +10,7 @@ class  ValorReajuste {
     PeriodosInec periodoIndice
 //    Indice indice
     FormulaPolinomicaContractual formulaPolinomica
+    Planilla planillaLiq
 
     double valor
 
@@ -27,6 +28,7 @@ class  ValorReajuste {
             formulaPolinomica column: 'frpl__id'
             valor column: 'vlrjvlor'
             obra column: 'obra__id'
+            planillaLiq column: 'plnllqui'
         }
     }
     static constraints = {
@@ -36,5 +38,6 @@ class  ValorReajuste {
         formulaPolinomica(blank: true, nullable: true)
         valor(blank: true, nullable: true)
         obra(blank: false, nullable: false)
+        planillaLiq(blank: true,nullable: true)
     }
 }

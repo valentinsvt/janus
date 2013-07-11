@@ -29,7 +29,8 @@ class ContratoController extends janus.seguridad.Shield {
         def contrato = Contrato.get(params.id)
         contrato.fechaPedidoRecepcionContratista = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionContratista)
         contrato.fechaPedidoRecepcionFiscalizador = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionFiscalizador)
-
+        contrato.obra.fechaFin=contrato.fechaPedidoRecepcionFiscalizador
+        contrato.obra.save(flush: true)
         if (!contrato.save(flush: true)) {
             println "Error al guardar fechas de pedido de recepcion (contrato controller l.33): " + contrato.errors
             flash.clase = "alert-error"
