@@ -1125,10 +1125,10 @@ class Planilla2Controller {
         if(periodos.size()==0 ){
 
 //            pcs.each {c->
-//            println " per o "+perOferta+"  per a "+perAnticipo
+            println " per o "+perOferta+"  per a "+perAnticipo
             perOferta=verificaIndices(pcs,perOferta ,0)
             perAnticipo=verificaIndices(pcs,perAnticipo,0)
-//            println " per o "+perOferta+"  per a "+perAnticipo
+            println " per o "+perOferta+"  per a "+perAnticipo
 
             def p1=new PeriodoPlanilla([planilla:planilla,periodo: perOferta,fechaIncio:fechaOferta,fechaFin:getLastDayOfMonth(fechaOferta),titulo: "OFERTA"])
             if(!p1.save(flush: true)){

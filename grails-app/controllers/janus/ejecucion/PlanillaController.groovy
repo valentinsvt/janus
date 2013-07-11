@@ -350,6 +350,10 @@ class PlanillaController extends janus.seguridad.Shield {
             params.fechaOficioEntradaPlanilla = new Date().parse("dd-MM-yyyy", params.fechaOficioEntradaPlanilla)
         }
 
+        if(!params.fechaPresentacion) {
+            params.fechaPresentacion = params.fechaIngreso
+        }
+
         def planillaInstance
         if (params.id) {
             planillaInstance = Planilla.get(params.id)
