@@ -171,7 +171,8 @@
             <g:form class="form-horizontal" name="frmSave-Concurso" action="save" id="${concursoInstance?.id}">
                 <ul class="nav nav-pills ui-corner-top" id="myTab">
                     <li class="active"><a href="#datos">Datos concurso</a></li>
-                    <li><a href="#fechas">Fechas de control del proceso</a></li>
+                    <li><a href="#fechas">Fechas del concurso</a></li>
+                    <li><a href="#fechas2">Fechas de control del trámite</a></li>
                 </ul>
 
                 <div class="tab-content ui-corner-bottom">
@@ -548,6 +549,97 @@
                             </div> <!-- fin col 2-->
                         </div>
                     </div> <!-- fin tab fechas -->
+
+                    <div class="tab-pane" id="fechas2">
+                        %{--<div id="cols" style="float: left;">--}%
+                        <div class="row">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Inicio Preparatorio
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaInicioPreparatorio" class="" value="${concursoInstance?.fechaInicioPreparatorio ?: concursoInstance?.fechaPublicacion}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Fin Preparatorio
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaFinPreparatorio" class="" value="${concursoInstance?.fechaFinPreparatorio}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Inicio Precontractual
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaInicioPrecontractual" class="" value="${concursoInstance?.fechaInicioPrecontractual}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Fin Precontractual
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaFinPrecontractual" class="" value="${concursoInstance?.fechaFinPrecontractual}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                            </div> <!-- fin col 1 -->
+
+                            <div class="span5">
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Inicio Contractual
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaInicioContractual" class="" value="${concursoInstance?.fechaInicioContractual}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Fecha Fin Contractual
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <elm:datepicker name="fechaFinContractual" class="" value="${concursoInstance?.fechaFinContractual}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
+
+                            </div> <!-- fin col 2-->
+                        </div>
+                    </div> <!-- fin tab fechas2 -->
+
                 </div>
             </g:form>
 
