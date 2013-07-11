@@ -1145,7 +1145,7 @@ class ReportesController {
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHojaLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
-        def prmsHeader = [border: Color.WHITE, colspan: 7,
+        def prmsHeader = [border: Color.WHITE, colspan: 8,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
         def prmsHeader3 = [border: Color.WHITE, colspan: 8,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
@@ -1159,11 +1159,13 @@ class ReportesController {
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotalMat = [border: Color.WHITE, colspan: 5,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotalTrans = [border: Color.WHITE, colspan: 7,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
-                prmsHeaderHojaLeft: prmsHeaderHojaLeft, prmsSubtotalMat: prmsSubtotalMat, prmsHeader3: prmsHeader3]
+                prmsHeaderHojaLeft: prmsHeaderHojaLeft, prmsSubtotalMat: prmsSubtotalMat, prmsHeader3: prmsHeader3, prmsSubtotalTrans: prmsSubtotalTrans]
 
         VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique().each { rubro ->
 
@@ -1228,7 +1230,6 @@ class ReportesController {
             creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES")
             if(params.transporte == '1'){
                 creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
-
             }
 
             creaHeadersTabla(tablaIndirectos, fonts, prms, "COSTOS INDIRECTOS")
@@ -1266,6 +1267,7 @@ class ReportesController {
                 if (r["grpocdgo"] == 1 && params.transporte == "1") {
                     llenaDatos(tablaTransporte, r, fonts, prms, "T")
                     totalTrans += r.parcial_t
+//                    println("-->>" + totalTrans)
                 }
             }
             totalRubro = totalHer + totalMan + totalMat
@@ -1277,8 +1279,16 @@ class ReportesController {
             addSubtotal(tablaHerramientas, totalHer, fonts, prms)
             addSubtotal(tablaManoObra, totalMan, fonts, prms)
             addSubtotalMat(tablaMateriales, totalMat, fonts, prms)
+
             if (params.transporte == "1") {
-                addSubtotal(tablaTransporte, totalTrans, fonts, prms)
+              addSubtotalTrans(tablaTransporte, totalTrans, fonts, prms)
+
+////                def addSubtotal( table, subtotal, fonts, params) {
+//                    addCellTabla(tablaTransporte, new Paragraph("TOTAL", fonts.times8bold), prmsHeader3)
+//                    addCellTabla(tablaTransporte, new Paragraph(g.formatNumber(number: totalTrans, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), prmsHeader3)
+////                }
+
+
             }
 
             addCellTabla(tablaIndirectos, new Paragraph("Costos Indirectos", fonts.times8normal), prmsCellLeft)
@@ -1422,6 +1432,10 @@ class ReportesController {
         addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), params.prmsNum)
     }
 
+    def addSubtotalTrans( table, subtotal, fonts, params) {
+        addCellTabla(table, new Paragraph("TOTAL", fonts.times8bold), params.prmsSubtotalTrans)
+        addCellTabla(table, new Paragraph(g.formatNumber(number: subtotal, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), params.prmsNum)
+    }
 
 
 
@@ -1471,7 +1485,7 @@ class ReportesController {
 
 
                     table.setWidths(arregloEnteros([9,24, 8, 10, 12, 9, 13,11]))
-                    addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader3)
+                    addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
                     addCellTabla(table, new Paragraph("CÓDIGO", fonts.times8boldWhite), params.prmsCellHead)
                     addCellTabla(table, new Paragraph("DESCRIPCIÓN", fonts.times8boldWhite), params.prmsCellHead)
                     addCellTabla(table, new Paragraph("UNIDAD", fonts.times8boldWhite), params.prmsCellHead)
