@@ -19,6 +19,8 @@ class TramiteController extends janus.seguridad.Shield {
 
     def verTramites(){
 //        params.id="MEM-132-DGES-13"
+        //para montar    showmount -e 192.168.0.13         mount -t nfs 192.168.0.13:/opt/pruebas/sad2013 sad/
+        //
         def memo = params.id
         def header=[:]
         def tramites = []
@@ -59,10 +61,12 @@ class TramiteController extends janus.seguridad.Shield {
 
     def cargarDatos(){
         try{
-            def command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /media/docmaster.DBF"
+//            def command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /media/docmaster.DBF"
+            def command="dbf2mysql -c -d dbf -Uroot -Proot -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /mnt/sad/docmaster.DBF"
             def proc = command.execute()
             proc.waitFor()
-            command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
+//            command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
+            command="dbf2mysql -c -d dbf -Uroot -Proot -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /mnt/sad/doctrami.DBF"
             proc = command.execute()
             proc.waitFor()
 //            println "fin comandos"
