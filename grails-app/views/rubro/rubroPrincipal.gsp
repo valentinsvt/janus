@@ -1254,6 +1254,11 @@
             }
         });
 
+        $("#fecha_precios").change(function(){
+            $("#cmb_vol").change()
+            $("#cmb_chof").change()
+        });
+
         $("#foto").click(function () {
             var child = window.open('${createLink(controller:"rubro",action:"showFoto",id: rubro?.id, params:[tipo:"il"])}', 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
 
@@ -1740,6 +1745,7 @@
             $("#modal-rubro").modal("show");
             $("#buscarDialog").unbind("click")
             $("#buscarDialog").bind("click", enviarItem)
+            setTimeout( function() { $( '#criterio' ).focus() }, 500 );
         });
         $("#cdgo_buscar").blur(function () {
 //            ////console.log($("#item_id").val()=="")
@@ -1791,6 +1797,8 @@
             $("#modal-rubro").modal("show");
             $("#buscarDialog").unbind("click")
             $("#buscarDialog").bind("click", enviar)
+            setTimeout( function() { $( '#criterio' ).focus() }, 500 );
+            //$("#criterio").focus()
 
         }); //click btn new
         $("#rubro_registro").click(function () {

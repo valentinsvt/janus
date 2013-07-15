@@ -280,7 +280,7 @@
 
                 $("#btnSave").click(function () {
                     if (!$(this).hasClass("disabled")) {
-                        $(this).replaceWith(spinner);
+                        $("#dlgLoad").dialog("open")
                         var data = "";
                         $("#tbDetalle").children("tr").each(function () {
                             var $row = $(this);
@@ -297,9 +297,15 @@
                                 data += "&";
                             }
                         });
-                        data += "id=${planilla.id}&total=" + $(".totalAct").data("valor");
-//                    ////console.log(data);
-                        location.href = "${createLink(action:'saveDetalle')}?" + data;
+                        if(data==""){
+                            $("#dlgLoad").dialog("close")
+                            alert("LLene el detalle de la planilla")
+                        }else{
+                            $(this).replaceWith(spinner);
+                            data += "id=${planilla.id}&total=" + $(".totalAct").data("valor");
+                            location.href = "${createLink(action:'saveDetalle')}?" + data;
+                        }
+
                     }
                     return false;
                 });

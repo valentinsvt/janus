@@ -146,6 +146,11 @@ class BuscadorTagLib {
         salida += '$("#buscarDialog").button().click(function(){'
         salida += ' enviar();'
         salida += '});'
+        salida += '$(".filaBuscador ").keyup(function(e){'
+        salida += 'if(e.which == 13) { '
+        salida += ' $("#buscarDialog").click();'
+        salida += ' }'
+        salida += '});'
 
 
 

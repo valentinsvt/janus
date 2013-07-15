@@ -960,6 +960,7 @@
                     $("#modalFooter_busqueda").html("").append(btnOk);
                     $(".contenidoBuscador").html("");
                     $("#modal-busqueda").modal("show");
+                    setTimeout( function() { $( '#criterio' ).focus() }, 500 );
                 });
 
                 $("#nuevo").click(function () {

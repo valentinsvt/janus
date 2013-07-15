@@ -3,7 +3,9 @@
 $("#buscar").click(function() {
     var w = screen.width
     var l = w/2-(460)
+
     $(".buscador").dialog('open')
+    $("#criterio").focus()
     $(".buscador").dialog({
         position:[l,30]
     })
