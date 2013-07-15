@@ -29,7 +29,7 @@
             <li><a href="#tab-transporte">Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>
             <li><a href="#tab-indirecto">Costos Indirectos</a></li>
-            <li class="desglose"><a href="#tab-desglose">Desglose de Transporte</a></li>
+            <li class="desglose"><a href="#tab-desglose">De Equipos</a></li>
         </ul>
 
         <div id="tab-transporte" class="tab">
@@ -436,7 +436,7 @@
 
         <div class="row-fluid margen">
             <div class="span5">
-               Desglose Equipos
+               Equipos
             </div>
 
             <div class="span2">
@@ -445,7 +445,7 @@
         </div>
         <div class="row-fluid margen">
             <div class="span5">
-                Desglose Repuestos
+                Repuestos
             </div>
 
             <div class="span2">
@@ -456,7 +456,7 @@
 
         <div class="row-fluid margen">
             <div class="span5">
-                Desglose Combustibles
+                Combustibles
             </div>
 
             <div class="span2">
@@ -466,7 +466,7 @@
         <div class="row-fluid margen">
 
             <div class="span5">
-                Desglose Mecánico
+                Mecánico
             </div>
 
             <div class="span2">
@@ -476,7 +476,7 @@
 
         <div class="row-fluid margen">
             <div class="span5">
-               Desglose Saldo
+               Saldo
             </div>
 
             <div class="span2">

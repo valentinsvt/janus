@@ -24,13 +24,7 @@
 
     <g:select name="departamento" class="departamento" from="${janus.Departamento.list()}" optionValue="descripcion" optionKey="id" style="width: 300px" noSelection="['-1':'-Escoja el departamento-']"/>
 
-
-
-
     <div class="span12" id="filaPersonas"></div>
-
-
-
 
     %{--<div class="span1" style="font-weight: bold">Persona:</div>--}%
     %{--<g:select name="persona.id" class="persona" from="${janus.Persona?.list()}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"--}%
@@ -61,9 +55,9 @@
     </div>
 
     <div class="span4">
-        <div class="span2" style="margin-left: -40px; font-weight: bold">Nueva Función: </div>
+        <div class="span2" style="margin-left: -50px; font-weight: bold">Nueva Función: </div>
         <elm:select name="funcion" id="funcion"  from="${janus.Funcion?.list()}" optionValue="descripcion" optionKey="id"
-                    optionClass="${{it?.descripcion}}"/>
+                    optionClass="${{it?.descripcion}}" style="margin-left: -10px"/>
 
     </div>
 

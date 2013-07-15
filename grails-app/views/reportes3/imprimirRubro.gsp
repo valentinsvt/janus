@@ -52,6 +52,11 @@
             /*font-family : "Open Sans Condensed" !important;*/
         }
 
+        .grande{
+
+            font-size: 18px;
+        }
+
         .totales {
             font-weight : bold;
         }
@@ -148,7 +153,7 @@
         <div class="hoja">
 
             <div class="tituloPdf tituloHeader">
-                <p>
+                <p class="grande">
                     <b>G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
@@ -168,7 +173,7 @@
                         <b>Fecha:</b> ${fechaPala}
                     </div>
 
-                    <div class="span3">
+                    <div style="margin-left: -200px">
                         <b>Fecha Act. P.U:</b> ${fechaPrecios}
                     </div>
                 </div>
