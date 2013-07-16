@@ -397,7 +397,7 @@ h4 {
     </div>
 </div>
 
-<div id="imprimirDialog">
+<div id="imprimirDialogValor">
 
     <fieldset>
         <div class="span3">
@@ -574,7 +574,7 @@ h4 {
 //       console.log(data)
         if (!data.ch || !data.hp || !data.vc || !data.hvb || !data.hva || !data.hab || !data.haa) {
 
-            $("#imprimirDialog").dialog("open");
+            $("#imprimirDialogValor").dialog("open");
 
         } else {
 
@@ -587,7 +587,7 @@ h4 {
         }
     });
 
-    $("#imprimirDialog").dialog({
+    $("#imprimirDialogValor").dialog({
 
         autoOpen  : false,
         resizable : false,
@@ -601,7 +601,7 @@ h4 {
         buttons  : {
             "Aceptar" : function () {
 
-                $("#imprimirDialog").dialog("close");
+                $("#imprimirDialogValor").dialog("close");
 
             }
         }

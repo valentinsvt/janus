@@ -168,24 +168,26 @@
 
             <div style="margin-top: -20px">
                 <div class="row-fluid">
-                    <div class="span7">
+                    <div class="span3" style="margin-right: 195px !important;">
                         %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
                         <b>Fecha:</b> ${fechaPala}
+                        %{--<b class="span3">Fecha Act. P.U:</b> ${fechaPrecios}--}%
                     </div>
 
-                    <div style="margin-left: -200px">
+                    <div class="span4">
                         <b>Fecha Act. P.U:</b> ${fechaPrecios}
                     </div>
                 </div>
 
                 <div class="row-fluid">
-                    <div class="span7">
+                    <div>
                         <b>Código:</b> ${rubro.codigo}
+                        <b style="margin-left: 300px">Unidad:</b> ${rubro.unidad.codigo}
                     </div>
 
-                    <div class="span3">
-                        <b>Unidad:</b> ${rubro.unidad.codigo}
-                    </div>
+                    %{--<div class="span3">--}%
+                        %{--<b>Unidad:</b> ${rubro.unidad.codigo}--}%
+                    %{--</div>--}%
                 </div>
 
                 <div class="row-fluid">

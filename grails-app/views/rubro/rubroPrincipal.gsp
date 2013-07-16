@@ -2031,6 +2031,13 @@
                     var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}?" + datos
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");
+                },
+                "Cancelar" :  function () {
+
+
+                    $("#imprimirTransporteDialog").dialog("close");
+
+
                 }
 
 

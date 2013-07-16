@@ -130,9 +130,9 @@
                             </g:link>
                         </g:if>
                         <g:else>
-                            <g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Ver pago" id="${planillaInstance.id}">
-                                <i class="icon-money icon-large"></i>
-                            </g:link>
+                            %{--<g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Ver pago" id="${planillaInstance.id}">--}%
+                                %{--<i class="icon-money icon-large"></i>--}%
+                            %{--</g:link>--}%
                         </g:else>
                     </g:else>
                 %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
