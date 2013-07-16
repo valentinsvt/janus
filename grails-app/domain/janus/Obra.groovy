@@ -11,6 +11,7 @@ class Obra implements Serializable {
     EstadoObra estadoObra
     ClaseObra claseObra
     Departamento departamento
+    Departamento departamentoDestino
     Lugar lugar
     String barrio
     String codigo
@@ -111,6 +112,7 @@ class Obra implements Serializable {
             estadoObra column: 'edob__id'
             claseObra column: 'csob__id'
             departamento column: 'dpto__id'
+            departamentoDestino column: 'dptodstn'
             lugar column: 'lgar__id'
             codigo column: 'obracdgo'
             nombre column: 'obranmbr'
@@ -214,6 +216,7 @@ class Obra implements Serializable {
         estadoObra(blank: true, nullable: true, attributes: [title: 'estadoObra'])
         programacion(blank: true, nullable: true, attributes: [title: 'programacion'])
         departamento(blank: true, nullable: true, attributes: [title: 'departamento'])
+        departamentoDestino(blank: true, nullable: true, attributes: [title: 'departamento destino de la documentación'])
         descripcion(size: 1..511, blank: true, nullable: true, attributes: [title: 'descripcion'])
         fechaInicio(blank: true, nullable: true, attributes: [title: 'fechaInicio'])
         fechaFin(blank: true, nullable: true, attributes: [title: 'fechaFin'])
