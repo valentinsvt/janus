@@ -110,9 +110,9 @@
                     <g:set var="totalAcumulado" value="${totalAcumulado + val.toDouble().round(2) + valAnt}"/>
 
                     <g:if test="${sp != vol.subPresupuestoId}">
-                        <tr>
+                        <tr class="subpresupuesto">
                             <th colspan="2">
-                                ${sp} ${vol.subPresupuestoId} ${vol.subPresupuesto.descripcion}
+                                %{--${vol.subPresupuestoId}--}% ${vol.subPresupuesto.descripcion}
                             </th>
                             <td colspan="3" class="espacio borderLeft"></td>
                             <td colspan="3" class="espacio borderLeft"></td>
@@ -274,6 +274,8 @@
 
             $(function () {
 
+                $("input.number").first().focus();
+
 //                $("#tbDetalle").children("tr").each(function () {
 //                    updateRow($(this));
 //                });
@@ -324,7 +326,8 @@
                             return validarNum(ev);
                         }
                     }, //keydown
-                    keyup   : function () {
+                    keyup   : function (ev) {
+                        var $input = $(this);
                         var val = $(this).val();
                         // esta parte valida q no ingrese mas de 2 decimales
                         var parts = val.split(".");
@@ -337,6 +340,35 @@
                         }
                         // esta parte hace los calculos
                         updateRow($(this).parents("tr"));
+
+                        //esta parte maneja los cambios de input con flechas y enter
+                        var $td = $input.parent("td");
+                        var $tr = $input.parents("tr");
+                        var $nextTr, $nextTd, $nextInput;
+                        switch (ev.keyCode) {
+                            case 13: //enter: cambia al input siguiente si existe. si esta al final no hace nada
+                            case 40: //flecha abajo: cambia al input siguiente si existe. si esta al final no hace nada
+                                ev.preventDefault();
+                                $nextTr = $tr.next();
+                                if ($nextTr.hasClass("subpresupuesto")) {
+                                    $nextTr = $nextTr.next()
+                                }
+                                $nextTd = $nextTr.children("td").eq($td.index());
+                                $nextInput = $nextTd.children(".number");
+                                $nextInput.focus();
+//                                console.log($input, $td, $tr, $nextTr, $nextTd, $nextInput);
+                                break;
+                            case 38://flecha arriba: cambia al input anterior si existe. si esta al inicio no hace nada
+                                $nextTr = $tr.prev();
+                                if ($nextTr.hasClass("subpresupuesto")) {
+                                    $nextTr = $nextTr.prev()
+                                }
+                                $nextTd = $nextTr.children("td").eq($td.index());
+                                $nextInput = $nextTd.children(".number");
+                                $nextInput.focus();
+                                ev.preventDefault();
+                                break;
+                        }
                     }, //keyup
                     blur    : function () {
                         // esta parte hace los calculos

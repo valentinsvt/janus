@@ -1,7 +1,6 @@
 package janus.ejecucion
 
 import groovy.json.JsonBuilder
-import groovy.time.TimeCategory
 import janus.*
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
@@ -82,39 +81,50 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
-        def fechaMin, fechaMax
+//        println "PARAMS: " + params
+
+        def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
         def tipo = params.tipo
         def lblMemo, lblFecha, extra
+
+//        println planilla.fechaOficioEntradaPlanilla
+//        println planilla.fechaMemoSalidaPlanilla
+//        println planilla.fechaMemoPedidoPagoPlanilla
+//        println planilla.fechaMemoPagoPlanilla
+
         switch (tipo) {
             case "2":
                 lblMemo = "Memo de salida"
                 lblFecha = "Fecha de memo de salida"
-//                fechaMin = planilla.fechaOficioEntradaPlanilla
-//                extra = "Fecha de oficio de entrada: " + fechaMin.format("dd-MM-yyyy")
+                fechaMin = planilla.fechaOficioEntradaPlanilla
+                fecha = planilla.fechaOficioEntradaPlanilla
+                extra = "Fecha de oficio de entrada: " + fechaMin.format("dd-MM-yyyy")
                 break;
             case "3":
                 lblMemo = "Memo de pedido de pago"
                 lblFecha = "Fecha de memo de pedido de pago"
-//                fechaMin = planilla.fechaMemoSalida
-//                extra = "Fecha de memo de salida: " + fechaMin.format("dd-MM-yyyy")
+                fechaMin = planilla.fechaMemoSalidaPlanilla
+                fecha = planilla.fechaMemoSalidaPlanilla
+                extra = "Fecha de memo de salida: " + fechaMin.format("dd-MM-yyyy")
                 break;
             case "4":
                 lblMemo = "Memo de pago"
                 lblFecha = "Fecha de memo de pago"
-//                fechaMin = planilla.fechaMemoPedidoPagoPlanilla
-//                extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")
+                fechaMin = planilla.fechaMemoPedidoPagoPlanilla
+                fecha = planilla.fechaMemoPedidoPagoPlanilla
+                extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")
                 break;
         }
 //        println tipo + "  " + fechaMin
-//        def y = fechaMin.format("yyyy").toInteger()
-//        def m = fechaMin.format("MM").toInteger() - 1
-//        def d = fechaMin.format("dd").toInteger()
-//        //js: new Date(year, month, day, hours, minutes, seconds, milliseconds)
-//        fechaMin = "new Date(${y},${m},${d})"
-//        fechaMax = "new Date(${y + 1},${m},${d})"
+        def y = fechaMin.format("yyyy").toInteger()
+        def m = fechaMin.format("MM").toInteger() - 1
+        def d = fechaMin.format("dd").toInteger()
+        //js: new Date(year, month, day, hours, minutes, seconds, milliseconds)
+        fechaMin = "new Date(${y},${m},${d})"
+        fechaMax = "new Date(${y + 2},${m},${d})"
 
-        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha]//, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra]
+        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha]
     }
 
     def savePagoPlanilla() {
@@ -139,8 +149,14 @@ class PlanillaController extends janus.seguridad.Shield {
                 str2 = "No se pudo pedir el pago"
                 break;
             case "4":
+                def fechaObra = new Date().parse("dd-MM-yyyy", params.fechaObra)
                 planilla.memoPagoPlanilla = memo
                 planilla.fechaMemoPagoPlanilla = fecha
+                def obra = Obra.get(planilla.contrato.obra.id)
+                obra.fechaInicio = fechaObra
+                if (!obra.save(flush: true)) {
+                    println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors
+                }
                 str = "Pago informado exitosamente"
                 str2 = "No se pudo informar el pago"
                 break;
@@ -148,8 +164,6 @@ class PlanillaController extends janus.seguridad.Shield {
         if (planilla.save(flush: true)) {
             flash.clase = "alert-success"
             flash.message = str
-
-
             redirect(action: "list", id: planilla.contratoId)
         } else {
             println "Error al grabar la fecha y el memo en la planilla: " + planilla.errors
@@ -180,8 +194,8 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def tiposPlanilla = TipoPlanilla.list([sort: 'nombre'])
 
-        def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra,[sort:"fechaFin"])
-        def finalObra=periodosEjec.pop().fechaFin
+        def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
+        def finalObra = periodosEjec.pop().fechaFin
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
         def anticipoPagado = false
@@ -225,8 +239,8 @@ class PlanillaController extends janus.seguridad.Shield {
             }
         }
 
-        if(planillasAvance.size()>0){
-            if(planillasAvance.pop().fechaFin == finalObra){
+        if (planillasAvance.size() > 0) {
+            if (planillasAvance.pop().fechaFin == finalObra) {
                 def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
                 tiposPlanilla -= plp.tipoPlanilla
             }
@@ -271,7 +285,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            periodos = periodos.unique().sort { it.fechaInicio }
 //        }
 
-        if(planillasAvance.size() == 0) {
+        if (planillasAvance.size() == 0) {
             /* cuando es la primera planilla de avance:
                     si la fecha de inicio de obra < 15: debe hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin de mes
                     si la fecha de inicio de obra >=15: puede hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin de mes
@@ -282,39 +296,51 @@ class PlanillaController extends janus.seguridad.Shield {
             def finMes = getLastDayOfMonth(inicioObra)
             def dias = inicioObra.format("dd").toInteger()
 
-            periodos.put((inicioObra.format("dd-MM-yyyy")+"_"+finMes.format("dd-MM-yyyy")),inicioObra.format("dd-MM-yyyy")+" a "+finMes.format("dd-MM-yyyy"))
-            if(dias>=15) {
-                def inicio =finMes.plus(1)
-                finMes=  getLastDayOfMonth(inicio)
-                periodos.put((inicioObra.format("dd-MM-yyyy")+"_"+finMes.format("dd-MM-yyyy")),inicioObra.format("dd-MM-yyyy")+" a "+finMes.format("dd-MM-yyyy"))
+            periodos.put((inicioObra.format("dd-MM-yyyy") + "_" + finMes.format("dd-MM-yyyy")), inicioObra.format("dd-MM-yyyy") + " a " + finMes.format("dd-MM-yyyy"))
+            if (dias >= 15) {
+                def inicio = finMes.plus(1)
+                finMes = getLastDayOfMonth(inicio)
+                periodos.put((inicioObra.format("dd-MM-yyyy") + "_" + finMes.format("dd-MM-yyyy")), inicioObra.format("dd-MM-yyyy") + " a " + finMes.format("dd-MM-yyyy"))
             }
 
-        }else{
-            def planillasAnt = Planilla.findAllByContratoAndTipoPlanilla(contrato,TipoPlanilla.findByCodigo("P"),[sort:"fechaFin"])
+        } else {
+            def planillasAnt = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"), [sort: "fechaFin"])
 
-            def inicio,fin
+            def inicio, fin
 //            println "planillas ant "+planillasAnt+" per ejec "+periodosEjec
-            if(planillasAnt.size()>0){
-                 inicio=planillasAnt.pop().fechaFin+1
-                 fin=getLastDayOfMonth(inicio)
-                if(fin>finalObra){
-                    periodos.put((inicio.format("dd-MM-yyyy")+"_"+finalObra.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+finalObra.format("dd-MM-yyyy"))
-                }else{
-                    if(finalObra-fin<=30){
-                        periodos.put((inicio.format("dd-MM-yyyy")+"_"+finalObra.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+finalObra.format("dd-MM-yyyy"))
-                        periodos.put((inicio.format("dd-MM-yyyy")+"_"+fin.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+fin.format("dd-MM-yyyy"))
-                    } else{
-                        periodos.put((inicio.format("dd-MM-yyyy")+"_"+fin.format("dd-MM-yyyy")),inicio.format("dd-MM-yyyy")+" a "+fin.format("dd-MM-yyyy"))
+            if (planillasAnt.size() > 0) {
+                inicio = planillasAnt.pop().fechaFin + 1
+                fin = getLastDayOfMonth(inicio)
+                if (fin > finalObra) {
+                    periodos.put((inicio.format("dd-MM-yyyy") + "_" + finalObra.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + finalObra.format("dd-MM-yyyy"))
+                } else {
+                    if (finalObra - fin <= 30) {
+                        periodos.put((inicio.format("dd-MM-yyyy") + "_" + finalObra.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + finalObra.format("dd-MM-yyyy"))
+                        periodos.put((inicio.format("dd-MM-yyyy") + "_" + fin.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + fin.format("dd-MM-yyyy"))
+                    } else {
+                        periodos.put((inicio.format("dd-MM-yyyy") + "_" + fin.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + fin.format("dd-MM-yyyy"))
                     }
                 }
 
-            } else{
+            } else {
                 println "error wtf no hay planillas"
             }
         }
 
 //        println "PERIODOS: "+periodos
-        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado]
+
+        def now = new Date()
+        def maxDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},"
+        if (now.format("dd").toInteger() > 14) {
+            maxDatePres += "14"
+        } else {
+            maxDatePres += now.format("dd")
+        }
+        maxDatePres += ")"
+
+        def minDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},1)"
+
+        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres]
     }
 
 
@@ -330,7 +356,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         Date firstDayOfMonth = calendar.getTime();
 
-        return  firstDayOfMonth
+        return firstDayOfMonth
     }
 
     def save() {
@@ -350,7 +376,7 @@ class PlanillaController extends janus.seguridad.Shield {
             params.fechaOficioEntradaPlanilla = new Date().parse("dd-MM-yyyy", params.fechaOficioEntradaPlanilla)
         }
 
-        if(!params.fechaPresentacion) {
+        if (!params.fechaPresentacion) {
             params.fechaPresentacion = params.fechaIngreso
         }
 
@@ -400,8 +426,8 @@ class PlanillaController extends janus.seguridad.Shield {
 
                     def periodoPlanilla = params.periodoPlanilla
                     def fechas = periodoPlanilla.split("_")
-                    planillaInstance.fechaInicio=new Date().parse("dd-MM-yyyy", fechas[0])
-                    planillaInstance.fechaFin=new Date().parse("dd-MM-yyyy", fechas[1])
+                    planillaInstance.fechaInicio = new Date().parse("dd-MM-yyyy", fechas[0])
+                    planillaInstance.fechaFin = new Date().parse("dd-MM-yyyy", fechas[1])
                     break;
                 case "L":
 
@@ -2329,7 +2355,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 //        println planillasAnteriores
 
-        def editable = planilla.fechaOrdenPago == null
+        def editable = planilla.fechaMemoSalidaPlanilla == null
 //        println editable
 
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]

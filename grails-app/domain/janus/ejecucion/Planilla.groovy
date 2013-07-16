@@ -8,7 +8,7 @@ class Planilla {
     TipoPlanilla tipoPlanilla
     EstadoPlanilla estadoPlanilla
     PeriodosInec periodoIndices
-    int numero
+    String numero
     String numeroFactura
     Date fechaPresentacion
     Date fechaIngreso
@@ -17,7 +17,7 @@ class Planilla {
     double descuentos
     String reajustada
     double reajuste
-    double reajusteLiq=0
+    double reajusteLiq = 0
     Date fechaReajuste
     double diferenciaReajuste
     String observaciones
@@ -113,7 +113,7 @@ class Planilla {
         estadoPlanilla(blank: true, nullable: true)
         periodoIndices(blank: true, nullable: true)
 
-        numero(blank: true, nullable: true)
+        numero(blank: true, nullable: true, maxSize: 20)
         numeroFactura(maxSize: 15, blank: true, nullable: true)
         fechaPresentacion(blank: true, nullable: true)
         fechaIngreso(blank: true, nullable: true)

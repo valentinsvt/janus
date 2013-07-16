@@ -2,6 +2,12 @@
     <g:hiddenField name="tipo" value="${tipo}"/>
     <fieldset>
         <div class="row">
+            <div class="span5">
+                ${extra}
+            </div>
+        </div>
+
+        <div class="row">
             <div class="span2 formato">
                 ${lblMemo}
             </div>
@@ -12,25 +18,38 @@
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
+        </div>
 
+        <div class="row">
             <div class="span2 formato">
                 ${lblFecha}
             </div>
 
             <div class="span4">
-                %{--<elm:datepicker name="fecha" class=" span3 required" maxDate="${fechaMax}" minDate="${fechaMin}"/>--}%
-                <elm:datepicker name="fecha" class=" span3 required"/>
+                <elm:datepicker name="fecha" class=" span3 required" maxDate="${fechaMax}" minDate="${fechaMin}" value="${fecha}"/>
+                %{--<elm:datepicker name="fecha" class=" span3 required"/>--}%
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
 
-        %{--<div class="row">--}%
-            %{--<div class="span5">--}%
-                %{--${extra}--}%
-            %{--</div>--}%
-        %{--</div>--}%
+        <g:if test="${tipo == '4'}">
+            <div class="row">
+                <div class="span2 formato">
+                    Fecha de inicio de obra
+                </div>
+
+                <div class="span4">
+                    <elm:datepicker name="fechaObra" class=" span3 required" maxDate="${fechaMax}" minDate="${fechaMin}" value="${fecha}"/>
+                    %{--<elm:datepicker name="fecha" class=" span3 required"/>--}%
+                    <span class="mandatory">*</span>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </div>
+        </g:if>
+
     </fieldset>
 </g:form>
 
