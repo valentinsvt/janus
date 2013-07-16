@@ -1,9 +1,6 @@
 package janus
 
-import com.lowagie.text.Document
-import com.lowagie.text.Element
-import com.lowagie.text.PageSize
-import com.lowagie.text.Paragraph
+import com.lowagie.text.*
 import com.lowagie.text.pdf.*
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
@@ -15,7 +12,7 @@ import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
 
-import java.awt.*
+import java.awt.Color
 
 //import java.awt.*
 
