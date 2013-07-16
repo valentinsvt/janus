@@ -25,7 +25,7 @@ class PlanillaController extends janus.seguridad.Shield {
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
     }
 
-    def listAdmin () {
+    def listAdmin() {
 
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
@@ -39,7 +39,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
 
-    def listFinanciero(){
+    def listFinanciero() {
 
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
@@ -142,6 +142,12 @@ class PlanillaController extends janus.seguridad.Shield {
                 fecha = planilla.fechaMemoPedidoPagoPlanilla
                 extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")
                 break;
+            case '5':
+                lblFecha = "Fecha de inicio de obra"
+                fechaMin = planilla.fechaMemoPagoPlanilla
+                fecha = planilla.fechaMemoPagoPlanilla
+                extra = "Fecha de memo de pago: " + fechaMin.format("dd-MM-yyyy")
+                break;
         }
 //        println tipo + "  " + fechaMin
         def y = fechaMin.format("yyyy").toInteger()
@@ -176,16 +182,24 @@ class PlanillaController extends janus.seguridad.Shield {
                 str2 = "No se pudo pedir el pago"
                 break;
             case "4":
-                def fechaObra = new Date().parse("dd-MM-yyyy", params.fechaObra)
                 planilla.memoPagoPlanilla = memo
                 planilla.fechaMemoPagoPlanilla = fecha
+//                def obra = Obra.get(planilla.contrato.obra.id)
+//                obra.fechaInicio = fechaObra
+//                if (!obra.save(flush: true)) {
+//                    println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors
+//                }
+                str = "Pago informado exitosamente"
+                str2 = "No se pudo informar el pago"
+                break;
+            case "5":
                 def obra = Obra.get(planilla.contrato.obra.id)
-                obra.fechaInicio = fechaObra
+                obra.fechaInicio = fecha
                 if (!obra.save(flush: true)) {
                     println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors
                 }
-                str = "Pago informado exitosamente"
-                str2 = "No se pudo informar el pago"
+                str = "Obra iniciada exitosamente"
+                str2 = "No se pudo iniciar la obra"
                 break;
         }
         if (planilla.save(flush: true)) {

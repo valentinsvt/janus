@@ -976,6 +976,27 @@ class Reportes2Controller {
         /* ***************************************************** Fin Detalles *************************************************************/
 
         document.close();
+
+//        // Create a reader
+//        PdfReader reader = new PdfReader(baos.toByteArray());
+//        // Create a stamper
+//        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(RESULT));
+//        // Loop over the pages and add a header to each page
+//        int n = reader.getNumberOfPages();
+//        for (int i = 1; i <= n; i++) {
+//            PdfPTable table = new PdfPTable(2);
+//            table.setTotalWidth(527);
+//            table.setLockedWidth(true);
+//            table.getDefaultCell().setFixedHeight(20);
+//            table.getDefaultCell().setBorder(Rectangle.BOTTOM);
+//            table.addCell("Planilla");
+//            table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+//            table.addCell(String.format("Pág. %d of %d", i, n));
+//            return table;
+//        }
+//        // Close the stamper
+//        stamper.close();
+
         pdfw.close()
         byte[] b = baos.toByteArray();
         response.setContentType("application/pdf")

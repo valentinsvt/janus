@@ -7,19 +7,20 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="span2 formato">
-                ${lblMemo}
+        <g:if test="${tipo.toInteger() < 5}">
+            <div class="row">
+                <div class="span2 formato">
+                    ${lblMemo}
+                </div>
+
+                <div class="span4">
+                    <g:textField name="memo" class="span3 required allCaps" maxlength="20"/>
+                    <span class="mandatory">*</span>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
             </div>
-
-            <div class="span4">
-                <g:textField name="memo" class="span3 required allCaps" maxlength="20"/>
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
-
+        </g:if>
         <div class="row">
             <div class="span2 formato">
                 ${lblFecha}
@@ -34,21 +35,21 @@
             </div>
         </div>
 
-        <g:if test="${tipo == '4'}">
-            <div class="row">
-                <div class="span2 formato">
-                    Fecha de inicio de obra
-                </div>
+        %{--<g:if test="${tipo == '4'}">--}%
+        %{--<div class="row">--}%
+        %{--<div class="span2 formato">--}%
+        %{--Fecha de inicio de obra--}%
+        %{--</div>--}%
 
-                <div class="span4">
-                    <elm:datepicker name="fechaObra" class=" span3 required" maxDate="${fechaMax}" minDate="${fechaMin}" value="${fecha}"/>
-                    %{--<elm:datepicker name="fecha" class=" span3 required"/>--}%
-                    <span class="mandatory">*</span>
+        %{--<div class="span4">--}%
+        %{--<elm:datepicker name="fechaObra" class=" span3 required" maxDate="${fechaMax}" minDate="${fechaMin}" value="${fecha}"/>--}%
+        %{--<elm:datepicker name="fecha" class=" span3 required"/>--}%
+        %{--<span class="mandatory">*</span>--}%
 
-                    <p class="help-block ui-helper-hidden"></p>
-                </div>
-            </div>
-        </g:if>
+        %{--<p class="help-block ui-helper-hidden"></p>--}%
+        %{--</div>--}%
+        %{--</div>--}%
+        %{--</g:if>--}%
 
     </fieldset>
 </g:form>

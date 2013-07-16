@@ -1,361 +1,361 @@
 <%@ page import="janus.ejecucion.Planilla" %>
 <!doctype html>
 <html>
-<head>
-    <meta name="layout" content="main">
-    <title>
-        Lista de Planillas
-    </title>
-    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
-    <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
-</head>
+    <head>
+        <meta name="layout" content="main">
+        <title>
+            Lista de Planillas
+        </title>
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+    </head>
 
-<body>
+    <body>
 
-<g:if test="${flash.message}">
-    <div class="row">
-        <div class="span12">
-            <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
-                <a class="close" data-dismiss="alert" href="#">×</a>
-                ${flash.message}
+        <g:if test="${flash.message}">
+            <div class="row">
+                <div class="span12">
+                    <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        ${flash.message}
+                    </div>
+                </div>
             </div>
+        </g:if>
+
+        <div class="tituloTree">
+            Planillas del contrato de la obra ${obra.descripcion}
         </div>
-    </div>
-</g:if>
 
-<div class="tituloTree">
-    Planillas del contrato de la obra ${obra.descripcion}
-</div>
-
-<div class="row">
-    <div class="span9 btn-group" role="navigation">
-        <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
-            <i class="icon-arrow-left"></i>
-            Contrato
-        </g:link>
-        %{--<g:link action="form" class="btn" params="[contrato: contrato.id]">--}%
+        <div class="row">
+            <div class="span9 btn-group" role="navigation">
+                <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
+                    <i class="icon-arrow-left"></i>
+                    Contrato
+                </g:link>
+            %{--<g:link action="form" class="btn" params="[contrato: contrato.id]">--}%
             %{--<i class="icon-file"></i>--}%
             %{--Nueva planilla--}%
-        %{--</g:link>--}%
-    </div>
+            %{--</g:link>--}%
+            </div>
 
-    <div class="span3" id="busqueda-Planilla"></div>
-</div>
+            <div class="span3" id="busqueda-Planilla"></div>
+        </div>
 
-<g:form action="delete" name="frmDelete-Planilla">
-    <g:hiddenField name="id"/>
-</g:form>
+        <g:form action="delete" name="frmDelete-Planilla">
+            <g:hiddenField name="id"/>
+        </g:form>
 
-<div id="list-Planilla" role="main" style="margin-top: 10px;">
+        <div id="list-Planilla" role="main" style="margin-top: 10px;">
 
-    <table class="table table-bordered table-striped table-condensed table-hover">
-        <thead>
-        <tr>
-            <g:sortableColumn property="numero" title="#"/>
-            <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
-            <g:sortableColumn property="estadoPlanilla" title="Estado"/>
-            <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
-            <g:sortableColumn property="fechaOrdenPago" title="Fecha orden pago"/>
-            <g:sortableColumn property="fechaPago" title="Fecha pago"/>
-            <g:sortableColumn property="periodoIndices" title="Periodo"/>
-            <g:sortableColumn property="descripcion" title="Descripcion"/>
-            <g:sortableColumn property="valor" title="Valor"/>
-            <th width="160">Acciones</th>
-            <th>Pagos</th>
-        </tr>
-        </thead>
-        <tbody class="paginate">
-        <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
-            <tr style="font-size: 10px">
-                <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
-                <td>${planillaInstance.tipoPlanilla.nombre}</td>
-                <td>${planillaInstance.estadoPlanilla?.nombre}</td>
-                <td>
-                    <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
-                </td>
-                <td>
-                    <g:formatDate date="${planillaInstance.fechaOrdenPago}" format="dd-MM-yyyy"/>
-                </td>
-                <td>
-                    <g:formatDate date="${planillaInstance.fechaPago}" format="dd-MM-yyyy"/>
-                </td>
-                <td>
-                    <g:if test="${planillaInstance.periodoIndices}">
-                        ${planillaInstance.periodoIndices?.fechaInicio?.format("dd-MM-yyyy")} a ${planillaInstance.periodoIndices?.fechaFin?.format("dd-MM-yyyy")}
-                    </g:if>
-                </td>
-                <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
-                <td>
-                    <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
-                </td>
-                <td>
-                %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">--}%
-                %{--<i class="icon-zoom-in icon-large"></i>--}%
-                %{--</a>--}%
-                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
-                        <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
-                            <i class="icon-reorder icon-large"></i>
-                        </g:link>
-                    </g:if>
-                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                        <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                            <i class="icon-table icon-large"></i>
-                        </g:link>
-                    </g:if>
-                    <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
-                        <g:link controller="planilla2" action="avance" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                            <i class="icon-table icon-large"></i>
-                        </g:link>
-                    </g:elseif>
-                    <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                        <g:link controller="planilla2" action="liquidacion" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
-                            <i class="icon-table icon-large"></i>
-                        </g:link>
-                    </g:elseif>
-                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
-                        <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
-                            <i class="icon-reorder icon-large"></i>
-                        </g:link>
-                    </g:if>
-
-                    <g:link action="imprimir" class="btn btn-small btn-ajax" rel="tooltip" title="Imprimir"><i class="icon-print"></i></g:link>
-
-                    %{--<g:if test="${!planillaInstance.fechaOrdenPago}">--}%
-                        %{--<g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">--}%
-                            %{--<i class="icon-money icon-large"></i>--}%
-                        %{--</g:link>--}%
-                    %{--</g:if>--}%
-                    %{--<g:else>--}%
-                        %{--<g:if test="${!planillaInstance.fechaPago}">--}%
-                            %{--<g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Pagar" id="${planillaInstance.id}">--}%
-                                %{--<i class="icon-money icon-large"></i>--}%
-                            %{--</g:link>--}%
-                        %{--</g:if>--}%
-                        %{--<g:else>--}%
-                            %{--<g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Ver pago" id="${planillaInstance.id}">--}%
-                                %{--<i class="icon-money icon-large"></i>--}%
-                            %{--</g:link>--}%
-                        %{--</g:else>--}%
-                    %{--</g:else>--}%
-                %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
-                %{--<i class="icon-pencil icon-large"></i>--}%
-                %{--</a>--}%
-                %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
-                %{--<i class="icon-trash icon-large"></i>--}%
-                %{--</a>--}%
-                </td>
-                <td style="text-align: center;">
-                    <g:set var="lblBtn" value="${-1}"/>
-                    <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
-                        <g:set var="lblBtn" value="${2}"/>
-                        <g:if test="${planillaInstance.fechaMemoSalidaPlanilla}">
-                            <g:set var="lblBtn" value="${3}"/>
-                            <g:if test="${planillaInstance.fechaMemoPedidoPagoPlanilla}">
-                                <g:set var="lblBtn" value="${4}"/>
-                                <g:if test="${planillaInstance.fechaMemoPagoPlanilla}">
-                                    <g:set var="lblBtn" value="${5}"/>
+            <table class="table table-bordered table-striped table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <g:sortableColumn property="numero" title="#"/>
+                        <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
+                        <g:sortableColumn property="estadoPlanilla" title="Estado"/>
+                        <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
+                        <g:sortableColumn property="fechaOrdenPago" title="Fecha orden pago"/>
+                        <g:sortableColumn property="fechaPago" title="Fecha pago"/>
+                        <g:sortableColumn property="periodoIndices" title="Periodo"/>
+                        <g:sortableColumn property="descripcion" title="Descripcion"/>
+                        <g:sortableColumn property="valor" title="Valor"/>
+                        <th width="160">Acciones</th>
+                        <th>Pagos</th>
+                    </tr>
+                </thead>
+                <tbody class="paginate">
+                    <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
+                        <tr style="font-size: 10px">
+                            <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
+                            <td>${planillaInstance.tipoPlanilla.nombre}</td>
+                            <td>${planillaInstance.estadoPlanilla?.nombre}</td>
+                            <td>
+                                <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
+                            </td>
+                            <td>
+                                <g:formatDate date="${planillaInstance.fechaOrdenPago}" format="dd-MM-yyyy"/>
+                            </td>
+                            <td>
+                                <g:formatDate date="${planillaInstance.fechaPago}" format="dd-MM-yyyy"/>
+                            </td>
+                            <td>
+                                <g:if test="${planillaInstance.periodoIndices}">
+                                    ${planillaInstance.periodoIndices?.fechaInicio?.format("dd-MM-yyyy")} a ${planillaInstance.periodoIndices?.fechaFin?.format("dd-MM-yyyy")}
                                 </g:if>
-                            </g:if>
-                        </g:if>
-                    </g:if>
-                    <g:if test="${planillaInstance.contrato.oferta.concurso.obra.fechaInicio}">
-                        <g:set var="lblBtn" value="${-6}"/>
-                    </g:if>
-
-                    <g:if test="${lblBtn > 0}">
-                        <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
-                            %{--<g:if test="${lblBtn == 2}">--}%
-                                %{--Enviar reajuste--}%
+                            </td>
+                            <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
+                            <td>
+                                <g:formatNumber number="${planillaInstance.valor}" maxFractionDigits="2" minFractionDigits="2" format="##,##0" locale="ec"/>
+                            </td>
+                            <td>
+                            %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-zoom-in icon-large"></i>--}%
+                            %{--</a>--}%
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
+                                    <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
+                                        <i class="icon-reorder icon-large"></i>
+                                    </g:link>
+                                </g:if>
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                    <g:link controller="planilla2" action="anticipo" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
+                                        <i class="icon-table icon-large"></i>
+                                    </g:link>
+                                </g:if>
+                                <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
+                                    <g:link controller="planilla2" action="avance" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
+                                        <i class="icon-table icon-large"></i>
+                                    </g:link>
+                                </g:elseif>
+                                <g:elseif test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
+                                    <g:link controller="planilla2" action="liquidacion" id="${planillaInstance.id}" rel="tooltip" title="Resumen" class="btn btn-small">
+                                        <i class="icon-table icon-large"></i>
+                                    </g:link>
+                                </g:elseif>
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
+                                    <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
+                                        <i class="icon-reorder icon-large"></i>
+                                    </g:link>
+                                </g:if>
+                                <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
+                                    <g:link action="imprimir" class="btn btnPrint btn-small btn-ajax" rel="tooltip" title="Imprimir"><i class="icon-print"></i></g:link>
+                                </g:if>
+                            %{--<g:if test="${!planillaInstance.fechaOrdenPago}">--}%
+                            %{--<g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-money icon-large"></i>--}%
+                            %{--</g:link>--}%
                             %{--</g:if>--}%
-                            %{--<g:elseif test="${lblBtn == 3}">--}%
-                                %{--Pedir pago--}%
-                            %{--</g:elseif>--}%
-                            <g:if test="${lblBtn == 4}">
-                                Informar pago
-                            </g:if>
-                        </a>
-                    </g:if>
-                    <g:elseif test="${lblBtn == -6}">
-                        <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
-                    </g:elseif>
-                </td>
-            </tr>
-        </g:each>
-        </tbody>
-    </table>
+                            %{--<g:else>--}%
+                            %{--<g:if test="${!planillaInstance.fechaPago}">--}%
+                            %{--<g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Pagar" id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-money icon-large"></i>--}%
+                            %{--</g:link>--}%
+                            %{--</g:if>--}%
+                            %{--<g:else>--}%
+                            %{--<g:link action="pagar" class="btn btn-small btn-ajax" rel="tooltip" title="Ver pago" id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-money icon-large"></i>--}%
+                            %{--</g:link>--}%
+                            %{--</g:else>--}%
+                            %{--</g:else>--}%
+                            %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-pencil icon-large"></i>--}%
+                            %{--</a>--}%
+                            %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${planillaInstance.id}">--}%
+                            %{--<i class="icon-trash icon-large"></i>--}%
+                            %{--</a>--}%
+                            </td>
+                            <td style="text-align: center;">
+                                <g:set var="lblBtn" value="${-1}"/>
+                                <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
+                                    <g:set var="lblBtn" value="${2}"/>
+                                    <g:if test="${planillaInstance.fechaMemoSalidaPlanilla}">
+                                        <g:set var="lblBtn" value="${3}"/>
+                                        <g:if test="${planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                            <g:set var="lblBtn" value="${4}"/>
+                                            <g:if test="${planillaInstance.fechaMemoPagoPlanilla}">
+                                                <g:set var="lblBtn" value="${5}"/>
+                                            </g:if>
+                                        </g:if>
+                                    </g:if>
+                                </g:if>
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && planillaInstance.contrato.oferta.concurso.obra.fechaInicio}">
+                                    <g:set var="lblBtn" value="${-6}"/>
+                                </g:if>
 
-</div>
+                                <g:if test="${lblBtn > 0}">
+                                    <g:if test="${lblBtn == 2}">
+                                        Enviar reajuste
+                                    </g:if>
+                                    <g:elseif test="${lblBtn == 3}">
+                                        Pedir pago
+                                    </g:elseif>
+                                    <g:if test="${lblBtn == 4}">
+                                        <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                            Informar pago
+                                        </a>
+                                    </g:if>
+                                </g:if>
+                                <g:elseif test="${lblBtn == -6}">
+                                    <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
+                                </g:elseif>
+                            </td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
 
-<div class="modal hide fade mediumModal" id="modal-Planilla">
-    <div class="modal-header" id="modalHeader">
-        <button type="button" class="close darker" data-dismiss="modal">
-            <i class="icon-remove-circle"></i>
-        </button>
+        </div>
 
-        <h3 id="modalTitle"></h3>
-    </div>
+        <div class="modal hide fade mediumModal" id="modal-Planilla">
+            <div class="modal-header" id="modalHeader">
+                <button type="button" class="close darker" data-dismiss="modal">
+                    <i class="icon-remove-circle"></i>
+                </button>
 
-    <div class="modal-body" id="modalBody">
-    </div>
+                <h3 id="modalTitle"></h3>
+            </div>
 
-    <div class="modal-footer" id="modalFooter">
-    </div>
-</div>
+            <div class="modal-body" id="modalBody">
+            </div>
 
-<script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
+            <div class="modal-footer" id="modalFooter">
+            </div>
+        </div>
 
-    function submitForm(btn) {
-        if ($("#frmSave-Planilla").valid()) {
-            btn.replaceWith(spinner);
-        }
-        $("#frmSave-Planilla").submit();
-    }
+        <script type="text/javascript">
+            var url = "${resource(dir:'images', file:'spinner_24.gif')}";
+            var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
-    $(function () {
-        $('[rel=tooltip]').tooltip();
+            function submitForm(btn) {
+                if ($("#frmSave-Planilla").valid()) {
+                    btn.replaceWith(spinner);
+                }
+                $("#frmSave-Planilla").submit();
+            }
 
-        $(".paginate").paginate({
-            maxRows        : 10,
-            searchPosition : $("#busqueda-Planilla"),
-            float          : "right"
-        });
+            $(function () {
+                $('[rel=tooltip]').tooltip();
 
-        $(".btn-pagar").click(function () {
-            var $btn = $(this);
-            var tipo = $btn.data("tipo").toString();
-            $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'pago_ajax')}",
-                data    : {
-                    id   : $btn.data("id"),
-                    tipo : tipo
-                },
-                success : function (msg) {
+                $(".paginate").paginate({
+                    maxRows        : 10,
+                    searchPosition : $("#busqueda-Planilla"),
+                    float          : "right"
+                });
+
+                $(".btn-pagar").click(function () {
+                    var $btn = $(this);
+                    var tipo = $btn.data("tipo").toString();
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'pago_ajax')}",
+                        data    : {
+                            id   : $btn.data("id"),
+                            tipo : tipo
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            switch (tipo) {
+                                case "2":
+                                    $("#modalTitle").html("Enviar reajuste");
+                                    break;
+                                case "3":
+                                    $("#modalTitle").html("Pedir pago");
+                                    break;
+                                case "4":
+                                    $("#modalTitle").html("Informar pago");
+                                    break;
+                            }
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-Planilla").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn new
+
+                $(".btn-new").click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'form_ajax')}",
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                            $("#modalTitle").html("Crear Planilla");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-Planilla").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn new
+
+                $(".btn-edit").click(function () {
+                    var id = $(this).data("id");
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'form_ajax')}",
+                        data    : {
+                            id : id
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
+                            $("#modalTitle").html("Editar Planilla");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-Planilla").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn edit
+
+                $(".btn-show").click(function () {
+                    var id = $(this).data("id");
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'show_ajax')}",
+                        data    : {
+                            id : id
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
+                            $("#modalTitle").html("Ver Planilla");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk);
+                            $("#modal-Planilla").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn show
+
+                $(".btn-delete").click(function () {
+                    var id = $(this).data("id");
+                    $("#id").val(id);
                     var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+                    var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
 
-                    btnSave.click(function () {
-                        submitForm(btnSave);
+                    btnDelete.click(function () {
+                        btnDelete.replaceWith(spinner);
+                        $("#frmDelete-Planilla").submit();
                         return false;
                     });
 
-                    switch (tipo) {
-                        case "2":
-                            $("#modalTitle").html("Enviar reajuste");
-                            break;
-                        case "3":
-                            $("#modalTitle").html("Pedir pago");
-                            break;
-                        case "4":
-                            $("#modalTitle").html("Informar pago");
-                            break;
-                    }
-
-                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-
-                    $("#modalBody").html(msg);
-                    $("#modalFooter").html("").append(btnOk).append(btnSave);
+                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
+                    $("#modalTitle").html("Eliminar Planilla");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Planilla?</p>");
+                    $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-Planilla").modal("show");
-                }
-            });
-            return false;
-        }); //click btn new
+                    return false;
+                });
 
-        $(".btn-new").click(function () {
-            $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'form_ajax')}",
-                success : function (msg) {
-                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                    btnSave.click(function () {
-                        submitForm(btnSave);
-                        return false;
-                    });
-
-                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                    $("#modalTitle").html("Crear Planilla");
-                    $("#modalBody").html(msg);
-                    $("#modalFooter").html("").append(btnOk).append(btnSave);
-                    $("#modal-Planilla").modal("show");
-                }
-            });
-            return false;
-        }); //click btn new
-
-        $(".btn-edit").click(function () {
-            var id = $(this).data("id");
-            $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'form_ajax')}",
-                data    : {
-                    id : id
-                },
-                success : function (msg) {
-                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                    var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                    btnSave.click(function () {
-                        submitForm(btnSave);
-                        return false;
-                    });
-
-                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                    $("#modalTitle").html("Editar Planilla");
-                    $("#modalBody").html(msg);
-                    $("#modalFooter").html("").append(btnOk).append(btnSave);
-                    $("#modal-Planilla").modal("show");
-                }
-            });
-            return false;
-        }); //click btn edit
-
-        $(".btn-show").click(function () {
-            var id = $(this).data("id");
-            $.ajax({
-                type    : "POST",
-                url     : "${createLink(action:'show_ajax')}",
-                data    : {
-                    id : id
-                },
-                success : function (msg) {
-                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
-                    $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                    $("#modalTitle").html("Ver Planilla");
-                    $("#modalBody").html(msg);
-                    $("#modalFooter").html("").append(btnOk);
-                    $("#modal-Planilla").modal("show");
-                }
-            });
-            return false;
-        }); //click btn show
-
-        $(".btn-delete").click(function () {
-            var id = $(this).data("id");
-            $("#id").val(id);
-            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-            var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
-
-            btnDelete.click(function () {
-                btnDelete.replaceWith(spinner);
-                $("#frmDelete-Planilla").submit();
-                return false;
             });
 
-            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-            $("#modalTitle").html("Eliminar Planilla");
-            $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Planilla?</p>");
-            $("#modalFooter").html("").append(btnOk).append(btnDelete);
-            $("#modal-Planilla").modal("show");
-            return false;
-        });
+        </script>
 
-    });
-
-</script>
-
-</body>
+    </body>
 </html>
