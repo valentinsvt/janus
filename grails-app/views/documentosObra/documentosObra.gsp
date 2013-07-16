@@ -40,6 +40,7 @@
     <li><a href="#tab-presupuesto">Presupuesto</a></li>
     <li><a href="#tab-memorando">Memorando</a></li>
     <li><a href="#tab-polinomica">F. Polinómica</a></li>
+    <li><a href="#tab-memorandoPresu">Memorando Admi</a></li>
     <li><a href="#tab-textosFijos">Textos Fijos</a></li>
 
 </ul>
@@ -804,10 +805,276 @@
 </div>
 
 
+<div id="tab-memorandoPresu" class="tab" style="">
+
+<div class="cabecera">
+
+    <fieldset class="borde">
+        <legend>Cabecera</legend>
+
+        %{--<div class="span6">--}%
+            %{--<div class="span1">Memo N°</div>--}%
+
+            %{--<div class="span3"><g:textField name="numeroMemo" value="${obra?.memoSalida}" disabled="true"/></div>--}%
+        %{--</div>--}%
+
+
+        <div class="span6">
+            <div class="span1">PARA:</div>
+            <div class="span3"><g:select name="paraMemoPresu" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>
+        </div>
+
+        <div class="span6">
+            <div class="span1">DE:</div>
+
+
+            <div class="span3"><g:textField name="deMemoPresu" style="width: 470px"
+                                            value="${persona?.departamento?.descripcion}"
+                                            disabled="true"/></div>
+
+        </div>
+        <div class="span6">
+            <div class="span1">FECHA:</div>
+            <div class="span3"><g:textField name="fechaMemoPresu" style="width: 200px" value="${new java.util.Date().format("dd-MM-yyyy")}" disabled="true"/> </div>
+
+        </div>
+
+        <div class="span6">
+            <div class="span1">ASUNTO:</div>
+            <div class="span3"><g:textField name="asuntoMemoPresu" style="width: 470px" value="" maxlength="100"/></div>
+
+        </div>
+
+
+    </fieldset>
+
+</div>
+
+<div class="texto">
+
+    <fieldset class="borde">
+        <legend>Texto</legend>
+
+        <g:form class="memoGrabarPresu" name="frm-memoPresu" controller="auxiliar" action="saveMemoPresu">
+
+            <g:hiddenField name="id" value="${"1"}"/>
+
+            <g:hiddenField name="obra" value="${obra?.id}"/>
+
+            <div class="span6">
+
+                <div class="span1">Texto</div>
+
+                <div class="span3"><g:textArea name="notaMemoAd" value="${auxiliarFijo?.notaMemoAd}" rows="4" cols="4"
+                                               style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
+                                               disabled="true"/></div>
+
+            </div>
+            
+            <div class="span6">
+                
+                %{--<g:select name="textoPresu" from=""--}%
+                
+            </div>
+
+
+            %{--<div class="span6">--}%
+                %{--<div class="span1">Pie</div>--}%
+
+                %{--<div class="span3"><g:textArea name="memo2" value="${auxiliarFijo?.memo2}" rows="4" cols="4"--}%
+                                               %{--style="width: 600px; height: 55px; margin-left: -50px; resize: none;"--}%
+                                               %{--disabled="true"/></div>--}%
+
+            %{--</div>--}%
+
+        </g:form>
+
+        <div class="span6" style="margin-top: 10px">
+            <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+                <button class="btn" id="btnEditarMemoPresu">Editar</button>
+                <button class="btn" id="btnAceptarMemopresu">Aceptar</button>
+
+            </div>
+        </div>
+
+
+
+    </fieldset>
+
+</div>
+
+<div class="valores">
+    <fieldset class="borde">
+        <legend>Valores</legend>
+        <div class="span7">
+        %{--<div class="span3">Presupuesto Referencial por administración directa:</div>--}%
+            <div class="span7">
+            <div class="span3">Presupuesto Referencial por Contrato:</div>
+
+            <div class="span2">
+                <g:textField name="baseMemoPresu" style="width: 100px" disabled="true"
+                             value="${formatNumber(number: totalPresupuestoBien, format: '####.##', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
+            </div>
+        </div>
+
+            <div class="span7">
+            <div class="span3">Materiales:</div>
+            <div class="span2">
+                <g:textField name="materialesMemo" style="width: 100px"/>
+            </div>
+            </div>
+            <div class="span7">
+            <div class="span3">Mano de Obra:</div>
+            <div class="span2">
+                <g:textField name="materialesMemo" style="width: 100px"/>
+            </div>
+            </div>
+            <div class="span7">
+            <div class="span3">Equipos:</div>
+            <div class="span2">
+                <g:textField name="materialesMemo" style="width: 100px"/>
+            </div>
+            </div>
+            <div class="span7">
+
+                <div class="span2">Costos Indirectos:</div>
+                %{--<div class="span3" style="margin-right: ">--}%
+                    <g:textField name="costoPorcentaje" style="width: 50px"/>
+                    <g:textField name="materialesMemo" style="width: 100px"/>
+                </div>
+
+            </div>
+        </div>
+
+     </fieldset>
+
+</div>
+
+
+<div class="setFirmas" style="margin-top: -10px">
+
+    <fieldset class="borde">
+
+        <legend>Set de Firmas</legend>
+
+        <div class="span6">
+
+            <elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"
+                        optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"
+                        optionClass="${{ it?.cargo }}" style="width: 350px"/>
+
+
+            <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
+                <button class="btn btnAdicionar" id="memoPresu">Adicionar</button>
+
+            </div>
+
+        </div>
+
+        <div class="span6" style="width: 700px; margin-top: -20px">
+
+            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasMemoPresu">
+
+                <thead>
+                <tr>
+                    %{--<th style="width: 50px">N°</th>--}%
+                    <th style="width: 350px">Nombre</th>
+                    <th style="width: 250px">Puesto</th>
+                    <th style="width: 20px"></th>
+
+                </tr>
+
+                </thead>
+
+                <tbody id="firmasFijasMemoPresu">
+
+                <g:if test="${obra?.inspector}">
+
+                    <tr data-id="${obra?.inspector?.id}">
+
+                        %{--<td>--}%
+
+                        %{--</td>--}%
+
+                        <td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
+
+                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
+
+                        </td>
+                        <td>
+                            ${obra?.inspector?.cargo}
+
+                        </td>
+                        <td>
+                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
+                        </td>
+
+                    </tr>
+                </g:if>
+
+
+                <g:if test="${obra?.revisor}">
+                    <tr data-id="${obra?.revisor?.id}">
+
+                        %{--<td>--}%
+
+                        %{--</td>--}%
+                        <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
+                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
+                        </td>
+                        <td>
+                            ${obra?.revisor?.cargo}
+                        </td>
+                        <td>
+                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
+                        </td>
+
+                    </tr>
+                </g:if>
+                <g:if test="${obra?.responsableObra}">
+
+                    <tr data-id="${obra?.responsableObra?.id}">
+
+                        %{--<td>--}%
+
+                        %{--</td>--}%
+                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
+                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
+                        </td>
+                        <td>
+                            ${obra?.responsableObra?.cargo}
+                        </td>
+                        <td>
+                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
+                        </td>
+                    </tr>
+
+                </g:if>
+
+                </tbody>
+
+
+
+                <tbody id="bodyFirmas_memoPresu">
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </fieldset>
+
+</div>
+
+</div>
+
+
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
     <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
     <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-    <button class="btn" id="btnExcel"><i class="icon-table"></i> Presupuesto a Excel</button>
+    %{--<button class="btn" id="btnExcel"><i class="icon-table"></i> Presupuesto a Excel</button>--}%
 
 </div>
 

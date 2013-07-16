@@ -33,10 +33,10 @@
             <i class="icon-arrow-left"></i>
             Contrato
         </g:link>
-        <g:link action="form" class="btn" params="[contrato: contrato.id]">
-            <i class="icon-file"></i>
-            Nueva planilla
-        </g:link>
+        %{--<g:link action="form" class="btn" params="[contrato: contrato.id]">--}%
+            %{--<i class="icon-file"></i>--}%
+            %{--Nueva planilla--}%
+        %{--</g:link>--}%
     </div>
 
     <div class="span3" id="busqueda-Planilla"></div>
@@ -163,18 +163,18 @@
 
                     <g:if test="${lblBtn > 0}">
                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
-                            <g:if test="${lblBtn == 2}">
-                                Enviar reajuste
+                            %{--<g:if test="${lblBtn == 2}">--}%
+                                %{--Enviar reajuste--}%
+                            %{--</g:if>--}%
+                            <g:if test="${lblBtn == 3}">
+                                Pedir pago
                             </g:if>
-                            %{--<g:elseif test="${lblBtn == 3}">--}%
-                                %{--Pedir pago--}%
-                            %{--</g:elseif>--}%
                             %{--<g:elseif test="${lblBtn == 4}">--}%
                                 %{--Informar pago--}%
                             %{--</g:elseif>--}%
-                            %{--<g:elseif test="${lblBtn == 5}">--}%
-                                %{--Iniciar Obra--}%
-                            %{--</g:elseif>--}%
+                            <g:if test="${lblBtn == 5}">
+                            Iniciar Obra
+                            </g:if>
                         </a>
                     </g:if>
                     <g:elseif test="${lblBtn == -6}">
