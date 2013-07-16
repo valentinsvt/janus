@@ -334,7 +334,21 @@
 
                             <li>
                                 <g:link controller="planilla" action="list" id="${contrato?.id}">
-                                    <i class=" icon-file-alt"></i>Planillas
+                                    <i class=" icon-file-alt"></i>Planillas Fiscalizador
+                                </g:link>
+                            </li>
+
+
+                            <li>
+                                <g:link controller="planilla" action="listAdmin" id="${contrato?.id}">
+                                    <i class=" icon-file-alt"></i>Planillas Admin. Cont.
+                                </g:link>
+                            </li>
+
+
+                            <li>
+                                <g:link controller="planilla" action="listFinanciero" id="${contrato?.id}">
+                                    <i class=" icon-file-alt"></i>Planillas Financiero
                                 </g:link>
                             </li>
 
