@@ -40,7 +40,7 @@
     <li><a href="#tab-presupuesto">Presupuesto</a></li>
     <li><a href="#tab-memorando">Memorando</a></li>
     <li><a href="#tab-polinomica">F. Polinómica</a></li>
-    %{--<li><a href="#tab-memorandoPresu">Memorando Admi</a></li>--}%
+    <li><a href="#tab-memorandoPresu">Memorando Admi</a></li>
     <li><a href="#tab-textosFijos">Textos Fijos</a></li>
 
 </ul>
@@ -955,122 +955,122 @@
 </div>
 
 
-<div class="setFirmas" style="margin-top: -10px">
+%{--<div class="setFirmas" style="margin-top: -10px">--}%
 
-    <fieldset class="borde">
+    %{--<fieldset class="borde">--}%
 
-        <legend>Set de Firmas</legend>
+        %{--<legend>Set de Firmas</legend>--}%
 
-        <div class="span6">
+        %{--<div class="span6">--}%
 
-            <elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"
-                        optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"
-                        optionClass="${{ it?.cargo }}" style="width: 350px"/>
+            %{--<elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"--}%
+                        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
+                        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
 
 
-            <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
-                <button class="btn btnAdicionar" id="memoPresu">Adicionar</button>
+            %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                %{--<button class="btn btnAdicionar" id="memoPresu">Adicionar</button>--}%
 
-            </div>
+            %{--</div>--}%
 
-        </div>
+        %{--</div>--}%
 
-        <div class="span6" style="width: 700px; margin-top: -20px">
+        %{--<div class="span6" style="width: 700px; margin-top: -20px">--}%
 
-            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasMemoPresu">
+            %{--<table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasMemoPresu">--}%
 
-                <thead>
-                <tr>
+                %{--<thead>--}%
+                %{--<tr>--}%
                     %{--<th style="width: 50px">N°</th>--}%
-                    <th style="width: 350px">Nombre</th>
-                    <th style="width: 250px">Puesto</th>
-                    <th style="width: 20px"></th>
+                    %{--<th style="width: 350px">Nombre</th>--}%
+                    %{--<th style="width: 250px">Puesto</th>--}%
+                    %{--<th style="width: 20px"></th>--}%
 
-                </tr>
+                %{--</tr>--}%
 
-                </thead>
+                %{--</thead>--}%
 
-                <tbody id="firmasFijasMemoPresu">
+                %{--<tbody id="firmasFijasMemoPresu">--}%
 
-                <g:if test="${obra?.inspector}">
+                %{--<g:if test="${obra?.inspector}">--}%
 
-                    <tr data-id="${obra?.inspector?.id}">
-
-                        %{--<td>--}%
-
-                        %{--</td>--}%
-
-                        <td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
-
-                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
-
-                        </td>
-                        <td>
-                            ${obra?.inspector?.cargo}
-
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
-                        </td>
-
-                    </tr>
-                </g:if>
-
-
-                <g:if test="${obra?.revisor}">
-                    <tr data-id="${obra?.revisor?.id}">
+                    %{--<tr data-id="${obra?.inspector?.id}">--}%
 
                         %{--<td>--}%
 
                         %{--</td>--}%
-                        <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
-                        </td>
-                        <td>
-                            ${obra?.revisor?.cargo}
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
-                        </td>
 
-                    </tr>
-                </g:if>
-                <g:if test="${obra?.responsableObra}">
+                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
 
-                    <tr data-id="${obra?.responsableObra?.id}">
+                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.inspector?.cargo}--}%
+
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+
+
+                %{--<g:if test="${obra?.revisor}">--}%
+                    %{--<tr data-id="${obra?.revisor?.id}">--}%
 
                         %{--<td>--}%
 
                         %{--</td>--}%
-                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
-                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
-                        </td>
-                        <td>
-                            ${obra?.responsableObra?.cargo}
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
-                        </td>
-                    </tr>
+                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.revisor?.cargo}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
 
-                </g:if>
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+                %{--<g:if test="${obra?.responsableObra}">--}%
 
-                </tbody>
+                    %{--<tr data-id="${obra?.responsableObra?.id}">--}%
+
+                        %{--<td>--}%
+
+                        %{--</td>--}%
+                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.responsableObra?.cargo}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+
+                %{--</g:if>--}%
+
+                %{--</tbody>--}%
 
 
 
-                <tbody id="bodyFirmas_memoPresu">
+                %{--<tbody id="bodyFirmas_memoPresu">--}%
 
 
-                </tbody>
+                %{--</tbody>--}%
 
-            </table>
+            %{--</table>--}%
 
-        </div>
+        %{--</div>--}%
 
-    </fieldset>
+    %{--</fieldset>--}%
 
-</div>
+%{--</div>--}%
 
 </div>
 
