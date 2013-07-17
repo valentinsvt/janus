@@ -1,14 +1,18 @@
 .noprint {
-    display: none;
+    display : none;
 }
 
 .siImprime {
-    display: block;
+    display : block;
+}
+
+.soloPrint {
+    display : block !important;
 }
 
 @media print {
     @page {
-        size : landscape;
-        margin: 8%;
+        size   : landscape;
+        margin : 8%;
     }
 }

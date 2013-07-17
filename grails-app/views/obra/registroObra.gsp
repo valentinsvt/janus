@@ -21,6 +21,9 @@
         <script src="${resource(dir: 'js/jquery/plugins/editable/bootstrap-editable/js', file: 'bootstrap-editable.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/editable/bootstrap-editable/css', file: 'bootstrap-editable.css')}" rel="stylesheet"/>
 
+        <script src="${resource(dir: 'js/jquery/plugins/editable/inputs-ext/coords', file: 'coords.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/editable/inputs-ext/coords', file: 'coords.css')}" rel="stylesheet"/>
+
         <style type="text/css">
 
         .formato {
@@ -41,6 +44,13 @@
 
         .editable {
             border-bottom : 1px dashed;
+        }
+
+        .error {
+            background  : inherit !important;
+            border      : solid 2px #C17474;
+            font-weight : bold;
+            padding     : 10px;
         }
         </style>
 
@@ -177,7 +187,7 @@
                     <div class="span1">Código:</div>
 
                     <g:if test="${obra?.codigo != null}">
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20" title="Código de la Obra" /></div>
+                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20" title="Código de la Obra"/></div>
                     </g:if>
                     <g:else>
                         <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" maxlength="20" title="Código de la Obra"/></div>
@@ -330,13 +340,14 @@
 
                     <div class="span2">
                         <g:set var="coords" value="${obra?.coordenadas}"/>
-                        <g:if test="${obra?.id == null}">
+                        <g:if test="${obra?.id == null || coords == null || coords?.trim() == ''}">
                             <g:set var="coords" value="${'S 0 12.5999999 W 78 31.194'}"/>
                         </g:if>
                         <g:hiddenField name="coordenadas" value="${coords}"/>
                         <a href="#" id="coords" class="editable">
                             ${coords}
                         </a>
+                        <g:set var="coordsParts" value="${coords.split(' ')}"/>
                     </div>
                     %{--<g:if test="${obra?.id != null}">--}%
 
@@ -378,6 +389,7 @@
                 <div class="span12" style="margin-top: 10px">
 
                     <div class="span2 formato" style="width: 60px;">Destino:</div>
+
                     <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destindo de documentos" noSelection="['': 'Seleccione ...']"/></div>
 
 
@@ -821,10 +833,44 @@
             $(function () {
 
                 $('#coords').editable({
-                    type    : 'text',
-                    title   : 'Registre las coordenadas',
-                    success : function (response, newValue) {
-                        $("#coordenadas").val(newValue);
+                    type      : 'coords',
+                    emptytext : 'Ingrese las coordenadas',
+                    title     : 'Registre las coordenadas de la obra',
+                    value     : {
+                        NS : "${coordsParts[0]}",
+                        NG : "${coordsParts[1]}",
+                        NM : "${coordsParts[2]}",
+                        EW : "${coordsParts[3]}",
+                        EG : "${coordsParts[4]}",
+                        EM : "${coordsParts[5]}"
+                    },
+                    validate  : function (value) {
+                        var ns = $.trim(value.NS);
+                        var ng = $.trim(value.NG);
+                        var nm = $.trim(value.NM);
+                        var ew = $.trim(value.EW);
+                        var eg = $.trim(value.EG);
+                        var em = $.trim(value.EM);
+                        if (ns == '' || ng == '' || nm == '' || ew == '' || eg == '' || em == '') {
+                            return 'Por favor complete todos los campos';
+                        }
+                        if (isNaN(ng) || isNaN(nm) || isNaN(eg) || isNaN(em)) {
+                            return 'Por favor ingrese números válidos';
+                        }
+                        ng = parseInt(ng);
+                        eg = parseInt(eg);
+                        nm = parseFloat(nm);
+                        em = parseFloat(em);
+                        if (ng >= 90 || eg >= 90) {
+                            return "El valor de los grados debe ser inferior a 90";
+                        }
+                        if (nm >= 60 || em >= 60) {
+                            return "El valor de los minutos debe ser inferior a 60";
+                        }
+                    },
+                    success   : function (response, newValue) {
+                        var val = newValue.NS + ' ' + newValue.NG + ' ' + newValue.NM + ' ' + newValue.EW + ' ' + newValue.EG + ' ' + newValue.EM;
+                        $("#coordenadas").val(val);
                     }
                 });
 
@@ -963,7 +1009,9 @@
                     $("#modalFooter_busqueda").html("").append(btnOk);
                     $(".contenidoBuscador").html("");
                     $("#modal-busqueda").modal("show");
-                    setTimeout( function() { $( '#criterio' ).focus() }, 500 );
+                    setTimeout(function () {
+                        $('#criterio').focus()
+                    }, 500);
                 });
 
                 $("#nuevo").click(function () {

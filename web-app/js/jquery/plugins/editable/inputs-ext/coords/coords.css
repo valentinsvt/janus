@@ -1,0 +1,9 @@
+.editable-coords {
+    display: block;
+    margin-bottom: 5px;  
+}
+
+.editable-coords span {
+    width: 70px;  
+    display: inline-block;
+}
