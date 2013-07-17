@@ -89,6 +89,10 @@
                 %{--<div class="span2" style="float: left; width: 200px">Latitud: <g:textField name="latitud" class="latitud number" id="latitud" style="width: 100px"/></div>--}%
 
                 %{--<div class="span2" style="float: left; width: 200px">Longitud: <g:textField name="longitud" class="longitud number" id="longitud" style="width: 100px"/></div>--}%
+            <div style="margin: 20px; margin-top: 80px;" class="noprint">
+                <b>Nota:</b>
+               <p>Para imprimir use la configuración de página definir la horientación del papel horizontal y una escala de 90% para cubrir toda la hoja en tamaño A4</p>
+            </div>
 
             </div>
         </div>
@@ -124,6 +128,18 @@
                 <div style="margin:  0 0 0 20px;">
                     ${obra.comunidad.parroquia.nombre}
                 </div>
+
+
+                <div style="margin: 20px 0 0 20px;">
+                    <span class="control-label">
+                        Comunidad:
+                    </span>
+                </div>
+
+                <div style="margin:  0 0 0 20px;">
+                    ${obra.comunidad?.nombre}
+                </div>
+
             </div>
         </div>
         %{--$("#imprime").append("<p>Cantón: " + "${obra.comunidad.parroquia.canton.nombre}" + "</p>")--}%
