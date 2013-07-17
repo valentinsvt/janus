@@ -3297,34 +3297,34 @@ class ReportesController {
         addEmptyLine(txtIzq, 1);
         txtIzq.setAlignment(Element.ALIGN_LEFT);
 
-        PdfPTable tablaCabecera = new PdfPTable(4);
+        PdfPTable tablaCabecera = new PdfPTable(2);
         tablaCabecera.setWidthPercentage(100);
-        tablaCabecera.setWidths(arregloEnteros([5,7,2,60]))
+        tablaCabecera.setWidths(arregloEnteros([5,60]))
 
 
         if (obra?.memoSalida == null) {
             addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph("N°", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("N°:", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaCabecera, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         } else {
 
 
             addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph("N°", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph(obra?.memoSalida, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("N°: " + obra?.memoSalida, times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaCabecera, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaCabecera, new Paragraph(, times8bold), prmsHeaderHoja)
 
         }
 
-        PdfPTable tablaQuito = new PdfPTable(3);
+        PdfPTable tablaQuito = new PdfPTable(2);
         tablaQuito.setWidthPercentage(100);
-        tablaQuito.setWidths(arregloEnteros([5,3,60]))
+        tablaQuito.setWidths(arregloEnteros([5,60]))
 
         addCellTabla(tablaQuito, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaQuito, new Paragraph("Quito,", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaQuito, new Paragraph(printFecha(obra?.fechaCreacionObra), times8bold), prmsHeaderHoja)
+        addCellTabla(tablaQuito, new Paragraph("Quito, " + printFecha(obra?.fechaCreacionObra), times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaQuito, new Paragraph(), times8bold), prmsHeaderHoja)
 
 
 
@@ -3406,7 +3406,7 @@ class ReportesController {
             addCellTabla(tablaMemo, new Paragraph("Oficio N°: " + obra?.oficioSalida, times10normal), prmsHeaderHoja)
 
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph("Fórmula Polinómica :", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph("Fórmula Polinómica", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(obra?.formulaPolinomica, times10normal), prmsHeaderHoja)
 

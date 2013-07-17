@@ -97,13 +97,13 @@
         .theader {
 
             /*border: 1px solid #000000;*/
-            margin-bottom: 30px !important;
+            /*margin-bottom: 30px !important;*/
             border-bottom: 1px solid #000000;
 
         }
 
         .theaderup {
-            margin-top: 30px !important;
+            /*margin-top: 30px !important;*/
             /*border: 1px solid #000000;*/
             border-top: 1px solid #000000;
 

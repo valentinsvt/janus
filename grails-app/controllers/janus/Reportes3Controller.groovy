@@ -47,17 +47,35 @@ class Reportes3Controller {
         def obra = Obra.get(params.obra)
         def detalle
         def valores
+        def subPre
+        def fechaNueva = printFecha(new Date());
+        def fechaPU = printFecha(obra?.fechaPreciosRubros);
+
+        if (params.sub != '-1'){
+
+            subPre= SubPresupuesto.get(params.sub).descripcion
+
+        }else {
+
+            subPre= -1
+
+        }
+
 
         if (params.sub)
 //            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
 
-            valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
+            if (params.sub == '-1'){
+                valores = preciosService.rbro_pcun_v2(obra.id)
 
-        else
+            }else {
+
+                valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
+
+            }
+          else
 //            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
             valores = preciosService.rbro_pcun_v2(obra.id)
-
-
 
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
@@ -78,7 +96,9 @@ class Reportes3Controller {
 //        println "precios "+precios
 
 
-        [detalle: detalle, precios: precios, subPres: subPres, subPre: SubPresupuesto.get(params.sub).descripcion, obra: obra, indirectos: indirecto * 100, valores: valores]
+//        [detalle: detalle, precios: precios, subPres: subPres, subPre: SubPresupuesto.get(params.sub).descripcion, obra: obra, indirectos: indirecto * 100, valores: valores]
+        [detalle: detalle, precios: precios, subPres: subPres, subPre: subPre, obra: obra, indirectos: indirecto * 100, valores: valores, fechaNueva: fechaNueva, fechaPU: fechaPU]
+
     }
 
     def imprimirRubroVolObra() {
@@ -242,7 +262,7 @@ class Reportes3Controller {
         def totalIndi = totalRubro * indi / 100
         totalIndi = totalIndi.toDouble().round(5)
         tablaIndi += "<thead><tr><th class='tituloHeader'>COSTOS INDIRECTOS</th></tr><tr><th colspan='3' class='theader'></th></tr><tr><th style='width:550px' class='padTopBot'>DESCRIPCIÓN</th><th>PORCENTAJE</th><th>VALOR</th></tr>    <tr><th colspan='3' class='theaderup'></th></tr>  </thead>"
-        tablaIndi += "<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align:right'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
+        tablaIndi += "<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align:center'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
         tablaIndi += "</table>"
 
 

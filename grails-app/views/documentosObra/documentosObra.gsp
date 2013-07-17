@@ -40,7 +40,7 @@
     <li><a href="#tab-presupuesto">Presupuesto</a></li>
     <li><a href="#tab-memorando">Memorando</a></li>
     <li><a href="#tab-polinomica">F. Polinómica</a></li>
-    <li><a href="#tab-memorandoPresu">Memorando Admi</a></li>
+    %{--<li><a href="#tab-memorandoPresu">Memorando Admi</a></li>--}%
     <li><a href="#tab-textosFijos">Textos Fijos</a></li>
 
 </ul>

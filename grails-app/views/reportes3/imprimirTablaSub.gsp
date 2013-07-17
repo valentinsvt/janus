@@ -1,7 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <title>Sub presupuesto ${subPre}</title>
+        <g:if test="${subPre == -1}">
+
+            <title>Todos los Subpresupuestos</title>
+
+        </g:if>
+        <g:else>
+
+            <title>Sub presupuesto ${subPre}</title>
+        </g:else>
+
         <link href="../font/open/stylesheet.css" rel="stylesheet" type="text/css"/>
         <link href="../font/tulpen/stylesheet.css" rel="stylesheet" type="text/css"/>
         <link href="../css/custom.css" rel="stylesheet" type="text/css"/>
@@ -43,6 +52,30 @@
 
             border-bottom: 1px solid #000000 !important;
             border-top: 1px solid #000000 !important;
+
+        }
+
+        .theaderBot {
+
+            /*border: 1px solid #000000;*/
+
+            border-bottom: 1px solid #000000;
+
+        }
+
+        .theaderup {
+
+            /*border: 1px solid #000000;*/
+            border-top: 1px solid #000000;
+
+
+
+        }
+
+        .padTopBot{
+
+            padding-top: 7px !important;
+            padding-bottom: 7px !important;
 
         }
 
@@ -110,51 +143,59 @@
         <div class="hoja">
 
             <div class="tituloPdf">
-                <p>
+                <p style="font-size: 18px">
                     <b>G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
-                <p>
-                    COORDINACIÓN DE COSTOS
+                <p style="font-size: 14px">
+                   <b> COORDINACIÓN DE COSTOS </b>
                 </p>
 
-                <p>
-                    ANALISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: ${subPre.toUpperCase()}
+                <p style="font-size: 14px">
+                    <g:if test="${subPre == -1}">
+                        <b>ANALISIS DE PRECIOS UNITARIOS DE SUBPRESUPUESTOS</b>
+                    </g:if>
+                    <g:else>
+                        <b>ANALISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: ${subPre.toUpperCase()}</b>
+                    </g:else>
+
                 </p>
             </div>
 
             <div style="margin-top: 20px">
                 <div class="row-fluid">
-                    <div class="span7">
-                        <b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}
+                    <div class="span3" style="margin-right: 195px !important;">
+                        %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
+                        <b>Fecha:</b> ${fechaNueva}
                     </div>
 
-                    <div class="span3">
-                        <b>Fecha Act. P.U:</b> ${obra.fechaPreciosRubros?.format("dd-MM-yyyy")}
+                    <div class="span4">
+                        %{--<b>Fecha Act. P.U:</b> ${obra.fechaPreciosRubros?.format("dd-MM-yyyy")}--}%
+                        <b>Fecha Act. P.U:</b> ${fechaPU}
                     </div>
                 </div>
 
             </div>
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
-                    <tr>
-                        <th style="width: 20px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+                    <tr class="theaderBot thederup padTopBot">
+                        <th style="width: 20px;" class="theaderBot theaderup padTopBot">
                             N°
                         </th>
-                        <th style="width: 80px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
                             Rubro
                         </th>
-                        <th style="width: 550px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+                        <th style="width: 550px;" class="theaderBot theaderup padTopBot">
                             Descripción
                         </th>
-                        <th style="width: 35px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000" class="col_unidad">
+                        <th style="width: 35px;" class="col_unidad theaderBot theaderup padTopBot">
                             Unidad
                         </th>
-                        <th style="width: 80px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
                             Cantidad
                         </th>
-                        <th class="col_precio" style="width:110px ;border-top: 1px solid #000000;  border-bottom: 1px solid #000000">P. U.</th>
-                        <th class="col_total" style="width:110px; border-top: 1px solid #000000;  border-bottom: 1px solid #000000">C.Total</th>
+                        <th class="col_precio theaderBot theaderup padTopBot" style="width:110px ;">P. U.</th>
+                        <th class="col_total  theaderBot theaderup padTopBot" style="width:110px;">C.Total</th>
                     </tr>
                 </thead>
                 <tbody id="tabla_material">

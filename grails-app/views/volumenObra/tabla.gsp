@@ -3,7 +3,7 @@
         <b>Subpresupuesto:</b>
         <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion"
                   style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"
-                  noSelection="['': 'TODOS']"></g:select>
+                  noSelection="['-1': 'TODOS']"></g:select>
 
         %{--todo descomentar esto--}%
         %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>--}%

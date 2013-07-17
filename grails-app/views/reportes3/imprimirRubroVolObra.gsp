@@ -168,15 +168,15 @@
         <div class="hoja">
 
             <div class="tituloPdf tituloHeader">
-                <p>
+                <p style="font-size: 18px">
                     <b>G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
-                <p>
+                <p style="font-size: 14px">
                     <b>COORDINACIÓN DE COSTOS</b>
                 </p>
 
-                <p>
+                <p style="font-size: 14px">
                     <b>ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO</b>
                 </p>
             </div>
@@ -194,17 +194,17 @@
                 </div>
 
                 <div class="row-fluid">
-                    <div class="span7">
+                    <div class="span3" style="margin-right: 195px !important;">
                         <b>Código:</b> ${rubro.codigo}
                     </div>
 
-                    <div class="span3">
+                    <div class="span4">
                         <b>Unidad:</b> ${rubro.unidad.codigo}
                     </div>
                 </div>
 
                 <div class="row-fluid">
-                    <div class="span8">
+                    <div class="span12">
                         <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>
                         <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(mayor)')}"></g:set>
                         <b>Descripción:</b> ${nombre}
