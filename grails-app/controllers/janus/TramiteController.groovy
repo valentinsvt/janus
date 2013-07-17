@@ -104,11 +104,11 @@ class TramiteController extends janus.seguridad.Shield {
         println "cargar datos dbf"
         try{
 //            def command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /media/docmaster.DBF"
-            def command="dbf2mysql -c -d dbf -Uroot -Proot -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /mnt/sad/docmaster.DBF"
+            def command="dbf2mysql -c -d dbf -Uroot -Proot -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO,MCREADOR,MUSDES /mnt/sad/docmaster.DBF"
             def proc = command.execute()
             proc.waitFor()
 //            command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
-            command="dbf2mysql -c -d dbf -Uroot -Proot -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /mnt/sad/doctrami.DBF"
+            command="dbf2mysql -c -d dbf -Uroot -Proot -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP,TECRADOR,TUSDES /mnt/sad/doctrami.DBF"
 
             proc = command.execute()
             def res = command.execute().inputStream.read()
