@@ -37,6 +37,11 @@
 
     <body>
 
+        <div class="row hide" id="divError">
+            <div class="span12 alert alert-error" id="spanError">
+            </div>
+        </div>
+
         <div class="datosObra span12" style="margin-bottom: 20px">
 
             <div class="span3" style="width: 180px;">
@@ -488,7 +493,12 @@
                         coords : $("#divCoords").data("coords")
                     },
                     success : function (msg) {
-                        console.log("Data Saved: " + msg);
+                        if (msg == "OK") {
+                            location.href = "${createLink(action:'registroObra', params: [obra: obra.id])}";
+                        } else {
+                            $("#spanError").html("Ha ocurrido un error al guardar las coordenadas de la obra.").show();
+                            $("#divError").show();
+                        }
                     }
                 });
             });
