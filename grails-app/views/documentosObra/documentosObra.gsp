@@ -926,23 +926,27 @@
             <div class="span7">
             <div class="span3">Mano de Obra:</div>
             <div class="span2">
-                <g:textField name="materialesMemo" style="width: 100px"/>
+                <g:textField name="manoObraMemo" style="width: 100px"/>
             </div>
             </div>
             <div class="span7">
             <div class="span3">Equipos:</div>
             <div class="span2">
-                <g:textField name="materialesMemo" style="width: 100px"/>
+                <g:textField name="equiposMemo" style="width: 100px"/>
             </div>
             </div>
             <div class="span7">
 
                 <div class="span2">Costos Indirectos:</div>
-                %{--<div class="span3" style="margin-right: ">--}%
+                <div class="span3" style="margin-left: 62px">
                     <g:textField name="costoPorcentaje" style="width: 50px"/>
-                    <g:textField name="materialesMemo" style="width: 100px"/>
+                    <g:textField name="costoMemo" style="width: 100px" disabled="true"/>
                 </div>
 
+            </div>
+            <div class="span7">
+            <div class="span3">TOTAL:</div>
+            <div class="span2"><g:textField name="totalMemoPresu" style="width: 100px" disabled="true"/></div>
             </div>
         </div>
 
@@ -2326,6 +2330,82 @@
         }
 
     });
+
+// $(function () {
+//
+//     $("#costoPorcentaje").click(function () {
+//        calculoPorcentaje();
+//
+//     });
+//
+//     function  calculoPorcentaje() {
+//         var porcentaje = 0
+//         porcentaje = ((parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) + parseFloat($("#equiposMemo").val()))*($("#costoPorcentaje").val()))/100
+//      $("#costoMemo").val(number_format(porcentaje, 2, ".", ""));
+//     }
+//
+//
+// });
+
+$(function () {
+
+     $("#materialesMemo").click(function () {
+         calculoPorcentaje();
+         sumaTotal();
+
+     });
+
+     $("#manoObraMemo").click(function () {
+         calculoPorcentaje();
+        sumaTotal();
+     });
+
+     $("#equiposMemo").click(function () {
+         calculoPorcentaje();
+         sumaTotal();
+
+     });
+
+    $("#equiposMemo,#manoObraMemo,#materialesMemo").keyup(function(ev) {
+       if(ev.keyCode == 13) {
+           calculoPorcentaje();
+           sumaTotal()
+       }
+    });
+
+
+
+//
+     $("#costoPorcentaje").click(function () {
+        calculoPorcentaje();
+         sumaTotal();
+
+     });
+
+     function  calculoPorcentaje() {
+         var porcentaje = 0
+         porcentaje = ((parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) + parseFloat($("#equiposMemo").val()))*($("#costoPorcentaje").val()))/100
+      $("#costoMemo").val(number_format(porcentaje, 2, ".", ""));
+     }
+
+//
+
+
+
+    function sumaTotal() {
+
+
+       var total = 0.0
+       total = parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) +
+               parseFloat($("#equiposMemo").val()) + parseFloat($("#costoMemo").val())
+
+       $("#totalMemoPresu").val(number_format(total,2,".",""))
+
+
+
+    }
+
+});
 
 
 
