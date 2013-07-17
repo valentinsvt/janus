@@ -1559,15 +1559,19 @@ class ReportesController {
             cell.setBorderWidth(params.w);
         }
         if(params.bordeTop){
-            cell.setBorderWidthTop(0.5)
+            cell.setBorderWidthTop(1)
             cell.setBorderWidthLeft(0)
             cell.setBorderWidthRight(0)
             cell.setBorderWidthBottom(0)
+            cell.setPaddingTop(7);
+
         }
         if(params.bordeBot){
-            cell.setBorderWidthBottom(0.5)
+            cell.setBorderWidthBottom(1)
             cell.setBorderWidthLeft(0)
             cell.setBorderWidthRight(0)
+            cell.setPaddingBottom(7)
+
             if(!params.bordeTop){
                 cell.setBorderWidthTop(0)
             }
@@ -2248,6 +2252,8 @@ class ReportesController {
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT,bordeTop:"1",bordeBot:"1"]
+        def prmsCellRightTop = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT,bordeTop:"1"]
+        def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT,bordeBot:"1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
@@ -2256,7 +2262,7 @@ class ReportesController {
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
                 prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
-                prmsCellRight2: prmsCellRight2]
+                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop,prmsCellRightBot: prmsCellRightBot ]
 
 
 
@@ -2338,7 +2344,7 @@ class ReportesController {
 
         PdfPTable tablaPresupuesto = new PdfPTable(7);
         tablaPresupuesto.setWidthPercentage(100);
-        tablaPresupuesto.setWidths(arregloEnteros([8,2,13,2,8,2,30]))
+        tablaPresupuesto.setWidths(arregloEnteros([12,2,13,2,8,2,26]))
 
         addCellTabla(tablaPresupuesto, new Paragraph("Memo Cant. Obra", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
@@ -2380,24 +2386,40 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.referencia, times8normal), prmsHeaderHoja)
 
-        addCellTabla(tablaPresupuesto, new Paragraph("Latitud", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph(g.formatNumber(number: obra?.latitud, minFractionDigits:
-                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times8normal), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("Longitud", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph(g.formatNumber(number: obra?.longitud, minFractionDigits:
-                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times8normal), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph("Coordenadas", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(obra?.coordenadas, times8normal), prmsHeaderHoja)
 
 
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(g.formatNumber(number: obra?., minFractionDigits:
+//                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times8normal), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph("Longitud", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(g.formatNumber(number: obra?.longitud, minFractionDigits:
+//                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times8normal), prmsHeaderHoja)
+
+        PdfPTable tablaCoordenadas = new PdfPTable(3);
+        tablaCoordenadas.setWidthPercentage(100);
+        tablaCoordenadas.setWidths(arregloEnteros([17,3,72]))
+
+        addCellTabla(tablaCoordenadas, new Paragraph("Coordenadas", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph(obra?.coordenadas, times8normal), prmsHeaderHoja)
+
+
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
 
 
 
@@ -2560,12 +2582,12 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "###,###", locale: "ec",maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
 
-            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRightBot)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
 
 
         }
@@ -2594,12 +2616,12 @@ class ReportesController {
 
 
 
-            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRightBot)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
 
 
         }
@@ -2638,12 +2660,12 @@ class ReportesController {
 
 
 
-            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRightBot)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
 
 
         }
@@ -2678,7 +2700,8 @@ class ReportesController {
 //        addCellTabla(tablaCondiciones, new Paragraph("Elaboró :", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaCondiciones, new Paragraph(obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
 
-        document.add(tablaPresupuesto)
+        document.add(tablaPresupuesto);
+        document.add(tablaCoordenadas);
 //        document.add(tablaHeaderVol)
         document.add(tablaVolObra)
         document.add(tablaTotal);
@@ -3274,38 +3297,40 @@ class ReportesController {
         addEmptyLine(txtIzq, 1);
         txtIzq.setAlignment(Element.ALIGN_LEFT);
 
-        PdfPTable tablaDatosMemo = new PdfPTable(4);
-        tablaDatosMemo.setWidthPercentage(100);
-        tablaDatosMemo.setWidths(arregloEnteros([5,7,2,60]))
+        PdfPTable tablaCabecera = new PdfPTable(4);
+        tablaCabecera.setWidthPercentage(100);
+        tablaCabecera.setWidths(arregloEnteros([5,7,2,60]))
 
 
         if (obra?.memoSalida == null) {
-//            txtIzq.add(new Paragraph("Memo N°: " + " ", times10bold));
-
-            addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatosMemo, new Paragraph("N°", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("N°", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         } else {
 
-//            txtIzq.add(new Paragraph("Memo N°: " + obra?.memoSalida, times10bold));
 
-            addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatosMemo, new Paragraph("N°", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatosMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatosMemo, new Paragraph(obra?.memoSalida, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("N°", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph(obra?.memoSalida, times8bold), prmsHeaderHoja)
 
         }
 
-//        txtIzq.add(new Paragraph("Quito, " + printFecha(obra?.fechaCreacionObra), times10bold));
-//        txtIzq.add(new Paragraph("DE : " + persona?.departamento?.descripcion, times10bold));
+        PdfPTable tablaQuito = new PdfPTable(3);
+        tablaQuito.setWidthPercentage(100);
+        tablaQuito.setWidths(arregloEnteros([5,3,60]))
+
+        addCellTabla(tablaQuito, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaQuito, new Paragraph("Quito,", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaQuito, new Paragraph(printFecha(obra?.fechaCreacionObra), times8bold), prmsHeaderHoja)
 
 
-        addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaDatosMemo, new Paragraph("Quito, ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaDatosMemo, new Paragraph(printFecha(obra?.fechaCreacionObra), times8bold), prmsHeaderHoja)
+
+        PdfPTable tablaDatosMemo = new PdfPTable(4);
+        tablaDatosMemo.setWidthPercentage(100);
+        tablaDatosMemo.setWidths(arregloEnteros([5,7,2,60]))
 
         addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaDatosMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -3351,14 +3376,11 @@ class ReportesController {
         addCellTabla(tablaDatosAux, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaDatosAux, new Paragraph(auxiliarFijo?.memo1, times10normal), prmsHeaderHoja)
 
-//
-//        txtIzq.add(new Paragraph(" ", times10bold));
-//
-//        txtIzq.add(new Paragraph(auxiliarFijo?.memo1, times10normal));
-//        txtIzq.add(new Paragraph(" ", times10normal));
 
         addEmptyLine(headers, 1);
         document.add(headers);
+        document.add(tablaCabecera);
+        document.add(tablaQuito);
         document.add(tablaDatosMemo);
         document.add(tablaLinea);
         document.add(tablaDatosAux);
@@ -3575,7 +3597,7 @@ class ReportesController {
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph("Valor Total :", times10bold), prmsHeaderHojaRight)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: valorTotal, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 
