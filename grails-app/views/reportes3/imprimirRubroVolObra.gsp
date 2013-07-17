@@ -107,6 +107,13 @@
 
         }
 
+        .padTopBot{
+
+            padding-top: 7px !important;
+            padding-bottom: 7px !important;
+
+        }
+
         .marginTop{
 
             margin-top:20px !important;
@@ -176,12 +183,12 @@
 
             <div style="margin-top: 20px">
                 <div class="row-fluid">
-                    <div class="span7">
+                    <div class="span3" style="margin-right: 195px !important;">
                         %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
                         <b>Fecha:</b> ${fechaSalida}
                     </div>
 
-                    <div class="span3">
+                    <div class="span4">
                         <b>Fecha Act. P.U:</b> ${fechaPrecios}
                     </div>
                 </div>

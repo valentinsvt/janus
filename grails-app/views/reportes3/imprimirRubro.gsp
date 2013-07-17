@@ -99,12 +99,14 @@
             /*border: 1px solid #000000;*/
             margin-bottom: 30px !important;
             border-bottom: 1px solid #000000;
+
         }
 
         .theaderup {
             margin-top: 30px !important;
             /*border: 1px solid #000000;*/
             border-top: 1px solid #000000;
+
 
 
         }
@@ -119,6 +121,12 @@
 
             font-size: 14px !important;
 
+        }
+
+        .padTopBot{
+
+            padding-top: 7px !important;
+            padding-bottom: 7px !important;
 
         }
 
