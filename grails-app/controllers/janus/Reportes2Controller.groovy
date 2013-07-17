@@ -977,7 +977,8 @@ class Reportes2Controller {
 //        // Create a reader
 //        PdfReader reader = new PdfReader(baos.toByteArray());
 //        // Create a stamper
-//        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(RESULT));
+////        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(RESULT));
+//        PdfStamper stamper = new PdfStamper(reader, baos);
 //        // Loop over the pages and add a header to each page
 //        int n = reader.getNumberOfPages();
 //        for (int i = 1; i <= n; i++) {
