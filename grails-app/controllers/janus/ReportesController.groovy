@@ -2240,18 +2240,23 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE,bordeTop:"1",bordeBot:"1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT,bordeTop:"1",bordeBot:"1"]
         def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT,bordeTop:"1",bordeBot:"1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2]
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                prmsCellRight2: prmsCellRight2]
 
 
 
@@ -2432,7 +2437,7 @@ class ReportesController {
 
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
 
-        tablaVolObra.setWidths(arregloEnteros([12, 40, 8, 12, 15, 15]))
+        tablaVolObra.setWidths(arregloEnteros([14, 43, 8, 10, 12, 15]))
 
 //        tablaHeaderVol.setWidths(arregloEnteros([100, 0, 0, 0, 0, 0]))
 
@@ -2452,9 +2457,9 @@ class ReportesController {
             addCellTabla(tablaVolObra, new Paragraph("Rubro N°", times8bold), prmsCellHead2)
             addCellTabla(tablaVolObra, new Paragraph("Descripción", times8bold), prmsCellHead2)
             addCellTabla(tablaVolObra, new Paragraph("Unidad", times8bold), prmsCellHead2)
-            addCellTabla(tablaVolObra, new Paragraph("Cantidad", times8bold), prmsCellHead2)
-            addCellTabla(tablaVolObra, new Paragraph("P. Unitario", times8bold), prmsCellHead2)
-            addCellTabla(tablaVolObra, new Paragraph("Costo Total", times8bold), prmsCellHead2)
+            addCellTabla(tablaVolObra, new Paragraph("Cantidad", times8bold), prmsCellHead3)
+            addCellTabla(tablaVolObra, new Paragraph("P. Unitario", times8bold), prmsCellHead3)
+            addCellTabla(tablaVolObra, new Paragraph("Costo Total", times8bold), prmsCellHead3)
 
 
 
@@ -2467,7 +2472,7 @@ class ReportesController {
 
 
 
-                    addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellCenter)
+                    addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellLeft)
 
 
                     addCellTabla(tablaVolObra, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)
@@ -2502,10 +2507,10 @@ class ReportesController {
 
 
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellCenter)
-            addCellTabla(tablaVolObra, new Paragraph("Total Subpresupuesto:", times8bold), prmsCellCenter)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("Total", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("Subpresupuesto:", times8bold), prmsCellLeft)
             addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
@@ -2526,12 +2531,12 @@ class ReportesController {
         tablaTotal.setWidths(arregloEnteros([85, 0, 0, 0, 0, 15]))
 
 
-        addCellTabla(tablaTotal, new Paragraph("Total del presupuesto: ", times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph("Total del presupuesto: ", times8bold), prmsCellRight2)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
 
 
 
