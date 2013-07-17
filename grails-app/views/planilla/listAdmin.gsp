@@ -174,11 +174,16 @@
                                     <g:elseif test="${lblBtn == 4}">
                                         Informar pago
                                     </g:elseif>
-                                    <g:if test="${lblBtn == 5}">
-                                        <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                    <g:elseif test="${lblBtn == 5}">
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                            <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Iniciar Obra
-                                        </a>
-                                    </g:if>
+                                            </a>
+                                        </g:if>
+                                        <g:else>
+                                            <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
+                                        </g:else>
+                                    </g:elseif>
                                 </g:if>
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>

@@ -174,6 +174,14 @@
                                             Informar pago
                                         </a>
                                     </g:if>
+                                    <g:elseif test="${lblBtn == 5}">
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                            Iniciar Obra
+                                        </g:if>
+                                        <g:else>
+                                            <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
+                                        </g:else>
+                                    </g:elseif>
                                 </g:if>
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
