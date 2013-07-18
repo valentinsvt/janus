@@ -62,22 +62,22 @@
             </div>
         </g:if>
 
-        %{--<g:if test="${alertas != ''}">--}%
-            %{--<div class="alert alert-warning alert-block">--}%
-                %{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
+    %{--<g:if test="${alertas != ''}">--}%
+    %{--<div class="alert alert-warning alert-block">--}%
+    %{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
 
-                %{--<h3>Se han generado alertas al generar la planilla</h3>--}%
-                %{--${alertas}--}%
-            %{--</div>--}%
-        %{--</g:if>--}%
-        %{--<g:if test="${errores != ''}">--}%
-            %{--<div class="alert alert-error alert-block">--}%
-                %{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
+    %{--<h3>Se han generado alertas al generar la planilla</h3>--}%
+    %{--${alertas}--}%
+    %{--</div>--}%
+    %{--</g:if>--}%
+    %{--<g:if test="${errores != ''}">--}%
+    %{--<div class="alert alert-error alert-block">--}%
+    %{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
 
-                %{--<h3>Han ocurrido errores graves al generar la planilla</h3>--}%
-                %{--${errores}--}%
-            %{--</div>--}%
-        %{--</g:if>--}%
+    %{--<h3>Han ocurrido errores graves al generar la planilla</h3>--}%
+    %{--${errores}--}%
+    %{--</div>--}%
+    %{--</g:if>--}%
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span12 btn-group" role="navigation">
@@ -89,14 +89,17 @@
                     <i class="icon-angle-left"></i>
                     Planillas
                 </g:link>
-                <a href="#" class="btn btn-ajax btn-new" id="btnImprimir" title="Imprimir">
-                    <i class="icon-print"></i>
-                    Imprimir
-                </a>
-                %{--<a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">--}%
-                %{--<i class="icon-table"></i>--}%
-                %{--Excel--}%
-                %{--</a>--}%
+            %{--<a href="#" class="btn btn-ajax btn-new" id="btnImprimir" title="Imprimir">--}%
+            %{--<i class="icon-print"></i>--}%
+            %{--Imprimir--}%
+            %{--</a>--}%
+                <g:link controller="reportes2" action="reportePlanilla" id="${planilla.id}" class="btn  btn-ajax" rel="tooltip" title="Imprimir">
+                    <i class="icon-print"></i> Imprimir
+                </g:link>
+            %{--<a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">--}%
+            %{--<i class="icon-table"></i>--}%
+            %{--Excel--}%
+            %{--</a>--}%
             </div>
         </div>
 

@@ -89,6 +89,9 @@
             <i class="icon-angle-left"></i>
             Planillas
         </g:link>
+        <g:link controller="reportes2" action="reportePlanillaLiquidacion" id="${planilla.id}" class="btn  btn-ajax" rel="tooltip" title="Imprimir">
+            <i class="icon-print"></i> Imprimir
+        </g:link>
         %{--<a href="#" class="btn btn-ajax btn-new" id="btnImprimir" title="Imprimir">--}%
             %{--<i class="icon-print"></i>--}%
             %{--Imprimir--}%
@@ -137,8 +140,8 @@
 
             <div class="linea" style="height: 100%;"></div>
 
-            <div class="tituloTree">Multa por no presentación de planilla</div>
-            ${pMl}
+            %{--<div class="tituloTree">Multa por no presentación de planilla</div>--}%
+            %{--${pMl}--}%
 
             <div class="tituloTree">Multa por retraso de obra</div>
             ${tablaMl}

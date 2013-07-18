@@ -15,6 +15,34 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def list() {
+        def codigoPerfil = session.perfil.codigo
+        println codigoPerfil
+        switch (codigoPerfil) {
+            case "FINA":
+                redirect(action: 'listFinanciero', id: params.id)
+                return
+                break;
+            case "ADCT":
+                redirect(action: 'listAdmin', id: params.id)
+                return
+                break;
+            case "FISC":
+                redirect(action: 'listFiscalizador', id: params.id)
+                return
+                break;
+        }
+
+        def contrato = Contrato.get(params.id)
+        def obra = contrato.oferta.concurso.obra
+
+        def fp = janus.FormulaPolinomica.findAllByObra(obra)
+//        println fp
+
+        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
+        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
+    }
+
+    def listFiscalizador() {
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 

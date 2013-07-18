@@ -6,9 +6,9 @@ import janus.pac.PeriodoEjecucion
 class Planilla2Controller {
 
     def liquidacion() {
-        println "params " + params
+//        println "params " + params
         def planilla = Planilla.get(params.id)
-        def override = true
+        def override = false
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def planillasAnterioresTot = Planilla.withCriteria {
@@ -102,7 +102,6 @@ class Planilla2Controller {
                 redirect(action: "error")
                 return
             }
-
         }
 
         def tableWidth = 150 * periodos.size() + 400
@@ -378,10 +377,13 @@ class Planilla2Controller {
 
                 } else {
                     def vlin
+                    def dec
                     if (i == 0) {
                         vlin = per.totalLiq
+                        dec=3
                     } else {
                         vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion).valor
+                        dec=2
                     }
 //                    println "error "+p.indice+" "+p.indice.id+"  "+per.periodo.id+"   "+vlin+"  "+vlinOferta+"  "+p.valor+"  "+"  "+per.periodo.id
                     def valor = (vlin / vlinOferta * p.valor).round(3)
@@ -406,7 +408,7 @@ class Planilla2Controller {
                     if (!per.save(flush: true)) {
                         println "error fr " + per.errors
                     }
-                    tablaFr += "<td class='number'><div>${vlin}</div><div class='bold'>${valor}</div></td>"
+                    tablaFr += "<td class='number'><div>${numero(vlin,dec)}</div><div class='bold'>${numero(valor)}</div></td>"
                 }
 
             }
@@ -500,7 +502,7 @@ class Planilla2Controller {
     def avance() {
 //        println "params " + params
         def planilla = Planilla.get(params.id)
-        def override = true
+        def override = false
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def planillasAnteriores = Planilla.withCriteria {

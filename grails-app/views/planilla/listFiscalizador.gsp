@@ -33,10 +33,10 @@
                     <i class="icon-arrow-left"></i>
                     Contrato
                 </g:link>
-            %{--<g:link action="form" class="btn" params="[contrato: contrato.id]">--}%
-            %{--<i class="icon-file"></i>--}%
-            %{--Nueva planilla--}%
-            %{--</g:link>--}%
+                <g:link action="form" class="btn" params="[contrato: contrato.id]">
+                    <i class="icon-file"></i>
+                    Nueva planilla
+                </g:link>
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -169,21 +169,19 @@
 
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
-                                        Enviar reajuste
-                                    </g:if>
-                                    <g:if test="${lblBtn == 3}">
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
-                                            Pedir pago
+                                            Enviar reajuste
                                         </a>
                                     </g:if>
+                                    <g:elseif test="${lblBtn == 3}">
+                                        Pedir pago
+                                    </g:elseif>
                                     <g:elseif test="${lblBtn == 4}">
                                         Informar pago
                                     </g:elseif>
                                     <g:elseif test="${lblBtn == 5}">
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                            <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Iniciar Obra
-                                            </a>
                                         </g:if>
                                         <g:else>
                                             <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>

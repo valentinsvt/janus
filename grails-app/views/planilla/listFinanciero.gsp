@@ -118,7 +118,12 @@
                                     </g:link>
                                 </g:if>
                                 <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
-                                    <g:link action="imprimir" class="btn btnPrint btn-small btn-ajax" rel="tooltip" title="Imprimir"><i class="icon-print"></i></g:link>
+                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
+                                        <g:link controller="reportes2" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir"><i class="icon-print"></i></g:link>
+                                    </g:if>
+                                    <g:else>
+                                        <g:link controller="reportes2" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir"><i class="icon-print"></i></g:link>
+                                    </g:else>
                                 </g:if>
                             %{--<g:if test="${!planillaInstance.fechaOrdenPago}">--}%
                             %{--<g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">--}%
