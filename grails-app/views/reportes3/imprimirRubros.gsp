@@ -101,6 +101,26 @@
 
         }
 
+        .padTopBot{
+
+            padding-top: 7px !important;
+            padding-bottom: 7px !important;
+
+        }
+
+        .tituloHeader{
+
+            font-size: 14px !important;
+
+        }
+
+        .marginTop{
+
+            margin-top:20px !important;
+        }
+
+
+
         .row-fluid {
             width  : 100%;
             height : 20px;
@@ -135,15 +155,15 @@
         <div class="hoja">
 
             <div class="tituloPdf">
-                <p>
+                <p style="font-size: 18px">
                     <b>G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
-                <p>
+                <p style="font-size: 14px">
                     GESTIÓN DE PRESUPUESTOS
                 </p>
 
-                <p>
+                <p style="font-size: 14px">
                     ANÁLISIS DE PRECIOS UNITARIOS
                 </p>
             </div>
