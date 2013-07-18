@@ -159,6 +159,8 @@ class VolumenObraController extends janus.seguridad.Shield{
 
     def tabla(){
 
+
+
         def usuario = session.usuario.id
         def persona = Persona.get(usuario)
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
@@ -177,7 +179,7 @@ class VolumenObraController extends janus.seguridad.Shield{
              orden = 'desc'
         }
 
-        if (params.sub && params.sub != "null") {
+        if (params.sub && params.sub != "-1") {
 //            println("entro1")
 //        detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
          valores = preciosService.rbro_pcun_v5(obra.id,params.sub,orden)

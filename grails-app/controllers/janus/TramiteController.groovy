@@ -39,6 +39,8 @@ class TramiteController extends janus.seguridad.Shield {
                 header.put("MDE",r["MDE"])
                 header.put("MPARA",r["MPARA"])
                 header.put("MASUNTO",r["MASUNTO"])
+                header.put("MCREADOR",r["MCREADOR"])
+                header.put("MUSDES",r["MUSDES"])
             }
             sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) {r->
                 def tmp =[:]
@@ -80,6 +82,8 @@ class TramiteController extends janus.seguridad.Shield {
                 header.put("MDE",r["MDE"])
                 header.put("MPARA",r["MPARA"])
                 header.put("MASUNTO",r["MASUNTO"])
+                header.put("MCREADOR",r["MCREADOR"])
+                header.put("MUSDES",r["MUSDES"])
             }
             sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) {r->
                 def tmp =[:]
@@ -90,6 +94,8 @@ class TramiteController extends janus.seguridad.Shield {
                 tmp.put("TASUNTO",r["TASUNTO"])
                 tmp.put("TRECIBIDO",r["TRECIBIDO"])
                 tmp.put("TFRECEP",r["TFRECEP"])
+                tmp.put("TECRADOR",r["TECRADOR"])
+                tmp.put("TUSDES",r["TUSDES"])
                 tramites.add(tmp)
             }
             sql.close()

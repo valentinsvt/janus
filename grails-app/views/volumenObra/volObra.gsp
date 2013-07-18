@@ -276,6 +276,7 @@
 //                        var total1 = 0
 
                 $(".total").each(function () {
+//                    console.log($(this),$(this).html())
 
                     total += parseFloat(str_replace(",", "", $(this).html()))
                 })

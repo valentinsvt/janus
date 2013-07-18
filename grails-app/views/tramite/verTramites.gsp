@@ -66,13 +66,13 @@
             De:
         </div>
         <div class="span2">
-            ${header["MDE"]}
+            ${header["MDE"]} (${header["MCREADOR"]})
         </div>
         <div class="span1 campo">
             Para:
         </div>
         <div class="span2">
-            ${header["MPARA"]}
+            ${header["MPARA"]} (${header["MUSDES"]})
         </div>
     </div>
     <div class="row-fluid">
@@ -95,6 +95,8 @@
             <th width="110px;">Trámite Principal</th>
             <th width="110px;">Trámite</th>
             <th>Fecha</th>
+            <th>De</th>
+            <th>Para</th>
             <th>Límite</th>
             <th>Asunto</th>
             <th>Recibido</th>
@@ -107,6 +109,8 @@
                 <td>${t["NMASTER"]}</td>
                 <td>${t["NTRAMITE"]}</td>
                 <td>${t["TFECHA"]}</td>
+                <td>${t["TCREADOR"]}</td>
+                <td>${t["TUSDES"]}</td>
                 <td>${t["TFLIMITE"]}</td>
                 <td>${t["TASUNTO"]}</td>
                 <td>${(t["TRECIBIDO"].toString()=="1")?"Si":"No"}</td>
