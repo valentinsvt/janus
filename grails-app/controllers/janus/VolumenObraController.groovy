@@ -179,6 +179,7 @@ class VolumenObraController extends janus.seguridad.Shield{
              orden = 'desc'
         }
 
+        preciosService.ac_rbroObra(obra.id)
         if (params.sub && params.sub != "-1") {
 //            println("entro1")
 //        detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
@@ -205,7 +206,6 @@ class VolumenObraController extends janus.seguridad.Shield{
 //        /*Todo ver como mismo es esta suma*/
         def indirecto = obra.totales/100
 
-        preciosService.ac_rbroObra(obra.id)
 
         [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
 

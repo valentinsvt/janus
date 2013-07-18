@@ -4,7 +4,7 @@
     <meta name="layout" content="admin"/>
     <title>Acciones</title>
     <g:set var="entityName" value="Perfiles"/>
-    <title>Estructura del Men&uacute; y Procesos</title>
+    <title>Estructura del Menú y Procesos</title>
     <script src="${resource(dir: 'js/jquery/plugins', file: 'jquery.livequery.min.js')}"></script>
 %{--
     <script type="text/javascript" src="${resource(dir: 'js/jquery/plugins', file: 'jquery.livequery.js')}"></script>
