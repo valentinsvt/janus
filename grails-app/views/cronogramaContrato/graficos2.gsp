@@ -16,7 +16,7 @@
     <body>
         <div class="btn-toolbar">
             <div class="btn-group">
-                <g:link action="index" id="${contrato.id}" class="btn">
+                <g:link action="index" id="${contrato.id}" params="[subpre: params.subpre]" class="btn">
                     <i class="icon-caret-left"></i>
                     Cronograma
                 </g:link>

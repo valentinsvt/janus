@@ -92,6 +92,10 @@
         td {
             vertical-align : middle !important;
         }
+
+        .num {
+            text-align : right;
+        }
         </style>
 
     </head>
@@ -103,7 +107,7 @@
             <h2>Cronograma</h2>
 
             <div style="height: 30px;">
-                <div class="left strong">Obra: ${obra.descripcion} (${meses} mes${obra.plazoEjecucionMeses == 1 ? "" : "es"})</div>
+                <div class="left strong">Obra: ${obra.descripcion} (${meses} mes${meses == 1 ? "" : "es"})</div>
 
                 <div class="right">Fecha consulta: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
             </div>
@@ -130,9 +134,9 @@
                         <th>
                             C.Total
                         </th>
-                        <th>
-                            Días
-                        </th>
+                        %{--<th>--}%
+                        %{--Días--}%
+                        %{--</th>--}%
                         <th>
                             T.
                         </th>
@@ -148,15 +152,15 @@
                 </thead>
                 <tbody id="tabla_material">
 
-                %{--<g:set var="totalMes" value="${[]}"/>--}%
+                    <g:set var="totalMes" value="${[]}"/>
 
                     <g:each in="${detalle}" var="vol" status="s">
 
                         <g:set var="cronos" value="${janus.Cronograma.findAllByVolumenObra(vol)}"/>
 
-                    %{--<g:set var="totalDolRow" value="${0}"/>--}%
-                    %{--<g:set var="totalPrcRow" value="${0}"/>--}%
-                    %{--<g:set var="totalCanRow" value="${0}"/>--}%
+                        <g:set var="totalDolRow" value="${0}"/>
+                        <g:set var="totalPrcRow" value="${0}"/>
+                        <g:set var="totalCanRow" value="${0}"/>
 
                         <tr class="item_row" id="${vol.id}" data-id="${vol.id}">
                             <td class="codigo">
@@ -179,9 +183,9 @@
                                 <g:formatNumber number="${parcial}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                 <g:set var="sum" value="${sum + parcial}"/>
                             </td>
-                            <td style="text-align: center">
-                                <span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>
-                            </td>
+                            %{--<td style="text-align: center">--}%
+                            %{--<span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>--}%
+                            %{--</td>--}%
                             <td>
                                 $
                             </td>
@@ -189,23 +193,25 @@
                                 <g:set var="prec" value="${cronos.find { it.periodo == i + 1 }}"/>
                                 <td class="dol mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
                                     data-tipo="dol" data-val="${prec?.precio ?: 0}" data-id="${prec?.id ?: ''}">
-                                    %{--<g:set var="totalDolRow" value="${prec ? totalDolRow + prec : totalDolRow}"/>--}%
+                                    <g:set var="totalDolRow" value="${prec ? totalDolRow + prec?.precio ?: 0 : totalDolRow}"/>
                                     %{--<g:if test="${!totalMes[i]}">--}%
-                                    %{--${totalMes[i] = 0}--}%
+                                        %{--${totalMes[i] = 0}--}%
                                     %{--</g:if>--}%
-                                    %{--${totalMes[i] = prec ? totalMes[i] + prec : totalMes}--}%
+                                    %{--${totalMes[i] = prec ? totalMes[i] + prec?.precio ?: 0 : totalMes}--}%
                                     <g:formatNumber number="${prec?.precio}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                 </td>
                             </g:each>
                             <td class="num rubro${vol.id} dol total totalRubro">
                                 <span>
+                                    totalDol
                                     %{--<g:formatNumber number="${totalDolRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
                                 </span> $
                             </td>
                         </tr>
 
                         <tr class="item_prc" data-id="${vol.id}">
-                            <td colspan="7">
+                            %{--<td colspan="7">--}%
+                            <td colspan="6">
 
                             </td>
                             <td>
@@ -221,13 +227,15 @@
                             </g:each>
                             <td class="num rubro${vol.id} prct total totalRubro">
                                 <span>
+                                    totalPrct
                                     %{--<g:formatNumber number="${totalPrcRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
                                 </span> %
                             </td>
                         </tr>
 
                         <tr class="item_f" data-id="${vol.id}">
-                            <td colspan="7">
+                            %{--<td colspan="7">--}%
+                            <td colspan="6">
 
                             </td>
                             <td>
@@ -243,6 +251,7 @@
                             </g:each>
                             <td class="num rubro${vol.id} fis total totalRubro">
                                 <span>
+                                    totalFis
                                     %{--<g:formatNumber number="${totalCanRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
                                 </span> F
                             </td>
@@ -257,7 +266,7 @@
                         <td class="num">
                             <g:formatNumber number="${sum}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                         </td>
-                        <td></td>
+                        %{--<td></td>--}%
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
                             <td class="num mes${i + 1} totalParcial total" data-mes="${i + 1}" data-valor="0">
@@ -270,7 +279,7 @@
                         <td></td>
                         <td colspan="4">TOTAL ACUMULADO</td>
                         <td></td>
-                        <td></td>
+                        %{--<td></td>--}%
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
                             <td class="num mes${i + 1} totalAcumulado total" data-mes="${i + 1}" data-valor="0">
@@ -282,7 +291,7 @@
                     <tr>
                         <td></td>
                         <td colspan="4">% PARCIAL</td>
-                        <td></td>
+                        %{--<td></td>--}%
                         <td></td>
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
@@ -296,7 +305,7 @@
                         <td></td>
                         <td colspan="4">% ACUMULADO</td>
                         <td></td>
-                        <td></td>
+                        %{--<td></td>--}%
                         <td>T</td>
                         <g:each in="${0..meses - 1}" var="i">
                             <td class="num mes${i + 1} prctAcumulado total" data-mes="${i + 1}" data-valor="0">

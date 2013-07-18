@@ -13,15 +13,19 @@
 
         <style type="text/css">
         .item_row {
-            background : #999999;
+            background : #B8B8B4;
         }
 
         .item_prc {
-            background : #C0C0C0;
+            background : #D0D0CB;
         }
 
         .item_f {
-            background : #C9C9C9;
+            background : #E8E8E4;
+        }
+
+        .item_f td {
+            border-bottom : solid 2px;
         }
 
         td {
@@ -65,32 +69,28 @@
         .graf {
             width  : 870px;
             height : 410px;
-            /*background : #e6e6fa;*/
         }
 
-            /*.btn {*/
-            /*z-index : 9999 !important;*/
-            /*}*/
+        tr, td {
+            height      : 14px !important;
+            line-height : 14px !important;
+        }
 
-            /*.modal-backdrop {*/
-            /*z-index : 9998 !important;*/
-            /*}*/
-
-            /*.modal {*/
-            /*z-index : 9999 !important;*/
-            /*}*/
+        .divTabla {
+            overflow-y : auto;
+            max-height : 640px;
+        }
         </style>
 
     </head>
 
     <body>
-        %{--Todo excel--}%
-        %{--<g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>--}%
-        <g:set var="meses" value="${Math.ceil(contrato.plazo / 30)}"/>
+        <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
+        <g:set var="plazoOk" value="${detalle.findAll { it.dias && it.dias > 0 }.size() > 0}"/>
         <g:set var="sum" value="${0}"/>
 
         <div class="tituloTree">
-            Cronograma del contrato de la obra ${obra.descripcion} (${meses} mes${obra.plazoEjecucionMeses == 1 ? "" : "es"})
+            Cronograma del contrato de la obra ${obra.descripcion} (${meses} mes${meses == 1 ? "" : "es"})
         </div>
 
         <div class="btn-toolbar">
@@ -99,15 +99,15 @@
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>
-                <g:if test="${meses > 0}">
-                    <a href="#" class="btn disabled" id="btnLimpiarRubro">
-                        <i class="icon-check-empty"></i>
-                        Limpiar Rubro
-                    </a>
-                    <a href="#" class="btn" id="btnLimpiarCronograma">
-                        <i class="icon-th-large"></i>
-                        Limpiar Cronograma
-                    </a>
+                <g:if test="${meses > 0 && plazoOk && contrato.estado != 'R'}">
+                %{--<a href="#" class="btn disabled" id="btnLimpiarRubro">--}%
+                %{--<i class="icon-check-empty"></i>--}%
+                %{--Limpiar Rubro--}%
+                %{--</a>--}%
+                %{--<a href="#" class="btn" id="btnLimpiarCronograma">--}%
+                %{--<i class="icon-th-large"></i>--}%
+                %{--Limpiar Cronograma--}%
+                %{--</a>--}%
                     <a href="#" class="btn disabled" id="btnDeleteRubro">
                         <i class="icon-minus"></i>
                         Eliminar Rubro
@@ -119,225 +119,264 @@
                 </g:if>
             </div>
 
-            <g:if test="${meses > 0}">
+            <g:if test="${meses > 0 && plazoOk}">
                 <div class="btn-group">
                     <a href="#" class="btn" id="btnGrafico">
                         <i class="icon-bar-chart"></i>
                         Gráficos de avance
                     </a>
-                %{--<a href="#" class="btn" id="btnGraficoEco">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance económico--}%
-                %{--</a>--}%
-                %{--<a href="#" class="btn" id="btnGraficoFis">--}%
-                %{--<i class="icon-bar-chart"></i>--}%
-                %{--Gráfico de avance físico--}%
-                %{--</a>--}%
-                    <g:link action="excel" class="btn" id="${obra.id}">
-                        <i class="icon-table"></i>
-                        Exportar a Excel
-                    </g:link>
+                    %{--<a href="#" class="btn" id="btnGraficoEco">--}%
+                    %{--<i class="icon-bar-chart"></i>--}%
+                    %{--Gráfico de avance económico--}%
+                    %{--</a>--}%
+                    %{--<a href="#" class="btn" id="btnGraficoFis">--}%
+                    %{--<i class="icon-bar-chart"></i>--}%
+                    %{--Gráfico de avance físico--}%
+                    %{--</a>--}%
+                    <a href="#" id="btnReporte" class="btn">
+                        <i class="icon-print"></i>
+                        Imprimir
+                    </a>
                 </div>
             </g:if>
         </div>
 
-        <g:if test="${meses > 0}">
-            <table class="table table-bordered table-condensed table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            Código
-                        </th>
-                        <th>
-                            Rubro
-                        </th>
-                        <th>
-                            Unidad
-                        </th>
-                        <th>
-                            Cantidad
-                        </th>
-                        <th>
-                            Unitario
-                        </th>
-                        <th>
-                            C.Total
-                        </th>
-                        <th>
-                            T.
-                        </th>
-                        <g:each in="${0..meses - 1}" var="i">
-                            <th>
-                                Mes ${i + 1}
+        <div style="margin-bottom: 5px;">
+            Subpresupuesto: <g:select name="subpresupuesto" from="${subpres}" optionKey="id" optionValue="descripcion"
+                                      style="width: 300px;font-size: 10px" id="subpres" value="${subpre}"
+                                      noSelection="['-1': 'TODOS']"/>
+            <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
+
+            <g:if test="${contrato.estado != 'R'}">
+                <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>
+            </g:if>
+        </div>
+
+        <g:if test="${meses > 0 && plazoOk}">
+
+            <div class="divTabla">
+                <table class="table table-bordered table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th class="codigo">
+                                Código
                             </th>
-                        </g:each>
-                        <th>
-                            Total Rubro
-                        </th>
-                    </tr>
-                </thead>
-                <tbody id="tabla_material">
-
-                %{--<g:set var="totalMes" value="${[]}"/>--}%
-
-                    <g:each in="${detalle}" var="vol" status="s">
-
-                        <g:set var="cronos" value="${CronogramaContrato.findAllByVolumenObra(vol)}"/>
-
-                    %{--<g:set var="totalDolRow" value="${0}"/>--}%
-                    %{--<g:set var="totalPrcRow" value="${0}"/>--}%
-                    %{--<g:set var="totalCanRow" value="${0}"/>--}%
-
-                        <tr class="item_row" id="${vol.id}" data-id="${vol.id}">
-                            <td class="codigo">
-                                ${vol.item.codigo}
-                            </td>
-                            <td class="nombre">
-                                ${vol.item.nombre}
-                            </td>
-                            <td style="text-align: center" class="unidad">
-                                ${vol.item.unidad.codigo}
-                            </td>
-                            <td class="num cantidad" data-valor="${vol.cantidad}">
-                                <elm:numero number="${vol.cantidad}" cero="hide"/>
-                            </td>
-                            <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
-                                <elm:numero number="${precios[vol.id.toString()]}" cero="hide"/>
-                            </td>
-                            <g:set var="parcial" value="${precios[vol.id.toString()] * vol.cantidad}"/>
-                            <td class="num subtotal" data-valor="${parcial}">
-                                <elm:numero number="${parcial}" cero="hide"/>
-                                <g:set var="sum" value="${sum + parcial}"/>
-                            </td>
-                            <td>
-                                $
-                            </td>
+                            <th class="nombre">
+                                Rubro
+                            </th>
+                            <th class="unidad">
+                                Unidad
+                            </th>
+                            <th class="cantidad">
+                                Cantidad
+                            </th>
+                            <th class="precioU">
+                                Unitario
+                            </th>
+                            <th class="subtotal">
+                                C.Total
+                            </th>
+                            %{--<th class="dias">--}%
+                            %{--Días--}%
+                            %{--</th>--}%
+                            <th class="tiny">
+                                T.
+                            </th>
                             <g:each in="${0..meses - 1}" var="i">
-                                <g:set var="prec" value="${cronos.find { it.periodo == i + 1 }}"/>
-                                <td class="dol mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
-                                    data-tipo="dol" data-val="${prec?.precio ?: 0}" data-id="${prec?.id ?: ''}">
-                                    %{--<g:set var="totalDolRow" value="${prec ? totalDolRow + prec : totalDolRow}"/>--}%
-                                    %{--<g:if test="${!totalMes[i]}">--}%
-                                    %{--${totalMes[i] = 0}--}%
-                                    %{--</g:if>--}%
-                                    %{--${totalMes[i] = prec ? totalMes[i] + prec : totalMes}--}%
-                                    <elm:numero number="${prec?.precio}" cero="hide"/>
+                                <th class="meses">
+                                    Mes ${i + 1}
+                                </th>
+                            </g:each>
+                            <th class="totalRubro">
+                                Total Rubro
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla_material">
+
+                    %{--<g:set var="totalMes" value="${[]}"/>--}%
+
+                        <g:each in="${detalle}" var="vol" status="s">
+
+                            <g:set var="cronos" value="${CronogramaContrato.findAllByVolumenObra(vol)}"/>
+
+                        %{--<g:set var="totalDolRow" value="${0}"/>--}%
+                        %{--<g:set var="totalPrcRow" value="${0}"/>--}%
+                        %{--<g:set var="totalCanRow" value="${0}"/>--}%
+
+                            <tr class="item_row" id="${vol.id}" data-id="${vol.id}">
+                                <td class="codigo">
+                                    ${vol.item.codigo}
+                                </td>
+                                <td class="nombre">
+                                    ${vol.item.nombre}
+                                </td>
+                                <td style="text-align: center" class="unidad">
+                                    ${vol.item.unidad.codigo}
+                                </td>
+                                <td class="num cantidad" data-valor="${vol.cantidad}">
+                                    <g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                </td>
+                                <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
+                                    <g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                </td>
+                                <g:set var="parcial" value="${precios[vol.id.toString()] * vol.cantidad}"/>
+                                <td class="num subtotal" data-valor="${parcial}">
+                                    <g:formatNumber number="${parcial}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    <g:set var="sum" value="${sum + parcial}"/>
+                                </td>
+                                %{--<td style="text-align: center" class="dias">--}%
+                                %{--<span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>--}%
+                                %{--</td>--}%
+                                <td class="tiny">
+                                    $
+                                </td>
+                                <g:each in="${0..meses - 1}" var="i">
+                                    <g:set var="prec" value="${cronos.find { it.periodo == i + 1 }}"/>
+                                    <td class="dol mes meses num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
+                                        data-tipo="dol" data-val="${prec?.precio ?: 0}" data-id="${prec?.id ?: ''}">
+                                        %{--<g:set var="totalDolRow" value="${prec ? totalDolRow + prec : totalDolRow}"/>--}%
+                                        %{--<g:if test="${!totalMes[i]}">--}%
+                                        %{--${totalMes[i] = 0}--}%
+                                        %{--</g:if>--}%
+                                        %{--${totalMes[i] = prec ? totalMes[i] + prec : totalMes}--}%
+                                        <g:formatNumber number="${prec?.precio}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    </td>
+                                </g:each>
+                                <td class="num rubro${vol.id} dol total totalRubro">
+                                    <span>
+                                        %{--<g:formatNumber number="${totalDolRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                                    </span> $
+                                </td>
+                            </tr>
+
+                            <tr class="item_prc" data-id="${vol.id}">
+                                <td colspan="6">
+                                    &nbsp
+                                </td>
+                                <td>
+                                    %
+                                </td>
+                                <g:each in="${0..meses - 1}" var="i">
+                                    <g:set var="porc" value="${cronos.find { it.periodo == i + 1 }}"/>
+                                    <td class="prct mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
+                                        data-tipo="prct" data-val="${porc?.porcentaje ?: 0}" data-id="${porc?.id ?: ''}">
+                                        %{--<g:set var="totalPrcRow" value="${porc ? totalPrcRow + porc : totalPrcRow}"/>--}%
+                                        <g:formatNumber number="${porc?.porcentaje}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    </td>
+                                </g:each>
+                                <td class="num rubro${vol.id} prct total totalRubro">
+                                    <span>
+                                        %{--<g:formatNumber number="${totalPrcRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                                    </span> %
+                                </td>
+                            </tr>
+
+                            <tr class="item_f" data-id="${vol.id}">
+                                <td colspan="6">
+                                    &nbsp
+                                </td>
+                                <td>
+                                    F
+                                </td>
+                                <g:each in="${0..meses - 1}" var="i">
+                                    <g:set var="cant" value="${cronos.find { it.periodo == i + 1 }}"/>
+                                    <td class="fis mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
+                                        data-tipo="fis" data-val="${cant?.cantidad ?: 0}" data-id="${cant?.id ?: ''}">
+                                        %{--<g:set var="totalCanRow" value="${cant ? totalCanRow + cant : totalCanRow}"/>--}%
+                                        <g:formatNumber number="${cant?.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                    </td>
+                                </g:each>
+                                <td class="num rubro${vol.id} fis total totalRubro">
+                                    <span>
+                                        %{--<g:formatNumber number="${totalCanRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
+                                    </span> F
+                                </td>
+                            </tr>
+
+                        </g:each>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td colspan="4">TOTAL PARCIAL</td>
+                            <td class="num">
+                                <g:formatNumber number="${sum}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                            </td>
+                            %{--<td></td>--}%
+                            <td>T</td>
+                            <g:each in="${0..meses - 1}" var="i">
+                                <td class="num mes${i + 1} totalParcial total" data-mes="${i + 1}" data-valor="0">
+                                    %{--${totalMes[i]}--}%
                                 </td>
                             </g:each>
-                            <td class="num rubro${vol.id} dol total totalRubro">
-                                <span>
-                                    %{--<g:formatNumber number="${totalDolRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
-                                </span> $
-                            </td>
+                            <td></td>
                         </tr>
-
-                        <tr class="item_prc" data-id="${vol.id}">
-                            <td colspan="6">
-                                &nbsp
-                            </td>
-                            <td>
-                                %
-                            </td>
+                        <tr>
+                            <td></td>
+                            <td colspan="4">TOTAL ACUMULADO</td>
+                            %{--<td></td>--}%
+                            <td></td>
+                            <td>T</td>
                             <g:each in="${0..meses - 1}" var="i">
-                                <g:set var="porc" value="${cronos.find { it.periodo == i + 1 }}"/>
-                                <td class="prct mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
-                                    data-tipo="prct" data-val="${porc?.porcentaje ?: 0}" data-id="${porc?.id ?: ''}">
-                                    %{--<g:set var="totalPrcRow" value="${porc ? totalPrcRow + porc : totalPrcRow}"/>--}%
-                                    <elm:numero number="${porc?.porcentaje}" cero="hide"/>
+                                <td class="num mes${i + 1} totalAcumulado total" data-mes="${i + 1}" data-valor="0">
+                                    0.00
                                 </td>
                             </g:each>
-                            <td class="num rubro${vol.id} prct total totalRubro">
-                                <span>
-                                    %{--<g:formatNumber number="${totalPrcRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
-                                </span> %
-                            </td>
+                            <td></td>
                         </tr>
-
-                        <tr class="item_f" data-id="${vol.id}">
-                            <td colspan="6">
-                                &nbsp
-                            </td>
-                            <td>
-                                F
-                            </td>
+                        <tr>
+                            <td></td>
+                            <td colspan="4">% PARCIAL</td>
+                            %{--<td></td>--}%
+                            <td></td>
+                            <td>T</td>
                             <g:each in="${0..meses - 1}" var="i">
-                                <g:set var="cant" value="${cronos.find { it.periodo == i + 1 }}"/>
-                                <td class="fis mes num mes${i + 1} rubro${vol.id}" data-mes="${i + 1}" data-rubro="${vol.id}" data-valor="0"
-                                    data-tipo="fis" data-val="${cant?.cantidad ?: 0}" data-id="${cant?.id ?: ''}">
-                                    %{--<g:set var="totalCanRow" value="${cant ? totalCanRow + cant : totalCanRow}"/>--}%
-                                    <elm:numero number="${cant?.cantidad}" cero="hide"/>
+                                <td class="num mes${i + 1} prctParcial total" data-mes="${i + 1}" data-valor="0">
+                                    0.00
                                 </td>
                             </g:each>
-                            <td class="num rubro${vol.id} fis total totalRubro">
-                                <span>
-                                    %{--<g:formatNumber number="${totalCanRow}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
-                                </span> F
-                            </td>
+                            <td></td>
                         </tr>
-
-                    </g:each>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td></td>
-                        <td colspan="4">TOTAL PARCIAL</td>
-                        <td class="num">
-                            <elm:numero number="${sum}" cero="hide"/>
-                        </td>
-                        <td>T</td>
-                        <g:each in="${0..meses - 1}" var="i">
-                            <td class="num mes${i + 1} totalParcial total" data-mes="${i + 1}" data-valor="0">
-                                %{--${totalMes[i]}--}%
-                            </td>
-                        </g:each>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td colspan="4">TOTAL ACUMULADO</td>
-                        <td></td>
-                        <td>T</td>
-                        <g:each in="${0..meses - 1}" var="i">
-                            <td class="num mes${i + 1} totalAcumulado total" data-mes="${i + 1}" data-valor="0">
-                                0.00
-                            </td>
-                        </g:each>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td colspan="4">% PARCIAL</td>
-                        <td></td>
-                        <td>T</td>
-                        <g:each in="${0..meses - 1}" var="i">
-                            <td class="num mes${i + 1} prctParcial total" data-mes="${i + 1}" data-valor="0">
-                                0.00
-                            </td>
-                        </g:each>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td colspan="4">% ACUMULADO</td>
-                        <td></td>
-                        <td>T</td>
-                        <g:each in="${0..meses - 1}" var="i">
-                            <td class="num mes${i + 1} prctAcumulado total" data-mes="${i + 1}" data-valor="0">
-                                0.00
-                            </td>
-                        </g:each>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
+                        <tr>
+                            <td></td>
+                            <td colspan="4">% ACUMULADO</td>
+                            %{--<td></td>--}%
+                            <td></td>
+                            <td>T</td>
+                            <g:each in="${0..meses - 1}" var="i">
+                                <td class="num mes${i + 1} prctAcumulado total" data-mes="${i + 1}" data-valor="0">
+                                    0.00
+                                </td>
+                            </g:each>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </g:if>
         <g:else>
-            <div class="alert alert-error">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <i class="icon-warning-sign icon-2x pull-left"></i>
-                <h4>Error</h4>
-                La obra tiene una planificación de 0 meses...Por favor corrija esto para continuar con el cronograma.
-            </div>
+            <g:if test="${meses == 0}">
+                <div class="alert alert-error">
+                    <i class="icon-warning-sign icon-2x pull-left"></i>
+                    <h4>Error</h4>
+                    La obra tiene una planificación de 0 meses...Por favor corrija esto para continuar con el cronograma.
+                </div>
+            </g:if>
+            <g:elseif test="${!plazoOk}">
+                <div class="alert alert-error">
+                    <i class="icon-warning-sign icon-2x pull-left"></i>
+                    <h4>Error</h4>
+
+                    <p>
+                        No se ha calculado el plazo de la obra.
+                    </p>
+
+                    <p>
+                        <g:link controller="obra" action="calculaPlazo" id="${obra.id}" class="btn btn-danger">Calcular</g:link>
+                    </p>
+                </div>
+            </g:elseif>
         </g:else>
 
         <div class="modal hide fade" id="modal-cronograma">
@@ -348,7 +387,7 @@
             </div>
 
             <div class="modal-body" id="modalBody">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="frmRubro">
                     <div class="control-group sm">
                         <div>
                             <span id="num-label" class="control-label label label-inverse">
@@ -420,6 +459,10 @@
                     </div>
                 </form>
 
+                <div id="divRubro">
+                    Múltiples rubros
+                </div>
+
 
                 <div class="well">
                     <div class="row" style="margin-bottom: 10px;">
@@ -481,7 +524,7 @@
             //            var plot, redraw = false;
 
             function log(msg) {
-                ////console.log(msg);
+//                ////console.log(msg);
             }
 
             function updateTotales() {
@@ -619,7 +662,54 @@
                     }
 
                 } catch (e) {
-                    ////console.log(e);
+//                    ////console.log(e);
+                    return false;
+                }
+                return true;
+            }
+
+            function validar2() {
+                var periodoIni = $.trim($("#periodosDesde").val());
+                var periodoFin = $.trim($("#periodosHasta").val());
+
+                var $prct = $("#tf_prct");
+
+                var prct = $.trim($prct.val());
+
+                if (periodoIni == "") {
+                    log("Ingrese el periodo inicial");
+                    return false;
+                }
+                if (periodoFin == "") {
+                    log("Ingrese el periodo final");
+                    return false;
+                }
+                if (prct == "") {
+                    log("Ingrese el porcentaje, cantidad o precio");
+                    return false;
+                }
+
+                var maxPrct = $prct.attr("max");
+
+                try {
+                    periodoIni = parseFloat(periodoIni);
+                    periodoFin = parseFloat(periodoFin);
+
+                    if (periodoFin < periodoIni) {
+                        log("El periodo inicial debe ser inferior al periodo final");
+                        return false;
+                    }
+
+                    prct = parseFloat(prct);
+                    maxPrct = parseFloat(maxPrct);
+
+                    if (prct > maxPrct) {
+                        log("El porcentaje debe ser menor que " + maxPrct);
+                        return false;
+                    }
+
+                } catch (e) {
+//                    ////console.log(e);
                     return false;
                 }
                 return true;
@@ -637,25 +727,74 @@
                  9          -> tab
                  */
 //        ////console.log(ev.keyCode);
-                return ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9);
+                return ((ev.keyCode >= 48 && ev.keyCode <= 57) || (ev.keyCode >= 96 && ev.keyCode <= 105) || ev.keyCode == 190 || ev.keyCode == 110 || ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9);
+            }
+
+            function getSelected() {
+                var selected = $(".item_row").filter(".rowSelected");
+                return selected;
             }
 
             $(function () {
+
+                $("#subpres").val(${subpre});
+
                 updateTotales();
 
-                $("#tabla_material").children("tr").click(function () {
-                    $("#btnLimpiarRubro, #btnDeleteRubro").removeClass("disabled");
+                $("#btnDesmarcar").click(function () {
                     $(".rowSelected").removeClass("rowSelected");
-                    $(this).addClass("rowSelected");
-                    if ($(this).hasClass("item_row")) {
-                        $(this).next().addClass("rowSelected").next().addClass("rowSelected");
-                    } else if ($(this).hasClass("item_prc")) {
-                        $(this).next().addClass("rowSelected");
-                        $(this).prev().addClass("rowSelected");
-                    } else if ($(this).hasClass("item_f")) {
-                        $(this).prev().addClass("rowSelected").prev().addClass("rowSelected");
+                });
+
+                $("#btnSubpre").click(function () {
+                    $.box({
+                        imageClass : "box_info",
+                        text       : "Cargando... Por favor espere...",
+                        title      : "Cargando",
+                        iconClose  : false,
+                        dialog     : {
+                            resizable     : false,
+                            draggable     : false,
+                            closeOnEscape : false,
+                            buttons       : false
+                        }
+                    });
+                    location.href = "${createLink(action: 'index')}/${contrato.id}?subpre=" + $("#subpres").val();
+                });
+
+                <g:if test="${contrato.estado!='R'}">
+                $("#tabla_material").children("tr").click(function () {
+                    //                    $(".rowSelected").removeClass("rowSelected");
+
+                    if ($(this).hasClass("rowSelected")) {
+                        $(this).removeClass("rowSelected");
+                        if ($(this).hasClass("item_row")) {
+                            $(this).next().removeClass("rowSelected").next().removeClass("rowSelected");
+                        } else if ($(this).hasClass("item_prc")) {
+                            $(this).next().removeClass("rowSelected");
+                            $(this).prev().removeClass("rowSelected");
+                        } else if ($(this).hasClass("item_f")) {
+                            $(this).prev().removeClass("rowSelected").prev().removeClass("rowSelected");
+                        }
+                    } else {
+                        $(this).addClass("rowSelected");
+                        if ($(this).hasClass("item_row")) {
+                            $(this).next().addClass("rowSelected").next().addClass("rowSelected");
+                        } else if ($(this).hasClass("item_prc")) {
+                            $(this).next().addClass("rowSelected");
+                            $(this).prev().addClass("rowSelected");
+                        } else if ($(this).hasClass("item_f")) {
+                            $(this).prev().addClass("rowSelected").prev().addClass("rowSelected");
+                        }
+                    }
+
+                    var sel = getSelected();
+                    if (sel.length == 0) {
+                        $("#btnLimpiarRubro, #btnDeleteRubro").addClass("disabled");
+                    } else {
+                        $("#btnLimpiarRubro, #btnDeleteRubro").removeClass("disabled");
                     }
                 });
+                </g:if>
 
                 $(".spinner").spinner({
                     min : 1,
@@ -708,7 +847,7 @@
                                     $("#tf_cant").val(val).data("val", val);
                                 }
                             } catch (e) {
-                                ////console.log(e);
+//                                ////console.log(e);
                             }
                         }
                     }
@@ -720,25 +859,43 @@
                             $("#tf_cant").val("");
                             $("#tf_precio").val("");
                         } else {
-                            try {
-                                prct = parseFloat(prct);
-                                var max = parseFloat($(this).data("max"));
-                                if (prct > max) {
-                                    prct = max;
+                            var $sel = getSelected();
+                            if ($sel.length == 1) {
+                                try {
+                                    prct = parseFloat(prct);
+                                    var max = parseFloat($(this).data("max"));
+                                    if (prct > max) {
+                                        prct = max;
+                                    }
+                                    var $precio = $("#tf_precio");
+                                    var $cant = $("#tf_cant");
+                                    var total = parseFloat($cant.data("total"));
+                                    var val = (prct / 100) * total;
+                                    var dol = $precio.data("max") * (prct / 100);
+                                    $cant.val(number_format(val, 2, ".", "")).data("val", val);
+                                    $precio.val(number_format(dol, 2, ".", "")).data("val", dol);
+                                    if (ev.keyCode != 110 && ev.keyCode != 190) {
+                                        $("#tf_prct").val(prct).data("val", prct);
+                                    }
+                                } catch (e) {
+//                                    ////console.log(e);
                                 }
-                                var $precio = $("#tf_precio");
-                                var $cant = $("#tf_cant");
-                                var total = parseFloat($cant.data("total"));
-                                var val = (prct / 100) * total;
-                                var dol = $precio.data("max") * (prct / 100);
-                                $cant.val(number_format(val, 2, ".", "")).data("val", val);
-                                $precio.val(number_format(dol, 2, ".", "")).data("val", dol);
-                                if (ev.keyCode != 110 && ev.keyCode != 190) {
-                                    $("#tf_prct").val(prct).data("val", prct);
+                            } //if $sel.lenght = 1
+                            else {
+                                try {
+                                    prct = parseFloat(prct);
+                                    if (prct > 100) {
+                                        prct = 100;
+                                    }
+                                    if (ev.keyCode != 110 && ev.keyCode != 190) {
+                                        $("#tf_prct").val(prct).data("val", prct);
+                                        $("#tf_cant").val("").data("val", null);
+                                        $("#tf_precio").val("").data("val", null);
+                                    }
+                                } catch (e) {
+//                                    ////console.log(e);
                                 }
-                            } catch (e) {
-                                ////console.log(e);
-                            }
+                            } //$sel.lenght > 1
                         }
                     }
                 });
@@ -767,23 +924,21 @@
                                     $("#tf_precio").val(dol).data("val", dol);
                                 }
                             } catch (e) {
-                                ////console.log(e);
+//                                ////console.log(e);
                             }
                         }
                     }
                 });
 
-                $(".mes").dblclick(function () {
-                    var $celda = $(this);
+                function clickOne($celda) {
                     var $tr = $celda.parents("tr");
-
                     if ($tr.hasClass("item_prc")) {
                         $tr = $tr.prev();
                     } else if ($tr.hasClass("item_f")) {
                         $tr = $tr.prev().prev();
                     }
 
-//                    ////console.log($tr);
+                    //                    ////console.log($tr);
 
                     var mes = $celda.data("mes");
                     var tipo = $celda.data("tipo");
@@ -793,9 +948,13 @@
                     $("#periodosDesde").val(mes);
                     $("#periodosHasta").val("${meses}");
 
-//                    ////console.log($celda, mes, tipo, valor, rubro);
-//                    ////console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
+                    //                    ////console.log($celda, mes, tipo, valor, rubro);
+                    //                    ////console.log($totalFila, $totalParcial, $prctParcial, $prctAcumulado);
 
+                    $("#divRubro").hide();
+                    $("#frmRubro").show();
+
+                    $("#rd_cant,#tf_cant,#rd_precio,#tf_precio").removeAttr("disabled");
                     $("#rd_cant").attr("checked", true);
 
                     var codigo = $.trim($tr.find(".codigo").text());
@@ -859,39 +1018,35 @@
                                 $(".dol.mes" + periodoIni + ".rubro" + rubro).text(number_format(dol, 2, ".", ",")).data("val", dol);
                                 $(".prct.mes" + periodoIni + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
                                 $(".fis.mes" + periodoIni + ".rubro" + rubro).text(number_format(cant, 2, ".", ",")).data("val", cant);
-                                dataAjax += "crono=" + rubro + "_" + periodoIni + "_" + dol + "_" + prct + "_" + cant;
+                                dataAjax += "&crono=" + rubro + "_" + periodoIni + "_" + dol + "_" + prct + "_" + cant;
                             } else {
                                 var meses = periodoFin - periodoIni + 1;
-//                                dol = subtotal * (prct / 100);
-//                                dol /= meses;
-                                var resto = prct;
-                                prct /= meses;
-//                                cant /= meses;
+                                dol = subtotal * (prct / 100);
 
-                                var prcnd = Math.round(prct);
-//                                ////console.log(prct, prcnd);
+                                var dolCalc = dol, prctCalc = prct, cantCalc = cant
 
-//                                var resto = 100;
+                                //                                dol /= meses;
+                                //                                prct /= meses;
+                                //                                cant /= meses;
+
+                                dol = Math.round((dol / meses) * 100) / 100;
+                                prct = Math.round((prct / meses) * 100) / 100;
+                                cant = Math.round((cant / meses) * 100) / 100;
 
                                 for (i = periodoIni; i <= periodoFin; i++) {
-                                    var df, pf, cf;
-//                                    ////console.log(i, prcnd, resto);
-                                    if (i < periodoFin) {
-                                        pf = prcnd;
-                                        resto -= pf;
-                                    } else {
-                                        pf = resto;
-                                        resto -= pf;
+                                    if (i == periodoFin) {
+                                        dol = dolCalc;
+                                        prct = prctCalc;
+                                        cant = cantCalc;
                                     }
-//                                    ////console.log(i, prcnd, pf, resto);
-                                    df = subtotal * (pf / 100);
-                                    cf = cant * (pf / 100);
+                                    dolCalc -= dol;
+                                    prctCalc -= prct;
+                                    cantCalc -= cant;
+                                    $(".dol.mes" + i + ".rubro" + rubro).text(number_format(dol, 2, ".", ",")).data("val", dol);
+                                    $(".prct.mes" + i + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
+                                    $(".fis.mes" + i + ".rubro" + rubro).text(number_format(cant, 2, ".", ",")).data("val", cant);
 
-                                    $(".dol.mes" + i + ".rubro" + rubro).text(number_format(df, 2, ".", ",")).data("val", df);
-                                    $(".prct.mes" + i + ".rubro" + rubro).text(number_format(pf, 2, ".", ",")).data("val", pf);
-                                    $(".fis.mes" + i + ".rubro" + rubro).text(number_format(cf, 2, ".", ",")).data("val", cf);
-
-                                    dataAjax += "crono=" + rubro + "_" + i + "_" + df + "_" + pf + "_" + cf + "&";
+                                    dataAjax += "&crono=" + rubro + "_" + i + "_" + dol + "_" + prct + "_" + cant + "&";
                                 }
                             }
                             $.ajax({
@@ -915,6 +1070,7 @@
                                     } else {
                                         ////console.log("ERROR");
                                     }
+                                    $(".rowSelected").removeClass("rowSelected");
                                 }
                             });
                         }
@@ -925,58 +1081,202 @@
 
                     $("#modalFooter").html("").append($btnCancel).append($btnOk);
                     $("#modal-cronograma").modal("show");
+                }
 
-                });
+                <g:if test="${contrato.estado!='R'}">
+                $(".mes").dblclick(function () {
+                    var $sel = getSelected();
+                    var $celda = $(this);
 
-                $("#btnLimpiarRubro").click(function () {
-                    if (!$(this).hasClass("disabled")) {
-                        $.box({
-                            imageClass : "box_info",
-                            text       : "Se limpiará el cronograma del rubro seleccionado, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
-                            title      : "Confirmación",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable : false,
-                                draggable : false,
-                                buttons   : {
-                                    "Aceptar"  : function () {
-                                        var id = $(".item_row.rowSelected").data("id");
-                                        $(".mes.rubro" + id).text("").data("val", 0);
-                                        updateTotales();
-                                    },
-                                    "Cancelar" : function () {
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
+                    if ($sel.length == 1) {
+                        clickOne($celda);
+                    } else {
+                        if ($sel.length > 1) {
+                            var mes = $celda.data("mes");
+                            $("#rd_cant,#tf_cant,#rd_precio,#tf_precio").attr("disabled", "true");
+                            $("#periodosDesde").val(mes);
+                            $("#periodosHasta").val("${meses}");
+                            $("#rd_prct").attr("checked", true);
 
-                $("#btnLimpiarCronograma").click(function () {
-                    $.box({
-                        imageClass : "box_info",
-                        text       : "Se limpiará todo el cronograma, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
-                        title      : "Confirmación",
-                        iconClose  : false,
-                        dialog     : {
-                            resizable : false,
-                            draggable : false,
-                            buttons   : {
-                                "Aceptar"  : function () {
-                                    $(".mes").text("").data("val", 0);
-                                    updateTotales();
-                                },
-                                "Cancelar" : function () {
-                                }
-                            }
+                            $("#frmRubro").hide();
+                            $("#divRubro").show();
+
+                            $("#tf_prct").data({
+                                max   : 100,
+                                total : 100
+                            }).val("");
+
+                            $("#spCant").text("");
+                            $("#spPrecio").text("");
+                            $("#spPrct").text(100);
+
+                            var $btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                            var $btnOk = $('<a href="#" class="btn btn-success">Aceptar</a>');
+
+                            $btnOk.click(function () {
+                                if (validar2()) {
+                                    $btnOk.replaceWith(spinner);
+
+                                    $(".item_row.rowSelected").each(function () {
+                                        var id = $(this).data("id");
+                                        $.ajax({
+                                            async   : false,
+                                            type    : "POST",
+                                            url     : "${createLink(action:'deleteRubro_ajax')}",
+                                            data    : {
+                                                id : id
+                                            },
+                                            success : function (msg) {
+                                                $(".mes.rubro" + id).text("").data("val", 0);
+                                                updateTotales();
+                                            }
+                                        });
+                                    });
+
+                                    var dataAjax = "";
+
+                                    var periodoIni = parseInt($("#periodosDesde").val());
+                                    var periodoFin = parseInt($("#periodosHasta").val());
+
+                                    var prct = $("#tf_prct").data("val");
+
+                                    $sel.each(function () {
+                                        var $tr = $(this);
+
+                                        var rubro = $tr.data("id");
+
+                                        var cantTot = $tr.find(".cantidad").data("valor");
+                                        var precTot = $tr.find(".subtotal").data("valor");
+
+                                        var cantCal = cantTot * (prct / 100);
+                                        var precCal = precTot * (prct / 100);
+
+                                        if (periodoIni == periodoFin) {
+                                            $(".dol.mes" + periodoIni + ".rubro" + rubro).text(number_format(precCal, 2, ".", ",")).data("val", precCal);
+                                            $(".prct.mes" + periodoIni + ".rubro" + rubro).text(number_format(prct, 2, ".", ",")).data("val", prct);
+                                            $(".fis.mes" + periodoIni + ".rubro" + rubro).text(number_format(cantCal, 2, ".", ",")).data("val", cantCal);
+                                            dataAjax += "&crono=" + rubro + "_" + periodoIni + "_" + precCal + "_" + prct + "_" + cantCal;
+                                        } else {
+                                            var meses = periodoFin - periodoIni + 1;
+
+                                            var pr = Math.round((prct / meses) * 100) / 100;
+                                            var cn = Math.round((cantCal / meses) * 100) / 100;
+                                            var pe = Math.round((precCal / meses) * 100) / 100;
+
+                                            var prRest = prct, cnRest = cantCal, peRest = precCal;
+
+                                            for (var i = periodoIni; i <= periodoFin; i++) {
+                                                if (i == periodoFin) {
+                                                    pr = prRest;
+                                                    cn = cnRest;
+                                                    pe = peRest;
+                                                }
+                                                prRest -= pr;
+                                                cnRest -= cn;
+                                                peRest -= pe;
+
+                                                $(".dol.mes" + i + ".rubro" + rubro).text(number_format(pe, 2, ".", ",")).data("val", pe);
+                                                $(".prct.mes" + i + ".rubro" + rubro).text(number_format(pr, 2, ".", ",")).data("val", pr);
+                                                $(".fis.mes" + i + ".rubro" + rubro).text(number_format(cn, 2, ".", ",")).data("val", cn);
+
+                                                dataAjax += "&crono=" + rubro + "_" + i + "_" + pe + "_" + pr + "_" + cn + "&";
+                                            }
+                                        }
+                                    });
+
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'saveCrono_ajax')}",
+                                        data    : dataAjax,
+                                        success : function (msg) {
+                                            var parts = msg.split("_");
+                                            if (parts[0] == "OK") {
+                                                parts = parts[1].split(";");
+                                                for (var i = 0; i < parts.length; i++) {
+                                                    var p = parts[i].split(":");
+                                                    var mes = p[0];
+                                                    var id = p[1];
+                                                    var rubro = p[2];
+                                                    $(".dol.mes" + mes + ".rubro" + rubro).data("id", id);
+                                                    $(".prct.mes" + mes + ".rubro" + rubro).data("id", id);
+                                                    $(".fis.mes" + mes + ".rubro" + rubro).data("id", id);
+                                                }
+                                                updateTotales();
+                                                $("#modal-cronograma").modal("hide");
+
+                                                $(".rowSelected").removeClass("rowSelected");
+
+                                            } else {
+//                                                ////console.log("ERROR");
+                                            }
+                                        }
+                                    });
+                                } //if validar
+                            });
+
+                            $("#modalTitle").html("Registro del Cronograma");
+                            $("#modalFooter").html("").append($btnCancel).append($btnOk);
+                            $("#modal-cronograma").modal("show");
                         }
-                    });
-                });
+                    }
+
+                }); //fin dblclick
+
+//                $("#btnLimpiarRubro").click(function () {
+//                    if (!$(this).hasClass("disabled")) {
+//                        $.box({
+//                            imageClass : "box_info",
+//                            text       : "Se limpiará el cronograma de los rubros seleccionado, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
+//                            title      : "Confirmación",
+//                            iconClose  : false,
+//                            dialog     : {
+//                                resizable : false,
+//                                draggable : false,
+//                                buttons   : {
+//                                    "Aceptar"  : function () {
+////                                        var id = $(".item_row.rowSelected").data("id");
+////                                        $(".mes.rubro" ge+ id).text("").data("val", 0);
+////                                        updateTotales();
+//
+//                                        $(".item_row.rowSelected").each(function () {
+//                                            var id = $(this).data("id");
+//                                            $(".mes.rubro" + id).text("").data("val", 0);
+//                                        });
+//                                        updateTotales();
+//                                    },
+//                                    "Cancelar" : function () {
+//                                    }
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
+//
+//                $("#btnLimpiarCronograma").click(function () {
+//                    $.box({
+//                        imageClass : "box_info",
+//                        text       : "Se limpiará todo el cronograma, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
+//                        title      : "Confirmación",
+//                        iconClose  : false,
+//                        dialog     : {
+//                            resizable : false,
+//                            draggable : false,
+//                            buttons   : {
+//                                "Aceptar"  : function () {
+//                                    $(".mes").text("").data("val", 0);
+//                                    updateTotales();
+//                                },
+//                                "Cancelar" : function () {
+//                                }
+//                            }
+//                        }
+//                    });
+//                });
 
                 $("#btnDeleteRubro").click(function () {
                     $.box({
                         imageClass : "box_info",
-                        text       : "Se eliminará el rubro, continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
+                        text       : "Se eliminarán los rubros marcados, continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
                         title      : "Confirmación",
                         iconClose  : false,
                         dialog     : {
@@ -984,18 +1284,34 @@
                             draggable : false,
                             buttons   : {
                                 "Aceptar"  : function () {
-                                    var id = $(".item_row.rowSelected").data("id");
-                                    $.ajax({
-                                        type    : "POST",
-                                        url     : "${createLink(action:'deleteRubro_ajax')}",
-                                        data    : {
-                                            id : id
-                                        },
-                                        success : function (msg) {
-                                            $(".mes.rubro" + id).text("").data("val", 0);
-                                            updateTotales();
-                                        }
+                                    %{--var id = $(".item_row.rowSelected").data("id");--}%
+                                    %{--$.ajax({--}%
+                                    %{--type    : "POST",--}%
+                                    %{--url     : "${createLink(action:'deleteRubro_ajax')}",--}%
+                                    %{--data    : {--}%
+                                    %{--id : id--}%
+                                    %{--},--}%
+                                    %{--success : function (msg) {--}%
+                                    %{--$(".mes.rubro" + id).text("").data("val", 0);--}%
+                                    %{--updateTotales();--}%
+                                    %{--}--}%
+                                    %{--});--}%
+
+                                    $(".item_row.rowSelected").each(function () {
+                                        var id = $(this).data("id");
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : "${createLink(action:'deleteRubro_ajax')}",
+                                            data    : {
+                                                id : id
+                                            },
+                                            success : function (msg) {
+                                                $(".mes.rubro" + id).text("").data("val", 0);
+                                                updateTotales();
+                                            }
+                                        });
                                     });
+
                                 },
                                 "Cancelar" : function () {
                                 }
@@ -1034,14 +1350,17 @@
                         }
                     });
                 });
-
-                $("#btnXls").click(function () {
+                </g:if>
+                $("#btnReporte").click(function () {
+                    location.href = "${createLink(controller: 'reportes2', action:'reporteCronogramaPdf', id:contrato.id, params:[tipo:'contrato'])}";
+                    return false;
                 });
 
                 $("#btnGrafico").click(function () {
                     var dataEco = "[[";
-                    var ticksXEco = "[";
-                    var ticksYEco = "[";
+                    dataEco += "[0,0],";
+                    var ticksXEco = "[0,";
+                    var ticksYEco = "[0,";
                     var maxEco = 0;
 
                     $(".totalAcumulado.total").each(function () {
@@ -1058,12 +1377,16 @@
                     dataEco += "]]";
                     ticksXEco = ticksXEco.substr(0, ticksXEco.length - 1);
                     ticksXEco += "]";
-                    ticksYEco = ticksYEco.substr(0, ticksYEco.length - 1);
+//                    ticksYEco = ticksYEco.substr(0, ticksYEco.length - 1);
+
+                    ticksYEco += number_format(${sum}, 2, ".", "");
+
                     ticksYEco += "]";
 
                     var dataFis = "[[";
-                    var ticksXFis = "[";
-                    var ticksYFis = "[";
+                    dataFis += "[0,0],";
+                    var ticksXFis = "[0,";
+                    var ticksYFis = "[0,";
                     var maxFis = 0;
                     $(".prctAcumulado.total").each(function () {
                         var mes = $(this).data("mes");
@@ -1079,7 +1402,10 @@
                     dataFis += "]]";
                     ticksXFis = ticksXFis.substr(0, ticksXFis.length - 1);
                     ticksXFis += "]";
-                    ticksYFis = ticksYFis.substr(0, ticksYFis.length - 1);
+//                    ticksYFis = ticksYFis.substr(0, ticksYFis.length - 1);
+
+                    ticksYFis += number_format(100, 2, ".", "");
+
                     ticksYFis += "]";
 
                     var tituloe = "Avance económico de la obra";
@@ -1087,9 +1413,13 @@
                     var titulof = "Avance físico de la obra";
                     var colorf = "5F81AA";
 
+                    maxFis = 100;
+                    maxEco = ${sum};
+
                     var d = "datae=" + dataEco + "&txe=" + ticksXEco + "&tye=" + ticksYEco + "&me=" + maxEco + "&tituloe=" + tituloe + "&colore=" + colore;
                     d += "&dataf=" + dataFis + "&txf=" + ticksXFis + "&tyf=" + ticksYFis + "&mf=" + maxFis + "&titulof=" + titulof + "&colorf=" + colorf;
-                    d += "&obra=${obra.id}&contrato=${contrato.id}";
+                    d += "&obra=${obra.id}&contrato=${contrato.id}"
+                    d += "&subpre=${subpre}";
 
                     var url = "${createLink(action: 'graficos2')}?" + d;
 //                    ////console.log(url);
@@ -1097,10 +1427,7 @@
 
                     return false;
                 });
-
             });
-
-
         </script>
 
     </body>

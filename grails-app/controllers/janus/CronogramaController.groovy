@@ -8,8 +8,15 @@ import org.springframework.dao.DataIntegrityViolationException
 class CronogramaController extends janus.seguridad.Shield {
 
     def preciosService
+    def arreglosService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def fixCrono() {
+        def obra = Obra.get(params.id)
+        def res = arreglosService.fixCronoObra(obra)
+        render res
+    }
 
     def saveCrono_ajax() {
 //        println ">>>>>>>>>>>>>>>>>"

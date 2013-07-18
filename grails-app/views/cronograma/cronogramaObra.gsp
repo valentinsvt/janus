@@ -89,7 +89,7 @@
         <g:set var="sum" value="${0}"/>
 
         <div class="tituloTree">
-            Cronograma de ${obra.descripcion} (${meses} mes${obra.plazoEjecucionMeses == 1 ? "" : "es"})
+            Cronograma de ${obra.descripcion} (${meses} mes${meses == 1 ? "" : "es"})
         </div>
 
         <div class="btn-toolbar">
@@ -98,15 +98,15 @@
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>
-                <g:if test="${meses > 0 && plazoOk}">
-                    <a href="#" class="btn disabled" id="btnLimpiarRubro">
-                        <i class="icon-check-empty"></i>
-                        Limpiar Rubro
-                    </a>
-                    <a href="#" class="btn" id="btnLimpiarCronograma">
-                        <i class="icon-th-large"></i>
-                        Limpiar Cronograma
-                    </a>
+                <g:if test="${meses > 0 && plazoOk && obra.estado != 'R'}">
+                %{--<a href="#" class="btn disabled" id="btnLimpiarRubro">--}%
+                %{--<i class="icon-check-empty"></i>--}%
+                %{--Limpiar Rubro--}%
+                %{--</a>--}%
+                %{--<a href="#" class="btn" id="btnLimpiarCronograma">--}%
+                %{--<i class="icon-th-large"></i>--}%
+                %{--Limpiar Cronograma--}%
+                %{--</a>--}%
                     <a href="#" class="btn disabled" id="btnDeleteRubro">
                         <i class="icon-minus"></i>
                         Eliminar Rubro
@@ -146,7 +146,9 @@
                                       noSelection="['-1': 'TODOS']"/>
             <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
 
-            <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>
+            <g:if test="${obra.estado != 'R'}">
+                <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>
+            </g:if>
         </div>
 
         <g:if test="${meses > 0 && plazoOk}">
@@ -758,6 +760,7 @@
                     location.href = "${createLink(action: 'cronogramaObra')}/${obra.id}?subpre=" + $("#subpres").val();
                 });
 
+                <g:if test="${obra.estado!='R'}">
                 $("#tabla_material").children("tr").click(function () {
                     //                    $(".rowSelected").removeClass("rowSelected");
 
@@ -790,6 +793,7 @@
                         $("#btnLimpiarRubro, #btnDeleteRubro").removeClass("disabled");
                     }
                 });
+                </g:if>
 
                 $(".spinner").spinner({
                     min : 1,
@@ -1065,6 +1069,7 @@
                                     } else {
                                         ////console.log("ERROR");
                                     }
+                                    $(".rowSelected").removeClass("rowSelected");
                                 }
                             });
                         }
@@ -1077,6 +1082,7 @@
                     $("#modal-cronograma").modal("show");
                 }
 
+                <g:if test="${obra.estado!='R'}">
                 $(".mes").dblclick(function () {
                     var $sel = getSelected();
                     var $celda = $(this);
@@ -1179,7 +1185,6 @@
 
                                     $.ajax({
                                         type    : "POST",
-                                        async   : false,
                                         url     : "${createLink(action:'saveCrono_ajax')}",
                                         data    : dataAjax,
                                         success : function (msg) {
@@ -1216,56 +1221,56 @@
 
                 }); //fin dblclick
 
-                $("#btnLimpiarRubro").click(function () {
-                    if (!$(this).hasClass("disabled")) {
-                        $.box({
-                            imageClass : "box_info",
-                            text       : "Se limpiará el cronograma de los rubros seleccionado, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
-                            title      : "Confirmación",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable : false,
-                                draggable : false,
-                                buttons   : {
-                                    "Aceptar"  : function () {
-//                                        var id = $(".item_row.rowSelected").data("id");
-//                                        $(".mes.rubro" ge+ id).text("").data("val", 0);
+//                $("#btnLimpiarRubro").click(function () {
+//                    if (!$(this).hasClass("disabled")) {
+//                        $.box({
+//                            imageClass : "box_info",
+//                            text       : "Se limpiará el cronograma de los rubros seleccionado, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
+//                            title      : "Confirmación",
+//                            iconClose  : false,
+//                            dialog     : {
+//                                resizable : false,
+//                                draggable : false,
+//                                buttons   : {
+//                                    "Aceptar"  : function () {
+////                                        var id = $(".item_row.rowSelected").data("id");
+////                                        $(".mes.rubro" ge+ id).text("").data("val", 0);
+////                                        updateTotales();
+//
+//                                        $(".item_row.rowSelected").each(function () {
+//                                            var id = $(this).data("id");
+//                                            $(".mes.rubro" + id).text("").data("val", 0);
+//                                        });
 //                                        updateTotales();
-
-                                        $(".item_row.rowSelected").each(function () {
-                                            var id = $(this).data("id");
-                                            $(".mes.rubro" + id).text("").data("val", 0);
-                                        });
-                                        updateTotales();
-                                    },
-                                    "Cancelar" : function () {
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-
-                $("#btnLimpiarCronograma").click(function () {
-                    $.box({
-                        imageClass : "box_info",
-                        text       : "Se limpiará todo el cronograma, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
-                        title      : "Confirmación",
-                        iconClose  : false,
-                        dialog     : {
-                            resizable : false,
-                            draggable : false,
-                            buttons   : {
-                                "Aceptar"  : function () {
-                                    $(".mes").text("").data("val", 0);
-                                    updateTotales();
-                                },
-                                "Cancelar" : function () {
-                                }
-                            }
-                        }
-                    });
-                });
+//                                    },
+//                                    "Cancelar" : function () {
+//                                    }
+//                                }
+//                            }
+//                        });
+//                    }
+//                });
+//
+//                $("#btnLimpiarCronograma").click(function () {
+//                    $.box({
+//                        imageClass : "box_info",
+//                        text       : "Se limpiará todo el cronograma, continuar?<br/>Los datos no serán remplazados hasta que haya ingresado datos que los remplacen",
+//                        title      : "Confirmación",
+//                        iconClose  : false,
+//                        dialog     : {
+//                            resizable : false,
+//                            draggable : false,
+//                            buttons   : {
+//                                "Aceptar"  : function () {
+//                                    $(".mes").text("").data("val", 0);
+//                                    updateTotales();
+//                                },
+//                                "Cancelar" : function () {
+//                                }
+//                            }
+//                        }
+//                    });
+//                });
 
                 $("#btnDeleteRubro").click(function () {
                     $.box({
@@ -1344,9 +1349,9 @@
                         }
                     });
                 });
-
+                </g:if>
                 $("#btnReporte").click(function () {
-                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes2',action: 'reporteCronograma', id:obra.id)}&filename=cronograma_${new Date().format('ddMMyyyy_HHmm')}.pdf";
+                    location.href = "${createLink(controller: 'reportes2', action:'reporteCronogramaPdf', id:obra.id, params:[tipo:'obra'])}";
                     return false;
                 });
 

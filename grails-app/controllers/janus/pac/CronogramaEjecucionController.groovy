@@ -8,8 +8,15 @@ import janus.VolumenesObra
 class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def preciosService
+    def arreglosService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def fixCrono() {
+        def obra = Obra.get(params.id)
+        def res = arreglosService.fixCronoEjecucion(obra)
+        render res
+    }
 
     def errores() {
 
@@ -328,8 +335,29 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         render ok ? "OK" : "NO"
     }
 
-    def numero(num) {
-        return formatNumber(number: num, maxFractionDigits: 2, minFractionDigits: 2, locale: "ec")
+    private String numero(num, decimales, cero) {
+        if (num == 0 && cero.toString().toLowerCase() == "hide") {
+            return " ";
+        }
+        if (decimales == 0) {
+            return formatNumber(number: num, minFractionDigits: decimales, maxFractionDigits: decimales, locale: "ec")
+        } else {
+            def format
+            if (decimales == 2) {
+                format = "##,##0"
+            } else if (decimales == 3) {
+                format = "##,###0"
+            }
+            return formatNumber(number: num, minFractionDigits: decimales, maxFractionDigits: decimales, locale: "ec", format: format)
+        }
+    }
+
+    private String numero(num, decimales) {
+        return numero(num, decimales, "show")
+    }
+
+    private String numero(num) {
+        return numero(num, 2)
     }
 
     def tabla() {
@@ -528,7 +556,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             filaDolAcum += numero(sumaDol)
             filaDolAcum += "</td>"
 
-            filaPor += "<td class='num'>-"
+            filaPor += "<td class='num'>"
 //            filaPor += formatNumber(number: por, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
             filaPor += numero(por)
             filaPor += "</td>"
