@@ -421,11 +421,11 @@ class ReportesController {
         def file = File.createTempFile(name, '.xls')
         file.deleteOnExit()
         WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
-        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, true);
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
         WritableCellFormat times16format = new WritableCellFormat(times16font);
-        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, true);
+        WritableFont times10Font = new WritableFont(WritableFont.TIMES, 10, WritableFont.NO_BOLD, false);
         WritableCellFormat times10 = new WritableCellFormat(times10Font);
-        WritableFont times10FontB = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD, true);
+        WritableFont times10FontB = new WritableFont(WritableFont.TIMES, 10, WritableFont.BOLD, false);
         WritableCellFormat times10b = new WritableCellFormat(times10FontB);
         def fila = 4
 
