@@ -347,6 +347,7 @@ class ObraFPController {
     }
 
     def calculaTransporte(id) {
+        // debería hacer un cálculo distintopara las obras registradas
         def cn = dbConnectionService.getConnection()
         def tx_sql = "select sum(trnp) transporte from rbro_pcun_v2 (${id})"
         def trnp = 0.0

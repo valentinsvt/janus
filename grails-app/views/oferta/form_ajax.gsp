@@ -30,6 +30,7 @@
                 <g:select id="proveedor" name="proveedor.id" from="${janus.pac.Proveedor.list()}" optionKey="id" class="many-to-one "
                           value="${ofertaInstance?.proveedor?.id}" noSelection="['null': '']" optionValue="nombre"/>
             </span>
+            <span class="mandatory">*</span>
             <a href="#" id="btnProv" class="btn" rel="tooltip" title="Agregar proveedor"><i class="icon-plus"></i></a>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -45,6 +46,7 @@
 
         <div class="controls">
             <g:textArea name="descripcion" cols="40" rows="5" maxlength="255" class="" value="${ofertaInstance?.descripcion}"/>
+            <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -59,7 +61,7 @@
 
         <div class="controls">
             <g:field type="number" name="monto" class="" value="${fieldValue(bean: ofertaInstance, field: 'monto')}"/>
-
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -73,6 +75,7 @@
 
         <div class="controls">
             <elm:datepicker name="fechaEntrega" class="" value="${ofertaInstance?.fechaEntrega}"/>
+            <span class="mandatory">*</span>
 
 
             <p class="help-block ui-helper-hidden"></p>

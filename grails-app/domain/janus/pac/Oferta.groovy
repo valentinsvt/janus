@@ -37,11 +37,11 @@ class Oferta {
         }
     }
     static constraints = {
-        concurso(blank: true, nullable: true)
-        proveedor(blank: true, nullable: true)
-        descripcion(blank: true, nullable: true, maxSize: 255)
-        monto(blank: true, nullable: true)
-        fechaEntrega(blank: true, nullable: true)
+        concurso(blank: false, nullable: false)
+        proveedor(blank: false, nullable: false)
+        descripcion(blank: false, nullable: false, maxSize: 255)
+        monto(blank: false, nullable: false)
+        fechaEntrega(blank: false, nullable: false)
         plazo(blank: true, nullable: true)
         calificado(blank: true, nullable: true, maxSize: 1)
         hoja(blank: true, nullable: true)

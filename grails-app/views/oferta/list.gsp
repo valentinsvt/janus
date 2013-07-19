@@ -55,7 +55,7 @@
                         <g:sortableColumn property="monto" title="Monto"/>
                         <g:sortableColumn property="fechaEntrega" title="Fecha Entrega"/>
                         <g:sortableColumn property="plazo" title="Plazo"/>
-                        <th width="150">Acciones</th>
+                        <th width="120">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
@@ -77,9 +77,11 @@
                                 <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${ofertaInstance.id}">
                                     <i class="icon-trash icon-large"></i>
                                 </a>
+%{--
                                 <g:link class="btn btn-small btn-warning btn-ajax" href="#" rel="tooltip" title="Calificar" id="${ofertaInstance.id}" controller="registroParametros" action="registro">
                                     <i class="icon-zoom-in icon-tasks"></i>
                                 </g:link>
+--}%
                             </td>
                         </tr>
                     </g:each>
