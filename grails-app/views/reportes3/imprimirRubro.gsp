@@ -162,7 +162,7 @@
 
             <div class="tituloPdf tituloHeader">
                 <p class="grande">
-                    <b>G.A.D. PROVINCIA DE PICHINCHA1</b>
+                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
                 <p style="font-size: 14px">
@@ -178,12 +178,12 @@
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
                         %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
-                        <b>Fecha:</b> ${fechaPala}
+                        <b>Fecha:</b> ${fechaPala.format("dd-MM-yyyy")}
                         %{--<b class="span3">Fecha Act. P.U:</b> ${fechaPrecios}--}%
                     </div>
 
                     <div class="span4">
-                        <b>Fecha Act. P.U:</b> ${fechaPrecios}
+                        <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
                     </div>
                 </div>
 

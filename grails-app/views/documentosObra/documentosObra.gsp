@@ -2366,21 +2366,30 @@ $(function () {
 
      });
 
-    $("#equiposMemo,#manoObraMemo,#materialesMemo").keyup(function(ev) {
-       if(ev.keyCode == 13) {
-           calculoPorcentaje();
-           sumaTotal()
-       }
-    });
 
 
+    $("#equiposMemo,#manoObraMemo,#materialesMemo").keydown(function (ev) {
 
-//
-     $("#costoPorcentaje").click(function () {
-        calculoPorcentaje();
-         sumaTotal();
+        return validarNum(ev);
 
-     });
+    }).keyup(function () {
+
+                calculoPorcentaje();
+                sumaTotal()
+
+            });
+
+
+    $("#costoPorcentaje").keydown(function (ev) {
+
+        return validarNum(ev);
+
+    }).keyup(function () {
+
+                calculoPorcentaje();
+                sumaTotal();
+
+            });
 
      function  calculoPorcentaje() {
          var porcentaje = 0

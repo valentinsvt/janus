@@ -108,6 +108,7 @@ class Reportes3Controller {
         def fecha1 = new Date().parse("dd-MM-yyyy", params.fecha)
 
         def fecha2 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
+
         def fechaSalida = printFecha(fecha2)
         def fecha = printFecha(fecha1)
 
@@ -275,7 +276,8 @@ class Reportes3Controller {
         if (totalMat == 0)
             tablaMat = ""
 //        println "fin reporte rubro"
-        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaTrans2: tablaTrans2, band:  band, tablaMat2: tablaMat2, bandMat: bandMat, bandTrans: bandTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, fechPal: fechaPal, fechaSalida: fechaSalida]
+        [rubro: rubro, fechaPrecios: fecha1, tablaTrans: tablaTrans, tablaTrans2: tablaTrans2, band:  band, tablaMat2: tablaMat2, bandMat: bandMat,
+                bandTrans: bandTrans, tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, fechPal: fechaPal, fechaSalida: fecha2]
 
 
     }
@@ -711,11 +713,12 @@ class Reportes3Controller {
         if (totalMat == 0)
             tablaMat = ""
 //        println "fin reporte rubro"
-        [rubro: rubro, fechaPrecios: fecha2, tablaTrans: tablaTrans, tablaTrans2: tablaTrans2, band: band, tablaMat2: tablaMat2, bandMat: bandMat, bandTrans: bandTrans , tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat, tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra, fechaPala: fechaPala]
+        [rubro: rubro, fechaPrecios: fecha, tablaTrans: tablaTrans, tablaTrans2: tablaTrans2, band: band, tablaMat2: tablaMat2, bandMat: bandMat, bandTrans: bandTrans , tablaHer: tablaHer, tablaMano: tablaMano, tablaMat: tablaMat,
+                tablaIndi: tablaIndi, totalRubro: totalRubro, totalIndi: totalIndi, obra: obra, fechaPala: fecha1]
     }
 
     def imprimirRubros() {
-//        println "imprimir rubro " + params
+//        println "imprimir rubros " + params
 
         def rubros = []
 
@@ -751,17 +754,17 @@ class Reportes3Controller {
         rubros.each { rubro ->
             def nombre = rubro.nombre.replaceAll('<', '(menor)').replaceAll('>', '(mayor)')
 
-            def header, tablas, footer
+            def header, tablas, footer, nota
             def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
 
             header = " <div style=\"margin-top: 20px\">\n" +
                     "                <div class=\"row-fluid\">\n" +
                     "                    <div class=\"span3\" style=\"margin-right: 195px !important;\">\n" +
-                    "                        <b>Fecha:</b> ${printFecha(new Date())}\n" +
+                    "                        <b>Fecha:</b> ${new Date().format("dd-MM-yyyy")}\n" +
                     "                    </div>\n" +
                     "\n" +
                     "                    <div class=\"span4\">\n" +
-                    "                        <b>Fecha Act. P.U:</b> ${printFecha(fecha)}\n" +
+                    "                        <b>Fecha Act. P.U:</b> ${fecha.format("dd-MM-yyyy")}\n" +
                     "                    </div>\n" +
                     "                </div>\n" +
                     "\n" +
@@ -797,7 +800,12 @@ class Reportes3Controller {
             def total = 0, totalHer = 0, totalMan = 0, totalMat = 0
             def band = 0
             def bandMat = 0
+            def obra
             def bandTrans = params.trans
+            if (params.obra) {
+                obra = Obra.get(params.obra)
+            }
+
 //            tablaTrans += "<thead><tr><th colspan='7'>Transporte</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px;'>Código</th><th style='width:610px'>Descripción</th><th>Pes/Vol</th><th>Cantidad</th><th>Distancia</th><th>Unitario(\$)</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
 //
 //            tablaHer += "<thead><tr><th colspan='7'>Equipos</th></tr><tr><th colspan='7' class='theader'></th></tr><tr><th style='width: 80px'>Código</th><th style='width:610px'>Descripción</th><th>Cantidad</th><th>Tarifa<br/> (\$/hora)</th><th>Costo(\$)</th><th>Rendimiento</th><th>C.Total(\$)</th></tr>  <tr><th colspan='7' class='theaderup'></th></tr> </thead><tbody>"
@@ -910,106 +918,6 @@ class Reportes3Controller {
 
             }
 
-//
-//            res.each { r ->
-//                if (r["grpocdgo"] == 3) {
-//                    tablaHer += "<tr>"
-//                    tablaHer += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-//                    tablaHer += "<td>" + r["itemnmbr"] + "</td>"
-//                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rndm"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    totalHer += r["parcial"]
-//                    tablaHer += "</tr>"
-//                }
-//                if (r["grpocdgo"] == 2) {
-//                    tablaMano += "<tr>"
-//                    tablaMano += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-//                    tablaMano += "<td>" + r["itemnmbr"] + "</td>"
-//                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rndm"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    totalMan += r["parcial"]
-//                    tablaMano += "</tr>"
-//                }
-//                if (r["grpocdgo"] == 1) {
-//                    bandMat=1
-//                    if (params.trans == true) {
-//                        tablaMat += "<tr>"
-//                        tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-//                        tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
-//                        totalMat += r["parcial"]
-//                        tablaMat += "</tr>"
-//                    }
-////                if (params.desglose != '1') {
-//                    else{
-//                        tablaMat += "<tr>"
-//                        tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-//                        tablaMat += "<td>" + r["itemnmbr"] + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["parcial"] + r["parcial_t"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                        totalMat += (r["parcial"] + r["parcial_t"])
-//                        tablaMat += "</tr>"
-//                    }
-//                }
-//                if (r["grpocdgo"] == 1 && params.trans == true ) {
-//
-//                    tablaTrans += "<tr>"
-//                    tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
-//                    tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
-//                    if(r["tplscdgo"].trim() =='P' || r["tplscdgo"].trim() =='P1' ){
-//                        tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
-//                    } else{
-//
-//                        if(r["tplscdgo"].trim() =='V' || r["tplscdgo"].trim() =='V1' || r["tplscdgo"].trim() =='V2'){
-//
-//                            tablaTrans += "<td style='width: 50px;text-align: right'>" + "m3-km" + "</td>"
-//                        }
-//                        else {
-//
-//                            tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
-//                        }
-//
-//                    }
-////                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
-//                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["distancia"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-////                tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"] / (r["itempeso"] * r["rbrocntd"] * r["distancia"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["tarifa"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    total += r["parcial_t"]
-//                    tablaTrans += "</tr>"
-//                }
-//                else {
-//
-//                }
-//
-//            }
-
-
-
-
-
-//            tablaTrans += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: total, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
-//            tablaTrans += "</tbody></table>"
-//
-//            tablaHer += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalHer, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
-//            tablaHer += "</tbody></table>"
-//            tablaMano += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMan, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
-//            tablaMano += "</tbody></table>"
-//            tablaMat += "<tr><td><b>SUBTOTAL</b></td><td></td><td></td><td></td><td></td><td></td><td style='width: 50px;text-align: right'>${g.formatNumber(number: totalMat, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</td></tr>"
-//            tablaMat += "</tbody></table>"
 
             tablaTrans += "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: total, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
             tablaTrans += "</tbody></table>"
@@ -1046,9 +954,24 @@ class Reportes3Controller {
             if (totalMat == 0)
                 tablaMat = ""
 
-
             tablas = "<div style=\"width: 100%;margin-top: 10px;\">"
-            tablas += tablaHer + tablaMano + tablaMat + tablaTrans + tablaIndi
+
+            if (params.trans == false){
+
+
+                tablas += tablaHer + tablaMano + tablaMat + tablaMat2 + tablaIndi
+
+            }else {
+
+
+
+                tablas += tablaHer + tablaMano + tablaMat + tablaTrans + tablaIndi
+
+
+            }
+
+
+//            tablas += tablaHer + tablaMano + tablaMat + tablaTrans + tablaIndi
             tablas += "</div>"
 
             footer = " <table class=\"table table-bordered table-striped table-condensed table-hover\" style=\"margin-top: 20px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000\">\n" +
@@ -1086,10 +1009,18 @@ class Reportes3Controller {
                     "                    </tbody>\n" +
                     "                </table>"
 
-            html += "<div class='divRubro'>" + header + tablas + footer + "</div>"
+
+            nota += "                <div style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left\">\n" +
+                    "                        <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales\n" +
+                    "                    </div>"
+
+
+            html += "<div class='divRubro'>" + header + tablas + footer + nota + "</div>"
+
         }
 
         [html: html]
+
     }
 
 
@@ -1168,7 +1099,9 @@ class Reportes3Controller {
 
         def item = Item.get(params.id)
 
-        def obra = Obra.get(params.id)
+          def obra = Obra.get(params.id)
+
+
 
         def auxiliar = Auxiliar.get(1)
 
@@ -1207,6 +1140,8 @@ class Reportes3Controller {
         def baos = new ByteArrayOutputStream()
         def name = "calculoValorHoraManoObra_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
@@ -1232,69 +1167,85 @@ class Reportes3Controller {
 //        addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
 
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold))
         headers.add(new Paragraph(" "))
-        headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE MANO DE OBRA"))
+        headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE MANO DE OBRA", times14bold ))
         headers.add(new Paragraph(" "))
 //        headers.add(new Paragraph("Quito, " + formatDate(date: new Date(), format: "dd-MM-yyyy"), times10bold));
-        headers.add(new Paragraph("QUITO, " + fechaCalculo, times10normal));
+        headers.add(new Paragraph("QUITO, " + fechaCalculo, times12bold));
         headers.add(new Paragraph(" ", times10bold));
-        headers.add(new Paragraph(item.nombre, times10bold));
+        headers.add(new Paragraph(item.nombre, times12bold));
         headers.add(new Paragraph(" ", times10bold));
 
 
         document.add(headers)
 
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(90);
-        table.setWidths(arregloEnteros([15,15,5,10,20]))
+        table.setWidths(arregloEnteros([25,8,5,15,10,30,5]))
 
-        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph("Sueldo Unificado", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(Su)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: c, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
+        addCellTabla(table, new Paragraph("Su", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
         addCellTabla(table, new Paragraph("Décimo Tercer", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(Su)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: c, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
+        addCellTabla(table, new Paragraph("Su", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
         addCellTabla(table, new Paragraph("Décimo Cuarto", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(SBU)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: u, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
+        addCellTabla(table, new Paragraph("S.B.U", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
         addCellTabla(table, new Paragraph("Aporte Patronal", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(AP)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: ap, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
+        addCellTabla(table, new Paragraph("Su*12*0.1215", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
         addCellTabla(table, new Paragraph("Fondo Reserva", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(Fr)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: u, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
+        addCellTabla(table, new Paragraph("Su", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
         addCellTabla(table, new Paragraph("Total Anual", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(Ta)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: ta, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
+        addCellTabla(table, new Paragraph("(Su*13)+SBU+AP+Fr", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
         addCellTabla(table, new Paragraph("Jornal Real", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(Jr)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: jr, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-
+        addCellTabla(table, new Paragraph("Ta/235", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+
         addCellTabla(table, new Paragraph("Costo Horario", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("(Ch)", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: nuevoCosto, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
+        addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Jr/8", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         document.add(table)
@@ -1355,6 +1306,8 @@ class Reportes3Controller {
         def baos = new ByteArrayOutputStream()
         def name = "calculoValorHoraEquipos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
@@ -1380,13 +1333,13 @@ class Reportes3Controller {
 //        addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
 
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA"))
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA",times18bold ))
         headers.add(new Paragraph(" "))
-        headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE EQUIPOS"))
+        headers.add(new Paragraph("CÁLCULO DEL VALOR POR HORA DE EQUIPOS", times14bold))
         headers.add(new Paragraph(" "))
-        headers.add(new Paragraph("Quito, " + printFecha(new Date()), times10bold));
+        headers.add(new Paragraph("Quito, " + printFecha(new Date()), times12bold));
         headers.add(new Paragraph(" ", times10bold));
-        headers.add(new Paragraph("Equipo:" + item.nombre, times10bold));
+        headers.add(new Paragraph("Equipo:" + item.nombre, times12bold));
         headers.add(new Paragraph(" ", times10bold));
 
 
@@ -1457,7 +1410,7 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: params.ci, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("vlan", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor Anual", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph("Factor de recuperación de capital", times10normal), prmsCellLeft2)
@@ -1489,7 +1442,7 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: params.cs, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("vlan", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor Anual", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph("Costo de Seguros", times10normal), prmsCellLeft2)
@@ -1529,7 +1482,7 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: params.k, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("vlan", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor Anual", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
 
@@ -1563,7 +1516,7 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: params.di, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("vlan", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor Anual", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph("Costo Diesel", times10normal), prmsCellLeft2)
@@ -1587,7 +1540,7 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: params.ac, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("vlan", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor Anual", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph("Costo Lubricante", times10normal), prmsCellLeft2)
@@ -1611,7 +1564,7 @@ class Reportes3Controller {
         addCellTabla(table, new Paragraph(" : ", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(g.formatNumber(number: params.gr, minFractionDigits: 2, maxFractionDigits:2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
-        addCellTabla(table, new Paragraph("vlan", times10normal), prmsCellLeft2)
+        addCellTabla(table, new Paragraph("Valor Anual", times10normal), prmsCellLeft2)
         addCellTabla(table, new Paragraph(" ", times10normal), prmsCellLeft2)
 
         addCellTabla(table, new Paragraph("Costo Grasa", times10normal), prmsCellLeft2)

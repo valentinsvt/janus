@@ -634,7 +634,7 @@
 
             <div class="span2" style="margin-top: 10px">
               Fecha:
-              <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${new java.util.Date()}" style="width: 100px"/>
+              <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${rubro?.fechaModificacion}" style="width: 100px"/>
             </div>
 
         </fieldset>

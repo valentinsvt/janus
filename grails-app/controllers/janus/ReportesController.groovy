@@ -1106,13 +1106,14 @@ class ReportesController {
 
 
     def imprimirRubros() {
-
+//        println("->>>" + params)
 
         def obra = Obra.get(params.obra.toLong())
 
 
         def lugar = obra.lugar
         def fecha = obra.fechaPreciosRubros
+        def fechaIngreso = obra.fechaCreacionObra
         def itemsChofer = [obra.chofer]
         def itemsVolquete = [obra.volquete]
 
@@ -1124,6 +1125,7 @@ class ReportesController {
         def name = "rubros_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
@@ -1173,9 +1175,9 @@ class ReportesController {
             Paragraph headers = new Paragraph();
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
-            headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-            headers.add(new Paragraph("GESTIÓN DE PRESUPUESTOS", times12bold));
-            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times12bold));
+            headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+            headers.add(new Paragraph("GESTIÓN DE PRESUPUESTOS", times14bold));
+            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times14bold));
 //            headers.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el " + new Date().format("dd/MM/yyyy hh:mm"), times8normal))
             addEmptyLine(headers, 1);
             document.add(headers);
@@ -1193,7 +1195,7 @@ class ReportesController {
             headerRubroTabla.setWidths(arregloEnteros([12, 66, 12, 10]))
 
             addCellTabla(headerRubroTabla, new Paragraph("Fecha:", times8bold), prmsHeaderHoja)
-            addCellTabla(headerRubroTabla, new Paragraph(printFecha(new Date()), times8normal), prmsHeaderHoja)
+            addCellTabla(headerRubroTabla, new Paragraph(fechaIngreso.format("dd-MM-yyyy"), times8normal), prmsHeaderHoja)
 
             addCellTabla(headerRubroTabla, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(headerRubroTabla, new Paragraph(" ", times8normal), prmsHeaderHoja)

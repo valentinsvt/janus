@@ -35,7 +35,7 @@
 
 <g:if test="${item.departamento.subgrupo.grupoId == 2 || item.departamento.subgrupo.grupoId == 3}">
     <div class="btn-group pull-left">
-    <a href="#" class="btn btn-ajax" id="btnPrint" style="display: none; margin-left: 10px">
+    <a href="#" class="btn btn-ajax" id="btnPrint" style="display: none; margin-left: 10px" data-id="${item.id}" data-nombre="${item.nombre}">
         <i class="icon-print"></i>
         Imprimir
     </a>
@@ -322,8 +322,11 @@
     });
 
     var valorSueldo
+    var id2
 
     $("#btnCalc2").click(function () {
+
+
         var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
         var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Calcular</a>');
         var a = "${anioRef}";
@@ -367,6 +370,9 @@
 
            valorSueldo = $valor.val();
 
+
+
+
             $(this).replaceWith(spinner);
 
             $.ajax({
@@ -407,7 +413,7 @@
 
     $("#btnCalc3").click(function () {
         var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-        var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Calcular</a>');
+        var btnCalc = $('<a href="#"  class="btn btn-success"><i class="icon-check"></i> Aceptar</a>');
         var a = "${anioRef}";
 
         $.ajax({
@@ -521,8 +527,9 @@
           title     : 'Elegir fecha de validez de cálculo',
           buttons   : {
               "Aceptar" : function () {
-
-                  location.href="${g.createLink(controller: 'reportes3',action: 'imprimirCalculoValor', id: item.id)}?valor=" + valorSueldo + "&fechaCalculo=" + $("#fechaCalculoId").val()
+                      console.log( $("#btnPrint").data("id"))
+                  location.href="${g.createLink(controller: 'reportes3',action: 'imprimirCalculoValor')}?valor=" + valorSueldo + "&fechaCalculo=" + $("#fechaCalculoId").val() + "&id=" +
+                          $("#btnPrint").data("id")
                   $("#imprimirDialog").dialog("close");
 
               },

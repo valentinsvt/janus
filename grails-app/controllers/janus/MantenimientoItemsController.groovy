@@ -1061,6 +1061,8 @@ class MantenimientoItemsController extends Shield {
         def itemId = parts[0]
         def lugarId = parts[1]
         def item = Item.get(itemId)
+
+//        println("-->>" + item + " id:" + item.id)
         def operador = params.operador
         def fecha = params.fecha
 
