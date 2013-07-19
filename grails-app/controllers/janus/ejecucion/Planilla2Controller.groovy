@@ -748,7 +748,7 @@ class Planilla2Controller {
 //                println "parcial crono += "+((pc/diasPr)*dias2).round(2)+"   = "+parcialCronograma+"     ("+pc+")   "+diasPr
 
             }
-            p.parcialCronograma = parcialCronograma.round(2)
+            p.parcialCronograma = parcialCronograma.toDouble().round(2)
             p.dias = diasTotal
             def totalPlanilla = planilla.valor
             def diasPlanilla = planilla.fechaFin - planilla.fechaInicio + 1
@@ -1074,7 +1074,7 @@ class Planilla2Controller {
     def anticipo() {
 
         def planilla = Planilla.get(params.id)
-        def override = false
+        def override = true
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def fechaOferta = planilla.contrato.oferta.fechaEntrega - 30
@@ -1405,11 +1405,12 @@ class Planilla2Controller {
                     eq("indice", c.indice)
                     periodo {
                         le("fechaInicio", per.fechaInicio)
-                        order("fechaInicio", "desc")
+                        order("fechaInicio", "asc")
                     }
                 }
+//                println "no hay val   ${c.indice.id}---- ${per} "+vals.periodo
                 if (vals.size() > 0) {
-                    perNuevo = vals.pop().per
+                    perNuevo = vals.pop().periodo
                 } else {
                     println "error wtf  " + c.indice + " " + per
                 }

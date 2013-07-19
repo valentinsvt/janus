@@ -271,7 +271,7 @@ class PlanillaController extends janus.seguridad.Shield {
         if (!pla) {
             anticipoPagado = true
         } else {
-            if (pla.fechaPago) {
+            if (pla.fechaMemoPagoPlanilla) {
                 anticipoPagado = true
             }
         }
@@ -379,7 +379,9 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println "planillas ant "+planillasAnt+" per ejec "+periodosEjec
             if (planillasAnt.size() > 0) {
                 inicio = planillasAnt.pop().fechaFin + 1
+                println "inicio "+inicio
                 fin = getLastDayOfMonth(inicio)
+                println "fin "+fin
                 if (fin > finalObra) {
                     periodos.put((inicio.format("dd-MM-yyyy") + "_" + finalObra.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + finalObra.format("dd-MM-yyyy"))
                 } else {
