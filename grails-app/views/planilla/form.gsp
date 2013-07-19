@@ -108,6 +108,17 @@
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
 
+                        <div class="span2 formato">
+                            Fiscalizador
+                        </div>
+
+                        <div class="span4">
+                            <g:set var="fisc" value="${janus.Departamento.get(1)}"/>
+                            <g:select name="fiscalizador" from="${janus.Persona.findAllByDepartamento(fisc)}" value="${planillaInstance.fiscalizador.id}" optionKey="id" optionValue="${{ it.nombre + " " + it.apellido }}"/>
+
+                            <p class="help-block ui-helper-hidden"></p>
+                        </div>
+
                         %{--<div class="span2 formato">--}%
                         %{--Número Factura--}%
                         %{--</div>--}%
@@ -137,7 +148,7 @@
 
                         <div class="span4">
                             %{--<elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" minDate="${minDatePres}" maxDate="new Date()" value="${planillaInstance?.fechaOficioEntradaPlanilla}"/>--}%
-                            <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required"  value="${planillaInstance?.fechaOficioEntradaPlanilla}"/>
+                            <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" value="${planillaInstance?.fechaOficioEntradaPlanilla}"/>
                             <span class="mandatory">*</span>
 
                             <p class="help-block ui-helper-hidden"></p>
@@ -152,7 +163,7 @@
 
                         <div class="span4">
                             %{--<elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" minDate="${minDatePres}" maxDate="new Date()" value="${planillaInstance?.fechaIngreso}"/>--}%
-                            <elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas"  value="${planillaInstance?.fechaIngreso}"/>
+                            <elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" value="${planillaInstance?.fechaIngreso}"/>
                             <span class="mandatory">*</span>
 
                             <p class="help-block ui-helper-hidden"></p>

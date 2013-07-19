@@ -1,4 +1,5 @@
 package janus
+
 class Parametros implements Serializable {
     //int indicador
     //String password
@@ -27,6 +28,8 @@ class Parametros implements Serializable {
     Item volquete
     int iva
     double inflacion
+
+    Persona subdirector
 
 
     static mapping = {
@@ -64,6 +67,8 @@ class Parametros implements Serializable {
             volquete column: 'itemvlqt'
             iva column: 'paux_iva'
             inflacion column: 'pauxinfl'
+
+            subdirector column: 'prsnsbdr'
         }
     }
     static constraints = {
@@ -90,9 +95,10 @@ class Parametros implements Serializable {
         indiceCostosIndirectosVehiculos(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosVehiculos'])
         indiceCostosIndirectosPromocion(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosPromocion'])
         indiceCostosIndirectosTimbresProvinciales(blank: true, nullable: true, attributes: [title: 'indiceCostosIndirectosTimbresProvinciales'])
-        chofer(nullable: true,blank:true)
-        volquete(nullable: true,blank:true)
-        iva(nullable: true,blank:true)
-        inflacion(nullable: true,blank:true)
+        chofer(nullable: true, blank: true)
+        volquete(nullable: true, blank: true)
+        iva(nullable: true, blank: true)
+        inflacion(nullable: true, blank: true)
+        subdirector(nullable: true, blank: true)
     }
 }

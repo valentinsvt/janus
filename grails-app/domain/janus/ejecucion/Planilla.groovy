@@ -1,6 +1,7 @@
 package janus.ejecucion
 
 import janus.Contrato
+import janus.Persona
 
 class Planilla {
 
@@ -49,6 +50,8 @@ class Planilla {
     Date fechaMemoSalidaPlanilla
     Date fechaMemoPedidoPagoPlanilla
     Date fechaMemoPagoPlanilla
+
+    Persona fiscalizador
 
     static mapping = {
         table 'plnl'
@@ -104,6 +107,8 @@ class Planilla {
             fechaMemoSalidaPlanilla column: 'plnlfcad'
             fechaMemoPedidoPagoPlanilla column: 'plnlfcpp'
             fechaMemoPagoPlanilla column: 'plnlfcfi'
+
+            fiscalizador column: 'prsnfscl'
         }
     }
 
@@ -149,6 +154,8 @@ class Planilla {
         fechaMemoSalidaPlanilla(blank: true, nullable: true)
         fechaMemoPedidoPagoPlanilla(blank: true, nullable: true)
         fechaMemoPagoPlanilla(blank: true, nullable: true)
+
+        fiscalizador(blank: true, nullable: true)
 
     }
 }
