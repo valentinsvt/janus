@@ -14,7 +14,7 @@
 
         <div class="tituloTree">
             <g:if test="${contrato}">
-                Documentos del contrato de la oba <span style="font-weight: bold; font-style: italic;">${contrato.obra.descripcion}</span>
+                Documentos del contrato de la obra: <span style="font-weight: bold;">${contrato.obra.descripcion?.toUpperCase()}</span>
             </g:if>
             <g:else>
                 Documentos de <span style="font-weight: bold; font-style: italic;">${concurso.objeto}</span>
