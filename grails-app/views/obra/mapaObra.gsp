@@ -32,7 +32,7 @@
         </style>
 
 
-        <title>Localización Geográfica de la Obra</title>
+        <title>Localización de la Obra</title>
     </head>
 
     <body>
@@ -42,101 +42,77 @@
             </div>
         </div>
 
-        <div class="datosObra span12" style="margin-bottom: 20px">
-
-            <div class="span3" style="width: 180px;">
-                <span id="nombreObra" class="control-label label label-inverse">
-                    Nombre de la Obra:
-                </span>
-            </div>
-
-            <div class="span5" style="margin-left: -50px; font-size: medium; width: 80%;">${obra?.nombre}</div>
+        <div class="datosObra span12" style="margin-bottom: 20px; width: 900px; text-align: center">
+            <div style="margin-left: -50px; font-size: medium; width: 100%;">NOMBRE DE LA OBRA: ${obra?.nombre}</div>
         </div>
 
         <div>
-            <div id="mapaPichincha" style="width: 850px; height: 600px; margin-left: 10px; float: left; margin-bottom: 20px;"></div>
+            <div id="mapaPichincha" style="width: 900px; height: 500px; margin-left: 10px; float: left; margin-bottom: 20px;"></div>
         </div>
 
-        <div style="float: left" class="noprint">
+        <div style="float: left; width: 200px;" class="noprint">
+            <div style="margin: 20px; margin-top: 80px;" class="noprint">
+                <b>Nota:</b>
+                <p>Si usa el botón "Imprimir", use la configuración de página definir la horientación del papel horizontal y
+                una escala de 100% para cubrir toda la hoja en tamaño A4</p>
+                <p>Se puede usar también la opción "Vista preliminar" para fijar la horientación del papel a horizontal y
+                la escala que desee según sus requerimiento</p>
+            </div>
+
+        </div>
+
+        <div class="noprint">
 
             %{--<div id="imprime" style="float: left; margin: 20px; height: 80px;">Coordenadas:</div>--}%
 
 
-            <div style="margin-top: 40px; width: 300px;">
+            <div style="margin-top: 40px; width: 900px;">
                 %{--<div class="span3" style="margin-left: -30px; margin-right: 30px;">--}%
                 <div style="margin: 0 0 0 20px;">
                     <span class="control-label label label-inverse">
                         Coordenadas Originales de la Obra:
                     </span>
-                </div>
-                %{--<div class="span2" style="float: left; width: 200px;">Latitud: <g:textField name="lato" class="lato number" style="width: 100px" id="lato"--}%
-                %{--value="${formatNumber(number:obra?.latitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" disabled="true"/></div>--}%
-                %{--<div class="span2" style="float: left; width: 200px;">Longitud: <g:textField name="longo" class="longo number" style="width: 100px" id="longo"--}%
-                %{--value="${formatNumber(number:obra?.longitud, format: '####.##', minFractionDigits: 5, maxFractionDigits: 8, locale: 'ec')}" disabled="true"/></div>--}%
-                <div style="margin: 20px;">
-                    ${obra.coordenadas}
+                    <span style="margin-left: 20px;">${obra.coordenadas}</span>
+
                 </div>
 
                 <div style="margin: 20px;">
                     <span id="coordNuevas11" class="control-label label label-inverse">
                         Coordenadas Nuevas de la Obra:
                     </span>
+                    <span style="margin-left: 34px; color: #008">${obra.coordenadas}</span>
                 </div>
 
-                <div style="margin: 20px;" id="divCoords">
-                    ${obra.coordenadas}
-                </div>
                 %{--<div class="span2" style="float: left; width: 200px">Latitud: <g:textField name="latitud" class="latitud number" id="latitud" style="width: 100px"/></div>--}%
 
                 %{--<div class="span2" style="float: left; width: 200px">Longitud: <g:textField name="longitud" class="longitud number" id="longitud" style="width: 100px"/></div>--}%
-            <div style="margin: 20px; margin-top: 80px;" class="noprint">
-                <b>Nota:</b>
-               <p>Para imprimir use la configuración de página definir la horientación del papel horizontal y una escala de 90% para cubrir toda la hoja en tamaño A4</p>
-            </div>
 
             </div>
         </div>
 
-        <div style="float: left;" class="soloPrint">
-            <div style="margin-top: 40px; width: 300px;">
-                <div style="margin: 0 0 0 20px;">
+        %{--<div style="float: left;" class="soloPrint">--}%
+        <div style="width: 900px;" class="soloPrint">
+            <div style="margin-top: 20px; width: 900px;">
                     <span class="control-label ">
-                        Coordenadas de la Obra:
+                        COORDENADAS DE LA OBRA:
                     </span>
-                </div>
 
-                <div style="margin:  0 0 0 20px;">
                     ${obra.coordenadas}
-                </div>
-
-                <div style="margin: 20px 0 0 20px;">
+                    <br>
                     <span class="control-label ">
-                        Cantón:
+                        CANTÓN:
                     </span>
-                </div>
-
-                <div style="margin:  0 0 0 20px;">
                     ${obra.comunidad.parroquia.canton.nombre}
-                </div>
 
-                <div style="margin: 20px 0 0 20px;">
-                    <span class="control-label">
-                        Parroquia:
+                    <span class="control-label" style="margin-left: 50px;">
+                        PARROQUIA:
                     </span>
-                </div>
-
-                <div style="margin:  0 0 0 20px;">
                     ${obra.comunidad.parroquia.nombre}
-                </div>
 
 
-                <div style="margin: 20px 0 0 20px;">
-                    <span class="control-label">
-                        Comunidad:
+                    <span class="control-label" style="margin-left: 50px;">
+                        COMUNIDAD:
                     </span>
-                </div>
-
-                <div style="margin:  0 0 0 20px;">
                     ${obra.comunidad?.nombre}
                 </div>
 
@@ -217,7 +193,7 @@
         --}%
 
 
-        <div class="btn-group" style="margin-top: 20px; margin-left: 250px">
+        <div class="btn-group" style="margin-top: 10px; margin-left: 300px">
 
             <button class="btn noprint" id="btnVolver"><i class="icon-arrow-left"></i> Regresar</button>
             <button class="btn noprint" id="btnGuardar"><i class="icon-check"></i> Guardar</button>
