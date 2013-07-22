@@ -1182,7 +1182,7 @@ class ReportesController {
 
 
             addCellTabla(headerRubroTabla, new Paragraph("Presupuesto:", times8bold), prmsHeaderHoja)
-            addCellTabla(headerRubroTabla, new Paragraph(obra.descripcion?.toUpperCase(), times8normal), prmsHeaderHoja)
+            addCellTabla(headerRubroTabla, new Paragraph(obra.nombre?.toUpperCase(), times8normal), prmsHeaderHoja)
 
             addCellTabla(headerRubroTabla, new Paragraph("Fecha Act. PU:", times8bold), prmsHeaderHoja)
             addCellTabla(headerRubroTabla, new Paragraph(fecha.format("dd-MM-yyyy"), times8normal), prmsHeaderHoja)
@@ -2220,6 +2220,7 @@ class ReportesController {
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+
         def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellRightTop = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1"]
@@ -2396,6 +2397,10 @@ class ReportesController {
         tablaVolObra.setWidthPercentage(100);
 
 
+        PdfPTable tablaCabeceraDoc = new PdfPTable(1);
+        tablaVolObra.setWidthPercentage(100);
+
+
         PdfPTable tablaTotalSub = new PdfPTable(6);
         tablaVolObra.setWidthPercentage(100);
 
@@ -2436,14 +2441,12 @@ class ReportesController {
         subPres.each { s ->
 
             total2 = 0
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph(s.descripcion, times10bold), prmsCellCenterLeft)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-
-
+            addCellTabla(tablaVolObra, new Paragraph(s.descripcion, times10bold), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan:6])
+//            addCellTabla(tablaVolObra, new Paragraph(s.descripcion, times10bold), prmsCellCenterLeft)
+//            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+//            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+//            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+//            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph("Rubro N°", times8bold), prmsCellHead2)
             addCellTabla(tablaVolObra, new Paragraph("Descripción", times8bold), prmsCellHead2)
@@ -2480,11 +2483,11 @@ class ReportesController {
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
                     totales = it.totl
-
+                    totalPrueba = total2 += totales
                     totalPresupuesto = (total1 += totales);
 
 
-                    totalPrueba = total2 += totales
+
 
 
                 } else {
@@ -2664,12 +2667,9 @@ class ReportesController {
 
         document.add(tablaPresupuesto);
         document.add(tablaCoordenadas);
-//        document.add(tablaHeaderVol)
         document.add(tablaVolObra)
         document.add(tablaTotal);
-
         document.add(txtCondiciones);
-
         document.add(tablaCondiciones)
 
 

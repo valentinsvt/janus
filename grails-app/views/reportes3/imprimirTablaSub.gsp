@@ -153,10 +153,10 @@
 
                 <p style="font-size: 14px">
                     <g:if test="${subPre == -1}">
-                        <b>ANALISIS DE PRECIOS UNITARIOS DE SUBPRESUPUESTOS</b>
+                        <b>VOLÚMENES DE OBRA</b>
                     </g:if>
                     <g:else>
-                        <b>ANALISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: ${subPre.toUpperCase()}</b>
+                        <b>VOLÚMENES DE OBRA DEL SUBPRESUPUESTO: ${subPre.toUpperCase()}</b>
                     </g:else>
 
                 </p>
@@ -176,6 +176,14 @@
                 </div>
 
             </div>
+            <g:set var="total1" value="${0}"></g:set>
+            <g:set var="total2" value="${0}"></g:set>
+            <g:set var="totalPrueba" value="${0}"></g:set>
+            <g:set var="totales" value="${0}"></g:set>
+            <g:set var="totalPresupuesto" value="${0}"></g:set>
+            <g:if test="${subPre == -1}">
+            <g:each in="${subPres}" var="sp" status="sub">
+              <div style="font-size: 12px; font-weight: bold">${sp.descripcion}</div>
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr class="theaderBot thederup padTopBot">
@@ -202,6 +210,7 @@
                     <g:set var="total" value="${0}"></g:set>
 
                 <g:each in="${valores}" var="val" status="j">
+                    <g:if test="${val.sbpr__id == sp.id}">
                     <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
 
                         <td style="width: 20px" class="orden">${val.vlobordn}</td>
@@ -216,26 +225,15 @@
                         <td class="col_total total" style="text-align: right"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
 
                         <g:set var="total" value="${total.toDouble() + val.totl}"></g:set>
+
+                       <g:hiddenField name="totales" value="${totales = val.totl}"/>
+                        <g:hiddenField name="totalPrueba" value="${totalPrueba = total2+=totales}"/>
+                        <g:hiddenField name="totalPresupuesto" value="${totalPresupuesto = total1 += totales}"/>
+
                     </tr>
+                    </g:if>
                 </g:each>
 
-
-                    %{--<g:each in="${detalle}" var="vol" status="i">--}%
-
-                        %{--<tr class="item_row" id="${vol.id}" item="${vol.item.id}" sub="${vol.subPresupuesto.id}">--}%
-                            %{--<td style="width: 20px" class="orden">${vol.orden}</td>--}%
-                            %{--<td class="cdgo">${vol.item.codigo}</td>--}%
-                            %{--<td class="nombre">${vol.item.nombre.replaceAll("<", "(Menor)").replaceAll(">", "(Mayor)")}</td>--}%
-                            %{--<td style="width: 60px !important;text-align: center" class="col_unidad">${vol.item.unidad.codigo}</td>--}%
-                            %{--<td style="text-align: right" class="cant">--}%
-                                %{--<g:formatNumber number="${vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
-                            %{--</td>--}%
-                            %{--<td class="col_precio" style=";text-align: right" id="i_${vol.item.id}"><g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
-                            %{--<td class="col_total total" style=";text-align: right"><g:formatNumber number="${precios[vol.id.toString()] * vol.cantidad}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
-                            %{--<g:set var="total" value="${total.toDouble() + (precios[vol.id.toString()] * vol.cantidad)}"></g:set>--}%
-                        %{--</tr>--}%
-
-                    %{--</g:each>--}%
                     <tr>
                         <td colspan="5"></td>
                         <td style="text-align: right"><b>Total:</b></td>
@@ -243,6 +241,79 @@
                     </tr>
                 </tbody>
             </table>
+            </g:each>
+                   <table style="margin-top: 10px; margin-left:430px; font-size: 12px !important;">
+                       <thead>
+
+                       </thead>
+                       <tbody>
+                       <tr>
+
+                           <td style="text-align: right"><b style="font-size: 10px">Total Presupuesto:</b></td>
+                           <td style="text-align: right; font-size: 12px"><b><g:formatNumber number="${totalPresupuesto}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                       </tr>
+                       </tbody>
+                   </table>
+
+            </g:if>
+
+            <g:else>
+
+                <table class="table table-bordered table-striped table-condensed table-hover">
+                    <thead>
+                    <tr class="theaderBot thederup padTopBot">
+                        <th style="width: 20px;" class="theaderBot theaderup padTopBot">
+                            N°
+                        </th>
+                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
+                            Rubro
+                        </th>
+                        <th style="width: 550px;" class="theaderBot theaderup padTopBot">
+                            Descripción
+                        </th>
+                        <th style="width: 35px;" class="col_unidad theaderBot theaderup padTopBot">
+                            Unidad
+                        </th>
+                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
+                            Cantidad
+                        </th>
+                        <th class="col_precio theaderBot theaderup padTopBot" style="width:110px ;">P. U.</th>
+                        <th class="col_total  theaderBot theaderup padTopBot" style="width:110px;">C.Total</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tabla_material">
+                    <g:set var="total" value="${0}"></g:set>
+
+                    <g:each in="${valores}" var="val" status="j">
+
+                            <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
+
+                                <td style="width: 20px" class="orden">${val.vlobordn}</td>
+                                %{--<td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>--}%
+                                <td class="cdgo">${val.rbrocdgo.trim()}</td>
+                                <td class="nombre">${val.rbronmbr.trim()}</td>
+                                <td style="width: 60px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
+                                <td style="text-align: right" class="cant">
+                                    <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
+                                </td>
+                                <td class="col_precio" style="text-align: right" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                                <td class="col_total total" style="text-align: right"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+
+                                <g:set var="total" value="${total.toDouble() + val.totl}"></g:set>
+                            </tr>
+
+                    </g:each>
+
+                    <tr>
+                        <td colspan="5"></td>
+                        <td style="text-align: right"><b>Total:</b></td>
+                        <td style="text-align: right"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+            </g:else>
         </div>
     </body>
 </html>

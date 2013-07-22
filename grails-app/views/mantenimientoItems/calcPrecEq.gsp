@@ -97,122 +97,122 @@ h4 {
 
 <table border="1" width="980px;">
     <thead>
-        <tr>
-            <th width="180px;">Equipo</th>
-            <th width="50px;">Potencia</th>
-            <th width="130px;">Valor Eq. Nuevo</th>
-            <th>Llantas</th>
-            <th colspan="3">Vida Económica (h)</th>
-            <th colspan="3">Horas al año (h)</th>
-            <th colspan="3">Vida llantas al año (h)</th>
-        </tr>
-        <tr>
-            <th>&nbsp;</th>
-            <th>(HP)</th>
-            <th>$</th>
-            <th>$</th>
-            <th>Baja</th>
-            <th>Alta</th>
-            %{--<th>Prom (H<sub>V</sub>)</th>--}%
-            <th>Prom</th>
-            <th>Baja</th>
-            <th>Alta</th>
-            %{--<th>Prom (H<sub>a</sub>)</th>--}%
-            <th>Prom</th>
-            <th>Baja</th>
-            <th>Alta</th>
-            %{--<th>Prom (H<sub>LL</sub>)</th>--}%
-            <th>Prom</th>
-        </tr>
+    <tr>
+        <th width="180px;">Equipo</th>
+        <th width="50px;">Potencia</th>
+        <th width="130px;">Valor Eq. Nuevo</th>
+        <th>Llantas</th>
+        <th colspan="3">Vida Económica (h)</th>
+        <th colspan="3">Horas al año (h)</th>
+        <th colspan="3">Vida llantas al año (h)</th>
+    </tr>
+    <tr>
+        <th>&nbsp;</th>
+        <th>(HP)</th>
+        <th>$</th>
+        <th>$</th>
+        <th>Baja</th>
+        <th>Alta</th>
+        %{--<th>Prom (H<sub>V</sub>)</th>--}%
+        <th>Prom</th>
+        <th>Baja</th>
+        <th>Alta</th>
+        %{--<th>Prom (H<sub>a</sub>)</th>--}%
+        <th>Prom</th>
+        <th>Baja</th>
+        <th>Alta</th>
+        %{--<th>Prom (H<sub>LL</sub>)</th>--}%
+        <th>Prom</th>
+    </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>${item.nombre}</td>
-            <td>
-                <g:textField type="number" class="campo01 calcular" name="hp"/>
-            </td>
-            <td>
-                <div class="input-append">
-                    <g:textField class="campo03 calcular" name="vc" type="text"/>
-                    <span class="add-on">$</span>
-                </div>
-            </td>
-            <td>
-                <div class="input-append">
-                    <g:textField class="campo02 calcular" name="vll" type="text"/>
-                    <span class="add-on">$</span>
-                </div>
-            </td>
-            <td>
-                <g:textField type="number" class="campo02 calcular prom" data-prom="hv" name="hvb"/>
-            </td>
-            <td>
-                <g:textField type="number" class="campo02 calcular prom" data-prom="hv" name="hva"/>
-            </td>
-            <td id="hv" class="num campo02">
-            </td>
-            <td>
-                <g:textField type="number" class="campo02 calcular prom" data-prom="ha" name="hab"/>
-            </td>
-            <td>
-                <g:textField type="number" class="campo02 calcular prom" data-prom="ha" name="haa"/>
-            </td>
-            <td id="ha" class="num campo02">
-            </td>
-            <td>
-                <g:textField type="number" class="campo02 calcular prom" data-prom="hll" name="hllb"/>
-            </td>
-            <td>
-                <g:textField type="number" class="campo02 calcular prom" data-prom="hll" name="hlla"/>
-            </td>
-            <td id="hll" class="num campo02">
-            </td>
-        </tr>
+    <tr>
+        <td>${item.nombre}</td>
+        <td>
+            <g:textField type="number" class="campo01 calcular" name="hp"/>
+        </td>
+        <td>
+            <div class="input-append">
+                <g:textField class="campo03 calcular" name="vc" type="text"/>
+                <span class="add-on">$</span>
+            </div>
+        </td>
+        <td>
+            <div class="input-append">
+                <g:textField class="campo02 calcular" name="vll" type="text"/>
+                <span class="add-on">$</span>
+            </div>
+        </td>
+        <td>
+            <g:textField type="number" class="campo02 calcular prom" data-prom="hv" name="hvb"/>
+        </td>
+        <td>
+            <g:textField type="number" class="campo02 calcular prom" data-prom="hv" name="hva"/>
+        </td>
+        <td id="hv" class="num campo02">
+        </td>
+        <td>
+            <g:textField type="number" class="campo02 calcular prom" data-prom="ha" name="hab"/>
+        </td>
+        <td>
+            <g:textField type="number" class="campo02 calcular prom" data-prom="ha" name="haa"/>
+        </td>
+        <td id="ha" class="num campo02">
+        </td>
+        <td>
+            <g:textField type="number" class="campo02 calcular prom" data-prom="hll" name="hllb"/>
+        </td>
+        <td>
+            <g:textField type="number" class="campo02 calcular prom" data-prom="hll" name="hlla"/>
+        </td>
+        <td id="hll" class="num campo02">
+        </td>
+    </tr>
     </tbody>
 </table>
 
 <h4>Valores anuales</h4>
 <table border="1">
     <thead>
-        <tr bgcolor="#bba">
-            <th>Año</th>
-            <th>Seguro</th>
-            <th>Tasa interés anual</th>
-            <th>Factor costo respuestos y reparaciones</th>
-            <th>Costo diesel</th>
-            <th>Costo lubricantes</th>
-            <th>Costo grasa</th>
-            <th></th>
-        </tr>
+    <tr bgcolor="#bba">
+        <th>Año</th>
+        <th>Seguro</th>
+        <th>Tasa interés anual</th>
+        <th>Factor costo respuestos y reparaciones</th>
+        <th>Costo diesel</th>
+        <th>Costo lubricantes</th>
+        <th>Costo grasa</th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-        <tr bgcolor="#e0e0d8">
-            <td>${valoresAnuales.anio}</td>
-            <td>
-                <g:textField type="number" class="input-mini calcular" name="cs" value="${g.formatNumber(number: valoresAnuales.seguro, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
-            </td>
-            <td>
-                <div class="input-append">
-                    <g:textField type="number" class="input-mini calcular" name="ci" value="${g.formatNumber(number: valoresAnuales.tasaInteresAnual, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
-                    <span class="add-on">%</span>
-                </div>
-            </td>
-            <td>
-                <g:textField type="number" class="input-mini calcular" name="k" value="${g.formatNumber(number: valoresAnuales.factorCostoRepuestosReparaciones, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
-            </td>
-            <td>
-                <g:textField type="number" class="input-mini calcular" name="di" value="${g.formatNumber(number: valoresAnuales.costoDiesel, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
-            </td>
-            <td>
-                <g:textField type="number" class="input-mini calcular" name="ac" value="${g.formatNumber(number: valoresAnuales.costoLubricante, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
-            </td>
-            <td>
-                <g:textField type="number" class="input-mini calcular" name="gr" value="${g.formatNumber(number: valoresAnuales.costoGrasa, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
-            </td>
-            <td>
-                <a href="#" class="btn btn-primary" id="btnSaveValoresAnuales">Modificar valores anuales</a>
-            </td>
-        </tr>
+    <tr bgcolor="#e0e0d8">
+        <td>${valoresAnuales.anio}</td>
+        <td>
+            <g:textField type="number" class="input-mini calcular" name="cs" value="${g.formatNumber(number: valoresAnuales.seguro, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+        </td>
+        <td>
+            <div class="input-append">
+                <g:textField type="number" class="input-mini calcular" name="ci" value="${g.formatNumber(number: valoresAnuales.tasaInteresAnual, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+                <span class="add-on">%</span>
+            </div>
+        </td>
+        <td>
+            <g:textField type="number" class="input-mini calcular" name="k" value="${g.formatNumber(number: valoresAnuales.factorCostoRepuestosReparaciones, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+        </td>
+        <td>
+            <g:textField type="number" class="input-mini calcular" name="di" value="${g.formatNumber(number: valoresAnuales.costoDiesel, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+        </td>
+        <td>
+            <g:textField type="number" class="input-mini calcular" name="ac" value="${g.formatNumber(number: valoresAnuales.costoLubricante, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+        </td>
+        <td>
+            <g:textField type="number" class="input-mini calcular" name="gr" value="${g.formatNumber(number: valoresAnuales.costoGrasa, minFractionDigits: 0, maxFractionDigits: 3, locale: 'ec')}"/>
+        </td>
+        <td>
+            <a href="#" class="btn btn-primary" id="btnSaveValoresAnuales">Modificar valores anuales</a>
+        </td>
+    </tr>
     </tbody>
 </table>
 
@@ -520,7 +520,7 @@ h4 {
         keydown : function (ev) {
             var dec = 2;
             var val = $(this).val();
-            if (ev.keyCode == 188 || ev.keyCode == 190 || ev.keyCode == 110) {
+            if (ev.keyCode == 188 || ev.keyCode == 190 || ev.keyCode == 110) {   // 188 -> , (coma), 190 -> . (punto) teclado, 110 -> . (punto) teclado numerico
                 if (!dec) {
                     return false;
                 } else {
@@ -532,20 +532,43 @@ h4 {
                     }
                 }
             } else {
-                if (val.indexOf(".") > -1 || val.indexOf(",") > -1) {
-                    if (dec) {
-                        var parts = val.split(".");
-                        var l = parts[1].length;
-                        if (l >= dec) {
-                            return false;
-                        }
-                    }
-                } else {
-                    return validarNum(ev);
-                }
+//                if (val.indexOf(".") > -1 || val.indexOf(",") > -1) {
+//                    if (dec) {
+//                        console.log(val);
+//                        var parts = val.split(".");
+//                        var l = parts[1].length;
+//                        if (l >= dec) {
+//                            if(ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 || ev.keyCode == 37|| ev.keyCode == 39) {   // 8 -> backspace, 46 -> delete, 9 -> tab, 37 -> flecha izq, 39 -> flecha der
+//                                return true;
+//                            }
+//                            if(val.startsWith(".")) {
+//                                return true;
+//                            }
+//                            return false;
+//                        }
+//                    }
+//                } else {
+                return validarNum(ev);
+//                }
             }
         },
         keyup   : function () {
+            var dec = 2;
+            var val = $(this).val();
+            var parts = val.split(".");
+            var newVal=val;
+            if(parts.length > 1) {
+                if(parts[1].length > dec) {
+                    newVal=parts[0]+"."+parts[1].substr(0,dec);
+                } else if(parts[1].length > 0) {
+                    newVal=parts[0]+"."+parts[1];
+                }
+            }
+            if(newVal.startsWith(".")) {
+                newVal = "0"+newVal;
+            }
+            $(this).val(newVal);
+
             var name = $(this).attr("name");
             data[name] = parseFloat($(this).val());
             if (name == "ci") {
@@ -579,11 +602,11 @@ h4 {
         } else {
 
             location.href = "${g.createLink(controller: 'reportes3',action: 'imprimirValorHoraEquipos', id: item.id)}?potencia=" + data.hp + "&vc=" + data.vc + "&veb=" + data.hvb +
-                            "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch +
-                            "&av=" + data.av + "&vr=" + data.vr + "&d=" + data.d + "&i=" + data.i + "&frc=" + data.frc + "&cs=" + data.cs + "&s=" + data.s + "&m=" + data.m + "&va=" + data.va + "&ci=" + data.ci +
-                            "&k=" + data.k + "&r=" + data.r + "&mor=" + data.mor + "&di=" + data.di + "&cd=" + data.cd +
-                            "&ac=" + data.ac + "&cl=" + data.cl + "&gr=" + data.gr + "&cg=" + data.cg + "&vll=" + data.vll +
-                            "&hll=" + data.hll + "&cll=" + data.cll
+                    "&vea=" + data.hva + "&vep=" + data.hv + "&hb=" + data.hab + "&ha=" + data.haa + "&hp=" + data.hp + "&vlb=" + data.hllb + "&vla=" + data.hlla + "&vlp=" + data.hll + "&ch=" + data.ch +
+                    "&av=" + data.av + "&vr=" + data.vr + "&d=" + data.d + "&i=" + data.i + "&frc=" + data.frc + "&cs=" + data.cs + "&s=" + data.s + "&m=" + data.m + "&va=" + data.va + "&ci=" + data.ci +
+                    "&k=" + data.k + "&r=" + data.r + "&mor=" + data.mor + "&di=" + data.di + "&cd=" + data.cd +
+                    "&ac=" + data.ac + "&cl=" + data.cl + "&gr=" + data.gr + "&cg=" + data.cg + "&vll=" + data.vll +
+                    "&hll=" + data.hll + "&cll=" + data.cll
         }
     });
 

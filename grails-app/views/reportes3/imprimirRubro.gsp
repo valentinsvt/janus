@@ -174,7 +174,7 @@
                 </p>
             </div>
 
-            <div style="margin-top: -20px">
+            <div style="margin-top: 20px">
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
                         %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
