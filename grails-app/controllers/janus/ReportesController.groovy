@@ -5281,6 +5281,8 @@ class ReportesController {
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def oferta = contrato.oferta
+        def tramite = Tramite.findByPlanilla(planilla)
+        def prsn = PersonasTramite.findAllByTramite(tramite,[sort:"rolTramite"])
         def planillas = Planilla.withCriteria {
             and {
                 eq("contrato", contrato)
@@ -5322,7 +5324,7 @@ class ReportesController {
         def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
 
 
-        return [planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, numerosALetras: numerosALetras]
+        return [planilla: planilla, obra: obra, oferta: oferta, contrato: contrato, numerosALetras: numerosALetras,tramite:tramite,prsn:prsn]
 
     }
 
