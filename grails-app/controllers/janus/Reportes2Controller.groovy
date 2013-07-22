@@ -337,6 +337,9 @@ class Reportes2Controller {
         return numero(num, 3)
     }
 
+    def memoPedidoPago() {
+
+    }
 
     def reportePlanilla() {
         def planilla = Planilla.get(params.id)

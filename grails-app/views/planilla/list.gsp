@@ -191,6 +191,13 @@
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                 </g:elseif>
+
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
+                                    <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                        <i class="icon-print"></i>
+                                    </a>
+                                </g:if>
+
                             </td>
                         </tr>
                     </g:each>
@@ -233,6 +240,11 @@
                     maxRows        : 10,
                     searchPosition : $("#busqueda-Planilla"),
                     float          : "right"
+                });
+
+                $(".btnPedidoPagoAnticipo").click(function () {
+                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");
+                    return false;
                 });
 
                 $(".btn-pagar").click(function () {
