@@ -141,7 +141,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
         def tipo = params.tipo
-        def lblMemo, lblFecha, extra
+        def lblMemo, lblFecha, extra, nombres = ""
+        def tipoTramite
 
 //        println planilla.fechaOficioEntradaPlanilla
 //        println planilla.fechaMemoSalidaPlanilla
@@ -155,6 +156,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 fechaMin = planilla.fechaOficioEntradaPlanilla
                 fecha = planilla.fechaOficioEntradaPlanilla
                 extra = "Fecha de oficio de entrada: " + fechaMin.format("dd-MM-yyyy")
+                tipoTramite = TipoTramite.findByCodigo("ENRJ")
                 break;
             case "3":
                 lblMemo = "Memo de pedido de pago"
@@ -162,6 +164,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 fechaMin = planilla.fechaMemoSalidaPlanilla
                 fecha = planilla.fechaMemoSalidaPlanilla
                 extra = "Fecha de memo de salida: " + fechaMin.format("dd-MM-yyyy")
+                tipoTramite = TipoTramite.findByCodigo("PDPG")
                 break;
             case "4":
                 lblMemo = "Memo de pago"
@@ -169,14 +172,38 @@ class PlanillaController extends janus.seguridad.Shield {
                 fechaMin = planilla.fechaMemoPedidoPagoPlanilla
                 fecha = planilla.fechaMemoPedidoPagoPlanilla
                 extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")
+                tipoTramite = TipoTramite.findByCodigo("INPG")
                 break;
             case '5':
                 lblFecha = "Fecha de inicio de obra"
                 fechaMin = planilla.fechaMemoPagoPlanilla
                 fecha = planilla.fechaMemoPagoPlanilla
                 extra = "Fecha de memo de pago: " + fechaMin.format("dd-MM-yyyy")
+                tipoTramite = TipoTramite.findByCodigo("INOB")
                 break;
         }
+
+        def roles = DepartamentoTramite.findAllByTipoTramite(tipoTramite)
+
+        roles.each { rol ->
+            def personas = Persona.findAllByDepartamento(rol.departamento)
+
+            def sel = g.select(from: personas, class: "span3", optionKey: "id", optionValue: { it.nombre + " " + it.apellido }, name: "persona_" + rol.rolTramite.id)
+
+            nombres += '<div class="row">'
+            nombres += '<div class="span2 formato">'
+            nombres += rol.rolTramite.descripcion
+            nombres += '</div>'
+            nombres += '<div class="span3">' + sel + '</div>'
+            nombres += '<div class="span2 dpto">(Dpto. de ' + rol.departamento.descripcion + ')</div>'
+            nombres += '</div>'
+        }
+
+        nombres += '<div class="row">'
+        nombres += '<div class="span2 formato">Asunto</div>'
+        nombres += '<div class="span4">' + g.textArea(name: 'asunto', style: "width:410px;") + '</div>'
+        nombres += '</div>'
+
 //        println tipo + "  " + fechaMin
         def y = fechaMin.format("yyyy").toInteger()
         def m = fechaMin.format("MM").toInteger() - 1
@@ -185,7 +212,7 @@ class PlanillaController extends janus.seguridad.Shield {
         fechaMin = "new Date(${y},${m},${d})"
         fechaMax = "new Date(${y + 2},${m},${d})"
 
-        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha]
+        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha, nombres: nombres]
     }
 
     def savePagoPlanilla() {
@@ -193,6 +220,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def tipo = params.tipo
         def memo = params.memo.toString().toUpperCase()
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        def tipoTramite, tramitePadre
 
         def str = "", str2 = ""
 
@@ -202,12 +231,16 @@ class PlanillaController extends janus.seguridad.Shield {
                 planilla.fechaMemoSalidaPlanilla = fecha
                 str = "Reajuste enviado exitosamente"
                 str2 = "No se pudo enviar el reajuste"
+                tipoTramite = TipoTramite.findByCodigo("ENRJ")
+                tramitePadre = null
                 break;
             case "3":
                 planilla.memoPedidoPagoPlanilla = memo
                 planilla.fechaMemoPedidoPagoPlanilla = fecha
                 str = "Pago pedido existosamente"
                 str2 = "No se pudo pedir el pago"
+                tipoTramite = TipoTramite.findByCodigo("PDPG")
+                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("ENRJ"))
                 break;
             case "4":
                 planilla.memoPagoPlanilla = memo
@@ -219,6 +252,8 @@ class PlanillaController extends janus.seguridad.Shield {
 //                }
                 str = "Pago informado exitosamente"
                 str2 = "No se pudo informar el pago"
+                tipoTramite = TipoTramite.findByCodigo("INPG")
+                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
                 break;
             case "5":
                 def obra = Obra.get(planilla.contrato.obra.id)
@@ -228,11 +263,35 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
                 str = "Obra iniciada exitosamente"
                 str2 = "No se pudo iniciar la obra"
+                tipoTramite = TipoTramite.findByCodigo("INOB")
+                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("INPG"))
                 break;
         }
         if (planilla.save(flush: true)) {
             flash.clase = "alert-success"
             flash.message = str
+
+            def estadoTramite = EstadoTramite.findByCodigo("C")
+            def tramite = new Tramite([
+                    planilla: planilla,
+                    tipoTramite: tipoTramite,
+                    tramitePadre: tramitePadre,
+                    estado: estadoTramite,
+                    descripcion: params.asunto,
+                    memo: memo,
+                    fecha: fecha
+            ])
+            if (!tramite.save(flush: true)) {
+                println "Error al guardar el tramite: "
+                println tramite.errors
+                str2 += "<li>Ha ocurrido un error al guardar el trámite</li>"
+
+                flash.clase = "alert-error"
+                str = "<h4>" + str2 + "</h4>"
+                str += g.renderErrors(bean: tramite)
+                flash.message = str
+            }
+
             redirect(action: "list", id: planilla.contratoId)
         } else {
             println "Error al grabar la fecha y el memo en la planilla: " + planilla.errors

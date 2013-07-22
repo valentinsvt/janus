@@ -990,7 +990,7 @@ class Reportes2Controller {
             def printHeaderDetalle = { params ->
                 def tablaHeaderDetalles = new PdfPTable(11);
                 tablaHeaderDetalles.setWidthPercentage(100);
-                tablaHeaderDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+                tablaHeaderDetalles.setWidths(arregloEnteros([13, 35, 5, 11, 11, 11, 11, 11, 11, 11, 13]))
 
                 addCellTabla(tablaHeaderDetalles, new Paragraph("Obra", fontThTiny), prmsTdNoBorder)
                 addCellTabla(tablaHeaderDetalles, new Paragraph(obra.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 10])

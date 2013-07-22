@@ -36,7 +36,7 @@ class TramitesController {
         return [campos: campos, padre: padre, tramite: tramite, init: init]
     }
 
-    def personasPorTipo() {
+    def  personasPorTipo() {
 
         if (params.tipo) {
 

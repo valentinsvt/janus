@@ -1,3 +1,13 @@
+<style type="text/css">
+.formato {
+    font-weight : bold;
+}
+
+.dpto {
+    font-size  : smaller;
+    font-style : italic;
+}
+</style>
 <g:form name="frmSave-Planilla" action="savePagoPlanilla" id="${planilla.id}">
     <g:hiddenField name="tipo" value="${tipo}"/>
     <fieldset>
@@ -34,6 +44,8 @@
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
+
+        ${nombres}
 
         %{--<g:if test="${tipo == '4'}">--}%
         %{--<div class="row">--}%
