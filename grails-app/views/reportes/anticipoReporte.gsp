@@ -174,41 +174,21 @@
             <elm:headerPlanillaReporte planilla="${planilla}"/>
 
             <g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
-                <div class="span12" style="">
-
-                    De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}, por el valor de USD <elm:numero number="${contrato?.monto}"/>  más IVA,
-
-                </div>
-
-                <div class="span12" style="">
-
-                    para la ${contrato?.oferta?.concurso?.obra?.descripcion}, ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia},
-
-                </div>
-
-                <div class="span12" style="margin-bottom: 10px">
-
+                <div class="row">
+                    De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}, por el valor de
+                    USD <elm:numero number="${contrato?.monto}"/>  sin incluir IVA, para realizar ${contrato?.objeto},
+                    ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia},
                     Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}
-
                 </div>
 
-                <div class="span12">
-
-                    Sírvase disponer el trámite respectivo para el pago del ${contrato?.porcentajeAnticipo}% del anticipo, a favor de ${contrato?.oferta?.proveedor?.nombre},
-
-                </div>
-
-                <div class="span12" style="margin-bottom: 10px">
-
-                    según claúsula sexta, literal a) del citado documento, el detalle es el siguiente:
-
+                <div class="row">
+                    Sírvase disponer el trámite respectivo para el pago del ${contrato?.porcentajeAnticipo}% del anticipo, a favor de ${contrato?.oferta?.proveedor?.titulo}
+                    ${contrato?.oferta?.proveedor?.nombreContacto} ${contrato?.oferta?.proveedor?.apellidoContacto},
+                    según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:
                 </div>
             </g:if>
 
-
-
             <div class="pago">
-
                 <div class="row">
                     <div class="span3" style="font-weight: bold; width: 200px; font-size: 10px">
                         <g:if test="${planilla.tipoPlanilla.codigo == 'A'}">

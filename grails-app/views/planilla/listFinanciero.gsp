@@ -55,9 +55,8 @@
                         <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
                         <g:sortableColumn property="estadoPlanilla" title="Estado"/>
                         <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
-                        <g:sortableColumn property="fechaOrdenPago" title="Fecha orden pago"/>
-                        <g:sortableColumn property="fechaPago" title="Fecha pago"/>
-                        <g:sortableColumn property="periodoIndices" title="Periodo"/>
+                        <g:sortableColumn property="fechaInicio" title="Fecha inicio"/>
+                        <g:sortableColumn property="fechaFin" title="Fecha fin"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="valor" title="Valor"/>
                         <th width="160">Acciones</th>
@@ -74,15 +73,10 @@
                                 <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
                             </td>
                             <td>
-                                <g:formatDate date="${planillaInstance.fechaOrdenPago}" format="dd-MM-yyyy"/>
+                                <g:formatDate date="${planillaInstance.fechaInicio}" format="dd-MM-yyyy"/>
                             </td>
                             <td>
-                                <g:formatDate date="${planillaInstance.fechaPago}" format="dd-MM-yyyy"/>
-                            </td>
-                            <td>
-                                <g:if test="${planillaInstance.periodoIndices}">
-                                    ${planillaInstance.periodoIndices?.fechaInicio?.format("dd-MM-yyyy")} a ${planillaInstance.periodoIndices?.fechaFin?.format("dd-MM-yyyy")}
-                                </g:if>
+                                <g:formatDate date="${planillaInstance.fechaFin}" format="dd-MM-yyyy"/>
                             </td>
                             <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
                             <td>
@@ -191,6 +185,12 @@
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                 </g:elseif>
+
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
+                                    <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                        <i class="icon-print"></i>
+                                    </a>
+                                </g:if>
                             </td>
                         </tr>
                     </g:each>
@@ -233,6 +233,11 @@
                     maxRows        : 10,
                     searchPosition : $("#busqueda-Planilla"),
                     float          : "right"
+                });
+
+                $(".btnPedidoPagoAnticipo").click(function () {
+                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");
+                    return false;
                 });
 
                 $(".btn-pagar").click(function () {

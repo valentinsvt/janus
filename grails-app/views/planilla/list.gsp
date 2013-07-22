@@ -55,9 +55,8 @@
                         <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
                         <g:sortableColumn property="estadoPlanilla" title="Estado"/>
                         <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
-                        <g:sortableColumn property="fechaOrdenPago" title="Fecha orden pago"/>
-                        <g:sortableColumn property="fechaPago" title="Fecha pago"/>
-                        <g:sortableColumn property="periodoIndices" title="Periodo"/>
+                        <g:sortableColumn property="fechaInicio" title="Fecha inicio"/>
+                        <g:sortableColumn property="fechaFin" title="Fecha fin"/>
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="valor" title="Valor"/>
                         <th width="160">Acciones</th>
@@ -74,15 +73,10 @@
                                 <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
                             </td>
                             <td>
-                                <g:formatDate date="${planillaInstance.fechaOrdenPago}" format="dd-MM-yyyy"/>
+                                <g:formatDate date="${planillaInstance.fechaInicio}" format="dd-MM-yyyy"/>
                             </td>
                             <td>
-                                <g:formatDate date="${planillaInstance.fechaPago}" format="dd-MM-yyyy"/>
-                            </td>
-                            <td>
-                                <g:if test="${planillaInstance.periodoIndices}">
-                                    ${planillaInstance.periodoIndices?.fechaInicio?.format("dd-MM-yyyy")} a ${planillaInstance.periodoIndices?.fechaFin?.format("dd-MM-yyyy")}
-                                </g:if>
+                                <g:formatDate date="${planillaInstance.fechaFin}" format="dd-MM-yyyy"/>
                             </td>
                             <td>${fieldValue(bean: planillaInstance, field: "descripcion")}</td>
                             <td>

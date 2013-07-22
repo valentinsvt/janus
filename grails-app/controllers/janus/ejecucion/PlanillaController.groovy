@@ -379,9 +379,9 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println "planillas ant "+planillasAnt+" per ejec "+periodosEjec
             if (planillasAnt.size() > 0) {
                 inicio = planillasAnt.pop().fechaFin + 1
-                println "inicio "+inicio
+//                println "inicio "+inicio
                 fin = getLastDayOfMonth(inicio)
-                println "fin "+fin
+//                println "fin "+fin
                 if (fin > finalObra) {
                     periodos.put((inicio.format("dd-MM-yyyy") + "_" + finalObra.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + finalObra.format("dd-MM-yyyy"))
                 } else {
@@ -411,7 +411,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def minDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},1)"
 
-        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres]
+        def fiscalizadorAnterior = planillas.last().fiscalizadorId
+
+        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior]
     }
 
 
@@ -450,7 +452,9 @@ class PlanillaController extends janus.seguridad.Shield {
         if (!params.fechaPresentacion) {
             params.fechaPresentacion = params.fechaIngreso
         }
-
+        if (params.oficioEntradaPlanilla) {
+            params.oficioEntradaPlanilla = params.oficioEntradaPlanilla.toString().toUpperCase()
+        }
         def planillaInstance
         if (params.id) {
             planillaInstance = Planilla.get(params.id)
