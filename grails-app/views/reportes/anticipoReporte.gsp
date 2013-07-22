@@ -110,7 +110,7 @@
 
         .row {
             /*margin-left : -20px;*/
-            clear: both;
+            clear : both;
         }
 
         .span5 {
@@ -141,9 +141,9 @@
             border           : 1px solid #e3e3e3;
         }
 
-        /*.pago {*/
+            /*.pago {*/
             /*height : 50px;*/
-              /*}*/
+            /*}*/
 
         .noborder, table.noborder, table.noborder td, table.noborder th {
             border : none !important;
@@ -156,63 +156,58 @@
         .borderTop {
             border-top : double 3px !important;
         }
-            .salto{
-             page-break-after: always;
 
-            }
+        .salto {
+            page-break-after : always;
+
+        }
         </style>
     </head>
 
     <body>
         <div class="hoja">
 
-
-
         %{--addCellTabla(anticipoTexto, new Paragraph(", según claúsula sexta, literal a) del citado documento, el detalle es el siguiente ", times8normal), prmsHeaderHoja)--}%
 
 
 
-        <elm:headerPlanillaReporte planilla="${planilla}"/>
+            <elm:headerPlanillaReporte planilla="${planilla}"/>
 
-<g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
-        <div class="span12" style="">
+            <g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
+                <div class="span12" style="">
 
-        De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}, por el valor de U$D <elm:numero number="${contrato?.monto}"/>  más IVA,
+                    De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${contrato?.fechaSubscripcion?.format("dd-MM-yyyy")}, por el valor de USD <elm:numero number="${contrato?.monto}"/>  más IVA,
 
-        </div>
+                </div>
 
-        <div class="span12" style="">
+                <div class="span12" style="">
 
-        para la ${contrato?.oferta?.concurso?.obra?.descripcion}, ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia},
+                    para la ${contrato?.oferta?.concurso?.obra?.descripcion}, ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia},
 
-        </div>
+                </div>
 
-        <div class="span12" style="margin-bottom: 10px">
+                <div class="span12" style="margin-bottom: 10px">
 
-        Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}
+                    Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}
 
+                </div>
 
+                <div class="span12">
 
-        </div>
+                    Sírvase disponer el trámite respectivo para el pago del ${contrato?.porcentajeAnticipo}% del anticipo, a favor de ${contrato?.oferta?.proveedor?.nombre},
 
-        <div class="span12">
+                </div>
 
+                <div class="span12" style="margin-bottom: 10px">
 
-          Sírvase disponer el trámite respectivo para el pago del ${contrato?.porcentajeAnticipo}% del anticipo, a favor de ${contrato?.oferta?.proveedor?.nombre},
+                    según claúsula sexta, literal a) del citado documento, el detalle es el siguiente:
 
-
-        </div>
-
-        <div class="span12" style="margin-bottom: 10px">
-
-            según claúsula sexta, literal a) del citado documento, el detalle es el siguiente:
-
-        </div>
-</g:if>
+                </div>
+            </g:if>
 
 
 
-        <div class="pago">
+            <div class="pago">
 
                 <div class="row">
                     <div class="span3" style="font-weight: bold; width: 200px; font-size: 10px">
@@ -264,196 +259,18 @@
 
                 SON: ${numerosALetras}
 
-
             </div>
 
 
-<g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
+            <g:if test="${planilla.tipoPlanilla.codigo == 'A'}">
 
+                <div class="span12" style="">
 
+                    A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta
+                    Dirección la fecha de pago del anticipo reajustado y su valor.
 
-
-            <div class="span12" style="">
-
-               A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta
-               Dirección la fecha de pago del anticipo reajustado y su valor.
-
-            </div>
-</g:if>
-
-          <div class="salto">
-
-
-          </div>
-
-            <g:if test="${planilla.tipoPlanilla.codigo != 'A'}">
-                <div class="area">
-                    <h2>Detalle planilla</h2>
-
-                    <table class="table table-bordered table-striped table-condensed table-hover">
-                        <thead>
-                            <tr>
-                                <th rowspan="2">N.</th>
-                                <th rowspan="2">Descripción del rubro</th>
-                                <th rowspan="2" class="borderLeft">U.</th>
-                                <th rowspan="2">Precio unitario</th>
-                                <th rowspan="2">Volumen contrat.</th>
-                                <th colspan="3" class="borderLeft">Cantidades</th>
-                                <th colspan="3" class="borderLeft">Valores</th>
-                            </tr>
-                            <tr>
-                                <th class="borderLeft">Anterior</th>
-                                <th>Actual</th>
-                                <th>Acumulado</th>
-                                <th class="borderLeft">Anterior</th>
-                                <th>Actual</th>
-                                <th>Acumulado</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbDetalle">
-                            <g:set var="totalAnterior" value="${0}"/>
-                            <g:set var="totalActual" value="${0}"/>
-                            <g:set var="totalAcumulado" value="${0}"/>
-
-                            <g:set var="sp" value="null"/>
-                            <g:each in="${detalle}" var="vol">
-                                <g:set var="det" value="${janus.ejecucion.DetallePlanilla.findByPlanillaAndVolumenObra(planilla, vol)}"/>
-                                <g:set var="anteriores" value="${janus.ejecucion.DetallePlanilla.findAllByPlanillaInListAndVolumenObra(planillasAnteriores, vol)}"/>
-
-                                <g:set var="cantAnt" value="${anteriores.sum { it.cantidad } ?: 0}"/>
-                                <g:set var="valAnt" value="${anteriores.sum { it.monto } ?: 0}"/>
-                                <g:set var="cant" value="${det?.cantidad ?: 0}"/>
-                                <g:set var="val" value="${det?.monto ?: 0}"/>
-
-                                <g:set var="totalAnterior" value="${totalAnterior + valAnt}"/>
-                                <g:set var="totalActual" value="${totalActual + val}"/>
-                                <g:set var="totalAcumulado" value="${totalAcumulado + val + valAnt}"/>
-
-                                <g:if test="${sp != vol.subPresupuestoId}">
-                                    <tr>
-                                        <th colspan="2">
-                                            ${vol.subPresupuesto.descripcion}
-                                        </th>
-                                        <td colspan="3" class="espacio borderLeft"></td>
-                                        <td colspan="3" class="espacio borderLeft"></td>
-                                        <td colspan="3" class="espacio borderLeft"></td>
-                                    </tr>
-                                    <g:set var="sp" value="${vol.subPresupuestoId}"/>
-                                </g:if>
-                                <tr>
-                                    <td class="codigo">
-                                        ${vol.item.codigo}
-                                    </td>
-                                    <td class="nombre">
-                                        ${vol.item.nombre.replaceAll("<", " menor que ").replaceAll(">", " mayor que ")}
-                                    </td>
-                                    <td style="text-align: center" class="unidad borderLeft">
-                                        ${vol.item.unidad.codigo}
-                                    </td>
-                                    <td class="num precioU">
-                                        <elm:numero number="${precios[vol.id.toString()]}" cero="hide"/>
-                                    </td>
-                                    <td class="num cantidad">
-                                        <elm:numero number="${vol.cantidad}" cero="hide"/>
-                                    </td>
-
-                                    <td class="ant num cant borderLeft">
-                                        <elm:numero number="${cantAnt}" cero="hide"/>
-                                    </td>
-                                    <td class="act num cant">
-                                        <elm:numero number="${cant}" cero="hide"/>
-                                    </td>
-                                    <td class="acu num cant">
-                                        <elm:numero number="${cant + cantAnt}" cero="hide"/>
-                                    </td>
-                                    <td class="ant num val borderLeft">
-                                        <elm:numero number="${valAnt}" cero="hide"/>
-                                    </td>
-                                    <td class="act num val">
-                                        <elm:numero number="${val}" cero="hide"/>
-                                    </td>
-                                    <td class="acu num val">
-                                        <elm:numero number="${val + valAnt}" cero="hide"/>
-                                    </td>
-                                </tr>
-                            </g:each>
-                        </tbody>
-                        <tfoot>
-                            <tr style="er">
-                                <td colspan="5" class="borderTop">
-                                    <b>OBSERVACIONES:</b>
-                                </td>
-                                <td colspan="3" class="espacio borderLeft borderTop">
-                                    <b>A) TOTAL AVANCE DE OBRA</b>
-                                </td>
-                                <td class="borderLeft borderTop num totalAnt">
-                                    <elm:numero number="${totalAnterior}" cero="hide"/>
-                                </td>
-                                <td class="borderTop num totalAct">
-                                    <elm:numero number="${totalActual}" cero="hide"/>
-                                </td>
-                                <td class="borderTop num totalAcu">
-                                    <elm:numero number="${totalAcumulado}" cero="hide"/>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
                 </div>
             </g:if>
-
-            <div class="area">
-                <h2>Cálculo de B<sub>0</sub></h2>
-                <table border="1" style="width: ${150 * periodos.size() + 150}px">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Cuadrilla Tipo</th>
-                            <th>Oferta</th>
-                            <th class="nb">${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            <th>Variación</th>
-                            <th class="nb">Anticipo <br/>${planilla.fechaPresentacion.format("MMM-yy")}</th>
-                            <g:if test="${periodos.size() > 2}">
-                                <g:each in="${2..periodos.size() - 1}" var="per">
-                                    <th>Variación</th>
-                                    <th class="nb">${periodos[per].fechaInicio.format("MMM-yy")}</th>
-                                </g:each>
-                            </g:if>
-                        </tr>
-                    </thead>
-                    ${tbodyB0}
-                </table>
-
-            </div>
-
-            <div class="area" style="min-height: 190px; margin-bottom: 30px; border: none;">
-                <h2>Cálculo de F<sub>r</sub> y P<sub>r</sub></h2>
-                <table border="1" style="width: ${150 * periodos.size() + 150}px; margin-top: 10px; margin-bottom: 10px;">
-                    <thead>
-                        <tr>
-                            <th rowspan="2">Componentes</th>
-                            <th>Oferta</th>
-                            <th colspan="${periodos.size() - 1}">Periodo de variación y aplicación de fórmula polinómica</th>
-                        </tr>
-                        <tr>
-                            <th>${oferta.fechaEntrega.format("MMM-yy")}</th>
-                            <th>Anticipo <br/>${planilla.fechaPresentacion.format("MMM-yy")}</th>
-                            <g:if test="${periodos.size() > 2}">
-                                <g:each in="${2..periodos.size() - 1}" var="per">
-                                    <th rowspan="2">${periodos[per].fechaInicio.format("MMM-yy")}</th>
-                                </g:each>
-                            </g:if>
-                        </tr>
-                        <tr>
-                            <th>Anticipo</th>
-                            <th>
-                                <elm:numero number="${contrato.porcentajeAnticipo}" decimales="0"/>%
-                            </th>
-                            <th>Anticipo</th>
-                        </tr>
-                    </thead>
-                    ${tbodyFr}
-                </table>
-
-            </div>
 
         </div>
     </body>
