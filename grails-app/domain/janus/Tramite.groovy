@@ -1,7 +1,7 @@
 package janus
 
 class Tramite implements Serializable {
-
+    janus.ejecucion.Planilla planilla
     Obra obra
     TipoTramite tipoTramite
     Contrato contrato
@@ -38,7 +38,7 @@ class Tramite implements Serializable {
             descripcion column: 'trmtdscr'
             documentosAdjuntos column: 'trmtadjn'
             memo column: 'trmtmemo'
-
+            planilla column: 'plnl__id'
             fecha column: 'trmtfcha'
             fechaEnvio column: 'trmtfcen'
             fechaRecepcion column: 'trmtfcrc'
@@ -60,7 +60,7 @@ class Tramite implements Serializable {
         documentosAdjuntos(size: 1..127, blank: true, nullable: true, attributes: [title: 'tramiteDocsAdjuntos'])
         fechaEnvio(blank: true, nullable: true, attributes: [title: 'Fecha de envío'])
         memo(maxSize: 20, blank: true, nullable: true, attributes: [title: 'numero de memo'])
-
+        planilla(blank:true,nullable: true)
         fechaRespuesta(blank: true, nullable: true, attributes: [title: 'tipoFechaRecepcion'])
         fechaFinalizacion(blank: true, nullable: true, attributes: [title: 'tipoFechaRecepcion'])
     }

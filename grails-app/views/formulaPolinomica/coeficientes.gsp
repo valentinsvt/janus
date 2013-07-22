@@ -463,7 +463,7 @@
                                                     var tr = $("<tr>");
                                                     var tdItem = $("<td>").append(nodeCod);
                                                     var tdDesc = $("<td>").append(nodeDes);
-                                                    var tdApor = $("<td class='numero'>").append(number_format(nodeValor, 3, '.', ''));
+                                                    var tdApor = $("<td class='numero'>").append(number_format(nodeValor, 5, '.', ''));
                                                     tr.append(tdItem).append(tdDesc).append(tdApor);
                                                     tr.data({
                                                         valor  : nodeValor,
@@ -476,8 +476,10 @@
                                                     });
                                                     $("#tblDisponibles").children("tbody").prepend(tr);
                                                     tr.show("pulsate");
-                                                    parent.attr("valor", msgParts[1]).trigger("change_node.jstree");
+                                                    parent.attr("valor", number_format(msgParts[1],3, '.', '')).trigger("change_node.jstree");
 
+
+//                                                    console.log( $("#spanTotal"),nodeValor,msg)
                                                     totalInit -= parseFloat(nodeValor);
                                                     $("#spanTotal").text(number_format(totalInit, 3, ".", "")).data("valor", totalInit);
                                                 }

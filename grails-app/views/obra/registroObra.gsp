@@ -1424,7 +1424,7 @@
                         });
 //
                     } else {
-                        estadoCambiado = 'N';
+
                         $.ajax({
                             type    : "POST",
                             url     : "${g.createLink(action: 'desregitrarObra')}",
@@ -1448,6 +1448,7 @@
                                         }
                                     });
                                 } else {
+                                    estadoCambiado = 'N';
                                     $("#dlgLoad").dialog("close");
                                     location.reload(true)
                                 }

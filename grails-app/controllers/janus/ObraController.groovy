@@ -107,9 +107,15 @@ class ObraController extends janus.seguridad.Shield {
 
     def desregitrarObra() {
         def obra = Obra.get(params.id)
-        obra.estado = "N"
-        if (obra.save(flush: true))
-            render "ok"
+        def con = janus.pac.Concurso.findAllByObra(obra)
+        if(con.size()==0){
+            obra.estado = "N"
+            if (obra.save(flush: true))
+                render "ok"
+        } else{
+            render "Error: esta obra ya tiene un concurso, no se puede cambiar su estado"
+        }
+
         return
     }
 
