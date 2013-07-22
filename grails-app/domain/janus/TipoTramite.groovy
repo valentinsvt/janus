@@ -30,7 +30,7 @@ class TipoTramite implements Serializable {
         descripcion(size: 1..63, blank: false, attributes: [title: 'descripción'])
         padre(blank: true, nullable: true, attributes: [title: 'trámite principal'])
         tiempo(blank: false, attributes: [title: 'tiempo de ejecución del trámite en días'])
-        tipo(blank: false, nullable: false, inList: ["O", "C"], attributes: [title: 'tipo de trámite: O: Obra, C:Contrato'])
+        tipo(blank: false, nullable: false, inList: ["O", "C", "P"], attributes: [title: 'tipo de trámite: O: Obra, C:Contrato, P:Planilla'])
         requiereRespuesta(blank: false, nullable: false, inList: ["S", "N"], attributes: [title: 'requiere respuesta: S: Si, N:No'])
     }
 

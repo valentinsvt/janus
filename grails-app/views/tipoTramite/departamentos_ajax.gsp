@@ -14,7 +14,7 @@
         <div class="span1 bold">Coordinación</div>
 
         <div class="span4">
-            <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id"
+            <g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id" optionValue="descripcion"
                       class="many-to-one span4 required"/>
         </div>
 

@@ -73,7 +73,7 @@
 
                             <td>${fieldValue(bean: tipoTramiteInstance, field: "tiempo")} días</td>
 
-                            <td>${tipoTramiteInstance.tipo == 'O' ? 'Obra' : 'Contrato'}</td>
+                            <td><g:message code="tipoTramite.tipo.${tipoTramiteInstance.tipo}"/></td>
 
                             <td>${tipoTramiteInstance.requiereRespuesta == 'S' ? 'Sí' : 'No'}</td>
 
