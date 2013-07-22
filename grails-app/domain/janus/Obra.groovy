@@ -94,6 +94,9 @@ class Obra implements Serializable {
 
     String coordenadas //coordenadas en sistema WGS84: -0.21,-78.5199 => S 0 12.5999999 W 78 31.194
 
+    int liquidacion  = 0
+
+
     static mapping = {
         table 'obra'
         cache usage: 'read-write', include: 'non-lazy'
@@ -194,6 +197,7 @@ class Obra implements Serializable {
             desgloseTransporte column: 'obratrnp'
 
             coordenadas column: 'obracrdn'
+            liquidacion column: 'obralqdc'
         }
     }
     static constraints = {

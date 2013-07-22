@@ -11,7 +11,7 @@ class TipoMultaController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [tipoMultaInstanceList: TipoMulta.list(params), params: params]
+        [tipoMultaInstanceList: TipoMulta.list(), params: params]
     } //list
 
     def form_ajax() {
