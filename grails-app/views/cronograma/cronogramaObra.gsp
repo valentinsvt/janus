@@ -89,7 +89,7 @@
         <g:set var="sum" value="${0}"/>
 
         <div class="tituloTree">
-            Cronograma de ${obra.descripcion} (${meses} mes${meses == 1 ? "" : "es"})
+            CRONOGRAMA DE LA OBRA: ${obra.nombre?.toUpperCase()} (${meses} mes${meses == 1 ? "" : "es"})
         </div>
 
         <div class="btn-toolbar">
