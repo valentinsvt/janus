@@ -40,7 +40,7 @@
     <li><a href="#tab-presupuesto">Presupuesto</a></li>
     <li><a href="#tab-memorando">Memorando</a></li>
     <li><a href="#tab-polinomica">F. Polinómica</a></li>
-    <li><a href="#tab-memorandoPresu">Memorando Admi</a></li>
+    <li><a href="#tab-memorandoPresu">Adm. Directa</a></li>
     <li><a href="#tab-textosFijos">Textos Fijos</a></li>
 
 </ul>
@@ -872,8 +872,7 @@
             </div>
             
             <div class="span6">
-                
-                %{--<g:select name="textoPresu" from=""--}%
+
                 
             </div>
 
@@ -892,7 +891,7 @@
         <div class="span6" style="margin-top: 10px">
             <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
                 <button class="btn" id="btnEditarMemoPresu">Editar</button>
-                <button class="btn" id="btnAceptarMemopresu">Aceptar</button>
+                <button class="btn" id="btnAceptarMemoPresu">Aceptar</button>
 
             </div>
         </div>
@@ -1566,7 +1565,39 @@
 
     });
 
+    $(".borrarFirmaMemoPresu").click(function () {
 
+//        $(this).parents("tr").remove()
+
+        var ob = $(this)
+
+        var obNombre =  ob.parents("tr").children("td").first().attr("id")
+
+        //modal
+
+        var btnOk = $('<a href="#" data-dismiss="modal" class="btn"> Cancelar</a>');
+        var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
+
+        btnDelete.click(function () {
+
+            $(ob).parents("tr").remove()
+            $("#modal-borrarFirma").modal("hide");
+
+
+
+            return false;
+        });
+
+        $("#modalTitle").html("Eliminar Firma");
+        $("#modalBody").html("<p>¿Está seguro que desea remover esta firma del documento ha ser impreso?</p>" + obNombre);
+        $("#modalFooter").html("").append(btnDelete).append(btnOk);
+        $("#modal-borrarFirma").modal("show");
+
+
+
+        return false;
+
+    });
 
 
 
@@ -1664,6 +1695,12 @@
 
         $("#memo1").attr("disabled", false);
         $("#memo2").attr("disabled", false)
+
+    });
+
+    $("#btnEditarMemoPresu").click(function () {
+
+        $("#notaMemoAd").attr("disabled", false);
 
     });
 
@@ -1878,6 +1915,18 @@
 
        if(active == 3){
 
+           var materiales = $("#materialesMemo").val()
+           var manoObra = $("#manoObraMemo").val()
+           var equipos = $("#equiposMemo").val()
+           var costoPorcentaje = $("#costoPorcentaje").val()
+           var costo = $("#costoMemo").val()
+           var total = $("#totalMemoPresu").val()
+           var texto = $("#notaMemoAd").val()
+           var para = $("#paraMemoPresu").val()
+           var de = $("#deMemoPresu").val()
+           var fecha = $("#fechaMemoPresu").val()
+           var asunto = $("#asuntoMemoPresu").val()
+
            firmasIdMP = [];
            firmasFijasMP = [];
 
@@ -1895,20 +1944,15 @@
 
            });
 
-//           console.log("1:" + firmasFijas)
 
-//           notaValue = $("#piePaginaSel").val();
+           location.href = "${g.createLink(controller: 'reportes' ,action: 'reportedocumentosObraMemoAdmi',id: obra?.id)}?firmasIdMP=" +
+                   firmasIdMP + "&totalPresupuesto=" + totalPres + "&firmasFijasMP=" + firmasFijasMP + "&materiales=" + materiales +
+                   "&manoObra=" + manoObra + "&equipos=" + equipos + "&costoPorcentaje=" + costoPorcentaje + "&costo=" + costo + "&total=" + total +
+                   "&texto=" + texto + "&para=" + para + "&de=" + de + "&fecha=" + fecha + "&asunto=" + asunto
 
-//
-//           if ($("#forzar").attr("checked") == "checked") {
-//
-//               forzarValue = 1;
-//
-//           } else {
-//
-//               forzarValue = 2;
-//
-//           }
+
+
+
        }
 
 
@@ -1934,6 +1978,9 @@
                 %{--+ "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo--}%
     });
 
+
+
+
     $("#btnEditarFor").click(function () {
 
         $("#notaFormula").attr("disabled", false);
@@ -1944,6 +1991,12 @@
 
         $("#frm-formula").submit();
     });
+
+    $("#btnAceptarMemoPresu").click(function () {
+
+        $("#frm-memoPresu").submit();
+    });
+
 
     $("#btnEditarTextoF").click(function () {
 
