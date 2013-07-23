@@ -236,7 +236,8 @@
                 });
 
                 $(".btnPedidoPagoAnticipo").click(function () {
-                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");
+                    var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");
+                    location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
                     return false;
                 });
 

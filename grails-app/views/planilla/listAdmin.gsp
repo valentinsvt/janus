@@ -176,7 +176,7 @@
                                     <g:elseif test="${lblBtn == 5}">
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                             <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
-                                            Iniciar Obra
+                                                Iniciar Obra
                                             </a>
                                         </g:if>
                                         <g:else>
@@ -238,7 +238,8 @@
                 });
 
                 $(".btnPedidoPagoAnticipo").click(function () {
-                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");
+                    var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");
+                    location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";
                     return false;
                 });
 
@@ -270,6 +271,9 @@
                                     break;
                                 case "4":
                                     $("#modalTitle").html("Informar pago");
+                                    break;
+                                case "5":
+                                    $("#modalTitle").html("Iniciar obra");
                                     break;
                             }
 

@@ -290,6 +290,36 @@ class PlanillaController extends janus.seguridad.Shield {
                 str = "<h4>" + str2 + "</h4>"
                 str += g.renderErrors(bean: tramite)
                 flash.message = str
+            } else {
+
+                if(tramitePadre) {
+                    tramitePadre.fechaRespuesta = fecha
+                    if(!tramitePadre.save(flush:true)) {
+                        println "error al guardar la fecha de respuesta del tramite padre...."
+                        println tramitePadre.errors
+                    }
+                }
+
+                def personas = params.findAll { it.key.contains("persona") }
+                personas.each { key, val ->
+                    def parts = key.split("_")
+                    def rolId = parts[1]
+                    def rol = RolTramite.get(rolId.toLong())
+                    def personaTramite = new PersonasTramite([
+                            tramite: tramite,
+                            rolTramite: rol,
+                            persona: Persona.get(val.toLong())
+                    ])
+                    if (!personaTramite.save(flush: true)) {
+                        println "Error al guardar persona tramite: "
+                        println personaTramite.errors
+                        str += "<li>Ha ocurrido un error al guardar el trámite</li>"
+
+                        flash.clase = "alert-error"
+                        str = "<h4>" + str2 + "</h4>"
+                        str += g.renderErrors(bean: tramite)
+                    }
+                }
             }
 
             redirect(action: "list", id: planilla.contratoId)
