@@ -31,6 +31,16 @@
 
                 <tr class="prop">
                     <td valign="top" class="name">
+                        <label for="codigo"><g:message code="prfl.codigo.label" default="Código"/></label>
+                    </td>
+                    <td valign="top" class="value ${hasErrors(bean: prflInstance, field: 'codigo', 'errors')}">
+                        <g:textField name="codigo" id="codigo" title="Código"
+                                     class="6 field ui-widget-content ui-corner-all" value="${prflInstance?.codigo}"/>
+                    </td>
+                </tr>
+
+                <tr class="prop">
+                    <td valign="top" class="name">
                         <label for="observaciones"><g:message code="prfl.observaciones.label"
                                                               default="Observaciones"/></label>
                     </td>

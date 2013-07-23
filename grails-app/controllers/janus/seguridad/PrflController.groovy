@@ -124,17 +124,18 @@ class PrflController extends janus.seguridad.Shield  {
     }
 
     def grabaPrfl = {
-      println "+++++parametros: ${params}"
+      //println "+++++parametros: ${params}"
+      //println "+++++parametros: ${params.codigo}"
       if (!params.id) {
         def prflInstance = new Prfl()
         params.controllerName = controllerName
         params.actionName = "save"
         prflInstance.properties = params
         prflInstance.save()
-
+        render ("ok")
         if (prflInstance.properties.errors.getErrorCount() > 0) {
           //println "---- save ${bancoInstance}"
-          render("El perfil no ha podido crearse")
+          println("El perfil no ha podido crearse: " + prflInstance.properties.errors)
         } else {
           if (prflInstance.padre) {
             def prms = Prms.findAllByPerfil(prflInstance.padre)
@@ -151,6 +152,7 @@ class PrflController extends janus.seguridad.Shield  {
         def prflInstance = Prfl.get(params.id)
         params.controllerName = controllerName
         params.actionName = "Update"
+        prflInstance.properties = params
         prflInstance.save()
         //prflInstance = kerberosoldService.save(params, Prfl, session.perfil, session.usuario)
         if (prflInstance.properties.errors.getErrorCount() > 0) {

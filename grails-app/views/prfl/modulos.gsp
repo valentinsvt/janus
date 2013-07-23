@@ -180,7 +180,7 @@
                                 type    : "POST", url : "../grabaPrfl",
                                 data    : "&nombre=" + $('#nombre').val() + "&descripcion=" + $('#descripcion').val() +
                                           "&padre.id=" + $('#padre_id').val() + "&observaciones=" + $('#observaciones').val() +
-                                          "&id=" + $('#id_prfl').val(),
+                                          "&id=" + $('#id_prfl').val() + "&codigo=" + $('#codigo').val(),
                                 success : function (msg) {
                                     //$("#ajx").html(msg)
                                     location.reload(true);
