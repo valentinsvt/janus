@@ -114,7 +114,7 @@
 
                         <div class="span4">
                             <g:set var="fisc" value="${janus.Departamento.get(1)}"/>
-                            <g:select name="fiscalizador" from="${janus.Persona.findAllByDepartamento(fisc)}" value="${planillaInstance?.fiscalizador ? planillaInstance.fiscalizadorId : fiscalizadorAnterior}" optionKey="id" optionValue="${{ it.nombre + " " + it.apellido }}"/>
+                            <g:select name="fiscalizador.id" from="${janus.Persona.findAllByDepartamento(fisc)}" value="${planillaInstance?.fiscalizador ? planillaInstance.fiscalizadorId : fiscalizadorAnterior}" optionKey="id" optionValue="${{ it.nombre + " " + it.apellido }}"/>
 
                             <p class="help-block ui-helper-hidden"></p>
                         </div>

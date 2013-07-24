@@ -53,6 +53,8 @@ class Planilla {
 
     Persona fiscalizador
 
+    Planilla padreCosto
+
     static mapping = {
         table 'plnl'
         cache usage: 'read-write', include: 'non-lazy'
@@ -109,6 +111,8 @@ class Planilla {
             fechaMemoPagoPlanilla column: 'plnlfcfi'
 
             fiscalizador column: 'prsnfscl'
+
+            padreCosto column: 'plnlpdcs'
         }
     }
 
@@ -157,5 +161,6 @@ class Planilla {
 
         fiscalizador(blank: true, nullable: true)
 
+        padreCosto(blank: true, nullable: true)
     }
 }

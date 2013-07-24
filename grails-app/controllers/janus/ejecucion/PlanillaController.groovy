@@ -292,9 +292,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 flash.message = str
             } else {
 
-                if(tramitePadre) {
+                if (tramitePadre) {
                     tramitePadre.fechaRespuesta = fecha
-                    if(!tramitePadre.save(flush:true)) {
+                    if (!tramitePadre.save(flush: true)) {
                         println "error al guardar la fecha de respuesta del tramite padre...."
                         println tramitePadre.errors
                     }
@@ -606,6 +606,7 @@ class PlanillaController extends janus.seguridad.Shield {
         } //es create
 
         if (!planillaInstance.save(flush: true)) {
+            println planillaInstance.errors
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Planilla " + (planillaInstance.id ? planillaInstance.id : "") + "</h4>"
 
@@ -2527,6 +2528,10 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def detalleCosto() {
+
+    }
+
+    def detalleCosto_old() {
         def planilla = Planilla.get(params.id)
         def contrato = Contrato.get(params.contrato)
 
