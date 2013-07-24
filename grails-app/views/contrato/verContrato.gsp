@@ -764,7 +764,7 @@
            if(${contrato?.fechaInicio != null}){
 
 
-               location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato.id)}"
+               location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato?.id)}"
 
            }else {
 
