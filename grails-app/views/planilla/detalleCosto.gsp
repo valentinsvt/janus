@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: luz
-  Date: 2/8/13
-  Time: 12:19 PM
+  Date: 7/24/13
+  Time: 1:09 PM
   To change this template use File | Settings | File Templates.
 --%>
 
@@ -42,7 +42,6 @@
             border-top : #5E8E9B double 3px !important;
         }
         </style>
-
     </head>
 
     <body>
@@ -65,13 +64,22 @@
         <elm:headerPlanilla planilla="${planilla}"/>
 
         <g:if test="${editable}">
-            <table class="table table-bordered table-condensed " style="width: auto;">
+            <table class="table table-bordered table-condensed ">
                 <thead>
                     <tr>
-                        <th>Rubro</th>
-                        <th>Precio unitario</th>
-                        <th>Cantidad</th>
-                        <th>Total</th>
+                        <th>Factura N.</th>
+                        <th>Descripción del rubro</th>
+                        <th>Unidad</th>
+                        <th>Valor sin IVA</th>
+                        <th>
+                            Valor con IVA<br/>
+                            (${iva}%)
+                        </th>
+                        <th>
+                            % de indirectos<br/>
+                            <g:select name="indirectos" class="input-mini" value="${25}" from="${0..100}"/>%
+                        </th>
+                        <th>Valor total</th>
                         <th>
                             <a href="#" id="btnReset" class="btn">Nuevo</a>
                         </th>
@@ -79,14 +87,23 @@
                 </thead>
                 <tbody>
                     <tr id="trRubro">
+                        <td id="tdFactura">
+                            <input type="text" id="txtFactura" class="input-small"/>
+                        </td>
                         <td id="tdRubro">
                             <input type="text" id="txtRubro" class="input-xxlarge"/>
                         </td>
-                        <td id="tdPrecio">
-                            <input type="text" id="txtPrecio" class="input-small number"/>
+                        <td id="tdUnidad">
+                            <g:select class="input-mini" name="selUnidad" from="${janus.Unidad.list([sort: 'descripcion'])}" optionKey="id" optionValue="codigo"/>
                         </td>
-                        <td id="tdCantidad">
-                            <input type="text" id="txtCantidad" class="input-small number"/>
+                        <td id="tdValor">
+                            <input type="text" id="txtValor" class="input-small number"/>
+                        </td>
+                        <td id="tdValorIva">
+                            <input type="text" id="txtValorIva" class="input-small number"/>
+                        </td>
+                        <td id="tdIndirectos">
+                            <input type="text" id="txtIndirectos" class="input-small number"/>
                         </td>
                         <td id="tdTotal" class="num bold">
                             0.00
@@ -148,6 +165,9 @@
         </div>
 
         <script type="text/javascript">
+
+            var iva = ${iva}/100;
+
             function validarNum(ev) {
                 /*
                  48-57      -> numeros
@@ -184,271 +204,21 @@
                 }
             }
 
-            function clickBuscar($btn) {
-                var $tr = $("#trRubro");
-                $tr.data({
-                    edit   : false,
-                    item   : $.trim($btn.attr("regid")),
-                    unidad : $.trim($btn.attr("prop_unidad")),
-                    nombre : $.trim($btn.attr("prop_nombre")),
-                    codigo : $.trim($btn.attr("prop_codigo"))
-                });
-
-                $("#txtRubro").val($.trim($btn.attr("prop_nombre")));
-                $("#modal-rubro").modal("hide");
-            }
-
-            function updateTotal() {
-                var total = 0;
-                $("#tbRubros").children("tr").each(function () {
-                    var tot = $(this).data("total");
-                    total += tot;
-                });
-                $("#tdTotalFinal").text(number_format(total, 2, ".", ",")).data("valor", total);
-            }
-
-            function initRows() {
-                var rows = ${detalles};
-                var total = 0;
-                for (var i = 0; i < rows.length; i++) {
-                    var data = rows[i];
-                    total += parseFloat(data.total);
-                    addRow(data);
-                }
-                $("#tdTotalFinal").text(number_format(total, 2, ".", ",")).data("valor", total);
-            }
-
-            function loadData(data) {
-                var $tr = $("#trRubro");
-                $tr.data(data);
-                $("#txtRubro").val(data.nombre);
-                $("#txtPrecio").val(data.precio);
-                $("#txtCantidad").val(data.cantidad);
-                $("#tdTotal").text(number_format(data.total, 2, ".", ","));
-                $("#btnSave").show();
-            }
-
-            function updateRow(data) {
-                $("#tbRubros").children("tr").each(function () {
-                    var idAct = $(this).data("id");
-                    if (idAct == data.id) {
-                        $(this).remove();
-                        addRow(data);
-                    }
-                });
-            }
-
-            function addRow(data) {
-                //N. 	Descripción del rubro 	U. 	Precio unitario 	Cantidad 	Total
-
-                var $tr = $("<tr>").data(data);
-                var $tdCod = $("<td>").text(data.codigo).appendTo($tr);
-                var $tdDes = $("<td>").text(data.nombre).appendTo($tr);
-                var $tdUni = $("<td>").css("text-align", "center").text(data.unidad).appendTo($tr);
-                var $tdPrec = $("<td>").css("text-align", "right").text(number_format(data.precio, 2, ".", ",")).appendTo($tr);
-                var $tdCant = $("<td>").css("text-align", "right").text(number_format(data.cantidad, 2, ".", ",")).appendTo($tr);
-                var $tdTotal = $("<td>").css("text-align", "right").text(number_format(data.total, 2, ".", ",")).appendTo($tr);
-
-                if (${editable}) {
-                    var $tdBtn = $("<td>");
-                    var $btnEdit = $("<a href='#' class='btn btn-primary' style='margin-left: 10px;' title='Editar'><i class='icon-pencil'></i></a>").appendTo($tdBtn);
-                    var $btnDelete = $("<a href='#' class='btn btn-danger' style='margin-left: 10px;' title='Eliminar'><i class='icon-trash'></i></a>").appendTo($tdBtn);
-
-                    $btnDelete.click(function () {
-                        $.box({
-                            imageClass : "box_info",
-                            title      : "Alerta",
-                            text       : "Está seguro de eliminar el rubro " + data.nombre + "? Esta acción no se puede deshacer.",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable     : false,
-                                draggable     : false,
-                                closeOnEscape : false,
-                                buttons       : {
-                                    "Aceptar"  : function () {
-                                        $.ajax({
-                                            type    : "POST",
-                                            url     : "${createLink(action:'deleteDetalleCosto')}",
-                                            data    : {
-                                                pln  : "${planilla.id}",
-                                                item : data.item
-                                            },
-                                            success : function (msg) {
-                                                $tr.remove();
-                                                updateTotal();
-                                            }
-                                        });
-                                    },
-                                    "Cancelar" : function () {
-                                    }
-                                }
-                            }
-                        });
-                    });
-
-                    $btnEdit.click(function () {
-                        loadData(data);
-                    });
-
-                    $tdBtn.appendTo($tr);
-                }
-
-                $tr.appendTo($("#tbRubros"));
-            }
-
-            function noDuplicados(item) {
-                var noExiste = true;
-                $("#tbRubros").children("tr").each(function () {
-                    var itemAct = $(this).data("item");
-                    if (itemAct == item) {
-                        noExiste = false;
-                    }
-                });
-                return noExiste;
-            }
-
             function reset() {
-                $("#txtRubro, .number").val("");
+                $("#txtRubro, #txtFactura, .number").val("");
+//                $("#indirectos").val(25);
+
                 $("#tdTotal").text("0.00");
                 $("#trRubro").removeData();
                 $("#btnAdd, #btnSave").hide();
             }
 
             $(function () {
-                reset();
-//                $("#tbDetalle").children("tr").each(function () {
-//                    updateRow($(this));
-//                });
 
-                initRows();
+                reset();
 
                 $("#btnReset").click(function () {
                     reset();
-                });
-
-                $("#btnSave").click(function () {
-                    $(this).hide().after(spinner);
-                    var $tr = $("#trRubro");
-                    var data = $tr.data();
-                    var $tdTotal = $("#tdTotalFinal");
-                    var max = parseFloat($tdTotal.data("max"));
-                    var tot = parseFloat($tdTotal.data("valor"));
-                    var val = data.total + tot;
-                    if (val <= max) {
-                        $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(action:'addDetalleCosto')}",
-                            data    : {
-                                id      : data.id,
-                                pln     : "${planilla.id}",
-                                item    : data.item,
-                                cant    : data.cantidad,
-                                prec    : data.precio,
-                                totalPl : val
-                            },
-                            success : function (msg) {
-                                var parts = msg.split("_");
-                                if (parts[0] == "OK") {
-                                    data.id = parts[1];
-                                    data.edit = true;
-                                    updateRow(data);
-                                    reset();
-                                    spinner.remove();
-                                }
-                            }
-                        });
-                    } else {
-                        $.box({
-                            imageClass : "box_info",
-                            title      : "Error",
-                            text       : "El total " + number_format(val, 2, ".", ",") + " sobrepasa el 10% del monto del contrato " + number_format(max, 2, ".", ","),
-                            iconClose  : false,
-                            dialog     : {
-                                resizable     : false,
-                                draggable     : false,
-                                closeOnEscape : false,
-                                buttons       : {
-                                    "Aceptar" : function () {
-                                        spinner.remove();
-                                        reset();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    return false;
-                });
-
-                $("#btnAdd").click(function () {
-                    $(this).hide().after(spinner);
-                    var $tr = $("#trRubro");
-                    var data = $tr.data();
-                    var $tdTotal = $("#tdTotalFinal");
-                    var max = parseFloat($tdTotal.data("max"));
-                    var tot = parseFloat($tdTotal.data("valor"));
-                    var val = data.total + tot;
-                    if (val <= max) {
-                        if (noDuplicados(data.item)) {
-                            $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(action:'addDetalleCosto')}",
-                                data    : {
-                                    pln     : "${planilla.id}",
-                                    item    : data.item,
-                                    cant    : data.cantidad,
-                                    prec    : data.precio,
-                                    totalPl : val
-                                },
-                                success : function (msg) {
-                                    var parts = msg.split("_");
-                                    if (parts[0] == "OK") {
-                                        data.id = parts[1];
-                                        data.edit = true;
-                                        addRow(data);
-                                        reset();
-                                        spinner.remove();
-                                    }
-                                }
-                            });
-                        } else {
-                            $.box({
-                                imageClass : "box_info",
-                                title      : "Alerta",
-                                text       : "El rubro " + data.nombre + " ya está ingresado, edítelo.",
-                                iconClose  : false,
-                                dialog     : {
-                                    resizable     : false,
-                                    draggable     : false,
-                                    closeOnEscape : false,
-                                    buttons       : {
-                                        "Aceptar" : function () {
-                                            spinner.remove();
-                                            reset();
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    } else {
-                        $.box({
-                            imageClass : "box_info",
-                            title      : "Error",
-                            text       : "El total " + number_format(val, 2, ".", ",") + " sobrepasa el 10% del monto del contrato " + number_format(max, 2, ".", ","),
-                            iconClose  : false,
-                            dialog     : {
-                                resizable     : false,
-                                draggable     : false,
-                                closeOnEscape : false,
-                                buttons       : {
-                                    "Aceptar" : function () {
-                                        spinner.remove();
-                                        reset();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    return false;
                 });
 
                 $(".number").bind({
@@ -466,6 +236,7 @@
                         }
                     }, //keydown
                     keyup   : function () {
+                        $(".errorP").remove();
                         var val = $(this).val();
                         // esta parte valida q no ingrese mas de 2 decimales
                         var parts = val.split(".");
@@ -477,35 +248,33 @@
                             }
                         }
                         // esta parte hace los calculos
-                        var $tr = $("#trRubro");
-                        var cant = $.trim($("#txtCantidad").val());
-                        var prec = $.trim($("#txtPrecio").val());
-                        if ($tr.data() && cant != "" && prec != "") {
-                            var tot = cant * prec;
-                            $tr.data({
-                                cantidad : cant,
-                                precio   : prec,
-                                total    : tot
-                            });
-                            $("#tdTotal").text(number_format(tot, 2, ".", ","));
-                            if (!$tr.data("edit")) {
-                                $("#btnAdd").show();
+                        if ($(this).attr("id") == "txtValor") {
+                            var indi = parseInt($("#indirectos").val()) / 100;
+                            var valorNoIva = parseFloat($.trim($("#txtValor").val()));
+
+                            var valorIva = valorNoIva + (valorNoIva * iva);
+                            $("#txtValorIva").val(number_format(valorIva, 2, ".", "")).data("default", number_format(valorIva, 2, ".", ""));
+
+                            var valorIndi = valorNoIva + (valorNoIva * indi);
+                            $("#txtIndirectos").val(number_format(valorIndi, 2, ".", "")).data("default", number_format(valorIndi, 2, ".", ""));
+                        } else if ($(this).attr("id") == "txtValorIva" || $(this).attr("id") == "txtValorIndi") {
+                            var valor = parseFloat($.trim($(this).val()));
+                            var def = parseFloat($(this).data("default"));
+                            var dif = Math.abs(valor - def);
+
+                            if (dif > 0.1) {
+                                $(this).val(def);
+                                $(this).after("<p class='errorP'>No puede ingresar un valor con una diferencia de más de un centavo</p>")
                             }
                         }
+
+                        var factura = $.trim($("#txtFactura").val());
+                        var rubro = $.trim($("#txtRubro").val());
+                        var unidadId = $("#selUnidad").val();
+
                     }
                 });
-
-                $("#txtRubro").dblclick(function () {
-                    var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-                    $("#modalTitle").html("Lista de rubros");
-                    $("#modalFooter").html("").append(btnOk);
-                    $(".contenidoBuscador").html("")
-                    $("#modal-rubro").modal("show");
-
-                });
-
             });
         </script>
-
     </body>
 </html>

@@ -2528,6 +2528,17 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def detalleCosto() {
+        def planilla = Planilla.get(params.id)
+        def contrato = Contrato.get(params.contrato)
+        def obra = contrato.oferta.concurso.obra
+        def editable = planilla.fechaMemoSalidaPlanilla == null
+        def dets = []
+
+        def iva = Parametros.get(1).iva
+
+        def json = new JsonBuilder(dets)
+//        println json.toPrettyString()
+        return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, detalles: json, iva: iva]
 
     }
 
@@ -2537,7 +2548,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def obra = contrato.oferta.concurso.obra
 
-        def editable = planilla.fechaPago == null
+        def editable = planilla.fechaMemoPagoPlanilla == null
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
         def dets = []
