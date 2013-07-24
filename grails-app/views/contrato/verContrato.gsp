@@ -419,7 +419,7 @@
 
             <div class="span3">
 
-             No existe una fecha de inicio de obra, el contrato no puede ser impreso!
+             No existe una fecha de inicio de obra, no se puede imprimir el contrato!
 
             </div>
 

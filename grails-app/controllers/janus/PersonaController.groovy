@@ -274,6 +274,7 @@ class PersonaController extends janus.seguridad.Shield {
     def save() {
 
         println(params.password)
+        def personaInstance
 
         if (params.fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
@@ -289,15 +290,26 @@ class PersonaController extends janus.seguridad.Shield {
         }
         if (params.password) {
 
-            params.password = params.password.encodeAsMD5()
-            println("ps" + params.password)
+//            println(params.password.encodeAsMD5())
+//            println(Persona.get(params.id).password)
+
+            if ((params.password.encodeAsMD5()) == Persona.get(params.id).password){
+
+                params.password = Persona.get(params.id).password
+
+//                println("entro")
+            }else{
+
+                params.password = params.password.encodeAsMD5()
+//                println("entro1")
+            }
         }
         if (params.autorizacion) {
             params.autorizacion = params.autorizacion.encodeAsMD5()
         }
 
 
-        def personaInstance
+
 
         if (params.id) {
             personaInstance = Persona.get(params.id)

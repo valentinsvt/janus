@@ -149,6 +149,7 @@
                 </td>
                 <td>
                     <g:passwordField name="password" maxlength="63" class="span2 required" value="${personaInstance?.password}"/>
+
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>

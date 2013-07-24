@@ -1105,6 +1105,7 @@ class ReportesController {
         def name = "rubros_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times16bold = new Font(Font.TIMES_ROMAN, 16, Font.BOLD);
         Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
@@ -1155,9 +1156,9 @@ class ReportesController {
             Paragraph headers = new Paragraph();
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
-            headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
-            headers.add(new Paragraph("GESTIÓN DE PRESUPUESTOS", times14bold));
-            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times14bold));
+            headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
+            headers.add(new Paragraph("GESTIÓN DE PRESUPUESTOS", times12bold));
+            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times12bold));
 //            headers.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el " + new Date().format("dd/MM/yyyy hh:mm"), times8normal))
             addEmptyLine(headers, 1);
             document.add(headers);
@@ -1453,7 +1454,7 @@ class ReportesController {
                     addCellTabla(table, new Paragraph("DESCRIPCIÓN", fonts.times8boldWhite), params.prmsCellHead)
                     addCellTabla(table, new Paragraph("UNIDAD", fonts.times8boldWhite), params.prmsCellHead)
                     addCellTabla(table, new Paragraph("CANTIDAD", fonts.times8boldWhite), params.prmsCellHead)
-                    addCellTabla(table, new Paragraph("TARIFA(\$/H)", fonts.times8boldWhite), params.prmsCellHead)
+                    addCellTabla(table, new Paragraph("UNITARIO(\$)", fonts.times8boldWhite), params.prmsCellHead)
 //                addCellTabla(table, new Paragraph("", fonts.times8boldWhite), params.prmsCellHead)
                     addCellTabla(table, new Paragraph("C.TOTAL(\$)", fonts.times8boldWhite), params.prmsCellHead)
 
