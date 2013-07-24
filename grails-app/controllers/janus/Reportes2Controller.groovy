@@ -609,6 +609,7 @@ class Reportes2Controller {
         tablaB0.setWidthPercentage(100);
         tablaB0.setWidths(arregloEnteros(tams))
         tablaB0.setWidthPercentage(100);
+        tablaB0.setSpacingAfter(5f);
 
         addCellTabla(tablaB0, new Paragraph("Cuadrilla Tipo", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 2])
         periodos.each { per ->
@@ -646,9 +647,14 @@ class Reportes2Controller {
         }
 
         document.add(tablaB0);
+        printFirmas([tipo: "otro", orientacion: "horizontal"])
         /* ***************************************************** Fin Tabla B0 *************************************************************/
 
         /* ***************************************************** Tabla P0 *****************************************************************/
+
+        document.newPage()
+        headerPlanilla([size: 10])
+
         Paragraph tituloP0 = new Paragraph();
         addEmptyLine(tituloP0, 1);
         tituloP0.setAlignment(Element.ALIGN_CENTER);
@@ -1095,14 +1101,15 @@ class Reportes2Controller {
 
                     def bAnt = planillaAnterior.reajuste
                     def bAct = planilla.reajuste
-                    def bAcu = planillaAnterior.reajuste + planilla.reajuste
+                    def bAcu = bAct-bAnt
 
                     def cAnt = params.ant + bAnt
                     def cAct = params.act + bAct
                     def cAcu = params.acu + bAcu
 
-                    def dAnt = planillasAnteriores.sum { it.descuentos }
-                    def d = (valorObra / planilla.contrato.monto) * planilla.contrato.anticipo - dAnt
+                    def dAnt = planillasAnteriores[0..planillasAnteriores.size()-2].sum { it.descuentos }
+//                    def d = (valorObra / planilla.contrato.monto) * planilla.contrato.anticipo - dAnt
+                    def d = planilla.descuentos
 
                     def antAnt = dAnt
                     def antAct = d
@@ -1131,9 +1138,9 @@ class Reportes2Controller {
 
                     addCellTabla(tablaDetalles, new Paragraph("", fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                     addCellTabla(tablaDetalles, new Paragraph("ANTICIPO", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 3])
-                    addCellTabla(tablaDetalles, new Paragraph(numero(antAnt, 2, "hide"), fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                    addCellTabla(tablaDetalles, new Paragraph(numero(antAct, 2, "hide"), fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                    addCellTabla(tablaDetalles, new Paragraph(numero(antAcu, 2, "hide"), fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(antAnt, 2), fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(antAct, 2), fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(antAcu, 2), fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
                     addCellTabla(tablaDetalles, new Paragraph("", fontThTiny), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                     addCellTabla(tablaDetalles, new Paragraph("MULTAS", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 3])

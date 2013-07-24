@@ -562,10 +562,23 @@ class Planilla2Controller {
             }
             order("id", "asc")
         }
+        def avanceAnteriores = Planilla.withCriteria {
+            eq("contrato", contrato)
+            and {
+                or {
+                    lt("fechaInicio", planilla.fechaInicio)
+                }
+                or {
+                    eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
+                }
+            }
+            order("id", "asc")
+        }
+
         def planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 1)
 //        println "planillas " + planillasAnteriores
         def periodos = PeriodoPlanilla.findAllByPlanillaInList(planillasAnteriores, [sort: "id"])
-
+        periodos = periodos.sort{it.fechaIncio}
 //        println periodos.id
 //        println periodos.periodo.descripcion
 
@@ -600,8 +613,9 @@ class Planilla2Controller {
         def bodyMultaRetraso = ""
 
         def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
-//        println "peridos planilla " + pa
+
         if (pa.size() == 0) {
+            println "creando periodos "
             def inicio = planilla.fechaInicio
             def fin = getLastDayOfMonth(planilla.fechaInicio)
 //            println "inicio " + inicio + " fin " + fin + "  planilla " + planilla.fechaFin
@@ -1107,6 +1121,15 @@ class Planilla2Controller {
         planilla.reajuste = reajusteTotal
         planilla.multaPlanilla = totalMulta
         planilla.multaRetraso = totalMultaRetraso
+        def valorAnt = 0
+        def anterior=0
+        if(avanceAnteriores.size()>0){
+            valorAnt=avanceAnteriores.sum{it.valor}
+            anterior=avanceAnteriores.sum{it.descuentos}
+        }
+
+
+        planilla.descuentos=(((valorAnt+planilla.valor)/contrato.monto)*contrato.anticipo-anterior).toDouble().round(2)
         if (!planilla.save(flush: true)) {
             println "error planilla reajuste " + planilla.id
         }
@@ -1117,7 +1140,7 @@ class Planilla2Controller {
     def anticipo() {
 
         def planilla = Planilla.get(params.id)
-        def override = true
+        def override = false
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def fechaOferta = planilla.contrato.oferta.fechaEntrega - 30
@@ -1156,6 +1179,7 @@ class Planilla2Controller {
         }
 
         if (override && periodos.size() > 0) {
+            println "Borrando periodos por alguna razon "
             periodos.each {
                 it.delete(flush: true)
             }
@@ -1165,7 +1189,7 @@ class Planilla2Controller {
 
 
         if (periodos.size() == 0) {
-
+            println "creando periodos "
 //            pcs.each {c->
             println " per o " + perOferta + "  per a " + perAnticipo
             perOferta = verificaIndices(pcs, perOferta, 0)

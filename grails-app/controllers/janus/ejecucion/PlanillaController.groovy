@@ -321,8 +321,11 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
                 }
             }
-
+            if(tipo == 5) {
+                redirect(controller: "cronogramaEjecucion", action: "index", id: planilla.contratoId)
+            }   else {
             redirect(action: "list", id: planilla.contratoId)
+            }
         } else {
             println "Error al grabar la fecha y el memo en la planilla: " + planilla.errors
             flash.clase = "alert-error"
@@ -398,7 +401,7 @@ class PlanillaController extends janus.seguridad.Shield {
         }
 
         if (planillasAvance.size() > 0) {
-            if (planillasAvance.pop().fechaFin == finalObra) {
+            if (planillasAvance.last().fechaFin == finalObra) {
                 def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
                 tiposPlanilla -= plp.tipoPlanilla
             }
@@ -442,7 +445,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println periodos
 //            periodos = periodos.unique().sort { it.fechaInicio }
 //        }
-
+           println "avance "+planillasAvance
         if (planillasAvance.size() == 0) {
             /* cuando es la primera planilla de avance:
                     si la fecha de inicio de obra < 15: debe hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin de mes
@@ -465,12 +468,12 @@ class PlanillaController extends janus.seguridad.Shield {
             def planillasAnt = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"), [sort: "fechaFin"])
 
             def inicio, fin
-//            println "planillas ant "+planillasAnt+" per ejec "+periodosEjec
+            println "planillas ant "+planillasAnt+" per ejec "+periodosEjec
             if (planillasAnt.size() > 0) {
                 inicio = planillasAnt.pop().fechaFin + 1
-//                println "inicio "+inicio
+                println "inicio "+inicio
                 fin = getLastDayOfMonth(inicio)
-//                println "fin "+fin
+                println "fin "+fin
                 if (fin > finalObra) {
                     periodos.put((inicio.format("dd-MM-yyyy") + "_" + finalObra.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + finalObra.format("dd-MM-yyyy"))
                 } else {
@@ -499,8 +502,13 @@ class PlanillaController extends janus.seguridad.Shield {
         maxDatePres += ")"
 
         def minDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},1)"
+        def fiscalizadorAnterior
+        if( planillas.size()>0){
+            fiscalizadorAnterior = planillas.last().fiscalizadorId
+        }
 
-        def fiscalizadorAnterior = planillas.last().fiscalizadorId
+
+
 
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior]
     }
@@ -2521,6 +2529,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println planillasAnteriores
 
         def editable = planilla.fechaMemoSalidaPlanilla == null
+        editable = PeriodoPlanilla.findAllByPlanilla(planilla).size() == 0
 //        println editable
 
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]

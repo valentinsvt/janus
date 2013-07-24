@@ -542,7 +542,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         html += "<td>T</td>"
         def filaDolAcum = "", filaPor = "", filaPorAcum = "", sumaDol = 0, sumaPor = 0
         totalesDol.each {
-            it = it.round(2)
+            it = it.toDouble().round(2)
             def por = ((100 * it) / totalCosto).round(2)
             sumaDol += it
             sumaPor += por
