@@ -311,7 +311,7 @@
                             <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
                                 <li>
                                     <g:link controller="cronogramaEjecucion" action="index" id="${contrato?.id}">
-                                        <i class="icon-th"></i>Cronograma ejecucion
+                                        <i class="icon-th"></i> Cronograma ejecucion
                                     </g:link>
                                 </li>
                             </g:if>
@@ -329,13 +329,13 @@
 
                             <li>
                                 <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
-                                    <i class="icon-book"></i>Biblioteca
+                                    <i class="icon-book"></i> Biblioteca
                                 </g:link>
                             </li>
 
                             <li>
                                 <g:link controller="planilla" action="list" id="${contrato?.id}">
-                                    <i class=" icon-file-alt"></i>Planillas
+                                    <i class=" icon-file-alt"></i> Planillas
                                 </g:link>
                             </li>
 
@@ -361,7 +361,13 @@
 
                             <li>
                                 <g:link action="fechasPedidoRecepcion" id="${contrato?.id}">
-                                    <i class=" icon-calendar-empty"></i>Fechas de pedido de recepción
+                                    <i class=" icon-calendar-empty"></i> Fechas de pedido de recepción
+                                </g:link>
+                            </li>
+
+                            <li>
+                                <g:link action="obraLiquidacion" id="${contrato?.id}">
+                                    <i class=" icon-gears"></i> Generar FP de Liquidación
                                 </g:link>
                             </li>
 

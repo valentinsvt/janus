@@ -9,6 +9,7 @@ class ContratoController extends janus.seguridad.Shield {
 
     def buscadorService
     def preciosService
+    def dbConnectionService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -635,4 +636,14 @@ class ContratoController extends janus.seguridad.Shield {
             redirect(action: "registroContrato")
         }
     } //delete
+
+    def obraLiquidacion() {
+        def contrato = Contrato.get(params.id)
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from obra_lq(" + contrato.obra.id + ")"
+        def nuevo = cn.execute(sql.toString())
+        cn.close()
+        render("Se ha generado la obra para la fórmula polinómica de liquidación con el id: $nuevo")
+    }
+
 } //fin controller

@@ -396,7 +396,20 @@ class PreciosService {
 
     }
 
-    def rbro_pcun_v3(obra,subpres){
+    def rbro_pcun_v2_item(obra, item){
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rbro_pcun_v2(" + obra + ") where item__id = " + item
+        def valor = 0.0
+        cn.eachRow(sql.toString()) { r ->
+            valor = r.totl
+        }
+        cn.close()
+        return valor
+
+    }
+
+    def rbro_pcun_v3(obra, subpres){
 
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rbro_pcun_v2(" + obra + ") where sbpr__id= ${subpres} order by vlobordn asc"

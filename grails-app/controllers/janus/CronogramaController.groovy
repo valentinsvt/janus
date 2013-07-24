@@ -338,7 +338,10 @@ class CronogramaController extends janus.seguridad.Shield {
             it.refresh()
 
             def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
+//            def res = preciosService.rbro_pcun_v2_item(obra.id, it.item.id)
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//            println res
+//            precios.put(it.id.toString(), res)
         }
         return [detalle: detalle, precios: precios, obra: obra, subpres: subpres, subpre: subpre]
     }
