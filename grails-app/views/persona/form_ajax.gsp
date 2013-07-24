@@ -228,10 +228,11 @@
                           %{--value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"  />--}%
 
 
-                <g:select name="perfiles" class="span2" multiple="true" from="${janus.seguridad.Prfl.findAllByIdNotEqual(4)}" optionKey="id" optionValue="nombre"
-                          value="${personaInstance?.sesiones*.id}"  />
 
-                ${personaInstance?.sesiones?.id}
+                <g:select name="perfiles" class="span2" multiple="multiple" from="${janus.seguridad.Prfl.findAllByIdNotEqual(4)}" optionKey="id" optionValue="nombre"
+                          value="${personaInstance?.sesiones*.perfilId}"  />
+
+                %{--${personaInstance?.sesiones*.perfilId}--}%
 
             </td>
             <td>

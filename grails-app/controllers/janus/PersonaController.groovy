@@ -273,7 +273,7 @@ class PersonaController extends janus.seguridad.Shield {
 
     def save() {
 
-//        println(params.password)
+        println(params.password)
 
         if (params.fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
@@ -288,11 +288,14 @@ class PersonaController extends janus.seguridad.Shield {
             params.fechaPass = new Date().parse("dd-MM-yyyy", params.fechaPass)
         }
         if (params.password) {
+
             params.password = params.password.encodeAsMD5()
+            println("ps" + params.password)
         }
         if (params.autorizacion) {
             params.autorizacion = params.autorizacion.encodeAsMD5()
         }
+
 
         def personaInstance
 
@@ -334,6 +337,10 @@ class PersonaController extends janus.seguridad.Shield {
         def perfilesAct2 = Sesn.findAllByUsuario(personaInstance).perfil.id*.toString()
         //perfiles q llegaron como parametro
         def perfilesNue = params.perfiles
+
+
+
+
         def perfilesAdd = [], perfilesDel = []
 
         if (!perfilesAct){
@@ -350,15 +357,34 @@ class PersonaController extends janus.seguridad.Shield {
             }
         }
 
-//        println("por agregar" + perfilesAdd)
-//        println("nuevos" + perfilesNue)
-//        println("actuales"+ perfilesAct2)
+        perfilesAct2.each{ j->
+
+            if (perfilesAdd.contains(j)){
+            } else{
+
+                perfilesDel.add(j)
+            }
+        }
+
+//        println("por agregar " + perfilesAdd)
+//        println("nuevos " + perfilesNue)
+//        println("actuales "+ perfilesAct2)
+//        println("del "+ perfilesDel)
+
+        perfilesDel.each {
+            def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
+            if (sesn){
+
+                sesn.delete()
+
+            }
+        }
+
 
         perfilesNue.each { i->
 
 
             if (!perfilesAct){
-
                 def sesn = new Sesn()
                 sesn.perfil = Prfl.get(i)
                 sesn.usuario = personaInstance
@@ -382,21 +408,13 @@ class PersonaController extends janus.seguridad.Shield {
                         if (!sesn.save(flush: true)) {
                             println "error al grabar sesn perfil: " + i + " persona " + personaInstance.id
                         }
-                    }
+//                    }
 
-//                }
-
-            }
-
-
-        }
-        perfilesDel.each {
-            def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
-            if (sesn){
-
-                sesn.delete()
+                }
 
             }
+
+
         }
 
         if (params.id) {

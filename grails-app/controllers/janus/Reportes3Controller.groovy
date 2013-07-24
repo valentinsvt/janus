@@ -1722,4 +1722,11 @@ class Reportes3Controller {
 
     }
 
+    def reporteContrato () {
+
+
+
+
+    }
+
 }
