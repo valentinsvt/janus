@@ -321,10 +321,10 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
                 }
             }
-            if(tipo == 5) {
+            if (tipo == 5) {
                 redirect(controller: "cronogramaEjecucion", action: "index", id: planilla.contratoId)
-            }   else {
-            redirect(action: "list", id: planilla.contratoId)
+            } else {
+                redirect(action: "list", id: planilla.contratoId)
             }
         } else {
             println "Error al grabar la fecha y el memo en la planilla: " + planilla.errors
@@ -445,7 +445,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println periodos
 //            periodos = periodos.unique().sort { it.fechaInicio }
 //        }
-           println "avance "+planillasAvance
+        println "avance " + planillasAvance
         if (planillasAvance.size() == 0) {
             /* cuando es la primera planilla de avance:
                     si la fecha de inicio de obra < 15: debe hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin de mes
@@ -468,12 +468,12 @@ class PlanillaController extends janus.seguridad.Shield {
             def planillasAnt = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"), [sort: "fechaFin"])
 
             def inicio, fin
-            println "planillas ant "+planillasAnt+" per ejec "+periodosEjec
+            println "planillas ant " + planillasAnt + " per ejec " + periodosEjec
             if (planillasAnt.size() > 0) {
                 inicio = planillasAnt.pop().fechaFin + 1
-                println "inicio "+inicio
+                println "inicio " + inicio
                 fin = getLastDayOfMonth(inicio)
-                println "fin "+fin
+                println "fin " + fin
                 if (fin > finalObra) {
                     periodos.put((inicio.format("dd-MM-yyyy") + "_" + finalObra.format("dd-MM-yyyy")), inicio.format("dd-MM-yyyy") + " a " + finalObra.format("dd-MM-yyyy"))
                 } else {
@@ -503,7 +503,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def minDatePres = "new Date(${now.format('yyyy')},${now.format('MM').toInteger() - 1},1)"
         def fiscalizadorAnterior
-        if( planillas.size()>0){
+        if (planillas.size() > 0) {
             fiscalizadorAnterior = planillas.last().fiscalizadorId
         }
 
@@ -2533,7 +2533,43 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println editable
 
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
+    }
 
+    private boolean updatePlanilla(planilla) {
+        def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla)
+        def totalMonto = detalles.size() > 0 ? detalles.sum { it.montoIva } : 0
+        def totalIndi = detalles.size() > 0 ? detalles.sum { it.montoIndirectos } : 0
+        def total = totalMonto + totalIndi
+        planilla.valor = total
+        if (!planilla.save(flush: true)) {
+            println "error al actualizar el valor de la planilla " + planilla.errors
+            return false
+        }
+        return true
+    }
+
+    def addDetalleCosto() {
+        def detalle = new DetallePlanillaCosto()
+        if (params.id) {
+            detalle = DetallePlanillaCosto.get(params.id)
+        }
+        detalle.properties = params
+        if (detalle.save(flush: true)) {
+            def planilla = Planilla.get(params.planilla.id)
+            updatePlanilla(planilla)
+            render "OK_" + detalle.id
+        } else {
+            println "ERROR: " + detalle.errors
+            render "NO_Ha ocurrido un error al guardar el rubro"
+        }
+    }
+
+    def deleteDetalleCosto() {
+        def detalle = DetallePlanillaCosto.get(params.id)
+        def planilla = Planilla.get(detalle.planillaId)
+        detalle.delete(flush: true)
+        updatePlanilla(planilla)
+        render "OK"
     }
 
     def detalleCosto() {
@@ -2541,15 +2577,53 @@ class PlanillaController extends janus.seguridad.Shield {
         def contrato = Contrato.get(params.contrato)
         def obra = contrato.oferta.concurso.obra
         def editable = planilla.fechaMemoSalidaPlanilla == null
+        def iva = Parametros.get(1).iva
         def dets = []
 
-        def iva = Parametros.get(1).iva
+        def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla)
+        /*"planilla.id"   :${planilla.id},
+            factura         : factura,
+            rubro           : rubro,
+            "unidad.id"     : unidadId,
+            unidadText      : unidadText,
+            monto           : valor,
+            montoIva        : valorIva,
+            montoIndirectos : valorIndi,
+            indirectos      : $("#thIndirectos").data("indi"),
+            total           : total
+            */
+        detalles.each { dp ->
+            dets.add([
+                    id: dp.id,
+                    "planilla.id": planilla.id,
+                    factura: dp.factura,
+                    rubro: dp.rubro,
+                    "unidad.id": dp.unidadId,
+                    unidadText: dp.unidad.codigo,
+                    monto: dp.monto,
+                    montoIva: dp.montoIva,
+                    montoIndirectos: dp.montoIndirectos,
+                    indirectos: dp.indirectos,
+                    total: dp.montoIva + dp.montoIndirectos
+            ])
+        }
+
+        def anteriores = Planilla.withCriteria {
+            eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
+            ne("id", planilla.id)
+        }
+
+        def totalAnterior = anteriores.size() > 0 ? anteriores.sum { it.valor } : 0
+
+        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 25
+        def max = contrato.monto * 0.1
+        max -= totalAnterior
 
         def json = new JsonBuilder(dets)
 //        println json.toPrettyString()
-        return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, detalles: json, iva: iva]
-
+        return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
     }
+
 
     def detalleCosto_old() {
         def planilla = Planilla.get(params.id)
@@ -2578,10 +2652,9 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println json.toPrettyString()
 
         return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, campos: campos, detalles: json]
-
     }
 
-    def deleteDetalleCosto() {
+    def deleteDetalleCosto_old() {
         def item = Item.get(params.item)
         def planilla = Planilla.get(params.pln)
         def detalle = DetallePlanilla.findByPlanillaAndItem(planilla, item)
@@ -2589,7 +2662,7 @@ class PlanillaController extends janus.seguridad.Shield {
         render "OK"
     }
 
-    def addDetalleCosto() {
+    def addDetalleCosto_old() {
         def planilla = Planilla.get(params.pln)
         def item = Item.get(params.item)
         def cant = params.cant.toDouble()

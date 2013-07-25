@@ -93,7 +93,7 @@
             %{--<i class="icon-print"></i>--}%
             %{--Imprimir--}%
             %{--</a>--}%
-                <g:link controller="reportes2" action="reportePlanilla" id="${planilla.id}" class="btn  btn-ajax" rel="tooltip" title="Imprimir">
+                <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planilla.id}" class="btn  btn-ajax" rel="tooltip" title="Imprimir">
                     <i class="icon-print"></i> Imprimir
                 </g:link>
             %{--<a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">--}%

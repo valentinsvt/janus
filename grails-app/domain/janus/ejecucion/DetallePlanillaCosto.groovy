@@ -5,11 +5,13 @@ import janus.Unidad
 class DetallePlanillaCosto {
 
     Planilla planilla
+    String factura
     String rubro
     Unidad unidad
-    double cantidad
-    double monto
-    double indirectos
+    double indirectos       // porcentaje de costos indirectos
+    double monto            // monto del rubro sin iva
+    double montoIva         // monto del rubro incluido iva
+    double montoIndirectos  // monto de los costos indirectos
 
     static mapping = {
         table 'dpcs'
@@ -18,13 +20,14 @@ class DetallePlanillaCosto {
         id generator: 'identity'
         version false
         columns {
-            id column: 'dtpl__id'
+            factura column: 'dpcsfctr'
             planilla column: 'plnl__id'
             rubro column: 'dpcsrbro'
             unidad column: 'undd__id'
-            cantidad column: 'dpcscntd'
-            monto column: 'dpcsmnto'
             indirectos column: 'dpcsindr'
+            monto column: 'dpcsmnto'
+            montoIva column: 'dpcsmniv'
+            montoIndirectos column: 'dpcsmnin'
         }
     }
 
