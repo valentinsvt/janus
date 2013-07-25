@@ -166,11 +166,11 @@
                 </p>
 
                 <p style="font-size: 14px">
-                    <b>GESTIÓN DE PRESUPUESTOS</b>
+                    <b>COORDINACIÓN DE COSTOS</b>
                 </p>
 
                 <p style="font-size: 14px">
-                    <b>ANÁLISIS DE PRECIOS UNITARIOS</b>
+                    <b>ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO</b>
                 </p>
             </div>
 
@@ -197,6 +197,7 @@
                         %{--<b>Unidad:</b> ${rubro.unidad.codigo}--}%
                     %{--</div>--}%
                 </div>
+
 
                 <div class="row-fluid">
                     <div class="span12">

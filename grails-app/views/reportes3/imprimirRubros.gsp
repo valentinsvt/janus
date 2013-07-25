@@ -160,11 +160,11 @@
                 </p>
 
                 <p style="font-size: 14px">
-                    GESTIÓN DE PRESUPUESTOS
+                    COORDINACIÓN DE COSTOS
                 </p>
 
                 <p style="font-size: 14px">
-                    ANÁLISIS DE PRECIOS UNITARIOS
+                    ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO
                 </p>
             </div>
 

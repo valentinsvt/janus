@@ -356,17 +356,23 @@ class PersonaController extends janus.seguridad.Shield {
         //saco los perfiles q ya tiene
         def perfilesAct = Sesn.findAllByUsuario(personaInstance).id*.toString()
         def perfilesAct2 = Sesn.findAllByUsuario(personaInstance).perfil.id*.toString()
+//        def perfilesAct2 = Sesn.findAllByUsuario(personaInstance).perfil.id
+
         //perfiles q llegaron como parametro
         def perfilesNue = params.perfiles
 
+        if (perfilesNue.class == java.lang.String) {
 
+            perfilesNue=[perfilesNue]
 
+        }
 
         def perfilesAdd = [], perfilesDel = []
 
         if (!perfilesAct){
 
             perfilesAct.each { per ->
+
                 if (!perfilesNue.contains(per)) {
                     perfilesDel.add(per)
                 }
@@ -375,6 +381,7 @@ class PersonaController extends janus.seguridad.Shield {
         perfilesNue.each { per ->
             if (!perfilesAct.contains(per)) {
                 perfilesAdd.add(per)
+
             }
         }
 
@@ -386,7 +393,7 @@ class PersonaController extends janus.seguridad.Shield {
                 perfilesDel.add(j)
             }
         }
-
+//
 //        println("por agregar " + perfilesAdd)
 //        println("nuevos " + perfilesNue)
 //        println("actuales "+ perfilesAct2)

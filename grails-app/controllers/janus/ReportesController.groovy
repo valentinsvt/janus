@@ -1157,8 +1157,8 @@ class ReportesController {
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
             headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
-            headers.add(new Paragraph("GESTIÓN DE PRESUPUESTOS", times12bold));
-            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times12bold));
+            headers.add(new Paragraph("COORDINACIÓN DE COSTOS", times12bold));
+            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO", times12bold));
 //            headers.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el " + new Date().format("dd/MM/yyyy hh:mm"), times8normal))
             addEmptyLine(headers, 1);
             document.add(headers);

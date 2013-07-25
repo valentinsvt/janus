@@ -45,7 +45,7 @@
                 %{--<g:field type="number" name="codigo"  class="span2 required"  value="${fieldValue(bean: personaInstance, field: 'codigo')}"/>--}%
                 <g:textField type="number" name="codigo required"  class="span2"  value="${personaInstance?.codigo}"/>
 
-                %{--<span class="mandatory">*</span>--}%
+                <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
             </td>
