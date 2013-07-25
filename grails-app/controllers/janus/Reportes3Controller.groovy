@@ -102,7 +102,7 @@ class Reportes3Controller {
     }
 
     def imprimirRubroVolObra() {
-//        println "----->>>>" + params
+        println "----->>>>" + params
 //        def rubro = Item.get(params.id)
         def obra = Obra.get(params.obra)
         def fecha1 = new Date().parse("dd-MM-yyyy", params.fecha)

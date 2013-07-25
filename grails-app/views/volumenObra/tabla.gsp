@@ -83,7 +83,7 @@
 
     <g:each in="${valores}" var="val" status="j">
     %{--<tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">--}%
-        <tr class="item_row" id="${val.vlob__id}" item="${val}" sub="${val.sbpr__id}">
+        <tr class="item_row" id="${val.vlob__id}" item="${val}" sub="${val.sbpr__id}" cdgo="${val.item__id}">
 
             <td style="width: 20px" class="orden">${val.vlobordn}</td>
             <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
@@ -135,7 +135,17 @@
 
             if (key == "foto") {
                 %{--var child = window.open('${createLink(controller:"rubro",action:"showFoto")}/'+$(this).attr("item"), 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');--}%
-                var child = window.open('${createLink(controller:"rubro",action:"showFoto")}/' + $(this).attr("id"), 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
+                var child = window.open('${createLink(controller:"rubro", action:"showFoto")}/' + $(this).attr("cdgo") +
+                        '?tipo=il', 'GADPP', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
+                if (child.opener == null)
+                    child.opener = self;
+                window.toolbar.visible = false;
+                window.menubar.visible = false;
+            }
+
+            if (key == "espc") {
+                var child = window.open('${createLink(controller:"rubro", action:"showFoto")}/' + $(this).attr("cdgo") +
+                        '?tipo=dt', 'GADPP', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');
                 if (child.opener == null)
                     child.opener = self;
                 window.toolbar.visible = false;
@@ -205,7 +215,8 @@
                 }
 
             },
-            "foto": {name: "Ilustración", icon: "doc"}
+            "foto": {name: "Ilustración", icon: "doc"},
+            "espc": {name: "Especificaciones", icon: "doc"}
         }
         %{--</g:if>--}%
         %{--<g:else>--}%

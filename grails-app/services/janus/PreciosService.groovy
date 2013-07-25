@@ -393,21 +393,19 @@ class PreciosService {
         }
         cn.close()
         return result
+     }
 
-    }
-
-    def rbro_pcun_v2_item(obra, item){
+    def rbro_pcun_v2_item(obra, sbpr, item){
 
         def cn = dbConnectionService.getConnection()
-        def sql = "select * from rbro_pcun_v2(" + obra + ") where item__id = " + item
+        def sql = "select * from rbro_pcun_v2(" + obra + ") where item__id = " + item + " and sbpr__id = " + sbpr
         def valor = 0.0
         cn.eachRow(sql.toString()) { r ->
             valor = r.totl
         }
         cn.close()
         return valor
-
-    }
+     }
 
     def rbro_pcun_v3(obra, subpres){
 
@@ -420,8 +418,7 @@ class PreciosService {
         }
         cn.close()
         return result
-
-    }
+     }
 
     def rbro_pcun_v4(obra,orden){
 

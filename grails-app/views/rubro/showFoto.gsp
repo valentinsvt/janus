@@ -35,39 +35,43 @@
             </div>
         </g:if>
         <div class="tituloTree" style="width: 720px;">
-            ${titulo} del Rubro: ${rubro?.nombre}
+            Código: ${rubro?.codigo}<br/>Nombre: ${rubro?.nombre}
         </div>
         <fieldset class="borde_abajo" style="position: relative;width: 670px;padding-left: 50px;">
             <div class="linea" style="height: 98%;"></div>
+            <p class="css-vertical-text">Archivo</p>
             <g:uploadForm action="uploadFile" method="post" name="frmUpload" enctype="multipart/form-data">
                 <g:hiddenField name="tipo" value="${tipo}"/>
                 <g:hiddenField name="rubro" value="${rubro?.id}"/>
                 <div class="fieldcontain required">
-                    <b>Archivo:</b>
+                    <b>Cargar archivo:</b>
                     <input type="file" id="file" name="file" class=""/>
+                    <a href="#" id="submit" class="btn">
+                        <i class="icon-save"></i> Guardar
+                    </a>
+                    <a href="#" id="salir" class="btn ">
+                        <i class="icon-minus-sign"></i> Salir
+                    </a>
 
-                    <div class="btn-group">
+                    <div class="btn-group" style="margin-top: 20px;">
                         %{--<input type="submit" value="Guardar" class="btn btn-primary">--}%
-                        <a href="#" id="submit" class="btn ">
-                            <i class="icon-save"></i> Guardar
-                        </a>
                         <g:if test="${filePath}">
-                            <g:link action="downloadFile" id="${rubro.id}" params="[tipo: tipo]" class="btn ">
+                            <g:link action="downloadFile" id="${rubro.id}" params="[tipo: tipo]" class="btn btn-info">
                                 <i class="icon-download-alt"></i> Descargar
                             </g:link>
                         </g:if>
-                        <a href="#" id="salir" class="btn ">
-                            <i class="icon-minus-sign"></i> Salir
-                        </a>
                     </div>
                 </div>
             </g:uploadForm>
+            <g:if test="${!filePath}">
+                   <p style="color: #800">No se ha cargado ningún archivo para este rubro</p>
+            </g:if>
         </fieldset>
-        <g:if test="${ext.toLowerCase() == 'pdf'}">
+        <g:if test="${ext?.toLowerCase() == 'pdf'}">
             <div class="alert alert-info">
                 <p>
                     <i class="icon-info-sign icon-2x pull-left"></i>
-                    El archivo cargado para este rubro es un pdf. Por favor descárguelo para visualizarlo.
+                    <p style="color: #000; font-size: 14px;">El archivo cargado para este rubro es un pdf. Por favor descárguelo para visualizarlo.</p>
                 </p>
             </div>
         </g:if>

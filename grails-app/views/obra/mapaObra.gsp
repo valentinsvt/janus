@@ -264,7 +264,8 @@
                 limites2();
 
 //                var kmzLayer = new google.maps.KmlLayer("http://www.nth-development.com/fine/Vias_Principales.kmz");
-                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/Vias_Principales.kmz");
+//                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/Vias_Principales.kmz");
+                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/5PRUEBA.kmz");
                 kmzLayer.setMap(map);
 //        limites();
 

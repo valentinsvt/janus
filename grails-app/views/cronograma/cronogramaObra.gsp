@@ -219,10 +219,12 @@
                                 <td class="num precioU" data-valor="${precios[vol.id.toString()]}">
                                     <g:formatNumber number="${precios[vol.id.toString()]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                 </td>
-                                <g:set var="parcial" value="${precios[vol.id.toString()] * vol.cantidad}"/>
+                                %{--<g:set var="parcial" value="${precios[vol.id.toString()] * vol.cantidad}"/>--}%
+                                <g:set var="parcial" value="${precios[vol.id.toString()]}"/>
                                 <td class="num subtotal" data-valor="${parcial}">
                                     <g:formatNumber number="${parcial}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
-                                    <g:set var="sum" value="${sum + parcial.toFloat().round(2)}"/>
+                                    %{--<g:set var="sum" value="${sum + parcial.toFloat().round(2)}"/>--}%
+                                    <g:set var="sum" value="${sum + parcial}"/>
                                 </td>
                                 <td style="text-align: center" class="dias">
                                     <span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>
