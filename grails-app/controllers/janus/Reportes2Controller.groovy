@@ -3789,7 +3789,7 @@ class Reportes2Controller {
 
 
         def baos = new ByteArrayOutputStream()
-        def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        def name = "desglose equipos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
@@ -3819,6 +3819,7 @@ class Reportes2Controller {
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
         headers.add(new Paragraph("DESGLOSE DE EQUIPOS", times12bold));
         headers.add(new Paragraph("OBRA: " + obra?.descripcion, times12bold));
 

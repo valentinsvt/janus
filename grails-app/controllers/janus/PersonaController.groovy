@@ -288,7 +288,8 @@ class PersonaController extends janus.seguridad.Shield {
         if (params.fechaPass) {
             params.fechaPass = new Date().parse("dd-MM-yyyy", params.fechaPass)
         }
-        if (params.password) {
+
+        if (params.password && params.id) {
 
 //            println(params.password.encodeAsMD5())
 //            println(Persona.get(params.id).password)
@@ -304,6 +305,14 @@ class PersonaController extends janus.seguridad.Shield {
 //                println("entro1")
             }
         }
+        else {
+
+            params.password =   params.password.encodeAsMD5()
+
+        }
+
+
+
         if (params.autorizacion) {
             params.autorizacion = params.autorizacion.encodeAsMD5()
         }
