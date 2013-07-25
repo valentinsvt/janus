@@ -273,7 +273,7 @@ class PersonaController extends janus.seguridad.Shield {
 
     def save() {
 
-        println(params.password)
+//        println(params.password)
         def personaInstance
 
         if (params.fechaInicio) {
@@ -396,7 +396,7 @@ class PersonaController extends janus.seguridad.Shield {
             def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
             if (sesn){
 
-                sesn.delete()
+                sesn.delete(flush: true)
 
             }
         }

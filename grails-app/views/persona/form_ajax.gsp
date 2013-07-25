@@ -42,8 +42,10 @@
                 </span>
             </td>
             <td>
-                <g:field type="number" name="codigo" class="span2 required" value="${fieldValue(bean: personaInstance, field: 'codigo')}"/>
-                <span class="mandatory">*</span>
+                %{--<g:field type="number" name="codigo"  class="span2 required"  value="${fieldValue(bean: personaInstance, field: 'codigo')}"/>--}%
+                <g:textField type="number" name="codigo"  class="span2"  value="${personaInstance?.codigo}"/>
+
+                %{--<span class="mandatory">*</span>--}%
 
                 <p class="help-block ui-helper-hidden"></p>
             </td>
@@ -252,6 +254,44 @@
 
 
 <script type="text/javascript">
+
+
+
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 190 || ev.keyCode == 110 ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+    $("#cedula").keydown(function (ev) {
+        if (ev.keyCode == 190 || ev.keyCode == 188 || ev.keyCode == 110) {
+//            if ($(this).val().indexOf(".") > -1) {
+//                return false
+//            }
+        }
+        return validarNum(ev);
+    });
+
+
+
+
+
+
+
     $("#frmSave-Persona").validate({
         errorPlacement : function (error, element) {
             element.parent().find(".help-block").html(error).show();
