@@ -200,6 +200,7 @@
                 </span>
             </td>
             <td>
+
                 <g:radioGroup name="activo" values="['1', '0']" labels="['Sí', 'No']" value="${personaInstance?.id ? personaInstance.activo : '0'}" class="required">
                     ${it.label} ${it.radio}
                 </g:radioGroup>
