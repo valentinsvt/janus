@@ -396,7 +396,14 @@ class PlanillaController extends janus.seguridad.Shield {
             }
             def plc = Planilla.findByContratoAndTipoPlanilla(contrato, costoPorcentaje)
             if (plc) {
-                tiposPlanilla -= plc.tipoPlanilla
+                def plcs = Planilla.findAllByContratoAndTipoPlanilla(contrato, costoPorcentaje)
+                def tt = plcs.sum { it.valor }
+//                println contrato.monto
+//                println contrato.monto * 0.1
+//                println tt
+                if (tt >= (contrato.monto * 0.1).round(2)) {
+                    tiposPlanilla -= plc.tipoPlanilla
+                }
             }
         }
 
