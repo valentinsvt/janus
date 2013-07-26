@@ -38,6 +38,8 @@ class Contrato implements Serializable {
     Date fechaPedidoRecepcionContratista
     Date fechaPedidoRecepcionFiscalizador
 
+    Persona administrador
+
     static mapping = {
 
         table 'cntr'
@@ -79,6 +81,7 @@ class Contrato implements Serializable {
             fechaPedidoRecepcionContratista column: 'cntrfccn'
             fechaPedidoRecepcionFiscalizador column: 'cntrfcfs'
 
+            administrador column: 'prsnadmn'
         }
     }
 
@@ -110,6 +113,8 @@ class Contrato implements Serializable {
 
         fechaPedidoRecepcionContratista(blank: true, nullable: true)
         fechaPedidoRecepcionFiscalizador(blank: true, nullable: true)
+
+        administrador(blank: true, nullable: true)
     }
 
     def getObra() {
