@@ -361,11 +361,22 @@ class PersonaController extends janus.seguridad.Shield {
         //perfiles q llegaron como parametro
         def perfilesNue = params.perfiles
 
-        if (perfilesNue.class == java.lang.String) {
 
-            perfilesNue=[perfilesNue]
+        if(perfilesNue){
+
+            if (perfilesNue.class == java.lang.String) {
+
+                perfilesNue=[perfilesNue]
+
+            }
+
+
+        }else {
+
+
 
         }
+
 
         def perfilesAdd = [], perfilesDel = []
 

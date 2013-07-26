@@ -200,7 +200,7 @@
                 </span>
             </td>
             <td>
-                <g:radioGroup name="activo" values="['1', '0']" labels="['Sí', 'No']" value="${personaInstance?.id ? personaInstance.activo : '0'}">
+                <g:radioGroup name="activo" values="['1', '0']" labels="['Sí', 'No']" value="${personaInstance?.id ? personaInstance.activo : '0'}" class="required">
                     ${it.label} ${it.radio}
                 </g:radioGroup>
                 <p class="help-block ui-helper-hidden"></p>
@@ -232,11 +232,11 @@
 
 
 
-                <g:select name="perfiles" class="span2" multiple="multiple" from="${janus.seguridad.Prfl.findAllByIdNotEqual(4)}" optionKey="id" optionValue="nombre"
+                <g:select name="perfiles" class="span2 required" multiple="multiple" from="${janus.seguridad.Prfl.findAllByIdNotEqual(4)}" optionKey="id" optionValue="nombre"
                           value="${personaInstance?.sesiones*.perfilId}"  />
-
+                <p class="help-block ui-helper-hidden"></p>
                 %{--${personaInstance?.sesiones*.perfilId}--}%
-
+                <span class="mandatory">*</span>
             </td>
             <td>
                 <span class="control-label label label-inverse">

@@ -1326,6 +1326,9 @@ class Reportes2Controller {
         def desglose = []
         def columnas = [5051, 5050, 5052, 3978, 5049]
 
+        def fechaIngreso = printFecha(obra?.fechaCreacionObra)
+        def fechaPrecios = printFecha(obra?.fechaPreciosRubros)
+
         def sqlTransTotal = "SELECT\n" +
                 "valor\n" +
                 "FROM mfvl, mfcl\n" +
@@ -1450,14 +1453,24 @@ class Reportes2Controller {
         println("coeficientes:" + valores)
 //
         println("ed1" + ed1)
-//        println("eqTotal:" + eqTotal)
+        println("eqTotal:" + eqTotal)
+        println("vartrans" + varTrans)
 
 
         if (varTrans > 0) {
             valores.eachWithIndex { item, i ->
 
-                b += (((ed1[i]) / (item)) - eqTotal)
-                //                println(b[0])
+                if (item > 0){
+
+
+                    b += (((ed1[i]) / (item)) - eqTotal)
+                    //                println(b[0])
+
+                } else {
+
+                    b += 0
+                }
+
             }
 
         } else {
@@ -1467,7 +1480,7 @@ class Reportes2Controller {
 
         }
 
-//        println("B:" + b)
+        println("B:" + b)
 
         b.each {
 
@@ -1477,7 +1490,7 @@ class Reportes2Controller {
 
         }
 
-//      println("C:" + c)
+      println("C:" + c)
 
 
         def prmsHeaderHoja = [border: Color.WHITE]
@@ -1504,6 +1517,7 @@ class Reportes2Controller {
         def baos = new ByteArrayOutputStream()
         def name = "desglose equipos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
@@ -1531,12 +1545,13 @@ class Reportes2Controller {
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
-        headers.add(new Paragraph("DESGLOSE DE EQUIPOS", times12bold));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times12bold));
-        headers.add(new Paragraph("FECHA INGRESO: " + obra?.fechaCreacionObra.format("dd-MM-yyyy"), times12bold));
-        headers.add(new Paragraph("FECHA act P.U.: " + obra?.fechaPreciosRubros.format("dd-MM-yyyy"), times12bold));
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
+        headers.add(new Paragraph("DESGLOSE DE EQUIPOS", times10bold));
+        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
+        headers.add(new Paragraph("FECHA INGRESO: " + fechaIngreso, times10bold));
+        headers.add(new Paragraph("FECHA act P.U.: " + fechaPrecios, times10bold));
+        headers.add(new Paragraph("CÓDIGO: " + obra?.codigo, times10bold));
 
         addEmptyLine(headers, 1);
         document.add(headers);
