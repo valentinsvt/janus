@@ -52,7 +52,7 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="registroContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
+                <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">
                     <i class="icon-double-angle-left"></i>
                     Contrato
                 </g:link>
@@ -207,9 +207,12 @@
                  9          -> tab
                  37         -> flecha izq
                  39         -> flecha der
+                 109        -> - teclado numerico
+                 173        -> - teclado
                  */
                 return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
                         (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                        (ev.keyCode >= 109 && ev.keyCode <= 173) ||
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
@@ -263,13 +266,13 @@
                 }
 //                } else if ($elm.attr("id") == "txtValorIva" || $(this).attr("id") == "txtValorIndi") {
                 var str = "";
-                $("#txtValorIva, #txtValorIndi").each(function () {
+                $("#txtValorIva, #txtIndirectos").each(function () {
                     var valor = parseFloat($.trim($(this).val()));
                     var def = parseFloat($(this).data("default"));
                     var dif = Math.abs(parseFloat(valor).toFixed(2) - parseFloat(def).toFixed(2)).toFixed(2);
 
                     if (dif > 0.1) {
-                        str += "<p class='errorP'>No puede ingresar un valor con una diferencia de más de un centavo de " + number_format(def, 2, ".", "") + "</p>";
+                        str += "<p class='errorP'>No puede ingresar un valor con una diferencia de más de diez centavos de " + number_format(def, 2, ".", "") + "</p>";
                         error = true;
                     }
                 });
