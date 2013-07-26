@@ -266,9 +266,9 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Financiamiento</div>
+                    <div class="span2 formato">Administrador</div>
 
-                    <div class="span3">${contrato?.financiamiento}</div>
+                    <div class="span3">${contrato?.administrador.titulo} ${contrato?.administrador.nombre} ${contrato?.administrador.apellido}</div>
 
                     %{--<div class="span2 formato">Financiado Por</div>--}%
 
@@ -419,19 +419,19 @@
 
         </div>
 
-    <div id="imprimirDialog">
+        <div id="imprimirDialog">
 
-        <fieldset>
+            <fieldset>
 
-            <div class="span3">
+                <div class="span3">
 
-             No existe una fecha de inicio de obra, no se puede imprimir el contrato!
+                    No existe una fecha de inicio de obra, no se puede imprimir el contrato!
 
-            </div>
+                </div>
 
-        </fieldset>
+            </fieldset>
 
-    </div>
+        </div>
 
         <script type="text/javascript">
 
@@ -666,8 +666,6 @@
                 $("#contenidoBuscador").html("")
                 $("#modal-busqueda").modal("show");
 
-
-
             });
 
             $("#btn-nuevo").click(function () {
@@ -765,42 +763,39 @@
 
             });
 
-        $("#btn-imprimir").click(function () {
+            $("#btn-imprimir").click(function () {
 
-           if(${contrato?.fechaInicio != null}){
+                if (${contrato?.fechaInicio != null}) {
 
+                    location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato?.id)}"
 
-               location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato?.id)}"
+                } else {
 
-           }else {
-
-               $("#imprimirDialog").dialog("open");
-           }
-
-
-
-        });
-
-        $("#imprimirDialog").dialog({
-            autoOpen  : false,
-            resizable : false,
-            modal     : true,
-            draggable : false,
-            width     : 350,
-            height    : 180,
-            position  : 'center',
-            title     : 'Imprimir Contrato',
-            buttons   : {
-
-                "Aceptar": function () {
-
-                    $("#imprimirDialog").dialog("close");
-
+                    $("#imprimirDialog").dialog("open");
                 }
-            }
+
+            });
+
+            $("#imprimirDialog").dialog({
+                autoOpen  : false,
+                resizable : false,
+                modal     : true,
+                draggable : false,
+                width     : 350,
+                height    : 180,
+                position  : 'center',
+                title     : 'Imprimir Contrato',
+                buttons   : {
+
+                    "Aceptar" : function () {
+
+                        $("#imprimirDialog").dialog("close");
+
+                    }
+                }
 
 
-        })
+            })
 
 
         </script>

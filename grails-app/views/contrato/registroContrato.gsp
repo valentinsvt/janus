@@ -50,7 +50,7 @@
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
                 <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
                 <g:if test="${contrato?.estado != 'R'}">
-                <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-save"></i> Guardar</button>
+                    <button class="btn" id="btn-aceptar" disabled="true"><i class="icon-save"></i> Guardar</button>
                 </g:if>
                 <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
                 <g:if test="${contrato?.id}">
@@ -58,20 +58,20 @@
                 </g:if>
 
                 <g:if test="${contrato?.estado == 'R' && planilla == []}">
-                <button class="btn" id="btn-desregistrar"><i class="icon-exclamation"></i> Cambiar Estado</button>
+                    <button class="btn" id="btn-desregistrar"><i class="icon-exclamation"></i> Cambiar Estado</button>
                 </g:if>
-                <g:if test="${contrato?.id && contrato?.estado!='R'}">
-                <button class="btn" id="btn-registrar"><i class="icon-exclamation"></i> Registrar</button>
+                <g:if test="${contrato?.id && contrato?.estado != 'R'}">
+                    <button class="btn" id="btn-registrar"><i class="icon-exclamation"></i> Registrar</button>
                 </g:if>
 
 
 
-                %{--<g:if test="${contrato?.estado != 'R' && }">--}%
+            %{--<g:if test="${contrato?.estado != 'R' && }">--}%
 
-                %{--</g:if>--}%
-                %{--<g:else>--}%
+            %{--</g:if>--}%
+            %{--<g:else>--}%
 
-                %{--</g:else>--}%
+            %{--</g:else>--}%
 
 
 
@@ -258,7 +258,7 @@
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 160px; padding: 10px;border-bottom: 1px solid black;">
+            <fieldset class="" style="position: relative; height: 190px; padding: 10px;border-bottom: 1px solid black;">
 
                 <div class="span12" style="margin-top: 10px">
 
@@ -313,6 +313,16 @@
 
                 </div>
 
+                <div class="span12" style="margin-top: 10px">
+
+                    <div class="span2 formato">Anticipo</div>
+
+                    <div class="span3">
+                        <g:select name="administrador.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{ it.apellido + ' ' + it.nombre }}"
+                                  value="${contrato?.administradorId}"/>
+                    </div>
+                </div>
+
 
                 %{--<div class="span12" style="margin-top: 10px">--}%
 
@@ -357,21 +367,21 @@
                             %{--</a>--}%
                             </li>
                             %{--<g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">--}%
-                                %{--<li>--}%
-                                    %{--<g:link controller="cronogramaEjecucion" action="index" id="${contrato?.id}">--}%
-                                        %{--<i class="icon-th"></i>Cronograma ejecucion--}%
-                                    %{--</g:link>--}%
-                                %{--</li>--}%
+                            %{--<li>--}%
+                            %{--<g:link controller="cronogramaEjecucion" action="index" id="${contrato?.id}">--}%
+                            %{--<i class="icon-th"></i>Cronograma ejecucion--}%
+                            %{--</g:link>--}%
+                            %{--</li>--}%
                             %{--</g:if>--}%
-                        %{--<li>--}%
-                        %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
-                        %{--Fórmula Pol.--}%
-                        %{--</g:link>--}%
-                        %{--</li>--}%
-                        %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
+                            %{--<li>--}%
+                            %{--<g:link controller="formulaPolinomica" action="coeficientes" id="${obra?.id}">--}%
+                            %{--Fórmula Pol.--}%
+                            %{--</g:link>--}%
+                            %{--</li>--}%
+                            %{--<li><a href="#" id="btnFormula"><i class="icon-file"></i>F. Polinómica</a></li>--}%
                             <li>
                                 %{--<a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}">--}%
-                                    %{--<i class="icon-calendar"></i> F. Polinómica--}%
+                                %{--<i class="icon-calendar"></i> F. Polinómica--}%
                                 %{--</a>--}%
                                 <g:link action="copiarPolinomica" id="${contrato?.id}"><i class="icon-superscript"></i> F. polinómica</g:link>
                             </li>
@@ -810,8 +820,7 @@
 
             });
 
-
-            $("#btn-desregistrar").click( function () {
+            $("#btn-desregistrar").click(function () {
 
                 $.ajax({
                     type    : "POST",
