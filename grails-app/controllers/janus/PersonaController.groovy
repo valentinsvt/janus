@@ -174,18 +174,18 @@ class PersonaController extends janus.seguridad.Shield {
 
 //         println(params.id)
 
-            def persona = Persona.get(params.id)
+        def persona = Persona.get(params.id)
 
 //          println(persona)
 
-            persona.activo = params.activo.toInteger()
+        persona.activo = params.activo.toInteger()
 
 //           println("id: " + persona.id)
 //           println("activo: " + persona.activo)
 
-            if (persona.save(flush: true))
-                render "ok"
-            flash.message = "El estado de la persona ha sido cambiado!"
+        if (persona.save(flush: true))
+            render "ok"
+        flash.message = "El estado de la persona ha sido cambiado!"
 
 //        redirect(action: 'list')
 
@@ -272,7 +272,7 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def save() {
-
+        println "params "+params
 //        println(params.password)
         def personaInstance
 
@@ -352,12 +352,6 @@ class PersonaController extends janus.seguridad.Shield {
             return
         }
 
-        //guardo los perfiles de la persona
-        //saco los perfiles q ya tiene
-        def perfilesAct = Sesn.findAllByUsuario(personaInstance).id*.toString()
-        def perfilesAct2 = Sesn.findAllByUsuario(personaInstance).perfil.id*.toString()
-//        def perfilesAct2 = Sesn.findAllByUsuario(personaInstance).perfil.id
-
         //perfiles q llegaron como parametro
         def perfilesNue = params.perfiles
 
@@ -371,90 +365,46 @@ class PersonaController extends janus.seguridad.Shield {
             }
 
 
-        }else {
-
-
-
         }
+        def  perfiles = Sesn.findAllByUsuario(personaInstance)
+        println "perfile nue "+perfilesNue
+        println "!!!  "+perfiles.perfil.id
 
 
-        def perfilesAdd = [], perfilesDel = []
-
-        if (!perfilesAct){
-
-            perfilesAct.each { per ->
-
-                if (!perfilesNue.contains(per)) {
-                    perfilesDel.add(per)
+        def borrar=true
+        for(int i = perfiles.size()-1;i>-1;i--){
+            perfilesNue.each {pn->
+                println "pn "+pn+"   "+    perfiles[i].perfil.id.toInteger()
+                if(pn.toInteger()==perfiles[i].perfil.id.toInteger()){
+                    borrar=false
                 }
             }
-        }
-        perfilesNue.each { per ->
-            if (!perfilesAct.contains(per)) {
-                perfilesAdd.add(per)
+            if(borrar) {
+                println "borrando "+perfiles[i]
+                perfiles[i].delete(flush: true)
 
+            }else{
+                borrar=true
             }
+//            if(!perfilesNue.contains(perfiles[i].perfil.id.toString())) {
+//                println "borrando "+perfiles[i]
+//                perfiles[i].delete(flush: true)
+//            }
         }
 
-        perfilesAct2.each{ j->
-
-            if (perfilesAdd.contains(j)){
-            } else{
-
-                perfilesDel.add(j)
+        perfilesNue.each {
+            def perfil =janus.seguridad.Prfl.get(it)
+            def ses = janus.seguridad.Sesn.findByUsuarioAndPerfil(personaInstance,perfil)
+            if(!ses){
+                ses = new janus.seguridad.Sesn([usuario:personaInstance,perfil:perfil])
+                println "grabando "+it
+                ses.save(flush: true)
             }
-        }
-//
-//        println("por agregar " + perfilesAdd)
-//        println("nuevos " + perfilesNue)
-//        println("actuales "+ perfilesAct2)
-//        println("del "+ perfilesDel)
 
-        perfilesDel.each {
-            def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
-            if (sesn){
-
-                sesn.delete(flush: true)
-
-            }
         }
 
 
-        perfilesNue.each { i->
 
-
-            if (!perfilesAct){
-                def sesn = new Sesn()
-                sesn.perfil = Prfl.get(i)
-                sesn.usuario = personaInstance
-                if (!sesn.save(flush: true)) {
-                    println "error al grabar sesn perfil: " + i + " persona " + personaInstance.id
-                }
-            }
-            else {
-
-//                perfilesNue.each{ i->
-
-//                    println("pa: " + perfilesAct2.contains(i))
-
-                    if (!perfilesAct2.contains(i)) {
-
-//                        println("entro2")
-
-                        def sesn = new Sesn()
-                        sesn.perfil = Prfl.get(i)
-                        sesn.usuario = personaInstance
-                        if (!sesn.save(flush: true)) {
-                            println "error al grabar sesn perfil: " + i + " persona " + personaInstance.id
-                        }
-//                    }
-
-                }
-
-            }
-
-
-        }
 
         if (params.id) {
             flash.clase = "alert-success"
