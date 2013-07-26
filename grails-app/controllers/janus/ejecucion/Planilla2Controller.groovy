@@ -548,6 +548,14 @@ class Planilla2Controller {
         def override = false
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
+        def costo = Planilla.findByTipoPlanillaAndFechaIngresoLessThan(TipoPlanilla.findByCodigo("C"),planilla.fechaIngreso)
+        if(costo){
+            if(costo.padreCosto==null){
+                costo.padreCosto=planilla
+                costo.save(flush: true)
+            }
+        }
+
         def planillasAnteriores = Planilla.withCriteria {
             eq("contrato", contrato)
             and {
@@ -614,6 +622,8 @@ class Planilla2Controller {
 
         def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
 
+
+
         if (pa.size() == 0) {
             println "creando periodos "
             def inicio = planilla.fechaInicio
@@ -660,7 +670,26 @@ class Planilla2Controller {
                 }
             }
         } else {
-            periodos += pa
+            def detalle = DetallePlanilla.findAllByPlanilla(planilla).sum{it.monto}
+            println "monto detalle "+detalle   +"   planilla "+planilla.valor
+            if(detalle.toDouble().round(2)!=planilla.valor){
+                println "son diferentes "
+                pa.each {
+                    it.fr=0
+                    it.p0=0
+                    it.parcialPlanilla=0
+                    it.total=0
+                }
+                periodos2=pa
+                println "periodos2 "+periodos2
+                println "periodos "+periodos
+                planilla.valor=detalle
+                planilla.save(flush: true)
+            }else{
+                periodos += pa
+            }
+
+
         }
 
         def tableWidth = 150 * (periodos.size() + periodos2.size()) + 400
@@ -808,10 +837,12 @@ class Planilla2Controller {
             p.parcialCronograma = parcialCronograma.toDouble().round(2)
             p.dias = diasTotal
             def totalPlanilla = planilla.valor
+//            println "valor planilla "+planilla.valor
             def diasPlanilla = planilla.fechaFin - planilla.fechaInicio + 1
             def totDiario = totalPlanilla / diasPlanilla
             p.parcialPlanilla = (totDiario * dias).toDouble().round(2)
             p.p0 = Math.max(p.parcialCronograma, p.parcialPlanilla)
+//            println "p0 "+p.p0
             if (!p.save(flush: true)) {
                 println "error calculo p0 " + p.errors
             }
@@ -976,7 +1007,7 @@ class Planilla2Controller {
                         println "error vlrj insert " + vlrj.errors
                     }
                 }
-
+//                println "per "+per.fr
                 per.fr += valor
                 if (!per.save(flush: true)) {
                     println "error fr " + per.errors

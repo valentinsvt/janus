@@ -2536,7 +2536,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println planillasAnteriores
 
         def editable = planilla.fechaMemoSalidaPlanilla == null
-        editable = PeriodoPlanilla.findAllByPlanilla(planilla).size() == 0
+//        editable = PeriodoPlanilla.findAllByPlanilla(planilla).size() == 0
 //        println editable
 
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
@@ -2773,16 +2773,27 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.clase = "alert-error"
             flash.message = "Ocurrieron " + err + " errores"
         } else {
-            pln.valor = params.total.toDouble()
-            if (!pln.save(flush: true)) {
-                flash.clase = "alert-error"
-                flash.message = "Ocurrió un error al guardar la planilla"
-            } else {
-                flash.clase = "alert-success"
-                flash.message = "Planilla guardada exitosamente"
+
+            def pers = PeriodoPlanilla.findAllByPlanilla(pln)
+            if(pers.size()==0){
+
+                pln.valor = params.total.toDouble()
+                if (!pln.save(flush: true)) {
+                    flash.clase = "alert-error"
+                    flash.message = "Ocurrió un error al guardar la planilla"
+                } else {
+                    flash.clase = "alert-success"
+                    flash.message = "Planilla guardada exitosamente"
+                }
+                redirect(controller: "planilla", action: "list", id: pln.contratoId)
+                return
+            }else{
+                redirect(controller: "planilla2",action: "avance",id: pln.id)
+                return
             }
+
         }
-        redirect(controller: "planilla", action: "list", id: pln.contratoId)
+
 //        render params
     }
 
