@@ -138,12 +138,30 @@
     -webkit-font-smoothing : antialiased;
 }
 
+.btn-devolver {
+    background-color       : hsl(0, 38%, 76%) !important;
+    background-repeat      : repeat-x;
+    filter                 : progid:DXImageTransform.Microsoft.gradient(startColorstr="#f2e2e2", endColorstr="#d9aaaa");
+    background-image       : -khtml-gradient(linear, left top, left bottom, from(#f2e2e2), to(#d9aaaa));
+    background-image       : -moz-linear-gradient(top, #f2e2e2, #d9aaaa);
+    background-image       : -ms-linear-gradient(top, #f2e2e2, #d9aaaa);
+    background-image       : -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2e2e2), color-stop(100%, #d9aaaa));
+    background-image       : -webkit-linear-gradient(top, #f2e2e2, #d9aaaa);
+    background-image       : -o-linear-gradient(top, #f2e2e2, #d9aaaa);
+    background-image       : linear-gradient(#f2e2e2, #d9aaaa);
+    border-color           : #d9aaaa #d9aaaa hsl(0, 38%, 72%);
+    color                  : #333 !important;
+    text-shadow            : 0 1px 1px rgba(255, 255, 255, 0.26);
+    -webkit-font-smoothing : antialiased;
+}
+
 .btn-info {
     /*background-color: #a2cedb;*/
-    background-color: #89cffd;
-    background-image: linear-gradient(to bottom, #89cffd, #296fad)
+    background-color : #89cffd;
+    background-image : linear-gradient(to bottom, #89cffd, #296fad)
 }
+
 .btn-info:hover, .btn-info:active, .btn-info.active, .btn-info.disabled, .btn-info[disabled] {
     /*background-color: #2f96b4;    */
-    background-color: #1f4684;
+    background-color : #1f4684;
 }

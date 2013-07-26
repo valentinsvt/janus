@@ -169,6 +169,9 @@
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Pedir pago
                                         </a>
+                                        <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                            Devolver
+                                        </a>
                                     </g:if>
                                     <g:elseif test="${lblBtn == 4}">
                                         Informar pago
@@ -285,7 +288,45 @@
                         }
                     });
                     return false;
-                }); //click btn new
+                }); //click btn pagar
+
+                $(".btn-devolver").click(function () {
+                    var $btn = $(this);
+                    var tipo = $btn.data("tipo").toString();
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'devolver_ajax')}",
+                        data    : {
+                            id   : $btn.data("id"),
+                            tipo : tipo
+                        },
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitForm(btnSave);
+                                return false;
+                            });
+
+                            switch (tipo) {
+                                case "3":
+                                    $("#modalTitle").html("Devolver a Enviar reajuste");
+                                    break;
+                                case "4":
+                                    $("#modalTitle").html("Devolver a Pedir pago");
+                                    break;
+                            }
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal-Planilla").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn devolver
 
                 $(".btn-new").click(function () {
                     $.ajax({
