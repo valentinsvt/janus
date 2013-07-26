@@ -381,7 +381,9 @@ class PersonaController extends janus.seguridad.Shield {
             }
             if(borrar) {
                 println "borrando "+perfiles[i]
-                perfiles[i].delete(flush: true)
+                def per = perfiles[i]
+                perfiles.remove(i)
+                per.delete(flush: true)
 
             }else{
                 borrar=true
