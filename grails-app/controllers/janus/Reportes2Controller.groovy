@@ -1450,11 +1450,11 @@ class Reportes2Controller {
 
 //        valores.add(obra?.desgloseEquipo)
 
-        println("coeficientes:" + valores)
-//
-        println("ed1" + ed1)
-        println("eqTotal:" + eqTotal)
-        println("vartrans" + varTrans)
+//        println("coeficientes:" + valores)
+////
+//        println("ed1" + ed1)
+//        println("eqTotal:" + eqTotal)
+//        println("vartrans" + varTrans)
 
 
         if (varTrans > 0) {
@@ -1480,7 +1480,7 @@ class Reportes2Controller {
 
         }
 
-        println("B:" + b)
+//        println("B:" + b)
 
         b.each {
 
@@ -1490,7 +1490,7 @@ class Reportes2Controller {
 
         }
 
-      println("C:" + c)
+//      println("C:" + c)
 
 
         def prmsHeaderHoja = [border: Color.WHITE]
@@ -1547,11 +1547,13 @@ class Reportes2Controller {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
         headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
+        addEmptyLine(headers, 1);
         headers.add(new Paragraph("DESGLOSE DE EQUIPOS", times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-        headers.add(new Paragraph("FECHA INGRESO: " + fechaIngreso, times10bold));
-        headers.add(new Paragraph("FECHA act P.U.: " + fechaPrecios, times10bold));
-        headers.add(new Paragraph("CÓDIGO: " + obra?.codigo, times10bold));
+        headers.add(new Paragraph("OBRA: " + obra?.nombre.toUpperCase(), times8bold));
+        headers.add(new Paragraph("FECHA INGRESO: " + fechaIngreso, times8bold));
+        headers.add(new Paragraph("FECHA act P.U.: " + fechaPrecios, times8bold));
+        headers.add(new Paragraph("CÓDIGO: " + obra?.codigo, times8bold));
+        headers.add(new Paragraph("DOC. REFERENCIA: " + obra?.oficioIngreso, times8bold));
 
         addEmptyLine(headers, 1);
         document.add(headers);
@@ -1559,6 +1561,8 @@ class Reportes2Controller {
         PdfPTable tablaDesglose = new PdfPTable(4);
         tablaDesglose.setWidthPercentage(90);
         tablaDesglose.setWidths(arregloEnteros([35, 2, 15, 30]))
+
+        tablaDesglose.setHorizontalAlignment(Element.ALIGN_RIGHT)
 
         addCellTabla(tablaDesglose, new Paragraph("Valor de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
@@ -1613,6 +1617,8 @@ class Reportes2Controller {
         PdfPTable tablaDesgloseBody = new PdfPTable(6);
         tablaDesgloseBody.setWidthPercentage(90);
         tablaDesgloseBody.setWidths(arregloEnteros([20, 20, 8, 5, 16, 40]))
+
+        tablaDesgloseBody.setHorizontalAlignment(Element.ALIGN_RIGHT)
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: valores[0] * 100, minFractionDigits:

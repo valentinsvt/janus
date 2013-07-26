@@ -759,6 +759,7 @@ class ReportesController {
         def baos = new ByteArrayOutputStream()
         def name = "subgrupos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
@@ -800,10 +801,11 @@ class ReportesController {
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-        headers.add(new Paragraph("REPORTE GRUPOS Y SUBGRUPOS", times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
+        headers.add(new Paragraph(" ", times14bold));
+        headers.add(new Paragraph("REPORTE GRUPOS Y SUBGRUPOS", times12bold));
+        headers.add(new Paragraph("OBRA: " + obra?.nombre, times12bold));
+        headers.add(new Paragraph("FECHA: " + printFecha(obra?.fechaCreacionObra), times12bold));
 
         addEmptyLine(headers, 1);
         document.add(headers);
@@ -1581,6 +1583,7 @@ class ReportesController {
 
 
         def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 2]
 
 
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
@@ -1610,6 +1613,7 @@ class ReportesController {
         def baos = new ByteArrayOutputStream()
         def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
@@ -1636,12 +1640,12 @@ class ReportesController {
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph(auxiliar.titulo, times12bold));
+        headers.add(new Paragraph(auxiliar.titulo, times14bold));
         headers.add(new Paragraph(" ", times10bold));
 //        headers.add(new Paragraph(" ", times10bold));
-        headers.add(new Paragraph(obra?.departamento?.descripcion, times10bold));
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
         headers.add(new Paragraph(" ", times10bold));
-
+        headers.add(new Paragraph("DATOS DE LA OBRA ", times10bold));
         document.add(headers)
 
 
@@ -1658,11 +1662,11 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph("Obra: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(obra?.nombre, times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(obra?.nombre, times10normal), prmsHeaderHoja3)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph("Código: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(obra?.oficioIngreso, times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(obra?.codigo, times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
 
@@ -1674,9 +1678,9 @@ class ReportesController {
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaCoeficiente, new Paragraph("Tipo de Obra: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(obra?.tipoObjetivo?.descripcion, times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph("Dirección: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente, new Paragraph(obra?.departamento?.direccion?.nombre, times10normal), prmsHeaderHoja3)
+//        addCellTabla(tablaCoeficiente, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaCoeficiente, new Paragraph("Programa: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente, new Paragraph(obra?.programacion?.descripcion, times10normal), prmsHeaderHoja)
@@ -1710,6 +1714,11 @@ class ReportesController {
         addCellTabla(tablaDistancias, new Paragraph("Listas de Precios al Peso", times12bold), prmsHeaderHoja)
         addCellTabla(tablaDistancias, new Paragraph(" ", times10normal), prmsHeaderHoja)
         addCellTabla(tablaDistancias, new Paragraph("Distancias", times12bold), prmsHeaderHoja)
+        addCellTabla(tablaDistancias, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaDistancias, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDistancias, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDistancias, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDistancias, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
         addCellTabla(tablaDistancias, new Paragraph("Lista Cantón", times10bold), prmsHeaderHoja)
@@ -1793,13 +1802,17 @@ class ReportesController {
         addCellTabla(tablaCoeficiente2, new Paragraph(obra?.sitio, times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaCoeficiente2, new Paragraph("Latitud: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente2, new Paragraph(g.formatNumber(number: obra?.latitud, format: "###.##", locale: "ec"), times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente2, new Paragraph("Coordenadas: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente2, new Paragraph(obra?.coordenadas, times10normal), prmsHeaderHoja3)
+//        addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaCoeficiente2, new Paragraph("Longitud: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente2, new Paragraph(g.formatNumber(number: obra?.longitud, format: "###.##", locale: "ec"), times10normal), prmsHeaderHoja)
-        addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente2, new Paragraph("Latitud: ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente2, new Paragraph(g.formatNumber(number: obra?.latitud, format: "###.##", locale: "ec"), times10normal), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
+//
+//        addCellTabla(tablaCoeficiente2, new Paragraph("Longitud: ", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente2, new Paragraph(g.formatNumber(number: obra?.longitud, format: "###.##", locale: "ec"), times10normal), prmsHeaderHoja)
+//        addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
 
 
@@ -5004,7 +5017,7 @@ class ReportesController {
         def nmro
         def numero = 1;
 
-        def fila = 9;
+        def fila = 13;
 
         def ultimaFila
 
@@ -5019,15 +5032,19 @@ class ReportesController {
         label = new Label(2, 6, "ANÁLISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: " + subPres?.descripcion.toString(), times16format); sheet.addCell(label);
 
 
+        label = new Label(2, 8, "FECHA: " + obra?.fechaCreacionObra.format("dd-MM-yyyy"), times16format); sheet.addCell(label);
 
-        label = new Label(0, 8, "N°", times16format); sheet.addCell(label);
-        label = new Label(1, 8, "CÓDIGO", times16format); sheet.addCell(label);
-        label = new Label(2, 8, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
-        label = new Label(3, 8, "RUBRO", times16format); sheet.addCell(label);
-        label = new Label(4, 8, "UNIDAD", times16format); sheet.addCell(label);
-        label = new Label(5, 8, "CANTIDAD", times16format); sheet.addCell(label);
-        label = new Label(6, 8, "UNITARIO", times16format); sheet.addCell(label);
-        label = new Label(7, 8, "C.TOTAL", times16format); sheet.addCell(label);
+        label = new Label(2, 10, "FECHA ACT. PRECIOS: " + obra?.fechaPreciosRubros.format("dd-MM-yyyy"), times16format); sheet.addCell(label);
+
+
+        label = new Label(0, 12, "N°", times16format); sheet.addCell(label);
+        label = new Label(1, 12, "CÓDIGO", times16format); sheet.addCell(label);
+        label = new Label(2, 12, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
+        label = new Label(3, 12, "RUBRO", times16format); sheet.addCell(label);
+        label = new Label(4, 12, "UNIDAD", times16format); sheet.addCell(label);
+        label = new Label(5, 12, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new Label(6, 12, "UNITARIO", times16format); sheet.addCell(label);
+        label = new Label(7, 12, "C.TOTAL", times16format); sheet.addCell(label);
 
         valores.each {
 

@@ -48,7 +48,7 @@ class Reportes3Controller {
         def detalle
         def valores
         def subPre
-        def fechaNueva = (new Date().format("dd-MM-yyyy"));
+        def fechaNueva = obra?.fechaCreacionObra.format("dd-MM-yyyy");
         def fechaPU = (obra?.fechaPreciosRubros.format("dd-MM-yyyy"));
 
         if (params.sub != '-1'){
