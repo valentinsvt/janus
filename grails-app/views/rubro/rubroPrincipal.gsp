@@ -281,7 +281,7 @@
             <th class="col_tarifa" style="display: none;">TARIFA <br>($/hora)</th>
             <th class="col_hora" style="display: none;">COSTO($)</th>
             <th class="col_rend" style="width: 50px">RENDIMIENTO</th>
-            <th class="col_total" style="display: none;"><C class="TOTAL"></C>($)<br>($/hora)</th>
+            <th class="col_total" style="display: none;"><C class="TOTAL"></C>C.TOTAL($)<br>($/hora)</th>
             <th style="width: 40px" class="col_delete"></th>
         </tr>
         </thead>
@@ -1137,7 +1137,7 @@
             indi = 21
         indi = parseFloat(indi)
         var tabla = $('<table class="table table-bordered table-striped table-condensed table-hover">')
-        tabla.append("<thead><tr><th colspan='3'>COSTOS INDIRECTOS</th></tr><tr><th style='width: 885px;'>DESCRIPCION</th><th style='text-align: right'>PORCENTAJES</th><th style='text-align: right'>VALOR</th></tr></thead>")
+        tabla.append("<thead><tr><th colspan='3'>COSTOS INDIRECTOS</th></tr><tr><th style='width: 885px;'>DESCRIPCION</th><th style='text-align: right'>PORCENTAJE</th><th style='text-align: right'>VALOR</th></tr></thead>")
         tabla.append("<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align: right'>" + indi + "%</td><td style='text-align: right;font-weight: bold'>" + number_format(total * indi / 100, 5, ".", "") + "</td></tr></tbody>")
         tabla.append("</table>")
         $("#tabla_indi").append(tabla)
