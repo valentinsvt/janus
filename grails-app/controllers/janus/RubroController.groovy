@@ -599,7 +599,7 @@ class RubroController extends janus.seguridad.Shield {
 
         def tabla = '<table class="table table-bordered table-striped table-condensed table-hover"> '
         def total = 0
-        tabla += "<thead><tr><th colspan=8>TRANSPORTE</th></tr><tr><th style='width: 80px;'>CODIGO</th><th style='width:610px'>DESCRIPCION</th><th>PESO</th><th>VOL</th><th>CANTIDAD</th><th>DISTANCIA</th><th>UNITARIO</th><th>C.TOTAL</th></thead><tbody>"
+        tabla += "<thead><tr><th colspan=8>TRANSPORTE</th></tr><tr><th style='width: 80px;'>CODIGO</th><th style='width:610px'>DESCRIPCION</th><th>PESO</th><th>VOL</th><th>CANTIDAD</th><th>DISTANCIA</th><th>TARIFA</th><th>C.TOTAL</th></thead><tbody>"
 //        println "rends "+rendimientos
 
 //        println "res "+res
