@@ -527,7 +527,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def tiposPlanilla = TipoPlanilla.list([sort: 'nombre'])
 
         def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
-        def finalObra = periodosEjec.pop().fechaFin
+        def finalObra = periodosEjec?.pop()?.fechaFin
 
         def pla = Planilla.findByContratoAndTipoPlanilla(contrato, anticipo)
         def anticipoPagado = false
