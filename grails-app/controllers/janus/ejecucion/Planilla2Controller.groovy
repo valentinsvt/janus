@@ -49,11 +49,15 @@ class Planilla2Controller {
             eq("codigo", obra.codigo + "LQ")
         }
         if (obraLiquidacion.size() == 0) {
+            println "error 1"
             flash.message = "No se encontró la obra de liquidación"
             redirect(action: "errores")
+            return
         } else if (obraLiquidacion.size() > 1) {
+            println "error 2"
             flash.message = "Se encontró más de una obra de liquidación"
             redirect(action: "errores")
+            return
         } else if (obraLiquidacion.size() == 1) {
             obraLiquidacion = obraLiquidacion[0]
 //            def pcs = FormulaPolinomicaContractual.withCriteria {
@@ -110,9 +114,10 @@ class Planilla2Controller {
                 }
             }
             if (!fechaFinObra) {
-                redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: contrato.id)
+                println "Error fecha fin obra"
                 flash.message = "Ingrese las fechas de recepción antes de generar la planilla de liquidación de reajuste"
                 flash.clase = "alert-error"
+                redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: contrato.id)
                 return
             }
 
@@ -120,13 +125,14 @@ class Planilla2Controller {
                 tarde = true
             }
 
-            def existe
+            def existe = null
             def error = false
+            flash.message = ""
             planillasAnteriores.each { pl ->
                 def pers = PeriodoPlanilla.findAllByPlanilla(pl)
                 pers.each { p ->
                     def periodo
-                    if (tarde == true) {
+                    if (tarde) {
                         periodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(p.fechaIncio, p.fechaFin)
 
                     } else {
@@ -137,14 +143,21 @@ class Planilla2Controller {
                     existe = verificaIndices(pcs, periodo, 0)
                     if (periodo != existe) {
                         error = true
+//                        if (!error.contains(periodo.toString())) {
+//                            error += "<li>No se encontraron todos los valores de índice para el periodo " + periodo.toString() + "</li>"
+////                            flash.message += "<li>No se encontraron todos los valores de índice para el periodo " + periodo.toString() + "</li>"
+//                        }
                     }
-
-                }
-                if (error) {
-                    redirect(action: "error")
-                    return
                 }
             }
+
+            if (error) {
+                println "**ERROR"
+                flash.message = "<ul>" + flash.message + "</ul>"
+                redirect(action: "errores")
+                return
+            }
+            println "AQUI"
 
             def tableWidth = 150 * periodos.size() + 400
             ///////////////////////////////////////////////////**********planillas*****************////////////////////////////////////////////////////////////
@@ -190,7 +203,11 @@ class Planilla2Controller {
             tablaBo += "</thead>"
             tablaBo += "<tbody>"
             def totalCoef = 0
+
             cs.each { c ->
+//                println "\t\t" + c
+//                println c.class
+//                println "\n"
                 tablaBo += "<tr>"
                 tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
                 tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
@@ -207,7 +224,7 @@ class Planilla2Controller {
 
                     tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
                     valor = (valor * c.valor).round(3)
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomica=${c.id} and planillaLiq = ${planillaAnticipo.id} ")
+                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomicaLiq=${c.id} and planillaLiq = ${planillaAnticipo.id} ")
                     if (vlrj.size() > 0) {
                         vlrj = vlrj.pop()
                         if (vlrj != valor) {
@@ -217,9 +234,9 @@ class Planilla2Controller {
                             }
                         }
                     } else {
-                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomica: c, valor: valor, planillaLiq: planillaAnticipo])
+                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomicaLiq: c, valor: valor, planillaLiq: planillaAnticipo])
                         if (!vlrj.save(flush: true)) {
-                            println "error vlrj insert " + vlrj.errors
+                            println "--error vlrj insert " + vlrj.errors
                         }
                     }
                     tablaBo += "<td class='number'>" + numero(valor) + "</td>"
@@ -237,7 +254,7 @@ class Planilla2Controller {
 
                     tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
                     valor = (valor * c.valor).round(3)
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomica=${c.id} and planillaLiq=${p.planilla.id}")
+                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomicaLiq=${c.id} and planillaLiq=${p.planilla.id}")
                     if (vlrj.size() > 0) {
                         vlrj = vlrj.pop()
                         if (vlrj != valor) {
@@ -247,9 +264,9 @@ class Planilla2Controller {
                             }
                         }
                     } else {
-                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomica: c, valor: valor, planillaLiq: p.planilla])
+                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomicaLiq: c, valor: valor, planillaLiq: p.planilla])
                         if (!vlrj.save(flush: true)) {
-                            println "error vlrj insert " + vlrj.errors
+                            println "++error vlrj insert " + vlrj.errors
                         }
                     }
                     tablaBo += "<td class='number'>" + numero(valor) + "</td>"
@@ -385,10 +402,12 @@ class Planilla2Controller {
 
             def totalFr = 0
 
+//            println "\n\n\n\t\tAQUI\n\n\n\n"
+
             ps.eachWithIndex { p, i ->
                 tablaFr += "<tr>"
                 tablaFr += "<th class='tal'>" + p?.indice?.descripcion + " (${p?.numero})</th>"
-                def vlinOferta
+                def vlinOferta = 0
                 (periodosAnticipo + periodosAvances).eachWithIndex { per, j ->
                     if (j == 0) { // es la oferta
                         def valor = 0
@@ -397,11 +416,16 @@ class Planilla2Controller {
                             tablaFr += "<td class='number'><div>${p.valor}</div><div class='bold'>${per.totalLiq}</div></td>"
                             valor = per.totalLiq
                         } else {
+                            println "*****************************************************"
+                            println p.indice
+                            println per.periodoLiquidacion
+                            println ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion)
+                            println "*****************************************************"
                             vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion).valor
                             tablaFr += "<td class='number'><div>${p.valor}</div><div class='bold'>${vlinOferta}</div></td>"
                             valor = vlinOferta
                         }
-                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id} and planillaLiq=${per.planilla.id}")
+                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomicaLiq=${p.id} and planillaLiq=${per.planilla.id}")
                         if (vlrj.size() > 0) {
                             vlrj = vlrj.pop()
                             if (vlrj != valor) {
@@ -411,9 +435,9 @@ class Planilla2Controller {
                                 }
                             }
                         } else {
-                            vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: per.periodoLiquidacion, formulaPolinomica: p, valor: valor, planillaLiq: per.planilla])
+                            vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: per.periodoLiquidacion, formulaPolinomicaLiq: p, valor: valor, planillaLiq: per.planilla])
                             if (!vlrj.save(flush: true)) {
-                                println "error vlrj insert " + vlrj.errors
+                                println "**error vlrj insert " + vlrj.errors
                             }
                         }
 
@@ -430,7 +454,7 @@ class Planilla2Controller {
 //                    println "error "+p.indice+" "+p.indice.id+"  "+per.periodo.id+"   "+vlin+"  "+vlinOferta+"  "+p.valor+"  "+"  "+per.periodo.id
                         def valor = (vlin / vlinOferta * p.valor).round(3)
 
-                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id} and planillaLiq=${per.planilla.id}")
+                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomicaLiq=${p.id} and planillaLiq=${per.planilla.id}")
                         if (vlrj.size() > 0) {
                             vlrj = vlrj.pop()
                             if (vlrj != valor) {
@@ -440,7 +464,7 @@ class Planilla2Controller {
                                 }
                             }
                         } else {
-                            vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: per.periodoLiquidacion, formulaPolinomica: p, valor: valor, planillaLiq: per.planilla])
+                            vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: per.periodoLiquidacion, formulaPolinomicaLiq: p, valor: valor, planillaLiq: per.planilla])
                             if (!vlrj.save(flush: true)) {
                                 println "error vlrj insert " + vlrj.errors
                             }
@@ -548,10 +572,10 @@ class Planilla2Controller {
         def override = false
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
-        def costo = Planilla.findByTipoPlanillaAndFechaIngresoLessThan(TipoPlanilla.findByCodigo("C"),planilla.fechaIngreso)
-        if(costo){
-            if(costo.padreCosto==null){
-                costo.padreCosto=planilla
+        def costo = Planilla.findByTipoPlanillaAndFechaIngresoLessThan(TipoPlanilla.findByCodigo("C"), planilla.fechaIngreso)
+        if (costo) {
+            if (costo.padreCosto == null) {
+                costo.padreCosto = planilla
                 costo.save(flush: true)
             }
         }
@@ -586,7 +610,7 @@ class Planilla2Controller {
         def planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 1)
 //        println "planillas " + planillasAnteriores
         def periodos = PeriodoPlanilla.findAllByPlanillaInList(planillasAnteriores, [sort: "id"])
-        periodos = periodos.sort{it.fechaIncio}
+        periodos = periodos.sort { it.fechaIncio }
 //        println periodos.id
 //        println periodos.periodo.descripcion
 
@@ -623,6 +647,8 @@ class Planilla2Controller {
         def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
 
 
+        def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
+        def liquidacion = planilla.fechaFin >= prej[0].fechaFin
 
         if (pa.size() == 0) {
             println "creando periodos "
@@ -670,22 +696,22 @@ class Planilla2Controller {
                 }
             }
         } else {
-            def detalle = DetallePlanilla.findAllByPlanilla(planilla).sum{it.monto}
-            println "monto detalle "+detalle   +"   planilla "+planilla.valor
-            if(detalle.toDouble().round(2)!=planilla.valor){
+            def detalle = DetallePlanilla.findAllByPlanilla(planilla).sum { it.monto }
+            println "monto detalle " + detalle + "   planilla " + planilla.valor
+            if (detalle.toDouble().round(2) != planilla.valor) {
                 println "son diferentes "
                 pa.each {
-                    it.fr=0
-                    it.p0=0
-                    it.parcialPlanilla=0
-                    it.total=0
+                    it.fr = 0
+                    it.p0 = 0
+                    it.parcialPlanilla = 0
+                    it.total = 0
                 }
-                periodos2=pa
-                println "periodos2 "+periodos2
-                println "periodos "+periodos
-                planilla.valor=detalle
+                periodos2 = pa
+                println "periodos2 " + periodos2
+                println "periodos " + periodos
+                planilla.valor = detalle
                 planilla.save(flush: true)
-            }else{
+            } else {
                 periodos += pa
             }
 
@@ -950,7 +976,7 @@ class Planilla2Controller {
         ps.eachWithIndex { p, i ->
             tablaFr += "<tr>"
             tablaFr += "<th class='tal'>" + p?.indice?.descripcion + " (${p?.numero})</th>"
-            def vlinOferta
+            def vlinOferta = null
             periodos.eachWithIndex { per, j ->
                 if (j == 0) { // es la oferta
                     def valor = 0
@@ -1069,27 +1095,57 @@ class Planilla2Controller {
         tablaFr += "</tfoot></table>"
         ///////////////////////////////////////////************************************ multa retraso **********************////////////////////////////
 
-        def tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
-        tablaMl += '<thead>'
-        tablaMl += '<tr>'
-        tablaMl += '<th>Mes y año</th>'
-        tablaMl += '<th>Cronograma</th>'
-        tablaMl += '<th>Planillado</th>'
-        tablaMl += '<th>Retraso</th>'
-        tablaMl += '<th>Multa</th>'
-        tablaMl += '</tr>'
-        tablaMl += '</thead>'
-        tablaMl += '<tbody>'
-        tablaMl += bodyMultaRetraso
-        tablaMl += '</tbody>'
-        tablaMl += '<tfoot>'
-        tablaMl += '<tr>'
-        tablaMl += '<th>TOTAL</th>'
-        tablaMl += '<td colspan="3"></td>'
-        tablaMl += "<th class='number'>${numero(totalMultaRetraso, 2)}</th>"
-        tablaMl += '</tr>'
-        tablaMl += '</tfoot>'
-        tablaMl += '</table>'
+        def totalContrato = contrato.monto
+        def prmlMulta = contrato.multaPlanilla
+
+        def tablaMl
+        if (!liquidacion) {
+            tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
+            tablaMl += '<thead>'
+            tablaMl += '<tr>'
+            tablaMl += '<th>Mes y año</th>'
+            tablaMl += '<th>Cronograma</th>'
+            tablaMl += '<th>Planillado</th>'
+            tablaMl += '<th>Retraso</th>'
+            tablaMl += '<th>Multa</th>'
+            tablaMl += '</tr>'
+            tablaMl += '</thead>'
+            tablaMl += '<tbody>'
+            tablaMl += bodyMultaRetraso
+            tablaMl += '</tbody>'
+            tablaMl += '<tfoot>'
+            tablaMl += '<tr>'
+            tablaMl += '<th>TOTAL</th>'
+            tablaMl += '<td colspan="3"></td>'
+            tablaMl += "<th class='number'>${numero(totalMultaRetraso, 2)}</th>"
+            tablaMl += '</tr>'
+            tablaMl += '</tfoot>'
+            tablaMl += '</table>'
+        } else {
+            def fechaFinFiscalizador = contrato.fechaPedidoRecepcionFiscalizador
+            def retraso = fechaFinFiscalizador - prej[0].fechaFin + 1
+            if (retraso < 0) {
+                retraso = 0
+            }
+            totalMultaRetraso = retraso * ((prmlMulta / 1000) * totalContrato)
+            tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
+            tablaMl += '<tr>'
+            tablaMl += '<th class="tal">Fecha final de la obra (cronograma)</th> <td>' + prej[0].fechaFin.format("dd-MM-yyyy") + '</td>'
+            tablaMl += '</tr>'
+            tablaMl += '<tr>'
+            tablaMl += '<th class="tal">Fecha pedido recepción fiscalizador</th> <td>' + fechaFinFiscalizador.format("dd-MM-yyyy") + '<td>'
+            tablaMl += '</tr>'
+            tablaMl += "<tr>"
+            tablaMl += '<th class="tal">Días de retraso</th> <td>' + retraso + '</td>'
+            tablaMl += "</tr>"
+            tablaMl += "<tr>"
+            tablaMl += '<th class="tal">Multa</th> <td>' + prmlMulta + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
+            tablaMl += "</tr>"
+            tablaMl += "<tr>"
+            tablaMl += '<th class="tal">Total multa</th> <td>$' + numero(totalMulta, 2) + '</td>'
+            tablaMl += "</tr>"
+            tablaMl += '</table>'
+        }
 
         ///////////////////////////////////////////************************************ multa no presentacion planilla **********************////////////////////////////
 
@@ -1117,12 +1173,11 @@ class Planilla2Controller {
         def retraso = fechaPresentacion - fechaMax + 1
 
         def totalMulta = 0
-
-        def totalContrato = contrato.monto
-        def prmlMulta = contrato.multaPlanilla
         if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-            totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum { it.parcialCronograma }) * (prmlMulta / 1000) * retraso
+            totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
+                it.parcialCronograma
+            }) * (prmlMulta / 1000) * retraso
         } else {
             retraso = 0
         }
@@ -1153,14 +1208,13 @@ class Planilla2Controller {
         planilla.multaPlanilla = totalMulta
         planilla.multaRetraso = totalMultaRetraso
         def valorAnt = 0
-        def anterior=0
-        if(avanceAnteriores.size()>0){
-            valorAnt=avanceAnteriores.sum{it.valor}
-            anterior=avanceAnteriores.sum{it.descuentos}
+        def anterior = 0
+        if (avanceAnteriores.size() > 0) {
+            valorAnt = avanceAnteriores.sum { it.valor }
+            anterior = avanceAnteriores.sum { it.descuentos }
         }
 
-
-        planilla.descuentos=(((valorAnt+planilla.valor)/contrato.monto)*contrato.anticipo-anterior).toDouble().round(2)
+        planilla.descuentos = (((valorAnt + planilla.valor) / contrato.monto) * contrato.anticipo - anterior).toDouble().round(2)
         if (!planilla.save(flush: true)) {
             println "error planilla reajuste " + planilla.id
         }
@@ -1494,36 +1548,40 @@ class Planilla2Controller {
     def verificaIndices(pcs, per, i) {
 
 //        println "\t"+i+"   "+per
-
         def perNuevo = per
-        pcs.each { c ->
-            def val = ValorIndice.findByIndiceAndPeriodo(c.indice, per)
-            if (!val) {
-                def vals = ValorIndice.withCriteria {
-                    eq("indice", c.indice)
-                    periodo {
-                        le("fechaInicio", per.fechaInicio)
-                        order("fechaInicio", "asc")
+        if (per != null) {
+            pcs.each { c ->
+                def val = ValorIndice.findByIndiceAndPeriodo(c.indice, per)
+                if (!val) {
+                    def vals = ValorIndice.withCriteria {
+                        eq("indice", c.indice)
+                        periodo {
+                            le("fechaInicio", per.fechaInicio)
+                            order("fechaInicio", "asc")
+                        }
+                    }
+//                println "no hay val   ${c.indice.id}---- ${per} "+vals.periodo
+                    if (vals.size() > 0) {
+                        perNuevo = vals.pop().periodo
+                    } else {
+                        if (!flash.message.contains(c.indice.toString()) || !flash.message.contains(per.toString())) {
+                            flash.message += "<li>No se encontró el valor de índice de  " + c.indice + " en el periodo " + per + "</li>"
+                        }
+                        println "error wtf  " + c.indice + " (" + c.indice.id + ") " + per + " (" + per.id + ")"
+                        perNuevo = null
                     }
                 }
-//                println "no hay val   ${c.indice.id}---- ${per} "+vals.periodo
-                if (vals.size() > 0) {
-                    perNuevo = vals.pop().periodo
-                } else {
-                    println "error wtf  " + c.indice + " " + per
-                }
+            }
+
+            if (i > 12 * 5) {
+                return null
+            }
+
+            if (per != perNuevo) {
+                i++
+                perNuevo = verificaIndices(pcs, perNuevo, i)
             }
         }
-
-        if (i > 12 * 5) {
-            return null
-        }
-
-        if (per != perNuevo) {
-            i++
-            perNuevo = verificaIndices(pcs, perNuevo, i)
-        }
-
         return perNuevo
     }
 

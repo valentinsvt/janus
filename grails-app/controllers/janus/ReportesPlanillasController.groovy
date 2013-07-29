@@ -33,6 +33,9 @@ class ReportesPlanillasController {
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
 
+        def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
+        def liquidacion = planilla.fechaFin >= prej[0].fechaFin
+
         def conDetalles = true
         if (params.detalle) {
             conDetalles = Boolean.parseBoolean(params.detalle)
@@ -48,7 +51,7 @@ class ReportesPlanillasController {
             if (planilla.tipoPlanilla.codigo == "L") {
                 periodoPlanilla = "Liquidación del reajuste (${fechaConFormato(planilla.fechaPresentacion, 'dd-MMM-yyyy')})"
             } else {
-                periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy")
+                periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy")+" (liquidación)"
             }
         }
 
@@ -512,7 +515,7 @@ class ReportesPlanillasController {
 
         ps.eachWithIndex { p, i ->
             addCellTabla(tablaFr, new Paragraph(p.indice.descripcion + " (" + p.numero + ")", fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            def vlinOferta
+            def vlinOferta=0
             periodos.eachWithIndex { per, j ->
                 if (j == 0) { //oferta
                     if (i == 0) { //mano de obra
@@ -664,7 +667,9 @@ class ReportesPlanillasController {
             def prmlMulta = contrato.multaPlanilla
             if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-                totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum { it.parcialCronograma }) * (prmlMulta / 1000) * retraso
+                totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
+                    it.parcialCronograma
+                }) * (prmlMulta / 1000) * retraso
             } else {
                 retraso = 0
             }
@@ -700,8 +705,32 @@ class ReportesPlanillasController {
             addCellTabla(tablaMl, new Paragraph("TOTAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMl, new Paragraph(numero(totalMultaRetraso, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 4])
 
-            document.add(tablaMl);
+            if (liquidacion) {
+                tablaMl = new PdfPTable(2);
+                tablaMl.setWidthPercentage(50);
+                tablaMl.setHorizontalAlignment(Element.ALIGN_LEFT)
+                tablaMl.setSpacingAfter(5f);
 
+                def fechaFinFiscalizador = contrato.fechaPedidoRecepcionFiscalizador
+                def retrasoLiq = fechaFinFiscalizador - prej[0].fechaFin + 1
+                if (retrasoLiq < 0) {
+                    retrasoLiq = 0
+                }
+                totalMultaRetraso = retrasoLiq * ((prmlMulta / 1000) * totalContrato)
+
+                addCellTabla(tablaMl, new Paragraph("Fecha final de la obra (cronograma)", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph(fechaConFormato(prej[0].fechaFin, "dd-MMM-yyyy"), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph("Fecha pedido recepción fiscalizador", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph(fechaConFormato(fechaFinFiscalizador, "dd-MMM-yyyy"), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph(numero(retrasoLiq, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph(numero(prmlMulta, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph('$' + numero(totalMultaRetraso, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            }
+
+            document.add(tablaMl);
 
             printFirmas([tipo: "otro", orientacion: "vertical"])
         }
@@ -714,7 +743,7 @@ class ReportesPlanillasController {
 //            PdfPTable tablaDetalles = new PdfPTable(11);
 //            tablaDetalles.setWidthPercentage(100);
 //            tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
-            PdfPTable tablaDetalles
+            PdfPTable tablaDetalles = null
             def borderWidth = 1
 
             def printHeaderDetalle = { params ->

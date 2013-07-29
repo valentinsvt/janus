@@ -162,13 +162,17 @@ class PlanillaController extends janus.seguridad.Shield {
                 tipoTramite = TipoTramite.findByCodigo("PDPG")
                 break;
         }
-        tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, tipoTramite, [sort: 'fecha', order: "desc"])[0]
+//        println "??? " + Tramite.findAllByPlanillaAndTipoTramite(planilla, tipoTramite, [sort: 'fecha', order: "desc"]).descripcion
+//        println "??? " + Tramite.findAllByPlanillaAndTipoTramite(planilla, tipoTramite, [sort: 'fecha', order: "desc"]).fecha
+        tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, tipoTramite, [sort: 'fechaEnvio', order: "desc"])[0]
 
         tramite.planilla = planilla
         tramite.tramitePadre = tramitePadre
         tramite.tipoTramite = tipoTramite
         tramite.estado = EstadoTramite.findByCodigo("C")
+//        println ">>" + tramitePadre.descripcion
         tramite.descripcion = "Devolución de " + tramitePadre.descripcion
+//        println "<<" + tramite.descripcion
 
         PersonasTramite.findAllByTramite(tramitePadre).each { p ->
             def per = new PersonasTramite()
@@ -224,7 +228,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 tipoTramite = TipoTramite.findByCodigo("PDPG")
                 break;
         }
-        tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, tipoTramite, [sort: 'fecha', order: "desc"])[0]
+        tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, tipoTramite, [sort: 'fechaEnvio', order: "desc"])[0]
 
         if (planilla.save(flush: true)) {
             flash.clase = "alert-success"
@@ -238,7 +242,8 @@ class PlanillaController extends janus.seguridad.Shield {
                     estado: estadoTramite,
                     descripcion: params.asunto,
                     memo: memo,
-                    fecha: fecha
+                    fecha: fecha,
+                    fechaEnvio: new Date()
             ])
             if (!tramite.save(flush: true)) {
                 println "Error al guardar el tramite: "
@@ -400,7 +405,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 str = "Pago pedido existosamente"
                 str2 = "No se pudo pedir el pago"
                 tipoTramite = TipoTramite.findByCodigo("PDPG")
-                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("ENRJ"))
+//                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("ENRJ"))
+                tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("ENRJ"), [sort: 'fechaEnvio', order: "desc"])[0]
                 break;
             case "4":
                 planilla.memoPagoPlanilla = memo
@@ -413,7 +419,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 str = "Pago informado exitosamente"
                 str2 = "No se pudo informar el pago"
                 tipoTramite = TipoTramite.findByCodigo("INPG")
-                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
+//                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
+                tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"), [sort: 'fechaEnvio', order: "desc"])[0]
                 break;
             case "5":
                 def obra = Obra.get(planilla.contrato.obra.id)
@@ -424,7 +431,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 str = "Obra iniciada exitosamente"
                 str2 = "No se pudo iniciar la obra"
                 tipoTramite = TipoTramite.findByCodigo("INOB")
-                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("INPG"))
+//                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("INPG"))
+                tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("INPG"), [sort: 'fechaEnvio', order: "desc"])[0]
                 break;
         }
         if (planilla.save(flush: true)) {
@@ -439,7 +447,8 @@ class PlanillaController extends janus.seguridad.Shield {
                     estado: estadoTramite,
                     descripcion: params.asunto,
                     memo: memo,
-                    fecha: fecha
+                    fecha: fecha,
+                    fechaEnvio: new Date()
             ])
             if (!tramite.save(flush: true)) {
                 println "Error al guardar el tramite: "
@@ -614,7 +623,7 @@ class PlanillaController extends janus.seguridad.Shield {
 //            println periodos
 //            periodos = periodos.unique().sort { it.fechaInicio }
 //        }
-        println "avance " + planillasAvance
+//        println "avance " + planillasAvance
         if (planillasAvance.size() == 0) {
             /* cuando es la primera planilla de avance:
                     si la fecha de inicio de obra < 15: debe hacer una planilla con fecha inicio=inicio de obra, fecha fin = fin de mes
@@ -675,9 +684,6 @@ class PlanillaController extends janus.seguridad.Shield {
         if (planillas.size() > 0) {
             fiscalizadorAnterior = planillas.last().fiscalizadorId
         }
-
-
-
 
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior]
     }
@@ -771,6 +777,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     planillaInstance.fechaFin = new Date().parse("dd-MM-yyyy", fechas[1])
                     break;
                 case "L":
+                    //es de liquidacion
 
                     break;
                 case "C":
@@ -805,10 +812,10 @@ class PlanillaController extends janus.seguridad.Shield {
 
         switch (planillaInstance.tipoPlanilla.codigo) {
             case 'A':
-                redirect(action: 'anticipo', controller: 'planilla2', id: planillaInstance.id)
+                redirect(controller: 'planilla2', action: 'anticipo', id: planillaInstance.id)
                 break;
             case 'L':
-                redirect(action: 'list', id: planillaInstance.contratoId)
+                redirect(controller: 'planilla2', action: 'liquidacion', id: planillaInstance.contratoId)
                 break;
             case 'P':
                 redirect(action: 'detalle', id: planillaInstance.id, params: [contrato: planillaInstance.contratoId])

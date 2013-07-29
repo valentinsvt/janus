@@ -53,7 +53,7 @@
                     <tr>
                         <g:sortableColumn property="numero" title="#"/>
                         <g:sortableColumn property="tipoPlanilla" title="Tipo"/>
-                        <g:sortableColumn property="estadoPlanilla" title="Estado"/>
+                        %{--<g:sortableColumn property="estadoPlanilla" title="Estado"/>--}%
                         <g:sortableColumn property="fechaPresentacion" title="Fecha presentación"/>
                         <g:sortableColumn property="fechaInicio" title="Fecha inicio"/>
                         <g:sortableColumn property="fechaFin" title="Fecha fin"/>
@@ -63,12 +63,27 @@
                         <th>Pagos</th>
                     </tr>
                 </thead>
+                <g:set var="cont" value="${1}"/>
+                <g:set var="prej" value="${janus.pac.PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])}"/>
                 <tbody class="paginate">
                     <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
                         <tr style="font-size: 10px">
                             <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
-                            <td>${planillaInstance.tipoPlanilla.nombre}</td>
-                            <td>${planillaInstance.estadoPlanilla?.nombre}</td>
+                            <td>
+                                ${planillaInstance.tipoPlanilla.nombre}
+
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
+                                    (${cont}/${prej.size()})
+                                    <g:if test="${cont == prej.size() && planillaInstance.fechaFin >= prej[0].fechaFin}">
+                                        (Liquidación)
+                                    </g:if>
+                                    <g:set var="cont" value="${cont + 1}"/>
+                                </g:if>
+
+                            </td>
+                            %{--<td>--}%
+                            %{--${planillaInstance.estadoPlanilla?.nombre}--}%
+                            %{--</td>--}%
                             <td>
                                 <g:formatDate date="${planillaInstance.fechaPresentacion}" format="dd-MM-yyyy"/>
                             </td>
@@ -113,11 +128,20 @@
                                 </g:if>
                                 <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
                                     <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                        <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir"><i class="icon-print"></i></g:link>
+                                        <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                            <i class="icon-print"></i>
+                                        </g:link>
                                     </g:if>
                                     <g:else>
-                                        <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir"><i class="icon-print"></i></g:link>
+                                        <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                            <i class="icon-print"></i>
+                                        </g:link>
                                     </g:else>
+                                </g:if>
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
+                                    <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                        <i class="icon-print"></i>
+                                    </g:link>
                                 </g:if>
                             %{--<g:if test="${!planillaInstance.fechaOrdenPago}">--}%
                             %{--<g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">--}%

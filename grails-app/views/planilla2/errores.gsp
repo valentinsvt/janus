@@ -17,14 +17,12 @@
         <div class="alert alert-error" style="min-height: 100px;">
             <h3>Ha ocurrido un error</h3>
 
-            <p>
-                <i class="icon-warning-sign icon-2x pull-left"></i>
-                <g:if test="${flash.message}">
-
-                    ${flash.message}
-
-                </g:if>
-            </p>
+            %{--<p>--}%
+            <i class="icon-warning-sign icon-2x pull-left"></i>
+            <g:if test="${flash.message}">
+                ${flash.message}
+            </g:if>
+            %{--</p>--}%
         </div>
     </body>
 </html>
