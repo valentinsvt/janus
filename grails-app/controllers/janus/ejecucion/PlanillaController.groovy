@@ -635,14 +635,18 @@ class PlanillaController extends janus.seguridad.Shield {
             */
 
             def inicioObra = contrato.oferta.concurso.obra.fechaInicio
-            def finMes = getLastDayOfMonth(inicioObra)
-            def dias = inicioObra.format("dd").toInteger()
+            def finMes = null
+            if (inicioObra) {
+                finMes = getLastDayOfMonth(inicioObra)
 
-            periodos.put((inicioObra.format("dd-MM-yyyy") + "_" + finMes.format("dd-MM-yyyy")), inicioObra.format("dd-MM-yyyy") + " a " + finMes.format("dd-MM-yyyy"))
-            if (dias >= 15) {
-                def inicio = finMes.plus(1)
-                finMes = getLastDayOfMonth(inicio)
+                def dias = inicioObra.format("dd").toInteger()
+
                 periodos.put((inicioObra.format("dd-MM-yyyy") + "_" + finMes.format("dd-MM-yyyy")), inicioObra.format("dd-MM-yyyy") + " a " + finMes.format("dd-MM-yyyy"))
+                if (dias >= 15) {
+                    def inicio = finMes.plus(1)
+                    finMes = getLastDayOfMonth(inicio)
+                    periodos.put((inicioObra.format("dd-MM-yyyy") + "_" + finMes.format("dd-MM-yyyy")), inicioObra.format("dd-MM-yyyy") + " a " + finMes.format("dd-MM-yyyy"))
+                }
             }
 
         } else {
