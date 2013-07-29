@@ -198,7 +198,6 @@
                     %{--</div>--}%
                 </div>
 
-
                 <div class="row-fluid">
                     <div class="span12">
                         <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>

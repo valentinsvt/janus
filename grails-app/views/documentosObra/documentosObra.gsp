@@ -290,7 +290,7 @@
 
 
                     <div class="span3"><g:textField name="deMemo" style="width: 470px"
-                                                    value="${persona?.departamento?.descripcion}"
+                                                    value="${obra?.departamento?.direccion?.nombre}"
                                                     disabled="true"/></div>
 
             </div>
