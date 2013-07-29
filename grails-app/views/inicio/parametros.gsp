@@ -55,12 +55,6 @@
                             action="list">Coordinación del personal</g:link> para la organización de los usuarios.
                 </div><br>
 
-                <div class="item" texto="tpus">
-                    <g:link controller="tipoUsuario"
-                            action="list">Tipo de Usuario</g:link> o de Personal, para usarse en la designación de
-                    los distintos responsables de obras.
-                </div><br>
-
                 <div class="item" texto="func">
                     <g:link controller="funcion"
                             action="list">Funciones del personal</g:link> que pueden desempeñar en la construcción de la obra
@@ -263,13 +257,6 @@
 
     <p>Distribución administrativa de la institución: Coordinaciones que la conforman, para la asociación de los
     empleados a cada uno de ellos.</p>
-</div>
-
-<div id="tpus" style="display:none">
-    <h3>Tipo de Usuario</h3><br>
-
-    <p>Tipo de usuario o tipo de personal técnico, para usarse en la designación de
-    los distintos responsables de obras, como responsable de obra, revisor e inspector.</p>
 </div>
 
 <div id="func" style="display:none">

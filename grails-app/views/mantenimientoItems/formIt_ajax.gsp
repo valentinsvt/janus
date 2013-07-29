@@ -174,6 +174,7 @@
         </div>
     </div>
 
+%{--
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -187,6 +188,7 @@
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
+--}%
 
     <g:if test="${grupo.toString() == '3'}">
         <div class="control-group">

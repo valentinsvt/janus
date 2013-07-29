@@ -262,18 +262,18 @@
                                 <td class="">${r.item}</td>
                                 <td>${r.unidad}</td>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.cantidad}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/>
+                                    <g:formatNumber number="${r.cantidad}" minFractionDigits="3" maxFractionDigits="3" format="##,##0" locale="ec"/>
                                 </td>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/>
+                                    <g:formatNumber number="${r.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,##0" locale="ec"/>
                                 </td>
                                 <g:if test="${tipo.contains(",") || tipo == '1'}">
                                     <td class="numero">
-                                        <g:formatNumber number="${r.transporte}" minFractionDigits="4" maxFractionDigits="4" format="##,####0" locale="ec"/>
+                                        <g:formatNumber number="${r.transporte}" minFractionDigits="4" maxFractionDigits="4" format="##,##0" locale="ec"/>
                                     </td>
                                 </g:if>
                                 <td class="numero">
-                                    <g:formatNumber number="${r.costo}" minFractionDigits="4" maxFractionDigits="4" format="##,####0" locale="ec"/>
+                                    <g:formatNumber number="${r.costo}" minFractionDigits="4" maxFractionDigits="4" format="##,##0" locale="ec"/>
                                 </td>
                                 <td class="numero">
                                     <g:formatNumber number="${r?.total}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>

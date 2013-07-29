@@ -46,7 +46,7 @@
                                 <td>${r?.codigo}</td>
                                 <td>${r?.item}</td>
                                 <td style="text-align: center">${r?.unidad}</td>
-                                <td style="text-align: right"><g:formatNumber number="${r?.punitario}" minFractionDigits="3" maxFractionDigits="3" format="##,###0" locale="ec"/></td>
+                                <td style="text-align: right"><g:formatNumber number="${r?.punitario}" minFractionDigits="5" maxFractionDigits="5" format="##,##0" locale="ec"/></td>
                                 <td style="text-align: center"><g:formatDate date="${r?.fecha}" format="dd-MM-yyyy"/></td>
                             </tr>
                             </g:if>
