@@ -268,7 +268,7 @@
 
                     <div class="span2 formato">Administrador</div>
 
-                    <div class="span3">${contrato?.administrador.titulo} ${contrato?.administrador.nombre} ${contrato?.administrador.apellido}</div>
+                    <div class="span3">${contrato?.administrador?.titulo} ${contrato?.administrador?.nombre} ${contrato?.administrador?.apellido}</div>
 
                     %{--<div class="span2 formato">Financiado Por</div>--}%
 
