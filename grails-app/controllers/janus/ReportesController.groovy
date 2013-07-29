@@ -122,7 +122,9 @@ class ReportesController {
         def baos = new ByteArrayOutputStream()
         def name = "matriz_polinomica_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
 //            println "name "+name
-        Font titleFont = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font titleFont = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font titleFont3 = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font titleFont2 = new Font(Font.TIMES_ROMAN, 16, Font.BOLD);
         Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
         Document document
@@ -138,14 +140,21 @@ class ReportesController {
 
         def titulo = obra.desgloseTransporte == "S" ? '(Con desglose de Transporte)' : '(Sin desglose de Transporte)'
 //        println titulo
-
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1)
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
+        headersTitulo.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA " + titulo, titleFont));
+        document.add(headersTitulo)
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont));
-        headers.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA " + titulo, titleFont));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, titleFont));
-        headers.add(new Paragraph("MEMO CANT. OBRA: ${obra.memoCantidadObra}                                                                                           FECHA: " + new Date().format("dd-MM-yyyy"), titleFont));
+        headers.setAlignment(Element.ALIGN_LEFT);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, titleFont3));
+        headers.add(new Paragraph("OBRA: " + obra?.nombre, titleFont3));
+        headers.add(new Paragraph("MEMO CANT. OBRA: ${obra.memoCantidadObra}                                                                                CÓDIGO: " + obra?.codigo, titleFont3));
+        headers.add(new Paragraph("DOC. REFERENCIA: " + obra?.oficioIngreso, titleFont3));
+        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                                                                            FECHA ACT.PRECIOS: " + printFecha(obra?.fechaPreciosRubros), titleFont3));
+//        headers.add(new Paragraph("FECHA ACT. PRECIOS: " + printFecha(obra?.fechaPreciosRubros), titleFont3));
         addEmptyLine(headers, 1);
         document.add(headers);
 
@@ -2228,6 +2237,7 @@ class ReportesController {
 
 
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
 
 
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
@@ -2346,6 +2356,14 @@ class ReportesController {
         tablaPresupuesto.setWidthPercentage(100);
         tablaPresupuesto.setWidths(arregloEnteros([12, 2, 13, 2, 8, 2, 26]))
 
+        addCellTabla(tablaPresupuesto, new Paragraph("Dirección", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.departamento?.direccion?.nombre, times8normal), prmsHeaderHoja3)
+//        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+//        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+
         addCellTabla(tablaPresupuesto, new Paragraph("Memo Cant. Obra", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.memoCantidadObra, times8normal), prmsHeaderHoja)
@@ -2405,6 +2423,10 @@ class ReportesController {
         addCellTabla(tablaCoordenadas, new Paragraph("Coordenadas", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCoordenadas, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCoordenadas, new Paragraph(obra?.coordenadas, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaCoordenadas, new Paragraph("Fecha Act. Precios", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8normal), prmsHeaderHoja)
 
 
         addCellTabla(tablaCoordenadas, new Paragraph("", times8bold), prmsHeaderHoja)
@@ -4014,6 +4036,7 @@ class ReportesController {
 
 
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 2]
 
 
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
@@ -4107,12 +4130,18 @@ class ReportesController {
         addCellTabla(tablaHeader, new Paragraph("Parroquia : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.parroquia?.nombre, times10normal), prmsHeaderHoja)
 
-        addCellTabla(tablaHeader, new Paragraph("Latitud :", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.latitud, minFractionDigits:
-                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph("Longitud :", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.longitud, minFractionDigits:
-                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph("Coordenadas : ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(obra?.coordenadas, times10normal), prmsHeaderHoja2)
+
+        addCellTabla(tablaHeader, new Paragraph("Fecha: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(printFecha(obra?.fechaCreacionObra), times10normal), prmsHeaderHoja2)
+
+//        addCellTabla(tablaHeader, new Paragraph("Latitud :", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.latitud, minFractionDigits:
+//                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
+//        addCellTabla(tablaHeader, new Paragraph("Longitud :", times10bold), prmsHeaderHoja)
+//        addCellTabla(tablaHeader, new Paragraph(g.formatNumber(number: obra?.longitud, minFractionDigits:
+//                1, maxFractionDigits: 5, format: "#####.##", locale: "ec"), times10normal), prmsHeaderHoja)
 
         document.add(tablaObra)
         document.add(tablaHeader)
@@ -5428,6 +5457,8 @@ class ReportesController {
         def name = "composicion_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
         Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
@@ -5456,10 +5487,14 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellIzquierda = [border: Color.WHITE,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellDerecha = [border: Color.WHITE,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellDerecha2 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
@@ -5470,17 +5505,23 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+        headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        document.add(headersTitulo)
+
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
+        headers.setAlignment(Element.ALIGN_LEFT);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
+        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
+        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
+        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
 
         addEmptyLine(headers, 1);
         document.add(headers);
-
 
 
 
@@ -5502,17 +5543,17 @@ class ReportesController {
         tablaTotales.setWidths(arregloEnteros([70, 30]))
 
 
-        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha2)
 
 
-        addCellTabla(tablaTitulo, new Paragraph("Materiales ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo, new Paragraph("Materiales ", times14bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo, new Paragraph(" ", times10bold), prmsCellIzquierda)
 
 
@@ -5566,7 +5607,7 @@ class ReportesController {
 //
 //        println("h:" + tablaTitulo2.getHeaderHeight())
 
-        addCellTabla(tablaTitulo2, new Paragraph("Mano de obra ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo2, new Paragraph("Mano de obra ", times14bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo2, new Paragraph(" ", times10bold), prmsCellIzquierda)
 
 
@@ -5618,7 +5659,7 @@ class ReportesController {
         tablaTotalesEquipos.setWidths(arregloEnteros([70, 30]))
 
 
-        addCellTabla(tablaTitulo3, new Paragraph("Equipos ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo3, new Paragraph("Equipos ", times14bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo3, new Paragraph(" ", times10bold), prmsCellIzquierda)
 
 
@@ -5745,6 +5786,8 @@ class ReportesController {
         def baos = new ByteArrayOutputStream()
         def name = "composicion_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
@@ -5774,10 +5817,14 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellIzquierda = [border: Color.WHITE,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellDerecha = [border: Color.WHITE,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellDerecha2 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
@@ -5788,14 +5835,20 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+        headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        document.add(headersTitulo)
+
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
-
+        headers.setAlignment(Element.ALIGN_LEFT);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
+        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
+        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
+        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
         addEmptyLine(headers, 1);
         document.add(headers);
         PdfPTable tablaHeader = new PdfPTable(8)
@@ -5815,17 +5868,17 @@ class ReportesController {
         tablaTotales.setWidths(arregloEnteros([70, 30]))
 
 
-        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha2)
 
 
-        addCellTabla(tablaTitulo, new Paragraph("Materiales ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo, new Paragraph("Materiales ", times14bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo, new Paragraph(" ", times10bold), prmsCellIzquierda)
 
 
@@ -5939,6 +5992,8 @@ class ReportesController {
         def name = "composicion_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
         Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
@@ -5967,10 +6022,15 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+
         def prmsCellIzquierda = [border: Color.WHITE,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellDerecha = [border: Color.WHITE,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellDerecha2 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
@@ -5981,17 +6041,32 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
+//        Paragraph headers = new Paragraph();
+//        addEmptyLine(headers, 1);
+//        headers.setAlignment(Element.ALIGN_CENTER);
+//        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
+//        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
+//        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
+//        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
+//
+
+
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+        headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        document.add(headersTitulo)
+
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
-
+        headers.setAlignment(Element.ALIGN_LEFT);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
+        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
+        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
+        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
         addEmptyLine(headers, 1);
         document.add(headers);
-
 
 
 
@@ -6013,14 +6088,14 @@ class ReportesController {
         tablaTotales.setWidths(arregloEnteros([70, 30]))
 
 
-        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha2)
 
 
 
@@ -6038,7 +6113,7 @@ class ReportesController {
 //
 //        println("h:" + tablaTitulo2.getHeaderHeight())
 
-        addCellTabla(tablaTitulo2, new Paragraph("Mano de obra ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo2, new Paragraph("Mano de obra ", times14bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo2, new Paragraph(" ", times10bold), prmsCellIzquierda)
 
 
@@ -6155,6 +6230,8 @@ class ReportesController {
         def name = "composicion_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
         Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
         Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
@@ -6183,10 +6260,14 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellIzquierda = [border: Color.WHITE,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellDerecha = [border: Color.WHITE,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellDerecha2 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
         def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
         def prmsSubtotal = [border: Color.WHITE, colspan: 6,
@@ -6197,14 +6278,31 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
+//        Paragraph headers = new Paragraph();
+//        addEmptyLine(headers, 1);
+//        headers.setAlignment(Element.ALIGN_CENTER);
+//        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
+//        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
+//        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
+//        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
+//
+//        addEmptyLine(headers, 1);
+//        document.add(headers);
+
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+        headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        document.add(headersTitulo)
+
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
-
+        headers.setAlignment(Element.ALIGN_LEFT);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
+        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
+        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
+        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
         addEmptyLine(headers, 1);
         document.add(headers);
 
@@ -6229,14 +6327,14 @@ class ReportesController {
         tablaTotales.setWidths(arregloEnteros([70, 30]))
 
 
-        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead)
-        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha)
-        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha)
+        addCellTabla(tablaHeader, new Paragraph("Código", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Item", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("U", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Cantidad", times8bold), prmsCellHead2)
+        addCellTabla(tablaHeader, new Paragraph("Precio Unitario", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Transporte", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Costo", times8bold), prmsCellDerecha2)
+        addCellTabla(tablaHeader, new Paragraph("Total", times8bold), prmsCellDerecha2)
 
 
 
@@ -6271,7 +6369,7 @@ class ReportesController {
         tablaTotalesEquipos.setWidths(arregloEnteros([70, 30]))
 
 
-        addCellTabla(tablaTitulo3, new Paragraph("Equipos ", times10bold), prmsCellIzquierda)
+        addCellTabla(tablaTitulo3, new Paragraph("Equipos ", times14bold), prmsCellIzquierda)
         addCellTabla(tablaTitulo3, new Paragraph(" ", times10bold), prmsCellIzquierda)
 
 

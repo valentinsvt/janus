@@ -858,7 +858,7 @@ class Reportes2Controller {
 
         def label
         def number
-        def fila = 8;
+        def fila = 16;
         def totalE = 0;
         def totalM = 0;
         def totalMO = 0;
@@ -868,18 +868,24 @@ class Reportes2Controller {
         def totalDirecto = 0;
         def ultimaFila
 
-        label = new jxl.write.Label(2, 4, "Composición de " + obra?.nombre, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 2, " G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 4, "COMPOSICIÓN: " + obra?.nombre, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 6, obra?.departamento?.direccion?.nombre, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 8, "CÓDIGO: " + obra?.codigo, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 10, "DOC. REFERENCIA: " + obra?.oficioIngreso, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 12, "FECHA: " + printFecha(obra?.fechaCreacionObra), times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 14, "FECHA ACT.PRECIOS: " + printFecha(obra?.fechaPreciosRubros), times16format); sheet.addCell(label);
 
-        label = new jxl.write.Label(0, 6, "CODIGO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 6, "ITEM", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(2, 6, "UNIDAD", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(3, 6, "CANTIDAD", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(4, 6, "P.UNITARIO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(5, 6, "TRANSPORTE", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(6, 6, "COSTO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(7, 6, "TOTAL", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(8, 6, "TIPO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(9, 6, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(0, 16, "CODIGO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 16, "ITEM", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 16, "UNIDAD", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(3, 16, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(4, 16, "P.UNITARIO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(5, 16, "TRANSPORTE", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(6, 16, "COSTO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(7, 16, "TOTAL", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(8, 16, "TIPO", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(9, 16, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
 
         res.each {
 
@@ -1542,18 +1548,21 @@ class Reportes2Controller {
         document.addCreator("Tedein SA");
 
 
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
+        headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+        addEmptyLine(headersTitulo,1)
+        headersTitulo.add(new Paragraph("DESGLOSE DE EQUIPOS", times12bold));
+        document.add(headersTitulo);
         Paragraph headers = new Paragraph();
-        addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_CENTER);
-        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
-        addEmptyLine(headers, 1);
-        headers.add(new Paragraph("DESGLOSE DE EQUIPOS", times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.nombre.toUpperCase(), times8bold));
-        headers.add(new Paragraph("FECHA INGRESO: " + fechaIngreso, times8bold));
-        headers.add(new Paragraph("FECHA act P.U.: " + fechaPrecios, times8bold));
-        headers.add(new Paragraph("CÓDIGO: " + obra?.codigo, times8bold));
-        headers.add(new Paragraph("DOC. REFERENCIA: " + obra?.oficioIngreso, times8bold));
+        headers.setAlignment(Element.ALIGN_LEFT);
+        headers.add(new Paragraph("OBRA: " + obra?.nombre?.toUpperCase(), times8bold));
+        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                                                          DOC. REFERENCIA: "   + obra?.oficioIngreso, times8bold));
+        headers.add(new Paragraph("FECHA INGRESO: ${fechaIngreso}                                        FECHA ACT.PRECIOS: " + fechaPrecios , times8bold));
+        headers.add(new Paragraph("___________________________________________________________________________________________________________", times8bold));
+
 
         addEmptyLine(headers, 1);
         document.add(headers);
