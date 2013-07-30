@@ -1148,6 +1148,7 @@ class Reportes2Controller {
         preface.setAlignment(Element.ALIGN_CENTER);
 
         preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont3));
+
         preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont2));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
