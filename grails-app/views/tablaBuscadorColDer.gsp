@@ -32,9 +32,12 @@
                             </td>
                         </g:each>
                         <td style="text-align: right;width: 40px">
-                            <div style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>
-                                <span class="ui-icon ui-icon-circle-check"></span>
-                            </div>
+                            <a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}"  regId="${reg?.id}" txtReg="${reg.toString()}"  ${propiedades} >
+                                <i class="icon-share"></i>
+                            </a>
+                            %{--<div style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>--}%
+                                %{--<span class="ui-icon ui-icon-circle-check"></span>--}%
+                            %{--</div>--}%
                         </td>
                     </tr>
                 </g:each>

@@ -35,6 +35,9 @@ class Concurso {
     Date fechaLimiteResultadosFinales
 
     Date fechaInicioPreparatorio
+    Date fechaEtapa1
+    Date fechaEtapa2
+    Date fechaEtapa3
     Date fechaFinPreparatorio
     Date fechaInicioPrecontractual
     Date fechaFinPrecontractual
@@ -85,6 +88,10 @@ class Concurso {
             fechaFinPrecontractual column: 'cncrffpc'
             fechaInicioContractual column: 'cncrfict'
             fechaFinContractual column: 'cncrffct'
+
+            fechaEtapa1  column:  'cncrfce1'
+            fechaEtapa2 column:  'cncrfce2'
+            fechaEtapa3 column:     'cncrfce3'
         }
     }
     static constraints = {
@@ -121,5 +128,8 @@ class Concurso {
         fechaFinPrecontractual(blank: true, nullable: true)
         fechaInicioContractual(blank: true, nullable: true)
         fechaFinContractual(blank: true, nullable: true)
+        fechaEtapa1(blank: true, nullable: true)
+        fechaEtapa2(blank: true, nullable: true)
+        fechaEtapa3(blank: true, nullable: true)
     }
 }

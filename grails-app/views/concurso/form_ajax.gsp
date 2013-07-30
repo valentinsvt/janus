@@ -12,6 +12,9 @@
     <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.ui.position.js')}" type="text/javascript"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.js')}" type="text/javascript"></script>
     <link href="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.css')}" rel="stylesheet" type="text/css"/>
+    <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
+    <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
+
     <style>
     td {
         line-height : 12px !important;
@@ -43,6 +46,7 @@
         </div>
     </div>
 </g:if>
+<input type="hidden" id="con_id" value="${concursoInstance?.id}">
 
 <div class="row" style="margin-bottom: 10px;">
     <div class="span9 btn-group" role="navigation">
@@ -163,7 +167,7 @@
     </div>
 </div>
 
-<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;height: 590px;margin-bottom: 10px;">
+<div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;margin-bottom: 10px;">
 <p class="css-vertical-text">Concurso</p>
 
 <div class="linea" style="height: 100%"></div>
@@ -347,248 +351,300 @@
 
 <div class="tab-pane" id="fechas">
 %{--<div id="cols" style="float: left;">--}%
+
 <div class="row">
-    <div class="span5">
-        <a  href="#" id="tramites" class="btn btn-primary">
-            <i class="icon-search"></i> Ver tramites S.A.D.
-        </a>
+<div class="span5">
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Publicación
+            </span>
+        </div>
+
+        <div class="controls">
+            <elm:datepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="span5">
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Publicación
-                </span>
-            </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Lím. Preguntas
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Lím. Preguntas
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Lím. Respuestas
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Lím. Respuestas
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Lím. Entrega Ofertas
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Lím. Entrega Ofertas
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Apertura Ofertas
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Apertura Ofertas
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaAperturaOfertas" class="" value="${concursoInstance?.fechaAperturaOfertas}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaAperturaOfertas" class="" value="${concursoInstance?.fechaAperturaOfertas}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Sol. Convalidación
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Sol. Convalidación
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Recibir Convalidación
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Recibir Convalidación
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Ini. Eval. Oferta
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Ini. Eval. Oferta
-                </span>
-            </div>
-
-            <div class="controls">
-                <elm:datepicker name="fechaInicioEvaluacionOferta" class="" value="${concursoInstance?.fechaInicioEvaluacionOferta}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaInicioEvaluacionOferta" class="" value="${concursoInstance?.fechaInicioEvaluacionOferta}"/>
+            <p class="help-block ui-helper-hidden"></p>
         </div>
-    </div> <!-- fin col 1 -->
+    </div>
+</div> <!-- fin col 1 -->
 
-    <div class="span5">
+<div class="span5">
 
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Límite res. fin.
-                </span>
-            </div>
-
-            <div class="controls">
-                <elm:datepicker name="fechaLimiteResultadosFinales" class="" value="${concursoInstance?.fechaLimiteResultadosFinales}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Límite res. fin.
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Adjudicación
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaLimiteResultadosFinales" class="" value="${concursoInstance?.fechaLimiteResultadosFinales}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Adjudicación
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Inicio
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Inicio
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Calificación
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Calificación
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Inicio Puja
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Inicio Puja
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha Fin Puja
-                </span>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-            <div class="controls">
-                <elm:datepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha Fin Puja
+            </span>
         </div>
 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Fecha aceptación proveedor
-                </span>
-            </div>
-
-            <div class="controls">
-                <elm:datepicker name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}"/>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+        <div class="controls">
+            <elm:datepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}"/>
+            <p class="help-block ui-helper-hidden"></p>
         </div>
-    </div> <!-- fin col 2-->
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Fecha aceptación proveedor
+            </span>
+        </div>
+
+        <div class="controls">
+            <elm:datepicker name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+</div> <!-- fin col 2-->
 </div>
 </div> <!-- fin tab fechas -->
 
 <div class="tab-pane" id="fechas2">
     %{--<div id="cols" style="float: left;">--}%
+    <div class="row" style="margin: 10px;">
+        <div class="span5">
+            <a  href="#" id="tramites" class="btn btn-primary">
+                <i class="icon-search"></i> Ver tramites S.A.D.
+            </a>
+        </div>
+    </div>
 
+    <fielset id="desc_prep" style="padding-bottom: 10px;border: 1px solid #000000;width: 95%;float: left;margin-left: 33px;padding: 10px;margin-bottom: 20px;" class="ui-corner-all">
+        <legend style="color:#0088CC;border-color: #0088CC;cursor: pointer" id="label_prep" class="active" title="Minimizar">Etapa Preparatoria</legend>
+        <div class="row" style="">
+            <div class="span6">
+                <div class="control-group">
+                    <div>
+                        <span class="control-label label label-inverse">
+                            Fecha Inicio Preparatorio
+                        </span>
+                    </div>
+
+                    <div class="controls">
+                        <elm:datepicker name="fechaInicioPreparatorio" class="" value="${concursoInstance?.fechaInicioPreparatorio ?: concursoInstance?.fechaPublicacion}" style="width:130px;float: left" />
+                        <g:if test="${concursoInstance?.fechaInicioPreparatorio==null}">
+                            <a class="btn btn-small btn-primary btn-ajax" href="#" rel="tooltip" title="Empezar preparatorio" id="inicio_prep" style="margin-left: 5px;">
+                                <i class="icon-check"></i>
+                            </a>
+                        </g:if>
+                        <div id="info_prep" style="width: 200px;float: left;margin-left: 10px;">
+                            <span style="color: ${(duracionPrep<maxPrep)?'green':'red'}">
+                                <g:if test="${concursoInstance.fechaInicioPreparatorio!=null}">
+
+                                    <g:if test="${duracionPrep<maxPrep}">
+                                        <g:if test="${maxPrep-duracionPrep<2}">
+                                            <div class="amarillo"></div>
+                                        </g:if>
+                                        <g:else>
+                                            <div class="verde"></div>
+                                        </g:else>
+                                    </g:if>
+                                    <g:else>
+                                        <g:set var="retraso" value="- ${((new Date())-(concursoInstance?.fechaInicioPreparatorio+maxPrep))} diás de retraso"></g:set>
+                                        <div class="rojo" title="Retrasado"></div>
+                                    </g:else>
+                                    <g:if test="${concursoInstance?.fechaFinPreparatorio==null}">
+                                        En curso ${retraso}
+                                    </g:if>
+                                    <g:else>
+                                        Terminado
+                                    </g:else>
+
+                                </g:if>
+                            </span>
+                        </div>
+                        <p class="help-block ui-helper-hidden"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="control-group">
+                    <div>
+                        <span class="control-label label label-inverse">
+                            Fecha Fin Preparatorio
+                        </span>
+                    </div>
+
+                    <div class="controls">
+                        <elm:datepicker name="fechaFinPreparatorio" class="" value="${concursoInstance?.fechaFinPreparatorio}" style="width:130px;"/>
+                        <p class="help-block ui-helper-hidden"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span11 hide_prep" style="height: 20px;margin: 10px;margin-left: 30px;margin-bottom: 20px;">
+            <div class="span3" style="background: ${(concursoInstance?.fechaEtapa1!=null)?'#feff6d':'gray'};margin: 0px;height: 15px;border-right: 2px solid black;text-align: center;font-weight: bold">Etapa 1 ${concursoInstance?.fechaEtapa1?.format("dd-MM-yyyy")}</div>
+            <div class="span5" style="background:  ${(concursoInstance?.fechaEtapa2!=null)?'#feff6d':'gray'};margin: 0px;height: 15px;border-right: 2px solid black;text-align: center;font-weight: bold">Etapa 2 ${concursoInstance?.fechaEtapa2?.format("dd-MM-yyyy")}</div>
+            <div class="span3" style="background:  ${(concursoInstance?.fechaEtapa3!=null)?'#feff6d':'gray'};margin: 0px;height: 15px;border-right: 2px solid black;text-align: center;font-weight: bold">Etapa 3 ${concursoInstance?.fechaEtapa3?.format("dd-MM-yyyy")}</div>
+        </div>
+        <fieldset class="span11 ui-corner-all hide_prep" id="seguimiento" style="padding: 0px;margin-left: 0px;" >
+            <legend style="border:none;background: none;">Seguimiento del tramite</legend>
+        </fieldset>
+
+    </fielset>
 
     <div class="row">
-        <div class="span5">
-            <div class="control-group">
-                <div>
-                    <span class="control-label label label-inverse">
-                        Fecha Inicio Preparatorio
-                    </span>
-                </div>
+        <div class="span6">
 
-                <div class="controls">
-                    <elm:datepicker name="fechaInicioPreparatorio" class="" value="${concursoInstance?.fechaInicioPreparatorio ?: concursoInstance?.fechaPublicacion}"/>
-                    <p class="help-block ui-helper-hidden"></p>
-                </div>
-            </div>
 
-            <div class="control-group">
-                <div>
-                    <span class="control-label label label-inverse">
-                        Fecha Fin Preparatorio
-                    </span>
-                </div>
 
-                <div class="controls">
-                    <elm:datepicker name="fechaFinPreparatorio" class="" value="${concursoInstance?.fechaFinPreparatorio}"/>
-                    <p class="help-block ui-helper-hidden"></p>
-                </div>
-            </div>
 
             <div class="control-group">
                 <div>
@@ -598,10 +654,28 @@
                 </div>
 
                 <div class="controls">
-                    <elm:datepicker name="fechaInicioPrecontractual" class="" value="${concursoInstance?.fechaInicioPrecontractual}"/>
+                    <elm:datepicker name="fechaInicioPrecontractual" class="" value="${concursoInstance?.fechaInicioPrecontractual}" style="width:130px;"/>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Fecha Inicio Contractual
+                    </span>
+                </div>
+
+                <div class="controls">
+                    <elm:datepicker name="fechaInicioContractual" class="" value="${concursoInstance?.fechaInicioContractual}" style="width:130px;"/>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </div>
+
+
+        </div> <!-- fin col 1 -->
+
+        <div class="span5">
+
 
             <div class="control-group">
                 <div>
@@ -611,24 +685,7 @@
                 </div>
 
                 <div class="controls">
-                    <elm:datepicker name="fechaFinPrecontractual" class="" value="${concursoInstance?.fechaFinPrecontractual}"/>
-                    <p class="help-block ui-helper-hidden"></p>
-                </div>
-            </div>
-
-        </div> <!-- fin col 1 -->
-
-        <div class="span5">
-
-            <div class="control-group">
-                <div>
-                    <span class="control-label label label-inverse">
-                        Fecha Inicio Contractual
-                    </span>
-                </div>
-
-                <div class="controls">
-                    <elm:datepicker name="fechaInicioContractual" class="" value="${concursoInstance?.fechaInicioContractual}"/>
+                    <elm:datepicker name="fechaFinPrecontractual" class="" value="${concursoInstance?.fechaFinPrecontractual}" style="width:130px;"/>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
@@ -641,12 +698,14 @@
                 </div>
 
                 <div class="controls">
-                    <elm:datepicker name="fechaFinContractual" class="" value="${concursoInstance?.fechaFinContractual}"/>
+                    <elm:datepicker name="fechaFinContractual" class="" value="${concursoInstance?.fechaFinContractual}" style="width:130px;"/>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
 
         </div> <!-- fin col 2-->
+
+
     </div>
 </div> <!-- fin tab fechas2 -->
 
@@ -704,10 +763,78 @@
         });
     }
 
+    function seguimiento(){
+        $.ajax({
+            type    : "POST",
+            url     : "${g.createLink(action:'seguimiento',controller: 'tramite',id: concursoInstance?.memoRequerimiento)}",
+            success : function (msg) {
+                $("#seguimiento").html(msg)
+            }
+        });
+    }
+    seguimiento();
     $('#myTab a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
     });
+
+
+    $("#label_prep").click(function(){
+        if($(this).hasClass("active")) {
+            $(".hide_prep").hide()
+            $(this).removeClass("active")
+            $(this).attr("title","Maximizar")
+        } else{
+            $(".hide_prep").show("slide")
+            $(this).addClass("active")
+            $(this).attr("title","Minimizar")
+        }
+
+    })
+
+    $("#inicio_prep").click(function(){
+        var memo = $("#memoRequerimiento").val().trim()
+        var fecha = $("#fechaInicioPreparatorio").val()
+        var error=""
+        if(memo==""){
+            error="<br>Error: Primero ingrese un memorando de requerimiento"
+        }
+        if(fecha==""){
+            error+="<br>Error: Seleccione una fecha de inicio"
+        }
+
+        if(error==""){
+            $.ajax({
+                type    : "POST",
+                url     : "${g.createLink(action:'iniciarPreparatorio',controller: 'concurso')}",
+                data    :"id=${concursoInstance?.id}&memo="+memo+"&fecha="+fecha,
+                success : function (msg) {
+                    if(msg=="ok"){
+                        window.location.reload(true)
+                    }
+                }
+            });
+        }else{
+            $.box({
+                imageClass : "box_info",
+                text       : error,
+                title      : "Errores",
+                iconClose  : false,
+                dialog     : {
+                    resizable : false,
+                    draggable : false,
+                    buttons   : {
+                        "Aceptar" : function () {
+                        }
+                    },
+                    width     : 500
+                }
+            });
+        }
+
+
+    });
+
 
     $("#frmSave-Concurso").validate({
         errorPlacement : function (error, element) {

@@ -29,8 +29,8 @@ class TramiteController extends janus.seguridad.Shield {
             /*mysql */
 
 
-            def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
-//            def sql = Sql.newInstance("jdbc:mysql://127.0.0.1:3306/dbf", "root","root", "com.mysql.jdbc.Driver")
+//            def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
+            def sql = Sql.newInstance("jdbc:mysql://127.0.0.1:3306/dbf", "root","root", "com.mysql.jdbc.Driver")
 
             sql.eachRow("select * from docmaster where NMASTER= '${memo}'".toString()) {r->
                 header.put("NMASTER",r["NMASTER"])
@@ -51,6 +51,8 @@ class TramiteController extends janus.seguridad.Shield {
                 tmp.put("TASUNTO",r["TASUNTO"])
                 tmp.put("TRECIBIDO",r["TRECIBIDO"])
                 tmp.put("TFRECEP",r["TFRECEP"])
+                tmp.put("TECRADOR",r["TCREADOR"])
+                tmp.put("TUSDES",r["TUSDES"])
                 tramites.add(tmp)
             }
             sql.close()
@@ -60,6 +62,35 @@ class TramiteController extends janus.seguridad.Shield {
         }
         [memo: memo, header: header, tramites: tramites]
     }
+
+    def seguimiento(){
+        def memo = params.id
+        def tramites = []
+        try {
+//            def sql = Sql.newInstance("jdbc:mysql://10.0.0.3:3306/dbf", "root","svt2579", "com.mysql.jdbc.Driver")
+            def sql = Sql.newInstance("jdbc:mysql://127.0.0.1:3306/dbf", "root","root", "com.mysql.jdbc.Driver")
+
+            sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) {r->
+                def tmp =[:]
+                tmp.put("NMASTER",r["NMASTER"])
+                tmp.put("NTRAMITE",r["NTRAMITE"])
+                tmp.put("TFECHA",r["TFECHA"])
+                tmp.put("TFLIMITE",r["TFLIMITE"])
+                tmp.put("TASUNTO",r["TASUNTO"])
+                tmp.put("TRECIBIDO",r["TRECIBIDO"])
+                tmp.put("TFRECEP",r["TFRECEP"])
+                tmp.put("TECRADOR",r["TCREADOR"])
+                tmp.put("TUSDES",r["TUSDES"])
+                tramites.add(tmp)
+            }
+            sql.close()
+        } catch (e) {
+            println "error "+e
+            e.printStackTrace()
+        }
+        [memo: memo, tramites: tramites]
+    }
+
     def verTramitesAjax(){
 //        params.id="MEM-132-DGES-13"
         //para montar    showmount -e 192.168.0.13         mount -t nfs 192.168.0.13:/opt/pruebas/sad2013 sad/
@@ -85,6 +116,7 @@ class TramiteController extends janus.seguridad.Shield {
                 header.put("MCREADOR",r["MCREADOR"])
                 header.put("MUSDES",r["MUSDES"])
             }
+            println "select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo} "
             sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) {r->
                 def tmp =[:]
                 tmp.put("NMASTER",r["NMASTER"])
@@ -94,7 +126,7 @@ class TramiteController extends janus.seguridad.Shield {
                 tmp.put("TASUNTO",r["TASUNTO"])
                 tmp.put("TRECIBIDO",r["TRECIBIDO"])
                 tmp.put("TFRECEP",r["TFRECEP"])
-                tmp.put("TECRADOR",r["TECRADOR"])
+                tmp.put("TECRADOR",r["TCREADOR"])
                 tmp.put("TUSDES",r["TUSDES"])
                 tramites.add(tmp)
             }
@@ -109,20 +141,20 @@ class TramiteController extends janus.seguridad.Shield {
     def cargarDatos(){
         println "cargar datos dbf"
         try{
-//            def command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO /media/docmaster.DBF"
+//            def command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO,MCREADOR,MUSDES /home/svt/grails/Aplicaciones/janus/web-app/sad2013xx/docmaster.DBF"
             def command="dbf2mysql -c -d dbf -Uroot -Proot -t docmaster -o NMASTER,MFECHA,MPRIORI,MDE,MPARA,MASUNTO,MCREADOR,MUSDES /mnt/sad/docmaster.DBF"
             def proc = command.execute()
             proc.waitFor()
-//            command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP /media/doctrami.DBF"
-            command="dbf2mysql -c -d dbf -Uroot -Proot -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP,TECRADOR,TUSDES /mnt/sad/doctrami.DBF"
+//            command="dbf2mysql -c -d dbf -Uroot -Psvt2579 -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP,TCREADOR,TUSDES /home/svt/grails/Aplicaciones/janus/web-app/sad2013xx/doctrami.DBF"
+            command="dbf2mysql -c -d dbf -Uroot -Proot -t doctrami -o NMASTER,NTRAMITE,TFECHA,TFLIMITE,TASUNTO,TRECIBIDO,TFRECEP,TCREADOR,TUSDES /mnt/sad/doctrami.DBF"
 
             proc = command.execute()
             def res = command.execute().inputStream.read()
-            if(res==-1) {
-                println "error al pasar el dbf a mysql "+res
-                render "Error. El archivo DBF no se encuentra disponible, comunique este error al administrador del sistema."
-                return
-            }
+//            if(res==-1) {
+//                println "error al pasar el dbf a mysql "+res
+//                render "Error. El archivo DBF no se encuentra disponible, comunique este error al administrador del sistema."
+//                return
+//            }
             render "ok"
             return
         }catch(e){

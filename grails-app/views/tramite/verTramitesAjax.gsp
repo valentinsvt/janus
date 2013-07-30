@@ -98,12 +98,24 @@
 <script type="text/javascript">
     $("#refresh").click(function(){
         if(confirm("Esta seguro, Esta acción puede tardar varios minutos.")){
+            $("#dlgLoad").parent().css("zIndex","99999")
+            $("#dlgLoad").parent().parent().css("zIndex","99998")
+//            console.log($("#dlgLoad").parent(),$("#dlgLoad").parent().parent())
             $("#dlgLoad").dialog("open")
+            $("#modal-tramite-body").html("");
             $.ajax({type : "POST", url : "${g.createLink(controller: 'tramite',action:'cargarDatos')}",
                 data     : "",
                 success  : function (msg) {
                     if(msg=="ok"){
-                        window.location="${g.createLink(controller: 'tramite',action:'verTramites',id:memo)}"
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${g.createLink(action:'verTramitesAjax',controller: 'tramite')}/"+$("#memoRequerimiento").val(),
+                            success : function (msg) {
+                                $("#modal-tramite-body").html(msg);
+                                $("#modal-tramite-body").show("slide")
+                                $("#dlgLoad").dialog("close")
+                            }
+                        });
                     }else{
                         alert(msg)
                     }

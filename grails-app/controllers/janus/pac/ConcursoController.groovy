@@ -142,9 +142,37 @@ class ConcursoController extends janus.seguridad.Shield {
         }
     }
 
+    def setEtapa(){
+        println "set etapa  "+params
+        def con = Concurso.get(params.id)
+        switch (params.tipo){
+            case "1":
+                con.fechaEtapa1=new Date().parse("dd-MM-yyyy",params.fecha)
+                break;
+            case "2":
+                con.fechaEtapa2=new Date().parse("dd-MM-yyyy",params.fecha)
+                break;
+            case "3":
+                con.fechaEtapa3=new Date().parse("dd-MM-yyyy",params.fecha)
+                con.fechaFinPreparatorio=con.fechaEtapa3
+                break;
+        }
+        con.save(flush: true)
+        render "ok"
+
+    }
+
+
     def form_ajax() {
 //        println "aqui "
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"]]
+        def duracionPrep =0
+        def duracionPre = 0
+        def duracionCon = 0
+        def maxPrep = 5
+        def maxPre = 5
+        def maxCon = 5
+
         def concursoInstance = new Concurso(params)
         if (params.id) {
             concursoInstance = Concurso.get(params.id.toLong())
@@ -153,10 +181,63 @@ class ConcursoController extends janus.seguridad.Shield {
                 flash.message = "No se encontró Concurso con id " + params.id
                 redirect(action: "list")
                 return
-            } //no existe el objeto
+            }
+            def ahora = new Date()
+            maxPrep = concursoInstance.pac.tipoProcedimiento.preparatorio
+            maxPre =  concursoInstance.pac.tipoProcedimiento.precontractual
+            maxCon = concursoInstance.pac.tipoProcedimiento.contractual
+            println "max prep "+maxPrep
+            if(concursoInstance.fechaInicioPreparatorio!=null){
+                use(groovy.time.TimeCategory) {
+                    if(concursoInstance.fechaFinPreparatorio==null)
+                        duracionPrep =  ahora - concursoInstance.fechaInicioPreparatorio
+                    else
+                        duracionPrep = concursoInstance.fechaFinPreparatorio - concursoInstance.fechaInicioPreparatorio
+
+                }
+                duracionPrep=duracionPrep.days
+            }
+            if(concursoInstance.fechaInicioPrecontractual!=null){
+                use(groovy.time.TimeCategory) {
+                    if(concursoInstance.fechaFinPrecontractual==null)
+                        duracionPre = ahora - concursoInstance.fechaInicioPrecontractual
+                    else
+                        duracionPre =  concursoInstance.fechaFinPrecontractual-concursoInstance.fechaInicioPrecontractual
+
+                }
+                duracionPre=duracionPre.days
+            }
+            if(concursoInstance.fechaInicioContractual!=null){
+                use(groovy.time.TimeCategory) {
+                    if(concursoInstance.fechaFinContractual==null)
+                        duracionCon = ahora- concursoInstance.fechaInicioContractual
+                    else
+                        duracionCon =  concursoInstance.fechaFinContractual - concursoInstance.fechaInicioContractual
+
+                    duracionCon=duracionCon.days
+                }
+            }
+         //no existe el objeto
         } //es edit
-        return [concursoInstance: concursoInstance, campos: campos]
+        return [concursoInstance: concursoInstance, campos: campos,duracionPrep:duracionPrep,duracionPre:duracionPre,duracionCon:duracionCon,maxPrep:maxPrep,maxPre:maxPre,maxCon:maxCon]
     } //form_ajax
+
+
+    def iniciarPreparatorio(){
+        println "iniciar prep "+params
+
+        def concurso = Concurso.get(params.id)
+        concurso.memoRequerimiento=params.memo
+        def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
+        concurso.fechaInicioPreparatorio=fecha
+        if(!concurso.save(flush: true)){
+            render "error"
+            return
+        }else{
+            render "ok"
+            return
+        }
+    }
 
 
     def buscarObra() {
