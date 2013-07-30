@@ -853,7 +853,7 @@ class Reportes3Controller {
                     bandMat = 1
 
                     tablaMat += "<tr>"
-                    if (params.trans != false) {
+                    if (params.trans != 'no') {
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                         tablaMat += "<td>" + r["itemnmbr"] + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
@@ -864,10 +864,10 @@ class Reportes3Controller {
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
                         totalMat += r["parcial"]
-                    } else {
-
                     }
-                    if(params.trans == false){
+                    if(params.trans == 'no'){
+
+                        println("entro false")
 
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                         tablaMat += "<td>" + r["itemnmbr"] + "</td>"
@@ -884,7 +884,7 @@ class Reportes3Controller {
                     }
                     tablaMat += "</tr>"
                 }
-                if (r["grpocdgo"]== 1 && params.trans != false) {
+                if (r["grpocdgo"]== 1 && params.trans != 'no') {
                     tablaTrans += "<tr>"
                     tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
@@ -945,7 +945,7 @@ class Reportes3Controller {
             tablaIndi += "<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align:center'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
             tablaIndi += "</table>"
 
-            if (total == 0 || params.trans == false)
+            if (total == 0 || params.trans == 'no')
                 tablaTrans = ""
             if (totalHer == 0)
                 tablaHer = ""

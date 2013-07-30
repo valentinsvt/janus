@@ -209,7 +209,7 @@
                             <i class="icon-print"></i>
                             PDF
                         </a>
-                        <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel" id="${obra?.id}"><i class="icon-table"></i>Excel</g:link>
+                        <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel" id="${obra?.id}" params="[sp: sub, tipo: tipo]"><i class="icon-table"></i>Excel</g:link>
                     </div>
                 </div>
             </g:if>
@@ -374,17 +374,17 @@
 
                         if($(".pdf.active").hasClass("1") == true){
 
-                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}"
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}?sp= ${sub}"
                         }else {
                         }
                         if($(".pdf.active").hasClass("2") == true){
-                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}"
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}?sp=${sub}"
                         }else {
 
 
                         }
                         if($(".pdf.active").hasClass("3") == true){
-                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}"
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}?sp=${sub}"
 
                         }else {
 
@@ -393,7 +393,7 @@
                         if($(".pdf.active").hasClass("-1") == true){
 
 
-                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}"
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}?sp=${sub}"
                         }
                     });
 

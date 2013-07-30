@@ -55,6 +55,9 @@ class VariablesController {
 //        if (!params.id) {
 //            params.id = "886"
 //        }
+
+//        println(params)
+
         if (!params.tipo) {
             params.tipo = "-1"
         }
@@ -131,7 +134,7 @@ class VariablesController {
             def res = cn.rows(sql.toString())
 
             def sp = cn.rows(sqlSP.toString())
-            return [res: res, obra: obra, tipo: params.tipo, rend: params.rend, sp: sp, spsel: params.sp]
+            return [res: res, obra: obra, tipo: params.tipo, rend: params.rend, sp: sp, spsel: params.sp, sub: params.sp]
         }
     }
 

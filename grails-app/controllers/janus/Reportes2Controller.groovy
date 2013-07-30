@@ -776,8 +776,28 @@ class Reportes2Controller {
 
     def reporteExcelComposicion() {
 
+        println("!!!" + params)
+
+        if (!params.tipo) {
+            params.tipo = "-1"
+        }
+        if(!params.sp){
+
+            params.sp = '-1'
+        }
+        if (params.tipo == "-1") {
+            params.tipo = "1,2,3"
+        }
+
+        def wsp =""
+
+        if(params.sp.toString() != "-1"){
+
+            wsp = "      AND v.sbpr__id = ${params.sp} \n"
+        }
+
         def obra = Obra.get(params.id)
-        params.tipo = "1,2,3"
+//        params.tipo = "1,2,3"
 
         def sql = "SELECT\n" +
                 "  v.voit__id                            id,\n" +
@@ -802,7 +822,7 @@ class Reportes2Controller {
                 "INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
                 "INNER JOIN sbpr b ON v.sbpr__id = b.sbpr__id\n" +
                 "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo})\n" +
-                "WHERE v.obra__id = ${params.id} \n" +
+                "WHERE v.obra__id = ${params.id} \n" + wsp +
                 "ORDER BY v.sbpr__id, grid ASC, i.itemnmbr"
 
 /*
@@ -821,7 +841,7 @@ class Reportes2Controller {
                 "ORDER BY g.grpo__id ASC, i.itemcdgo"
 */
 
-        //println sql
+//        println sql
 
         def cn = dbConnectionService.getConnection()
 
@@ -1104,6 +1124,8 @@ class Reportes2Controller {
         def name = "cronograma${tipo.capitalize()}_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
 
         Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font catFont2 = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font catFont3 = new Font(Font.TIMES_ROMAN, 16, Font.BOLD);
         Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
         Font fontTitle = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
         Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
@@ -1124,8 +1146,8 @@ class Reportes2Controller {
         Paragraph preface = new Paragraph();
         addEmptyLine(preface, 1);
         preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
-        preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont));
+        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont3));
+        preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont2));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
         preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
@@ -1135,6 +1157,15 @@ class Reportes2Controller {
         pMeses.add(new Paragraph("Obra: ${obra.descripcion} (${meses} mes${meses == 1 ? '' : 'es'})", info))
         addEmptyLine(pMeses, 1);
         document.add(pMeses);
+        Paragraph fecha = new Paragraph();
+        fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
+//        addEmptyLine(fecha, 1);
+        document.add(fecha);
+        Paragraph fechaP = new Paragraph();
+        fechaP.add(new Paragraph("Fecha Act. Precios: ${printFecha(obra?.fechaPreciosRubros)}", info))
+        addEmptyLine(fechaP, 1);
+        document.add(fechaP);
+
         /* ***************************************************** Fin Titulo del reporte ***************************************************/
         /* ***************************************************** Tabla cronograma *********************************************************/
         def tams = [10, 40, 5, 6, 6, 6, 2]

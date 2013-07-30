@@ -5694,6 +5694,8 @@ class ReportesController {
 
     def reporteComposicionMat() {
 
+//        println("-->>" + params)
+
         def obra = Obra.get(params.id)
 
         def totales

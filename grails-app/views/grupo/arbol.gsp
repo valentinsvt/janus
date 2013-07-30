@@ -226,7 +226,7 @@
 
         <div class="row-fluid">
             <div class="span1">
-                Canton
+                Cantón
             </div>
 
             <div class="span4">
@@ -276,8 +276,8 @@
     <div class="modal-footer" id="modal_trans_footer">
         <g:hiddenField name="nodeId" val=""/>
         <a href="#" data-dismiss="modal" class="btn btn-primary" id="print_totales" data-transporte="true">Consolidado</a>
-        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="true">Imprimir con transporte</a>
-        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="false">Imprimir sin transporte</a>
+        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="si">Imprimir con transporte</a>
+        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="no">Imprimir sin transporte</a>
         <a href="#" data-dismiss="modal" class="btn" id="btnCancel">Cancelar</a>
     </div>
 </div>
