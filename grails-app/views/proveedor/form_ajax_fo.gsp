@@ -41,7 +41,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="ruc" maxlength="13" class="" value="${proveedorInstance?.ruc}"/>
+            <g:textField name="ruc" maxlength="13" class="" value="${proveedorInstance?.ruc}" style="width: 130px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -125,7 +125,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="fax" maxlength="11" class="" value="${proveedorInstance?.fax}"/>
+            <g:textField name="fax" maxlength="11" class="" value="${proveedorInstance?.fax}" style="width: 120px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -139,7 +139,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="telefonos" maxlength="40" class="" value="${proveedorInstance?.telefonos}"/>
+            <g:textField name="telefonos" maxlength="40" class="" value="${proveedorInstance?.telefonos}" style="width: 120px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -216,19 +216,19 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Estado
-            </span>
-        </div>
+    %{--<div class="control-group">--}%
+        %{--<div>--}%
+            %{--<span class="control-label label label-inverse">--}%
+                %{--Estado--}%
+            %{--</span>--}%
+        %{--</div>--}%
 
-        <div class="controls">
-            <g:textField name="estado" maxlength="1" class="" value="${proveedorInstance?.estado}"/>
+        %{--<div class="controls">--}%
+            %{--<g:textField name="estado" maxlength="1" class="" value="${proveedorInstance?.estado}"/>--}%
 
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
+        %{--</div>--}%
+    %{--</div>--}%
 
     <div class="control-group">
         <div>
@@ -238,7 +238,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="observaciones" maxlength="127" class="" value="${proveedorInstance?.observaciones}"/>
+            <g:textField name="observaciones" maxlength="127" class="" value="${proveedorInstance?.observaciones}" style="width: 400px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>

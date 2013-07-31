@@ -782,7 +782,11 @@ class RubroController extends janus.seguridad.Shield {
         }
 
 
-        nuevo.codigo=codigo+rubro.codigo;
+        rubro.codigo=codigo+rubro.codigo;
+        rubro.fechaModificacion=new Date()
+        rubro.save(flush: true)
+        nuevo.fecha=new Date()
+        nuevo.fechaModificacion=null
         if(!nuevo.save(flush: true)){
             println "erro copiar rubro "+nuevo.errors
             error=true
@@ -802,6 +806,8 @@ class RubroController extends janus.seguridad.Shield {
                 }
             }
         }
+        if(error==false)
+            error=nuevo.id
         render error
 
     }

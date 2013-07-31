@@ -582,12 +582,24 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
             }
         }
-
+        def costo = false
         if (planillasAvance.size() > 0) {
             if (planillasAvance.last().fechaFin == finalObra) {
                 def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
                 tiposPlanilla -= plp.tipoPlanilla
             }
+            planillasAvance.each {pa->
+                if(pa.fechaMemoPagoPlanilla==null){
+                    def costos = Planilla.findAllByPadreCosto(pa)
+                    if(costos.size()==0){
+                        costo=true
+                    }
+                }
+
+            }
+        }
+        if(!costo){
+            tiposPlanilla.remove(TipoPlanilla.findByCodigo("C"))
         }
 
         if (!params.id) {

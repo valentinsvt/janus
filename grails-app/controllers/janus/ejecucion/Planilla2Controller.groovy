@@ -718,7 +718,7 @@ class Planilla2Controller {
 
         }
 
-        def tableWidth = 150 * (periodos.size() + periodos2.size()) + 400
+        def tableWidth = 150 * (periodos.size() + periodos2.size()) + 100
         def smallTableWidth = 400
 
 //        println "periodos  " + periodos
@@ -1142,7 +1142,7 @@ class Planilla2Controller {
             tablaMl += '<th class="tal">Multa</th> <td>' + prmlMulta + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
             tablaMl += "</tr>"
             tablaMl += "<tr>"
-            tablaMl += '<th class="tal">Total multa</th> <td>$' + numero(totalMulta, 2) + '</td>'
+            tablaMl += '<th class="tal">Total multa</th> <td>$' + numero(totalMultaRetraso, 2) + '</td>'
             tablaMl += "</tr>"
             tablaMl += '</table>'
         }

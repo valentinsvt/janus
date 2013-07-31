@@ -90,7 +90,7 @@
 
         </div>
 
-        <div class="modal hide fade" id="modal-Oferta">
+        <div class="modal mediumModal hide fade" id="modal-Oferta">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>

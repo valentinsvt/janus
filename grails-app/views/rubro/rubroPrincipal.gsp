@@ -651,7 +651,7 @@
 
 </div>
 <script type="text/javascript">
-    function agregar(){
+    function agregar(id,tipo){
         var cant = $("#item_cantidad").val()
         if (cant == "")
             cant = 0
@@ -662,10 +662,13 @@
             rend = 1
         if ($("#item_id").val() * 1 > 0) {
             if (cant > 0) {
-                var data = "rubro=${rubro?.id}&item=" + $("#item_id").val() + "&cantidad=" + cant + "&rendimiento=" + rend
+                var data = "rubro="+id+"&item=" + $("#item_id").val() + "&cantidad=" + cant + "&rendimiento=" + rend
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'addItem')}",
                     data     : data,
                     success  : function (msg) {
+                        if(tipo=="H"){
+                            window.location.href="${g.createLink(action: 'rubroPrincipal')}?idRubro="+id
+                        }
                         var tr = $("<tr class='item_row'>")
                         var td = $("<td>")
                         var band = true
@@ -1940,8 +1943,9 @@
                                                 if(msg=="true"){
                                                     alert("Error al generar historico del rubro, comunique este error al administrador del sistema")
                                                 }else{
+//                                                    console.log("es historico",msg)
                                                     $("#boxHiddenDlg").dialog("close")
-                                                    agregar();
+                                                    agregar(msg,"H");
 
                                                 }
 
@@ -1953,7 +1957,7 @@
                             }
                         });
                     }else{
-                       agregar();
+                       agregar(${rubro?.id},"");
 
                     }
                 }

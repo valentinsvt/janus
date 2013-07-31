@@ -17,7 +17,20 @@
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Descripcion
+            </span>
+        </div>
 
+        <div class="controls">
+            <g:textArea name="descripcion" cols="100" rows="5" maxlength="255" class="" value="${ofertaInstance?.descripcion}" style="width: 400px;"/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -37,20 +50,7 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Descripcion
-            </span>
-        </div>
 
-        <div class="controls">
-            <g:textArea name="descripcion" cols="40" rows="5" maxlength="255" class="" value="${ofertaInstance?.descripcion}"/>
-            <span class="mandatory">*</span>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
 
     <div class="control-group">
         <div>
@@ -60,24 +60,8 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="monto" class="" value="${fieldValue(bean: ofertaInstance, field: 'monto')}"/>
+            <g:field type="number" name="monto" class="" value="${fieldValue(bean: ofertaInstance, field: 'monto')}" style="width:140px;"  />
             <span class="mandatory">*</span>
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Fecha Entrega
-            </span>
-        </div>
-
-        <div class="controls">
-            <elm:datepicker name="fechaEntrega" class="" value="${ofertaInstance?.fechaEntrega}"/>
-            <span class="mandatory">*</span>
-
-
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -90,7 +74,7 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="plazo" class="" value="${fieldValue(bean: ofertaInstance, field: 'plazo')}"/>
+            <g:field type="number" name="plazo" class="" value="${fieldValue(bean: ofertaInstance, field: 'plazo')}" style="width:140px;" />
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -99,16 +83,34 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Calificado
+                Fecha Entrega
             </span>
         </div>
 
         <div class="controls">
-            <g:textField name="calificado" maxlength="1" class="" value="${ofertaInstance?.calificado}"/>
+            <elm:datepicker name="fechaEntrega" class="" value="${ofertaInstance?.fechaEntrega}"  style="width:140px;"/>
+            <span class="mandatory">*</span>
+
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
+
+
+
+    %{--<div class="control-group">--}%
+        %{--<div>--}%
+            %{--<span class="control-label label label-inverse">--}%
+                %{--Calificado--}%
+            %{--</span>--}%
+        %{--</div>--}%
+
+        %{--<div class="controls">--}%
+            %{--<g:textField name="calificado" maxlength="1" class="" value="${ofertaInstance?.calificado}"/>--}%
+
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
+        %{--</div>--}%
+    %{--</div>--}%
 
     <div class="control-group">
         <div>
@@ -118,8 +120,21 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="hoja" class="" value="${fieldValue(bean: ofertaInstance, field: 'hoja')}"/>
+            <g:field type="number" name="hoja" class="" value="${fieldValue(bean: ofertaInstance, field: 'hoja')}"  style="width:140px;" />
 
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Garantia
+            </span>
+        </div>
+
+        <div class="controls">
+            %{--<g:textField name="garantia" maxlength="1" class="" value="${ofertaInstance?.garantia}"/>--}%
+            <input type="checkbox" name="garantia" value="1" ${(ofertaInstance?.garantia=="1")?"checked":""}>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -138,33 +153,21 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Garantia
-            </span>
-        </div>
 
-        <div class="controls">
-            <g:textField name="garantia" maxlength="1" class="" value="${ofertaInstance?.garantia}"/>
 
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
+    %{--<div class="control-group">--}%
+        %{--<div>--}%
+            %{--<span class="control-label label label-inverse">--}%
+                %{--Estado--}%
+            %{--</span>--}%
+        %{--</div>--}%
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Estado
-            </span>
-        </div>
+        %{--<div class="controls">--}%
+            %{--<g:textField name="estado" maxlength="1" class="" value="${ofertaInstance?.estado}"/>--}%
 
-        <div class="controls">
-            <g:textField name="estado" maxlength="1" class="" value="${ofertaInstance?.estado}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
+        %{--</div>--}%
+    %{--</div>--}%
 
     <div class="control-group">
         <div>
@@ -174,7 +177,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="observaciones" maxlength="127" class="" value="${ofertaInstance?.observaciones}"/>
+            <g:textField name="observaciones" maxlength="127" class="" value="${ofertaInstance?.observaciones}" style="width: 400px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -183,7 +186,7 @@
 </g:form>
 
 
-<div class="modal hide fade" id="modal-prov">
+<div class="modal mediumModal hide fade" id="modal-prov">
     <div class="modal-header" id="modalHeader-prov">
         <button type="button" class="close darker" data-dismiss="modal">
             <i class="icon-remove-circle"></i>
