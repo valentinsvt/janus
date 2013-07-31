@@ -1820,15 +1820,10 @@ class Reportes3Controller {
 
     def reporteGarantias () {
 
-//        def obra = Obra.get(1430)
-//        def concurso = janus.pac.Concurso.findByObra(obra)
-//        def oferta = janus.pac.Oferta.findByConcurso(concurso)
-//        def contrato = Contrato.findByObra(obra)
-
 
         def garantias =  janus.pac.Garantia.list();
 
-        println("-->>" + garantias)
+//        println("-->>" + garantias)
 
         def auxiliar = Auxiliar.get(1)
         def prmsHeaderHoja = [border: Color.WHITE]
@@ -1841,6 +1836,10 @@ class Reportes3Controller {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead2 = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead4 = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -1896,7 +1895,7 @@ class Reportes3Controller {
 
         PdfPTable tablaGarantia = new PdfPTable(13);
         tablaGarantia.setWidthPercentage(100);
-        tablaGarantia.setWidths(arregloEnteros([10,10,10,10,10,10,10,10,10,10,10,10,10]))
+        tablaGarantia.setWidths(arregloEnteros([10,15,10,10,5,10,10,10,10,10,10,10,10]))
 
         addCellTabla(tablaGarantia, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
         addCellTabla(tablaGarantia, new Paragraph("Contratista", times8bold), prmsCellHead2)
@@ -1915,9 +1914,22 @@ class Reportes3Controller {
         garantias.each {
 
 
-            addCellTabla(tablaGarantia, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
-
-
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.codigo, times8bold), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre + " " + it?.contrato?.oferta?.proveedor?.apellidoContacto, times8bold), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoGarantia?.descripcion, times8bold), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.codigo, times8bold), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(it?.numeroRenovaciones, times8bold), prmsCellHead2)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.numeroRenovaciones, format: "###,###", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8bold), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.padre?.codigo, times8bold), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.aseguradora?.nombre, times8bold), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoDocumentoGarantia?.descripcion, times8bold), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.estado?.descripcion, times8bold), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(it?.monto, times8bold), prmsCellHead2)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaInicio.format("dd-MM-yyyy"), times8bold), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaFinalizacion.format("dd-MM-yyyy"), times8bold), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.cancelada?.format("dd-MM-yyyy"), times8bold), prmsCellHead3)
+//            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.cancelada, format: "##,##", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8bold), prmsCellHead2)
 
 
         }

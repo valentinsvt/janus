@@ -51,6 +51,10 @@
                 <a href="#" id="btnReporte" class="btn">
                     Reporte
                 </a>
+                <a href="#" id="btnReporteGeneral" class="btn">
+                    Reporte General Garantías
+                </a>
+
             </div>
         </div>
 
@@ -455,6 +459,10 @@
 
                 $("#btnReporte").click(function () {
                     location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportes',action: 'garantiasContrato')}/${contrato?.id}"
+                });
+
+                $("#btnReporteGeneral").click(function () {
+                    location.href = "${createLink(controller: 'reportes3',action: 'reporteGarantias')}"
                 });
 
                 $frm.validate();
