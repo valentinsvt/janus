@@ -43,6 +43,7 @@ class Concurso {
     Date fechaFinPrecontractual
     Date fechaInicioContractual
     Date fechaFinContractual
+    String numeroCertificacion
 
     static mapping = {
         table 'cncr'
@@ -92,6 +93,7 @@ class Concurso {
             fechaEtapa1  column:  'cncrfce1'
             fechaEtapa2 column:  'cncrfce2'
             fechaEtapa3 column:     'cncrfce3'
+            numeroCertificacion column: 'cncrnmct'
         }
     }
     static constraints = {
@@ -131,5 +133,6 @@ class Concurso {
         fechaEtapa1(blank: true, nullable: true)
         fechaEtapa2(blank: true, nullable: true)
         fechaEtapa3(blank: true, nullable: true)
+        numeroCertificacion(blank: true, nullable: true, maxSize: 4)
     }
 }

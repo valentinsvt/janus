@@ -182,6 +182,33 @@
 <div class="tab-content ui-corner-bottom">
 <div class="tab-pane active" id="datos">
     <div class="row">
+
+        <div class="span5" style="width: 600px;">
+            <span class="control-label label label-inverse">
+                Administración
+            </span>
+            <div style="width: 400px;" class="controls">
+                <g:hiddenField name="administracion.id" value="${concursoInstance?.administracion?.id}"/>
+                ${concursoInstance?.administracion?.nombrePrefecto}
+            </div>
+        </div>
+
+        <div class="span5">
+            <div class="control-group">
+                <div>
+                    <span class="control-label label label-inverse">
+                        Estado
+                    </span>
+                </div>
+
+                <div class="controls">
+                    <g:hiddenField name="estado" value="${concursoInstance?.estado}"/>
+                    ${concursoInstance?.estado == 'R' ? 'Registrado' : 'No registrado'}
+                </div>
+            </div>
+        </div>
+
+
         <div class="span10">
             <div class="control-group">
                 <div>
@@ -197,22 +224,18 @@
             </div>
         </div>
 
-        <div class="span5">
+        <div class="span5" style="width: 600px;">
 
             <div class="control-group">
                 <div>
                     <span class="control-label label label-inverse">
-                        Estado
+                        Número de certificación:
                     </span>
                 </div>
 
                 <div class="controls">
-                    %{--
-                    <g:textField name="estado" class="" value="${concursoInstance?.estado}"/>
-                    --}%
-                    %{--<p class="help-block ui-helper-hidden"></p>--}%
-                    <g:hiddenField name="estado" value="${concursoInstance?.estado}"/>
-                    ${concursoInstance?.estado == 'R' ? 'Registrado' : 'No registrado'}
+                    <g:textField name="numeroCertificacion" value="${concursoInstance?.numeroCertificacion?:'0000'}" style="width: 50px;"
+                                 maxlength ="4" /> (Número de certificación de disponibilidad de fondos)
                 </div>
             </div>
 
@@ -238,7 +261,7 @@
 
                 <div class="controls">
                     <input type="hidden" id="obra_id" name="obra.id" value="${concursoInstance?.obra?.id}">
-                    <input type="text" id="obra_busqueda" value="${concursoInstance?.obra?.codigo}" title="${concursoInstance?.obra?.nombre}">
+                    <input type="text" id="obra_busqueda" value="${concursoInstance?.obra?.codigo}" title="${concursoInstance?.obra?.nombre}" style="width: 400px;">
                     %{--
                     <g:select id="obra" name="obra.id" from="${janus.Obra.list([sort: 'nombre'])}" optionKey="id" class="many-to-one " value="${concursoInstance?.obra?.id}"
                     --}%
@@ -257,7 +280,8 @@
 
                 <div class="controls">
                     <g:select id="pac" name="pac.id" from="${janus.pac.Pac.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.pac?.id}"
-                              noSelection="['null': '']" optionValue="${{ it.descripcion && it.descripcion.size() > 55 ? it.descripcion[0..55] + '...' : it.descripcion }}"/>
+                              noSelection="['null': '']" optionValue="${{ it.descripcion && it.descripcion.size() > 55 ? it.descripcion[0..55] + '...' : it.descripcion }}"
+                    style="width: 400px;"/>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </div>
@@ -265,24 +289,6 @@
         </div> <!-- fin col 1-->
 
         <div class="span5">
-            <div class="control-group">
-                <div>
-                    <span class="control-label label label-inverse">
-                        Administración
-                    </span>
-                </div>
-
-                <div class="controls">
-                    %{--
-                    <g:select id="administracion" name="administracion.id" from="${janus.Administracion.list()}" optionKey="id" class="many-to-one " value="${concursoInstance?.administracion?.id}" noSelection="['null': '']"/>
-                    --}%
-                    <g:hiddenField name="administracion.id" value="${concursoInstance?.administracion?.id}"/>
-                    %{--${concursoInstance?.administracion?.fechaInicio?.format("dd-MM-yyyy")} a--}%
-                    %{--${concursoInstance?.administracion?.fechaFin?.format("dd-MM-yyyy")}--}%
-                    ${concursoInstance?.administracion?.nombrePrefecto}
-                    <p class="help-block ui-helper-hidden"></p>
-                </div>
-            </div>
 
             <div class="control-group">
                 <div>

@@ -162,7 +162,7 @@
                     </div>
 
                     <div class="span2">
-                        <g:textField name="codigo" class="span2 required"/>
+                        <g:textField name="codigo" class="span2 required allCaps"/>
                     </div>
 
                     <div class="span1">
@@ -170,7 +170,7 @@
                     </div>
 
                     <div class="span2">
-                        <g:textField name="padre" class="span2" readonly="true"/>
+                        <g:textField name="padre" class="span2 allCaps" readonly="true"/>
                     </div>
                 </div>
 
@@ -392,6 +392,7 @@
 
             function clicks($tr) {
                 $tr.dblclick(function (ev) {
+                    padreCod=$tr.data("codigo");
                     $(".selected").removeClass("selected");
                     $(this).addClass("selected");
                     loadForm($(this).data());
@@ -440,7 +441,7 @@
                 }
                 reset();
             }
-
+            var padreCod;
             $(function () {
                 rowsIniciales();
 
@@ -505,6 +506,7 @@
                         } else if (btn == "btnRenew") {
                             data.id = $("#id").val();
                             data.tipo = "renew";
+                            data.padre = padreCod;
                         }
                         if (continua) {
 //                            ////console.log(data);
@@ -531,6 +533,7 @@
                                             botones("create");
 //                                            ////console.log(data);
                                         }
+                                        reset();
                                     } else {
 //                                        ////console.log("ERROR!!!!");
                                     }
@@ -581,6 +584,7 @@
                                         success : function (msg) {
                                             if (msg == "OK") {
                                                 $("tr.selected").remove();
+                                                reset();
                                             } else {
                                                 $.box({
                                                     imageClass : "box_info",

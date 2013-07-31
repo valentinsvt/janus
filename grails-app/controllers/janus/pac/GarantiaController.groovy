@@ -35,7 +35,7 @@ class GarantiaController extends janus.seguridad.Shield {
                     contrato: contrato.id,
                     tipoGarantiaTxt: garantia.tipoGarantia.descripcion,
                     tipoGarantia: garantia.tipoGarantiaId,
-                    codigo: garantia.codigo,
+                    codigo: garantia.codigo.trim(),
                     aseguradoraTxt: garantia.aseguradora.nombre,
                     aseguradora: garantia.aseguradoraId,
                     tipoDocumentoGarantiaTxt: garantia.tipoDocumentoGarantia.descripcion,
@@ -47,7 +47,8 @@ class GarantiaController extends janus.seguridad.Shield {
                     fechaFinalizacion: formatDate(date: garantia.fechaFinalizacion, format: "dd-MM-yyyy"),
                     diasGarantizados: garantia.diasGarantizados,
                     estadoTxt: garantia.estado.descripcion,
-                    estado: garantia.estadoId
+                    estado: garantia.estadoId,
+                    padre: garantia.padre?garantia.padre.codigo.trim():""
             ])
         }
         def json = new JsonBuilder(garantias)
@@ -67,7 +68,7 @@ class GarantiaController extends janus.seguridad.Shield {
 
     def addGarantiaContrato() {
 //        println params
-        def garantia, datos = true
+        def garantia, datos = true, padre=null
 
         switch (params.tipo.toString().trim().toLowerCase()) {
             case "add":
@@ -78,8 +79,7 @@ class GarantiaController extends janus.seguridad.Shield {
                 break;
             case "renew":
                 garantia = new Garantia()
-                def padre = Garantia.get(params.id)
-                garantia.padre = padre
+                padre = Garantia.get(params.id)
                 padre.estado = EstadoGarantia.get(6) //renovada
                 if (!padre.save(flush: true)) {
                     println "error save padre" + padre.errors
@@ -100,6 +100,7 @@ class GarantiaController extends janus.seguridad.Shield {
         garantia.codigo = params.codigo.trim()
         garantia.numeroRenovaciones = 0
         garantia.estadoGarantia = "N" //registrado o no
+        garantia.padre = padre
 
         if (!garantia.save(flush: true)) {
             println "Errores: " + garantia.errors
