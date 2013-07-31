@@ -1213,8 +1213,14 @@ class Planilla2Controller {
             valorAnt = avanceAnteriores.sum { it.valor }
             anterior = avanceAnteriores.sum { it.descuentos }
         }
+        def prej2 = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio', order: "asc"])
 
-        planilla.descuentos = (((valorAnt + planilla.valor) / contrato.monto) * contrato.anticipo - anterior).toDouble().round(2)
+        if(planilla.fechaFin>=prej2.last().fechaFin){
+            planilla.descuentos = (contrato.anticipo-anterior).toDouble().round(2)
+        }else{
+            planilla.descuentos = (((valorAnt + planilla.valor) / contrato.monto) * contrato.anticipo - anterior).toDouble().round(2)
+        }
+
         if (!planilla.save(flush: true)) {
             println "error planilla reajuste " + planilla.id
         }
