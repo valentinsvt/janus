@@ -404,6 +404,27 @@ class PersonaController extends janus.seguridad.Shield {
             }
 
         }
+        for(int i = perfiles.size()-1;i>-1;i--){
+            perfilesNue.each {pn->
+                println "pn "+pn+"   "+    perfiles[i].perfil.id.toInteger()
+                if(pn.toInteger()==perfiles[i].perfil.id.toInteger()){
+                    borrar=false
+                }
+            }
+            if(borrar) {
+                println "borrando "+perfiles[i]
+                def per = perfiles[i]
+                perfiles.remove(i)
+                per.delete(flush: true)
+
+            }else{
+                borrar=true
+            }
+//            if(!perfilesNue.contains(perfiles[i].perfil.id.toString())) {
+//                println "borrando "+perfiles[i]
+//                perfiles[i].delete(flush: true)
+//            }
+        }
 
 
 
