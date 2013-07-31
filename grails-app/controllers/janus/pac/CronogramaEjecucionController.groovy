@@ -360,6 +360,13 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         return numero(num, 2)
     }
 
+    def modificarVolumen() {
+        println params
+        def vol = VolumenesObra.get(params.vol)
+        def crejs = CronogramaEjecucion.findAllByVolumenObra(vol)
+        println crejs
+    }
+
     def tabla() {
         def obra = Obra.get(params.id)
         def html = ""
@@ -444,7 +451,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         html += "<tbody>"
         cronos.each { crono ->
-            html += "<tr class='item_row'>"
+            html += "<tr class='click item_row' data-vol='" + crono.volumen.id + "'>"
 
             html += "<td class='codigo'>"
             html += crono.codigo
@@ -508,7 +515,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
             html += "</tr>"
 
-            html += "<tr class='item_prc'>"
+            html += "<tr class='click item_prc'>"
             html += '<td colspan="6"> </td>'
             html += '<td>%</td>'
             html += filaPor
@@ -518,7 +525,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
             html += "</tr>"
 
-            html += "<tr class='item_f'>"
+            html += "<tr class='click item_f'>"
             html += '<td colspan="6"> </td>'
             html += '<td>F</td>'
             html += filaCan

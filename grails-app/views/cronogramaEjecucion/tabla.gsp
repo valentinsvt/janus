@@ -11,6 +11,24 @@
         La obra tiene una planificación de 0 meses...Por favor corrija esto para continuar con el cronograma.
     </div>
 </g:else>
+%{--<script type="text/javascript">--}%
+%{--$(".click").click(function () {--}%
+%{--$(".rowSelected").removeClass("rowSelected");--}%
+
+%{--$(this).addClass("rowSelected");--}%
+%{--if ($(this).hasClass("item_row")) {--}%
+%{--$(this).next().addClass("rowSelected").next().addClass("rowSelected");--}%
+%{--} else if ($(this).hasClass("item_prc")) {--}%
+%{--$(this).next().addClass("rowSelected");--}%
+%{--$(this).prev().addClass("rowSelected");--}%
+%{--} else if ($(this).hasClass("item_f")) {--}%
+%{--$(this).prev().addClass("rowSelected").prev().addClass("rowSelected");--}%
+%{--}--}%
+%{--$("#btnCambio").removeClass("disabled");--}%
+%{--});--}%
+%{--</script>--}%
+
+
 
 %{--<script type="text/javascript">--}%
 %{--$("th.S.click").click(function () {--}%

@@ -28,6 +28,66 @@ class ReportesPlanillasController {
     def preciosService
     def dbConnectionService
 
+    def reporteAvance() {
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def contrato = Contrato.get(params.id)
+        def obra = contrato.oferta.concurso.obra
+
+        def baos = new ByteArrayOutputStream()
+        def name = "avance_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+        Font fontThTiny = new Font(Font.TIMES_ROMAN, 7, Font.BOLD);
+        Font fontTdTiny = new Font(Font.TIMES_ROMAN, 7, Font.NORMAL);
+        Font fontThFirmas = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdFirmas = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
+        Image logo = Image.getInstance(logoPath);
+        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+
+//        HeaderFooter footer = new HeaderFooter(new Phrase("This is page: "), true);
+//        document.setFooter(footer);
+        document.resetHeader()
+        document.resetFooter()
+
+        document.open();
+        PdfContentByte cb = pdfw.getDirectContent();
+        document.addTitle("Avance de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, planillas");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("AVANCE DE LA OBRA " + obra.nombre + " AL " + fechaConFormato(fecha, "dd-MMMM-yyyy"), fontTituloGad));
+        addEmptyLine(preface, 1);
+        Paragraph preface2 = new Paragraph();
+        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        addEmptyLine(preface2, 1);
+        document.add(logo)
+        document.add(preface);
+        document.add(preface2);
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
     def reportePlanilla() {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
@@ -51,7 +111,7 @@ class ReportesPlanillasController {
             if (planilla.tipoPlanilla.codigo == "L") {
                 periodoPlanilla = "Liquidación del reajuste (${fechaConFormato(planilla.fechaPresentacion, 'dd-MMM-yyyy')})"
             } else {
-                periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy")+" (liquidación)"
+                periodoPlanilla = 'del ' + fechaConFormato(planilla.fechaInicio, "dd-MMM-yyyy") + ' al ' + fechaConFormato(planilla.fechaFin, "dd-MMM-yyyy") + " (liquidación)"
             }
         }
 
@@ -515,7 +575,7 @@ class ReportesPlanillasController {
 
         ps.eachWithIndex { p, i ->
             addCellTabla(tablaFr, new Paragraph(p.indice.descripcion + " (" + p.numero + ")", fontTh), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            def vlinOferta=0
+            def vlinOferta = 0
             periodos.eachWithIndex { per, j ->
                 if (j == 0) { //oferta
                     if (i == 0) { //mano de obra
@@ -1929,6 +1989,7 @@ class ReportesPlanillasController {
 
     private String fechaConFormato(fecha, formato) {
         def meses = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+        def mesesLargo = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
         def strFecha
 //        println ">>" + fecha + "    " + formato
         switch (formato) {
@@ -1936,6 +1997,9 @@ class ReportesPlanillasController {
                 strFecha = meses[fecha.format("MM").toInteger()] + "-" + fecha.format("yy")
                 break;
             case "dd-MMM-yyyy":
+                strFecha = "" + fecha.format("dd") + " de " + meses[fecha.format("MM").toInteger()] + " " + fecha.format("yyyy")
+                break;
+            case "dd MMM yyyy":
                 strFecha = "" + fecha.format("dd") + " de " + meses[fecha.format("MM").toInteger()] + " " + fecha.format("yyyy")
                 break;
             default:

@@ -353,7 +353,9 @@ class PlanillaController extends janus.seguridad.Shield {
         roles.each { rol ->
             def personas = Persona.findAllByDepartamento(rol.departamento)
 
-            def sel = g.select(from: personas, class: "span3", optionKey: "id", optionValue: { it.nombre + " " + it.apellido }, name: "persona_" + rol.rolTramite.id)
+            def sel = g.select(from: personas, class: "span3", optionKey: "id", optionValue: {
+                it.nombre + " " + it.apellido
+            }, name: "persona_" + rol.rolTramite.id)
 
             nombres += '<div class="row">'
             nombres += '<div class="span2 formato">'
@@ -492,7 +494,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
                 }
             }
-            if (tipo == 5) {
+            if (tipo == "5") {
                 redirect(controller: "cronogramaEjecucion", action: "index", id: planilla.contratoId)
             } else {
                 redirect(action: "list", id: planilla.contratoId)
@@ -527,8 +529,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def tiposPlanilla = TipoPlanilla.list([sort: 'nombre'])
 
         def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
-        def finalObra=null
-        if(periodosEjec.size() > 0) {
+        def finalObra = null
+        if (periodosEjec.size() > 0) {
             finalObra = periodosEjec?.pop()?.fechaFin
         }
 
@@ -868,9 +870,6 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         return strFecha
     }
-
-
-
 
 
     def resumen() {
@@ -2887,7 +2886,8 @@ class PlanillaController extends janus.seguridad.Shield {
         def numRegistros = 20
         def extras = " and tipoItem = 2"
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Item, "Item", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            def lista = buscadorService.buscar(Item, "Item", "excluyente", params, true, extras)
+            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {

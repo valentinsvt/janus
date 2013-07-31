@@ -371,6 +371,12 @@
                                 </g:link>
                             </li>
 
+                            <li>
+                                <a href="#" id="btnAvance">
+                                    <i class=" icon-paperclip"></i> Reporte de avance
+                                </a>
+                            </li>
+
                         </ul>
 
                     </div>
@@ -378,6 +384,26 @@
 
             </div>
         </g:if>
+
+
+        <div class="modal hide fade" id="modal-fecha" style="overflow: hidden">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">x</button>
+
+                <h3 id="modal_tittle_fecha">
+                    Fecha
+                </h3>
+            </div>
+
+            <div class="modal-body" id="modal_body_fecha">
+                <p>Ingrese la fecha hasta la cual desea ver el reporte de avance.</p>
+                <elm:datepicker name="fechaAvance" value="${new Date()}"/>
+            </div>
+
+            <div class="modal-footer" id="modal_footer_fecha">
+                <a href="#" class="btn btn-success" id="btnVerAvance">Ver</a>
+            </div>
+        </div>
 
 
         <div class="modal hide fade mediumModal" id="modal-var" style="overflow: hidden">
@@ -481,6 +507,15 @@
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
+
+            $("#btnAvance").click(function () {
+                $("#modal-fecha").modal("show");
+                return false;
+            });
+            $("#btnVerAvance").click(function () {
+                $(this).replaceWith(spinner);
+                location.href = "${createLink(controller: 'reportesPlanillas', action: 'reporteAvance', id:contrato.id)}?fecha=" + $("#fechaAvance").val();
+            });
 
             $(".number").keydown(function (ev) {
                 return validarInt(ev);

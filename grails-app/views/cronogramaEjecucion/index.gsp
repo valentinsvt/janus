@@ -99,6 +99,23 @@
             /*cursor : pointer;*/
             /*}*/
 
+        #divTabla {
+            max-height : 705px;
+            overflow   : auto;
+        }
+
+        .item_row.rowSelected {
+            background : #75B2DE !important;
+        }
+
+        .item_prc.rowSelected {
+            background : #84BFEA !important;
+        }
+
+        .item_f.rowSelected {
+            background : #94CDF7 !important;
+        }
+
         </style>
 
     </head>
@@ -137,6 +154,13 @@
                     %{--Eliminar Suspensión--}%
                     %{--</a>--}%
                 </div>
+
+                %{--<div class="btn-group">--}%
+                    %{--<a href="#" class="btn btn-info disabled" id="btnCambio">--}%
+                        %{--<i class="icon-exchange"></i>--}%
+                        %{--Modificar--}%
+                    %{--</a>--}%
+                %{--</div>--}%
 
             %{--<div class="btn-group">--}%
             %{--<a href="#" class="btn" id="btnGrafico">--}%
@@ -248,6 +272,51 @@
             });
 
             $(function () {
+                $("#btnCambio").click(function () {
+                    if (!$(this).hasClass("disabled")) {
+                        var $row = $(".item_row.rowSelected");
+                        var vol = $row.data("vol");
+
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(action:'modificarVolumen')}",
+                            data    : {
+                                vol : vol
+                            },
+                            success : function (msg) {
+                                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                                btnSave.click(function () {
+                                    if ($("#frmSave-modificacion").valid()) {
+                                        btnSave.replaceWith(spinner);
+                                        %{--$.ajax({--}%
+                                        %{--type    : "POST",--}%
+                                        %{--url     : "${createLink(action:'ampliacion')}",--}%
+                                        %{--data    : {--}%
+                                        %{--obra : "${obra.id}",--}%
+                                        %{--dias : $("#dias").val()--}%
+                                        %{--},--}%
+                                        %{--success : function (msg) {--}%
+                                        %{--$("#modal-forms").modal("hide");--}%
+                                        %{--updateTabla();--}%
+                                        %{--}--}%
+                                        %{--});--}%
+                                    }
+                                    return false;
+                                });
+
+                                $("#modalTitle-forms").html("Modificación");
+                                $("#modalBody-forms").html(msg);
+                                $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                                $("#modal-forms").modal("show");
+                            }
+                        });
+
+                    }
+                    return false;
+                });
+
                 $("#btnAmpl").click(function () {
                     $.ajax({
                         type    : "POST",
