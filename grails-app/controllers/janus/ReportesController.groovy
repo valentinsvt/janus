@@ -5454,6 +5454,8 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellHead2 = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellIzquierda = [border: Color.WHITE,
@@ -5477,20 +5479,47 @@ class ReportesController {
         headersTitulo.setAlignment(Element.ALIGN_CENTER);
         headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
         headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+        headersTitulo.add(new Paragraph("", times12bold));
         document.add(headersTitulo)
 
-        Paragraph headers = new Paragraph();
-        addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_LEFT);
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
-        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
-        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
+        PdfPTable header = new PdfPTable(3)
+        header.setWidthPercentage(100)
+        header.setWidths(arregloEnteros([25,8,65]))
 
-        addEmptyLine(headers, 1);
-        document.add(headers);
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
 
+        addCellTabla(header, new Paragraph("OBRA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.nombre, times8bold), prmsCellHead3)
 
+        addCellTabla(header, new Paragraph("CÓDIGO", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.codigo, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("DOCUMENTO DE REFERENCIA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.oficioIngreso, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaCreacionObra), times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA ACT. PRECIOS", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+
+        document.add(header);
 
 
         PdfPTable tablaHeader = new PdfPTable(8)
@@ -5533,15 +5562,15 @@ class ReportesController {
                 addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
                 addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
 
                 totales = r?.total
 
@@ -5552,7 +5581,7 @@ class ReportesController {
 
         addCellTabla(tablaTotales, new Paragraph("Total Materiales", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: valorTotal, minFractionDigits:
-                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
 
         addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
         addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
@@ -5587,15 +5616,15 @@ class ReportesController {
                 addCellTabla(tablaComposicion2, new Paragraph(j?.item, times8normal), prmsCellIzquierda)
                 addCellTabla(tablaComposicion2, new Paragraph(j?.unidad, times8normal), prmsCellHead)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
 
                 totalesMano = j?.total
                 valorTotalMano = (total2 += totalesMano)
@@ -5607,7 +5636,7 @@ class ReportesController {
 
         addCellTabla(tablaTotalesMano, new Paragraph("Total Mano de Obra:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalesMano, new Paragraph(g.formatNumber(number: valorTotalMano, minFractionDigits:
-                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
 
         addCellTabla(tablaTotalesMano, new Paragraph(" ", times10bold), prmsNum)
         addCellTabla(tablaTotalesMano, new Paragraph(" ", times10bold), prmsNum)
@@ -5637,15 +5666,15 @@ class ReportesController {
                 addCellTabla(tablaComposicion3, new Paragraph(k?.item, times8normal), prmsCellIzquierda)
                 addCellTabla(tablaComposicion3, new Paragraph(k?.unidad, times8normal), prmsCellHead)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
 
                 totalesEquipos = k?.total
                 valorTotalEquipos = (total3 += totalesEquipos)
@@ -5657,7 +5686,7 @@ class ReportesController {
 
         addCellTabla(tablaTotalesEquipos, new Paragraph("Total Equipos:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalesEquipos, new Paragraph(g.formatNumber(number: valorTotalEquipos, minFractionDigits:
-                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
 
 //
         PdfPTable tablaTotalGeneral = new PdfPTable(2)
@@ -5666,7 +5695,7 @@ class ReportesController {
 
         addCellTabla(tablaTotalGeneral, new Paragraph("Total General:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalGeneral, new Paragraph(g.formatNumber(number: (valorTotal + valorTotalMano + valorTotalEquipos), minFractionDigits:
-                3, maxFractionDigits: 3, format: "###,##0", locale: "ec"), times10bold), prmsNum)
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
 
 //        println("size: " + document.pageSize.getHeight())
 
@@ -5713,22 +5742,24 @@ class ReportesController {
         def total3 = 0
 
 
-        if (!params.tipo) {
-            params.tipo = "-1"
-        }
+//        if (!params.tipo) {
+//            params.tipo = "-1"
+//        }
         if (!params.rend) {
             params.rend = "screen"
         }
         if (!params.sp) {
             params.sp = '-1'
         }
-        if (params.tipo == "-1") {
-            params.tipo = "1,2,3"
-        }
+//        if (params.tipo == "-1") {
+//            params.tipo = "1,2,3"
+//        }
 
-//        params.tipo = "1"
+        params.tipo = "1"
+
         def wsp = ""
         if (params.sp.toString() != "-1") {
+            println("entro")
             wsp = "      AND v.sbpr__id = ${params.sp} \n"
         }
 
@@ -5747,6 +5778,7 @@ class ReportesController {
                 "g.grpo__id, g.grpodscr " +
                 "ORDER BY g.grpo__id ASC, i.itemcdgo"
 
+//        println(sql)
 
         def cn = dbConnectionService.getConnection()
         def res = cn.rows(sql.toString())
@@ -5786,6 +5818,8 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellHead2 = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellIzquierda = [border: Color.WHITE,
@@ -5809,17 +5843,40 @@ class ReportesController {
         headersTitulo.setAlignment(Element.ALIGN_CENTER);
         headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
         headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+        headersTitulo.add(new Paragraph("", times12bold));
         document.add(headersTitulo)
 
-        Paragraph headers = new Paragraph();
-        addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_LEFT);
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
-        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
-        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
-        addEmptyLine(headers, 1);
-        document.add(headers);
+        PdfPTable header = new PdfPTable(3)
+        header.setWidthPercentage(100)
+        header.setWidths(arregloEnteros([25,8,65]))
+
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("OBRA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.nombre, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("CÓDIGO", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.codigo, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("DOCUMENTO DE REFERENCIA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.oficioIngreso, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaCreacionObra), times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA ACT. PRECIOS", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8bold), prmsCellHead3)
+
+        document.add(header);
+
         PdfPTable tablaHeader = new PdfPTable(8)
         tablaHeader.setWidthPercentage(100)
         tablaHeader.setWidths(arregloEnteros([12, 36, 5, 9, 9, 9, 10, 10]))
@@ -5860,15 +5917,15 @@ class ReportesController {
                 addCellTabla(tablaComposicion, new Paragraph(r?.item, times8normal), prmsCellIzquierda)
                 addCellTabla(tablaComposicion, new Paragraph(r?.unidad, times8normal), prmsCellHead)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion, new Paragraph(g.formatNumber(number: r?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
 
                 totales = r?.total
 
@@ -5878,7 +5935,7 @@ class ReportesController {
         }
 
         addCellTabla(tablaTotales, new Paragraph("Total Materiales", times10bold), prmsCellDerecha)
-        addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: valorTotal, minFractionDigits: 3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+        addCellTabla(tablaTotales, new Paragraph(g.formatNumber(number: valorTotal, minFractionDigits: 3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
 
         addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
         addCellTabla(tablaTotales, new Paragraph(" ", times10bold), prmsNum)
@@ -5902,6 +5959,8 @@ class ReportesController {
     }
 
     def reporteComposicionMano() {
+
+//        println("MO!!!!" + params)
 
         def obra = Obra.get(params.id)
 
@@ -5934,6 +5993,7 @@ class ReportesController {
         }
         def wsp = ""
         if (params.sp.toString() != "-1") {
+            println("entro")
             wsp = "      AND v.sbpr__id = ${params.sp} \n"
         }
 
@@ -5952,6 +6012,7 @@ class ReportesController {
                 "g.grpo__id, g.grpodscr " +
                 "ORDER BY g.grpo__id ASC, i.itemcdgo"
 
+//        println(sql)
 
         def cn = dbConnectionService.getConnection()
         def res = cn.rows(sql.toString())
@@ -5991,6 +6052,8 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellHead2 = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
 
@@ -6010,32 +6073,44 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
-//        Paragraph headers = new Paragraph();
-//        addEmptyLine(headers, 1);
-//        headers.setAlignment(Element.ALIGN_CENTER);
-//        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-//        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
-//        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-//        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
-//
-
-
         Paragraph headersTitulo = new Paragraph();
         addEmptyLine(headersTitulo, 1);
         headersTitulo.setAlignment(Element.ALIGN_CENTER);
         headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
         headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+        headersTitulo.add(new Paragraph("", times12bold));
         document.add(headersTitulo)
 
-        Paragraph headers = new Paragraph();
-        addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_LEFT);
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
-        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
-        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
-        addEmptyLine(headers, 1);
-        document.add(headers);
+        PdfPTable header = new PdfPTable(3)
+        header.setWidthPercentage(100)
+        header.setWidths(arregloEnteros([25,8,65]))
+
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("OBRA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.nombre, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("CÓDIGO", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.codigo, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("DOCUMENTO DE REFERENCIA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.oficioIngreso, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaCreacionObra), times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA ACT. PRECIOS", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8bold), prmsCellHead3)
+
+        document.add(header);
 
 
 
@@ -6095,15 +6170,15 @@ class ReportesController {
                 addCellTabla(tablaComposicion2, new Paragraph(j?.item, times8normal), prmsCellIzquierda)
                 addCellTabla(tablaComposicion2, new Paragraph(j?.unidad, times8normal), prmsCellHead)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion2, new Paragraph(g.formatNumber(number: j?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
 
                 totalesMano = j?.total
                 valorTotalMano = (total2 += totalesMano)
@@ -6115,7 +6190,7 @@ class ReportesController {
 
         addCellTabla(tablaTotalesMano, new Paragraph("Total Mano de Obra:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalesMano, new Paragraph(g.formatNumber(number: valorTotalMano, minFractionDigits:
-                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
 
         addCellTabla(tablaTotalesMano, new Paragraph(" ", times10bold), prmsNum)
         addCellTabla(tablaTotalesMano, new Paragraph(" ", times10bold), prmsNum)
@@ -6229,6 +6304,8 @@ class ReportesController {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
         def prmsCellHead2 = [border: Color.WHITE,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellIzquierda = [border: Color.WHITE,
@@ -6247,37 +6324,44 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsRight: prmsRight,
                 prmsCellDerecha: prmsCellDerecha, prmsCellIzquierda: prmsCellIzquierda]
 
-//        Paragraph headers = new Paragraph();
-//        addEmptyLine(headers, 1);
-//        headers.setAlignment(Element.ALIGN_CENTER);
-//        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times12bold));
-//        headers.add(new Paragraph("COMPOSICIÓN", times10bold));
-//        headers.add(new Paragraph("OBRA: " + obra?.descripcion, times10bold));
-//        headers.add(new Paragraph("FECHA: " + new Date().format("dd-MM-yyyy"), times10bold));
-//
-//        addEmptyLine(headers, 1);
-//        document.add(headers);
-
         Paragraph headersTitulo = new Paragraph();
         addEmptyLine(headersTitulo, 1);
         headersTitulo.setAlignment(Element.ALIGN_CENTER);
         headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
         headersTitulo.add(new Paragraph("COMPOSICIÓN", times14bold));
+        headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+        headersTitulo.add(new Paragraph("", times12bold));
         document.add(headersTitulo)
 
-        Paragraph headers = new Paragraph();
-        addEmptyLine(headers, 1);
-        headers.setAlignment(Element.ALIGN_LEFT);
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
-        headers.add(new Paragraph("OBRA: " + obra?.nombre, times10bold));
-        headers.add(new Paragraph("CÓDIGO: ${obra?.codigo}                                  DOC. REFERENCIA:" + obra?.oficioIngreso, times10bold));
-        headers.add(new Paragraph("FECHA: ${printFecha(obra?.fechaCreacionObra)}                           FECHA ACT.PRECIOS:" + printFecha(obra?.fechaPreciosRubros), times10bold));
-        addEmptyLine(headers, 1);
-        document.add(headers);
+        PdfPTable header = new PdfPTable(3)
+        header.setWidthPercentage(100)
+        header.setWidths(arregloEnteros([25,8,65]))
 
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph("", times8bold), prmsCellHead3)
 
+        addCellTabla(header, new Paragraph("OBRA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.nombre, times8bold), prmsCellHead3)
 
+        addCellTabla(header, new Paragraph("CÓDIGO", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.codigo, times8bold), prmsCellHead3)
 
+        addCellTabla(header, new Paragraph("DOCUMENTO DE REFERENCIA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(obra?.oficioIngreso, times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaCreacionObra), times8bold), prmsCellHead3)
+
+        addCellTabla(header, new Paragraph("FECHA ACT. PRECIOS", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(" : ", times8bold), prmsCellHead3)
+        addCellTabla(header, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8bold), prmsCellHead3)
+
+        document.add(header);
 
         PdfPTable tablaHeader = new PdfPTable(8)
         tablaHeader.setWidthPercentage(100)
@@ -6349,15 +6433,15 @@ class ReportesController {
                 addCellTabla(tablaComposicion3, new Paragraph(k?.item, times8normal), prmsCellIzquierda)
                 addCellTabla(tablaComposicion3, new Paragraph(k?.unidad, times8normal), prmsCellHead)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.cantidad, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.punitario, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.transporte, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.costo, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
                 addCellTabla(tablaComposicion3, new Paragraph(g.formatNumber(number: k?.total, minFractionDigits:
-                        3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                        3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times8normal), prmsNum)
 
                 totalesEquipos = k?.total
                 valorTotalEquipos = (total3 += totalesEquipos)
@@ -6369,7 +6453,7 @@ class ReportesController {
 
         addCellTabla(tablaTotalesEquipos, new Paragraph("Total Equipos:", times10bold), prmsCellDerecha)
         addCellTabla(tablaTotalesEquipos, new Paragraph(g.formatNumber(number: valorTotalEquipos, minFractionDigits:
-                3, maxFractionDigits: 3, format: "###,###0", locale: "ec"), times10bold), prmsNum)
+                3, maxFractionDigits: 3, format: "##,##0", locale: "ec"), times10bold), prmsNum)
 
 
         document.add(tablaTitulo3)
