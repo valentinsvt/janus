@@ -30,7 +30,7 @@
             <li><a href="#tab-factores">Factores</a></li>
             <li><a href="#tab-indirecto">Costos Indirectos</a></li>
             <li class="desglose"><a href="#tab-desglose">Desglose Eq.</a></li>
-            <li class="especial"><a href="#tab-desglose">Tranp. Especial</a></li>
+            <li class="especial"><a href="#tab-especial">Tranp. Especial</a></li>
         </ul>
 
         <div id="tab-transporte" class="tab">
@@ -505,6 +505,46 @@
         </div>
     </div>
 
+    <div id="tab-especial" class="tab">
+        <div class="row-fluid">
+            <div class="span3">
+                Transporte Camioneta
+            </div>
+
+            <div class="span6">
+                <g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre" class="num"
+                          noSelection="${['': 'Seleccione...']}" value=""
+                          style="width: 300px; margin-left: -10px"/>
+            </div>
+            <div class="span2">
+                <g:textField class="inputVar num2" name="transporteCamioneta" style="width: 80px" type="number" maxlength="12" value="${obra?.transporteCamioneta}"/>
+            </div>
+            <div class="span1">
+                <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span3">
+                Transporte Acémila
+            </div>
+
+            <div class="span6">
+                <g:select name="transporteAcemila.id" id="trac" from="${transporteAcemila}" optionKey="id" optionValue="nombre" class="num"
+                          noSelection="${['': 'Seleccione...']}" value=""
+                          style="width: 300px; margin-left: -10px"/>
+            </div>
+            <div class="span2">
+                <g:textField class="inputVar num2" name="transporteAcemila" style="width: 80px" type="number" maxlength="12" value="${obra?.transporteAcemila}"/>
+            </div>
+            <div class="span1">
+                <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+            </div>
+        </div>
+
+
+    </div>
+
 
     </div>
 </g:form>
@@ -533,6 +573,16 @@
 
     $(".sum1, .sum2, .num").keydown(function (ev) {
         if (ev.keyCode == 190 || ev.keyCode == 188) {
+            if ($(this).val().indexOf(".") > -1) {
+                return false
+            }
+        }
+        return validarNum(ev);
+    });
+
+
+    $(".num2").keydown(function (ev) {
+        if (ev.keyCode == 190 || ev.keyCode == 188 || ev.keyCode == 110) {
             if ($(this).val().indexOf(".") > -1) {
                 return false
             }

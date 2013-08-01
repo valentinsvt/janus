@@ -32,12 +32,19 @@ class VariablesController {
 
 //        println("volquetes2" + volquetes2)
 
-        [choferes: choferes, volquetes: volquetes, obra: obra, par: par, volquetes2: volquetes2]
+
+        def transporteCamioneta =  Item.findAllByCodigoIlike('tc-%');
+        def transporteAcemila =  Item.findAllByCodigoIlike('ta-%');
+//
+//        println("TC" + transporteCamioneta);
+//        println("TA" + transporteAcemila);
+
+        [choferes: choferes, volquetes: volquetes, obra: obra, par: par, volquetes2: volquetes2, transporteCamioneta: transporteCamioneta, transporteAcemila: transporteAcemila]
     }
 
     def saveVar_ajax() {
 //        println "save vars aqui"
-//        println params
+        println params
 
         def obra = Obra.get(params.id)
         obra.properties = params

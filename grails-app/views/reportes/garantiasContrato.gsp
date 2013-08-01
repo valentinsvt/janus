@@ -77,14 +77,14 @@
 
             <div class="tituloPdf">
                 <p>
-                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>
+                    <b style="font-size: 18px">G.A.D. PROVINCIA DE PICHINCHA</b>
                 </p>
 
-                <p>
+                <p style="font-size: 14px">
                     COORDINACIÓN DE COMPRAS PÚBLICAS
                 </p>
 
-                <p>
+                <p style="font-size: 14px">
                     GARANTÍAS DE CONTRATO
                 </p>
             </div>
@@ -163,16 +163,14 @@
             <table border="1" class="borde">
                 <thead>
                     <tr>
-                        <th>Tipo</th>
-                        <th>N. Garantía</th>
-                        %{--<th>Nro</th>--}%
-                        <th>Aseguradora</th>
-                        <th>Documento</th>
-                        <th>Estado</th>
-                        <th>Emisión</th>
-                        <th>Vencimiento</th>
-                        <th>Monto</th>
-                        %{--<th>Fecha</th>--}%
+                        <th style="width: 150px">Tipo</th>
+                        <th style="width: 120px">N. Garantía</th>
+                        <th style="width: 300px">Aseguradora</th>
+                        <th style="width: 70px">Documento</th>
+                        <th style="width: 60px">Estado</th>
+                        <th style="width: 70px">Emisión</th>
+                        <th style="width: 70px">Vencimiento</th>
+                        <th style="width: 280px">Monto</th>
                     </tr>
                 </thead>
                 <tbody>

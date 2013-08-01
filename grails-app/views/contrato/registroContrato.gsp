@@ -315,12 +315,23 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Anticipo</div>
+                    <div class="span2 formato">Administrador</div>
 
                     <div class="span3">
                         <g:select name="administrador.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{ it.apellido + ' ' + it.nombre }}"
-                                  value="${contrato?.administradorId}"/>
+                                  value="${contrato?.administradorId}" class="required" noSelection="['' :'Seleccione...']"/>
                     </div>
+
+                    <div class="span2 formato">Delegado del Prefecto</div>
+
+                    <div class="span3">
+                        <g:select name="delegadoPrefecto.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{ it.apellido + ' ' + it.nombre }}"
+                                  value="${contrato?.delegadoPrefectoId}" class="required" noSelection="['': 'Seleccione...']"/>
+                    </div>
+
+
+
+
                 </div>
 
 

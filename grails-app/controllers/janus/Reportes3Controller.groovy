@@ -1840,6 +1840,8 @@ class Reportes3Controller {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellHead4 = [border: Color.WHITE,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellHead5 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
         def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -1889,8 +1891,8 @@ class Reportes3Controller {
         headers.add(new Paragraph(" "))
         headers.add(new Paragraph("REPORTE DE GARANTÍAS", times14bold ))
         headers.add(new Paragraph(" "))
-//        headers.add(new Paragraph("QUITO, " + printFecha(new Date().format("dd-MM-yyyy")), times12bold));
-        headers.add(new Paragraph("QUITO, " + new Date().format("dd-MM-yyyy"), times12bold));
+        headers.add(new Paragraph("QUITO, " + printFecha(new Date()), times12bold));
+//        headers.add(new Paragraph("QUITO, " + new Date().format("dd-MM-yyyy"), times12bold));
         headers.add(new Paragraph(" ", times10bold));
 
         PdfPTable tablaGarantia = new PdfPTable(13);
@@ -1912,26 +1914,19 @@ class Reportes3Controller {
         addCellTabla(tablaGarantia, new Paragraph("Cancelación", times8bold), prmsCellHead2)
 
         garantias.each {
-
-
-            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.codigo, times8bold), prmsCellHead3)
-            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre + " " + it?.contrato?.oferta?.proveedor?.apellidoContacto, times8bold), prmsCellHead4)
-            addCellTabla(tablaGarantia, new Paragraph(it?.tipoGarantia?.descripcion, times8bold), prmsCellHead4)
-            addCellTabla(tablaGarantia, new Paragraph(it?.codigo, times8bold), prmsCellHead3)
-//            addCellTabla(tablaGarantia, new Paragraph(it?.numeroRenovaciones, times8bold), prmsCellHead2)
-            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.numeroRenovaciones, format: "###,###", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8bold), prmsCellHead3)
-            addCellTabla(tablaGarantia, new Paragraph(it?.padre?.codigo, times8bold), prmsCellHead3)
-            addCellTabla(tablaGarantia, new Paragraph(it?.aseguradora?.nombre, times8bold), prmsCellHead4)
-            addCellTabla(tablaGarantia, new Paragraph(it?.tipoDocumentoGarantia?.descripcion, times8bold), prmsCellHead3)
-            addCellTabla(tablaGarantia, new Paragraph(it?.estado?.descripcion, times8bold), prmsCellHead3)
-//            addCellTabla(tablaGarantia, new Paragraph(it?.monto, times8bold), prmsCellHead2)
-            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellHead3)
-            addCellTabla(tablaGarantia, new Paragraph(it?.fechaInicio.format("dd-MM-yyyy"), times8bold), prmsCellHead3)
-            addCellTabla(tablaGarantia, new Paragraph(it?.fechaFinalizacion.format("dd-MM-yyyy"), times8bold), prmsCellHead3)
-            addCellTabla(tablaGarantia, new Paragraph(it?.cancelada?.format("dd-MM-yyyy"), times8bold), prmsCellHead3)
-//            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.cancelada, format: "##,##", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8bold), prmsCellHead2)
-
-
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.contrato?.oferta?.proveedor?.nombre + " " + it?.contrato?.oferta?.proveedor?.apellidoContacto, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoGarantia?.descripcion, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.numeroRenovaciones, format: "###,###", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.padre?.codigo, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.aseguradora?.nombre, times8normal), prmsCellHead4)
+            addCellTabla(tablaGarantia, new Paragraph(it?.tipoDocumentoGarantia?.descripcion, times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.estado?.descripcion, times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(g.formatNumber(number: it?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8normal), prmsCellHead5)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaInicio.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.fechaFinalizacion.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
+            addCellTabla(tablaGarantia, new Paragraph(it?.cancelada?.format("dd-MM-yyyy"), times8normal), prmsCellHead3)
         }
 
 

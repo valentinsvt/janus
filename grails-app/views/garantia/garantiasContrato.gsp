@@ -48,10 +48,10 @@
                     <i class="icon-double-angle-left"></i>
                     Contrato
                 </g:link>
-                <a href="#" id="btnReporte" class="btn">
+                <a href="#" id="btnReporte" class="btn"><i class="icon-print"></i>
                     Reporte
                 </a>
-                <a href="#" id="btnReporteGeneral" class="btn">
+                <a href="#" id="btnReporteGeneral" class="btn"><i class="icon-print"></i>
                     Reporte General Garantías
                 </a>
 
