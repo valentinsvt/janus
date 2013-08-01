@@ -93,7 +93,7 @@ class TramiteController extends janus.seguridad.Shield {
 
     def verTramitesAjax(){
 //        params.id="MEM-132-DGES-13"
-        //para montar    showmount -e 192.168.0.13         mount -t nfs 192.168.0.13:/opt/pruebas/sad2013 sad/
+        //para montar    showmount -e 192.168.0.13           mount -t nfs 192.168.0.13:/opt/exportSad /mnt/sad/  /// en el servidor sad  /etc/rc.d/init.d/portmap start   service nfs start
         //
         def memo = params.id
         def header=[:]
