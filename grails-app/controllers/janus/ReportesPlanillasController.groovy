@@ -35,12 +35,27 @@ class ReportesPlanillasController {
         })
     }
 
-    private String nombrePersona(Persona persona) {
+    private String nombrePersona(persona, tipo) {
+//        println persona
+//        println tipo
+        def str = ""
         if (persona) {
-            return cap((persona.titulo ? persona.titulo + " " : "") + persona.nombre + " " + persona.apellido)
-        } else {
-            return ""
+            switch (tipo) {
+                case "pers":
+                    str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombre + " " + persona.apellido)
+                    break;
+                case "prov":
+                    str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombreContacto + " " + persona.apellidoContacto)
+                    break;
+            }
         }
+//        println str
+//        println "****************************************************"
+        return str
+    }
+
+    private String nombrePersona(persona) {
+        return nombrePersona(persona, "pers")
     }
 
     def reporteAvance() {
@@ -395,7 +410,7 @@ class ReportesPlanillasController {
             def administrador = contrato.administrador
 
 //            def strContratista = cap(contratista.titulo + " " + contratista.nombreContacto + " " + contratista.apellidoContacto + "\nContratista")
-            def strContratista = nombrePersona(contratista) + "\nContratista"
+            def strContratista = nombrePersona(contratista, "prov") + "\nContratista"
             def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
             def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
             def strAdmin = nombrePersona(administrador) + "\nAdministrador"
@@ -416,9 +431,9 @@ class ReportesPlanillasController {
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph(strFiscalizador, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
-                addCellTabla(tablaFirmas, new Paragraph(strFechaPresentacion, fontTdFirmas), [height: 58, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_TOP])
-                addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 58, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaFirmas, new Paragraph(strFechaAprobacion, fontTdFirmas), [height: 58, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_TOP])
+                addCellTabla(tablaFirmas, new Paragraph(strFechaPresentacion, fontTdFirmas), [height: 45, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_TOP])
+                addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [height: 45, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaFirmas, new Paragraph(strFechaAprobacion, fontTdFirmas), [height: 45, bwb: 1, bcb: Color.BLACK, border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_TOP])
 
                 addCellTabla(tablaFirmas, new Paragraph(strSubdirector, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])

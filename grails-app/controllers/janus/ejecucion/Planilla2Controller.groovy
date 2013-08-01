@@ -572,6 +572,19 @@ class Planilla2Controller {
         def override = false
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
+
+        def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
+        def liquidacion = planilla.fechaFin >= prej[0].fechaFin
+
+        if (liquidacion) {
+            if (!contrato.fechaPedidoRecepcionContratista || !contrato.fechaPedidoRecepcionFiscalizador) {
+                flash.message = "Por favor ingrese las fechas de pedido de recepción para generar la planilla final de avance (liquidación)"
+                flash.clase = "alert-error"
+                redirect(controller: "contrato", action: "fechasPedidoRecepcion", id: contrato.id)
+                return
+            }
+        }
+
         def costo = Planilla.findByTipoPlanillaAndFechaIngresoLessThan(TipoPlanilla.findByCodigo("C"), planilla.fechaIngreso)
         if (costo) {
             if (costo.padreCosto == null) {
@@ -645,10 +658,6 @@ class Planilla2Controller {
         def bodyMultaRetraso = ""
 
         def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
-
-
-        def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
-        def liquidacion = planilla.fechaFin >= prej[0].fechaFin
 
         if (pa.size() == 0) {
             println "creando periodos "
@@ -1215,9 +1224,9 @@ class Planilla2Controller {
         }
         def prej2 = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio', order: "asc"])
 
-        if(planilla.fechaFin>=prej2.last().fechaFin){
-            planilla.descuentos = (contrato.anticipo-anterior).toDouble().round(2)
-        }else{
+        if (planilla.fechaFin >= prej2.last().fechaFin) {
+            planilla.descuentos = (contrato.anticipo - anterior).toDouble().round(2)
+        } else {
             planilla.descuentos = (((valorAnt + planilla.valor) / contrato.monto) * contrato.anticipo - anterior).toDouble().round(2)
         }
 
