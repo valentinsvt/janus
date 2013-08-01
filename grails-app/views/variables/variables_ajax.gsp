@@ -29,7 +29,8 @@
             <li><a href="#tab-transporte">Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>
             <li><a href="#tab-indirecto">Costos Indirectos</a></li>
-            <li class="desglose"><a href="#tab-desglose">De Equipos</a></li>
+            <li class="desglose"><a href="#tab-desglose">Desglose Eq.</a></li>
+            <li class="especial"><a href="#tab-desglose">Tranp. Especial</a></li>
         </ul>
 
         <div id="tab-transporte" class="tab">
