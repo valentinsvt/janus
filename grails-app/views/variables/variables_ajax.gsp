@@ -500,11 +500,12 @@
 
             <div class="span2">
                 %{--<g:textField type="text" name="totalDesglose" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo + obra?.desgloseMecanico + obra?.desgloseCombustible + obra?.desgloseRepuestos + obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
-                <input type="text" id="totalDesglose" class="inputVar num" value="0.0", maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                <input type="text" id="totalDesglose" class="inputVar num" value="0.0" readonly/>
             </div>
         </div>
     </div>
 
+    %{--/* TODO: poner en obra los id de los item de tranposte camioneta y transporte acemila */--}%
     <div id="tab-especial" class="tab">
         <div class="row-fluid">
             <div class="span3">
@@ -517,10 +518,11 @@
                           style="width: 300px; margin-left: -10px"/>
             </div>
             <div class="span2">
-                <g:textField class="inputVar num2" name="transporteCamioneta" style="width: 80px" type="number" maxlength="12" value="${obra?.transporteCamioneta}"/>
+                %{--<g:textField class="inputVar num2" name="transporteCamioneta" style="width: 60px" type="number" maxlength="12" value="${obra?.transporteCamioneta}"/>--}%
+                <g:textField class="inputVar num2" name="transporteCamioneta" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.transporteCamioneta), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
             <div class="span1">
-                <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+                <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}"  readonly="true"  style="width: 30px; margin-left: 5px"/>
             </div>
         </div>
 
@@ -535,10 +537,10 @@
                           style="width: 300px; margin-left: -10px"/>
             </div>
             <div class="span2">
-                <g:textField class="inputVar num2" name="transporteAcemila" style="width: 80px" type="number" maxlength="12" value="${obra?.transporteAcemila}"/>
+                <g:textField class="inputVar num2" name="transporteAcemila" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.transporteAcemila), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
             <div class="span1">
-                <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+                <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}"  readonly="true"  style="width: 30px; margin-left: 5px"/>
             </div>
         </div>
 

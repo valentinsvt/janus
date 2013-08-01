@@ -92,6 +92,9 @@ class ObraFPController {
             return
         }
 
+
+
+
         res = verificaMatriz(obra__id)
         if (res != "") {
             render res
@@ -141,13 +144,21 @@ class ObraFPController {
 //        //println "pasa verificaMatriz"
 //        println "verifica_precios \n" + verifica_precios(obra__id)
 
-        /* --------------------------------------- procesaMatriz --------------------------------
-        * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
-        * 1. Eliminar las tablas obxx_user si existen y crear nuevas                            *
-        * 2. Se descomponen los items de la obra y se los inserta en vlobitem: sp_obra          *
+        //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        //poneTransporteEspecial(${obra_id})
+
+        //recalcula valores de la composicion de al obra
+        //ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-        * ------------------------------------------------------------------------------------- */
+            /* --------------------------------------- procesaMatriz --------------------------------
+            * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
+            * 1. Eliminar las tablas obxx_user si existen y crear nuevas                            *
+            * 2. Se descomponen los items de la obra y se los inserta en vlobitem: sp_obra          *
+
+
+            * ------------------------------------------------------------------------------------- */
         /* 1. Eliminar las tablas obxx_user si existen y crear nuevas                           */
         creaTablas(obra__id, "S")  /* cambio obra__id */
         numeroCampos = 0
@@ -269,6 +280,34 @@ class ObraFPController {
         cn.close()
         return er
     }
+
+    def poneTransporteEspecial(id) {
+        def res
+        def cn = dbConnectionService.getConnection()
+        def peso = 0.0
+        def tx_sql = "select sum(voitcntd*itempeso) peso from vlobitem, item, tpls " +
+                "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
+                "tpls.tpls__id = item.tpls__id and tplscdgo like 'P%'"
+        cn.eachRow(tx_sql.toString()) { row ->
+            peso += row.peso
+        }
+        x_sql = "select sum(voitcntd*itempeso*1.7) peso from vlobitem, item, tpls " +
+                "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
+                "tpls.tpls__id = item.tpls__id and tplscdgo like 'V%'"
+        cn.eachRow(tx_sql.toString()) { row ->
+            peso += row.peso
+        }
+        // hallar los id de camioneta y acémila
+        x_sql = "update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
+                "where item__id = ${camioneta}"
+        res = cn.execute(txSql.toString())
+        x_sql = "update vlob set vlobcntd = ${peso * obra.distancia_acem} " +
+                "where item__id = ${acemila}"
+        res += cn.execute(txSql.toString())
+        cn.close()
+        return res
+    }
+
 
 /*
     def nombresCortos() {
