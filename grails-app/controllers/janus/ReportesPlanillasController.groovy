@@ -58,6 +58,311 @@ class ReportesPlanillasController {
         return nombrePersona(persona, "pers")
     }
 
+    def reporteDiferencias() {
+        def contrato = Contrato.get(params.id)
+        def obra = contrato.oferta.concurso.obra
+
+        def planillasAvance = Planilla.withCriteria {
+            eq("contrato", contrato)
+            eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
+            order("fechaInicio", "asc")
+        }
+
+        def planillasCosto = Planilla.withCriteria {
+            eq("contrato", contrato)
+            eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
+        }
+
+        def planillaAnticipo = Planilla.withCriteria {
+            eq("contrato", contrato)
+            eq("tipoPlanilla", TipoPlanilla.findByCodigo("A"))
+        }[0]
+
+        def indirecto = obra.totales / 100
+        preciosService.ac_rbroObra(obra.id)
+        def detalles = [:]
+        def volumenes = VolumenesObra.findAllByObra(obra, [sort: "item"])
+
+        volumenes.each { vol ->
+            vol.refresh()
+            def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
+            def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
+
+//            def precio = preciosService.rbro_pcun_v2_item(obra.id, vol.subPresupuesto.id, vol.item.id)
+
+            if (!detalles[vol.item]) {
+                detalles[vol.item] = [
+                        codigo: vol.item.codigo,
+                        nombre: vol.item.nombre,
+                        unidad: vol.item.unidad.codigo,
+                        precio: precio,
+                        cantidad: [
+                                contratado: 0,
+                                ejecutado: 0
+                        ],
+                        valor: [
+                                contratado: 0,
+                                ejecutado: 0
+                        ]
+                ]
+            }
+            detalles[vol.item].cantidad.contratado += vol.cantidad
+            detalles[vol.item].valor.contratado += ((vol.cantidad * precio).toDouble().round(2))
+        }
+
+        planillasAvance.each { pla ->
+            def det = DetallePlanilla.findAllByPlanilla(pla)
+            det.each { dt ->
+                if (detalles[dt.volumenObra.item]) {
+                    detalles[dt.volumenObra.item].cantidad.ejecutado += dt.cantidad
+                    detalles[dt.volumenObra.item].valor.ejecutado += dt.monto
+                } else {
+                    println "no existe detalle para " + dt.volumenObra.item + "???"
+                }
+            }
+        }
+
+        def baos = new ByteArrayOutputStream()
+        def name = "diferencias_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+        Font fontNombre = new Font(Font.TIMES_ROMAN, 7, Font.NORMAL);
+
+        def prmsTdNoBorder = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+
+        Font fontThHeader = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTdHeader = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        def formatoFechasTabla = "dd-MM-yyyy"
+
+        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
+        Image logo = Image.getInstance(logoPath);
+        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+
+        document.resetHeader()
+        document.resetFooter()
+
+        document.open();
+        PdfContentByte cb = pdfw.getDirectContent();
+        document.addTitle("Cuadro de diferencias de volúmenes entre contratados y ejecutados");
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, planillas");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("Cuadro de diferencias de volúmenes entre contratados y ejecutados", fontTituloGad));
+        addEmptyLine(preface, 1);
+        Paragraph preface2 = new Paragraph();
+        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        addEmptyLine(preface2, 1);
+        document.add(logo)
+        document.add(preface);
+        document.add(preface2);
+
+        /* ************************************************************** HEADER ****************************************************************************************************/
+        PdfPTable tablaHeaderPlanilla = new PdfPTable(5);
+        tablaHeaderPlanilla.setWidthPercentage(100);
+        tablaHeaderPlanilla.setWidths(arregloEnteros([12, 24, 10, 12, 24]))
+        tablaHeaderPlanilla.setSpacingAfter(10f)
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Obra", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.nombre, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Lugar", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph((obra.lugar?.descripcion ?: ""), fontTdHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontTdHeader), prmsTdNoBorder)
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Ubicación", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre, fontTdHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Monto contrato", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.monto, 2), fontTdHeader), prmsTdNoBorder)
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Contratista", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(contrato.oferta.proveedor.nombre, fontTdHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontTdHeader), prmsTdNoBorder)
+
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("Plazo", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph(numero(contrato.plazo, 0) + " días", fontTdHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontThHeader), prmsTdNoBorder)
+        addCellTabla(tablaHeaderPlanilla, new Paragraph("", fontTdHeader), prmsTdNoBorder)
+
+        document.add(tablaHeaderPlanilla);
+        /* ************************************************************** FIN HEADER ****************************************************************************************************/
+        /* ************************************************************** DETALLES ****************************************************************************************************/
+        PdfPTable tablaCant = new PdfPTable(3);
+        tablaCant.setWidthPercentage(100);
+        addCellTabla(tablaCant, new Paragraph("Cantidades", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+        addCellTabla(tablaCant, new Paragraph("Ejecutadas", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaCant, new Paragraph("En más", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaCant, new Paragraph("En menos", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        PdfPTable tablaVal = new PdfPTable(3);
+        tablaVal.setWidthPercentage(100);
+        addCellTabla(tablaVal, new Paragraph("Valores", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+        addCellTabla(tablaVal, new Paragraph("Ejecutados", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaVal, new Paragraph("En más", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaVal, new Paragraph("En menos", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        PdfPTable tablaDetalles = new PdfPTable(11);
+        tablaDetalles.setWidthPercentage(100);
+        tablaDetalles.setWidths(arregloEnteros([10, 24, 3, 6, 8, 8, 8, 8, 8, 8, 8]))
+        tablaDetalles.setSpacingAfter(10f)
+
+        addCellTabla(tablaDetalles, new Paragraph("N.", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDetalles, new Paragraph("Descripción del rubro", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDetalles, new Paragraph("U.", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDetalles, new Paragraph("Precio unitario", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDetalles, new Paragraph("Volumen contrat.", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDetalles, tablaCant, [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+        addCellTabla(tablaDetalles, tablaVal, [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+
+        def height = 12
+
+        def totalEjecutado = 0, totalMas = 0, totalMenos = 0
+        def tot = 0
+
+        detalles.each { k, det ->
+            def cantMas = 0, cantMenos = 0, valMas = 0, valMenos = 0
+            def difCant = det.cantidad.contratado - det.cantidad.ejecutado
+            def difVal = det.valor.contratado - det.valor.ejecutado
+            if (difCant >= 0) {
+                cantMas = difCant
+            } else {
+                cantMenos = difCant
+            }
+            if (difVal >= 0) {
+                valMas = difVal
+            } else {
+                valMenos = difVal
+            }
+
+            addCellTabla(tablaDetalles, new Paragraph(det.codigo, fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(det.nombre, fontNombre), [height: height, border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(det.unidad, fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(det.precio, 2), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(det.cantidad.contratado, 2), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+            tot += (det.precio * det.cantidad.contratado)
+
+            addCellTabla(tablaDetalles, new Paragraph(numero(det.cantidad.ejecutado, 2), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(cantMas, 2, "hide"), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(cantMenos, 2, "hide"), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+            addCellTabla(tablaDetalles, new Paragraph(numero(det.valor.ejecutado, 2), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(valMas, 2, "hide"), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(numero(valMenos, 2, "hide"), fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+            totalEjecutado += det.valor.ejecutado
+            totalMas += valMas
+            totalMenos += valMenos
+        }
+
+        addCellTabla(tablaDetalles, new Paragraph("", fontTd), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 8])
+        addCellTabla(tablaDetalles, new Paragraph(numero(totalEjecutado, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDetalles, new Paragraph(numero(totalMas, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDetalles, new Paragraph(numero(totalMenos, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tablaDetalles);
+        /* ************************************************************** FIN DETALLES ****************************************************************************************************/
+        /* ************************************************************** DIFERENCIA ****************************************************************************************************/
+        def totalMenosMas = Math.abs(totalMenos) - totalMas
+        def totalEjecContrat = totalEjecutado - contrato.monto
+
+        def num = (totalMenosMas / contrato.monto) * 100
+
+        PdfPTable tablaPrct = new PdfPTable(1);
+        tablaPrct.setWidthPercentage(100);
+        addCellTabla(tablaPrct, new Paragraph("%", fontTh), [bct: Color.WHITE, bwt: 0.1, bwr: 0.1, bwl: 0.1, bwb: 0.1, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaPrct, new Paragraph(numero(num, 2), fontTh), [bcb: Color.WHITE, bwb: 0.1, bwr: 0.1, bwl: 0.1, bwt: 0.1, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        PdfPTable tablaDifs = new PdfPTable(3);
+        tablaDifs.setWidthPercentage(100);
+        addCellTabla(tablaDifs, new Paragraph(numero(Math.abs(totalMenos), 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDifs, new Paragraph("-", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDifs, new Paragraph(numero(Math.abs(totalMas), 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDifs, new Paragraph(numero(totalMenosMas, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+
+        addCellTabla(tablaDifs, new Paragraph(numero(totalEjecutado, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDifs, new Paragraph("-", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDifs, new Paragraph(numero(contrato.monto, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDifs, new Paragraph(numero(totalEjecContrat, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+
+        PdfPTable tablaDiferencia = new PdfPTable(3);
+        tablaDiferencia.setWidthPercentage(100);
+        tablaDiferencia.setWidths(arregloEnteros([64, 12, 24]))
+        tablaDiferencia.setSpacingAfter(10f)
+
+        addCellTabla(tablaDiferencia, new Paragraph("DIFERENCIA", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDiferencia, tablaPrct, [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDiferencia, tablaDifs, [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tablaDiferencia)
+        /* ************************************************************** FIN DIFERENCIA ****************************************************************************************************/
+        /* ************************************************************** COSTO ****************************************************************************************************/
+        def totalCosto = planillasCosto.sum { it.valor } ?: 0
+        def prctCosto = (totalCosto / contrato.monto) * 100
+
+        PdfPTable tablaCosto = new PdfPTable(3);
+        tablaCosto.setWidthPercentage(100);
+        tablaCosto.setWidths(arregloEnteros([64, 12, 24]))
+        tablaCosto.setSpacingAfter(10f)
+
+        addCellTabla(tablaCosto, new Paragraph("OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE", fontTh), [padding: 8, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaCosto, new Paragraph(numero(prctCosto, 2), fontTh), [padding: 8, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaCosto, new Paragraph(numero(totalCosto, 2), fontTh), [padding: 8, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tablaCosto)
+        /* ************************************************************** FIN COSTO ****************************************************************************************************/
+        /* ************************************************************** TOTAL ****************************************************************************************************/
+
+        def totalAdicional = totalCosto + totalMenosMas
+        def prctAdicional = (totalAdicional / contrato.monto) / 100
+
+        PdfPTable tablaTots = new PdfPTable(3);
+        tablaTots.setWidthPercentage(100);
+        addCellTabla(tablaTots, new Paragraph(numero(totalCosto, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaTots, new Paragraph("+", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaTots, new Paragraph(numero(totalMenosMas, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaTots, new Paragraph(numero(totalAdicional, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+
+        PdfPTable tablaTotal = new PdfPTable(3);
+        tablaTotal.setWidthPercentage(100);
+        tablaTotal.setWidths(arregloEnteros([64, 12, 24]))
+        tablaTotal.setSpacingAfter(10f)
+
+        addCellTabla(tablaTotal, new Paragraph("TOTAL OBRAS ADICIONALES", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaTotal, new Paragraph(numero(prctAdicional, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaTotal, tablaTots, [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        document.add(tablaTotal)
+        /* ************************************************************** FIN DIFERENCIA ****************************************************************************************************/
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
     def reporteAvance() {
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def contrato = Contrato.get(params.id)

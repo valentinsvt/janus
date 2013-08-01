@@ -49,7 +49,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
 
-        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
+        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
     }
 

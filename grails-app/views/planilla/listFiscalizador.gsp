@@ -23,6 +23,9 @@
             </div>
         </g:if>
 
+        <g:set var="cont" value="${1}"/>
+        <g:set var="prej" value="${janus.pac.PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])}"/>
+
         <div class="tituloTree">
             Planillas del contrato de la obra ${obra.descripcion}
         </div>
@@ -37,6 +40,14 @@
                     <i class="icon-file"></i>
                     Nueva planilla
                 </g:link>
+
+                <g:if test="${planillaInstanceList.last().fechaFin >= prej[0].fechaFin}">
+                    <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
+                        <i class="icon-exchange"></i>
+                        Reporte de diferencias
+                    </g:link>
+                </g:if>
+
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -63,8 +74,6 @@
                         <th>Pagos</th>
                     </tr>
                 </thead>
-                <g:set var="cont" value="${1}"/>
-                <g:set var="prej" value="${janus.pac.PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])}"/>
                 <tbody class="paginate">
                     <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
                         <tr style="font-size: 10px">
