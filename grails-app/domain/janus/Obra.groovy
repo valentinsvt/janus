@@ -96,8 +96,13 @@ class Obra implements Serializable {
 
     int liquidacion  = 0
 
-    double transporteCamioneta
-    double transporteAcemila
+    Item transporteCamioneta
+    Item transporteAcemila
+
+    double distanciaCamioneta
+    double distanciaAcemila
+
+
 
     static mapping = {
         table 'obra'
@@ -201,8 +206,11 @@ class Obra implements Serializable {
             coordenadas column: 'obracrdn'
             liquidacion column: 'obralqdc'
 
-            transporteCamioneta column: 'obratrcm'
-            transporteAcemila column: 'obratrac'
+            transporteCamioneta column: 'itemtrcm'
+            transporteAcemila column: 'itemtrac'
+
+            distanciaCamioneta column: 'obratrcm'
+            distanciaAcemila column: 'obratrac'
         }
     }
     static constraints = {
@@ -302,6 +310,9 @@ class Obra implements Serializable {
 
         transporteCamioneta(blank: true, nullable: true, attibutes: [title: 'Transporte en Camioneta'])
         transporteAcemila(blank: true, nullable: true, attributes: [title: 'Transporte en Acemila'])
+
+        distanciaCamioneta(blank: true, nullable: true)
+        distanciaAcemila(blank: true, nullable: true)
     }
 
     String toString() {

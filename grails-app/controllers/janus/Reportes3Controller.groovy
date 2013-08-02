@@ -1725,11 +1725,16 @@ class Reportes3Controller {
     def reporteContrato () {
 
         def obra = Obra.get(1430)
-        def concurso = janus.pac.Concurso.findByObra(obra)
-        def oferta = janus.pac.Oferta.findByConcurso(concurso)
-        def contrato = Contrato.findByObra(obra)
 
-        def auxiliar = Auxiliar.get(1)
+//        println("obra" + obra)
+//
+        def concurso = janus.pac.Concurso.findByObra(obra)
+//
+        def oferta = janus.pac.Oferta.findByConcurso(concurso)
+
+        def contrato = Contrato.findByOferta(oferta)
+
+//        def auxiliar = Auxiliar.get(1)
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
@@ -1744,6 +1749,7 @@ class Reportes3Controller {
         def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
         def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
+        def prmsCellLeft3 = [border: Color.WHITE, valign: Element.ALIGN_LEFT, align: Element.ALIGN_LEFT]
         def prmsSubtotal = [border: Color.BLACK, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
@@ -1783,8 +1789,7 @@ class Reportes3Controller {
         Paragraph headers = new Paragraph();
         headers.setAlignment(Element.ALIGN_LEFT);
 
-        headers.add(new Paragraph("Oficio N°:",times18bold ))
-        headers.add(new Paragraph(" "))
+        headers.add(new Paragraph("Oficio N°:",times12bold ))
         headers.add(new Paragraph("Quito, " + printFecha(new Date()), times12bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(" ", times10bold));
@@ -1801,7 +1806,8 @@ class Reportes3Controller {
         tablaTexto.setWidthPercentage(90)
         tablaTexto.setWidths(arregloEnteros([90, 10]));
 
-        addCellTabla(tablaTexto, new Paragraph("Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato" + contrato?.codigo, times8normal), prmsCellLeft2)
+        addCellTabla(tablaTexto, new Paragraph("Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato " + obra?.porcentajeAnticipo, times8normal), prmsCellLeft3)
+        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
 
 
 

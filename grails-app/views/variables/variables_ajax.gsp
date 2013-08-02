@@ -513,13 +513,13 @@
             </div>
 
             <div class="span6">
-                <g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre" class="num"
-                          noSelection="${['': 'Seleccione...']}" value=""
+                <g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
+                          value="${obra?.transporteCamioneta?.id}"
                           style="width: 300px; margin-left: -10px"/>
             </div>
             <div class="span2">
-                %{--<g:textField class="inputVar num2" name="transporteCamioneta" style="width: 60px" type="number" maxlength="12" value="${obra?.transporteCamioneta}"/>--}%
-                <g:textField class="inputVar num2" name="transporteCamioneta" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.transporteCamioneta), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                %{--<g:textField class="inputVar num2" name="distanciaCamioneta" style="width: 60px" type="number" maxlength="12" value="${obra?.distanciaCamioneta}"/>--}%
+                <g:textField class="inputVar num3" name="distanciaCamioneta" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaCamioneta), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
             <div class="span1">
                 <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}"  readonly="true"  style="width: 30px; margin-left: 5px"/>
@@ -532,12 +532,12 @@
             </div>
 
             <div class="span6">
-                <g:select name="transporteAcemila.id" id="trac" from="${transporteAcemila}" optionKey="id" optionValue="nombre" class="num"
-                          noSelection="${['': 'Seleccione...']}" value=""
+                <g:select name="transporteAcemila.id" id="trac" from="${transporteAcemila}" optionKey="id" optionValue="nombre"
+                           value="${obra?.transporteAcemila?.id}"
                           style="width: 300px; margin-left: -10px"/>
             </div>
             <div class="span2">
-                <g:textField class="inputVar num2" name="transporteAcemila" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.transporteAcemila), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                <g:textField class="inputVar num3" name="distanciaAcemila" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaAcemila), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
             </div>
             <div class="span1">
                 <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}"  readonly="true"  style="width: 30px; margin-left: 5px"/>
@@ -591,6 +591,38 @@
         }
         return validarNum(ev);
     });
+
+
+
+    $(".num3").bind({
+        keydown : function (ev) {
+            // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+            if (ev.keyCode == 190 || ev.keyCode == 110) {
+                var val = $(this).val();
+                if (val.length == 0) {
+                    $(this).val("0");
+                }
+                return val.indexOf(".") == -1;
+            } else {
+                // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                return validarNum(ev);
+            }
+        }, //keydown
+        keyup   : function () {
+            var val = $(this).val();
+            // esta parte valida q no ingrese mas de 2 decimales
+            var parts = val.split(".");
+            if (parts.length > 1) {
+                if (parts[1].length > 2) {
+                    parts[1] = parts[1].substring(0, 2);
+                    val = parts[0] + "." + parts[1];
+                    $(this).val(val);
+                }
+            }
+          }
+    });
+
+
 
     function suma(items, update) {
         var sum1 = 0;

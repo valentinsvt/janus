@@ -200,6 +200,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         def dsps = obra.distanciaPeso
         def dsvl = obra.distanciaVolumen
         def lugar = obra.lugar
+        def estado = obra.estado
         def prch = 0
         def prvl = 0
 
@@ -207,7 +208,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         def indirecto = obra.totales/100
 
 
-        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
+        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado]
 
     }
 

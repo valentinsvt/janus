@@ -551,7 +551,18 @@
 
     %{--});--}%
 
+    %{--console.log("estado: " + '${estado}')--}%
 
+  if(${estado == 'R'}){
+
+
+      $(".col_delete").hide()
+
+  }else {
+
+      $(".col_delete").show()
+
+  }
 
 
 
