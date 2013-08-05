@@ -1838,6 +1838,7 @@ class Reportes3Controller {
         Paragraph prueba = new Paragraph();
         prueba.setAlignment(Element.ALIGN_JUSTIFIED);
 
+
         prueba.add(new Paragraph("Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato " + contrato?.codigo + ", ", times10normal ))
 
         prueba.add(new Paragraph("para la construcción de " + obra?.descripcion, times10normal));
