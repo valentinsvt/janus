@@ -145,7 +145,8 @@ class ObraFPController {
 //        println "verifica_precios \n" + verifica_precios(obra__id)
 
         //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        //poneTransporteEspecial(${obra_id})
+
+        //poneTransporteEspecial(obra__id)
 
         //recalcula valores de la composicion de al obra
         //ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
@@ -281,30 +282,80 @@ class ObraFPController {
         return er
     }
 
+
+    /*
+    * No se pueden crear dinámicamente los rubors de tranaporte especial porque no se sabe el subpresupuesto
+    *   se debe incluir un rubro para camioneta y otro para acémila como máximo.
+    *
+    *   PROBLEMAS: no se sabe en que subpresupuesto crear los rubros.
+    *              si se deja libre para que el usuario cree los rubros en VLOB, se debe
+     *             registrar la distancia correspondiente en VLOB y este proc. debe poner la cantidad.
+    */
     def poneTransporteEspecial(id) {
+
+        println "inicia proceso... "
         def res
-        def cn = dbConnectionService.getConnection()
-        def peso = 0.0
-        def tx_sql = "select sum(voitcntd*itempeso) peso from vlobitem, item, tpls " +
-                "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
-                "tpls.tpls__id = item.tpls__id and tplscdgo like 'P%'"
-        cn.eachRow(tx_sql.toString()) { row ->
-            peso += row.peso
+        def camioneta = Item.get(Obra.get(id).transporteCamioneta.id)
+        def acemila   = Item.get(Obra.get(id).transporteAcemila.id)
+        if (camioneta || acemila){
+            def cn = dbConnectionService.getConnection()
+            def peso = 0.0
+            def tx_sql = "select sum(voitcntd*itempeso) peso from vlobitem, item, tpls " +
+                    "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
+                    "tpls.tpls__id = item.tpls__id and tplscdgo like 'P%'"
+            cn.eachRow(tx_sql.toString()) { row ->
+                peso += row.peso
+            }
+            println "peso del peso: ${peso}"
+            tx_sql = "select sum(voitcntd*itempeso*1.7) peso from vlobitem, item, tpls " +
+                    "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
+                    "tpls.tpls__id = item.tpls__id and tplscdgo like 'V%'"
+            cn.eachRow(tx_sql.toString()) { row ->
+                println "peso al volumen: ${row.peso}"
+                peso += row.peso
+            }
+            println "peso total: ${peso}"
+            /* verifica que hay a los rubros en vlob */
+            if (camioneta) {
+                def itemCamioneta = VolumenesObra.findAllByItem(Item.get(Obra.get(id).transporteCamioneta.id))
+                println itemCamioneta
+                if (itemCamioneta) {
+                    println "ya existe el rubro de camioneta: actualizando..."
+                    tx_sql = "update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
+                            "where item__id = ${camioneta}"
+                    res = cn.execute(txSql.toString())
+
+                } else {
+                    println "No hay el rubro de camioneta: creando..."
+                    tx_sql = "insert into vlob() values update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
+                            "where item__id = ${camioneta}"
+                    res = cn.execute(txSql.toString())
+
+                }
+/*
+                tx_sql = "update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
+                        "where item__id = ${camioneta}"
+                res = cn.execute(txSql.toString())
+*/
+
+            }
+
+            if (acemila) {
+                if (VolumenesObra.findAllByItem(Item.get(Obra.get(id).transporteAcemila.id))) {
+                    println "ya existe el rubro de acemila: actualizando..."
+/*
+                tx_sql = "update vlob set vlobcntd = ${peso * obra.distancia_acem} " +
+                        "where item__id = ${acemila}"
+                res += cn.execute(txSql.toString())
+*/
+                } else {
+                    println "No hay el rubro de acémila: creando..."
+                }
+                // hallar los id de camioneta y acémila
+            }
+            cn.close()
+
         }
-        x_sql = "select sum(voitcntd*itempeso*1.7) peso from vlobitem, item, tpls " +
-                "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
-                "tpls.tpls__id = item.tpls__id and tplscdgo like 'V%'"
-        cn.eachRow(tx_sql.toString()) { row ->
-            peso += row.peso
-        }
-        // hallar los id de camioneta y acémila
-        x_sql = "update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
-                "where item__id = ${camioneta}"
-        res = cn.execute(txSql.toString())
-        x_sql = "update vlob set vlobcntd = ${peso * obra.distancia_acem} " +
-                "where item__id = ${acemila}"
-        res += cn.execute(txSql.toString())
-        cn.close()
         return res
     }
 
