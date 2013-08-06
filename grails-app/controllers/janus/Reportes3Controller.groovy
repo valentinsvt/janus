@@ -1729,44 +1729,17 @@ class Reportes3Controller {
 //        println("obra" + obra)
 //
         def concurso = janus.pac.Concurso.findByObra(obra)
-//
+
         def oferta = janus.pac.Oferta.findByConcurso(concurso)
 
         def contrato = Contrato.findByOferta(oferta)
 
 
-        def total1 = 0;
-        def total2 = 0;
-        def totalPrueba = 0
+        def tipoPlanilla = janus.ejecucion.TipoPlanilla.findByCodigoIlike("A");
 
-        def totales
-
-        def totalPresupuesto=0;
-        def totalPresupuestoBien=0;
-
-        def valores = preciosService.rbro_pcun_v2(obra.id)
-
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+        def planillaDesc = janus.ejecucion.Planilla.findByContratoAndTipoPlanilla(contrato, tipoPlanilla)
 
 
-        subPres.each { s->
-
-            total2 = 0
-
-            valores.each {
-
-                if(it.sbprdscr == s.descripcion){
-
-                    totales = it.totl
-                    totalPresupuestoBien = (total1 += totales)
-                    totalPrueba = total2 += totales
-
-                }
-            }
-
-        }
-
-//        def auxiliar = Auxiliar.get(1)
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
@@ -1781,7 +1754,7 @@ class Reportes3Controller {
         def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
         def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
         def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
-        def prmsCellLeft3 = [border: Color.WHITE, valign: Element.ALIGN_JUSTIFIED, align: Element.ALIGN_JUSTIFIED, colspan: 2]
+        def prmsCellLeft3 = [border: Color.WHITE, valign: Element.ALIGN_LEFT, align: Element.ALIGN_LEFT, colspan: 2]
         def prmsSubtotal = [border: Color.BLACK, colspan: 6,
                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
         def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
@@ -1821,12 +1794,14 @@ class Reportes3Controller {
         Paragraph headers = new Paragraph();
         headers.setAlignment(Element.ALIGN_LEFT);
 
-        headers.add(new Paragraph("Oficio N°:",times12bold ))
+        headers.add(new Paragraph("Oficio N°: " + obra?.oficioSalida,times12bold ))
         headers.add(new Paragraph("Quito, " + printFecha(new Date()), times12bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph("Ingeniero", times10bold));
+        headers.add(new Paragraph(oferta?.proveedor?.nombreContacto.toUpperCase() + " " + oferta?.proveedor?.apellidoContacto.toUpperCase(), times10bold));
+        headers.add(new Paragraph(oferta?.proveedor?.titulo.toUpperCase() + " " + oferta?.proveedor?.nombre.toUpperCase(), times10bold));
         headers.add(new Paragraph("Presente", times10bold));
         headers.add(new Paragraph("", times10bold));
         headers.add(new Paragraph("", times10bold));
@@ -1835,98 +1810,41 @@ class Reportes3Controller {
         document.add(headers);
 
 
-        Paragraph prueba = new Paragraph();
+        def par1 = "Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato N° " + contrato?.codigo + ", "  +
+                "para la construcción de " + obra?.descripcion  +
+                ", ubicada en la Parroquia " + obra?.parroquia?.nombre.toLowerCase() + ", Distrito Metropolitano de "+
+                "Quito, de la Provincia de " + obra?.lugar?.descripcion + ", por un valor de US\$ " + contrato?.monto + " sin incluir IVA, consta"+
+                "de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para"+
+                "ejecutar, terminar y entregar a entera satisfacción es de " + contrato?.plazo + ","       +
+                "contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se"+
+                "entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada"+
+                "la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. "
+
+        def par2 = "Tesorería de la Corporación, remite a la " + obra?.departamento?.direccion?.nombre +
+                   ", copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$ " + (planillaDesc?.valor + planillaDesc.reajuste) + " fue " +
+                   "acreditado el " + printFecha(planillaDesc?.fechaMemoPagoPlanilla).toLowerCase()
+
+
+        def par3 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° " + contrato?.codigo + ", será " + printFecha(obra?.fechaInicio).toLowerCase() +"."
+
+
+        Paragraph prueba = new Paragraph(par1,times10normal);
         prueba.setAlignment(Element.ALIGN_JUSTIFIED);
+        prueba.setSpacingAfter(20);
 
+        Paragraph prueba2 = new Paragraph(par2,times10normal);
+        prueba2.setAlignment(Element.ALIGN_JUSTIFIED);
+        prueba2.setSpacingAfter(20);
 
-        prueba.add(new Paragraph("Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato " + contrato?.codigo + ", ", times10normal ))
-
-        prueba.add(new Paragraph("para la construcción de " + obra?.descripcion, times10normal));
-
-        prueba.add(new Paragraph("en la calle principal " + ", ubicada en la Parroquia " + obra?.parroquia?.nombre.toLowerCase() + ", Distrito Metropolitano de", times10normal));
-
-        prueba.add(new Paragraph("Quito, de la Provincia de " + obra?.lugar?.descripcion + ", por un valor de US\$" + contrato?.monto + " sin incluir IVA, consta", times10normal));
-
-        prueba.add(new Paragraph("de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para", times10normal));
-
-        prueba.add(new Paragraph("ejecutar, terminar y entregar a entera satisfacción es de " + contrato?.plazo + ",", times10normal));
-
-        prueba.add(new Paragraph("contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se", times10normal));
-
-        prueba.add(new Paragraph("entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada", times10normal));
-
-        prueba.add(new Paragraph("la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. ", times10normal));
-        prueba.add(new Paragraph(" ", times10normal));
-
-        prueba.add(new Paragraph("Tesorería de la Corporación, remite la Dirección de Gestión de Infraestructura para el", times10normal));
-
-        prueba.add(new Paragraph("Desarrollo, copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$" + (totalPresupuestoBien*(obra?.porcentajeAnticipo/100)) + " fue", times10normal));
-
-        prueba.add(new Paragraph("acreditado el", times10normal));
-        prueba.add(new Paragraph(" ", times10normal));
-
-        prueba.add(new Paragraph("Por las razones indicadas la fecha de inicio de la obra, del contrato " + obra?.codigo + ", será " + printFecha(obra.fechaCreacionObra).toLowerCase(), times10normal));
+        Paragraph prueba3 = new Paragraph(par3,times10normal);
+        prueba3.setAlignment(Element.ALIGN_JUSTIFIED);
+        prueba3.setSpacingAfter(20);
 
         document.add(prueba);
+        document.add(prueba2);
+        document.add(prueba3);
 
 
- //Se cambia la tabla por paragraph... borrar
-//      PdfPTable tablaTexto = new PdfPTable(2)
-//      tablaTexto.setWidthPercentage(100)
-     //   tablaTexto.setWidths(arregloEnteros([90, 10]));
-
-     /*   addCellTabla(tablaTexto, new Paragraph("Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato " + contrato?.codigo + ", ", times8normal), prmsCellLeft3)
-//        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("para la construcción de " + obra?.descripcion, times8normal), prmsCellLeft3)
-//        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph(" en la calle principal " +  ", ubicada en la Parroquia " + obra?.parroquia?.nombre.toLowerCase() + ", Distrito Metropolitano de ", times8normal), prmsCellLeft3)
-//        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("Quito, de la Provincia de " + obra?.lugar?.descripcion + ", por un valor de US\$" + totalPresupuestoBien + " sin incluir IVA, consta ", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para ", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("ejecutar, terminar y entregar a entera satisfacción es de " + contrato?.plazo + ", ", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se ", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista.", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("Tesorería de la Corporación, remite la Dirección de Gestión de Infraestructura para el ", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("Desarrollo, copia del reporte de pago del " + obra?.porcentajeAnticipo + "% del anticipo, por un valor de US\$" + (totalPresupuestoBien*(obra?.porcentajeAnticipo/100)) + " fue ", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("acreditado el ", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-
-        addCellTabla(tablaTexto, new Paragraph("Por las razones indicadas la fecha de inicio de la obra, del contrato " + obra?.codigo + ", será " + printFecha(obra.fechaCreacionObra), times8normal), prmsCellLeft3)
-        addCellTabla(tablaTexto, new Paragraph("", times8normal), prmsCellLeft3)
-       */
-
-
-
-
-
-//        document.add(tablaTexto);
         document.close();
         pdfw.close()
         byte[] b = baos.toByteArray();

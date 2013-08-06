@@ -521,8 +521,8 @@
                 </div>
 
                 <div class="span6">
-                    <g:select name="transporteCamioneta" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
-                              value="${obra?.transporteCamioneta}"
+                    <g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
+                              value="${obra?.transporteCamioneta?.id}"
                               style="width: 300px; margin-left: -10px"/>
                 </div>
 
