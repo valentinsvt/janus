@@ -31,21 +31,28 @@
         </div>
 
         <div class="row">
-            <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
-                    <i class="icon-arrow-left"></i>
-                    Contrato
-                </g:link>
-                <g:link action="form" class="btn" params="[contrato: contrato.id]">
-                    <i class="icon-file"></i>
-                    Nueva planilla
-                </g:link>
-
-                <g:if test="${planillaInstanceList.last().fechaFin >= prej[0].fechaFin}">
-                    <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
-                        <i class="icon-exchange"></i>
-                        Reporte de diferencias
+            <div class="span9" role="navigation">
+                <div class="btn-group">
+                    <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
+                        <i class="icon-arrow-left"></i>
+                        Contrato
                     </g:link>
+                    <g:link action="form" class="btn" params="[contrato: contrato.id]">
+                        <i class="icon-file"></i>
+                        Nueva planilla
+                    </g:link>
+                </div>
+                <g:if test="${planillaInstanceList.last().fechaFin >= prej[0].fechaFin}">
+                    <div class="btn-group">
+                        <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
+                            <i class="icon-exchange"></i>
+                            Reporte de diferencias
+                        </g:link>
+                        <g:link controller="acta" action="form" class="btn" params="[contrato: contrato.id]">
+                            <i class="icon-stackexchange"></i>
+                            Acta de recepción provisional
+                        </g:link>
+                    </div>
                 </g:if>
 
             </div>
@@ -71,7 +78,7 @@
                         <g:sortableColumn property="descripcion" title="Descripcion"/>
                         <g:sortableColumn property="valor" title="Valor"/>
                         <th width="160">Acciones</th>
-                        <th>Pagos</th>
+                        <th width="130">Pagos</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">

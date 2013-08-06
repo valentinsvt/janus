@@ -588,17 +588,17 @@ class PlanillaController extends janus.seguridad.Shield {
                 def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
                 tiposPlanilla -= plp.tipoPlanilla
             }
-            planillasAvance.each {pa->
-                if(pa.fechaMemoPagoPlanilla==null){
+            planillasAvance.each { pa ->
+                if (pa.fechaMemoPagoPlanilla == null) {
                     def costos = Planilla.findAllByPadreCosto(pa)
-                    if(costos.size()==0){
-                        costo=true
+                    if (costos.size() == 0) {
+                        costo = true
                     }
                 }
 
             }
         }
-        if(!costo){
+        if (!costo) {
             tiposPlanilla.remove(TipoPlanilla.findByCodigo("C"))
         }
 
