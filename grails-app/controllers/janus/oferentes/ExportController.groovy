@@ -14,9 +14,10 @@ class ExportController extends janus.seguridad.Shield {
 
         def oferente = Persona.get(params.oferente)
         def r = oferentesService.exportDominio(janus.Persona, "prsnjnid", oferente)
+
 //        println ">>>>" + r
         if (r !=-1) {
-
+            def oferenteId = r
             def res = oferentesService.exportDominio(janus.Obra, "obrajnid", obra, params.oferente, "ofrt__id", r, "ofrt__id", "select * from obra where obrajnid=${obra.id} and ofrt__id=${r}")
 
             if (res !=-1) {
@@ -25,8 +26,8 @@ class ExportController extends janus.seguridad.Shield {
 //                println "volumen!!!------------------------------------------ "
                 vols.each {v->
 //                    println "volumen "+v.item+"  "+v.cantidad
-                    res = oferentesService.exportDominioSinReferencia(janus.Item, v.item, oferente.id, "ofrt__id","select * from item where ofrt__id=${oferente.id} and itemcdgo='${v.item.codigo}'")
-//                    println "IT............................ "+res
+                    res = oferentesService.exportDominioSinReferencia(janus.Item, v.item,oferenteId, "ofrt__id","select * from item where ofrt__id=${oferenteId} and itemcdgo='${v.item.codigo}'")
+                    println "IT............................ "+res
                     if(res!=-1){
                         def itemId=res
                         res = oferentesService.exportDominioSinReferencia(janus.SubPresupuesto, v.subPresupuesto, false, false,"select * from sbpr where sbprdscr='${v.subPresupuesto.descripcion}' and grpo__id=${v.subPresupuesto.grupo.id}  ")

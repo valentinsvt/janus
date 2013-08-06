@@ -146,12 +146,12 @@ class OferentesService {
 
         def cn = dbConnectionService.getConnectionOferentes()
         def count = 0
-//        println "validacion " + validacion
+        println "validacion " + validacion
         cn.eachRow(validacion.toString()) { r ->
             //println "r " + r
             count = r[0]
         }
-//        println " res validacion "+count
+        println " res validacion "+count
         if (count == 0) {
             def res
             try {
