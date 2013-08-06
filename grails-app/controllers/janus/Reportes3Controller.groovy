@@ -73,7 +73,7 @@ class Reportes3Controller {
                 valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
 
             }
-          else
+        else
 //            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
             valores = preciosService.rbro_pcun_v2(obra.id)
 
@@ -1099,7 +1099,7 @@ class Reportes3Controller {
 
         def item = Item.get(params.id)
 
-          def obra = Obra.get(params.id)
+        def obra = Obra.get(params.id)
 
 
 
@@ -1724,7 +1724,9 @@ class Reportes3Controller {
 
     def reporteContrato () {
 
-        def obra = Obra.get(1430)
+//        println("-->>" + params)
+
+        def obra = Obra.get(params.id)
 
 //        println("obra" + obra)
 //
@@ -1794,14 +1796,14 @@ class Reportes3Controller {
         Paragraph headers = new Paragraph();
         headers.setAlignment(Element.ALIGN_LEFT);
 
-        headers.add(new Paragraph("Oficio N°: " + obra?.oficioSalida,times12bold ))
+        headers.add(new Paragraph("Oficio N°: " + params.oficio,times12bold ))
         headers.add(new Paragraph("Quito, " + printFecha(new Date()), times12bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(" ", times10bold));
-        headers.add(new Paragraph("Ingeniero", times10bold));
+        headers.add(new Paragraph(oferta?.proveedor?.titulo, times10bold));
         headers.add(new Paragraph(oferta?.proveedor?.nombreContacto.toUpperCase() + " " + oferta?.proveedor?.apellidoContacto.toUpperCase(), times10bold));
-        headers.add(new Paragraph(oferta?.proveedor?.titulo.toUpperCase() + " " + oferta?.proveedor?.nombre.toUpperCase(), times10bold));
+        headers.add(new Paragraph(oferta?.proveedor?.nombre.toUpperCase(), times10bold));
         headers.add(new Paragraph("Presente", times10bold));
         headers.add(new Paragraph("", times10bold));
         headers.add(new Paragraph("", times10bold));
@@ -1810,22 +1812,24 @@ class Reportes3Controller {
         document.add(headers);
 
 
-        def par1 = "Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato N° " + contrato?.codigo + ", "  +
-                "para la construcción de " + obra?.descripcion  +
-                ", ubicada en la Parroquia " + obra?.parroquia?.nombre.toLowerCase() + ", Distrito Metropolitano de "+
-                "Quito, de la Provincia de " + obra?.lugar?.descripcion + ", por un valor de US\$ " + contrato?.monto + " sin incluir IVA, consta"+
-                "de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para"+
-                "ejecutar, terminar y entregar a entera satisfacción es de " + contrato?.plazo + ","       +
-                "contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se"+
-                "entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada"+
-                "la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. "
+        def par1 = "Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato N° " + contrato?.codigo + ", "
+        par1 +="para la construcción de " + obra?.descripcion
+        par1 +=   ", ubicada en la Parroquia " + obra?.parroquia?.nombre + ", Distrito Metropolitano de "
+        par1 +=  "Quito, de la Provincia de " + obra?.lugar?.descripcion + ", por un valor de US\$ "
+        par1 +=   g.formatNumber(number: contrato?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " sin incluir IVA, consta "
+        par1 += "de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para "
+        par1 +=  "ejecutar, terminar y entregar a entera satisfacción es de " +  NumberToLetterConverter.numberToLetter(contrato?.plazo).toLowerCase() + " días calendario " + "("
+        par1 +=  g.formatNumber(number: contrato?.plazo, format: "##,##0", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0) + "), "
+        par1 +=  "contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se "
+        par1 += "entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada "
+        par1 += "la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. "
 
-        def par2 = "Tesorería de la Corporación, remite a la " + obra?.departamento?.direccion?.nombre +
-                   ", copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$ " + (planillaDesc?.valor + planillaDesc.reajuste) + " fue " +
-                   "acreditado el " + printFecha(planillaDesc?.fechaMemoPagoPlanilla).toLowerCase()
+        def par2 = "Tesorería de la Corporación, remite a la " + obra?.departamento?.direccion?.nombre
+                par2 +=", copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$ " + g.formatNumber(number: (planillaDesc?.valor + planillaDesc.reajuste), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " fue "
+                par2 += "acreditado el " + printFecha(planillaDesc?.fechaMemoPagoPlanilla).toLowerCase()
 
 
-        def par3 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° " + contrato?.codigo + ", será " + printFecha(obra?.fechaInicio).toLowerCase() +"."
+        def par3 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° " + contrato?.codigo + ", será el " + printFecha(obra?.fechaInicio).toLowerCase() +"."
 
 
         Paragraph prueba = new Paragraph(par1,times10normal);
@@ -1843,6 +1847,32 @@ class Reportes3Controller {
         document.add(prueba);
         document.add(prueba2);
         document.add(prueba3);
+
+
+
+
+        PdfPTable tablaFirmas = new PdfPTable(1);
+        tablaFirmas.setWidthPercentage(100);
+
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+
+
+        def firmas = Persona.get(params.firma)
+
+        addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times8bold), prmsHeaderHoja)
+
+
+        document.add(tablaFirmas);
+
 
 
         document.close();

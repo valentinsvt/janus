@@ -54,7 +54,6 @@
                         </g:link>
                     </div>
                 </g:if>
-
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -255,7 +254,10 @@
             </div>
         </div>
 
-        <script type="text/javascript">
+
+
+
+    <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
@@ -411,6 +413,9 @@
                     $("#modal-Planilla").modal("show");
                     return false;
                 });
+
+
+
 
             });
 
