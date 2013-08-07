@@ -16,7 +16,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def list() {
         def codigoPerfil = session.perfil.codigo
-        println codigoPerfil
+//        println codigoPerfil
         switch (codigoPerfil) {
             case "FINA":
                 redirect(action: 'listFinanciero', id: params.id)

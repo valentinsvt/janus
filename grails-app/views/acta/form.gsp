@@ -19,6 +19,10 @@
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
+        <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
+
         <title>Acta</title>
 
         <style>
@@ -44,6 +48,7 @@
             padding    : 3px 20px 0 3px;
             margin     : 10px 0;
             width      : auto;
+            min-height : 25px;
         }
 
         .numero {
@@ -54,6 +59,14 @@
             background    : rgba(50, 100, 150, 0.3);
             padding       : 5px;
             margin-bottom : 10px;
+            position      : relative;
+        }
+
+        .botones {
+            width    : 31px;
+            position : absolute;
+            right    : -35px;
+            top      : 0;
         }
 
         .seccion .span9 {
@@ -105,10 +118,6 @@
             </div>
         </g:if>
 
-        <div class="tituloTree">
-            Creación de Acta
-        </div>
-
         <div class="row" style="margin-bottom: 15px;">
             <div class="span9" role="navigation">
                 <div class="btn-group">
@@ -117,7 +126,7 @@
                             <i class="icon-arrow-left"></i>
                             Contrato
                         </g:link>
-                        <g:link action="form" class="btn" params="[contrato: actaInstance.contrato]">
+                        <g:link controller="planilla" action="list" class="btn" id="${actaInstance.contratoId}">
                             <i class="icon-file"></i>
                             Planillas
                         </g:link>
@@ -126,6 +135,10 @@
 
                 <div class="btn-group">
                     <a href="#" id="btnSave" class="btn btn-success"><i class="icon-save"></i> Guardar</a>
+                    <g:if test="${actaInstance.id}">
+                    %{--<g:link controller="reportesPlanillas" class="btn" action="actaRecepcion" id="${actaInstance.id}"><i class="icon-print"></i> Imprimir</g:link>--}%
+                        <a href="#" class="btn" id="btnPrint"><i class="icon-print"></i> Imprimir</a>
+                    </g:if>
                 </div>
 
             </div>
@@ -236,6 +249,102 @@
         <script type="text/javascript">
             var secciones = 1;
 
+            $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
+
+            function log(msg, error) {
+                var sticky = false;
+                var theme = "success";
+                if (error) {
+                    sticky = true;
+                    theme = "error";
+                }
+                $.jGrowl(msg, {
+                    speed          : 'slow',
+                    sticky         : sticky,
+                    theme          : theme,
+                    closerTemplate : '<div>[ cerrar todos ]</div>',
+                    themeState     : ''
+                });
+
+//                console.log(error, message);
+//                if (error) {
+//                    $.box({
+//                        imageClass : "box_info",
+//                        text       : error,
+//                        title      : "Error",
+//                        iconClose  : false,
+//                        dialog     : {
+//                            resizable     : false,
+//                            draggable     : false,
+//                            closeOnEscape : false,
+//                            buttons       : {
+//                                "Aceptar" : function () {
+//                                }
+//                            }
+//                        }
+//                    });
+//                }
+            }
+
+            function submitFormSeccion(btn) {
+                var $form = $("#frmSave");
+                if ($form.valid()) {
+                    btn.replaceWith(spinner);
+
+                    var url = $form.attr("action");
+                    $.ajax({
+                        type    : "POST",
+                        url     : url,
+                        data    : $form.serialize(),
+                        success : function (msg) {
+                            if (msg.startsWith("NO")) {
+                                var p = msg.split("_");
+                                log(p[1], true);
+                            } else {
+                                var $sec = addSeccion($.parseJSON(msg));
+                                if ($sec) {
+                                    $("#modal").modal("hide");
+                                    $('html, body').animate({
+                                        scrollTop : $sec.offset().top
+                                    }, 2000);
+                                }
+                                log("Elemento creado existosamente", false);
+                            }
+                        }
+                    });
+                }
+            }
+
+            function submitFormParrafo(btn, num, $div) {
+                var $form = $("#frmSave");
+                if ($form.valid()) {
+                    btn.replaceWith(spinner);
+
+                    var url = $form.attr("action");
+                    $.ajax({
+                        type    : "POST",
+                        url     : url,
+                        data    : $form.serialize(),
+                        success : function (msg) {
+                            if (msg.startsWith("NO")) {
+                                var p = msg.split("_");
+                                log(p[1], true);
+                            } else {
+                                var $sec = addParrafo($.parseJSON(msg), num, $div);
+                                if ($sec) {
+                                    $("#modal").modal("hide");
+                                    $('html, body').animate({
+                                        scrollTop : $div.parents(".seccion").offset().top
+                                    }, 2000);
+                                    editable($sec.find(".editable"));
+                                }
+                                log("Elemento creado existosamente", false);
+                            }
+                        }
+                    });
+                }
+            }
+
             function getSecciones() {
                 var str = "";
                 $(".seccion").each(function () {
@@ -281,7 +390,7 @@
                         $num.text(num + ".-");
                     }
 
-                    var titulo = CKEDITOR.instances["seccion_" + num].getData();
+                    var titulo = CKEDITOR.instances["seccion_" + $sec.data("id")].getData();
 
                     $sec.data({
                         numero : num,
@@ -398,7 +507,7 @@
                         $num.text(numSec + "." + num + ".-");
                     }
 
-                    var contenido = CKEDITOR.instances["parrafo_" + numSec + "_" + num].getData();
+                    var contenido = CKEDITOR.instances["parrafo_" + $par.data("id")].getData();
 
                     $par.data({
                         numero    : num,
@@ -410,15 +519,23 @@
             }
 
             function addParrafo(data, num, $div) {
+                if (data.contenido == "null" || data.contenido == null) {
+                    data.contenido = "";
+                }
                 var $parr = $("<div class='parrafo'></div>");
                 var $titulo = $("<div class='row tituloParrafo '></div>");
                 $("<div class='span1 numero lvl2 bold'>" + num + "." + data.numero + ".-</div>").appendTo($titulo);
-                $("<div class='span9 contParrafo editable ui-corner-all' id='parrafo_" + num + "_" + data.numero + "' contenteditable='true'>" + data.contenido + "</div>").appendTo($titulo);
+                var $edit = $("<div class='span9 contParrafo editable ui-corner-all' id='parrafo_" + data.id + "' contenteditable='true'>" + data.contenido + "</div>").appendTo($titulo);
                 if (data.tipoTabla) {
                     tipoTabla(data.tipoTabla, $titulo);
                 }
-
+                var $btnTabla;
                 var $btnEliminarParrafo = $('<a href="#" class="btn btn-delete btn-mini" style="margin-left: 10px;"><i class="icon-minus"></i> Eliminar párrafo</a>');
+//                if (data.tipoTabla) {
+//                    $btnTabla = $('<a href="#" class="btn btn-mini" style="margin-left: 10px;">Eliminar tabla</a>');
+//                } else {
+//                    $btnTabla = $('<a href="#" class="btn btn-mini" style="margin-left: 10px;">Insertar tabla</a>');
+//                }
 
                 $btnEliminarParrafo.click(function () {
                     var $del = $(this).parents(".parrafo");
@@ -433,8 +550,24 @@
                             closeOnEscape : false,
                             buttons       : {
                                 "Aceptar"  : function () {
-                                    $del.remove();
-                                    numerosParrafos($div.parents(".seccion"));
+
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(controller: 'parrafo', action: 'delete_ext')}",
+                                        data    : {
+                                            id : data.id
+                                        },
+                                        success : function (msg) {
+                                            var p = msg.split("_");
+                                            if (p[0] == "OK") {
+                                                log(p[1], false);
+                                                $del.remove();
+                                                numerosParrafos($div.parents(".seccion"));
+                                            } else {
+                                                log(p[1], true);
+                                            }
+                                        }
+                                    });
                                 },
                                 "Cancelar" : function () {
                                 }
@@ -444,26 +577,112 @@
                     return false;
                 });
 
-                $titulo.append($btnEliminarParrafo).appendTo($parr);
+                $titulo.append($btnEliminarParrafo).append($btnTabla).appendTo($parr);
                 $parr.appendTo($div);
 
                 $parr.data({
+                    id        : data.id,
                     numero    : data.numero,
                     contenido : data.contenido,
                     tipoTabla : data.tipoTabla
                 });
-
+                return $parr;
             }
 
             function addSeccion(data) {
                 var $seccion = $("<div class='seccion ui-corner-all'></div>");
                 var $titulo = $("<div class='row tituloSeccion'></div>");
                 $("<div class='span1 numero lvl1 bold'>" + data.numero + ".-</div>").appendTo($titulo);
-                $("<div class='span9 lblSeccion editable bold ui-corner-all' id='seccion_" + data.numero + "' contenteditable='true'>" + data.titulo + "</div>").appendTo($titulo);
+                var $edit = $("<div class='span9 lblSeccion editable ui-corner-all' id='seccion_" + data.id + "' contenteditable='true'>" + data.titulo + "</div>").appendTo($titulo);
                 var $btnAddParrafo = $('<a href="#" class="btn btn-show btn-mini pull-right" style="margin-left: 10px;"><i class="icon-plus"></i> Agregar párrafo</a>');
                 var $btnEliminarSeccion = $('<a href="#" class="btn btn-danger btn-mini pull-right" style="margin-left: 10px;"><i class="icon-minus"></i> Eliminar sección</a>');
 
+                var $btnSubir = $('<a href="#" class="btn btn-bajar btn-mini"><i class="icon-arrow-up"></i></a>');
+                var $btnBajar = $('<a href="#" class="btn btn-bajar btn-mini"><i class="icon-arrow-down"></i></a>');
+                var $botones = $("<div class='botones'></div>");
+                $botones.append($btnSubir).append($btnBajar);
+
+                $btnSubir.click(function () {
+                    var $prev = $seccion.prev();
+                    if ($prev) {
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(controller:'seccion', action: 'updateNumeros')}",
+                            data    : {
+                                acta   : "${actaInstance.id}",
+                                id     : data.id,
+                                numero : $seccion.data("numero") - 1
+                            },
+                            success : function (msg) {
+                                var p = msg.split("_");
+                                if (p[0] == "OK") {
+                                    $prev.before($seccion);
+                                    numerosSecciones();
+                                } else {
+                                    log(p[1], true);
+                                }
+                            }
+                        });
+                    }
+                    return false;
+                });
+                $btnBajar.click(function () {
+                    var $next = $seccion.next();
+                    if ($next) {
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(controller:'seccion', action: 'updateNumeros')}",
+                            data    : {
+                                acta   : "${actaInstance.id}",
+                                id     : data.id,
+                                numero : $seccion.data("numero") + 1
+                            },
+                            success : function (msg) {
+                                var p = msg.split("_");
+                                if (p[0] == "OK") {
+                                    $next.after($seccion);
+                                    numerosSecciones();
+                                } else {
+                                    log(p[1], true);
+                                }
+                            }
+                        });
+                    }
+                    return false;
+                });
+
+                if (!data.parrafos) {
+                    data.parrafos = [];
+                }
+
+                var parrafos = data.parrafos.length;
+
+                var $parr = $("<div class='row parrafos'></div>");
+
                 $btnAddParrafo.click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        data    : {
+                            seccion : data.id,
+                            numero  : parrafos + 1
+                        },
+                        url     : "${createLink(controller: 'parrafo', action:'form_ext_ajax')}",
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitFormParrafo(btnSave, data.numero, $parr);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                            $("#modalTitle").html("Crear Párrafo");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal").modal("show");
+                        }
+                    });
                     return false;
                 });
                 $btnEliminarSeccion.click(function () {
@@ -479,8 +698,23 @@
                             closeOnEscape : false,
                             buttons       : {
                                 "Aceptar"  : function () {
-                                    $del.remove();
-                                    numerosSecciones();
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(controller: 'seccion', action: 'delete_ext')}",
+                                        data    : {
+                                            id : data.id
+                                        },
+                                        success : function (msg) {
+                                            var p = msg.split("_");
+                                            if (p[0] == "OK") {
+                                                log(p[1], false);
+                                                $del.remove();
+                                                numerosSecciones();
+                                            } else {
+                                                log(p[1], true);
+                                            }
+                                        }
+                                    });
                                 },
                                 "Cancelar" : function () {
                                 }
@@ -494,26 +728,30 @@
                 $titulo.append($btnAddParrafo).append($btnEliminarSeccion);
                 $titulo.appendTo($seccion);
 
-                if (!data.parrafos) {
-                    data.parrafos = [];
-                }
-
                 $seccion.data({
+                    id     : data.id,
                     numero : data.numero,
                     titulo : data.titulo
                 });
-
-                if (data.parrafos.length > 0) {
-                    var $parr = $("<div class='row parrafos'></div>");
+                var parrafosAdded = []
+                if (parrafos > 0) {
                     for (var i = 0; i < data.parrafos.length; i++) {
-                        addParrafo(data.parrafos[i], data.numero, $parr);
+                        var $par = addParrafo(data.parrafos[i], data.numero, $parr);
+                        parrafosAdded.push($par)
                     }
-                    $parr.appendTo($seccion);
                 }
 
-                $("#secciones").append($seccion);
+                $parr.appendTo($seccion);
+
+                $("#secciones").append($seccion)
+                $seccion.append($botones);
 
                 secciones++;
+                editable($edit);
+                for (var i = 0; i < parrafosAdded.length; i++) {
+                    editable(parrafosAdded[i].find(".editable"));
+                }
+                return $seccion;
             }
 
             function initSecciones() {
@@ -548,9 +786,102 @@
                 }
             }
 
+            function editable($elm) {
+                var id = $elm.attr("id");
+                var p = id.split("_");
+                CKEDITOR.config.toolbar_descripcion = [
+                    ['Undo', 'Redo'],
+                    ['Bold', 'Italic', 'Underline'],
+                    ['Subscript', 'Superscript'],
+                    ['NumberedList', 'BulletedList'],
+                    ['Outdent', 'Indent']
+                ];
+                CKEDITOR.config.toolbar_seccion = [
+                    ['Undo', 'Redo'],
+                    ['Bold', 'Italic', 'Underline'],
+                    ['Subscript', 'Superscript']
+                ];
+                CKEDITOR.config.toolbar_parrafo = [
+                    ['Undo', 'Redo'],
+                    ['Bold', 'Italic', 'Underline'],
+                    ['Subscript', 'Superscript'],
+                    ['NumberedList', 'BulletedList'],
+                    ['Outdent', 'Indent']
+                ];
+
+                try {
+                    CKEDITOR.inline(id, {
+                        toolbar : p[0],
+                        on      : {
+                            blur : function (event) {
+                                var data = event.editor.getData();
+                                var url, datos;
+                                switch (p[0]) {
+                                    case "descripcion":
+                                        url = "${createLink(controller: 'acta', action: 'updateDescripcion')}";
+                                        datos = {
+                                            id          : "${actaInstance.id}",
+                                            descripcion : data
+                                        };
+                                        break;
+                                    case "seccion":
+                                        url = "${createLink(controller: 'seccion', action: 'save_ext')}";
+                                        datos = {
+                                            id     : $elm.parents(".seccion").data("id"),
+                                            titulo : data
+                                        };
+                                        break;
+                                    case "parrafo":
+                                        url = "${createLink(controller: 'parrafo', action: 'save_ext')}";
+                                        datos = {
+                                            id        : $elm.parents(".parrafo").data("id"),
+                                            contenido : data
+                                        };
+                                        break;
+                                }
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : url,
+                                    data    : datos,
+                                    success : function (msg) {
+                                        var p = msg.split("_");
+                                        if (p[0] == "NO") {
+                                            log(p[1], p[0] == "NO");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } catch (e) {
+//                    console.log(e);
+                }
+            }
+
             $(function () {
 
+                CKEDITOR.disableAutoInline = true;
+
                 initSecciones();
+
+                $('[rel=tooltip]').tooltip();
+
+                $(".editable").each(function () {
+                    editable($(this));
+                });
+
+//                CKEDITOR.inline('editable', {
+//                    on : {
+//                        blur : function (event) {
+//                            var data = event.editor.getData();
+//                            console.log(data);
+//                        }
+//                    }
+//                });
+
+                $("#btnPrint").click(function () {
+                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
+                });
 
                 $("#btnAddSeccion").click(function () {
                     var id = "${actaInstance.id}";
@@ -583,12 +914,12 @@
                                 var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                                 btnSave.click(function () {
-                                    submitForm(btnSave);
+                                    submitFormSeccion(btnSave);
                                     return false;
                                 });
 
                                 $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                                $("#modalTitle").html("Crear Acta");
+                                $("#modalTitle").html("Crear Sección");
                                 $("#modalBody").html(msg);
                                 $("#modalFooter").html("").append(btnOk).append(btnSave);
                                 $("#modal").modal("show");

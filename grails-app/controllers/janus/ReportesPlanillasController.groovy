@@ -10,6 +10,8 @@ import com.lowagie.text.pdf.PdfContentByte
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
+import groovy.json.JsonBuilder
+import janus.actas.Acta
 import janus.ejecucion.DetallePlanilla
 import janus.ejecucion.DetallePlanillaCosto
 import janus.ejecucion.FormulaPolinomicaContractual
@@ -21,6 +23,7 @@ import janus.ejecucion.ValorIndice
 import janus.ejecucion.ValorReajuste
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
+import janus.pac.Garantia
 
 import java.awt.Color
 
@@ -56,6 +59,11 @@ class ReportesPlanillasController {
 
     private String nombrePersona(persona) {
         return nombrePersona(persona, "pers")
+    }
+
+    def actaRecepcion() {
+        def acta = Acta.get(params.id)
+        return [actaInstance: acta]
     }
 
     def reporteDiferencias() {
