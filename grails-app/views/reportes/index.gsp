@@ -118,39 +118,39 @@
                         class="link" dialog="dlgContabilidadPeriodo">
                     Contratistas
                 </g:link>
-                Listado de contrtistas que han firmado contratos con el GADPP.
+                Listado de contratistas que han firmado contratos con el GADPP.
             </li>
 
-            <li text="fldf" class="item" texto="obraprsp">
+            <li text="asgr" class="item" texto="asgr">
                 <g:link controller="reportes" action="flujoEfectivo" file="Estado_Flujos_Efectivo.pdf" class="link"
                         dialog="dlgContabilidadPeriodo">
                     Aseguradoras
                 </g:link>
-                Listado de aseguradoras que se hallan registradas en el ssitema.
+                Listado de aseguradoras que se hallan registradas en el sistema.
             </li>
 
-            <li text="patr" class="item" texto="obraprsp">
+            <li text="grnt" class="item" texto="grnt">
                 <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
                         class="link" dialog="dlgContabilidadPeriodo">
                     Garantías por contrato y contratistas
                 </g:link>
                 Listado de garantías detalladas por contrato.
             </li>
-            <li text="vnts" class="item" texto="obraprsp">
+            <li text="trnf" class="item" texto="trnf">
                 <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
                         class="link" dialog="dlgVentas">
                     Transferencias y/o cheques pagados
                 </g:link>
                 Listado de pagos realizados a partir de la solicitud depagos relativos a las obras.
             </li>
-            <li text="vnts" class="item" texto="obraprsp">
+            <li text="avob" class="item" texto="avob">
                 <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
                         class="link" dialog="dlgVentas">
                     Avance de obras
                 </g:link>
                 Listado de obras con el respectivo porcentaje de avance.
             </li>
-            <li text="vnts" class="item" texto="obraprsp">
+            <li text="obfn" class="item" texto="obfn">
                 <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
                         class="link" dialog="dlgVentas">
                     Obras finalizadas
@@ -180,6 +180,69 @@
         </p><p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
         polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios</p>
     </div>
+
+    <div id="obrargst" style="display: none">
+        <h3>Obras Registradas</h3><br>
+
+        <p>Listado de obras que se hallan regsitradas en el sistema, están an la fase inicial de estructuración de presupuestos
+        y más documentos precontractuales.</p>
+    </div>
+
+    <div id="obracntn" style="display: none">
+        <h3>Obras contratadas por cantón</h3><br>
+
+        <p> Listado de obras que han contratado, organizadas por canton.</p>
+    </div>
+
+    <div id="cncr" style="display: none">
+        <h3>Concursos</h3><br>
+
+        <p>Listado de concursos para la contratación de obras y otros servicios. </p>
+    </div>
+
+    <div id="cntr" style="display: none">
+        <h3>Contratos</h3><br>
+
+        <p> Listado de contratos registrados en el sistema.</p>
+    </div>
+
+    <div id="prve" style="display: none">
+        <h3>Contratistas</h3><br>
+
+        <p>  Listado de contratistas que han firmado contratos con el GADPP.</p>
+    </div>
+
+    <div id="asgr" style="display: none">
+        <h3>Aseguradoras</h3><br>
+
+        <p> Listado de aseguradoras que se hallan registradas en el sistema.</p>
+    </div>
+
+    <div id="grnt" style="display: none">
+        <h3>Garantías por contrato y contratista</h3><br>
+
+        <p> Listado de garantías detalladas por contrato.</p>
+    </div>
+
+    <div id="trnf" style="display: none">
+        <h3>Trasferencias y/o cheques pagados</h3><br>
+
+        <p>Listado de pagos realizados a partir de la solicitud depagos relativos a las obras. </p>
+    </div>
+
+    <div id="avob" style="display: none">
+        <h3>Avance de obras</h3><br>
+
+        <p>  Listado de obras con el respectivo porcentaje de avance.</p>
+    </div>
+
+    <div id="obfn" style="display: none">
+        <h3>Obras finalizadas</h3><br>
+
+        <p>Listado de obras finalizadas.</p>
+    </div>
+
+
 
 </div>
 

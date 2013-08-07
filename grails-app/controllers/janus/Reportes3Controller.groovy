@@ -1725,48 +1725,11 @@ class Reportes3Controller {
     def reporteContrato () {
 
         def obra = Obra.get(1430)
-
 //        println("obra" + obra)
-//
         def concurso = janus.pac.Concurso.findByObra(obra)
-//
         def oferta = janus.pac.Oferta.findByConcurso(concurso)
-
         def contrato = Contrato.findByOferta(oferta)
-
-
-        def total1 = 0;
-        def total2 = 0;
-        def totalPrueba = 0
-
-        def totales
-
-        def totalPresupuesto=0;
-        def totalPresupuestoBien=0;
-
-        def valores = preciosService.rbro_pcun_v2(obra.id)
-
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
-
-
-        subPres.each { s->
-
-            total2 = 0
-
-            valores.each {
-
-                if(it.sbprdscr == s.descripcion){
-
-                    totales = it.totl
-                    totalPresupuestoBien = (total1 += totales)
-                    totalPrueba = total2 += totales
-
-                }
-            }
-
-        }
-
-//        def auxiliar = Auxiliar.get(1)
+        //        def auxiliar = Auxiliar.get(1)
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
@@ -1839,9 +1802,8 @@ class Reportes3Controller {
         prueba.setAlignment(Element.ALIGN_JUSTIFIED);
 
 
-        prueba.add(new Paragraph("Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato " + contrato?.codigo + ", ", times10normal ))
-
-        prueba.add(new Paragraph("para la construcción de " + obra?.descripcion, times10normal));
+        prueba.add(new Paragraph("Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato "
+                + contrato?.codigo + ", para la construcción de " + obra?.descripcion, times10normal));
 
         prueba.add(new Paragraph("en la calle principal " + ", ubicada en la Parroquia " + obra?.parroquia?.nombre.toLowerCase() + ", Distrito Metropolitano de", times10normal));
 
