@@ -878,7 +878,7 @@ class Reportes2Controller {
 
         def label
         def number
-        def fila = 16;
+        def fila = 18;
         def totalE = 0;
         def totalM = 0;
         def totalMO = 0;

@@ -8,9 +8,10 @@
 .inputVar {
     width : 65px;
 }
+
 .margen {
-    margin-left: 40px;
-    width: 500px;
+    margin-left : 40px;
+    width       : 500px;
 }
 
     /*.sum1 {*/
@@ -58,7 +59,7 @@
                 </div>
 
                 <div class="span1">
-                    <g:textField name="unidad_volqueta" id="uni_vol" value="${(obra.volquete?.unidad) ? obra?.volquete?.unidad : par?.volquete?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+                    <g:textField name="unidad_volqueta" id="uni_vol" value="${(obra.volquete?.unidad) ? obra?.volquete?.unidad : par?.volquete?.unidad}" readonly="true" style="width: 20px; margin-left: 5px"/>
                 </div>
             </div>
 
@@ -85,7 +86,7 @@
                 </div>
 
                 <div class="span1">
-                    <g:textField name="unidad_chofer" id="uni_chof" value="${(obra.chofer?.unidad) ? obra?.chofer?.unidad : par?.chofer?.unidad}"  readonly="true"  style="width: 20px; margin-left: 5px"/>
+                    <g:textField name="unidad_chofer" id="uni_chof" value="${(obra.chofer?.unidad) ? obra?.chofer?.unidad : par?.chofer?.unidad}" readonly="true" style="width: 20px; margin-left: 5px"/>
                 </div>
             </div>
 
@@ -171,6 +172,7 @@
             <div style="margin: 5px; font-weight: bold; text-align: center">
                 Listas de Precios para Peso y Volumen
             </div>
+
             <div class="row-fluid" style="margin-top: 10px; width: 640px">
 
                 <div class="span2" style="width: 70px;">
@@ -180,12 +182,13 @@
                 <div class="span4">
                     <g:select name="lugar.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=1')}"
                               optionKey="id" optionValue="descripcion" value="${obra?.lugar?.id}" class="span10"
-                              noSelection="['null': 'Seleccione...']" />
+                              noSelection="['null': 'Seleccione...']"/>
                 </div>
 
                 <div class="span4" style="margin-left: -20px; width: 150px;">
                     Petreos Hormigones
                 </div>
+
                 <div class="span4">
                     <g:select name="listaVolumen0.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=3')}"
                               optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen0?.id}"
@@ -203,7 +206,7 @@
                 <div class="span4">
                     <g:select name="listaPeso1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=2')}"
                               optionKey="id" optionValue="descripcion" value="${obra?.listaPeso1?.id}" class="span10"
-                              noSelection="['null': 'Seleccione...']" />
+                              noSelection="['null': 'Seleccione...']"/>
                 </div>
 
                 <div class="span4" style="margin-left: -20px; width: 150px;">
@@ -211,9 +214,9 @@
                 </div>
 
                 <div class="span4">
-                     <g:select name="listaVolumen1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}"
-                               optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen1?.id}"
-                               class="span10" noSelection="['null': 'Seleccione...']" style="margin-left: -10px;"/>
+                    <g:select name="listaVolumen1.id" from="${janus.Lugar.findAll('from Lugar  where tipoLista=4')}"
+                              optionKey="id" optionValue="descripcion" value="${obra?.listaVolumen1?.id}"
+                              class="span10" noSelection="['null': 'Seleccione...']" style="margin-left: -10px;"/>
                 </div>
 
             </div>
@@ -244,6 +247,7 @@
                     <g:textField type="text" name="factorReduccion" class="inputVar num" value="${g.formatNumber(number: (obra?.factorReduccion) ?: par.factorReduccion, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
+
             <div class="row-fluid margen">
                 <div class="span5">
                     Velocidad
@@ -263,6 +267,7 @@
                     <g:textField type="text" name="capacidadVolquete" class="inputVar num" value="${g.formatNumber(number: (obra?.capacidadVolquete) ?: par.capacidadVolquete, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
+
             <div class="row-fluid margen">
 
                 <div class="span5">
@@ -283,6 +288,7 @@
                     <g:textField type="text" name="factorVolumen" class="inputVar num" value="${g.formatNumber(number: (obra?.factorVolumen) ?: par.factorVolumen, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                 </div>
             </div>
+
             <div class="row-fluid margen">
                 <div class="span5">
                     Factor Peso
@@ -433,120 +439,124 @@
             </div>
 
         </div>
-    <div id="tab-desglose" class="tab">
 
-        <div class="row-fluid margen">
-            <div class="span5">
-               Equipos
+        <div id="tab-desglose" class="tab">
+
+            <div class="row-fluid margen">
+                <div class="span5">
+                    Equipos
+                </div>
+
+                <div class="span2">
+                    <g:textField type="text" name="desgloseEquipo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
             </div>
 
-            <div class="span2">
-                <g:textField type="text" name="desgloseEquipo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-            </div>
-        </div>
-        <div class="row-fluid margen">
-            <div class="span5">
-                Repuestos
-            </div>
+            <div class="row-fluid margen">
+                <div class="span5">
+                    Repuestos
+                </div>
 
-            <div class="span2">
-                <g:textField type="text" name="desgloseRepuestos" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseRepuestos), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-            </div>
-        </div>
-
-
-        <div class="row-fluid margen">
-            <div class="span5">
-                Combustibles
-            </div>
-
-            <div class="span2">
-                <g:textField type="text" name="desgloseCombustible" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseCombustible), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-            </div>
-        </div>
-        <div class="row-fluid margen">
-
-            <div class="span5">
-                Mecánico
-            </div>
-
-            <div class="span2">
-                <g:textField type="text" name="desgloseMecanico" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseMecanico), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-            </div>
-        </div>
-
-        <div class="row-fluid margen">
-            <div class="span5">
-               Saldo
-            </div>
-
-            <div class="span2">
-                <g:textField type="text" name="desgloseSaldo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                <div class="span2">
+                    <g:textField type="text" name="desgloseRepuestos" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseRepuestos), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
             </div>
 
 
-        </div>
+            <div class="row-fluid margen">
+                <div class="span5">
+                    Combustibles
+                </div>
 
-        <div class="row-fluid margen" style="margin-bottom: 5px">
-        ______________________________________
-
-        </div>
-
-        <div class="row-fluid margen">
-
-            <div class="span5">
-                Total Desglose:
+                <div class="span2">
+                    <g:textField type="text" name="desgloseCombustible" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseCombustible), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
             </div>
 
-            <div class="span2">
-                %{--<g:textField type="text" name="totalDesglose" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo + obra?.desgloseMecanico + obra?.desgloseCombustible + obra?.desgloseRepuestos + obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
-                <input type="text" id="totalDesglose" class="inputVar num" value="0.0" readonly/>
-            </div>
-        </div>
-    </div>
+            <div class="row-fluid margen">
 
-    %{--/* TODO: poner en obra los id de los item de tranposte camioneta y transporte acemila */--}%
-    <div id="tab-especial" class="tab">
-        <div class="row-fluid">
-            <div class="span3">
-                Transporte Camioneta
+                <div class="span5">
+                    Mecánico
+                </div>
+
+                <div class="span2">
+                    <g:textField type="text" name="desgloseMecanico" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseMecanico), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
             </div>
 
-            <div class="span6">
-                <g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
-                          value="${obra?.transporteCamioneta?.id}"
-                          style="width: 300px; margin-left: -10px"/>
+            <div class="row-fluid margen">
+                <div class="span5">
+                    Saldo
+                </div>
+
+                <div class="span2">
+                    <g:textField type="text" name="desgloseSaldo" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
+
             </div>
-            <div class="span2">
-                %{--<g:textField class="inputVar num2" name="distanciaCamioneta" style="width: 60px" type="number" maxlength="12" value="${obra?.distanciaCamioneta}"/>--}%
-                <g:textField class="inputVar num3" name="distanciaCamioneta" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaCamioneta), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+
+            <div class="row-fluid margen" style="margin-bottom: 5px">
+                ______________________________________
+
             </div>
-            <div class="span1">
-                <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}"  readonly="true"  style="width: 30px; margin-left: 5px"/>
+
+            <div class="row-fluid margen">
+
+                <div class="span5">
+                    Total Desglose:
+                </div>
+
+                <div class="span2">
+                    %{--<g:textField type="text" name="totalDesglose" class="inputVar num" value="${g.formatNumber(number: (obra?.desgloseSaldo + obra?.desgloseMecanico + obra?.desgloseCombustible + obra?.desgloseRepuestos + obra?.desgloseEquipo), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
+                    <input type="text" id="totalDesglose" class="inputVar num" value="0.0" readonly/>
+                </div>
             </div>
         </div>
 
-        <div class="row-fluid">
-            <div class="span3">
-                Transporte Acémila
+        %{--/* TODO: poner en obra los id de los item de tranposte camioneta y transporte acemila */--}%
+        <div id="tab-especial" class="tab">
+            <div class="row-fluid">
+                <div class="span3">
+                    Transporte Camioneta
+                </div>
+
+                <div class="span6">
+                    <g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
+                              value="${obra?.transporteCamioneta?.id}"
+                              style="width: 300px; margin-left: -10px"/>
+                </div>
+
+                <div class="span2">
+                    %{--<g:textField class="inputVar num2" name="distanciaCamioneta" style="width: 60px" type="number" maxlength="12" value="${obra?.distanciaCamioneta}"/>--}%
+                    <g:textField class="inputVar num3" name="distanciaCamioneta" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaCamioneta), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
+
+                <div class="span1">
+                    <g:textField name="unidad_camioneta" id="uni_trcm" value="${"Km"}" readonly="true" style="width: 30px; margin-left: 5px"/>
+                </div>
             </div>
 
-            <div class="span6">
-                <g:select name="transporteAcemila.id" id="trac" from="${transporteAcemila}" optionKey="id" optionValue="nombre"
-                           value="${obra?.transporteAcemila?.id}"
-                          style="width: 300px; margin-left: -10px"/>
+            <div class="row-fluid">
+                <div class="span3">
+                    Transporte Acémila
+                </div>
+
+                <div class="span6">
+                    <g:select name="transporteAcemila.id" id="trac" from="${transporteAcemila}" optionKey="id" optionValue="nombre"
+                              value="${obra?.transporteAcemila?.id}"
+                              style="width: 300px; margin-left: -10px"/>
+                </div>
+
+                <div class="span2">
+                    <g:textField class="inputVar num3" name="distanciaAcemila" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaAcemila), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                </div>
+
+                <div class="span1">
+                    <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}" readonly="true" style="width: 30px; margin-left: 5px"/>
+                </div>
             </div>
-            <div class="span2">
-                <g:textField class="inputVar num3" name="distanciaAcemila" style="width: 60px" type="number" maxlength="6" value="${g.formatNumber(number: (obra?.distanciaAcemila), maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-            </div>
-            <div class="span1">
-                <g:textField name="unidad_acemila" id="uni_trac" value="${"Km"}"  readonly="true"  style="width: 30px; margin-left: 5px"/>
-            </div>
+
         </div>
-
-
-    </div>
-
 
     </div>
 </g:form>
@@ -582,7 +592,6 @@
         return validarNum(ev);
     });
 
-
     $(".num2").keydown(function (ev) {
         if (ev.keyCode == 190 || ev.keyCode == 188 || ev.keyCode == 110) {
             if ($(this).val().indexOf(".") > -1) {
@@ -591,8 +600,6 @@
         }
         return validarNum(ev);
     });
-
-
 
     $(".num3").bind({
         keydown : function (ev) {
@@ -619,10 +626,8 @@
                     $(this).val(val);
                 }
             }
-          }
+        }
     });
-
-
 
     function suma(items, update) {
         var sum1 = 0;
@@ -664,31 +669,27 @@
         }
     }
 
-    function unidadItem ($campo, $update){
+    function unidadItem($campo, $update) {
         var id = $campo.val();
 
-        if(id != ""){
+        if (id != "") {
 
             $.ajax({
-                type:"POST",
+                type    : "POST",
                 url     : "${g.createLink(controller: 'rubro',action:'getUnidad')}",
                 data    : {
-                    id    : id
+                    id : id
                 },
-                success : function (msg){
-
+                success : function (msg) {
 
                     $update.val(msg.toString().trim());
                 }
             })
 
-
-
-        }else {
+        } else {
 
             $update.val(" ");
         }
-
 
     }
 
@@ -725,22 +726,22 @@
     });
 
     $(function () {
-        $(".desglose").click(function() {
+        $(".desglose").click(function () {
             sumaDesglose();
         });
-        $("#desgloseEquipo").keyup(function() {
+        $("#desgloseEquipo").keyup(function () {
             sumaDesglose();
         });
-        $("#desgloseRepuestos").keyup(function() {
+        $("#desgloseRepuestos").keyup(function () {
             sumaDesglose();
         });
-        $("#desgloseCombustible").keyup(function() {
+        $("#desgloseCombustible").keyup(function () {
             sumaDesglose();
         });
-        $("#desgloseMecanico").keyup(function() {
+        $("#desgloseMecanico").keyup(function () {
             sumaDesglose();
         });
-        $("#desgloseSaldo").keyup(function() {
+        $("#desgloseSaldo").keyup(function () {
             sumaDesglose();
         });
     });
@@ -749,8 +750,8 @@
         var smDesglose = 0.0
         //console.log("sumadesglose")
         smDesglose = parseFloat($("#desgloseEquipo").val()) + parseFloat($("#desgloseRepuestos").val()) +
-                parseFloat($("#desgloseCombustible").val()) + parseFloat($("#desgloseMecanico").val()) +
-                parseFloat($("#desgloseSaldo").val())
+                     parseFloat($("#desgloseCombustible").val()) + parseFloat($("#desgloseMecanico").val()) +
+                     parseFloat($("#desgloseSaldo").val())
         $("#totalDesglose").val(number_format(smDesglose, 2, ".", ""));
     }
 

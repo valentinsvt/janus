@@ -99,8 +99,8 @@ class Obra implements Serializable {
     Item transporteCamioneta
     Item transporteAcemila
 
-    double distanciaCamioneta
-    double distanciaAcemila
+    double distanciaCamioneta=0
+    double distanciaAcemila=0
 
 
 
@@ -308,11 +308,11 @@ class Obra implements Serializable {
 
         coordenadas(size: 0..254, blank: true, nullable: true, attributes: [title: 'Coordenadas en formato WGS84'])
 
-        transporteCamioneta(blank: true, nullable: true, attibutes: [title: 'Transporte en Camioneta'])
-        transporteAcemila(blank: true, nullable: true, attributes: [title: 'Transporte en Acemila'])
+        transporteCamioneta(blank: false, nullable: false, attibutes: [title: 'Transporte en Camioneta'])
+        transporteAcemila(blank: false, nullable: false, attributes: [title: 'Transporte en Acemila'])
 
-        distanciaCamioneta(blank: true, nullable: true)
-        distanciaAcemila(blank: true, nullable: true)
+        distanciaCamioneta(blank: false, nullable: false)
+        distanciaAcemila(blank: false, nullable: false)
     }
 
     String toString() {

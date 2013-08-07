@@ -122,9 +122,10 @@ class ObraController extends janus.seguridad.Shield {
         if (!params.save) params.save = "0"
 
         def sqlM = "select itemcdgo, itemnmbr, sum(itemcntd) itemcntd, sum(itemcntd/8) dias " +
-                "from obra_comp(${params.id}) where grpo__id = 2 and itemcntd > 0 group by itemcdgo, itemnmbr order by dias desc"
+                "from obra_comp_v2(${params.id}) where grpo__id = 2 and itemcntd > 0 group by itemcdgo, itemnmbr order by dias desc"
         def sqlR = "select itemcdgo, itemnmbr, unddcdgo, sum(rbrocntd) rbrocntd, sum(dias) dias " +
                 "from plazo(${params.id},${params.personas},${params.maquinas},${params.save}) group by itemcdgo, itemnmbr, unddcdgo"
+        println sqlM
         println sqlR
         def cn = dbConnectionService.getConnection()
         def resultM = cn.rows(sqlM.toString())

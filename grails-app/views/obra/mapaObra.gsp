@@ -265,7 +265,7 @@
 
 //                var kmzLayer = new google.maps.KmlLayer("http://www.nth-development.com/fine/Vias_Principales.kmz");
 //                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/Vias_Principales.kmz");
-                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/5PRUEBA.kmz");
+                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/Parroquias_Pichincha.kmz");
                 kmzLayer.setMap(map);
 //        limites();
 

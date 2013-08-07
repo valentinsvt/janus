@@ -33,7 +33,7 @@
         <div class="row">
             <div class="span12 btn-group" role="navigation" style="margin-left: 0;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
-                <button class="btn" id="btn-imprimir" disabled="true"><i class="icon-print"></i> Imprimir</button>
+                %{--<button class="btn" id="btn-imprimir" disabled="true"><i class="icon-print"></i> Imprimir</button>--}%
             </div>
         </div>
 
@@ -445,19 +445,19 @@
 
         </div>
 
-        <div id="imprimirDialog">
+        %{--<div id="imprimirDialog">--}%
 
-            <fieldset>
+            %{--<fieldset>--}%
 
-                <div class="span3">
+                %{--<div class="span3">--}%
 
-                    No existe una fecha de inicio de obra, no se puede imprimir el contrato!
+                    %{--No existe una fecha de inicio de obra, no se puede imprimir el contrato!--}%
 
-                </div>
+                %{--</div>--}%
 
-            </fieldset>
+            %{--</fieldset>--}%
 
-        </div>
+        %{--</div>--}%
 
         <script type="text/javascript">
 
@@ -718,7 +718,7 @@
             });
 
             if (${contrato?.codigo != null}) {
-                $("#btn-imprimir").attr("disabled", false);
+//                $("#btn-imprimir").attr("disabled", false);
 
                 $(".activo").focus(function () {
 
@@ -798,39 +798,39 @@
 
             });
 
-            $("#btn-imprimir").click(function () {
+            %{--$("#btn-imprimir").click(function () {--}%
 
-                if (${contrato?.fechaInicio != null}) {
+                %{--if (${contrato?.fechaInicio != null}) {--}%
 
-                    location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato?.id)}"
+                    %{--location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato?.id)}"--}%
 
-                } else {
+                %{--} else {--}%
 
-                    $("#imprimirDialog").dialog("open");
-                }
+                    %{--$("#imprimirDialog").dialog("open");--}%
+                %{--}--}%
 
-            });
+            %{--});--}%
 
-            $("#imprimirDialog").dialog({
-                autoOpen  : false,
-                resizable : false,
-                modal     : true,
-                draggable : false,
-                width     : 350,
-                height    : 180,
-                position  : 'center',
-                title     : 'Imprimir Contrato',
-                buttons   : {
-
-                    "Aceptar" : function () {
-
-                        $("#imprimirDialog").dialog("close");
-
-                    }
-                }
-
-
-            })
+//            $("#imprimirDialog").dialog({
+//                autoOpen  : false,
+//                resizable : false,
+//                modal     : true,
+//                draggable : false,
+//                width     : 350,
+//                height    : 180,
+//                position  : 'center',
+//                title     : 'Imprimir Contrato',
+//                buttons   : {
+//
+//                    "Aceptar" : function () {
+//
+//                        $("#imprimirDialog").dialog("close");
+//
+//                    }
+//                }
+//
+//
+//            })
 
 
         </script>

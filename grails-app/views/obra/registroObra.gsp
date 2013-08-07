@@ -1329,6 +1329,7 @@
                     title     : 'Copiar la obra al sistema de oferentes',
                     buttons   : {
                         "Aceptar"  : function () {
+                            $("#dlgLoad").dialog("open");
                             $("#divOk").hide();
                             $("#divError").hide();
                             var originalId = "${obra?.id}";
@@ -1341,6 +1342,7 @@
                                     oferente : oferente
                                 },
                                 success : function (msg) {
+                                    $("#dlgLoad").dialog("close");
                                     $("#copiarDialogOfe").dialog("close");
                                     var parts = msg.split('_');
                                     if (parts[0] == 'NO') {

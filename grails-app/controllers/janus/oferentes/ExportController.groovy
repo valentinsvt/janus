@@ -1,6 +1,7 @@
 package janus.oferentes
 
 import janus.Persona
+import janus.VolumenesObra
 
 class ExportController extends janus.seguridad.Shield {
 
@@ -8,34 +9,50 @@ class ExportController extends janus.seguridad.Shield {
     def oferentesService
 
     def exportObra() {
-//        println "export obra " + params
+//        println "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ export obra " + params
         def obra = janus.Obra.get(params.obra)
 
         def oferente = Persona.get(params.oferente)
         def r = oferentesService.exportDominio(janus.Persona, "prsnjnid", oferente)
-//        println ">>>>" + r
-        if (r == true || r == -1) {
-            def personaSql = "select prsn__id id from prsn where prsnjnid=${params.oferente}"
-            def cn = dbConnectionService.getConnectionOferentes()
-            def prsn = -1
-//        println "validacion " + validacion
-            cn.eachRow(personaSql.toString()) { row ->
-//                println "r " + row
-                prsn = row.id
-            }
 
-            def res = oferentesService.exportDominio(janus.Obra, "obrajnid", obra, params.oferente, "ofrt__id", prsn, "ofrt__id", "select count(*) from obra where obrajnid=${obra.id} and ofrt__id=${prsn}")
-            if (res == true)
-                render "OK_Obra exportada correctamente"
-            else {
-                if (res == false) {
-                    render "NO_Error: ha ocurrido un error al copiar el registro."
-                } else {
-                    render "NO_Error: El registro ya ha sido exportado al sistema de oferentes."
+//        println ">>>>" + r
+        if (r !=-1) {
+            def oferenteId = r
+            def res = oferentesService.exportDominio(janus.Obra, "obrajnid", obra, params.oferente, "ofrt__id", r, "ofrt__id", "select * from obra where obrajnid=${obra.id} and ofrt__id=${r}")
+
+            if (res !=-1) {
+                def obraJnId=res
+                def vols = VolumenesObra.findAllByObra(obra)
+//                println "volumen!!!------------------------------------------ "
+                vols.each {v->
+//                    println "volumen "+v.item+"  "+v.cantidad
+                    res = oferentesService.exportDominioSinReferencia(janus.Item, v.item,oferenteId, "ofrt__id","select * from item where ofrt__id=${oferenteId} and itemcdgo='${v.item.codigo}'")
+                    println "IT............................ "+res
+                    if(res!=-1){
+                        def itemId=res
+                        res = oferentesService.exportDominioSinReferencia(janus.SubPresupuesto, v.subPresupuesto, false, false,"select * from sbpr where sbprdscr='${v.subPresupuesto.descripcion}' and grpo__id=${v.subPresupuesto.grupo.id}  ")
+//                        println "SB............................ "+res
+                        if(res==-1){
+                            render "NO_Error: ha ocurrido un error al copiar el registro."
+                            return
+                        }
+                        res = oferentesService.sqlOferentes("insert into vlob (vlob__id,sbpr__id,item__id,obra__id,vlobcntd,vlobordn,vlobdias) values (default,${res},${itemId},${obraJnId},${v.cantidad},${v.orden},${v.dias})",1)
+//                        println "VLOB............................ "+res
+
+                    }else{
+                        render "NO_Error: ha ocurrido un error al copiar el registro."
+                        return
+                    }
                 }
+                render "OK_Obra exportada correctamente"
+                return
+            }else {
+                render "NO_Error: ha ocurrido un error al copiar el registro."
+                return
             }
         } else {
             render "NO_Error: No se pudo exportar el oferente para exportar la obra."
+            return
         }
     }
 

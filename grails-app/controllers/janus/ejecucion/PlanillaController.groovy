@@ -48,9 +48,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
-
+        def firma = Persona.findAllByCargoIlike("Direct%");
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
-        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
+        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma]
     }
 
     def listAdmin() {
@@ -60,9 +60,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
-
+        def firma = Persona.findAllByCargoIlike("Direct%");
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
-        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
+        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma]
 
     }
 
@@ -588,17 +588,17 @@ class PlanillaController extends janus.seguridad.Shield {
                 def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
                 tiposPlanilla -= plp.tipoPlanilla
             }
-            planillasAvance.each {pa->
-                if(pa.fechaMemoPagoPlanilla==null){
+            planillasAvance.each { pa ->
+                if (pa.fechaMemoPagoPlanilla == null) {
                     def costos = Planilla.findAllByPadreCosto(pa)
-                    if(costos.size()==0){
-                        costo=true
+                    if (costos.size() == 0) {
+                        costo = true
                     }
                 }
 
             }
         }
-        if(!costo){
+        if (!costo) {
             tiposPlanilla.remove(TipoPlanilla.findByCodigo("C"))
         }
 
