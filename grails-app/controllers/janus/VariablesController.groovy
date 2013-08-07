@@ -50,6 +50,8 @@ class VariablesController {
         obra.properties = params
 //        obra.capacidadVolquete=params.asdas.toDouble()
 //        obra.factorVolumen=params.factorVolumen.toDouble()
+        if (!obra.transporteCamioneta) obra.distanciaCamioneta = 0
+        if (!obra.transporteAcemila) obra.distanciaAcemila = 0
         if (obra.save(flush: true)) {
             render "OK"
         } else {

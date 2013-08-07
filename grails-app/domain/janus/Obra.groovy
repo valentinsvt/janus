@@ -308,8 +308,8 @@ class Obra implements Serializable {
 
         coordenadas(size: 0..254, blank: true, nullable: true, attributes: [title: 'Coordenadas en formato WGS84'])
 
-        transporteCamioneta(blank: false, nullable: false, attibutes: [title: 'Transporte en Camioneta'])
-        transporteAcemila(blank: false, nullable: false, attributes: [title: 'Transporte en Acemila'])
+        transporteCamioneta(blank: true, nullable: true, attibutes: [title: 'Transporte en Camioneta'])
+        transporteAcemila(blank: true, nullable: true, attributes: [title: 'Transporte en Acémila'])
 
         distanciaCamioneta(blank: false, nullable: false)
         distanciaAcemila(blank: false, nullable: false)

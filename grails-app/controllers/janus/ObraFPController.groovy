@@ -139,18 +139,34 @@ class ObraFPController {
         //ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
         ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 //        println "ejecutó sp_obra"
+
+        /* Se debe crear una neuva columna: Transp_Especial, que sirve para totalizar el valor de cada rubro
+   *   por concepto de transporte especial en camioneta o en acémila o ambos.
+   *  La suma total de Transp_Especial se debe desglosar en 70% equipos y 30% mano de obra (chofer)
+   *  Si hay desglose de transporte o si hay transporte especial se debe crear la columna chofer.
+   */
+        //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        def camioneta = Item.get(Obra.get(obra__id).transporteCamioneta?.id)
+        def acemila   = Item.get(Obra.get(obra__id).transporteAcemila?.id)
+        def trnpEspecial =  camioneta || acemila
+        println "tranporte especial: " + trnpEspecial
+        transporteEspecial(obra__id)
+
+        /* vuelve a ejecutar para incluir rubors de tranpsorte especial */
+        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+
+/*
+        if (trnpEspecial) {
+            creaCampo(obra__id, 'TRANS-ESPECIAL_U', 'D')
+            creaCampo(obra__id, 'TRANS-ESPECIAL_T', 'D')
+        }
+*/
+        //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 //
 //        println "verificaMatriz" + verificaMatriz(obra__id)
 //        //println "pasa verificaMatriz"
 //        println "verifica_precios \n" + verifica_precios(obra__id)
-
-        //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-        //poneTransporteEspecial(obra__id)
-
-        //recalcula valores de la composicion de al obra
-        //ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
-        //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
             /* --------------------------------------- procesaMatriz --------------------------------
@@ -204,6 +220,7 @@ class ObraFPController {
             creaCampo(obra__id, id_combustible + "_U", "D")
             creaCampo(obra__id, id_combustible + "_T", "D")
         }
+
         creaCampo(obra__id, 'TOTAL_U', 'T');
         creaCampo(obra__id, 'TOTAL_T', 'T');
         /* ---- Inserta los rubros y títulos de totales --------------------------------------- */
@@ -283,20 +300,21 @@ class ObraFPController {
     }
 
 
-    /*
-    * No se pueden crear dinámicamente los rubors de tranaporte especial porque no se sabe el subpresupuesto
-    *   se debe incluir un rubro para camioneta y otro para acémila como máximo.
-    *
-    *   PROBLEMAS: no se sabe en que subpresupuesto crear los rubros.
-    *              si se deja libre para que el usuario cree los rubros en VLOB, se debe
-     *             registrar la distancia correspondiente en VLOB y este proc. debe poner la cantidad.
+    /* Se deben crear los rubros TCxx o TAxxx de transporte especial en VLOB bajo el subpresupuesto transporte especial
+    *  si ya existe se actualizan sus cantidades.
+    *  La suma total de Transp_Especial se debe desglosar en 70% equipos y 30% mano de obra (chofer o arriero)
+    *  NO HAY DESGLOSE::::????
+    *  Si hay desglose de transporte o si hay transporte especial se debe crear la columna chofer.
     */
-    def poneTransporteEspecial(id) {
+    def transporteEspecial(id) {
 
         println "inicia proceso... "
         def res
-        def camioneta = Item.get(Obra.get(id).transporteCamioneta.id)
-        def acemila   = Item.get(Obra.get(id).transporteAcemila.id)
+        def sbpr = SubPresupuesto.findByDescripcion("TRANSPORTE ESPECIAL")
+        if (!sbpr) res = "Ingrese el subpresupuesto:TRANSPORTE ESPECIAL"
+        def obra = Obra.get(id)
+        def camioneta = Item.get(obra.transporteCamioneta?.id)
+        def acemila   = Item.get(obra.transporteAcemila?.id)
         if (camioneta || acemila){
             def cn = dbConnectionService.getConnection()
             def peso = 0.0
@@ -314,46 +332,57 @@ class ObraFPController {
                 println "peso al volumen: ${row.peso}"
                 peso += row.peso
             }
-            println "peso total: ${peso}"
+            println "peso total: ${peso.toDouble().round(2)}"
             /* verifica que hay a los rubros en vlob */
             if (camioneta) {
-                def itemCamioneta = VolumenesObra.findAllByItem(Item.get(Obra.get(id).transporteCamioneta.id))
+                def itemCamioneta = VolumenesObra.findByItem(Item.get(obra.transporteCamioneta.id))
                 println itemCamioneta
                 if (itemCamioneta) {
                     println "ya existe el rubro de camioneta: actualizando..."
-                    tx_sql = "update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
-                            "where item__id = ${camioneta}"
-                    res = cn.execute(txSql.toString())
-
+                    tx_sql = "update vlob set vlobcntd = ${(peso * obra.distanciaCamioneta).toDouble().round(2)} " +
+                            "where vlob__id = ${itemCamioneta.id}"
+                    println tx_sql
+                    res = cn.execute(tx_sql.toString())
                 } else {
                     println "No hay el rubro de camioneta: creando..."
-                    tx_sql = "insert into vlob() values update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
-                            "where item__id = ${camioneta}"
-                    res = cn.execute(txSql.toString())
-
+                    tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
+                             "values(${sbpr.id}, ${camioneta.id}, ${id}, ${(peso * obra.distanciaCamioneta).toDouble().round(2)}, 1000, 0) "
+                    println tx_sql
+                    res = cn.execute(tx_sql.toString())
                 }
-/*
-                tx_sql = "update vlob set vlobcntd = ${peso * obra.distancia_cam} " +
-                        "where item__id = ${camioneta}"
-                res = cn.execute(txSql.toString())
-*/
-
             }
-
             if (acemila) {
-                if (VolumenesObra.findAllByItem(Item.get(Obra.get(id).transporteAcemila.id))) {
-                    println "ya existe el rubro de acemila: actualizando..."
-/*
-                tx_sql = "update vlob set vlobcntd = ${peso * obra.distancia_acem} " +
-                        "where item__id = ${acemila}"
-                res += cn.execute(txSql.toString())
-*/
+                def itemAcemila = VolumenesObra.findByItem(Item.get(obra.transporteAcemila.id))
+                println itemAcemila
+                if (itemAcemila) {
+                    println "ya existe el rubro de acémila: actualizando..."
+                    tx_sql = "update vlob set vlobcntd = ${(peso * obra.distanciaAcemila).toDouble().round(2)} " +
+                            "where vlob__id = ${itemAcemila.id}"
+                    println tx_sql
+                    res = cn.execute(tx_sql.toString())
                 } else {
-                    println "No hay el rubro de acémila: creando..."
+                    println "No hay el rubro de camioneta: creando..."
+                    tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
+                            "values(${sbpr.id}, ${acemila.id}, ${id}, ${(peso * obra.distanciaAcemila).toDouble().round(2)}, 1000, 0) "
+                    println tx_sql
+                    res = cn.execute(tx_sql.toString())
                 }
-                // hallar los id de camioneta y acémila
             }
             cn.close()
+
+        } else {
+            /* se deben borrar los rubros ingresados si existen... */
+            def aborrar =  Item.findAllByCodigoIlike('tc-%');
+            aborrar += Item.findAllByCodigoIlike('ta-%');
+            def ids = []
+            aborrar.each() {
+                ids << it.id
+            }
+            println "a borrar: " + ids
+            ids.each(){
+                def tmp = VolumenesObra.findByItem(Item.get(it))
+                if (tmp) tmp.delete()
+            }
 
         }
         return res
