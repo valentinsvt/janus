@@ -237,7 +237,7 @@
     </div>
 
     <div id="obfn" style="display: none">
-        <h3>Obras finalizadas </h3><br>
+        <h3>Obras finalizadas</h3><br>
 
         <p>Listado de obras finalizadas.</p>
     </div>
