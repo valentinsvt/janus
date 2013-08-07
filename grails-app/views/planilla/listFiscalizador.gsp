@@ -54,6 +54,12 @@
                         </g:link>
                     </div>
                 </g:if>
+                <div class="btn-group">
+                    <a href="#" class="btn  " id="imprimir">
+                        <i class="icon-print"></i>
+                        Imprimir Documento
+                    </a>
+                </div>
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -255,6 +261,33 @@
         </div>
 
 
+    <div id="imprimirDialog">
+
+        <fieldset>
+            <div class="span4" style="margin-top: 10px">
+
+                Oficio N°: <g:textField name="oficio" maxlength="20"/>
+
+            </div>
+
+            <div class="span4" style="margin-top: 10px">
+                Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>
+
+            </div>
+
+        </fieldset>
+    </div>
+
+    <div id="errorImpresion">
+        <fieldset>
+            <div class="spa3" style="margin-top: 30px; margin-left: 10px">
+
+                Debe ingresar un número de Oficio!
+
+            </div>
+        </fieldset>
+    </div>
+
 
 
     <script type="text/javascript">
@@ -413,6 +446,82 @@
                     $("#modal-Planilla").modal("show");
                     return false;
                 });
+
+
+                $("#imprimir").click(function () {
+
+
+                    $("#imprimirDialog").dialog("open");
+
+                });
+
+                $("#imprimirDialog").dialog({
+
+                    autoOpen: false,
+                    resizable: false,
+                    modal: true,
+                    draggable: false,
+                    width: 420,
+                    height: 280,
+                    position: 'center',
+                    title: 'Datos del documento a ser impreso',
+                    buttons: {
+                        "Aceptar": function () {
+
+                            if($("#oficio").val()){
+
+                                location.href="${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()
+
+                                $("#imprimirDialog").dialog("close")
+
+
+                            } else {
+
+                                $("#errorImpresion").dialog("open")
+
+                            }
+
+
+
+
+                        },
+                        "Cancelar": function () {
+
+                            $("#imprimirDialog").dialog("close")
+
+                        }
+
+                    }
+
+                })
+
+
+
+
+
+
+                $("#errorImpresion").dialog({
+
+
+                    autoOpen: false,
+                    resizable: false,
+                    modal: true,
+                    draggable: false,
+                    width: 320,
+                    height: 200,
+                    position: 'center',
+                    title: 'Error',
+                    buttons: {
+                        "Aceptar": function () {
+
+                            $("#errorImpresion").dialog("close")
+
+                        }
+                    }
+
+
+                });
+
 
 
 
