@@ -315,7 +315,7 @@
                 }
             }
 
-            function submitFormParrafo(btn, num, $div) {
+            function submitFormParrafo(btn, num, $div, add, $replace) {
                 var $form = $("#frmSave");
                 if ($form.valid()) {
                     btn.replaceWith(spinner);
@@ -330,15 +330,20 @@
                                 var p = msg.split("_");
                                 log(p[1], true);
                             } else {
-                                var $sec = addParrafo($.parseJSON(msg), num, $div);
-                                if ($sec) {
-                                    $("#modal").modal("hide");
-                                    $('html, body').animate({
-                                        scrollTop : $div.parents(".seccion").offset().top
-                                    }, 2000);
-                                    editable($sec.find(".editable"));
+                                var $sec;
+                                if (add) {
+                                    $sec = addParrafo($.parseJSON(msg), num, $div);
+                                    if ($sec) {
+                                        $('html, body').animate({
+                                            scrollTop : $div.parents(".seccion").offset().top
+                                        }, 2000);
+                                    }
+                                    log("Elemento creado existosamente", false);
+                                } else {
+                                    $sec = addParrafo($.parseJSON(msg), num, $div, $replace);
                                 }
-                                log("Elemento creado existosamente", false);
+                                $("#modal").modal("hide");
+                                editable($sec.find(".editable"));
                             }
                         }
                     });
@@ -518,7 +523,7 @@
 
             }
 
-            function addParrafo(data, num, $div) {
+            function addParrafo(data, num, $div, $replace) {
                 if (data.contenido == "null" || data.contenido == null) {
                     data.contenido = "";
                 }
@@ -529,13 +534,34 @@
                 if (data.tipoTabla) {
                     tipoTabla(data.tipoTabla, $titulo);
                 }
-                var $btnTabla;
+                var $btnTabla = $('<a href="#" class="btn btn-mini" style="margin-left: 10px;">Modificar tabla</a>');
                 var $btnEliminarParrafo = $('<a href="#" class="btn btn-delete btn-mini" style="margin-left: 10px;"><i class="icon-minus"></i> Eliminar párrafo</a>');
-//                if (data.tipoTabla) {
-//                    $btnTabla = $('<a href="#" class="btn btn-mini" style="margin-left: 10px;">Eliminar tabla</a>');
-//                } else {
-//                    $btnTabla = $('<a href="#" class="btn btn-mini" style="margin-left: 10px;">Insertar tabla</a>');
-//                }
+
+                $btnTabla.click(function () {
+                    $.ajax({
+                        type    : "POST",
+                        data    : {
+                            id : data.id
+                        },
+                        url     : "${createLink(controller: 'parrafo', action:'form_ext_ajax')}",
+                        success : function (msg) {
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                            btnSave.click(function () {
+                                submitFormParrafo(btnSave, data.numero, $parr, false, $parr);
+                                return false;
+                            });
+
+                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+                            $("#modalTitle").html("Modificar Párrafo");
+                            $("#modalBody").html(msg);
+                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            $("#modal").modal("show");
+                        }
+                    });
+                    return false;
+                });
 
                 $btnEliminarParrafo.click(function () {
                     var $del = $(this).parents(".parrafo");
@@ -578,7 +604,11 @@
                 });
 
                 $titulo.append($btnEliminarParrafo).append($btnTabla).appendTo($parr);
-                $parr.appendTo($div);
+                if ($replace) {
+                    $replace.replaceWith($parr);
+                } else {
+                    $parr.appendTo($div);
+                }
 
                 $parr.data({
                     id        : data.id,
@@ -672,7 +702,7 @@
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                submitFormParrafo(btnSave, data.numero, $parr);
+                                submitFormParrafo(btnSave, data.numero, $parr, true);
                                 return false;
                             });
 
