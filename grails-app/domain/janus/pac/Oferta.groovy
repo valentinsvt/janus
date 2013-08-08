@@ -1,5 +1,7 @@
 package janus.pac
 
+import janus.Persona
+
 class Oferta {
 
     Concurso concurso
@@ -14,6 +16,8 @@ class Oferta {
     String garantia
     String estado
     String observaciones
+
+    Persona responsableProceso
 
     static mapping = {
         table 'ofrt'
@@ -34,6 +38,8 @@ class Oferta {
             garantia column: 'ofrtgrnt'
             estado column: 'ofrtetdo'
             observaciones column: 'ofrtobsr'
+
+            responsableProceso column: 'prsn__id'
         }
     }
     static constraints = {
@@ -49,5 +55,7 @@ class Oferta {
         garantia(blank: true, nullable: true, maxSize: 1)
         estado(blank: true, nullable: true, maxSize: 1)
         observaciones(blank: true, nullable: true, maxSize: 127)
+
+        responsableProceso(blank: true, nullable: true)
     }
 }

@@ -294,7 +294,7 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Anticipo</div>
+                    <div class="span2 formato">Anticipo sin reajuste</div>
 
                     <div class="span1">
                         <g:textField name="porcentajeAnticipo" class="anticipo activo"
@@ -307,30 +307,41 @@
                                      value="${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                     </div>
 
-                    <div class="span2 formato">Indices de la Oferta</div>
+                    <div class="span2 formato">Indices mes anterior presentación oferta</div>
 
                     <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list()}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id"/></div>
 
                 </div>
 
+                %{--<div class="span12" style="margin-top: 10px">--}%
+
+                %{--<div class="span2 formato">Administrador</div>--}%
+
+                %{--<div class="span3">--}%
+                %{--<g:select name="administrador.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{--}%
+                %{--it.apellido + ' ' + it.nombre--}%
+                %{--}}"--}%
+                %{--value="${contrato?.administradorId}" class="required" noSelection="['': 'Seleccione...']"/>--}%
+                %{--</div>--}%
+
+                %{--<div class="span2 formato">Delegado del Prefecto</div>--}%
+
+                %{--<div class="span3">--}%
+                %{--<g:select name="delegadoPrefecto.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{--}%
+                %{--it.apellido + ' ' + it.nombre--}%
+                %{--}}"--}%
+                %{--value="${contrato?.delegadoPrefectoId}" class="required" noSelection="['': 'Seleccione...']"/>--}%
+                %{--</div>--}%
+
+                %{--</div>--}%
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Administrador</div>
+                    <div class="span2 formato">Dpto. Administrador</div>
 
                     <div class="span3">
-                        <g:select name="administrador.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{ it.apellido + ' ' + it.nombre }}"
-                                  value="${contrato?.administradorId}" class="required" noSelection="['' :'Seleccione...']"/>
+                        <g:select name="depAdministrador.id" from="${janus.Departamento.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"
+                                  value="${contrato?.depAdministradorId}" class="required"/>
                     </div>
-
-                    <div class="span2 formato">Delegado del Prefecto</div>
-
-                    <div class="span3">
-                        <g:select name="delegadoPrefecto.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{ it.apellido + ' ' + it.nombre }}"
-                                  value="${contrato?.delegadoPrefectoId}" class="required" noSelection="['': 'Seleccione...']"/>
-                    </div>
-
-
-
 
                 </div>
 

@@ -22,6 +22,8 @@ class Proveedor {
     String estado //activo o inactivo
     String observaciones
 
+    String origen       //Nacional, Extranjero o Mixto (N,E,M)
+
     static mapping = {
         table 'prve'
         cache usage: 'read-write', include: 'non-lazy'
@@ -48,6 +50,8 @@ class Proveedor {
             titulo column: 'prvettlr'
             estado column: 'prveetdo'
             observaciones column: 'prveobsr'
+
+            origen column: 'prveorgn'
         }
     }
     static constraints = {
@@ -68,6 +72,8 @@ class Proveedor {
         titulo(blank: true, nullable: true, maxSize: 4)
         estado(blank: true, nullable: true, maxSize: 1)
         observaciones(blank: true, nullable: true, maxSize: 127)
+
+        origen(blank: true, nullable: true, maxSize: 1, inList: ['N', 'E', 'M'])
     }
 
     String toString() {

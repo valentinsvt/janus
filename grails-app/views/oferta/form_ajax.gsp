@@ -17,10 +17,11 @@
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
+
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Descripcion
+                Descripción
             </span>
         </div>
 
@@ -31,6 +32,7 @@
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
+
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -51,7 +53,6 @@
     </div>
 
 
-
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -60,8 +61,9 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="monto" class="" value="${fieldValue(bean: ofertaInstance, field: 'monto')}" style="width:140px;"  />
+            <g:field type="number" name="monto" class="" value="${fieldValue(bean: ofertaInstance, field: 'monto')}" style="width:140px;"/>
             <span class="mandatory">*</span>
+
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -74,7 +76,7 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="plazo" class="" value="${fieldValue(bean: ofertaInstance, field: 'plazo')}" style="width:140px;" />
+            <g:field type="number" name="plazo" class="" value="${fieldValue(bean: ofertaInstance, field: 'plazo')}" style="width:140px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -88,7 +90,7 @@
         </div>
 
         <div class="controls">
-            <elm:datepicker name="fechaEntrega" class="" value="${ofertaInstance?.fechaEntrega}"  style="width:140px;"/>
+            <elm:datepicker name="fechaEntrega" class="" value="${ofertaInstance?.fechaEntrega}" style="width:140px;"/>
             <span class="mandatory">*</span>
 
 
@@ -98,43 +100,45 @@
 
 
 
-    %{--<div class="control-group">--}%
-        %{--<div>--}%
-            %{--<span class="control-label label label-inverse">--}%
-                %{--Calificado--}%
-            %{--</span>--}%
-        %{--</div>--}%
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span class="control-label label label-inverse">--}%
+%{--Calificado--}%
+%{--</span>--}%
+%{--</div>--}%
 
-        %{--<div class="controls">--}%
-            %{--<g:textField name="calificado" maxlength="1" class="" value="${ofertaInstance?.calificado}"/>--}%
+%{--<div class="controls">--}%
+%{--<g:textField name="calificado" maxlength="1" class="" value="${ofertaInstance?.calificado}"/>--}%
 
-            %{--<p class="help-block ui-helper-hidden"></p>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+%{--<p class="help-block ui-helper-hidden"></p>--}%
+%{--</div>--}%
+%{--</div>--}%
 
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Hoja
+                Hojas de oferta
             </span>
         </div>
 
         <div class="controls">
-            <g:field type="number" name="hoja" class="" value="${fieldValue(bean: ofertaInstance, field: 'hoja')}"  style="width:140px;" />
+            <g:field type="number" name="hoja" class="" value="${fieldValue(bean: ofertaInstance, field: 'hoja')}" style="width:140px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
+
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Garantia
+                Garantía
             </span>
         </div>
 
         <div class="controls">
             %{--<g:textField name="garantia" maxlength="1" class="" value="${ofertaInstance?.garantia}"/>--}%
-            <input type="checkbox" name="garantia" value="1" ${(ofertaInstance?.garantia=="1")?"checked":""}>
+            <input type="checkbox" name="garantia" value="1" ${(ofertaInstance?.garantia == "1") ? "checked" : ""}>
+
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -142,7 +146,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Subsecretario
+                Secretario C.T.
             </span>
         </div>
 
@@ -153,21 +157,35 @@
         </div>
     </div>
 
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Responsable del proceso
+            </span>
+        </div>
 
+        <div class="controls">
+            <g:select name="responsableProceso.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{
+                it.apellido + ' ' + it.nombre
+            }}"
+                      value="${ofertaInstance?.responsableProcesoId}" class="required"/>
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
 
-    %{--<div class="control-group">--}%
-        %{--<div>--}%
-            %{--<span class="control-label label label-inverse">--}%
-                %{--Estado--}%
-            %{--</span>--}%
-        %{--</div>--}%
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span class="control-label label label-inverse">--}%
+%{--Estado--}%
+%{--</span>--}%
+%{--</div>--}%
 
-        %{--<div class="controls">--}%
-            %{--<g:textField name="estado" maxlength="1" class="" value="${ofertaInstance?.estado}"/>--}%
+%{--<div class="controls">--}%
+%{--<g:textField name="estado" maxlength="1" class="" value="${ofertaInstance?.estado}"/>--}%
 
-            %{--<p class="help-block ui-helper-hidden"></p>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+%{--<p class="help-block ui-helper-hidden"></p>--}%
+%{--</div>--}%
+%{--</div>--}%
 
     <div class="control-group">
         <div>

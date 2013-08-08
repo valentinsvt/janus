@@ -22,7 +22,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Tipo
+                Tipo proveedor
             </span>
         </div>
 
@@ -36,7 +36,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Ruc
+                RUC
             </span>
         </div>
 
@@ -134,7 +134,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Telefonos
+                Teléfonos
             </span>
         </div>
 
@@ -177,35 +177,49 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Licencia
+                Origen
             </span>
         </div>
 
         <div class="controls">
-            <g:textField name="licencia" maxlength="10" class="" value="${proveedorInstance?.licencia}"/>
+            <g:select name="origen" from="${proveedorInstance.constraints.origen.inList}" class=" required" value="${proveedorInstance?.origen}" valueMessagePrefix="proveedor.origen"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
 
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span class="control-label label label-inverse">--}%
+%{--Licencia--}%
+%{--</span>--}%
+%{--</div>--}%
+
+%{--<div class="controls">--}%
+%{--<g:textField name="licencia" maxlength="10" class="" value="${proveedorInstance?.licencia}"/>--}%
+
+%{--<p class="help-block ui-helper-hidden"></p>--}%
+%{--</div>--}%
+%{--</div>--}%
+
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span class="control-label label label-inverse">--}%
+%{--Registro--}%
+%{--</span>--}%
+%{--</div>--}%
+
+%{--<div class="controls">--}%
+%{--<g:textField name="registro" maxlength="7" class="" value="${proveedorInstance?.registro}"/>--}%
+
+%{--<p class="help-block ui-helper-hidden"></p>--}%
+%{--</div>--}%
+%{--</div>--}%
+
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Registro
-            </span>
-        </div>
-
-        <div class="controls">
-            <g:textField name="registro" maxlength="7" class="" value="${proveedorInstance?.registro}"/>
-
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
-
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Titulo
+                Título
             </span>
         </div>
 
@@ -216,19 +230,19 @@
         </div>
     </div>
 
-    %{--<div class="control-group">--}%
-        %{--<div>--}%
-            %{--<span class="control-label label label-inverse">--}%
-                %{--Estado--}%
-            %{--</span>--}%
-        %{--</div>--}%
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span class="control-label label label-inverse">--}%
+%{--Estado--}%
+%{--</span>--}%
+%{--</div>--}%
 
-        %{--<div class="controls">--}%
-            %{--<g:textField name="estado" maxlength="1" class="" value="${proveedorInstance?.estado}"/>--}%
+%{--<div class="controls">--}%
+%{--<g:textField name="estado" maxlength="1" class="" value="${proveedorInstance?.estado}"/>--}%
 
-            %{--<p class="help-block ui-helper-hidden"></p>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+%{--<p class="help-block ui-helper-hidden"></p>--}%
+%{--</div>--}%
+%{--</div>--}%
 
     <div class="control-group">
         <div>

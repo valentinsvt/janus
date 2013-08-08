@@ -38,6 +38,8 @@ class Contrato implements Serializable {
     Date fechaPedidoRecepcionContratista
     Date fechaPedidoRecepcionFiscalizador
 
+    Departamento depAdministrador
+
     Persona administrador
     Persona delegadoPrefecto
 
@@ -82,6 +84,8 @@ class Contrato implements Serializable {
             fechaPedidoRecepcionContratista column: 'cntrfccn'
             fechaPedidoRecepcionFiscalizador column: 'cntrfcfs'
 
+            depAdministrador column: 'dptoadmn'
+
             administrador column: 'prsnadmn'
             delegadoPrefecto column: 'prsndlpr'
         }
@@ -115,6 +119,8 @@ class Contrato implements Serializable {
 
         fechaPedidoRecepcionContratista(blank: true, nullable: true)
         fechaPedidoRecepcionFiscalizador(blank: true, nullable: true)
+
+        depAdministrador(blank: true, nullable: true)
 
         administrador(blank: true, nullable: true)
         delegadoPrefecto(blank: true, nullable: true)
