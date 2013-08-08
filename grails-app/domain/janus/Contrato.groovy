@@ -40,7 +40,7 @@ class Contrato implements Serializable {
 
     Departamento depAdministrador
 
-    Persona administrador
+//    Persona administrador
     Persona delegadoPrefecto
 
     static mapping = {
@@ -86,7 +86,7 @@ class Contrato implements Serializable {
 
             depAdministrador column: 'dptoadmn'
 
-            administrador column: 'prsnadmn'
+//            administrador column: 'prsnadmn'
             delegadoPrefecto column: 'prsndlpr'
         }
     }
@@ -122,11 +122,37 @@ class Contrato implements Serializable {
 
         depAdministrador(blank: true, nullable: true)
 
-        administrador(blank: true, nullable: true)
+//        administrador(blank: true, nullable: true)
         delegadoPrefecto(blank: true, nullable: true)
     }
 
     def getObra() {
         return this.oferta?.concurso?.obra
     }
+
+    def getAdministradorContrato() {
+        def admins = AdministradorContrato.withCriteria {
+            eq("contrato", this)
+            le("fechaInicio", new Date().clearTime())
+            or {
+                ge("fechaFin", new Date().clearTime())
+                isNull("fechaFin")
+            }
+            order("fechaInicio", "desc")
+        }
+        println admins
+        if (admins.size() == 0) {
+            return new AdministradorContrato()
+        } else if (admins.size() == 1) {
+            return admins.first()
+        } else {
+            println "Alerta hay varios admins: contrato: " + this.id + " admins: " + admins.id
+            return admins.first()
+        }
+    }
+
+    def getAdministrador() {
+        return this.administradorContrato?.administrador
+    }
+
 }

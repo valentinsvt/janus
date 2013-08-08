@@ -18,10 +18,18 @@
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
+        <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
+
         <style type="text/css">
 
         .formato {
             font-weight : bolder;
+        }
+
+        tr.info td {
+            background : rgba(91, 123, 179, 0.46) !important;
         }
         </style>
 
@@ -377,6 +385,12 @@
                                 </a>
                             </li>
 
+                            <li>
+                                <a href="#" id="btnAdmin">
+                                    <i class="icon-user"></i> Administrador
+                                </a>
+                            </li>
+
                         </ul>
 
                     </div>
@@ -447,19 +461,35 @@
 
         %{--<div id="imprimirDialog">--}%
 
-            %{--<fieldset>--}%
+        %{--<fieldset>--}%
 
-                %{--<div class="span3">--}%
+        %{--<div class="span3">--}%
 
-                    %{--No existe una fecha de inicio de obra, no se puede imprimir el contrato!--}%
+        %{--No existe una fecha de inicio de obra, no se puede imprimir el contrato!--}%
 
-                %{--</div>--}%
+        %{--</div>--}%
 
-            %{--</fieldset>--}%
+        %{--</fieldset>--}%
 
         %{--</div>--}%
 
         <script type="text/javascript">
+
+            function log(msg, error) {
+                var sticky = false;
+                var theme = "success";
+                if (error) {
+                    sticky = true;
+                    theme = "error";
+                }
+                $.jGrowl(msg, {
+                    speed          : 'slow',
+                    sticky         : sticky,
+                    theme          : theme,
+                    closerTemplate : '<div>[ cerrar todos ]</div>',
+                    themeState     : ''
+                });
+            }
 
             function updateAnticipo() {
                 var porcentaje = $("#porcentajeAnticipo").val();
@@ -489,6 +519,7 @@
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
+
             function validarInt(ev) {
                 /*
                  48-57      -> numeros
@@ -507,6 +538,26 @@
                         ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
                         ev.keyCode == 37 || ev.keyCode == 39);
             }
+
+            $("#btnAdmin").click(function () {
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(controller: 'administradorContrato', action: 'list_ext')}",
+                    data    : {
+                        contrato : "${contrato?.id}"
+                    },
+                    success : function (msg) {
+                        var $btnOk = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
+                        $("#modal_tittle_var").text("Administradores");
+                        $("#modal_body_var").html(msg);
+                        $("#administrador").data("contrato", "${contrato?.id}");
+                        $("#modal_footer_var").html($btnOk);
+                        $("#modal-var").modal("show");
+                    }
+                });
+
+                return false;
+            });
 
             $("#btnAvance").click(function () {
                 $("#modal-fecha").modal("show");
@@ -800,37 +851,37 @@
 
             %{--$("#btn-imprimir").click(function () {--}%
 
-                %{--if (${contrato?.fechaInicio != null}) {--}%
+            %{--if (${contrato?.fechaInicio != null}) {--}%
 
-                    %{--location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato?.id)}"--}%
+            %{--location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: contrato?.id)}"--}%
 
-                %{--} else {--}%
+            %{--} else {--}%
 
-                    %{--$("#imprimirDialog").dialog("open");--}%
-                %{--}--}%
+            %{--$("#imprimirDialog").dialog("open");--}%
+            %{--}--}%
 
             %{--});--}%
 
-//            $("#imprimirDialog").dialog({
-//                autoOpen  : false,
-//                resizable : false,
-//                modal     : true,
-//                draggable : false,
-//                width     : 350,
-//                height    : 180,
-//                position  : 'center',
-//                title     : 'Imprimir Contrato',
-//                buttons   : {
-//
-//                    "Aceptar" : function () {
-//
-//                        $("#imprimirDialog").dialog("close");
-//
-//                    }
-//                }
-//
-//
-//            })
+            //            $("#imprimirDialog").dialog({
+            //                autoOpen  : false,
+            //                resizable : false,
+            //                modal     : true,
+            //                draggable : false,
+            //                width     : 350,
+            //                height    : 180,
+            //                position  : 'center',
+            //                title     : 'Imprimir Contrato',
+            //                buttons   : {
+            //
+            //                    "Aceptar" : function () {
+            //
+            //                        $("#imprimirDialog").dialog("close");
+            //
+            //                    }
+            //                }
+            //
+            //
+            //            })
 
 
         </script>
