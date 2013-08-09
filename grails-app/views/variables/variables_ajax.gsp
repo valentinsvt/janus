@@ -9,6 +9,13 @@
     width : 65px;
 }
 
+.ui-front {
+
+
+    z-index: 1060 !important;
+
+}
+
 .margen {
     margin-left : 40px;
     width       : 500px;
@@ -522,8 +529,8 @@
 
                 <div class="span6">
                     %{--<g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"--}%
-                    <g:select name="transporteCamioneta.id" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
-                              value="${obra?.transporteCamioneta?.id}" style="width: 300px; margin-left: -10px" noSelection="${['': 'Seleccione']}"/>
+                    <g:select name="transporteCamioneta.id" from="${transporteCamioneta}" optionKey="id" optionValue="nombre" id="transporteCam"
+                              value="${obra?.transporteCamioneta?.id}" style="width: 300px; margin-left: -10px" noSelection="${['null': 'Seleccione']}"/>
                 </div>
 
                 <div class="span2">
@@ -543,8 +550,8 @@
 
                 <div class="span6">
                     %{--<g:select name="transporteAcemila.id" id="trac" from="${transporteAcemila}" optionKey="id" optionValue="nombre"--}%
-                    <g:select name="transporteAcemila.id" from="${transporteAcemila}" optionKey="id" optionValue="nombre"
-                              value="${obra?.transporteAcemila?.id}" style="width: 300px; margin-left: -10px" noSelection="${['': 'Seleccione']}"/>
+                    <g:select name="transporteAcemila.id" from="${transporteAcemila}" optionKey="id" optionValue="nombre"  id="transporteAce"
+                              value="${obra?.transporteAcemila?.id}" style="width: 300px; margin-left: -10px" noSelection="${['null': 'Seleccione']}"/>
                 </div>
 
                 <div class="span2">
@@ -560,6 +567,8 @@
 
     </div>
 </g:form>
+
+
 
 <script type="text/javascript">
 
@@ -754,6 +763,8 @@
                      parseFloat($("#desgloseSaldo").val())
         $("#totalDesglose").val(number_format(smDesglose, 2, ".", ""));
     }
+
+
 
 
 </script>

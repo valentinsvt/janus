@@ -700,6 +700,19 @@
             </div>
         </g:if>
 
+
+
+
+    <div id="errorDialog">
+        <fieldset>
+            <div class="span3">
+                Debe seleccionar un transporte especial válido!
+                <br>(Tab: Tranp. Especial)</br>
+            </div>
+        </fieldset>
+    </div>
+
+
         <script type="text/javascript">
 
             function enviarLq() {
@@ -1225,7 +1238,9 @@
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-var").valid()) {
+
+//                                var active = $("#tabs").tabs("option", "active");
+                              if ($("#frmSave-var").valid()) {
                                     btnSave.replaceWith(spinner);
                                 }
                                 var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();//+"&lang=en_US";
@@ -1245,6 +1260,9 @@
                                 });
 
                                 return false;
+
+
+
                             });
 
                             $("#modal_title_var").html("Variables");
@@ -1679,6 +1697,37 @@
                 }
 
             });
+
+
+
+
+            $("#errorDialog").dialog({
+
+                autoOpen: false,
+                resizable: false,
+                modal: true,
+                draggable: false,
+                width: 350,
+                height: 180,
+                zIndex: 1060,
+                position: 'center',
+                title: 'Error',
+                buttons: {
+                    "Aceptar": function () {
+
+                        $("#errorDialog").dialog("close");
+
+                    }
+                }
+
+            });
+
+
+
+
+
+
+
         </script>
 
     </body>

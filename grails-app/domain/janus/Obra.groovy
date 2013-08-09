@@ -311,8 +311,8 @@ class Obra implements Serializable {
         transporteCamioneta(blank: true, nullable: true, attibutes: [title: 'Transporte en Camioneta'])
         transporteAcemila(blank: true, nullable: true, attributes: [title: 'Transporte en Acémila'])
 
-        distanciaCamioneta(blank: false, nullable: false)
-        distanciaAcemila(blank: false, nullable: false)
+        distanciaCamioneta(blank: true, nullable: false)
+        distanciaAcemila(blank: true, nullable: false)
     }
 
     String toString() {
