@@ -1017,7 +1017,7 @@ class ReportesController {
                 fila++
 
             }
-            if (r["parcial_t"] > 0) {
+            if (r["grpocdgo"] ==1) {
                 rowsTrans.add(r)
                 total += r["parcial_t"]
             }
@@ -1044,12 +1044,16 @@ class ReportesController {
             label = new Label(6, fila, "C.Total", times16format); sheet.addCell(label);
             fila++
             rowsTrans.each { rt ->
+                def tra=  rt["parcial_t"]
+                def tot=0
+                if(tra>0)
+                   tot= rt["parcial_t"] / (rt["itempeso"] * rt["rbrocntd"] * rt["distancia"])
                 label = new Label(0, fila, rt["itemcdgo"], times10); sheet.addCell(label);
                 label = new Label(1, fila, rt["itemnmbr"], times10); sheet.addCell(label);
                 number = new Number(2, fila, rt["itempeso"]); sheet.addCell(number);
                 number = new Number(3, fila, rt["rbrocntd"]); sheet.addCell(number);
                 number = new Number(4, fila, rt["distancia"]); sheet.addCell(number);
-                number = new Number(5, fila, rt["parcial_t"] / (rt["itempeso"] * rt["rbrocntd"] * rt["distancia"])); sheet.addCell(number);
+                number = new Number(5, fila, tot); sheet.addCell(number);
                 number = new Number(6, fila, rt["parcial_t"]); sheet.addCell(number);
                 fila++
             }

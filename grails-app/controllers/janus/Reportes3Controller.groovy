@@ -444,7 +444,7 @@ class Reportes3Controller {
                 fila++
 
             }
-            if (r["parcial_t"] > 0) {
+            if (r["grpocdgo"] ==1) {
                 rowsTrans.add(r)
                 total += r["parcial_t"]
             }
