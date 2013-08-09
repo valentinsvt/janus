@@ -145,22 +145,22 @@
                         <i class="icon-resize-small"></i>
                         Suspensión
                     </a>
-                    <a href="#" class="btn btn-info" id="btnFecha">
-                        <i class="icon-calendar"></i>
-                        Cambiar fecha de fin
-                    </a>
+                    %{--<a href="#" class="btn btn-info" id="btnFecha">--}%
+                    %{--<i class="icon-calendar"></i>--}%
+                    %{--Cambiar fecha de fin--}%
+                    %{--</a>--}%
                     %{--<a href="#" class="btn btn-danger disabled" id="btnDelSusp">--}%
                     %{--<i class="icon-trash"></i>--}%
                     %{--Eliminar Suspensión--}%
                     %{--</a>--}%
                 </div>
 
-                %{--<div class="btn-group">--}%
-                    %{--<a href="#" class="btn btn-info disabled" id="btnCambio">--}%
-                        %{--<i class="icon-exchange"></i>--}%
-                        %{--Modificar--}%
-                    %{--</a>--}%
-                %{--</div>--}%
+            %{--<div class="btn-group">--}%
+            %{--<a href="#" class="btn btn-info disabled" id="btnCambio">--}%
+            %{--<i class="icon-exchange"></i>--}%
+            %{--Modificar--}%
+            %{--</a>--}%
+            %{--</div>--}%
 
             %{--<div class="btn-group">--}%
             %{--<a href="#" class="btn" id="btnGrafico">--}%
@@ -209,7 +209,7 @@
             }
 
             function updateDias() {
-                var ini = $("#inicio").datepicker("getDate");
+                var ini = $("#ini").datepicker("getDate");
                 var fin = $("#fin").datepicker("getDate");
                 if (ini && fin) {
                     var dif = daydiff(ini, fin);
@@ -328,13 +328,12 @@
                             btnSave.click(function () {
                                 if ($("#frmSave-ampliacion").valid()) {
                                     btnSave.replaceWith(spinner);
+                                    var data = $("#frmSave-ampliacion").serialize();
+                                    data += "&obra=${obra.id}";
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'ampliacion')}",
-                                        data    : {
-                                            obra : "${obra.id}",
-                                            dias : $("#dias").val()
-                                        },
+                                        data    : data,
                                         success : function (msg) {
                                             $("#modal-forms").modal("hide");
                                             updateTabla();
@@ -367,14 +366,12 @@
                             btnSave.click(function () {
                                 if ($("#frmSave-suspension").valid()) {
                                     btnSave.replaceWith(spinner);
+                                    var data = $("#frmSave-suspension").serialize();
+                                    data += "&obra=${obra.id}";
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'suspension')}",
-                                        data    : {
-                                            obra : "${obra.id}",
-                                            ini  : $("#inicio").val(),
-                                            fin  : $("#fin").val()
-                                        },
+                                        data    : data,
                                         success : function (msg) {
 //                                            ////console.log(msg);
                                             $("#modal-forms").modal("hide");

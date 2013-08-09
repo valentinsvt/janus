@@ -1,7 +1,8 @@
 package janus
 
-class Modificaciones implements Serializable{
+class Modificaciones implements Serializable {
 
+    Obra obra
     String tipo
     int dias
     Date fechaInicio
@@ -13,7 +14,6 @@ class Modificaciones implements Serializable{
     String observaciones
     VolumenesObra volObra
 
-
     static mapping = {
 
         table 'mdce'
@@ -23,6 +23,7 @@ class Modificaciones implements Serializable{
         version false
         columns {
             id column: 'mdce__id'
+            obra column: 'obra__id'
             tipo column: 'mdcetipo'
             dias column: 'mdcedias'
             fechaInicio column: 'mdcefcin'
@@ -38,19 +39,15 @@ class Modificaciones implements Serializable{
     }
 
     static constraints = {
-
-        tipo (blank: true, nullable: true, inList: ['A', 'S', 'R'])
-        dias (blank: true, nullable: true)
+        tipo(blank: true, nullable: true, inList: ['A', 'S', 'R'])
+        dias(blank: true, nullable: true)
         fechaInicio(blank: true, nullable: true)
         fechaFin(blank: true, nullable: true)
         fechaMemo(blank: true, nullable: true)
         fecha(blank: true, nullable: true)
-        memo (blank: true, nullable: true)
+        memo(blank: true, nullable: true)
         motivo(blank: true, nullable: true)
         observaciones(blank: true, nullable: true)
         volObra(blank: true, nullable: true)
-
-
-
     }
 }

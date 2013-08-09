@@ -13,7 +13,7 @@
         </div>
 
         <div class="controls">
-            <elm:datepicker name="inicio" minDate="new Date(${min})" onClose="updateDias" class="required dateEC"/>
+            <elm:datepicker name="ini" minDate="new Date(${min})" onClose="updateDias" class="required dateEC"/>
             <span class="mandatory">*</span>
 
             <p class="help-block">Incluido</p>
@@ -50,6 +50,51 @@
             <span id="diasSuspension">
 
             </span>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Memo N.
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="memo" class="required allCaps"/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Motivo
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="motivo" class="required "/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Observaciones
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="observaciones" class="required "/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
 

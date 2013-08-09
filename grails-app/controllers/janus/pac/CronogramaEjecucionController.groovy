@@ -2,6 +2,7 @@ package janus.pac
 
 import groovy.time.TimeCategory
 import janus.Contrato
+import janus.Modificaciones
 import janus.Obra
 import janus.VolumenesObra
 
@@ -69,6 +70,22 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def finSusp = fin
         use(TimeCategory) {
             finSusp = fin - 1.days
+        }
+
+        def modificacion = new Modificaciones([
+                obra: obra,
+                tipo: "S",
+                dias: finSusp - ini + 1,
+                fecha: new Date(),
+                fechaInicio: ini,
+                fechaFin: finSusp,
+                motivo: params.motivo,
+                observaciones: params.observaciones,
+                memo: params.memo.toUpperCase()
+        ])
+
+        if (!modificacion.save(flush: true)) {
+            println "error modificacion: " + modificacion.errors
         }
 
 //        println ini
@@ -272,6 +289,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     def ampliacion_ajax() {}
 
     def ampliacion() {
+//        println "AMPLIACION"
 //        println params
         def dias = params.dias.toInteger()
         def obra = Obra.get(params.obra)
@@ -279,6 +297,19 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         def suspension = PeriodoEjecucion.findByObraAndTipo(obra, "S", [sort: 'fechaInicio', order: "desc"])
 
         def periodos
+
+        def modificacion = new Modificaciones([
+                obra: obra,
+                tipo: "A",
+                dias: dias,
+                fecha: new Date(),
+                motivo: params.motivo,
+                observaciones: params.observaciones,
+                memo: params.memo.toUpperCase()
+        ])
+        if (!modificacion.save(flush: true)) {
+            println "error modificacion: " + modificacion.errors
+        }
 
         if (suspension) {
             //hace la ampliacion solo en los periodos tipo P q esten despues de la ultima suspension

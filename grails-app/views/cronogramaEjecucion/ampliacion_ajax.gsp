@@ -5,6 +5,21 @@
         Una vez hecha la ampliación no se puede deshacer.
     </div>
 
+%{--<div class="control-group">--}%
+%{--<div>--}%
+%{--<span class="control-label label label-inverse">--}%
+%{--Número--}%
+%{--</span>--}%
+%{--</div>--}%
+
+%{--<div class="controls">--}%
+%{--<g:textField name="numero" class="required"/>--}%
+%{--<span class="mandatory">*</span>--}%
+
+%{--<p class="help-block ui-helper-hidden"></p>--}%
+%{--</div>--}%
+%{--</div>--}%
+
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
@@ -20,9 +35,68 @@
         </div>
     </div>
 
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Memo N.
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="memo" class="required allCaps"/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Motivo
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="motivo" class="required "/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Observaciones
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:textField name="observaciones" class="required "/>
+            <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
 </g:form>
 
 <script type="text/javascript">
+    $("#frmSave-ampliacion").validate({
+        errorPlacement : function (error, element) {
+            element.parent().find(".help-block").html(error).show();
+        },
+        success        : function (label) {
+            label.parent().hide();
+        },
+        errorClass     : "label label-important",
+        submitHandler  : function (form) {
+            $(".btn-success").replaceWith(spinner);
+            form.submit();
+        }
+    });
+
     $("#dias").keydown(function (ev) {
         return validarNum(ev);
     });
