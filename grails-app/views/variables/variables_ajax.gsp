@@ -522,7 +522,7 @@
 
                 <div class="span6">
                     %{--<g:select name="transporteCamioneta.id" id="trcm" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"--}%
-                    <g:select name="transporteCamioneta" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
+                    <g:select name="transporteCamioneta.id" from="${transporteCamioneta}" optionKey="id" optionValue="nombre"
                               value="${obra?.transporteCamioneta?.id}" style="width: 300px; margin-left: -10px" noSelection="${['': 'Seleccione']}"/>
                 </div>
 
@@ -543,7 +543,7 @@
 
                 <div class="span6">
                     %{--<g:select name="transporteAcemila.id" id="trac" from="${transporteAcemila}" optionKey="id" optionValue="nombre"--}%
-                    <g:select name="transporteAcemila" from="${transporteAcemila}" optionKey="id" optionValue="nombre"
+                    <g:select name="transporteAcemila.id" from="${transporteAcemila}" optionKey="id" optionValue="nombre"
                               value="${obra?.transporteAcemila?.id}" style="width: 300px; margin-left: -10px" noSelection="${['': 'Seleccione']}"/>
                 </div>
 

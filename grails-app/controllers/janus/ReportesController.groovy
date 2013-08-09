@@ -1096,7 +1096,7 @@ class ReportesController {
 
 
 
-    def imprimirRubros() {
+    def imprimirRubros(){
 //        println("->>>" + params)
 
         def obra = Obra.get(params.obra.toLong())
@@ -1358,7 +1358,7 @@ class ReportesController {
 
     }
 
-    def llenaDatos(table, r, fonts, params, tipo) {
+    def llenaDatos(table, r, fonts, params, tipo){
         addCellTabla(table, new Paragraph(r.itemcdgo, fonts.times8normal), params.prmsCellLeft)
         addCellTabla(table, new Paragraph(r.itemnmbr, fonts.times8normal), params.prmsCellLeft)
         switch (tipo) {
