@@ -41,7 +41,7 @@ class ComposicionController extends janus.seguridad.Shield{
             }
 
         }
-        render "ok"
+        redirect(action: "tabla",id:params.id)
     }
 
 
