@@ -145,7 +145,13 @@
                             <i class="icon-arrow-left"></i>
                             Regresar
                         </a>
+                        <g:link action="validacion" id="${obra?.id}" controller="composicion" class="btn" >
+                            <i class="icon-list"></i>
+                            Composición
+                        </g:link>
                     </div>
+
+
 
                     <div class="btn-group" data-toggle="buttons-radio">
                         <g:link action="composicion" id="${obra?.id}" params="[tipo: -1, sp: spsel]" class="btn btn-info toggle pdf ${tipo.contains(',') ? 'active' : ''} -1">

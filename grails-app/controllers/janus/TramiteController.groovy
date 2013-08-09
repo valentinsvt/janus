@@ -116,7 +116,7 @@ class TramiteController extends janus.seguridad.Shield {
                 header.put("MCREADOR",r["MCREADOR"])
                 header.put("MUSDES",r["MUSDES"])
             }
-            println "select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo} "
+            println "select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}' "
             sql.eachRow("select * from doctrami where NMASTER= '${memo}' or NTRAMITE = '${memo}'".toString()) {r->
                 def tmp =[:]
                 tmp.put("NMASTER",r["NMASTER"])

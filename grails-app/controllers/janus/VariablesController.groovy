@@ -1,6 +1,6 @@
 package janus
 
-class VariablesController {
+class VariablesController  extends janus.seguridad.Shield{
 
     def dbConnectionService
 
