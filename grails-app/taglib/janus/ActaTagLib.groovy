@@ -481,9 +481,13 @@ class ActaTagLib {
     }
 
     def dta(Acta acta) {
-        def tabla = "<table class='table table-bordered table-condensed'>"
-        tabla += "<thead>"
+        def contrato = acta.contrato
+        def obra = contrato.oferta.concurso.obra
+        def ampliaciones = Modificaciones.findAllByObraAndTipo(obra, 'A')
 
+        def tabla = "<table class='table table-bordered table-condensed'>"
+
+        tabla += "<thead>"
         tabla += "<tr>"
         tabla += "<th>N.</th>"
         tabla += "<th>N. de días</th>"
@@ -492,17 +496,33 @@ class ActaTagLib {
         tabla += "<th>Motivo</th>"
         tabla += "<th>Observaciones</th>"
         tabla += "</tr>"
-
         tabla += "</thead>"
+
+        tabla += "<tbody>"
+        ampliaciones.eachWithIndex { amp, i ->
+            tabla += "<tr>"
+            tabla += "<td>${i + 1}</td>"
+            tabla += "<td class='tar'>${amp.dias}</td>"
+            tabla += "<td>${amp.memo}</td>"
+            tabla += "<td>${fechaConFormato(fecha: amp.fecha, formato: 'dd-MM-yyyy')}</td>"
+            tabla += "<td>${amp.motivo}</td>"
+            tabla += "<td>${amp.observaciones}</td>"
+            tabla += "</tr>"
+        }
+        tabla += "</tbody>"
 
         tabla += "</table>"
         return tabla
     }
 
     def dts(Acta acta) {
-        def tabla = "<table class='table table-bordered table-condensed'>"
-        tabla += "<thead>"
+        def contrato = acta.contrato
+        def obra = contrato.oferta.concurso.obra
+        def suspensiones = Modificaciones.findAllByObraAndTipo(obra, 'S')
 
+        def tabla = "<table class='table table-bordered table-condensed'>"
+
+        tabla += "<thead>"
         tabla += "<tr>"
         tabla += "<th>N.</th>"
         tabla += "<th>N. de días</th>"
@@ -511,8 +531,20 @@ class ActaTagLib {
         tabla += "<th>Fecha</th>"
         tabla += "<th>Motivo</th>"
         tabla += "</tr>"
-
         tabla += "</thead>"
+
+        tabla += "<tbody>"
+        suspensiones.eachWithIndex { susp, i ->
+            tabla += "<tr>"
+            tabla += "<td>${i + 1}</td>"
+            tabla += "<td class='tar'>${susp.dias}</td>"
+            tabla += "<td>del ${fechaConFormato(fecha: susp.fechaInicio, formato: 'dd-MM-yyyy')} al ${fechaConFormato(fecha: susp.fechaFin, formato: 'dd-MM-yyyy')}</td>"
+            tabla += "<td>${susp.memo}</td>"
+            tabla += "<td>${fechaConFormato(fecha: susp.fecha, formato: 'dd-MM-yyyy')}</td>"
+            tabla += "<td>${susp.motivo}</td>"
+            tabla += "</tr>"
+        }
+        tabla += "</tbody>"
 
         tabla += "</table>"
         return tabla
