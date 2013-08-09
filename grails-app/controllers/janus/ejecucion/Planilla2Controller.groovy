@@ -14,6 +14,11 @@ class Planilla2Controller {
 //        println "params " + params
         def planilla = Planilla.get(params.id)
         def override = false
+//        println planilla
+//        println planilla.contrato
+//        println planilla.contrato.oferta
+//        println planilla.contrato.oferta.concurso
+//        println planilla.contrato.oferta.concurso.obra
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def planillasAnterioresTot = Planilla.withCriteria {
@@ -89,8 +94,13 @@ class Planilla2Controller {
                 }
             }
 
-
-            def cs = FormulaPolinomica.findAllByObraAndNumeroIlike(obraLiquidacion, "C%", [sort: "numero"])
+//            def cs = FormulaPolinomica.findAllByObraAndNumeroIlike(obraLiquidacion, "C%", [sort: "numero"])
+            def cs = FormulaPolinomica.withCriteria {
+                eq("obra", obraLiquidacion)
+                ilike("numero", "C%")
+//                gt("valor", 0)
+                order("numero")
+            }
 //            def cs = FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato, "C%", [sort: "numero"])
 //        def ps=  FormulaPolinomicaContractual.findAllByContratoAndNumeroIlike(contrato,"P%",[sort:"numero"])
 //            def ps = FormulaPolinomicaContractual.withCriteria {
@@ -157,7 +167,7 @@ class Planilla2Controller {
                 redirect(action: "errores")
                 return
             }
-            println "AQUI"
+//            println "AQUI"
 
             def tableWidth = 150 * periodos.size() + 400
             ///////////////////////////////////////////////////**********planillas*****************////////////////////////////////////////////////////////////
@@ -205,74 +215,76 @@ class Planilla2Controller {
             def totalCoef = 0
 
             cs.each { c ->
+                if (c.valor > 0) {
 //                println "\t\t" + c
 //                println c.class
 //                println "\n"
-                tablaBo += "<tr>"
-                tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
-                tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
-                totalCoef += c.valor
-                periodosAnticipo.each { p ->
-                    def valor = ValorIndice.findByPeriodoAndIndice(p.periodoLiquidacion, c.indice).valor
-                    if (!valor) {
-                        println "wtf no valor " + p.periodoLiquidacion + "  " + c.indice
-                        valor = 0
-                    }
+                    tablaBo += "<tr>"
+                    tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
+                    tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
+                    totalCoef += c.valor
+                    periodosAnticipo.each { p ->
+                        def valor = ValorIndice.findByPeriodoAndIndice(p.periodoLiquidacion, c.indice).valor
+                        if (!valor) {
+                            println "wtf no valor " + p.periodoLiquidacion + "  " + c.indice
+                            valor = 0
+                        }
 
-                    p.totalLiq += (valor * c.valor).round(3)
-                    p.save(flush: true)
+                        p.totalLiq += (valor * c.valor).round(3)
+                        p.save(flush: true)
 
-                    tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
-                    valor = (valor * c.valor).round(3)
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomicaLiq=${c.id} and planillaLiq = ${planillaAnticipo.id} ")
-                    if (vlrj.size() > 0) {
-                        vlrj = vlrj.pop()
-                        if (vlrj != valor) {
-                            vlrj.valor = valor
+                        tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
+                        valor = (valor * c.valor).round(3)
+                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomicaLiq=${c.id} and planillaLiq = ${planillaAnticipo.id} ")
+                        if (vlrj.size() > 0) {
+                            vlrj = vlrj.pop()
+                            if (vlrj != valor) {
+                                vlrj.valor = valor
+                                if (!vlrj.save(flush: true)) {
+                                    println "error vlrj update " + vlrj.errors
+                                }
+                            }
+                        } else {
+                            vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomicaLiq: c, valor: valor, planillaLiq: planillaAnticipo])
                             if (!vlrj.save(flush: true)) {
-                                println "error vlrj update " + vlrj.errors
+                                println "--error vlrj insert " + vlrj.errors
                             }
                         }
-                    } else {
-                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomicaLiq: c, valor: valor, planillaLiq: planillaAnticipo])
-                        if (!vlrj.save(flush: true)) {
-                            println "--error vlrj insert " + vlrj.errors
+                        tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+                    }
+
+                    periodosAvances.each { p ->
+                        def valor = ValorIndice.findByPeriodoAndIndice(p.periodoLiquidacion, c.indice).valor
+                        if (!valor) {
+                            println "wtf no valor liq " + p.periodoLiquidacion + "  " + c.indice
+                            valor = 0
                         }
-                    }
-                    tablaBo += "<td class='number'>" + numero(valor) + "</td>"
-                }
 
-                periodosAvances.each { p ->
-                    def valor = ValorIndice.findByPeriodoAndIndice(p.periodoLiquidacion, c.indice).valor
-                    if (!valor) {
-                        println "wtf no valor liq " + p.periodoLiquidacion + "  " + c.indice
-                        valor = 0
-                    }
+                        p.totalLiq += (valor * c.valor).round(3)
+                        p.save(flush: true)
 
-                    p.totalLiq += (valor * c.valor).round(3)
-                    p.save(flush: true)
-
-                    tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
-                    valor = (valor * c.valor).round(3)
-                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomicaLiq=${c.id} and planillaLiq=${p.planilla.id}")
-                    if (vlrj.size() > 0) {
-                        vlrj = vlrj.pop()
-                        if (vlrj != valor) {
-                            vlrj.valor = valor
+                        tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
+                        valor = (valor * c.valor).round(3)
+                        def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodoLiquidacion.id} and formulaPolinomicaLiq=${c.id} and planillaLiq=${p.planilla.id}")
+                        if (vlrj.size() > 0) {
+                            vlrj = vlrj.pop()
+                            if (vlrj != valor) {
+                                vlrj.valor = valor
+                                if (!vlrj.save(flush: true)) {
+                                    println "error vlrj update " + vlrj.errors
+                                }
+                            }
+                        } else {
+                            vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomicaLiq: c, valor: valor, planillaLiq: p.planilla])
                             if (!vlrj.save(flush: true)) {
-                                println "error vlrj update " + vlrj.errors
+                                println "++error vlrj insert " + vlrj.errors
                             }
                         }
-                    } else {
-                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodoLiquidacion, formulaPolinomicaLiq: c, valor: valor, planillaLiq: p.planilla])
-                        if (!vlrj.save(flush: true)) {
-                            println "++error vlrj insert " + vlrj.errors
-                        }
+                        tablaBo += "<td class='number'>" + numero(valor) + "</td>"
                     }
-                    tablaBo += "<td class='number'>" + numero(valor) + "</td>"
-                }
 
-                tablaBo += "</tr>"
+                    tablaBo += "</tr>"
+                }
             }
 
             tablaBo += "</tbody><tfoot>"
@@ -413,16 +425,16 @@ class Planilla2Controller {
                         def valor = 0
                         if (i == 0) { //es mano de obra
                             vlinOferta = per.totalLiq
-                            tablaFr += "<td class='number'><div>${p.valor}</div><div class='bold'>${per.totalLiq}</div></td>"
+                            tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(per.totalLiq, 3)}</div></td>"
                             valor = per.totalLiq
                         } else {
-                            println "*****************************************************"
-                            println p.indice
-                            println per.periodoLiquidacion
-                            println ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion)
-                            println "*****************************************************"
+//                            println "*****************************************************"
+//                            println p.indice
+//                            println per.periodoLiquidacion
+//                            println ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion)
+//                            println "*****************************************************"
                             vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoLiquidacion).valor
-                            tablaFr += "<td class='number'><div>${p.valor}</div><div class='bold'>${vlinOferta}</div></td>"
+                            tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(vlinOferta, 2)}</div></td>"
                             valor = vlinOferta
                         }
                         def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomicaLiq=${p.id} and planillaLiq=${per.planilla.id}")
@@ -517,11 +529,11 @@ class Planilla2Controller {
             (periodosAnticipo + periodosAvances).eachWithIndex { per, i ->
                 if (i > 0) {
                     def fr1 = (per.frLiq - 1).round(3)
-                    tr1 += "<th class='number'>${per.frLiq}</th>"
-                    tr2 += "<th class='number'>${fr1}</th>"
-                    tr3 += "<th class='number'>${per.p0}</th>"
+                    tr1 += "<th class='number'>${numero(per.frLiq, 2)}</th>"
+                    tr2 += "<th class='number'>${numero(fr1, 2)}</th>"
+                    tr3 += "<th class='number'>${numero(per.p0, 2)}</th>"
                     def t = (per.p0 * fr1).round(2)
-                    tr4 += "<th class='number'>${t}</th>"
+                    tr4 += "<th class='number'>${numero(t, 2)}</th>"
                     reajusteTotal += t
                 }
             }
