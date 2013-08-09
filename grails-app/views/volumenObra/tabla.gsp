@@ -76,7 +76,9 @@
         </th>
         <th class="col_precio" style="display: none;">Unitario</th>
         <th class="col_total" style="display: none;">C.Total</th>
-        <th style="width: 40px" class="col_delete"></th>
+        <g:if test="${obra.estado!='R'}">
+            <th style="width: 40px" class="col_delete"></th>
+        </g:if>
     </tr>
     </thead>
     <tbody id="tabla_material">
@@ -97,17 +99,17 @@
             <td class="col_precio" style="display: none;text-align: right" id="i_${val.item__id}"><g:formatNumber
                     number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
             <td class="col_total total" style="display: none;text-align: right">
-                <g:formatNumber number="${val.totl}"
-                                                                                                format="##,##0"
-                                                                                                minFractionDigits="2"
-                                                                                                maxFractionDigits="2"
-                                                                                                locale="ec"/></td>
-            <td style="width: 40px;text-align: center" class="col_delete">
-                <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar"
-                   iden="${val.vlob__id}">
-                    <i class="icon-trash"></i></a>
+                <g:formatNumber number="${val.totl}" format="##,##0" minFractionDigits="2"  maxFractionDigits="2"  locale="ec"/>
             </td>
+            <g:if test="${obra.estado!='R'}">
+                <td style="width: 40px;text-align: center" class="col_delete">
 
+                    <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar"
+                       iden="${val.vlob__id}">
+                        <i class="icon-trash"></i></a>
+
+                </td>
+            </g:if>
         </tr>
     </g:each>
 
@@ -221,8 +223,8 @@
         %{--</g:if>--}%
         %{--<g:else>--}%
         %{--items: {--}%
-            %{--"print": {name: "Imprimir", icon: "print"},--}%
-            %{--"foto": {name: "Foto", icon: "doc"}--}%
+        %{--"print": {name: "Imprimir", icon: "print"},--}%
+        %{--"foto": {name: "Foto", icon: "doc"}--}%
         %{--}--}%
         %{--</g:else>--}%
     });
@@ -553,16 +555,7 @@
 
     %{--console.log("estado: " + '${estado}')--}%
 
-  if(${estado == 'R'}){
 
-
-      $(".col_delete").hide()
-
-  }else {
-
-      $(".col_delete").show()
-
-  }
 
 
 
