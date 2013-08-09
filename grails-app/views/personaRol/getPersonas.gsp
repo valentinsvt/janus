@@ -48,47 +48,28 @@ style="width: 300px"/>
 
     if($(".persona").val() != null){
         cargarFuncion();
-
     }else {
-
         $("#funcionPersona").html("");
-
     }
 
 
 
 $(".persona").change(function () {
-
-
     cargarFuncion();
-
 });
 
 function cargarFuncion () {
 
     var idPersona = $(".persona").val();
-
-
-
     $.ajax({
         type: "POST",
         url: "${g.createLink(action: 'obtenerFuncion')}",
             data : { id: idPersona
-
             } ,
-
             success: function (msg) {
-
                 $("#funcionPersona").html(msg);
-
-
             }
-
-
         });
-
-
-
     }
 
 

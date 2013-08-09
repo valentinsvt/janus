@@ -42,7 +42,7 @@
 
                 <div class="item" texto="grpo">
                     <g:link controller="grupo"
-                            action="list">Grupos de Ítems</g:link> para clasificar entre materiales, mano de obra y equipos.
+                            action="list">Grupos de Rubros</g:link> para clasificar los distintos análisis de precios.
                 </div><br>
 
                 <div class="item" texto="trnp">
@@ -62,7 +62,7 @@
                 </div><br>
 
                 <div class="item" texto="tpin">
-                    <g:link controller="tipoIndice" action="list">Tipo de Indice</g:link> según el INEC.
+                    <g:link controller="tipoIndice" action="list">Tipo de Indice</g:link> según el INEC y Contraloría.
                 </div><br>
                 <div class="item" texto="tptr">
                     <g:link controller="tipoTramite" action="list">Tipo de Trámite</g:link> para la gestión de procesos y flujo de trabajo
@@ -97,11 +97,6 @@
                     <g:link controller="programacion" action="list">Programa</g:link> del cual forma parte una obra .
                 </div><br>
 
-                <div class="item" texto="paux">
-                    <g:link controller="parametros"
-                            action="list">Parámetros de costos</g:link> indirectos y valores de los indices.
-                </div><br>
-
                 <div class="item" texto="auxl">
                     <g:link controller="auxiliar"
                             action="textosFijos">Textos fijos</g:link> para la generación de los documentos precontractuales.
@@ -113,7 +108,7 @@
                 </div><br>
 
                 <div class="item" texto="var">
-                    <g:link controller="inicio" action="variables">Variables</g:link>
+                    <g:link controller="inicio" action="variables">Valores de costos indirectos y transporte</g:link> valores por defecto que se usan en las obras.
                 </div><br>
             </div>
 
@@ -240,10 +235,9 @@
 </div>
 
 <div id="grpo" style="display:none">
-    <h3>Grupos de Ítems</h3><br>
+    <h3>Grupos de Rubros</h3><br>
 
-    <p>Grupos para la clasificación de los ítems que conforman los rubros
-    para el análisis de precios unitarios</p>
+    <p>Grupos para la clasificación de los rubros para la elaboración de los distintos análisis de precios unitarios</p>
 </div>
 
 <div id="trnp" style="display:none">
@@ -269,7 +263,7 @@
 <div id="tpin" style="display:none">
     <h3>Tipo de Indice</h3><br>
 
-    <p>Según la clasificación del INEC que se aplica a la fórmula polinómica y cada uno de sus coeficientes.
+    <p>Para distinguir la fuente: INEC o C.G.E., se aplica a la fórmula polinómica y cada uno de sus coeficientes.
     Tanto para la cuadrilla tipo como para fórmula general.</p>
 </div>
 
@@ -304,10 +298,6 @@
     <h3>Programa</h3><br>
     <p>Programa del cual forma parte una obra o proyecto.</p>
 </div>
-<div id="paux" style="display:none">
-    <h3>Parámetros de Costos</h3><br>
-    <p>Desglose de valores de costos indirectos que deben cargarse al presupuesto de las obras.</p>
-</div>
 <div id="auxl" style="display:none">
     <h3>Textos fijos</h3><br>
     <p>Textos para los documentos precontractuales de presupuesto, volúmenes de obra y fórmula polinómica.</p>
@@ -318,7 +308,7 @@
 </div>
 <div id="var" style="display:none">
     <h3>Variables</h3><br>
-    <p>Variables.</p>
+    <p>Valores de parámetros de transporte y costos indirectos que se usan por defecto en las obras.</p>
 </div>
 
 <div id="tpcr" style="display:none">

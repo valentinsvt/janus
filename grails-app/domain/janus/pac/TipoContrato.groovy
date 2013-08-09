@@ -13,12 +13,12 @@ class TipoContrato {
         version false
         columns {
             id column: 'tpcr__id'
-            codigo column: 'tpcrcgdo'
+            codigo column: 'tpcrcdgo'
             descripcion column: 'tpcrdscr'
         }
     }
     static constraints = {
-        codigo(nullable: true,blank: true,size: 1..7)
-        descripcion(nullable: true,blank: true,size:1..32)
+        codigo(nullable: true,blank: true,size: 1..2)
+        descripcion(nullable: true,blank: true,size:1..63)
     }
 }

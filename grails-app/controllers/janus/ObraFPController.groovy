@@ -134,10 +134,7 @@ class ObraFPController {
 //        println "ejecutó ac_rbro_hr"
 
         /* solo se debe correr sp_obra cuando esta no está registrada */
-        //if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
-
-        //ejecutaSQL("select * from sp_obra(${obra__id}, ${sbpr})")
-        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 //        println "ejecutó sp_obra"
 
         /* Se debe crear una neuva columna: Transp_Especial, que sirve para totalizar el valor de cada rubro
@@ -153,7 +150,8 @@ class ObraFPController {
         transporteEspecial(obra__id)
 
         /* vuelve a ejecutar para incluir rubors de tranpsorte especial */
-        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+        if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+//        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 
 /*
         if (trnpEspecial) {
