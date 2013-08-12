@@ -236,17 +236,17 @@
 
                     <div class="span1">Cantón</div>
                     <g:hiddenField name="canton.id" id="hiddenCanton" value="${obra?.comunidad?.parroquia?.canton?.id}"/>
-                    <div class="span2"><g:textField name="canton.id" id="cantNombre" class="canton required nowhitespace" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" disabled="true" title="Cantón"/></div>
+                    <div class="span2"><g:textField name="canton.id" id="cantNombre" class="canton required error" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" readonly="true" title="Cantón"/></div>
 
                     <div class="span1" style="text-align: right">Parroquia</div>
 
                     <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
-                    <div class="span2"><g:textField name="parroquia.id" id="parrNombre" class="parroquia required nowhitespace" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" disabled="true" title="Parroquia"/></div>
+                    <div class="span2"><g:textField name="parroquia.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" readonly="true" title="Parroquia"/></div>
 
                     <div class="span1" style="text-align: right">Comunidad</div>
 
                     <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
-                    <div class="span2"><g:textField name="comunidad.id" id="comuNombre" class="comunidad required nowhitespace" value="${obra?.comunidad?.nombre}" style="width: 175px" disabled="true" title="Comunidad"/></div>
+                    <div class="span2"><g:textField name="comunidad.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" style="width: 175px" readonly="true" title="Comunidad"/></div>
 
 
                     <div class="span2"><button class="btn btn-buscar btn-info" id="btn-buscar"><i class="icon-globe"></i> Buscar
