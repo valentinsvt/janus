@@ -68,14 +68,17 @@ class RubroController extends janus.seguridad.Shield {
         def choferes = []
         def aux = Parametros.get(1)
         def grupoTransporte = DepartamentoItem.findAllByTransporteIsNotNull()
-        def dpto = Departamento.findByPermisosIlike("APU")
-        def resps = Persona.findAllByDepartamento(dpto)
+        def dpto = Departamento.findAllByPermisosIlike("APU")
+        def resps = Persona.findAllByDepartamentoInList(dpto)
 //        println "depto "+dpto
         def dptoUser = Persona.get(session.usuario.id).departamento
         def modifica = false
-        if (dpto) {
-            if (dpto.id.toInteger() == dptoUser.id.toInteger())
-                modifica = true
+        if (dpto.size()>0) {
+            dpto.each {d->
+                if (d.id.toInteger() == dptoUser.id.toInteger())
+                    modifica = true
+            }
+
         }
 
         grupoTransporte.each {
@@ -108,7 +111,7 @@ class RubroController extends janus.seguridad.Shield {
 //        println "get datos items "+params
         def item = Item.get(params.id)
 //        println "render "+  item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad.codigo + "&" + item.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
-        render "" + item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad?.codigo?.trim() + "&" + item.rendimiento + "&" + ((item.tipoLista) ? item.tipoLista?.id : "0")
+        render "" + item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad?.codigo?.trim() + "&" + item.rendimiento + "&" + ((item.tipoLista) ? item.tipoLista?.id : "0")+"&"+item.departamento.subgrupo.grupo.id
     }
 
     def addItem() {
@@ -160,6 +163,7 @@ class RubroController extends janus.seguridad.Shield {
         funcionJs += ' success: function(msg){'
         funcionJs += 'var parts = msg.split("&");'
         funcionJs += ' $("#item_id").val(parts[0]);'
+        funcionJs += ' $("#item_id").attr("tipo",parts[6]);'
         funcionJs += '$("#cdgo_buscar").val(parts[1]);'
         funcionJs += '$("#item_desc").val(parts[2]);'
         funcionJs += '$("#item_unidad").val(parts[3]);'
