@@ -46,8 +46,6 @@
                     </a>
                 </div>
 
-
-
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -138,19 +136,17 @@
                                     </g:link>
                                 </g:if>
                                 <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
-                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                        <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                            <i class="icon-print"></i>
-                                        </g:link>
-                                    </g:if>
-                                    <g:else>
-                                        <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                            <i class="icon-print"></i>
-                                        </g:link>
-                                    </g:else>
+                                    <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                        <i class="icon-print"></i>
+                                    </g:link>
                                 </g:if>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
                                     <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                        <i class="icon-print"></i>
+                                    </g:link>
+                                </g:if>
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
+                                    <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
@@ -256,36 +252,36 @@
         </div>
 
 
-    <div id="imprimirDialog">
+        <div id="imprimirDialog">
 
-        <fieldset>
-            <div class="span4" style="margin-top: 10px">
+            <fieldset>
+                <div class="span4" style="margin-top: 10px">
 
-                Oficio N°: <g:textField name="oficio" maxlength="20"/>
+                    Oficio N°: <g:textField name="oficio" maxlength="20"/>
 
-            </div>
+                </div>
 
-            <div class="span4" style="margin-top: 10px">
-                Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>
+                <div class="span4" style="margin-top: 10px">
+                    Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>
 
-            </div>
+                </div>
 
-        </fieldset>
-    </div>
+            </fieldset>
+        </div>
 
-    <div id="errorImpresion">
-        <fieldset>
-            <div class="spa3" style="margin-top: 30px; margin-left: 10px">
+        <div id="errorImpresion">
+            <fieldset>
+                <div class="spa3" style="margin-top: 30px; margin-left: 10px">
 
-                Debe ingresar un número de Oficio!
+                    Debe ingresar un número de Oficio!
 
-            </div>
-        </fieldset>
-    </div>
+                </div>
+            </fieldset>
+        </div>
 
 
 
-    <script type="text/javascript">
+        <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
@@ -483,10 +479,7 @@
                     return false;
                 });
 
-
-
                 $("#imprimir").click(function () {
-
 
                     $("#imprimirDialog").dialog("open");
 
@@ -494,23 +487,22 @@
 
                 $("#imprimirDialog").dialog({
 
-                    autoOpen: false,
-                    resizable: false,
-                    modal: true,
-                    draggable: false,
-                    width: 420,
-                    height: 280,
-                    position: 'center',
-                    title: 'Datos del documento a ser impreso',
-                    buttons: {
-                        "Aceptar": function () {
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 420,
+                    height    : 280,
+                    position  : 'center',
+                    title     : 'Datos del documento a ser impreso',
+                    buttons   : {
+                        "Aceptar"  : function () {
 
-                            if($("#oficio").val()){
+                            if ($("#oficio").val()) {
 
-                                location.href="${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()
+                                location.href = "${g.createLink(controller: 'reportes3', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()
 
                                 $("#imprimirDialog").dialog("close")
-
 
                             } else {
 
@@ -518,11 +510,8 @@
 
                             }
 
-
-
-
                         },
-                        "Cancelar": function () {
+                        "Cancelar" : function () {
 
                             $("#imprimirDialog").dialog("close")
 
@@ -532,24 +521,19 @@
 
                 })
 
-
-
-
-
-
                 $("#errorImpresion").dialog({
 
 
-                    autoOpen: false,
-                    resizable: false,
-                    modal: true,
-                    draggable: false,
-                    width: 320,
-                    height: 200,
-                    position: 'center',
-                    title: 'Error',
-                    buttons: {
-                        "Aceptar": function () {
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 320,
+                    height    : 200,
+                    position  : 'center',
+                    title     : 'Error',
+                    buttons   : {
+                        "Aceptar" : function () {
 
                             $("#errorImpresion").dialog("close")
 
@@ -558,11 +542,6 @@
 
 
                 });
-
-
-
-
-
 
             });
 

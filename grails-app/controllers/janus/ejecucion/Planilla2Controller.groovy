@@ -43,6 +43,7 @@ class Planilla2Controller {
             order("id", "asc")
         }
         def planillaAnterior = planillasAnteriores[planillasAnteriores.size() - 1]
+//        println "planilla 2 " + planillaAnterior
         def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
         def finalObraCrono = periodosEjec.pop().fechaFin
         def tarde = false
@@ -509,7 +510,6 @@ class Planilla2Controller {
 
             }
 
-
             tr1 = "<tr>"
             tr2 = "<tr>"
             tr3 = "<tr>"
@@ -570,11 +570,14 @@ class Planilla2Controller {
 //        tablaFr+="</tfoot></table>"
 
             //////////////////////////////////////////fin anticipo//////////////////////////////////////////////////////////////////////////////////////////////////
+
+            def tablaMl = ""
+
             tablaBo.replaceAll("&&", "" + tableWidth)
             tablaP0.replaceAll("&&", "" + tableWidth)
             tablaFr.replaceAll("&&", "" + tableWidth)
 
-            return [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr]
+            return [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl]
         }
     }
 

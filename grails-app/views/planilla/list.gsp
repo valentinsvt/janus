@@ -127,19 +127,17 @@
                                     </g:link>
                                 </g:if>
                                 <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
-                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                        <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                            <i class="icon-print"></i>
-                                        </g:link>
-                                    </g:if>
-                                    <g:else>
-                                        <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                            <i class="icon-print"></i>
-                                        </g:link>
-                                    </g:else>
+                                    <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                        <i class="icon-print"></i>
+                                    </g:link>
                                 </g:if>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
                                     <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
+                                        <i class="icon-print"></i>
+                                    </g:link>
+                                </g:if>
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
+                                    <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
                                     </g:link>
                                 </g:if>
