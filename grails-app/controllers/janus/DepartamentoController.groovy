@@ -11,18 +11,17 @@ class DepartamentoController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 15, 100)
-        [departamentoInstanceList: Departamento.list(params), departamentoInstanceTotal: Departamento.count(), params: params]
+        [departamentoInstanceList: Departamento.list(params), params: params]
     } //list
 
     def form_ajax() {
         def departamentoInstance = new Departamento(params)
-        if (params.id) {
+        if(params.id) {
             departamentoInstance = Departamento.get(params.id)
-            if (!departamentoInstance) {
+            if(!departamentoInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Departamento con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Departamento con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -31,9 +30,9 @@ class DepartamentoController extends janus.seguridad.Shield {
 
     def save() {
         def departamentoInstance
-        if (params.id) {
+        if(params.id) {
             departamentoInstance = Departamento.get(params.id)
-            if (!departamentoInstance) {
+            if(!departamentoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Departamento con id " + params.id
                 redirect(action: 'list')
@@ -63,7 +62,7 @@ class DepartamentoController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Departamento " + departamentoInstance.id
         } else {
@@ -77,7 +76,7 @@ class DepartamentoController extends janus.seguridad.Shield {
         def departamentoInstance = Departamento.get(params.id)
         if (!departamentoInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Departamento con id " + params.id
+            flash.message =  "No se encontró Departamento con id " + params.id
             redirect(action: "list")
             return
         }
@@ -88,7 +87,7 @@ class DepartamentoController extends janus.seguridad.Shield {
         def departamentoInstance = Departamento.get(params.id)
         if (!departamentoInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Departamento con id " + params.id
+            flash.message =  "No se encontró Departamento con id " + params.id
             redirect(action: "list")
             return
         }
@@ -96,12 +95,12 @@ class DepartamentoController extends janus.seguridad.Shield {
         try {
             departamentoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Departamento " + departamentoInstance.id
+            flash.message =  "Se ha eliminado correctamente Departamento " + departamentoInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Departamento " + (departamentoInstance.id ? departamentoInstance.id : "")
+            flash.message =  "No se pudo eliminar Departamento " + (departamentoInstance.id ? departamentoInstance.id : "")
             redirect(action: "list")
         }
     } //delete

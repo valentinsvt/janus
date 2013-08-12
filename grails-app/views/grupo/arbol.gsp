@@ -641,7 +641,7 @@
                     sepBefore : false,
                     sepAfter  : false,
                     icon      : icons.subgrupo,
-                    url       : "${createLink(action:'formSg_ajax')}",
+                    url       : "${createLink(action:'formSg_gr_ajax')}",
                     data      : {
                         grupo : nodeId
                     },
@@ -661,7 +661,7 @@
                     icon      : icons.edit,
                     sepBefore : false,
                     sepAfter  : false,
-                    url       : "${createLink(action:'formSg_ajax')}",
+                    url       : "${createLink(action:'formSg_gr_ajax')}",
                     data      : {
                         grupo : parentId,
                         id    : nodeId
@@ -694,7 +694,7 @@
                     icon      : icons[nodeRel],
                     sepBefore : true,
                     sepAfter  : true,
-                    url       : "${createLink(action:'formSg_ajax')}",
+                    url       : "${createLink(action:'formSg_gr_ajax')}",
                     data      : {
                         grupo : parentId
                     },
@@ -712,7 +712,7 @@
                     sepAfter  : false,
 //                    icon      : icons["departamento_" + nodeTipo],
                     icon      : icons.departamento,
-                    url       : "${createLink(action:'formDp_ajax')}",
+                    url       : "${createLink(action:'formDp_gr_ajax')}",
                     data      : {
                         subgrupo : nodeId
                     },
@@ -739,7 +739,7 @@
                     icon      : icons.edit,
                     sepBefore : false,
                     sepAfter  : false,
-                    url       : "${createLink(action:'formDp_ajax')}",
+                    url       : "${createLink(action:'formDp_gr_ajax')}",
                     data      : {
                         subgrupo : parentId,
                         id       : nodeId
@@ -772,7 +772,7 @@
                     sepBefore : true,
                     sepAfter  : true,
                     icon      : icons[nodeRel],
-                    url       : "${createLink(action:'formDp_ajax')}",
+                    url       : "${createLink(action:'formDp_gr_ajax')}",
                     data      : {
                         subgrupo : parentId
                     },

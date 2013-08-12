@@ -151,6 +151,16 @@ class ObraFPController {
         println "tranporte especial: " + trnpEspecial
         transporteEspecial(obra__id)
 
+        if (trnpEspecial){
+            def res = verifica_precios(obra__id)
+            if (res.size() > 0) {
+                def msg = "<span style='color:red'>Errores detectados</span><br> <span class='label-azul'>No se encontraron precios para los siguientes items:</span><br>"
+                msg += res.collect { "<b>ITEM</b>: $it.key ${it.value.join(", <b>Lista</b>: ")}" }.join('<br>')
+                render msg
+                return
+            }
+        }
+
         /* vuelve a ejecutar para incluir rubors de tranpsorte especial */
         if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 //        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
@@ -308,7 +318,7 @@ class ObraFPController {
     */
     def transporteEspecial(id) {
 
-        //println "inicia proceso... "
+        println "inicia proceso...  para obra: $id"
         def res
         def sbpr = SubPresupuesto.findByDescripcion("TRANSPORTE ESPECIAL")
         if (!sbpr) res = "Ingrese el subpresupuesto:TRANSPORTE ESPECIAL"
@@ -324,18 +334,18 @@ class ObraFPController {
             cn.eachRow(tx_sql.toString()) { row ->
                 peso += row.peso
             }
-            println "peso del peso: ${peso}"
+//            println "peso del peso: ${peso}"
             tx_sql = "select sum(voitcntd*itempeso*1.7) peso from vlobitem, item, tpls " +
                     "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
                     "tpls.tpls__id = item.tpls__id and tplscdgo like 'V%'"
             cn.eachRow(tx_sql.toString()) { row ->
-                println "peso al volumen: ${row.peso}"
+                //println "peso al volumen: ${row.peso}"
                 peso += row.peso
             }
             println "peso total: ${peso.toDouble().round(2)}"
             /* verifica que hay a los rubros en vlob */
             if (camioneta) {
-                def itemCamioneta = VolumenesObra.findByItem(Item.get(obra.transporteCamioneta.id))
+                def itemCamioneta = VolumenesObra.findByItemAndObra(Item.get(obra.transporteCamioneta.id), obra)
                 println itemCamioneta
                 if (itemCamioneta) {
                     println "ya existe el rubro de camioneta: actualizando..."
@@ -352,7 +362,7 @@ class ObraFPController {
                 }
             }
             if (acemila) {
-                def itemAcemila = VolumenesObra.findByItem(Item.get(obra.transporteAcemila.id))
+                def itemAcemila = VolumenesObra.findByItemAndObra(Item.get(obra.transporteAcemila.id), obra)
                 println itemAcemila
                 if (itemAcemila) {
                     println "ya existe el rubro de acémila: actualizando..."

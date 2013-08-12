@@ -1,11 +1,11 @@
 
-<%@ page import="janus.Departamento" %>
+<%@ page import="janus.Direccion" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            Coodinaciones (Nivel de Gestión)
+            Lista de Direcciones
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,50 +27,42 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Coordinación
+                    Crear  Dirección
                 </a>
             </div>
-            <div class="span3" id="busqueda-Departamento"></div>
+            <div class="span3" id="busqueda-Direccion"></div>
         </div>
 
-        <g:form action="delete" name="frmDelete-Departamento">
+        <g:form action="delete" name="frmDelete-Direccion">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-Departamento" role="main" style="margin-top: 10px;">
+        <div id="list-Direccion" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="descripcion" title="Descripción" />
-                    
-                        <th>Direccion</th>
-                    
-                        <g:sortableColumn property="permisos" title="Permisos" />
+                        <g:sortableColumn property="nombre" title="Nombre" />
                     
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="paginate">
-                <g:each in="${departamentoInstanceList}" status="i" var="departamentoInstance">
+                <g:each in="${direccionInstanceList}" status="i" var="direccionInstance">
                     <tr>
                     
-                        <td>${fieldValue(bean: departamentoInstance, field: "descripcion")}</td>
-                    
-                        <td>${fieldValue(bean: departamentoInstance, field: "direccion")}</td>
-                    
-                        <td>${fieldValue(bean: departamentoInstance, field: "permisos")}</td>
+                        <td>${fieldValue(bean: direccionInstance, field: "nombre")}</td>
                     
                         <td>
-                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${departamentoInstance.id}">
+                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${direccionInstance.id}">
                                 <i class="icon-zoom-in icon-large"></i>
                             </a>
-                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${departamentoInstance.id}">
+                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${direccionInstance.id}">
                                 <i class="icon-pencil icon-large"></i>
                             </a>
 
-                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${departamentoInstance.id}">
+                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${direccionInstance.id}">
                                 <i class="icon-trash icon-large"></i>
                             </a>
                         </td>
@@ -81,7 +73,7 @@
 
         </div>
 
-        <div class="modal hide fade" id="modal-Departamento">
+        <div class="modal hide fade" id="modal-Direccion">
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>
@@ -102,18 +94,18 @@
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
             function submitForm(btn) {
-                if ($("#frmSave-Departamento").valid()) {
+                if ($("#frmSave-Direccion").valid()) {
                     btn.replaceWith(spinner);
                 }
-                $("#frmSave-Departamento").submit();
+                $("#frmSave-Direccion").submit();
             }
 
             $(function () {
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows        : 15,
-                    searchPosition : $("#busqueda-Departamento"),
+                    maxRows        : 10,
+                    searchPosition : $("#busqueda-Direccion"),
                     float          : "right"
                 });
 
@@ -131,10 +123,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Coordinación");
+                            $("#modalTitle").html("Crear Dirección");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Departamento").modal("show");
+                            $("#modal-Direccion").modal("show");
                         }
                     });
                     return false;
@@ -158,10 +150,10 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Coordinación");
+                            $("#modalTitle").html("Editar Dirección");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Departamento").modal("show");
+                            $("#modal-Direccion").modal("show");
                         }
                     });
                     return false;
@@ -178,10 +170,10 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Coordinación");
+                            $("#modalTitle").html("Ver Dirección");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-Departamento").modal("show");
+                            $("#modal-Direccion").modal("show");
                         }
                     });
                     return false;
@@ -195,15 +187,15 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-Departamento").submit();
+                        $("#frmDelete-Direccion").submit();
                         return false;
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Coordinación");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Departamento?</p>");
+                    $("#modalTitle").html("Eliminar Direccion");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Direccion?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-Departamento").modal("show");
+                    $("#modal-Direccion").modal("show");
                     return false;
                 });
 

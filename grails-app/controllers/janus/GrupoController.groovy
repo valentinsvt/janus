@@ -65,6 +65,15 @@ class GrupoController extends janus.seguridad.Shield {
         return [grupo: grupo, subgrupoItemsInstance: subgrupoItemsInstance]
     }
 
+    def formSg_gr_ajax() {
+        def grupo = Grupo.get(params.grupo)
+        def subgrupoItemsInstance = new SubgrupoItems()
+        if (params.id) {
+            subgrupoItemsInstance = SubgrupoItems.get(params.id)
+        }
+        return [grupo: grupo, subgrupoItemsInstance: subgrupoItemsInstance]
+    }
+
 
     def formGr_ajax() {
         def grupo = Grupo.get(params.id)
@@ -203,6 +212,15 @@ class GrupoController extends janus.seguridad.Shield {
 
 
     def formDp_ajax() {
+        def subgrupo = SubgrupoItems.get(params.subgrupo)
+        def departamentoItemInstance = new DepartamentoItem()
+        if (params.id) {
+            departamentoItemInstance = DepartamentoItem.get(params.id)
+        }
+        return [subgrupo: subgrupo, departamentoItemInstance: departamentoItemInstance]
+    }
+
+    def formDp_gr_ajax() {
         def subgrupo = SubgrupoItems.get(params.subgrupo)
         def departamentoItemInstance = new DepartamentoItem()
         if (params.id) {

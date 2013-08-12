@@ -50,9 +50,15 @@
                             action="list">Transporte</g:link> para diferenciar los ítems que participan en el transporte.
                 </div><br>
 
+                <div class="item" texto="dire">
+                    <g:link controller="direccion"
+                            action="list">Direcciones del personal</g:link> para la organización de los usuarios.
+                    Organigrama: Nivel de Secretarías
+                </div><br>
                 <div class="item" texto="dpto">
                     <g:link controller="departamento"
                             action="list">Coordinación del personal</g:link> para la organización de los usuarios.
+                    Organigrama: Nivel de Gestiones
                 </div><br>
 
                 <div class="item" texto="func">
@@ -249,8 +255,13 @@
 <div id="dpto" style="display:none">
     <h3>Coordinación</h3><br>
 
-    <p>Distribución administrativa de la institución: Coordinaciones que la conforman, para la asociación de los
+    <p>Distribución administrativa de la institución: nivel de Gestión, que la conforman, para la asociación de los
     empleados a cada uno de ellos.</p>
+</div>
+<div id="dire" style="display:none">
+    <h3>Direcciones</h3><br>
+
+    <p>Distribución administrativa de la institución: Direcciones o según el organigrama del GADPP, nivel de Secretarías.</p>
 </div>
 
 <div id="func" style="display:none">
