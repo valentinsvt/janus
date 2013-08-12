@@ -169,6 +169,11 @@ class VolumenObraController extends janus.seguridad.Shield{
 //
 //        println "params --->>>> "+params
         def obra = Obra.get(params.obra)
+
+
+        def volumenes = VolumenesObra.findAllByObra(obra);
+
+
         def detalle
         def valores
         def orden

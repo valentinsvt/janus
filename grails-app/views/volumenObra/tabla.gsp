@@ -116,6 +116,17 @@
     </tbody>
 </table>
 
+
+
+<div id="borrarDialog">
+    <fieldset>
+        <div class="span3">
+            Está seguro que desea borrar este rubro?
+        </div>
+    </fieldset>
+</div>
+
+
 <script type="text/javascript">
 
     $.contextMenu({
@@ -371,18 +382,27 @@
     });
     $(".borrarItem").click(function () {
 
-        var interval = loading("detalle")
+//        var interval = loading("detalle")
+//
+//        console.log("-->>" + $(this).attr("iden"));
 
-        if (confirm("Esta seguro de eliminar el rubro?")) {
-            $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",
-                data: "id=" + $(this).attr("iden"),
-                success: function (msg) {
-                    clearInterval(interval)
-                    $("#detalle").html(msg)
 
-                }
-            });
-        }
+
+
+
+        $("#borrarDialog").dialog("open");
+
+
+        %{--if (confirm("Esta seguro de eliminar el rubro?")) {--}%
+            %{--$.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",--}%
+                %{--data: "id=" + $(this).attr("iden"),--}%
+                %{--success: function (msg) {--}%
+                    %{--clearInterval(interval)--}%
+                    %{--$("#detalle").html(msg)--}%
+
+                %{--}--}%
+            %{--});--}%
+        %{--}--}%
     });
 
     $("#copiar_rubros").click(function () {
@@ -481,6 +501,12 @@
         });
 
 
+
+
+
+
+
+
 //     }
 
 
@@ -554,6 +580,48 @@
     %{--});--}%
 
     %{--console.log("estado: " + '${estado}')--}%
+
+
+    $("#borrarDialog").dialog({
+
+
+        autoOpen: false,
+        resizable: false,
+        modal: true,
+        draggable: false,
+        width: 350,
+        height: 200,
+        position: 'center',
+        title: 'Borrar',
+        buttons: {
+            "Aceptar": function () {
+
+                   console.log("-->>" + $(this).attr("iden"));
+
+                    $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",
+                        data: "id=" + $(this).attr("iden"),
+                        success: function (msg) {
+                            clearInterval(interval)
+                            $("#detalle").html(msg)
+
+                        }
+                    });
+
+
+
+                $("#borrarDialog").dialog("close");
+
+            },
+
+           "Cancelar" : function () {
+
+
+               $("#borrarDialog").dialog("close");
+
+           }
+        }
+
+    });
 
 
 
