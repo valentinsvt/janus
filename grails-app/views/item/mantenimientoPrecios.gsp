@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="span2" align="center">
-                    <elm:datepicker name="fecha" class="fecha datepicker input-small" value=""/>
+                    <elm:datepicker name="fecha" class="fecha datepicker input-small" value="" maxDate="'+1y'"/>
                 </div>
 
                 %{--<div class="span1" align="center" style="margin-left: 50px; margin-right: 40px">--}%

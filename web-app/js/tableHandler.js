@@ -23,7 +23,7 @@ var textFieldBinds = {
 
 function doEdit(sel) {
     var texto = $.trim(sel.text());
-//    console.log("doEdit", sel,sel.text(), texto, sel.data("valor"));
+    console.log("doEdit", sel,sel.text(), texto, sel.data("valor"));
     if (texto == "" && sel.data("valor") > 0) {
         texto = sel.data("valor");
     }

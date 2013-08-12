@@ -218,13 +218,13 @@ class ItemController extends janus.seguridad.Shield {
                 "  i.tpls__id      tipo\n" +
                 "FROM item i\n" +
                 "  LEFT JOIN rbpc r\n" +
-                "    ON i.item__id = r.item__id AND r.rbpcfcha = '${f}'\n" +
+                "    ON i.item__id = r.item__id AND r.rbpcfcha <= '${f}'\n" +
                 "  INNER JOIN undd u\n" +
                 "    ON i.undd__id = u.undd__id\n" +
                 "  LEFT JOIN lgar l\n" +
                 "    ON r.lgar__id = l.lgar__id\n" +
                 "WHERE i.tpls__id ${tipoLugar}\n" +
-                "ORDER BY i.itemcdgo, i.item__id, l.lgardscr"
+                "ORDER BY i.itemcdgo,l.lgardscr,r.rbpcfcha desc, i.item__id"
 
 //        println sqlPrecios
 
@@ -290,17 +290,20 @@ class ItemController extends janus.seguridad.Shield {
                     def precio = precios.find {
                         it.item_id == row.item_id && it.lugar_id == lugarId
                     }
-                    def prec = "", p = 0, rubro = "new"
+                    def prec = "", p = 0, rubro = "new", clase = ""
                     if (precio) {
                         prec = g.formatNumber(number: precio.precio, maxFractionDigits: 5, minFractionDigits: 5, locale: "ec")
                         p = precio.precio
-                        rubro = precio.rbpc_id
+                        if (precio.fecha.format("yyyy-MM-dd") == f) {
+                            rubro = precio.rbpc_id
+                        } else {
+                            clase += "old "
+                        }
                     }
-                    def clase = ""
                     if (params.lgar != "-1") {
-                        clase = "editable"
+                        clase += "editable"
                     }
-                    body += "<td class='${clase} number' data-original='${p}' data-lugar='${lugarId}' data-id='${rubro}' data-item='${row.item_id}'>" + prec + '</td>'
+                    body += "<td class='${clase} number' data-original='${p}' data-valor='${p}' data-lugar='${lugarId}' data-id='${rubro}' data-item='${row.item_id}'>" + prec + '</td>'
                 }
             }
         }
@@ -544,7 +547,7 @@ class ItemController extends janus.seguridad.Shield {
             rubroPrecioInstance.registrado = reg
 
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "item controller l 547: "+"error " + parts
+                println "item controller l 547: " + "error " + parts
                 if (nos != "") {
                     nos += ","
                 }
@@ -598,7 +601,7 @@ class ItemController extends janus.seguridad.Shield {
             rubroPrecioInstance.registrado = "N"
 
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "item controller l 601: "+"error " + parts
+                println "item controller l 601: " + "error " + parts
                 if (nos != "") {
                     nos += ","
                 }
@@ -653,7 +656,7 @@ class ItemController extends janus.seguridad.Shield {
             rubroPrecioInstance.fecha = nuevaFecha
 
             if (!rubroPrecioInstance.save(flush: true)) {
-                println "item controller l 656: "+"error " + parts
+                println "item controller l 656: " + "error " + parts
                 if (nos != "") {
                     nos += ","
                 }

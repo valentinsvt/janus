@@ -45,6 +45,10 @@
         .changed {
             background-color : #C3DBC3 !important;
         }
+
+        .old {
+            color : #21337f;
+        }
         </style>
 
     </head>
@@ -77,7 +81,7 @@
                 </div>
 
                 <div class="span2" align="center">
-                    <elm:datepicker name="fecha" class="fecha datepicker input-small" value=""/>
+                    <elm:datepicker name="fecha" class="fecha datepicker input-small" value="" maxDate="'+1y'"/>
                 </div>
 
                 <div class="btn-group span1" style="margin-left: 5px; margin-right: 10px; width: 200px;">

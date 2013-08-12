@@ -5,7 +5,7 @@
         <style type="text/css">
         @page {
             size   : 21cm 29.7cm ;  /*width height */
-            margin : 1.5cm;
+            margin : 3cm;
         }
 
         html {
