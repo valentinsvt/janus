@@ -88,14 +88,14 @@
 
     <body>
         <div class="hoja">
-            <h1>G.A.D. PROVINCIA DE PICHINCHA</h1>
+            <h1 style="font-size: 16px">G.A.D. PROVINCIA DE PICHINCHA</h1>
 
-            <h2>Reporte de costos de ${grupo.descripcion.toLowerCase()}</h2>
+            <h2>REPORTE DE COSTOS DE ${grupo.descripcion.toUpperCase()}</h2>
 
             <div style="height: 30px;">
-                <div class="left strong">${lugar.descripcion}</div>
+                <div class="left strong"> LISTA DE PRECIOS: ${lugar.descripcion.toUpperCase()}</div>
 
-                <div class="right">Fecha consulta: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
+                <div class="right strong">FECHA DE CONSULTA: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
             </div>
 
             <table border="1">

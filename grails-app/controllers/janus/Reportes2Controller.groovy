@@ -1048,10 +1048,10 @@ class Reportes2Controller {
         def fila = 8;
 
         label = new jxl.write.Label(2, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
-        label = new jxl.write.Label(2, 2, "Reporte de Costos de ${grupo.descripcion.toLowerCase()}", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 2, "REPORTE COSTOS DE: ${grupo.descripcion.toUpperCase()}", times16format); sheet.addCell(label);
 
-        label = new jxl.write.Label(1, 4, lugar?.descripcion, times16format); sheet.addCell(label);
-        label = new jxl.write.Label(4, 4, "Fecha Consulta: " + new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 4, "LISTA DE PRECIOS: " + lugar?.descripcion, times16format); sheet.addCell(label);
+        label = new jxl.write.Label(4, 4, "FECHA DE CONSULTA: " + new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
 
         def col = 0
         label = new jxl.write.Label(col, 6, "CODIGO", times16format); sheet.addCell(label); col++;
