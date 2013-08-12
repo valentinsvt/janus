@@ -67,7 +67,7 @@
                 <span style="width: 120px; margin: 5px;">
                 <elm:datepicker name="fecha" id="fcDefecto" class="datepicker required" style="width: 90px"
                                 yearRange="${(new Date().format('yyyy').toInteger() - 10).toString() + ':' + new Date().format('yyyy')}"
-                                maxDate="new Date()" value="${new Date()}"/>
+                                maxDate="'+1y'" value="${new Date()}"/>
                 </span>
             </form>
         </div>

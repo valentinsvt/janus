@@ -134,8 +134,10 @@ class ObraFPController {
 //        println "ejecutó ac_rbro_hr"
 
         /* solo se debe correr sp_obra cuando esta no está registrada */
-        if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
-//        println "ejecutó sp_obra"
+        if (Obra.get(obra__id).estado == "N") {
+            ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
+            //println "ejecutó sp_obra"
+        }
 
         /* Se debe crear una neuva columna: Transp_Especial, que sirve para totalizar el valor de cada rubro
    *   por concepto de transporte especial en camioneta o en acémila o ambos.
@@ -231,9 +233,9 @@ class ObraFPController {
 
         /* ---- ejecuta Rubros(subPrsp) y Descomposicion(subPrsp) ----------------------------- */
         rubros(obra__id, sbpr)
-//        println "completa rubros"
+        //println "completa rubros"
         descomposicion(obra__id, sbpr)
-//        println "completa descomposicion"
+        //println "completa descomposicion"
         des_Materiales(obra__id, sbpr, conTransporte)
 //        println "completa des_Materiales, conTranp: $conTransporte"
         if (hayEquipos) {
@@ -306,7 +308,7 @@ class ObraFPController {
     */
     def transporteEspecial(id) {
 
-        println "inicia proceso... "
+        //println "inicia proceso... "
         def res
         def sbpr = SubPresupuesto.findByDescripcion("TRANSPORTE ESPECIAL")
         if (!sbpr) res = "Ingrese el subpresupuesto:TRANSPORTE ESPECIAL"
@@ -361,7 +363,7 @@ class ObraFPController {
                 } else {
                     println "No hay el rubro de camioneta: creando..."
                     tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
-                            "values(${sbpr.id}, ${acemila.id}, ${id}, ${(peso * obra.distanciaAcemila).toDouble().round(2)}, 1000, 0) "
+                            "values(${sbpr.id}, ${acemila.id}, ${id}, ${(peso * obra.distanciaAcemila).toDouble().round(2)}, 1001, 0) "
                     println tx_sql
                     res = cn.execute(tx_sql.toString())
                 }
@@ -577,23 +579,23 @@ class ObraFPController {
         def cn = dbConnectionService.getConnection()
         def tx_sql = ""
         if (sbpr == 0) {
-            tx_sql = "select itemcdgo, sum(vlobcntd) vlobcntd, itemnmbr, unddcdgo "
+            tx_sql = "select itemcdgo, sum(vlobcntd) vlobcntd, itemnmbr, unddcdgo, min(vlobordn) ordn "
             tx_sql += "from vlob, item, undd "
             tx_sql += "where item.item__id = vlob.item__id and obra__id = ${id} and "
             tx_sql += "vlobcntd > 0 and undd.undd__id = item.undd__id "
-            tx_sql += "group by itemcdgo, itemnmbr, unddcdgo"
+            tx_sql += "group by itemcdgo, itemnmbr, unddcdgo order by ordn"
 /*   no es posible ordenar los rubros porque si existen en varios subpresupuestos, no existe un listado único
             tx_sql += "group by itemcdgo, itemnmbr, unddcdgo, vlobordn "
             tx_sql += "order by vlobordn"
 */
         } else {
-            tx_sql = "select itemcdgo, sum(vlobcntd) vlobcntd, itemnmbr, unddcdgo "
+            tx_sql = "select itemcdgo, sum(vlobcntd) vlobcntd, itemnmbr, unddcdgo, min(vlobordn) ordn  "
             tx_sql += "from vlob, item, undd "
             tx_sql += "where item.item__id = vlob.item__id and obra__id = ${id} and "
             tx_sql += "vlobcntd > 0 and undd.undd__id = item.undd__id and sbpr__id = ${sbpr} "
-            tx_sql += "group by itemcdgo, itemnmbr, unddcdgo"
+            tx_sql += "group by itemcdgo, itemnmbr, unddcdgo order by ordn"
         }
-//        println "rubros: " + tx_sql
+        //println "rubros: " + tx_sql
         def contador = 1
         cn.eachRow(tx_sql.toString()) { row ->
             insertaRubro("obra__id, codigo, rubro, unidad, cantidad, orden",
