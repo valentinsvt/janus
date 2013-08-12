@@ -277,7 +277,7 @@
 
             },
             success: function (msg) {
-                location.href = "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra',id: obra?.id)}";
+                location.href = "${g.createLink(controller: 'reportes',action: 'reporteExcelVolObra',id: obra?.id)}?sub=" + $("#subPres_desc").val();
                 $("#dlgLoad").dialog("close");
 
 //                spinner.replaceWith($boton);
