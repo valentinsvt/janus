@@ -23,6 +23,12 @@ class ExportController extends janus.seguridad.Shield {
             if (res !=-1) {
                 def obraJnId=res
                 def vols = VolumenesObra.findAllByObra(obra)
+                def concurso = janus.pac.Concurso.findByObra(obra)
+                def fechaOferta = concurso.fechaLimiteEntregaOfertas.format("yyyy-MM-dd")
+                println "sql "+  "update obra set obracdcn=${concurso.codigo}, obrafcof='${fechaOferta}' where obra__id=${obraJnId}"
+                oferentesService.sqlOferentes("update obra set obracdcn='${concurso.codigo}', obrafcof='${fechaOferta}' where obra__id=${obraJnId}",2)
+
+
 //                println "volumen!!!------------------------------------------ "
                 vols.each {v->
 //                    println "volumen "+v.item+"  "+v.cantidad
