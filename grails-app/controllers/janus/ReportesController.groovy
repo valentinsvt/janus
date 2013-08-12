@@ -4951,6 +4951,8 @@ class ReportesController {
 
     def reporteExcelVolObra() {
 
+//        println("params->" + params)
+
         def obra = Obra.get(params.id)
         def detalle
         detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
@@ -4963,9 +4965,37 @@ class ReportesController {
         def lugar = obra.lugar
         def prch = 0
         def prvl = 0
+        def subPre
         preciosService.ac_rbroObra(obra.id)
 
-        def valores = preciosService.rbro_pcun_v2(obra.id)
+//        def valores = preciosService.rbro_pcun_v2(obra.id)
+        def valores
+
+        if (params.sub)
+
+            if (params.sub == '-1'){
+                valores = preciosService.rbro_pcun_v2(obra.id)
+
+            }else {
+
+                valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
+
+            }
+        else
+
+            valores = preciosService.rbro_pcun_v2(obra.id)
+
+
+
+        if (params.sub == '-1' || params.sub == null ){
+
+            subPre= subPres?.descripcion
+
+        }else {
+
+
+            subPre= SubPresupuesto.get(params.sub).descripcion
+        }
 
         def indirecto = obra.totales / 100
 
@@ -5029,7 +5059,7 @@ class ReportesController {
         label = new Label(2, 4, "DEPARTAMENTO DE COSTOS", times16format); sheet.addCell(label);
 
 
-        label = new Label(2, 6, "ANÁLISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: " + subPres?.descripcion.toString(), times16format); sheet.addCell(label);
+        label = new Label(2, 6, "ANÁLISIS DE PRECIOS UNITARIOS DEL SUBPRESUPUESTO: " + subPre, times16format); sheet.addCell(label);
 
 
         label = new Label(2, 8, "FECHA: " + obra?.fechaCreacionObra.format("dd-MM-yyyy"), times16format); sheet.addCell(label);
