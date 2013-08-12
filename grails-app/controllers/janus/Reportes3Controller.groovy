@@ -1785,6 +1785,7 @@ class Reportes3Controller {
 
         Document document
         document = new Document(PageSize.A4);
+        document.setMargins(50,30,30,40)
         def pdfw = PdfWriter.getInstance(document, baos);
         document.open();
         document.addTitle("Contrato " + new Date().format("dd_MM_yyyy"));
@@ -1796,7 +1797,7 @@ class Reportes3Controller {
         Paragraph headers = new Paragraph();
         headers.setAlignment(Element.ALIGN_LEFT);
 
-        headers.add(new Paragraph("Oficio N°: " + params.oficio,times12bold ))
+        headers.add(new Paragraph("Oficio N°: " + params.oficio.toUpperCase(),times12bold ))
         headers.add(new Paragraph("Quito, " + printFecha(new Date()), times12bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(" ", times10bold));

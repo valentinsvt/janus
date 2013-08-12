@@ -57,7 +57,7 @@
                 <div class="btn-group">
                     <a href="#" class="btn  " id="imprimir">
                         <i class="icon-print"></i>
-                        Imprimir Documento
+                        Imprimir Orden de Inicio de Obra
                     </a>
                 </div>
             </div>
@@ -264,7 +264,7 @@
             <fieldset>
                 <div class="span4" style="margin-top: 10px">
 
-                    Oficio N°: <g:textField name="oficio" maxlength="20"/>
+                    Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>
 
                 </div>
 
