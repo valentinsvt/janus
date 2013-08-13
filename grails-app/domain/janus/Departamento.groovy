@@ -19,7 +19,7 @@ class Departamento implements Serializable {
     }
 
     static constraints = {
-        descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
+        descripcion(size: 1..63, blank: false, attributes: [title: 'descripcion'])
         direccion(blank: true, attributes: [title: 'Direccion'])
         permisos(blank: true,nullable: true, size: 1..124)
     }
