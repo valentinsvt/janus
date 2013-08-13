@@ -1,4 +1,7 @@
 <div class="row-fluid" style="margin-left: 0px">
+    <g:if test="${msg}">
+        <div class="alert ${flash.clase ?: 'alert-info'}" role="status">${msg}</div>
+    </g:if>
     <div class="span-6" style="margin-bottom: 5px">
         <b>Subpresupuesto:</b>
         <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion"
@@ -382,27 +385,17 @@
     });
     $(".borrarItem").click(function () {
 
-//        var interval = loading("detalle")
-//
-//        console.log("-->>" + $(this).attr("iden"));
 
 
+        if (confirm("Esta seguro de eliminar el rubro?")) {
+            $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",
+                data: "id=" + $(this).attr("iden"),
+                success: function (msg) {
+                    $("#detalle").html(msg)
 
-
-
-        $("#borrarDialog").dialog("open");
-
-
-        %{--if (confirm("Esta seguro de eliminar el rubro?")) {--}%
-            %{--$.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",--}%
-                %{--data: "id=" + $(this).attr("iden"),--}%
-                %{--success: function (msg) {--}%
-                    %{--clearInterval(interval)--}%
-                    %{--$("#detalle").html(msg)--}%
-
-                %{--}--}%
-            %{--});--}%
-        %{--}--}%
+                }
+            });
+        }
     });
 
     $("#copiar_rubros").click(function () {
@@ -596,7 +589,7 @@
         buttons: {
             "Aceptar": function () {
 
-                   console.log("-->>" + $(this).attr("iden"));
+//                   console.log("-->>" + $(this).attr("iden"));
 
                     $.ajax({type: "POST", url: "${g.createLink(controller: 'volumenObra',action:'eliminarRubro')}",
                         data: "id=" + $(this).attr("iden"),

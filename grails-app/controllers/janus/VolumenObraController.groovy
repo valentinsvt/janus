@@ -76,7 +76,7 @@ class VolumenObraController extends janus.seguridad.Shield{
             volumen = VolumenesObra.get(params.id)
         else {
 
-                volumen=new VolumenesObra()
+            volumen=new VolumenesObra()
         }
 //        println "volumn :" + volumen
         volumen.cantidad = params.cantidad.toDouble()
@@ -119,11 +119,11 @@ class VolumenObraController extends janus.seguridad.Shield{
                 return
 
             } else {
-            volumen = VolumenesObra.findByObraAndItemAndSubPresupuesto(obra, rubro, sbprDest)
+                volumen = VolumenesObra.findByObraAndItemAndSubPresupuesto(obra, rubro, sbprDest)
 
 
-            if (volumen == null)
-                volumen=new VolumenesObra()
+                if (volumen == null)
+                    volumen=new VolumenesObra()
 
             }
         }
@@ -181,21 +181,21 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (params.ord == '1'){
             orden = 'asc'
         } else {
-             orden = 'desc'
+            orden = 'desc'
         }
 
         preciosService.ac_rbroObra(obra.id)
         if (params.sub && params.sub != "-1") {
 //            println("entro1")
 //        detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
-         valores = preciosService.rbro_pcun_v5(obra.id,params.sub,orden)
+            valores = preciosService.rbro_pcun_v5(obra.id,params.sub,orden)
 //          detalle= VolumenesObra.findAllBySubPresupuesto(SubPresupuesto.get(params.sub))
 //            println("detalle" + detalle)
         }
         else  {
 //            println("entro2")
 //        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-        valores = preciosService.rbro_pcun_v4(obra.id,orden)
+            valores = preciosService.rbro_pcun_v4(obra.id,orden)
         }
 
         def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
@@ -213,17 +213,36 @@ class VolumenObraController extends janus.seguridad.Shield{
         def indirecto = obra.totales/100
 
 
-        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado]
+        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado,msg:params.msg]
 
     }
 
     def eliminarRubro(){
+        println "elm rubro "+params
         def vol = VolumenesObra.get(params.id)
         def obra = vol.obra
         def orden = vol.orden
-        preciosService.actualizaOrden(vol,"delete")
-        vol.delete()
-        redirect(action: "tabla",params: [obra:obra.id, sub: vol.subPresupuesto.id, ord: 1])
+        def msg="ok"
+        def cronos = Cronograma.findAllByVolumenObra(vol)
+        cronos.each {c->
+            if(c.porcentaje==0){
+                c.delete(flush: true)
+            }else{
+                msg="Error no se puede borrar el rubro porque esta presente en el cronograma con un valor diferente de cero."
+            }
+        }
+
+        try{
+            if(msg=="ok"){
+                preciosService.actualizaOrden(vol,"delete")
+                vol.delete(flush: true)
+            }
+
+        }catch (e){
+            println "e "+e
+            msg="Error"
+        }
+        redirect(action: "tabla",params: [obra:obra.id, sub: vol.subPresupuesto.id, ord: 1,msg:msg])
 
 
     }
