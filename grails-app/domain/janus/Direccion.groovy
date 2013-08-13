@@ -14,7 +14,7 @@ class Direccion {
         }
     }
     static constraints = {
-        nombre(size: 1..31, blank: false, attributes: [title: 'Nombre de la Dirección'])
+        nombre(size: 1..63, blank: false, attributes: [title: 'Nombre de la Dirección'])
     }
 
     String toString() {

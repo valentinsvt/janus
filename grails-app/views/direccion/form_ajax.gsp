@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="nombre" maxlength="31" class=" required" value="${direccionInstance?.nombre}" style="width: 300px;"/>
+                <g:textField name="nombre" maxlength="63" class=" required" value="${direccionInstance?.nombre}" style="width: 300px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

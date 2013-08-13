@@ -19,7 +19,7 @@
                         Código
                     </th>
                     <th style="width: 600px;">
-                        Descripción Equipo
+                        Equipo
                     </th>
                     <th style="width: 80px;">
                         Cantidad
@@ -47,7 +47,7 @@
                         Código
                     </th>
                     <th style="width: 600px;">
-                        Descripción Mano de obra
+                        Mano de obra
                     </th>
                     <th style="width: 80px">
                         Cantidad
@@ -75,7 +75,7 @@
                         Código
                     </th>
                     <th style="width: 600px;">
-                        Descripción Material
+                        Materiales
                     </th>
                     <th style="width: 60px" class="col_unidad">
                         Unidad
