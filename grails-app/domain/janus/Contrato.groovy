@@ -140,7 +140,7 @@ class Contrato implements Serializable {
             }
             order("fechaInicio", "desc")
         }
-        println admins
+//        println admins
         if (admins.size() == 0) {
             return new AdministradorContrato()
         } else if (admins.size() == 1) {
