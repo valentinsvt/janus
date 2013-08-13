@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="31" class=" required" value="${departamentoInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="63" class=" required" value="${departamentoInstance?.descripcion}" style="width: 300px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:select id="direccion" name="direccion.id" from="${janus.Direccion.list()}" optionKey="id" class="many-to-one  required" value="${departamentoInstance?.direccion?.id}"/>
+                <g:select id="direccion" name="direccion.id" from="${janus.Direccion.list()}" optionKey="id" class="many-to-one  required" value="${departamentoInstance?.direccion?.id}" style="width: 300px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
