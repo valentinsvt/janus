@@ -160,21 +160,14 @@
                 </p>
 
                 <p style="font-size: 14px">
-                    COORDINACIÓN DE COSTOS
+                    SUBSISTEMA APU
                 </p>
 
                 <p style="font-size: 14px">
-                    ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO
+                    ANÁLISIS DE PRECIOS UNITARIOS
                 </p>
             </div>
-
-
             ${html}
-
-            %{--<div style="width: 100%;float: left;height: 20px;margin-top: 10px;text-align: right">--}%
-                %{--<b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.--}%
-            %{--</div>--}%
-
         </div>
     </body>
 </html>

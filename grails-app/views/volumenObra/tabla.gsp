@@ -41,20 +41,6 @@
         </a>
 
     </div>
-
-
-    %{--<div class="span1">--}%
-
-
-    %{--</div>--}%
-
-
-    %{--<div class="span4" style="width: 500px">--}%
-
-
-
-    %{--</div>--}%
-
 </div>
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>

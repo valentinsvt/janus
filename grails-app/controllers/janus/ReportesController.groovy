@@ -1174,20 +1174,13 @@ class ReportesController {
             addEmptyLine(headers, 1);
             headers.setAlignment(Element.ALIGN_CENTER);
             headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
-            headers.add(new Paragraph("COORDINACIÓN DE COSTOS", times12bold));
-            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO", times12bold));
-//            headers.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el " + new Date().format("dd/MM/yyyy hh:mm"), times8normal))
+            headers.add(new Paragraph("SUBSISTEMA APU", times12bold));
+            headers.add(new Paragraph("ANÁLISIS DE PRECIOS UNITARIOS", times12bold));
             addEmptyLine(headers, 1);
             document.add(headers);
 
             def id = rubro.id
-
-//            def parametros = "" + id + "," + lugar.id + ",'" + fecha + "'," + obra.distanciaPeso + "," + obra.distanciaVolumen + "," + rendimientos["rdps"] + "," + rendimientos["rdvl"]
-//            preciosService.ac_rbro(id, lugar.id, fecha)
-//            def res = preciosService.rb_precios(parametros, "")
-
             def res = preciosService.precioUnitarioVolumenObraAsc("* ", obra.id, id)
-
             PdfPTable headerRubroTabla = new PdfPTable(4); // 4 columns.
             headerRubroTabla.setWidthPercentage(90);
             headerRubroTabla.setWidths(arregloEnteros([12, 66, 12, 10]))
@@ -1234,7 +1227,20 @@ class ReportesController {
 
             creaHeadersTabla(tablaHerramientas, fonts, prms, "EQUIPOS")
             creaHeadersTabla(tablaManoObra, fonts, prms, "MANO DE OBRA")
-            creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES")
+
+
+
+            if(params.transporte == '1'){
+
+                creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES")
+
+            }else {
+
+                creaHeadersTabla(tablaMateriales, fonts, prms, "MATERIALES INCLUIDO TRANSPORTE")
+
+            }
+
+
             if (params.transporte == '1') {
                 creaHeadersTabla(tablaTransporte, fonts, prms, "TRANSPORTE")
             }
@@ -1289,12 +1295,6 @@ class ReportesController {
 
             if (params.transporte == "1") {
                 addSubtotalTrans(tablaTransporte, totalTrans, fonts, prms)
-
-////                def addSubtotal( table, subtotal, fonts, params) {
-//                    addCellTabla(tablaTransporte, new Paragraph("TOTAL", fonts.times8bold), prmsHeader3)
-//                    addCellTabla(tablaTransporte, new Paragraph(g.formatNumber(number: totalTrans, minFractionDigits: 5, maxFractionDigits: 5, format: "##,#####0", locale: "ec"), fonts.times8bold), prmsHeader3)
-////                }
-
 
             }
 
@@ -1483,20 +1483,23 @@ class ReportesController {
 
                 } else {
 
+                    if(tipo == "MATERIALES INCLUIDO TRANSPORTE"){
+
+                        table.setWidths(arregloEnteros([12, 38, 12, 13, 13, 15]))
+                        addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
+                        addCellTabla(table, new Paragraph("CÓDIGO", fonts.times8boldWhite), params.prmsCellHead)
+                        addCellTabla(table, new Paragraph("DESCRIPCIÓN", fonts.times8boldWhite), params.prmsCellHead)
+                        addCellTabla(table, new Paragraph("UNIDAD", fonts.times8boldWhite), params.prmsCellHead)
+                        addCellTabla(table, new Paragraph("CANTIDAD", fonts.times8boldWhite), params.prmsCellHead)
+                        addCellTabla(table, new Paragraph("UNITARIO(\$)", fonts.times8boldWhite), params.prmsCellHead)
+//                addCellTabla(table, new Paragraph("", fonts.times8boldWhite), params.prmsCellHead)
+                        addCellTabla(table, new Paragraph("C.TOTAL(\$)", fonts.times8boldWhite), params.prmsCellHead)
+
+                    }else {
+
 
                     if (tipo == "TRANSPORTE") {
 
-
-//                        table.setWidths(arregloEnteros([9, 24, 8, 10, 12, 9, 13, 11]))
-//                        addCellTabla(table, new Paragraph(tipo, fonts.times10boldWhite), params.prmsHeader)
-//                        addCellTabla(table, new Paragraph("CÓDIGO", fonts.times8boldWhite), params.prmsCellHead)
-//                        addCellTabla(table, new Paragraph("DESCRIPCIÓN", fonts.times8boldWhite), params.prmsCellHead)
-//                        addCellTabla(table, new Paragraph("UNIDAD", fonts.times8boldWhite), params.prmsCellHead)
-//                        addCellTabla(table, new Paragraph("CANTIDAD", fonts.times8boldWhite), params.prmsCellHead)
-//                        addCellTabla(table, new Paragraph("TARIFA(\$/H)", fonts.times8boldWhite), params.prmsCellHead)
-//                        addCellTabla(table, new Paragraph("COSTO(\$)", fonts.times8boldWhite), params.prmsCellHead)
-//                        addCellTabla(table, new Paragraph("RENDIMIENTO", fonts.times8boldWhite), params.prmsCellHead)
-//                        addCellTabla(table, new Paragraph("C.TOTAL(\$)", fonts.times8boldWhite), params.prmsCellHead)
 
 
                         table.setWidths(arregloEnteros([9, 24, 8, 10, 12, 11, 11, 11]))
@@ -1528,7 +1531,7 @@ class ReportesController {
 
                     }
 
-
+                    }
                 }
 
 

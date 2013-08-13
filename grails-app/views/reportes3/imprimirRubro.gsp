@@ -74,18 +74,6 @@
             background : #000000 !important;
             color      : #FFFFFF !important;
         }
-
-            /*th {*/
-            /*background : #cccccc;*/
-            /*}*/
-
-            /*tbody tr:nth-child(2n+1) {*/
-            /*background : none repeat scroll 0 0 #E1F1F7;*/
-            /*}*/
-
-            /*tbody tr:nth-child(2n) {*/
-            /*background : none repeat scroll 0 0 #F5F5F5;*/
-            /*}*/
         thead tr {
             margin : 0px
         }
@@ -166,20 +154,18 @@
                 </p>
 
                 <p style="font-size: 14px">
-                    <b>COORDINACIÓN DE COSTOS</b>
+                    <b>SUBSISTEMA APU</b>
                 </p>
 
                 <p style="font-size: 14px">
-                    <b>ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO</b>
+                    <b>ANÁLISIS DE PRECIOS UNITARIOS</b>
                 </p>
             </div>
 
             <div style="margin-top: 20px">
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
-                        %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
                         <b>Fecha:</b> ${fechaPala.format("dd-MM-yyyy")}
-                        %{--<b class="span3">Fecha Act. P.U:</b> ${fechaPrecios}--}%
                     </div>
 
                     <div class="span4">
@@ -261,11 +247,6 @@
                 </table>
 
             </div>
-
-            %{--<div style="width: 100%;float: left;height: 30px;margin-top: 40px;text-align: left">--}%
-                %{--Parámetros para los datos de presupuesto  obtenidos de la obra:--}%
-            %{--</div>--}%
-
             <div style="width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left">
                 <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales.
             </div>

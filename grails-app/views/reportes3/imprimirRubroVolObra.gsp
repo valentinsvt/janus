@@ -173,18 +173,17 @@
                 </p>
 
                 <p style="font-size: 14px">
-                    <b>COORDINACIÓN DE COSTOS</b>
+                    <b>SUBSISTEMA APU</b>
                 </p>
 
                 <p style="font-size: 14px">
-                    <b>ANÁLISIS DE PRECIOS UNITARIOS DE PRESUPUESTO</b>
+                    <b>ANÁLISIS DE PRECIOS UNITARIOS</b>
                 </p>
             </div>
 
             <div style="margin-top: 20px">
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
-                        %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
                         <b>Fecha:</b> ${fechaSalida.format("dd-MM-yyyy")}
                     </div>
 

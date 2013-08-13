@@ -66,7 +66,7 @@
                 <span style="font-size: 12px; margin-left: 20px; ">Fecha por Defecto:</span>
                 <span style="width: 120px; margin: 5px;">
                 <elm:datepicker name="fecha" id="fcDefecto" class="datepicker required" style="width: 90px"
-                                yearRange="${(new Date().format('yyyy').toInteger() - 10).toString() + ':' + new Date().format('yyyy')}"
+
                                 maxDate="'+1y'" value="${new Date()}"/>
                 </span>
             </form>
