@@ -91,9 +91,7 @@ class RubroController extends janus.seguridad.Shield {
 
         }
 
-        grupos.add(Grupo.get(4))
-        grupos.add(Grupo.get(5))
-        grupos.add(Grupo.get(6))
+        grupos=Grupo.findAll("from Grupo  where id>3")
         if (params.idRubro) {
             rubro = Item.get(params.idRubro)
             def items = Rubro.findAllByRubro(rubro)
@@ -295,10 +293,15 @@ class RubroController extends janus.seguridad.Shield {
                     nuevo.rubro = rubro
                     nuevo.item = it.item
 //                    println " asd "  +it.item.nombre
-                    if (!(it.item.nombre =~ "HERRAMIENTA MENOR")) {
-//                        println "entro 1 "+factor
+                    if(it.item.departamento.subgrupo.grupo.id.toInteger()==1){
                         nuevo.cantidad = it.cantidad * factor
+                    }else{
+                        if (!(it.item.nombre =~ "HERRAMIENTA MENOR")) {
+                            nuevo.rendimiento = it.rendimiento * factor
+                            nuevo.cantidad=it.cantidad
+                        }
                     }
+
                     nuevo.fecha = new Date()
                     if (!nuevo.save(flush: true)) {
                         println "Error: copiar composicion " + nuevo.errors

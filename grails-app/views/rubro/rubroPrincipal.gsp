@@ -1850,6 +1850,12 @@
             if (cod.trim().length > 30 || cod.trim().length < 1) {
                 msg = "<br>Error: La propiedad código debe tener entre 1 y 30 caracteres."
             }
+            if (desc.trim().length > 160 || desc.trim().length < 1) {
+                if (msg == "")
+                    msg = "<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
+                else
+                    msg = "<br>Error: La propiedad descripción debe tener entre 1 y 160 caracteres."
+            }
             if (resp == "-1") {
                 if (msg == "")
                     msg = "<br>Error: Seleccione un responsable."
