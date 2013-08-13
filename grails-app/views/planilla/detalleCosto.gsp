@@ -100,10 +100,10 @@
                 <tbody>
                     <tr id="trRubro">
                         <td id="tdFactura">
-                            <input type="text" id="txtFactura" class="input-small int"/>
+                            <input type="text" id="txtFactura" class="input-small int" style="width: 120px;"/>
                         </td>
                         <td id="tdRubro">
-                            <input type="text" id="txtRubro" class="input-xlarge"/>
+                            <input type="text" id="txtRubro" class="input-xlarge" style="width: 360px;"/>
                         </td>
                         <td id="tdUnidad">
                             <g:select class="input-mini" name="selUnidad" from="${janus.Unidad.list([sort: 'descripcion'])}" optionKey="id" optionValue="codigo"/>
@@ -117,7 +117,7 @@
                         <td id="tdIndirectos">
                             <input type="text" id="txtIndirectos" class="input-small number"/>
                         </td>
-                        <td id="tdTotal" class="num bold">
+                        <td id="tdTotal" class="num bold" style="font-size: 14px;">
                             0.00
                         </td>
                         <td>

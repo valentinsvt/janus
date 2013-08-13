@@ -369,7 +369,7 @@
 
                             <li>
                                 <g:link action="fechasPedidoRecepcion" id="${contrato?.id}">
-                                    <i class=" icon-calendar-empty"></i> Fechas de pedido de recepción
+                                    <i class=" icon-calendar-empty"></i> Pedido de recepción
                                 </g:link>
                             </li>
 
