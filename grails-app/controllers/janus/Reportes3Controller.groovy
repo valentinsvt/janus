@@ -334,7 +334,7 @@ class Reportes3Controller {
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
         def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 2, "GESTIÓN DE PRESUPUESTOS".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2, "SUBSISTEMA APU".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "ANÁLISIS DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
 
         sheet.mergeCells(0, 1, 1, 1)
@@ -776,7 +776,22 @@ class Reportes3Controller {
             def header, tablas, footer, nota
             def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
 
-            header = " <div style=\"margin-top: 20px\">\n" +
+            header =
+                    "  <div class=\"tituloPdf\">\n" +
+                            "                <p style=\"font-size: 18px\">\n" +
+                            "                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
+                            "                </p>\n" +
+                            "\n" +
+                            "                <p style=\"font-size: 14px\">\n" +
+                            "                    SUBSISTEMA APU\n" +
+                            "                </p>\n" +
+                            "\n" +
+                            "                <p style=\"font-size: 14px\">\n" +
+                            "                    ANÁLISIS DE PRECIOS UNITARIOS\n" +
+                            "                </p>\n" +
+                            "\n" +
+                            "            </div>\n " +
+                    " <div style=\"margin-top: 20px\">\n" +
                     "                <div class=\"row-fluid\">\n" +
                     "                    <div class=\"span3\" style=\"margin-right: 195px !important;\">\n" +
                     "                        <b>Fecha:</b> ${new Date().format("dd-MM-yyyy")}\n" +
@@ -850,11 +865,11 @@ class Reportes3Controller {
                     tablaHer += "<tr>"
                     tablaHer += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaHer += "<td>" + r["itemnmbr"] + "</td>"
-                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rndm"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rndm"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaHer += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     totalHer += r["parcial"]
                     tablaHer += "</tr>"
                 }
@@ -862,11 +877,11 @@ class Reportes3Controller {
                     tablaMano += "<tr>"
                     tablaMano += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaMano += "<td>" + r["itemnmbr"] + "</td>"
-                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rndm"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"] * r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rndm"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaMano += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     totalMan += r["parcial"]
                     tablaMano += "</tr>"
                 }
@@ -879,8 +894,8 @@ class Reportes3Controller {
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                         tablaMat += "<td>" + r["itemnmbr"] + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 //                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
 //                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
@@ -894,13 +909,9 @@ class Reportes3Controller {
                         tablaMat += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                         tablaMat += "<td>" + r["itemnmbr"] + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
-                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["parcial"] + r["parcial_t"]), format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["rbpcpcun"] + r["parcial_t"] / r["rbrocntd"]), format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                        tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: (r["parcial"] + r["parcial_t"]), format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
 
                         totalMat += r["parcial"] + r["parcial_t"]
                     }
@@ -925,11 +936,11 @@ class Reportes3Controller {
 
                     }
 //                tablaTrans += "<td style='width: 50px;text-align: right'>" + r["unddcdgo"] + "</td>"
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["distancia"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["tarifa"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"], format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["itempeso"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["distancia"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["tarifa"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
+                    tablaTrans += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["parcial_t"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                     total += r["parcial_t"]
                     tablaTrans += "</tr>"
                 }
@@ -941,13 +952,13 @@ class Reportes3Controller {
             }
 
 
-            tablaTrans += "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: total, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
+            tablaTrans += "<tr><td></td><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: total, format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
             tablaTrans += "</tbody></table>"
-            tablaHer += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: totalHer, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
+            tablaHer += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: totalHer, format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
             tablaHer += "</tbody></table>"
-            tablaMano += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: totalMan, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
+            tablaMano += "<tr><td></td><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: totalMan, format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
             tablaMano += "</tbody></table>"
-            tablaMat += "<tr><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: totalMat, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
+            tablaMat += "<tr><td></td><td></td><td></td><td></td><td style='text-align: right'><b>TOTAL</b></td><td style='width: 50px;text-align: right'><b>${g.formatNumber(number: totalMat, format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec")}</b></td></tr>"
             tablaMat += "</tbody></table>"
             tablaTrans2 += "</tbody></table>"
             tablaMat2 += "</tbody></table>"
@@ -964,7 +975,7 @@ class Reportes3Controller {
 //            tablaIndi += "</table>"
 
             tablaIndi += "<thead><tr><th class='tituloHeader'>COSTOS INDIRECTOS</th></tr><tr><th colspan='3' class='theader'></th></tr><tr><th style='width:550px' class='padTopBot'>DESCRIPCIÓN</th><th style='width:130px'>PORCENTAJE</th><th>VALOR</th></tr>    <tr><th colspan='3' class='theaderup'></th></tr>  </thead>"
-            tablaIndi += "<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align:center'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
+            tablaIndi += "<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align:center'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
             tablaIndi += "</table>"
 
 //            if (total == 0 || params.trans == 'no')
@@ -982,6 +993,7 @@ class Reportes3Controller {
 
 
                 tablas += tablaHer + tablaMano + tablaMat + tablaIndi
+
 
             }else {
 
@@ -1001,21 +1013,21 @@ class Reportes3Controller {
                     "                            <td style=\"width: 350px;\">\n" +
                     "                                <b>COSTO UNITARIO DIRECTO</b>\n" +
                     "                            </td>\n" +
-                    "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro, format: "##,#####0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
+                    "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro, format: "##,##0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
                     "                            </b></td>\n" +
                     "                        </tr>\n" +
                     "                        <tr>\n" +
                     "                            <td>\n" +
                     "                                <b>COSTOS INDIRECTOS</b>\n" +
                     "                            </td>\n" +
-                    "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalIndi, format: "##,#####0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
+                    "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalIndi, format: "##,##0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
                     "                            </b></td>\n" +
                     "                        </tr>\n" +
                     "                        <tr>\n" +
                     "                            <td>\n" +
                     "                                <b>COSTO TOTAL DEL RUBRO</b>\n" +
                     "                            </td>\n" +
-                    "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro + totalIndi, format: "##,#####0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
+                    "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro + totalIndi, format: "##,##0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
                     "                            </b></td>\n" +
                     "                        </tr>\n" +
                     "                        <tr>\n" +
@@ -1030,8 +1042,7 @@ class Reportes3Controller {
                     "                    </tbody>\n" +
                     "                </table>"
 
-
-            nota += "                <div style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left\">\n" +
+            nota = "                <div style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left\">\n" +
                     "                        <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales\n" +
                     "                    </div>"
 

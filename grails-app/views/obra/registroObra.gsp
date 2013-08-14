@@ -393,7 +393,7 @@
 
                     <div class="span2 formato" style="width: 60px;">Destino:</div>
 
-                    <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destindo de documentos" noSelection="['': 'Seleccione ...']"/></div>
+                    <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destindo de documentos" noSelection="['null': 'Seleccione ...']"/></div>
 
 
                     <div class="span1 formato" style="margin-left: 0px; width: 50px;">Oficio</div>

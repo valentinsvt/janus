@@ -146,7 +146,7 @@
                             <g:if test="${cols.contains('t')}">
                                 <td>
                                     %{--${precio.item.peso}--}%
-                                    <g:formatNumber number="${precio.item.peso}" minFractionDigits="5" maxFractionDigits="5" format="##,##0" locale='ec'/>
+                                    <g:formatNumber number="${precio.item.peso}" minFractionDigits="6" maxFractionDigits="6" format="##,##0" locale='ec'/>
                                     <g:if test="${precio.item.transporte == 'P'}">
                                         Tn
                                     </g:if>
