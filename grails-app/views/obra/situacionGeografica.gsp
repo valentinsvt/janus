@@ -52,7 +52,7 @@
         $("#hiddenComunidad").val($(this).attr("comunidad"));
         $("#comuNombre").val($(this).attr("comN"));
 
-        $("hiddenCanton").val($(this).attr("canton"));
+        $("#hiddenCanton").val($(this).attr("canton"));
         $("#cantNombre").val($(this).attr("cantN"));
 
 
