@@ -134,7 +134,7 @@
 
             <div class="span2" style="margin-left: 0px; width: 100px;">
                 <b>Cantidad</b>
-                <input type="text" style="width: 95px;text-align: right" id="item_cantidad" value="1">
+                <input type="text" style="width: 95px;text-align: right" id="item_cantidad" value="0">
             </div>
 
             <div class="span1" style="margin-left: 10px; width: 60px;">
