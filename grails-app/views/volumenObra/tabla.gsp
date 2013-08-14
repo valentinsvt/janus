@@ -1,6 +1,6 @@
 <div class="row-fluid" style="margin-left: 0px">
     <g:if test="${msg}">
-        <div class="alert ${flash.clase ?: 'alert-info'}" role="status">${msg}</div>
+        <div class="alert ${flash.clase ?: 'alert-info'}" role="status" style="width: 80%">${msg}</div>
     </g:if>
     <div class="span-6" style="margin-bottom: 5px">
         <b>Subpresupuesto:</b>

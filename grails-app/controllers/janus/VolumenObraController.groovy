@@ -52,6 +52,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
     def buscarRubroCodigo(){
+//        println "aqui "+params
         def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(),TipoItem.get(2))
         if (rubro){
             render ""+rubro.id+"&&"+rubro.tipoLista?.id+"&&"+rubro.nombre+"&&"+rubro.unidad?.codigo
@@ -71,14 +72,22 @@ class VolumenObraController extends janus.seguridad.Shield{
         def rubro = Item.findByCodigo(params.cod)
         def sbpr = SubPresupuesto.get(params.sub)
         def volumen
+        def msg=""
 //        if (params.vlob_id)
         if (params.id)
             volumen = VolumenesObra.get(params.id)
         else {
 
             volumen=new VolumenesObra()
+            def v=VolumenesObra.findByItemAndObra(rubro,obra)
+            if(v){
+                msg="El item ya existe dentro del volumen de obra. Utilice las herramientas de edicion para cambiar la cantidad o el orden."
+                redirect(action: "tabla",params: [obra:obra.id,sub:"-1",ord: 1,msg:msg])
+                return
+            }
         }
 //        println "volumn :" + volumen
+
         volumen.cantidad = params.cantidad.toDouble()
         volumen.orden    = params.orden.toInteger()
         volumen.subPresupuesto = SubPresupuesto.get(params.sub)
