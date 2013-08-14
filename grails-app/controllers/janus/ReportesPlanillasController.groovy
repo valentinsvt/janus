@@ -1,31 +1,33 @@
 package janus
 
-import com.lowagie.text.Document
-import com.lowagie.text.Element
-import com.lowagie.text.Font
-import com.lowagie.text.Image
-import com.lowagie.text.PageSize
-import com.lowagie.text.Paragraph
-import com.lowagie.text.pdf.PdfContentByte
-import com.lowagie.text.pdf.PdfPCell
-import com.lowagie.text.pdf.PdfPTable
-import com.lowagie.text.pdf.PdfWriter
-import groovy.json.JsonBuilder
-import janus.actas.Acta
-import janus.ejecucion.DetallePlanilla
-import janus.ejecucion.DetallePlanillaCosto
-import janus.ejecucion.FormulaPolinomicaContractual
-import janus.ejecucion.PeriodoPlanilla
-import janus.ejecucion.PeriodosInec
-import janus.ejecucion.Planilla
-import janus.ejecucion.TipoPlanilla
-import janus.ejecucion.ValorIndice
-import janus.ejecucion.ValorReajuste
-import janus.pac.CronogramaEjecucion
-import janus.pac.PeriodoEjecucion
-import janus.pac.Garantia
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import groovy.json.JsonBuilder;
+import janus.actas.Acta;
+import janus.ejecucion.DetallePlanilla;
+import janus.ejecucion.DetallePlanillaCosto;
+import janus.ejecucion.FormulaPolinomicaContractual;
+import janus.ejecucion.PeriodoPlanilla;
+import janus.ejecucion.PeriodosInec;
+import janus.ejecucion.Planilla;
+import janus.ejecucion.TipoPlanilla;
+import janus.ejecucion.ValorIndice;
+import janus.ejecucion.ValorReajuste;
+import janus.pac.CronogramaEjecucion;
+import janus.pac.PeriodoEjecucion;
+import janus.pac.Garantia;
 
-import java.awt.Color
+import java.awt.Color;
 
 class ReportesPlanillasController {
 
@@ -3090,31 +3092,8 @@ class ReportesPlanillasController {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
-        def oferta = contrato.oferta
         def tramite = Tramite.findByPlanilla(planilla)
         def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
-        def planillas = Planilla.withCriteria {
-            and {
-                eq("contrato", contrato)
-                or {
-                    lt("fechaInicio", planilla.fechaFin)
-                    isNull("fechaInicio")
-                }
-                order("id", "asc")
-            }
-        }
-
-        def diasPlanilla = 0
-
-        if (planilla.tipoPlanilla.codigo != "A") {
-            diasPlanilla = planilla.fechaFin - planilla.fechaInicio
-        }
-        def valorPlanilla = planilla.valor
-
-        def acumuladoCrono = 0, acumuladoPlan = 0
-
-        def diasAll = 0
-
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def precios = [:]
         def indirecto = obra.totales / 100
@@ -3124,11 +3103,6 @@ class ReportesPlanillasController {
         detalle.each {
             def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
-        }
-
-        def planillasAnteriores = Planilla.withCriteria {
-            eq("contrato", contrato)
-            lt("fechaFin", planilla.fechaInicio)
         }
 
         def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
@@ -3146,6 +3120,8 @@ class ReportesPlanillasController {
         Font fontTdTabla = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
 
         Font fontContenido = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+
+        Font fontFirma = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
 
         def prmsTdNoBorder = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
 
@@ -3303,8 +3279,193 @@ class ReportesPlanillasController {
 
         /* *********************************** FIRMA **********************************/
 
+        def strParrafoFirma = "\n\n\n______________________________________\n${nombrePersona(prsn[0].persona)}\n${prsn[0].persona.departamento}"
+        Paragraph parrafoFirma = new Paragraph(strParrafoFirma, fontFirma);
+        parrafoFirma.setAlignment(Element.ALIGN_JUSTIFIED);
+        addEmptyLine(parrafoFirma, 1);
+        document.add(parrafoFirma)
         /* *********************************** FIN FIRMA **********************************/
 
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
+
+    def reporteContrato() {
+
+//        println("-->>" + params)
+
+        def obra = Obra.get(params.id)
+
+//        println("obra" + obra)
+//
+        def concurso = janus.pac.Concurso.findByObra(obra)
+
+        def oferta = janus.pac.Oferta.findByConcurso(concurso)
+
+        def contrato = Contrato.findByOferta(oferta)
+
+
+        def tipoPlanilla = janus.ejecucion.TipoPlanilla.findByCodigoIlike("A");
+
+        def planillaDesc = janus.ejecucion.Planilla.findByContratoAndTipoPlanilla(contrato, tipoPlanilla)
+
+        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
+        Image logo = Image.getInstance(logoPath);
+        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellLeft = [border: Color.BLACK, valign: Element.ALIGN_MIDDLE]
+        def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
+        def prmsCellLeft3 = [border: Color.WHITE, valign: Element.ALIGN_LEFT, align: Element.ALIGN_LEFT, colspan: 2]
+        def prmsSubtotal = [border: Color.BLACK, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2,
+                prmsCellRight: prmsCellRight, prmsCellHead2: prmsCellHead2, prmsCellLeft2: prmsCellLeft2]
+
+
+        def baos = new ByteArrayOutputStream()
+        def name = "contrato_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times12normal = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
+        Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times10normal = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+
+        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font fontInfo = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
+
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+
+        Document document
+        document = new Document(PageSize.A4);
+        document.setMargins(86.4, 56.2, 50, 10);
+
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Contrato " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
+        preface.add(new Paragraph("OFICIO DE INICIO DE LA OBRA " + obra.nombre, fontTituloGad));
+        addEmptyLine(preface, 1);
+//        Paragraph preface2 = new Paragraph();
+//        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), fontInfo))
+//        addEmptyLine(preface2, 1);
+        document.add(logo)
+        document.add(preface);
+//        document.add(preface2);
+
+        Paragraph headers = new Paragraph();
+        headers.setAlignment(Element.ALIGN_LEFT);
+
+        headers.add(new Paragraph("Oficio N°: " + params.oficio.toUpperCase(), times12bold))
+        headers.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy"), times12bold));
+        headers.add(new Paragraph(" ", times10bold));
+        headers.add(new Paragraph(" ", times10bold));
+        headers.add(new Paragraph(oferta?.proveedor?.titulo, times12bold));
+        headers.add(new Paragraph(oferta?.proveedor?.nombreContacto.toUpperCase() + " " + oferta?.proveedor?.apellidoContacto.toUpperCase(), times12bold));
+        headers.add(new Paragraph(oferta?.proveedor?.nombre.toUpperCase(), times12bold));
+        headers.add(new Paragraph("Presente", times12bold));
+        headers.add(new Paragraph("", times10bold));
+        headers.add(new Paragraph("", times10bold));
+        headers.add(new Paragraph("De nuestra consideración:", times12bold));
+        headers.add(new Paragraph("", times10bold));
+        document.add(headers);
+
+
+        def par1 = "Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato N° " + contrato?.codigo + ", "
+        par1 += "para la construcción de " + obra?.descripcion
+        par1 += ", ubicada en la Parroquia " + obra?.parroquia?.nombre + ", Distrito Metropolitano de "
+        par1 += "Quito, de la Provincia de " + obra?.lugar?.descripcion + ", por un valor de US\$ "
+        par1 += g.formatNumber(number: contrato?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " sin incluir IVA, consta "
+        par1 += "de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para "
+        par1 += "ejecutar, terminar y entregar a entera satisfacción es de " + NumberToLetterConverter.numberToLetter(contrato?.plazo).toLowerCase() + " días calendario " + "("
+        par1 += g.formatNumber(number: contrato?.plazo, format: "##,##0", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0) + "), "
+        par1 += "contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se "
+        par1 += "entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada "
+        par1 += "la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. "
+
+        def par2 = "Tesorería de la Corporación, remite a la " + obra?.departamento?.direccion?.nombre
+        par2 += ", copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$ " + g.formatNumber(number: (planillaDesc?.valor + planillaDesc.reajuste), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " fue "
+        par2 += "acreditado el " + fechaConFormato(planillaDesc?.fechaMemoPagoPlanilla, "dd MMMM yyyy").toLowerCase()
+
+
+        def par3 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° " + contrato?.codigo + ", será el " + fechaConFormato(obra?.fechaInicio, "dd MMMM yyyy").toLowerCase() + "."
+
+
+        Paragraph prueba = new Paragraph(par1, times12normal);
+        prueba.setAlignment(Element.ALIGN_JUSTIFIED);
+        prueba.setSpacingAfter(20);
+
+        Paragraph prueba2 = new Paragraph(par2, times12normal);
+        prueba2.setAlignment(Element.ALIGN_JUSTIFIED);
+        prueba2.setSpacingAfter(20);
+
+        Paragraph prueba3 = new Paragraph(par3, times12normal);
+        prueba3.setAlignment(Element.ALIGN_JUSTIFIED);
+        prueba3.setSpacingAfter(20);
+
+        document.add(prueba);
+        document.add(prueba2);
+        document.add(prueba3);
+
+        PdfPTable tablaFirmas = new PdfPTable(1);
+        tablaFirmas.setWidthPercentage(100);
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+
+        def firmas = Persona.get(params.firma)
+        addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times12bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times12bold), prmsHeaderHoja)
+        document.add(tablaFirmas);
+
+        def footer = new PdfPTable(1);
+        footer.setWidthPercentage(100);
+        footer.setSpacingBefore(55f);
+
+        addCellTabla(footer, new Paragraph("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", times8normal), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+        document.add(footer)
 
         document.close();
         pdfw.close()
