@@ -44,7 +44,7 @@
         <div id="tab-transporte" class="tab">
             <div class="row-fluid">
                 <div class="span2">
-                    Volquete
+                    Vehículo
                 </div>
 
                 <div class="span6">

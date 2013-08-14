@@ -11,7 +11,7 @@ class DepartamentoController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [departamentoInstanceList: Departamento.list([sort:'direccion', sort:'descripcion']), params: params]
+        [departamentoInstanceList: Departamento.list([sort:'direccion']), params: params]
     } //list
 
     def form_ajax() {
