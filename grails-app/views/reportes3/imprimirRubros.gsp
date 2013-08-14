@@ -154,19 +154,20 @@
     <body>
         <div class="hoja">
 
-            <div class="tituloPdf">
-                <p style="font-size: 18px">
-                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>
-                </p>
+            %{--<div class="tituloPdf">--}%
+                %{--<p style="font-size: 18px">--}%
+                    %{--<b>G.A.D. PROVINCIA DE PICHINCHA</b>--}%
+                %{--</p>--}%
 
-                <p style="font-size: 14px">
-                    SUBSISTEMA APU
-                </p>
+                %{--<p style="font-size: 14px">--}%
+                    %{--SUBSISTEMA APU--}%
+                %{--</p>--}%
 
-                <p style="font-size: 14px">
-                    ANÁLISIS DE PRECIOS UNITARIOS
-                </p>
-            </div>
+                %{--<p style="font-size: 14px">--}%
+                    %{--ANÁLISIS DE PRECIOS UNITARIOS--}%
+                %{--</p>--}%
+
+            %{--</div>--}%
             ${html}
         </div>
     </body>
