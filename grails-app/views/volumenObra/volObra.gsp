@@ -28,6 +28,7 @@
 
 <div class="tituloTree">
     Volumen de obra de: ${obra.descripcion + " (" + obra.codigo + ")"}
+    <input type="hidden" id="override" value="0">
 </div>
 
 <div class="span12 btn-group" role="navigation" style="margin-left: 0px;">
@@ -88,7 +89,7 @@
                 <b>Dist. volúmen:</b> ${obra?.distanciaVolumen}
             </div>
             <div class="span3" style="width: 320px; margin-top: -8px;">
-            <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion" style="margin-left: 20px;"></g:select>
+                <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion" style="margin-left: 20px;"></g:select>
             </div>
         </div>
 
@@ -100,7 +101,7 @@
 
 
 
-                       <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 250px;font-size: 10px" id="subPres"/>   </span>
+                    <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 250px;font-size: 10px" id="subPres"/>   </span>
 
 
                     %{--todo descomentar esto--}%
@@ -519,13 +520,13 @@
                                 alerta += p[1];
                                 alerta += '</div>';
 
-                               $("#div_cmb_sub").html(p[2])
+                                $("#div_cmb_sub").html(p[2])
                             }else {
                                 alerta = '<div class="alert alert-error" role="status"><a class="close" data-dismiss="alert" href="#">×</a>';
                                 alerta += p[1];
                                 alerta += '</div>';
                             }
-                           $("#mensaje").html(alerta);
+                            $("#mensaje").html(alerta);
                         }
                     });
 
@@ -567,7 +568,7 @@
                 msn = "seleccione un rubro"
 
             if (msn.length == 0) {
-                var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&orden=" + orden + "&sub=" + sub + "&obra=${obra.id}" + "&cod=" + cod + "&ord=" + '1'
+                var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&orden=" + orden + "&sub=" + sub + "&obra=${obra.id}" + "&cod=" + cod + "&ord=" + '1&override='+$("#override").val()
 //                        //console.log(datos)
                 if ($("#vol_id").val() * 1 > 0)
                     datos += "&id=" + $("#vol_id").val()
@@ -576,13 +577,28 @@
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'addItem')}",
                     data     : datos,
                     success  : function (msg) {
-                        $("#detalle").html(msg)
-                        $("#vol_id").val("")
-                        $("#item_codigo").val("")
-                        $("#item_id").val("")
-                        $("#item_nombre").val("")
-                        $("#item_cantidad").val("")
-                        $("#item_orden").val($("#item_orden").val() * 1 + 1)
+                        if(msg!="error"){
+                            $("#detalle").html(msg)
+                            $("#vol_id").val("")
+                            $("#item_codigo").val("")
+                            $("#item_id").val("")
+                            $("#item_nombre").val("")
+                            $("#item_cantidad").val("")
+                            $("#item_orden").val($("#item_orden").val() * 1 + 1)
+                            $("#override").val("0")
+                        }else{
+                            if(confirm("El item ya existe dentro del volumen de obra. Desea incrementar la cantidad?")){
+                                $("#override").val("1")
+                                $("#item_agregar").click()
+                            }else{
+                                $("#vol_id").val("")
+                                $("#item_codigo").val("")
+                                $("#item_id").val("")
+                                $("#item_nombre").val("")
+                                $("#item_cantidad").val("")
+                                $("#item_orden").val($("#item_orden").val() * 1 + 1)
+                            }
+                        }
                     }
                 });
             } else {
@@ -607,7 +623,7 @@
 
         $(document).ready(function() {
             $("#grupos").trigger("change");
-            });
+        });
 
     });
 </script>

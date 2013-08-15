@@ -81,9 +81,16 @@ class VolumenObraController extends janus.seguridad.Shield{
             volumen=new VolumenesObra()
             def v=VolumenesObra.findByItemAndObra(rubro,obra)
             if(v){
-                msg="El item ya existe dentro del volumen de obra. Utilice las herramientas de edicion para cambiar la cantidad o el orden."
-                redirect(action: "tabla",params: [obra:obra.id,sub:"-1",ord: 1,msg:msg])
-                return
+                if(params.override=="1"){
+                    v.cantidad+=params.cantidad.toDouble()
+                    v.save(flush: true)
+                    redirect(action: "tabla",params: [obra:obra.id,sub:v.subPresupuesto.id,ord: 1])
+                    return
+                }else{
+                    msg="error"
+                    render msg
+                    return
+                }
             }
         }
 //        println "volumn :" + volumen
