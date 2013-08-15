@@ -4,7 +4,9 @@
     <meta name="layout" content="main">
     <script src="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/js', file: 'jquery.dataTables.min.js')}"></script>
     <link href="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/css', file: 'jquery.dataTables.css')}" rel="stylesheet">
-
+    <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
+    <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
+    <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
     <title>Composición de la obra</title>
 </head>
 
@@ -55,6 +57,43 @@
             </g:link>
         </div>
 
+    </div>
+    <div class="borde_abajo" style="padding-left: 45px;position: relative;">
+        <div class="row-fluid">
+            <div class="span1" style="margin-left: -17px; width: 100px;">
+                <b>Código</b>
+                <input type="text" style="width: 100px;;font-size: 10px" id="item_codigo">
+                <input type="hidden" style="width: 60px" id="item_id">
+            </div>
+
+            <div class="span4" style="margin-left: 15px;">
+                <b>Rubro</b>
+                <input type="text" style="width: 340px;font-size: 10px" id="item_nombre" disabled="true">
+
+            </div>
+
+            <div class="span2" style="margin-left: 0px; width: 100px;">
+                <b>Cantidad</b>
+                <input type="text" style="width: 95px;text-align: right" id="item_cantidad" value="">
+            </div>
+            <div class="span2" style="width: 100px;">
+                <b>Precio</b>
+                <input type="text" style="width: 95px;text-align: right" id="item_precio" value="" disabled="true">
+            </div>
+            <div class="span2" style=" width: 100px;">
+                <b>Tranporte</b>
+                <input type="text" style="width: 95px;text-align: right" id="item_transporte" value="" disabled="true">
+            </div>
+
+            <div class="span1" style="padding-top:30px">
+                <input type="hidden" value="" id="vol_id">
+                %{--<g:if test="${obra?.estado != 'R'}">--}%
+                <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
+                    <i class="icon-plus"></i>
+                </a>
+                %{--</g:if>--}%
+            </div>
+        </div>
     </div>
 
 
@@ -166,9 +205,37 @@
         </div>
     </div>
 </div>
+<div class="modal grande hide fade" id="modal-rubro" style="overflow: hidden;">
+    <div class="modal-header btn-info">
+        <button type="button" class="close" data-dismiss="modal">×</button>
 
+        <h3 id="modalTitle"></h3>
+    </div>
+
+    <div class="modal-body" id="modalBody">
+        <bsc:buscador name="rubro.buscador.id" value="" accion="buscaRubro" controlador="composicion" campos="${campos}" label="Rubro" tipo="lista"/>
+    </div>
+
+    <div class="modal-footer" id="modalFooter">
+    </div>
+</div>
 
 <script type="text/javascript">
+
+    function precios(item){
+        var obra = ${obra.id}
+                $.ajax({
+                    type    : "POST",
+                    url     : "${g.createLink(controller: 'composicion',action:'precios')}",
+                    data    : "obra="+obra+"&item="+item,
+                    success : function (msg) {
+//                        console.log(msg)
+                        var parts=msg.split(";")
+                        $("#item_precio").val(parts[0])
+                        $("#item_transporte").val(parts[1])
+                    }
+                });
+    }
 
     $(function () {
         $('#tbl').dataTable({
@@ -189,6 +256,121 @@
                 return false;
             }
         });
+
+
+
+
+        $("#item_codigo").dblclick(function () {
+            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+            $("#modalTitle").html("Lista de rubros");
+            $("#modalFooter").html("").append(btnOk);
+            $("#modal-rubro").modal("show");
+            $("#buscarDialog").unbind("click")
+            $("#buscarDialog").bind("click", enviar)
+
+        });
+
+
+        $("#item_codigo").blur(function () {
+//            ////
+            if ($("#item_id").val() == "" && $("#item_codigo").val() != "") {
+//                console.log($("#item_id").val())
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'composicion',action:'buscarRubroCodigo')}",
+                    data     : "codigo=" + $("#item_codigo").val(),
+                    success  : function (msg) {
+//                        console.log("msg "+msg)
+                        if (msg != "-1") {
+
+                            var parts = msg.split("&&")
+                            $("#item_id").val(parts[0])
+                            precios(parts[0]);
+                            $("#item_nombre").val(parts[2])
+                        } else {
+                            $("#item_id").val("")
+                            $("#item_nombre").val("")
+                        }
+                    }
+                });
+            }
+        });
+        $("#item_codigo").keydown(function (ev) {
+
+            if (ev.keyCode * 1 != 9 && (ev.keyCode * 1 < 37 || ev.keyCode * 1 > 40)) {
+
+                $("#item_id").val("")
+                $("#item_nombre").val("")
+                $("#item_precio").val("")
+                $("#item_transporte").val("")
+
+            } else {
+//                ////console.log("no reset")
+            }
+
+        });
+
+        $("#item_agregar").click(function () {
+
+            var cantidad = $("#item_cantidad").val()
+            cantidad = str_replace(",", "", cantidad)
+            var rubro = $("#item_id").val()
+            if (isNaN(cantidad))
+                cantidad = 0
+            var msn = ""
+            if (cantidad * 1 <= 0) {
+                msn = "La cantidad debe ser un número positivo mayor a 0"
+            }
+            if (rubro * 1 < 1)
+                msn = "seleccione un rubro"
+
+            if (msn.length == 0) {
+                var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&obra=${obra.id}"
+
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'composicion',action:'addItem')}",
+                    data     : datos,
+                    success  : function (msg) {
+                        if(msg=="ok"){
+                            window.location.reload(true)
+                        }else{
+                            $.box({
+                                imageClass : "box_info",
+                                text       : msg,
+                                title      : "Error",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    draggable : false,
+                                    buttons   : {
+                                        "Aceptar" : function () {
+                                        }
+                                    },
+                                    width     : 500
+                                }
+                            });
+                        }
+
+                    }
+                });
+            } else {
+                $.box({
+                    imageClass : "box_info",
+                    text       : msn,
+                    title      : "Alerta",
+                    iconClose  : false,
+                    dialog     : {
+                        resizable : false,
+                        draggable : false,
+                        buttons   : {
+                            "Aceptar" : function () {
+                            }
+                        },
+                        width     : 500
+                    }
+                });
+            }
+
+        });
+
+
 
         $("#guardar").click(function(){
 //            console.log("guardar")
@@ -214,6 +396,7 @@
 //            console.log(event.which)
             if (event.which == 13) {
                 var valor=$(this).val()
+//                console.log("eenter ",valor)
                 $(this).val("")
                 $(this).hide()
                 var padre =   $(this).parent()
@@ -249,14 +432,17 @@
 
         })
         $("#txt").blur(function(){
-            var valor=$(this).val()
-            $(this).val("")
-            $(this).hide()
-            var padre =   $(this).parent()
-            $("#totales").append($(this))
-            padre.addClass("changed")
-            padre.html(valor)
-            padre.addClass("texto")
+//            console.log("blur")
+            if($("#txt").val()!=""){
+                var valor=$(this).val()
+                $(this).val("")
+                $(this).hide()
+                var padre =   $(this).parent()
+                $("#totales").append($(this))
+                padre.addClass("changed")
+                padre.html(valor)
+                padre.addClass("texto")
+            }
         })
         var txt =$("#txt")
         $(".cantidad").click(function(){
@@ -274,35 +460,35 @@
         });
 
 
-        $("#imprimirPdf").click(function () {
+        %{--$("#imprimirPdf").click(function () {--}%
 
-//                       console.log("-->" + $(".pdf.active").attr("class"))
-//                       console.log("-->" + $(".pdf.active").hasClass('2'))
+%{--//                       console.log("-->" + $(".pdf.active").attr("class"))--}%
+%{--//                       console.log("-->" + $(".pdf.active").hasClass('2'))--}%
 
-            if($(".pdf.active").hasClass("1") == true){
+            %{--if($(".pdf.active").hasClass("1") == true){--}%
 
-                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}?sp=${sub}"
-            }else {
-            }
-            if($(".pdf.active").hasClass("2") == true){
-                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}?sp=${sub}"
-            }else {
-
-
-            }
-            if($(".pdf.active").hasClass("3") == true){
-                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}?sp=${sub}"
-
-            }else {
+                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}?sp=${sub}"--}%
+            %{--}else {--}%
+            %{--}--}%
+            %{--if($(".pdf.active").hasClass("2") == true){--}%
+                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}?sp=${sub}"--}%
+            %{--}else {--}%
 
 
-            }
-            if($(".pdf.active").hasClass("-1") == true){
+            %{--}--}%
+            %{--if($(".pdf.active").hasClass("3") == true){--}%
+                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}?sp=${sub}"--}%
+
+            %{--}else {--}%
 
 
-                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}?sp=${sub}"
-            }
-        });
+            %{--}--}%
+            %{--if($(".pdf.active").hasClass("-1") == true){--}%
+
+
+                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}?sp=${sub}"--}%
+            %{--}--}%
+        %{--});--}%
 
     });
 </script>

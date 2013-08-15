@@ -134,7 +134,7 @@
 
             <div class="span2" style="margin-left: 0px; width: 100px;">
                 <b>Cantidad</b>
-                <input type="text" style="width: 95px;text-align: right" id="item_cantidad" value="0">
+                <input type="text" style="width: 95px;text-align: right" id="item_cantidad" value="">
             </div>
 
             <div class="span1" style="margin-left: 10px; width: 60px;">
@@ -581,7 +581,7 @@
                         $("#item_codigo").val("")
                         $("#item_id").val("")
                         $("#item_nombre").val("")
-                        $("#item_cantidad").val("1")
+                        $("#item_cantidad").val("")
                         $("#item_orden").val($("#item_orden").val() * 1 + 1)
                     }
                 });
