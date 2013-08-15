@@ -53,7 +53,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
     def buscarRubroCodigo(){
 //        println "aqui "+params
-        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(),TipoItem.get(2))
+        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim()?.toUpperCase(),TipoItem.get(2))
         if (rubro){
             render ""+rubro.id+"&&"+rubro.tipoLista?.id+"&&"+rubro.nombre+"&&"+rubro.unidad?.codigo
             return

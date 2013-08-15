@@ -123,7 +123,7 @@
             %{--<div class="span7" style="height: 38px"></div> --}%
             <div class="span1" style="margin-left: -17px; width: 100px;">
                 <b>Código</b>
-                <input type="text" style="width: 100px;;font-size: 10px" id="item_codigo">
+                <input type="text" style="width: 100px;;font-size: 10px" id="item_codigo" class="allCaps">
                 <input type="hidden" style="width: 60px" id="item_id">
             </div>
 
