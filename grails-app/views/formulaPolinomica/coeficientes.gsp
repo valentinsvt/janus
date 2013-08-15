@@ -61,7 +61,7 @@
             background : #98A8B5 !important;
         }
 
-        .selected {
+        .selected, .selected td {
             background : #A4CCEA !important;
         }
 
@@ -83,6 +83,10 @@
             border-radius : 0 !important;
         }
 
+        .contenedorTabla {
+            max-height : 550px;
+            overflow   : auto;
+        }
         </style>
 
     </head>
@@ -161,30 +165,32 @@
                         </div>
                     </div>
 
-                    <table class="table table-condensed table-bordered table-hover" id="tblDisponibles">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Descripción</th>
-                                <th>Aporte</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <g:each in="${rows}" var="r">
-                                <tr data-item="${r.iid}" data-codigo="${r.codigo}" data-nombre="${r.item}" data-valor="${r.aporte ?: 0}">
-                                    <td>
-                                        ${r.codigo}
-                                    </td>
-                                    <td>
-                                        ${r.item}
-                                    </td>
-                                    <td class="numero">
-                                        <g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>
-                                    </td>
+                    <div class="contenedorTabla">
+                        <table class="table table-condensed table-bordered table-striped table-hover" id="tblDisponibles">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Descripción</th>
+                                    <th>Aporte</th>
                                 </tr>
-                            </g:each>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <g:each in="${rows}" var="r">
+                                    <tr data-item="${r.iid}" data-codigo="${r.codigo}" data-nombre="${r.item}" data-valor="${r.aporte ?: 0}">
+                                        <td>
+                                            ${r.codigo}
+                                        </td>
+                                        <td>
+                                            ${r.item}
+                                        </td>
+                                        <td class="numero">
+                                            <g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>
+                                        </td>
+                                    </tr>
+                                </g:each>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -584,12 +590,15 @@
 
                         $tabla.children("tbody").children("tr.selected").each(function () {
                             var data = $(this).data();
-                            if (total + parseFloat(data.valor) <= 0.2) {
+//                            console.log($.trim(numero.toLowerCase()), total, parseFloat(data.valor));
+//                            console.log($.trim(numero.toLowerCase()) == "px");
+//                            console.log(total + parseFloat(data.valor), total + parseFloat(data.valor) > 0.2);
+                            if ($.trim(numero.toLowerCase()) == "px" && total + parseFloat(data.valor) > 0.2) {
+                                msg += "<li>No se puede agregar " + data.nombre + " pues el valor de px no puede superar 0.20</li>";
+                            } else {
                                 rows2add.push({add : {attr : {item : data.item, numero : data.codigo, nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
                                 total += parseFloat(data.valor);
                                 dataAdd.items.push(data.item + "_" + data.valor);
-                            } else {
-                                msg += "<li>No se puede agregar " + data.nombre + " pues el valor de px no puede superar 0.20</li>";
                             }
                         });
 
@@ -600,8 +609,8 @@
                                     $("#divError").hide("blind");
                                 }, 5000);
                             });
-                            $tabla.children("tbody").children("tr.selected").removeClass(".selected");
-                            $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
+//                            $tabla.children("tbody").children("tr.selected").removeClass(".selected");
+//                            $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
                             $btn.show();
                             spinner.remove();
                         } else {
@@ -661,17 +670,17 @@
                     return false;
                 });
 
-                $tabla.dataTable({
-                    sScrollY        : "655px",
-                    bPaginate       : false,
-                    bScrollCollapse : true,
-                    bFilter         : false,
-                    oLanguage       : {
-                        sZeroRecords : "No se encontraron datos",
-                        sInfo        : "",
-                        sInfoEmpty   : ""
-                    }
-                }).children("tbody").children("tr").click(function () {
+                $tabla/*.dataTable({
+                 sScrollY        : "655px",
+                 bPaginate       : false,
+                 bScrollCollapse : true,
+                 bFilter         : false,
+                 oLanguage       : {
+                 sZeroRecords : "No se encontraron datos",
+                 sInfo        : "",
+                 sInfoEmpty   : ""
+                 }
+                 })*/.children("tbody").children("tr").click(function () {
                             clickTr($(this));
 //                            var $sps = $("#spanSuma");
 //                            var total = parseFloat($sps.data("total"));
@@ -690,6 +699,10 @@
 //                            }
 //                            updateTotal(total);
                         });
+
+                $(".modal").draggable({
+                    handle : ".modal-header"
+                });
 
                 $tree.bind("loaded.jstree",
                         function (event, data) {

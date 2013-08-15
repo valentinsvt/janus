@@ -16,6 +16,7 @@
         <div class="span">
             Modificar valor &nbsp;&nbsp;&nbsp;
             <g:field type="number" name="valor" value="${formula.valor}" class="input-mini"/>
+            (suma <g:formatNumber number="${total}" format="##,##0.#####" locale="ec"/>)
         </div>
     </div>
 </div>
@@ -53,14 +54,14 @@
                 return validarNum(ev);
             }
         }/*,
-        keyup   : function () {
-            if ($.trim($(this).val() == "")) {
-                ////console.log("aqui", $(this).val());
-                $(this).val("0");
-            } else {
-                ////console.log("?");
-            }
-        }*/
+         keyup   : function () {
+         if ($.trim($(this).val() == "")) {
+         ////console.log("aqui", $(this).val());
+         $(this).val("0");
+         } else {
+         ////console.log("?");
+         }
+         }*/
     });
 
     //    $("#valor").keydown(function (ev) {

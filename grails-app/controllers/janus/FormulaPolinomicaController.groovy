@@ -79,7 +79,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
     def editarGrupo() {
         def formula = FormulaPolinomica.get(params.id)
-        return [formula: formula]
+        def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(formula)
+        def total = children.sum { it.valor }
+        return [formula: formula, total: total]
     }
 
     def guardarGrupo() {
@@ -144,7 +146,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             def total = 0
 
             fp.each { f ->
-                if (f.numero =~ params.tipo) {
+                if (f.numero=~params.tipo) {
                     def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
                     def mapFormula = [
                             data: f.numero,

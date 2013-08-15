@@ -305,9 +305,17 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
+        def contrato = planilla.contrato
+        def obra = contrato.oferta.concurso.obra
         def tipo = params.tipo
         def lblMemo, lblFecha, extra, nombres = ""
-        def tipoTramite
+        def tiposTramite, tipoTramite
+
+//        def obraDpto = obra.departamento
+        def adminContrato = contrato.administrador
+        def obraDpto = adminContrato.departamento
+
+        def especial = "DE"
 
 //        println planilla.fechaOficioEntradaPlanilla
 //        println planilla.fechaMemoSalidaPlanilla
@@ -321,7 +329,49 @@ class PlanillaController extends janus.seguridad.Shield {
                 fechaMin = planilla.fechaOficioEntradaPlanilla
                 fecha = planilla.fechaOficioEntradaPlanilla
                 extra = "Fecha de oficio de entrada: " + fechaMin.format("dd-MM-yyyy")
-                tipoTramite = TipoTramite.findByCodigo("ENRJ")
+//                tipoTramite = TipoTramite.findByCodigo("ENRJ")
+                tiposTramite = TipoTramite.findAllByCodigo("ENRJ")
+                tiposTramite.each { tt ->
+//                    def dptoDe = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("DE"))
+                    def dptoPara = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("PARA"))
+                    if (dptoPara.departamento == obraDpto) {
+//                        println "SIP"
+                        tipoTramite = tt
+                    }
+                }
+                especial = "PARA"
+                if (!tipoTramite) {
+                    println "NOP: crear un tipo de tramite con codigo ENRJ, para: " + obraDpto
+                    tipoTramite = new TipoTramite([
+                            padre: null,
+                            codigo: "ENRJ",
+                            tiempo: 5,
+                            descripcion: "Enviar reajuste (fiscalización a " + obraDpto.descripcion.toLowerCase() + ")",
+                            tipo: "P",
+                            requiereRespuesta: "S"
+                    ])
+                    if (tipoTramite.save(flush: true)) {
+                        println "Creado tipo de tramite OK, creando dptos"
+                        def dDe = new DepartamentoTramite([
+                                tipoTramite: tipoTramite,
+                                rolTramite: RolTramite.findByCodigo("DE"),
+                                departamento: Departamento.get(1) //Fiscalizacion
+                        ])
+                        if (!dDe.save(flush: true)) {
+                            println "error al guardar DE: " + dDe.errors
+                        }
+                        def dPara = new DepartamentoTramite([
+                                tipoTramite: tipoTramite,
+                                rolTramite: RolTramite.findByCodigo("PARA"),
+                                departamento: obraDpto
+                        ])
+                        if (!dPara.save(flush: true)) {
+                            println "error al guardar PARA: " + dPara.errors
+                        }
+                    } else {
+                        println "error al guardar tipo tramite: " + tipoTramite.errors
+                    }
+                }
                 break;
             case "3":
                 lblMemo = "Memo de pedido de pago"
@@ -329,7 +379,61 @@ class PlanillaController extends janus.seguridad.Shield {
                 fechaMin = planilla.fechaMemoSalidaPlanilla
                 fecha = planilla.fechaMemoSalidaPlanilla
                 extra = "Fecha de memo de salida: " + fechaMin.format("dd-MM-yyyy")
-                tipoTramite = TipoTramite.findByCodigo("PDPG")
+//                tipoTramite = TipoTramite.findByCodigo("PDPG")
+                tiposTramite = TipoTramite.findAllByCodigo("PDPG")
+                tiposTramite.each { tt ->
+                    def dptoDe = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("DE"))
+//                    def dptoPara = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("PARA"))
+                    if (dptoDe.departamento == obraDpto) {
+//                        println "SIP"
+                        tipoTramite = tt
+                    }
+                }
+                especial = "DE"
+                if (!tipoTramite) {
+                    println "NOP: crear un tipo de tramite con codigo PDPG, de: " + obraDpto
+                    //////////////////////////////////
+                    def tiposTramitePadre = TipoTramite.findAllByCodigo("ENRJ")
+                    def tipoTramitePadre
+                    tiposTramitePadre.each { tt ->
+//                        def dptoDe = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("DE"))
+                        def dptoPara = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("PARA"))
+                        if (dptoPara.departamento == obraDpto) {
+//                        println "SIP"
+                            tipoTramitePadre = tt
+                        }
+                    }
+                    //////////////////////////////////
+                    tipoTramite = new TipoTramite([
+                            padre: tipoTramitePadre,
+                            codigo: "PDPG",
+                            tiempo: 2,
+                            descripcion: "Pedir pago planilla (" + (obraDpto.descripcion.size() <= 22 ? obraDpto.descripcion.toLowerCase() : obraDpto.descripcion.toLowerCase()[0..22]) + " a dir. financiera)",
+                            tipo: "P",
+                            requiereRespuesta: "S"
+                    ])
+                    if (tipoTramite.save(flush: true)) {
+                        println "Creado tipo de tramite OK, creando dptos"
+                        def dDe = new DepartamentoTramite([
+                                tipoTramite: tipoTramite,
+                                rolTramite: RolTramite.findByCodigo("DE"),
+                                departamento: obraDpto
+                        ])
+                        if (!dDe.save(flush: true)) {
+                            println "error al guardar DE: " + dDe.errors
+                        }
+                        def dPara = new DepartamentoTramite([
+                                tipoTramite: tipoTramite,
+                                rolTramite: RolTramite.findByCodigo("PARA"),
+                                departamento: Departamento.get(11) //dir. financiera
+                        ])
+                        if (!dPara.save(flush: true)) {
+                            println "error al guardar PARA: " + dPara.errors
+                        }
+                    } else {
+                        println "error al guardar tipo tramite: " + tipoTramite.errors
+                    }
+                }
                 break;
             case "4":
                 lblMemo = "Memo de pago"
@@ -337,14 +441,70 @@ class PlanillaController extends janus.seguridad.Shield {
                 fechaMin = planilla.fechaMemoPedidoPagoPlanilla
                 fecha = planilla.fechaMemoPedidoPagoPlanilla
                 extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")
-                tipoTramite = TipoTramite.findByCodigo("INPG")
+//                tipoTramite = TipoTramite.findByCodigo("INPG")
+                tiposTramite = TipoTramite.findAllByCodigo("INPG")
+                tiposTramite.each { tt ->
+//                    def dptoDe = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("DE"))
+                    def dptoPara = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("PARA"))
+                    if (dptoPara.departamento == obraDpto) {
+//                        println "SIP"
+                        tipoTramite = tt
+                    }
+                }
+                especial = "PARA"
+                if (!tipoTramite) {
+                    println "NOP: crear un tipo de tramite con codigo INPG, para: " + obraDpto
+                    //////////////////////////////////
+                    def tiposTramitePadre = TipoTramite.findAllByCodigo("PDPG")
+                    def tipoTramitePadre
+                    tiposTramitePadre.each { tt ->
+                        def dptoDe = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("DE"))
+//                    def dptoPara = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("PARA"))
+                        if (dptoDe.departamento == obraDpto) {
+//                        println "SIP"
+                            tipoTramitePadre = tt
+                        }
+                    }
+                    //////////////////////////////////
+                    tipoTramite = new TipoTramite([
+                            padre: tipoTramitePadre,
+                            codigo: "INPG",
+                            tiempo: 15,
+                            descripcion: "Informar pago planilla (" + (obraDpto.descripcion.size() <= 19 ? obraDpto.descripcion.toLowerCase() : obraDpto.descripcion.toLowerCase()[0..19]) + " a dir. financiera)",
+                            tipo: "P",
+                            requiereRespuesta: "N"
+                    ])
+                    if (tipoTramite.save(flush: true)) {
+                        println "Creado tipo de tramite OK, creando dptos"
+                        def dDe = new DepartamentoTramite([
+                                tipoTramite: tipoTramite,
+                                rolTramite: RolTramite.findByCodigo("DE"),
+                                departamento: Departamento.get(11) //dir. financiera
+                        ])
+                        if (!dDe.save(flush: true)) {
+                            println "error al guardar DE: " + dDe.errors
+                        }
+                        def dPara = new DepartamentoTramite([
+                                tipoTramite: tipoTramite,
+                                rolTramite: RolTramite.findByCodigo("PARA"),
+                                departamento: obraDpto
+                        ])
+                        if (!dPara.save(flush: true)) {
+                            println "error al guardar PARA: " + dPara.errors
+                        }
+                    } else {
+                        println "error al guardar tipo tramite: " + tipoTramite.errors
+                    }
+                }
                 break;
             case '5':
-                lblFecha = "Fecha de inicio de obra"
-                fechaMin = planilla.fechaMemoPagoPlanilla
-                fecha = planilla.fechaMemoPagoPlanilla
-                extra = "Fecha de memo de pago: " + fechaMin.format("dd-MM-yyyy")
-                tipoTramite = TipoTramite.findByCodigo("INOB")
+                redirect(action: 'inicioObra_ajax', params: params)
+                return
+//                lblFecha = "Fecha de inicio de obra"
+//                fechaMin = planilla.fechaMemoPagoPlanilla
+//                fecha = planilla.fechaMemoPagoPlanilla
+//                extra = "Fecha de memo de pago: " + fechaMin.format("dd-MM-yyyy")
+//                tipoTramite = TipoTramite.findByCodigo("INOB")
                 break;
         }
 
@@ -352,6 +512,10 @@ class PlanillaController extends janus.seguridad.Shield {
 
         roles.each { rol ->
             def personas = Persona.findAllByDepartamento(rol.departamento)
+
+            if (rol.rolTramite.codigo == especial) {
+                personas = [adminContrato]
+            }
 
             def sel = g.select(from: personas, class: "span3", optionKey: "id", optionValue: {
                 it.nombre + " " + it.apellido
@@ -380,6 +544,31 @@ class PlanillaController extends janus.seguridad.Shield {
         fechaMax = "new Date(${y + 2},${m},${d})"
 
         [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha, nombres: nombres]
+    }
+
+    def inicioObra_ajax() {
+        println "PARAMS: " + params
+
+        def fechaMin, fechaMax, fecha
+        def planilla = Planilla.get(params.id)
+        def obra = planilla.contrato.oferta.concurso.obra
+        def tipo = params.tipo
+        def lblMemo, lblFecha, extra, nombres = ""
+
+        lblFecha = "Fecha de inicio de obra"
+        lblMemo = "Memo de inicio de obra"
+        fechaMin = planilla.fechaMemoPagoPlanilla
+        fecha = planilla.fechaMemoPagoPlanilla
+        extra = "Fecha de memo de pago: " + fechaMin.format("dd-MM-yyyy")
+
+        def y = fechaMin.format("yyyy").toInteger()
+        def m = fechaMin.format("MM").toInteger() - 1
+        def d = fechaMin.format("dd").toInteger()
+        //js: new Date(year, month, day, hours, minutes, seconds, milliseconds)
+        fechaMin = "new Date(${y},${m},${d})"
+        fechaMax = "new Date(${y + 2},${m},${d})"
+
+        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha]
     }
 
     def savePagoPlanilla() {
@@ -432,9 +621,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
                 str = "Obra iniciada exitosamente"
                 str2 = "No se pudo iniciar la obra"
-                tipoTramite = TipoTramite.findByCodigo("INOB")
+//                tipoTramite = TipoTramite.findByCodigo("INOB")
 //                tramitePadre = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("INPG"))
-                tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("INPG"), [sort: 'fechaEnvio', order: "desc"])[0]
+//                tramitePadre = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("INPG"), [sort: 'fechaEnvio', order: "desc"])[0]
                 break;
         }
         if (planilla.save(flush: true)) {
@@ -508,6 +697,24 @@ class PlanillaController extends janus.seguridad.Shield {
 
             flash.message = str
             redirect(action: "list", id: planilla.contratoId)
+        }
+    }
+
+    def iniciarObra() {
+        def planilla = Planilla.get(params.id)
+        def memo = params.memo.toString().toUpperCase()
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        def obra = Obra.get(planilla.contrato.obra.id)
+        obra.fechaInicio = fecha
+        obra.memoInicioObra = memo
+        if (!obra.save(flush: true)) {
+            flash.message = "No se pudo iniciar la obra"
+            println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors
+            redirect(action: "list", id: planilla.contratoId)
+        } else {
+            flash.message = "Obra iniciada exitosamente"
+            redirect(controller: "cronogramaEjecucion", action: "index", id: planilla.contratoId)
         }
     }
 

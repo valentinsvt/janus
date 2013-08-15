@@ -94,15 +94,15 @@ class Obra implements Serializable {
 
     String coordenadas //coordenadas en sistema WGS84: -0.21,-78.5199 => S 0 12.5999999 W 78 31.194
 
-    int liquidacion  = 0
+    int liquidacion = 0
 
     Item transporteCamioneta
     Item transporteAcemila
 
-    double distanciaCamioneta=0
-    double distanciaAcemila=0
+    double distanciaCamioneta = 0
+    double distanciaAcemila = 0
 
-
+    String memoInicioObra
 
     static mapping = {
         table 'obra'
@@ -211,6 +211,8 @@ class Obra implements Serializable {
 
             distanciaCamioneta column: 'obratrcm'
             distanciaAcemila column: 'obratrac'
+
+            memoInicioObra column: 'obrammio'
         }
     }
     static constraints = {
@@ -313,6 +315,8 @@ class Obra implements Serializable {
 
         distanciaCamioneta(blank: true, nullable: true)
         distanciaAcemila(blank: true, nullable: true)
+
+        memoInicioObra(blank: true, nullable: true, maxSize: 20, attributes: [title: 'Memo de inicio de obra'])
     }
 
     String toString() {
