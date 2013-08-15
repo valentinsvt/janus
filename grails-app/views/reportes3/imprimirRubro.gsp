@@ -165,11 +165,21 @@
             <div style="margin-top: 20px">
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
+                        <g:if test="${fechaPala}">
                         <b>Fecha:</b> ${fechaPala.format("dd-MM-yyyy")}
+                        </g:if>
+                        <g:else>
+                          <b>Fecha:</b>
+                        </g:else>
                     </div>
 
                     <div class="span4">
+                        <g:if test="${fechaPrecios}">
                         <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
+                        </g:if>
+                        <g:else>
+                            <b>Fecha Act. P.U:</b>
+                        </g:else>
                     </div>
                 </div>
 

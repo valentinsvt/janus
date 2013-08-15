@@ -34,7 +34,7 @@
     %{--<g:select name="persona.id" class="persona" from="${janus.Persona?.list()}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"--}%
     %{--style="width: 300px"/>--}%
     <hr>
-    <div class="span4" id="funcion" style="margin-top: 10px;">
+    <div class="span4" id="funcionDiv" style="margin-top: 10px;">
         <div class="span2" style="margin-left: -50px; font-weight: bold">Nueva Función:</div>
         <elm:select name="funcion" id="funcion" from="${janus.Funcion?.list()}" optionValue="descripcion" optionKey="id"
                     optionClass="${{ it?.descripcion }}" style="margin-left: -10px"/>
@@ -172,6 +172,9 @@
         var idAcicionar = $("#funcion").val();
 
 
+//        console.log("-->" + idAcicionar)
+
+
         var tbody = $("#funcionPersona");
         var rows = tbody.children("tr").length;
         var continuar = true;
@@ -228,6 +231,8 @@
 
         } else {
             //avisar q ya existe
+
+            alert("La persona ya tiene asignado ese rol!")
         }
 
     });

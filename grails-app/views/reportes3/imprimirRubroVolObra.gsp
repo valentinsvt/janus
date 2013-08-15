@@ -184,21 +184,42 @@
             <div style="margin-top: 20px">
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
-                        <b>Fecha:</b> ${fechaSalida.format("dd-MM-yyyy")}
+                        <g:if test="${fechaSalida}">
+                            <b>Fecha:</b> ${fechaSalida.format("dd-MM-yyyy")}
+
+                        </g:if>
+                        <g:else>
+                             <b>Fecha:</b>
+                        </g:else>
+
                     </div>
 
                     <div class="span4">
-                        <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
+                        <g:if test="${fechaPrecios}">
+
+                            <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
+                        </g:if>
+                        <g:else>
+                            <b>Fecha Act. P.U:</b>
+                        </g:else>
+
                     </div>
                 </div>
 
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
-                        <b>Código:</b> ${rubro.codigo}
+                        <b>Código:</b> ${rubro?.codigo}
                     </div>
 
                     <div class="span4">
-                        <b>Unidad:</b> ${rubro.unidad.codigo}
+                        <b>Unidad:</b> ${rubro?.unidad?.codigo}
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span12">
+
+                        <b>Código Obra:</b> ${obra?.codigo}
                     </div>
                 </div>
 

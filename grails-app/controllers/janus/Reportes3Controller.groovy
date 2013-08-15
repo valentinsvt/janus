@@ -105,12 +105,26 @@ class Reportes3Controller {
 //        println "----->>>>" + params
 //        def rubro = Item.get(params.id)
         def obra = Obra.get(params.obra)
-        def fecha1 = new Date().parse("dd-MM-yyyy", params.fecha)
 
-        def fecha2 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
+        def fecha1
+        def fecha2
 
-        def fechaSalida = printFecha(fecha2)
-        def fecha = printFecha(fecha1)
+        if(params.fecha){
+
+            fecha1 = new Date().parse("dd-MM-yyyy", params.fecha)
+        }else {
+
+        }
+
+        if(params.fechaSalida){
+
+            fecha2 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
+        }else {
+        }
+
+
+//        def fechaSalida = printFecha(fecha2)
+//        def fecha = printFecha(fecha1)
 
         def fechaPal = printFecha(new Date());
 
@@ -542,12 +556,32 @@ class Reportes3Controller {
     def imprimirRubro() {
 //        println "imprimir rubro "+params
         def rubro = Item.get(params.id)
-        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-        def fecha1 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
 
-//        def fechaPala = printFecha(new Date());
-        def fechaPala = printFecha(fecha1);
-        def fecha2 = printFecha(fecha)
+
+
+//        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+//        def fecha1 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
+
+
+        def fecha
+        def fecha1
+
+        if(params.fecha){
+
+            fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        }else {
+
+        }
+
+        if(params.fechaSalida){
+
+            fecha1 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
+        }else {
+        }
+
+
+//        def fechaPala = printFecha(fecha1);
+//        def fecha2 = printFecha(fecha)
 
 
 
