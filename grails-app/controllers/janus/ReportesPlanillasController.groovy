@@ -29,6 +29,9 @@ import janus.pac.Garantia;
 
 import java.awt.Color;
 
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.*;
+
 class ReportesPlanillasController {
 
     def preciosService
@@ -3370,6 +3373,20 @@ class ReportesPlanillasController {
         document.setMargins(86.4, 56.2, 50, 10);
 
         def pdfw = PdfWriter.getInstance(document, baos);
+
+        // headers and footers must be added before the document is opened
+        HeaderFooter footer1 = new HeaderFooter(
+                new Phrase("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", new Font(times8normal)), false); // true aqui pone numero de pagina
+        footer1.setBorder(Rectangle.NO_BORDER);
+        footer1.setBorder(Rectangle.TOP);
+        footer1.setAlignment(Element.ALIGN_CENTER);
+        document.setFooter(footer1);
+
+//        HeaderFooter header1 = new HeaderFooter(
+//                new Phrase("This is a header without a page number", new Font(times8normal)), false);
+//        header1.setAlignment(Element.ALIGN_CENTER);
+//        document.setHeader(header1);
+
         document.open();
         document.addTitle("Contrato " + new Date().format("dd_MM_yyyy"));
         document.addSubject("Generado por el sistema Janus");
@@ -3459,13 +3476,13 @@ class ReportesPlanillasController {
         addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times12bold), prmsHeaderHoja)
         document.add(tablaFirmas);
 
-        def footer = new PdfPTable(1);
-        footer.setWidthPercentage(100);
-        footer.setSpacingBefore(55f);
-
-        addCellTabla(footer, new Paragraph("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", times8normal), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-
-        document.add(footer)
+//        def footer = new PdfPTable(1);
+//        footer.setWidthPercentage(100);
+//        footer.setSpacingBefore(55f);
+//
+//        addCellTabla(footer, new Paragraph("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", times8normal), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//
+//        document.add(footer)
 
         document.close();
         pdfw.close()
