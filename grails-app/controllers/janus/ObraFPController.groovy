@@ -159,14 +159,14 @@ class ObraFPController {
         }
 
         /* vuelve a ejecutar para incluir rubors de tranpsorte especial */
-        println "ejecuta sp_obra_v2"
+//        println "ejecuta sp_obra_v2"
         if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 //        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 
         //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //
-        println "verificaMatriz" + verificaMatriz(obra__id)
+//        println "verificaMatriz" + verificaMatriz(obra__id)
 //        //println "pasa verificaMatriz"
 //        println "verifica_precios \n" + verifica_precios(obra__id)
 
@@ -179,8 +179,8 @@ class ObraFPController {
 
             * ------------------------------------------------------------------------------------- */
         /* 1. Eliminar las tablas obxx_user si existen y crear nuevas                           */
-        println "creaTablas"
         creaTablas(obra__id, "S")  /* cambio obra__id */
+//        println "fin .. creaTablas"
         numeroCampos = 0
 
         /* 2. Se descomponen los items de la obra y se los inserta en vlobitem: sp_obra         */
@@ -227,18 +227,20 @@ class ObraFPController {
         creaCampo(obra__id, 'TOTAL_U', 'T');
         creaCampo(obra__id, 'TOTAL_T', 'T');
         /* ---- Inserta los rubros y títulos de totales --------------------------------------- */
+//        println "inicio inserta rubros"
         insertaRubro("obra__id, codigo, rubro, orden", "${obra__id},'sS1', 'SUMAN', 10000")
         insertaRubro("obra__id, codigo, rubro, orden", "${obra__id},'sS2', 'TOTALES', 10001")
         insertaRubro("obra__id, codigo, rubro, orden", "${obra__id},'sS3', 'COEFICIENTES DE LA FORMULA', 10002")
         insertaRubro("obra__id, codigo, rubro, orden", "${obra__id},'sS4', 'TARIFA HORARIA', 10003")
         insertaRubro("obra__id, codigo, rubro, orden", "${obra__id},'sS6', 'HORAS HOMBRE POR COMPONENTE', 10004")
         insertaRubro("obra__id, codigo, rubro, orden", "${obra__id},'sS5', 'COEFICIENTES DE LA CUADRILLA TIPO',10005")
+//        println "fin inserta rubros"
 
         /* ---- ejecuta Rubros(subPrsp) y Descomposicion(subPrsp) ----------------------------- */
         rubros(obra__id, sbpr)
-        //println "completa rubros"
+//        println "completa rubros"
         descomposicion(obra__id, sbpr)
-        //println "completa descomposicion"
+//        println "completa descomposicion"
         des_Materiales(obra__id, sbpr, conTransporte)
 //        println "completa des_Materiales, conTranp: $conTransporte"
         if (hayEquipos) {
@@ -311,7 +313,7 @@ class ObraFPController {
     */
     def transporteEspecial(id) {
 
-        println "inicia proceso...  para obra: $id"
+//        println "inicia proceso...  para obra: $id"
         def res
         def sbpr = SubPresupuesto.findByDescripcion("TRANSPORTE ESPECIAL")
         if (!sbpr) res = "Ingrese el subpresupuesto:TRANSPORTE ESPECIAL"
@@ -335,39 +337,39 @@ class ObraFPController {
                 //println "peso al volumen: ${row.peso}"
                 peso += row.peso
             }
-            println "peso total: ${peso.toDouble().round(2)}"
+//            println "peso total: ${peso.toDouble().round(2)}"
             /* verifica que hay a los rubros en vlob */
             if (camioneta) {
                 def itemCamioneta = VolumenesObra.findByItemAndObra(Item.get(obra.transporteCamioneta.id), obra)
-                println itemCamioneta
+//                println itemCamioneta
                 if (itemCamioneta) {
-                    println "ya existe el rubro de camioneta: actualizando..."
+//                    println "ya existe el rubro de camioneta: actualizando..."
                     tx_sql = "update vlob set vlobcntd = ${(peso * obra.distanciaCamioneta).toDouble().round(2)} " +
                             "where vlob__id = ${itemCamioneta.id}"
-                    println tx_sql
+//                    println tx_sql
                     res = cn.execute(tx_sql.toString())
                 } else {
-                    println "No hay el rubro de camioneta: creando..."
+//                    println "No hay el rubro de camioneta: creando..."
                     tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
                              "values(${sbpr.id}, ${camioneta.id}, ${id}, ${(peso * obra.distanciaCamioneta).toDouble().round(2)}, 1000, 0) "
-                    println tx_sql
+//                    println tx_sql
                     res = cn.execute(tx_sql.toString())
                 }
             }
             if (acemila) {
                 def itemAcemila = VolumenesObra.findByItemAndObra(Item.get(obra.transporteAcemila.id), obra)
-                println itemAcemila
+//                println itemAcemila
                 if (itemAcemila) {
-                    println "ya existe el rubro de acémila: actualizando..."
+//                    println "ya existe el rubro de acémila: actualizando..."
                     tx_sql = "update vlob set vlobcntd = ${(peso * obra.distanciaAcemila).toDouble().round(2)} " +
                             "where vlob__id = ${itemAcemila.id}"
-                    println tx_sql
+//                    println tx_sql
                     res = cn.execute(tx_sql.toString())
                 } else {
-                    println "No hay el rubro de camioneta: creando..."
+//                    println "No hay el rubro de camioneta: creando..."
                     tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
                             "values(${sbpr.id}, ${acemila.id}, ${id}, ${(peso * obra.distanciaAcemila).toDouble().round(2)}, 1001, 0) "
-                    println tx_sql
+//                    println tx_sql
                     res = cn.execute(tx_sql.toString())
                 }
             }
@@ -381,7 +383,7 @@ class ObraFPController {
             aborrar.each() {
                 ids << it.id
             }
-            println "a borrar: " + ids
+//            println "a borrar: " + ids
             ids.each(){
                 def tmp = VolumenesObra.findByItem(Item.get(it))
                 if (tmp) tmp.delete()
@@ -598,19 +600,26 @@ class ObraFPController {
             tx_sql += "vlobcntd > 0 and undd.undd__id = item.undd__id and sbpr__id = ${sbpr} "
             tx_sql += "group by itemcdgo, itemnmbr, unddcdgo order by ordn"
         }
-        //println "rubros: " + tx_sql
+//        println "rubros: " + tx_sql
         def contador = 1
         cn.eachRow(tx_sql.toString()) { row ->
+            def nmbr = row.itemnmbr.replaceAll(/'/,"\'\'")        //maneja nombres con comillas simples
+            def tx = "${id},'${row.itemcdgo}', '${nmbr.size() > 60 ? nmbr[0..59] : nmbr}'," +
+                    "'${row.unddcdgo}', ${row.vlobcntd}, ${contador}"
+            //println "..........." + tx
+/*
             insertaRubro("obra__id, codigo, rubro, unidad, cantidad, orden",
                     "${id},'${row.itemcdgo}', '${row.itemnmbr.size() > 60 ? row.itemnmbr[0..59] : row.itemnmbr}'," +
                             "'${row.unddcdgo}', ${row.vlobcntd}, ${contador}")
+*/
+            insertaRubro("obra__id, codigo, rubro, unidad, cantidad, orden", tx)
             ejecutaSQL("insert into mfvl (obra__id, clmncdgo, codigo, valor) values(${id},1," +
                     "'${row.itemcdgo}', ${contador} )")
             ejecutaSQL("insert into mfvl (obra__id, clmncdgo, codigo) values(${id},2, '${row.itemcdgo}')")
             contador++
         }
         tx_sql = "select distinct clmncdgo from mfcl where obra__id = ${id} and clmndscr like '%_T' or clmndscr like '%_U'"
-        //println "2rubros: " + tx_sql
+//        println "2rubros: " + tx_sql
         cn.eachRow(tx_sql.toString()) { d ->
             //println "insert into mfvl (obra__id, clmncdgo, codigo, valor) select " +
             "obra__id, ${d.clmncdgo}, codigo, 0 from mfrb where obra__id = ${id}"
