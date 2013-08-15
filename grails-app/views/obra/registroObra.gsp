@@ -208,7 +208,7 @@
 
                     <div class="span1" style="margin-left: -20px">Tipo</div>
 
-                    <div class="span2" id="divTipoObra"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list()}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/></div>
+                    <div class="span2" id="divTipoObra"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/></div>
 
                     <div class="span2" style="margin-left:78px;"><a href="#" class="btn btn-info" id="btnCrearTipoObra"><i class="icon-user"></i> Crear Tipo
                     </a></div>

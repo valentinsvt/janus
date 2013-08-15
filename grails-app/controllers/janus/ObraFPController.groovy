@@ -92,9 +92,6 @@ class ObraFPController {
             return
         }
 
-
-
-
         res = verificaMatriz(obra__id)
         if (res != "") {
             render res
@@ -162,19 +159,14 @@ class ObraFPController {
         }
 
         /* vuelve a ejecutar para incluir rubors de tranpsorte especial */
+        println "ejecuta sp_obra_v2"
         if (Obra.get(obra__id).estado == "N") ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 //        ejecutaSQL("select * from sp_obra_v2(${obra__id}, ${sbpr})")
 
-/*
-        if (trnpEspecial) {
-            creaCampo(obra__id, 'TRANS-ESPECIAL_U', 'D')
-            creaCampo(obra__id, 'TRANS-ESPECIAL_T', 'D')
-        }
-*/
         //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //
-//        println "verificaMatriz" + verificaMatriz(obra__id)
+        println "verificaMatriz" + verificaMatriz(obra__id)
 //        //println "pasa verificaMatriz"
 //        println "verifica_precios \n" + verifica_precios(obra__id)
 
@@ -187,6 +179,7 @@ class ObraFPController {
 
             * ------------------------------------------------------------------------------------- */
         /* 1. Eliminar las tablas obxx_user si existen y crear nuevas                           */
+        println "creaTablas"
         creaTablas(obra__id, "S")  /* cambio obra__id */
         numeroCampos = 0
 
