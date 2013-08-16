@@ -1165,8 +1165,8 @@
 
                     %{--var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'--}%
 
-                    %{--var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";--}%
-                    var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";
+                    var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
+                    %{--var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";--}%
                     $.box({
                         imageClass : "box_info",
                         text       : "Desea imprimir con desglose de transporte?",
@@ -1179,13 +1179,13 @@
 
                                 "Sí"               : function () {
                                     url += "1";
-                                    location.href = url;
-                                    %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url--}%
+//                                    location.href = url;
+                                    location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                                 },
                                 "No"               : function () {
                                     url += "0";
-                                    location.href = url;
-                                    %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url--}%
+//                                    location.href = url;
+                                    location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                                 },
                                 "Exportar a Excel" : function () {
                                     var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
