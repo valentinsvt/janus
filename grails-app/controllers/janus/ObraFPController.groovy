@@ -385,7 +385,7 @@ class ObraFPController {
             }
 //            println "a borrar: " + ids
             ids.each(){
-                def tmp = VolumenesObra.findByItem(Item.get(it))
+                def tmp = VolumenesObra.findByItemAndObra(Item.get(it), obra)
                 if (tmp) tmp.delete()
             }
 
