@@ -282,7 +282,7 @@
                     <div class="span1" style="margin-left: 10px; width:50px;">Plazo</div>
 
                     <g:if test="${obra?.plazoEjecucionMeses == null}">
-                        <div class="span2" style="margin-left: -10px; width: 50px;">
+                        <div class="span2" style="margin-left: -10px; width: 130px;">
                             <g:textField name="plazoEjecucionMeses" class="plazoMeses plazo required number" style="width: 28px" data-original="${obra?.plazoEjecucionMeses}"
                                          maxlength="3" type="number" value="${'1'}" title="Plazo de ejecución en meses"/> Meses
                         </div>

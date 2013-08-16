@@ -37,7 +37,7 @@
             <li><a href="#tab-transporte">Transporte</a></li>
             <li><a href="#tab-factores">Factores</a></li>
             <li><a href="#tab-indirecto">Costos Indirectos</a></li>
-            <li class="desglose"><a href="#tab-desglose">Desglose Eq.</a></li>
+            <li class="desglose"><a href="#tab-desglose">Desglose Eq. FP</a></li>
             <li class="especial"><a href="#tab-especial">Tranp. Especial</a></li>
         </ul>
 
@@ -278,7 +278,8 @@
             <div class="row-fluid margen">
 
                 <div class="span5">
-                    Reducción/Tiempo
+                    %{--Reducción/Tiempo--}%
+                    Factor Tiempo
                 </div>
 
                 <div class="span2">

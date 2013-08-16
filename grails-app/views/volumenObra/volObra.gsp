@@ -89,7 +89,8 @@
                 <b>Dist. volúmen:</b> ${obra?.distanciaVolumen}
             </div>
             <div class="span3" style="width: 320px; margin-top: -8px;">
-                <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion" style="margin-left: 20px;"></g:select>
+                <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion"
+                                             style="margin-left: 20px;" value="5"></g:select>
             </div>
         </div>
 
