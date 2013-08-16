@@ -45,7 +45,7 @@ class BuscadorService {
 
             campo=it.replaceFirst("&","")
             dato=mapa[campo]
-            // println "dato "+dato
+//            println "dato "+dato
 
             if(ignoreCase){
                 //println "si ignorecase"
@@ -135,6 +135,16 @@ class BuscadorService {
                             } else{
                                 //println "no es like "
                                 parts[0]+=" "+campo+" "+comparador+" ? "
+
+                                try{
+                                    if(dato=~"int" || dato=~"Int" )
+                                        par[0]=par[0].toInteger()
+                                    if(dato=~"double" || dato=~"Double" )
+                                        par[0]=par[0].toDouble()
+//                                    println "aqui  "+par[0]+"  "+par[0].class
+                                }catch (e){
+                                    println " e to double "+e
+                                }
                                 parts.add(par[0])
 
                             }
@@ -206,8 +216,8 @@ class BuscadorService {
             else
                 sql+= " where "+extras.replaceFirst(" and ","").replaceFirst(" or ","")
         }
-        //println "sql " + sql  + orderby+" pars "+res
-        lista = dominio.findAll(sql+orderby, res,[max: 200])
+//        println "sql " + sql  + orderby+" --> pars "+res
+        lista = dominio.findAll((sql+orderby).toString(), res,[max: 200])
         lista.add(lista.size())
         if (lista.size() < 1 && tipo != "excluyente") {
             res = filtro("or", parametros, common, mapa, ignoreCase)

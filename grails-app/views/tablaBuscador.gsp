@@ -128,7 +128,7 @@
 </g:if>
 <g:else>
     <div class="message" style="margin-left: 40px;width: 85%;margin-bottom: 15px">
-        No se encontraron datos
+        No se encontraron datos. Si esta buscando por fechas utilice el formato: dd/MM/yyyy.
     </div>
 </g:else>
 
