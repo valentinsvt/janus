@@ -56,10 +56,10 @@ class ComposicionController extends janus.seguridad.Shield{
         def conLista = []
         def lista
 //        println "listas " + listas
-
+        println "item tipo lista "+item.tipoLista
         if (item.tipoLista) {
             conLista.add(item)
-            switch (item.tipoLista.codigo){
+            switch (item.tipoLista.codigo.trim()){
                 case "MQ":
                     lista=obra.listaManoObra
                     break;
@@ -85,7 +85,7 @@ class ComposicionController extends janus.seguridad.Shield{
 
         }
 
-
+         println "lista "+lista
         def precios = ""
 //        println "items " + items + "  con lista " + conLista
         if (items.size() > 0) {

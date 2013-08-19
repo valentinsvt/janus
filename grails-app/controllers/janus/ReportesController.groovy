@@ -539,7 +539,8 @@ class ReportesController {
             document.addCreator("Tedein SA");
             Paragraph preface = new Paragraph();
             addEmptyLine(preface, 1);
-            preface.add(new Paragraph("Reporte de " + params.titulo, catFont));
+            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
+            preface.add(new Paragraph("" + params.titulo, catFont));
             preface.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
             addEmptyLine(preface, 1);
             document.add(preface);
