@@ -776,7 +776,7 @@ class Reportes2Controller {
 
     def reporteExcelComposicion() {
 
-        println("!!!" + params)
+//        println("!!!" + params)
 
         if (!params.tipo) {
             params.tipo = "-1"
@@ -971,7 +971,8 @@ class Reportes2Controller {
         number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra); sheet.addCell(number);
 
         label = new jxl.write.Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
-        number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo); sheet.addCell(number);
+//        number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo); sheet.addCell(number);
+        number = new jxl.write.Number(7, ultimaFila + 2, formatNumber(number: totalEquipo, maxFractionDigits: 2, minFractionDigits: 2)); sheet.addCell(number);
 
         label = new jxl.write.Label(6, ultimaFila + 3, "TOTAL DIRECTO: ", times16format); sheet.addCell(label);
         number = new jxl.write.Number(7, ultimaFila + 3, totalDirecto); sheet.addCell(number);

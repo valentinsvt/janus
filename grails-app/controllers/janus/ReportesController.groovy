@@ -2077,6 +2077,7 @@ class ReportesController {
         headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times10bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph("DATOS DE LA OBRA ", times10bold));
+        headers.add(new Paragraph(" ", times10bold));
         document.add(headers)
 
 
@@ -2225,7 +2226,7 @@ class ReportesController {
         addCellTabla(tablaCoeficiente2, new Paragraph("Coordenadas: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(obra?.coordenadas, times10normal), prmsHeaderHoja3)
 
-        addCellTabla(tablaCoeficiente2, new Paragraph("Lugar de precios M.O. y Equipos: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCoeficiente2, new Paragraph("Lista de precios M.O. y Equipos: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(obra?.lugar?.descripcion, times10normal), prmsHeaderHoja)
         addCellTabla(tablaCoeficiente2, new Paragraph(" ", times10normal), prmsHeaderHoja)
 
@@ -3686,7 +3687,10 @@ class ReportesController {
 
         addCellTabla(tablaQuito, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaQuito, new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaQuito, new Paragraph(), times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaQuito, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaQuito, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
 
 
         PdfPTable tablaDatosMemo = new PdfPTable(4);
@@ -3920,7 +3924,7 @@ class ReportesController {
 
 
                 addCellTabla(tablaBaseMemo, new Paragraph("Proyeccion del Reajuste : ", times10bold), prmsHeaderHojaRight)
-                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "####,###", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 //                addCellTabla(tablaBaseMemo, new Paragraph("(Período : " + g.formatNumber(number: mesesMemo, format: "##.##", locale: "ec") + " meses, Inflación : " + g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec") + "% )"  , times8bold), prmsHeaderHojaRight)
@@ -4419,7 +4423,7 @@ class ReportesController {
 
         PdfPTable tablaHeader = new PdfPTable(4);
         tablaHeader.setWidthPercentage(90);
-        tablaHeader.setWidths(arregloEnteros([15, 35, 15, 35]))
+        tablaHeader.setWidths(arregloEnteros([15, 42, 15, 28]))
 
         addCellTabla(tablaHeader, new Paragraph("Nombre: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.nombre, times10normal), prmsHeaderHoja2)
@@ -4639,7 +4643,7 @@ class ReportesController {
         addCellTabla(tablaPie, new Paragraph("Fecha de actualizacion: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(printFecha(obra?.fechaPreciosRubros), times10normal), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "###,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -6876,26 +6880,12 @@ class ReportesController {
 
         def diasContractual = 0
 
-//        println "ini "+inicioPreparatorio+"   fin "+finPreparatorio+"    dias cal "+(finPreparatorio-inicioPreparatorio+1)
-
-//        while(fechaTemp <= finPreparatorio){
-//            println "\t"+fechaTemp+"   "+fmt.format(fechaTemp)
-//             if(!noLaborables.contains(fmt.format(fechaTemp))) {
-//                 diasPreparatorio++
-//             }
-//            fechaTemp += 1
-//        }
-//        println "diasLaborable: "+diasPreparatorio
-
-
         diasPreparatorio = horasLaborables(fechaTemp, finPreparatorio, diasPreparatorio, fmt, noLaborables)
-//        println "diasLaborable: "+diasPreparatorio
 
         diasPrecontractual = horasLaborables(fechaTempPrecon, finPrecontractual, diasPrecontractual, fmt, noLaborables)
-//        println "diasLaborable2: "+diasPrecontractual
 
         diasContractual = horasLaborables(fechaTempContra, finContractual, diasContractual, fmt, noLaborables)
-//        println "diasLaborable3: "+diasContractual
+
 
         def baos = new ByteArrayOutputStream()
         def name = "avance_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -6970,11 +6960,11 @@ class ReportesController {
 
             addCellTabla(tablaAvance, new Paragraph("Preparatorio", times8normal), prmsCellIzquierda)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: diasPreparatorio, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsNum)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: diasPreparatorioPac, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsNum)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: (diasPreparatorio / diasPreparatorioPac) * 100, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec") + " %", times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec") + " %", times8normal), prmsNum)
 
 
         }
@@ -6982,11 +6972,11 @@ class ReportesController {
 
             addCellTabla(tablaAvance, new Paragraph("Precontractual", times8normal), prmsCellIzquierda)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: diasPrecontractual, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsNum)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: diasPrecontractualPac, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsNum)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: (diasPrecontractual / diasPrecontractualPac) * 100, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec") + " %", times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec") + " %", times8normal), prmsNum)
 
 
         }
@@ -6994,11 +6984,11 @@ class ReportesController {
 
             addCellTabla(tablaAvance, new Paragraph("Contractual", times8normal), prmsCellIzquierda)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: diasContractual, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsNum)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: diasContractualPac, minFractionDigits:
-                    0, maxFractionDigits: 0, format: "###,###0", locale: "ec"), times8normal), prmsNum)
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsNum)
             addCellTabla(tablaAvance, new Paragraph(g.formatNumber(number: (diasContractual / diasContractualPac) * 100, minFractionDigits:
-                    0, maxFractionDigits: 2, format: "###,###0", locale: "ec") + " %", times8normal), prmsNum)
+                    0, maxFractionDigits: 2, format: "##,##0", locale: "ec") + " %", times8normal), prmsNum)
         }
 
 

@@ -68,17 +68,7 @@
             color      : #FFFFFF !important;
         }
 
-            /*th {*/
-            /*background : #cccccc;*/
-            /*}*/
 
-            /*tbody tr:nth-child(2n+1) {*/
-            /*background : none repeat scroll 0 0 #E1F1F7;*/
-            /*}*/
-
-            /*tbody tr:nth-child(2n) {*/
-            /*background : none repeat scroll 0 0 #F5F5F5;*/
-            /*}*/
         thead tr {
             margin : 0px;
 

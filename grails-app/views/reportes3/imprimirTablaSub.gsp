@@ -148,15 +148,15 @@
                 </p>
 
                 <p style="font-size: 14px">
-                   <b> COORDINACIÓN DE COSTOS </b>
+                   <b> PRESUPUESTO </b>
                 </p>
 
                 <p style="font-size: 14px">
                     <g:if test="${subPre == -1}">
-                        <b>VOLÚMENES DE OBRA</b>
+                        <b>TODOS LOS SUBPRESUPUESTOS</b>
                     </g:if>
                     <g:else>
-                        <b>VOLÚMENES DE OBRA DEL SUBPRESUPUESTO: ${subPre.toUpperCase()}</b>
+                        <b>SUBPRESUPUESTO: ${subPre.toUpperCase()}</b>
                     </g:else>
 
                 </p>
@@ -172,6 +172,21 @@
                     <div class="span4">
                         %{--<b>Fecha Act. P.U:</b> ${obra.fechaPreciosRubros?.format("dd-MM-yyyy")}--}%
                         <b>Fecha Act. P.U:</b> ${fechaPU}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6" style="margin-right: 195px !important;">
+                        <b>Nombre:</b> ${obra?.nombre}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6" style="margin-right: 195px !important;">
+                        <b>Código Obra:</b> ${obra?.codigo}
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6" style="margin-right: 195px !important;">
+                        <b>Doc. Referencia:</b> ${obra?.oficioIngreso}
                     </div>
                 </div>
 
