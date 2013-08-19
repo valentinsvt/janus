@@ -11,7 +11,7 @@ class DireccionController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [direccionInstanceList: Direccion.list(params), params: params]
+        [direccionInstanceList: Direccion.list([sort: 'nombre']), params: params]
     } //list
 
     def form_ajax() {

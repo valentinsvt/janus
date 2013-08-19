@@ -327,7 +327,7 @@ class ObraFPController {
                     "where item.item__id = vlobitem.item__id and obra__id = ${id} and " +
                     "tpls.tpls__id = item.tpls__id and tplscdgo like 'P%'"
             cn.eachRow(tx_sql.toString()) { row ->
-                peso += row.peso
+                if (row.peso) peso += row.peso
             }
 //            println "peso del peso: ${peso}"
             tx_sql = "select sum(voitcntd*itempeso*1.7) peso from vlobitem, item, tpls " +
@@ -335,11 +335,11 @@ class ObraFPController {
                     "tpls.tpls__id = item.tpls__id and tplscdgo like 'V%'"
             cn.eachRow(tx_sql.toString()) { row ->
                 //println "peso al volumen: ${row.peso}"
-                peso += row.peso
+                if (row.peso) peso += row.peso
             }
 //            println "peso total: ${peso.toDouble().round(2)}"
             /* verifica que hay a los rubros en vlob */
-            if (camioneta) {
+            if (camioneta && (peso > 0)) {
                 def itemCamioneta = VolumenesObra.findByItemAndObra(Item.get(obra.transporteCamioneta.id), obra)
 //                println itemCamioneta
                 if (itemCamioneta) {
@@ -356,7 +356,7 @@ class ObraFPController {
                     res = cn.execute(tx_sql.toString())
                 }
             }
-            if (acemila) {
+            if (acemila && (peso > 0)) {
                 def itemAcemila = VolumenesObra.findByItemAndObra(Item.get(obra.transporteAcemila.id), obra)
 //                println itemAcemila
                 if (itemAcemila) {
