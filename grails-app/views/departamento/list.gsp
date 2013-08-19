@@ -45,7 +45,7 @@
                     
                         <g:sortableColumn property="descripcion" title="Descripción" />
                     
-                        <th>Direccion</th>
+                        <th>Dirección</th>
                     
                         <g:sortableColumn property="permisos" title="Permisos" />
                     
