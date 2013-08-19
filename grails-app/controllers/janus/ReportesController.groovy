@@ -3619,7 +3619,7 @@ class ReportesController {
 
 
         def baos = new ByteArrayOutputStream()
-        def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        def name = "memorando_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font times14bold = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
         Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
@@ -3661,7 +3661,7 @@ class ReportesController {
 
         PdfPTable tablaCabecera = new PdfPTable(2);
         tablaCabecera.setWidthPercentage(100);
-        tablaCabecera.setWidths(arregloEnteros([5, 60]))
+        tablaCabecera.setWidths(arregloEnteros([4, 60]))
 
 
         if (obra?.memoSalida == null) {
@@ -3682,10 +3682,10 @@ class ReportesController {
 
         PdfPTable tablaQuito = new PdfPTable(2);
         tablaQuito.setWidthPercentage(100);
-        tablaQuito.setWidths(arregloEnteros([5, 60]))
+        tablaQuito.setWidths(arregloEnteros([4, 60]))
 
         addCellTabla(tablaQuito, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaQuito, new Paragraph("Quito, " + printFecha(obra?.fechaCreacionObra), times10bold), prmsHeaderHoja)
+        addCellTabla(tablaQuito, new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times10bold), prmsHeaderHoja)
 //        addCellTabla(tablaQuito, new Paragraph(), times8bold), prmsHeaderHoja)
 
 
@@ -4432,7 +4432,7 @@ class ReportesController {
         addCellTabla(tablaHeader, new Paragraph("Ubicación : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.sitio, times10normal), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph("Fecha: ", times10bold), prmsHeaderHoja)
-        addCellTabla(tablaHeader, new Paragraph(printFecha(obra?.fechaCreacionObra).toUpperCase(), times10normal), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(printFecha(obra?.fechaOficioSalida).toUpperCase(), times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaHeader, new Paragraph("Cantón : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaHeader, new Paragraph(obra?.parroquia?.canton?.nombre, times10normal), prmsHeaderHoja)
@@ -7153,7 +7153,7 @@ class ReportesController {
 
         addCellTabla(tablaCabeceraMemo, new Paragraph("FECHA", times10bold), prmsHeaderHoja)
         addCellTabla(tablaCabeceraMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaCabeceraMemo, new Paragraph(fecha, times10bold), prmsHeaderHoja)
+        addCellTabla(tablaCabeceraMemo, new Paragraph(printFecha(obra?.fechaOficioSalida), times10bold), prmsHeaderHoja)
 
         addCellTabla(tablaCabeceraMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCabeceraMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -7184,40 +7184,40 @@ class ReportesController {
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
-        addCellTabla(tablaValoresMemoPresu, new Paragraph("Presupuesto referencial por contrato ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph("Presupuesto referencial por contrato :", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph("USD " + g.formatNumber(number: params?.totalPresupuesto?:0, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaLeft)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
-
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph("USD " + g.formatNumber(number: params?.totalPresupuesto?:0, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaLeft)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
-        addCellTabla(tablaValoresMemoPresu, new Paragraph("Presupuesto referencial por administración directa ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaValoresMemoPresu, new Paragraph("Presupuesto referencial por administración directa :", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu, new Paragraph("Materiales", times8bold), prmsHeaderHojaRight)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.materiales?:0, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.materiales?:0, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
 
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu, new Paragraph("Mano de Obra", times8bold), prmsHeaderHojaRight)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.manoObra?:0, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.manoObra?:0, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu, new Paragraph("Equipo", times8bold), prmsHeaderHojaRight)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.equipos?:0, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.equipos?:0, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(params?.costoPorcentaje + " %" + " Costos Indirectos", times8bold), prmsHeaderHojaRight)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.costo?:0, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.costo?:0, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8normal), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu, new Paragraph("TOTAL", times8bold), prmsHeaderHojaRight)
-        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.total?:0, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+        addCellTabla(tablaValoresMemoPresu, new Paragraph(g.formatNumber(number: params?.total?:0, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaValoresMemoPresu, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -7313,7 +7313,7 @@ class ReportesController {
         addCellTabla(tablaTotalMemoPresu, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotalMemoPresu, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotalMemoPresu, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotalMemoPresu, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "###,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
+        addCellTabla(tablaTotalMemoPresu, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
 
 
         //firmas
