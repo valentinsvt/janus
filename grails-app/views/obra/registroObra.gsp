@@ -111,7 +111,7 @@
                     <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
                 </g:if>
 
-                <g:if test="${obra?.id != null}">
+                <g:if test="${obra?.id != null && obra?.estado == 'R'}">
                     <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes</button>
                 </g:if>
             </g:if>
