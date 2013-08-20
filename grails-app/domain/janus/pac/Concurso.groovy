@@ -11,6 +11,7 @@ class Concurso {
     String codigo
     String objeto
     Double costoBases
+    Double porMilBases = 0
     Date fechaInicio
     Date fechaPublicacion
     Date fechaLimitePreguntas
@@ -45,6 +46,8 @@ class Concurso {
     Date fechaFinContractual
     String numeroCertificacion
 
+    Date fechaNotificacionAdjudicacion
+
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
@@ -60,6 +63,7 @@ class Concurso {
             codigo column: 'cncrcdgo'
             objeto column: 'cncrobjt'
             costoBases column: 'cncrbase'
+            porMilBases column: 'cncrpmbs'
             fechaInicio column: 'cncrfcin'
             fechaPublicacion column: 'cncrfcpu'
             fechaLimitePreguntas column: 'cncrfcpg'
@@ -90,10 +94,12 @@ class Concurso {
             fechaInicioContractual column: 'cncrfict'
             fechaFinContractual column: 'cncrffct'
 
-            fechaEtapa1  column:  'cncrfce1'
-            fechaEtapa2 column:  'cncrfce2'
-            fechaEtapa3 column:     'cncrfce3'
+            fechaEtapa1 column: 'cncrfce1'
+            fechaEtapa2 column: 'cncrfce2'
+            fechaEtapa3 column: 'cncrfce3'
             numeroCertificacion column: 'cncrnmct'
+
+            fechaNotificacionAdjudicacion column: 'cncrfcna'
         }
     }
     static constraints = {
@@ -103,6 +109,7 @@ class Concurso {
         codigo(blank: true, nullable: true, maxSize: 15)
         objeto(blank: true, nullable: true, maxSize: 255)
         costoBases(blank: true, nullable: true)
+        porMilBases(blank: true, nullable: true)
         fechaInicio(blank: true, nullable: true)
         fechaPublicacion(blank: true, nullable: true)
         fechaLimitePreguntas(blank: true, nullable: true)
@@ -134,5 +141,7 @@ class Concurso {
         fechaEtapa2(blank: true, nullable: true)
         fechaEtapa3(blank: true, nullable: true)
         numeroCertificacion(blank: true, nullable: true, maxSize: 4)
+
+        fechaNotificacionAdjudicacion(blank: true, nullable: true)
     }
 }

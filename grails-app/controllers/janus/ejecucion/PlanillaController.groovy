@@ -7,7 +7,13 @@ import janus.pac.PeriodoEjecucion
 
 class PlanillaController extends janus.seguridad.Shield {
 
-    def preciosService, buscadorService
+    def preciosService, buscadorService, reportesPdfService
+
+    def tests() {
+//        println rep.capitalize(string: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+//        println rep.capitalize { "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }
+
+    }
 
     def errorIndice() {
         def planilla = Planilla.get(params.id)

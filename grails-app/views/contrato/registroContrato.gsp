@@ -266,21 +266,21 @@
 
                     <div class="span3">
                         <g:textField name="multaRetraso" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>&#8240;
+                                     value="${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> por mil
                     </div>
 
                     <div class="span2 formato">Multa por no presentación de planilla</div>
 
                     <div class="span3">
                         <g:textField name="multaPlanilla" class="number" style="width: 50px"
-                                     value="${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/>&#8240;
+                                     value="${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> por mil
                     </div>
 
                 </div>
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Monto</div>
+                    <div class="span2 formato">Monto referencial</div>
 
                     <div class="span3"><g:textField name="monto" class="monto activo"
                                                     value="${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/></div>
@@ -307,7 +307,7 @@
                                      value="${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
                     </div>
 
-                    <div class="span2 formato">Indices mes anterior presentación oferta</div>
+                    <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
 
                     <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list()}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id"/></div>
 
@@ -336,7 +336,7 @@
                 %{--</div>--}%
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Dpto. Administrador</div>
+                    <div class="span2 formato">Dirección Administradora</div>
 
                     <div class="span3">
                         <g:select name="depAdministrador.id" from="${janus.Departamento.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"

@@ -47,12 +47,7 @@ class ActaTagLib {
         if (decimales == 0) {
             out << formatNumber(number: num, minFractionDigits: decimales, maxFractionDigits: decimales, locale: "ec")
         } else {
-            def format
-            if (decimales == 2) {
-                format = "##,##0"
-            } else if (decimales == 3) {
-                format = "##,###0"
-            }
+            def format = "##,##0"
             out << formatNumber(number: num, minFractionDigits: decimales, maxFractionDigits: decimales, locale: "ec", format: format)
         }
     }

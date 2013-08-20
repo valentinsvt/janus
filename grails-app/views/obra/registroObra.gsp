@@ -92,10 +92,14 @@
                 </g:if>
             </g:if>
 
-            <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
+            <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
+                <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
+            </g:if>
             <g:if test="${obra?.liquidacion == 0}">
                 <g:if test="${obra?.estado != 'R'}">
-                    <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+                    <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
+                        <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+                    </g:if>
                 </g:if>
             </g:if>
             <g:if test="${obra?.id != null}">
@@ -108,11 +112,16 @@
                 </g:if>
 
                 <g:if test="${obra?.id != null}">
-                    <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+                    <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
+                        <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+                    </g:if>
                 </g:if>
 
                 <g:if test="${obra?.id != null && obra?.estado == 'R'}">
-                    <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes</button>
+                    <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
+                        <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
+                        </button>
+                    </g:if>
                 </g:if>
             </g:if>
 
@@ -136,10 +145,20 @@
 
                     %{--<div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" id="departamentoObra"--}%
                     %{--value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 450px" disabled="true" title="Departamento actual del usuario"/></div>--}%
+                    <div class="span3">
+                        <g:if test="${obra?.id}">
+                            <g:hiddenField name="departamento.id" id="departamento" value="${obra.departamentoId}"/>
 
-                    <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
-                    <div class="span3"><g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}" optionKey="id" optionValue="descripcion" style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/></div>
+                            <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
+                                         style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                        </g:if>
+                        <g:else>
+                            <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
 
+                            <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
+                                         style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                        </g:else>
+                    </div>
 
                     <div class="span1" style="margin-left: 506px; font-weight: bold">ESTADO</div>
 
@@ -243,35 +262,38 @@
                     </div>
 
                     <div class="span2" style="width: 220px; margin-left: 10px;">Cantón
-                        <g:hiddenField name="canton.id" id="hiddenCanton" value="${obra?.comunidad?.parroquia?.canton?.id}"/>
-                        %{--<div class="span2"><g:textField name="cantonkk.id" id="cantNombre" class="canton required error" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" readonly="true" title="Cantón"/></div>--}%
-                        <g:textField style="width: 210px;" name="cantonkk.id" id="cantNombre" class="canton required" value="${obra?.comunidad?.parroquia?.canton?.nombre}" readonly="true" title="Cantón"/>
+                    <g:hiddenField name="canton.id" id="hiddenCanton" value="${obra?.comunidad?.parroquia?.canton?.id}"/>
+                    %{--<div class="span2"><g:textField name="cantonkk.id" id="cantNombre" class="canton required error" value="${obra?.comunidad?.parroquia?.canton?.nombre}" style="width: 175px" readonly="true" title="Cantón"/></div>--}%
+                    <g:textField style="width: 210px;" name="cantonkk.id" id="cantNombre" class="canton required" value="${obra?.comunidad?.parroquia?.canton?.nombre}" readonly="true" title="Cantón"/>
                     </div>
 
                     <div class="span2" style="width: 200px; margin-left: 10px;">Parroquia
-                        <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
-                        %{--<div class="span2"><g:textField name="parroquiakk.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" readonly="true" title="Parroquia"/>--}%
-                        <g:textField style="width: 190px;" name="parroquiakk.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" readonly="true" title="Parroquia"/>
+                    <g:hiddenField name="parroquia.id" id="hiddenParroquia" value="${obra?.comunidad?.parroquia?.id}"/>
+                    %{--<div class="span2"><g:textField name="parroquiakk.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" style="width: 175px" readonly="true" title="Parroquia"/>--}%
+                    <g:textField style="width: 190px;" name="parroquiakk.id" id="parrNombre" class="parroquia required" value="${obra?.comunidad?.parroquia?.nombre}" readonly="true" title="Parroquia"/>
                     </div>
 
                     <div class="span2" style="width: 200px; margin-left: 10px;">Comunidad
-                        <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
-                        %{--<div class="span2"><g:textField name="comunidadkk.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" style="width: 175px" readonly="true" title="Comunidad"/>--}%
-                        <g:textField style="width: 190px;" name="comunidadkk.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" readonly="true" title="Comunidad"/>
+                    <g:hiddenField name="comunidad.id" id="hiddenComunidad" value="${obra?.comunidad?.id}"/>
+                    %{--<div class="span2"><g:textField name="comunidadkk.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" style="width: 175px" readonly="true" title="Comunidad"/>--}%
+                    <g:textField style="width: 190px;" name="comunidadkk.id" id="comuNombre" class="comunidad required" value="${obra?.comunidad?.nombre}" readonly="true" title="Comunidad"/>
                     </div>
 
                     <div class="span2" style="width: 355px; margin-left: 10px;">Sitio
-                       %{--<div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 200px; margin-left: 0px;" maxlength="63" title="Sitio urbano o rural"/></div>--}%
-                       <g:textField style="width: 355px;" name="sitio" class="sitio" value="${obra?.sitio}" margin-left: 0px;" maxlength="63" title="Sitio urbano o rural"/>
+                    %{--<div class="span4"><g:textField name="sitio" class="sitio" value="${obra?.sitio}" style="width: 200px; margin-left: 0px;" maxlength="63" title="Sitio urbano o rural"/></div>--}%
+                    <g:textField style="width: 355px;" name="sitio" class="sitio" value="${obra?.sitio}" margin-left: 0px;" maxlength="63" title="Sitio urbano o rural"/>
                     </div>
 
                 </div>
+
                 <div class="span12" style="margin-top: 10px;">
 
                     <div class="span2">Localidad</div>
+
                     <div class="span4" style="margin-left: -70px; width: 480px;"><g:textField style="width: 440px;" name="barrio" class="barrio" value="${obra?.barrio}" maxlength="127" title="Barrio, asentamiento, recinto o localidad"/></div>
 
                     <div class="span1" style="margin-left: 40px; width: 50px;">Anticipo</div>
+
                     <div class="span2" style="margin-left: 10px; width: 120px;"><g:textField name="porcentajeAnticipo" type="number" class="anticipo number required" style="width: 40px" value="${obra?.porcentajeAnticipo}" maxlength="3" title="Porcentaje de Anticipo"/> %</div>
 
 
@@ -309,10 +331,12 @@
 
                 <div class="span12">
                     <div class="span1">Observaciones</div>
+
                     <div class="span6" style="width: 400px;"><g:textField name="observaciones" class="observaciones" style="width: 400px;" value="${obra?.observaciones}" maxlength="127" title="Observaciones"/></div>
-                %{--</div>--}%
-                %{--<div class="span12">--}%
+                    %{--</div>--}%
+                    %{--<div class="span12">--}%
                     <div class="span1" style="width: 100px;">Anexos y planos:</div>
+
                     <div class="span6" style="width: 400px;"><g:textField name="anexos" class="referencia" style="width: 475px; margin-left: -30px;" value="${obra?.anexos}" maxlength="127" title="Detalle de anexos y planos ingresados en la biblioteca de la obra"/></div>
                 </div>
 
@@ -366,8 +390,6 @@
                     %{--</g:else>--}%
 
                 </div>
-
-
 
             </fieldset>
 
@@ -534,7 +556,9 @@
 
                 <div class="span3" style="margin-top: 10px">
                     <div class="span3">
-                        <g:select name="oferenteCopia" from="${janus.Persona.findAll('from Persona where departamento=13')}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>
+                        <g:select name="oferenteCopia" from="${janus.Persona.findAll('from Persona where departamento=13')}" optionKey="id" optionValue="${{
+                            it.nombre + ' ' + it.apellido
+                        }}"/>
                         %{--<g:select name="oferenteCopia" from="${janus.Persona.list()}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido }}"/>--}%
                     </div>
                 </div>
@@ -695,14 +719,14 @@
 
 
 
-    <div id="errorDialog">
-        <fieldset>
-            <div class="span3">
-                Debe seleccionar un transporte especial válido!
-                <br>(Tab: Tranp. Especial)</br>
-            </div>
-        </fieldset>
-    </div>
+        <div id="errorDialog">
+            <fieldset>
+                <div class="span3">
+                    Debe seleccionar un transporte especial válido!
+                    <br>(Tab: Tranp. Especial)</br>
+                </div>
+            </fieldset>
+        </div>
 
 
         <script type="text/javascript">
@@ -1239,7 +1263,7 @@
                             btnSave.click(function () {
 
 //                                var active = $("#tabs").tabs("option", "active");
-                              if ($("#frmSave-var").valid()) {
+                                if ($("#frmSave-var").valid()) {
                                     btnSave.replaceWith(spinner);
                                 }
                                 var data = $("#frmSave-var").serialize() + "&id=" + $("#id").val();//+"&lang=en_US";
@@ -1259,8 +1283,6 @@
                                 });
 
                                 return false;
-
-
 
                             });
 
@@ -1697,22 +1719,19 @@
 
             });
 
-
-
-
             $("#errorDialog").dialog({
 
-                autoOpen: false,
-                resizable: false,
-                modal: true,
-                draggable: false,
-                width: 350,
-                height: 180,
-                zIndex: 1060,
-                position: 'center',
-                title: 'Error',
-                buttons: {
-                    "Aceptar": function () {
+                autoOpen  : false,
+                resizable : false,
+                modal     : true,
+                draggable : false,
+                width     : 350,
+                height    : 180,
+                zIndex    : 1060,
+                position  : 'center',
+                title     : 'Error',
+                buttons   : {
+                    "Aceptar" : function () {
 
                         $("#errorDialog").dialog("close");
 

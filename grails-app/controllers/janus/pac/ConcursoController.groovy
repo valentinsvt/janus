@@ -122,7 +122,8 @@ class ConcursoController extends janus.seguridad.Shield {
         def numRegistros = 20
         def extras = ""
         if (!params.reporte) {
-            def lista2 = buscadorService.buscar(Pac, "Pac", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            def lista2 = buscadorService.buscar(Pac, "Pac", "excluyente", params, true, extras)
+            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista2.pop()
             def lista = []
             lista2.each { l ->
@@ -142,19 +143,19 @@ class ConcursoController extends janus.seguridad.Shield {
         }
     }
 
-    def setEtapa(){
-        println "set etapa  "+params
+    def setEtapa() {
+        println "set etapa  " + params
         def con = Concurso.get(params.id)
-        switch (params.tipo){
+        switch (params.tipo) {
             case "1":
-                con.fechaEtapa1=new Date().parse("dd-MM-yyyy",params.fecha)
+                con.fechaEtapa1 = new Date().parse("dd-MM-yyyy", params.fecha)
                 break;
             case "2":
-                con.fechaEtapa2=new Date().parse("dd-MM-yyyy",params.fecha)
+                con.fechaEtapa2 = new Date().parse("dd-MM-yyyy", params.fecha)
                 break;
             case "3":
-                con.fechaEtapa3=new Date().parse("dd-MM-yyyy",params.fecha)
-                con.fechaFinPreparatorio=con.fechaEtapa3
+                con.fechaEtapa3 = new Date().parse("dd-MM-yyyy", params.fecha)
+                con.fechaFinPreparatorio = con.fechaEtapa3
                 break;
         }
         con.save(flush: true)
@@ -166,7 +167,7 @@ class ConcursoController extends janus.seguridad.Shield {
     def form_ajax() {
 //        println "aqui "
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazo": ["Plazo", "int"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"]]
-        def duracionPrep =0
+        def duracionPrep = 0
         def duracionPre = 0
         def duracionCon = 0
         def maxPrep = 5
@@ -184,56 +185,56 @@ class ConcursoController extends janus.seguridad.Shield {
             }
             def ahora = new Date()
             maxPrep = concursoInstance.pac.tipoProcedimiento.preparatorio
-            maxPre =  concursoInstance.pac.tipoProcedimiento.precontractual
+            maxPre = concursoInstance.pac.tipoProcedimiento.precontractual
             maxCon = concursoInstance.pac.tipoProcedimiento.contractual
-            println "max prep "+maxPrep
-            if(concursoInstance.fechaInicioPreparatorio!=null){
+            println "max prep " + maxPrep
+            if (concursoInstance.fechaInicioPreparatorio != null) {
                 use(groovy.time.TimeCategory) {
-                    if(concursoInstance.fechaFinPreparatorio==null)
-                        duracionPrep =  ahora - concursoInstance.fechaInicioPreparatorio
+                    if (concursoInstance.fechaFinPreparatorio == null)
+                        duracionPrep = ahora - concursoInstance.fechaInicioPreparatorio
                     else
                         duracionPrep = concursoInstance.fechaFinPreparatorio - concursoInstance.fechaInicioPreparatorio
 
                 }
-                duracionPrep=duracionPrep.days
+                duracionPrep = duracionPrep.days
             }
-            if(concursoInstance.fechaInicioPrecontractual!=null){
+            if (concursoInstance.fechaInicioPrecontractual != null) {
                 use(groovy.time.TimeCategory) {
-                    if(concursoInstance.fechaFinPrecontractual==null)
+                    if (concursoInstance.fechaFinPrecontractual == null)
                         duracionPre = ahora - concursoInstance.fechaInicioPrecontractual
                     else
-                        duracionPre =  concursoInstance.fechaFinPrecontractual-concursoInstance.fechaInicioPrecontractual
+                        duracionPre = concursoInstance.fechaFinPrecontractual - concursoInstance.fechaInicioPrecontractual
 
                 }
-                duracionPre=duracionPre.days
+                duracionPre = duracionPre.days
             }
-            if(concursoInstance.fechaInicioContractual!=null){
+            if (concursoInstance.fechaInicioContractual != null) {
                 use(groovy.time.TimeCategory) {
-                    if(concursoInstance.fechaFinContractual==null)
-                        duracionCon = ahora- concursoInstance.fechaInicioContractual
+                    if (concursoInstance.fechaFinContractual == null)
+                        duracionCon = ahora - concursoInstance.fechaInicioContractual
                     else
-                        duracionCon =  concursoInstance.fechaFinContractual - concursoInstance.fechaInicioContractual
+                        duracionCon = concursoInstance.fechaFinContractual - concursoInstance.fechaInicioContractual
 
-                    duracionCon=duracionCon.days
+                    duracionCon = duracionCon.days
                 }
             }
-         //no existe el objeto
+            //no existe el objeto
         } //es edit
-        return [concursoInstance: concursoInstance, campos: campos,duracionPrep:duracionPrep,duracionPre:duracionPre,duracionCon:duracionCon,maxPrep:maxPrep,maxPre:maxPre,maxCon:maxCon]
+        return [concursoInstance: concursoInstance, campos: campos, duracionPrep: duracionPrep, duracionPre: duracionPre, duracionCon: duracionCon, maxPrep: maxPrep, maxPre: maxPre, maxCon: maxCon]
     } //form_ajax
 
 
-    def iniciarPreparatorio(){
-        println "iniciar prep "+params
+    def iniciarPreparatorio() {
+        println "iniciar prep " + params
 
         def concurso = Concurso.get(params.id)
-        concurso.memoRequerimiento=params.memo
-        def fecha = new Date().parse("dd-MM-yyyy",params.fecha)
-        concurso.fechaInicioPreparatorio=fecha
-        if(!concurso.save(flush: true)){
+        concurso.memoRequerimiento = params.memo
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        concurso.fechaInicioPreparatorio = fecha
+        if (!concurso.save(flush: true)) {
             render "error"
             return
-        }else{
+        } else {
             render "ok"
             return
         }
@@ -333,7 +334,8 @@ class ConcursoController extends janus.seguridad.Shield {
         def numRegistros = 20
 
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
+            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
             render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
         } else {
@@ -341,7 +343,8 @@ class ConcursoController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Obra
             session.funciones = funciones
-            def anchos = [7, 10, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7] /*el ancho de las columnas en porcentajes... solo enteros*/
+            def anchos = [7, 10, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7]
+            /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
         }
     }
@@ -352,7 +355,6 @@ class ConcursoController extends janus.seguridad.Shield {
         def plazo = obra.plazoEjecucionMeses * 30 + obra.plazoEjecucionDias
         render "" + obra.codigo + "&&" + obra.nombre + "&&" + plazo + "&&" + monto
     }
-
 
 
     def save() {
@@ -422,6 +424,9 @@ class ConcursoController extends janus.seguridad.Shield {
         }
         if (params.fechaFinContractual) {
             params.fechaFinContractual = new Date().parse("dd-MM-yyyy", params.fechaFinContractual)
+        }
+        if (params.fechaNotificacionAdjudicacion) {
+            params.fechaNotificacionAdjudicacion = new Date().parse("dd-MM-yyyy", params.fechaNotificacionAdjudicacion)
         }
 
         def concursoInstance

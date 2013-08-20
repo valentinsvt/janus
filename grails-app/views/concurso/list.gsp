@@ -52,7 +52,6 @@
                 <thead>
                     <tr>
                         <th>Obra</th>
-                        <th>Administracion</th>
                         <th>Pac</th>
                         <g:sortableColumn property="codigo" title="Codigo"/>
                         <g:sortableColumn property="objeto" title="Objeto"/>
@@ -65,7 +64,6 @@
                     <g:each in="${concursoInstanceList}" status="i" var="concursoInstance">
                         <tr style="font-size: 11px" class="item_row" id="${concursoInstance.id}" reg="${concursoInstance.estado}">
                             <td>${concursoInstance.obra?.descripcion}</td>
-                            <td>${concursoInstance.administracion?.descripcion}</td>
                             <td>${concursoInstance.pac?.descripcion}</td>
                             <td>${fieldValue(bean: concursoInstance, field: "codigo")}</td>
                             <td>${fieldValue(bean: concursoInstance, field: "objeto")}</td>

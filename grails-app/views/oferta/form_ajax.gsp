@@ -165,7 +165,7 @@
         </div>
 
         <div class="controls">
-            <g:select name="responsableProceso.id" from="${janus.Persona.list([sort: 'apellido'])}" optionKey="id" optionValue="${{
+            <g:select name="responsableProceso.id" from="${responsablesProceso}" optionKey="id" optionValue="${{
                 it.apellido + ' ' + it.nombre
             }}"
                       value="${ofertaInstance?.responsableProcesoId}" class="required"/>

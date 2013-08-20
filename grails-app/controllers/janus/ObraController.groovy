@@ -72,7 +72,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println "fps "+fps
         def totalP = 0
         fps.each { fp ->
-            if (fp.numero =~ "p") {
+            if (fp.numero=~"p") {
 //                println "sumo "+fp.numero+"  "+fp.valor
                 totalP += fp.valor
             }
@@ -80,7 +80,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def totalC = 0
         fps.each { fp ->
-            if (fp.numero =~ "c") {
+            if (fp.numero=~"c") {
 //                println "sumo "+fp.numero+"  "+fp.valor
                 totalC += fp.valor
             }
@@ -184,7 +184,7 @@ class ObraController extends janus.seguridad.Shield {
         def matrizOk = false
 
         def prov = Provincia.list();
-        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"],"departamento": ["Dirección", "string"],"fechaCreacionObra":["Fecha","date"]]
+        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "canton": ["Canton", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
 
@@ -256,7 +256,7 @@ class ObraController extends janus.seguridad.Shield {
             }
             if (params.campos == "departamento") {
                 def dirs = Direccion.findAll("from Direccion where nombre like '%${params.criterios.toUpperCase()}%'")
-                def deps= Departamento.findAllByDireccionInList(dirs)
+                def deps = Departamento.findAllByDireccionInList(dirs)
                 params.criterios = ""
                 deps.eachWithIndex { p, i ->
                     extraDep += "" + p.id
@@ -297,7 +297,7 @@ class ObraController extends janus.seguridad.Shield {
                 }
                 if (p == "departamento") {
                     def dirs = Direccion.findAll("from Direccion where nombre like '%${params.criterios.toUpperCase()}%'")
-                    def deps= Departamento.findAllByDireccionInList(dirs)
+                    def deps = Departamento.findAllByDireccionInList(dirs)
 
                     deps.eachWithIndex { c, j ->
                         extraDep += "" + c.id
@@ -332,9 +332,9 @@ class ObraController extends janus.seguridad.Shield {
         def comu = { c ->
             return c.comunidad?.nombre
         }
-        def listaTitulos = ["CODIGO", "NOMBRE", "DESCRIPCION", "DIRECCION","FECHA REG.", "M. INGRESO", "M. SALIDA", "SITIO", "PLAZO", "PARROQUIA", "COMUNIDAD", "INSPECTOR", "REVISOR", "RESPONSABLE", "ESTADO"]
-        def listaCampos = ["codigo", "nombre", "descripcion","departamento", "fechaCreacionObra", "oficioIngreso", "oficioSalida", "sitio", "plazoEjecucionMeses", "parroquia", "comunidad", "inspector", "revisor", "responsableObra", "estado"]
-        def funciones = [null, null, null, null,["format": ["dd/MM/yyyy hh:mm"]], null, null, null, null, ["closure": [parr, "&"]], ["closure": [comu, "&"]], null, null, null, null]
+        def listaTitulos = ["CODIGO", "NOMBRE", "DESCRIPCION", "DIRECCION", "FECHA REG.", "M. INGRESO", "M. SALIDA", "SITIO", "PLAZO", "PARROQUIA", "COMUNIDAD", "INSPECTOR", "REVISOR", "RESPONSABLE", "ESTADO"]
+        def listaCampos = ["codigo", "nombre", "descripcion", "departamento", "fechaCreacionObra", "oficioIngreso", "oficioSalida", "sitio", "plazoEjecucionMeses", "parroquia", "comunidad", "inspector", "revisor", "responsableObra", "estado"]
+        def funciones = [null, null, null, null, ["format": ["dd/MM/yyyy hh:mm"]], null, null, null, null, ["closure": [parr, "&"]], ["closure": [comu, "&"]], null, null, null, null]
         def url = g.createLink(action: "buscarObra", controller: "obra")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-busqueda").modal("hide");'
@@ -347,10 +347,12 @@ class ObraController extends janus.seguridad.Shield {
             if (params.excel) {
                 session.dominio = Obra
                 session.funciones = funciones
-                def anchos = [15, 50, 70, 20,20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20] /*anchos para el set column view en excel (no son porcentajes)*/
+                def anchos = [15, 50, 70, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
             } else {
-                def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
                 render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "obra", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
             }
@@ -360,12 +362,13 @@ class ObraController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Obra
             session.funciones = funciones
-            def anchos = [7, 10, 7, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7] /*el ancho de las columnas en porcentajes... solo enteros*/
+            def anchos = [7, 10, 7, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7]
+            /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Lista de obras", anchos: anchos, extras: extras, landscape: true])
         }
     }
 
-    def buscarObraLq(){
+    def buscarObraLq() {
         println "buscar obra LQ"
         def extraParr = ""
         def extraCom = ""
@@ -459,10 +462,12 @@ class ObraController extends janus.seguridad.Shield {
             if (params.excel) {
                 session.dominio = Obra
                 session.funciones = funciones
-                def anchos = [15, 50, 70, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20] /*anchos para el set column view en excel (no son porcentajes)*/
+                def anchos = [15, 50, 70, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
             } else {
-                def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
                 render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "obra", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
             }
@@ -472,11 +477,11 @@ class ObraController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Obra
             session.funciones = funciones
-            def anchos = [7, 10, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7] /*el ancho de las columnas en porcentajes... solo enteros*/
+            def anchos = [7, 10, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7]
+            /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
         }
     }
-
 
 
     def mapaObra() {
@@ -518,8 +523,6 @@ class ObraController extends janus.seguridad.Shield {
 
         def personas = Persona.findAllByDepartamento(departamento)
 
-
-
         def funcionInsp = Funcion.get(3)
         def funcionRevi = Funcion.get(4)
         def funcionResp = Funcion.get(5)
@@ -539,12 +542,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println(personas)
 
         return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona]
-
-
     }
-
-
-
 
     def situacionGeografica() {
         def comunidades
@@ -918,10 +916,6 @@ class ObraController extends janus.seguridad.Shield {
         }
         return [tipoObraInstance: tipoObraInstance]
     }
-
-
-
-
 
 
     def delete() {

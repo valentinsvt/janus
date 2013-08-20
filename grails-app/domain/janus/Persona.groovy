@@ -24,8 +24,6 @@ class Persona implements Serializable {
     Integer activo
     Date fechaActualizacionPass
 
-
-
     //static hasMany = [sesiones: Sesn, accesos: Accs, alertas: janus.alertas.Alerta]
     static hasMany = [sesiones: Sesn, accesos: Accs]
     static auditable = [ignore: ['password']]

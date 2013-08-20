@@ -265,7 +265,7 @@
                         ${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}
                     </div>
 
-                    <div class="span2 formato">Indices de la Oferta</div>
+                    <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
 
                     <div class="span3">${contrato?.periodoValidez?.descripcion}</div>
 
@@ -547,7 +547,11 @@
                         contrato : "${contrato?.id}"
                     },
                     success : function (msg) {
-                        var $btnOk = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
+                        var $btnOk = $('<a href="#" class="btn">Aceptar</a>');
+                        $btnOk.click(function () {
+                            $(this).replaceWith(spinner);
+                            location.reload(true);
+                        });
                         $("#modal_tittle_var").text("Administradores");
                         $("#modal_body_var").html(msg);
                         $("#administrador").data("contrato", "${contrato?.id}");

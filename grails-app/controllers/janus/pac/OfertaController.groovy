@@ -1,5 +1,7 @@
 package janus.pac
 
+import janus.Persona
+import janus.PersonaRol
 import org.springframework.dao.DataIntegrityViolationException
 
 class OfertaController extends janus.seguridad.Shield {
@@ -32,7 +34,18 @@ class OfertaController extends janus.seguridad.Shield {
             def concurso = Concurso.get(params.cncr)
             ofertaInstance.concurso = concurso
         }
-        return [ofertaInstance: ofertaInstance]
+
+        def responsablesProceso = PersonaRol.withCriteria {
+            persona {
+                eq("activo", 1)
+                order("apellido", "asc")
+            }
+            funcion {
+                eq("codigo", "C")
+            }
+        }
+
+        return [ofertaInstance: ofertaInstance, responsablesProceso: responsablesProceso]
     } //form_ajax
 
     def save() {
