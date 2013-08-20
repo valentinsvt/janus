@@ -100,11 +100,11 @@
 
             <div class="span6" style="margin-bottom: 20px; margin-top: 5px">
                 <div class="span3" style="font-weight: bold;">
-                    Distancia Peso
+                    Distancias al Peso
                 </div>
 
                 <div class="span2" style="font-weight: bold;">
-                    Distancia Volumen
+                    Distancias al Volumen
                 </div>
             </div>
 
@@ -121,7 +121,7 @@
 
 
                 <div class="span5">
-                    Materiales Petreos Hormigones
+                    Pétreos para Hormigones
                 </div>
 
                 <div class="span1">
@@ -144,7 +144,7 @@
                 </div>
 
                 <div class="span5">
-                    Materiales Mejoramiento
+                    Pétreos para Mejoramiento
                 </div>
 
                 <div class="span1">
@@ -164,7 +164,7 @@
 
 
                 <div class="span5">
-                    Materiales Carpeta Asfáltica
+                    Pétreos para Carpeta Asfáltica
                 </div>
 
                 <div class="span1">
@@ -448,7 +448,7 @@
 
             <div class="row-fluid" style="margin-top: 10px;">
 
-                <div class="span1" style="margin-left: 0px; width: 100px;"><g:link controller="reportes2" action="reporteCostosIndirectos"  id="${obra.id}" style="margin-left: 0px;" class="btn btn-info"><i class="icon-print"></i> Reporte</g:link></div>
+                <div class="span1" style="margin-left: 0px; width: 120px;"><g:link controller="reportes2" action="reporteCostosIndirectos"  id="${obra.id}" style="margin-left: 0px;" class="btn btn-info"><i class="icon-print"></i> Reporte</g:link></div>
 
             </div>
 
