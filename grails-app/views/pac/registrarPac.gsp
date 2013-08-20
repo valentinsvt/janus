@@ -75,7 +75,7 @@
         </div>
         <div class="row-fluid" style="margin-left: 0px">
             <div class="span4">
-                <b>Requiriente:</b>
+                <b>Requirente:</b>
                 <input type="text" id="item_req" style="width: 250px; font-size: 12px;">
             </div>
             <div class="span3">
@@ -118,10 +118,10 @@
                 %{--<g:select name="tipo" from="${janus.pac.TipoCompra.list()}" optionKey="id" optionValue="descripcion" style="width: 100px;;font-size: 12px" id="item_tipo"></g:select>--}%
             %{--</div>--}%
             <div class="span2" >
-                <b>Cantidad:</b>
-                <input type="text" style="width: 90px;text-align: right" id="item_cantidad" value="1">
+                <b>Cantidad: </b>
+                <input type="text" style="width: 100px;text-align: right" id="item_cantidad" value="1">
             </div>
-            <div class="span2" style="margin-left: -50px;" >
+            <div class="span2" style="margin-left: -40px;" >
                 <b>Costo unitario:</b>
                 <input type="text" style="width: 123px;text-align: right" id="item_precio" value="1">
             </div>
@@ -317,9 +317,14 @@
             if(isNaN(cant))
                 cant=0
             var costo = $("#item_precio").val()
+            var costoAnt =  $("#item_precio").attr("valAnt")
             costo = str_replace(",","",costo)
             if(isNaN(costo))
                 costo=0
+            costoAnt = str_replace(",","",costoAnt)
+            if(isNaN(costoAnt))
+                costoAnt=0
+            costoAnt=costoAnt*1
             var unidad = $("#item_unidad").val()
             var c1 = $("#item_c1")
             var c2 = $("#item_c2")
@@ -364,8 +369,9 @@
                 disponible=0
             else
                 disponible=disponible*1
-            if(costo*cant>disponible){
-                msg+="<br>Error: El valor total del P.A.C. (costo*cantidad) $"+(costo*cant)+" no se puede ser superior a: $"+disponible
+
+            if(costo*cant>disponible+costoAnt){
+                msg+="<br>Error: El valor total del P.A.C. (costo*cantidad) $"+(costo*cant)+" no se puede ser superior a: $"+(disponible+costoAnt)
             }
             if(msg!==""){
 

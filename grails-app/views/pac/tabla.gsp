@@ -165,6 +165,7 @@
         $("#item_desc").val($(this).find(".desc").html())
         $("#item_cantidad").val($(this).find(".cant").html().trim())
         $("#item_precio").val($(this).find(".costo").html())
+        $("#item_precio").attr("valAnt",$(this).find(".costo").html())
         $("#item_unidad").val($(this).find(".unidad").attr("unidad"))
         $("#item_req").val($(this).attr("req"))
         $("#item_memo").val($(this).attr("memo"))
