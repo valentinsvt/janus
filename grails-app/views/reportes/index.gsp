@@ -81,7 +81,8 @@
             </li>
 
             <li text="obrargst" class="item" texto="obrargst">
-                <g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link"
+                %{--<g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link"--}%
+                <g:link controller="reportes4" action="registradas" class="link"
                         dialog="dlgContabilidad">
                     Obras registradas
                 </g:link>

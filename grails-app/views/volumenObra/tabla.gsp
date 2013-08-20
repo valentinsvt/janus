@@ -31,7 +31,7 @@
             Copiar Rubros
         </a>
         <a href="#" class="btn  " id="imprimir_sub">
-            <i class="icon-file"></i>
+            <i class="icon-print"></i>
             Imprimir Subpresupuesto
         </a>
 

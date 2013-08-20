@@ -1901,11 +1901,6 @@ class Reportes2Controller {
 
         tablaDesgloseBody.setHorizontalAlignment(Element.ALIGN_RIGHT)
 
-        addCellTabla(tablaDesgloseBody, new Paragraph("Control y Administración", times10normal), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.contrato, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
-
         addCellTabla(tablaDesgloseBody, new Paragraph("Dirección de Obra", times10normal), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCostosIndirectosObra, minFractionDigits:

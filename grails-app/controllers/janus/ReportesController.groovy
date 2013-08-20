@@ -2710,19 +2710,21 @@ class ReportesController {
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
 
         if (obra?.oficioSalida == null) {
 
-            headers.add(new Paragraph("Oficio N°:" + " ", times10bold));
+            headers.add(new Paragraph("Oficio N°:" + " ", times12bold));
 
         } else {
 
-            headers.add(new Paragraph("Oficio N°:" + obra?.oficioSalida, times10bold));
+            headers.add(new Paragraph("Oficio N°:" + obra?.oficioSalida, times12bold));
 
         }
 
 //        headers.add(new Paragraph("Quito, " + formatDate(date: obra?.fechaOficioSalida, format: "dd-MM-yyyy"), times10bold));
-        headers.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times10bold));
+        headers.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida).toUpperCase(), times12bold));
 
 
 
@@ -3652,7 +3654,9 @@ class ReportesController {
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
-        headers.add(new Paragraph(" ", times12bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times14bold));
+        addEmptyLine(headers, 1);
         headers.add(new Paragraph("MEMORANDO", times14bold))
 
 
@@ -4404,10 +4408,10 @@ class ReportesController {
 
 
         Paragraph headers = new Paragraph();
-//        addEmptyLine(headers, 1);
+
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
-//        headers.add(new Paragraph(" ", times12bold));
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
         headers.add(new Paragraph("FÓRMULA POLINÓMICA N°:" + obra?.formulaPolinomica, times12bold))
         document.add(headers);
 
@@ -7113,7 +7117,9 @@ class ReportesController {
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
-        headers.add(new Paragraph(" ", times12bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times18bold));
+        addEmptyLine(headers, 1);
         headers.add(new Paragraph("MEMORANDO", times14bold))
         headers.add(new Paragraph(" ", times12bold));
 

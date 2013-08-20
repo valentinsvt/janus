@@ -328,15 +328,15 @@
         </div>
 
         <div id="tab-indirecto" class="tab">
-            <div class="row-fluid">
-                <div class="span10">
-                    Control y Administración (Fiscalización) - no se usa en obras nuevas
-                </div>
+            %{--<div class="row-fluid">--}%
+                %{--<div class="span10">--}%
+                    %{--Control y Administración (Fiscalización) - no se usa en obras nuevas--}%
+                %{--</div>--}%
 
-                <div class="span2">
-                    <g:textField type="text" name="contrato" class="inputVar num" value="${g.formatNumber(number: obra?.contrato, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
-                </div>
-            </div>
+                %{--<div class="span2">--}%
+                    %{--<g:textField type="text" name="contrato" class="inputVar num" value="${g.formatNumber(number: obra?.contrato, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>--}%
+                %{--</div>--}%
+            %{--</div>--}%
 
             <div class="row-fluid" style="margin-top: 20px;">
                 <div class="span4">

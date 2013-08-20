@@ -148,12 +148,12 @@
                 </p>
 
                 <p style="font-size: 14px">
-                   <b> PRESUPUESTO </b>
+                   <b> ${obra?.departamento?.direccion?.nombre}</b>
                 </p>
 
                 <p style="font-size: 14px">
                     <g:if test="${subPre == -1}">
-                        <b>TODOS LOS SUBPRESUPUESTOS</b>
+                        <b>PRESUPUESTO</b>
                     </g:if>
                     <g:else>
                         <b>SUBPRESUPUESTO: ${subPre.toUpperCase()}</b>
