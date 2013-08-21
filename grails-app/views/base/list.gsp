@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                     
-                        <th>Concurso</th>
+                        <th>Proceso</th>
                     
                         <g:sortableColumn property="monto" title="Monto" />
                     

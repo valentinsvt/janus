@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Concurso
+            Proceso
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="span9 btn-group" role="navigation">
                     <g:link controller="concurso" action="list" class="btn">
-                        <i class="icon-angle-left"></i> Concurso
+                        <i class="icon-angle-left"></i> Proceso
                     </g:link>
                 </div>
             </div>

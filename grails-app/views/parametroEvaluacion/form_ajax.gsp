@@ -36,7 +36,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Concurso
+                    Proceso
                 </span>
             </div>
 

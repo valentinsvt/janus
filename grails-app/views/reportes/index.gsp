@@ -101,9 +101,9 @@
             <li text="cncr" class="item" texto="cncr">
                 <g:link controller="reportes" action="balanceComprobacion" file="Balance_Comprobacion.pdf" class="link"
                         dialog="dlgContabilidadPeriodo">
-                    Concursos
+                    Procesos
                 </g:link>
-                Listado de concursos para la contratación de obras y otros servicios.
+                Listado de proceso para la contratación de obras y otros servicios.
             </li>
 
             <li text="cntr" class="item" texto="cntr">
@@ -196,9 +196,9 @@
     </div>
 
     <div id="cncr" style="display: none">
-        <h3>Concursos</h3><br>
+        <h3>Proceso</h3><br>
 
-        <p>Listado de concursos para la contratación de obras y otros servicios. </p>
+        <p>Listado de procesos para la contratación de obras y otros servicios. </p>
     </div>
 
     <div id="cntr" style="display: none">

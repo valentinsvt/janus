@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Concursos
+            Lista de Procesos
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -174,8 +174,8 @@
 
             <g:form class="form-horizontal" name="frmSave-Concurso" action="save" id="${concursoInstance?.id}">
                 <ul class="nav nav-pills ui-corner-top" id="myTab">
-                    <li class="active"><a href="#datos">Datos concurso</a></li>
-                    <li><a href="#fechas">Fechas del concurso</a></li>
+                    <li class="active"><a href="#datos">Datos proceso</a></li>
+                    <li><a href="#fechas">Fechas del proceso</a></li>
                     <li><a href="#fechas2">Fechas de control del trámite</a></li>
                 </ul>
 
@@ -313,7 +313,7 @@
                                 <div class="control-group">
                                     <div>
                                         <span class="control-label label label-inverse">
-                                            Monto adjudicado
+                                            Monto referencial
                                         </span>
                                     </div>
 
@@ -607,7 +607,7 @@
                                                             </g:else>
                                                         </g:if>
                                                         <g:else>
-                                                            <g:set var="retraso" value="- ${((new Date()) - (concursoInstance?.fechaInicioPreparatorio + maxPrep))} diás de retraso"></g:set>
+                                                            <g:set var="retraso" value="- ${((new Date()) - (concursoInstance?.fechaInicioPreparatorio + maxPrep))} días de retraso"></g:set>
                                                             <div class="rojo" title="Retrasado"></div>
                                                         </g:else>
                                                         <g:if test="${concursoInstance?.fechaFinPreparatorio == null}">

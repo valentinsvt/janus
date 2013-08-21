@@ -357,7 +357,7 @@
             <ol>
                 <li>
                     <p>
-                        Ubique la obra que ha salido a concurso, usando el bot&oacuten Lista
+                        Ubique la obra que ha salido a proceso, usando el bot&oacuten Lista
                     </p>
                     <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen7.png')}"/><br><br>
                 </li>

@@ -280,7 +280,7 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Monto referencial</div>
+                    <div class="span2 formato">Monto</div>
 
                     <div class="span3"><g:textField name="monto" class="monto activo"
                                                     value="${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/></div>

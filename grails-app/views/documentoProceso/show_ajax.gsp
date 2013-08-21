@@ -28,7 +28,7 @@
         <div class="control-group">
             <div>
                 <span id="concurso-label" class="control-label label label-inverse">
-                    Concurso
+                    Proceso
                 </span>
             </div>
             <div class="controls">

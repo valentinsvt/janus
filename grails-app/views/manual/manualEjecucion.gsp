@@ -105,7 +105,7 @@
                         <li><a href="#PlanAnual">Plan Anual de Compras</a></li>
                     </ul>
                 </li>
-                <li><a href="#Concursos">Concursos</a></li>
+                <li><a href="#Concursos">Proceso</a></li>
                 <li><a href="#Contratos">Contratos</a>
                     <ul>
                         <li><a href="#CronoCon">Contratos</a></li>
@@ -254,7 +254,7 @@
         <!-- Concursos -->
 
         <div class="centrado">
-            <h2 class="cursiva">Concursos</h2><br>
+            <h2 class="cursiva">Procesos</h2><br>
 
             <p>Esta secci&oacuten permite crear, editar y eliminar procesos, as&iacute
             como subir documentos, definir par&aacutemetros de evaluaci&oacuten y
@@ -286,7 +286,7 @@
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen14.png')}"/><br><br>
 
             <p>La opci&oacuten Evaluaci&oacuten muestra una pantalla que permite definir
-            los par&aacutemetros de evaluaci&oacuten del concurso. Aqu&iacute se
+            los par&aacutemetros de evaluaci&oacuten del proceso. Aqu&iacute se
             muestra en forma de &aacuterbol en el lado izquierdo, donde se pueden
             agregar, editar y eliminar los elementos (men&uacute en el clic derecho)
             y en el lado derecho muestra una tabla que resume los datos de los
@@ -299,7 +299,7 @@
             ofertas y evaluaci&oacuten, de modo que estas opciones del men&uacute
             aparecer&aacuten desactivadas para procesos no registrados. El registro de
             los procesos se realiza mediante el bot&oacuten Registrar en la pantalla
-            de concursos.
+            de procesos.
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen16.png')}"/><br><br>
 
@@ -469,7 +469,7 @@
             <p>La biblioteca de contratos permite almacenar en el sistema documentos en formato
             digital ya sea estos archivos de texto (de Microsoft office o de libre office),
             hojas de c&aacutelculo, im&aacutegenes o archivos en formato pdf. Esta biblioteca
-            almacena documentos relativos al contrato desde la etapa del concurso hasta
+            almacena documentos relativos al contrato desde la etapa del proceso hasta
             la ejecuci&oacuten de la obra.
             </p>
 

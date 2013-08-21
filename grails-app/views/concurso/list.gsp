@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Concursos
+            Lista de Procesos
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -158,7 +158,7 @@
 
                                 $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                                 $("#modalTitle").html("Eliminar Concurso");
-                                $("#modalBody").html("<p>¿Está seguro de querer eliminar este Concurso?</p>");
+                                $("#modalBody").html("<p>¿Está seguro de querer eliminar este Proceso?</p>");
                                 $("#modalFooter").html("").append(btnOk).append(btnDelete);
                                 $("#modal-Concurso").modal("show");
                                 return false;
@@ -220,7 +220,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Concurso");
+                            $("#modalTitle").html("Crear Proceso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Concurso").modal("show");
@@ -247,7 +247,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Concurso");
+                            $("#modalTitle").html("Editar Proceso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Concurso").modal("show");
@@ -267,7 +267,7 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Concurso");
+                            $("#modalTitle").html("Ver Proceso");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
                             $("#modal-Concurso").modal("show");
@@ -289,8 +289,8 @@
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Concurso");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Concurso?</p>");
+                    $("#modalTitle").html("Eliminar Proceso");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Proceso?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-Concurso").modal("show");
                     return false;

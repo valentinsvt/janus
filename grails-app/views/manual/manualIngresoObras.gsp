@@ -168,7 +168,7 @@
             permite el monitoreo de todo el ciclo de vida de una Obra P&uacuteblica, el mismo
             que se inicia con el registro de la Obra, los estudios preliminares y precontractuales
             necesarios para determinar los vol&uacutemenes de obra, el presupuesto y llamar
-            a un concurso de ofertas donde la mejor de ellas da lugar a un contrato de
+            a un proceso de ofertas donde la mejor de ellas da lugar a un contrato de
             ejecuci&oacuten de la Obra. Con el contrato se establecen el cronograma valorado
             de trabajo, la f&oacutermula polin&oacutemica de reajuste de precios, garant&iacuteas
             y dem&aacutes condiciones que regular&aacuten la ejecuci&oacuten de la obra. En
@@ -1260,7 +1260,7 @@
 
             <p>El ingreso de las Obras al sistema, es el primer paso para poder realizar
             todos los procesos referentes a la Obra, sean estos ingresos de vol&uacutemenes
-            de obra, c&aacutelculo de presupuesto, f&oacutermula polin&oacutemica, concursos,
+            de obra, c&aacutelculo de presupuesto, f&oacutermula polin&oacutemica, procesos,
             contrataci&oacuten, garant&iacuteas, etc.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen359.png')}"/><br>
