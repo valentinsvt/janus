@@ -20,7 +20,7 @@
     <div class="span7">
 
         <b>Buscar Por: </b>
-        <g:select name="buscador" from="${["Codigo", "Nombre", "Tipo"]}" id="buscador_reg"/>
+        <g:select name="buscador" from="${['obracdgo':'Codigo', 'obranmbr':'Nombre']}" optionKey="key" optionValue="value" id="buscador_reg"/>
         <b style="margin-left: 10px">Estado: </b>
         <g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key" optionValue="value" id="estado_reg"/>
 
@@ -52,13 +52,11 @@
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>
     <tr>
-        <th style="width: 20px;">
-            #
-        </th>
+
         <th style="width: 80px;">
             Código
         </th>
-        <th style="width: 200px;">
+        <th style="width: 220px;">
             Nombre
         </th>
         <th style="width: 80px;">
@@ -67,7 +65,7 @@
         <th style="width: 80px">
             Fecha Reg
         </th>
-        <th style="width: 200px">
+        <th style="width: 250px">
             Cantón-Parroquia-Comunidad
         </th>
         <th style="width: 100px">
@@ -92,23 +90,20 @@
 
     <tbody id="tabla_material">
 
-    <g:each in="${obras}" var="obra" status="">
+    <g:each in="${res}" var="obra" status="">
+        <tr class="obra_row" id="${obra.obra__id}">
+            <td>${obra.obracdgo}</td>
+            <td>${obra.obranmbr}</td>
+            <td>${obra.obratipo}</td>
+            <td><g:formatDate date="${obra.obrafcha}" format="dd-MM-yyyy"/></td>
+            <td>${janus.Parroquia.get(obra.parr__id).canton.nombre} - ${janus.Parroquia.get(obra.parr__id).nombre} - ${janus.Comunidad.get(obra.cmnd__id).nombre}</td>
+            <td>${obra.obravlor}</td>
+            <td>${obra.obraofsl}</td>
+            <td>${obra.obrammsl}</td>
+            <td>${obra.dptodstn}</td>
+            <td>${janus.Departamento.get(obra.dpto__id).direccion.nombre}</td>
+        </tr>
 
-        %{--<tr class="item_row" id="${}" item="${val}" sub="${val.sbpr__id}">--}%
-
-            %{--<td style="width: 10px" class="sel"><g:checkBox class="chec" name="selec" checked="false" id="seleccionar1" value="${val.item__id}"/></td>--}%
-            %{--<td style="width: 10px" class="sel"><input type="checkbox" id="seleccionar1" class="chec" checked="false" value="${val.item__id}"></td>--}%
-            %{--<td style="width: 20px" class="orden">${val.vlobordn}</td>--}%
-            %{--<td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>--}%
-            %{--<td class="cdgo">${val.rbrocdgo.trim()}</td>--}%
-            %{--<td class="nombre">${val.rbronmbr.trim()}</td>--}%
-            %{--<td style="width: 60px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>--}%
-            %{--<td style="text-align: right" class="cant">--}%
-                %{--<g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>--}%
-            %{--</td>--}%
-            %{--<td class="col_precio" style="display: none;text-align: right" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
-            %{--<td class="col_total total" style="display: none;text-align: right"><g:formatNumber number="${val.totl}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>--}%
-        %{--</tr>--}%
 
     </g:each>
 
@@ -126,7 +121,7 @@
 
     $("#buscar").click(function(){
 
-        var datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val()
+        var datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()
         var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaRegistradas')}",
             data     : datos,

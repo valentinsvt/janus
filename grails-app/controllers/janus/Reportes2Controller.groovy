@@ -1161,6 +1161,15 @@ class Reportes2Controller {
         pMeses.add(new Paragraph("Obra: ${obra.descripcion} (${meses} mes${meses == 1 ? '' : 'es'})", info))
         addEmptyLine(pMeses, 1);
         document.add(pMeses);
+
+        Paragraph codigoObra = new Paragraph();
+        codigoObra.add(new Paragraph("Código de la Obra: ${obra?.codigo}", info))
+        document.add(codigoObra);
+
+        Paragraph docReferencia = new Paragraph();
+        docReferencia.add(new Paragraph("Doc. Referencia: ${obra?.oficioIngreso}", info))
+        document.add(docReferencia);
+
         Paragraph fecha = new Paragraph();
         fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
 //        addEmptyLine(fecha, 1);
