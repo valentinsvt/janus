@@ -3499,10 +3499,10 @@ class ReportesPlanillasController {
         document.add(headers);
 
 
-        def par1 = "Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato N° " + contrato?.codigo + ", "
-        par1 += "para la construcción de " + obra?.descripcion
-        par1 += ", ubicada en la Parroquia " + obra?.parroquia?.nombre + ", Distrito Metropolitano de "
-        par1 += "Quito, de la Provincia de " + obra?.lugar?.descripcion + ", por un valor de US\$ "
+        def par1 = "Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato N° " + contrato?.codigo.trim() + ", "
+        par1 += "para la construcción de " + obra?.descripcion.trim()
+        par1 += ", ubicada en la Parroquia " + obra?.parroquia?.nombre.trim() + ", Distrito Metropolitano de "
+        par1 += "Quito, de la Provincia de Pichincha, por un valor de US\$ "
         par1 += g.formatNumber(number: contrato?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " sin incluir IVA, consta "
         par1 += "de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para "
         par1 += "ejecutar, terminar y entregar a entera satisfacción es de " + NumberToLetterConverter.numberToLetter(contrato?.plazo).toLowerCase() + " días calendario " + "("
@@ -3511,12 +3511,12 @@ class ReportesPlanillasController {
         par1 += "entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada "
         par1 += "la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. "
 
-        def par2 = "Tesorería de la Corporación, remite a la " + obra?.departamento?.direccion?.nombre
+        def par2 = "Tesorería de la Corporación, remite a la " + obra?.departamento?.direccion?.nombre.trim()
         par2 += ", copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$ " + g.formatNumber(number: (planillaDesc?.valor + planillaDesc.reajuste), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " fue "
         par2 += "acreditado el " + fechaConFormato(planillaDesc?.fechaMemoPagoPlanilla, "dd MMMM yyyy").toLowerCase()
 
 
-        def par3 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° " + contrato?.codigo + ", será el " + fechaConFormato(obra?.fechaInicio, "dd MMMM yyyy").toLowerCase() + "."
+        def par3 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° " + contrato?.codigo.trim() + ", será el " + fechaConFormato(obra?.fechaInicio, "dd MMMM yyyy").toLowerCase() + "."
 
 
         Paragraph prueba = new Paragraph(par1, times12normal);
