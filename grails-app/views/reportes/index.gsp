@@ -86,7 +86,7 @@
                         dialog="dlgContabilidad">
                     Obras registradas
                 </g:link>
-                Listado de obras que se hallan regsitradas en el sistema, están an la fase inicial de estructuración de presupuestos
+                Listado de obras que se hallan registradas en el sistema, están an la fase inicial de estructuración de presupuestos
                 y más documentos precontractuales.
             </li>
 

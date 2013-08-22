@@ -179,6 +179,8 @@ class ObraController extends janus.seguridad.Shield {
 
         def usuario = session.usuario.id
 
+        def perfil = session.perfil
+
         def persona = Persona.get(usuario)
 
         def matrizOk = false
@@ -213,9 +215,9 @@ class ObraController extends janus.seguridad.Shield {
                 matrizOk = true
             }
 //            println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil]
         } else {
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk]
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil]
         }
 
 

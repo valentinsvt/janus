@@ -309,7 +309,7 @@
 
                 <div class="span2">
                     <g:textField name="baseMemo" style="width: 100px" disabled="true"
-                                 value="${formatNumber(number: totalPresupuestoBien, format: '####.##', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
+                                 value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
                 </div>
 
                 %{--<div class="span1" style="margin-left: -30px">Valor de Reajuste:</div>--}%
@@ -520,7 +520,7 @@
 
                 <div class="span3">
                     <g:textField name="montoFor"
-                                 value="${formatNumber(number: totalPresupuestoBien, format: '####.##', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"
+                                 value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"
                                  disabled="true"/>
                 </div>
             </div>
@@ -912,7 +912,7 @@
 
             <div class="span2">
                 <g:textField name="baseMemoPresu" style="width: 100px" disabled="true"
-                             value="${formatNumber(number: totalPresupuestoBien, format: '####.##', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
+                             value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
             </div>
         </div>
 

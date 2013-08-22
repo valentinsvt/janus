@@ -17,18 +17,18 @@
 
 
 <div class="row-fluid">
-    <div class="span7">
+    <div class="span12">
 
         <b>Buscar Por: </b>
-        <g:select name="buscador" from="${['obracdgo':'Codigo', 'obranmbr':'Nombre']}" optionKey="key" optionValue="value" id="buscador_reg"/>
+        <g:select name="buscador" from="${['cdgo':'Codigo', 'nmbr':'Nombre', 'tipo': 'Tipo', 'cntn': 'Cantón', 'parr': 'Parroquia'
+                , 'cmnd': 'Comunidad', 'insp':'Inspector', 'rvsr':'Revisor', 'ofig':'Of. Ingreso', 'ofsl': 'Of. Salida'
+                ,'mmsl':'Memo Salida', 'frpl':'F. Polinómica']}" value="${params.buscador}"
+                  optionKey="key" optionValue="value" id="buscador_reg" style="width: 150px"/>
         <b style="margin-left: 10px">Estado: </b>
-        <g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key" optionValue="value" id="estado_reg"/>
-
-    </div>
-
-    <div class="span12" style="margin-left: 5px">
-       <b>Criterio: </b>
-        <g:textField name="criterio" style="width: 600px; margin-right: 10px"/>
+        <g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"
+                  optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>
+        <b>Criterio: </b>
+        <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
@@ -43,8 +43,6 @@
         </a>
     </div>
 
-
-
 </div>
 
 
@@ -56,7 +54,7 @@
         <th style="width: 80px;">
             Código
         </th>
-        <th style="width: 220px;">
+        <th style="width: 250px;">
             Nombre
         </th>
         <th style="width: 80px;">
@@ -65,7 +63,7 @@
         <th style="width: 80px">
             Fecha Reg
         </th>
-        <th style="width: 250px">
+        <th style="width: 320px">
             Cantón-Parroquia-Comunidad
         </th>
         <th style="width: 100px">
@@ -80,8 +78,14 @@
         <th style="width: 100px">
             Destino
         </th>
-        <th style="width: 100px">
+        <th style="width: 250px">
             Elaborado
+        </th>
+        <th style="width: 80px">
+            Ingresada
+        </th>
+        <th style="width: 50px">
+            Estado
         </th>
 
     </tr>
@@ -90,18 +94,21 @@
 
     <tbody id="tabla_material">
 
-    <g:each in="${res}" var="obra" status="">
-        <tr class="obra_row" id="${obra.obra__id}">
-            <td>${obra.obracdgo}</td>
-            <td>${obra.obranmbr}</td>
-            <td>${obra.obratipo}</td>
-            <td><g:formatDate date="${obra.obrafcha}" format="dd-MM-yyyy"/></td>
-            <td>${janus.Parroquia.get(obra.parr__id).canton.nombre} - ${janus.Parroquia.get(obra.parr__id).nombre} - ${janus.Comunidad.get(obra.cmnd__id).nombre}</td>
-            <td>${obra.obravlor}</td>
-            <td>${obra.obraofsl}</td>
-            <td>${obra.obrammsl}</td>
-            <td>${obra.dptodstn}</td>
-            <td>${janus.Departamento.get(obra.dpto__id).direccion.nombre}</td>
+    <g:each in="${res}" var="obra" status="j">
+        <tr class="obra_row" id="${obra.id}">
+            <td>${obra.codigo}</td>
+            <td>${obra.nombre}</td>
+            <td>${obra.tipo}</td>
+            <td><g:formatDate date="${obra.fecha}" format="dd-MM-yyyy"/></td>
+            <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
+            <td style="text-align: right">${valoresTotales[j]}</td>
+            <td>${obra.oficio}</td>
+            <td>${obra.memo}</td>
+            <td>${obra.destino}</td>
+            <td>${obra.elaborado}</td>
+            <td>${obra.ingreso}</td>
+            <td>${obra.estado == "R"? "Registrada":"No registrada"}</td>
+
         </tr>
 
 
@@ -137,6 +144,14 @@
     $("#regresar").click(function () {
 
         location.href = "${g.createLink(controller: 'reportes', action: 'index')}"
+
+    });
+
+
+    $("#imprimir").click(function () {
+
+
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradas' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()
 
     });
 
