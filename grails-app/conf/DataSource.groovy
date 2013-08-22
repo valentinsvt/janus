@@ -54,4 +54,22 @@ environments {
         }
     }
 
+    produccionGADPP {
+        dataSource {
+            dbCreate = "update"
+            //url = "jdbc:postgresql://127.0.0.1:5432/janus"
+            url = "jdbc:postgresql://127.0.0.1:5432/obras"
+            username = "postgres"
+            password = "janus"
+        }
+        dataSource_oferentes {
+            dialect = org.hibernate.dialect.PostgreSQLDialect
+            driverClassName = 'org.postgresql.Driver'
+            url = "jdbc:postgresql://127.0.0.1:5432/oferentes"
+            username = "postgres"
+            password = "janus"
+            dbCreate = 'update'
+        }
+    }
+
 }
