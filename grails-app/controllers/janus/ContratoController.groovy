@@ -30,7 +30,7 @@ class ContratoController extends janus.seguridad.Shield {
         def contrato = Contrato.get(params.id)
         contrato.fechaPedidoRecepcionContratista = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionContratista)
         contrato.fechaPedidoRecepcionFiscalizador = new Date().parse("dd-MM-yyyy", params.fechaPedidoRecepcionFiscalizador)
-        contrato.obra.fechaFin=contrato.fechaPedidoRecepcionFiscalizador
+        contrato.obra.fechaFin = contrato.fechaPedidoRecepcionFiscalizador
         contrato.obra.save(flush: true)
         if (!contrato.save(flush: true)) {
             println "Error al guardar fechas de pedido de recepcion (contrato controller l.33): " + contrato.errors
@@ -94,7 +94,6 @@ class ContratoController extends janus.seguridad.Shield {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"]]
             [campos: campos]
         }
-
 
 
     }
@@ -325,7 +324,8 @@ class ContratoController extends janus.seguridad.Shield {
 //        println "extras "+extras
 
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
+            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {
@@ -443,7 +443,8 @@ class ContratoController extends janus.seguridad.Shield {
 //        println "extras "+extras
 
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
+            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
 
 
             lista.pop()
@@ -487,28 +488,36 @@ class ContratoController extends janus.seguridad.Shield {
         funcionJs += '}'
         def numRegistros = 20
 
+        def nuevaLista = []
+
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
+            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
 //            println "lista "+lista
-            for(int i=lista.size()-1;i>0;i--){
-                 def concurso = janus.pac.Concurso.findByObra(lista[i])
-                if(concurso){
+            for (int i = lista.size() - 1; i > 0; i--) {
+                def concurso = janus.pac.Concurso.findByObra(lista[i])
+                if (concurso) {
                     def oferta = janus.pac.Oferta.findAllByConcurso(concurso)
-                    if(oferta.size()<1)
-                        lista.remove(i);
-                }else{
+                    if (oferta.size() > 0) {
+                        nuevaLista += lista[i]
+                    }
+//                    if (oferta.size() < 1) {
+//                        lista.remove(i);
+//                    }
+                } /*else {
                     lista.remove(i);
-                }
+                }*/
             }
 //            println "lista2 "+lista
-            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+            render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: nuevaLista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
         } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Obra
             session.funciones = funciones
-            def anchos = [7, 10, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7] /*el ancho de las columnas en porcentajes... solo enteros*/
+            def anchos = [7, 10, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7]
+            /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
         }
 

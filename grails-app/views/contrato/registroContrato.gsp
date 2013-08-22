@@ -133,7 +133,7 @@
 
                         <div class="span2 formato">Obra</div>
 
-                        <div class="span3"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
+                        <div class="span3"><g:textField name="obra" id="obraCodigo" class="obraCodigo required" autocomplete="off" value="${contrato?.oferta?.concurso?.obra?.codigo}" disabled="true"/></div>
 
                         <div class="span1 formato">Nombre</div>
 
@@ -238,13 +238,13 @@
 
                 <div class="span12" style="margin-top: 10px" align="center">
 
-                    <div class="span2 formato">Tipo</div>
+                    <div class="span2 formato">Tipo de contrato</div>
 
                     <div class="span3"><g:select from="${janus.pac.TipoContrato.list()}" name="tipoContrato.id" class="tipoContrato activo" value="${contrato?.tipoContratoId}" optionKey="id" optionValue="descripcion"/></div>
 
                     <div class="span2 formato">Fecha de Suscripción</div>
 
-                    <div class="span2"><elm:datepicker name="fechaSuscripcion" class="fechaSuscripcion datepicker input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
+                    <div class="span2"><elm:datepicker name="fechaSuscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
                 </div>
 
@@ -262,7 +262,7 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Multa por retraso</div>
+                    <div class="span2 formato">Multa por retraso de obra</div>
 
                     <div class="span3">
                         <g:textField name="multaRetraso" class="number" style="width: 50px"
@@ -277,10 +277,27 @@
                     </div>
 
                 </div>
+                <div class="span12" style="margin-top: 10px">
+
+                    <div class="span2 formato">Multa por incumplimiento del cronograma</div>
+
+                    <div class="span3">
+                        <g:textField name="multaIncumplimiento" class="number" style="width: 50px"
+                                     value="${g.formatNumber(number: contrato?.multaIncumplimiento, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> por mil
+                    </div>
+
+                    <div class="span2 formato">Multa por no acatar disposiciones del fiscalizador</div>
+
+                    <div class="span3">
+                        <g:textField name="multaDisposiciones" class="number" style="width: 50px"
+                                     value="${g.formatNumber(number: contrato?.multaDisposiciones, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"/> por mil
+                    </div>
+
+                </div>
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato">Monto</div>
+                    <div class="span2 formato">Monto del contrato</div>
 
                     <div class="span3"><g:textField name="monto" class="monto activo"
                                                     value="${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/></div>

@@ -32,8 +32,11 @@ class Contrato implements Serializable {
     String observaciones
     String memo
 
-    Double multaRetraso
-    Double multaPlanilla
+    Double multaRetraso                 //multa por retraso de obra (solo en la ultima planilla de avance)
+    Double multaPlanilla                //multa por no presentacion de la planilla (retraso en la presentacion)
+
+    Double multaIncumplimiento          //multa por incumplimiento del cronograma (retraso de obra en las planillas de avance)
+    Double multaDisposiciones           //multa por no acatar las disposiciones del fiscalizador
 
     Date fechaPedidoRecepcionContratista
     Date fechaPedidoRecepcionFiscalizador
@@ -80,6 +83,9 @@ class Contrato implements Serializable {
 
             multaRetraso column: "cntrmlrt"
             multaPlanilla column: "cntrmlpl"
+
+            multaIncumplimiento column:  'cntrmlin'
+            multaDisposiciones column:  'cntrmlds'
 
             fechaPedidoRecepcionContratista column: 'cntrfccn'
             fechaPedidoRecepcionFiscalizador column: 'cntrfcfs'
