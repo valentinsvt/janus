@@ -72,7 +72,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println "fps "+fps
         def totalP = 0
         fps.each { fp ->
-            if (fp.numero=~"p") {
+            if (fp.numero =~ "p") {
 //                println "sumo "+fp.numero+"  "+fp.valor
                 totalP += fp.valor
             }
@@ -80,7 +80,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def totalC = 0
         fps.each { fp ->
-            if (fp.numero=~"c") {
+            if (fp.numero =~ "c") {
 //                println "sumo "+fp.numero+"  "+fp.valor
                 totalC += fp.valor
             }
@@ -900,7 +900,6 @@ class ObraController extends janus.seguridad.Shield {
         }
         [obraInstance: obraInstance]
     } //show
-
 
     def crearTipoObra() {
 
