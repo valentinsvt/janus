@@ -73,7 +73,7 @@
             </li>
 
             <li text="obracntr" class="item" texto="obracntr">
-                <g:link controller="reportes" action="gestorContable" file="Gestor_Contable.pdf" class="link"
+                <g:link controller="reportes4" action="contratadas" class="link"
                         dialog="dlgContabilidad">
                     Obras contratadas
                 </g:link>
@@ -90,13 +90,13 @@
                 y más documentos precontractuales.
             </li>
 
-            <li text="obracntn" class="item" texto="obracntn">
-                <g:link controller="reportes" action="comprobante" file="Comprobante.pdf" class="link"
-                        dialog="dlgComprobante">
-                    Obras contratadas por cantón
-                </g:link>
-                Listado de obras que han contratado, organizadas por canton.
-            </li>
+            %{--<li text="obracntn" class="item" texto="obracntn">--}%
+                %{--<g:link controller="reportes" action="comprobante" file="Comprobante.pdf" class="link"--}%
+                        %{--dialog="dlgComprobante">--}%
+                    %{--Obras contratadas por cantón--}%
+                %{--</g:link>--}%
+                %{--Listado de obras que han contratado, organizadas por canton.--}%
+            %{--</li>--}%
 
             <li text="cncr" class="item" texto="cncr">
                 <g:link controller="reportes" action="balanceComprobacion" file="Balance_Comprobacion.pdf" class="link"
@@ -340,27 +340,27 @@
                     $(".notice").hide();
 */
                 }).click(function () {
-                    var url = $(this).attr("href");
-                    var file = $(this).attr("file");
+                    %{--var url = $(this).attr("href");--}%
+                    %{--var file = $(this).attr("file");--}%
 
-                    var dialog = trim($(this).attr("dialog"));
+                   %{--var dialog = trim($(this).attr("dialog"));--}%
+                   %{--var cont = trim($(this).text());--}%
 
-                    var cont = trim($(this).text());
 
-                    $("#" + dialog).dialog("option", "title", cont);
-                    $("#" + dialog).dialog("open");
+                    %{--$("#" + dialog).dialog("option", "title", cont);--}%
+                    %{--$("#" + dialog).dialog("open");--}%
 
-                    actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=" + file + "&url=" + url;
+                    %{--actionUrl = "${createLink(controller:'pdf',action:'pdfLink')}?filename=" + file + "&url=" + url;--}%
 
-//                            console.log(actionUrl);
+%{--//                            console.log(actionUrl);--}%
 
                     %{--<g:link action="pdfLink" controller="pdf" params="[url: g.createLink(controller: 'reportes', action: 'planDeCuentas'), filename: 'Plan_de_Cuentas.pdf']">--}%
                     %{--plan de cuentas--}%
                     %{--</g:link>--}%
 
-//                            console.log(url, file);
+%{--//                            console.log(url, file);--}%
 
-                    return false;
+                    %{--return false;--}%
                 });
 
         $("#contP").change(function () {

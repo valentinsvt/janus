@@ -24,6 +24,8 @@ class Persona implements Serializable {
     Integer activo
     Date fechaActualizacionPass
 
+    String firma
+
     //static hasMany = [sesiones: Sesn, accesos: Accs, alertas: janus.alertas.Alerta]
     static hasMany = [sesiones: Sesn, accesos: Accs]
     static auditable = [ignore: ['password']]
@@ -56,6 +58,8 @@ class Persona implements Serializable {
 
             activo column: 'prsnactv'
             fechaActualizacionPass column: 'prsnfcps'
+
+            firma column: 'prsnfrma'
         }
     }
     static constraints = {
@@ -78,6 +82,8 @@ class Persona implements Serializable {
 
         activo(blank: false, nullable: false, attributes: [title: 'activo'])
         fechaActualizacionPass(blank: true, nullable: true, attributes: [title: 'fecha cmabio pass'])
+
+        firma(blank: true, nullable: true)
     }
 
     String toString() {

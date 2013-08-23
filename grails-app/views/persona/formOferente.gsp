@@ -235,6 +235,16 @@
                 </g:radioGroup>
                 <p class="help-block ui-helper-hidden"></p>
             </td>
+        <td>
+            <span class="control-label label label-inverse">
+                Firma
+            </span>
+        </td>
+        <td>
+            <g:textField name="firma" maxlength="50" class="span2 required" value="${personaInstance?.firma}"/>
+            <span class="mandatory">*</span>
+            <p class="help-block ui-helper-hidden"></p>
+        </td>
             %{--<td>--}%
                 %{--<span class="control-label label label-inverse">--}%
                     %{--Fecha Actualizacion Pass--}%

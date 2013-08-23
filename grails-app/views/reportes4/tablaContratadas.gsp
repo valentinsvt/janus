@@ -1,10 +1,11 @@
-
 <%--
   Created by IntelliJ IDEA.
   User: fabricio
-  Date: 8/20/13
-  Time: 12:10 PM
+  Date: 8/23/13
+  Time: 11:26 AM
 --%>
+
+
 
 <g:if test="${flash.message}">
     <div class="span12" style="height: 35px;margin-bottom: 10px; margin-left: -25px">
@@ -23,10 +24,10 @@
         <g:select name="buscador" from="${['cdgo':'Codigo', 'nmbr':'Nombre', 'tipo': 'Tipo', 'cntn': 'Cantón', 'parr': 'Parroquia'
                 , 'cmnd': 'Comunidad', 'insp':'Inspector', 'rvsr':'Revisor', 'ofig':'Of. Ingreso', 'ofsl': 'Of. Salida'
                 ,'mmsl':'Memo Salida', 'frpl':'F. Polinómica']}" value="${params.buscador}"
-                  optionKey="key" optionValue="value" id="buscador_reg" style="width: 150px"/>
-        <b style="margin-left: 10px">Estado: </b>
-        <g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"
-                  optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>
+                  optionKey="key" optionValue="value" id="buscador_con" style="width: 150px"/>
+        %{--<b style="margin-left: 10px">Estado: </b>--}%
+        %{--<g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"--}%
+                  %{--optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>--}%
         <b>Criterio: </b>
         <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
         <a href="#" class="btn  " id="buscar">
@@ -69,15 +70,13 @@
         <th style="width: 100px">
             Valor
         </th>
-        <th style="width: 230px">
+        <th style="width: 250px">
             Elaborado
         </th>
-        <th style="width: 70px">
-            Doc.Referencia
+        <th style="width: 80px">
+            Contrato
         </th>
-        <th style="width: 100px">
-            Estado
-        </th>
+
 
     </tr>
     </thead>
@@ -85,7 +84,7 @@
 
     <tbody id="tabla_material">
 
-    <g:each in="${res}" var="obra" status="j">
+    <g:each in="${obras}" var="obra" status="j">
         <tr class="obra_row" id="${obra.id}">
             <td>${obra.codigo}</td>
             <td>${obra.nombre}</td>
@@ -94,8 +93,7 @@
             <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
             <td style="text-align: right">${valoresTotales[j]}</td>
             <td>${obra.elaborado}</td>
-            <td>${obra.ingreso}</td>
-            <td>${obra.estado == "R"? "Registrada":"No registrada"}</td>
+            <td>${contratos[j].codigo}</td>
 
         </tr>
 
@@ -116,9 +114,9 @@
 
     $("#buscar").click(function(){
 
-        var datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()
+        var datos = "si=${"si"}&buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio").val()
         var interval = loading("detalle")
-        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaRegistradas')}",
+        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaContratadas')}",
             data     : datos,
             success  : function (msg) {
                 clearInterval(interval)
@@ -139,7 +137,7 @@
     $("#imprimir").click(function () {
 
 
-        location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradas' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio").val()
 
     });
 
