@@ -117,7 +117,7 @@
                     </g:if>
                 </g:if>
 
-                <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR'}">
+                <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' }">
                     <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
                         <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
                         </button>
@@ -223,35 +223,19 @@
                 <div class="span12">
                     <div class="span1">Programa</div>
 
-                    <div class="span3">
-                        <g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list()}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
+                    <div class="span3"><g:select name="programacion.id" class="programacion required" from="${janus.Programacion?.list()}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/></div>
 
-                        <a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">
-                            <i class="icon-plus-sign"></i>
-                        </a>
-                    </div>
+                    <div class="span1" style="margin-left: -20px">Tipo</div>
 
-                    <div class="span1" style="margin-left: 0;">Tipo</div>
+                    <div class="span2" id="divTipoObra"><g:select name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/></div>
 
-                    <div class="span3" id="divTipoObra">
-                        <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
-                        %{--</div>--}%
-
-                        %{--<div class="span2" style="margin-left:78px;">--}%
-                        <a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">
-                            <i class="icon-plus-sign"></i>
-                        </a>
-                    </div>
+                    <div class="span2" style="margin-left:78px;"><a href="#" class="btn btn-info" id="btnCrearTipoObra"><i class="icon-user"></i> Crear Tipo
+                    </a></div>
 
 
-                    <div class="span1" style="margin-left: 10px">Clase</div>
+                    <div class="span1" style="margin-left: -40px">Clase</div>
 
-                    <div class="span3">
-                        <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
-                        <a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">
-                            <i class="icon-plus-sign"></i>
-                        </a>
-                    </div>
+                    <div class="span1"><g:select name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/></div>
                 </div>
 
 
@@ -1587,8 +1571,7 @@
                                     data    : $("#frmSave-TipoObra").serialize(),
                                     success : function (msg) {
                                         if (msg != 'error') {
-//                                            $("#divTipoObra").html(msg);
-                                            $("#tipoObra").replaceWith(msg);
+                                            $("#divTipoObra").html(msg);
                                         }
 
                                         $("#modal-TipoObra").modal("hide");
@@ -1600,82 +1583,6 @@
 
                             $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
                             $("#modalTitle_tipo").html("Crear Tipo de Obra");
-                            $("#modalBody_tipo").html(msg);
-                            $("#modalFooter_tipo").html("").append(btnOk).append(btnSave);
-                            $("#modal-TipoObra").modal("show");
-                        }
-                    });
-                    return false;
-
-                });
-
-                $("#btnCrearClase").click(function () {
-
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(controller: "claseObra", action:'form_ext_ajax')}",
-                        success : function (msg) {
-                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                            btnSave.click(function () {
-//                            submitForm(btnSave);
-                                $(this).replaceWith(spinner);
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(controller: 'claseObra', action:'save_ext')}",
-                                    data    : $("#frmSave-claseObraInstance").serialize(),
-                                    success : function (msg) {
-                                        if (msg != 'error') {
-                                            $("#claseObra").replaceWith(msg);
-                                        }
-                                        $("#modal-TipoObra").modal("hide");
-                                    }
-                                });
-
-                                return false;
-                            });
-
-                            $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle_tipo").html("Crear Clase de Obra");
-                            $("#modalBody_tipo").html(msg);
-                            $("#modalFooter_tipo").html("").append(btnOk).append(btnSave);
-                            $("#modal-TipoObra").modal("show");
-                        }
-                    });
-                    return false;
-
-                });
-
-                $("#btnCrearPrograma").click(function () {
-
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(controller:'programacion', action:'form_ext_ajax')}",
-                        success : function (msg) {
-                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
-
-                            btnSave.click(function () {
-//                            submitForm(btnSave);
-                                $(this).replaceWith(spinner);
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(controller: 'programacion', action:'save_ext')}",
-                                    data    : $("#frmSave-programacionInstance").serialize(),
-                                    success : function (msg) {
-                                        if (msg != 'error') {
-                                            $("#programacion").replaceWith(msg);
-                                        }
-                                        $("#modal-TipoObra").modal("hide");
-                                    }
-                                });
-
-                                return false;
-                            });
-
-                            $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle_tipo").html("Crear Programa");
                             $("#modalBody_tipo").html(msg);
                             $("#modalFooter_tipo").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoObra").modal("show");

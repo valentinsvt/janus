@@ -71,7 +71,7 @@
                 </span>
             </td>
             <td>
-                <elm:datepicker name="fechaNacimiento" class="span2" value="${personaInstance?.fechaNacimiento}"/>
+                <elm:datepicker name="fechaNacimiento" class="span2" value="${personaInstance?.fechaNacimiento}" yearRange="-75:-18"/>
                 <p class="help-block ui-helper-hidden"></p>
             </td>
             <td>
@@ -98,7 +98,7 @@
                 </span>
             </td>
             <td>
-                <elm:datepicker name="fechaInicio" class="span2" value="${personaInstance?.fechaInicio}"/>
+                <elm:datepicker name="fechaInicio" class="span2" value="${personaInstance?.fechaInicio}" yearRange="-1:+0"/>
 
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -109,7 +109,7 @@
                 </span>
             </td>
             <td>
-                <elm:datepicker name="fechaFin" class="span2" value="${personaInstance?.fechaFin}"/>
+                <elm:datepicker name="fechaFin" class="span2" value="${personaInstance?.fechaFin}" yearRange="-1:+0"/>
 
 
                 <p class="help-block ui-helper-hidden"></p>
