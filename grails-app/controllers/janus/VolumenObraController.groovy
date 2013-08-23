@@ -79,8 +79,11 @@ class VolumenObraController extends janus.seguridad.Shield{
         else {
 
             volumen=new VolumenesObra()
-            def v=VolumenesObra.findByItemAndObra(rubro,obra)
-            if(v){
+//            def v=VolumenesObra.findByItemAndObra(rubro,obra)
+            def v = VolumenesObra.findAll("from VolumenesObra where obra=${obra.id} and item=${rubro.id} and subPresupuesto=${sbpr.id}")
+//            println "v "+v
+            if(v.size()>0){
+                v=v.pop()
                 if(params.override=="1"){
                     v.cantidad+=params.cantidad.toDouble()
                     v.save(flush: true)
