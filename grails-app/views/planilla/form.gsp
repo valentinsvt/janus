@@ -182,6 +182,18 @@
                         </div>
                     </div>
 
+                    <g:if test="${!esAnticipo}">
+                        <div class="row hide" style="margin-bottom: 10px;" id="divMultaDisp">
+                            <div class='span2 formato'>
+                                Multa por no acatar las disposiciones del fiscalizador
+                            </div>
+
+                            <div class="span4">
+                                <g:field type="number" name="diasMultaDisposiciones" class="input-mini required digits" value="${planillaInstance.diasMultaDisposiciones}" maxlength="3"/> días
+                            </div>
+                        </div>
+                    </g:if>
+
                     <g:if test="${esAnticipo}">
                         <div class="row" style="margin-bottom: 10px;">
                             <div class='span2 formato'>
@@ -281,9 +293,10 @@
         <script type="text/javascript">
 
             function checkPeriodo() {
-                if ($("#tipoPlanilla").val() == "3") {
-                    $(".periodo,.presentacion").show();
+                if ($("#tipoPlanilla").val() == "3") { //avance
+                    $(".periodo,.presentacion,#divMultaDisp").show();
                 } else {
+                    $("#divMultaDisp").hide();
                     if ($("#tipoPlanilla").val() == "2" || $("#tipoPlanilla").val() == "5") {
                         $(".presentacion").show();
                         $(".periodo").hide();

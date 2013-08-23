@@ -143,8 +143,11 @@
                     <div class="tituloTree">Multa por no presentación de planilla</div>
                     ${pMl}
 
-                    <div class="tituloTree">Multa por retraso de obra</div>
+                    <div class="tituloTree">${!liquidacion ? "Multa por incumplimiento del cronograma" : "Multa por retraso de obra"}</div>
                     ${tablaMl}
+
+                    <div class="tituloTree">Multa por no acatar disposiciones del fiscalizador</div>
+                    ${tablaMlFs}
                 </div> <!-- Multas -->
             </g:if>
         </div>

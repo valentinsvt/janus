@@ -740,6 +740,13 @@ class ReportesPlanillasController {
                 order("numero", "asc")
             }
         }
+
+        def totalContrato = contrato.monto
+        def prmlMultaPlanilla = contrato.multaPlanilla
+        def prmlMultaIncumplimiento = contrato.multaIncumplimiento
+        def prmlMultaDisposiciones = contrato.multaDisposiciones
+        def prmlMultaRetraso = contrato.multaRetraso
+
 //        def pcs = FormulaPolinomicaContractual.withCriteria {
 //            and {
 //                eq("contrato", contrato)
@@ -1052,11 +1059,9 @@ class ReportesPlanillasController {
                     if (per.planilla == planilla) {
                         def retraso = 0, multa = 0
                         if (per.parcialCronograma > per.parcialPlanilla) {
-                            def totalContrato = contrato.monto
-                            def prmlMulta = contrato.multaPlanilla
                             def valorDia = per.parcialCronograma / per.dias
                             retraso = ((per.parcialCronograma - per.parcialPlanilla) / valorDia).round(2)
-                            multa = ((totalContrato) * (prmlMulta / 1000) * retraso).round(2)
+                            multa = ((totalContrato) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
                         }
                         totalMultaRetraso += multa
 
@@ -1311,13 +1316,11 @@ class ReportesPlanillasController {
             def retraso = fechaPresentacion - fechaMax + 1
 
 
-            def totalContrato = contrato.monto
-            def prmlMulta = contrato.multaPlanilla
             if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
                 totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
                     it.parcialCronograma
-                }) * (prmlMulta / 1000) * retraso
+                }) * (prmlMultaPlanilla / 1000) * retraso
             } else {
                 retraso = 0
             }
@@ -1336,7 +1339,7 @@ class ReportesPlanillasController {
             addCellTabla(tablaPml, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("" + retraso, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaPml, new Paragraph(numero(prmlMulta, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaPml, new Paragraph(numero(prmlMultaPlanilla, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph('$' + numero(totalMulta, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             document.add(tablaPml);
@@ -1346,7 +1349,7 @@ class ReportesPlanillasController {
             Paragraph tituloMultaRetraso = new Paragraph();
             addEmptyLine(tituloMultaRetraso, 1);
             tituloMultaRetraso.setAlignment(Element.ALIGN_CENTER);
-            tituloMultaRetraso.add(new Paragraph("Multa por retraso de obra", fontTitle));
+            tituloMultaRetraso.add(new Paragraph(liquidacion ? "Multa por retraso de obra" : "Multa por incumplimiento del cronograma", fontTitle));
             addEmptyLine(tituloMultaRetraso, 1);
             document.add(tituloMultaRetraso);
 
@@ -1364,7 +1367,7 @@ class ReportesPlanillasController {
                 if (retrasoLiq < 0) {
                     retrasoLiq = 0
                 }
-                totalMultaRetraso = retrasoLiq * ((prmlMulta / 1000) * totalContrato)
+                totalMultaRetraso = retrasoLiq * ((prmlMultaRetraso / 1000) * totalContrato)
 
                 addCellTabla(tablaMl, new Paragraph("Fecha final de la obra (cronograma)", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaMl, new Paragraph(fechaConFormato(prej[0].fechaFin, "dd-MMM-yyyy"), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -1373,16 +1376,38 @@ class ReportesPlanillasController {
                 addCellTabla(tablaMl, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaMl, new Paragraph(numero(retrasoLiq, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaMl, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-                addCellTabla(tablaMl, new Paragraph(numero(prmlMulta, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaMl, new Paragraph(numero(prmlMultaRetraso, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaMl, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaMl, new Paragraph('$' + numero(totalMultaRetraso, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             }
 
             document.add(tablaMl);
-
-            printFirmas([tipo: "otro", orientacion: "vertical"])
         }
         /* ***************************************************** Fin Multa retraso ********************************************************/
+
+        /* ***************************************************** Multa disposiciones ********************************************************/
+        Paragraph tituloMultaDisp = new Paragraph();
+        tituloMultaDisp.setAlignment(Element.ALIGN_CENTER);
+        tituloMultaDisp.add(new Paragraph("Multa por no acatar disposiciones del fiscalizador", fontTitle));
+        addEmptyLine(tituloMultaDisp, 1);
+        document.add(tituloMultaDisp);
+
+        PdfPTable tablaMultaDisp = new PdfPTable(2);
+        tablaMultaDisp.setWidthPercentage(50);
+        tablaMultaDisp.setSpacingAfter(10f);
+
+        tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+        addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaMultaDisp, new Paragraph(numero(planilla.diasMultaDisposiciones, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaMultaDisp, new Paragraph(numero(prmlMultaDisposiciones, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(planilla.multaDisposiciones, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        document.add(tablaMultaDisp);
+
+        printFirmas([tipo: "otro", orientacion: "vertical"])
+        /* ***************************************************** Fin Multa disposiciones ************************************************/
 
         /* ***************************************************** Detalles *****************************************************************/
         if (conDetalles) {
@@ -1509,9 +1534,12 @@ class ReportesPlanillasController {
 
                     def m1 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaRetraso } ?: 0
                     def m2 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaPlanilla } ?: 0
+                    def m3 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaIncumplimiento } ?: 0
+                    def m4 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaDisposiciones } ?: 0
 
-                    def multasAnt = m1 + m2
-                    def multasAct = totalMultaRetraso + totalMulta
+                    def multasAnt = m1 + m2 + m3 + m4
+//                    def multasAct = totalMultaRetraso + totalMulta
+                    def multasAct = planilla.multaIncumplimiento + planilla.multaRetraso + planilla.multaDisposiciones + planilla.multaPlanilla
                     def multasAcu = multasAnt + multasAct
 
                     def totalAnt = cAnt - antAnt - multasAnt
@@ -2644,8 +2672,10 @@ class ReportesPlanillasController {
 
                     def m1 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaRetraso } ?: 0
                     def m2 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaPlanilla } ?: 0
+                    def m3 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaIncumplimiento } ?: 0
+                    def m4 = planillasAnteriores[0..planillasAnteriores.size() - 2].sum { it.multaDisposiciones } ?: 0
 
-                    def multasAnt = m1 + m2
+                    def multasAnt = m1 + m2 + m3 + m4
                     def multasAct = 0//totalMultaRetraso + totalMulta
                     def multasAcu = multasAnt + multasAct
 

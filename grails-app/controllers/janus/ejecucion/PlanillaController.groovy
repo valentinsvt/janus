@@ -939,6 +939,9 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def save() {
+        if (!params.diasMultaDisposiciones) {
+            params.diasMultaDisposiciones = 0
+        }
         if (params.fechaPresentacion) {
             params.fechaPresentacion = new Date().parse("dd-MM-yyyy", params.fechaPresentacion)
         }

@@ -672,6 +672,12 @@ class Planilla2Controller {
 
         def bodyMultaRetraso = ""
 
+        def totalContrato = contrato.monto
+        def prmlMultaPlanilla = contrato.multaPlanilla
+        def prmlMultaIncumplimiento = contrato.multaIncumplimiento
+        def prmlMultaDisposiciones = contrato.multaDisposiciones
+        def prmlMultaRetraso = contrato.multaRetraso
+
         def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
 
         if (pa.size() == 0) {
@@ -929,11 +935,9 @@ class Planilla2Controller {
                     if (p.planilla == planilla) {
                         def retraso = 0, multa = 0
                         if (p.parcialCronograma > p.parcialPlanilla) {
-                            def totalContrato = contrato.monto
-                            def prmlMulta = contrato.multaPlanilla
                             def valorDia = p.parcialCronograma / p.dias
                             retraso = ((p.parcialCronograma - p.parcialPlanilla) / valorDia).round(2)
-                            multa = ((totalContrato) * (prmlMulta / 1000) * retraso).round(2)
+                            multa = ((totalContrato) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
                         }
                         totalMultaRetraso += multa
                         bodyMultaRetraso += "<tr>"
@@ -1119,10 +1123,10 @@ class Planilla2Controller {
         tablaFr += "</tfoot></table>"
         ///////////////////////////////////////////************************************ multa retraso **********************////////////////////////////
 
-        def totalContrato = contrato.monto
-        def prmlMulta = contrato.multaPlanilla
-
         def tablaMl
+
+        def multaRetraso = 0, multaIncumplimiento = 0
+
         if (!liquidacion) {
             tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
             tablaMl += '<thead>'
@@ -1145,13 +1149,14 @@ class Planilla2Controller {
             tablaMl += '</tr>'
             tablaMl += '</tfoot>'
             tablaMl += '</table>'
+            multaIncumplimiento = totalMultaRetraso
         } else {
             def fechaFinFiscalizador = contrato.fechaPedidoRecepcionFiscalizador
             def retraso = fechaFinFiscalizador - prej[0].fechaFin + 1
             if (retraso < 0) {
                 retraso = 0
             }
-            totalMultaRetraso = retraso * ((prmlMulta / 1000) * totalContrato)
+            totalMultaRetraso = retraso * ((prmlMultaRetraso / 1000) * totalContrato)
             tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
             tablaMl += '<tr>'
             tablaMl += '<th class="tal">Fecha final de la obra (cronograma)</th> <td>' + prej[0].fechaFin.format("dd-MM-yyyy") + '</td>'
@@ -1163,12 +1168,13 @@ class Planilla2Controller {
             tablaMl += '<th class="tal">Días de retraso</th> <td>' + retraso + '</td>'
             tablaMl += "</tr>"
             tablaMl += "<tr>"
-            tablaMl += '<th class="tal">Multa</th> <td>' + prmlMulta + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
+            tablaMl += '<th class="tal">Multa</th> <td>' + prmlMultaRetraso + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
             tablaMl += "</tr>"
             tablaMl += "<tr>"
             tablaMl += '<th class="tal">Total multa</th> <td>$' + numero(totalMultaRetraso, 2) + '</td>'
             tablaMl += "</tr>"
             tablaMl += '</table>'
+            multaRetraso = totalMultaRetraso
         }
 
         ///////////////////////////////////////////************************************ multa no presentacion planilla **********************////////////////////////////
@@ -1196,12 +1202,12 @@ class Planilla2Controller {
         def fechaPresentacion = planilla.fechaPresentacion
         def retraso = fechaPresentacion - fechaMax + 1
 
-        def totalMulta = 0
+        def multaPlanilla = 0
         if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-            totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
+            multaPlanilla = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
                 it.parcialCronograma
-            }) * (prmlMulta / 1000) * retraso
+            }) * (prmlMultaPlanilla / 1000) * retraso
         } else {
             retraso = 0
         }
@@ -1220,17 +1226,34 @@ class Planilla2Controller {
         pMl += '<th class="tal">Días de retraso</th> <td>' + retraso + "</td>"
         pMl += "</tr>"
         pMl += "<tr>"
-        pMl += '<th class="tal">Multa</th> <td>' + prmlMulta + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
+        pMl += '<th class="tal">Multa</th> <td>' + prmlMultaPlanilla + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
         pMl += "</tr>"
         pMl += "<tr>"
-        pMl += '<th class="tal">Total multa</th> <td>$' + numero(totalMulta, 2) + "</td>"
+        pMl += '<th class="tal">Total multa</th> <td>$' + numero(multaPlanilla, 2) + "</td>"
         pMl += "</tr>"
         pMl += '</table>'
+        ///////////////////////////////////////////************************************ multa no acatar disposiciones fiscalizador **********************////////////////////////////
+        def diasNoAcatar = planilla.diasMultaDisposiciones
+        def multaDisposiciones = totalContrato * diasNoAcatar * (prmlMultaDisposiciones / 1000)
+        def tablaMlFs = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
+        tablaMlFs += "<tr>"
+        tablaMlFs += '<th class="tal">Días</th> <td>' + diasNoAcatar + "</td>"
+        tablaMlFs += "</tr>"
+        tablaMlFs += "<tr>"
+        tablaMlFs += '<th class="tal">Multa</th> <td>' + prmlMultaDisposiciones + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
+        tablaMlFs += "</tr>"
+        tablaMlFs += "<tr>"
+        tablaMlFs += '<th class="tal">Total multa</th> <td>$' + numero(multaDisposiciones, 2) + "</td>"
+        tablaMlFs += "</tr>"
+        tablaMlFs += '</table>'
         ///////////////////////////////////////////************************************fin**********************////////////////////////////
 
         planilla.reajuste = reajusteTotal
-        planilla.multaPlanilla = totalMulta
-        planilla.multaRetraso = totalMultaRetraso
+        planilla.multaPlanilla = multaPlanilla
+        planilla.multaRetraso = multaRetraso
+        planilla.multaIncumplimiento = multaIncumplimiento
+        planilla.multaDisposiciones = multaDisposiciones
+
         def valorAnt = 0
         def anterior = 0
         if (avanceAnteriores.size() > 0) {
@@ -1249,7 +1272,7 @@ class Planilla2Controller {
             println "error planilla reajuste " + planilla.id
         }
 
-        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl]
+        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, tablaMlFs: tablaMlFs, liquidacion: liquidacion]
     }
 
     def anticipo() {

@@ -26,8 +26,13 @@ class Planilla {
     Date fechaFin
     String aprobado
 
-    Double multaRetraso = 0
-    Double multaPlanilla = 0
+    Double multaRetraso = 0                 //multa por retraso de obra (solo en la ultima planilla de avance)
+    Double multaPlanilla = 0                //multa por no presentacion de la planilla (retraso en la presentacion)
+
+    Double multaIncumplimiento = 0          //multa por incumplimiento del cronograma (retraso de obra en las planillas de avance)
+    Double multaDisposiciones = 0           //multa por no acatar las disposiciones del fiscalizador
+
+    Integer diasMultaDisposiciones = 0          //dias de multa por no acatar las disposiciones del fiscalizador
 
     String memoSalida
     String memoOrdenPago
@@ -99,6 +104,11 @@ class Planilla {
 
             multaRetraso column: 'plnlmlrt'
             multaPlanilla column: 'plnlmlpl'
+
+            multaIncumplimiento column: 'plnlmlin'
+            multaDisposiciones column: 'plnlmlds'
+
+            diasMultaDisposiciones column: 'plnldsmd'
 
             oficioEntradaPlanilla column: 'plnlofen'
             memoSalidaPlanilla column: 'plnlmmad'
