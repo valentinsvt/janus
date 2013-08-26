@@ -123,8 +123,7 @@
             </li>
 
             <li text="asgr" class="item" texto="asgr">
-                <g:link controller="reportes" action="flujoEfectivo" file="Estado_Flujos_Efectivo.pdf" class="link"
-                        dialog="dlgContabilidadPeriodo">
+                <g:link controller="reportes4" action="aseguradoras" class="link">
                     Aseguradoras
                 </g:link>
                 Listado de aseguradoras que se hallan registradas en el sistema.
