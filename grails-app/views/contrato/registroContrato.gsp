@@ -258,7 +258,7 @@
 
             </fieldset>
 
-            <fieldset class="" style="position: relative; height: 190px; padding: 10px;border-bottom: 1px solid black;">
+            <fieldset class="" style="position: relative; height: 240px; padding: 10px;border-bottom: 1px solid black;">
 
                 <div class="span12" style="margin-top: 10px">
 

@@ -243,6 +243,22 @@
 
                 <div class="span12" style="margin-top: 10px">
 
+                    <div class="span2 formato">Multa por incumplimiento del cronograma</div>
+
+                    <div class="span3">
+                        ${g.formatNumber(number: contrato?.multaIncumplimiento, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
+                    </div>
+
+                    <div class="span2 formato">Multa por no acatar disposiciones del fiscalizador</div>
+
+                    <div class="span3">
+                        ${g.formatNumber(number: contrato?.multaDisposiciones, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
+                    </div>
+
+                </div>
+
+                <div class="span12" style="margin-top: 10px">
+
                     <div class="span2 formato">Monto</div>
 
                     <div class="span3">${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}</div>
