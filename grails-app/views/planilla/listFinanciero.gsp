@@ -302,8 +302,15 @@
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
 
-                            $("#modalBody").html(msg);
-                            $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            if (msg == "NO") {
+                                $("#modalBody").html("Ha ocurrido un error: No se encontró un administrador activo para el contrato.<br/>Por favor asigne uno desde la página del contrato en la opción Administrador.");
+                                btnOk.text("Aceptar");
+                                $("#modalFooter").html("").append(btnOk);
+                            } else {
+                                $("#modalBody").html(msg);
+                                $("#modalFooter").html("").append(btnOk).append(btnSave);
+                            }
+
                             $("#modal-Planilla").modal("show");
                         }
                     });

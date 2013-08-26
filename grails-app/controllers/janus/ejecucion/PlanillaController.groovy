@@ -142,7 +142,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def devolver_ajax() {
-        println params
+//        println params
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
         def tipo = params.tipo
@@ -319,6 +319,11 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //        def obraDpto = obra.departamento
         def adminContrato = contrato.administrador
+//        def adminContrato = null
+        if (!adminContrato) {
+            render "NO"
+            return
+        }
         def obraDpto = adminContrato.departamento
 
         def especial = "DE"
