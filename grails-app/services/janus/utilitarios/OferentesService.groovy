@@ -174,7 +174,7 @@ class OferentesService {
 
     }
 
-    def sqlOferentes(sql,tipo){    //0 select 1 insert   2 update
+    def sqlOferentes(sql, tipo){    //0 select 1 insert   2 update
         def res
         def cn = dbConnectionService.getConnectionOferentes()
 //        println "sql "+sql  +" tipo "+tipo
