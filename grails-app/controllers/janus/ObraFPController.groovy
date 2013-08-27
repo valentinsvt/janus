@@ -166,18 +166,18 @@ class ObraFPController {
         //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //
-//        println "verificaMatriz" + verificaMatriz(obra__id)
+        println "verificaMatriz" + verificaMatriz(obra__id)
 //        //println "pasa verificaMatriz"
-//        println "verifica_precios \n" + verifica_precios(obra__id)
+        println "verifica_precios \n" + verifica_precios(obra__id)
 
 
-            /* --------------------------------------- procesaMatriz --------------------------------
-            * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
-            * 1. Eliminar las tablas obxx_user si existen y crear nuevas                            *
-            * 2. Se descomponen los items de la obra y se los inserta en vlobitem: sp_obra          *
+        /* --------------------------------------- procesaMatriz --------------------------------
+        * la pregunta de uno o todos los subpresupuestos se debe manejar en la interfaz         *
+        * 1. Eliminar las tablas obxx_user si existen y crear nuevas                            *
+        * 2. Se descomponen los items de la obra y se los inserta en vlobitem: sp_obra          *
 
 
-            * ------------------------------------------------------------------------------------- */
+        * ------------------------------------------------------------------------------------- */
         /* 1. Eliminar las tablas obxx_user si existen y crear nuevas                           */
         creaTablas(obra__id, "S")  /* cambio obra__id */
 //        println "fin .. creaTablas"
