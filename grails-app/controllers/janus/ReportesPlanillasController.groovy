@@ -1386,31 +1386,32 @@ class ReportesPlanillasController {
             }
 
             document.add(tablaMl);
+
+            /* ***************************************************** Fin Multa retraso ********************************************************/
+
+            /* ***************************************************** Multa disposiciones ********************************************************/
+            Paragraph tituloMultaDisp = new Paragraph();
+            tituloMultaDisp.setAlignment(Element.ALIGN_CENTER);
+            tituloMultaDisp.add(new Paragraph("Multa por no acatar disposiciones del fiscalizador", fontTitle));
+            addEmptyLine(tituloMultaDisp, 1);
+            document.add(tituloMultaDisp);
+
+            PdfPTable tablaMultaDisp = new PdfPTable(2);
+            tablaMultaDisp.setWidthPercentage(50);
+            tablaMultaDisp.setSpacingAfter(10f);
+
+            tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+            addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaDisp, new Paragraph(numero(planilla.diasMultaDisposiciones, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaDisp, new Paragraph(numero(prmlMultaDisposiciones, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(planilla.multaDisposiciones, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            document.add(tablaMultaDisp);
+
+            printFirmas([tipo: "otro", orientacion: "vertical"])
         }
-        /* ***************************************************** Fin Multa retraso ********************************************************/
-
-        /* ***************************************************** Multa disposiciones ********************************************************/
-        Paragraph tituloMultaDisp = new Paragraph();
-        tituloMultaDisp.setAlignment(Element.ALIGN_CENTER);
-        tituloMultaDisp.add(new Paragraph("Multa por no acatar disposiciones del fiscalizador", fontTitle));
-        addEmptyLine(tituloMultaDisp, 1);
-        document.add(tituloMultaDisp);
-
-        PdfPTable tablaMultaDisp = new PdfPTable(2);
-        tablaMultaDisp.setWidthPercentage(50);
-        tablaMultaDisp.setSpacingAfter(10f);
-
-        tablaMultaDisp.setHorizontalAlignment(Element.ALIGN_LEFT)
-
-        addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaDisp, new Paragraph(numero(planilla.diasMultaDisposiciones, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaDisp, new Paragraph(numero(prmlMultaDisposiciones, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(planilla.multaDisposiciones, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        document.add(tablaMultaDisp);
-
-        printFirmas([tipo: "otro", orientacion: "vertical"])
         /* ***************************************************** Fin Multa disposiciones ************************************************/
 
         /* ***************************************************** Detalles *****************************************************************/

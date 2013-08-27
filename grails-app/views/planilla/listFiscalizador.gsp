@@ -209,7 +209,12 @@
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
-                                            Enviar reajuste
+                                            <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                                Enviar reajuste
+                                            </g:if>
+                                            <g:else>
+                                                Enviar planilla
+                                            </g:else>
                                         </a>
                                     </g:if>
                                     <g:elseif test="${lblBtn == 3}">
@@ -337,18 +342,21 @@
                                 submitForm(btnSave);
                                 return false;
                             });
-
-                            switch (tipo) {
-                                case "2":
-                                    $("#modalTitle").html("Enviar reajuste");
-                                    break;
-                                case "3":
-                                    $("#modalTitle").html("Pedir pago");
-                                    break;
-                                case "4":
-                                    $("#modalTitle").html("Informar pago");
-                                    break;
-                            }
+                            $("#modalTitle").html($btn.text());
+//                            switch (tipo) {
+//                                case "2":
+//                                    $("#modalTitle").html("Enviar reajuste");
+//                                    break;
+//                                case "3":
+//                                    $("#modalTitle").html("Pedir pago");
+//                                    break;
+//                                case "4":
+//                                    $("#modalTitle").html("Informar pago");
+//                                    break;
+//                                case "5":
+//                                    $("#modalTitle").html("Iniciar obra");
+//                                    break;
+//                            }
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
 

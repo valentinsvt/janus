@@ -46,8 +46,6 @@
                     </a>
                 </div>
 
-
-
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -196,13 +194,18 @@
 
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
-                                        Enviar reajuste
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                            Enviar reajuste
+                                        </g:if>
+                                        <g:else>
+                                            Enviar planilla
+                                        </g:else>
                                     </g:if>
                                     <g:if test="${lblBtn == 3}">
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Pedir pago
                                         </a>
-                                        <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                        <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}" data-txt="${planillaInstance.tipoPlanilla.codigo == 'A' ? 'reajuste' : 'planilla'}">
                                             Devolver
                                         </a>
                                     </g:if>
@@ -254,36 +257,36 @@
         </div>
 
 
-    <div id="imprimirDialog">
+        <div id="imprimirDialog">
 
-        <fieldset>
-            <div class="span4" style="margin-top: 10px">
+            <fieldset>
+                <div class="span4" style="margin-top: 10px">
 
-                Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>
+                    Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>
 
-            </div>
+                </div>
 
-            <div class="span4" style="margin-top: 10px">
-                Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>
+                <div class="span4" style="margin-top: 10px">
+                    Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>
 
-            </div>
+                </div>
 
-        </fieldset>
-    </div>
+            </fieldset>
+        </div>
 
-    <div id="errorImpresion">
-        <fieldset>
-            <div class="spa3" style="margin-top: 30px; margin-left: 10px">
+        <div id="errorImpresion">
+            <fieldset>
+                <div class="spa3" style="margin-top: 30px; margin-left: 10px">
 
-                Debe ingresar un número de Oficio!
+                    Debe ingresar un número de Oficio!
 
-            </div>
-        </fieldset>
-    </div>
+                </div>
+            </fieldset>
+        </div>
 
 
 
-    <script type="text/javascript">
+        <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
             var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>");
 
@@ -330,21 +333,21 @@
                                 submitForm(btnSave);
                                 return false;
                             });
-
-                            switch (tipo) {
-                                case "2":
-                                    $("#modalTitle").html("Enviar reajuste");
-                                    break;
-                                case "3":
-                                    $("#modalTitle").html("Pedir pago");
-                                    break;
-                                case "4":
-                                    $("#modalTitle").html("Informar pago");
-                                    break;
-                                case "5":
-                                    $("#modalTitle").html("Iniciar obra");
-                                    break;
-                            }
+                            $("#modalTitle").html($btn.text());
+//                            switch (tipo) {
+//                                case "2":
+//                                    $("#modalTitle").html("Enviar reajuste");
+//                                    break;
+//                                case "3":
+//                                    $("#modalTitle").html("Pedir pago");
+//                                    break;
+//                                case "4":
+//                                    $("#modalTitle").html("Informar pago");
+//                                    break;
+//                                case "5":
+//                                    $("#modalTitle").html("Iniciar obra");
+//                                    break;
+//                            }
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
 
@@ -384,7 +387,7 @@
 
                             switch (tipo) {
                                 case "3":
-                                    $("#modalTitle").html("Devolver a Enviar reajuste");
+                                    $("#modalTitle").html("Devolver a Enviar " + $btn.data("txt"));
                                     break;
                                 case "4":
                                     $("#modalTitle").html("Devolver a Pedir pago");
@@ -491,10 +494,7 @@
                     return false;
                 });
 
-
-
                 $("#imprimir").click(function () {
-
 
                     $("#imprimirDialog").dialog("open");
 
@@ -502,23 +502,22 @@
 
                 $("#imprimirDialog").dialog({
 
-                    autoOpen: false,
-                    resizable: false,
-                    modal: true,
-                    draggable: false,
-                    width: 420,
-                    height: 280,
-                    position: 'center',
-                    title: 'Datos del documento a ser impreso',
-                    buttons: {
-                        "Aceptar": function () {
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 420,
+                    height    : 280,
+                    position  : 'center',
+                    title     : 'Datos del documento a ser impreso',
+                    buttons   : {
+                        "Aceptar"  : function () {
 
-                            if($("#oficio").val()){
+                            if ($("#oficio").val()) {
 
-                                location.href="${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()
+                                location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()
 
                                 $("#imprimirDialog").dialog("close")
-
 
                             } else {
 
@@ -526,11 +525,8 @@
 
                             }
 
-
-
-
                         },
-                        "Cancelar": function () {
+                        "Cancelar" : function () {
 
                             $("#imprimirDialog").dialog("close")
 
@@ -540,24 +536,19 @@
 
                 })
 
-
-
-
-
-
                 $("#errorImpresion").dialog({
 
 
-                    autoOpen: false,
-                    resizable: false,
-                    modal: true,
-                    draggable: false,
-                    width: 320,
-                    height: 200,
-                    position: 'center',
-                    title: 'Error',
-                    buttons: {
-                        "Aceptar": function () {
+                    autoOpen  : false,
+                    resizable : false,
+                    modal     : true,
+                    draggable : false,
+                    width     : 320,
+                    height    : 200,
+                    position  : 'center',
+                    title     : 'Error',
+                    buttons   : {
+                        "Aceptar" : function () {
 
                             $("#errorImpresion").dialog("close")
 
@@ -566,11 +557,6 @@
 
 
                 });
-
-
-
-
-
 
             });
 

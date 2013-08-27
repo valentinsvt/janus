@@ -771,7 +771,7 @@ class PlanillaController extends janus.seguridad.Shield {
             order("fechaInicio", "asc")
         }
         def cPlanillas = planillas.size()
-
+        def liquidado = false
         def esAnticipo = false
         if (cPlanillas == 0) {
             tiposPlanilla = TipoPlanilla.findAllByCodigo('A')
@@ -783,6 +783,7 @@ class PlanillaController extends janus.seguridad.Shield {
             def pll = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacion)
             if (pll) {
                 tiposPlanilla -= pll.tipoPlanilla
+                liquidado = true
             }
             def plr = Planilla.findByContratoAndTipoPlanilla(contrato, reajusteDefinitivo)
             if (plr) {
@@ -924,7 +925,10 @@ class PlanillaController extends janus.seguridad.Shield {
             fiscalizadorAnterior = planillas.last().fiscalizadorId
         }
 
-        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior]
+        liquidado = false
+
+        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo,
+                anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado]
     }
 
 
@@ -968,6 +972,9 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         if (params.oficioEntradaPlanilla) {
             params.oficioEntradaPlanilla = params.oficioEntradaPlanilla.toString().toUpperCase()
+        }
+        if (params.numero) {
+            params.numero = params.numero.toUpperCase()
         }
         def planillaInstance
         if (params.id) {

@@ -186,7 +186,12 @@
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
                                     %{--<a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
-                                        Enviar reajuste
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                            Enviar reajuste
+                                        </g:if>
+                                        <g:else>
+                                            Enviar planilla
+                                        </g:else>
                                     %{--</a>--}%
                                     </g:if>
                                     <g:elseif test="${lblBtn == 3}">

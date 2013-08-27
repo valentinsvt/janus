@@ -185,7 +185,12 @@
 
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
-                                        Enviar reajuste
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                            Enviar reajuste
+                                        </g:if>
+                                        <g:else>
+                                            Enviar planilla
+                                        </g:else>
                                     </g:if>
                                     <g:elseif test="${lblBtn == 3}">
                                         Pedir pago
@@ -194,7 +199,8 @@
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Informar pago
                                         </a>
-                                        <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                        %{--<a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
+                                        <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}" data-txt="${planillaInstance.tipoPlanilla.codigo == 'A' ? 'reajuste' : 'planilla'}">
                                             Devolver
                                         </a>
                                     </g:if>
@@ -287,18 +293,21 @@
                                 submitForm(btnSave);
                                 return false;
                             });
-
-                            switch (tipo) {
-                                case "2":
-                                    $("#modalTitle").html("Enviar reajuste");
-                                    break;
-                                case "3":
-                                    $("#modalTitle").html("Pedir pago");
-                                    break;
-                                case "4":
-                                    $("#modalTitle").html("Informar pago");
-                                    break;
-                            }
+                            $("#modalTitle").html($btn.text());
+//                            switch (tipo) {
+//                                case "2":
+//                                    $("#modalTitle").html("Enviar reajuste");
+//                                    break;
+//                                case "3":
+//                                    $("#modalTitle").html("Pedir pago");
+//                                    break;
+//                                case "4":
+//                                    $("#modalTitle").html("Informar pago");
+//                                    break;
+//                                case "5":
+//                                    $("#modalTitle").html("Iniciar obra");
+//                                    break;
+//                            }
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
 
@@ -338,7 +347,7 @@
 
                             switch (tipo) {
                                 case "3":
-                                    $("#modalTitle").html("Devolver a Enviar reajuste");
+                                    $("#modalTitle").html("Devolver a Enviar " + $btn.data("txt"));
                                     break;
                                 case "4":
                                     $("#modalTitle").html("Devolver a Pedir pago");
