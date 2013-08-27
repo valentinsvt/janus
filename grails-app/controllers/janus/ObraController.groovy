@@ -22,6 +22,159 @@ class ObraController extends janus.seguridad.Shield {
 
     }
 
+
+    def obrasFinalizadas(){
+        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"]]
+        [campos:campos]
+    }
+    def buscarObraFin(){
+        println "buscar obra fin"
+        def extraParr = ""
+        def extraCom = ""
+        def extraDep = ""
+
+        if (params.campos instanceof java.lang.String) {
+            if (params.campos == "parroquia") {
+                def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios.toUpperCase()}%'")
+                params.criterios = ""
+                parrs.eachWithIndex { p, i ->
+                    extraParr += "" + p.id
+                    if (i < parrs.size() - 1)
+                        extraParr += ","
+                }
+                if (extraParr.size() < 1)
+                    extraParr = "-1"
+                params.campos = ""
+                params.operadores = ""
+            }
+            if (params.campos == "comunidad") {
+                def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios.toUpperCase()}%'")
+                params.criterios = ""
+                coms.eachWithIndex { p, i ->
+                    extraCom += "" + p.id
+                    if (i < coms.size() - 1)
+                        extraCom += ","
+                }
+                if (extraCom.size() < 1)
+                    extraCom = "-1"
+                params.campos = ""
+                params.operadores = ""
+            }
+            if (params.campos == "departamento") {
+                def dirs = Direccion.findAll("from Direccion where nombre like '%${params.criterios.toUpperCase()}%'")
+                def deps = Departamento.findAllByDireccionInList(dirs)
+                params.criterios = ""
+                deps.eachWithIndex { p, i ->
+                    extraDep += "" + p.id
+                    if (i < deps.size() - 1)
+                        extraDep += ","
+                }
+                if (extraDep.size() < 1)
+                    extraDep = "-1"
+                params.campos = ""
+                params.operadores = ""
+            }
+        } else {
+            def remove = []
+            params.campos.eachWithIndex { p, i ->
+                if (p == "comunidad") {
+                    def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios[i].toUpperCase()}%'")
+
+                    coms.eachWithIndex { c, j ->
+                        extraCom += "" + c.id
+                        if (j < coms.size() - 1)
+                            extraCom += ","
+                    }
+                    if (extraCom.size() < 1)
+                        extraCom = "-1"
+                    remove.add(i)
+                }
+                if (p == "parroquia") {
+                    def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios[i].toUpperCase()}%'")
+
+                    parrs.eachWithIndex { c, j ->
+                        extraParr += "" + c.id
+                        if (j < parrs.size() - 1)
+                            extraParr += ","
+                    }
+                    if (extraParr.size() < 1)
+                        extraParr = "-1"
+                    remove.add(i)
+                }
+                if (p == "departamento") {
+                    def dirs = Direccion.findAll("from Direccion where nombre like '%${params.criterios.toUpperCase()}%'")
+                    def deps = Departamento.findAllByDireccionInList(dirs)
+
+                    deps.eachWithIndex { c, j ->
+                        extraDep += "" + c.id
+                        if (j < deps.size() - 1)
+                            extraDep += ","
+                    }
+                    if (extraDep.size() < 1)
+                        extraDep = "-1"
+                    remove.add(i)
+                }
+            }
+            remove.each {
+                params.criterios[it] = null
+                params.campos[it] = null
+                params.operadores[it] = null
+            }
+        }
+
+
+        def extras = " and liquidacion=0 and fechaFin is not null"
+        if (extraParr.size() > 1)
+            extras += " and parroquia in (${extraParr})"
+        if (extraCom.size() > 1)
+            extras += " and comunidad in (${extraCom})"
+        if (extraDep.size() > 1)
+            extras += " and departamento in (${extraDep})"
+
+//        println "extas "+extras
+        def parr = { p ->
+            return p.parroquia?.nombre
+        }
+        def comu = { c ->
+            return c.comunidad?.nombre
+        }
+        def listaTitulos = ["CODIGO", "NOMBRE", "DESCRIPCION", "DIRECCION", "FECHA REG.", "M. INGRESO", "M. SALIDA", "SITIO", "PLAZO", "PARROQUIA", "COMUNIDAD", "INSPECTOR", "REVISOR", "RESPONSABLE", "ESTADO"]
+        def listaCampos = ["codigo", "nombre", "descripcion", "departamento", "fechaCreacionObra", "oficioIngreso", "oficioSalida", "sitio", "plazoEjecucionMeses", "parroquia", "comunidad", "inspector", "revisor", "responsableObra", "estado"]
+        def funciones = [null, null, null, null, ["format": ["dd/MM/yyyy hh:mm"]], null, null, null, null, ["closure": [parr, "&"]], ["closure": [comu, "&"]], null, null, null, null]
+        def url = g.createLink(action: "buscarObraFin", controller: "obra")
+        def funcionJs = "function(){"
+        funcionJs += '$("#modal-busqueda").modal("hide");'
+        funcionJs += 'location.href="' + g.createLink(action: 'registroObra', controller: 'obra') + '?obra="+$(this).attr("regId");'
+        funcionJs += '}'
+        def numRegistros = 20
+//        println "params " + params.reporte + "  " + params.excel
+
+        if (!params.reporte) {
+            if (params.excel) {
+                session.dominio = Obra
+                session.funciones = funciones
+                def anchos = [15, 50, 70, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Obras", anchos: anchos, extras: extras, landscape: true])
+            } else {
+                def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "obra", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+            }
+
+        } else {
+//            println "entro reporte"
+            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+            session.dominio = Obra
+            session.funciones = funciones
+            def anchos = [7, 10, 7, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7]
+            /*el ancho de las columnas en porcentajes... solo enteros*/
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Lista de obras", anchos: anchos, extras: extras, landscape: true])
+        }
+    }
+
+
     def regitrarObra() {
         def obra = Obra.get(params.id)
         def obrafp = new ObraFPController()

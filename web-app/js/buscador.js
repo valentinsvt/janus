@@ -134,6 +134,6 @@ function cambiaOperador() {
 
 $("#criterio").keypress(function(event){
     if(parseInt(event.keyCode) == 13){
-        enviar();
+        $("#buscarDialog").click()
     }
 });

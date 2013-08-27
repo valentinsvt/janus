@@ -150,7 +150,7 @@
                 Listado de obras con el respectivo porcentaje de avance.
             </li>
             <li text="obfn" class="item" texto="obfn">
-                <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
+                <g:link controller="obra" action="obrasFinalizadas" file=""
                         class="link" dialog="dlgVentas">
                     Obras finalizadas
                 </g:link>
