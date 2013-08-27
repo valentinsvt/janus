@@ -1478,6 +1478,8 @@ class Reportes4Controller {
 
     def tablaContratos () {
 
+        println(params)
+
         def sql
         def res
         def cn
@@ -1505,7 +1507,7 @@ class Reportes4Controller {
                 "FROM cntr c\n" +
                 "  LEFT JOIN ofrt f ON c.ofrt__id = f.ofrt__id\n" +
                 "  LEFT JOIN cncr r ON f.cncr__id = r.cncr__id\n" +
-                "  LEFT JOIN obra o ON r.cncr__id = o.obra__id\n" +
+                "  LEFT JOIN obra o ON r.obra__id = o.obra__id\n" +
                 "  LEFT JOIN cmnd d ON o.cmnd__id = d.cmnd__id\n" +
                 "  LEFT JOIN parr p ON o.parr__id = p.parr__id\n" +
                 "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
@@ -1522,25 +1524,43 @@ class Reportes4Controller {
         switch (params.buscador) {
             case "cdgo":
             case "memo":
-            case "fcsb":
+//            case "fcsb":
             case "ofsl":
             case "mnto":
                 buscador = "cntr"+params.buscador
-                filtroBuscador =" and ${buscador} ILIKE ('%${params.criterio}%') "
+                filtroBuscador =" where ${buscador} ILIKE ('%${params.criterio}%') "
                 break;
             case "cncr":
-                filtroBuscador = " and r.cncrcdgo ILIKE ('%${params.criterio}%') "
+                filtroBuscador = " where r.cncrcdgo ILIKE ('%${params.criterio}%') "
                 break;
             case "parr":
-                filtroBuscador = " and p.parrnmbr ILIKE ('%${params.criterio}%') "
+                filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
                 break;
             case "cntn":
-                filtroBuscador = " and n.cntnnmbr ILIKE ('%${params.criterio}%') "
+                filtroBuscador = " where n.cntnnmbr ILIKE ('%${params.criterio}%') "
                 break;
             case "obra":
-                filtroBuscador = " and n.cntnnmbr ILIKE ('%${params.criterio}%') "
+                filtroBuscador = " where o.obracdgo ILIKE ('%${params.criterio}%') "
                 break;
-
+            case "clas":
+                filtroBuscador = " where t.tpodscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "nmbr":
+                filtroBuscador = " where o.obranmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "tipo":
+                filtroBuscador = " where e.tpcrdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cont":
+                filtroBuscador = " where g.prvenmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "tppz":
+                filtroBuscador = " where z.tppzdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "inic":
+            case "fin":
+            case "fcsb":
+                break;
 
         }
 
@@ -1553,13 +1573,221 @@ class Reportes4Controller {
 
         res = cn.rows(sql.toString())
 
+
+//        println(sql)
+
         return [res: res, params:params]
 
     }
 
     def reporteContratos () {
 
+        def sql
+        def cn
+        def res
 
+
+        def sqlBase =  "SELECT\n" +
+                "  c.cntr__id    id,\n" +
+                "  c.cntrcdgo    codigo, \n" +
+                "  c.cntrmemo    memo,\n" +
+                "  c.cntrfcsb    fechasu,\n" +
+                "  r.cncrcdgo    concurso,\n" +
+                "  o.obracdgo    obracodigo,\n" +
+                "  o.obranmbr    obranombre,\n" +
+                "  n.cntnnmbr    canton,\n" +
+                "  p.parrnmbr    parroquia,\n" +
+                "  t.tpobdscr    tipoobra,\n" +
+                "  e.tpcrdscr    tipocontrato,\n" +
+                "  c.cntrmnto    monto,\n" +
+                "  c.cntrpcan    porcentaje,\n" +
+                "  c.cntrantc    anticipo,\n" +
+                "  g.prvenmbr    nombrecontra,\n" +
+                "  b.prinfcin    fechainicio,\n" +
+                "  b.prinfcfn    fechafin,\n" +
+                "  z.tppzdscr    plazo\n" +
+                "FROM cntr c\n" +
+                "  LEFT JOIN ofrt f ON c.ofrt__id = f.ofrt__id\n" +
+                "  LEFT JOIN cncr r ON f.cncr__id = r.cncr__id\n" +
+                "  LEFT JOIN obra o ON r.obra__id = o.obra__id\n" +
+                "  LEFT JOIN cmnd d ON o.cmnd__id = d.cmnd__id\n" +
+                "  LEFT JOIN parr p ON o.parr__id = p.parr__id\n" +
+                "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
+                "  LEFT JOIN tpcr e ON c.tpcr__id = e.tpcr__id\n" +
+                "  LEFT JOIN tpob t ON o.tpob__id = t.tpob__id\n" +
+                "  LEFT JOIN prin b ON c.prin__id = b.prin__id\n" +
+                "  LEFT JOIN tppz z ON c.tppz__id = z.tppz__id\n" +
+                "  LEFT JOIN prve g ON f.prve__id = g.prve__id\n"
+
+        def filtroBuscador = ""
+
+        def buscador = ""
+
+        params.criterio = params.criterio.trim();
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+        def prmsCellRightTop = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1"]
+        def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
+        def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.WHITE, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+
+        def baos = new ByteArrayOutputStream()
+        def name = "contratos_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+
+//        document.setMargins(2,2,2,2)
+        document.addTitle("Contratos" + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph("REPORTE DE CONTRATOS", times12bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
+        addEmptyLine(headers, 1);
+        document.add(headers);
+
+        PdfPTable tablaRegistradas = new PdfPTable(10);
+        tablaRegistradas.setWidthPercentage(100);
+        tablaRegistradas.setWidths(arregloEnteros([14, 14, 15, 30, 25, 10, 20, 10, 10, 10]))
+
+        addCellTabla(tablaRegistradas, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Fecha Suscripcion", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Memo", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Obra", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Cantón - Parroquia - Comunidad", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Plazo", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Contratista", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Monto", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("% Anticipo", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Anticipo", times8bold), prmsCellHead2)
+
+
+        switch (params.buscador) {
+            case "cdgo":
+            case "memo":
+//            case "fcsb":
+            case "ofsl":
+            case "mnto":
+                buscador = "cntr"+params.buscador
+                filtroBuscador =" where ${buscador} ILIKE ('%${params.criterio}%') "
+                break;
+            case "cncr":
+                filtroBuscador = " where r.cncrcdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "parr":
+                filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cntn":
+                filtroBuscador = " where n.cntnnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "obra":
+                filtroBuscador = " where o.obracdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "clas":
+                filtroBuscador = " where t.tpodscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "nmbr":
+                filtroBuscador = " where o.obranmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "tipo":
+                filtroBuscador = " where e.tpcrdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cont":
+                filtroBuscador = " where g.prvenmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "tppz":
+                filtroBuscador = " where z.tppzdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "inic":
+            case "fin":
+            case "fcsb":
+                break;
+
+        }
+
+        sql = sqlBase + filtroBuscador
+
+        cn = dbConnectionService.getConnection()
+
+        res = cn.rows(sql.toString())
+
+        res.eachWithIndex {i,j->
+
+            addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fechasu, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.memo, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.obranombre, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.plazo, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.nombrecontra, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.monto, minFractionDigits:
+                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.porcentaje, minFractionDigits:
+                    0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.anticipo, minFractionDigits:
+                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+
+        }
+
+
+        document.add(tablaRegistradas);
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
 
     }
 
