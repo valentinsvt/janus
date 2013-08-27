@@ -1201,24 +1201,32 @@
                             draggable : false,
                             buttons   : {
 
-                                "Sí"               : function () {
+                                "Sí"                               : function () {
                                     url += "1";
 //                                    location.href = url;
                                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                                 },
-                                "No"               : function () {
+                                "No"                               : function () {
                                     url += "0";
 //                                    location.href = url;
                                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                                 },
-                                "Exportar a Excel" : function () {
+                                "Exportar a Excel"                 : function () {
                                     var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
                                     url += "1";
                                     location.href = url;
 
                                 },
-                                "Especificaciones" : function () {
-                                    var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}";
+                                %{--"Ilustraciones"                    : function () {--}%
+                                    %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=i";--}%
+                                    %{--location.href = url;--}%
+                                %{--},--}%
+                                %{--"Especificaciones"                 : function () {--}%
+                                    %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=e";--}%
+                                    %{--location.href = url;--}%
+                                %{--},--}%
+                                "Ilustraciones y Especificaciones" : function () {
+                                    var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
                                     location.href = url;
                                 },
 

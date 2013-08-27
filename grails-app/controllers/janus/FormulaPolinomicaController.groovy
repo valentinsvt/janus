@@ -142,18 +142,19 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
             def obra = Obra.get(params.id)
             def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
-            println "fp: " + fp
+//            println "fp: " + fp
             def total = 0
 
             fp.each { f ->
-                if (f.numero=~params.tipo) {
+                if (f.numero =~ params.tipo) {
                     def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
                     def mapFormula = [
                             data: f.numero,
                             attr: [
                                     id: "fp_" + f.id,
                                     numero: f.numero,
-                                    nombre: (f.valor > 0 || children.size() > 0) ? f.indice?.descripcion : "",
+//                                    nombre: (f.valor > 0 || children.size() > 0) ? f.indice?.descripcion : "",
+                                    nombre: (f.valor > 0 || children.size() > 0 || f.numero == "p01") ? f.indice?.descripcion : "",
                                     valor: g.formatNumber(number: f.valor, maxFractionDigits: 3, minFractionDigits: 3),
 //                                    valor: f.valor,
                                     rel: "fp"

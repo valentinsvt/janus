@@ -1,6 +1,7 @@
 package janus
 
 import com.lowagie.text.*
+
 //import com.lowagie.text.Font
 import com.lowagie.text.pdf.*
 import janus.ejecucion.*
@@ -36,7 +37,7 @@ class Reportes2Controller {
 
     private String printFecha(Date fecha) {
         if (fecha) {
-            return (fecha.format("dd")+' de '+ meses[fecha.format("MM").toInteger()]+' de '+fecha.format("yyyy")).toUpperCase()
+            return (fecha.format("dd") + ' de ' + meses[fecha.format("MM").toInteger()] + ' de ' + fecha.format("yyyy")).toUpperCase()
         } else {
             return "Error: no hay fecha que mostrar"
         }
@@ -173,8 +174,7 @@ class Reportes2Controller {
 
     def reporteRubroIlustracion() {
         def obra = Obra.get(params.id)
-        def rubros = VolumenesObra.findAllByObra(obra).item
-
+        def rubros = VolumenesObra.findAllByObra(obra).item.unique()
 
         def baos = new ByteArrayOutputStream()
         def name = "rubros_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -215,6 +215,200 @@ class Reportes2Controller {
 
         def rubrosText = "Rubros de la obra " + truncText(obra.nombre)
 
+        def tipo = params.tipo //i: ilustraciones, e: especificaciones, ie: ambas
+
+        rubros.each { rubro ->
+            Paragraph paragraphRubro = new Paragraph();
+            paragraphRubro.add(new Paragraph(rubro.nombre, fontTitle));
+
+            document.add(paragraphRubro)
+
+            PdfPTable tablaRubro = new PdfPTable(6);
+            tablaRubro.setWidths(arregloEnteros([12, 24, 10, 24, 10, 20]))
+            tablaRubro.setWidthPercentage(100);
+            tablaRubro.setSpacingBefore(10f);
+
+            def extIlustracion = "", extEspecificacion = "", pagesEspecificacion = 0, pagesIlustracion = 0, pathEspecificacion, pathIlustracion
+            PdfReader readerEspecificacion
+            PdfReader readerIlustracion
+
+            if (rubro.foto && tipo.contains("i")) {
+                extIlustracion = rubro.foto.split("\\.")
+                extIlustracion = extIlustracion[extIlustracion.size() - 1]
+
+                pathIlustracion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.foto
+
+                if (extIlustracion.toLowerCase() == "pdf") {
+                    readerIlustracion = new PdfReader(new FileInputStream(pathIlustracion));
+                    pagesIlustracion = readerIlustracion.getNumberOfPages()
+                }
+            }
+            if (rubro.especificaciones && tipo.contains("e")) {
+                extEspecificacion = rubro.especificaciones.split("\\.")
+                extEspecificacion = extEspecificacion[extEspecificacion.size() - 1]
+
+                pathEspecificacion = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro?.especificaciones
+
+                if (extEspecificacion.toLowerCase() == "pdf") {
+                    readerEspecificacion = new PdfReader(new FileInputStream(pathEspecificacion));
+                    pagesEspecificacion = readerEspecificacion.getNumberOfPages()
+                }
+            }
+
+            def maxImageSize = 400
+
+            addCellTabla(tablaRubro, new Paragraph("Código", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.codigo, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Unidad", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.unidad.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph("", fontTd), prmsTd)
+
+            addCellTabla(tablaRubro, new Paragraph("Fecha creación", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.fecha?.format("dd-MM-yyyy"), fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Fecha modificación", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro.fechaModificacion?.format("dd-MM-yyyy"), fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph("", fontTd), prmsTd)
+
+            addCellTabla(tablaRubro, new Paragraph("Solicitante", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.subgrupo?.grupo?.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Grupo", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.subgrupo?.descripcion, fontTd), prmsTd)
+            addCellTabla(tablaRubro, new Paragraph("Subgrupo", fontTh), prmsTh)
+            addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.descripcion, fontTd), prmsTd)
+
+            if (extEspecificacion && extEspecificacion != "") {
+                addCellTabla(tablaRubro, new Paragraph("Especificación", fontTh), prmsTh)
+                if (extEspecificacion.toLowerCase() != "pdf") { //es una imgaen png, jpg...
+                    def img = Image.getInstance(pathEspecificacion);
+                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
+                        img.scaleToFit(maxImageSize, maxImageSize);
+                    }
+                    addCellTabla(tablaRubro, img, prmsEs)
+                } else {
+                    def str = "- PDF de ${pagesEspecificacion} página${pagesEspecificacion == 1 ? '' : 's'} adjunto a partir de la siguiente página -"
+                    if (pagesEspecificacion == 1) {
+                        str = "- PDF de ${pagesEspecificacion} página${pagesEspecificacion == 1 ? '' : 's'} adjunto en la siguiente página -"
+                    }
+                    addCellTabla(tablaRubro, new Paragraph(str, fontTd), prmsEs)
+                }
+            }
+
+            if (extIlustracion && extIlustracion != "") {
+                addCellTabla(tablaRubro, new Paragraph("Ilustración", fontTh), prmsTh)
+                if (extIlustracion.toLowerCase() != "pdf") { //es una imgaen png, jpg...
+                    def img = Image.getInstance(pathIlustracion);
+                    if (img.getScaledWidth() > maxImageSize || img.getScaledHeight() > maxImageSize) {
+                        img.scaleToFit(maxImageSize, maxImageSize);
+                    }
+                    addCellTabla(tablaRubro, img, prmsEs)
+                } else {
+                    def str = "- PDF de ${pagesIlustracion} página${pagesIlustracion == 1 ? '' : 's'} adjunto "
+                    def adj = "a partir de la siguiente página -"
+                    if (pagesIlustracion == 1) {
+                        str = "- PDF de ${pagesIlustracion} página${pagesIlustracion == 1 ? '' : 's'} adjunto "
+                        adj = "en la siguiente página -"
+                    }
+
+                    if (pagesEspecificacion > 0) {
+                        adj = "después de la especificación - "
+                    }
+
+                    addCellTabla(tablaRubro, new Paragraph(str + adj, fontTd), prmsEs)
+                }
+            }
+
+            document.add(tablaRubro)
+
+            infoText(cb, document, rubrosText, DOC)
+            infoText(cb, document, pagAct.toString(), PAG)
+            pagAct++
+
+            if (extEspecificacion == "pdf") {
+                pagesEspecificacion.times {
+                    document.newPage();
+                    PdfImportedPage page = pdfw.getImportedPage(readerEspecificacion, it + 1);
+                    cb.addTemplate(page, 0, 0);
+
+                    infoText(cb, document, "Especificación del rubro " + truncText(rubro.nombre) + " pág. " + (it + 1) + "/" + pagesEspecificacion, ADJ)
+                    infoText(cb, document, rubrosText, DOC)
+                    infoText(cb, document, pagAct.toString(), PAG)
+                    pagAct++
+                }
+                document.newPage();
+            }
+
+            if (extIlustracion == "pdf") {
+                pagesIlustracion.times {
+                    document.newPage();
+                    PdfImportedPage page = pdfw.getImportedPage(readerIlustracion, it + 1);
+                    cb.addTemplate(page, 0, 0);
+
+                    infoText(cb, document, "Ilustración del rubro " + truncText(rubro.nombre) + " pág. " + (it + 1) + "/" + pagesIlustracion, ADJ)
+                    infoText(cb, document, rubrosText, DOC)
+                    infoText(cb, document, pagAct.toString(), PAG)
+                    pagAct++
+                }
+                document.newPage();
+            }
+            document.newPage();
+        }
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
+    def reporteRubroIlustracion_bck() {
+        def obra = Obra.get(params.id)
+        def rubros = VolumenesObra.findAllByObra(obra).item
+
+        def baos = new ByteArrayOutputStream()
+        def name = "rubros_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font fontTitle = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
+        Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        PdfContentByte cb = pdfw.getDirectContent();
+        document.addTitle("Rubros de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus, rubros");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph preface = new Paragraph();
+        addEmptyLine(preface, 1);
+        preface.setAlignment(Element.ALIGN_CENTER);
+        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
+        preface.add(new Paragraph("ANEXO DE ESPECIFICACIÓN DE RUBROS DE LA OBRA " + obra.nombre, catFont));
+        addEmptyLine(preface, 1);
+        Paragraph preface2 = new Paragraph();
+        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        addEmptyLine(preface2, 1);
+        document.add(preface);
+        document.add(preface2);
+
+        def prmsTh = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def prmsTd = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE]
+        def prmsEs = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 5]
+
+        def pagAct = 1
+
+        def rubrosText = "Rubros de la obra " + truncText(obra.nombre)
+
+        def tipo = params.tipo //i: ilustraciones, e: especificaciones, ie: ambas
+
         rubros.each { rubro ->
             Paragraph paragraphRubro = new Paragraph();
             paragraphRubro.add(new Paragraph(rubro.nombre, fontTitle));
@@ -223,10 +417,14 @@ class Reportes2Controller {
             tablaRubro.setWidths(arregloEnteros([12, 24, 10, 24, 10, 20]))
             tablaRubro.setWidthPercentage(100);
 
-            def ext = ""
-            if (rubro.foto) {
-                ext = rubro.foto.split("\\.")
-                ext = ext[ext.size() - 1]
+            def extIlustracion = "", extEspecificacion = ""
+            if (rubro.foto && tipo.contains("i")) {
+                extIlustracion = rubro.foto.split("\\.")
+                extIlustracion = extIlustracion[extIlustracion.size() - 1]
+            }
+            if (rubro.especificaciones && tipo.contains("e")) {
+                extEspecificacion = rubro.especificaciones.split("\\.")
+                extEspecificacion = extEspecificacion[extEspecificacion.size() - 1]
             }
 
             addCellTabla(tablaRubro, new Paragraph("Código", fontTh), prmsTh)
@@ -250,12 +448,12 @@ class Reportes2Controller {
             addCellTabla(tablaRubro, new Paragraph("Subgrupo", fontTh), prmsTh)
             addCellTabla(tablaRubro, new Paragraph(rubro?.departamento?.descripcion, fontTd), prmsTd)
 
-            addCellTabla(tablaRubro, new Paragraph("Especificación", fontTh), prmsTh)
-            addCellTabla(tablaRubro, new Paragraph(rubro?.especificaciones, fontTd), prmsEs)
+//            addCellTabla(tablaRubro, new Paragraph("Especificación", fontTh), prmsTh)
+//            addCellTabla(tablaRubro, new Paragraph(rubro?.especificaciones, fontTd), prmsEs)
 
-            if (ext && ext != "") {
+            if (extIlustracion && extIlustracion != "") {
                 def path = servletContext.getRealPath("/") + "rubros" + File.separatorChar + rubro.foto
-                if (ext.toLowerCase() != 'pdf') {
+                if (extIlustracion.toLowerCase() != 'pdf') {
                     def maxImageSize = 400
                     addCellTabla(tablaRubro, new Paragraph("Ilustración", fontTh), prmsTh)
 
@@ -288,13 +486,12 @@ class Reportes2Controller {
                         PdfImportedPage page = pdfw.getImportedPage(reader, it + 1);
                         cb.addTemplate(page, 0, 0);
 
-                        infoText(cb, document, "Especificación del rubro " + truncText(rubro.nombre) + " pág. " + (it + 1) + "/" + pages, ADJ)
+                        infoText(cb, document, "Ilustración del rubro " + truncText(rubro.nombre) + " pág. " + (it + 1) + "/" + pages, ADJ)
                         infoText(cb, document, rubrosText, DOC)
                         infoText(cb, document, pagAct.toString(), PAG)
                         pagAct++
                     }
                     document.newPage();
-
                 }
             } else {
                 paragraphRubro.add(tablaRubro)
@@ -782,7 +979,7 @@ class Reportes2Controller {
         if (!params.tipo) {
             params.tipo = "-1"
         }
-        if(!params.sp){
+        if (!params.sp) {
 
             params.sp = '-1'
         }
@@ -790,9 +987,9 @@ class Reportes2Controller {
             params.tipo = "1,2,3"
         }
 
-        def wsp =""
+        def wsp = ""
 
-        if(params.sp.toString() != "-1"){
+        if (params.sp.toString() != "-1") {
 
             wsp = "      AND v.sbpr__id = ${params.sp} \n"
         }
@@ -1510,7 +1707,7 @@ class Reportes2Controller {
         if (varTrans > 0) {
             valores.eachWithIndex { item, i ->
 
-                if (item > 0){
+                if (item > 0) {
 
 
                     b += (((ed1[i]) / (item)) - eqTotal)
@@ -1598,7 +1795,7 @@ class Reportes2Controller {
         headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
         addEmptyLine(headersTitulo, 1);
         headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
-        addEmptyLine(headersTitulo,1)
+        addEmptyLine(headersTitulo, 1)
         headersTitulo.add(new Paragraph("DESGLOSE DE EQUIPOS", times12bold));
         addEmptyLine(headersTitulo, 1);
         document.add(headersTitulo);
@@ -1718,7 +1915,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
 //        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[0], minFractionDigits:
 //                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0]*valores[0], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[0], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -1729,7 +1926,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
 //        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[1], minFractionDigits:
 //                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0]*valores[1], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[1], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -1740,7 +1937,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
 //        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[2], minFractionDigits:
 //                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0]*valores[2], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[2], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -1751,7 +1948,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
 //        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[3], minFractionDigits:
 //                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0]*valores[3], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[3], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -1762,7 +1959,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
 //        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[4], minFractionDigits:
 //                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0]*valores[4], minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[4], minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -1787,7 +1984,7 @@ class Reportes2Controller {
     }
 
 
-    def reporteCostosIndirectos () {
+    def reporteCostosIndirectos() {
 
         //        println("params" + params)
 
@@ -1853,7 +2050,7 @@ class Reportes2Controller {
         headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times14bold));
         addEmptyLine(headersTitulo, 1);
         headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
-        addEmptyLine(headersTitulo,1)
+        addEmptyLine(headersTitulo, 1)
         headersTitulo.add(new Paragraph("COSTOS INDIRECTOS", times12bold));
         addEmptyLine(headersTitulo, 1);
         document.add(headersTitulo);
@@ -1912,7 +2109,7 @@ class Reportes2Controller {
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Dirección de Obra", times10normal), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-       addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCostosIndirectosObra, minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.indiceCostosIndirectosObra, minFractionDigits:
                 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -1924,7 +2121,7 @@ class Reportes2Controller {
 
         addCellTabla(tablaDesgloseBody, new Paragraph("Administrativos", times10normal), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.administracion , minFractionDigits:
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: obra?.administracion, minFractionDigits:
                 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2006,7 +2203,6 @@ class Reportes2Controller {
         response.getOutputStream().write(b1)
 
 
-
     }
 
 //    def addCellTabla(table, paragraph, params) {
@@ -2053,8 +2249,6 @@ class Reportes2Controller {
 //        }
 //        table.addCell(cell);
 //    }
-
-
 
 
 }
