@@ -683,7 +683,11 @@ class ReportesPlanillasController {
         def contrato = planilla.contrato
 
         def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
-        def liquidacion = planilla.fechaFin >= prej[0].fechaFin
+        /* gdo*/
+        def liquidacion = false
+        if (planilla?.fechaFin) {
+            liquidacion = planilla.fechaFin >= prej[0].fechaFin
+        }
 
         def conDetalles = true
         if (params.detalle) {

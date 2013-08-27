@@ -42,7 +42,7 @@
                         Nueva planilla
                     </g:link>
                 </div>
-                <g:if test="${planillaInstanceList.size() > 0 && planillaInstanceList.last().fechaFin >= prej[0].fechaFin}">
+                <g:if test="${planillaInstanceList.size() > 0 && planillaInstanceList.last()?.fechaFin >= prej[0]?.fechaFin}">
                     <div class="btn-group">
                         <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
                             <i class="icon-exchange"></i>
