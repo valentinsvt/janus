@@ -19,11 +19,11 @@
     <div class="span12">
 
         <b>Buscar Por: </b>
-        <g:select name="buscador" from="${['nmbr':'Nombre', 'cdgo': 'Código', 'cdla': 'Cédula'
+        <g:select name="buscador" from="${['nmbr':'Nombre', '_ruc': 'Cédula'
                 , 'espe': 'Especialidad',]}" value="${params.buscador}"
-                  optionKey="key" optionValue="value" id="buscador_as" style="width: 150px"/>
+                  optionKey="key" optionValue="value" id="buscador_cont" style="width: 150px"/>
         <b>Criterio: </b>
-        <g:textField name="criterio" id="criterio_as" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+        <g:textField name="criterio" id="criterio_cont" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
@@ -40,44 +40,46 @@
 
 </div>
 
+<div style="width: 1000px; height: 500px; overflow-y:hidden; overflow-x: auto" >
 
 
+<div style="width: 1800px; height: 500px; overflow-y: hidden" >
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>
     <tr>
 
-        <th style="width: 250px;">
-            Código
-        </th>
-        <th style="width: 120px;">
+        <th style="width: 100px;">
             Cédula/RUC
         </th>
-        <th style="width: 110px;">
+        <th style="width: 60px;">
             Sigla
         </th>
-        <th style="width: 110px">
+        <th style="width: 60px">
             Tit
         </th>
-        <th style="width: 250px">
+        <th style="width: 300px">
             Nombre
         </th>
-        <th style="width: 200px">
+        <th style="width: 180px">
             Especialidad
         </th>
-        <th style="width: 170px">
-            Licencia
+        <th style="width: 280px">
+           Contacto
         </th>
         <th style="width: 80px">
             Cámara Const.
         </th>
-        <th style="width: 80px">
+        <th style="width: 400px">
             Dirección
         </th>
-        <th style="width: 80px">
+        <th style="width: 120px">
             Teléfono
         </th>
-        <th style="width: 80px">
+        <th style="width: 280px">
             Garante
+        </th>
+        <th style="width: 80px">
+            Fecha Cont.
         </th>
 
 
@@ -87,16 +89,19 @@
 
     <tbody id="tabla_material">
 
-    <g:each in="${res}" var="aseg" status="j">
-        <tr class="obra_row" id="${aseg.id}">
-            <td>${aseg.nombre}</td>
-            <td>${aseg.tipoaseguradora}</td>
-            <td>${aseg.telefono}</td>
-            <td>${aseg.fax}</td>
-            <td>${aseg.direccion}</td>
-            <td>${aseg.observaciones}</td>
-            <td>${aseg.contacto}</td>
-            <td><g:formatDate date="${aseg.fecha}" format="dd-MM-yyyy"/></td>
+    <g:each in="${res}" var="cont" status="j">
+        <tr class="obra_row" id="${cont.id}">
+            <td>${cont.ruc}</td>
+            <td>${cont.sigla}</td>
+            <td>${cont.titulo}</td>
+            <td>${cont.nombre}</td>
+            <td>${cont.especialidad}</td>
+            <td>${cont.nombrecon + " " + cont.apellidocon} </td>
+            <td>${cont.camara}</td>
+            <td>${cont.direccion}</td>
+            <td>${cont.telefono}</td>
+            <td>${cont.garante}</td>
+            <td><g:formatDate date="${cont.fecha}" format="dd-MM-yyyy"/></td>
 
         </tr>
 
@@ -108,6 +113,9 @@
 
     </tbody>
 </table>
+
+</div>
+</div>
 
 
 

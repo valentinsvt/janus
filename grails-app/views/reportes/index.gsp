@@ -107,16 +107,15 @@
             </li>
 
             <li text="cntr" class="item" texto="cntr">
-                <g:link controller="reportes" action="situacionFinanciera" file="Situacion_Financiera.pdf" class="link"
-                        dialog="dlgContabilidadPeriodo">
+                <g:link controller="reportes4" action="contratos" class="link">
                     Contratos
                 </g:link>
                 Listado de contratos registrados en el sistema.
             </li>
 
             <li text="prve" class="item" texto="prve">
-                <g:link controller="reportes" action="resultadoIntegral" file="Estado_Resultado_Integral.pdf"
-                        class="link" dialog="dlgContabilidadPeriodo">
+                <g:link controller="reportes4" action="contratistas"
+                        class="link">
                     Contratistas
                 </g:link>
                 Listado de contratistas que han firmado contratos con el GADPP.
