@@ -1,7 +1,7 @@
 <%@ page import="janus.actas.Seccion" %>
 
 <div id="create-Seccion" class="span" role="main">
-    <g:form class="form-horizontal" name="frmSave" action="save_ext">
+    <g:form class="form-horizontal" name="frmSave" data-action="save_ext">
         <g:hiddenField name="id" value="${seccionInstance?.id}"/>
         <g:hiddenField name="acta.id" value="${seccionInstance?.actaId}"/>
         <g:hiddenField name="numero" value="${seccionInstance?.numero}"/>
@@ -48,4 +48,13 @@
             form.submit();
         }
     });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitFormSeccion($(".btn-success"));
+            ev.preventDefault();
+            return false;
+        }
+    });
+
 </script>

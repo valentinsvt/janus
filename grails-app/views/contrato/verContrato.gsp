@@ -294,9 +294,9 @@
 
                     <div class="span3">${contrato?.administrador?.titulo} ${contrato?.administrador?.nombre} ${contrato?.administrador?.apellido}</div>
 
-                    %{--<div class="span2 formato">Financiado Por</div>--}%
+                    <div class="span2 formato">Fiscalizador</div>
 
-                    %{--<div class="span3">${contrato?.financiadoPor}</div>--}%
+                    <div class="span3">${contrato?.fiscalizador?.titulo} ${contrato?.fiscalizador?.nombre} ${contrato?.fiscalizador?.apellido}</div>
 
                 </div>
 
@@ -403,7 +403,13 @@
 
                             <li>
                                 <a href="#" id="btnAdmin">
-                                    <i class="icon-user"></i> Administrador
+                                    <i class="icon-user"></i> Admin.
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#" id="btnFisc">
+                                    <i class="icon-user"></i> Fisc.
                                 </a>
                             </li>
 
@@ -575,7 +581,29 @@
                         $("#modal-var").modal("show");
                     }
                 });
+                return false;
+            });
 
+            $("#btnFisc").click(function () {
+                $.ajax({
+                    type    : "POST",
+                    url     : "${createLink(controller: 'fiscalizadorContrato', action: 'list_ext')}",
+                    data    : {
+                        contrato : "${contrato?.id}"
+                    },
+                    success : function (msg) {
+                        var $btnOk = $('<a href="#" class="btn">Aceptar</a>');
+                        $btnOk.click(function () {
+                            $(this).replaceWith(spinner);
+                            location.reload(true);
+                        });
+                        $("#modal_tittle_var").text("Fiscalizadores");
+                        $("#modal_body_var").html(msg);
+                        $("#fiscalizador").data("contrato", "${contrato?.id}");
+                        $("#modal_footer_var").html($btnOk);
+                        $("#modal-var").modal("show");
+                    }
+                });
                 return false;
             });
 

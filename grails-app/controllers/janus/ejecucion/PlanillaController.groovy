@@ -613,6 +613,7 @@ class PlanillaController extends janus.seguridad.Shield {
             case "4":
                 planilla.memoPagoPlanilla = memo
                 planilla.fechaMemoPagoPlanilla = fecha
+                planilla.fechaPago = fecha
 //                def obra = Obra.get(planilla.contrato.obra.id)
 //                obra.fechaInicio = fechaObra
 //                if (!obra.save(flush: true)) {
@@ -740,6 +741,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def anticipo = TipoPlanilla.findByCodigo('A')
         def avance = TipoPlanilla.findByCodigo('P')
+        def avanceLiq = TipoPlanilla.findByCodigo('Q')
         def liquidacion = TipoPlanilla.findByCodigo('L')
         def reajusteDefinitivo = TipoPlanilla.findByCodigo('R')
         def costoPorcentaje = TipoPlanilla.findByCodigo('C')
@@ -784,10 +786,15 @@ class PlanillaController extends janus.seguridad.Shield {
             if (pll) {
                 tiposPlanilla -= pll.tipoPlanilla
                 liquidado = true
+                tiposPlanilla = []
             }
             def plr = Planilla.findByContratoAndTipoPlanilla(contrato, reajusteDefinitivo)
             if (plr) {
                 tiposPlanilla -= plr.tipoPlanilla
+            }
+            def plq = Planilla.findByContratoAndTipoPlanilla(contrato, avanceLiq)
+            if (plq) {
+                tiposPlanilla -= plq.tipoPlanilla
             }
             def plc = Planilla.findByContratoAndTipoPlanilla(contrato, costoPorcentaje)
             if (plc) {
@@ -925,7 +932,7 @@ class PlanillaController extends janus.seguridad.Shield {
             fiscalizadorAnterior = planillas.last().fiscalizadorId
         }
 
-        liquidado = false
+//        liquidado = false
 
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo,
                 anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado]
@@ -977,6 +984,7 @@ class PlanillaController extends janus.seguridad.Shield {
             params.numero = params.numero.toUpperCase()
         }
         def planillaInstance
+
         if (params.id) {
             planillaInstance = Planilla.get(params.id)
             if (!planillaInstance) {
@@ -1036,6 +1044,8 @@ class PlanillaController extends janus.seguridad.Shield {
                     break;
             }
 
+            def contrato = Contrato.get(params.contrato.id)
+            planillaInstance.fiscalizador = contrato.fiscalizador
         } //es create
 
         if (!planillaInstance.save(flush: true)) {

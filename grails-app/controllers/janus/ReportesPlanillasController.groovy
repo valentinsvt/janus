@@ -1273,7 +1273,7 @@ class ReportesPlanillasController {
             addCellTabla(tablaFr, new Paragraph("REAJUSTE ANTERIOR", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
             addCellTabla(tablaFr, new Paragraph(numero(reajusteAnterior, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
             addCellTabla(tablaFr, new Paragraph("REAJUSTE A PLANILLAR", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaFr, new Paragraph(/*numero(reajustePlanillar, 2) + " ** " +*/ numero(planilla.reajuste, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+            addCellTabla(tablaFr, new Paragraph(numero(reajustePlanillar, 2)  /*numero(planilla.reajuste, 2)*/, fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
         }
 
         document.add(tablaFr);
@@ -1293,7 +1293,7 @@ class ReportesPlanillasController {
 
             Paragraph tituloMultaNoPres = new Paragraph();
             tituloMultaNoPres.setAlignment(Element.ALIGN_CENTER);
-            tituloMultaNoPres.add(new Paragraph("Multa por no presentación de planilla", fontTitle));
+            tituloMultaNoPres.add(new Paragraph("Multa por retraso en la presentación de planilla", fontTitle));
             addEmptyLine(tituloMultaNoPres, 1);
             document.add(tituloMultaNoPres);
 
@@ -1322,9 +1322,11 @@ class ReportesPlanillasController {
 
             if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-                totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
-                    it.parcialCronograma
-                }) * (prmlMultaPlanilla / 1000) * retraso
+//                totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
+//                    it.parcialCronograma
+//                }) * (prmlMultaPlanilla / 1000) * retraso
+
+                totalMulta = (prmlMultaPlanilla / 1000) * planilla.valor
             } else {
                 retraso = 0
             }
@@ -1343,7 +1345,7 @@ class ReportesPlanillasController {
             addCellTabla(tablaPml, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("" + retraso, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaPml, new Paragraph(numero(prmlMultaPlanilla, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaPml, new Paragraph(numero(prmlMultaPlanilla, 2) + "‰ de \$" + numero(planilla.valor, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph('$' + numero(totalMulta, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             document.add(tablaPml);
@@ -1483,7 +1485,7 @@ class ReportesPlanillasController {
                 Font fontThFooter = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
                 def txt = "AVANCE DE OBRA PARCIAL"
                 if (params.completo) {
-                    txt = "TOTAL AVANCE DE OBRA"
+                    txt = "AVANCE DE OBRA"
                 }
 
 //                addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
@@ -1525,6 +1527,10 @@ class ReportesPlanillasController {
                     }
                     def cpAcu = cpAnt + cpAct
 
+                    def smAnt = params.ant + cpAnt
+                    def smAct = params.act + cpAct
+                    def smAcu = params.acu + cpAcu
+
                     def cAnt = params.ant + bAnt + cpAnt
                     def cAct = params.act + bAct + cpAct
                     def cAcu = params.acu + bAcu + cpAcu
@@ -1556,7 +1562,7 @@ class ReportesPlanillasController {
                     def sbtAcu = bAcu + params.acu
 
 //                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
-                    addCellTabla(tablaDetalles, new Paragraph("TOTAL REAJUSTE DE PRECIOS", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                    addCellTabla(tablaDetalles, new Paragraph("REAJUSTE DE PRECIOS", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
                     addCellTabla(tablaDetalles, new Paragraph(numero(bAnt, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(bAct, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(bAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
@@ -1566,10 +1572,15 @@ class ReportesPlanillasController {
                     addCellTabla(tablaDetalles, new Paragraph(numero(sbtAct, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(sbtAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
-                    addCellTabla(tablaDetalles, new Paragraph("TOTAL RUBROS NO CONTRACTUALES COSTO + %", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                    addCellTabla(tablaDetalles, new Paragraph("RUBROS NO CONTRACTUALES COSTO + PORCENTAJE", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
                     addCellTabla(tablaDetalles, new Paragraph(numero(cpAnt, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(cpAct, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaDetalles, new Paragraph(numero(cpAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+
+                    addCellTabla(tablaDetalles, new Paragraph("SUMATORIA DE AVANCE DE OBRA Y COSTO + PORCENTAJE", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(smAnt, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(smAct, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaDetalles, new Paragraph(numero(smAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
 //                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                     addCellTabla(tablaDetalles, new Paragraph("TOTAL PLANILLA REAJUSTADA INCLUIDO COSTO + PORCENTAJE", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
@@ -1578,7 +1589,7 @@ class ReportesPlanillasController {
                     addCellTabla(tablaDetalles, new Paragraph(numero(cAcu, 2), fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
 //                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
-                    addCellTabla(tablaDetalles, new Paragraph("DESCUENTOS CONTRACTUALES", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 11])
+                    addCellTabla(tablaDetalles, new Paragraph("DESCUENTOS CONTRACTUALES", fontThFooter), [border: Color.BLACK, bg: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 11])
 
 //                    addCellTabla(tablaDetalles, new Paragraph("", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 5])
                     addCellTabla(tablaDetalles, new Paragraph("ANTICIPO", fontThFooter), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 8])
@@ -1629,11 +1640,15 @@ class ReportesPlanillasController {
 
             def totalPags = Math.ceil(totalRows / maxRows).toInteger()
 
-            if (totalRows % maxRows > maxRowsLastPag) {
+//            println "totalRows: " + totalRows + "    maxRows: " + maxRows + "   maxRowsLastPag: " + maxRowsLastPag
+//
+//            println "totalPags " + totalPags
+//            println totalRows % maxRows
+            if (totalRows % maxRows >= maxRowsLastPag) {
                 totalPags++
             }
 
-//            println "totalRows: " + totalRows + "    maxRows: " + maxRows + "   maxRowsLastPag: " + maxRowsLastPag
+//            println "totalPags " + totalPags
 
             def currentPag = 1
 

@@ -71,6 +71,30 @@
                         <g:hiddenField id="contrato" name="contrato.id" value="${planillaInstance?.contrato?.id}"/>
                         %{--<g:hiddenField name="numero" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>--}%
 
+                        <div class="alert alert-info">
+                            <g:if test="${tipos.find { it.codigo == 'A' }}">
+                                <p>
+                                    La planilla de tipo "${tipos.find { it.codigo == 'A' }.nombre}" se utiliza para registrar el reajuste al momento del inicio de la obra
+                                </p>
+                            </g:if>
+
+                            <g:if test="${tipos.find { it.codigo == 'P' }}">
+                                <p>
+                                    Las planillas de tipo "${tipos.find { it.codigo == 'P' }.nombre}" se utilizan para registrar el avance de la obra. La última de este tipo es considerada como planilla de liquidación
+                                </p>
+                            </g:if>
+                            <g:if test="${tipos.find { it.codigo == 'L' }}">
+                                <p>
+                                    La planilla de tipo "${tipos.find { it.codigo == 'L' }.nombre}" se utiliza para registrar el reajuste definitivo de la obra
+                                </p>
+                            </g:if>
+                            <g:if test="${tipos.find { it.codigo == 'C' }}">
+                                <p>
+                                    Las planillas de tipo "${tipos.find { it.codigo == 'C' }.nombre}" se utilizan para registrar costos por rubros no incluídos en el volumen de obra
+                                </p>
+                            </g:if>
+                        </div>
+
                         <div class="row">
                             <div class='span2 formato'>
                                 Tipo de Planilla
@@ -114,8 +138,10 @@
                             </div>
 
                             <div class="span4">
-                                <g:set var="fisc" value="${janus.Departamento.get(1)}"/>
-                                <g:select name="fiscalizador.id" from="${janus.Persona.findAllByDepartamento(fisc)}" value="${planillaInstance?.fiscalizador ? planillaInstance.fiscalizadorId : fiscalizadorAnterior}" optionKey="id" optionValue="${{ it.nombre + " " + it.apellido }}"/>
+                                %{--<g:set var="fisc" value="${janus.Departamento.get(1)}"/>--}%
+                                %{--<g:select name="fiscalizador.id" from="${janus.Persona.findAllByDepartamento(fisc)}" value="${planillaInstance?.fiscalizador ? planillaInstance.fiscalizadorId : fiscalizadorAnterior}" optionKey="id" optionValue="${{ it.nombre + " " + it.apellido }}"/>--}%
+
+                                ${contrato.fiscalizador.titulo} ${contrato.fiscalizador.nombre} ${contrato.fiscalizador.apellido}
 
                                 <p class="help-block ui-helper-hidden"></p>
                             </div>

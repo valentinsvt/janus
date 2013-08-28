@@ -124,6 +124,29 @@ class Planilla2Controller {
                     order("numero", "asc")
                 }
             }
+
+            def cMayor0 = cs.findAll { it.valor > 0 }
+            def pMayor0 = ps.findAll { it.valor > 0 }
+
+//            println "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+//            println cs
+//            println cMayor0
+//            println cMayor0.size()
+//            println ps
+//            println pMayor0
+//            println pMayor0.size()
+//            println "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+
+            if (cMayor0.size() == 0 || pMayor0.size() == 1) {
+                println "NO hay la fp de liq"
+                println obraLiquidacion.id
+                def url = g.createLink(controller: "formulaPolinomica", action: "coeficientes", id: obraLiquidacion.id)
+                def link = "<a href='${url}' class='btn btn-danger'>Fórmula polinómica de liquidación</a>"
+                flash.message = "No se encontró la fórmula polinómica de liquidación. Por favor ingrésela para realizar la planilla de liquidación<br/><br/>" + link
+                redirect(action: "errores")
+                return
+            }
+
             if (!fechaFinObra) {
                 println "Error fecha fin obra"
                 flash.message = "Ingrese las fechas de recepción antes de generar la planilla de liquidación de reajuste"
@@ -138,20 +161,31 @@ class Planilla2Controller {
 
             def existe = null
             def error = false
+            def errorNull = ""
             flash.message = ""
             planillasAnteriores.each { pl ->
+//                println pl
                 def pers = PeriodoPlanilla.findAllByPlanilla(pl)
                 pers.each { p ->
+//                    println "\t" + p
                     def periodo
                     if (tarde) {
+//                        println "\t\t1: " + p.fechaIncio + "    " + p.fechaFin
                         periodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(p.fechaIncio, p.fechaFin)
-
+//                        println "Periodo q incluye " + p.fechaIncio.format("dd-MM-yyyy") + " y " + p.fechaFin.format("dd-MM-yyyy") + ": " + periodo
                     } else {
+//                        println "\t\t2: " + pl.fechaPago
                         periodo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(pl.fechaPago, pl.fechaPago)
+//                        println "Periodo q incluye " + pl.fechaPago.format("dd-MM-yyyy") + " y " + pl.fechaPago.format("dd-MM-yyyy") + ": " + periodo
                     }
+//                    println "\t\t" + periodo
                     p.periodoLiquidacion = periodo
                     p.save(flush: true)
                     existe = verificaIndices(pcs, periodo, 0)
+//                    println "\t\t" + existe
+                    if (!periodo || !existe) {
+                        errorNull = true
+                    }
                     if (periodo != existe) {
                         error = true
 //                        if (!error.contains(periodo.toString())) {
@@ -159,7 +193,15 @@ class Planilla2Controller {
 ////                            flash.message += "<li>No se encontraron todos los valores de índice para el periodo " + periodo.toString() + "</li>"
 //                        }
                     }
+//                    println "\t\t\t" + error
                 }
+            }
+
+            if (errorNull) {
+                println "**ERROR Null"
+                flash.message = "<ul><li>Ha ocurrido un error grave</li>></ul>"
+                redirect(action: "errores")
+                return
             }
 
             if (error) {
@@ -1205,9 +1247,10 @@ class Planilla2Controller {
         def multaPlanilla = 0
         if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-            multaPlanilla = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
-                it.parcialCronograma
-            }) * (prmlMultaPlanilla / 1000) * retraso
+//            multaPlanilla = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
+//                it.parcialCronograma
+//            }) * (prmlMultaPlanilla / 1000) * retraso
+            multaPlanilla = (prmlMultaPlanilla / 1000) * planilla.valor
         } else {
             retraso = 0
         }
@@ -1226,7 +1269,7 @@ class Planilla2Controller {
         pMl += '<th class="tal">Días de retraso</th> <td>' + retraso + "</td>"
         pMl += "</tr>"
         pMl += "<tr>"
-        pMl += '<th class="tal">Multa</th> <td>' + prmlMultaPlanilla + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
+        pMl += '<th class="tal">Multa</th> <td>' + prmlMultaPlanilla + "&#8240; de \$" + numero(planilla.valor, 2) + "</td>"
         pMl += "</tr>"
         pMl += "<tr>"
         pMl += '<th class="tal">Total multa</th> <td>$' + numero(multaPlanilla, 2) + "</td>"

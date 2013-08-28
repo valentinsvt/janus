@@ -291,7 +291,7 @@
                 if ($form.valid()) {
                     btn.replaceWith(spinner);
 
-                    var url = $form.attr("action");
+                    var url = $form.data("action");
                     $.ajax({
                         type    : "POST",
                         url     : url,

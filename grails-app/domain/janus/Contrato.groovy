@@ -84,8 +84,8 @@ class Contrato implements Serializable {
             multaRetraso column: "cntrmlrt"
             multaPlanilla column: "cntrmlpl"
 
-            multaIncumplimiento column:  'cntrmlin'
-            multaDisposiciones column:  'cntrmlds'
+            multaIncumplimiento column: 'cntrmlin'
+            multaDisposiciones column: 'cntrmlds'
 
             fechaPedidoRecepcionContratista column: 'cntrfccn'
             fechaPedidoRecepcionFiscalizador column: 'cntrfcfs'
@@ -159,6 +159,31 @@ class Contrato implements Serializable {
 
     def getAdministrador() {
         return this.administradorContrato?.administrador
+    }
+
+    def getFiscalizadorContrato() {
+        def fiscs = FiscalizadorContrato.withCriteria {
+            eq("contrato", this)
+            le("fechaInicio", new Date().clearTime())
+            or {
+                ge("fechaFin", new Date().clearTime())
+                isNull("fechaFin")
+            }
+            order("fechaInicio", "desc")
+        }
+//        println fiscs
+        if (fiscs.size() == 0) {
+            return new FiscalizadorContrato()
+        } else if (fiscs.size() == 1) {
+            return fiscs.first()
+        } else {
+            println "Alerta hay varios fiscalizadores: contrato: " + this.id + " fiscs: " + fiscs.id
+            return fiscs.first()
+        }
+    }
+
+    def getFiscalizador() {
+        return this.fiscalizadorContrato?.fiscalizador
     }
 
 }

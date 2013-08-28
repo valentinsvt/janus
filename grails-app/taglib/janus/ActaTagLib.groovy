@@ -315,8 +315,8 @@ class ActaTagLib {
             order("fechaIngreso", "asc")
         }
 
-        def p1 = planillasCosto.first()
-        def prct = DetallePlanillaCosto.findByPlanilla(p1).indirectos
+        def p1 = planillasCosto.size() > 0 ? planillasCosto.first() : null
+        def prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
 
         def tabla = "<table class='table table-bordered table-condensed'>"
 
