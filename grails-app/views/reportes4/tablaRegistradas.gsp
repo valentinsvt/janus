@@ -33,14 +33,14 @@
             <i class="icon-search"></i>
             Buscar
         </a>
-        <a href="#" class="btn  " id="imprimir">
-            <i class="icon-print"></i>
-            Imprimir
-        </a>
-        <a href="#" class="btn" id="regresar">
-            <i class="icon-arrow-left"></i>
-            Regresar
-        </a>
+        %{--<a href="#" class="btn  " id="imprimir">--}%
+            %{--<i class="icon-print"></i>--}%
+            %{--Imprimir--}%
+        %{--</a>--}%
+        %{--<a href="#" class="btn" id="regresar">--}%
+            %{--<i class="icon-arrow-left"></i>--}%
+            %{--Regresar--}%
+        %{--</a>--}%
     </div>
 
 </div>
@@ -85,6 +85,8 @@
 
     <tbody id="tabla_material">
 
+    <g:if test="${params.criterio}">
+
     <g:each in="${res}" var="obra" status="j">
         <tr class="obra_row" id="${obra.id}">
             <td>${obra.codigo}</td>
@@ -102,11 +104,12 @@
 
     </g:each>
 
-
+    </g:if>
 
 
     </tbody>
 </table>
+
 
 
 
@@ -140,6 +143,13 @@
 
 
         location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradas' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()
+
+    });
+
+    $("#excel").click(function () {
+
+
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradasExcel' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()
 
     });
 

@@ -1,4 +1,9 @@
-
+<%--
+  Created by IntelliJ IDEA.
+  User: fabricio
+  Date: 8/28/13
+  Time: 10:35 AM
+--%>
 
 
 <%@ page import="janus.Grupo" %>
@@ -7,7 +12,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        Obras Registradas
+       Garantías
     </title>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -30,7 +35,7 @@
     </div>
 </g:if>
 
-<div style="width: 99.7%;height: 400px;overflow-y: auto;float: right;" id="detalle"></div>
+<div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
 
 <div class="row-fluid">
     <div class="span12">
@@ -38,10 +43,6 @@
         <a href="#" class="btn  " id="imprimir">
             <i class="icon-print"></i>
             Imprimir
-        </a>
-        <a href="#" class="btn  " id="excel">
-            <i class="icon-table"></i>
-            Excel
         </a>
         <a href="#" class="btn" id="regresar">
             <i class="icon-arrow-left"></i>
@@ -70,8 +71,8 @@
     function cargarTabla() {
         var interval = loading("detalle")
         var datos = ""
-        datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val()
-        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaRegistradas')}",
+        datos = "si=${"si"}&buscador=" + $("#buscador_gar").val()
+        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaGarantias')}",
             data     : datos,
             success  : function (msg) {
                 clearInterval(interval)
@@ -82,8 +83,6 @@
 
 
     $(function () {
-
-
 
         cargarTabla();
 

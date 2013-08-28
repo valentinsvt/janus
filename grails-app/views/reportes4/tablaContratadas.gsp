@@ -29,19 +29,19 @@
         %{--<g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"--}%
                   %{--optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>--}%
         <b>Criterio: </b>
-        <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+        <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}" id="criterio_con"/>
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
         </a>
-        <a href="#" class="btn  " id="imprimir">
-            <i class="icon-print"></i>
-            Imprimir
-        </a>
-        <a href="#" class="btn" id="regresar">
-            <i class="icon-arrow-left"></i>
-            Regresar
-        </a>
+        %{--<a href="#" class="btn  " id="imprimir">--}%
+            %{--<i class="icon-print"></i>--}%
+            %{--Imprimir--}%
+        %{--</a>--}%
+        %{--<a href="#" class="btn" id="regresar">--}%
+            %{--<i class="icon-arrow-left"></i>--}%
+            %{--Regresar--}%
+        %{--</a>--}%
     </div>
 
 </div>
@@ -84,6 +84,8 @@
 
     <tbody id="tabla_material">
 
+    <g:if test="${params.criterio}">
+
     <g:each in="${obras}" var="obra" status="j">
         <tr class="obra_row" id="${obra.id}">
             <td>${obra.codigo}</td>
@@ -100,7 +102,7 @@
 
     </g:each>
 
-
+    </g:if>
 
 
     </tbody>
@@ -114,7 +116,7 @@
 
     $("#buscar").click(function(){
 
-        var datos = "si=${"si"}&buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio").val()
+        var datos = "si=${"si"}&buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
         var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaContratadas')}",
             data     : datos,
@@ -137,8 +139,16 @@
     $("#imprimir").click(function () {
 
 
-        location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio").val()
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
 
     });
+
+    $("#excel").click(function () {
+
+
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelContratadas' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
+
+    });
+
 
 </script>

@@ -558,6 +558,70 @@ class ReportesController {
         }
     }
 
+    def reporteBuscador2 = {
+
+        // println "reporte buscador params !! "+params
+        if (!session.dominio)
+            response.sendError(403)
+        else {
+            def listaTitulos = params.listaTitulos
+            def listaCampos = params.listaCampos
+            def lista = buscadorService.buscar(session.dominio, params.tabla, "excluyente", params, true, params.extras)
+            def funciones = session.funciones
+            session.dominio = null
+            session.funciones = null
+            lista.pop()
+
+            def baos = new ByteArrayOutputStream()
+            def name = "reporte_de_" + params.titulo.replaceAll(" ", "_") + "_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+//            println "name "+name
+            Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+            Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+            Document document
+            if (params.landscape)
+                document = new Document(PageSize.A4.rotate());
+            else
+                document = new Document();
+
+            def pdfw = PdfWriter.getInstance(document, baos);
+
+            document.open();
+            document.addTitle("Reporte de " + params.titulo + " " + new Date().format("dd_MM_yyyy"));
+            document.addSubject("Generado por el sistema Janus");
+            document.addKeywords("reporte, elyon," + params.titulo);
+            document.addAuthor("Janus");
+            document.addCreator("Tedein SA");
+            Paragraph preface = new Paragraph();
+            addEmptyLine(preface, 1);
+//            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
+//            preface.add(new Paragraph("" + params.titulo, catFont));
+//            preface.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+//            addEmptyLine(preface, 1);
+//            document.add(preface);
+
+            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
+            addEmptyLine(preface, 1);
+            preface.add(new Paragraph("REPORTE DE OBRAS REGISTRADAS", catFont));
+            addEmptyLine(preface, 1);
+            preface.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), catFont));
+            addEmptyLine(preface, 1);
+
+
+
+//        Start a new page
+//        document.newPage();
+            //System.getProperty("user.name")
+            addContent(document, catFont, listaCampos.size(), listaTitulos, params.anchos, listaCampos, funciones, lista);            // Los tamaños son porcentajes!!!!
+            document.close();
+            pdfw.close()
+            byte[] b = baos.toByteArray();
+            response.setContentType("application/pdf")
+            response.setHeader("Content-disposition", "attachment; filename=" + name)
+            response.setContentLength(b.length)
+            response.getOutputStream().write(b)
+        }
+    }
+
     def pac() {
 //        println "params REPORTE " + params
         def pac

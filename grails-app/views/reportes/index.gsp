@@ -64,8 +64,7 @@
     <div class="ui-widget-content ui-corner-all lista">
         <ul class="noBullet">
             <li text="obraprsp" class="item" texto="obraprsp">
-                <g:link controller="reportes" action="planDeCuentas" file="Plan_de_Cuentas.pdf" class="link"
-                        dialog="dlgContabilidad">
+                <g:link controller="reportes4" action="presupuestadas" class="link" dialog="dlgVentas">
                     Obras presupuestadas:
                 </g:link>
                 Listado de obras que se hallan elaboradas los presupuestos y se hallan listas para entrar en el proceso de
@@ -129,8 +128,7 @@
             </li>
 
             <li text="grnt" class="item" texto="grnt">
-                <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
-                        class="link" dialog="dlgContabilidadPeriodo">
+                <g:link controller="reportes4" action="garantias" class="link">
                     Garantías por contrato y contratistas
                 </g:link>
                 Listado de garantías detalladas por contrato.

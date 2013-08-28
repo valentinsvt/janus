@@ -36,6 +36,15 @@
 
 <div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
 
+<a href="#" class="btn  " id="imprimir">
+    <i class="icon-print"></i>
+    Imprimir
+</a>
+<a href="#" class="btn" id="regresar">
+    <i class="icon-arrow-left"></i>
+    Regresar
+</a>
+
 <script type="text/javascript">
 
 

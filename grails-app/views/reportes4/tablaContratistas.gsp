@@ -28,14 +28,14 @@
             <i class="icon-search"></i>
             Buscar
         </a>
-        <a href="#" class="btn  " id="imprimir">
-            <i class="icon-print"></i>
-            Imprimir
-        </a>
-        <a href="#" class="btn" id="regresar">
-            <i class="icon-arrow-left"></i>
-            Regresar
-        </a>
+        %{--<a href="#" class="btn  " id="imprimir">--}%
+            %{--<i class="icon-print"></i>--}%
+            %{--Imprimir--}%
+        %{--</a>--}%
+        %{--<a href="#" class="btn" id="regresar">--}%
+            %{--<i class="icon-arrow-left"></i>--}%
+            %{--Regresar--}%
+        %{--</a>--}%
     </div>
 
 </div>
@@ -89,6 +89,8 @@
 
     <tbody id="tabla_material">
 
+    <g:if test="${params.criterio}">
+
     <g:each in="${res}" var="cont" status="j">
         <tr class="obra_row" id="${cont.id}">
             <td>${cont.ruc}</td>
@@ -108,7 +110,7 @@
 
     </g:each>
 
-
+    </g:if>
 
 
     </tbody>
@@ -149,6 +151,12 @@
 
 
         location.href="${g.createLink(controller: 'reportes4', action:'reporteContratistas' )}?buscador=" + $("#buscador_cont").val() + "&criterio=" + $("#criterio_cont").val()
+
+    });
+    $("#excel").click(function () {
+
+
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelContratistas' )}?buscador=" + $("#buscador_cont").val() + "&criterio=" + $("#criterio_cont").val()
 
     });
 
