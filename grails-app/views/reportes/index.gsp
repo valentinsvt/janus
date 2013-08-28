@@ -83,7 +83,7 @@
                 %{--<g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link"--}%
                 <g:link controller="reportes4" action="registradas" class="link"
                         dialog="dlgContabilidad">
-                    Obras registradas
+                    Obras ingresadas
                 </g:link>
                 Listado de obras que se hallan registradas en el sistema, están an la fase inicial de estructuración de presupuestos
                 y más documentos precontractuales.
@@ -98,9 +98,9 @@
             %{--</li>--}%
 
             <li text="cncr" class="item" texto="cncr">
-                <g:link controller="reportes" action="balanceComprobacion" file="Balance_Comprobacion.pdf" class="link"
+                <g:link controller="concurso" action="concursos" file="concursos" class="link"
                         dialog="dlgContabilidadPeriodo">
-                    Procesos
+                    Procesos de contratación
                 </g:link>
                 Listado de proceso para la contratación de obras y otros servicios.
             </li>
@@ -134,7 +134,7 @@
                 Listado de garantías detalladas por contrato.
             </li>
             <li text="trnf" class="item" texto="trnf">
-                <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
+                <g:link controller="planilla2" action="pagos" file="pagos.pdf"
                         class="link" dialog="dlgVentas">
                     Transferencias y/o cheques pagados
                 </g:link>

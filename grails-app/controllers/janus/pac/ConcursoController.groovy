@@ -2,6 +2,7 @@ package janus.pac
 
 import janus.Administracion
 import janus.Comunidad
+import janus.Contrato
 import janus.Obra
 import janus.Parroquia
 import org.springframework.dao.DataIntegrityViolationException
@@ -39,6 +40,102 @@ class ConcursoController extends janus.seguridad.Shield {
 //        println codigo
 //        println "________________________________________________________"
         return codigo
+    }
+
+
+    def concursos(){
+        def campos = ["codigo": ["Código", "string"], "objeto": ["Objeto", "string"], "fechaInicio": ["Fecha inicio", "string"], "presupuestoReferencial": ["Presupuesto", "string"], "obra": ["Obra", "string"]]
+        [campos:campos]
+    }
+
+
+    def buscarConcurso(){
+        def extraObra = ""
+        if (params.campos instanceof java.lang.String) {
+            if (params.campos == "obra") {
+                def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%' or codigo like '%${params.criterios.toUpperCase()}%'")
+                params.criterios = ""
+                obras.eachWithIndex { ob, j ->
+                    extraObra += "" + ob.id
+                    if (j < obras.size() - 1)
+                        extraObra += ","
+                }
+                if (extraObra.size() < 1)
+                    extraObra = "-1"
+                params.campos = ""
+                params.operadores = ""
+            }
+        } else {
+            def remove = []
+            params.campos.eachWithIndex { p, i ->
+                if (p == "obra") {
+                    def obras = Obra.findAll("from Obra where nombre like '%${params.criterios[i].toUpperCase()}%'  or codigo like '%${params.criterios.toUpperCase()}%'")
+                    obras.eachWithIndex { ob, j ->
+                        extraObra += "" + ob.id
+                        if (j < obras.size() - 1)
+                            extraObra += ","
+                    }
+                    if (extraObra.size() < 1)
+                        extraObra = "-1"
+
+                }
+            }
+            remove.each {
+                params.criterios[it] = null
+                params.campos[it] = null
+                params.operadores[it] = null
+            }
+        }
+
+//        println "extra obra "+extraObra
+
+        def pac = { concurso ->
+            return concurso?.obra?.codigo
+        }
+        def nombreObra = { concurso ->
+            return concurso?.obra?.nombre
+        }
+        def registro = { concurso ->
+            return (concurso?.estado!="R")?"N":"R"
+        }
+
+        def listaTitulos = ["CODIGO","OBJETO","OBRA","PAC","MONTO","ESTADO"]
+        def listaCampos = ["codigo", "objeto", "obra", "pac", "presupuestoReferencial","estado"]
+        def funciones = [null, null,["closure": [nombreObra, "&"]], ["closure": [pac, "&"]], null,["closure": [registro, "&"]]]
+        def url = g.createLink(action: "buscarConcurso", controller: "concurso")
+        def funcionJs = "function(){"
+        funcionJs += '$("#modal-busqueda").modal("hide");'
+        funcionJs += 'location.href="' + g.createLink(action: 'form_ajax', controller: 'concurso') + '/"+$(this).attr("regId");'
+        funcionJs += '}'
+        def numRegistros = 20
+        def extras = " "
+        if (extraObra.size() > 0)
+            extras += " and obra in (${extraObra})"
+        println "extras "+extras
+
+        if (!params.reporte) {
+            if (params.excel) {
+                session.dominio = Concurso
+                session.funciones = funciones
+                def anchos = [35, 70, 70, 35, 20,10]
+                /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PROCESOS DE CONTRATACION", anchos: anchos, extras: extras, landscape: true])
+            } else {
+                def lista = buscadorService.buscar(Concurso, "Concurso", "excluyente", params, true, extras)
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "obra", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+            }
+
+        } else {
+//            println "entro reporte"
+            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+            session.dominio = Concurso
+            session.funciones = funciones
+            def anchos = [12, 38, 25, 10, 5,5]
+            /*el ancho de las columnas en porcentajes... solo enteros*/
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PROCESOS DE CONTRATACION", anchos: anchos, extras: extras, landscape: true])
+        }
     }
 
     def index() {

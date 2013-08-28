@@ -1,14 +1,139 @@
 package janus.ejecucion
 
+import janus.Contrato
 import janus.FormulaPolinomica
 import janus.Obra
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
 
-class Planilla2Controller {
+class Planilla2Controller extends janus.seguridad.Shield {
+
+    def buscadorService
 
     def errores() {
     }
+
+
+    def pagos(){
+        def campos = ["id": ["Obra", "string"],"descripcion":["Descripción","string"],"fechaPresentacion":["Fecha Presentación","string"],"memoPagoPlanilla":["Memo pago","string"]]
+        [campos:campos]
+    }
+
+
+    def buscarPlanilla(){
+
+        def extraObra = ""
+        if (params.campos instanceof java.lang.String) {
+            if (params.campos == "id") {
+                if( params.criterios != ""){
+                    def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%' or codigo like '%${params.criterios.toUpperCase()}%' ")
+                    params.criterios = ""
+                    obras.eachWithIndex { p, i ->
+                        def concursos = janus.pac.Concurso.findAllByObraAndEstado(p, "R")
+                        concursos.each { co ->
+                            def ofertas = janus.pac.Oferta.findAllByConcurso(co)
+                            ofertas.each { o->
+                                def contratos = Contrato.findAllByOferta(o)
+                                contratos.eachWithIndex{ cn,k->
+                                    extraObra += "" + cn.id
+                                    if (k < contratos.size() - 1)
+                                        extraObra += ","
+                                }
+                            }
+
+                        }
+
+                    }
+                    if (extraObra.size() < 1)
+                        extraObra = "-1"
+                }
+
+                params.campos = ""
+                params.operadores = ""
+            }
+        } else {
+            def remove = []
+            params.campos.eachWithIndex { p, i ->
+                if (p == "id") {
+                    if( params.criterios != ""){
+                        def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%' or codigo like '%${params.criterios.toUpperCase()}%' ")
+
+                        obras.eachWithIndex { ob, j ->
+                            def concursos = janus.pac.Concurso.findAllByObraAndEstado(ob, "R")
+                            concursos.each { co ->
+                                def ofertas = janus.pac.Oferta.findAllByConcurso(co)
+                                ofertas.each { o->
+                                    def contratos = Contrato.findAllByOferta(o)
+                                    contratos.eachWithIndex{ cn,k->
+                                        extraObra += "" + cn.id
+                                        if (k < contratos.size() - 1)
+                                            extraObra += ","
+                                    }
+                                }
+
+                            }
+
+                        }
+                        if (extraObra.size() < 1)
+                            extraObra = "-1"
+                    }
+
+
+                }
+            }
+            remove.each {
+                params.criterios[it] = null
+                params.campos[it] = null
+                params.operadores[it] = null
+            }
+        }
+
+//        println "extra obra "+extraObra
+
+        def codObra = { pla ->
+            return pla.contrato?.oferta?.concurso?.obra?.codigo
+        }
+        def contr = { pla ->
+            return pla.contrato?.codigo
+        }
+
+        def listaTitulos = ["OBRA","CONTRATO","DECRIPCION","FECHA PRESENTACION","MEMO PAGO","MONTO"]
+        def listaCampos = ["id","contrato","descripcion","fechaPresentacion","memoPagoPlanilla","valor"]
+        def funciones = [ ["closure": [codObra, "&"]],["closure": [contr, "&"]],null,null,null,null]
+        def url = g.createLink(action: "buscarPlanilla", controller: "planilla2")
+        def funcionJs = "function(){"
+        funcionJs += '}'
+        def numRegistros = 20
+        def extras = " and fechaPago is not null "
+        if (extraObra.size() > 0)
+            extras += " and contrato in (${extraObra}) "
+//        println "extras "+extras
+//        println "params "+params
+        if (!params.reporte) {
+            if (params.excel) {
+                session.dominio = Planilla
+                session.funciones = funciones
+                def anchos = [35,35,60,35,35,30]
+                /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Planilla", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PAGOS", anchos: anchos, extras: extras, landscape: true])
+            } else {
+                def lista = buscadorService.buscar(Planilla, "Planilla", "excluyente", params, true, extras)
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscador', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "planilla2", numRegistros: numRegistros, funcionJs: funcionJs, width: 1800, paginas: 12])
+            }
+
+        } else {
+//            println "entro reporte"
+            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+            session.dominio = Planilla
+            session.funciones = funciones
+            def anchos = [15,15,40,10,10,10]
+            /*el ancho de las columnas en porcentajes... solo enteros*/
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Planilla", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PAGOS", anchos: anchos, extras: extras, landscape: true])
+        }
+    }
+
 
     def liquidacion() {
 //        println "params " + params
