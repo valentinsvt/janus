@@ -2528,6 +2528,106 @@ class Reportes4Controller {
     }
 
     def reporteExcelContratos () {
+
+
+        def sql
+        def cn
+        def res
+
+
+        def sqlBase =  "SELECT\n" +
+                "  c.cntr__id    id,\n" +
+                "  c.cntrcdgo    codigo, \n" +
+                "  c.cntrmemo    memo,\n" +
+                "  c.cntrfcsb    fechasu,\n" +
+                "  r.cncrcdgo    concurso,\n" +
+                "  o.obracdgo    obracodigo,\n" +
+                "  o.obranmbr    obranombre,\n" +
+                "  n.cntnnmbr    canton,\n" +
+                "  p.parrnmbr    parroquia,\n" +
+                "  t.tpobdscr    tipoobra,\n" +
+                "  e.tpcrdscr    tipocontrato,\n" +
+                "  c.cntrmnto    monto,\n" +
+                "  c.cntrpcan    porcentaje,\n" +
+                "  c.cntrantc    anticipo,\n" +
+                "  g.prvenmbr    nombrecontra,\n" +
+                "  b.prinfcin    fechainicio,\n" +
+                "  b.prinfcfn    fechafin,\n" +
+                "  z.tppzdscr    plazo\n" +
+                "FROM cntr c\n" +
+                "  LEFT JOIN ofrt f ON c.ofrt__id = f.ofrt__id\n" +
+                "  LEFT JOIN cncr r ON f.cncr__id = r.cncr__id\n" +
+                "  LEFT JOIN obra o ON r.obra__id = o.obra__id\n" +
+                "  LEFT JOIN cmnd d ON o.cmnd__id = d.cmnd__id\n" +
+                "  LEFT JOIN parr p ON o.parr__id = p.parr__id\n" +
+                "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
+                "  LEFT JOIN tpcr e ON c.tpcr__id = e.tpcr__id\n" +
+                "  LEFT JOIN tpob t ON o.tpob__id = t.tpob__id\n" +
+                "  LEFT JOIN prin b ON c.prin__id = b.prin__id\n" +
+                "  LEFT JOIN tppz z ON c.tppz__id = z.tppz__id\n" +
+                "  LEFT JOIN prve g ON f.prve__id = g.prve__id\n"
+
+        def filtroBuscador = ""
+
+        def buscador = ""
+
+        params.criterio = params.criterio.trim();
+
+
+
+
+
+        switch (params.buscador) {
+            case "cdgo":
+            case "memo":
+//            case "fcsb":
+            case "ofsl":
+            case "mnto":
+                buscador = "cntr"+params.buscador
+                filtroBuscador =" where ${buscador} ILIKE ('%${params.criterio}%') "
+                break;
+            case "cncr":
+                filtroBuscador = " where r.cncrcdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "parr":
+                filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cntn":
+                filtroBuscador = " where n.cntnnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "obra":
+                filtroBuscador = " where o.obracdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "clas":
+                filtroBuscador = " where t.tpodscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "nmbr":
+                filtroBuscador = " where o.obranmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "tipo":
+                filtroBuscador = " where e.tpcrdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cont":
+                filtroBuscador = " where g.prvenmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "tppz":
+                filtroBuscador = " where z.tppzdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "inic":
+            case "fin":
+            case "fcsb":
+                break;
+
+        }
+
+        sql = sqlBase + filtroBuscador
+
+        cn = dbConnectionService.getConnection()
+
+        res = cn.rows(sql.toString())
+
+
+
         WorkbookSettings workbookSettings = new WorkbookSettings()
         workbookSettings.locale = Locale.default
 
@@ -2949,6 +3049,178 @@ class Reportes4Controller {
 
 
 
+    }
+
+
+    def reporteExcelGarantias() {
+
+
+
+        def sql
+        def res
+        def cn
+
+
+        def sqlBase =  "SELECT\n" +
+                "  g.grnt__id    id,\n" +
+                "  g.grntcdgo    codigo, \n" +
+                "  g.grntnmrv    renovacion,\n" +
+                "  g.grntpdre    padre,\n" +
+                "  c.cntrcdgo    codigocontrato,\n" +
+                "  t.tpgrdscr    tipogarantia,\n" +
+                "  q.tdgrdscr    documento,\n" +
+                "  a.asgrnmbr    aseguradora,\n" +
+                "  s.prvenmbr    contratista,\n" +
+                "  g.grntetdo    estado,\n" +
+                "  g.grntmnto    monto,\n" +
+                "  m.mndacdgo    moneda,\n" +
+                "  g.grntfcin    emision,\n" +
+                "  g.grntfcfn    vencimiento,\n" +
+                "  g.grntdias    dias\n" +
+                "FROM grnt g\n" +
+                "  LEFT JOIN cntr c ON g.cntr__id = c.cntr__id\n" +
+                "  LEFT JOIN tpgr t ON g.tpgr__id = t.tpgr__id\n" +
+                "  LEFT JOIN tdgr q ON g.tdgr__id = q.tdgr__id\n" +
+                "  LEFT JOIN asgr a ON g.asgr__id = a.asgr__id\n" +
+                "  LEFT JOIN prve s ON c.prve__id = s.prve__id\n" +
+                "  LEFT JOIN mnda m ON g.mnda__id = m.mnda__id\n"
+
+
+        def filtroBuscador = ""
+
+        def buscador = ""
+
+        params.criterio = params.criterio.trim();
+
+
+        switch (params.buscador) {
+            case "cdgo":
+            case "nmrv":
+            case "etdo":
+            case "mnto":
+            case "dias":
+                buscador = "grnt"+params.buscador
+                filtroBuscador =" where ${buscador} ILIKE ('%${params.criterio}%') "
+                break;
+            case "contrato":
+                filtroBuscador = " where c.cntrcdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "tpgr":
+                filtroBuscador = " where t.tpgrdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "tdgr":
+                filtroBuscador = " where q.tdgrdscr ILIKE ('%${params.criterio}%') "
+                break;
+            case "aseguradora":
+                filtroBuscador = " where a.asgrnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cont":
+                filtroBuscador = " where s.prvenmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "mnda":
+                filtroBuscador = " where m.mndacdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "fcin":
+            case "fcfn":
+                break;
+
+        }
+
+        sql = sqlBase + filtroBuscador
+
+        cn = dbConnectionService.getConnection()
+
+        res = cn.rows(sql.toString())
+
+
+
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+        // fija el ancho de la columna
+        // sheet.setColumnView(1,40)
+
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        sheet.setColumnView(0, 12)
+        sheet.setColumnView(1, 60)
+        sheet.setColumnView(2, 25)
+        sheet.setColumnView(3, 25)
+        sheet.setColumnView(4, 40)
+        sheet.setColumnView(5, 25)
+        sheet.setColumnView(8, 20)
+        // inicia textos y numeros para asocias a columnas
+
+        def label
+        def nmro
+        def number
+
+        def fila = 6;
+
+
+        NumberFormat nf = new NumberFormat("#.##");
+        WritableCellFormat cf2obj = new WritableCellFormat(nf);
+
+        label = new Label(1, 1, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(1, 2, "REPORTE EXCEL REGISTRADAS", times16format); sheet.addCell(label);
+
+
+
+        label = new Label(0, 4, "N° Contrato: ", times16format); sheet.addCell(label);
+        label = new Label(1, 4, "Contratista", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "Tipo de Garantía", times16format); sheet.addCell(label);
+        label = new Label(3, 4, "N° Garantía", times16format); sheet.addCell(label);
+        label = new Label(4, 4, "Rnov", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "Original", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Aseguradora", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "DOcumento", times16format); sheet.addCell(label);
+        label = new Label(8, 4, "Estado", times16format); sheet.addCell(label);
+        label = new Label(9, 4, "Monto", times16format); sheet.addCell(label);
+        label = new Label(10, 4, "Emisión", times16format); sheet.addCell(label);
+        label = new Label(11, 4, "Vencimiento", times16format); sheet.addCell(label);
+        label = new Label(12, 4, "Cancelación", times16format); sheet.addCell(label);
+
+
+        res.eachWithIndex {i, j->
+
+
+            label = new Label(0, fila, i?.codigocontrato.toString()); sheet.addCell(label);
+            label = new Label(1, fila, i?.contratista); sheet.addCell(label);
+            label = new Label(2, fila, i.tipogarantia.toString()); sheet.addCell(label);
+            label = new Label(3, fila, i?.codigo?.toString()); sheet.addCell(label);
+            label = new Label(4, fila, i?.renovacion?.toString() + " " + i?.parroquia?.toString() + " " + i?.comunidad?.toString()); sheet.addCell(label);
+            label = new Label(5, fila, ""); sheet.addCell(label);
+            label = new Label(6, fila, i?.aseguradora?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.documento?.toString()); sheet.addCell(label);
+            label = new Label(8, fila, i?.estado?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(9, fila, i.monto); sheet.addCell(number);
+            label = new Label(10, fila, i?.emision?.toString()); sheet.addCell(label);
+            label = new Label(11, fila, i?.vencimiento?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(12, fila, i.dias); sheet.addCell(number);
+
+
+            fila++
+
+        }
+
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "ContratosExcel.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
     }
 
 

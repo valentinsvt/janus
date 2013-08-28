@@ -161,6 +161,13 @@
 
     });
 
+    $("#excel").click(function () {
+
+
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelGarantias' )}?buscador=" + $("#buscador_gar").val() + "&criterio=" + $("#criterio_gar").val()
+
+    });
+
     $("#buscador_gar").change(function () {
 
         if($(this).val() == 'fcin' || $(this).val() == 'fcfn'){

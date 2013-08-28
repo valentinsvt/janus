@@ -40,6 +40,10 @@
     <i class="icon-print"></i>
     Imprimir
 </a>
+<a href="#" class="btn  " id="excel">
+    <i class="icon-print"></i>
+    Excel
+</a>
 <a href="#" class="btn" id="regresar">
     <i class="icon-arrow-left"></i>
     Regresar
