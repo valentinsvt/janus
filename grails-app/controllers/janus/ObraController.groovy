@@ -339,7 +339,7 @@ class ObraController extends janus.seguridad.Shield {
         def matrizOk = false
 
         def prov = Provincia.list();
-        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"],"estado":["Estado","string"]]
+        def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "canton": ["Canton", "string"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"],"estado":["Estado","string"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
 
@@ -381,88 +381,129 @@ class ObraController extends janus.seguridad.Shield {
         def extraParr = ""
         def extraCom = ""
         def extraDep = ""
+        def extraCan = ""
 
         if (params.campos instanceof java.lang.String) {
-            if (params.campos == "parroquia") {
-                def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios.toUpperCase()}%'")
-                params.criterios = ""
-                parrs.eachWithIndex { p, i ->
-                    extraParr += "" + p.id
-                    if (i < parrs.size() - 1)
-                        extraParr += ","
-                }
-                if (extraParr.size() < 1)
-                    extraParr = "-1"
-                params.campos = ""
-                params.operadores = ""
-            }
-            if (params.campos == "comunidad") {
-                def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios.toUpperCase()}%'")
-                params.criterios = ""
-                coms.eachWithIndex { p, i ->
-                    extraCom += "" + p.id
-                    if (i < coms.size() - 1)
-                        extraCom += ","
-                }
-                if (extraCom.size() < 1)
-                    extraCom = "-1"
-                params.campos = ""
-                params.operadores = ""
-            }
-            if (params.campos == "departamento") {
-                def dirs = Direccion.findAll("from Direccion where nombre like '%${params.criterios.toUpperCase()}%'")
-                def deps = Departamento.findAllByDireccionInList(dirs)
-                params.criterios = ""
-                deps.eachWithIndex { p, i ->
-                    extraDep += "" + p.id
-                    if (i < deps.size() - 1)
-                        extraDep += ","
-                }
-                if (extraDep.size() < 1)
-                    extraDep = "-1"
-                params.campos = ""
-                params.operadores = ""
-            }
-        } else {
-            def remove = []
-            params.campos.eachWithIndex { p, i ->
-                if (p == "comunidad") {
-                    def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios[i].toUpperCase()}%'")
-
-                    coms.eachWithIndex { c, j ->
-                        extraCom += "" + c.id
-                        if (j < coms.size() - 1)
-                            extraCom += ","
-                    }
-                    if (extraCom.size() < 1)
-                        extraCom = "-1"
-                    remove.add(i)
-                }
-                if (p == "parroquia") {
-                    def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios[i].toUpperCase()}%'")
-
-                    parrs.eachWithIndex { c, j ->
-                        extraParr += "" + c.id
-                        if (j < parrs.size() - 1)
+            if(params.criterios!=""){
+                if (params.campos == "parroquia") {
+                    def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios.toUpperCase()}%'")
+                    params.criterios = ""
+                    parrs.eachWithIndex { p, i ->
+                        extraParr += "" + p.id
+                        if (i < parrs.size() - 1)
                             extraParr += ","
                     }
                     if (extraParr.size() < 1)
                         extraParr = "-1"
-                    remove.add(i)
+                    params.campos = ""
+                    params.operadores = ""
                 }
-                if (p == "departamento") {
+                if (params.campos == "canton") {
+                    println "busca canton"
+                    def cans = Canton.findAll("from Canton where nombre like '%${params.criterios.toUpperCase()}%'")
+                    params.criterios = ""
+                    cans.eachWithIndex { p, i ->
+                        def parrs = Parroquia.findAllByCanton(p)
+                        parrs.eachWithIndex { pa, k ->
+                            extraCan += "" + pa.id
+                            if (k < parrs.size() - 1)
+                                extraCan += ","
+                        }
+                    }
+                    if (extraCan.size() < 1)
+                        extraCan = "-1"
+//                    println "extra can "+extraCan
+                    params.campos = ""
+                    params.operadores = ""
+                }
+                if (params.campos == "comunidad") {
+                    def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios.toUpperCase()}%'")
+                    params.criterios = ""
+                    coms.eachWithIndex { p, i ->
+                        extraCom += "" + p.id
+                        if (i < coms.size() - 1)
+                            extraCom += ","
+                    }
+                    if (extraCom.size() < 1)
+                        extraCom = "-1"
+                    params.campos = ""
+                    params.operadores = ""
+                }
+                if (params.campos == "departamento") {
                     def dirs = Direccion.findAll("from Direccion where nombre like '%${params.criterios.toUpperCase()}%'")
                     def deps = Departamento.findAllByDireccionInList(dirs)
-
-                    deps.eachWithIndex { c, j ->
-                        extraDep += "" + c.id
-                        if (j < deps.size() - 1)
+                    params.criterios = ""
+                    deps.eachWithIndex { p, i ->
+                        extraDep += "" + p.id
+                        if (i < deps.size() - 1)
                             extraDep += ","
                     }
                     if (extraDep.size() < 1)
                         extraDep = "-1"
-                    remove.add(i)
+                    params.campos = ""
+                    params.operadores = ""
                 }
+            }
+
+        } else {
+            def remove = []
+            params.campos.eachWithIndex { p, i ->
+                if(params.criterios[i]!=""){
+                    if (p == "comunidad") {
+                        def coms = Comunidad.findAll("from Comunidad where nombre like '%${params.criterios[i].toUpperCase()}%'")
+
+                        coms.eachWithIndex { c, j ->
+                            extraCom += "" + c.id
+                            if (j < coms.size() - 1)
+                                extraCom += ","
+                        }
+                        if (extraCom.size() < 1)
+                            extraCom = "-1"
+                        remove.add(i)
+                    }
+                    if (params.campos == "canton") {
+                        def cans = Canton.findAll("from Canton where nombre like '%${params.criterios.toUpperCase()}%'")
+                        params.criterios = ""
+                        cans.eachWithIndex { c, j ->
+                            def parrs = Parroquia.findAllByCanton(p)
+                            parrs.eachWithIndex { pa, k ->
+                                extraCan += "" + pa.id
+                                if (k < parrs.size() - 1)
+                                    extraCan += ","
+                            }
+                        }
+                        if (extraCan.size() < 1)
+                            extraCan = "-1"
+                        params.campos = ""
+                        params.operadores = ""
+                    }
+                    if (p == "parroquia") {
+                        def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios[i].toUpperCase()}%'")
+
+                        parrs.eachWithIndex { c, j ->
+                            extraParr += "" + c.id
+                            if (j < parrs.size() - 1)
+                                extraParr += ","
+                        }
+                        if (extraParr.size() < 1)
+                            extraParr = "-1"
+                        remove.add(i)
+                    }
+                    if (p == "departamento") {
+                        def dirs = Direccion.findAll("from Direccion where nombre like '%${params.criterios.toUpperCase()}%'")
+                        def deps = Departamento.findAllByDireccionInList(dirs)
+
+                        deps.eachWithIndex { c, j ->
+                            extraDep += "" + c.id
+                            if (j < deps.size() - 1)
+                                extraDep += ","
+                        }
+                        if (extraDep.size() < 1)
+                            extraDep = "-1"
+                        remove.add(i)
+                    }
+                }
+
             }
             remove.each {
                 params.criterios[it] = null
@@ -473,11 +514,13 @@ class ObraController extends janus.seguridad.Shield {
 
 
         def extras = " and liquidacion=0"
-        if (extraParr.size() > 1)
+        if (extraParr.size() > 0)
             extras += " and parroquia in (${extraParr})"
-        if (extraCom.size() > 1)
+        if (extraCan.size() > 0)
+            extras += " and parroquia in (${extraCan})"
+        if (extraCom.size() > 0)
             extras += " and comunidad in (${extraCom})"
-        if (extraDep.size() > 1)
+        if (extraDep.size() > 0)
             extras += " and departamento in (${extraDep})"
 
 //        println "extas "+extras
