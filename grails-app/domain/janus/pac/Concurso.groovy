@@ -48,6 +48,8 @@ class Concurso {
 
     Date fechaNotificacionAdjudicacion
 
+    String memoSif
+
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
@@ -100,6 +102,9 @@ class Concurso {
             numeroCertificacion column: 'cncrnmct'
 
             fechaNotificacionAdjudicacion column: 'cncrfcna'
+
+
+            memoSif column: 'cncrmmsf'
         }
     }
     static constraints = {
@@ -143,5 +148,6 @@ class Concurso {
         numeroCertificacion(blank: true, nullable: true, maxSize: 4)
 
         fechaNotificacionAdjudicacion(blank: true, nullable: true)
+        memoSif(nullable: true,blank:true,size: 1..120)
     }
 }

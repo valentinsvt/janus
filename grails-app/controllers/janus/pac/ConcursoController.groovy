@@ -281,9 +281,9 @@ class ConcursoController extends janus.seguridad.Shield {
                 return
             }
             def ahora = new Date()
-            maxPrep = concursoInstance.pac.tipoProcedimiento.preparatorio
-            maxPre = concursoInstance.pac.tipoProcedimiento.precontractual
-            maxCon = concursoInstance.pac.tipoProcedimiento.contractual
+            maxPrep = concursoInstance.pac.tipoProcedimiento?.preparatorio
+            maxPre = concursoInstance.pac.tipoProcedimiento?.precontractual
+            maxCon = concursoInstance.pac.tipoProcedimiento?.contractual
             println "max prep " + maxPrep
             if (concursoInstance.fechaInicioPreparatorio != null) {
                 use(groovy.time.TimeCategory) {

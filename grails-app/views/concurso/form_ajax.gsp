@@ -252,6 +252,18 @@
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
+                                <div class="control-group">
+                                    <div>
+                                        <span class="control-label label label-inverse">
+                                            Memo SIF.
+                                        </span>
+                                    </div>
+
+                                    <div class="controls">
+                                        <g:textField name="memoSif" value="${concursoInstance?.memoSif}"/>
+                                        <p class="help-block ui-helper-hidden"></p>
+                                    </div>
+                                </div>
 
                                 <div class="control-group">
                                     <div>
@@ -305,7 +317,7 @@
                                             ${(concursoInstance.costoBases > 0 || (concursoInstance.costoBases == 0 && concursoInstance.porMilBases == 0) || !concursoInstance.costoBases || !concursoInstance.porMilBases) ? "checked" : ""}/>
                                         <g:field type="number" name="costoBases" class="input-mini" value="${concursoInstance.costoBases ?: 200}"/>
                                         <input type="radio" name="costo" id="rbt_porMilBases" ${concursoInstance.porMilBases > 0 ? "checked" : ""}/>
-                                        <g:field type="number" name="porMilBases" class="input-mini" value="${concursoInstance.porMilBases ?: 0}"/> por mil
+                                        <g:field type="number" name="porMilBases" class="input-mini" value="${concursoInstance.porMilBases ?: 0}"/> x 1000
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
