@@ -81,10 +81,9 @@ class PacController extends janus.seguridad.Shield {
                             Cell[] row = null
                             s.getRows().times { j ->
                                 if (j > 7 /*&& j <= 10*/) {
-                                    println ">>>>>>>>>>>>>>>" + j
+                                    println ">>>>>>>>>>>>>>>" + (j + 1)
                                     row = s.getRow(j)
                                     if (row.length > 0) {
-//                                    println row*.getContents()
 
                                         def ok = ["obra", "consultoria", "consultoría"]
                                         def tipoCompra = row[3].getContents()
@@ -173,40 +172,77 @@ class PacController extends janus.seguridad.Shield {
                                             def cuatrimestre2 = row[9].getContents()
                                             def cuatrimestre3 = row[10].getContents()
 
+//                                            println row*.getContents()
+                                            cant = cant.toString().replaceAll(",", "")
+                                            try {
+                                                cant = cant.toDouble()
+                                            } catch (e) {
+                                                println e
+                                                error = true
+                                                errores += "<li>No se pudo convertir el valor " + cant + " a número. El registro de la fila " + (j + 1) + " no fue ingresado</li>"
+                                            }
+                                            costoUnitario = costoUnitario.toString().replaceAll(",", "")
+                                            try {
+                                                costoUnitario = costoUnitario.toDouble()
+                                            } catch (e) {
+                                                println e
+                                                error = true
+                                                errores += "<li>No se pudo convertir el valor " + costoUnitario + " a número. El registro de la fila " + (j + 1) + " no fue ingresado</li>"
+                                            }
+//                                            println "\t cant: " + cant + " cu: " + costoUnitario
+
                                             if (!error) {
-                                                def pacs = Pac.withCriteria {
-                                                    eq("cpp", cpp)
-                                                    eq("presupuesto", presupuesto)
-                                                    eq("anio", anioObj)
-                                                    eq("descripcion", descripcion)
-                                                }
-                                                if (pacs.size() == 0) {
-                                                    def pac = new Pac([
-                                                            unidad: unidad,
-                                                            cpp: cpp,
-                                                            presupuesto: presupuesto,
-                                                            tipoCompra: tipoCompraObj,
-                                                            departamento: departamento,
-                                                            anio: anioObj,
-                                                            descripcion: descripcion,
-                                                            cantidad: cant,
-                                                            costo: costoUnitario,
-                                                            c1: cuatrimestre1,
-                                                            c2: cuatrimestre2,
-                                                            c3: cuatrimestre3,
-                                                            memo: memo,
-                                                            requiriente: requirente
-                                                    ])
-                                                    if (pac.save(flush: true)) {
-                                                        println "guardado pac con id=" + pac.id
-                                                        done++
-                                                    } else {
-                                                        println pac.errors
-                                                        errores += "<li><strong>Ha ocurrido un error al guardar el pac: " + pac.errors + "</strong></li>"
-                                                    }
+                                                def total = cant * costoUnitario
+
+                                                def tipoProcedimiento = TipoProcedimiento.findAllByMinimoLessThanEqualsAndTechoGreaterThan(total, total)
+                                                if (tipoProcedimiento.size() == 1) {
+                                                    tipoProcedimiento = tipoProcedimiento[0]
+                                                } else if (tipoProcedimiento.size() == 0) {
+                                                    error = true
+                                                    println "no hay tipoProcedimiento para el valor " + total
+                                                    errores += "<li>No se encontró un tipo de procedimiento para el valor " + total + ". El registro de la fila " + (j + 1) + " no fue ingresado</li>"
                                                 } else {
-                                                    println "ya existia un registro: " + pacs
-                                                    errores += "<li><i>Ya se encontró un registro con los mismos CCP, partida presupuestaria, descripción y año. El registro de la fila " + (j + 1) + " no fue ingresado</li>"
+                                                    error = true
+                                                    println "hay mas de un tipoProcedimiento para el valor " + total + ": " + tipoProcedimiento
+                                                    errores += "<li>Se ha encontrado más de un tipo de procedimiento para el valor " + total + ". El registro de la fila " + (j + 1) + " no fue ingresado</li>"
+                                                }
+
+                                                if (!error) {
+                                                    def pacs = Pac.withCriteria {
+                                                        eq("cpp", cpp)
+                                                        eq("presupuesto", presupuesto)
+                                                        eq("anio", anioObj)
+                                                        eq("descripcion", descripcion)
+                                                    }
+                                                    if (pacs.size() == 0) {
+                                                        def pac = new Pac([
+                                                                unidad: unidad,
+                                                                cpp: cpp,
+                                                                presupuesto: presupuesto,
+                                                                tipoCompra: tipoCompraObj,
+                                                                departamento: departamento,
+                                                                tipoProcedimiento: tipoProcedimiento,
+                                                                anio: anioObj,
+                                                                descripcion: descripcion,
+                                                                cantidad: cant,
+                                                                costo: costoUnitario,
+                                                                c1: cuatrimestre1,
+                                                                c2: cuatrimestre2,
+                                                                c3: cuatrimestre3,
+                                                                memo: memo,
+                                                                requiriente: requirente
+                                                        ])
+                                                        if (pac.save(flush: true)) {
+                                                            println "guardado pac con id=" + pac.id
+                                                            done++
+                                                        } else {
+                                                            println pac.errors
+                                                            errores += "<li><strong>Ha ocurrido un error al guardar el pac: " + pac.errors + "</strong></li>"
+                                                        }
+                                                    } else {
+                                                        println "ya existia un registro: " + pacs
+                                                        errores += "<li><i>Ya se encontró un registro con los mismos CCP, partida presupuestaria, descripción y año. El registro de la fila " + (j + 1) + " no fue ingresado</li>"
+                                                    }
                                                 }
                                             } //! error
                                         } // es obra o consultoria

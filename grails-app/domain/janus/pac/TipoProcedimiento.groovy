@@ -5,7 +5,8 @@ class TipoProcedimiento {
     String descripcion
     String sigla
     double bases = 0
-    double techo = 0
+    double techo = 0        //valor maximo
+    double minimo = 0       //valor minimo
 
     int preparatorio = 0
     int precontractual = 0
@@ -25,6 +26,7 @@ class TipoProcedimiento {
             sigla column: 'tppcsgla'
             bases column: 'tppcbase'
             techo column: 'tppctcho'
+            minimo column: 'tppcvlmn'
             fuente column: 'tppcfnte'
             preparatorio column: 'tppcprpt'
             precontractual column: 'tppcprct'
