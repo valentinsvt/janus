@@ -37,10 +37,12 @@
                     <i class="icon-file"></i>
                     Crear  Oferente
                 </a>
+%{--
                 <a href="#" class="btn btn-ajax btn-copy">
                     <i class="icon-copy"></i>
                     Copiar al sistema de Oferentes
                 </a>
+--}%
             </div>
 
             <div class="span3" id="search">
@@ -72,7 +74,7 @@
 
                             <th width="150">Acciones</th>
 
-                            <th width="50">Copiar <input type="checkbox" id="chkAll"/></th>
+                            %{--<th width="50">Copiar <input type="checkbox" id="chkAll"/></th>--}%
                         </tr>
                     </thead>
                     <tbody class="paginate">
@@ -107,9 +109,11 @@
                                         <i class="icon-refresh icon-large"></i>
                                     </a>
                                 </td>
+%{--
                                 <td style="text-align: center;">
                                     <input type="checkbox" name="id" value="${sesionPerfil?.usuario?.id}" class="chk" id="${sesionPerfil?.usuario?.id}"/>
                                 </td>
+--}%
 
                             </tr>
 
@@ -201,9 +205,11 @@
                     float          : "right"
                 });
 
+/*
                 $("#chkAll").click(function () {
                     $(".chk").attr("checked", $(this).is(":checked"));
                 });
+*/
 
                 $(".chk").click(function () {
                     if (!$(this).is(":checked")) {

@@ -50,7 +50,7 @@
 
             <td>
                 <span class="control-label label label-inverse">
-                    Perfiles
+                    Perfil
                 </span>
             </td>
             <td>
@@ -76,7 +76,7 @@
             </td>
             <td>
                 <span class="control-label label label-inverse">
-                    Coordinación
+                    Departamento
                 </span>
             </td>
             <td>
@@ -84,7 +84,8 @@
                           %{--value="${personaInstance?.departamento?.id}" noSelection="['null': '']" optionValue="descripcion"/>--}%
 
 
-                <g:textField name="departamentoTxt" class="span2" value="${janus.Departamento?.findByDescripcion("OFERENTES")}" readonly="true"/>
+                %{--<g:textField name="departamentoTxt" class="span2" value="${janus.Departamento?.findByDescripcion("OFERENTES")}" readonly="true"/>--}%
+                OFERENTES
 
                 <g:hiddenField name="departamento.id" class="span2" value="${janus.Departamento?.findByDescripcion("OFERENTES")?.id}" optionKey="id"/>
 
