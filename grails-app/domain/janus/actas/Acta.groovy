@@ -9,6 +9,10 @@ class Acta {
     String descripcion
     String nombre
     String tipo             //provisional:P o definitiva:D
+    Date fecha
+
+    Integer registrada = 0   //0: no, 1:si
+    Date fechaRegistro
 
     static hasMany = [secciones: Seccion]
 
@@ -26,6 +30,10 @@ class Acta {
             descripcion type: "text"
             nombre column: "actanmbr"
             tipo column: "actatipo"
+
+            fecha column: 'actafcha'
+            registrada column: 'actargst'
+            fechaRegistro column: 'actafcrg'
         }
     }
 
@@ -35,5 +43,8 @@ class Acta {
         descripcion(blank: false, nullable: false)
         nombre(blank: false, nullable: false, maxSize: 20)
         tipo(blank: false, nullable: false, inList: ["P", "D"])
+        fecha(blank: true, nullable: true)
+        registrada(blank: true, nullable: true)
+        fechaRegistro(blank: true, nullable: true)
     }
 }

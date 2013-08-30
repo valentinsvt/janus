@@ -96,11 +96,28 @@ class ActaController extends janus.seguridad.Shield {
     } //list
 
     def form() {
+        if (!params.tipo) {
+            params.tipo = 'P' //provisional
+        }
+
+        def tipo = params.tipo.toUpperCase()
+
+        if (tipo != 'D' && tipo != 'P') {
+            flash.message = "No se reconoció el tipo de acta " + tipo
+            redirect(action: "errores", params: [contrato: params.contrato])
+            return
+        }
+
+//        def tipos = new Acta().constraints.tipo.inList
+        def tipos = [params.tipo]
+
+        def actaProv = null
         if (params.contrato || params.id) {
             def secciones = []
             def actaInstance = new Acta(params)
             if (params.id) {
-                actaInstance = Acta.get(params.id)
+                actaInstance = Acta.get(params.id.toLong())
+                tipo = actaInstance.tipo
                 if (!actaInstance) {
                     flash.clase = "alert-error"
                     flash.message = "No se encontró Acta con id " + params.id
@@ -109,119 +126,167 @@ class ActaController extends janus.seguridad.Shield {
                 } //no existe el objeto
 
                 def sec = actaInstance.secciones
+
                 if (sec.size() == 0) {
                     def contrato = actaInstance.contrato
                     def obra = contrato.oferta.concurso.obra
-                    secciones = [
-                            [
-                                    numero: 1,
-                                    titulo: "ANTECEDENTES",
-                                    parrafos: [
-                                            [
-                                                    numero: 1,
-                                                    contenido: "La presente Acta se suscribe en atención a la solicitud formulada por el contratista el " + fechaConFormato(contrato.fechaPedidoRecepcionContratista, "dd MMMM yyyy") + " y tramitada mediante hoja de control y trámite N."
-                                            ],
-                                            [
-                                                    numero: 2,
-                                                    contenido: "En cumplimiento del artículo 81 de la Ley Orgánica del Sistema Nacional de Contratación Pública el señor Prefecto autoriza el trámite solicitado por el contratista medinte hoja de control y trámite N."
-                                            ],
-                                    ]
-                            ],
-                            [
-                                    numero: 2,
-                                    titulo: "CONDICIONES GENERALES DE EJECUCIÓN",
-                                    parrafos: [
-                                            [
-                                                    numero: 1,
-                                                    contenido: "Mediante contrato " + contrato.codigo + " suscrito el " + fechaConFormato(contrato.fechaSubscripcion, "dd-MM-yyyy") + " el contratista " +
-                                                            "" + nombrePersona(contrato.oferta.proveedor, "prov") + " se compromete a construir <strong>" + contrato.objeto + "</strong> en " +
-                                                            "<strong>" + obra.sitio + "</strong> - <strong>Parroquia " + obra.parroquia.nombre + " - Cantón " + obra.parroquia.canton.nombre + "</strong>" +
-                                                            "<br/>Por un monto de \$ <strong>" + numero(contrato.monto, 2) + "</strong>" +
-                                                            "<br/>Anticipo entregado \$ <strong>" + numero(contrato.anticipo, 2) + " (" + numero(contrato.porcentajeAnticipo, 0) + "%)</strong>"
-                                            ]
-                                    ]
-                            ],
-                            [
-                                    numero: 3,
-                                    titulo: "CONDICIONES OPERATIVAS"
-                            ],
-                            [
-                                    numero: 4,
-                                    titulo: "LIQUIDACIÓN ECONÓMICA",
-                                    parrafos: [
-                                            [
-                                                    numero: 1,
-                                                    contenido: "<strong>OBRA EJECUTADA.-</strong> Los rubros ejecutados y pagados en las planillas correspondientes son los siguientes",
-                                                    tipoTabla: "RBR"
-                                            ],
-                                            [
-                                                    numero: 2,
-                                                    contenido: "<strong>DETALLE DE PLANILLAS.-</strong> Los rubros ejecutados por el contratista, medidos en la obra y aceptados por las partes, se hallan consignados en planillas de pago de acuerdo al siguiente detalle:",
-                                                    tipoTabla: "DTP"
-                                            ],
-                                            [
-                                                    numero: 3,
-                                                    contenido: "<strong>DETALLE DE OBRAS ADICIONALES:</strong>",
-                                                    tipoTabla: "OAD"
-                                            ],
-                                            [
-                                                    numero: 4,
-                                                    contenido: "<strong>RESUMEN DE OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE:</strong>",
-                                                    tipoTabla: "OCP"
-                                            ],
-                                            [
-                                                    numero: 5,
-                                                    contenido: "<strong>RESUMEN DE REAJUSTES DE PRECIOS:</strong>",
-                                                    tipoTabla: "RRP"
-                                            ],
-                                            [
-                                                    numero: 6,
-                                                    contenido: "<strong>RESUMEN GENERAL DE VALORES:</strong>",
-                                                    tipoTabla: "RGV"
-                                            ]
-                                    ]
-                            ],
-                            [
-                                    numero: 5,
-                                    titulo: "LIQUIDACIÓN DE PLAZOS",
-                                    parrafos: [
-                                            [
-                                                    numero: 1,
-                                                    contenido: "El plazo de entrega de la obra, según el contrato, es de: <strong>" + numero(contrato.plazo, 0) + " días calendario</strong>" +
-                                                            " contados a partir del " + fechaConFormato(obra.fechaInicio, "dd-MM-yyyy") + " según orden de inicio impartida por la Dirección de " +
-                                                            "Fiscalización mediante "
-                                            ]
-                                    ]
-                            ]
-                    ]
 
-                    secciones.each { s ->
-                        def seccion = new Seccion([
-                                acta: actaInstance,
-                                numero: s.numero,
-                                titulo: s.titulo
-                        ])
-                        if (!seccion.save(flush: true)) {
-                            println "error al guardar seccion " + s.numero + ": " + seccion.errors
-                        } else {
-                            s.parrafos.each { p ->
-                                def tipoTabla = null
-                                if (p.tipoTabla) {
-                                    tipoTabla = p.tipoTabla
-                                }
-                                def parrafo = new Parrafo([
-                                        seccion: seccion,
-                                        numero: p.numero,
-                                        contenido: p.contenido,
-                                        tipoTabla: tipoTabla
-                                ])
-                                if (!parrafo.save(flush: true)) {
-                                    println "error al guardar el parrafo (" + seccion.numero + ") " + p.numero + ": " + parrafo.errors
+                    if (tipo == 'P') {
+                        secciones = [
+                                [
+                                        numero: 1,
+                                        titulo: "ANTECEDENTES",
+                                        parrafos: [
+                                                [
+                                                        numero: 1,
+                                                        contenido: "La presente Acta se suscribe en atención a la solicitud formulada por el contratista el " + fechaConFormato(contrato.fechaPedidoRecepcionContratista, "dd MMMM yyyy") + " y tramitada mediante hoja de control y trámite N."
+                                                ],
+                                                [
+                                                        numero: 2,
+                                                        contenido: "En cumplimiento del artículo 81 de la Ley Orgánica del Sistema Nacional de Contratación Pública el señor Prefecto autoriza el trámite solicitado por el contratista medinte hoja de control y trámite N."
+                                                ],
+                                        ]
+                                ],
+                                [
+                                        numero: 2,
+                                        titulo: "CONDICIONES GENERALES DE EJECUCIÓN",
+                                        parrafos: [
+                                                [
+                                                        numero: 1,
+                                                        contenido: "Mediante contrato " + contrato.codigo + " suscrito el " + fechaConFormato(contrato.fechaSubscripcion, "dd-MM-yyyy") + " el contratista " +
+                                                                "" + nombrePersona(contrato.oferta.proveedor, "prov") + " se compromete a construir <strong>" + contrato.objeto + "</strong> en " +
+                                                                "<strong>" + obra.sitio + "</strong> - <strong>Parroquia " + obra.parroquia.nombre + " - Cantón " + obra.parroquia.canton.nombre + "</strong>" +
+                                                                "<br/>Por un monto de \$ <strong>" + numero(contrato.monto, 2) + "</strong>" +
+                                                                "<br/>Anticipo entregado \$ <strong>" + numero(contrato.anticipo, 2) + " (" + numero(contrato.porcentajeAnticipo, 0) + "%)</strong>"
+                                                ]
+                                        ]
+                                ],
+                                [
+                                        numero: 3,
+                                        titulo: "CONDICIONES OPERATIVAS"
+                                ],
+                                [
+                                        numero: 4,
+                                        titulo: "LIQUIDACIÓN ECONÓMICA",
+                                        parrafos: [
+                                                [
+                                                        numero: 1,
+                                                        contenido: "<strong>OBRA EJECUTADA.-</strong> Los rubros ejecutados y pagados en las planillas correspondientes son los siguientes",
+                                                        tipoTabla: "RBR"
+                                                ],
+                                                [
+                                                        numero: 2,
+                                                        contenido: "<strong>DETALLE DE PLANILLAS.-</strong> Los rubros ejecutados por el contratista, medidos en la obra y aceptados por las partes, se hallan consignados en planillas de pago de acuerdo al siguiente detalle:",
+                                                        tipoTabla: "DTP"
+                                                ],
+                                                [
+                                                        numero: 3,
+                                                        contenido: "<strong>DETALLE DE OBRAS ADICIONALES:</strong>",
+                                                        tipoTabla: "OAD"
+                                                ],
+                                                [
+                                                        numero: 4,
+                                                        contenido: "<strong>RESUMEN DE OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE:</strong>",
+                                                        tipoTabla: "OCP"
+                                                ],
+                                                [
+                                                        numero: 5,
+                                                        contenido: "<strong>RESUMEN DE REAJUSTES DE PRECIOS:</strong>",
+                                                        tipoTabla: "RRP"
+                                                ],
+                                                [
+                                                        numero: 6,
+                                                        contenido: "<strong>RESUMEN GENERAL DE VALORES:</strong>",
+                                                        tipoTabla: "RGV"
+                                                ]
+                                        ]
+                                ],
+                                [
+                                        numero: 5,
+                                        titulo: "LIQUIDACIÓN DE PLAZOS",
+                                        parrafos: [
+                                                [
+                                                        numero: 1,
+                                                        contenido: "El plazo de entrega de la obra, según el contrato, es de: <strong>" + numero(contrato.plazo, 0) + " días calendario</strong>" +
+                                                                " contados a partir del " + fechaConFormato(obra.fechaInicio, "dd-MM-yyyy") + " según orden de inicio impartida por la Dirección de " +
+                                                                "Fiscalización mediante "
+                                                ]
+                                        ]
+                                ]
+                        ]
+
+                        secciones.each { s ->
+                            def seccion = new Seccion([
+                                    acta: actaInstance,
+                                    numero: s.numero,
+                                    titulo: s.titulo
+                            ])
+                            if (!seccion.save(flush: true)) {
+                                println "error al guardar seccion " + s.numero + ": " + seccion.errors
+                            } else {
+                                s.parrafos.each { p ->
+                                    def tipoTabla = null
+                                    if (p.tipoTabla) {
+                                        tipoTabla = p.tipoTabla
+                                    }
+                                    def parrafo = new Parrafo([
+                                            seccion: seccion,
+                                            numero: p.numero,
+                                            contenido: p.contenido,
+                                            tipoTabla: tipoTabla
+                                    ])
+                                    if (!parrafo.save(flush: true)) {
+                                        println "error al guardar el parrafo (" + seccion.numero + ") " + p.numero + ": " + parrafo.errors
+                                    }
                                 }
                             }
+                        } //secciones.each para guardar
+                    } // es provisional: se crean las secciones/parrafos por default
+                    else if (tipo == 'D') {
+//                        println "AQUIQQQQQ"
+                        contrato = actaInstance.contrato
+                        actaProv = Acta.findAllByContratoAndTipo(contrato, 'P')
+                        if (actaProv.size() == 1) {
+                            actaProv = actaProv[0]
+//                            println actaProv
+//                            println actaProv.fechaRegistro
+//                            println actaProv.registrada
+                            if (actaProv.fechaRegistro && actaProv.registrada == 1) {
+//                                println "ASDFASDFASDF"
+                                //secciones
+                                actaProv.secciones.each { seccion ->
+                                    def nuevaSec = new Seccion([
+                                            numero: seccion.numero,
+                                            titulo: seccion.titulo,
+                                            acta: actaInstance
+                                    ])
+                                    if (nuevaSec.save(flush: true)) {
+                                        seccion.parrafos.each { parrafo ->
+                                            def nuevoParr = new Parrafo([
+                                                    numero: parrafo.numero,
+                                                    contenido: parrafo.contenido,
+                                                    tipoTabla: parrafo.tipoTabla,
+                                                    seccion: nuevaSec
+                                            ])
+                                            if (!nuevoParr.save(flush: true)) {
+                                                println "error al guardar: " + nuevoParr.errors
+                                            }
+                                        }
+                                    } else {
+                                        println "error al guardar: " + nuevaSec.errors
+                                    }
+                                }
+                                sec = Seccion.findAllByActa(actaInstance)
+                            } else {
+                                flash.message = "No ha registrado el acta provisional, no puede generar el acta definitiva."
+                                redirect(action: "errores", params: [contrato: params.contrato])
+                                return
+                            }
                         }
-                    }
-                    sec = actaInstance.secciones
+                    } //es definitiva: se copian las secciones/parrafos de la provisional
+//                    sec = actaInstance.secciones
+                    sec = Seccion.findAllByActa(actaInstance)
+//                    println sec
                 }
 
                 sec.each { s ->
@@ -230,7 +295,7 @@ class ActaController extends janus.seguridad.Shield {
                     objSec.numero = s.numero
                     objSec.titulo = s.titulo
                     objSec.parrafos = []
-                    s.parrafos.each { p ->
+                    Parrafo.findAllBySeccion(s).each { p ->
                         objSec.parrafos.add([
                                 id: p.id,
                                 numero: p.numero,
@@ -240,21 +305,29 @@ class ActaController extends janus.seguridad.Shield {
                     }
                     secciones.add(objSec)
                 }
-
             } //es edit
             else {
                 if (params.contrato) {
                     def sec = []
                     def contrato = Contrato.get(params.contrato)
-                    def actas = Acta.findAllByContrato(contrato)
+                    def actas = Acta.findAllByContratoAndTipo(contrato, tipo)
                     if (actas.size() == 0) {
+
                         def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
                         def hoy = new Date()
                         actaInstance.contrato = contrato
-                        def obra = actaInstance.contrato.oferta.concurso.obra
-                        actaInstance.descripcion = "En la parroquia <strong>" + obra.parroquia.nombre + "</strong>, cantón <strong>" + obra.parroquia.canton.nombre + "</strong>, a los "
-                        actaInstance.descripcion += "<strong>" + NumberToLetterConverter.numberToLetter(hoy.format("dd").toInteger()) + " (" + hoy.format("dd") + ")</strong> días del mes de "
-                        actaInstance.descripcion += "<strong>" + meses[hoy.format("MM").toInteger()] + "</strong> del <strong>" + hoy.format("yyyy") + "</strong>, nos constituímos "
+                        if (params.tipo == 'P') {
+                            def obra = actaInstance.contrato.oferta.concurso.obra
+                            actaInstance.descripcion = "En la parroquia <strong>" + obra.parroquia.nombre + "</strong>, cantón <strong>" + obra.parroquia.canton.nombre + "</strong>, a los "
+                            actaInstance.descripcion += "<strong>" + NumberToLetterConverter.numberToLetter(hoy.format("dd").toInteger()) + " (" + hoy.format("dd") + ")</strong> días del mes de "
+                            actaInstance.descripcion += "<strong>" + meses[hoy.format("MM").toInteger()] + "</strong> del <strong>" + hoy.format("yyyy") + "</strong>, nos constituímos "
+                        } else {
+                            actaProv = Acta.findAllByContratoAndTipo(contrato, 'P')
+                            if (actaProv.size() == 1) {
+                                actaProv = actaProv[0]
+                                actaInstance.descripcion = actaProv.descripcion
+                            }
+                        }
                     } else if (actas.size() == 1) {
                         actaInstance = actas[0]
                         sec = actaInstance.secciones
@@ -281,11 +354,37 @@ class ActaController extends janus.seguridad.Shield {
                 }
             } //es create
             def jsonSecciones = new JsonBuilder(secciones)
-            return [actaInstance: actaInstance, secciones: jsonSecciones]
+
+//            println jsonSecciones.toPrettyString()
+
+            def editable = actaInstance.registrada == 0 && !actaInstance.fechaRegistro
+            if (tipo == 'D') {
+                if (actaProv.registrada != 1 || !actaProv.fechaRegistro) {
+                    flash.message = "No ha registrado el acta provisional, no puede generar el acta definitiva."
+                    redirect(action: "errores", params: [contrato: params.contrato])
+                    return
+                }
+
+                def diasDefinitiva = 180
+                def fechaProv = actaProv.fechaRegistro
+                def hoy = new Date()
+
+                if (hoy - fechaProv < diasDefinitiva) {
+                    flash.message = "El acta provisional fue registrada el " + (fechaProv.format("dd-MM-yyyy")) + ". Tiene que esperar " + diasDefinitiva + " días para generar el acta definitiva (" + (fechaProv + diasDefinitiva).format("dd-MM-yyyy") + ")"
+                    redirect(action: "errores", params: [contrato: params.contrato])
+                    return
+                }
+            }
+
+            return [actaInstance: actaInstance, secciones: jsonSecciones, editable: editable, tipos: tipos, actaProv: actaProv]
         } else {
             flash.message = "No puede crear un acta sin contrato"
             redirect(action: 'errores')
         }
+    }
+
+    def errores() {
+        return [contrato: params.contrato]
     }
 
     def updateDescripcion() {
@@ -312,14 +411,35 @@ class ActaController extends janus.seguridad.Shield {
         return [actaInstance: actaInstance]
     } //form_ajax
 
+    def registrar() {
+        def acta = Acta.get(params.id)
+        acta.registrada = 1
+        acta.fechaRegistro = new Date()
+        if (acta.save(flush: true)) {
+            flash.clase = "alert-success"
+            flash.message = "El acta ha sido registrada exitosamente"
+        } else {
+            flash.clase = "alert-error"
+            flash.message = "Ha ocurrido un error al registrar el acta: " + g.renderErrors(bean: acta)
+        }
+        redirect(action: "form", id: params.id)
+    }
+
     def save() {
+        if (params.fecha) {
+            params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        }
+
+        if (params.numero) {
+            params.numero = params.numero.toUpperCase()
+        }
         def actaInstance
         if (params.id) {
             actaInstance = Acta.get(params.id)
             if (!actaInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Acta con id " + params.id
-                redirect(action: 'form')
+                redirect(action: 'form', params: [contrato: params.contrato.id])
                 return
             }//no existe el objeto
             actaInstance.properties = params
@@ -342,7 +462,7 @@ class ActaController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
-            redirect(action: 'form')
+            redirect(action: 'form', params: [contrato: params.contrato.id])
             return
         }
 

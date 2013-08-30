@@ -102,6 +102,15 @@
         .tal {
             text-align : left !important;
         }
+
+        .warning {
+            font-size : 15px;
+        }
+
+        .strongWarning {
+            font-size   : 18px;
+            font-weight : bold;
+        }
         </style>
     </head>
 
@@ -134,27 +143,65 @@
                 </div>
 
                 <div class="btn-group">
-                    <a href="#" id="btnSave" class="btn btn-success"><i class="icon-save"></i> Guardar</a>
-                    <g:if test="${actaInstance.id}">
+                    <g:if test="${!actaInstance?.id || editable}">
+                        <a href="#" id="btnSave" class="btn btn-success"><i class="icon-save"></i> Guardar</a>
+                    </g:if>
+                    <g:if test="${actaInstance?.id}">
                     %{--<g:link controller="reportesPlanillas" class="btn" action="actaRecepcion" id="${actaInstance.id}"><i class="icon-print"></i> Imprimir</g:link>--}%
                         <a href="#" class="btn" id="btnPrint"><i class="icon-print"></i> Imprimir</a>
+                        <g:if test="${editable}">
+                            <a href="#" class="btn " id="btnRegistro"><i class="icon-lock"></i> Registrar</a>
+                        </g:if>
                     </g:if>
                 </div>
 
             </div>
 
         </div>
-
         <g:form class="form-horizontal" name="frmSave-Acta" action="save">
-            <g:hiddenField name="id" value="${actaInstance?.id}"/>
-            <g:hiddenField id="contrato" name="contrato.id" value="${actaInstance?.contrato?.id}"/>
-            <g:hiddenField id="txtDescripcion" name="descripcion" value="${actaInstance?.descripcion}"/>
+            <g:if test="${editable}">
+                <g:hiddenField name="id" value="${actaInstance?.id}"/>
+                <g:hiddenField id="contrato" name="contrato.id" value="${actaInstance?.contrato?.id}"/>
+                <g:hiddenField id="txtDescripcion" name="descripcion" value="${actaInstance?.descripcion}"/>
+            </g:if>
 
             <div class="titulo bold">
-                Acta de  <g:textField name="nombre" maxlength="20" class=" required input-small" value="${actaInstance?.nombre ?: 'recepción'}"/>
-                <g:select name="tipo" from="${actaInstance.constraints.tipo.inList}" class=" required input-medium" value="${actaInstance?.tipo}" valueMessagePrefix="acta.tipo"/>
-                N. <g:textField name="numero" maxlength="20" class=" required input-small" value="${actaInstance?.numero}"/>
+                Acta de
+                <g:if test="${editable}">
+                    <g:textField name="nombre" maxlength="20" class=" required input-small" value="${actaInstance?.nombre ?: actaProv ? actaProv.nombre : 'recepción'}"/>
+                </g:if>
+                <g:else>
+                    ${actaInstance?.nombre}
+                </g:else>
+                <g:if test="${editable}">
+                    <g:select name="tipo" from="${tipos}" class=" required input-medium" value="${actaInstance?.tipo}" valueMessagePrefix="acta.tipo"/>
+                </g:if>
+                <g:else>
+                    <g:message code="acta.tipo.${actaInstance.tipo}"/>
+                </g:else>
+                N.
+                <g:if test="${editable}">
+                    <g:textField name="numero" maxlength="20" class=" required allCaps input-medium" style="width: 170px;" value="${actaInstance?.numero}"/>
+                </g:if>
+                <g:else>
+                    ${actaInstance.numero}
+                </g:else>
+                efectuada el
+                <g:if test="${editable}">
+                    <elm:datepicker name="fecha" class="input-small required" value="${actaInstance?.fecha}"/>
+                </g:if>
+                <g:else>
+                    <g:formatDate date="${actaInstance.fecha}" format="dd-MM-yyyy"/>
+                    y registrada el
+                    <g:formatDate date="${actaInstance.fechaRegistro}" format="dd-MM-yyyy"/>
+                </g:else>
             </div>
+
+            <g:if test="${!actaInstance.id && actaInstance.tipo == 'D'}">
+                <div class="alert alert-info" style="margin-top: 15px;">
+                    Está creando el acta definitiva. Una vez ingresados el número y la fecha y guardada el acta se copiarán las secciones y los párrafos del acta provisional.
+                </div>
+            </g:if>
 
             <div class="tituloChevere">
                 Datos Generales
@@ -218,13 +265,15 @@
 
             </div> %{-- well contrato --}%
 
-            <div class="editable ui-corner-all" id="descripcion" contenteditable="true">
+            <div class="${editable ? 'editable' : ''} ui-corner-all" id="descripcion" ${editable ? 'contenteditable="true"' : ''}>
                 ${actaInstance.descripcion}
             </div>
 
-            <a href="#" class="btn btn-primary btn-small" style="margin-bottom: 10px;" id="btnAddSeccion">
-                <i class="icon-plus"></i> Agregar sección
-            </a>
+            <g:if test="${editable && actaInstance.id}">
+                <a href="#" class="btn btn-primary btn-small" style="margin-bottom: 10px;" id="btnAddSeccion">
+                    <i class="icon-plus"></i> Agregar sección
+                </a>
+            </g:if>
 
             <div id="secciones"></div>
 
@@ -248,6 +297,7 @@
 
         <script type="text/javascript">
             var secciones = 1;
+            var $btnSaveActa = $("#btnSave");
 
             $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
 
@@ -259,11 +309,10 @@
                     theme = "error";
                 }
                 $.jGrowl(msg, {
-                    speed          : 'slow',
-                    sticky         : sticky,
-                    theme          : theme,
-                    closerTemplate : '<div>[ cerrar todos ]</div>',
-                    themeState     : ''
+                    speed      : 'slow',
+                    sticky     : sticky,
+                    theme      : theme,
+                    themeState : ''
                 });
 
 //                console.log(error, message);
@@ -290,8 +339,7 @@
                 var $form = $("#frmSave");
                 if ($form.valid()) {
                     btn.replaceWith(spinner);
-
-                    var url = $form.data("action");
+                    var url = $form.attr("action");
                     $.ajax({
                         type    : "POST",
                         url     : url,
@@ -301,7 +349,7 @@
                                 var p = msg.split("_");
                                 log(p[1], true);
                             } else {
-                                var $sec = addSeccion($.parseJSON(msg));
+                                var $sec = addSeccion($.parseJSON(msg), true);
                                 if ($sec) {
                                     $("#modal").modal("hide");
                                     $('html, body').animate({
@@ -523,14 +571,21 @@
 
             }
 
-            function addParrafo(data, num, $div, $replace) {
+            function addParrafo(data, num, $div, $replace, isEditable) {
                 if (data.contenido == "null" || data.contenido == null) {
                     data.contenido = "";
                 }
+
+                var clase = "editable", contentEditable = "contenteditable='true'";
+                if (!isEditable) {
+                    clase = "";
+                    contentEditable = "";
+                }
+
                 var $parr = $("<div class='parrafo'></div>");
                 var $titulo = $("<div class='row tituloParrafo '></div>");
                 $("<div class='span1 numero lvl2 bold'>" + num + "." + data.numero + ".-</div>").appendTo($titulo);
-                var $edit = $("<div class='span9 contParrafo editable ui-corner-all' id='parrafo_" + data.id + "' contenteditable='true'>" + data.contenido + "</div>").appendTo($titulo);
+                var $edit = $("<div class='span9 contParrafo " + clase + " ui-corner-all' id='parrafo_" + data.id + "' " + contentEditable + ">" + data.contenido + "</div>").appendTo($titulo);
                 if (data.tipoTabla) {
                     tipoTabla(data.tipoTabla, $titulo);
                 }
@@ -603,7 +658,10 @@
                     return false;
                 });
 
-                $titulo.append($btnEliminarParrafo).append($btnTabla).appendTo($parr);
+                if (isEditable) {
+                    $titulo.append($btnEliminarParrafo).append($btnTabla);
+                }
+                $titulo.appendTo($parr);
                 if ($replace) {
                     $replace.replaceWith($parr);
                 } else {
@@ -619,11 +677,18 @@
                 return $parr;
             }
 
-            function addSeccion(data) {
+            function addSeccion(data, isEditable) {
                 var $seccion = $("<div class='seccion ui-corner-all'></div>");
                 var $titulo = $("<div class='row tituloSeccion'></div>");
                 $("<div class='span1 numero lvl1 bold'>" + data.numero + ".-</div>").appendTo($titulo);
-                var $edit = $("<div class='span9 lblSeccion editable ui-corner-all' id='seccion_" + data.id + "' contenteditable='true'>" + data.titulo + "</div>").appendTo($titulo);
+
+                var clase = "editable", contentEditable = "contenteditable='true'";
+                if (!isEditable) {
+                    clase = "";
+                    contentEditable = "";
+                }
+
+                var $edit = $("<div class='span9 lblSeccion " + clase + " ui-corner-all' id='seccion_" + data.id + "' " + contentEditable + ">" + data.titulo + "</div>").appendTo($titulo);
                 var $btnAddParrafo = $('<a href="#" class="btn btn-show btn-mini pull-right" style="margin-left: 10px;"><i class="icon-plus"></i> Agregar párrafo</a>');
                 var $btnEliminarSeccion = $('<a href="#" class="btn btn-danger btn-mini pull-right" style="margin-left: 10px;"><i class="icon-minus"></i> Eliminar sección</a>');
 
@@ -755,7 +820,9 @@
                     return false;
                 });
 
-                $titulo.append($btnAddParrafo).append($btnEliminarSeccion);
+                if (isEditable) {
+                    $titulo.append($btnAddParrafo).append($btnEliminarSeccion);
+                }
                 $titulo.appendTo($seccion);
 
                 $seccion.data({
@@ -763,23 +830,27 @@
                     numero : data.numero,
                     titulo : data.titulo
                 });
-                var parrafosAdded = []
+                var parrafosAdded = [];
                 if (parrafos > 0) {
                     for (var i = 0; i < data.parrafos.length; i++) {
-                        var $par = addParrafo(data.parrafos[i], data.numero, $parr);
+                        var $par = addParrafo(data.parrafos[i], data.numero, $parr, false, isEditable);
                         parrafosAdded.push($par)
                     }
                 }
 
                 $parr.appendTo($seccion);
 
-                $("#secciones").append($seccion)
-                $seccion.append($botones);
+                $("#secciones").append($seccion);
+                if (isEditable) {
+                    $seccion.append($botones);
+                }
 
                 secciones++;
-                editable($edit);
-                for (var i = 0; i < parrafosAdded.length; i++) {
-                    editable(parrafosAdded[i].find(".editable"));
+                if (isEditable) {
+                    editable($edit);
+                    for (var i = 0; i < parrafosAdded.length; i++) {
+                        editable(parrafosAdded[i].find(".editable"));
+                    }
                 }
                 return $seccion;
             }
@@ -787,7 +858,7 @@
             function initSecciones() {
                 var secciones = ${secciones};
                 for (var i = 0; i < secciones.length; i++) {
-                    addSeccion(secciones[i]);
+                    addSeccion(secciones[i], ${editable});
                 }
             }
 
@@ -869,6 +940,7 @@
                                         };
                                         break;
                                 }
+                                <g:if test="${actaInstance.id}">
                                 $.ajax({
                                     type    : "POST",
                                     url     : url,
@@ -880,6 +952,7 @@
                                         }
                                     }
                                 });
+                                </g:if>
                             }
                         }
                     });
@@ -913,6 +986,29 @@
                     location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
                 });
 
+                $("#btnRegistro").click(function () {
+                    $.box({
+                        imageClass : "box_info",
+                        text       : "<span class='warning'>Por favor verifique que el acta que va a registrar sea la que fue firmada, " +
+                                     "pues <span class='strongWarning'>una vez registrada el acta NO se puede modificar y el registro es definitivo y NO se puede deshacer.</span>",
+                        title      : "Alerta",
+                        iconClose  : false,
+                        dialog     : {
+                            width         : 450,
+                            resizable     : false,
+                            draggable     : false,
+                            closeOnEscape : false,
+                            buttons       : {
+                                "Registrar" : function () {
+                                    location.href = "${createLink(action:'registrar', id:actaInstance.id)}";
+                                },
+                                "Cancelar"  : function () {
+                                }
+                            }
+                        }
+                    });
+                });
+
                 $("#btnAddSeccion").click(function () {
                     var id = "${actaInstance.id}";
                     if (id == "") {
@@ -941,7 +1037,7 @@
                             url     : "${createLink(controller: 'seccion', action:'form_ext_ajax')}",
                             success : function (msg) {
                                 var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+                                var btnSave = $('<a href="#" id="btnSaveSeccion" class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                                 btnSave.click(function () {
                                     submitFormSeccion(btnSave);
@@ -953,6 +1049,7 @@
                                 $("#modalBody").html(msg);
                                 $("#modalFooter").html("").append(btnOk).append(btnSave);
                                 $("#modal").modal("show");
+                                $("#titulo").focus();
                             }
                         });
                     }
@@ -972,11 +1069,11 @@
                     }
                 });
 
-                $("input").keyup(function (ev) {
-                    if (ev.keyCode == 13) {
-                        submitForm($(".btn-success"));
-                    }
-                });
+//                $("input").keyup(function (ev) {
+//                    if (ev.keyCode == 13) {
+//                        submitForm($(".btn-success"));
+//                    }
+//                });
             });
         </script>
 

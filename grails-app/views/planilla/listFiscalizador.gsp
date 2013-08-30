@@ -42,29 +42,39 @@
                         Nueva planilla
                     </g:link>
                 </div>
+            </div>
+
+            <div class="span3" id="busqueda-Planilla"></div>
+        </div>
+
+        <div class="row">
+            <div class="span12" role="navigation">
                 <g:if test="${planillaInstanceList.size() > 0 && planillaInstanceList.last()?.fechaFin >= prej[0]?.fechaFin}">
                     <div class="btn-group">
                         <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
                             <i class="icon-exchange"></i>
                             Reporte de diferencias
                         </g:link>
-                        <g:link controller="acta" action="form" class="btn" params="[contrato: contrato.id]">
+                        <g:link controller="acta" action="form" class="btn" params="[contrato: contrato.id, tipo: 'P']">
                             <i class="icon-stackexchange"></i>
                             Acta de recepción provisional
                         </g:link>
+                        <g:set var="actaProvisional" value="${janus.actas.Acta.findAllByContratoAndTipo(contrato, 'P')}"/>
+                        <g:if test="${actaProvisional.size() == 1 && actaProvisional[0].registrada == 1}">
+                            <g:link controller="acta" action="form" class="btn" params="[contrato: contrato.id, tipo: 'D']">
+                                <i class="icon-stackexchange"></i>
+                                Acta de recepción definitiva
+                            </g:link>
+                        </g:if>
                     </div>
                 </g:if>
                 <g:if test="${obra.fechaInicio}">
-                    <div class="btn-group">
-                        <a href="#" class="btn  " id="imprimir">
-                            <i class="icon-print"></i>
-                            Imprimir Orden de Inicio de Obra
-                        </a>
-                    </div>
+                    <a href="#" class="btn  " id="imprimir">
+                        <i class="icon-print"></i>
+                        Imprimir Orden de Inicio de Obra
+                    </a>
                 </g:if>
             </div>
-
-            <div class="span3" id="busqueda-Planilla"></div>
         </div>
 
         <g:form action="delete" name="frmDelete-Planilla">
@@ -268,19 +278,19 @@
 
         %{--<div id="imprimirDialog">--}%
 
-            %{--<fieldset>--}%
-                %{--<div class="span4" style="margin-top: 10px">--}%
+        %{--<fieldset>--}%
+        %{--<div class="span4" style="margin-top: 10px">--}%
 
-                    %{--Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>--}%
+        %{--Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>--}%
 
-                %{--</div>--}%
+        %{--</div>--}%
 
-                %{--<div class="span4" style="margin-top: 10px">--}%
-                    %{--Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>--}%
+        %{--<div class="span4" style="margin-top: 10px">--}%
+        %{--Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>--}%
 
-                %{--</div>--}%
+        %{--</div>--}%
 
-            %{--</fieldset>--}%
+        %{--</fieldset>--}%
         %{--</div>--}%
 
         <div id="errorImpresion">
@@ -473,37 +483,37 @@
 
                 %{--$("#imprimirDialog").dialog({--}%
 
-                    %{--autoOpen  : false,--}%
-                    %{--resizable : false,--}%
-                    %{--modal     : true,--}%
-                    %{--draggable : false,--}%
-                    %{--width     : 420,--}%
-                    %{--height    : 280,--}%
-                    %{--position  : 'center',--}%
-                    %{--title     : 'Datos del documento a ser impreso',--}%
-                    %{--buttons   : {--}%
-                        %{--"Aceptar"  : function () {--}%
+                %{--autoOpen  : false,--}%
+                %{--resizable : false,--}%
+                %{--modal     : true,--}%
+                %{--draggable : false,--}%
+                %{--width     : 420,--}%
+                %{--height    : 280,--}%
+                %{--position  : 'center',--}%
+                %{--title     : 'Datos del documento a ser impreso',--}%
+                %{--buttons   : {--}%
+                %{--"Aceptar"  : function () {--}%
 
-                            %{--if ($("#oficio").val()) {--}%
+                %{--if ($("#oficio").val()) {--}%
 
-                                %{--location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()--}%
+                %{--location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()--}%
 
-                                %{--$("#imprimirDialog").dialog("close")--}%
+                %{--$("#imprimirDialog").dialog("close")--}%
 
-                            %{--} else {--}%
+                %{--} else {--}%
 
-                                %{--$("#errorImpresion").dialog("open")--}%
+                %{--$("#errorImpresion").dialog("open")--}%
 
-                            %{--}--}%
+                %{--}--}%
 
-                        %{--},--}%
-                        %{--"Cancelar" : function () {--}%
+                %{--},--}%
+                %{--"Cancelar" : function () {--}%
 
-                            %{--$("#imprimirDialog").dialog("close")--}%
+                %{--$("#imprimirDialog").dialog("close")--}%
 
-                        %{--}--}%
+                %{--}--}%
 
-                    %{--}--}%
+                %{--}--}%
 
                 %{--})--}%
 
