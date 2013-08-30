@@ -369,11 +369,14 @@ class ActaController extends janus.seguridad.Shield {
                 def fechaProv = actaProv.fechaRegistro
                 def hoy = new Date()
 
-                if (hoy - fechaProv < diasDefinitiva) {
-                    flash.message = "El acta provisional fue registrada el " + (fechaProv.format("dd-MM-yyyy")) + ". Tiene que esperar " + diasDefinitiva + " días para generar el acta definitiva (" + (fechaProv + diasDefinitiva).format("dd-MM-yyyy") + ")"
-                    redirect(action: "errores", params: [contrato: params.contrato])
-                    return
-                }
+                /* TODO:
+                        esto valida q hayan pasado los 180 dias desde el registro del acta provisional para poder hacer el acta definitiva
+                 */
+//                if (hoy - fechaProv < diasDefinitiva) {
+//                    flash.message = "El acta provisional fue registrada el " + (fechaProv.format("dd-MM-yyyy")) + ". Tiene que esperar " + diasDefinitiva + " días para generar el acta definitiva (" + (fechaProv + diasDefinitiva).format("dd-MM-yyyy") + ")"
+//                    redirect(action: "errores", params: [contrato: params.contrato])
+//                    return
+//                }
             }
 
             return [actaInstance: actaInstance, secciones: jsonSecciones, editable: editable, tipos: tipos, actaProv: actaProv]
