@@ -1177,24 +1177,24 @@ class ReportesPlanillasController {
                 if (j == 0) { //oferta
                     if (i == 0) { //mano de obra
                         vlinOferta = per.total
-                        addCellTabla(tablaFr, new Paragraph(numero(p.valor) + "\n" + numero(per.total), fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaFr, new Paragraph(numero(p.valor) + "\n" + numero(per.total, 3), fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 //                        println "\t1 " + p.valor
                         totalFr += p.valor
                     } else {
                         vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
-                        addCellTabla(tablaFr, new Paragraph(numero(p.valor) + "\n" + numero(vlinOferta, 2), fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaFr, new Paragraph(numero(p.valor) + "\n" + numero(vlinOferta, 3), fontTh), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 //                        println "\t2 " + p.valor
                         totalFr += p.valor
                     }
                 } else {
                     def vlin
-                    def dec
+                    def dec = 3
                     if (i == 0) {
                         vlin = per.total
-                        dec = 3
+//                        dec = 3
                     } else {
                         vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
-                        dec = 2
+//                        dec = 2
                     }
 //                    println "error "+p.indice+" "+p.indice.id+"  "+per.periodo.id+"   "+vlin+"  "+vlinOferta+"  "+p.valor+"  "+"  "+per.periodo.id
                     def valor = (vlin / vlinOferta * p.valor).round(3)

@@ -1177,23 +1177,23 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     def valor = 0
                     if (i == 0) { //es mano de obra
                         vlinOferta = per.total
-                        tablaFr += "<td class='number'><div>${numero(p.valor)}</div><div class='bold'>${numero(per.total)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(p.valor,3)}</div><div class='bold'>${numero(per.total)}</div></td>"
                         valor = per.total
                     } else {
                         vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
-                        tablaFr += "<td class='number'><div>${numero(p.valor)}</div><div class='bold'>${numero(vlinOferta, 2)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(p.valor,3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
                         valor = vlinOferta
                     }
 
 
                 } else {
-                    def vlin, dec
+                    def vlin, dec=3
                     if (i == 0) {
                         vlin = per.total
-                        dec = 3
+//                        dec = 3
                     } else {
                         vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
-                        dec = 2
+//                        dec = 2
                     }
 //                    println "error "+p.indice+" "+p.indice.id+"  "+per.periodo.id+"   "+vlin+"  "+vlinOferta+"  "+p.valor+"  "+"  "+per.periodo.id
                     def valor = (vlin / vlinOferta * p.valor).round(3)
@@ -1666,11 +1666,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     def valor = 0
                     if (i == 0) { //es mano de obra
                         vlinOferta = per.total
-                        tablaFr += "<td class='number'><div>${numero(p.valor, 2)}</div><div class='bold'>${numero(per.total)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(per.total)}</div></td>"
                         valor = per.total
                     } else {
                         vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
-                        tablaFr += "<td class='number'><div>${numero(p.valor)}</div><div class='bold'>${numero(vlinOferta, 2)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(p.valor,3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
                         valor = vlinOferta
                     }
                     def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id}")
@@ -1719,7 +1719,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     if (!per.save(flush: true)) {
                         println "error fr " + per.errors
                     }
-                    tablaFr += "<td class='number'><div>${numero(vlin, 2)}</div><div class='bold'>${numero(valor)}</div></td>"
+                    tablaFr += "<td class='number'><div>${numero(vlin, 3)}</div><div class='bold'>${numero(valor,3)}</div></td>"
                 }
             }
             tablaFr += "</tr>"
