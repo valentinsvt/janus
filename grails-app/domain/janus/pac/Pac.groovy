@@ -49,7 +49,7 @@ class Pac {
         }
     }
     static constraints = {
-        unidad(blank:true,nullable: true)
+        unidad(blank:true,nullable: true)                    ;
         cpp(blank:false,nullable: false)
         tipoCompra(blank:false,nullable: false)
         departamento(blank:false,nullable: false)
