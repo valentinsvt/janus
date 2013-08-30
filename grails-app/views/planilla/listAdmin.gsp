@@ -226,9 +226,6 @@
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                 </g:elseif>
-                                <a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">
-                                    Iniciar Obra
-                                </a>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
                                     <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
                                         <i class="icon-print"></i>

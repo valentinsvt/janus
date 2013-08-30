@@ -36,12 +36,12 @@
                 <div class="row-fluid" style="margin-left: 0px">
                     <div class="span4">
                         <div class="span3"><b>Requirente:</b></div>
-                        <g:textField class="required" name="requirente" style="width: 250px; font-size: 12px;"/>
+                        <g:textField class="required" name="requirente" maxlength="100" style="width: 250px; font-size: 12px;"/>
                     </div>
 
                     <div class="span3">
                         <b>Memorando:</b>
-                        <g:textField class="allCaps required" name="memo" style="width: 156px; font-size: 12px;"/>
+                        <g:textField class="allCaps required" name="memo" maxlength="20" style="width: 156px; font-size: 12px;"/>
                     </div>
 
                     <div class="span4">
