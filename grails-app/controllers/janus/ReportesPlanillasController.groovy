@@ -3534,7 +3534,7 @@ class ReportesPlanillasController {
         Paragraph headers = new Paragraph();
         headers.setAlignment(Element.ALIGN_LEFT);
 
-        headers.add(new Paragraph("Oficio N°: " + params.oficio.toUpperCase(), times12bold))
+        headers.add(new Paragraph("Oficio N°: " + obra.memoInicioObra, times12bold))
         headers.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy"), times12bold));
         headers.add(new Paragraph(" ", times10bold));
         headers.add(new Paragraph(" ", times10bold));
@@ -3595,7 +3595,7 @@ class ReportesPlanillasController {
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
 
-        def firmas = Persona.get(params.firma)
+        def firmas = obra.firmaInicioObra
         addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times12bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times12bold), prmsHeaderHoja)
         document.add(tablaFirmas);

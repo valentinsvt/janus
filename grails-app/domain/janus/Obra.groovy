@@ -103,6 +103,7 @@ class Obra implements Serializable {
     double distanciaAcemila = 0
 
     String memoInicioObra
+    Persona firmaInicioObra
     String anexos
 
     static mapping = {
@@ -214,6 +215,7 @@ class Obra implements Serializable {
             distanciaAcemila column: 'obratrac'
 
             memoInicioObra column: 'obrammio'
+            firmaInicioObra column: 'prsnfrio'
             anexos column: 'obraanxo'
         }
     }
@@ -319,6 +321,7 @@ class Obra implements Serializable {
         distanciaAcemila(blank: true, nullable: true)
 
         memoInicioObra(blank: true, nullable: true, maxSize: 20, attributes: [title: 'Memo de inicio de obra'])
+        firmaInicioObra(blank: true, nullable: true, attributes: [title: 'Firma para el memo de inicio de obra'])
         anexos(blank: true, nullable: true, maxSize: 255, attributes: [title: 'Anexos y planos ingresados a la biblioteca'])
     }
 

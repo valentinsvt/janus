@@ -558,7 +558,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def inicioObra_ajax() {
-        println "PARAMS: " + params
+//        println "PARAMS: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -579,7 +579,9 @@ class PlanillaController extends janus.seguridad.Shield {
         fechaMin = "new Date(${y},${m},${d})"
         fechaMax = "new Date(${y + 2},${m},${d})"
 
-        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha]
+        def firma = Persona.findAllByCargoIlike("Direct%");
+
+        [planilla: planilla, tipo: tipo, lblMemo: lblMemo, lblFecha: lblFecha, fechaMin: fechaMin, fechaMax: fechaMax, extra: extra, fecha: fecha, firma: firma]
     }
 
     def savePagoPlanilla() {
@@ -716,10 +718,12 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         def memo = params.memo.toString().toUpperCase()
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def personaFirma = Persona.get(params.firma.toLong())
 
         def obra = Obra.get(planilla.contrato.obra.id)
         obra.fechaInicio = fecha
         obra.memoInicioObra = memo
+        obra.firmaInicioObra = personaFirma
         if (!obra.save(flush: true)) {
             flash.message = "No se pudo iniciar la obra"
             println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors

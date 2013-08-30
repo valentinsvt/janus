@@ -226,7 +226,9 @@
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                 </g:elseif>
-
+                                <a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">
+                                    Iniciar Obra
+                                </a>
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
                                     <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
                                         <i class="icon-print"></i>
@@ -257,22 +259,22 @@
         </div>
 
 
-        <div id="imprimirDialog">
+        %{--<div id="imprimirDialog">--}%
 
-            <fieldset>
-                <div class="span4" style="margin-top: 10px">
+            %{--<fieldset>--}%
+                %{--<div class="span4" style="margin-top: 10px">--}%
 
-                    Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>
+                    %{--Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>--}%
 
-                </div>
+                %{--</div>--}%
 
-                <div class="span4" style="margin-top: 10px">
-                    Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>
+                %{--<div class="span4" style="margin-top: 10px">--}%
+                    %{--Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>--}%
 
-                </div>
+                %{--</div>--}%
 
-            </fieldset>
-        </div>
+            %{--</fieldset>--}%
+        %{--</div>--}%
 
         <div id="errorImpresion">
             <fieldset>
@@ -495,46 +497,46 @@
                 });
 
                 $("#imprimir").click(function () {
-
-                    $("#imprimirDialog").dialog("open");
+                    location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val();
+//                    $("#imprimirDialog").dialog("open");
 
                 });
 
-                $("#imprimirDialog").dialog({
+                %{--$("#imprimirDialog").dialog({--}%
 
-                    autoOpen  : false,
-                    resizable : false,
-                    modal     : true,
-                    draggable : false,
-                    width     : 420,
-                    height    : 280,
-                    position  : 'center',
-                    title     : 'Datos del documento a ser impreso',
-                    buttons   : {
-                        "Aceptar"  : function () {
+                    %{--autoOpen  : false,--}%
+                    %{--resizable : false,--}%
+                    %{--modal     : true,--}%
+                    %{--draggable : false,--}%
+                    %{--width     : 420,--}%
+                    %{--height    : 280,--}%
+                    %{--position  : 'center',--}%
+                    %{--title     : 'Datos del documento a ser impreso',--}%
+                    %{--buttons   : {--}%
+                        %{--"Aceptar"  : function () {--}%
 
-                            if ($("#oficio").val()) {
+                            %{--if ($("#oficio").val()) {--}%
 
-                                location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()
+                                %{--location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()--}%
 
-                                $("#imprimirDialog").dialog("close")
+                                %{--$("#imprimirDialog").dialog("close")--}%
 
-                            } else {
+                            %{--} else {--}%
 
-                                $("#errorImpresion").dialog("open")
+                                %{--$("#errorImpresion").dialog("open")--}%
 
-                            }
+                            %{--}--}%
 
-                        },
-                        "Cancelar" : function () {
+                        %{--},--}%
+                        %{--"Cancelar" : function () {--}%
 
-                            $("#imprimirDialog").dialog("close")
+                            %{--$("#imprimirDialog").dialog("close")--}%
 
-                        }
+                        %{--}--}%
 
-                    }
+                    %{--}--}%
 
-                })
+                %{--})--}%
 
                 $("#errorImpresion").dialog({
 
