@@ -36,7 +36,7 @@ class Pac {
             anio column: 'anio__id'
             presupuesto column: 'prsp__id'
             programa column: 'pgps__id'
-            descripcion column: 'pgpsdscr'
+            descripcion column: 'pacpdscr'
             cantidad column: 'pacpcnta'
             costo column: 'pacpcsto'
             c1 column: 'pacpctr1'
