@@ -199,6 +199,7 @@
                                     </g:elseif>
                                     <g:elseif test="${lblBtn == 4}">
                                         Informar pago
+
                                     </g:elseif>
                                     <g:elseif test="${lblBtn == 5}">
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
@@ -217,6 +218,13 @@
                                     <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
                                         <i class="icon-print"></i>
                                     </a>
+
+                                </g:if>
+                                <g:if test="${(planillaInstance.tipoPlanilla.codigo == 'P' || planillaInstance.tipoPlanilla.codigo == 'Q') && Math.abs(lblBtn) > 3}">
+                                    <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                        <i class="icon-print"></i>
+                                    </a>
+
                                 </g:if>
 
                             </td>
@@ -267,6 +275,12 @@
                     %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
                     %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
                     location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPagoAnticipo')}/" + $(this).data("id");
+                    return false;
+                });
+                $(".btnPedidoPago").click(function () {
+                    %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
+                    %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
+                    location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPago')}/" + $(this).data("id");
                     return false;
                 });
 
