@@ -282,6 +282,16 @@
 
                     total += parseFloat(str_replace(",", "", $(this).html()))
                 })
+                if($("#subPres_desc").val()=="-1"){
+                    $.ajax({
+                        type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'setMontoObra')}",
+                        data     : "obra=${obra?.id}&monto=" + total,
+                        success  : function (msg) {
+
+                        }
+                    });
+                }
+
                 $("#divTotal").html(number_format(total, 2, ".", ","))
             }
         });

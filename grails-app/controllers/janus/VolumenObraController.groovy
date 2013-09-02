@@ -42,6 +42,22 @@ class VolumenObraController extends janus.seguridad.Shield{
         [subs:subs]
     }
 
+
+
+    def setMontoObra(){
+        def tot = params.monto
+        try{
+            tot=tot.toDouble()
+        }catch (e) {
+            tot=0
+        }
+        def obra =Obra.get(params.obra)
+        if(obra.valor!=tot){
+            obra.valor=tot
+            obra.save(flush: true)
+        }
+    }
+
     def cargaCombosEditar(){
 
         def sub = SubPresupuesto.get(params.id)
