@@ -390,9 +390,9 @@
                             </li>
 
                             <li>
-                                <g:link action="obraLiquidacion" id="${contrato?.id}">
-                                    <i class=" icon-gears"></i> Generar FP de Liquidación
-                                </g:link>
+                                <a href="#" id="liquidacion">
+                                    <i class=" icon-paperclip"></i> Generar FP Liquidación
+                                </a>
                             </li>
 
                             <li>
@@ -495,7 +495,18 @@
 
         %{--</div>--}%
 
-        <script type="text/javascript">
+    <div id="LQDialogo">
+
+        <fieldset>
+            <div class="span3">
+                Está seguro de querer iniciar el proceso para generar la Fórmula Polinómica de Liquidación
+            </div>
+        </fieldset>
+    </div>
+
+
+
+    <script type="text/javascript">
 
             function log(msg, error) {
                 var sticky = false;
@@ -896,6 +907,57 @@
                 }
 
             });
+
+            $("#LQDialogo").dialog({
+
+                autoOpen  : false,
+                resizable : false,
+                modal     : true,
+                draggable : false,
+                width     : 350,
+                height    : 220,
+                position  : 'center',
+                title     : 'Generar Liquidación de Obra',
+                buttons   : {
+                    "Aceptar"  : function () {
+
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(action: 'obraLiquidacion')}",
+                                data    : "id=${contrato?.id}",
+                                success : function (msg) {
+                                    alert(msg);
+
+                                }
+                            });
+
+
+                        $("#LQDialogo").dialog("close")
+
+                    },
+                    "Cancelar" : function () {
+
+                        $("#LQDialogo").dialog("close")
+
+                    }
+
+                }
+
+            });
+
+
+
+            $("#liquidacion").click(function () {
+
+                if (${contrato?.id != null}) {
+
+                    $("#LQDialogo").dialog("open")
+
+                }
+
+            });
+
+
 
             %{--$("#btn-imprimir").click(function () {--}%
 

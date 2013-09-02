@@ -118,7 +118,7 @@ class ReportesPlanillasController {
     }
 
     private String nombrePersona(persona, tipo) {
-//        println persona
+        println "nombrePersona" + persona
 //        println tipo
         def str = ""
         if (persona) {
@@ -3437,6 +3437,8 @@ class ReportesPlanillasController {
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def precios = [:]
         def indirecto = obra.totales / 100
+
+        println "tramite: $tramite, personas del tramite: " + prsn
 
         preciosService.ac_rbroObra(obra.id)
 

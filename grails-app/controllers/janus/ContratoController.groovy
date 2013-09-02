@@ -652,7 +652,7 @@ class ContratoController extends janus.seguridad.Shield {
         def sql = "select * from obra_lq(" + contrato.obra.id + ")"
         def nuevo = cn.execute(sql.toString())
         cn.close()
-        render("Se ha generado la obra para la fórmula polinómica de liquidación con el id: $nuevo")
+        render("Se ha generado la obra para la fórmula polinómica de liquidación")
     }
 
 } //fin controller
