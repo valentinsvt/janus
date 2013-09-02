@@ -319,14 +319,20 @@ class PlanillaController extends janus.seguridad.Shield {
 
 //        def obraDpto = obra.departamento
         def adminContrato = contrato.administrador
-//        def adminContrato = null
+        def fiscContrato = contrato.fiscalizador
+//        fiscContrato = null
         if (!adminContrato) {
-            render "NO"
+            render "No se encontró el administrador del contrato. Por favor asegúrese de que existe un administrador activo para continuar con el trámite."
+            return
+        }
+        if (!fiscContrato) {
+            render "No se encontró el fiscalizador del contrato. Por favor asegúrese de que existe un fiscalizador activo para continuar con el trámite."
             return
         }
         def obraDpto = adminContrato.departamento
 
         def especial = "DE"
+        def fiscalizador = null
 
         def errores = ""
 
@@ -375,6 +381,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
                 }
                 especial = "PARA"
+                fiscalizador = "DE"
                 if (!tipoTramite) {
                     println "NOP: crear un tipo de tramite con codigo ENRJ, para: " + obraDpto
                     tipoTramite = new TipoTramite([
@@ -420,12 +427,12 @@ class PlanillaController extends janus.seguridad.Shield {
                 }
                 if (!dDe) {
                     render "No se encontró el departamento que envía el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
-                            "que envía a ${dptoFiscalizacion}"
+                            " que envía a ${dptoFiscalizacion}"
                     return
                 }
                 if (!dPara) {
                     render "No se encontró el departamento que recibe el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
-                            "que recibe a ${obraDpto}"
+                            " que recibe a ${obraDpto}"
                     return
                 }
                 break;
@@ -611,8 +618,11 @@ class PlanillaController extends janus.seguridad.Shield {
         roles.each { rol ->
             def personas = Persona.findAllByDepartamento(rol.departamento)
 
-            if (rol.rolTramite.codigo == especial) {
+            if (rol.rolTramite.codigo.trim() == especial.trim()) {
                 personas = [adminContrato]
+            }
+            if (rol.rolTramite.codigo.trim() == fiscalizador.trim()) {
+                personas = [fiscContrato]
             }
 
             def sel = g.select(from: personas, class: "span3", optionKey: "id", optionValue: {

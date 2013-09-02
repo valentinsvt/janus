@@ -3432,8 +3432,10 @@ class ReportesPlanillasController {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
-        def tramite = Tramite.findByPlanilla(planilla)
+//        def tramite = Tramite.findByPlanilla(planilla)
+        def tramite = Tramite.findByPlanillaAndTipoTramite(planilla,TipoTramite.findByCodigo("PDPG"))
         def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
+
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def precios = [:]
         def indirecto = obra.totales / 100

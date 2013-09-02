@@ -199,7 +199,7 @@
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Informar pago
                                         </a>
-                                        %{--<a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
+                                    %{--<a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
                                         <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}" data-txt="${planillaInstance.tipoPlanilla.codigo == 'A' ? 'reajuste' : 'planilla'}">
                                             Devolver
                                         </a>
@@ -317,7 +317,12 @@
                                 $("#modalFooter").html("").append(btnOk);
                             } else {
                                 $("#modalBody").html(msg);
-                                $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                if (msg.startsWith("No")) {
+                                    btnOk.text("Aceptar");
+                                    $("#modalFooter").html("").append(btnOk);
+                                } else {
+                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                }
                             }
 
                             $("#modal-Planilla").modal("show");

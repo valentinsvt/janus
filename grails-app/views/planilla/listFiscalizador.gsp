@@ -49,7 +49,7 @@
 
         <div class="row">
             <div class="span12" role="navigation">
-                <g:if test="${planillaInstanceList.size() > 0 && planillaInstanceList.last()?.fechaFin >= prej[0]?.fechaFin}">
+                <g:if test="${planillaInstanceList.size() > 0 && planillaInstanceList.last() && planillaInstanceList.last()?.fechaFin && prej[0] && prej[0]?.fechaFin && planillaInstanceList.last()?.fechaFin >= prej[0]?.fechaFin}">
                     <div class="btn-group">
                         <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
                             <i class="icon-exchange"></i>
@@ -376,7 +376,12 @@
                                 $("#modalFooter").html("").append(btnOk);
                             } else {
                                 $("#modalBody").html(msg);
-                                $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                if (msg.startsWith("No")) {
+                                    btnOk.text("Aceptar");
+                                    $("#modalFooter").html("").append(btnOk);
+                                } else {
+                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                }
                             }
 
                             $("#modal-Planilla").modal("show");

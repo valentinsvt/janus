@@ -258,19 +258,19 @@
 
         %{--<div id="imprimirDialog">--}%
 
-            %{--<fieldset>--}%
-                %{--<div class="span4" style="margin-top: 10px">--}%
+        %{--<fieldset>--}%
+        %{--<div class="span4" style="margin-top: 10px">--}%
 
-                    %{--Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>--}%
+        %{--Oficio N°: <g:textField name="oficio" maxlength="20" class="allCaps"/>--}%
 
-                %{--</div>--}%
+        %{--</div>--}%
 
-                %{--<div class="span4" style="margin-top: 10px">--}%
-                    %{--Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>--}%
+        %{--<div class="span4" style="margin-top: 10px">--}%
+        %{--Firma: <g:select name="firmaDocumento.id" from="${firma}" optionKey="id" optionValue="cargo" style="margin-left: 20px" id="firma"/>--}%
 
-                %{--</div>--}%
+        %{--</div>--}%
 
-            %{--</fieldset>--}%
+        %{--</fieldset>--}%
         %{--</div>--}%
 
         <div id="errorImpresion">
@@ -356,7 +356,12 @@
                                 $("#modalFooter").html("").append(btnOk);
                             } else {
                                 $("#modalBody").html(msg);
-                                $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                if (msg.startsWith("No")) {
+                                    btnOk.text("Aceptar");
+                                    $("#modalFooter").html("").append(btnOk);
+                                } else {
+                                    $("#modalFooter").html("").append(btnOk).append(btnSave);
+                                }
                             }
 
                             $("#modal-Planilla").modal("show");
@@ -501,37 +506,37 @@
 
                 %{--$("#imprimirDialog").dialog({--}%
 
-                    %{--autoOpen  : false,--}%
-                    %{--resizable : false,--}%
-                    %{--modal     : true,--}%
-                    %{--draggable : false,--}%
-                    %{--width     : 420,--}%
-                    %{--height    : 280,--}%
-                    %{--position  : 'center',--}%
-                    %{--title     : 'Datos del documento a ser impreso',--}%
-                    %{--buttons   : {--}%
-                        %{--"Aceptar"  : function () {--}%
+                %{--autoOpen  : false,--}%
+                %{--resizable : false,--}%
+                %{--modal     : true,--}%
+                %{--draggable : false,--}%
+                %{--width     : 420,--}%
+                %{--height    : 280,--}%
+                %{--position  : 'center',--}%
+                %{--title     : 'Datos del documento a ser impreso',--}%
+                %{--buttons   : {--}%
+                %{--"Aceptar"  : function () {--}%
 
-                            %{--if ($("#oficio").val()) {--}%
+                %{--if ($("#oficio").val()) {--}%
 
-                                %{--location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()--}%
+                %{--location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val()--}%
 
-                                %{--$("#imprimirDialog").dialog("close")--}%
+                %{--$("#imprimirDialog").dialog("close")--}%
 
-                            %{--} else {--}%
+                %{--} else {--}%
 
-                                %{--$("#errorImpresion").dialog("open")--}%
+                %{--$("#errorImpresion").dialog("open")--}%
 
-                            %{--}--}%
+                %{--}--}%
 
-                        %{--},--}%
-                        %{--"Cancelar" : function () {--}%
+                %{--},--}%
+                %{--"Cancelar" : function () {--}%
 
-                            %{--$("#imprimirDialog").dialog("close")--}%
+                %{--$("#imprimirDialog").dialog("close")--}%
 
-                        %{--}--}%
+                %{--}--}%
 
-                    %{--}--}%
+                %{--}--}%
 
                 %{--})--}%
 
