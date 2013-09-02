@@ -316,9 +316,11 @@ class ActaTagLib {
         }
 
         def p1 = planillasCosto.size() > 0 ? planillasCosto.first() : null
-        def prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
-
-        def tabla = "<table class='table table-bordered table-condensed'>"
+                def tabla=""
+        def prct
+        if(p1) {
+        prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
+        tabla = "<table class='table table-bordered table-condensed'>"
 
         tabla += "<thead>"
         tabla += "<tr>"
@@ -367,6 +369,7 @@ class ActaTagLib {
         tabla += "</tfoot>"
 
         tabla += "</table>"
+    }
         return tabla
     }
 

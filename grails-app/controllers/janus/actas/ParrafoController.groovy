@@ -44,6 +44,7 @@ class ParrafoController extends janus.seguridad.Shield {
     }
 
     def form_ext_ajax() {
+//        println params
         def message
         def parrafoInstance = new Parrafo(params)
         if (params.id) {

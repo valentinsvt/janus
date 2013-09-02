@@ -678,6 +678,7 @@
             }
 
             function addSeccion(data, isEditable) {
+                console.log(data)
                 var $seccion = $("<div class='seccion ui-corner-all'></div>");
                 var $titulo = $("<div class='row tituloSeccion'></div>");
                 $("<div class='span1 numero lvl1 bold'>" + data.numero + ".-</div>").appendTo($titulo);

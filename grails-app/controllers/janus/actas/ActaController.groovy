@@ -224,6 +224,7 @@ class ActaController extends janus.seguridad.Shield {
                             if (!seccion.save(flush: true)) {
                                 println "error al guardar seccion " + s.numero + ": " + seccion.errors
                             } else {
+                                s.id=seccion.id
                                 s.parrafos.each { p ->
                                     def tipoTabla = null
                                     if (p.tipoTabla) {
@@ -237,6 +238,8 @@ class ActaController extends janus.seguridad.Shield {
                                     ])
                                     if (!parrafo.save(flush: true)) {
                                         println "error al guardar el parrafo (" + seccion.numero + ") " + p.numero + ": " + parrafo.errors
+                                    } else {
+                                        p.id=parrafo.id
                                     }
                                 }
                             }

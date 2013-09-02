@@ -237,9 +237,9 @@
                                     </a>
 
                                 </g:if>
-                                <a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">
-                                    Iniciar Obra
-                                </a>
+                                %{--<a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">--}%
+                                    %{--Iniciar Obra--}%
+                                %{--</a>--}%
                             </td>
                         </tr>
                     </g:each>
@@ -320,6 +320,12 @@
                     %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
                     %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
                     location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPagoAnticipo')}/" + $(this).data("id");
+                    return false;
+                });
+                $(".btnPedidoPago").click(function () {
+                    %{--var url = "${createLink(controller: 'reportes',action: 'anticipoReporte')}/" + $(this).data("id");--}%
+                    %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url + "&filename=Memo_pedido_pago_" + "${new Date().format('ddMMyyyy_hhmm')}" + ".pdf";--}%
+                    location.href = "${g.createLink(controller: 'reportesPlanillas',action: 'memoPedidoPago')}/" + $(this).data("id");
                     return false;
                 });
 

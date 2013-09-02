@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <title>Sistema Janus</title>
+    <title>Sistema SEP - GADPP</title>
     <meta name="layout" content="main"/>
     <style type="text/css">
     @page {
@@ -49,15 +49,19 @@
     .desactivado{
         color: #bbc;
     }
-    h1 {
-        font-size: 24px;
+    .titl {
+        font-family: 'open sans condensed';
+        font-weight: bold;
+        text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);
+        color:#0070B0;
+        margin-top: 20px;
     }
     </style>
 </head>
 <body>
 <div class="dialog">
-    <div style="text-align: center;"><h1 style="font-family: 'open sans condensed';font-weight: bold;font-size: 25px;
-    text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#0068AC;">CONTROL DE PROYECTOS CONTRATACION, EJECUCIÓN, SEGUIMIENTO DE OBRAS Y CONSULTORÍAS<br>G.A.D. PROVINCIA DE PICHINCHA</h1></div>
+    <div style="text-align: center;"><h1 class="titl" style="font-size: 26px;">SEGUIMIENTO Y EJECUCIÓN DE PROYECTOS DE OBRAS Y CONSULTORÍAS<br>
+        GOBIERNO AUTÓNOMO DESCENTRALIZADO PROVINCIA DE PICHINCHA</h1></div>
         <div class="body ui-corner-all" style="width: 850px;position: relative;margin: auto;margin-top: 0px;height: 510px;
             background: #2080b0;">
 

@@ -67,9 +67,14 @@
             color : #bbc;
         }
 
-        h1 {
-            font-size : 24px;
+        .titl {
+            font-family: 'open sans condensed';
+            font-weight: bold;
+            text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);
+            color:#0088CC;
+            margin-top: 20px;
         }
+
         </style>
     </head>
 
@@ -86,9 +91,10 @@
             <span id="spanError"></span>
         </div>
 
-        <div style="text-align: center;"><h1 style="font-family: 'open sans condensed';font-weight: bold;font-size:
-        25px;text-shadow: -2px 2px 1px rgba(0, 0, 0, 0.25);color:#0088CC; margin-top: 60px;">
-            CONTROL DE PROYECTOS<br>CONTRATACION, EJECUCIÓN, SEGUIMIENTO DE OBRAS Y CONSULTORÍAS<br>G.A.D. PROVINCIA DE PICHINCHA</h1></div>
+        <div style="text-align: center; margin-top: 40px;"><h1 class="titl" style="font-size: 32px;">SEP - GADPP</h1>
+            <h1 class="titl" style="font-size: 24px;">SEGUIMIENTO Y EJECUCIÓN DE PROYECTOS DE OBRAS Y CONSULTORÍAS<br>
+                GOBIERNO AUTÓNOMO DESCENTRALIZADO PROVINCIA DE PICHINCHA</h1>
+            %{--<h1 class="titl" style="font-size: 24px; color: #06a">Registro de Ofertas en Línea</h1></div>--}%
 
         <div class="dialog ui-corner-all" style="height: 595px;background: #d7d7d7;;padding: 10px;width: 910px;margin: auto;margin-top: 5px">
             <div style="text-align: center; margin-top: 50px; color: #810;">
@@ -111,7 +117,7 @@
             <div class="modal-body" id="modalBody" style="padding: 0px">
 
                 <g:form class="well form-horizontal span " action="validar" name="frmLogin" style="border: 5px solid #2080B0;background:#C7C7C5 /*#a7a7a5*/;color: #939Aa2;width: 300px;position: relative;padding-left: 60px;margin: 0px">
-                    <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px; color: #334">Sistema Janus</p>
+                    <p class="css-vertical-text tituloGrande" style="left: 12px;;font-family: 'Tulpen One',cursive;font-weight: bold;font-size: 35px; color: #334">Sistema SEP - GADPP</p>
 
                     <div class="linea" style="height: 95%;left: 45px; border-left-color: #334"></div>
                     <button type="button" class="close" data-dismiss="modal" style="color: white;opacity: 1;">×</button>
