@@ -307,7 +307,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
-//        println "PARAMS: " + params
+        println "PARAMS: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -328,10 +328,34 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def especial = "DE"
 
+        def errores = ""
+
 //        println planilla.fechaOficioEntradaPlanilla
 //        println planilla.fechaMemoSalidaPlanilla
 //        println planilla.fechaMemoPedidoPagoPlanilla
 //        println planilla.fechaMemoPagoPlanilla
+
+        def dptoFiscalizacion = Departamento.findAllByCodigo("FISC")
+        def dptoDirFinanciera = Departamento.findAllByCodigo("FINA")
+
+        if (dptoFiscalizacion.size() == 1) {
+            dptoFiscalizacion = dptoFiscalizacion[0]
+        } else if (dptoFiscalizacion.size() == 0) {
+            render "No se encontró el departamento de Fiscalización con código FISC. Por favor asegúrese de que exista para continuar con el trámite."
+            return
+        } else {
+            render "Se encontraron ${dptoFiscalizacion.size()} departamentos de Fiscalización con código FISC. Por favor asegúrese de que exista para sólo uno continuar con el trámite."
+            return
+        }
+        if (dptoDirFinanciera.size() == 1) {
+            dptoDirFinanciera = dptoDirFinanciera[0]
+        } else if (dptoDirFinanciera.size() == 0) {
+            render "No se encontró el departamento de Dirección Financiera con código FINA. Por favor asegúrese de que exista para continuar con el trámite."
+            return
+        } else {
+            render "Se encontraron ${dptoDirFinanciera.size()} departamentos de Dirección Financiera con código FINA. Por favor asegúrese de que exista para sólo uno continuar con el trámite."
+            return
+        }
 
         switch (tipo) {
             case "2":
@@ -366,7 +390,8 @@ class PlanillaController extends janus.seguridad.Shield {
                         def dDe = new DepartamentoTramite([
                                 tipoTramite: tipoTramite,
                                 rolTramite: RolTramite.findByCodigo("DE"),
-                                departamento: Departamento.get(1) //Fiscalizacion
+                                departamento: dptoFiscalizacion
+//                                departamento: Departamento.get(1) //Fiscalizacion
                         ])
                         if (!dDe.save(flush: true)) {
                             println "error al guardar DE: " + dDe.errors
@@ -382,6 +407,26 @@ class PlanillaController extends janus.seguridad.Shield {
                     } else {
                         println "error al guardar tipo tramite: " + tipoTramite.errors
                     }
+                }
+                def dDe = DepartamentoTramite.withCriteria {
+                    eq("tipoTramite", tipoTramite)
+                    eq("rolTramite", RolTramite.findByCodigo("DE"))
+                    eq("departamento", dptoFiscalizacion)
+                }
+                def dPara = DepartamentoTramite.withCriteria {
+                    eq("tipoTramite", tipoTramite)
+                    eq("rolTramite", RolTramite.findByCodigo("PARA"))
+                    eq("departamento", obraDpto)
+                }
+                if (!dDe) {
+                    render "No se encontró el departamento que envía el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
+                            "que envía a ${dptoFiscalizacion}"
+                    return
+                }
+                if (!dPara) {
+                    render "No se encontró el departamento que recibe el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
+                            "que recibe a ${obraDpto}"
+                    return
                 }
                 break;
             case "3":
@@ -436,7 +481,8 @@ class PlanillaController extends janus.seguridad.Shield {
                         def dPara = new DepartamentoTramite([
                                 tipoTramite: tipoTramite,
                                 rolTramite: RolTramite.findByCodigo("PARA"),
-                                departamento: Departamento.get(11) //dir. financiera
+                                departamento: dptoDirFinanciera //dir. financiera
+//                                departamento: Departamento.get(11) //dir. financiera
                         ])
                         if (!dPara.save(flush: true)) {
                             println "error al guardar PARA: " + dPara.errors
@@ -444,6 +490,26 @@ class PlanillaController extends janus.seguridad.Shield {
                     } else {
                         println "error al guardar tipo tramite: " + tipoTramite.errors
                     }
+                }
+                def dDe = DepartamentoTramite.withCriteria {
+                    eq("tipoTramite", tipoTramite)
+                    eq("rolTramite", RolTramite.findByCodigo("DE"))
+                    eq("departamento", obraDpto)
+                }
+                def dPara = DepartamentoTramite.withCriteria {
+                    eq("tipoTramite", tipoTramite)
+                    eq("rolTramite", RolTramite.findByCodigo("PARA"))
+                    eq("departamento", dptoDirFinanciera)
+                }
+                if (!dDe) {
+                    render "No se encontró el departamento que envía el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
+                            "que envía a ${obraDpto}"
+                    return
+                }
+                if (!dPara) {
+                    render "No se encontró el departamento que recibe el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
+                            "que recibe a ${dptoDirFinanciera}"
+                    return
                 }
                 break;
             case "4":
@@ -490,7 +556,8 @@ class PlanillaController extends janus.seguridad.Shield {
                         def dDe = new DepartamentoTramite([
                                 tipoTramite: tipoTramite,
                                 rolTramite: RolTramite.findByCodigo("DE"),
-                                departamento: Departamento.get(11) //dir. financiera
+                                departamento: dptoDirFinanciera //dir. financiera
+//                                departamento: Departamento.get(11) //dir. financiera
                         ])
                         if (!dDe.save(flush: true)) {
                             println "error al guardar DE: " + dDe.errors
@@ -506,6 +573,26 @@ class PlanillaController extends janus.seguridad.Shield {
                     } else {
                         println "error al guardar tipo tramite: " + tipoTramite.errors
                     }
+                }
+                def dDe = DepartamentoTramite.withCriteria {
+                    eq("tipoTramite", tipoTramite)
+                    eq("rolTramite", RolTramite.findByCodigo("DE"))
+                    eq("departamento", dptoDirFinanciera)
+                }
+                def dPara = DepartamentoTramite.withCriteria {
+                    eq("tipoTramite", tipoTramite)
+                    eq("rolTramite", RolTramite.findByCodigo("PARA"))
+                    eq("departamento", obraDpto)
+                }
+                if (!dDe) {
+                    render "No se encontró el departamento que envía el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
+                            "que envía a ${dptoDirFinanciera}"
+                    return
+                }
+                if (!dPara) {
+                    render "No se encontró el departamento que recibe el trámite. Por favor asegúrese de que el tipo de trámite " + tipoTramite.descripcion + " tenga como departamento" +
+                            "que recibe a ${obraDpto}"
+                    return
                 }
                 break;
             case '5':

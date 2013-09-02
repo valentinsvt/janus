@@ -167,6 +167,34 @@ class TipoTramiteController extends janus.seguridad.Shield {
             return
         }
 
+        def hijos = TipoTramite.countByPadre(tipoTramiteInstance)
+        def departamentos = DepartamentoTramite.countByTipoTramite(tipoTramiteInstance)
+        def tramites = Tramite.countByTipoTramite(tipoTramiteInstance)
+
+        if (departamentos > 0 || hijos > 0 || tramites > 0) {
+            flash.message = "El tipo de trámite tiene "
+            def str = ""
+            if (departamentos > 0) {
+                str += departamentos + " departamento${departamentos == 1 ? '' : 's'}"
+            }
+            if (hijos > 0) {
+                if (str != "") {
+                    str += ","
+                }
+                str += hijos + " hijo${hijos == 1 ? '' : 's'}"
+            }
+            if (tramites > 0) {
+                if (str != "") {
+                    str += ","
+                }
+                str += tramites + " trámite${tramites == 1 ? '' : 's'}"
+            }
+            flash.clase = "alert-error"
+            flash.message += str + " por lo que no pudo ser eliminado."
+            redirect(action: "list")
+            return
+        }
+
         try {
             tipoTramiteInstance.delete(flush: true)
             flash.clase = "alert-success"
