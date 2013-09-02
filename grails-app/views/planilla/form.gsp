@@ -27,8 +27,8 @@
         }
 
         select.label-important, textarea.label-important {
-            background  : none !important;
-            color       : #555 !important;
+            background : none !important;
+            color : #555 !important;
             text-shadow : none !important;
         }
         </style>
@@ -74,23 +74,31 @@
                         <div class="alert alert-info">
                             <g:if test="${tipos.find { it.codigo == 'A' }}">
                                 <p>
-                                    La planilla de tipo "${tipos.find { it.codigo == 'A' }.nombre}" se utiliza para registrar el reajuste al momento del inicio de la obra
+                                    La planilla de tipo "${tipos.find {
+                                        it.codigo == 'A'
+                                    }.nombre}" se utiliza para registrar el reajuste al momento del inicio de la obra
                                 </p>
                             </g:if>
 
                             <g:if test="${tipos.find { it.codigo == 'P' }}">
                                 <p>
-                                    Las planillas de tipo "${tipos.find { it.codigo == 'P' }.nombre}" se utilizan para registrar el avance de la obra. La última de este tipo es considerada como planilla de liquidación
+                                    Las planillas de tipo "${tipos.find {
+                                        it.codigo == 'P'
+                                    }.nombre}" se utilizan para registrar el avance de la obra. La última de este tipo es considerada como planilla de liquidación
                                 </p>
                             </g:if>
                             <g:if test="${tipos.find { it.codigo == 'L' }}">
                                 <p>
-                                    La planilla de tipo "${tipos.find { it.codigo == 'L' }.nombre}" se utiliza para registrar el reajuste definitivo de la obra
+                                    La planilla de tipo "${tipos.find {
+                                        it.codigo == 'L'
+                                    }.nombre}" se utiliza para registrar el reajuste definitivo de la obra
                                 </p>
                             </g:if>
                             <g:if test="${tipos.find { it.codigo == 'C' }}">
                                 <p>
-                                    Las planillas de tipo "${tipos.find { it.codigo == 'C' }.nombre}" se utilizan para registrar costos por rubros no incluídos en el volumen de obra
+                                    Las planillas de tipo "${tipos.find {
+                                        it.codigo == 'C'
+                                    }.nombre}" se utilizan para registrar costos por rubros no incluídos en el volumen de obra
                                 </p>
                             </g:if>
                         </div>
@@ -127,7 +135,7 @@
                             </div>
 
                             <div class="span4">
-                                <g:textField name="numero" class=" required allCaps" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
+                                <g:textField name="numero" maxlength="20" class=" required allCaps" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
                                 %{--<span class="uneditable-input span3">${planillaInstance.numero}</span>--}%
 
                                 <p class="help-block ui-helper-hidden"></p>
@@ -362,8 +370,10 @@
                 });
 
                 $("#btnSave").click(function () {
-                    $(this).replaceWith(spinner);
-                    $("#frmSave-Planilla").submit();
+                    if ($("#frmSave-Planilla").valid()) {
+                        $(this).replaceWith(spinner);
+                        $("#frmSave-Planilla").submit();
+                    }
                 });
 
                 $("#tipoPlanilla").change(function () {

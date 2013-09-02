@@ -621,7 +621,7 @@ class PlanillaController extends janus.seguridad.Shield {
             if (rol.rolTramite.codigo.trim() == especial.trim()) {
                 personas = [adminContrato]
             }
-            if (rol.rolTramite.codigo.trim() == fiscalizador.trim()) {
+            if (rol.rolTramite.codigo.trim() == fiscalizador?.trim()) {
                 personas = [fiscContrato]
             }
 
@@ -664,10 +664,10 @@ class PlanillaController extends janus.seguridad.Shield {
         def lblMemo, lblFecha, extra, nombres = ""
 
         lblFecha = "Fecha de inicio de obra"
-        lblMemo = "Memo de inicio de obra"
+        lblMemo = "Oficio de inicio de obra"
         fechaMin = planilla.fechaMemoPagoPlanilla
         fecha = planilla.fechaMemoPagoPlanilla
-        extra = "Fecha de memo de pago: " + fechaMin.format("dd-MM-yyyy")
+        extra = "Fecha de oficio de pago: " + fechaMin.format("dd-MM-yyyy")
 
         def y = fechaMin.format("yyyy").toInteger()
         def m = fechaMin.format("MM").toInteger() - 1
@@ -816,6 +816,17 @@ class PlanillaController extends janus.seguridad.Shield {
         def memo = params.memo.toString().toUpperCase()
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def personaFirma = Persona.get(params.firma.toLong())
+
+        def contrato = Contrato.get(planilla.contratoId)
+        contrato.numeralPlazo = params.numeralPlazo
+        contrato.numeralAnticipo = params.numeralAnticipo
+        contrato.clausula = params.clausula
+        if (!contrato.save(flush: true)) {
+            flash.message = "No se pudo iniciar la obra"
+            println "Error al guardar datos del contrato desde el boton azul: " + contrato.errors
+            redirect(action: "list", id: planilla.contratoId)
+            return
+        }
 
         def obra = Obra.get(planilla.contrato.obra.id)
         obra.fechaInicio = fecha

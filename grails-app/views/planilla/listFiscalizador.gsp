@@ -251,6 +251,12 @@
                                         <i class="icon-print"></i>
                                     </a>
                                 </g:if>
+                                <g:if test="${(planillaInstance.tipoPlanilla.codigo == 'P' || planillaInstance.tipoPlanilla.codigo == 'Q') && Math.abs(lblBtn) > 3}">
+                                    <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                        <i class="icon-print"></i>
+                                    </a>
+
+                                </g:if>
                             </td>
                         </tr>
                     </g:each>

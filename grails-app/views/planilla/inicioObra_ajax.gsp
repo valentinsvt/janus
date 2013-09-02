@@ -32,12 +32,55 @@
 
         <div class="row">
             <div class="span2 formato">
-                Firma para el memo
+                Firma para el oficio
             </div>
 
             <div class="span4">
-                <g:select name="firma" from="${firma}" optionKey="id" optionValue="${{ it.nombre + ' ' + it.apellido + ' (' + it.cargo + ')' }}" id="firma"/>
+                <g:select name="firma" from="${firma}" optionKey="id" optionValue="${{
+                    it.nombre + ' ' + it.apellido + ' (' + it.cargo + ')'
+                }}" id="firma"/>
                 <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span2 formato">
+                Cláusula
+            </div>
+
+            <div class="span4">
+                <g:textField name="clausula" maxlength="20" class="required input-small"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span2 formato">
+                Numeral plazo
+            </div>
+
+            <div class="span4">
+                <g:textField name="numeralPlazo" maxlength="10" class="required input-mini"/>
+                <span class="mandatory">*</span>
+                <small>que señala que el plazo total que el contratista....</small>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span2 formato">
+                Numeral anticipo
+            </div>
+
+            <div class="span4">
+                <g:textField name="numeralAnticipo" maxlength="10" class="required input-mini"/>
+                <span class="mandatory">*</span>
+                <small>se entenderá entregado el anticipo una vez transcurridas...</small>
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -57,6 +100,11 @@
             </div>
         </div>
 
+        <div class="alert alert-danger" style="font-size: large;">
+            <strong>
+                Tenga en cuenta que los datos ingresados para la impresión del oficio son definitivos. Una vez guardados no podrán ser modificados.
+            </strong>
+        </div>
         %{--<g:if test="${tipo == '4'}">--}%
         %{--<div class="row">--}%
         %{--<div class="span2 formato">--}%

@@ -35,7 +35,8 @@ class Contrato implements Serializable {
     Double multaRetraso                 //multa por retraso de obra (solo en la ultima planilla de avance)
     Double multaPlanilla                //multa por no presentacion de la planilla (retraso en la presentacion)
 
-    Double multaIncumplimiento          //multa por incumplimiento del cronograma (retraso de obra en las planillas de avance)
+    Double multaIncumplimiento
+    //multa por incumplimiento del cronograma (retraso de obra en las planillas de avance)
     Double multaDisposiciones           //multa por no acatar las disposiciones del fiscalizador
 
     Date fechaPedidoRecepcionContratista
@@ -45,6 +46,10 @@ class Contrato implements Serializable {
 
 //    Persona administrador
     Persona delegadoPrefecto
+
+    String clausula
+    String numeralPlazo
+    String numeralAnticipo
 
     static mapping = {
 
@@ -94,6 +99,10 @@ class Contrato implements Serializable {
 
 //            administrador column: 'prsnadmn'
             delegadoPrefecto column: 'prsndlpr'
+
+            clausula column: 'cntrclsl'
+            numeralPlazo column: 'cntrnmpl'
+            numeralAnticipo column: 'cntrnman'
         }
     }
 
@@ -130,6 +139,10 @@ class Contrato implements Serializable {
 
 //        administrador(blank: true, nullable: true)
         delegadoPrefecto(blank: true, nullable: true)
+
+        clausula(blank: true, nullable: true, maxSize: 20)
+        numeralAnticipo(blank: true, nullable: true, maxSize: 10)
+        numeralPlazo(blank: true, nullable: true, maxSize: 10)
     }
 
     def getObra() {

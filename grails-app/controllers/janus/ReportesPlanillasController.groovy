@@ -3551,10 +3551,10 @@ class ReportesPlanillasController {
         addCellTabla(tablaDatosMemo, new Paragraph(tramite.memo, fontTdHeader), [border: Color.WHITE, bct: Color.BLACK, bwt: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("Para", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("De", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("Fecha", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaDatosMemo, new Paragraph(fechaConFormato(tramite?.fecha, "dd-MM-yyyy"), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -3771,10 +3771,10 @@ class ReportesPlanillasController {
         par1 += ", ubicada en la Parroquia " + obra?.parroquia?.nombre.trim() + ", Distrito Metropolitano de "
         par1 += "Quito, de la Provincia de Pichincha, por un valor de US\$ "
         par1 += g.formatNumber(number: contrato?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " sin incluir IVA, consta "
-        par1 += "de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para "
+        par1 += "de la cláusula ${contrato.clausula}, numeral ${contrato.numeralPlazo}, que señala que el plazo total que el contratista tiene para "
         par1 += "ejecutar, terminar y entregar a entera satisfacción es de " + NumberToLetterConverter.numberToLetter(contrato?.plazo).toLowerCase() + " días calendario " + "("
         par1 += g.formatNumber(number: contrato?.plazo, format: "##,##0", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0) + "), "
-        par1 += "contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se "
+        par1 += "contados a partir de la fecha de efectivización del anticipo y, en el numeral ${contrato.numeralAnticipo} se dice que se "
         par1 += "entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada "
         par1 += "la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. "
 
