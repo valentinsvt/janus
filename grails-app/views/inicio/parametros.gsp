@@ -21,7 +21,7 @@
                 <li><a href="#ejec">Ejecución</a></li>
             </ul>
 
-            <div id="gnrl" class="ui-widget-content" style="height: 560px">
+            <div id="gnrl" class="ui-widget-content" style="height: 580px">
                 <div class="item" texto="admn">
                     <g:link controller="administracion" action="list">Administración</g:link> del GADPP, autoridad principal.
                 </div><br>
@@ -76,6 +76,9 @@
                 <div class="item" texto="rltr">
                     <g:link controller="rolTramite" action="list">Rol de la persona en el Trámite</g:link>, por ejemplo, quien envía,
                     quien recibe o si recibe una copia del documento.
+                </div><br>
+                <div class="item" texto="ddlb">
+                    <g:link controller="diaLaborable" action="calendario">Días laborables</g:link>
                 </div><br>
             </div>
 
@@ -399,6 +402,10 @@
 <div id="tpml" style="display:none">
     <h3>Tipo de multa</h3><br>
     <p>Tipo de multa que puede tener una planilla, según el contrato, distintos de retraso en obra y presentación de la planilla.</p>
+</div>
+<div id="ddlb" style="display:none">
+    <h3>Días laborables</h3><br>
+    <p>Configuración de los días laborables.</p>
 </div>
 %{--<div id="tppo" style="display:none">--}%
     %{--<h3>Tipo de prórroga</h3><br>--}%
