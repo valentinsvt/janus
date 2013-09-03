@@ -5,7 +5,7 @@
 
     <head>
         <meta name="layout" content="main">
-        <title>Janus -Ingreso-</title>
+        <title>SEP-GADPP -Ingreso-</title>
 
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
