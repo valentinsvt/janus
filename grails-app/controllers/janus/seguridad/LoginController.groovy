@@ -62,10 +62,12 @@ class LoginController {
             eq("activo", 1)
         }
 
-        println("usuario:" + user.departamento.id)
+       if(user?.departamento?.id[0] == 13){
 
-//       if(user?.departamento?.id == 13)
+           flash.message = "El departamento al que pertenece el usuario no es válido para logear en el sistema!"
 
+       }
+       else {
         if (user.size() == 0) {
             flash.message = "No se ha encontrado el usuario"
         } else if (user.size() > 1) {
@@ -76,6 +78,8 @@ class LoginController {
             redirect(action: "perfiles")
             return
         }
+       }
+
         redirect(controller: 'login', action: "login")
     }
 

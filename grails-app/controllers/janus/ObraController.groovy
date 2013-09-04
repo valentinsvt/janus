@@ -334,6 +334,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def perfil = session.perfil
 
+
         def persona = Persona.get(usuario)
 
         def matrizOk = false
