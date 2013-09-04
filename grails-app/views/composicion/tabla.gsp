@@ -145,7 +145,7 @@
                     <td class="">${r.item.nombre}</td>
                     <td>${r.item.unidad.codigo}</td>
                     <td class="numero cantidad texto " iden="${r.id}">
-                        <g:formatNumber number="${r.cantidad}" minFractionDigits="2" maxFractionDigits="7" format="##,#######0" locale="ec"/>
+                        <g:formatNumber number="${r.cantidad}" minFractionDigits="2" maxFractionDigits="7" format="##,##0" locale="ec"/>
                     </td>
                     <td class="numero ${r.id}">
                         <g:formatNumber number="${r.precio}" minFractionDigits="3" maxFractionDigits="3" format="##,##0" locale="ec"/>

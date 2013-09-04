@@ -1855,7 +1855,7 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph("Valor de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: eqTotal, minFractionDigits:
-                5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+                5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
@@ -1869,7 +1869,7 @@ class Reportes2Controller {
             addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
             addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
             addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
-                    5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
             addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
         } else {

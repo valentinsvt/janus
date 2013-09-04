@@ -63,13 +63,6 @@ class DocumentosObraController {
             prvl = preciosService.getPrecioItems(fecha,lugar,[obra.volquete])
             prvl = prvl["${obra.volquete.id}"]
         }
-//        def rendimientos = preciosService.rendimientoTranposrte(dsps,dsvl,prch,prvl)
-//
-//        if (rendimientos["rdps"].toString()=="NaN")
-//            rendimientos["rdps"]=0
-//        if (rendimientos["rdvl"].toString()=="NaN")
-//            rendimientos["rdvl"]=0
-
         def indirecto = obra.totales/100
 
 
@@ -127,11 +120,20 @@ class DocumentosObraController {
 
         def firmas = PersonaRol.findAllByFuncionAndPersonaInList(funcionFirmar, firmasAdicionales)
 
+        //calculo de composición
+
+        def resComp = Composicion.findAll("from Composicion where obra=${params.id} and grupo in (${1})")
+        resComp.sort{it.item.codigo}
+
+        def resMano = Composicion.findAll("from Composicion where obra=${params.id} and grupo in (${2})")
+        resMano.sort{it.item.codigo}
 
 
+        def resEq = Composicion.findAll("from Composicion where obra=${params.id} and grupo in (${3})")
+        resEq.sort{it.item.codigo}
 
-//        [obra: obra, firmas: firmas, firmasViales: firmasViales, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, personasFirmas: personasFirmas, personasFirmas2: personasFirmas2, totalPresupuesto: totalPresupuesto]
-        [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona, totalPresupuestoBien: totalPresupuestoBien, persona: persona]
+        [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
+                totalPresupuestoBien: totalPresupuestoBien, persona: persona, resComp: resComp, resMano: resMano, resEq: resEq]
 
 
 

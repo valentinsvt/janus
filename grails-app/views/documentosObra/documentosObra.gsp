@@ -308,8 +308,10 @@
                 <div class="span1">Valor de la Base:</div>
 
                 <div class="span2">
-                    <g:textField name="baseMemo" style="width: 100px" disabled="true"
-                                 value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>
+                    %{--<g:textField name="baseMemo" style="width: 100px" disabled="true"--}%
+                                 %{--value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>--}%
+
+                    <g:textField name="baseMemo" style="width: 100px" disabled="true"  value="${totalPresupuestoBien}"/>
                 </div>
 
                 %{--<div class="span1" style="margin-left: -30px">Valor de Reajuste:</div>--}%
@@ -918,20 +920,36 @@
 
             <div class="span7">
             <div class="span3">Materiales:</div>
+
+            <g:set var="totalMaterial" value="${0}"/>
+                <g:each in="${resComp}" var="r">
+            <g:set var="totalMaterial" value="${totalMaterial + ((r.transporte+r.precio)*r.cantidad)}"/>
+                </g:each>
             <div class="span2">
-                <g:textField name="materialesMemo" style="width: 100px" maxlength="15"/>
+                <g:hiddenField name="tMaterial" value="${totalMaterial}"/>
+                <g:textField name="materialesMemo" style="width: 100px" value="${formatNumber(number: totalMaterial, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
             </div>
             </div>
             <div class="span7">
             <div class="span3">Mano de Obra:</div>
+                <g:set var="totalMano" value="${0}"/>
+                <g:each in="${resMano}" var="r">
+                    <g:set var="totalMano" value="${totalMano + ((r.transporte+r.precio)*r.cantidad)}"/>
+                </g:each>
             <div class="span2">
-                <g:textField name="manoObraMemo" style="width: 100px" maxlength="15"/>
+                <g:hiddenField name="tMano" value="${totalMano}"/>
+                <g:textField name="manoObraMemo" style="width: 100px" value="${formatNumber(number: totalMano, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
             </div>
             </div>
             <div class="span7">
             <div class="span3">Equipos:</div>
+                <g:set var="totalEquipo" value="${0}"/>
+                <g:each in="${resEq}" var="r">
+                    <g:set var="totalEquipo" value="${totalEquipo + ((r.transporte+r.precio)*r.cantidad)}"/>
+                </g:each>
             <div class="span2">
-                <g:textField name="equiposMemo" style="width: 100px" maxlength="15"/>
+                <g:hiddenField name="tEquipo" value="${totalEquipo}"/>
+                <g:textField name="equiposMemo" style="width: 100px" value="${formatNumber(number: totalEquipo, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}" readonly="true"/>
             </div>
             </div>
             <div class="span7">
@@ -2457,18 +2475,18 @@
 $(function () {
 
      $("#materialesMemo").click(function () {
-         calculoPorcentaje();
+//         calculoPorcentaje();
          sumaTotal();
 
      });
 
      $("#manoObraMemo").click(function () {
-         calculoPorcentaje();
+//         calculoPorcentaje();
         sumaTotal();
      });
 
      $("#equiposMemo").click(function () {
-         calculoPorcentaje();
+//         calculoPorcentaje();
          sumaTotal();
 
      });
@@ -2500,8 +2518,16 @@ $(function () {
             });
 
      function  calculoPorcentaje() {
+
+
          var porcentaje = 0
-         porcentaje = ((parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) + parseFloat($("#equiposMemo").val()))*($("#costoPorcentaje").val()))/100
+//         porcentaje = ((parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) + parseFloat($("#equiposMemo").val()))*($("#costoPorcentaje").val()))/100
+         porcentaje = ((parseFloat($("#tMaterial").val()) + parseFloat($("#tMano").val()) + parseFloat($("#tEquipo").val()))*($("#costoPorcentaje").val()))/100
+
+//         console.log("%:" + porcentaje)
+
+
+
       $("#costoMemo").val(number_format(porcentaje, 2, ".", ""));
      }
 
@@ -2513,8 +2539,15 @@ $(function () {
 
 
        var total = 0.0
-       total = parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) +
-               parseFloat($("#equiposMemo").val()) + parseFloat($("#costoMemo").val())
+
+
+
+//       total = parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) +
+//               parseFloat($("#equiposMemo").val()) + parseFloat($("#costoMemo").val())
+
+
+        total = parseFloat($("#tMaterial").val()) + parseFloat($("#tMano").val()) +
+                parseFloat($("#tEquipo").val()) + parseFloat($("#costoMemo").val())
 
        $("#totalMemoPresu").val(number_format(total,2,".",""))
 
