@@ -21,110 +21,15 @@
 
         <script src="${resource(dir: 'js/jquery/i18n', file: 'jquery.ui.datepicker-es.js')}"></script>
 
+        <link href="${resource(dir: 'css', file: 'cronograma.css')}" rel="stylesheet">
         <title>Cronograma ejecución</title>
-
-
-        <style type="text/css">
-        th {
-            vertical-align : middle !important;
-        }
-
-        .item_row {
-            background : #999999;
-        }
-
-        .item_prc {
-            background : #C0C0C0;
-        }
-
-        .item_f {
-            background : #C9C9C9;
-        }
-
-        td {
-            vertical-align : middle !important;
-        }
-
-        .num {
-            text-align : right !important;
-            width      : 60px;
-            /*background : #c71585 !important;*/
-        }
-
-        .spinner {
-            width : 60px;
-        }
-
-        .radio {
-            margin : 0 !important;
-        }
-
-        .sm {
-            margin-bottom : 10px !important;
-        }
-
-        .totalRubro {
-            width : 75px;
-        }
-
-            /*.P {*/
-            /*background : red !important;*/
-            /*}*/
-
-        th.S {
-            background  : #f8f8ff !important;
-            color       : #10718C !important;
-            text-shadow : -2px 1px 3px rgba(0, 0, 0, 0.6) !important;
-        }
-
-        .item_row td.S {
-            background : #BFBFC1 !important;
-        }
-
-        .item_prc td.S {
-            background : #D1D1D6 !important;
-        }
-
-        .item_f td.S {
-            background : #E5E5EA !important;
-        }
-
-        .selected, th.selected.S {
-            background  : #10718C !important;
-            color       : #f8f8ff !important;
-            text-shadow : -2px 1px 3px rgba(255, 255, 255, 0.6) !important;
-        }
-
-            /*.click {*/
-            /*cursor : pointer;*/
-            /*}*/
-
-        #divTabla {
-            max-height : 705px;
-            overflow   : auto;
-        }
-
-        .item_row.rowSelected {
-            background : #75B2DE !important;
-        }
-
-        .item_prc.rowSelected {
-            background : #84BFEA !important;
-        }
-
-        .item_f.rowSelected {
-            background : #94CDF7 !important;
-        }
-
-        </style>
-
     </head>
 
     <body>
         <g:set var="meses" value="${obra.plazoEjecucionMeses + (obra.plazoEjecucionDias > 0 ? 1 : 0)}"/>
 
         <div class="tituloTree">
-            Cronograma de ejecución de la obra ${obra.descripcion} (${meses} mes${obra.plazoEjecucionMeses == 1 ? "" : "es"})
+            Cronograma de ejecución de la obra ${obra.descripcion} (${meses} mes${meses == 1 ? "" : "es"})
         </div>
 
         <div class="btn-toolbar hide" id="toolbar">
@@ -181,6 +86,10 @@
             %{--</g:link>--}%
             %{--</div>--}%
             </g:if>
+        </div>
+
+        <div>
+            La ruta crítica se muestra con los rubros marcados en amarillo
         </div>
 
         <div id="divTabla">

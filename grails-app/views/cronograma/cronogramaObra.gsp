@@ -7,78 +7,12 @@
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
 
+        <link href="${resource(dir: 'css', file: 'cronograma.css')}" rel="stylesheet">
         <title>Cronograma</title>
 
 
         <style type="text/css">
-        .item_row {
-            background : #B8B8B4;
-        }
 
-        .item_prc {
-            background : #D0D0CB;
-        }
-
-        .item_f {
-            background : #E8E8E4;
-        }
-
-        .item_f td {
-            border-bottom : solid 2px;
-        }
-
-        td {
-            vertical-align : middle !important;
-        }
-
-        .num {
-            text-align : right !important;
-            width      : 60px;
-            /*background : #c71585 !important;*/
-        }
-
-        .spinner {
-            width : 60px;
-        }
-
-        .radio {
-            margin : 0 !important;
-        }
-
-        .sm {
-            margin-bottom : 10px !important;
-        }
-
-        .totalRubro {
-            width : 75px;
-        }
-
-        .item_row.rowSelected {
-            background : #75B2DE !important;
-        }
-
-        .item_prc.rowSelected {
-            background : #84BFEA !important;
-        }
-
-        .item_f.rowSelected {
-            background : #94CDF7 !important;
-        }
-
-        .graf {
-            width  : 870px;
-            height : 410px;
-        }
-
-        tr, td {
-            height      : 14px !important;
-            line-height : 14px !important;
-        }
-
-        .divTabla {
-            overflow-y : auto;
-            max-height : 640px;
-        }
         </style>
 
     </head>
@@ -148,7 +82,15 @@
 
             <g:if test="${obra.estado != 'R'}">
                 <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>
+                <a href="#" class="btn" style="margin-top: -10px;" id="btnRutaOn"><i class="icon icon-check"></i> Marcar ruta crítica
+                </a>
+                <a href="#" class="btn" style="margin-top: -10px;" id="btnRutaOff"><i class="icon icon-check-empty"></i> Desmarcar ruta crítica
+                </a>
             </g:if>
+        </div>
+
+        <div>
+            La ruta crítica se muestra con los rubros marcados en amarillo
         </div>
 
         <g:if test="${meses > 0 && plazoOk}">
@@ -203,7 +145,7 @@
                         %{--<g:set var="totalPrcRow" value="${0}"/>--}%
                         %{--<g:set var="totalCanRow" value="${0}"/>--}%
 
-                            <tr class="item_row" id="${vol.id}" data-id="${vol.id}">
+                            <tr class="item_row ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''} ${vol.id}" id="${vol.id}" data-id="${vol.id}">
                                 <td class="codigo">
                                     ${vol.item.codigo}
                                 </td>
@@ -251,7 +193,7 @@
                                 </td>
                             </tr>
 
-                            <tr class="item_prc" data-id="${vol.id}">
+                            <tr class="item_prc ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''} ${vol.id}" data-id="${vol.id}">
                                 <td colspan="7">
                                     &nbsp
                                 </td>
@@ -273,7 +215,7 @@
                                 </td>
                             </tr>
 
-                            <tr class="item_f" data-id="${vol.id}">
+                            <tr class="item_f ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''} ${vol.id}" data-id="${vol.id}">
                                 <td colspan="7">
                                     &nbsp
                                 </td>
@@ -1084,7 +1026,57 @@
                     $("#modal-cronograma").modal("show");
                 }
 
+                function modificarRuta(tipo) {
+                    var data = "";
+                    var $selected = $(".rowSelected");
+                    $selected.each(function () {
+                        var id = $(this).data("id");
+                        if (data.indexOf(id) == -1) {
+                            if (data != "") {
+                                data += "&";
+                            }
+                            data += "row=" + id;
+                        }
+                    });
+                    data += "&ruta=" + tipo;
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action: 'rutaCritica')}",
+                        data    : data,
+                        success : function (msg) {
+                            var parts = msg.split("_");
+                            var ok = parts[0];
+                            var no = parts[1];
+                            if (ok != "") {
+                                ok = ok.split(",");
+                            }
+                            if (no != "") {
+                                no = no.split(",");
+                            }
+                            for (var i = 0; i < ok.length; i++) {
+                                if (tipo == "S") {
+                                    $("." + ok[i]).removeClass("selectedRow").addClass("rutaCritica");
+                                } else {
+                                    $("." + ok[i]).removeClass("selectedRow").removeClass("rutaCritica");
+                                }
+                            }
+                            for (var i = 0; i < no.length; i++) {
+                                $("." + no[i]).removeClass("selectedRow").addClass("error");
+                            }
+                        }
+                    });
+                }
+
                 <g:if test="${obra.estado!='R'}">
+                $("#btnRutaOn").click(function () {
+                    modificarRuta("S");
+                    return false;
+                });
+                $("#btnRutaOff").click(function () {
+                    modificarRuta("N");
+                    return false;
+                });
+
                 $(".mes").dblclick(function () {
                     var $sel = getSelected();
                     var $celda = $(this);

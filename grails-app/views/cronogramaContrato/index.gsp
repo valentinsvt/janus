@@ -7,81 +7,8 @@
 
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
-
+        <link href="${resource(dir: 'css', file: 'cronograma.css')}" rel="stylesheet">
         <title>Cronograma</title>
-
-
-        <style type="text/css">
-        .item_row {
-            background : #B8B8B4;
-        }
-
-        .item_prc {
-            background : #D0D0CB;
-        }
-
-        .item_f {
-            background : #E8E8E4;
-        }
-
-        .item_f td {
-            border-bottom : solid 2px;
-        }
-
-        td {
-            vertical-align : middle !important;
-        }
-
-        .num {
-            text-align : right !important;
-            width      : 60px;
-            /*background : #c71585 !important;*/
-        }
-
-        .spinner {
-            width : 60px;
-        }
-
-        .radio {
-            margin : 0 !important;
-        }
-
-        .sm {
-            margin-bottom : 10px !important;
-        }
-
-        .totalRubro {
-            width : 75px;
-        }
-
-        .item_row.rowSelected {
-            background : #75B2DE !important;
-        }
-
-        .item_prc.rowSelected {
-            background : #84BFEA !important;
-        }
-
-        .item_f.rowSelected {
-            background : #94CDF7 !important;
-        }
-
-        .graf {
-            width  : 870px;
-            height : 410px;
-        }
-
-        tr, td {
-            height      : 14px !important;
-            line-height : 14px !important;
-        }
-
-        .divTabla {
-            overflow-y : auto;
-            max-height : 640px;
-        }
-        </style>
-
     </head>
 
     <body>
@@ -152,8 +79,11 @@
             </g:if>
         </div>
 
-        <g:if test="${meses > 0 && plazoOk}">
+        <div>
+            La ruta crítica se muestra con los rubros marcados en amarillo
+        </div>
 
+        <g:if test="${meses > 0 && plazoOk}">
             <div class="divTabla">
                 <table class="table table-bordered table-condensed table-hover">
                     <thead>
@@ -204,7 +134,7 @@
                         %{--<g:set var="totalPrcRow" value="${0}"/>--}%
                         %{--<g:set var="totalCanRow" value="${0}"/>--}%
 
-                            <tr class="item_row" id="${vol.id}" data-id="${vol.id}">
+                            <tr class="item_row ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''}" id="${vol.id} " data-id="${vol.id}">
                                 <td class="codigo">
                                     ${vol.item.codigo}
                                 </td>
@@ -251,7 +181,7 @@
                                 </td>
                             </tr>
 
-                            <tr class="item_prc" data-id="${vol.id}">
+                            <tr class="item_prc ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''}" data-id="${vol.id}">
                                 <td colspan="6">
                                     &nbsp
                                 </td>
@@ -273,7 +203,7 @@
                                 </td>
                             </tr>
 
-                            <tr class="item_f" data-id="${vol.id}">
+                            <tr class="item_f ${vol.rutaCritica == 'S' ? 'rutaCritica' : ''}" data-id="${vol.id}">
                                 <td colspan="6">
                                     &nbsp
                                 </td>

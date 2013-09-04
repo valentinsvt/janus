@@ -482,7 +482,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         html += "<tbody>"
         cronos.each { crono ->
-            html += "<tr class='click item_row' data-vol='" + crono.volumen.id + "'>"
+            html += "<tr class='click item_row ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}' data-vol='" + crono.volumen.id + "'>"
 
             html += "<td class='codigo'>"
             html += crono.codigo
@@ -546,7 +546,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
             html += "</tr>"
 
-            html += "<tr class='click item_prc'>"
+            html += "<tr class='click item_prc ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}'>"
             html += '<td colspan="6"> </td>'
             html += '<td>%</td>'
             html += filaPor
@@ -556,7 +556,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             html += "</td>"
             html += "</tr>"
 
-            html += "<tr class='click item_f'>"
+            html += "<tr class='click item_f ${crono.volumen.rutaCritica == 'S' ? 'rutaCritica' : ''}'>"
             html += '<td colspan="6"> </td>'
             html += '<td>F</td>'
             html += filaCan

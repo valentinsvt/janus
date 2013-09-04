@@ -9,6 +9,8 @@ class VolumenesObra implements Serializable {
 
     double dias
 
+    String rutaCritica = "N"
+
     static auditable = [ignore: ["orden"]]
     static mapping = {
         table 'vlob'
@@ -25,6 +27,8 @@ class VolumenesObra implements Serializable {
             orden column: 'vlobordn'
 
             dias column: 'vlobdias'
+
+            rutaCritica column: 'vlobrtcr'
         }
     }
     static constraints = {
@@ -32,5 +36,7 @@ class VolumenesObra implements Serializable {
         item(blank: false, attributes: [title: 'item'])
         cantidad(blank: false, attributes: [title: 'cantidad'])
         subPresupuesto(blank: false, attributes: [title: 'subPresupuesto'])
+
+        rutaCritica(blank: true, nullable: true, maxSize: 1, inList: ['S', 'N'], attributes: [title: 'ruta critica'])
     }
 }

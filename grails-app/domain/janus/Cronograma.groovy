@@ -30,5 +30,4 @@ class Cronograma implements Serializable {
         porcentaje(blank: false, nullable: false, attributes: [title: 'porcentaje'])
         cantidad(blank: false, nullable: false, attributes: [title: 'cantidad'])
     }
-
 }

@@ -3,6 +3,7 @@ package janus
 import jxl.Workbook
 import jxl.WorkbookSettings
 import jxl.write.*
+import org.aspectj.weaver.patterns.HasThisTypePatternTriedToSneakInSomeGenericOrParameterizedTypePatternMatchingStuffAnywhereVisitor
 import org.springframework.dao.DataIntegrityViolationException
 
 class CronogramaController extends janus.seguridad.Shield {
@@ -310,6 +311,41 @@ class CronogramaController extends janus.seguridad.Shield {
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
 
+    }
+
+    def rutaCritica() {
+        if (params.row.class == java.lang.String) {
+            params.row = [params.row]
+        }
+        def ruta = params.ruta
+        def ids = params.row
+        def errores = ""
+        def ok = ""
+
+        ids.each { id ->
+            def vol = VolumenesObra.get(id.toLong())
+            if (vol.rutaCritica != ruta) {
+                vol.rutaCritica = ruta
+                if (!vol.save(flush: true)) {
+                    if (errores != "") {
+                        errores += ","
+                    }
+                    errores += id
+                    println "error: " + vol.errors
+                } else {
+                    if (ok != "") {
+                        ok += ","
+                    }
+                    ok += id
+                }
+            } else {
+                if (ok != "") {
+                    ok += ","
+                }
+                ok += id
+            }
+        }
+        render ok + "_" + errores
     }
 
     def cronogramaObra() {

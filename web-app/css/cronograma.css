@@ -1,0 +1,128 @@
+.item_row {
+    background : #B8B8B4;
+}
+
+.item_prc {
+    background : #D0D0CB;
+}
+
+.item_f {
+    background : #E8E8E4;
+}
+
+.item_f td {
+    border-bottom : solid 2px;
+}
+
+td {
+    vertical-align : middle !important;
+}
+
+.num {
+    text-align : right !important;
+    width      : 60px;
+    /*background : #c71585 !important;*/
+}
+
+.spinner {
+    width : 60px;
+}
+
+.radio {
+    margin : 0 !important;
+}
+
+.sm {
+    margin-bottom : 10px !important;
+}
+
+.totalRubro {
+    width : 75px;
+}
+
+/****** row selected *******/
+.item_row.rowSelected {
+    background : #75B2DE !important;
+}
+
+.item_prc.rowSelected {
+    background : #84BFEA !important;
+}
+
+.item_f.rowSelected {
+    background : #94CDF7 !important;
+}
+
+/****** ruta critica *******/
+.item_row.rutaCritica {
+    background : #DDDD75 !important;
+}
+
+.item_prc.rutaCritica {
+    background : #E3E884 !important;
+}
+
+.item_f.rutaCritica {
+    background : #EBF492 !important;
+}
+
+/****** ruta critica selected *******/
+.item_row.rowSelected.rutaCritica {
+    background : #75DD9D !important;
+}
+
+.item_prc.rowSelected.rutaCritica {
+    background : #84E8BC !important;
+}
+
+.item_f.rowSelected.rutaCritica {
+    background : #92F4CF !important;
+}
+
+/********************* error *****************************/
+.error {
+    background-color : red !important;
+}
+
+.graf {
+    width  : 870px;
+    height : 410px;
+}
+
+tr, td {
+    height      : 14px !important;
+    line-height : 14px !important;
+}
+
+.divTabla {
+    overflow-y : auto;
+    max-height : 640px;
+}
+
+th {
+    vertical-align : middle !important;
+}
+
+th.S {
+    background  : #f8f8ff !important;
+    color       : #10718C !important;
+    text-shadow : -2px 1px 3px rgba(0, 0, 0, 0.6) !important;
+}
+
+.item_row td.S {
+    background : #BFBFC1 !important;
+}
+
+.item_prc td.S {
+    background : #D1D1D6 !important;
+}
+
+.item_f td.S {
+    background : #E5E5EA !important;
+}
+
+.selected, th.selected.S {
+    background  : #10718C !important;
+    color       : #f8f8ff !important;
+    text-shadow : -2px 1px 3px rgba(255, 255, 255, 0.6) !important;
+}
