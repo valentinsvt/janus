@@ -55,28 +55,28 @@ td {
 
 /****** ruta critica *******/
 .item_row.rutaCritica {
-    background : #DDDD75 !important;
+    background : #EDE8CB !important;
 }
 
 .item_prc.rutaCritica {
-    background : #E3E884 !important;
+    background : #F7F2D7 !important;
 }
 
 .item_f.rutaCritica {
-    background : #EBF492 !important;
+    background : #F7F4E3 !important;
 }
 
 /****** ruta critica selected *******/
 .item_row.rowSelected.rutaCritica {
-    background : #75DD9D !important;
+    background : #C9EAD7 !important;
 }
 
 .item_prc.rowSelected.rutaCritica {
-    background : #84E8BC !important;
+    background : #D7F4E4 !important;
 }
 
 .item_f.rowSelected.rutaCritica {
-    background : #92F4CF !important;
+    background : #E1F4E4 !important;
 }
 
 /********************* error *****************************/
