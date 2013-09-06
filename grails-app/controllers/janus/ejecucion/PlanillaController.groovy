@@ -7,7 +7,7 @@ import janus.pac.PeriodoEjecucion
 
 class PlanillaController extends janus.seguridad.Shield {
 
-    def preciosService, buscadorService, reportesPdfService
+    def preciosService, buscadorService, reportesPdfService, diasLaborablesService
 
     def tests() {
 //        println rep.capitalize(string: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
@@ -2125,20 +2125,28 @@ class PlanillaController extends janus.seguridad.Shield {
 //                fechaMax = fechaFinPer + diasMax.days
 //            }
 
-            def noLaborables = ["Sat", "Sun"]
-
-//            println fechaMax
-            diasMax.times {
-                fechaMax++
-//                println fechaMax
-                def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
-                while (noLaborables.contains(fmt.format(fechaMax))) {
-//                    println fmt.format(fechaMax)
-                    fechaMax++
-//                    println fechaMax
-                }
-            }
+//            def noLaborables = ["Sat", "Sun"]
+//
+////            println fechaMax
+//            diasMax.times {
+//                fechaMax++
+////                println fechaMax
+//                def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
+//                while (noLaborables.contains(fmt.format(fechaMax))) {
+////                    println fmt.format(fechaMax)
+//                    fechaMax++
+////                    println fechaMax
+//                }
+//            }
 //            println "***** "+fechaMax
+
+            /* aqui esta con el nuevo service para calcular dias laborables con la tabla */
+            def res = diasLaborablesService.diasLaborablesDesde(fechaFinPer, diasMax)
+            if (res[0]) {
+                fechaMax = res[1]
+            } else {
+                fechaMax = null
+            }
 
             def fechaPresentacion = planilla.fechaPresentacion
             def retraso = fechaPresentacion - fechaMax
@@ -2862,20 +2870,27 @@ class PlanillaController extends janus.seguridad.Shield {
 //                fechaMax = fechaFinPer + diasMax.days
 //            }
 
-            def noLaborables = ["Sat", "Sun"]
-
-//            println fechaMax
-            diasMax.times {
-                fechaMax++
-//                println fechaMax
-                def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
-                while (noLaborables.contains(fmt.format(fechaMax))) {
-//                    println fmt.format(fechaMax)
-                    fechaMax++
-//                    println fechaMax
-                }
-            }
+//            def noLaborables = ["Sat", "Sun"]
+//
+////            println fechaMax
+//            diasMax.times {
+//                fechaMax++
+////                println fechaMax
+//                def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
+//                while (noLaborables.contains(fmt.format(fechaMax))) {
+////                    println fmt.format(fechaMax)
+//                    fechaMax++
+////                    println fechaMax
+//                }
+//            }
 //            println "***** "+fechaMax
+            /* aqui esta con el nuevo service para calcular dias laborables con la tabla */
+            def res = diasLaborablesService.diasLaborablesDesde(fechaFinPer, diasMax)
+            if (res[0]) {
+                fechaMax = res[1]
+            } else {
+                fechaMax = null
+            }
 
             def fechaPresentacion = planilla.fechaPresentacion
             def retraso = fechaPresentacion - fechaMax
