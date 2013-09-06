@@ -28,6 +28,7 @@ class ReportesController {
     def buscadorService
     def preciosService
     def dbConnectionService
+    def diasLaborablesService
 
     def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 
