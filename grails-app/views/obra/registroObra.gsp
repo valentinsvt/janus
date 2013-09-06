@@ -423,8 +423,11 @@
 
                     <div class="span2 formato" style="width: 60px;">Destino:</div>
 
-                    <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destindo de documentos" noSelection="['null': 'Seleccione ...']"/></div>
+                    <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/></div>
 
+                    <div class="span2 formato" style="width: 70px;">Dirección:</div>
+
+                    <div class="span2" style="margin-right: 25px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="direccionDestino.id" from="${janus.Direccion.list([sort:'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/></div>
 
                     <div class="span1 formato" style="margin-left: 0px; width: 50px;">Oficio</div>
 
@@ -432,7 +435,7 @@
 
                     <div class="span1 formato">Memorando</div>
 
-                    <div class="span2" style="margin-left: 10px; width: 120px;"><g:textField name="memoSalida" class="span2" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/></div>
+                    <div class="span2" style="margin-left: 10px; width: 120px;margin-right: 50px;"><g:textField name="memoSalida" class="span2" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/></div>
 
                     <div class="span1 formato" style="margin-left: 30px; width: 70px;">Fórmula P.</div>
 

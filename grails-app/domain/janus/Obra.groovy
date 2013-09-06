@@ -12,6 +12,7 @@ class Obra implements Serializable {
     ClaseObra claseObra
     Departamento departamento
     Departamento departamentoDestino
+    Direccion direccionDestino
     Lugar lugar
     String barrio
     String codigo
@@ -125,6 +126,7 @@ class Obra implements Serializable {
             claseObra column: 'csob__id'
             departamento column: 'dpto__id'
             departamentoDestino column: 'dptodstn'
+            direccionDestino  column: 'dircdstn'
             lugar column: 'lgar__id'
             codigo column: 'obracdgo'
             nombre column: 'obranmbr'
@@ -240,6 +242,7 @@ class Obra implements Serializable {
         programacion(blank: true, nullable: true, attributes: [title: 'programacion'])
         departamento(blank: true, nullable: true, attributes: [title: 'departamento'])
         departamentoDestino(blank: true, nullable: true, attributes: [title: 'departamento destino de la documentación'])
+        direccionDestino(blank: true, nullable: true, attributes: [title: 'dirección destino de la documentación'])
         descripcion(size: 1..511, blank: true, nullable: true, attributes: [title: 'descripcion'])
         fechaInicio(blank: true, nullable: true, attributes: [title: 'fechaInicio'])
         fechaFin(blank: true, nullable: true, attributes: [title: 'fechaFin'])
