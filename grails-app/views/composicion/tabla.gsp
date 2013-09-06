@@ -80,10 +80,10 @@
                 <b>Precio</b>
                 <input type="text" style="width: 95px;text-align: right" id="item_precio" value="" disabled="true">
             </div>
-            <div class="span2" style=" width: 100px;">
-                <b>Tranporte</b>
-                <input type="text" style="width: 95px;text-align: right" id="item_transporte" value="" disabled="true">
-            </div>
+            %{--<div class="span2" style=" width: 100px;">--}%
+            %{--<b>Tranporte</b>--}%
+            %{--<input type="text" style="width: 95px;text-align: right" id="item_transporte" value="" disabled="true">--}%
+            %{--</div>--}%
 
             <div class="span1" style="padding-top:30px">
                 <input type="hidden" value="" id="vol_id">
@@ -147,15 +147,15 @@
                     <td class="numero cantidad texto " iden="${r.id}">
                         <g:formatNumber number="${r.cantidad}" minFractionDigits="2" maxFractionDigits="7" format="##,##0" locale="ec"/>
                     </td>
-                    <td class="numero ${r.id}">
+                    <td class="numero ${r.id} ">
                         <g:formatNumber number="${r.precio}" minFractionDigits="3" maxFractionDigits="3" format="##,##0" locale="ec"/>
                     </td>
                     <g:if test="${tipo.contains(",") || tipo == '1'}">
-                        <td class="numero ${r.id}">
+                        <td class="numero ${r.id} transporte">
                             <g:formatNumber number="${r.transporte}" minFractionDigits="4" maxFractionDigits="4" format="##,##0" locale="ec"/>
                         </td>
                     </g:if>
-                    <td class="numero ${r.id}">
+                    <td class="numero ${r.id} precio">
                         <g:formatNumber number="${r.transporte+r.precio}" minFractionDigits="4" maxFractionDigits="4" format="##,##0" locale="ec"/>
                     </td>
                     <td class="numero ${r.id} total">
@@ -235,6 +235,16 @@
                         $("#item_transporte").val(parts[1])
                     }
                 });
+    }
+
+
+    function updateTotal(celda){
+        var val = celda.val()
+        val=val.replace(",", "")
+        var precio = celda.parent().parent().find(".precio").html()
+        precio=precio.replace(",", "")
+        celda.parent().parent().find(".total").html(number_format(precio*val, 2, ".", ""))
+
     }
 
     $(function () {
@@ -395,6 +405,7 @@
         $("#txt").keyup(function(event){
 //            console.log(event.which)
             if (event.which == 13) {
+                updateTotal($(this))
                 var valor=$(this).val()
 //                console.log("eenter ",valor)
                 $(this).val("")
@@ -406,6 +417,7 @@
                 padre.addClass("texto")
             }
             if(event.which==40 ){
+                updateTotal($(this))
                 var valor=$(this).val()
                 $(this).val("")
                 $(this).hide()
@@ -418,6 +430,7 @@
                 padre.parent().next().find(".cantidad").click()
             }
             if(event.which==38 ){
+                updateTotal($(this))
                 var valor=$(this).val()
                 $(this).val("")
                 $(this).hide()
@@ -434,6 +447,7 @@
         $("#txt").blur(function(){
 //            console.log("blur")
             if($("#txt").val()!=""){
+                updateTotal($(this))
                 var valor=$(this).val()
                 $(this).val("")
                 $(this).hide()
@@ -462,32 +476,32 @@
 
         %{--$("#imprimirPdf").click(function () {--}%
 
-%{--//                       console.log("-->" + $(".pdf.active").attr("class"))--}%
-%{--//                       console.log("-->" + $(".pdf.active").hasClass('2'))--}%
+        %{--//                       console.log("-->" + $(".pdf.active").attr("class"))--}%
+        %{--//                       console.log("-->" + $(".pdf.active").hasClass('2'))--}%
 
-            %{--if($(".pdf.active").hasClass("1") == true){--}%
+        %{--if($(".pdf.active").hasClass("1") == true){--}%
 
-                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}?sp=${sub}"--}%
-            %{--}else {--}%
-            %{--}--}%
-            %{--if($(".pdf.active").hasClass("2") == true){--}%
-                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}?sp=${sub}"--}%
-            %{--}else {--}%
-
-
-            %{--}--}%
-            %{--if($(".pdf.active").hasClass("3") == true){--}%
-                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}?sp=${sub}"--}%
-
-            %{--}else {--}%
+        %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}?sp=${sub}"--}%
+        %{--}else {--}%
+        %{--}--}%
+        %{--if($(".pdf.active").hasClass("2") == true){--}%
+        %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}?sp=${sub}"--}%
+        %{--}else {--}%
 
 
-            %{--}--}%
-            %{--if($(".pdf.active").hasClass("-1") == true){--}%
+        %{--}--}%
+        %{--if($(".pdf.active").hasClass("3") == true){--}%
+        %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}?sp=${sub}"--}%
+
+        %{--}else {--}%
 
 
-                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}?sp=${sub}"--}%
-            %{--}--}%
+        %{--}--}%
+        %{--if($(".pdf.active").hasClass("-1") == true){--}%
+
+
+        %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}?sp=${sub}"--}%
+        %{--}--}%
         %{--});--}%
 
     });
