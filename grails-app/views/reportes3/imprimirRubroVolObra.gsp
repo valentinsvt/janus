@@ -25,6 +25,7 @@
         @page {
             size   : 21cm 29.7cm;  /*width height */
             margin : 2cm;
+            margin-left: 2.5cm;
         }
 
         body {
@@ -184,7 +185,14 @@
 
                     </div>
 
-                    <div class="span4">
+                    %{--<div class="span4">--}%
+                       %{----}%
+                    %{--</div>--}%
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span12">
+
                         <g:if test="${fechaPrecios}">
 
                             <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
@@ -195,36 +203,44 @@
 
                     </div>
                 </div>
-
                 <div class="row-fluid">
-                    <div class="span3" style="margin-right: 195px !important;">
-                        <b>Código:</b> ${rubro?.codigo}
-                    </div>
-
-                    <div class="span4">
-                        <b>Unidad:</b> ${rubro?.unidad?.codigo}
-                    </div>
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span12">
-
-                        <b>Código Obra:</b> ${obra?.codigo}
-                    </div>
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span12">
-
-                        <b>Doc. Referencia:</b> ${obra?.oficioIngreso}
-                    </div>
-                </div>
-               <div class="row-fluid">
                     <div class="span12">
 
                         <b>Presupuesto:</b> ${obra?.nombre}
                     </div>
                 </div>
+                <div class="row-fluid">
+                <div class="span12">
+
+                    <b>Código Obra:</b> ${obra?.codigo}
+                </div>
+               </div>
+                <div class="row-fluid">
+                    <div class="span3" style="margin-right: 195px !important;">
+                        <b>Código:</b> ${rubro?.codigo}
+                    </div>
+
+                    %{--<div class="span4">--}%
+                       %{----}%
+                    %{--</div>--}%
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span12">
+
+                        <b>Unidad:</b> ${rubro?.unidad?.codigo}
+                    </div>
+                </div>
+
+
+
+                %{--<div class="row-fluid">--}%
+                    %{--<div class="span12">--}%
+
+                        %{--<b>Doc. Referencia:</b> ${obra?.oficioIngreso}--}%
+                    %{--</div>--}%
+                %{--</div>--}%
+
 
                 <div class="row-fluid">
                     <div class="span12">

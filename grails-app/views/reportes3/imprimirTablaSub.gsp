@@ -59,14 +59,14 @@
 
             /*border: 1px solid #000000;*/
 
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid #000000 !important;
 
         }
 
         .theaderup {
 
             /*border: 1px solid #000000;*/
-            border-top: 1px solid #000000;
+            border-top: 1px solid #000000 !important;
 
 
 
@@ -175,7 +175,7 @@
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="span6" style="margin-right: 195px !important;">
+                    <div class="span12" style="margin-right: 100px !important;">
                         <b>Nombre:</b> ${obra?.nombre}
                     </div>
                 </div>
@@ -200,25 +200,28 @@
             <g:each in="${subPres}" var="sp" status="sub">
               <div style="font-size: 12px; font-weight: bold">${sp.descripcion}</div>
             <table class="table table-bordered table-striped table-condensed table-hover">
-                <thead>
-                    <tr class="theaderBot thederup padTopBot">
-                        <th style="width: 20px;" class="theaderBot theaderup padTopBot">
+                <thead >
+                    <tr >
+
+                        <th colspan="7" class="theaderBot theaderup padTopBot">
+                        <th style="width: 20px;" %{--class="theaderBot theaderup padTopBot"--}%>
                             N°
                         </th>
-                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
+                        <th style="width: 80px;" %{--class="theaderBot theaderup padTopBot"--}%>
                             Rubro
                         </th>
-                        <th style="width: 550px;" class="theaderBot theaderup padTopBot">
+                        <th style="width: 400px;" %{--class="theaderBot theaderup padTopBot"--}%>
                             Descripción
                         </th>
-                        <th style="width: 35px;" class="col_unidad theaderBot theaderup padTopBot">
+                        <th style="width: 45px; text-align: left" %{--class="col_unidad theaderBot theaderup padTopBot"--}%>
                             Unidad
                         </th>
-                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
+                        <th style="width: 80px;" %{--class="theaderBot theaderup padTopBot"--}%>
                             Cantidad
                         </th>
-                        <th class="col_precio theaderBot theaderup padTopBot" style="width:110px ;">P. U.</th>
-                        <th class="col_total  theaderBot theaderup padTopBot" style="width:110px;">C.Total</th>
+                        <th class="col_precio %{--theaderBot theaderup padTopBot--}%" style="width:80px ; text-align: right">P. U.</th>
+                        <th class="col_total %{-- theaderBot theaderup padTopBot--}%" style="width:80px; text-align: right">C.Total</th>
+                    </th>
                     </tr>
                 </thead>
                 <tbody id="tabla_material">
@@ -227,45 +230,49 @@
                 <g:each in="${valores}" var="val" status="j">
                     <g:if test="${val.sbpr__id == sp.id}">
                     <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
-
+                       %{--<td style="width: 765px">--}%
                         <td style="width: 20px" class="orden">${val.vlobordn}</td>
                         %{--<td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>--}%
-                        <td class="cdgo">${val.rbrocdgo.trim()}</td>
-                        <td class="nombre">${val.rbronmbr.trim()}</td>
-                        <td style="width: 60px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
-                        <td style="text-align: right" class="cant">
+                        <td class="cdgo" style="width: 80px">${val.rbrocdgo.trim()}</td>
+                        <td class="nombre" style="width: 400px">${val.rbronmbr.trim()}</td>
+                        <td style="width: 45px;text-align: right" class="col_unidad">${val.unddcdgo.trim()}</td>
+                        <td style="text-align: right; width: 80px" class="cant">
                             <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                         </td>
-                        <td class="col_precio" style="text-align: right" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                        <td class="col_total total" style="text-align: right"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-
+                        <td class="col_precio" style="text-align: right; width: 80px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                        <td class="col_total total" style="text-align: right; width: 80px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                        %{--</td>--}%
                         <g:set var="total" value="${total.toDouble() + val.totl}"></g:set>
 
                        <g:hiddenField name="totales" value="${totales = val.totl}"/>
                         <g:hiddenField name="totalPrueba" value="${totalPrueba = total2+=totales}"/>
                         <g:hiddenField name="totalPresupuesto" value="${totalPresupuesto = total1 += totales}"/>
 
-                    </tr>
+                                            </tr>
                     </g:if>
                 </g:each>
 
                     <tr>
                         <td colspan="5"></td>
-                        <td style="text-align: right"><b>Total:</b></td>
+                        <td style="text-align: right"><b>Subtotal:</b></td>
                         <td style="text-align: right"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
                     </tr>
                 </tbody>
             </table>
             </g:each>
-                   <table style="margin-top: 10px; margin-left:430px; font-size: 12px !important;">
+                   <table style="margin-top: 10px; font-size: 12px !important; width: 600px!important">
                        <thead>
+                      <th>
 
+                      </th>
                        </thead>
                        <tbody>
-                       <tr>
-
-                           <td style="text-align: right"><b style="font-size: 10px">Total Presupuesto:</b></td>
+                          <tr>
+                           <td colspan="7" class="theaderBot theaderup padTopBot">
+                           <td style="text-align: right"><b style="font-size: 10px; margin-left: 400px">TOTAL PRESUPUESTO:</b></td>
                            <td style="text-align: right; font-size: 12px"><b><g:formatNumber number="${totalPresupuesto}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                           </td>
+
                        </tr>
                        </tbody>
                    </table>
@@ -276,7 +283,8 @@
 
                 <table class="table table-bordered table-striped table-condensed table-hover">
                     <thead>
-                    <tr class="theaderBot thederup padTopBot">
+                    <tr>
+                        <th colspan="7" class="theaderBot theaderup padTopBot">
                         <th style="width: 20px;" class="theaderBot theaderup padTopBot">
                             N°
                         </th>
@@ -292,8 +300,9 @@
                         <th style="width: 80px;" class="theaderBot theaderup padTopBot">
                             Cantidad
                         </th>
-                        <th class="col_precio theaderBot theaderup padTopBot" style="width:110px ;">P. U.</th>
-                        <th class="col_total  theaderBot theaderup padTopBot" style="width:110px;">C.Total</th>
+                        <th class="col_precio %{--theaderBot theaderup padTopBot--}%" style="width:80px ; text-align: right">P. U.</th>
+                        <th class="col_total %{-- theaderBot theaderup padTopBot--}%" style="width:80px; text-align: right">C.Total</th>
+                        </th>
                     </tr>
                     </thead>
                     <tbody id="tabla_material">
@@ -311,8 +320,8 @@
                                 <td style="text-align: right" class="cant">
                                     <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                                 </td>
-                                <td class="col_precio" style="text-align: right" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                                <td class="col_total total" style="text-align: right"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                                <td class="col_precio" style="text-align: right; width: 80px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                                <td class="col_total total" style="text-align: right; width: 80px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
 
                                 <g:set var="total" value="${total.toDouble() + val.totl}"></g:set>
                             </tr>

@@ -156,7 +156,7 @@
 
     $("#buscar").click(function(){
 
-        var datos = "si=${"si"}&buscador=" + $("#buscador_tra").val() + "&criterio=" + $("#criterio_tra").val()
+        var datos = "si=${"si"}&buscador=" + $("#buscador_tra").val() + "&criterio=" + $("#criterio_tra").val() + "&fecha=" + $("#fecha_tra").val()
         var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaContratos')}",
             data     : datos,

@@ -2294,8 +2294,17 @@ class Reportes4Controller {
                 filtroBuscador = " where z.tppzdscr ILIKE ('%${params.criterio}%') "
                 break;
             case "inic":
+//                def dia = formatDate(date: params.fecha, format: "MM/dd/yyyy")
+                def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                //                filtroBuscador = " where b.prinfcin= ('${params.fecha}') "
+                filtroBuscador = " where b.prinfcin= ('${dia}') "
+                break;
             case "fin":
+//                filtroBuscador = " where b.prinfcfn= ('${params.fecha}') "
+                break;
             case "fcsb":
+//                filtroBuscador = " where c.cntrfcsb= ('${params.fecha}') "
                 break;
 
         }
