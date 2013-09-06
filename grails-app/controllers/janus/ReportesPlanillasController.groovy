@@ -37,6 +37,7 @@ class ReportesPlanillasController {
     def preciosService
     def dbConnectionService
     def reportesPdfService
+    def diasLaborablesService
 
     def reporteTest() {
         def name = "test_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -75,7 +76,8 @@ class ReportesPlanillasController {
         def pdfw = PdfWriter.getInstance(document, baos);
 
         // headers and footers must be added before the document is opened
-        HeaderFooter footer1 = new HeaderFooter(new Phrase("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", fontFooter), false); // true aqui pone numero de pagina
+        HeaderFooter footer1 = new HeaderFooter(new Phrase("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", fontFooter), false);
+        // true aqui pone numero de pagina
         footer1.setBorder(Rectangle.NO_BORDER);
         footer1.setBorder(Rectangle.TOP);
         footer1.setAlignment(Element.ALIGN_CENTER);
@@ -1301,20 +1303,28 @@ class ReportesPlanillasController {
             def fechaFinPer = planilla.fechaFin
             def fechaMax = fechaFinPer
 
-            def noLaborables = ["Sat", "Sun"]
-
-//            println fechaMax
-            diasMax.times {
-                fechaMax++
-//                println fechaMax
-                def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
-                while (noLaborables.contains(fmt.format(fechaMax))) {
-//                    println fmt.format(fechaMax)
-                    fechaMax++
-//                    println fechaMax
-                }
-            }
+//            def noLaborables = ["Sat", "Sun"]
+//
+////            println fechaMax
+//            diasMax.times {
+//                fechaMax++
+////                println fechaMax
+//                def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
+//                while (noLaborables.contains(fmt.format(fechaMax))) {
+////                    println fmt.format(fechaMax)
+//                    fechaMax++
+////                    println fechaMax
+//                }
+//            }
 //            println "***** "+fechaMax
+
+            /* aqui esta con el nuevo service para calcular dias laborables con la tabla */
+            def res = diasLaborablesService.diasLaborablesDesde(fechaFinPer, diasMax)
+            if (res[0]) {
+                fechaMax = res[1]
+            } else {
+                fechaMax = null
+            }
 
             def fechaPresentacion = planilla.fechaPresentacion
             def retraso = fechaPresentacion - fechaMax + 1
@@ -3214,11 +3224,12 @@ class ReportesPlanillasController {
 
         table.addCell(cell);
     }
+
     def memoPedidoPago() {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
-        def tramite = Tramite.findByPlanillaAndTipoTramite(planilla,TipoTramite.findByCodigo("PDPG"))
+        def tramite = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
         def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         def precios = [:]
@@ -3383,15 +3394,15 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("(-) Anticipo  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.descuentos, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaValores, new Paragraph("(-) Multas  ", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        def multas=0
-        multas = planilla.multaDisposiciones+planilla.multaIncumplimiento+planilla.multaPlanilla+planilla.multaRetraso
+        def multas = 0
+        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
         addCellTabla(tablaValores, new Paragraph("${numero(multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("SUMA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste-planilla.descuentos-multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}", fontTdTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaValores, new Paragraph("A FAVOR DEL CONTRATISTA", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste-planilla.descuentos-multas, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaValores)
 
@@ -3433,7 +3444,7 @@ class ReportesPlanillasController {
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
 //        def tramite = Tramite.findByPlanilla(planilla)
-        def tramite = Tramite.findByPlanillaAndTipoTramite(planilla,TipoTramite.findByCodigo("PDPG"))
+        def tramite = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
         def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
@@ -3717,7 +3728,8 @@ class ReportesPlanillasController {
 
         // headers and footers must be added before the document is opened
         HeaderFooter footer1 = new HeaderFooter(
-                new Phrase("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", new Font(times8normal)), false); // true aqui pone numero de pagina
+                new Phrase("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", new Font(times8normal)), false);
+        // true aqui pone numero de pagina
         footer1.setBorder(Rectangle.NO_BORDER);
         footer1.setBorder(Rectangle.TOP);
         footer1.setAlignment(Element.ALIGN_CENTER);
