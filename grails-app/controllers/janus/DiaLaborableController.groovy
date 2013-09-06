@@ -1,10 +1,35 @@
 package janus
 
+import groovy.json.JsonBuilder
 import org.springframework.dao.DataIntegrityViolationException
 
 class DiaLaborableController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def diasLaborablesService
+
+    def calculador() {
+
+    }
+
+    def calcEntre() {
+        def fecha1 = new Date().parse("dd-MM-yyyy", params.fecha1)
+        def fecha2 = new Date().parse("dd-MM-yyyy", params.fecha2)
+
+        def ret = diasLaborablesService.diasLaborablesEntre(fecha1, fecha2)
+        def json = new JsonBuilder(ret)
+        render json
+    }
+
+    def calcDias() {
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def dias = params.dias.toInteger()
+
+        def ret = diasLaborablesService.diasLaborablesDesde(fecha, dias)
+        def json = new JsonBuilder(ret)
+        render json
+    }
 
     def saveCalendario() {
         def errores = 0
@@ -41,19 +66,19 @@ class DiaLaborableController extends janus.seguridad.Shield {
             params.anio = anio
         }
         def meses = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-        def enero = new Date().parse("dd-MM-yyyy", "01-01-" + params.anio)
-        def diciembre = new Date().parse("dd-MM-yyyy", "31-12-" + params.anio)
+        def enero01 = new Date().parse("dd-MM-yyyy", "01-01-" + params.anio)
+        def diciembre31 = new Date().parse("dd-MM-yyyy", "31-12-" + params.anio)
 
         def dias = DiaLaborable.withCriteria {
-            ge("fecha", enero)
-            le("fecha", diciembre)
+            ge("fecha", enero01)
+            le("fecha", diciembre31)
             order("fecha", "asc")
         }
 
         if (dias.size() < 365) {
             println "No hay todos los dias para ${params.anio}: hay " + dias.size()
 
-            def fecha = enero
+            def fecha = enero01
             def cont = 1
             def fds = ["sat", "sun"]
             def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
@@ -68,7 +93,7 @@ class DiaLaborableController extends janus.seguridad.Shield {
                     "sun": 0,
             ]
 
-            while (fecha <= diciembre) {
+            while (fecha <= diciembre31) {
                 def dia = fmt.format(fecha).toLowerCase()
                 def ordinal = 0
                 if (!fds.contains(dia)) {
@@ -82,6 +107,7 @@ class DiaLaborableController extends janus.seguridad.Shield {
                     def diaLaborable = new DiaLaborable([
                             fecha: fecha,
                             dia: diasSem[dia],
+                            anio: fecha.format("yyyy").toInteger(),
                             ordinal: ordinal
                     ])
                     if (!diaLaborable.save(flush: true)) {
@@ -93,8 +119,8 @@ class DiaLaborableController extends janus.seguridad.Shield {
                 fecha++
             }
             dias = DiaLaborable.withCriteria {
-                ge("fecha", enero)
-                le("fecha", diciembre)
+                ge("fecha", enero01)
+                le("fecha", diciembre31)
                 order("fecha", "asc")
             }
             println "Guardados ${dias.size()} dias"

@@ -3,6 +3,7 @@ package janus
 class DiaLaborable {
     Date fecha
     String dia              //lun:1, mar:2, mie:3, jue:4, vie:5, sab:6, dom:0
+    Integer anio            //anio de la fecha (para facilitar las busquedas)
     Integer ordinal
     String observaciones
 
@@ -15,6 +16,7 @@ class DiaLaborable {
         columns {
             fecha column: "ddlbfcha"
             dia column: "ddlbddia"
+            anio column: "ddlbanio"
             ordinal column: "ddlbordn"
             observaciones column: 'ddlbobsr'
         }

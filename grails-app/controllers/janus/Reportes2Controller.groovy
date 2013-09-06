@@ -1090,9 +1090,12 @@ class Reportes2Controller {
         label = new jxl.write.Label(1, 4, "COMPOSICIÓN: " + obra?.nombre, times16format); sheet.addCell(label);
         label = new jxl.write.Label(1, 6, obra?.departamento?.direccion?.nombre, times16format); sheet.addCell(label);
         label = new jxl.write.Label(1, 8, "CÓDIGO: " + obra?.codigo, times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 10, "DOC. REFERENCIA: " + obra?.oficioIngreso, times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 12, "FECHA: " + printFecha(obra?.fechaCreacionObra), times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 14, "FECHA ACT.PRECIOS: " + printFecha(obra?.fechaPreciosRubros), times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 10, "DOC. REFERENCIA: " + obra?.oficioIngreso, times16format);
+        sheet.addCell(label);
+        label = new jxl.write.Label(1, 12, "FECHA: " + printFecha(obra?.fechaCreacionObra), times16format);
+        sheet.addCell(label);
+        label = new jxl.write.Label(1, 14, "FECHA ACT.PRECIOS: " + printFecha(obra?.fechaPreciosRubros), times16format);
+        sheet.addCell(label);
 
         label = new jxl.write.Label(0, 16, "CODIGO", times16format); sheet.addCell(label);
         label = new jxl.write.Label(1, 16, "ITEM", times16format); sheet.addCell(label);
@@ -1166,7 +1169,8 @@ class Reportes2Controller {
         number = new jxl.write.Number(7, ultimaFila, totalMaterial.toDouble()?.round(2) ?: 0); sheet.addCell(number);
 
         label = new jxl.write.Label(6, ultimaFila + 1, "Total Mano de Obra: ", times16format); sheet.addCell(label);
-        number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra.toDouble()?.round(2) ?: 0); sheet.addCell(number);
+        number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra.toDouble()?.round(2) ?: 0);
+        sheet.addCell(number);
 
         label = new jxl.write.Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
 //        number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo); sheet.addCell(number);
@@ -1246,15 +1250,20 @@ class Reportes2Controller {
         def number
         def fila = 8;
 
-        label = new jxl.write.Label(2, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
-        label = new jxl.write.Label(2, 2, "REPORTE COSTOS DE: ${grupo.descripcion.toUpperCase()}", times16format); sheet.addCell(label);
+        label = new jxl.write.Label(2, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format);
+        sheet.addCell(label);
+        label = new jxl.write.Label(2, 2, "REPORTE COSTOS DE: ${grupo.descripcion.toUpperCase()}", times16format);
+        sheet.addCell(label);
 
-        label = new jxl.write.Label(1, 4, "LISTA DE PRECIOS: " + lugar?.descripcion, times16format); sheet.addCell(label);
-        label = new jxl.write.Label(4, 4, "FECHA DE CONSULTA: " + new Date().format("dd-MM-yyyy"), times16format); sheet.addCell(label);
+        label = new jxl.write.Label(1, 4, "LISTA DE PRECIOS: " + lugar?.descripcion, times16format);
+        sheet.addCell(label);
+        label = new jxl.write.Label(4, 4, "FECHA DE CONSULTA: " + new Date().format("dd-MM-yyyy"), times16format);
+        sheet.addCell(label);
 
         def col = 0
         label = new jxl.write.Label(col, 6, "CODIGO", times16format); sheet.addCell(label); col++;
-        label = new jxl.write.Label(col, 6, grupo.descripcion.toUpperCase(), times16format); sheet.addCell(label); col++;
+        label = new jxl.write.Label(col, 6, grupo.descripcion.toUpperCase(), times16format); sheet.addCell(label);
+        col++;
         label = new jxl.write.Label(col, 6, "UNIDAD", times16format); sheet.addCell(label); col++;
         if (grupo.id == 1) {
             label = new jxl.write.Label(col, 6, "PESO/VOL", times16format); sheet.addCell(label); col++;
@@ -1371,10 +1380,11 @@ class Reportes2Controller {
         fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
 //        addEmptyLine(fecha, 1);
         document.add(fecha);
-        Paragraph fechaP = new Paragraph();
-        fechaP.add(new Paragraph("Fecha Act. Precios: ${printFecha(obra?.fechaPreciosRubros)}", info))
-        addEmptyLine(fechaP, 1);
-        document.add(fechaP);
+
+        Paragraph rutaCritica = new Paragraph();
+        rutaCritica.add(new Paragraph("Los rubros pertenecientes a la ruta crítica están marcados con un * antes de su código.", info))
+        addEmptyLine(rutaCritica, 1);
+        document.add(rutaCritica);
 
         /* ***************************************************** Fin Titulo del reporte ***************************************************/
         /* ***************************************************** Tabla cronograma *********************************************************/
@@ -1435,7 +1445,7 @@ class Reportes2Controller {
             def parcial = precios[vol.id.toString()] * vol.cantidad
             sum += parcial
 
-            addCellTabla(tabla, new Paragraph(vol.item.codigo, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tabla, new Paragraph((vol.rutaCritica == 'S' ? "* " : "") + vol.item.codigo, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tabla, new Paragraph(vol.item.nombre, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tabla, new Paragraph(vol.item.unidad.codigo, fontTd), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tabla, new Paragraph(numero(vol.cantidad, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])

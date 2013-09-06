@@ -6938,9 +6938,9 @@ class ReportesController {
 
         def finContractual = concurso.fechaInicioContractual
 
-        def noLaborables = ["Sat", "Sun"]
-
-        def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
+//        def noLaborables = ["Sat", "Sun"]
+//
+//        def fmt = new java.text.SimpleDateFormat("EEE", new Locale("en"))
 
         def fechaTemp = inicioPreparatorio
 
@@ -6954,12 +6954,14 @@ class ReportesController {
 
         def diasContractual = 0
 
-        diasPreparatorio = horasLaborables(fechaTemp, finPreparatorio, diasPreparatorio, fmt, noLaborables)
+//        diasPreparatorio = horasLaborables(fechaTemp, finPreparatorio, diasPreparatorio, fmt, noLaborables)
+//        diasPrecontractual = horasLaborables(fechaTempPrecon, finPrecontractual, diasPrecontractual, fmt, noLaborables)
+//        diasContractual = horasLaborables(fechaTempContra, finContractual, diasContractual, fmt, noLaborables)
 
-        diasPrecontractual = horasLaborables(fechaTempPrecon, finPrecontractual, diasPrecontractual, fmt, noLaborables)
-
-        diasContractual = horasLaborables(fechaTempContra, finContractual, diasContractual, fmt, noLaborables)
-
+        /* Aqui esta con la nueva tabla de dias feriados */
+        diasPreparatorio = diasLaborablesService.diasLaborablesEntre(fechaTemp, finPreparatorio)
+        diasPrecontractual = diasLaborablesService.diasLaborablesEntre(fechaTempPrecon, finPrecontractual)
+        diasContractual = diasLaborablesService.diasLaborablesEntre(fechaTempContra, finContractual)
 
         def baos = new ByteArrayOutputStream()
         def name = "avance_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
