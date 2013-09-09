@@ -1504,6 +1504,7 @@
 //
                             } else {
 
+
                                 $.ajax({
                                     type    : "POST",
                                     url     : "${g.createLink(action: 'desregitrarObra')}",
