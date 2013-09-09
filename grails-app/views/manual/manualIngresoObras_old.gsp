@@ -2,14 +2,10 @@
 <html>
     <head>
 
-        %{--<meta name="layout" content="main">--}%
+        <meta name="layout" content="manuales"/>
 
         <title>Manual de Usuario</title>
         <style>
-        * {
-            max-width : 1100px;
-            margin    : auto;
-        }
 
         div {
             margin : auto;
@@ -101,11 +97,11 @@
             <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'logo.png')}"/>
             <br><br>
 
-            <h3>Sistema Integrado de Gesti&oacuten de Proyectos, Fiscalizaci&oacuten,
-            Contrataci&oacuten y Ejecuci&oacuten de Obras</h3>
+            <h4>Sistema Integrado de Gesti&oacuten de Proyectos, Fiscalizaci&oacuten,
+            Contrataci&oacuten y Ejecuci&oacuten de Obras</h4>
             <br><a id="volverIndice"></a>
 
-            <h2>Manual del Usuario</h2>
+            <h2 class="izquierda">Manual del Usuario</h2>
         </div>
 
         <div id="indice">
@@ -115,60 +111,56 @@
             Fiscalizaci&oacuten, Contrataci&oacuten y Ejecuci&oacuten de Obras
             </a></p>
             <ol>
+                <li><a href="#Introduccion">Introducción</a></li>
                 <li><a href="#IngresoSistema">Ingreso al Sistema</a></li>
-                <li><a href="#ModAdmin">M&oacutedulo de Administraci&oacuten del Sistema</a></li>
-                <ul>
-                    <li><a href="#ManParam">Manejo de par&aacutemetros</a></li>
-                    <li><a href="#ManPer">Manejo de perfiles y permisos</a></li>
+                <li><a href="#ModAdmin">M&oacutedulo de Administraci&oacuten del Sistema</a>
                     <ul>
+                        <li><a href="#ModAdmin">M&oacutedulo de Administraci&oacuten del Sistema</a></li>
+                        <li><a href="#ManParam">Manejo de par&aacutemetros</a></li>
+                        <li><a href="#ManPer">Manejo de perfiles y permisos</a></li>
                         <li><a href="#GestPerm">Gesti&oacuten de Permisos y M&oacutedulos</a></li>
                         <li><a href="#GestUsuario">Gesti&oacuten de Usuarios</a></li>
+
                     </ul>
-                </ul>
-                <li><a href="#ModAnalisis">M&oacutedulo de An&aacutelisis de Precios Unitarios</a>
                 </li>
-                <ul>
-                    <li><a href="#RegMateriales">Registro de Materiales, Mano de Obra y Equipos
-                    </a></li>
-                    <li><a href="#PrecMant">Precios y Mantenimiento de &Iacutetems</a></li>
-                    <li><a href="#AnPrecios">An&aacutelisis de precios unitarios: Rubros</a></li>
-                    <li><a href="#BarraCom">Barra de comandos</a></li>
-                </ul>
-                <li><a href="#RegObras">Registro de Obras</a></li>
-                <ul>
-                    <li><a href="#Lista">Lista</a></li>
-                    <li><a href="#Nuevo">Nuevo</a></li>
-                    <li><a href="#Grabar">Grabar</a></li>
-                    <li><a href="#Cancelar">Cancelar</a></li>
-                    <li><a href="#EliminarObra">Eliminar la Obra</a></li>
-                    <li><a href="#Imprimir">Imprimir</a></li>
-                    <li><a href="#CambiarEstado">Cambiar de Estado</a></li>
-                    <li><a href="#CopiarObra">Copiar Obra</a></li>
-                    <li><a href="#CopiarOferentes">Copiar Obra a Oferentes</a></li>
-                    <li><a href="#RegDatObra">Registro de datos de la obra</a></li>
-                    <li><a href="#BotonInferior">Registro de obras &#45 Barra de botones inferior
-                    </a></li>
-                    <li><a href="#BotonInferior">Variables</a></li>
-                    <li><a href="#VolObra">Vol&uacutemenes de Obra</a></li>
-                    <li><a href="#MatrizFormula">Matriz de la F&oacutermula Polin&oacutemica</a></li>
-                    <li><a href="#FormulaPoli">F&oacutermula polin&oacutemica</a></li>
-                    <li><a href="#TrabajoPoli">Trabajando en la composici&oacuten de la f&oacutermula
-                    polin&oacutemica</a></li>
-                    <li><a href="#RubrObra">Rubros de la obra</a></li>
-                    <li><a href="#Cronograma">Cronograma</a></li>
-                    <li><a href="#CompObra">Composici&oacuten de la Obra</a></li>
-                    <li><a href="#DocObra">Documentos de la Obra</a></li>
-                </ul>
+                <li>
+                    <a href="#ModAnalisis">M&oacutedulo de An&aacutelisis de Precios Unitarios</a>
+                    <ul>
+                        <li><a href="#RegMateriales">Registro de Materiales, Mano de Obra y Equipos
+                        </a></li>
+                        <li><a href="#PrecMant">Precios y Mantenimiento de &Iacutetems</a></li>
+                        <li><a href="#AnPrecios">An&aacutelisis de precios unitarios: Rubros</a></li>
+                        <li><a href="#BarraCom">Barra de comandos</a></li>
+                    </ul>
+                </li>
+                <li><a href="#RegObras">Registro de Obras</a>
+                    <ul>
+                        <li><a href="#Lista">Registro de obras</a></li>
+                        <li><a href="#Lista">Lista</a></li>
+                        <li><a href="#Nuevo">Barra de comandos</a></li>
+                        <li><a href="#RegDatObra">Registro de datos de la obra</a></li>
+                        <li><a href="#BotonInferior">Variables</a></li>
+                        <li><a href="#VolObra">Vol&uacutemenes de Obra</a></li>
+                        <li><a href="#MatrizFormula">Matriz de la F&oacutermula Polin&oacutemica</a></li>
+                        <li><a href="#FormulaPoli">F&oacutermula polin&oacutemica</a></li>
+                        <li><a href="#TrabajoPoli">Trabajando en la composici&oacuten de la f&oacutermula
+                        polin&oacutemica</a></li>
+                        <li><a href="#RubrObra">Rubros de la obra</a></li>
+                        <li><a href="#Cronograma">Cronograma</a></li>
+                        <li><a href="#CompObra">Composici&oacuten de la Obra</a></li>
+                        <li><a href="#DocObra">Documentos de la Obra</a></li>
+                    </ul>
+                </li>
             </ol>
         </div>
 
 
         <a id="SistInt"></a>
 
-        <div><!--Sistema Integrado de Gestion de Proyectos... pg 3, 4, 5-->
+        <div class="centrado">
             <br><br><br>
 
-            <h2 class="centrado">Sistema Integrado de Gesti&oacuten de Proyectos,
+            <h2>Sistema Integrado de Gesti&oacuten de Proyectos,
             Fiscalizaci&oacuten, Contrataci&oacuten y Ejecuci&oacuten de Obras</h2>
 
             <p>El Sistema Integrado de Gesti&oacuten de Proyectos, Fiscalizaci&oacuten,
@@ -184,10 +176,9 @@
             de obra ejecutados, valores de reajuste, liquidaciones, la recepci&oacuten provisional
             y la recepci&oacuten definitiva de la Obra.
             </p>
-
-            <div class="centrado"><br>
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen101.png')}"/>
-            </div> <br>
+            <br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen101.png')}"/>
+            <br>
 
             <p>Adicionalmente el sistema puede operar en forma independiente con tres bases
             de datos distintas para contrataci&oacuten de obras, administraci&oacuten directa
@@ -222,9 +213,8 @@
             proceso normal). Dentro del organigrama del GADPP figuran:
             </p> <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen102.png')}"/>
-            </div> <br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen102.png')}"/>
+            <br>
 
             <p>Las Unidades de Infraestructura para el Desarrollo, Gesti&oacuten de Vialidad
             y Gesti&oacuten de Riego reciben los proyectos de Obra seg&uacuten su competencia.
@@ -268,9 +258,8 @@
             si no supera el porcentaje que determina la ley.
             </p>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen103.png')}"/>
-            </div> <br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen103.png')}"/>
+            <br>
 
             <p>La recepci&oacuten de la obra provisional y definitiva se registran en el
             sistema con sus respectivas fechas, esta informaci&oacuten sirve para generar
@@ -279,11 +268,8 @@
         </div>
         <br> <a id="IngresoSistema"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br>
 
-        <div><!--Ingreso al Sistema, pg 5,6,7-->
+        <div class="centrado"><!--Ingreso al Sistema, pg 5,6,7-->
             <br><br>
 
             <h2 class="cursiva">Ingreso al Sistema</h2>
@@ -293,10 +279,9 @@
                 <br>Para poder ingresar al sistema colocamos el nombre de usuario y password
             en los campos solicitados, a continuaci&oacuten damos clic en &#34Continuar&#34.
             </p>
-
-            <div class="centrado"><!-- pg 6 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen104.png')}"/>
-            </div> <br>
+            <!-- pg 6 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen104.png')}"/>
+            <br>
 
             <p>Si el usuario ha olvidado su contrase&#241a es posible solicitar una nueva
             contrase&#241a al hacer clic en la parte inferior &#34Olvid&oacute su
@@ -305,9 +290,8 @@
             una nueva contrase&#241a para que pueda ingresar.
             </p>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen105.png')}"/>
-            </div> <br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen105.png')}"/>
+            <br>
 
             <p>Una vez que ha ingresado en el sistema este le pedir&aacute que escoja su
             perfil de usuario. Los perfiles se definen en el m&oacutedulo de
@@ -316,10 +300,9 @@
             administraci&oacuten en el sistema. Seleccione su perfil haga clic en
             &#34Entrar&#34 para continuar.
             </p>
-
-            <div class="centrado"><!-- pg 7 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen106.png')}"/>
-            </div> <br>
+            <!-- pg 7 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen106.png')}"/>
+            <br>
 
             <p>La pantalla de bienvenida presenta est&aacute formada por un men&uacute
             donde aparece como t&iacutetulo el m&oacutedulo o secci&oacuten en la que se
@@ -336,21 +319,17 @@
             puede ser modificado por el administrador del sistema.
             </p> <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen107.png')}"/>
-            </div> <br> <br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen107.png')}"/>
+            <br> <br>
         </div>
 
         <a id="ModAdmin"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div>
 
 
         <br>
 
-        <div><!--Modulo de Administracion del Sistema pg 7,8 -->
+        <div class="centrado"><!--Modulo de Administracion del Sistema pg 7,8 -->
             <br><br>
 
             <h2 class="cursiva">M&oacutedulo de Administraci&oacuten del Sistema</h2>
@@ -406,15 +385,12 @@
         </div>
 
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div>
         <br>
 
-        <div><!--Manejo de Parametros pg 8,9, 10, 11, 12-->
+        <div class="centrado"><!--Manejo de Parametros pg 8,9, 10, 11, 12-->
             <br>
 
-            <h2>Manejo de par&aacutemetros</h2>
+            <h2 class="izquierda">Manejo de par&aacutemetros</h2>
 
             <p>Para que el sistema pueda ser utilizado es necesario contar con una serie
             de par&aacutemetros sobre los cuales se ha de ir construyendo los datos e
@@ -493,9 +469,9 @@
             concepto, uso y a veces presenta ejemplos.
             </p>
             <br><br> <!--pg 10 -->
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen109.png')}"/>
-            </div>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen109.png')}"/>
+
             <br><br>
 
             <p>Si se hace un clic en el texto subrayado de la lista de par&aacutemetros
@@ -505,9 +481,8 @@
             </p>
             <br><br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen110.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen110.png')}"/>
+
             <br><br>
 
             <p>En la zona inferior aparece un enlace para la siguiente p&aacutegina de datos
@@ -518,53 +493,44 @@
             y eliminar.
             </p>
             <br><br> <!-- pg 11 -->
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen111.png')}"/>
-            </div>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen111.png')}"/>
 
             <p>Par&aacutemetros de Obras:</p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen112.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen112.png')}"/>
+
             <br><br>
 
             <p>Par&aacutemetros de contrataci&oacuten:</p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen113.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen113.png')}"/>
 
             <p>Par&aacutemetros de ejecuci&oacuten:</p> <!-- pg 12 -->
             <br><br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen114.png')}"/>
-            </div> <br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen114.png')}"/>
+            <br><br>
         </div>
 
         <a id="ManPer"></a>
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br>
+        <br>
 
 
-        <div><!-- Manejo de perfiles y permisos pg 12, 13, 14, 15-->
+        <div class="centrado"><!-- Manejo de perfiles y permisos pg 12, 13, 14, 15-->
             <br><br>
 
-            <h2>Manejo de perfiles y permisos</h2>
+            <h2 class="izquierda">Manejo de perfiles y permisos</h2>
 
             <p>Desde esta secci&oacuten se administran las opciones que aparecen en el
             men&uacute del usuario de acuerdo a cada perfil que se haya definido en el
             sistema. La pantalla de esta secci&oacuten es:
             </p>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen115.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen115.png')}"/>
+
             <br><br>
 
             <p>Los elementos de esta pantalla se describen a continuaci&oacuten:</p> <br>
@@ -593,9 +559,8 @@
             m&oacutedulo.
             </p> <br><br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen116.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen116.png')}"/>
+
             <br> <!-- pg 14 -->
             <p>Al hacer clic en el m&oacutedulo se despliegan sus las acciones junto con
             los comandos: &#34Eliminar del M&oacutedulo&#34, &#34Cambiar Men&uacute <-->
@@ -629,30 +594,23 @@
             acciones o modificar el m&oacutedulo al que pertenecen.
             </p>
             <br>
+            <!-- pg 15 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen117.png')}"/>
 
-            <div class="centrado"><!-- pg 15 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen117.png')}"/>
-            </div>
             <a id="GestPerm"></a>
             <br> <br> <br> <br>
         </div>
 
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br> <br>
-
-
-        <div><!--Gestion de Permisos y Modulos pg 15, 16, 17-->
+        <div class="centrado"><!--Gestion de Permisos y Modulos pg 15, 16, 17-->
             <h3 class="cursiva">Gesti&oacuten de Permisos y M&oacutedulos</h3>
 
             <p>El comando &#34Gestionar Permisos y M&oacutedulos&#34 nos lleva a una pantalla
             donde se pueden administrar los perfiles y los m&oacutedulos del sistema.
             </p>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen118.png')}"/>
-            </div><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen118.png')}"/>
+            <br>
 
             <p>En el caso de los perfiles, estos pueden crearse en funci&oacuten de otros
             existentes, de tal forma que todos los permisos del perfil &#34padre&#34 son
@@ -664,9 +622,9 @@
 
             <p><strong>Crear Perfil:</strong> Permite crear un nuevo perfil en el sistema.</p>
             <!-- pg 16 -->
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen137.png')}"/>
-            </div> <br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen137.png')}"/>
+            <br>
 
             <p><strong>Editar Perfil:</strong>Edita el perfil seleccionado en el combo
             &#34Seleccione un Perfil&#34, en el caso ilustrado, el perfil se&#241alado es
@@ -685,9 +643,8 @@
             </p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen119.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen119.png')}"/>
+
             <br>
 
             <p>El valor que se ingrese en orden determina la posici&oacuten en la que aparece
@@ -708,10 +665,9 @@
             que posee el m&oacutedulo y con una se&#241al aquellas que pueden ser vistas por el
             perfil seleccionado.
             </p>
-
-            <div class="centrado"><!-- pg 17 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen120.png')}"/>
-            </div> <br>
+            <!-- pg 17 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen120.png')}"/>
+            <br>
 
             <p>Para cambiar los permisos simplemente seleccione las acciones permitidas
             haciendo un clic para poner un visto en la columna &#34Permisos&#34 y luego haga
@@ -728,11 +684,9 @@
         </div>
 
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br>
+        <br>
 
-        <div><!-- Gestion de Usuarios pg 17, 18, 19-->
+        <div class="centrado"><!-- Gestion de Usuarios pg 17, 18, 19-->
             <br>
 
             <h3 class="cursiva">Gesti&oacuten de Usuarios</h3> <!-- pg 17 -->
@@ -747,53 +701,40 @@
                 <li>Contrase&#241a para autorizaciones electr&oacutenicas</li>
                 <li>Correo electr&oacutenico</li>
             </ul>
+            <!-- pg 18 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen121.png')}"/>
 
-            <div class="centrado"><!-- pg 18 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen121.png')}"/>
-            </div>
             <br>
 
             <p>Pantalla de edici&oacuten de datos de un usuario:</p>
             <br>
+            <!-- pg 19 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen122.png')}"/>
 
-            <div class="centrado"><!-- pg 19 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen122.png')}"/>
-            </div>
             <a id="ModAnalisis"></a>
             <br><br><br>
         </div>
 
+        <br> <br>
 
-        <div><!--Modulo de Analisis de Precios Unitarios pg 19 -->
+        <div class="centrado"><!--Registro de Materiales, Mano de Obra y Equipos pg 19, 20, 21, 22, 23 -->
             <h2 class="cursiva">M&oacutedulo de An&aacutelisis de Precios Unitarios</h2>
 
             <p>Antes de comenzar con el An&aacutelisis de precios unitarios, es necesario
             que los datos necesarios para el correcto funcionamiento se encuentren
             registrados en el sistema. El ingreso de estos datos deben llevar un orden
             l&oacutegico, el cual se detalla a continuaci&oacuten.
-            </p>
-            <a id="RegMateriales"></a> <br>
-        </div>
-        <br>
 
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br>
-
-        <div><!--Registro de Materiales, Mano de Obra y Equipos pg 19, 20, 21, 22, 23 -->
-            <h2>Registro de Materiales, Mano de Obra y Equipos</h2>
+            <h2 class="izquierda">Registro de Materiales, Mano de Obra y Equipos</h2>
 
             <p>Las tres partes principales con las que consta la pantalla de Registro y
             mantenimiento de &iacutetems son: Materiales, Mano de Obra y Equipos. <br>
                 Desde esta pantalla se puede ingresar directamente a trabajar ya sea con
                 Materiales, Mano de Obra o Equipos.
             </p>
+            <br> <!-- pg 20 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen123.png')}"/>
             <br>
-
-            <div class="centrado"><!-- pg 20 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen123.png')}"/>
-            </div><br>
 
             <p>En la zona superior de la p&aacutegina se halla una barra de herramientas
             con tres botones que permiten acceder a cada tipo de &iacutetem (grupos), y un
@@ -802,9 +743,8 @@
             </p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen124.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen124.png')}"/>
+
             <br>
 
             <p>En el buscador, al escribir el nombre de un &iacutetem, se despliega en forma
@@ -812,19 +752,17 @@
             </p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen125.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen125.png')}"/>
+
             <br>
 
             <p>Al hacer un clic en buscar, aparecen se&#241alados en el &aacuterbol las
             coincidencias encontradas.
             </p>
             <br>
+            <!-- pg 21 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen126.png')}"/>
 
-            <div class="centrado"><!-- pg 21 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen126.png')}"/>
-            </div>
             <br>
 
             <p>Si se hace un clic con el bot&oacuten derecho del rat&oacuten sobre un
@@ -833,9 +771,8 @@
             </p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen127.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen127.png')}"/>
+
             <br>
 
             <p>La zona derecha de la pantalla muestra los datos m&aacutes importantes de cada
@@ -845,17 +782,15 @@
             </p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen128.png')}"/> <!--pg 22 -->
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen128.png')}"/> <!--pg 22 -->
+
             <br>
 
             <p>Equipos:</p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen129.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen129.png')}"/>
+
             <br>
 
             <p>Es posible editar los grupos, crear nuevos grupos y subgrupos, al dar clic
@@ -864,9 +799,8 @@
             </p>
             <br>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen130.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen130.png')}"/>
+
             <br>
 
             <p>Al igual que con los grupos es posible editar, crear y agregar un nuevo
@@ -874,52 +808,42 @@
             un subgrupo. La opci&oacuten de &#34eliminar subgrupo&#34 aparecer&aacute solo
             si este se halla vac&iacuteo, es decir, que no contiene ning&uacuten &iacutetem.
             </p>
-            <br>
-
-            <div class="centrado"><!-- pg 23 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen131.png')}"/>
-            </div>
+            <!-- pg 23 -->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen131.png')}"/>
 
             <p>Tambi&eacuten podemos eliminar, crear un nuevo &iacutetem o editar el
             &iacutetem dando clic derecho sobre el mismo
             .</p>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen132.png')}"/>
-            </div>
-            <br>
-
-            <p>Esta pantalla es similar a la presentada para crear nuevos &iacutetems.</p><br>
-
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen133.png')}"/>
-            </div>
-            <br>
-
-            <p>Nueva mano de obra:</p>
-            <br>
-
-            <div class="centrado"><!-- pg 24 -->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen134.png')}"/>
-            </div>
-            <br>
-
-            <p>Nuevo equipo:</p>
-
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen135.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen132.png')}"/>
         </div>
         <br>
 
+        <p>Esta pantalla es similar a la presentada para crear nuevos &iacutetems.</p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen133.png')}"/>
+
+        <br>
+
+        <p>Nueva mano de obra:</p>
+        <br>
+        <!-- pg 24 -->
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen134.png')}"/>
+
+        <br>
+
+        <p>Nuevo equipo:</p>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen135.png')}"/>
+
+    </div>
+        <br>
+
         <a id="PrecMant"></a>
+        <br> <br>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br>
-
-        <div><!--Precios y Mantenimiento de Items pg 24-->
-            <h2>Precios y Mantenimiento de &Iacutetems</h2>
+        <div class="centrado"><!--Precios y Mantenimiento de Items pg 24-->
+            <h2 class="izquierda">Precios y Mantenimiento de &Iacutetems</h2>
 
             <p>La pantalla de registro de precios es similar a la de registro de
             &iacutetems. Esta est&aacute organizada como un &aacuterbol con los diferentes
@@ -928,9 +852,7 @@
             derecha de la pantalla el detalle de los precios y las fechas en que se definieron.
             </p>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen136.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen136.png')}"/>
 
             <p>El casillero con borde morado que muestra el precio del &iacutetem, en el
             cual se puede escribir para modificarlo. Para escribir en el se debe hacer doble
@@ -939,238 +861,208 @@
             &#34Guardar&#34. El bot&oacuten &#34Nuevo precio&#34 permite crear un nuevo precio
             para el &iacutetem en la lista se&#241alada.
             </p>
-        </div>
 
 
-        <!--ROBERT-->
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen301.png')}"></img><br><br>  <!-- Pag 25 -->
-        </div>
 
-        <p>
-            Los elementos que dispone esta pantalla son: botones de acceso a materiales,
-            mano de obra y equipos.Los elementos que dispone esta pantalla son: botones de
-            acceso a materiales, mano de obra y equipos.
-        </p>
+            <!--ROBERT-->
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen302.png')}"></img><br><br>
-        </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen301.png')}"/><br><br>  <!-- Pag 25 -->
 
-        <p>El buscador tiene la misma funcionalidad que en la pantalla de registro de
-        &iacutetems, al igual que el bot&oacuten &#34cerrar todo&#34.
-        </p>
+            <p>
+                Los elementos que dispone esta pantalla son: botones de acceso a materiales,
+                mano de obra y equipos.Los elementos que dispone esta pantalla son: botones de
+                acceso a materiales, mano de obra y equipos.
+            </p>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen303.png')}"></img><br><br>
-        </div>
 
-        <p>Finalmente tenemos una fila de botones que nos permite interaccionar con
-        esta pantalla.
-        </p>
-        <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen304.png')}"></img> <br>
-        <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen305.png')}"></img> <br><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen302.png')}"/><br><br>
 
-        <p>En estas condiciones, el bot&oacuten &#34Nuevo Precio&#34 permite crear
-        un nuevo precio del &iacutetem en todas las listas.
-        </p>
+            <p>El buscador tiene la misma funcionalidad que en la pantalla de registro de
+            &iacutetems, al igual que el bot&oacuten &#34cerrar todo&#34.
+            </p>
 
-        <p>
-            El men&uacute que se despleiga al hacer un clic derecho sobre la lista
-            de precios desaparece mientras se visualice el elemento &#34todos los
-            lugares&#34. Para regresar a ver las listas de precios en forma individual se
-            debe hacer otro clic sobre el bot&oacuten &#34Todos los lugares&#34, con lo cual
-            el color de este bot&oacuten cambia a desactivado y nuevamente se despliegan los
-            nombres de las listas de precios.
-        </p><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen303.png')}"/><br><br>
 
-        <div class="centrado">
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen306.png')}"></img><br><br>
-        </div>
+            <p>Finalmente tenemos una fila de botones que nos permite interaccionar con
+            esta pantalla.
+            </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen304.png')}"/> <br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen305.png')}"/> <br><br>
 
-        <p>El men&uacute que se despliega al hacer clic derecho sobre el lugar (lista de
-        precios) nosp ermite crear nuevas listas, eliminarlas o editar sus datos. Si
-        se selecciona eliminar, el sistema muestra un mensaje de confirmaci&oacuten
-        antes de proceder. S&oacutelo es posible eliminar listas de precios que no hayan
-        sido utilizadas en alguna obra. Si una lista de precios ya ha sido utilizada en
-        una obra, la opci&oacuten del men&uacute aparece desactivada.
-        </p>
+            <p>En estas condiciones, el bot&oacuten &#34Nuevo Precio&#34 permite crear
+            un nuevo precio del &iacutetem en todas las listas.
+            </p>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen307.png')}"></img> <br> <br>
-        </div>
+            <p>
+                El men&uacute que se despleiga al hacer un clic derecho sobre la lista
+                de precios desaparece mientras se visualice el elemento &#34todos los
+                lugares&#34. Para regresar a ver las listas de precios en forma individual se
+                debe hacer otro clic sobre el bot&oacuten &#34Todos los lugares&#34, con lo cual
+                el color de este bot&oacuten cambia a desactivado y nuevamente se despliegan los
+                nombres de las listas de precios.
+            </p><br>
 
-        <p>El segundo bot&oacuten es &#34Todas las fechas&#34, que al estar desactivado
-        muestra en la zona derecha los precios de todas las fechas. Si se requiere
-        consultar los precios a una fecha determinada se debe usar esta opci&oacuten.
-        Al hacer un clic en este bot&oacuten aparece un men&uacute:
-        </p>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen306.png')}"/><br><br>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen308.png')}"></img><br><br>
-        </div>
+            <p>El men&uacute que se despliega al hacer clic derecho sobre el lugar (lista de
+            precios) nosp ermite crear nuevas listas, eliminarlas o editar sus datos. Si
+            se selecciona eliminar, el sistema muestra un mensaje de confirmaci&oacuten
+            antes de proceder. S&oacutelo es posible eliminar listas de precios que no hayan
+            sido utilizadas en alguna obra. Si una lista de precios ya ha sido utilizada en
+            una obra, la opci&oacuten del men&uacute aparece desactivada.
+            </p>
 
-        <p>Al seleccionar una de las opciones aparece un espacio para ingresa la fecha.</p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen307.png')}"/> <br> <br>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen309.png')}"></img><br><br>
-        </div>
+            <p>El segundo bot&oacuten es &#34Todas las fechas&#34, que al estar desactivado
+            muestra en la zona derecha los precios de todas las fechas. Si se requiere
+            consultar los precios a una fecha determinada se debe usar esta opci&oacuten.
+            Al hacer un clic en este bot&oacuten aparece un men&uacute:
+            </p>
 
-        <p>Una vez que se haya ingresado la fecha se debe presionar el bot&oacuten
-        &#34Refrescar&#34 para volver a cargar los precios de acuerdo a la condici&oacuten
-        y a la fecha seleccionada.
-        </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen308.png')}"/><br><br>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen310.png')}"></img><br><br>
-        </div>
+            <p>Al seleccionar una de las opciones aparece un espacio para ingresa la fecha.</p>
 
-        <p>El siguiente bot&oacuten es &#34Reporte&#34 y sirve para obtener un reporte de
-        precios del sistema. Al hacer un clic sobre este bot&oacuten se muestra un
-        men&uacute donde se deben definir las condiciones para la generaci&oacuten del
-        reporte. Estas son:
-        </p>
-        <br><!--alinear-->
-        <ul class="izquierda">
-            <li>Columnas a imprimir adem&aacutes del c&oacutedigo y el nombre del &iacutetem
-                <ul>
-                    <li>Transporte</li>
-                    <li>Unidad</li>
-                    <li>Precio</li>
-                    <li>Fecha de actualizaci&oacuten</li>
-                </ul>
-            </li>
-            <li>Orden de impresi&oacuten
-                <ul>
-                    <li>Alfab&eacutetico: por nombre del &iacutetem</li>
-                    <li>Num&eacuterico: por c&oacutedigo del &iacutetem.</li>
-                </ul>
-            </li>
-            <li>Lugar y fecha de referencia
-                <ul>
-                    <li>Lugar o lista de precios</li>
-                    <li>Fecha a la cual se imprimen los precios m&aacutes recientes
-                    o vigentes.</li>
-                </ul>
-            </li>
-        </ul>
-        <br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen309.png')}"/><br><br>
 
-        <p>El siguiente bot&oacuten es &#34Reporte&#34 y sirve para obtener un reporte
-        de precios del sistema. Al hacer un clic sobre este bot&oacuten se muestra un
-        men&uacute donde se deben definir las condiciones para la generaci&oacuten del
-        reporte. Estas son:
-        </p><br>
-        <ul class="izquierda">
-            <li>Columnas a imprimir adem&aacutes del c&oacutedigo y el nombre del &iacutetem
-                <ul>
-                    <li>Transporte</li>
-                    <li>Unidad</li>
-                    <li>Precio</li>
-                    <li>Fecha de actualizaci&oacuten</li>
-                </ul>
-            </li>
-            <li>Orden de impresi&oacuten
-                <ul>
-                    <li>Alfab&eacutetico: por nombre del &iacutetem</li>
-                    <li>Num&eacuterico: por c&oacutedigo del &iacutetem.</li>
-                </ul>
-            </li>
-            <li>Lugar y fecha de referencia
-                <ul>
-                    <li>Lugar o lista de precios</li>
-                    <li>Fecha a la cual se imprimen los precios m&aacutes recientes o
-                    vigentes.</li>
-                </ul>
-            </li>
-        </ul>
+            <p>Una vez que se haya ingresado la fecha se debe presionar el bot&oacuten
+            &#34Refrescar&#34 para volver a cargar los precios de acuerdo a la condici&oacuten
+            y a la fecha seleccionada.
+            </p>
 
-        <div class="centrado">
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen310.png')}"/><br><br>
+
+            <p>El siguiente bot&oacuten es &#34Reporte&#34 y sirve para obtener un reporte de
+            precios del sistema. Al hacer un clic sobre este bot&oacuten se muestra un
+            men&uacute donde se deben definir las condiciones para la generaci&oacuten del
+            reporte. Estas son:
+            </p>
+            <br><!--alinear-->
+            <ul class="izquierda">
+                <li>Columnas a imprimir adem&aacutes del c&oacutedigo y el nombre del &iacutetem
+                    <ul>
+                        <li>Transporte</li>
+                        <li>Unidad</li>
+                        <li>Precio</li>
+                        <li>Fecha de actualizaci&oacuten</li>
+                    </ul>
+                </li>
+                <li>Orden de impresi&oacuten
+                    <ul>
+                        <li>Alfab&eacutetico: por nombre del &iacutetem</li>
+                        <li>Num&eacuterico: por c&oacutedigo del &iacutetem.</li>
+                    </ul>
+                </li>
+                <li>Lugar y fecha de referencia
+                    <ul>
+                        <li>Lugar o lista de precios</li>
+                        <li>Fecha a la cual se imprimen los precios m&aacutes recientes
+                        o vigentes.</li>
+                    </ul>
+                </li>
+            </ul>
+            <br>
+
+            <p>El siguiente bot&oacuten es &#34Reporte&#34 y sirve para obtener un reporte
+            de precios del sistema. Al hacer un clic sobre este bot&oacuten se muestra un
+            men&uacute donde se deben definir las condiciones para la generaci&oacuten del
+            reporte. Estas son:
+            </p><br>
+            <ul class="izquierda">
+                <li>Columnas a imprimir adem&aacutes del c&oacutedigo y el nombre del &iacutetem
+                    <ul>
+                        <li>Transporte</li>
+                        <li>Unidad</li>
+                        <li>Precio</li>
+                        <li>Fecha de actualizaci&oacuten</li>
+                    </ul>
+                </li>
+                <li>Orden de impresi&oacuten
+                    <ul>
+                        <li>Alfab&eacutetico: por nombre del &iacutetem</li>
+                        <li>Num&eacuterico: por c&oacutedigo del &iacutetem.</li>
+                    </ul>
+                </li>
+                <li>Lugar y fecha de referencia
+                    <ul>
+                        <li>Lugar o lista de precios</li>
+                        <li>Fecha a la cual se imprimen los precios m&aacutes recientes o
+                        vigentes.</li>
+                    </ul>
+                </li>
+            </ul>
+
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen311.png')}"> </img><br><br>
-        </div>
 
-        <p>En la ilustraci&oacuten aparecen seleccionadas las columnas Unidad y Precio,
-        el orden es alfab&eacutetico y se imprimir&aacute el reporte de la lista
-        Cayambe con prcios al 17 de enero de 2007.
-        </p>
+            <p>En la ilustraci&oacuten aparecen seleccionadas las columnas Unidad y Precio,
+            el orden es alfab&eacutetico y se imprimir&aacute el reporte de la lista
+            Cayambe con prcios al 17 de enero de 2007.
+            </p>
 
-        <p>Mientras se genera el reporte aparece la leyenda:</p>
+            <p>Mientras se genera el reporte aparece la leyenda:</p>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen312.png')}"></img><br><br>
-        </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen312.png')}"/><br><br>
 
-        <p>Una vez que se haya generado el reporte se debe hacer un clic en cerrar.
-        Al hacer un clic en cerrar el reporte se sigue generando y aparecer&aacute
-        una ventana de descarga cuando este est&eacute listo.
-        </p>
+            <p>Una vez que se haya generado el reporte se debe hacer un clic en cerrar.
+            Al hacer un clic en cerrar el reporte se sigue generando y aparecer&aacute
+            una ventana de descarga cuando este est&eacute listo.
+            </p>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen313.png')}"></img><br><br>
-        </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen313.png')}"/><br><br>
 
-        <p>Un ejemplo de reporte se muestra a continuaci&oacuten.</p>
+            <p>Un ejemplo de reporte se muestra a continuaci&oacuten.</p>
 
-        <div class="centrado">
             <br> <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen314.png')}"><br><br>
-            <br> <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen315.png')}"></img>
+            <br> <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen315.png')}"/>
+
+            <p>El bot&oacuten Items sirve para ir a la pantalla de registro de &Iacutetems.</p>
+
+            <p>El bot&oacuten Mantenimiento de precios nos lleva a una pantalla que ayuda
+            de una forma m&aacutes &aacutegil al mantenimiento de precios de una lista y
+            fecha espec&iacutefica.
+            </p>
+
+            <p>En esta pantalla se debe escoger el lugar o lista de precios, la fecha de
+            referencia, y  materiales, mano de obra, equipos o &#34Todos&#34 los &iacutetems,
+            y luego hacer un clic en &#34Consultar&#34.
+            </p>
+
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen316.png')}"/><br><br>
+
+            <p>En la ilustraci&oacuten aparecen desplegados las opciones de cada
+            secci&oacuten de esta pantalla. Una vez definidos los valores se debe presionar
+            en Consultar para que se muestren los precios vigentes a la fecha.
+            </p>
+
+            <p><br> Si se desea crear nuevos precios, seleccione la fecha a la cual se
+            desea crear nuevos precios, presione Consultar y edite los precios de los
+            &iacutetems deseados. Al presionar Guardar, se crean los nuevos precios
+            (s&oacutelo de los modificados) a la fecha que se seleccion&oacute. Para
+            verificar se debe visualizar la fecha que se actualiza una vez que se edita el
+            valor del precio de un &iacutetem y se le da un clic en el bot&oacuten Guardar.
+            </p>
+
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen317.png')}"/><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen318.png')}"/><br><br>
+
+            <p>
+                Pantalla para el registro de precios por Volumen
+            </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen319.png')}"/><br><br><br>
         </div>
-
-        <p>El bot&oacuten Items sirve para ir a la pantalla de registro de &Iacutetems.</p>
-
-        <p>El bot&oacuten Mantenimiento de precios nos lleva a una pantalla que ayuda
-        de una forma m&aacutes &aacutegil al mantenimiento de precios de una lista y
-        fecha espec&iacutefica.
-        </p>
-
-        <p>En esta pantalla se debe escoger el lugar o lista de precios, la fecha de
-        referencia, y  materiales, mano de obra, equipos o &#34Todos&#34 los &iacutetems,
-        y luego hacer un clic en &#34Consultar&#34.
-        </p>
-
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen316.png')}"></img><br><br>
-        </div>
-
-        <p>En la ilustraci&oacuten aparecen desplegados las opciones de cada
-        secci&oacuten de esta pantalla. Una vez definidos los valores se debe presionar
-        en Consultar para que se muestren los precios vigentes a la fecha.
-        </p>
-
-        <p><br> Si se desea crear nuevos precios, seleccione la fecha a la cual se
-        desea crear nuevos precios, presione Consultar y edite los precios de los
-        &iacutetems deseados. Al presionar Guardar, se crean los nuevos precios
-        (s&oacutelo de los modificados) a la fecha que se seleccion&oacute. Para
-        verificar se debe visualizar la fecha que se actualiza una vez que se edita el
-        valor del precio de un &iacutetem y se le da un clic en el bot&oacuten Guardar.
-        </p>
-
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen317.png')}"></img><br>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen318.png')}"></img><br><br>
-        </div>
-
-        <p>
-            Pantalla para el registro de precios por Volumen
-        </p>
-        <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen319.png')}"></img><br><br><br>
-    </div>
 
 
         <a id="AnPrecios"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br> <br>
-
 
         <div class="centrado"><!-- Analisis de Precios Unitarios Rubros-->
-            <h2>An&aacutelisis de precios unitarios: Rubros</h2> <br>
+            <h2 class="izquierda">An&aacutelisis de precios unitarios: Rubros</h2> <br>
 
             <p>La opci&oacuten del men&uacute APU &#8211&#62;  Rubros nos lleva la pantalla
             de an&aacutelisis de precios unitarios o administraci&oacuten de rubros.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen320.png')}"></img><br><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen320.png')}"/><br><br>
 
             <p>Desde esta pantalla se puede consultar la estructura de un rubro existente
             en el sistema, crear uno nuevo, borrar uno existente, modificar la
@@ -1205,91 +1097,72 @@
 
         <a id="BarraCom"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br> <br>
 
-
-        <div><!--Barra de Comandos-->
-            <h2>Barra de comandos</h2>
+        <div class="centrado"><!--Barra de Comandos-->
+            <h2 class="izquierda">Barra de comandos</h2>
             <br>
 
             <p>Los comandos disponibles en esta pantalla son los siguientes:</p>
-        </div>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen321.png')}"></img><br>
-        </div>
 
-        <p><strong>Lista:</strong> Muestra una ventana donde se pueden buscar rubros
-        ingresados al sistema.
-        </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen321.png')}"/><br>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen322.png')}"></img><br><br>
-        </div>
+            <p><strong>Lista:</strong> Muestra una ventana donde se pueden buscar rubros
+            ingresados al sistema.
+            </p>
 
-        <p>En esta pantalla se puede realizar b&uacutesquedas por c&oacutedigo o por el
-        nombre o descripci&oacuten del rubro. Las b&uacutesquedas pueden ser con
-        criterios como &#34Empieza con&#34, &#34Contiene&#34 o &#34es igual a&#34,
-        adem&aacutes se puede obtener el resultado de la b&uacutesqueda ordenado por
-        el c&oacutedigo o la descripci&oacuten en forma ascendente o descendente. Al
-        presionar el bot&oacuten Buscar se muestra el resultado dela b&uacutesqueda.
-        </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen322.png')}"/><br><br>
 
-        <p><br>La ilustraci&oacuten a continuaci&oacuten muestra el resultado de buscar
-        por descripci&oacuten, rubros que contiene la palabra &#34cemento&#34, ordenado
-        por c&oacutedigo en forma ascendente.
-        </p>
+            <p>En esta pantalla se puede realizar b&uacutesquedas por c&oacutedigo o por el
+            nombre o descripci&oacuten del rubro. Las b&uacutesquedas pueden ser con
+            criterios como &#34Empieza con&#34, &#34Contiene&#34 o &#34es igual a&#34,
+            adem&aacutes se puede obtener el resultado de la b&uacutesqueda ordenado por
+            el c&oacutedigo o la descripci&oacuten en forma ascendente o descendente. Al
+            presionar el bot&oacuten Buscar se muestra el resultado dela b&uacutesqueda.
+            </p>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen323.png')}"></img><br><br>
-        </div>
+            <p><br>La ilustraci&oacuten a continuaci&oacuten muestra el resultado de buscar
+            por descripci&oacuten, rubros que contiene la palabra &#34cemento&#34, ordenado
+            por c&oacutedigo en forma ascendente.
+            </p>
 
-        <p>El bot&oacuten Reporte de esta lista permite exportar esta lista a un archivo
-        pdf, esta lista genera el siguiente reporte.
-        </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen323.png')}"/><br><br>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen324.png')}"></img><br><br>
-        </div>
+            <p>El bot&oacuten Reporte de esta lista permite exportar esta lista a un archivo
+            pdf, esta lista genera el siguiente reporte.
+            </p>
 
-        <p>Para seleccionar un rubro se debe hacer un clic en el bot&oacuten
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen325.png')}"></img> junto al registro deseado.
-        </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen324.png')}"/><br><br>
 
-        <p>El sistema carga en la pantalla de rubros el registro seleccionado y lo
-        muestra en detalle organizando los &iacutetems en equipos, manos de obra y
-        materiales. Por ejemplo, al buscar y cargar un rubro con la palabra concreto se
-        tendr&iacutea:
-        </p>
+            <p>Para seleccionar un rubro se debe hacer un clic en el bot&oacuten
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen325.png')}"/> junto al registro deseado.
+            </p>
 
-        <div class="centrado">
-            <br> <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen326.png')}"></img><br><br>
-        </div>
+            <p>El sistema carga en la pantalla de rubros el registro seleccionado y lo
+            muestra en detalle organizando los &iacutetems en equipos, manos de obra y
+            materiales. Por ejemplo, al buscar y cargar un rubro con la palabra concreto se
+            tendr&iacutea:
+            </p>
 
-        <p>El rubro en detalle se muestra como:</p>
+            <br> <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen326.png')}"/><br><br>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen327.png')}"></img><br><br>
-        </div>
+            <p>El rubro en detalle se muestra como:</p>
 
-        <p><strong>Nuevo:</strong> El bot&oacuten nuevo limpia la pantalla y la prepara
-        para el registro de un nuevo rubro.
-        </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen327.png')}"/><br><br>
 
-        <div class="centrado">
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen328.png')}"></img><br><br>
-        </br>
+            <p><strong>Nuevo:</strong> El bot&oacuten nuevo limpia la pantalla y la prepara
+            para el registro de un nuevo rubro.
+            </p>
+
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen328.png')}"/><br><br>
+
             <p>En esta pantalla se deben llenar todos los campos de la secci&oacuten rubro
             antes de proceder a ingresar los &iacutetems de su composici&oacuten, los cuales
             pueden ser ingresados en cualquier orden. Para a&#241adir &iacutetems use la
             secci&oacuten:
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen329.png')}"></img><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen329.png')}"/><br><br>
 
             <p>
                 Al hacer un clic en el casillero de c&oacutedigo, vuelve a aparecer la
@@ -1300,12 +1173,10 @@
                 el sistema lo desecha autom&aacuteticamente.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen330.png')}"></img><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen330.png')}"/><br><br>
 
             <p>Para copiar la composici&oacuten se hace un clic en el &iacutecono
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '350.png')}"></img> y seguidamente confirmar la orden.
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '350.png')}"/> y seguidamente confirmar la orden.
             Los &iacutetems del rubro seleccionado se a&#241aden a los del rubro que se
             tiene en pantalla.
             </p>
@@ -1320,18 +1191,14 @@
             composici&oacuten del rubro.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '351.png')}"></img><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '351.png')}"/><br><br>
 
             <p><strong>Calcular:</strong> este bot&oacuten cambia el aspecto de la pantalla
             para mostrar los precios de los componentes del rubro incluyendo los costos
             indirectos.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '352.png')}"></img><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '352.png')}"/><br><br>
 
             <p>Por defecto se toman los valores de 0 km para las distancias y los valores
             de VOLQUETA 8 M3 para volquete y CHOFER LIC. TIPO E para chofer. Es por tanto
@@ -1339,15 +1206,11 @@
             transporte.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '353.png')}"></img><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '353.png')}"/><br><br>
 
             <p>El resultado final incluyendo valores de transporte es:</p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '354.png')}"></img><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '354.png')}"/><br><br>
 
             <p>Los precios que se despliegan son los correspondientes a la lista de precios
             seleccionada, a la fecha fijada en pantalla y al valor del porcentaje de costos
@@ -1359,9 +1222,7 @@
             sea utilizado en una obra.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '355.png')}"></img><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: '355.png')}"/><br><br>
 
             <p>Registrado: Sirve para registrar o desregistrar el rubro. Al presionar este
             bot&oacuten, aparecer&aacute un mensaje que confirme si desea registrar el Rubro.
@@ -1371,7 +1232,7 @@
             el mismo, a menos que se lo desregistre.  Al registrar el rubro, se asigna la
             fecha del registro, al lado derecho del mismo.
             </p>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen356.png')}"></img>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen356.png')}"/>
 
             <p><strong>Transporte:</strong> Sirve para ingresar las variables de transporte.
             Al presionarlo, aparecer&aacute una ventana donde se deben ingresar los valores del
@@ -1380,19 +1241,17 @@
             se lo puede ver solamente cuando se presiona el bot&oacuten de Impresi&oacuten del
             Rubro.
             </p>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen357.png')}"></img>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen357.png')}"/>
 
             <p>Imprimir: genera un reporte del rubro en formato dpf, con los par&aacutemetros
             seleccionados de lista de precios, fecha, costos indirectos y las variables
             de transporte ingresadas.
             </p>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen358.png')}"></img><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen358.png')}"/><br><br>
         </div>
+
         <a id="RegObras"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br> <br>
 
         <div class="centrado">
             <br>
@@ -1404,7 +1263,7 @@
             de obra, c&aacutelculo de presupuesto, f&oacutermula polin&oacutemica, procesos,
             contrataci&oacuten, garant&iacuteas, etc.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen359.png')}"></img><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen359.png')}"/><br>
             <a id="Lista"></a>
 
             <p>La parte superior de esta pantalla presenta un conjunto de comandos que
@@ -1432,7 +1291,7 @@
             </p>
 
 
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen360.png')}"></img>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen360.png')}"/>
 
             <p>Para cada criterio de b&uacutesqueda se pueden aplicar operaciones como
             contiene, empieza o igual. Estas operaciones se aplican al texto de los datos
@@ -1440,10 +1299,10 @@
             &#34Contiene&#34 y se ingresa un criterio como calles, se listar&aacuten toas
             las obras que contengan la palabra calles como nombre de la obra.
             </p>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen361.png')}"></img>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen361.png')}"/>
 
             <p>Para seleccionar una de las obras se debe hacer un clic en el bot&oacuten
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen362.png')}"></img> de la obra deseada.
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen362.png')}"/> de la obra deseada.
             </p>
 
             <p>El bot&oacuten reporte permite obtener un reporte en formato pdf que contiene
@@ -1457,10 +1316,6 @@
         <div class="centrado">
 
             <a id="Nuevo"></a>
-
-            <div class="regresa">
-                <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-            </div> <br> <br> <br>
             <a id="Grabar"></a>
 
             <h3 class="izquierda">Nuevo</h3>
@@ -1472,7 +1327,7 @@
             <h3 class="izquierda">Grabar</h3>
 
             <p>Guarda los cambios realizados en la pantalla de registro de obras.</p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen363.png')}"></img>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen363.png')}"/>
             <a id="Cancelar"></a><br><br><br>
 
             <p>Una vez que existe una obra en pantalla aparece la barra de botones de la parte
@@ -1494,14 +1349,14 @@
             <p>Luego de confirmar la orden y si la obra no posee informaci&oacuten asociada,
             elimina la obra en pantalla del sistema
             .</p>
-            <!-- Empieza rob  -->
+
             <a id="CambiarEstado"></a><br>
             <br>
 
             <h3 class="izquierda">Imprimir</h3>
 
             <p>Imprime los datos en pantalla.</p>
-            <!-- Empieza rob  -->
+
             <a id="CopiarObra"></a><br>
             <br>
 
@@ -1516,7 +1371,7 @@
             <h3 class="izquierda">Copiar Obra</h3>
 
             <p>Permite copiar la obra con un nuevo c&oacutedigo.</p><br>
-            <!-- Empieza rob  -->
+
 
             <br>
 
@@ -1529,10 +1384,6 @@
 
 
         <a id="RegDatObra"></a><br><br>
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br> <br>
 
 
         <div class="centrado">
@@ -1551,7 +1402,7 @@
                     bot&oacuten <strong>Cambiar de Estado,</strong> que se encuentra en
                     la parte superior derecha; se pedir&aacute confirmaci&oacuten antes de
                     cambiar el estado.</td>
-                    <td><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen364.png')}"></img>
+                    <td><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen364.png')}"/>
                     </td>
                 </tr>
             </table>
@@ -1606,10 +1457,6 @@
 
         <a id="BotonInferior"></a><br><br>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br> <br>
-
         <div class="centrado">
             <h2 class="izquierda">Registro de obras &#8211 Barra de botones inferior</h2>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'imagen370.png')}"><br><br><br>
@@ -1627,10 +1474,6 @@
 
 
         <a id="VolObra"></a><br><br>
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br> <br>
 
         <div class="centrado">
             <h2 class="izquierda">Vol&uacutemenes de Obra</h2><br>
@@ -1654,13 +1497,7 @@
             formato PDF el conjunto de rubros con el respectivo grupo y subgrupo al que
             pertenecen, as&iacute como tambi&eacuten el subpresupuesto del que forman parte.
             </p>
-        </div>
 
-
-
-
-        <!--JUANES-->
-        <div><!--50, 51, 52, 53, 54-->
             <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img201.png')}"/><br><br>
 
             <p>Cada l&iacutenea de los rubros que conforman el volumen de obra, posee
@@ -1690,10 +1527,7 @@
             el reporte saldr&aacute sin dichos valores.
             </p>
             <br>
-
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img205.png')}"/><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img205.png')}"/><br><br>
 
             <p>Si se dese reportar todos los an&aacutelisis de precios de la obra, se
             debe ingresar mediante el menu superior APU, y posteriormente usar el
@@ -1719,9 +1553,8 @@
             subpresupuesto de origen como uno de destino.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img207.png')}"> <br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img207.png')}"> <br>
+
             <br>
 
             <p>Si se desea copiar solo los rubros seleccionados, marcamos los mismos
@@ -1743,9 +1576,7 @@
             formato pdf del presupuesto de la obra, incluyendo todos sus rubros.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img208.png')}"/> <!--53--><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img208.png')}"/> <!--53--><br><br>
 
             <p><br>Para el registro de un nuevo rubro se debe empezar por seleccionar
             el subpresupuesto, para lo cual se puede ayudar presionando la primera
@@ -1755,9 +1586,7 @@
             para que se despliegue una ventana de b&uacutesqueda de rubros.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img209.png')}"/><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img209.png')}"/><br><br>
 
             <p>Desde esta pantalla se selecciona el rubro deseado y se retorna a la anterior
             presionando el bot&oacuten &quotvisto&quot junto al rubro en cuesti&oacuten.
@@ -1772,13 +1601,9 @@
 
         <a id="MatrizFormula"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br><br>
 
-
-        <div><!--Matriz de Formula Polinomica pg 54, 55, 56-->
-            <h2>Matriz de la F&oacutermula Polin&oacutemica</h2>
+        <div class="centrado"><!--Matriz de Formula Polinomica pg 54, 55, 56-->
+            <h2 class="izquierda">Matriz de la F&oacutermula Polin&oacutemica</h2>
             <br>
 
             <p>El bot&oacuten Matriz FP, nos lleva a ejecutar un proceso de c&aacutelculo
@@ -1804,9 +1629,7 @@
             confirmaci&oacuten de la orden:
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img211.png')}"/><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img211.png')}"/><br>
 
             <p><br>Si ya ha generado la matriz y desea conservar los valores en el caso de
             que no se hayan cambiado los vol&uacutemenes de obra ni actualizado precios,
@@ -1814,9 +1637,7 @@
             &quotSi&quot. Seguidamente aparecer&aacute:
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img212.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img212.png')}"/>
 
             <p><br>Si se desea hacer una matriz de un subpresupuesto espec&iacutefico,
             selecci&oacutenelo desde el combo, caso contrario, s&oacutelo verifique que la
@@ -1825,9 +1646,7 @@
             o sin el visto si no. Presione Generar para iniciar el proceso.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img213.png')}"/><br> <!--55-->
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img213.png')}"/><br> <!--55-->
 
             <p><br>Esta ventana se mantendr&aacute mientras se realizan los c&aacutelculos
             de la f&oacutermula polin&oacutemica y se despliega la matriz
@@ -1850,9 +1669,7 @@
             este halla organizado en forma primero vertical y luego horizontal.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img215.png')}"/><!--56-->
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img215.png')}"/><!--56-->
 
             <p><br><br>Un buscador para poder ubicar f&aacutecilmente las columnas
             de los distintos &iacutetems, para ello, escriba parte del nombre del
@@ -1861,9 +1678,7 @@
             el resultado de buscar la columna de transporte.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img216.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img216.png')}"/>
 
             <p><br>Finalmente, el bot&oacuten limpiar selecci&oacuten sirve para
             desmarcar las columnas que han sido resaltadas como resultado de la
@@ -1873,15 +1688,9 @@
 
         <a id="FormulaPoli"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br>
 
-
-        <div><!-- Formula polinomica pg 57, 58-->
-            <br><br>
-
-            <h2>F&oacutermula polin&oacutemica</h2>
+        <div class="centrado"><!-- Formula polinomica pg 57, 58-->
+            <h2 class="izquierda">F&oacutermula polin&oacutemica</h2>
 
             <p><br>Para acceder a los ajustes de la f&oacutermula polin&oacutemica
             use el bot&oacuten &quotCoeficientes F&oacutermula Polin&oacutemica&quot,
@@ -1910,14 +1719,10 @@
 
         <a id="TrabajoPoli"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br>
-
-        <div><!-- Trabajando en la composicion de la formula polinomica pg 58,59-->
+        <div class="centrado"><!-- Trabajando en la composicion de la formula polinomica pg 58,59-->
             <br><br>
 
-            <h2>Trabajando en la composici&oacuten de la f&oacutermula polin&oacutemica
+            <h2 class="izquierda">Trabajando en la composici&oacuten de la f&oacutermula polin&oacutemica
             </h2>
 
             <p><br>
@@ -1946,18 +1751,14 @@
             coeficiente y seleccione Editar.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img220.png')}"/> <!--59-->
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img220.png')}"/> <!--59-->
 
             <p><br>Al seleccionar editar aparecer&aacute la pantalla ilustrada a
             continuaci&oacuten en la cual se podr&aacute cambiar el material y ajustar
             el valor del coeficiente.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img221.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img221.png')}"/>
 
             <p><br>
                 Para quitar un material de un coeficiente se debe seguir el siguiente proceso:
@@ -1966,9 +1767,8 @@
                 <li>Confirme la orden dada.</li>
             </ol>
         </p>
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img222.png')}"/>
-            </div>
+
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img222.png')}"/>
 
             <p>Tan s&oacutelo el concepto de p01 no puede se ajustado, todos los valores de los
             coeficientes se pueden ajustar para que no haya descuadre en los decimales.
@@ -1982,43 +1782,33 @@
 
         <a id="RubrObra"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br>
-
 
         <div><!-- Rubros de la obra pg 60-->
-            <h2><br>Rubros de la obra</h2>
+            <h2 class="izquierda"><br>Rubros de la obra</h2>
 
             <p><br>Haciendo un clic en el bot&oacuten Rubros podemos imprimir el todos
             los rubros de la obra con o sin desglose de transporte.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img223.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img223.png')}"/>
 
             <p><br>De acuerdo como se desee, se generar&aacute un reporte en formato pdf con los
             an&aacutelisis de precios de todos los rubros que se hallan en la obra, en hojas
             separadas. El reporte es extenso y puede tomar unos pocos minutos su generaci&oacuten.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img224.png')}"/><br><br>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img224.png')}"/><br><br>
+
         </div>
 
 
         <a id="Cronograma"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br>
 
         <div><!--Cronograma pg 61, 62, 63, 64-->
             <br><br>
 
-            <h2>Cronograma</h2>
+            <h2 class="izquierda">Cronograma</h2>
 
             <p><br>El cronograma de la obra se lo puede trabajar en base a las cantidades de obra o
             en base a porcentajes de avance.
@@ -2030,9 +1820,7 @@
             asignado a la obra.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img225.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img225.png')}"/>
 
             <p>El bot&oacuten <img class="boton" src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img226.png')}"/> permite regresar
             a la pantalla de  registro de la obra.
@@ -2050,9 +1838,8 @@
             formulario para asignar un valor.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img228.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img228.png')}"/>
+
             <!--63-->
             <p><br>El &aacuterea de per&iacuteodos permite seleccionar un periodo, o un rango
             de periodos. Al seleccionar un rango se dividir&aacute lo asignado entre el
@@ -2066,18 +1853,14 @@
             la tabla del cronograma.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img229.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img229.png')}"/>
 
             <p><br>El bot&oacuten <img class="boton" src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img230.png')}"/> limpia los
             campos del rubro seleccionado, despu&eacutes de mostrar una pantalla de
             confirmaci&oacuten de la orden.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img231.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img231.png')}"/>
 
             <p><br>Esta modificaci&oacuten es solo visual, es decir, los datos existentes
             no se eliminan, s&oacutelo se limpian los casilleros. Los valores ser&aacuten
@@ -2092,9 +1875,8 @@
             notificaci&oacuten.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img233.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img233.png')}"/>
+
             <!--64-->
             <p><br>Al igual que la opci&oacuten anterior, esta modificaci&oacuten
             es solo visual, es decir, los datos existentes solo se reemplazar&aacuten
@@ -2107,9 +1889,7 @@
             en el bot&oacuten  &quotEliminar cronograma&quot y  confirmar la orden.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img234.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img234.png')}"/>
 
             <p><br>Esta modificaci&oacuten es inmediata, es decir, al dar clic en
             Aceptar se eliminar&aacuten los valores de la base de datos y no hay
@@ -2124,9 +1904,7 @@
             ver los gr&aacuteficos de avance econ&oacutemico y f&iacutesico de la obra.
             </p>
 
-            <div class="centrado">
-                <br><br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img237.png')}"/>
-            </div>
+            <br><br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img237.png')}"/>
 
             <p>El bot&oacuten <img class="boton" src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img238.png')}"/> permite
             regresar a la pantalla del cronograma.
@@ -2136,14 +1914,11 @@
 
         <a id="CompObra"></a>
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br><br>
 
         <div><!-- Composicion de la Obra pg 65, 66-->
             <br><br>
 
-            <h2>Composici&oacuten de la Obra</h2>
+            <h2 class="izquierda">Composici&oacuten de la Obra</h2>
             <br>
 
             <p>Los &iacutetems que componen la obra se muestra al hacer un clic en
@@ -2156,9 +1931,7 @@
             pdf o exportado a excel.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img239.png')}">
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img239.png')}">
 
             <p><br>Los comandos de esta pantalla son:</p>
 
@@ -2185,20 +1958,14 @@
             de los &iacutetems mostrados en pantalla.
             </p>
 
-            <div class="centrado">
-                <br><br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img240.png')}"/> <!--66-->
-            </div>
+            <br><br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img240.png')}"/> <!--66-->
+
         </div>
 
         <a id="DocObra"></a>
-        <br><br>
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br><br>
 
         <div><!-- Documentos de la Obra pg 66,-->
-            <h2>Documentos de la obra</h2>
+            <h2 class="izquierda">Documentos de la obra</h2>
 
             <p><br>Genera los documentos precontratuales t&eacutecnicos que sirven para
             establecer los elementos necesarios para la formulaci&oacuten del proceso
@@ -2213,10 +1980,8 @@
             Regresar, Imprimir y Presupuesto a Excel
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img241.png')}"/><br> <!--67-->
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img242.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img241.png')}"/><br> <!--67-->
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img242.png')}"/>
 
             <p><br>Regresar, retorna a la pantalla de registro de obra.</p>
 
@@ -2245,9 +2010,7 @@
             los dos tipos de reporte que se presentan.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img243.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img243.png')}"/>
 
             <p><br>Tipo de Obra, es un campo no editable que indica si la obra es de
             tipo Civil o Vial.
@@ -2259,9 +2022,7 @@
             y el set de firmas.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img244.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img244.png')}"/>
 
             <p><br><br><strong>Pie de P&aacutegina</strong></p>
             <br>
@@ -2271,9 +2032,7 @@
             pagina ya existente.
             </p>
 
-            <div class="centrado">
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img245.png')}"/>
-            </div>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img245.png')}"/>
 
             <p><br><strong>Firmas</strong></p>
             <br>
@@ -2285,9 +2044,7 @@
             seleccionadas del combo y agregadas con el bot&oacuten Adicionar.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img246.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img246.png')}"/>
 
             <p>El bot&oacuten rojo al lado de cada firma permite retirar de la lista la
             firma ha ser agregada al documento.</p>
@@ -2301,10 +2058,8 @@
             las cuales incluyen agregar el IVA y el reajuste del presupuesto.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img247.png')}"/>
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img248.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img247.png')}"/>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img248.png')}"/>
 
             <p><br><strong>MEMORANDO</strong></p>  <!--70-->
             <p><br>Consta de cuatro partes, las mismas que son: Tipo de Reporte,
@@ -2313,9 +2068,7 @@
 
             <p><br><br><strong>Tipo de Reporte</strong></p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img249.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img249.png')}"/>
 
             <p>Las dos opciones presentar&aacuten datos distintos en el documento impreso,
             adem&aacutes al seleccionar Presupuesto Referencial se bloquear&aacuten
@@ -2332,9 +2085,7 @@
             bot&oacuten para calcular dicho valor.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img250.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img250.png')}"/>
 
             <p><br><br><strong>Texto</strong></p>
             <br>
@@ -2347,9 +2098,7 @@
 
             <p>El segundo texto se colocar&aacute despues de los valores calculados.</p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img251.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img251.png')}"/>
 
             <p><br><br><strong>Firmas del Memorando</strong></p> <!--71-->
             <br>
@@ -2361,9 +2110,7 @@
             seleccionadas del combo y agregadas con el bot&oacuten Adicionar.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img252.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img252.png')}"/>
 
             <p>El bot&oacuten rojo al lado de cada firma permite retirar de la lista la
             firma ha ser agregada al documento.
@@ -2377,9 +2124,7 @@
 
             <p>Presenta un conjunto de datos provenientes del registro de la Obra.</p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img253.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img253.png')}"/>
 
             <p><br><strong>Nota</strong></p>
             <br>
@@ -2388,9 +2133,7 @@
             de los componentes.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img254.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img254.png')}"/>
 
             <p><br><br><strong>Firmas de la F&oacutermula polin&oacutemica</strong></p>
             <!--72-->
@@ -2403,9 +2146,7 @@
             seleccionadas del combo y agregadas con el bot&oacuten Adicionar.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img255.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img255.png')}"/>
 
             <p>El bot&oacuten rojo al lado de cada firma permite retirar de la lista la
             firma ha ser agregada al documento.
@@ -2427,9 +2168,7 @@
                 posteriormente al dar clic en Aceptar se guardar&aacuten los cambios.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img256.png')}"/>
-            </div>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img256.png')}"/>
 
             <p><br><br><strong>Pie de P&aacutegina</strong></p> <!--73-->
             <p>Este texto se colocar&aacute en la parte correspondiente a condiciones
@@ -2441,18 +2180,9 @@
             pueden guardar los cambios al hacer clic en el bot&oacuten Aceptar.
             </p>
 
-            <div class="centrado">
-                <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img257.png')}"/>
-            </div> <br><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesIngreso', file: 'img257.png')}"/>
+
         </div>
-        <br>
-
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br> <br><br>
-
-    </div>
 
     </body>
 </html>

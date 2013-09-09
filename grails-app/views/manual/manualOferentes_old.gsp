@@ -3,19 +3,11 @@
 
     <head>
 
-        %{--<meta name="layout" content="main">--}%
+        <meta name="layout" content="manuales"/>
 
 
         <title>Manual de Usuario - Oferentes</title>
         <style>
-        p {
-
-        }
-
-        * {
-            max-width : 1100px;
-            margin    : auto;
-        }
 
         div {
             margin : auto;
@@ -36,7 +28,7 @@
         }
 
         .sinsenal {
-            /*list-style-type : none;*/
+            list-style-type : none;
         }
 
         #indice {
@@ -103,7 +95,6 @@
     </head>
 
     <body>
-
         <div id="header2">
             <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'encabezado.png')}"/>
         </div>
@@ -127,7 +118,7 @@
             <br><a id="volverIndice"></a>
             <br><br>
 
-            <h3>TEDEIN S.A.  2012 - 2013</h3>
+            <h3>TEDEIN S.A. 2012 - 2013</h3>
             <br><br><br>
         </div>
 
@@ -135,11 +126,15 @@
             <br>
 
             <h2>
-                Índice de contenido
+                &Iacutendice de contenido
             </h2>
             <ol class="sinsenal">
-                <li><a href="#ModuloGanadores">M&oacutedulo de Oferentes Ganadores</a>
+                <li>
+                    <h4>M&oacutedulo de Oferentes Ganadores</h4>
                     <ul class="sinsenal">
+                        <li>
+                            <a href="#Introduccion">Introducción</a>
+                        </li>
                         <li>
                             <a href="#Registro de cuentas de Oferentes">Registro de cuentas de Oferentes</a>
                         </li>
@@ -161,7 +156,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#Obras">Obras</a>
+                    <a href="#Obras"><h4>Obras</h4></a>
                     <ul class="sinsenal">
                         <li>
                             <a href="#Lista">Lista</a>
@@ -203,8 +198,6 @@
         </div>
 
         <div class="centrado">
-            <br><br><br>
-
             <h2 class="izquierda">M&oacutedulo de Oferentes Ganadores</h2>
             <br>
 
@@ -215,8 +208,9 @@
             de usuario y contrase&ntildea durante el per&iacuteodo de recepci&oacuten de ofertas.
                 <a id="Registro de cuentas de Oferentes"></a>
             </p>
-            <br><br>
+        </div>
 
+        <div class="centrado">
             <h3 class="izquierda">
                 Registro de cuentas de Oferentes
             </h3>
@@ -349,11 +343,9 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen6.png')}"/>
             <br><br>
             <a id="Vinculaci&oacuten de la Obra a cada oferente"></a>
+        </div>
 
-            <div class="regresa">
-                <p><a href="#ModuloGanadores">M&oacutedulo de Oferentes Ganadores</a></p>
-            </div> <br><br><br>
-
+        <div>
             <h3 class="izquierda">
                 Vinculaci&oacuten de la Obra a cada oferente
             </h3>
@@ -395,12 +387,9 @@
                 <a id="M&oacutedulo de Oferentes"></a>
 
             </p>
+        </div>
 
-            <div class="regresa">
-                <p><a href="#ModuloGanadores">M&oacutedulo de Oferentes Ganadores</a></p>
-            </div> <br><br><br>
-
-
+        <div class="centrado">
             <h3 class="izquierda">
                 M&oacutedulo de Oferentes
             </h3>
@@ -447,11 +436,9 @@
 
             </p>
 
+        </div>
 
-            <div class="regresa">
-                <p><a href="#ModuloGanadores">M&oacutedulo de Oferentes Ganadores</a></p>
-            </div> <br><br><br>
-
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Registro de An&aacutelisis de Precios
@@ -496,10 +483,9 @@
                 <a id="Barra de comandos"></a>
             </p>
 
-            <div class="regresa">
-                <p><a href="#ModuloGanadores">M&oacutedulo de Oferentes Ganadores</a></p>
-            </div> <br><br><br>
+        </div>
 
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Barra de comandos
@@ -535,7 +521,9 @@
 
             <p>
                 Si ya ha registrado un rubro, puede seleccionarlo haciendo un clic
-                en el bot&oacuten   <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen25.png')}"/>que aparece a la izquierda de los datos del rubro.
+                en el bot&oacuten
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen25.png')}"/>que
+            aparece a la izquierda de los datos del rubro.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen19.png')}"/><br><br>
 
@@ -561,7 +549,8 @@
                 En esta pantalla se deben llenar todos los campos de la secci&oacuten
                 rubro antes de proceder a ingresar los &iacutetemes de su
                 composici&oacuten,
-                los cuales pueden ser ingresados en cualquier orden. Para a&ntildeadir un &iacutetem use la secci&oacuten:
+                los cuales pueden ser ingresados en cualquier orden. Para a&ntildeadir un &iacutetem use la
+                secci&oacuten:
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen22.png')}"/><br><br>
 
@@ -657,7 +646,7 @@
             </p>
 
             <p>
-                <strong>Borrar:</strong> Borra el Rubro y toda su composici&oacuten de insumos.  Para
+                <strong>Borrar:</strong> Borra el Rubro y toda su composici&oacuten de insumos. Para
             poder borrar es necesario que el Rubro no se encuentre registrado y que no sea
             utilizado en una obra.
             </p>
@@ -673,7 +662,7 @@
             <p>
                 <strong>Excel:</strong> genera un archivo en formato de hoja de c&aacutelculo con los datos del
             rubro que se
-            halla en pantalla. Una vez generado el  archivo aparecer&aacute un
+            halla en pantalla. Una vez generado el archivo aparecer&aacute un
             cuadro de di&aacutelogo que permite
             descargarlo.
             </p>
@@ -710,12 +699,6 @@
             <a id="Obras"></a>
         </div>
 
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div> <br>
-
-
         <div class="centrado">
             <br> <a id="Obras"></a>
 
@@ -745,10 +728,9 @@
                 <a id="Lista"></a>
             </p>
 
+        </div>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Lista
@@ -770,7 +752,7 @@
             <p>
                 Para cada criterio de b&uacutesqueda se pueden aplicar operaciones como contiene,
                 empieza o igual. Estas operaciones se aplican al texto de los datos de la obra,
-                as&iacute, si se selecciona  en &#34;Buscar por&#34; nombre, se aplica
+                as&iacute, si se selecciona en &#34;Buscar por&#34; nombre, se aplica
                 &#34;Contiene&#34; y se
                 ingresa un criterio como calles, se listar&aacuten toas las obras que contengan
                 la palabra calles como nombre de la obra.
@@ -780,7 +762,7 @@
             <p>
                 Para seleccionar una de las obras se debe hacer un clic en el bot&oacuten
                 <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen72.png')}"/>
-                de la   obra deseada.
+                de la obra deseada.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen36.png')}"/><br><br>
 
@@ -790,12 +772,9 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen37.png')}"/>
             <a id="Variables"></a>
 
-            <br><br>
+        </div>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
-
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Variables
@@ -814,10 +793,9 @@
 
             </p>
 
+        </div>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Vol&uacutemenes de Obra
@@ -865,11 +843,9 @@
 
             </p>
 
+        </div>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
-
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Matriz de la F&oacutermula Polin&oacutemica
@@ -975,10 +951,9 @@
                 <a id=" F&oacutermula polin&oacutemica"></a>
             </p>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
+        </div>
 
+        <div class="centrado">
 
             <h3 class="izquierda">
                 F&oacutermula polin&oacutemica
@@ -1014,10 +989,9 @@
                 <a id="Trabajando en la composici&oacuten de la f&oacutermula polin&oacutemica"></a>
             </p>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
+        </div>
 
+        <div class="centrado">
 
             <h3>
                 Trabajando en la composici&oacuten de la f&oacutermula polin&oacutemica
@@ -1108,9 +1082,9 @@
                 <a id="Rubros de la obra"></a>
             </p>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
+        </div>
+
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Rubros de la obra
@@ -1132,11 +1106,9 @@
             <a id="Cronograma"></a>
             <br>
 
+        </div>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
-
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Cronograma
@@ -1151,12 +1123,14 @@
                 Para acceder a la pantalla del cronograma en el bot&oacuten &#34Cronograma&#34.
                 Al abrirla por primera vez, se muestra la tabla vac&iacutea. Las columnas
                 &#34Mes #&#34 se
-                generan autom&aacuteticamente seg&uacuten el plazo  asignado a la obra.
+                generan autom&aacuteticamente seg&uacuten el plazo asignado a la obra.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen59.png')}"/><br><br>
 
             <p>
-                El bot&oacuten <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen73.png')}"/> permite regresar a la
+                El bot&oacuten
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen73.png')}"/> permite
+            regresar a la
             pantalla de
             registro de la obra.
             </p>
@@ -1192,9 +1166,11 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen62.png')}"/><br><br>
 
             <p>
-                El bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen74.png')}"/> limpia los campos del
-            rubro seleccionado,
-            despu&eacutes de mostrar una pantalla de confirmaci&oacuten de la orden.
+                El
+                bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen74.png')}"/>
+                limpia los campos del
+                rubro seleccionado,
+                despu&eacutes de mostrar una pantalla de confirmaci&oacuten de la orden.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen63.png')}"/><br><br>
 
@@ -1208,7 +1184,8 @@
             </p>
 
             <p>
-                El bot&oacuten <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen64.png')}"/>
+                El bot&oacuten
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen64.png')}"/>
                 limpia los campos de todos los rubros
                 de la tabla, despu&eacutes de mostrar una notificaci&oacuten.
             </p>
@@ -1224,7 +1201,7 @@
 
             <p>
                 Si se desea eliminar todos los datos del cronograma se debe hacer un
-                clic en el bot&oacuten  &#34Eliminar cronograma&#34 y  confirmar la orden.
+                clic en el bot&oacuten &#34Eliminar cronograma&#34 y confirmar la orden.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen66.png')}"/><br><br>
 
@@ -1235,26 +1212,31 @@
             </p>
 
             <p>
-                El bot&oacuten <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen67.png')}"/> exporta la tabla del
+                El bot&oacuten
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen67.png')}"/> exporta
+            la tabla del
             cronograma a
             una hoja Excel.
             </p>
 
             <p>
-                El bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen68.png')}"/>permite ver los gr&aacuteficos de
+                El
+                bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen68.png')}"/>permite
+            ver los gr&aacuteficos de
             avance econ&oacutemico y f&iacutesico de la obra.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen69.png')}"/><br><br>
 
             <p>
-                El bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen70.png')}"/> permite regresar a la pantalla del cronograma.
+                El
+                bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen70.png')}"/>
+                permite regresar a la pantalla del cronograma.
                 <a id="Composici&oacuten de la Obra"></a>
             </p>
 
-            <div class="regresa">
-                <p><a href="#Obras">Volver al Obras</a></p>
-            </div> <br><br>
+        </div>
 
+        <div class="centrado">
 
             <h3 class="izquierda">
                 Composici&oacuten de la Obra
@@ -1311,10 +1293,6 @@
             xls, de los &iacutetems mostrados en pantalla.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen71.png')}"/><br><br>
-
-            <div class="regresa">
-                <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-            </div> <br><br>
         </div>
 
     </body>
