@@ -117,11 +117,11 @@
                     </g:if>
                 </g:if>
 
-                <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' }">
-                    %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">--}%
-                        <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
-                        </button>
-                    %{--</g:if>--}%
+                <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR'}">
+                %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">--}%
+                    <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
+                    </button>
+                %{--</g:if>--}%
                 </g:if>
             </g:if>
 
@@ -422,24 +422,28 @@
                 <div class="span12" style="margin-top: 10px">
 
                     <div class="span2 formato" style="width: 230px;">Destino:
-                         <g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+                    <g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
                     </div>
+
                     <div class="span2 formato" style="width: 230px;">Dirección:
-                         <g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort:'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+                    <g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
                     </div>
+
                     <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio
-                         <g:textField name="oficioSalida" class="span2" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
+                    <g:textField name="oficioSalida" class="span2" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
                     </div>
+
                     <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
-                         <g:textField name="memoSalida" class="span2" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
+                    <g:textField name="memoSalida" class="span2" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
                     </div>
 
                     <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                         <g:textField name="formulaPolinomica" class="span2" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
+                    <g:textField name="formulaPolinomica" class="span2" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
                     </div>
+
                     <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha
-                       <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
-                                                       value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
+                    <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
+                                    value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
                     </div>
                 </div>
 
@@ -1233,12 +1237,12 @@
 
                                 },
                                 %{--"Ilustraciones"                    : function () {--}%
-                                    %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=i";--}%
-                                    %{--location.href = url;--}%
+                                %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=i";--}%
+                                %{--location.href = url;--}%
                                 %{--},--}%
                                 %{--"Especificaciones"                 : function () {--}%
-                                    %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=e";--}%
-                                    %{--location.href = url;--}%
+                                %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=e";--}%
+                                %{--location.href = url;--}%
                                 %{--},--}%
                                 "Ilustraciones y Especificaciones" : function () {
                                     var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
@@ -1550,19 +1554,56 @@
 
                 });
 
-                $(".btnFormula").click(function () {
-                    var url = $(this).attr("href");
+                function fp(url) {
                     $("#dlgLoad").dialog("open");
                     $.ajax({
+                        async   : false,
                         type    : "POST",
                         url     : url,
-                        success : function (msg) {
-                            if (msg == "ok" || msg == "OK") {
+                        success : function (msg2) {
+                            if (msg2 == "ok" || msg2 == "OK") {
                                 location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra?.id)}";
                             }
                         }
                     });
+                }
 
+                $(".btnFormula").click(function () {
+                    var url = $(this).attr("href");
+                    $.ajax({
+                        type    : "POST",
+                        async   : false,
+                        url     : "${createLink(action: 'existeFP')}",
+                        data    : {
+                            obra : "${obra?.id}"
+                        },
+                        success : function (msg) {
+                            if (msg == "true" || msg == true) {
+                                //ya hay la fp
+                                fp(url);
+                            } else {
+                                //no hay la fp
+                                $.box({
+                                    imageClass : "box_info",
+                                    text       : "Asegúrese de que ya ha ingresado todos los rubros para generar la fórumla polinómica.",
+                                    title      : "Confirmación",
+                                    iconClose  : false,
+                                    dialog     : {
+                                        resizable     : false,
+                                        draggable     : false,
+                                        closeOnEscape : false,
+                                        buttons       : {
+                                            "Continuar" : function () {
+                                                fp(url);
+                                            },
+                                            "Cancelar"  : function () {
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
                     return false;
                 });
 

@@ -218,7 +218,7 @@
                 var tabla = $('<table class="table table-bordered  table-condensed " id="tablaHeaders" style="width:140px;max-width: 140px;float: left">')
                 var ht = $("#ht").innerHeight()
                 $("#ht").css({"height" : ht})
-                tabla.append('<thead><tr style="height:'+ht+'px ;" ><th style="width: 20px;max-width: 20px;font-size: 12px !important">#</th><th style="width: 80px;;font-size: 12px !important" >Código</th></tr></thead>')
+                tabla.append('<thead><tr style="height:' + ht + 'px ;" ><th style="width: 20px;max-width: 20px;font-size: 12px !important">#</th><th style="width: 80px;;font-size: 12px !important" >Código</th></tr></thead>')
                 var body = $('<tbody id="body_headers">')
                 var cnt = 0;
                 $(".item_row").each(function () {
@@ -411,21 +411,74 @@
 
                 });
 
-                $(".btnFormula").click(function () {
-                    var url = $(this).attr("href");
+                function fp(url) {
                     $("#dlgLoad").dialog("open");
                     $.ajax({
+                        async   : false,
                         type    : "POST",
                         url     : url,
-                        success : function (msg) {
-                            if (msg == "ok" || msg == "OK") {
+                        success : function (msg2) {
+                            if (msg2 == "ok" || msg2 == "OK") {
                                 location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra)}";
                             }
                         }
                     });
+                }
 
+                $(".btnFormula").click(function () {
+                    var url = $(this).attr("href");
+                    $.ajax({
+                        type    : "POST",
+                        async   : false,
+                        url     : "${createLink(controller: 'obra', action: 'existeFP')}",
+                        data    : {
+                            obra : "${obra}"
+                        },
+                        success : function (msg) {
+                            if (msg == "true" || msg == true) {
+                                //ya hay la fp
+                                fp(url);
+                            } else {
+                                //no hay la fp
+                                $.box({
+                                    imageClass : "box_info",
+                                    text       : "Asegúrese de que ya ha ingresado todos los rubros para generar la fórumla polinómica.",
+                                    title      : "Confirmación",
+                                    iconClose  : false,
+                                    dialog     : {
+                                        resizable     : false,
+                                        draggable     : false,
+                                        closeOnEscape : false,
+                                        buttons       : {
+                                            "Continuar" : function () {
+                                                fp(url);
+                                            },
+                                            "Cancelar"  : function () {
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
                     return false;
                 });
+
+                %{--$(".btnFormula").click(function () {--}%
+                %{--var url = $(this).attr("href");--}%
+                %{--$("#dlgLoad").dialog("open");--}%
+                %{--$.ajax({--}%
+                %{--type    : "POST",--}%
+                %{--url     : url,--}%
+                %{--success : function (msg) {--}%
+                %{--if (msg == "ok" || msg == "OK") {--}%
+                %{--location.href = "${createLink(controller: 'formulaPolinomica', action: 'coeficientes', id:obra)}";--}%
+                %{--}--}%
+                %{--}--}%
+                %{--});--}%
+
+                %{--return false;--}%
+                %{--});--}%
 
             });
 
