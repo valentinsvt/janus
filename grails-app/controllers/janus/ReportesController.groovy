@@ -5329,7 +5329,7 @@ class ReportesController {
         def nmro
         def numero = 1;
 
-        def fila = 13;
+        def fila = 16;
 
         def ultimaFila
 
@@ -5347,22 +5347,24 @@ class ReportesController {
         label = new Label(2, 8, "FECHA: " + obra?.fechaCreacionObra.format("dd-MM-yyyy"), times16format);
         sheet.addCell(label);
 
-        label = new Label(2, 10, "FECHA ACT. PRECIOS: " + obra?.fechaPreciosRubros.format("dd-MM-yyyy"), times16format);
+        label = new Label(2, 9, "FECHA ACT. PRECIOS: " + obra?.fechaPreciosRubros.format("dd-MM-yyyy"), times16format);
         sheet.addCell(label);
 
-        label = new Label(2, 11, "NOMBRE: " + obra?.nombre, times16format); sheet.addCell(label);
-        label = new Label(2, 12, "DOC. REFERENCIA: " + obra?.nombre, times16format); sheet.addCell(label);
+        label = new Label(2, 10, "NOMBRE: " + obra?.nombre, times16format); sheet.addCell(label);
+        label = new Label(2, 11, "DOC. REFERENCIA: " + obra?.oficioIngreso + "  " + obra?.referencia, times16format); sheet.addCell(label);
+//        label = new Label(2, 12, "REFERENCIA: " + obra?.referencia, times16format); sheet.addCell(label);
+        label = new Label(2, 12, "MEMO CANT. DE OBRA: " + obra?.memoCantidadObra, times16format); sheet.addCell(label);
 
 
 
-        label = new Label(0, 12, "N°", times16format); sheet.addCell(label);
-        label = new Label(1, 12, "CÓDIGO", times16format); sheet.addCell(label);
-        label = new Label(2, 12, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
-        label = new Label(3, 12, "RUBRO", times16format); sheet.addCell(label);
-        label = new Label(4, 12, "UNIDAD", times16format); sheet.addCell(label);
-        label = new Label(5, 12, "CANTIDAD", times16format); sheet.addCell(label);
-        label = new Label(6, 12, "UNITARIO", times16format); sheet.addCell(label);
-        label = new Label(7, 12, "C.TOTAL", times16format); sheet.addCell(label);
+        label = new Label(0, 15, "N°", times16format); sheet.addCell(label);
+        label = new Label(1, 15, "CÓDIGO", times16format); sheet.addCell(label);
+        label = new Label(2, 15, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
+        label = new Label(3, 15, "RUBRO", times16format); sheet.addCell(label);
+        label = new Label(4, 15, "UNIDAD", times16format); sheet.addCell(label);
+        label = new Label(5, 15, "CANTIDAD", times16format); sheet.addCell(label);
+        label = new Label(6, 15, "UNITARIO", times16format); sheet.addCell(label);
+        label = new Label(7, 15, "C.TOTAL", times16format); sheet.addCell(label);
 
         valores.each {
 

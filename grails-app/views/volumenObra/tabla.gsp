@@ -65,7 +65,7 @@
         </th>
         <th class="col_precio" style="display: none;">Unitario</th>
         <th class="col_total" style="display: none;">C.Total</th>
-        <g:if test="${obra.estado!='R'}">
+        <g:if test="${obra.estado!='R' && obra?.departamento?.id == persona?.departamento?.id}">
             <th style="width: 40px" class="col_delete"></th>
         </g:if>
     </tr>
@@ -90,7 +90,7 @@
             <td class="col_total total" style="display: none;text-align: right">
                 <g:formatNumber number="${val.totl}" format="##,##0" minFractionDigits="2"  maxFractionDigits="2"  locale="ec"/>
             </td>
-            <g:if test="${obra.estado!='R'}">
+            <g:if test="${obra.estado!='R' && obra?.departamento?.id == persona?.departamento?.id}">
                 <td style="width: 40px;text-align: center" class="col_delete">
 
                     <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar"
@@ -309,41 +309,7 @@
         });
     });
 
-    %{--$("#ver_todos").click(function(){--}%
-    %{--$("#calcular").removeClass("active")--}%
-    %{--$("#divTotal").html("")--}%
-    %{--if ($(this).hasClass("active")) {--}%
-    %{--$(this).removeClass("active")--}%
 
-    %{--var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val()+"&ord=" + 1--}%
-    %{--var interval = loading("detalle")--}%
-    %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
-    %{--data     : datos,--}%
-    %{--success  : function (msg) {--}%
-    %{--clearInterval(interval)--}%
-    %{--$("#detalle").html(msg)--}%
-    %{--}--}%
-    %{--});--}%
-
-    %{--}else{--}%
-    %{--$(this).addClass("active")--}%
-    %{--//--}%
-    %{--//            //console.log("--->>>" + $(this).addClass("active"))--}%
-
-
-    %{--var datos = "obra=${obra.id}"+"&ord=" + 1--}%
-    %{--var interval = loading("detalle")--}%
-    %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
-    %{--data     : datos,--}%
-    %{--success  : function (msg) {--}%
-    %{--clearInterval(interval)--}%
-    %{--$("#detalle").html(msg)--}%
-    %{--}--}%
-    %{--});--}%
-    %{--}--}%
-    %{--return false--}%
-
-    %{--}) ;--}%
     var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + $(".item_row").attr("id") + "Wobra=${obra.id}"
 
 
@@ -394,29 +360,10 @@
 
     $("#ordenarAsc").click(function () {
 
-//     $("#ver_todos").removeClass("active")
+
         $("#divTotal").html("")
         $("#calcular").removeClass("active")
 
-
-        %{--if($("#ver_todos").hasClass("active")){--}%
-
-        %{--var orden = 1;--}%
-
-        %{--var datos = "obra=${obra.id}&ord=" + orden--}%
-
-
-        %{--var interval = loading("detalle")--}%
-        %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
-        %{--data     : datos,--}%
-        %{--success  : function (msg) {--}%
-        %{--clearInterval(interval)--}%
-        %{--$("#detalle").html(msg)--}%
-        %{--}--}%
-        %{--});--}%
-
-
-        %{--}else{--}%
 
         var orden = 1;
 
@@ -440,30 +387,8 @@
 
     $("#ordenarDesc").click(function () {
 
-//     $("#ver_todos").removeClass("active")
         $("#divTotal").html("")
         $("#calcular").removeClass("active")
-
-
-        %{--if($("#ver_todos").hasClass("active")){--}%
-
-        %{--var orden = 2;--}%
-
-        %{--var datos = "obra=${obra.id}&ord=" + orden--}%
-
-
-        %{--var interval = loading("detalle")--}%
-        %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
-        %{--data     : datos,--}%
-        %{--success  : function (msg) {--}%
-        %{--clearInterval(interval)--}%
-        %{--$("#detalle").html(msg)--}%
-        %{--}--}%
-        %{--});--}%
-
-
-        %{--}else{--}%
-
 
         var orden = 2;
 
@@ -479,87 +404,7 @@
             }
         });
 
-
-
-
-
-
-
-
-//     }
-
-
-        %{--var orden = 2;--}%
-
-        %{--var datos = "obra=${obra.id}&sub="+$("#subPres_desc").val() + "&ord=" + orden--}%
-
-
-        %{--var interval = loading("detalle")--}%
-        %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'tabla')}",--}%
-        %{--data     : datos,--}%
-        %{--success  : function (msg) {--}%
-        %{--clearInterval(interval)--}%
-        %{--$("#detalle").html(msg)--}%
-        %{--}--}%
-        %{--});--}%
-
     });
-
-
-    %{--$("#desgloseDialog").dialog({--}%
-
-    %{--autoOpen  : false,--}%
-    %{--resizable : false,--}%
-    %{--modal     : true,--}%
-    %{--draggable : false,--}%
-    %{--width     : 350,--}%
-    %{--height    : 150,--}%
-    %{--position  : 'center',--}%
-    %{--title     : 'Imprimir con desglose de transporte',--}%
-    %{--buttons   : {--}%
-    %{--"Si" : function () {--}%
-
-
-    %{--var dsps=${obra.distanciaPeso}--}%
-    %{--var dsvs=${obra.distanciaVolumen}--}%
-    %{--var volqueta=${precioVol}--}%
-    %{--var chofer=${precioChof}--}%
-    %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
-
-    %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos--}%
-    %{--location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url--}%
-
-
-
-    %{--$("#desgloseDialog").dialog("close");--}%
-
-    %{--},--}%
-    %{--"No" : function () {--}%
-
-
-
-    %{--var dsps=${obra.distanciaPeso}--}%
-    %{--var dsvs=${obra.distanciaVolumen}--}%
-    %{--var volqueta=${precioVol}--}%
-    %{--var chofer=${precioChof}--}%
-    %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"--}%
-
-    %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObra')}"+datos--}%
-    %{--location.href="${g.createLink(controller: 'pdf',action: 'pdfLink')}?url="+url--}%
-
-
-
-
-    %{--$("#desgloseDialog").dialog("close");--}%
-
-    %{--}--}%
-    %{--}--}%
-
-
-    %{--});--}%
-
-    %{--console.log("estado: " + '${estado}')--}%
-
 
     $("#borrarDialog").dialog({
 
@@ -601,9 +446,5 @@
         }
 
     });
-
-
-
-
 
 </script>

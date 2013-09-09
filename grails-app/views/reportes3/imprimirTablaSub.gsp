@@ -186,7 +186,7 @@
                 </div>
                 <div class="row-fluid">
                     <div class="span6" style="margin-right: 195px !important;">
-                        <b>Doc. Referencia:</b> ${obra?.oficioIngreso}
+                        <b>Doc. Referencia:</b> ${obra?.oficioIngreso} ${obra?.referencia}
                     </div>
                 </div>
 

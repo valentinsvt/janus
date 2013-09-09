@@ -248,7 +248,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         def indirecto = obra.totales/100
 
 
-        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado,msg:params.msg]
+        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado,msg:params.msg, persona: persona]
 
     }
 

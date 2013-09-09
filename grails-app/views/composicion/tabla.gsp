@@ -29,6 +29,7 @@
                 <i class="icon-arrow-left"></i>
                 Regresar
             </a>
+           <button class="btn" id="btn-comp" title="Regresar a composición"><i class="icon-arrow-left"></i>Composición</button>
         </div>
 
         <div class="btn-group">
@@ -277,6 +278,13 @@
             $("#modal-rubro").modal("show");
             $("#buscarDialog").unbind("click")
             $("#buscarDialog").bind("click", enviar)
+
+        });
+
+
+        $("#btn-comp").click( function () {
+
+          location.href="${createLink(controller: 'variables', action: 'composicion', id: obra?.id)}"
 
         });
 

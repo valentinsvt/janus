@@ -1284,10 +1284,14 @@
                             obra : "${obra?.id}"
                         },
                         success : function (msg) {
-                            var btnCancel = $('<a href="#" data-dismiss="modal" class="btn" >Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
-                            btnSave.click(function () {
+
+
+                           var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                           var btnCancel = $('<a href="#" data-dismiss="modal" class="btn" >Cancelar</a>');
+
+                                   btnSave.click(function () {
 
 //                                var active = $("#tabs").tabs("option", "active");
                                 if ($("#frmSave-var").valid()) {
@@ -1316,9 +1320,17 @@
                             $("#modal_title_var").html("Variables");
                             $("#modal_body_var").html(msg);
                             $("#modal_footer_var").html("").append(btnCancel);
-                            <g:if test="${obra?.estado!='R'}">
+                            %{--<g:if test="${obra?.estado!='R'}">--}%
+                            %{--$("#modal_footer_var").html("").append(btnSave);--}%
+                            %{--</g:if>--}%
+                            <g:if test="${obra?.departamento?.id == persona?.departamento?.id && obra?.estado != 'R'}">
                             $("#modal_footer_var").html("").append(btnSave);
+
                             </g:if>
+                            <g:else>
+                            $("#modal_footer_var").html("").append(btnCancel);
+                            </g:else>
+
                             $("#modal-var").modal("show");
                         }
                     });
