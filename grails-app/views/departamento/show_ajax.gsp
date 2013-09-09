@@ -58,5 +58,22 @@
         </div>
     </g:if>
     
+    <g:if test="${departamentoInstance?.codigo}">
+        <div class="control-group">
+            <div>
+                <span id="codigo-label" class="control-label label label-inverse">
+                    Codigo
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="codigo-label">
+                    <g:fieldValue bean="${departamentoInstance}" field="codigo"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
     </form>
 </div>

@@ -421,30 +421,26 @@
 
                 <div class="span12" style="margin-top: 10px">
 
-                    <div class="span2 formato" style="width: 60px;">Destino:</div>
+                    <div class="span2 formato" style="width: 230px;">Destino:
+                         <g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+                    </div>
+                    <div class="span2 formato" style="width: 230px;">Dirección:
+                         <g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort:'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+                    </div>
+                    <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio
+                         <g:textField name="oficioSalida" class="span2" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
+                    </div>
+                    <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
+                         <g:textField name="memoSalida" class="span2" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
+                    </div>
 
-                    <div class="span2" style="margin-right: 20px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/></div>
-
-                    <div class="span2 formato" style="width: 70px;">Dirección:</div>
-
-                    <div class="span2" style="margin-right: 25px; margin-left: 0px; width: 220px;"><g:select style="width: 220px;" name="direccionDestino.id" from="${janus.Direccion.list([sort:'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/></div>
-
-                    <div class="span1 formato" style="margin-left: 0px; width: 50px;">Oficio</div>
-
-                    <div class="span2" style="margin-left: -10px; width: 120px;"><g:textField name="oficioSalida" class="span2" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 110px;"/></div>
-
-                    <div class="span1 formato">Memorando</div>
-
-                    <div class="span2" style="margin-left: 10px; width: 120px;margin-right: 50px;"><g:textField name="memoSalida" class="span2" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/></div>
-
-                    <div class="span1 formato" style="margin-left: 30px; width: 70px;">Fórmula P.</div>
-
-                    <div class="span2" style="width: 120px; margin-left: 10px"><g:textField name="formulaPolinomica" class="span2" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/></div>
-
-                    <div class="span1 formato" style="margin-left: 30px; width: 50px;">Fecha</div>
-
-                    <div class="span1"><elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
-                                                       value="${obra?.fechaOficioSalida}" style="width: 100px; margin-left: -20px;"/></div>
+                    <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
+                         <g:textField name="formulaPolinomica" class="span2" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
+                    </div>
+                    <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha
+                       <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
+                                                       value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
+                    </div>
                 </div>
 
                 <div class="span12" style="margin-top: 10px">

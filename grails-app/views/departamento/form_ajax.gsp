@@ -13,7 +13,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class=" required" value="${departamentoInstance?.descripcion}" style="width: 300px;"/>
+                <g:textField name="descripcion" maxlength="63" class=" required" value="${departamentoInstance?.descripcion}"
+                style="width: 300px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -27,7 +28,8 @@
             </div>
 
             <div class="controls">
-                <g:select id="direccion" name="direccion.id" from="${janus.Direccion.list()}" optionKey="id" class="many-to-one  required" value="${departamentoInstance?.direccion?.id}" style="width: 300px;"/>
+                <g:select id="direccion" name="direccion.id" from="${janus.Direccion.list()}" optionKey="id" class="many-to-one  required" value="${departamentoInstance?.direccion?.id}"
+                          style="width: 300px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -43,6 +45,20 @@
             <div class="controls">
                 <g:textField name="permisos" maxlength="124" class="" value="${departamentoInstance?.permisos}"/>
                 
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Código
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="codigo" maxlength="4" class=" required" value="${departamentoInstance?.codigo}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

@@ -12,7 +12,6 @@ class DepartamentoController extends janus.seguridad.Shield {
 
     def list() {
         def lista = Departamento.findAll("from Departamento order by direccion desc, descripcion")
-//        [departamentoInstanceList: Departamento.list([sort:'direccion, descripcion']), params: params]
         [departamentoInstanceList: lista, params: params]
     } //list
 
