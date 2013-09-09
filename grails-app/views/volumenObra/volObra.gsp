@@ -91,6 +91,7 @@
             <div class="span3" style="width: 320px; margin-top: -8px;">
                 <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion"
                                              style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>
+            %{--**${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}--}%
             </div>
         </div>
 
@@ -100,10 +101,7 @@
                 <span id="sp">
                     %{--<g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
 
-
-
                     <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 250px;font-size: 10px" id="subPres"/>   </span>
-
 
                     %{--todo descomentar esto--}%
                     %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
