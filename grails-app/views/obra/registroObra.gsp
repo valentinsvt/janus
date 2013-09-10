@@ -1191,7 +1191,7 @@
         $("#btn-buscar").click(function () {
             $("#dlgLoad").dialog("close");
             $("#busqueda").dialog("open");
-            $(".ui-dialog-titlebar-close").html("X")
+            $(".ui-dialog-titlebar-close").html("x")
             return false;
 //
         });
