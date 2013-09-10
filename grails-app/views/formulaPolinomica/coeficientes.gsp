@@ -107,7 +107,7 @@
 
         <div class="btn-toolbar" style="margin-top: 15px;">
             <div class="btn-group">
-                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn " title="Regresar a la obra">
+                <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" id="btnRegresar" class="btn " title="Regresar a la obra">
                     <i class="icon-arrow-left"></i>
                     Regresar
                 </a>
@@ -501,7 +501,21 @@
 
                                 </g:if>
                                 <g:else>
-                                alert("No puede modificar los coeficientes de una obra ya registrada")
+                                $.box({
+                                    imageClass : "box_info",
+                                    text       : "No puede modificar los coeficientes de una obra ya registrada",
+                                    title      : "Alerta",
+                                    iconClose  : false,
+                                    dialog     : {
+                                        resizable     : false,
+                                        draggable     : false,
+                                        closeOnEscape : false,
+                                        buttons       : {
+                                            "Aceptar" : function () {
+                                            }
+                                        }
+                                    }
+                                });
                                 </g:else>
 
                             }
@@ -532,6 +546,39 @@
             }
 
             $(function () {
+
+                $("#btnRegresar").click(function () {
+                    var url = $(this).attr("href");
+                    var total = parseFloat($("#spanTotal").data("valor"));
+                    var tipo = "${tipo}";
+                    if (total == 1) {
+                        return true;
+                    }
+                    var msg = "La fórmula polinómica no suma 1. ¿Está seguro de querer salir de esta página?";
+                    if (tipo == "c") {
+                        msg = "La cuadrilla tipo no suma 1. ¿Está seguro de querer salir de esta página?";
+                    }
+                    $.box({
+                        imageClass : "box_info",
+                        text       : msg,
+                        title      : "Confirme",
+                        iconClose  : false,
+                        dialog     : {
+                            resizable     : false,
+                            draggable     : false,
+                            closeOnEscape : false,
+                            buttons       : {
+                                "Salir"                  : function () {
+                                    location.href = url;
+                                },
+                                "Continuar en la página" : function () {
+                                    return false;
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                });
 
                 $("#btnRemoveSelection").click(function () {
                     if (!$(this).hasClass("disabled")) {
@@ -769,7 +816,8 @@
                             }
                         });
 
-            });
+            })
+            ;
         </script>
 
     </body>

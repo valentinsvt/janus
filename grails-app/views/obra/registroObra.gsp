@@ -1606,7 +1606,7 @@
                         //no hay la fp
                         $.box({
                             imageClass : "box_info",
-                            text       : "Asegúrese de que ya ha ingresado todos los rubros para generar la fórumla polinómica.",
+                            text       : "Asegúrese de que ya ha ingresado todos los rubros para generar la fórmula polinómica.",
                             title      : "Confirmación",
                             iconClose  : false,
                             dialog     : {
