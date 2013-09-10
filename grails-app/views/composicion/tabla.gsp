@@ -395,7 +395,9 @@
             var data="data="
             $(".changed").each(function(){
 //                console.log($(this))
-                data+=$(this).attr("iden")+"I"+$(this).html()+"X"
+                var val= $(this).html()
+                val=val.replace(",", "")
+                data+=$(this).attr("iden")+"I"+val+"X"
             });
 //            console.log(data)
             $.ajax({
