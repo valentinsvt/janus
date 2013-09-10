@@ -2210,7 +2210,7 @@ class Reportes4Controller {
 
     def tablaContratos () {
 
-        println(params)
+//        println(params)
 
         def sql
         def res
@@ -2294,17 +2294,37 @@ class Reportes4Controller {
                 filtroBuscador = " where z.tppzdscr ILIKE ('%${params.criterio}%') "
                 break;
             case "inic":
-//                def dia = formatDate(date: params.fecha, format: "MM/dd/yyyy")
-                def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
-                def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
-                //                filtroBuscador = " where b.prinfcin= ('${params.fecha}') "
-                filtroBuscador = " where b.prinfcin= ('${dia}') "
+
+                if(params.fecha){
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where b.prinfcin= '${dia}' "
+                }
+
                 break;
             case "fin":
-//                filtroBuscador = " where b.prinfcfn= ('${params.fecha}') "
+                if(params.fecha){
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where b.prinfcfn= '${dia}' "
+                }
+
                 break;
             case "fcsb":
-//                filtroBuscador = " where c.cntrfcsb= ('${params.fecha}') "
+
+                if(params.fecha){
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where c.cntrfcsb= '${dia}' "
+                }
+
+
                 break;
 
         }
@@ -2318,8 +2338,9 @@ class Reportes4Controller {
 
         res = cn.rows(sql.toString())
 
-
+//
 //        println(sql)
+//        println(res)
 
         return [res: res, params:params]
 
@@ -2493,9 +2514,39 @@ class Reportes4Controller {
                 filtroBuscador = " where z.tppzdscr ILIKE ('%${params.criterio}%') "
                 break;
             case "inic":
-            case "fin":
-            case "fcsb":
+
+                if(params.fecha){
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where b.prinfcin= '${dia}' "
+                }
+
                 break;
+            case "fin":
+                if(params.fecha){
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where b.prinfcfn= '${dia}' "
+                }
+
+                break;
+            case "fcsb":
+
+                if(params.fecha){
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where c.cntrfcsb= '${dia}' "
+                }
+
+
+                break;
+
 
         }
 
@@ -2828,7 +2879,33 @@ class Reportes4Controller {
                 }
                 break;
             case "fcin":
+
+                if(params.fecha){
+
+//                    println("---->>>>****" + params.fecha)
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+//                    println("---->>>>" + params.fecha)
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where g.grntfcin = '${dia}' "
+                }
+
+                break;
+
             case "fcfn":
+
+                if(params.fecha){
+
+//                    println("---->>>>****" + params.fecha)
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+//                    println("---->>>>" + params.fecha)
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where g.grntfcfn= '${dia}' "
+                }
+
                 break;
 
         }
@@ -3005,7 +3082,33 @@ class Reportes4Controller {
                 filtroBuscador = " where m.mndacdgo ILIKE ('%${params.criterio}%') "
                 break;
             case "fcin":
+
+                if(params.fecha){
+
+//                    println("---->>>>****" + params.fecha)
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+//                    println("---->>>>" + params.fecha)
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where g.grntfcin = '${dia}' "
+                }
+
+                break;
+
             case "fcfn":
+
+                if(params.fecha){
+
+//                    println("---->>>>****" + params.fecha)
+
+                    def fecha =new Date().parse("dd-MM-yyyy", params.fecha)
+                    params.fecha = fecha
+//                    println("---->>>>" + params.fecha)
+                    def dia = formatDate(date: fecha, format: "yyyy-MM-dd")
+                    filtroBuscador = " where g.grntfcfn= '${dia}' "
+                }
+
                 break;
 
         }

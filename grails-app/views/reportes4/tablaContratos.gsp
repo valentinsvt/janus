@@ -25,10 +25,21 @@
         'tppz':'Tipo Plazo', 'inic':'Fecha Inicio', 'fin':'Fecha Fin']}" value="${params.buscador}"
                   optionKey="key" optionValue="value" id="buscador_tra" style="width: 150px"/>
         <b>Fecha: </b>
-        <elm:datepicker name="fecha" id="fecha_tra" disabled="true"/>
-        <b>Criterio: </b>
-        <g:textField name="criterio" id="criterio_tra" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
 
+
+        <g:set var="fechas" value="${['fcsb','inic','fin']}" />
+<g:if test="${fechas.contains(params.buscador)}">
+        <elm:datepicker name="fecha" id="fecha_tra" value="${params.fecha}"/>
+        <b>Criterio: </b>
+        <g:textField name="criterio" id="criterio_tra" readonly="readonly" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+</g:if>
+<g:else>
+
+    <elm:datepicker name="fecha" id="fecha_tra" disabled="disabled" value="${params.fecha}"/>
+    <b>Criterio: </b>
+    <g:textField name="criterio" id="criterio_tra" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+
+</g:else>
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
@@ -112,7 +123,8 @@
 
             <tbody id="tabla_material">
 
-            <g:if test="${params.criterio}">
+
+            <g:if test="${params.criterio || params.fecha}">
 
             <g:each in="${res}" var="cont" status="j">
                 <tr class="obra_row" id="${cont.id}">
@@ -195,10 +207,13 @@
 
            $("#fecha_tra").removeAttr("disabled")
 
+           $("#criterio_tra").attr("readonly", "true").val("")
        }
         else {
 
            $("#fecha_tra").attr("disabled", true).val("")
+           $("#criterio_tra").removeAttr("readonly")
+
        }
 
 

@@ -27,21 +27,30 @@
                 'dias':'Días']}" value="${params.buscador}"
                   optionKey="key" optionValue="value" id="buscador_gar" style="width: 150px"/>
         <b>Fecha: </b>
-        <elm:datepicker name="fecha" id="fecha_gar" disabled="true"/>
-        <b>Criterio: </b>
-        <g:textField name="criterio" id="criterio_gar" style="width: 250px; margin-right: 10px" value="${params.criterio}" readonly="false"/>
+        <g:set var="fechas" value="${['fcin','fcfn']}" />
+
+        <g:if test="${fechas.contains(params.buscador)}">
+            <elm:datepicker name="fecha" id="fecha_gar"  value="${params.fecha}"/>
+            <b>Criterio: </b>
+            <g:textField name="criterio" id="criterio_gar" readonly="readonly" style="width: 250px; margin-right: 10px" value="${params.criterio}" />
+        </g:if>
+        <g:else>
+            <elm:datepicker name="fecha" id="fecha_gar" disabled="disabled"  value="${params.fecha}"/>
+            <b>Criterio: </b>
+            <g:textField name="criterio" id="criterio_gar" style="width: 250px; margin-right: 10px" value="${params.criterio}" />
+        </g:else>
 
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
         </a>
         %{--<a href="#" class="btn  " id="imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
+        %{--<i class="icon-print"></i>--}%
+        %{--Imprimir--}%
         %{--</a>--}%
         %{--<a href="#" class="btn" id="regresar">--}%
-            %{--<i class="icon-arrow-left"></i>--}%
-            %{--Regresar--}%
+        %{--<i class="icon-arrow-left"></i>--}%
+        %{--Regresar--}%
         %{--</a>--}%
     </div>
 
@@ -56,43 +65,43 @@
             <tr>
 
                 <th style="width: 100px;">
-                   N° Contrato
+                    N° Contrato
                 </th>
                 <th style="width: 60px;">
-                   N° Garantía
+                    N° Garantía
                 </th>
                 <th style="width: 60px">
-                   Renovación
+                    Renovación
                 </th>
                 <th style="width: 300px">
-                   Tipo de Garantía
+                    Tipo de Garantía
                 </th>
                 <th style="width: 180px">
-                   Documento
+                    Documento
                 </th>
                 <th style="width: 280px">
-                   Aseguradora
+                    Aseguradora
                 </th>
                 <th style="width: 350px">
-                   Contratista
+                    Contratista
                 </th>
                 <th style="width: 80px">
-                   Estado
+                    Estado
                 </th>
                 <th style="width: 250px">
-                   Monto
+                    Monto
                 </th>
                 <th style="width: 100px">
-                   Moneda
+                    Moneda
                 </th>
                 <th style="width: 150px">
-                   Emisión
+                    Emisión
                 </th>
                 <th style="width: 150px">
-                   Vencimiento
+                    Vencimiento
                 </th>
                 <th style="width: 100px">
-                   Días
+                    Días
                 </th>
             </tr>
             </thead>
@@ -100,25 +109,25 @@
 
             <tbody id="tabla_material">
 
-            <g:if test="${params.criterio}">
+            <g:if test="${params.criterio || params.fecha}">
 
-            <g:each in="${res}" var="cont" status="j">
-                <tr class="obra_row" id="${cont.id}">
-                    <td>${cont.codigocontrato}</td>
-                    <td>${cont.codigo}</td>
-                    <td>${cont.renovacion}</td>
-                    <td>${cont.tipogarantia}</td>
-                    <td>${cont.documento} </td>
-                    <td>${cont.aseguradora}</td>
-                    <td>${cont.contratista}</td>
-                    <td style="text-align: center">${cont.estado}</td>
-                    <td>${cont.monto}</td>
-                    <td>${cont.moneda}</td>
-                    <td><g:formatDate date="${cont.emision}" format="dd-MM-yyyy"/></td>
-                    <td><g:formatDate date="${cont.vencimiento}" format="dd-MM-yyyy"/></td>
-                    <td>${cont.dias}</td>
-                </tr>
-            </g:each>
+                <g:each in="${res}" var="cont" status="j">
+                    <tr class="obra_row" id="${cont.id}">
+                        <td>${cont.codigocontrato}</td>
+                        <td>${cont.codigo}</td>
+                        <td>${cont.renovacion}</td>
+                        <td>${cont.tipogarantia}</td>
+                        <td>${cont.documento} </td>
+                        <td>${cont.aseguradora}</td>
+                        <td>${cont.contratista}</td>
+                        <td style="text-align: center">${cont.estado}</td>
+                        <td>${cont.monto}</td>
+                        <td>${cont.moneda}</td>
+                        <td><g:formatDate date="${cont.emision}" format="dd-MM-yyyy"/></td>
+                        <td><g:formatDate date="${cont.vencimiento}" format="dd-MM-yyyy"/></td>
+                        <td>${cont.dias}</td>
+                    </tr>
+                </g:each>
             </g:if>
             </tbody>
         </table>
@@ -134,7 +143,7 @@
 
     $("#buscar").click(function(){
 
-        var datos = "si=${"si"}&buscador=" + $("#buscador_gar").val() + "&criterio=" + $("#criterio_gar").val()
+        var datos = "si=${"si"}&buscador=" + $("#buscador_gar").val() + "&criterio=" + $("#criterio_gar").val() + "&fecha=" + $("#fecha_gar").val()
         var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaGarantias')}",
             data     : datos,
