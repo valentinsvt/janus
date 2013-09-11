@@ -134,7 +134,7 @@ class ReportesController {
         def prmsHeaderHoja = [border: Color.WHITE]
 
         Document document
-        document = new Document(PageSize.A4.rotate());
+        document = new Document(PageSize.A3.rotate());
         def pdfw = PdfWriter.getInstance(document, baos);
         document.open();
         document.addTitle("Matriz Polinómica " + new Date().format("dd_MM_yyyy"));
@@ -214,12 +214,7 @@ class ReportesController {
 
 //            println "inicio "+inicio+"  fin  "+fin
 //            println "iniciocab "+inicioCab+"  fincab  "+finCab
-//
-//
-
-
             if (inicio != 0) {
-
                 anchos = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
                 anchos2 = [10, 10, 10, 10, 10, 10, 10, 10, 10]
             }
@@ -241,20 +236,11 @@ class ReportesController {
             if (inicio == fin)
                inicio -= 2       //gdo
 */
-
 //            println "anchos "+anchos
 //            println "anchos2 "+anchos2
-
-
             PdfPTable table = new PdfPTable((fin - inicio).toInteger());       //gdo
-
 //            println("-->>" + (fin-inicio))
-
             PdfPTable table2 = new PdfPTable(((fin - inicio).toInteger()) - 1);
-
-
-
-
 
             table.setWidthPercentage(100);
             table.setWidths(arregloEnteros(anchos))
@@ -262,38 +248,26 @@ class ReportesController {
             table2.setWidthPercentage(100);
             table2.setWidths(arregloEnteros(anchos2))
 
-
-
             if (inicio == 0) {
-
-
                 (finCab - inicioCab).toInteger().times { i ->
-
 //                if(inicio != 0){
-//
 //                    println("entro" + i)
 //                    println("--->>>"  + i)
 //                    println("%%%%"  + inicio)
 //                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[((inicio+i)-1)][1], small));
 //                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 //                    table.addCell(c1);
-//
-//
 //                }
 //                if(inicio == 0){
 //
 //                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
 //                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 //                    table.addCell(c1);
-//
 //                }
-
 //                    println columnas
                     PdfPCell c0 = new PdfPCell(new Phrase(columnas[(inicioCab + i) - 1][1], small));
                     c0.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table2.addCell(c0);
-
-
                 }
                 table2.setHeaderRows(1);
                 filas.each { f ->
@@ -310,13 +284,8 @@ class ReportesController {
 //                        cell.setFixedHeight(16f);
 //                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
 //                        table2.addCell(cell);
-//
 //                    }
-//
 //                    if(inicio == 0){
-//
-//
-//
 //                        def dato = f[(inicio + i)]
 //                        if (!dato)
 //                            dato = "0.00"
@@ -326,14 +295,12 @@ class ReportesController {
 //                        cell.setFixedHeight(16f);
 ////                        if (i > 3) cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
 //                        table2.addCell(cell);
-//
 //                    }
                         def fuente = small
                         def borde = 1.5
                         if (f[1]=~"sS") {
                             fuente = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
                         }
-
 
                         def dato = f[(inicio + i)]
                         if (!dato)
@@ -350,21 +317,13 @@ class ReportesController {
                     }
                 }
 
-
             } else {
-
-
                 (finCab - inicioCab).toInteger().times { i ->
-
 //                println "columnas "+columnas[(inicioCab + i)-1][1]
                     PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicioCab + i) - 1][1], small));
                     c1.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table.addCell(c1);
-
-
                 }
-
-
                 table.setHeaderRows(1);
                 filas.each { f ->
 //                    println "f "+f[1]
@@ -391,11 +350,7 @@ class ReportesController {
                         table.addCell(cell);
                     }
                 }
-
-
             }
-
-
 
             parrafo.add(table2)
             parrafo.add(table);
@@ -408,7 +363,6 @@ class ReportesController {
             inicioCab = finCab
             finCab = inicioCab + 10
 
-
             if (fin > columnas.size() + 1) {
                 fin = columnas.size() + 1
             }
@@ -417,7 +371,6 @@ class ReportesController {
             }
             if (inicio > columnas.size())
                 break;
-
         }
 
         /*table*/
@@ -429,8 +382,6 @@ class ReportesController {
         response.setHeader("Content-disposition", "attachment; filename=" + name)
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
-
-
     }
 
 
