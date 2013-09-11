@@ -200,14 +200,14 @@ class ReportesController {
         /*table*/
 
         def parcial = []
-        def anchos = [5, 6, 20, 5, 8, 8, 8, 8, 8,8,8,8]     // , 9
-        def anchos2 = [5, 6, 20, 5, 8, 8, 8, 8, 8,8,8,8]     // , 9
+        def anchos = [4, 5, 15, 4, 6, 6, 6, 6, 6,6,6,6,6,6,6,6]     // , 9
+        def anchos2 = [4, 5, 15, 4, 6, 6, 6, 6, 6,6,6,6,6,6,6,6]     // , 9
 
         def inicio = 0
-        def fin = 12
+        def fin = 16
 
         def inicioCab = 0
-        def finCab = 12
+        def finCab = 16
 
 //        println "size "+columnas.size()
         while (fin <= columnas.size() + 1) {  //gdo  <= antes
@@ -215,11 +215,11 @@ class ReportesController {
 //            println "inicio "+inicio+"  fin  "+fin
 //            println "iniciocab "+inicioCab+"  fincab  "+finCab
             if (inicio != 0) {
-                anchos = [8, 8, 8, 8, 8, 8, 8, 8, 9,9,9,9]
-                anchos2 = [8, 8, 8, 8, 8, 8, 8, 8, 9,9,9,9]
+                anchos = [ 6, 6, 6, 6, 6,6,6,6,6,6,6,6,7,7,7,7]
+                anchos2 = [6, 6, 6, 6, 6,6,6,6,6,6,6,6,7,7,7,7]
             }
 
-            if (fin - inicio < 12) {
+            if (fin - inicio < 16) {
                 anchos = []
                 (fin - inicio).toInteger().times { i ->
                     anchos.add((100 / (fin - inicio)).toInteger())
@@ -317,10 +317,10 @@ class ReportesController {
             document.newPage();
 //            inicio = fin + 1
             inicio = fin
-            fin = inicio + 12
+            fin = inicio + 16
 
             inicioCab = finCab
-            finCab = inicioCab + 12
+            finCab = inicioCab + 16
 
             if (fin > columnas.size() + 1) {
                 fin = columnas.size() + 1
