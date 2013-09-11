@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html>
-
     <head>
-
         %{--<meta name="layout" content="main">--}%
-
-
         <title>Manual de Usuario - Oferentes</title>
         <style>
         p {
@@ -22,13 +18,13 @@
         }
 
         #header2 {
-            z-index          : 1;
-            position         : relative;
-            width            : 97.5%;
-            height           : 60px;
-            text-align       : center;
-            background-color : #ffffff;
-            margin-top       : -9px;
+            z-index    : 1;
+            position   : relative;
+            width      : 97.5%;
+            height     : 60px;
+            text-align : center;
+            /*background-color : #ffffff;*/
+            margin-top : -9px;
         }
 
         .centrado {
@@ -103,6 +99,8 @@
     </head>
 
     <body>
+
+        <g:link controller="inicio" action="index">&lt;&lt;&nbsp;Regresar al sistema</g:link>
 
         <div id="header2">
             <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'encabezado.png')}"/>
@@ -340,13 +338,13 @@
                 </li>
                 <li>
                     <p>
-                        3. El sistema responder&aacute con un mensaje indicando que se han copiado los
+                        El sistema responder&aacute con un mensaje indicando que se han copiado los
                         oferentes o si ya se han copiado y se intenta repetir el proceso, un
                         mensaje de error indicando que ya han sido copiados.
                     </p>
                 </li>
             </ol>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen6.png')}"/>
+            %{--<br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen6.png')}"/>--}%
             <br><br>
             <a id="Vinculaci&oacuten de la Obra a cada oferente"></a>
 
@@ -432,6 +430,11 @@
                 por mail su contrase&ntildea al correo electr&oacutenico registrado del oferente.
 
             </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen11.2.png')}"/><br><br>
+
+            <p>
+                Si se ha pulsado Ingresar aparecerá la pantalla de selección de perfil, seleccione Oferente y haga clic en Entrar:
+            </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen12.png')}"/><br><br>
 
             <p>
@@ -506,7 +509,12 @@
             </h3>
 
             <p>
-                Los comandos disponibles en esta pantalla son los siguientes:
+                Cuando la pantalla se halla en blanco, es decir, sin un rubro cargado, la barra de comandos sólo muestra el botón Lista y Cancelar.
+            </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen16.1.png')}"/><br><br>
+
+            <p>
+                Si se ha cargado un rubro en pantalla en la barra aumentan varios botones que permiten otras funcionalidades.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen16.png')}"/><br><br>
 
@@ -534,144 +542,95 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen18.png')}"/><br><br>
 
             <p>
-                Si ya ha registrado un rubro, puede seleccionarlo haciendo un clic
-                en el bot&oacuten   <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen25.png')}"/>que aparece a la izquierda de los datos del rubro.
+                Para seleccionar un rubro, haga un clic en el botón que aparece a la izquierda de cada línea de datos del rubro.
+                Al hacer esto aparece el rubro en la pantalla principal como:
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen19.png')}"/><br><br>
 
             <p>
-                Para ver el precio del rubro, haga un clic en el bot&oacuten Calcular
-                para desplegar los precios de cada &iacutetem que conforma el rubro, costos
-                indirectos y costo total.
+                Inicialmente todos los rubros aparecen vacíos y, es el oferente quien debe conforme a su criterio incluir los elementos de Equipo,
+                Mano de obra y Materiales que se deben emplear, junto con los precios y rendimientos respectivos (Los rendimientos no se aplican a los materiales,
+                de modo que el sistema desecha el valor de rendimiento cuando se ingresan materiales).
             </p>
+            <br/>
+
+            <p>
+                Para ingresar los ítems del rubro, haga doble clic en el casillero “Código” en la sección Ítems, con ello aparecerá la pantalla de
+                búsquedas para permitirnos buscar el ítem deseado luego al seleccionarlo de la lista se regresa a la pantalla de rubros y se completan
+                los datos de precio (este valor incluye transporte a la obra), cantidad y rendimiento. El rendimiento sólo se define para equipos y mano de obra,
+                si se ingresa un valor de rendimiento para materiales, el sistema lo desecha automáticamente.
+            </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen19.2.png')}"/><br><br>
+
+            <p>
+                Ingrese el valor del precio unitario del ítem incluyendo transporte al sitio de la obra, en caso de que ya se haya registrado este
+                material para un rubro anterior, el sistema mostrará el precio en forma automática. Para completar el proceso de inclusión del ítem en el
+                rubro se debe presionar el botón Agregar (“+”).
+            </p>
+
+            <br/>
+
+            <p>
+                El botón <strong>Cancelar</strong> sirve sólo para descartar y limpiar la pantalla.
+            </p>
+            <br/>
+
+            <p>Si se desea modificar la composición, se puede dar doble clic en el ítem en cuestión, para que sus datos se copien en la zona de edición y poderlos corregir.</p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen19.3.png')}"/><br><br>
+
+            <p>
+                Si se ingresa un valor en precio, este se usa para todos los rubros que contengan el ítem en cuestión.
+            </p>
+            <br/>
+
+            <p>
+                Finalmente, se debe hacer un clic en <strong>Calcular</strong> para ver en detalle los precios y el valor final del rubro incluido costos indirectos.
+            </p>
+
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen20.png')}"/><br><br>
 
             <p>
-                A continuaci&oacuten se describir&aacute uno a uno los botones que aparecen en
-                la barra de heramientas.
+                Mientras se muestra la pantalla de cálculos no se pueden editar los valores, el sistema presenta una pantalla de aviso indicando que se cambie el modo de
+                presentación del rubro  para poder editar los datos.
             </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen20.2.png')}"/><br><br>
 
             <p>
-                <strong>Nuevo:</strong> El bot&oacuten nuevo limpia la pantalla y la prepara para el
-            registro de un nuevo rubro.
+                Vuelva a presionar el botón “Calcular” para cambiar el modo de visualización de la pantalla de rubros.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen21.png')}"/><br><br>
+            <br/>
 
             <p>
-                En esta pantalla se deben llenar todos los campos de la secci&oacuten
-                rubro antes de proceder a ingresar los &iacutetemes de su
-                composici&oacuten,
-                los cuales pueden ser ingresados en cualquier orden. Para a&ntildeadir un &iacutetem use la secci&oacuten:
+                En el caso de que se desee eliminar un ítem se debe usar el botón “Eliminar” que aparece al lado derecho de cada ítem en la composición del rubro.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen22.png')}"/><br><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen20.3.png')}"/><br><br>
 
             <p>
-                Al hacer un clic en el casillero de c&oacutedigo, vuelve a
-                aparecer la
-                pantalla de b&uacutesquedas para permitirnos buscar el &iacutetem deseado luego
-                al seleccionarlo de la lista se regresa a la pantalla de rubros y
-                se completan los datos de cantidad y rendimiento. El rendimiento s&oacutelo
-                se define para equipos y manos de obra, si se ingresa un valor de
-                rendimiento para materiales, el sistema lo desecha autom&aacuteticamente.
+                <strong>Calcular:</strong> este botón cambia el aspecto de la pantalla para mostrar los precios de los componentes del rubro incluyendo los
+            costos indirectos. Si existen ítemes que aún no poseen precios, el sistema mostrará el valor de 0.000. Para ingresar los precios,
+            simplemente haga doble clic en la línea del ítem deseado para que esta se copie a la zona superior (Ítems) y pueda registrar el precio.
+            Este proceso sirve también para editar o modificar los datos registrados para cada ítem. En el caso de la cantidad del ítem de “Herramienta menor”,
+            el valor se calcula en forma automática de la sumatoria del valor de mano de obra que emplea el rubro, de modo que si se ingresa un valor de precio,
+            el sistema lo ignora.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen23.png')}"/><br><br>
+            <br/>
 
             <p>
-                Ingrese el valor del precio unitario del &iacutetem incluyendo
-                transporte
-                al sitio de la obra, en caso de que ya se haya registrado este
-                material para un rubro anterior, el sistema mostrar&aacute el precio en
-                forma autom&aacutetica. Para completar el proceso de inclusi&oacuten del &iacutetem
-                en el rubro se debe presionar el bot&oacuten Agregar (&#34;+&#34;).
+                Si desea inspeccionar los precios al cambiar el valor del porcentaje de costos indirectos, ingrese el nuevo valor en este casillero y vuelva a presionar
+                Calcular para desplegar los nuevos valores. “Calcular” cambia alternativamente el modo de visualización del rubro.
             </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen20.4.png')}"/><br><br>
+            %{-- ********************************************************** --}%
 
             <p>
-                Los botones Guardar, Canelar y Borrar sirven para almacenar los datos
-                del rubro en el sistema, descartar cambios o eliminar el rubro del sistema
-                respectivamente. S&oacutelo los rubros que no hayan sido utilizados en una
-                obra podr&aacuten ser eliminados.
-            </p>
-
-            <p>
-                El bot&oacuten &#34;Copiar composici&oacuten&#34; permite crear un
-                rubro en base a uno
-                existente. Al hacer un clic en este bot&oacuten aparece una ventana donde se
-                selecciona el rubro desde el cual se ha de copiar la composici&oacuten al rubro
-                en pantalla que se est&aacute creando. Los &iacutetemes del rubro seleccionado se a&ntildeaden
-                a los existentes del rubro en pantalla.
-            </p>
-
-            <p>
-                Para poder usar este bot&oacuten se debe crear primero la cabecera del rubro y
-                hacer un clic en el bot&oacuten Guardar. Con esto se llenan los datos de la secci&oacuten
-                Rubro de esta pantalla.
-            </p>
-
-            <p>
-                Seguidamente presione el bot&oacuten Copiar composici&oacuten con lo
-                cual aparecer&aacute una
-                pantalla de b&uacutesqueda para ubicar el rubro del cual se quiere copiar la
-                composici&oacuten.
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen24.png')}"/><br><br>
-
-            <p>
-                Para copiar la composici&oacuten se hace un clic en el &iacutecono
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen25.png')}"/>
-
-                y seguidamente confirme la orden. Los &iacutetemes del rubro seleccionado se a&ntildeaden a
-                los del rubro que se tiene en pantalla
-            </p>
-
-            <p>
-                Si se desea corregir la composici&oacuten, se puede dar doble clic en el &iacutetem
-                en cuesti&oacuten, para que sus datos se copien en la zona de edici&oacuten y se poderlos corregir.
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen26.png')}"/><br><br>
-
-            <p>
-                En el caso de que se desee eliminar un &iacutetem se debe usar el bot&oacuten &#34;Eliminar&#34;
-                que aparece al lado derecho de cada &iacutetem en la composici&oacuten del rubro.
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen27.png')}"/><br><br>
-
-            <p><strong>Calcular:</strong> este bot&oacuten cambia el aspecto de la pantalla para
-            mostrar los precios de los componentes del rubro incluyendo los costos indirectos
-            . Si existen &iacutetemes que a&uacuten no poseen precios, el sistema mostrar&aacute
-            el valor de 0.000.
-            Para ingresar los precios, simplemente haga doble clic en la l&iacutenea del
-            &iacutetem deseado
-            para que esta se copie a la zona superior (Items) y pueda registrar el precio. Este
-            proceso sirve tambi&eacuten para editar o modificar los datos registrados para
-            cada &iacutetem.
-            En el caso de la cantidad del &iacutetem de &#34;Herramienta menor&#34;, el
-            valor se calcula en
-            forma autom&aacutetica de la sumatoria del valor de mano de obra que emplea el rubro.
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen28.png')}"/><br><br>
-
-            <p>
-                Los precios que se despliegan son los correspondientes a la lista de precios
-                seleccionada, a la fecha fijada en pantalla y al valor del porcentaje de costos
-                indirectos.
-            </p>
-
-            <p>
-                <strong>Borrar:</strong> Borra el Rubro y toda su composici&oacuten de insumos.  Para
-            poder borrar es necesario que el Rubro no se encuentre registrado y que no sea
-            utilizado en una obra.
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen29.png')}"/><br><br>
-
-            <p>
-                <strong>Imprimir:</strong> genera un reporte del rubro en formato
-            dpf, con los par&aacutemetros
+                El botón <strong>Imprimir</strong> genera un reporte del rubro en formato
+            pdf, con los par&aacutemetros
             seleccionados
             de lista de precios, fecha, costos indirectos y las variables de transporte ingresadas.
             </p>
 
             <p>
-                <strong>Excel:</strong> genera un archivo en formato de hoja de c&aacutelculo con los datos del
+                El botón <strong>Excel</strong> genera un archivo en formato de hoja de c&aacutelculo con los datos del
             rubro que se
             halla en pantalla. Una vez generado el  archivo aparecer&aacute un
             cuadro de di&aacutelogo que permite
@@ -680,31 +639,21 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen30.png')}"/><br><br>
 
             <p>
-                <strong>Especificaciones:</strong> Muestra una ventana para el registro de las
-            especificaciones t&eacutecnicas del
-            rubro. Esta ventana permite el ingreso de hasta 12 l&iacuteneas de
-            texto aproximadamente,
-            por lo
-            que se recomienda hacer una descripci&oacuten objetiva y simple del rubro.
+                <strong>Especificaciones:</strong> Muestra una ventana para el registro de las especificaciones técnicas del rubro.
+            Esta ventana permite el ingreso de un archivo en formato pdf con las especifica­ciones del rubro.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen31.png')}"/><br><br>
 
             <p>
-                Una vez ingresada la especificaci&oacuten presione el bot&oacuten Guardar
-                para que se grabe en el
-                sistema.
+                El oferente sólo puede mirar las especificaciones, no es posible cargar o alimentar el sistema con especificaciones.
             </p>
 
+            <br/>
+
             <p>
-                Ilustraci&oacuten: Sirve para cargar al sistema una ilustraci&oacuten o
-                detalle gr&aacutefico del rubro.
-                Para
-                hacerlo debe contar con una foto o imagen digital del rubro y luego usar
-                el bot&oacuten
-                examinra para
-                ubicarlo. Una vez que se haya cargado el archivo se mostrar&aacute la ilustraci&oacuten en la
-                zona inferior
-                de la venta, algo similar a:
+                <strong>Ilustraci&oacuten:</strong> Es similar a las especificaciones de cada rubro con a diferencia que en este caso se visualiza una
+            ilustración o “foto” de detalle de rubro. Igualmente, el oferente sólo puede mirar o descargar la ilustración como una ayuda para evitar falsas
+            interpretaciones respecto de lo que se requiere en una determinada obra o proyecto.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen32.png')}"/><br><br>
             <a id="Obras"></a>
@@ -720,28 +669,34 @@
             <br> <a id="Obras"></a>
 
             <h2 class="izquierda">
-                Obras
+                Proyecto: Registro de obras
             </h2>
 
             <p>
-                El ingreso de las Obras al sistema est&aacute restringido para el oferente, este
-                simplemente debe completar la informaci&oacuten con los datos de su oferta, es decir,
-                sus vol&uacutemenes de obra, presupuesto, f&oacutermula polin&oacutemica y cronograma.
+                El ingreso de las Obras al sistema está restringido para el oferente, este simplemente debe completar la información con los datos
+                de su oferta, es decir, composición de cada uno de los rubros o sus propios análisis de precios, con lo cual se podrá visualizar los
+                valores del presupuesto conforme a los volúmenes de obra, luego podrá completar su presupuesto mediante el ingreso de las “variables” o
+                sus propios costos indirectos y utilidad. Finalmente podrá generar la matriz d ella fórmula polinómica, armar la fórmula polinómica y conformar
+                su cronograma de ejecución de la obra.
             </p>
+            <br/>
 
             <p>
-                Al ingresar a la secci&oacuten obras mediante la opci&oacuten de men&uacute
-                Obras &#8211&gt Registro
-                de Obras, el sistema autom&aacuteticamente ubica la primera obra que posea el
-                oferente, en el caso de no tratarse de la obra que se desea ofertar, se
-                debe usar el bot&oacuten Lista para cargar la obra correcta.
+                El sistema le permitirá imprimir los formularios de presupuesto, cronograma, análisis de precios unitarios de todos los rubros que conforman
+                la obra y otros documentos como un descriptivo de la obra, matriz de la fórmula polinómica y el detalle de la composición en materiales mano de obra y equipos.
+            </p>
+            <br/>
+
+            <p>
+                Al ingresar a la sección obras mediante la opción de menú Detalle del Proyecto → Registro de Obras, el sistema automáticamente ubica
+                la primera obra que posea el oferente, en el caso de no tratarse de la obra que se desea ofertar, se debe usar el botón Lista para cargar la obra correcta.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen33.png')}"/><br><br>
 
             <p>
-                La parte superior de esta pantalla presenta s&oacutelo el bot&oacuten Lista
-                e Imprimir.
-                A continuaci&oacuten se ir&aacuten explicando cada uno de estas funcionalidades.
+                La parte superior de esta pantalla presenta sólo los botones Lista, Imprimir y cambiar de estado, este último servirá
+                para “registrar” la obra una vez que se haya completado el proceso de oferta y se bloquea sus datos para que no sean cambiados o modificados
+                en el futuro. A continuación se irán explicando cada una de estas funcionalidades.
                 <a id="Lista"></a>
             </p>
 
@@ -762,26 +717,16 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen34.png')}"/><br><br>
 
             <p>
-                Con esta pantalla se pueden ubicar obras aplicando varios criterios de b&uacutesqueda
-                como son: c&oacutedigo, nombre, descripci&oacuten, memorando de ingreso, memorando de
-                salida, sitio, plazo, parroquia y comunidad.
+                Con esta pantalla se pueden ubicar obras aplicando varios criterios de búsqueda como son: código, nombre, descripción, etc.
+                Esta pantalla sólo mostrará las obras que se hallen en proceso de contratación relacionadas con el oferente que las está consultando, en el caso de haber varias.
             </p>
+            <br/>
 
             <p>
-                Para cada criterio de b&uacutesqueda se pueden aplicar operaciones como contiene,
-                empieza o igual. Estas operaciones se aplican al texto de los datos de la obra,
-                as&iacute, si se selecciona  en &#34;Buscar por&#34; nombre, se aplica
-                &#34;Contiene&#34; y se
-                ingresa un criterio como calles, se listar&aacuten toas las obras que contengan
-                la palabra calles como nombre de la obra.
+                Para seleccionar una de las obras se debe hacer un clic en el botón
+                <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen72.png')}"/> del lado izquierdo de la obra deseada.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen35.png')}"/><br><br>
 
-            <p>
-                Para seleccionar una de las obras se debe hacer un clic en el bot&oacuten
-                <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen72.png')}"/>
-                de la   obra deseada.
-            </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen36.png')}"/><br><br>
 
             <p>
@@ -808,8 +753,7 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen38.png')}"/><br><br>
 
             <p>
-                Ingrese los valores necesarios y presiones Guardar para almacenarlos en
-                el sistema.
+                Ingrese su valores de costos indirectos y el costo hora del mecánico, luego presione Guardar para almacenarlos en el sistema.
                 <a id=" Vol&uacutemenes de Obra"></a>
 
             </p>
@@ -824,45 +768,37 @@
             </h3>
 
             <p>
-                Este bot&oacuten nos lleva al registro de los vol&uacutemenes de obra. Esta pantalla
-                presenta dos secciones, una destinada al ingreso de datos del rubro
-                dentro de un subpresupuesto y la otra, denominada composici&oacuten, que
-                muestra una lista de los rubros.
+                Este botón nos lleva al registro de los volúmenes de obra. Esta pantalla presenta dos secciones, una destinada al
+                ingreso de datos del rubro dentro de un subpresupuesto y la otra, denominada composición, que muestra una lista de los rubros.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen39.png')}"/><br><br>
 
             <p>
-                Al presionar el bot&oacuten &#34;Calcular&#34; se presentan los valores.
+                Al presionar el botón “Calcular” se presentan los valores unitarios de cada rubro y el total del presupuesto
+                o valor de la obra. Si no han registrado aun los análisis de precios o el detalle de composición del cada rubro, los valores unitarios aparecerán con ceros.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen40.png')}"/><br><br>
 
             <p>
-                El bot&oacuten Regresar sirve para volver a la pantalla de registro de obras.
+                El botón Regresar sirve para volver a la pantalla de la obra.
             </p>
 
             <p>
-                Cada l&iacutenea de los rubros que conforman el volumen de obra, posee
-                un men&uacute de se muestra al hacer clic con el bot&oacuten derecho del rat&oacuten,
-                tal como se ve en la siguiente ilustraci&oacuten.
+                Cada línea de los rubros que conforman el volumen de obra, posee un menú de se muestra al hacer clic con el botón derecho del ratón,
+                tal como se ve en la siguiente ilustración.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen41.png')}"/><br><br>
 
             <p>
-                La opci&oacuten Editar, copia los datos del rubro en la zona de edici&oacuten:
+                El botón Imprimir Presupuesto muestra en formato pdf el presupuesto conforme el formulario No. 2 del INCOP.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen42.png')}"/><br><br>
+            <br/>
 
             <p>
-                Al hacer clic en Editar se copian los datos a los casilleros (campos)
-                respectivos :
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen43.png')}"/><br><br>
-
-            <p>
-                Luego de hacer los cambios deseados se guardan los datos haciendo un
-                clic en el bot&oacuten &#34;+&#34;.
+                También es posible exportar el detalle de volúmenes de obra a una hoja de calculo tipo excel, presionando el botón excel.
+                <br/>
+                <br/>
                 <a id=" Matriz de la F&oacutermula Polin&oacutemica"></a>
-
             </p>
 
 
@@ -926,18 +862,17 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen45.png')}"/><br><br>
 
             <p>
-                Si se desea hacer una matriz de un subpresupuesto espec&iacutefico,
-                selecci&oacutenelo desde el
-                combo, caso contrario, s&oacutelo verifique que la casilla de &#34Generar
-                con transporte&#34 est&eacute
-                de acuerdo a lo que requiera, es decir, con un visto si si desea hacer el desglose de
-                transporte o sin el visto si no. Presione Generar para iniciar el proceso.
+                Presione Generar para iniciar el proceso.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen46.png')}"/><br><br>
 
             <p>
                 Esta ventana se mantendr&aacute mientras se realizan los c&aacutelculos de la f&oacutermula
                 polin&oacutemica y se despliega la matriz.
+            </p>
+            <br/>
+
+            <p>
                 Luego de completado el proceso, se despliega la matriz de la f&oacutermula polin&oacutemica.
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen47.png')}"/><br><br>
@@ -998,19 +933,21 @@
                 funci&oacuten de
                 los distintos aportes de materiales obtenidos de la matriz de la f&oacutermula.
             </p>
+            <br/>
 
             <p>
                 En la parte superior de esta pantalla figuran 3 botones, Regresar para
                 volver a la pantalla de obras, F&oacutermula polin&oacutemica y Cuadrilla tipo.
             </p>
+            <br/>
+
+            <p>
+                Por defecto la pantalla que se muestra corresponde a la de la fórmula polinómica, lo que equivale a presionar el botón
+                Fórmula polinómica, al presionar el botón Cuadrilla tipo, se muestra la pantalla para trabajar en la composición de la cuadrilla tipo.
+            </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen51.png')}"/><br><br>
 
             <p>
-                Por defecto la pantalla que se muestra corresponde a la de la f&oacutermula
-                polin&oacutemica, lo que equivale a presionar el bot&oacuten F&oacutermula
-                polin&oacutemica, al
-                presionar el bot&oacuten Cuadrilla tipo, se muestra la pantalla para trabajar
-                en la composici&oacuten de la cuadrilla tipo.
                 <a id="Trabajando en la composici&oacuten de la f&oacutermula polin&oacutemica"></a>
             </p>
 
@@ -1105,6 +1042,8 @@
             <p>
                 En el caso de que la pantalla no muestre todos los datos, se debe presionar
                 F5 o refrescarla para que se desplieguen todos los datos.
+                <br/>
+                <br/>
                 <a id="Rubros de la obra"></a>
             </p>
 
@@ -1178,6 +1117,12 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen61.png')}"/><br><br>
 
             <p>
+                Si se han seleccionado varios rubros el único valor que puede modificarse es el del porcentaje (%) y se aplicará
+                el mismo porcentaje a todos los rubros seleccionados, eliminando cualquier otro valor ya existente en estos.
+            </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen61.2.png')}"/><br><br>
+
+            <p>
                 El &aacuterea de per&iacuteodos permite seleccionar un periodo, o un rango de
                 periodos. Al seleccionar un rango se dividir&aacute lo asignado entre el
                 n&uacutemero de periodos que contenga el rango; por ejemplo, al asignar 50%
@@ -1192,53 +1137,14 @@
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen62.png')}"/><br><br>
 
             <p>
-                El bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen74.png')}"/> limpia los campos del
-            rubro seleccionado,
-            despu&eacutes de mostrar una pantalla de confirmaci&oacuten de la orden.
+                El botón “Eliminar rubro” borra los campos del rubro seleccionado, después de mostrar una pantalla de confirmación de la orden.
             </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen63.png')}"/><br><br>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen62.2.png')}"/><br><br>
 
             <p>
-                Esta modificaci&oacuten es solo visual, es decir, los datos existentes
-                no se eliminan, s&oacutelo se limpian los casilleros. Los valores
-                ser&aacuten modificados s&oacutelo si se ingresan nuevos datos en estos
-                casilleros. Esto quiere decir que si no se ingresa ning&uacuten dato que
-                sobreescriba los limpiados, la siguiente vez que se abra el cronograma
-                volver&aacuten a aparecer.
+                El botón “Eliminar Cronograma” borra todos los campos de todos los rubros de la tabla, después de mostrar una notificación.
             </p>
-
-            <p>
-                El bot&oacuten <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen64.png')}"/>
-                limpia los campos de todos los rubros
-                de la tabla, despu&eacutes de mostrar una notificaci&oacuten.
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen65.png')}"/><br><br>
-
-            <p>
-                Al igual que la opci&oacuten anterior, esta modificaci&oacuten es solo
-                visual, es decir, los datos existentes solo se reemplazar&aacuten si se
-                ingresan nuevos datos. Esto quiere decir que si no se ingresa
-                ning&uacuten dato que sobreescriba los limpiados, la siguiente vez que
-                se abra el cronograma volver&aacuten a aparecer.
-            </p>
-
-            <p>
-                Si se desea eliminar todos los datos del cronograma se debe hacer un
-                clic en el bot&oacuten  &#34Eliminar cronograma&#34 y  confirmar la orden.
-            </p>
-            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen66.png')}"/><br><br>
-
-            <p>
-                Esta modificaci&oacuten es inmediata, es decir, al dar clic en
-                Aceptar se eliminar&aacuten los valores de la base de datos y no hay
-                manera de recuperarlos.
-            </p>
-
-            <p>
-                El bot&oacuten <img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen67.png')}"/> exporta la tabla del
-            cronograma a
-            una hoja Excel.
-            </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen62.3.png')}"/><br><br>
 
             <p>
                 El bot&oacuten<img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen68.png')}"/>permite ver los gr&aacuteficos de
@@ -1266,6 +1172,7 @@
                 la pantalla de composici&oacuten organizada por grupos de &iacutetems,
                 es decir, por materiales, mano de obra y equipos.
             </p>
+            <br/>
 
             <p>
                 Este es b&aacutesicamente un reporte de la obra y puede ser
@@ -1276,6 +1183,7 @@
             <p>
                 Los comandos de esta pantalla son:
             </p>
+            <br/>
 
             <p>
                 <strong>Regresar:</strong> que sirve para regresar a la pantalla
@@ -1312,11 +1220,16 @@
             </p>
             <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen71.png')}"/><br><br>
 
+            <p>
+                Se puede obtener la composición para cada subpresupuesto, seleccionándolo desde el combo que inicialmente aparece como “Todos los subpresupuestos”.
+            </p>
+            <br><img src="${resource(dir: 'images/imagenesManuales/imagenesOferentes', file: 'imagen71.2.png')}"/><br><br>
+
             <div class="regresa">
                 <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
             </div> <br><br>
         </div>
-
+        <g:link controller="inicio" action="index">&lt;&lt;&nbsp;Regresar al sistema</g:link>
     </body>
 
 </html>
