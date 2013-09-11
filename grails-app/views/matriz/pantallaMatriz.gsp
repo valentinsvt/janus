@@ -80,7 +80,11 @@
             </g:link>
             <a href="${g.createLink(controller: 'reportes', action: 'imprimeMatriz', id: "${obra}")}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
                 <i class="icon-print"></i>
-                Imprimir
+                Imprimir A3
+            </a>
+            <a href="${g.createLink(controller: 'reportes4', action: 'imprimeMatrizA4', id: "${obra}")}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
+                <i class="icon-print"></i>
+                Imprimir A4
             </a>
             <input type="text" style="width: 200px;margin-left: 20px;margin-top: 9px;" class="ui-corner-all" id="texto_busqueda">
             <a href="#" class="btn btn-ajax btn-new" id="buscar" title="Buscar">

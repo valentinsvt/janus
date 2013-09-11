@@ -200,14 +200,14 @@ class ReportesController {
         /*table*/
 
         def parcial = []
-        def anchos = [5, 6, 35, 5, 8, 8, 8, 8, 8, 8]     // , 9
-        def anchos2 = [5, 6, 35, 5, 8, 8, 8, 8, 8]     // , 9
+        def anchos = [5, 6, 20, 5, 8, 8, 8, 8, 8,8,8,8]     // , 9
+        def anchos2 = [5, 6, 20, 5, 8, 8, 8, 8, 8,8,8,8]     // , 9
 
         def inicio = 0
-        def fin = 10
+        def fin = 12
 
-        def inicioCab = 1
-        def finCab = 10
+        def inicioCab = 0
+        def finCab = 12
 
 //        println "size "+columnas.size()
         while (fin <= columnas.size() + 1) {  //gdo  <= antes
@@ -215,33 +215,29 @@ class ReportesController {
 //            println "inicio "+inicio+"  fin  "+fin
 //            println "iniciocab "+inicioCab+"  fincab  "+finCab
             if (inicio != 0) {
-                anchos = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-                anchos2 = [10, 10, 10, 10, 10, 10, 10, 10, 10]
+                anchos = [8, 8, 8, 8, 8, 8, 8, 8, 9,9,9,9]
+                anchos2 = [8, 8, 8, 8, 8, 8, 8, 8, 9,9,9,9]
             }
 
-            if (fin - inicio < 10) {
+            if (fin - inicio < 12) {
                 anchos = []
                 (fin - inicio).toInteger().times { i ->
                     anchos.add((100 / (fin - inicio)).toInteger())
                 }
 
                 anchos2 = []
-                ((fin - inicio).toInteger() - 1).times { i ->
+                ((fin - inicio).toInteger() ).times { i ->
                     anchos2.add((100 / (((fin - inicio).toInteger()) - 1)).toInteger())
                 }
 
             }
             def parrafo = new Paragraph("")
-/*
-            if (inicio == fin)
-               inicio -= 2       //gdo
-*/
-//            println "anchos "+anchos
-//            println "anchos2 "+anchos2
+
             PdfPTable table = new PdfPTable((fin - inicio).toInteger());       //gdo
 //            println("-->>" + (fin-inicio))
-            PdfPTable table2 = new PdfPTable(((fin - inicio).toInteger()) - 1);
 
+            PdfPTable table2 = new PdfPTable(((finCab - inicioCab).toInteger()));
+//            println "inicio "+inicioCab+"  fin "+finCab+"   "+anchos2.size()+"  "+arregloEnteros(anchos2) +" i1 "+inicio+" f1 "+fin
             table.setWidthPercentage(100);
             table.setWidths(arregloEnteros(anchos))
 
@@ -250,21 +246,7 @@ class ReportesController {
 
             if (inicio == 0) {
                 (finCab - inicioCab).toInteger().times { i ->
-//                if(inicio != 0){
-//                    println("entro" + i)
-//                    println("--->>>"  + i)
-//                    println("%%%%"  + inicio)
-//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[((inicio+i)-1)][1], small));
-//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                    table.addCell(c1);
-//                }
-//                if(inicio == 0){
-//
-//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
-//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-//                    table.addCell(c1);
-//                }
-//                    println columnas
+
                     PdfPCell c0 = new PdfPCell(new Phrase(columnas[(inicioCab + i) - 1][1], small));
                     c0.setHorizontalAlignment(Element.ALIGN_CENTER);
                     table2.addCell(c0);
@@ -273,29 +255,6 @@ class ReportesController {
                 filas.each { f ->
                     (finCab - inicioCab).toInteger().times { i ->
 
-//                    if(inicio != 0) {
-//
-//                        def dato = f[(inicio + i)-1]
-//                        if (!dato)
-//                            dato = "0.00"
-//                        else
-//                            dato = dato.toString()
-//                        def cell = new PdfPCell(new Phrase(dato, small))
-//                        cell.setFixedHeight(16f);
-//                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
-//                        table2.addCell(cell);
-//                    }
-//                    if(inicio == 0){
-//                        def dato = f[(inicio + i)]
-//                        if (!dato)
-//                            dato = "0.00"
-//                        else
-//                            dato = dato.toString()
-//                        def cell = new PdfPCell(new Phrase(dato, small))
-//                        cell.setFixedHeight(16f);
-////                        if (i > 3) cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
-//                        table2.addCell(cell);
-//                    }
                         def fuente = small
                         def borde = 1.5
                         if (f[1]=~"sS") {
@@ -358,10 +317,10 @@ class ReportesController {
             document.newPage();
 //            inicio = fin + 1
             inicio = fin
-            fin = inicio + 10
+            fin = inicio + 12
 
             inicioCab = finCab
-            finCab = inicioCab + 10
+            finCab = inicioCab + 12
 
             if (fin > columnas.size() + 1) {
                 fin = columnas.size() + 1
