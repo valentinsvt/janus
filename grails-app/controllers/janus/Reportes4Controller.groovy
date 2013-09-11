@@ -223,11 +223,15 @@ class Reportes4Controller {
 //            println("-->>" + (fin-inicio))
             PdfPTable table2 = new PdfPTable(((fin - inicio).toInteger()) - 1);
 
-            table.setWidthPercentage(100);
+            def tam = 100
+            if(anchos.size()<10)
+                tam=(anchos.size()*10).toInteger()
+            table.setWidthPercentage(tam);
             table.setWidths(arregloEnteros(anchos))
-
-            table2.setWidthPercentage(100);
+            table.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table2.setWidthPercentage(tam);
             table2.setWidths(arregloEnteros(anchos2))
+            table2.setHorizontalAlignment(Element.ALIGN_LEFT);
 
             if (inicio == 0) {
                 (finCab - inicioCab).toInteger().times { i ->

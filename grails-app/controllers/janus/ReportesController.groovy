@@ -238,11 +238,15 @@ class ReportesController {
 
             PdfPTable table2 = new PdfPTable(((finCab - inicioCab).toInteger()));
 //            println "inicio "+inicioCab+"  fin "+finCab+"   "+anchos2.size()+"  "+arregloEnteros(anchos2) +" i1 "+inicio+" f1 "+fin
-            table.setWidthPercentage(100);
+            def tam = 100
+            if(anchos.size()<16)
+                tam=(anchos.size()*100/16).toInteger()
+            table.setWidthPercentage(tam);
             table.setWidths(arregloEnteros(anchos))
-
-            table2.setWidthPercentage(100);
+            table.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table2.setWidthPercentage(tam);
             table2.setWidths(arregloEnteros(anchos2))
+            table2.setHorizontalAlignment(Element.ALIGN_LEFT);
 
             if (inicio == 0) {
                 (finCab - inicioCab).toInteger().times { i ->
