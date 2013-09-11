@@ -48,104 +48,76 @@
             </ul>
 
             <div id="tab-formulaPolinomica" class="tab">
-
                 <div class="formula">
-
                     <fieldset class="borde">
                         <legend>Formula Polinómica</legend>
-
                         <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPoliContrato">
-
                             <thead>
                                 <tr>
                                     <th style="width: 20px; text-align: center">Coeficiente</th>
                                     <th style="width: 70px">Nombre del Indice (INEC)</th>
                                     <th style="width: 40px">Valor</th>
-
                                 </tr>
-
                             </thead>
-
                             <tbody id="bodyPoliContrato">
-
+                                <g:set var="total" value="${0}"/>
                                 <g:each in="${ps}" var="i">
-
                                     <tr>
                                         <td>${i?.numero}</td>
                                         <td>${i?.indice?.descripcion}</td>
                                         <td style="text-align: right; width: 40px">${g.formatNumber(number: i?.valor, maxFractionDigits: 3, minFractionDigits: 3)}</td>
-
+                                        <g:set var="total" value="${total + (i?.valor ?: 0)}"/>
                                     </tr>
-
                                 </g:each>
-
                             </tbody>
-
+                            <tfoot>
+                                <tr>
+                                    <th colspan="2">TOTAL</th>
+                                    <th style="text-align: right;">${g.formatNumber(number: total, maxFractionDigits: 3, minFractionDigits: 3)}</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </fieldset>
-
                 </div>
-
             </div>
 
             <div id="tab-cuadrillaTipo" class="tab">
 
                 <fieldset class="borde">
-
                     <legend>Cuadrilla Tipo</legend>
-
                     <table class="table table-bordered table-striped table-hover table-condensed" id="tablaCuadrilla">
-
                         <thead>
                             <tr>
                                 <th style="width: 20px; text-align: center">Coeficiente</th>
                                 <th style="width: 70px">Nombre del Indice (INEC)</th>
                                 <th style="width: 40px">Valor</th>
-
                             </tr>
-
                         </thead>
-
                         <tbody id="bodyCuadrilla">
-
+                            <g:set var="total" value="${0}"/>
                             <g:each in="${cuadrilla}" var="i">
-
                                 <tr>
                                     <td>${i?.numero}</td>
                                     <td>${i?.indice?.descripcion}</td>
                                     <td style="text-align: right; width: 40px">${g.formatNumber(number: i?.valor, maxFractionDigits: 3, minFractionDigits: 3)}</td>
-
+                                    <g:set var="total" value="${total + (i?.valor ?: 0)}"/>
                                 </tr>
-
                             </g:each>
-
                         </tbody>
-
+                        <tfoot>
+                            <tr>
+                                <th colspan="2">TOTAL</th>
+                                <th style="text-align: right;">${g.formatNumber(number: total, maxFractionDigits: 3, minFractionDigits: 3)}</th>
+                            </tr>
+                        </tfoot>
                     </table>
-
                 </fieldset>
-
             </div>
-
         </div>
-
-
-
-
-
         <script type="text/javascript">
-
             $("#tabs").tabs({
-
                 heightStyle : "fill"
-
-
             });
-
-
-
-
         </script>
-
     </body>
 </html>
