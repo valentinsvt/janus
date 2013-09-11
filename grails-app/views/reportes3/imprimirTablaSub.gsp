@@ -179,6 +179,13 @@
                         <b>Nombre:</b> ${obra?.nombre}
                     </div>
                 </div>
+
+                <div class="row-fluid">
+                    <div class="span6" style="margin-right: 195px !important;">
+                        <b>Memorando de Cant. Obra:</b> ${obra?.memoCantidadObra}
+                    </div>
+                </div>
+
                 <div class="row-fluid">
                     <div class="span6" style="margin-right: 195px !important;">
                         <b>Código Obra:</b> ${obra?.codigo}
