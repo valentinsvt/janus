@@ -152,26 +152,31 @@
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen1.png')}"/><br><br>
 
             <p>Desde esta pantalla de debe hacer doble clic en el casillero de la partida
-            para acceder a la pantalla donde se pueden buscar la partida presupuestaria
-            de la cual se desea ingresa la asignaci&oacuten o techo de inversiones para
+            para acceder a la pantalla donde se puede buscar la partida presupuestaria
+            de la cual se desea ingresar la asignaci&oacuten o techo de inversiones para
             el año.
             </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen2.png')}"/><br><br>
 
             <p>Una vez seleccionada la partida se debe ingresar el a&#241o y finalmente el
             valor del techo de la asignaci&oacuten para ese a&#241o.
             </p>
 
             <p>En el caso de que una partida no exista, se la puede ingresar al sistema
-            utilizando el bot&ocuten &#34Crear nueva partida&#34
+            utilizando el bot&oacuten &#34Crear nueva partida&#34
             </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen3.png')}"/><br><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen2.png')}"/><br><br>
+
+
 
             <p>Una vez realizada la asignaci&oacuten, se presenta en la zona inferior
             una lista con los valores de las asignaciones realizadas para el
             a&#241o que se seleccione.
             </p> <br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen4.png')}"/>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen3.png')}"/><br><br>
+
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen4.png')}"/>--}%
         </div>
 
         <a id="PlanAnual"></a><br>
@@ -186,7 +191,7 @@
             <h2 class="izquierda">Plan Anual de Compras</h2><br>
 
             <p>Esta pantalla permite agregar, modificar y eliminar planes anuales
-            de compras (PAC). Se accede desde el men&ucute &#34Contrataciones&#34.
+            de compras (PAC). Se accede desde el men&uacute &#34Contrataci&oacuten&#34.
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen5.png')}"/><br><br><br>
 
@@ -200,7 +205,7 @@
             <p>Al hacer doble clic en el campo de texto de &#34Partida presupuestaria&#34
             se abre un dialogo que permite buscar una partida para seleccionarla
             haciendo clic en el bot&oacuten &#34Visto&#34 a la derecha de la fila deseada.
-            </p>
+            </p><br>
 
             <p>Si no existe la partida necesaria para el P.A.C. que va a ser creado, se puede
             crear una nueva. Se hace clic en el <img class="boton" src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen7.png')}"/>
@@ -211,19 +216,22 @@
             <p>Aqu&iacute se completan los datos necesarios y se hace clic en el bot&oacuten
             &#34Guardar&#34, y la nueva partida presupuestaria ya puede ser utilizada
             para crear el P.A.C.
-            </p>
+            </p><br>
 
             <p>Tambi&eacuten existe una pantalla de ayuda para ubicar el c&oacutedigo de compras
             p&uacuteblicas de un determinado bien o servicio, esta pantalla se muestra
             al hacer doble clic en el campo de texto &#34C&oacutedigo C.P.&#34.
             </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen9_1.png')}"/><br><br><br>
+
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen9.png')}"/><br><br><br>
 
             <p>Se terminan de completar los datos requeridos y se seleccionan los cuatrimestres
             en los cuales se aplica el P.A.C. haciendo clic en los botones. Al hacer clic
             en el bot&oacuten Agregar se almacenan los datos y se agrega la fila c
             orrespondiente en la tabla de detalle.
-            </p>
+            </p><br>
 
             <p>Para modificar una fila ya ingresada, se hace doble clic, o clic derecho y en
             &#34Editar&#34 en el men&uacute que aparece, o tambi&eacuten se puede hacer un doble
@@ -236,7 +244,76 @@
             y usado son informaci&oacuten de los saldos presupuestarios para cada partida
             y se actualizan en forma inmediata con cada registro que se haga del PAC.
             </p><br><br>
-        </div>
+
+        <p>Si se desea tambi&eacuten se puede cargar los datos del P.A.C. directamente de un
+           archivo Excel (xls solamente). Para hacer esto, se presiona el bot&oacuten "Subir Excel"
+           (ubicado en la parte inferior derecha del &aacuterea de datos del P.A.C. Esto muestra la
+            pantalla de carga.
+
+        </p><br><br>
+
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_1.png')}"/><br><br><br>
+
+        <p>
+            En esta pantalla se debe completar el requirente, el n&uacute;mero de memorando y la coordinaci&oacute;n antes
+            de seleccionar el archivo. El archivo debe tener la extensi&oacute;n xls para poder
+            se utilizado (Debe ser guardado en modo de compatibilidad con Excel 2003). El archivo debe adem&aacute;s
+            tener un formato en particular (ilustrado m&aacute;s adelante) para que el sistema pueda interpretarlo.
+            El sistema solamente procesa las filas en las cuales el tipo de copra es “OBRA” o “CONSULTORIA”.
+
+        </p><br><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_2.png')}"/><br><br><br>
+
+        <p>
+
+            Las filas de los t&iacute;tulos deben ser la 7 y la 8.
+        </p>
+        <p>
+
+            Las columnas deben ser (comenzando en la A):
+        </p>
+        <p>
+            * Partida presupuestaria / Cuenta contable
+        </p>
+        <p>
+            * C&oacute;digo categor&iacute;a CPC a nivel 8
+        </p>
+        <p>
+            * Tipo compra
+        </p>
+        <p>
+            * Detalle del producto
+        </p>
+        <p>
+            * Cantidad anual
+        </p>
+        <p>
+            * Unidad
+        </p>
+        <p>
+            * Costo unitario
+        </p>
+        <p>
+            * Cuatrimestre 1 (marcado con una “S” o vac&iacuteo)
+        </p>
+        <p>
+            * Cuatrimestre 2 (marcado con una “S” o vac&iacute;o)
+        </p>
+        <p>
+            * Cuatrimestre 3 (marcado con una “S” o vac&iacute;o)
+        </p><br>
+        <p>
+
+            Al presionar el bot&oacute;n “Subir”, el sistema procesa la informaci&oacute;n y muestra un resumen de lo realizado.
+            Esta operaci&oacute;n puede tardar algunos minutos dependiendo del tamaño del archivo.
+        </p><br>
+
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_3.png')}"/><br><br><br>
+
+       </div>
 
         <a id="Concursos"></a><br>
 
@@ -246,7 +323,7 @@
 
 
         <!-- Concursos -->
-        <h2 class="cursiva">Procesos</h2><br>
+        <h2 class="cursiva">Concursos</h2><br>
 
         <div class="centrado">
             <p>Esta secci&oacuten permite crear, editar y eliminar procesos, as&iacute
@@ -255,17 +332,17 @@
             que aparece al hacer clic derecho en las filas de la tabla.
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen11.png')}"/><br><br>
-
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen12.png')}"/><br><br>
             <p>Al hacer clic en &#34Nuevo proceso&#34 se muestra una ventana para buscar
             y seleccionar el P.A.C. para el cual se va a crear el proceso. Al seleccionar
             el P.A.C., se crea un proceso que tiene &uacutenicamente el P.A.C. y el
             objeto, en el cual se copia la descripci&oacuten del P.A.C.
-            </p>
+            </p><br>
 
             <p>La opci&oacuten Documentos  muestra una pantalla que permite subir archivos,
             completar su informaci&oacuten y descargar los documentos ya subidos.
             </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen12.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen12_1.png')}"/><br><br>
 
             <p>Si desea incluir nuevos documentos haga un clic en el bot&oacuten Nuevo
             Documento. La pantalla de subida de archivos aparece.
@@ -276,19 +353,32 @@
             resumen, la descripci&oacuten y las palabras clave, sobre las cuales se
             realizar&aacuten b&uacutesquedas para poder consultar en la biblioteca.
             </p><br>
+            <p>
+                La columna “Acciones” de la tabla tiene varios botones. De izquierda a derecha
+                &eacute;stos son: “Ver”, “Editar”, “Descargar” y “Eliminar”
+            </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen14.png')}"/><br><br>
 
-            <p>La opci&oacuten Evaluaci&oacuten muestra una pantalla que permite definir
-            los par&aacutemetros de evaluaci&oacuten del proceso. Aqu&iacute se
-            muestra en forma de &aacuterbol en el lado izquierdo, donde se pueden
-            agregar, editar y eliminar los elementos (men&uacute en el clic derecho)
-            y en el lado derecho muestra una tabla que resume los datos de los
-            par&aacutemetros ingresados.
+            <p>
+                El bot&oacute;n “Ver” muestra los datos registrados del documento.
             </p><br>
+
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen15.png')}"/><br><br>
 
+            <p>
+                El bot&oacute;n “Editar” muestra el mismo formulario que el bot&oacute;n de creaci&oacute;n,
+                pero con los datos del documento seleccionado, de manera a poder editar la informaci&oacute;n y guardar los cambios.
+            </p>
+            <p>
+                El botón “Descargar” permite guardar de manera local el documento.
+
+            </p>
+            <p>
+                El botón “Eliminar” elimina definitivamente el documento y sus datos.
+            </p>
+
             <p>La opci&oacuten Ofertas permite crear, editar y eliminar ofertas, as&iacute
-            como evaluarlas. S&ocutelo los procesos registrados admiten el ingreso de
+            como evaluarlas. S&oacute;cutelo los procesos registrados admiten el ingreso de
             ofertas y evaluaci&oacuten, de modo que estas opciones del men&uacute
             aparecer&aacuten desactivadas para procesos no registrados. El registro de
             los procesos se realiza mediante el bot&oacuten Registrar en la pantalla
@@ -305,11 +395,6 @@
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen18.png')}"/><br><br>
 
-            <p>El bot&oacuten amarillo en la pantalla de ofertas, permite calificar
-            la oferta mediante una plantilla creada en base a la tabla de
-            evaluaci&oacuten con &aacutereas de texto para completar la informaci&oacuten.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen19.png')}"/><br><br>
 
             <p>Para crear una oferta use el bot&oacuten &#34Crear Oferta&#34.</p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen20.png')}"/>
@@ -332,18 +417,24 @@
             puede tambi&eacuten subir al sistema el archivo digitalizado o pdf del contrato,
             de tal forma que sirva como fuente de consulta inmediata para lograr el
             correcto cumplimiento del contrato.
-            </p>
+            </p><br>
 
             <p>Para acceder a contratos se debe usar la opci&ocuten contratos del men&uacute
             Ejecuci&oacuten.</p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen21.png')}"/><br><br>
 
-            <p>Esta pantalla cuenta con un men&uacute interno que permite listar los contratos
-            registrados en el sistema, crear nuevos contratos, grabar los datos al sistema,
-            cancelar cambios realizados, eliminar contratos en el caso de que no exista
-            informaci&oacuten asociada y finalmente salir a la pantalla inicial.
+            <p>Al presionar el bot&oacuten lista aparece una pantalla de b&uacutesqueda que
+            nos permite ubicar los contratos por c&oacutedigo o n&uacutemero de contrato
+            y por nombre de la obra.
             </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen22.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen24.png')}"/><br><br>
+
+
+            <p>Al presionar en el bot&oacuten &#34visto&#34 en la l&iacutenea deseada, se
+            cargan los datos del contrato y aparece la barra de botones o de herramientas
+            antes descrita.
+            </p><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen25.png')}"/><br><br>
 
             <p>En la parte inferior de la pantalla de contratos aparece una barra de herramientas
             una vez que se ha registrado el contrato o cuando se halla visualizando un contrato
@@ -352,23 +443,9 @@
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen23.png')}"/><br><br>
 
             <p>Esta barra de herramientas permite acceder al registro de garant&iacuteas
-            (m&oacutedulo a&uacuten en construcci&oacuten), el cronograma contractual de
-            la obra, la f&oacutermula polin&oacutemica contractual, una biblioteca de
-            documentos relativos al contrato y la ejecuci&oacuten de la obra, y al registro
-            y pago de planillas.
-            </p>
-
-            <p>Al presionar el bot&oacuten lista aparece una pantalla de b&uacutesqueda que
-            nos permite ubicar los contratos por c&oacutedigo o n&uacutemero de contrato
-            y por nombre de la obra.
+            , el cronograma contractual de la obra, la f&oacutermula polin&oacutemica contractual, una biblioteca de
+            documentos relativos al contrato y la ejecuci&oacuten de la obra.
             </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen24.png')}"/><br><br>
-
-            <p>Al presionar en el bot&oacuten &#34visto&#34 en la l&iacutenea deseada, se
-            cargan los datos del contrato y aparece la barra de botones o de herramientas
-            antes descrita.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen25.png')}"/><br><br>
 
             <p>La zona para el registro del objeto del contrato puede almacenar
             aproximadamente hasta 16 l&iacuteneas.
@@ -399,9 +476,12 @@
             de la obra, preparado en el m&oacutedulo de obras).
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen26.png')}"/><br><br>
-
-            <p>Para registrar los valores en el cronograma se debe hacer doble clic en la
-            casilla del mes correspondiente. El sistema muestra la pantalla para el registro
+            <p>
+                Se pueden filtrar los rubros por subpresupuesto, o mostrar todo.
+            </p>
+            <p>
+                Para registrar los valores en el cronograma se debe hacer clic sobre la o las filas a modificar (se muestran el azul las filas seleccionadas) y
+                doble clic en la casilla del mes correspondiente. El sistema muestra la pantalla para el registro
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen27.png')}"/><br><br>
 
