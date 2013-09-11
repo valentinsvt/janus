@@ -5,6 +5,7 @@ import com.lowagie.text.Element
 import com.lowagie.text.Font
 import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
+import com.lowagie.text.Phrase
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
@@ -50,6 +51,318 @@ class Reportes4Controller {
 
     def registradas () {
 
+    }
+
+    def imprimeMatrizA4() {
+
+        def obra = Obra.get(params.id)
+//
+//        println "imprime matriz"
+        def cn = buscadorService.dbConnectionService.getConnection()
+        def cn2 = buscadorService.dbConnectionService.getConnection()
+        def sql = "SELECT clmncdgo,clmndscr,clmntipo from mfcl where obra__id=${params.id} order by 1"
+        def columnas = []
+        def filas = []
+        cn.eachRow(sql.toString()) { r ->
+            def col = r[1]
+            if (r[2] != "R") {
+                def parts = col.split("_")
+                //println "parts "+parts
+                try {
+                    col = parts[0].toLong()
+                    col = Item.get(col).nombre
+
+                } catch (e) {
+                    col = parts[0]
+                }
+
+                col += parts[1]?.replaceAll("T", " Total")?.replaceAll("U", " Unitario")
+            }
+
+            columnas.add([r[0], col, r[2]])
+        }
+        sql = "SELECT * from mfrb where obra__id=${params.id} order by orden"
+        def cont = 1
+        cn.eachRow(sql.toString()) { r ->
+            def tmp = [cont, r[0].trim(), r[2], r[3], r[4]]
+            def sq = ""
+            columnas.each { c ->
+                if (c[2] != "R") {
+                    sq = "select valor from mfvl where obra__id=${params.id} and clmncdgo=${c[0]} and codigo='${r[0].trim()}'"
+                    cn2.eachRow(sq.toString()) { v ->
+                        tmp.add(v[0])
+                    }
+                }
+
+            }
+//            println "fila  "+tmp
+//            println("col" + columnas)
+            filas.add(tmp)
+            cont++
+        }
+
+        def baos = new ByteArrayOutputStream()
+        def name = "matriz_polinomica_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+//            println "name "+name
+        Font titleFont = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font titleFont3 = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font titleFont2 = new Font(Font.TIMES_ROMAN, 16, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+        Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+        document.addTitle("Matriz Polinómica " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus,matriz");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+        Font small = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        def titulo = obra.desgloseTransporte == "S" ? '(Con desglose de Transporte)' : '(Sin desglose de Transporte)'
+//        println titulo
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1)
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.add(new Paragraph(obra?.departamento?.direccion?.nombre, titleFont));
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.add(new Paragraph("MATRIZ DE LA FORMULA POLINÓMICA " + titulo, titleFont));
+        addEmptyLine(headersTitulo, 1);
+
+        document.add(headersTitulo)
+
+        PdfPTable tablaHeader = new PdfPTable(3);
+        tablaHeader.setWidthPercentage(100);
+        tablaHeader.setWidths(arregloEnteros([15, 2, 70]))
+
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+
+        addCellTabla(tablaHeader, new Paragraph("OBRA", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(obra?.nombre, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("CÓDIGO", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(obra?.codigo, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("MEMO CANT. OBRA", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(obra?.memoCantidadObra, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("DOC. REFERENCIA", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(obra?.oficioIngreso, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("FECHA", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(printFecha(obra?.fechaCreacionObra).toUpperCase(), times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph("FECHA ACT. PRECIOS", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(printFecha(obra?.fechaPreciosRubros).toUpperCase(), times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaHeader, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+        document.add(tablaHeader);
+
+        /*table*/
+
+        def parcial = []
+        def anchos = [5, 6, 35, 5, 8, 8, 8, 8, 8, 8]     // , 9
+        def anchos2 = [5, 6, 35, 5, 8, 8, 8, 8, 8]     // , 9
+
+        def inicio = 0
+        def fin = 10
+
+        def inicioCab = 1
+        def finCab = 10
+
+//        println "size "+columnas.size()
+        while (fin <= columnas.size() + 1) {  //gdo  <= antes
+
+//            println "inicio "+inicio+"  fin  "+fin
+//            println "iniciocab "+inicioCab+"  fincab  "+finCab
+            if (inicio != 0) {
+                anchos = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+                anchos2 = [10, 10, 10, 10, 10, 10, 10, 10, 10]
+            }
+
+            if (fin - inicio < 10) {
+                anchos = []
+                (fin - inicio).toInteger().times { i ->
+                    anchos.add((100 / (fin - inicio)).toInteger())
+                }
+
+                anchos2 = []
+                ((fin - inicio).toInteger() - 1).times { i ->
+                    anchos2.add((100 / (((fin - inicio).toInteger()) - 1)).toInteger())
+                }
+
+            }
+            def parrafo = new Paragraph("")
+/*
+            if (inicio == fin)
+               inicio -= 2       //gdo
+*/
+//            println "anchos "+anchos
+//            println "anchos2 "+anchos2
+            PdfPTable table = new PdfPTable((fin - inicio).toInteger());       //gdo
+//            println("-->>" + (fin-inicio))
+            PdfPTable table2 = new PdfPTable(((fin - inicio).toInteger()) - 1);
+
+            table.setWidthPercentage(100);
+            table.setWidths(arregloEnteros(anchos))
+
+            table2.setWidthPercentage(100);
+            table2.setWidths(arregloEnteros(anchos2))
+
+            if (inicio == 0) {
+                (finCab - inicioCab).toInteger().times { i ->
+//                if(inicio != 0){
+//                    println("entro" + i)
+//                    println("--->>>"  + i)
+//                    println("%%%%"  + inicio)
+//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[((inicio+i)-1)][1], small));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//                }
+//                if(inicio == 0){
+//
+//                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[inicio+i][1], small));
+//                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//                    table.addCell(c1);
+//                }
+//                    println columnas
+                    PdfPCell c0 = new PdfPCell(new Phrase(columnas[(inicioCab + i) - 1][1], small));
+                    c0.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table2.addCell(c0);
+                }
+                table2.setHeaderRows(1);
+                filas.each { f ->
+                    (finCab - inicioCab).toInteger().times { i ->
+
+//                    if(inicio != 0) {
+//
+//                        def dato = f[(inicio + i)-1]
+//                        if (!dato)
+//                            dato = "0.00"
+//                        else
+//                            dato = dato.toString()
+//                        def cell = new PdfPCell(new Phrase(dato, small))
+//                        cell.setFixedHeight(16f);
+//                        cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//                        table2.addCell(cell);
+//                    }
+//                    if(inicio == 0){
+//                        def dato = f[(inicio + i)]
+//                        if (!dato)
+//                            dato = "0.00"
+//                        else
+//                            dato = dato.toString()
+//                        def cell = new PdfPCell(new Phrase(dato, small))
+//                        cell.setFixedHeight(16f);
+////                        if (i > 3) cell.setHorizontalAlignment(Element.ALIGN_RIGHT)
+//                        table2.addCell(cell);
+//                    }
+                        def fuente = small
+                        def borde = 1.5
+                        if (f[1]=~"sS") {
+                            fuente = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+                        }
+
+                        def dato = f[(inicio + i)]
+                        if (!dato)
+                            dato = "0.00"
+                        else
+                            dato = dato.toString()
+                        def cell = new PdfPCell(new Phrase(dato, fuente));
+                        cell.setFixedHeight(16f);
+                        if (f[1] == "sS1")
+                            cell.setBorderWidthTop(borde)
+                        if (f[1] == "sS2")
+                            cell.setBorderWidthBottom(borde)
+                        table2.addCell(cell);
+                    }
+                }
+
+            } else {
+                (finCab - inicioCab).toInteger().times { i ->
+//                println "columnas "+columnas[(inicioCab + i)-1][1]
+                    PdfPCell c1 = new PdfPCell(new Phrase(columnas[(inicioCab + i) - 1][1], small));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+                }
+                table.setHeaderRows(1);
+                filas.each { f ->
+//                    println "f "+f[1]
+                    def fuente = small
+                    def borde = 1.5
+                    if (f[1]=~"sS") {
+                        fuente = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+                    }
+                    if (f[1] == "sS1" || f[1] == "sS2")
+                        borde = 1.5
+                    (fin - inicio).toInteger().times { i ->
+
+                        def dato = f[(inicio + i) - 1]
+                        if (!dato)
+                            dato = "0.00"
+                        else
+                            dato = dato.toString()
+                        def cell = new PdfPCell(new Phrase(dato, fuente));
+                        cell.setFixedHeight(16f);
+                        if (f[1] == "sS1")
+                            cell.setBorderWidthTop(borde)
+                        if (f[1] == "sS2")
+                            cell.setBorderWidthBottom(borde)
+                        table.addCell(cell);
+                    }
+                }
+            }
+
+            parrafo.add(table2)
+            parrafo.add(table);
+            document.add(parrafo);
+            document.newPage();
+//            inicio = fin + 1
+            inicio = fin
+            fin = inicio + 10
+
+            inicioCab = finCab
+            finCab = inicioCab + 10
+
+            if (fin > columnas.size() + 1) {
+                fin = columnas.size() + 1
+            }
+            if (finCab > columnas.size() + 1) {
+                finCab = columnas.size() + 1
+            }
+            if (inicio > columnas.size())
+                break;
+        }
+
+        /*table*/
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
     }
 
     def tablaRegistradas () {
