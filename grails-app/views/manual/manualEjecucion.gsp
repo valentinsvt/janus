@@ -478,17 +478,22 @@
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen26.png')}"/><br><br>
             <p>
                 Se pueden filtrar los rubros por subpresupuesto, o mostrar todo.
-            </p>
+            </p><br>
             <p>
                 Para registrar los valores en el cronograma se debe hacer clic sobre la o las filas a modificar (se muestran el azul las filas seleccionadas) y
                 doble clic en la casilla del mes correspondiente. El sistema muestra la pantalla para el registro
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen27.png')}"/><br><br>
 
-            <p>El modo de registro del cronograma es id&eacutentico al cronograma de la obra,
-            de tal forma que se pueden ingresar valores para varios periodos en forma
-            prorrateada tanto de las cantidades como del porcentaje o del valor monetario
-            del avance. <br> Desde la pantalla de cronograma se puede acceder al
+            <p>
+                El modo de registro del cronograma es id&eacute;ntico al cronograma de la obra,
+                de tal forma que se pueden ingresar valores para varios per&iacute;odos en forma
+                prorrateada tanto de las cantidades como del porcentaje o del valor
+                monetario del avance. Cuando se han seleccionado varias filas simult&aacute;neamente
+                la edición puede &uacute;nicamente realizarse por porcentajes, y los valores
+                ya existentes serán remplazados.
+
+                <br> Desde la pantalla de cronograma se puede acceder al
             gr&aacutefico de avance de la obra.
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen28.png')}"/><br><br>
@@ -538,7 +543,7 @@
             hojas de c&aacutelculo, im&aacutegenes o archivos en formato pdf. Esta biblioteca
             almacena documentos relativos al contrato desde la etapa del proceso hasta
             la ejecuci&oacuten de la obra.
-            </p>
+            </p><br>
 
             <p>Para acceder a la biblioteca haga clic en el bot&oacuten Biblioteca de la barra de
             herramientas inferior de la pantalla de contratos.
@@ -548,46 +553,57 @@
             <p>El sistema muestra la pantalla de documentos cargados obra por obra. En esta
             pantalla existe un buscador que permite ubicar documentos basados en palabras
             clave para un r&aacutepido acceso a la informaci&oacuten.
-            </p>
+            </p><br>
 
             <p>A continuaci&oacuten se muestra la pantalla resultado de buscar en la biblioteca
-            la palabra oferta.
+            la palabra "archivo".
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen32.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen32.png')}"/><br><br>
 
-            <p>Las palabras buscadas aparecen se&#241aladas en la pantalla para ayudar a
-            seleccionar el documento que m&aacutes se aproxima a lo requerido.
+            <p>Si desea incluir nuevos documentos haga un clic en el bot&oacute;n Nuevo Documento. La pantalla de subida de archivos aparece.
             </p><br>
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen33.png')}"/><br><br>
 
-            <p>La pantalla de ver documentos muestra la informaci&oacuten de resumen del documento
-            seleccionado. <br> Para el ingreso de nuevos documentos haga clic en el
-            bot&oacuten &#34Nuevo Documento&#34.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen34.png')}"/><br><br>
+            <p>
+            Los datos m&aacute;s importantes del registro de documentos comprenden el resumen,
+            la descripci&oacute;n y las palabras clave, sobre las cuales se realizar&aacute;n b&uacute;squedas
+            para poder consultar en la biblioteca.
 
-            <p>A la derecha de cada l&iacutenea de la lista de documentos aparecen los botones de
-            acciones que nos permiten ver, editar, descargar o eliminar un documento. <br>
-                El bot&oacuten Ver nos muestra una pantalla de resumen del documento:
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen35.png')}"/><br><br>
+            <p>
+            La columna “Acciones” de la tabla tiene varios botones.
+            De izquierda a derecha &eacute;stos son: “Ver”, “Editar”, “Descargar” y “Eliminar”
+            </p><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen34.png')}"/><br><br>
 
-            <p>El bot&oacuten editar muestra una pantalla similar a la de crear nuevos documentos,
-            excepto que en esta vez, aparece cargada con los valores registrados en el sistema.
+            <p>
+                El botón “Ver” muestra los datos registrados del documento.
+            </p><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen35.png')}"/><br><br>
+
+            <p>El bot&oacute;n “Editar” muestra el mismo formulario que el bot&oacute;n de creaci&oacute;n,
+            pero con los datos del documento seleccionado, de manera a poder editar la informaci&oacute;n y guardar los cambios.
             </p>
 
-            <p>El bot&oacuten descargar muestra una pantalla de descarga donde aparece el nombre
-            del archivo y el usuario puede indicar si s&oacutelo desea visualizarlo o
-            almacenarlo en su m&aacutequina para tenerlo disponible para pr&oacuteximas
-            consultas.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen36.png')}"/><br><br>
+            <p>El bot&oacute;n “Descargar” permite guardar de manera local el documento.
 
-            <p>Finalmente, si se desea borrar o eliminar un documento de la biblioteca, el
-            sistema presenta una pantalla de confirmaci&oacuten de la orden antes de realizar
-            el borrado.
+            </p>
+        <p>
+            El bot&oacute;n “Eliminar” elimina definitivamente el documento y sus datos.
+        </p><br>
+
+        <p>
+            La opci&oacute;n Ofertas permite crear, editar y eliminar ofertas, as&iacute; como evaluarlas. S&oacute;lo los
+            procesos registrados admiten el ingreso de ofertas y evaluaci&oacute;n, de modo que estas opciones
+            del men&uacute; aparecer&aacute;n desactivadas para procesos no registrados. El registro de los procesos se
+            realiza mediante el bot&oacute;n Registrar en la pantalla de concursos.
+        </p><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen36.png')}"/><br><br>
+
+            <p>
+                Para editar los datos de la oferta use el botón Editar.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen37.png')}"/><a id="RegControl"></a><br><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen37.png')}"/><br><br><br>
         </div>
 
 
