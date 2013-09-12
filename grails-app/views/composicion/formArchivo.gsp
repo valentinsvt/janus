@@ -24,8 +24,8 @@
         <g:uploadForm action="uploadFile" method="post" name="frmUpload" id="${obra}">
             <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
                 <div class="row-fluid" style="margin-left: 0px">
-                    <div class="span4">
-                        <div class="span3"><b>Archivo:</b></div>
+                    <div class="span6">
+                        <div class="span2"><b>Archivo:</b></div>
                         <input type="file" class="required" id="file" name="file"/>
                     </div>
                 </div>

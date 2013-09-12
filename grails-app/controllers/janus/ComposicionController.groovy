@@ -245,7 +245,7 @@ class ComposicionController extends janus.seguridad.Shield {
     }
 
     def uploadFile() {
-
+        def obra = Obra.get(params.id)
         def path = servletContext.getRealPath("/") + "xlsComposicion/"   //web-app/archivos
         new File(path).mkdirs()
 
@@ -293,27 +293,67 @@ class ComposicionController extends janus.seguridad.Shield {
                     if (sheet == 0) {
                         Sheet s = workbook.getSheet(sheet)
                         if (!s.getSettings().isHidden()) {
-                            println s.getName() + "  " + sheet
+//                            println s.getName() + "  " + sheet
                             htmlInfo += "<h2>Hoja " + (sheet + 1) + ": " + s.getName() + "</h2>"
                             Cell[] row = null
                             s.getRows().times { j ->
+                                def ok = true
 //                                if (j > 19) {
-                                println ">>>>>>>>>>>>>>>" + (j + 1)
+//                                println ">>>>>>>>>>>>>>>" + (j + 1)
                                 row = s.getRow(j)
                                 if (row.length == 11) {
-                                    def cod = row[0]
-                                    def nombre = row[1]
-                                    def cant = row[3]
-                                    def nuevaCant = row[4]
+                                    def cod = row[0].getContents()
+                                    def nombre = row[1].getContents()
+                                    def cant = row[3].getContents()
+                                    def nuevaCant = row[4].getContents()
 
-                                    /** **/
-                                    row.length.times { k ->
-                                        if (!row[k].isHidden()) {
-                                            println "k:" + k + "      " + row[k].getContents()
-                                        }// row ! hidden
-                                    } //row.legth.each
+                                    if (cod != "CODIGO") {
+                                        def item = Item.findAllByCodigo(cod)
+                                        if (item.size() == 1) {
+                                            //ok
+                                            item = item[0]
+                                        } else if (item.size() == 0) {
+                                            errores += "<li>No se encontró item con código ${cod} (l. ${j + 1})</li>"
+                                            println "No se encontró item con código ${cod}"
+                                            ok = false
+                                        } else {
+                                            println "Se encontraron ${item.size()} items con código ${cod}!! ${item.id}"
+                                            errores += "<li>Se encontraron ${item.size()} items con código ${cod}!! (l. ${j + 1})</li>"
+                                            ok = false
+                                        }
+                                        if (ok) {
+                                            def comp = Composicion.withCriteria {
+                                                eq("item", item)
+                                                eq("obra", obra)
+                                            }
+                                            if (comp.size() == 1) {
+                                                comp = comp[0]
+                                                comp.cantidad = nuevaCant.toDouble()
 
-                                    /** **/
+                                                if (comp.save(flush: true)) {
+                                                    done++
+//                                                    println "Modificado comp: ${comp.id}"
+                                                    doneHtml += "<li>Se ha modificado la cantidad para el item ${nombre}</li>"
+                                                } else {
+                                                    println "No se pudo guardar comp ${comp.id}: " + comp.errors
+                                                    errores += "<li>Ha ocurrido un error al guardar la cantidad para el item ${nombre} (l. ${j + 1})</li>"
+                                                }
+//                                            println comp
+//                                            /** **/
+//                                            row.length.times { k ->
+//                                                if (!row[k].isHidden()) {
+//                                                    println "k:" + k + "      " + row[k].getContents()
+//                                                }// row ! hidden
+//                                            } //row.legth.each
+                                            } else if (comp.size() == 0) {
+                                                println "No se encontró composición para el item ${nombre}"
+                                                errores += "<li>No se encontró composición para el item ${nombre} (l. ${j + 1})</li>"
+                                            } else {
+                                                println "Se encontraron ${comp.size()} composiciones para el item ${nombre}: ${comp.id}"
+                                                errores += "<li>Se encontraron ${comp.size()} composiciones para el item ${nombre} (l. ${j + 1})</li>"
+                                            }
+                                        }
+                                    }
                                 } //row ! empty
 //                                }//row > 7 (fila 9 + )
                             } //rows.each
@@ -334,7 +374,7 @@ class ComposicionController extends janus.seguridad.Shield {
                 flash.message = str
 
                 println "DONE!!"
-                redirect(action: "mensajeUpload")
+                redirect(action: "mensajeUpload", id: params.id)
             } else {
                 flash.message = "Seleccione un archivo Excel xls para procesar (archivos xlsx deben ser convertidos a xls primero)"
                 redirect(action: 'formArchivo')
@@ -347,7 +387,7 @@ class ComposicionController extends janus.seguridad.Shield {
     }
 
     def mensajeUpload() {
-
+        return [obra: params.id]
     }
 
     def save() {
