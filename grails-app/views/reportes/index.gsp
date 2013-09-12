@@ -63,94 +63,86 @@
 
     <div class="ui-widget-content ui-corner-all lista">
         <ul class="noBullet">
-            <li text="obraprsp" class="item" texto="obraprsp">
-                <g:link controller="reportes4" action="presupuestadas" class="link" dialog="dlgVentas">
-                    Obras presupuestadas:
-                </g:link>
-                Listado de obras que se hallan elaboradas los presupuestos y se hallan listas para entrar en el proceso de
-                contratación.
-            </li>
-
-            <li text="obracntr" class="item" texto="obracntr">
-                <g:link controller="reportes4" action="contratadas" class="link"
-                        dialog="dlgContabilidad">
-                    Obras contratadas
-                </g:link>
-                Listado de obras que se hallan contratadas
-            </li>
-
             <li text="obrargst" class="item" texto="obrargst">
                 %{--<g:link controller="reportes" action="presupuesto" file="Presupuesto.pdf" class="link"--}%
                 <g:link controller="reportes4" action="registradas" class="link"
                         dialog="dlgContabilidad">
-                    Obras ingresadas
+                    Obras ingresadas:
                 </g:link>
-                Listado de obras que se hallan registradas en el sistema, están an la fase inicial de estructuración de presupuestos
-                y más documentos precontractuales.
+                Listado de obras que se hallan en el sistema, estas obras están an la fase inicial de estructuración de presupuestos
+                y de documentos precontractuales. Estado = 'N'
             </li>
-
-            %{--<li text="obracntn" class="item" texto="obracntn">--}%
-                %{--<g:link controller="reportes" action="comprobante" file="Comprobante.pdf" class="link"--}%
-                        %{--dialog="dlgComprobante">--}%
-                    %{--Obras contratadas por cantón--}%
-                %{--</g:link>--}%
-                %{--Listado de obras que han contratado, organizadas por canton.--}%
-            %{--</li>--}%
+            <li text="obraprsp" class="item" texto="obraprsp">
+                <g:link controller="reportes4" action="presupuestadas" class="link" dialog="dlgVentas">
+                    Obras presupuestadas:
+                </g:link>
+                Listado de obras que ya poseen un presupuesto elaborado y se hallan listas para entrar en el proceso de
+                contratación. Estado = 'R'
+            </li>
 
             <li text="cncr" class="item" texto="cncr">
                 <g:link controller="concurso" action="concursos" file="concursos" class="link"
                         dialog="dlgContabilidadPeriodo">
-                    Procesos de contratación
+                    Procesos de contratación:
                 </g:link>
-                Listado de proceso para la contratación de obras y otros servicios.
+                Listado de procesos de contratación para la construcción de obras y para consultorías.
+            </li>
+
+
+            <li text="obracntr" class="item" texto="obracntr">
+                <g:link controller="reportes4" action="contratadas" class="link"
+                        dialog="dlgContabilidad">
+                    Obras contratadas:
+                </g:link>
+                Listado de obras que se hallan contratadas
             </li>
 
             <li text="cntr" class="item" texto="cntr">
                 <g:link controller="reportes4" action="contratos" class="link">
-                    Contratos
+                    Contratos:
                 </g:link>
-                Listado de contratos registrados en el sistema.
+                Listado de contratos de obras y consultorías registrados en el sistema.
             </li>
 
             <li text="prve" class="item" texto="prve">
                 <g:link controller="reportes4" action="contratistas"
                         class="link">
-                    Contratistas
+                    Contratistas:
                 </g:link>
-                Listado de contratistas que han firmado contratos con el GADPP.
+                Listado de contratistas que han firmado contratos de obras y consultoría con el GADPP.
             </li>
 
             <li text="asgr" class="item" texto="asgr">
                 <g:link controller="reportes4" action="aseguradoras" class="link">
-                    Aseguradoras
+                    Aseguradoras:
                 </g:link>
-                Listado de aseguradoras que se hallan registradas en el sistema.
+                Listado de aseguradoras que se hallan registradas en el sistema que han emitido garantías.
             </li>
 
             <li text="grnt" class="item" texto="grnt">
                 <g:link controller="reportes4" action="garantias" class="link">
-                    Garantías por contrato y contratistas
+                    Garantías registradas de los distintos contratos para obras y cosultoría:
                 </g:link>
                 Listado de garantías detalladas por contrato.
             </li>
             <li text="trnf" class="item" texto="trnf">
                 <g:link controller="planilla2" action="pagos" file="pagos.pdf"
                         class="link" dialog="dlgVentas">
-                    Transferencias y/o cheques pagados
+                    Transferencias y/o cheques pagados:
                 </g:link>
                 Listado de pagos realizados a partir de la solicitud depagos relativos a las obras.
             </li>
             <li text="avob" class="item" texto="avob">
                 <g:link controller="reportes" action="cambiosPatrimonio" file="Estado_Cambios_Patrimonio.pdf"
                         class="link" dialog="dlgVentas">
-                    Avance de obras
+                    Avance de obras:
                 </g:link>
                 Listado de obras con el respectivo porcentaje de avance.
             </li>
             <li text="obfn" class="item" texto="obfn">
                 <g:link controller="obra" action="obrasFinalizadas" file=""
                         class="link" dialog="dlgVentas">
-                    Obras finalizadas
+                    Obras finalizadas:
                 </g:link>
                 Listado de obras finalizadas.
             </li>
@@ -160,83 +152,77 @@
     <div id="tool" class="leyenda ui-widget-content ui-corner-all">
     </div>
 
+    <div id="obrargst" style="display: none">
+        <h3>Obras Registradas</h3><br>
+
+        <p>Listado de obras que están ingresadas al sistema. Estas obras se hallan en la fase inicial de registro de
+           cantidades de obra, elaboración de la matriz de la fórmula polinómica, fórmula polinómica, determinación de
+           plazos y cronograma de ejecución.</p>
+        <p>En esta fase se preparan los documentos precontractuales.</p>
+    </div>
+
     <div id="obraprsp" style="display: none;">
         <h3>Obras Presupuestadas</h3><br>
 
-        <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
-        contratación.
-        </p><p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
-        polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios</p>
+        <p>Listado de obras que ya cuentan con presupuestos elaborados. Estas obras se hallan listas para entrar en el proceso de
+        contratación.</p>
+        <p>Cada una de estas obras cuenta con el registro de volúmenes de obra, la matriz de la fórmula
+        polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales.</p>
+    </div>
+
+    <div id="cncr" style="display: none">
+        <h3>Proceso de contratación</h3><br>
+        <p>Listado de procesos para la contratación de obras y consultorías. </p>
+        <p>Desde este reporte se puede acceder al presupuesto de la obra y a detalle del proceso de contratación.</p>
     </div>
 
     <div id="obracntr" style="display: none">
         <h3>Obras Contratadas</h3><br>
 
-        <p>Listado de obras que se hallan elaboradas los presupuestos y se hallan lsitas para entrar en el proceso de
-        contratación.
-        </p><p> De cada una de las obbras se han realizado ya el registro de volúmen de obra, la matriz de la fórmula
-        polinómica, la fórmula polinómica, el cronograma y los documentos precontractuales necesarios</p>
-    </div>
-
-    <div id="obrargst" style="display: none">
-        <h3>Obras Registradas</h3><br>
-
-        <p>Listado de obras que se hallan regsitradas en el sistema, están an la fase inicial de estructuración de presupuestos
-        y más documentos precontractuales.</p>
-    </div>
-
-    <div id="obracntn" style="display: none">
-        <h3>Obras contratadas por cantón</h3><br>
-
-        <p> Listado de obras que han contratado, organizadas por canton.</p>
-    </div>
-
-    <div id="cncr" style="display: none">
-        <h3>Proceso</h3><br>
-
-        <p>Listado de procesos para la contratación de obras y otros servicios. </p>
+        <p>Listado de obras que se hallan contratadas, con los datos más relevantes del contrato.</p>
+        <p>Desde este reporte se puede acceder al presupuesto de la obra y a detalle del proceso de contratación.</p>
     </div>
 
     <div id="cntr" style="display: none">
         <h3>Contratos</h3><br>
 
         <p> Listado de contratos registrados en el sistema.</p>
+        <p>Desde este reprote se puede visualizar el contrato con su cronograma y fórmula polinómica.</p>
     </div>
 
     <div id="prve" style="display: none">
         <h3>Contratistas</h3><br>
-
-        <p>  Listado de contratistas que han firmado contratos con el GADPP.</p>
+        <p>  Listado de contratistas que han firmado contratos de ejecución de obras y cnsultorías con el GADPP.</p>
     </div>
 
     <div id="asgr" style="display: none">
         <h3>Aseguradoras</h3><br>
-
-        <p> Listado de aseguradoras que se hallan registradas en el sistema.</p>
+        <p> Listado de aseguradoras que se hallan registradas en el sistema y que han emitido garantías en los diferentes contratos.</p>
     </div>
 
     <div id="grnt" style="display: none">
         <h3>Garantías por contrato y contratista</h3><br>
-
-        <p> Listado de garantías detalladas por contrato.</p>
+        <p> Listado de garantías detalladas por contrato, indicando el tipo de garantía, vigencia y valores</p>
     </div>
 
     <div id="trnf" style="display: none">
         <h3>Trasferencias y/o cheques pagados</h3><br>
 
-        <p>Listado de pagos realizados a partir de la solicitud depagos relativos a las obras. </p>
+        <p>Listado de pagos de planillas realizados de las distintas obras contratadas. </p>
     </div>
 
     <div id="avob" style="display: none">
         <h3>Avance de obras</h3><br>
 
-        <p>  Listado de obras con el respectivo porcentaje de avance.</p>
+        <p>  Listado de obras con el respectivo porcentaje de avance físico y económico.</p>
     </div>
 
     <div id="obfn" style="display: none">
         <h3>Obras finalizadas</h3><br>
 
         <p>Listado de obras finalizadas.</p>
+        <p>Estas obras cuentan ya con el acta de entrega - rececpción provicional o definitiva.</p>
+        <p>El reprote muestra fechas de inicio de obra y fechas de la firma de actas.</p>
     </div>
 
 
