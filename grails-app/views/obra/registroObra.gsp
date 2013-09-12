@@ -107,6 +107,7 @@
                 <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
             </g:if>
         </g:if>
+
     </g:if>
     <g:if test="${obra?.id != null}">
 
