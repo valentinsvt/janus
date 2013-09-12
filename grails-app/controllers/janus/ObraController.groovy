@@ -22,6 +22,33 @@ class ObraController extends janus.seguridad.Shield {
 
     }
 
+    def iniciarObraAdm(){
+        println "incio obra dm "+params
+        def obra=Obra.get(params.obra)
+        def fecha
+        try{
+            fecha=new Date().parse("dd-MM-yyyy",params.fecha)
+            if(!obra.fechaInicio){
+                obra.tipo="D"
+                obra.fechaInicio=fecha
+                obra.observacionesInicioObra=params.obs
+                obra.save(flush: true)
+                render "ok"
+                return
+
+            }else{
+                render "error"
+                return
+            }
+        } catch (e){
+            println "error fecha "+e
+            render "error"
+            return
+        }
+
+
+    }
+
 
     def obrasFinalizadas() {
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"]]

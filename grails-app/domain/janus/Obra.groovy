@@ -107,6 +107,10 @@ class Obra implements Serializable {
     Persona firmaInicioObra
     String anexos
 
+
+    String observacionesInicioObra
+
+
     static mapping = {
         table 'obra'
         cache usage: 'read-write', include: 'non-lazy'
@@ -219,6 +223,9 @@ class Obra implements Serializable {
             memoInicioObra column: 'obrammio'
             firmaInicioObra column: 'prsnfrio'
             anexos column: 'obraanxo'
+
+            observacionesInicioObra column: 'obraobin'
+
         }
     }
     static constraints = {
@@ -326,6 +333,9 @@ class Obra implements Serializable {
         memoInicioObra(blank: true, nullable: true, maxSize: 20, attributes: [title: 'Memo de inicio de obra'])
         firmaInicioObra(blank: true, nullable: true, attributes: [title: 'Firma para el memo de inicio de obra'])
         anexos(blank: true, nullable: true, maxSize: 255, attributes: [title: 'Anexos y planos ingresados a la biblioteca'])
+
+        observacionesInicioObra(blank: true,nullable: true,size: 1..55)
+
     }
 
     String toString() {

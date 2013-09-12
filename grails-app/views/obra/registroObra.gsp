@@ -130,6 +130,12 @@
         %{--</g:if>--}%
         </g:if>
     </g:if>
+    <g:if test="${obra?.estado == 'R'}">
+        <g:if test="${!obra?.fechaInicio}">
+            <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra como administración directa
+            </button>
+        </g:if>
+    </g:if>
 
 </div>
 
@@ -741,7 +747,16 @@
     </div>
 </g:if>
 
+<div id="admDirecta">
 
+    <br>
+    <b>Observaciones:</b><br><br>
+    <textarea  style="width: 90%;height: 80px;resize: none" id="descAdm" maxlength="250"></textarea>
+    <br> <br>
+    <b>Fecha de inicio:</b> <br><br>
+    <elm:datepicker id="fechaInicio"></elm:datepicker>
+
+</div>
 
 
 <div id="errorDialog">
@@ -912,6 +927,69 @@
     }
 
     $(function () {
+
+
+        $("#btn-adminDirecta").click(function(){
+            $("#admDirecta").dialog("open")
+            $(".ui-dialog-titlebar-close").html("X")
+        });
+        $("#admDirecta").dialog({
+            autoOpen:false,
+            width:500,
+            height:400,
+            title:"Iniciar obra",
+            modal:true,
+            buttons:{
+                "Cerrar":function(){
+
+                },
+                "Iniciar obra":function(){
+                    var obs = $("#descAdm").val()
+                    var fec = $("#fechaInicio").val()
+                    var msg =""
+                    if(obs.length>250)
+                        msg+="<br>El campon observaciones debe tener maximo 250 caracteres."
+                    if(!fec || fec==""){
+                        msg+="<br>Seleccione una fecha de inicio de obra."
+                    }
+                    if(msg!=""){
+                        $.box({
+                            imageClass : "box_info",
+                            text       : msg,
+                            title      : "Errores",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable : false,
+                                draggable : false
+                            }
+                        });
+                    }else{
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${g.createLink(action:'iniciarObraAdm' )}",
+                            data    : "obra=${obra?.id}&fecha="+fec+"&obs="+obs,
+                            success : function (msg) {
+                                if(msg=="ok")
+                                    location.reload(true)
+                                else{
+                                    $.box({
+                                        imageClass : "box_info",
+                                        text       : "Ha ocurrido un error, revice los datos ingresados",
+                                        title      : "Errores",
+                                        iconClose  : false,
+                                        dialog     : {
+                                            resizable : false,
+                                            draggable : false
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                }
+            }
+        });
 
         $('#coords').editable({
             type      : 'coords',
