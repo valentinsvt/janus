@@ -431,7 +431,7 @@ class ReportesController {
 
     def reporteBuscador = {
 
-        // println "reporte buscador params !! "+params
+//        println "reporte buscador params !! "+params
         if (!session.dominio)
             response.sendError(403)
         else {

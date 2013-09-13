@@ -412,7 +412,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def buscarObra() {
-        println "buscar obra"
+//        println "buscar obra "+params
         def extraParr = ""
         def extraCom = ""
         def extraDep = ""
@@ -496,11 +496,11 @@ class ObraController extends janus.seguridad.Shield {
                             extraCom = "-1"
                         remove.add(i)
                     }
-                    if (params.campos == "canton") {
-                        def cans = Canton.findAll("from Canton where nombre like '%${params.criterios.toUpperCase()}%'")
-                        params.criterios = ""
+                    if (p == "canton") {
+                        def cans = Canton.findAll("from Canton where nombre like '%${params.criterios[i].toUpperCase()}%'")
+
                         cans.eachWithIndex { c, j ->
-                            def parrs = Parroquia.findAllByCanton(p)
+                            def parrs = Parroquia.findAllByCanton(c)
                             parrs.eachWithIndex { pa, k ->
                                 extraCan += "" + pa.id
                                 if (k < parrs.size() - 1)
@@ -509,8 +509,7 @@ class ObraController extends janus.seguridad.Shield {
                         }
                         if (extraCan.size() < 1)
                             extraCan = "-1"
-                        params.campos = ""
-                        params.operadores = ""
+                        remove.add(i)
                     }
                     if (p == "parroquia") {
                         def parrs = Parroquia.findAll("from Parroquia where nombre like '%${params.criterios[i].toUpperCase()}%'")
@@ -683,7 +682,7 @@ class ObraController extends janus.seguridad.Shield {
         def listaTitulos = ["CODIGO", "NOMBRE", "DESCRIPCION", "FECHA REG.", "M. INGRESO", "M. SALIDA", "SITIO", "PLAZO", "PARROQUIA", "COMUNIDAD", "INSPECTOR", "REVISOR", "RESPONSABLE", "ESTADO"]
         def listaCampos = ["codigo", "nombre", "descripcion", "fechaCreacionObra", "oficioIngreso", "oficioSalida", "sitio", "plazo", "parroquia", "comunidad", "inspector", "revisor", "responsableObra", "estado"]
         def funciones = [null, null, null, ["format": ["dd/MM/yyyy hh:mm"]], null, null, null, null, ["closure": [parr, "&"]], ["closure": [comu, "&"]], null, null, null, null]
-        def url = g.createLink(action: "buscarObra", controller: "obra")
+        def url = g.createLink(action: "buscarObraLq", controller: "obra")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-busqueda").modal("hide");'
         funcionJs += 'location.href="' + g.createLink(action: 'registroObra', controller: 'obra') + '?obra="+$(this).attr("regId");'
