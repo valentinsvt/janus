@@ -56,7 +56,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def buscarObraFin() {
-        println "buscar obra fin"
+//        println "buscar obra fin"
         def extraParr = ""
         def extraCom = ""
         def extraDep = ""
@@ -166,9 +166,9 @@ class ObraController extends janus.seguridad.Shield {
         def comu = { c ->
             return c.comunidad?.nombre
         }
-        def listaTitulos = ["CODIGO", "NOMBRE", "DESCRIPCION", "DIRECCION", "FECHA REG.", "M. INGRESO", "M. SALIDA", "SITIO", "PLAZO", "PARROQUIA", "COMUNIDAD", "INSPECTOR", "REVISOR", "RESPONSABLE", "ESTADO"]
-        def listaCampos = ["codigo", "nombre", "descripcion", "departamento", "fechaCreacionObra", "oficioIngreso", "oficioSalida", "sitio", "plazoEjecucionMeses", "parroquia", "comunidad", "inspector", "revisor", "responsableObra", "estado"]
-        def funciones = [null, null, null, null, ["format": ["dd/MM/yyyy hh:mm"]], null, null, null, null, ["closure": [parr, "&"]], ["closure": [comu, "&"]], null, null, null, null]
+        def listaTitulos = ["CODIGO", "NOMBRE", "DIRECCION", "FECHA REG.",  "SITIO", "PARROQUIA", "COMUNIDAD", "FECHA INICIO","FECHA FIN"]
+        def listaCampos = ["codigo", "nombre", "departamento", "fechaCreacionObra",  "sitio",  "parroquia", "comunidad","fechaInicio","fechaFin" ]
+        def funciones = [null, null, null, ["format": ["dd/MM/yyyy"]], null,["closure": [parr, "&"]], ["closure": [comu, "&"]], ["format": ["dd/MM/yyyy"]], ["format": ["dd/MM/yyyy"]]]
         def url = g.createLink(action: "buscarObraFin", controller: "obra")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-busqueda").modal("hide");'
@@ -196,9 +196,9 @@ class ObraController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Obra
             session.funciones = funciones
-            def anchos = [7, 10, 7, 7, 7, 7, 7, 7, 4, 7, 7, 7, 7, 7, 7]
+            def anchos = [7, 16, 23,8,10,10,10,8,8]
             /*el ancho de las columnas en porcentajes... solo enteros*/
-            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Lista de obras", anchos: anchos, extras: extras, landscape: true])
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE OBRAS FINALIZADAS", anchos: anchos, extras: extras, landscape: true])
         }
     }
 

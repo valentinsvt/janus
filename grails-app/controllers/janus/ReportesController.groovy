@@ -448,6 +448,13 @@ class ReportesController {
 //            println "name "+name
             Font catFont = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
             Font info = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+            Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+            Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+            Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+            Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+            Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+            Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+            Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
             Document document
             if (params.landscape)
                 document = new Document(PageSize.A4.rotate());
@@ -462,13 +469,20 @@ class ReportesController {
             document.addKeywords("reporte, elyon," + params.titulo);
             document.addAuthor("Janus");
             document.addCreator("Tedein SA");
-            Paragraph preface = new Paragraph();
-            addEmptyLine(preface, 1);
-            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
-            preface.add(new Paragraph("" + params.titulo, catFont));
-            preface.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
-            addEmptyLine(preface, 1);
-            document.add(preface);
+//            Paragraph preface = new Paragraph();
+//            addEmptyLine(headers, 1);
+//            preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont));
+            Paragraph headers = new Paragraph();
+            addEmptyLine(headers, 1);
+            headers.setAlignment(Element.ALIGN_CENTER);
+            headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+            addEmptyLine(headers, 1);
+            headers.add(new Paragraph("" + params.titulo, times12bold));
+            addEmptyLine(headers, 1);
+            headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
+            addEmptyLine(headers, 1);
+
+            document.add(headers);
 //        Start a new page
 //        document.newPage();
             //System.getProperty("user.name")

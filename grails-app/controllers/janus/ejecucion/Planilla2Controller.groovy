@@ -131,7 +131,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             session.funciones = funciones
             def anchos = [15,15,40,10,10,10]
             /*el ancho de las columnas en porcentajes... solo enteros*/
-            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Planilla", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PAGOS", anchos: anchos, extras: extras, landscape: true])
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Planilla", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE CHEQUES PAGADOS", anchos: anchos, extras: extras, landscape: true])
         }
     }
 
