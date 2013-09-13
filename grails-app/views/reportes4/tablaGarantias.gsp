@@ -109,7 +109,9 @@
 
             <tbody id="tabla_material">
 
-            <g:if test="${params.criterio || params.fecha}">
+            %{--<g:if test="${params.criterio || params.fecha}">--}%
+            <g:if test="${params.buscador != 'undefined'}">
+
 
                 <g:each in="${res}" var="cont" status="j">
                     <tr class="obra_row" id="${cont.id}">

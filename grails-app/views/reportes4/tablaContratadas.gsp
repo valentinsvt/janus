@@ -71,7 +71,7 @@
             Valor
         </th>
         <th style="width: 250px">
-            Elaborado
+           Coordinación
         </th>
         <th style="width: 80px">
             Contrato
@@ -84,7 +84,7 @@
 
     <tbody id="tabla_material">
 
-    <g:if test="${params.criterio}">
+    <g:if test="${params.buscador != 'undefined'}">
 
     <g:each in="${obras}" var="obra" status="j">
         <tr class="obra_row" id="${obra.id}">
@@ -107,7 +107,6 @@
 
     </tbody>
 </table>
-
 
 
 <script type="text/javascript">

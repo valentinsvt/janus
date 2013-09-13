@@ -99,7 +99,7 @@ class ConcursoController extends janus.seguridad.Shield {
             return (concurso?.estado!="R")?"N":"R"
         }
 
-        def listaTitulos = ["CODIGO","OBJETO","OBRA","PAC","MONTO","ESTADO"]
+        def listaTitulos = ["NÚMERO","OBJETO","OBRA/CONSULTORIA","PAC","MONTO","ESTADO"]
         def listaCampos = ["codigo", "objeto", "obra", "pac", "presupuestoReferencial","estado"]
         def funciones = [null, null,["closure": [nombreObra, "&"]], ["closure": [pac, "&"]], null,["closure": [registro, "&"]]]
         def url = g.createLink(action: "buscarConcurso", controller: "concurso")

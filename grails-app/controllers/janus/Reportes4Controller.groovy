@@ -55,6 +55,11 @@ class Reportes4Controller {
 
     }
 
+    def presuestadasFinal () {
+
+
+    }
+
     def imprimeMatrizA4() {
 
         def obra = Obra.get(params.id)
@@ -463,22 +468,33 @@ class Reportes4Controller {
 
         }
 
+//       def bandera = 0
+//
+//        if(params.estado == '1'){
+//
+//            bandera = 1
+//
+//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
+//        }
+//        else if(params.estado == '2'){
+//
+//            bandera = 1
+//
+//            filtro = " where obraofig is NOT NULL "
+//
+//        }
+//        else if(params.estado == '3'){
+//
+//            bandera = 1
+//
+//            filtro = " where obraetdo='R' "
+//
+//        }
+
+        filtro = " where obraetdo='N' "
 
 
-        if(params.estado == '1'){
 
-            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-        }
-        else if(params.estado == '2'){
-
-            filtro = " where obraofig is NOT NULL "
-
-        }
-        else if(params.estado == '3'){
-
-            filtro = " where obraetdo='R' "
-
-        }
 //        println "====================="
 //        println filtro
 //        println filtroBuscador
@@ -527,6 +543,174 @@ class Reportes4Controller {
 
         return [obras: obras, res: res, valoresTotales: valoresTotales, params:params]
     }
+
+
+    def tablaPresupuestadas () {
+
+        //        println("paramsReg" + params)
+
+        def obras
+
+        def sql
+        def cn
+        def res
+
+
+        def total1 = 0;
+        def totales
+        def totalPresupuestoBien=[];
+        def valoresTotales = []
+
+        def valores
+        def subPres
+
+        params.old = params.criterio
+
+        params.criterio=cleanCriterio(params.criterio)
+
+        def sqlBase =  "SELECT\n" +
+                "  o.obra__id    id,\n" +
+                "  o.obracdgo    codigo, \n" +
+                "  o.obranmbr    nombre,\n" +
+                "  o.obratipo    tipo,\n" +
+                "  o.obrafcha    fecha,\n" +
+                "  c.cmndnmbr    comunidad,\n" +
+                "  p.parrnmbr    parroquia,\n" +
+                "  n.cntnnmbr    canton,\n" +
+                "  o.obraofsl    oficio,\n" +
+                "  o.obrammsl    memo,\n" +
+                "  e.dptodscr    elaborado,\n" +
+                "  d.dptodscr    destino,\n" +
+                "  o.obraofig    ingreso,\n" +
+                "  o.obraetdo    estado,\n" +
+                "  s.prsnnmbr    personan,\n" +
+                "  s.prsnapll    personaa,\n" +
+                "  t.tpobdscr    tipoobra\n" +
+                "FROM obra o\n" +
+                "  LEFT JOIN dpto d ON o.dptodstn = d.dpto__id\n" +
+                "  LEFT JOIN dpto e ON o.dpto__id = e.dpto__id\n" +
+                "  LEFT JOIN cmnd c ON o.cmnd__id = c.cmnd__id\n" +
+                "  LEFT JOIN parr p ON c.parr__id = p.parr__id\n" +
+                "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
+                "  LEFT JOIN prsn s ON o.obrainsp = s.prsn__id\n" +
+                "  LEFT JOIN tpob t ON o.tpob__id = t.tpob__id\n"
+
+
+        def filtro=" where obraetdo='R' or obraofig is NOT NULL "
+        def filtroBuscador = ""
+
+        def buscador = ""
+
+        switch (params.buscador) {
+            case "cdgo":
+            case "nmbr":
+            case "ofig":
+            case "ofsl":
+            case "mmsl":
+            case "frpl":
+            case "tipo":
+                buscador = "obra"+params.buscador
+                filtroBuscador =" and ${buscador} ILIKE ('%${params.criterio}%') "
+                break;
+            case "cmnd":
+                filtroBuscador = " and c.cmndnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "parr":
+                filtroBuscador = " and p.parrnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cntn":
+                filtroBuscador = " and n.cntnnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "insp":
+            case "rvsr":
+                filtroBuscador = " and (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
+                break;
+
+        }
+
+//       def bandera = 0
+//
+//        if(params.estado == '1'){
+//
+//            bandera = 1
+//
+//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
+//        }
+//        else if(params.estado == '2'){
+//
+//            bandera = 1
+//
+//            filtro = " where obraofig is NOT NULL "
+//
+//        }
+//        else if(params.estado == '3'){
+//
+//            bandera = 1
+//
+//            filtro = " where obraetdo='R' "
+//
+//        }
+
+        filtro = " where obraetdo='R' "
+
+
+
+//        println "====================="
+//        println filtro
+//        println filtroBuscador
+//        println "====================="
+
+        params.criterio = params.old
+
+        sql = sqlBase + filtro + filtroBuscador
+
+        cn = dbConnectionService.getConnection()
+
+        res = cn.rows(sql.toString())
+//        println(sql)
+//        println(res)
+
+        res.each{
+
+            totales = 0
+            total1=0
+
+            valores =  preciosService.rbro_pcun_v2(it.id)
+
+            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
+
+            subPres.each { s->
+
+                valores.each {
+                    if(it.sbprdscr == s.descripcion){
+
+                        totales = it.totl
+                        totalPresupuestoBien = (total1 += totales)
+                    }
+
+
+                }
+
+
+            }
+
+//           println("--->>" + totalPresupuestoBien)
+            valoresTotales += totalPresupuestoBien
+
+        }
+
+//        println("##" + valoresTotales)
+
+        return [obras: obras, res: res, valoresTotales: valoresTotales, params:params]
+
+
+
+
+    }
+
+
+
+
 
     private static void addEmptyLine(Paragraph paragraph, int number) {
         for (int i = 0; i < number; i++) {
@@ -658,21 +842,23 @@ class Reportes4Controller {
         }
 
 
+//
+//        if(params.estado == '1'){
+//
+//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
+//        }
+//        else if(params.estado == '2'){
+//
+//            filtro = " where obraofig is NOT NULL "
+//
+//        }
+//        else if(params.estado == '3'){
+//
+//            filtro = " where obraetdo='R' "
+//
+//        }
 
-        if(params.estado == '1'){
-
-            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-        }
-        else if(params.estado == '2'){
-
-            filtro = " where obraofig is NOT NULL "
-
-        }
-        else if(params.estado == '3'){
-
-            filtro = " where obraetdo='R' "
-
-        }
+        filtro = " where obraetdo='N' "
 
         sql = sqlBase + filtro + filtroBuscador
 
@@ -778,7 +964,7 @@ class Reportes4Controller {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("REPORTE DE OBRAS REGISTRADAS", times12bold));
+        headers.add(new Paragraph("REPORTE DE OBRAS INGRESADAS", times12bold));
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
         addEmptyLine(headers, 1);
@@ -802,7 +988,264 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.nombre, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.tipoobra, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i?.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph( i?.fecha.toString(), times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
+            if(valoresTotales[j] != null){
+                addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
+                        5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+            }else {
+
+                addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+
+            }
+
+            addCellTabla(tablaRegistradas, new Paragraph(i.elaborado, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellLeft)
+
+
+
+        }
+
+
+        document.add(tablaRegistradas);
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+
+    }
+
+
+    def reportePresupuestadas () {
+
+        //        println("params reporte:" + params)
+
+        def sql
+        def cn
+        def res
+
+
+        def total1 = 0;
+        def totales
+        def totalPresupuestoBien=[];
+        def valoresTotales = []
+
+        def valores
+        def subPres
+
+        def sqlBase =  "SELECT\n" +
+                "  o.obra__id    id,\n" +
+                "  o.obracdgo    codigo, \n" +
+                "  o.obranmbr    nombre,\n" +
+                "  o.obratipo    tipo,\n" +
+                "  o.obrafcha    fecha,\n" +
+                "  c.cmndnmbr    comunidad,\n" +
+                "  p.parrnmbr    parroquia,\n" +
+                "  n.cntnnmbr    canton,\n" +
+                "  o.obraofsl    oficio,\n" +
+                "  o.obrammsl    memo,\n" +
+                "  e.dptodscr    elaborado,\n" +
+                "  d.dptodscr    destino,\n" +
+                "  o.obraofig    ingreso,\n" +
+                "  o.obraetdo    estado,\n" +
+                "  s.prsnnmbr    personan,\n" +
+                "  s.prsnapll    personaa,\n" +
+                "  t.tpobdscr    tipoobra\n" +
+                "FROM obra o\n" +
+                "  LEFT JOIN dpto d ON o.dptodstn = d.dpto__id\n" +
+                "  LEFT JOIN dpto e ON o.dpto__id = e.dpto__id\n" +
+                "  LEFT JOIN cmnd c ON o.cmnd__id = c.cmnd__id\n" +
+                "  LEFT JOIN parr p ON c.parr__id = p.parr__id\n" +
+                "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
+                "  LEFT JOIN prsn s ON o.obrainsp = s.prsn__id\n" +
+                "  LEFT JOIN tpob t ON o.tpob__id = t.tpob__id\n"
+
+
+        def filtro=" where obraetdo='R' or obraofig is NOT NULL "
+        def filtroBuscador = ""
+
+
+
+        switch (params.buscador) {
+            case "cdgo":
+            case "nmbr":
+            case "ofig":
+            case "ofsl":
+            case "mmsl":
+            case "frpl":
+            case "tipo":
+                params.buscador = "obra"+params.buscador
+                filtroBuscador =" and ${params.buscador} ILIKE ('%${params.criterio}%') "
+                break;
+            case "cmnd":
+                filtroBuscador = " and c.cmndnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "parr":
+                filtroBuscador = " and p.parrnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cntn":
+                filtroBuscador = " and n.cntnnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "insp":
+            case "rsvr":
+                filtroBuscador = " and s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%') "
+                break;
+
+        }
+
+
+//
+//        if(params.estado == '1'){
+//
+//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
+//        }
+//        else if(params.estado == '2'){
+//
+//            filtro = " where obraofig is NOT NULL "
+//
+//        }
+//        else if(params.estado == '3'){
+//
+//            filtro = " where obraetdo='R' "
+//
+//        }
+
+        filtro = " where obraetdo='R' "
+
+        sql = sqlBase + filtro + filtroBuscador
+
+        cn = dbConnectionService.getConnection()
+
+        res = cn.rows(sql.toString())
+
+//        println(sql)
+
+        //valor
+
+        res.each{
+
+            totales = 0
+            total1=0
+
+            valores =  preciosService.rbro_pcun_v2(it.id)
+
+            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
+
+            subPres.each { s->
+
+                valores.each {
+                    if(it.sbprdscr == s.descripcion){
+
+                        totales = it.totl
+                        totalPresupuestoBien = (total1 += totales)
+                    }
+
+
+                }
+
+
+            }
+
+            valoresTotales += totalPresupuestoBien
+
+        }
+
+        //reporte
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+        def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+        def prmsCellRightTop = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1"]
+        def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
+        def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.WHITE, colspan: 6,
+                align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+
+        def baos = new ByteArrayOutputStream()
+        def name = "presupuestadas_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
+                times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+        def pdfw = PdfWriter.getInstance(document, baos);
+        document.open();
+
+//        document.setMargins(2,2,2,2)
+        document.addTitle("ObrasPresupuestadas " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", times18bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph("REPORTE DE OBRAS PRESUPUESTADAS", times12bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
+        addEmptyLine(headers, 1);
+        document.add(headers);
+
+        PdfPTable tablaRegistradas = new PdfPTable(8);
+        tablaRegistradas.setWidthPercentage(100);
+        tablaRegistradas.setWidths(arregloEnteros([14, 35, 8, 8, 30, 10, 10,10]))
+
+        addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Tipo", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Fecha Reg.", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
+
+        res.eachWithIndex {i,j->
+
+            addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.nombre, times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(i.tipoobra, times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i?.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph( i?.fecha.toString(), times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
             if(valoresTotales[j] != null){
                 addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
@@ -911,20 +1354,23 @@ class Reportes4Controller {
 
 
 
-        if(params.estado == '1'){
+//        if(params.estado == '1'){
+//
+//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
+//        }
+//        else if(params.estado == '2'){
+//
+//            filtro = " where obraofig is NOT NULL "
+//
+//        }
+//        else if(params.estado == '3'){
+//
+//            filtro = " where obraetdo='R' "
+//
+//        }
 
-            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-        }
-        else if(params.estado == '2'){
 
-            filtro = " where obraofig is NOT NULL "
-
-        }
-        else if(params.estado == '3'){
-
-            filtro = " where obraetdo='R' "
-
-        }
+        filtro = " where obraetdo='N' "
 
         sql = sqlBase + filtro + filtroBuscador
 
@@ -1004,7 +1450,7 @@ class Reportes4Controller {
         WritableCellFormat cf2obj = new WritableCellFormat(nf);
 
         label = new Label(1, 1, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
-        label = new Label(1, 2, "REPORTE EXCEL OBRAS REGISTRADAS", times16format); sheet.addCell(label);
+        label = new Label(1, 2, "REPORTE EXCEL OBRAS INGRESADAS", times16format); sheet.addCell(label);
 
 
 
@@ -1045,6 +1491,229 @@ class Reportes4Controller {
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
+
+    }
+
+
+    def reporteExcelPresupuestadas () {
+
+
+
+
+        def sql
+        def cn
+        def res
+
+
+        def total1 = 0;
+        def totales
+        def totalPresupuestoBien=[];
+        def valoresTotales = []
+
+        def valores
+        def subPres
+
+        def sqlBase =  "SELECT\n" +
+                "  o.obra__id    id,\n" +
+                "  o.obracdgo    codigo, \n" +
+                "  o.obranmbr    nombre,\n" +
+                "  o.obratipo    tipo,\n" +
+                "  o.obrafcha    fecha,\n" +
+                "  c.cmndnmbr    comunidad,\n" +
+                "  p.parrnmbr    parroquia,\n" +
+                "  n.cntnnmbr    canton,\n" +
+                "  o.obraofsl    oficio,\n" +
+                "  o.obrammsl    memo,\n" +
+                "  e.dptodscr    elaborado,\n" +
+                "  d.dptodscr    destino,\n" +
+                "  o.obraofig    ingreso,\n" +
+                "  o.obraetdo    estado,\n" +
+                "  s.prsnnmbr    personan,\n" +
+                "  s.prsnapll    personaa,\n" +
+                "  t.tpobdscr    tipoobra\n" +
+                "FROM obra o\n" +
+                "  LEFT JOIN dpto d ON o.dptodstn = d.dpto__id\n" +
+                "  LEFT JOIN dpto e ON o.dpto__id = e.dpto__id\n" +
+                "  LEFT JOIN cmnd c ON o.cmnd__id = c.cmnd__id\n" +
+                "  LEFT JOIN parr p ON c.parr__id = p.parr__id\n" +
+                "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
+                "  LEFT JOIN prsn s ON o.obrainsp = s.prsn__id\n" +
+                "  LEFT JOIN tpob t ON o.tpob__id = t.tpob__id\n"
+
+
+        def filtro=" where obraetdo='R' or obraofig is NOT NULL "
+        def filtroBuscador = ""
+
+
+
+        switch (params.buscador) {
+            case "cdgo":
+            case "nmbr":
+            case "ofig":
+            case "ofsl":
+            case "mmsl":
+            case "frpl":
+            case "tipo":
+                params.buscador = "obra"+params.buscador
+                filtroBuscador =" and ${params.buscador} ILIKE ('%${params.criterio}%') "
+                break;
+            case "cmnd":
+                filtroBuscador = " and c.cmndnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "parr":
+                filtroBuscador = " and p.parrnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "cntn":
+                filtroBuscador = " and n.cntnnmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "insp":
+            case "rsvr":
+                filtroBuscador = " and s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%') "
+                break;
+
+        }
+
+
+
+//        if(params.estado == '1'){
+//
+//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
+//        }
+//        else if(params.estado == '2'){
+//
+//            filtro = " where obraofig is NOT NULL "
+//
+//        }
+//        else if(params.estado == '3'){
+//
+//            filtro = " where obraetdo='R' "
+//
+//        }
+
+
+        filtro = " where obraetdo='R' "
+
+        sql = sqlBase + filtro + filtroBuscador
+
+        cn = dbConnectionService.getConnection()
+
+        res = cn.rows(sql.toString())
+
+//        println(sql)
+
+        //valor
+
+        res.each{
+
+            totales = 0
+            total1=0
+
+            valores =  preciosService.rbro_pcun_v2(it.id)
+
+            subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
+
+            subPres.each { s->
+
+                valores.each {
+                    if(it.sbprdscr == s.descripcion){
+
+                        totales = it.totl
+                        totalPresupuestoBien = (total1 += totales)
+                    }
+
+
+                }
+
+
+            }
+
+            valoresTotales += totalPresupuestoBien
+
+        }
+
+
+        //excel
+        WorkbookSettings workbookSettings = new WorkbookSettings()
+        workbookSettings.locale = Locale.default
+
+        def file = File.createTempFile('myExcelDocument', '.xls')
+        file.deleteOnExit()
+
+        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+        WritableCellFormat formatXls = new WritableCellFormat(font)
+
+        def row = 0
+        WritableSheet sheet = workbook.createSheet('MySheet', 0)
+        // fija el ancho de la columna
+        // sheet.setColumnView(1,40)
+
+        WritableFont times16font = new WritableFont(WritableFont.TIMES, 11, WritableFont.BOLD, false);
+        WritableCellFormat times16format = new WritableCellFormat(times16font);
+        sheet.setColumnView(0, 12)
+        sheet.setColumnView(1, 60)
+        sheet.setColumnView(2, 25)
+        sheet.setColumnView(3, 25)
+        sheet.setColumnView(4, 40)
+        sheet.setColumnView(5, 25)
+        sheet.setColumnView(8, 20)
+        // inicia textos y numeros para asocias a columnas
+
+        def label
+        def nmro
+        def number
+
+        def fila = 6;
+
+
+        NumberFormat nf = new NumberFormat("#.##");
+        WritableCellFormat cf2obj = new WritableCellFormat(nf);
+
+        label = new Label(1, 1, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+        label = new Label(1, 2, "REPORTE EXCEL OBRAS PRESUPUESTADAS", times16format); sheet.addCell(label);
+
+
+
+        label = new Label(0, 4, "Código: ", times16format); sheet.addCell(label);
+        label = new Label(1, 4, "Nombre", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "Tipo", times16format); sheet.addCell(label);
+        label = new Label(3, 4, "Fecha Reg.", times16format); sheet.addCell(label);
+        label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
+        label = new Label(5, 4, "Valor", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Elaborado", times16format); sheet.addCell(label);
+        label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
+
+        res.eachWithIndex {i, j->
+
+
+            label = new Label(0, fila, i.codigo.toString()); sheet.addCell(label);
+            label = new Label(1, fila, i?.nombre.toString()); sheet.addCell(label);
+            label = new Label(2, fila, i?.tipoobra?.toString()); sheet.addCell(label);
+            label = new Label(3, fila, i?.fecha?.toString()); sheet.addCell(label);
+            label = new Label(4, fila, i?.canton?.toString() + " " + i?.parroquia?.toString() + " " + i?.comunidad?.toString()); sheet.addCell(label);
+            if(valoresTotales[j]!= null){
+                number = new jxl.write.Number(5, fila, valoresTotales[j]); sheet.addCell(number);
+            }else{
+                label = new Label(5, fila, " "); sheet.addCell(label);
+            }
+
+            label = new Label(6, fila, i?.elaborado?.toString()); sheet.addCell(label);
+            label = new Label(7, fila, i?.estado?.toString()); sheet.addCell(label);
+            fila++
+
+        }
+
+
+        workbook.write();
+        workbook.close();
+        def output = response.getOutputStream()
+        def header = "attachment; filename=" + "DocumentosObraExcel.xls";
+        response.setContentType("application/octet-stream")
+        response.setHeader("Content-Disposition", header);
+        output.write(file.getBytes());
+
+
 
     }
 
@@ -1141,6 +1810,9 @@ class Reportes4Controller {
 
         }
 
+
+
+
         params.criterio = params.old
         sql = sqlBase + filtroBuscador
 
@@ -1148,7 +1820,7 @@ class Reportes4Controller {
 
         res = cn.rows(sql.toString())
 
-        println(sql)
+//        println(sql)
 //        println(res)
 
 
@@ -1158,8 +1830,10 @@ class Reportes4Controller {
         def contrato
         def contratos = []
 
+        def bandera = 0
 
         res.each{ i->
+
 
             obra = Obra.get(i.id)
 
@@ -1187,7 +1861,12 @@ class Reportes4Controller {
 
         }
 
+
+
+
         obras.each{
+
+           bandera = 1
 
             totales = 0
             total1=0
@@ -1224,7 +1903,7 @@ class Reportes4Controller {
 //        }
 
 
-        return [obras: obras, res: res, valoresTotales: valoresTotales, params:params, contratos: contratos]
+        return [obras: obras, res: res, valoresTotales: valoresTotales, params:params, contratos: contratos, bandera: bandera]
 
 
 
@@ -1350,16 +2029,28 @@ class Reportes4Controller {
 
         PdfPTable tablaRegistradas = new PdfPTable(8);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([14, 30, 15, 8, 25, 10, 20, 10]))
+//        tablaRegistradas.setWidths(arregloEnteros([14, 30, 15, 8, 25, 10, 20, 10]))
+        tablaRegistradas.setWidths(arregloEnteros([14, 30, 15, 25, 15, 10, 15, 10]))
+
+//        addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Tipo", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Fecha Reg.", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Contrato", times8bold), prmsCellHead2)
 
         addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Tipo", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Fecha Reg.", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Fecha Contrato", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Coordinación", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Contrato", times8bold), prmsCellHead2)
+
+
 
 
 //        println "\n\nREPORTE "+params
@@ -1481,7 +2172,6 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.nombre, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.tipoobra, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
             if(valoresTotales[j] != null){
                 addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
@@ -1491,6 +2181,7 @@ class Reportes4Controller {
                 addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
 
             }
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.elaborado, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(contratos[j].codigo, times8normal), prmsCellLeft)
 
@@ -1906,7 +2597,8 @@ class Reportes4Controller {
                 times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
-        document = new Document(PageSize.A4.rotate());
+        document = new Document(PageSize.A4);
+        document.setMargins(56.2, 56.2, 50, 28.1);
         def pdfw = PdfWriter.getInstance(document, baos);
         document.open();
 
@@ -1970,7 +2662,7 @@ class Reportes4Controller {
 
         PdfPTable tablaRegistradas = new PdfPTable(3);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([5, 2, 70]))
+        tablaRegistradas.setWidths(arregloEnteros([10, 2, 70]))
 
 
         res.each {
@@ -2298,7 +2990,8 @@ class Reportes4Controller {
                 times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
 
         Document document
-        document = new Document(PageSize.A4.rotate());
+        document = new Document(PageSize.A4);
+        document.setMargins(56.2, 56.2, 50, 28.1);
         def pdfw = PdfWriter.getInstance(document, baos);
         document.open();
 
@@ -2347,7 +3040,7 @@ class Reportes4Controller {
 
         PdfPTable tablaRegistradas = new PdfPTable(3);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([10, 2, 70]))
+        tablaRegistradas.setWidths(arregloEnteros([15, 2, 65]))
 
 
         res.each {
@@ -2789,13 +3482,12 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(10);
+        PdfPTable tablaRegistradas = new PdfPTable(9);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([14, 14, 15, 30, 25, 10, 20, 10, 10, 10]))
+        tablaRegistradas.setWidths(arregloEnteros([14, 14, 30, 25, 10, 20, 10, 10, 10]))
 
         addCellTabla(tablaRegistradas, new Paragraph("N° Contrato", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Fecha Suscripcion", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Memo", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Obra", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Cantón - Parroquia - Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Plazo", times8bold), prmsCellHead2)
@@ -2887,9 +3579,10 @@ class Reportes4Controller {
         res.eachWithIndex {i,j->
 
             addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
-//            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fechasu, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.memo, times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph (i.fechasu.toString(), times8normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i.fechasu, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(i.memo, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.obranombre, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.plazo, times8normal), prmsCellLeft)
@@ -3155,10 +3848,11 @@ class Reportes4Controller {
                 "  g.grntdias    dias\n" +
                 "FROM grnt g\n" +
                 "  LEFT JOIN cntr c ON g.cntr__id = c.cntr__id\n" +
+                "  LEFT JOIN ofrt o ON c.ofrt__id = o.ofrt__id\n" +
                 "  LEFT JOIN tpgr t ON g.tpgr__id = t.tpgr__id\n" +
                 "  LEFT JOIN tdgr q ON g.tdgr__id = q.tdgr__id\n" +
                 "  LEFT JOIN asgr a ON g.asgr__id = a.asgr__id\n" +
-                "  LEFT JOIN prve s ON c.prve__id = s.prve__id\n" +
+                "  LEFT JOIN prve s ON o.prve__id = s.prve__id\n" +
                 "  LEFT JOIN mnda m ON g.mnda__id = m.mnda__id\n"
 
 
@@ -3280,10 +3974,11 @@ class Reportes4Controller {
                 "  g.grntdias    dias\n" +
                 "FROM grnt g\n" +
                 "  LEFT JOIN cntr c ON g.cntr__id = c.cntr__id\n" +
+                "  LEFT JOIN ofrt o ON c.ofrt__id = o.ofrt__id\n" +
                 "  LEFT JOIN tpgr t ON g.tpgr__id = t.tpgr__id\n" +
                 "  LEFT JOIN tdgr q ON g.tdgr__id = q.tdgr__id\n" +
                 "  LEFT JOIN asgr a ON g.asgr__id = a.asgr__id\n" +
-                "  LEFT JOIN prve s ON c.prve__id = s.prve__id\n" +
+                "  LEFT JOIN prve s ON o.prve__id = s.prve__id\n" +
                 "  LEFT JOIN mnda m ON g.mnda__id = m.mnda__id\n"
 
 
@@ -3380,7 +4075,7 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Monto", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Emisión", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Vencimiento", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Cancelación", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Cancela-ción", times8bold), prmsCellHead2)
 
         switch (params.buscador) {
             case "cdgo":

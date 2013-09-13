@@ -7581,9 +7581,9 @@ class ReportesController {
 
 
         addCellTabla(tablaTotalCom, new Paragraph(" ", times8bold), prmsCellHead4)
-        addCellTabla(tablaTotalCom, new Paragraph(" ", times8bold), prmsCellHead4)
-        addCellTabla(tablaTotalCom, new Paragraph(" ", times8bold), prmsCellHead4)
-        addCellTabla(tablaTotalCom, new Paragraph(" ", times8bold), prmsCellHead4)
+//        addCellTabla(tablaTotalCom, new Paragraph(" ", times8bold), prmsCellHead4)
+//        addCellTabla(tablaTotalCom, new Paragraph(" ", times8bold), prmsCellHead4)
+//        addCellTabla(tablaTotalCom, new Paragraph(" ", times8bold), prmsCellHead4)
 
 //        document.add(tablaTotalCom);
 
@@ -7803,12 +7803,12 @@ class ReportesController {
         addCellTabla(tablaContMano, new Paragraph(g.formatNumber(number: totalPrueba6, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
 
         addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
+//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
+//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
+//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
+//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
+//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
+//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
 
 //        document.add(tablaContMano);
 
@@ -8009,17 +8009,25 @@ class ReportesController {
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
-       //nota
+//       nota
 
-//        Paragraph pie = new Paragraph();
-//        addEmptyLine(pie, 1);
-//        pie.setAlignment(Element.ALIGN_LEFT);
-//        addEmptyLine(pie, 1);
-//        pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por adminsitración directa el valor que se requerirá consiste en el costo de los materiales \$ " + g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
-//                + " puesto que la mano de obra y los costos están considerados dentro de los gastos corrientes de la Institución.", times8normal));
-//        addEmptyLine(pie, 1);
+        Paragraph pie = new Paragraph();
+        pie.setAlignment(Element.ALIGN_LEFT);
+        pie.add(new Paragraph("PLAZO: " + obra?.plazoEjecucionMeses + "mes(es) " + obra?.plazoEjecucionDias + " días calendario", times8normal ))
+        pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por administración directa el valor que se requerirá consiste en el costo de los materiales \$ " + g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+                + " puesto que la mano de obra y los costos están considerados dentro de los gastos corrientes de la Institución.", times8normal));
+        addEmptyLine(pie, 1);
+
+        PdfPTable tablaAdjunto = new PdfPTable(2);
+        tablaAdjunto.setWidthPercentage(100);
+        tablaAdjunto.setWidths(arregloEnteros([10,70]))
 
 
+        addCellTabla(tablaAdjunto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaAdjunto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaAdjunto, new Paragraph("Adjunto: ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaAdjunto, new Paragraph(auxiliar?.notaPieAd, times8normal), prmsHeaderHojaLeft)
 
         document.add(headers);
         document.add(tablaCabeceraMemo);
@@ -8042,7 +8050,8 @@ class ReportesController {
         document.add(tablaComEq);
         document.add(tablaTotalCom);
 
-//        document.add(pie);
+        document.add(pie);
+
 
 
 
@@ -8304,7 +8313,7 @@ class ReportesController {
         }
 
 
-
+        document.add(tablaAdjunto);
 
         document.close();
         pdfw.close()

@@ -73,7 +73,8 @@
                 y de documentos precontractuales. Estado = 'N'
             </li>
             <li text="obraprsp" class="item" texto="obraprsp">
-                <g:link controller="reportes4" action="presupuestadas" class="link" dialog="dlgVentas">
+                %{--<g:link controller="reportes4" action="presupuestadas" class="link" dialog="dlgVentas">--}%
+                <g:link controller="reportes4" action="presuestadasFinal" class="link">
                     Obras presupuestadas:
                 </g:link>
                 Listado de obras que ya poseen un presupuesto elaborado y se hallan listas para entrar en el proceso de

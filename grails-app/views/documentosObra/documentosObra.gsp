@@ -809,19 +809,12 @@
 
 <div id="tab-memorandoPresu" class="tab" style="">
 
-<div class="cabecera">
+<div class="cabecera" >
 
-    <fieldset class="borde">
+    <fieldset class="borde" style="margin-top: -10px">
         <legend>Cabecera</legend>
 
-        %{--<div class="span6">--}%
-        %{--<div class="span1">Memo N°</div>--}%
-
-        %{--<div class="span3"><g:textField name="numeroMemo" value="${obra?.memoSalida}" disabled="true"/></div>--}%
-        %{--</div>--}%
-
-
-        <div class="span6">
+        <div class="span6" style="margin-top: -10px">
             <div class="span1">PARA:</div>
             <div class="span3"><g:select name="paraMemoPresu" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>
         </div>
@@ -863,7 +856,7 @@
 
             <g:hiddenField name="obra" value="${obra?.id}"/>
 
-            <div class="span6">
+            <div class="span6" style="margin-top: -10px">
 
                 <div class="span1">Texto</div>
 
@@ -873,30 +866,47 @@
 
             </div>
 
-            <div class="span6">
+            %{--<div class="span6">--}%
 
 
-            </div>
-
-
-        %{--<div class="span6">--}%
-        %{--<div class="span1">Pie</div>--}%
-
-        %{--<div class="span3"><g:textArea name="memo2" value="${auxiliarFijo?.memo2}" rows="4" cols="4"--}%
-        %{--style="width: 600px; height: 55px; margin-left: -50px; resize: none;"--}%
-        %{--disabled="true"/></div>--}%
-
-        %{--</div>--}%
+            %{--</div>--}%
 
         </g:form>
 
-        <div class="span6" style="margin-top: 10px">
+        <div class="span6">
             <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
                 <button class="btn" id="btnEditarMemoPresu">Editar</button>
                 <button class="btn" id="btnAceptarMemoPresu">Aceptar</button>
 
             </div>
         </div>
+
+        <g:form class="memoGrabarAdjunto" name="frm-memoAdj" controller="auxiliar" action="saveMemoAdj">
+
+            <g:hiddenField name="id" value="${"1"}"/>
+
+            <g:hiddenField name="obra" value="${obra?.id}"/>
+
+            <div class="span6">
+
+                <div class="span1">Adjunto</div>
+
+                <div class="span3"><g:textArea name="notaPieAd" value="${auxiliarFijo?.notaPieAd}" rows="4" cols="4"
+                                               style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
+                                               disabled="true"/></div>
+
+            </div>
+
+        </g:form>
+
+        <div class="span6">
+            <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+                <button class="btn" id="btnEditarAdjunto">Editar</button>
+                <button class="btn" id="btnAceptarAdjunto">Aceptar</button>
+
+            </div>
+        </div>
+
 
 
 
@@ -1720,6 +1730,16 @@
 
     });
 
+
+    $("#btnEditarAdjunto").click(function () {
+
+        $("#notaPieAd").attr("disabled", false);
+
+    });
+
+
+
+
     $(".radioPresupuesto").click(function () {
 
         tipoClick = $(this).attr("value")
@@ -2035,6 +2055,12 @@
 
         $("#frm-memoPresu").submit();
     });
+
+    $("#btnAceptarAdjunto").click(function () {
+
+        $("#frm-memoAdj").submit();
+    });
+
 
 
     $("#btnEditarTextoF").click(function () {

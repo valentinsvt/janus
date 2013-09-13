@@ -70,9 +70,9 @@
                 <th style="width: 60px;">
                     Suscripción
                 </th>
-                <th style="width: 60px">
-                    Memo Distri.
-                </th>
+                %{--<th style="width: 60px">--}%
+                    %{--Memo Distri.--}%
+                %{--</th>--}%
                 <th style="width: 300px">
                     Concurso
                 </th>
@@ -124,13 +124,16 @@
             <tbody id="tabla_material">
 
 
-            <g:if test="${params.criterio || params.fecha}">
 
+
+
+            %{--<g:if test="${params.criterio || params.fecha}">--}%
+                <g:if test="${params.buscador != 'undefined'}">
             <g:each in="${res}" var="cont" status="j">
                 <tr class="obra_row" id="${cont.id}">
                     <td>${cont.codigo}</td>
                     <td><g:formatDate date="${cont.fechasu}" format="dd-MM-yyyy"/></td>
-                    <td>${cont.memo}</td>
+                    %{--<td>${cont.memo}</td>--}%
                     <td>${cont.concurso}</td>
                     <td>${cont.obracodigo}</td>
                     <td>${cont.obranombre} </td>
@@ -151,7 +154,7 @@
 
             </g:each>
             </g:if>
-
+%{--</g:if>--}%
 
 
             </tbody>

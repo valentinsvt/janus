@@ -1,10 +1,10 @@
-
 <%--
   Created by IntelliJ IDEA.
   User: fabricio
-  Date: 8/20/13
-  Time: 12:10 PM
+  Date: 9/13/13
+  Time: 4:29 PM
 --%>
+
 
 <g:if test="${flash.message}">
     <div class="span12" style="height: 35px;margin-bottom: 10px; margin-left: -25px">
@@ -23,23 +23,23 @@
         <g:select name="buscador" from="${['cdgo':'Codigo', 'nmbr':'Nombre', 'tipo': 'Tipo', 'cntn': 'Cantón', 'parr': 'Parroquia'
                 , 'cmnd': 'Comunidad', 'insp':'Inspector', 'rvsr':'Revisor', 'ofig':'Of. Ingreso', 'ofsl': 'Of. Salida'
                 ,'mmsl':'Memo Salida', 'frpl':'F. Polinómica']}" value="${params.buscador}"
-                  optionKey="key" optionValue="value" id="buscador_reg" style="width: 150px"/>
+                  optionKey="key" optionValue="value" id="buscador_reg1" style="width: 150px"/>
         %{--<b style="margin-left: 10px">Estado: </b>--}%
         %{--<g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"--}%
-                  %{--optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>--}%
+        %{--optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>--}%
         <b>Criterio: </b>
         <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
-        <a href="#" class="btn  " id="buscar">
+        <a href="#" class="btn  " id="buscar1">
             <i class="icon-search"></i>
             Buscar
         </a>
         %{--<a href="#" class="btn  " id="imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
+        %{--<i class="icon-print"></i>--}%
+        %{--Imprimir--}%
         %{--</a>--}%
         %{--<a href="#" class="btn" id="regresar">--}%
-            %{--<i class="icon-arrow-left"></i>--}%
-            %{--Regresar--}%
+        %{--<i class="icon-arrow-left"></i>--}%
+        %{--Regresar--}%
         %{--</a>--}%
     </div>
 
@@ -88,22 +88,22 @@
     %{--<g:if test="${params.criterio || bandera == 1}">--}%
     <g:if test="${params.buscador != 'undefined'}">
 
-    <g:each in="${res}" var="obra" status="j">
-        <tr class="obra_row" id="${obra.id}">
-            <td>${obra.codigo}</td>
-            <td>${obra.nombre}</td>
-            <td>${obra.tipoobra}</td>
-            <td><g:formatDate date="${obra.fecha}" format="dd-MM-yyyy"/></td>
-            <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
-            <td style="text-align: right">${valoresTotales[j]}</td>
-            <td>${obra.elaborado}</td>
-            <td>${obra.ingreso}</td>
-            <td>${obra.estado == "R"? "Registrada":"No registrada"}</td>
+        <g:each in="${res}" var="obra" status="j">
+            <tr class="obra_row" id="${obra.id}">
+                <td>${obra.codigo}</td>
+                <td>${obra.nombre}</td>
+                <td>${obra.tipoobra}</td>
+                <td><g:formatDate date="${obra.fecha}" format="dd-MM-yyyy"/></td>
+                <td>${obra.canton} - ${obra.parroquia} - ${obra.comunidad}</td>
+                <td style="text-align: right">${valoresTotales[j]}</td>
+                <td>${obra.elaborado}</td>
+                <td>${obra.ingreso}</td>
+                <td>${obra.estado == "R"? "Registrada":"No registrada"}</td>
 
-        </tr>
+            </tr>
 
 
-    </g:each>
+        </g:each>
 
     </g:if>
 
@@ -118,12 +118,12 @@
 
     var checkeados = []
 
-    $("#buscar").click(function(){
+    $("#buscar1").click(function(){
 
         %{--var datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()--}%
-        var datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + ${1} + "&criterio=" + $("#criterio").val()
+        var datos = "si=${"si"}&buscador=" + $("#buscador_reg1").val() + "&estado=" + ${1} + "&criterio=" + $("#criterio").val()
         var interval = loading("detalle")
-        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaRegistradas')}",
+        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaPresupuestadas')}",
             data     : datos,
             success  : function (msg) {
                 clearInterval(interval)
@@ -145,7 +145,7 @@
 
 
         %{--location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradas' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()--}%
-        location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradas' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + ${1} + "&criterio=" + $("#criterio").val()
+        location.href="${g.createLink(controller: 'reportes4', action:'reportePresupuestadas' )}?buscador=" + $("#buscador_reg1").val() + "&estado=" + ${1} + "&criterio=" + $("#criterio").val()
 
     });
 
@@ -153,7 +153,7 @@
 
 
         %{--location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradasExcel' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val() + "&criterio=" + $("#criterio").val()--}%
-        location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradasExcel' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + ${1} + "&criterio=" + $("#criterio").val()
+        location.href="${g.createLink(controller: 'reportes4', action:'reporteExcelPresupuestadas' )}?buscador=" + $("#buscador_reg1").val() + "&estado=" + ${1} + "&criterio=" + $("#criterio").val()
 
     });
 

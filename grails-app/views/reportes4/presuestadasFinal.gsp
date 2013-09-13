@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: fabricio
+  Date: 9/13/13
+  Time: 4:25 PM
+--%>
+
 
 
 
@@ -7,7 +14,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        Obras Ingresadas
+        Obras Presupuestadas
     </title>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -70,8 +77,8 @@
     function cargarTabla() {
         var interval = loading("detalle")
         var datos = ""
-        datos = "si=${"si"}&buscador=" + $("#buscador_reg").val() + "&estado=" + $("#estado_reg").val()
-        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaRegistradas')}",
+        datos = "si=${"si"}&buscador=" + $("#buscador_reg1").val() + "&estado=" + $("#estado_reg1").val()
+        $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes4',action:'tablaPresupuestadas')}",
             data     : datos,
             success  : function (msg) {
                 clearInterval(interval)

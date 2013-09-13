@@ -87,9 +87,10 @@
 
     <tbody id="tabla_material">
 
-    <g:if test="${params.criterio}">
+    <g:if test="${params.buscador != 'undefined'}">
 
-    <g:each in="${res}" var="aseg" status="j">
+
+        <g:each in="${res}" var="aseg" status="j">
         <tr class="obra_row" id="${aseg.id}">
             <td>${aseg.nombre}</td>
             <td>${aseg.tipoaseguradora}</td>
