@@ -391,7 +391,7 @@ class ComposicionController extends janus.seguridad.Shield {
     }
 
     def save() {
-        println "save comp " + params.data
+        println "save comp " + params
 
         def parts = params.data.split("X")
         parts.each { p ->
@@ -402,6 +402,23 @@ class ComposicionController extends janus.seguridad.Shield {
                     if (comp) {
                         comp.cantidad = data[1].toDouble()
                         comp.save(flush: true)
+                    }
+                }
+            }
+        }
+        if(params.data2 && params.data2!=""){
+            parts = params.data2.split("X")
+            parts.each { p ->
+                if (p != "") {
+                    def data = p.split("I")
+                    if (data[0] != "") {
+                        def comp = Composicion.get(data[0])
+                        if (comp) {
+                            comp.precio = data[1].toDouble()
+                            comp.transporte=0
+                            if(!comp.save(flush: true))
+                                println "error sva comp "+comp.errors
+                        }
                     }
                 }
             }
