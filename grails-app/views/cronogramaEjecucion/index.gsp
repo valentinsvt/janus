@@ -50,6 +50,10 @@
                         <i class="icon-resize-small"></i>
                         Suspensión
                     </a>
+                    <a href="#" class="btn btn-info" id="btnModif">
+                        <i class="icon-retweet"></i>
+                        Modificación
+                    </a>
                     %{--<a href="#" class="btn btn-info" id="btnFecha">--}%
                     %{--<i class="icon-calendar"></i>--}%
                     %{--Cambiar fecha de fin--}%
@@ -96,7 +100,7 @@
 
         </div>
 
-        <div class="modal fade hide " id="modal-forms">
+        <div class="modal fade hide large" id="modal-forms">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -298,6 +302,50 @@
 
                         }
                     });
+                    return false;
+                });
+
+                $("#btnModif").click(function () {
+                    var vol = $(".rowSelected").first().data("vol");
+                    if (vol) {
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(action:'modificacion_ajax')}",
+                            data    : {
+                                obra     : "${obra.id}",
+                                contrato : "${contrato.id}",
+                                vol      : vol
+                            },
+                            success : function (msg) {
+                                var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
+                                btnSave.click(function () {
+                                    if ($("#frmSave-suspension").valid()) {
+                                        btnSave.replaceWith(spinner);
+                                        var data = $("#frmSave-suspension").serialize();
+                                        data += "&obra=${obra.id}";
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : "${createLink(action:'modificacion')}",
+                                            data    : data,
+                                            success : function (msg) {
+                                                //                                            ////console.log(msg);
+                                                $("#modal-forms").modal("hide");
+                                                updateTabla();
+                                            }
+                                        });
+                                    }
+                                    return false;
+                                });
+
+                                $("#modalTitle-forms").html("Modificación");
+                                $("#modalBody-forms").html(msg);
+                                $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
+                                $("#modal-forms").modal("show");
+                            }
+                        });
+                    }
                     return false;
                 });
 

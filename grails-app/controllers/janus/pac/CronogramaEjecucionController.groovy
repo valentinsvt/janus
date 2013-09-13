@@ -5,6 +5,11 @@ import janus.Contrato
 import janus.Modificaciones
 import janus.Obra
 import janus.VolumenesObra
+import janus.ejecucion.PeriodoPlanilla
+import janus.ejecucion.Planilla
+import janus.ejecucion.TipoPlanilla
+
+import javax.management.Query
 
 class CronogramaEjecucionController extends janus.seguridad.Shield {
 
@@ -284,6 +289,288 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
         }
 
         render "OK"
+    }
+
+    def modificacion_ajax() {
+        def obra = Obra.get(params.obra.toLong())
+        def contrato = Contrato.get(params.contrato.toLong())
+        def vol = VolumenesObra.get(params.vol.toLong())
+
+        def html = "", row2 = ""
+
+        def liquidacionReajuste = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("L"))
+        if (liquidacionReajuste.size() > 0) {
+            return [msg: "Ya se ha realizado la liquidación del reajuste, ya no puede realizar modificaciones"]
+        }
+
+        def planillas = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"))
+        def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
+
+        def indirecto = obra.totales / 100
+        preciosService.ac_rbroObra(obra.id)
+
+        def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, vol.item.id)
+//            precios.put(vol.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
+//            println indirecto
+//            println res
+        def precio = (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2)
+        def cronos = [
+                codigo: vol.item.codigo,
+                nombre: vol.item.nombre,
+                unidad: vol.item.unidad.codigo,
+                cantidad: vol.cantidad,
+                precioU: precio,
+                parcial: precio * vol.cantidad,
+                volumen: vol
+        ]
+
+        html += "<table class='table table-condensed'>"
+        html += "<tr>"
+        html += "<th>Rubro</th>"
+        html += "<td>" + cronos.codigo + " " + cronos.nombre + "</td>"
+        html += "<th>Unidad</th>"
+        html += "<td>" + cronos.unidad + "</td>"
+        html += "</tr>"
+        html += "<tr>"
+        html += "<th>Cantidad</th>"
+        html += "<td>" + numero(cronos.cantidad) + "</td>"
+        html += "<th>Unitario</th>"
+        html += "<td>" + numero(cronos.precioU) + "</td>"
+        html += "</tr>"
+        html += "<tr>"
+        html += "<th>C. total</th>"
+        html += "<td>" + numero(cronos.parcial) + "</td>"
+        html += "</tr>"
+        html += "</table>"
+
+        html += '<table class="table table-bordered table-condensed table-hover">'
+        html += '<thead>'
+        html += '<tr>'
+        html += '<th rowspan="2" style="width:50px;"></th>'
+        html += '<th rowspan="2" style="width:12px;">'
+        html += 'T.'
+        html += '</th>'
+        periodos.eachWithIndex { per, i ->
+            html += "<th class='${per.tipo}'>"
+            html += formatDate(date: per.fechaInicio, format: "dd-MM-yyyy") + " a " + formatDate(date: per.fechaFin, format: "dd-MM-yyyy")
+            html += "</th>"
+
+            row2 += "<th class='${per.tipo}' data-periodo='${per.id}'>"
+            row2 += (per.tipo == 'P' ? 'Periodo' : (per.tipo == 'S' ? 'Susp.' : '')) + " " + per.numero
+            row2 += " (" + (per.fechaFin - per.fechaInicio + 1) + " días)"
+            row2 += "</th>"
+        }
+        html += '<th rowspan="2">'
+        html += 'Total rubro'
+        html += '</th>'
+        html += "</tr>"
+
+        html += "<tr>"
+        html += row2
+        html += "</tr>"
+        html += "</thead>"
+
+        html += "<tbody>"
+
+        def cantModificable = []
+
+        def filaDol = "", filaPor = "", filaCan = ""
+        def totDol = 0, totPor = 0, totCan = 0
+        periodos.eachWithIndex { periodo, i ->
+            def cronosPer = CronogramaEjecucion.findAllByVolumenObraAndPeriodo(cronos.volumen, periodo)
+            filaDol += "<td class='dol num ${periodo.tipo}'>"
+            filaPor += "<td class='prct num ${periodo.tipo}'>"
+            filaCan += "<td class='fis num ${periodo.tipo}'>"
+
+            cantModificable[i] = [
+                    dol: 0,
+                    por: 0,
+                    can: 0
+            ]
+            if (cronosPer.size() == 1) {
+                cronosPer = cronosPer[0]
+//                    println cronosPer.id
+//                    filaDol += g.formatNumber(number: cronosPer.precio, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
+                filaDol += numero(cronosPer.precio)
+//                    filaPor += g.formatNumber(number: cronosPer.porcentaje, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
+                filaPor += numero(cronosPer.porcentaje)
+//                    filaCan += g.formatNumber(number: cronosPer.cantidad, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec")
+                filaCan += numero(cronosPer.cantidad)
+                totDol += cronosPer.precio
+                totPor += cronosPer.porcentaje
+                totCan += cronosPer.cantidad
+
+                cantModificable[i] = [
+                        dol: cronosPer.precio,
+                        por: cronosPer.porcentaje,
+                        can: cronosPer.cantidad
+                ]
+//                totalesDol[i] += cronosPer.precio
+            }
+            filaDol += "</td>"
+            filaPor += "</td>"
+            filaCan += "</td>"
+        }
+
+        def filaDolPla = "", filaPorPla = "", filaCanPla = ""
+        def filaDolMod = "", filaPorMod = "", filaCanMod = ""
+        def totDolPla = 0, totPorPla = 0, totCanPla = 0
+        periodos.eachWithIndex { periodo, i ->
+            filaDolPla += "<td class='dol planilla num ${periodo.tipo}'>"
+            filaPorPla += "<td class='prct planilla num ${periodo.tipo}'>"
+            filaCanPla += "<td class='fis planilla num ${periodo.tipo}'>"
+            filaDolMod += "<td class='dol planilla num ${periodo.tipo}'>"
+            filaPorMod += "<td class='prct planilla num ${periodo.tipo}'>"
+            filaCanMod += "<td class='fis planilla num ${periodo.tipo}'>"
+
+            def planillasPeriodo = Planilla.withCriteria {
+                and {
+                    eq("contrato", contrato)
+                    or {
+                        between("fechaInicio", periodo.fechaInicio, periodo.fechaFin)
+                        between("fechaFin", periodo.fechaInicio, periodo.fechaFin)
+                    }
+                }
+            }
+
+            def diasPeriodo = periodo.fechaFin - periodo.fechaInicio + 1
+            def cantDia = cronos.cantidad / diasPeriodo
+            def totalPlanilla = 0
+            def modificable = true
+            println cantModificable[i]
+            planillasPeriodo.each { pla ->
+                println "periodo: " + periodo.fechaInicio.format("dd-MM-yyyy") + " - " + periodo.fechaFin.format("dd-MM-yyyy")
+                println "\tplanilla: " + pla.fechaInicio.format("dd-MM-yyyy") + " - " + pla.fechaFin.format("dd-MM-yyyy")
+                if (pla.fechaFin >= periodo.fechaFin) {
+                    modificable = false
+                    cantModificable[i] = [
+                            dol: 0,
+                            por: 0,
+                            can: 0
+                    ]
+                }
+                def diasPlanilla = pla.fechaFin - pla.fechaInicio + 1
+                totalPlanilla += (diasPlanilla * cantDia)
+            }
+
+            def porPla = (totalPlanilla * 100) / totDol
+            def canPla = (totCan * (porPla / 100))
+
+            filaDolPla += numero(totalPlanilla, 2, "hide")
+            filaPorPla += numero(porPla, 2, "hide")
+            filaCanPla += numero(canPla, 2, "hide")
+
+            totDolPla += totalPlanilla
+            totPorPla += porPla
+            totCanPla += canPla
+
+            if (modificable) {
+                def maxDol = numero((cantModificable[i].dol - totalPlanilla).toDouble().round(2))
+                def maxPor = numero((cantModificable[i].por - porPla).toDouble().round(2))
+                def maxCan = numero((cantModificable[i].can - canPla).toDouble().round(2))
+                filaDolMod += "<input type='number' class='input-mini tiny' value='" + maxDol + "' data-tipo='dol' data-max='" + maxDol + "' />"
+                filaPorMod += "<input type='number' class='input-mini tiny' value='" + maxPor + "' data-tipo='prct' data-max='" + maxPor + "' />"
+                filaCanMod += "<input type='number' class='input-mini tiny' value='" + maxCan + "' data-tipo='fis' data-max='" + maxCan + "' />"
+            }
+
+            filaDolPla += "</td>"
+            filaPorPla += "</td>"
+            filaCanPla += "</td>"
+            filaDolMod += "</td>"
+            filaPorMod += "</td>"
+            filaCanMod += "</td>"
+        }
+
+        html += "<tr class='item_row ' data-vol='" + cronos.volumen.id + "'>"
+        html += '<th rowspan="3">Cronograma</th>'
+        html += '<td>$</td>'
+        html += filaDol
+        html += "<td class='num dol total totalRubro'>"
+//            html += formatNumber(number: totDol, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
+        html += numero(totDol)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='click item_prc'>"
+//        html += '<td colspan="5"> </td>'
+//        html += '<td>Cronograma</td>'
+        html += '<td>%</td>'
+        html += filaPor
+        html += "<td class='num prct total totalRubro'>"
+//            html += formatNumber(number: totPor, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
+        html += numero(totPor)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='click item_f '>"
+//        html += '<td colspan="5"> </td>'
+//        html += '<td>Cronograma</td>'
+        html += '<td>F</td>'
+        html += filaCan
+        html += "<td class='num fis total totalRubro'>"
+//            html += formatNumber(number: totCan, maxFractionDigits: 2, minFractionDigits: 2, format: "##,##0", locale: "ec")
+        html += numero(totCan)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='item_row ' data-vol='" + cronos.volumen.id + "'>"
+        html += '<th rowspan="3">Planillado</th>'
+        html += '<td>$</td>'
+        html += filaDolPla
+        html += "<td class='num dol total totalRubro'>"
+        html += numero(totDolPla)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='click item_prc '>"
+        html += '<td>%</td>'
+        html += filaPorPla
+        html += "<td class='num prct total totalRubro'>"
+        html += numero(totPorPla)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='click item_f '>"
+        html += '<td>F</td>'
+        html += filaCanPla
+        html += "<td class='num fis total totalRubro'>"
+        html += numero(totCanPla)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='item_row ' data-vol='" + cronos.volumen.id + "'>"
+        html += '<th rowspan="3">Modificaciones</th>'
+        html += '<td>$</td>'
+        html += filaDolMod
+        html += "<td class='num dol total totalRubro totalModif'>"
+        html += numero(0)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='click item_prc '>"
+        html += '<td>%</td>'
+        html += filaPorMod
+        html += "<td class='num prct total totalRubro totalModif'>"
+        html += numero(0)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "<tr class='click item_f '>"
+        html += '<td>F</td>'
+        html += filaCanMod
+        html += "<td class='num fis total totalRubro totalModif'>"
+        html += numero(0)
+        html += "</td>"
+        html += "</tr>"
+
+        html += "</tbody>"
+        html += "</table>"
+
+        return [html: html]
+    }
+
+    def modificacion() {
+
     }
 
     def ampliacion_ajax() {}

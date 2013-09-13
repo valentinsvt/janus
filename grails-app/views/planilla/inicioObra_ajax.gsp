@@ -51,7 +51,7 @@
             </div>
 
             <div class="span4">
-                <g:textField name="clausula" maxlength="20" class="required input-small"/>
+                <g:textField name="clausula" maxlength="20" class="required input-small" value="octava"/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -64,7 +64,7 @@
             </div>
 
             <div class="span4">
-                <g:textField name="numeralPlazo" maxlength="10" class="required input-mini"/>
+                <g:textField name="numeralPlazo" maxlength="10" class="required input-mini" value="8.01"/>
                 <span class="mandatory">*</span>
                 <small>que señala que el plazo total que el contratista....</small>
 
@@ -78,7 +78,7 @@
             </div>
 
             <div class="span4">
-                <g:textField name="numeralAnticipo" maxlength="10" class="required input-mini"/>
+                <g:textField name="numeralAnticipo" maxlength="10" class="required input-mini" value="8.02"/>
                 <span class="mandatory">*</span>
                 <small>se entenderá entregado el anticipo una vez transcurridas...</small>
 

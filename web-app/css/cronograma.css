@@ -68,15 +68,15 @@ td {
 
 /****** ruta critica selected *******/
 .item_row.rowSelected.rutaCritica {
-    background : #C9EAD7 !important;
+    background : #AFDBC1 !important;
 }
 
 .item_prc.rowSelected.rutaCritica {
-    background : #D7F4E4 !important;
+    background : #C5E5D2 !important;
 }
 
 .item_f.rowSelected.rutaCritica {
-    background : #E1F4E4 !important;
+    background : #D3EADC !important;
 }
 
 /********************* error *****************************/

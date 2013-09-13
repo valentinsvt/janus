@@ -44,7 +44,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
 
-        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
+        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
     }
 
@@ -74,7 +74,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
         def firma = Persona.findAllByCargoIlike("Direct%");
-        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
+        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma]
     }
 
@@ -104,7 +104,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
         def firma = Persona.findAllByCargoIlike("Direct%");
-        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
+        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma]
 
     }
@@ -136,7 +136,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
 //        println fp
 
-        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'numero'])
+        def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
         return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList]
 
     }
@@ -973,6 +973,9 @@ class PlanillaController extends janus.seguridad.Shield {
                 if (tt >= (contrato.monto * 0.1).round(2)) {
                     tiposPlanilla -= plc.tipoPlanilla
                 }
+            }
+            if (tiposPlanilla.find { it.codigo == "P" }) {
+                tiposPlanilla -= liquidacion
             }
         }
         def costo = false
@@ -3159,7 +3162,7 @@ class PlanillaController extends janus.seguridad.Shield {
             default:
                 editable = false
         }
-
+editable=true
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
 
