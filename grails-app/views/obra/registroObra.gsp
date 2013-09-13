@@ -237,7 +237,7 @@
     <div class="span1">Programa</div>
 
     <div class="span3">
-        <g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list()}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
+        <g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list([sort: 'descripcion'])}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
 
         <a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">
             <i class="icon-plus-sign"></i>
@@ -260,7 +260,7 @@
     <div class="span1" style="margin-left: 10px">Clase</div>
 
     <div class="span3">
-        <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list()}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
+        <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list([sort: 'descripcion'])}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
         <a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">
             <i class="icon-plus-sign"></i>
         </a>
@@ -433,13 +433,12 @@
     </div>
 
     <div class="span12" style="margin-top: 10px">
-
-        <div class="span2 formato" style="width: 230px;">Destino:
-        <g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id)}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+        <div class="span2 formato" style="width: 230px;">Destino: Dirección
+        <g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
         </div>
 
-        <div class="span2 formato" style="width: 230px;">Dirección:
-        <g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+        <div class="span2 formato" style="width: 230px;">Destino: Coordinación
+        <g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id + ' order by descripcion')}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
         </div>
 
         <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio

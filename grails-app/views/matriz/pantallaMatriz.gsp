@@ -76,7 +76,7 @@
             </a>
             <g:link controller="formulaPolinomica" action="insertarVolumenesItem" class="btn btn-ajax btn-new btnFormula" params="[obra: obra]" title="Coeficientes">
                 <i class="icon-table"></i>
-                Coeficientes fórmula polinómica
+                Fórmula polinómica
             </g:link>
             <a href="${g.createLink(controller: 'reportes', action: 'imprimeMatriz', id: "${obra}")}" class="btn btn-ajax btn-new" id="imprimir" title="Imprimir">
                 <i class="icon-print"></i>
@@ -86,7 +86,7 @@
                 <i class="icon-print"></i>
                 Imprimir A4
             </a>
-            <input type="text" style="width: 200px;margin-left: 20px;margin-top: 9px;" class="ui-corner-all" id="texto_busqueda">
+            <input type="text" style="width: 100px;margin-left: 20px;margin-top: 9px;" class="ui-corner-all" id="texto_busqueda">
             <a href="#" class="btn btn-ajax btn-new" id="buscar" title="Buscar">
                 <i class="icon-search"></i>
                 Buscar

@@ -104,7 +104,7 @@
                 $('[rel=tooltip]').tooltip();
 
                 $(".paginate").paginate({
-                    maxRows        : 10,
+                    maxRows        : 15,
                     searchPosition : $("#busqueda-Direccion"),
                     float          : "right"
                 });
