@@ -3,9 +3,11 @@ package janus
 import com.lowagie.text.Document
 import com.lowagie.text.Element
 import com.lowagie.text.Font
+import com.lowagie.text.HeaderFooter
 import com.lowagie.text.PageSize
 import com.lowagie.text.Paragraph
 import com.lowagie.text.Phrase
+import com.lowagie.text.Rectangle
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
@@ -117,6 +119,15 @@ class Reportes4Controller {
         Document document
         document = new Document(PageSize.A4.rotate());
         def pdfw = PdfWriter.getInstance(document, baos);
+
+        HeaderFooter footer1 = new HeaderFooter(new Phrase(" ", times8normal), true);
+        // true aqui pone numero de pagina
+        footer1.setBorder(Rectangle.NO_BORDER);
+//        footer1.setBorder(Rectangle.TOP);
+        footer1.setAlignment(Element.ALIGN_CENTER);
+
+        document.setFooter(footer1);
+
         document.open();
         document.addTitle("Matriz Polinómica " + new Date().format("dd_MM_yyyy"));
         document.addSubject("Generado por el sistema Janus");
