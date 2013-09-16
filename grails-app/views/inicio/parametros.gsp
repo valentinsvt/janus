@@ -78,7 +78,8 @@
                     quien recibe o si recibe una copia del documento.
                 </div><br>
                 <div class="item" texto="ddlb">
-                    <g:link controller="diaLaborable" action="calendario">Días laborables</g:link>
+                    <g:link controller="diaLaborable" action="calendario">Días laborables</g:link> permite definir los días laborables
+                    en un calendario anual.
                 </div><br>
             </div>
 
@@ -405,7 +406,9 @@
 </div>
 <div id="ddlb" style="display:none">
     <h3>Días laborables</h3><br>
-    <p>Configuración de los días laborables.</p>
+    <p>El calendario se genera en forma automática para cada año, con los fines de semana definidos como días no
+    laborables, en el se debe corregir para que solo aparezcan señalados los días que no son laborables.
+    </p>
 </div>
 %{--<div id="tppo" style="display:none">--}%
     %{--<h3>Tipo de prórroga</h3><br>--}%

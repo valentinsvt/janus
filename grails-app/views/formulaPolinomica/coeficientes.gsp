@@ -550,8 +550,11 @@
                 $("#btnRegresar").click(function () {
                     var url = $(this).attr("href");
                     var total = parseFloat($("#spanTotal").data("valor"));
+
+//                    console.log(total, Math.abs(total - 1), Math.abs(total - 1) > 0.0001);
+
                     var tipo = "${tipo}";
-                    if (total == 1) {
+                    if (Math.abs(total - 1) <= 0.0001) {
                         return true;
                     }
                     var msg = "La fórmula polinómica no suma 1. ¿Está seguro de querer salir de esta página?";
