@@ -192,10 +192,16 @@
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <div class="span6" style="margin-right: 195px !important;">
+                    <div class="span12" style="margin-right: 195px !important;">
                         <b>Doc. Referencia:</b> ${obra?.oficioIngreso} ${obra?.referencia}
                     </div>
                 </div>
+
+                <div class="row-fluid">
+
+                </div>
+
+
 
             </div>
             <g:set var="total1" value="${0}"></g:set>
@@ -275,9 +281,9 @@
                        </thead>
                        <tbody>
                           <tr>
-                           <td colspan="7" class="theaderBot theaderup padTopBot">
-                           <td style="text-align: right"><b style="font-size: 10px; margin-left: 400px">TOTAL PRESUPUESTO:</b></td>
-                           <td style="text-align: right; font-size: 12px"><b><g:formatNumber number="${totalPresupuesto}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                           <td class="theaderBot theaderup padTopBot">
+                           <td style="text-align: left"><b style="font-size: 10px; margin-left: 400px">TOTAL PRESUPUESTO:</b></td>
+                           <td style="text-align: right !important; font-size: 12px"><b><g:formatNumber number="${totalPresupuesto}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
                            </td>
 
                        </tr>

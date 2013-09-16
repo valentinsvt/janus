@@ -970,9 +970,9 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(8);
+        PdfPTable tablaRegistradas = new PdfPTable(7);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([14, 35, 8, 8, 30, 10, 10,10]))
+        tablaRegistradas.setWidths(arregloEnteros([14, 35, 18, 8, 30, 10, 10]))
 
         addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
@@ -981,7 +981,7 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
 
         res.eachWithIndex {i,j->
 
@@ -989,7 +989,11 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.nombre, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.tipoobra, times8normal), prmsCellLeft)
 //            addCellTabla(tablaRegistradas, new Paragraph(g.formatDate(date: i?.fecha, format: "dd-MM-yyyy"), times8normal), prmsCellLeft)
+           if(i?.fecha == null){
+               addCellTabla(tablaRegistradas, new Paragraph( "", times8normal), prmsCellLeft)
+           }else {
             addCellTabla(tablaRegistradas, new Paragraph( i?.fecha.toString(), times8normal), prmsCellLeft)
+           }
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
             if(valoresTotales[j] != null){
                 addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
@@ -1001,7 +1005,7 @@ class Reportes4Controller {
             }
 
             addCellTabla(tablaRegistradas, new Paragraph(i.elaborado, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellLeft)
 
 
 
@@ -1461,7 +1465,7 @@ class Reportes4Controller {
         label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
         label = new Label(5, 4, "Valor", times16format); sheet.addCell(label);
         label = new Label(6, 4, "Elaborado", times16format); sheet.addCell(label);
-        label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
+//        label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
 
         res.eachWithIndex {i, j->
 
@@ -1478,7 +1482,7 @@ class Reportes4Controller {
             }
 
             label = new Label(6, fila, i?.elaborado?.toString()); sheet.addCell(label);
-            label = new Label(7, fila, i?.estado?.toString()); sheet.addCell(label);
+//            label = new Label(7, fila, i?.estado?.toString()); sheet.addCell(label);
             fila++
 
         }

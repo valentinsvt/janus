@@ -6,6 +6,18 @@
   Time: 12:10 PM
 --%>
 
+<style type="text/css">
+
+
+
+.selectedColumna, .selectedColumna td {
+    background-color : rgba(120, 220, 249, 0.4) !important;
+    font-weight      : bold;
+}
+
+</style>
+
+
 <g:if test="${flash.message}">
     <div class="span12" style="height: 35px;margin-bottom: 10px; margin-left: -25px">
         <div class="alert ${flash.clase ?: 'alert-info'}" role="status" style="text-align: center">
@@ -24,28 +36,15 @@
                 , 'cmnd': 'Comunidad', 'insp':'Inspector', 'rvsr':'Revisor', 'ofig':'Of. Ingreso', 'ofsl': 'Of. Salida'
                 ,'mmsl':'Memo Salida', 'frpl':'F. Polinómica']}" value="${params.buscador}"
                   optionKey="key" optionValue="value" id="buscador_reg" style="width: 150px"/>
-        %{--<b style="margin-left: 10px">Estado: </b>--}%
-        %{--<g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"--}%
-                  %{--optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>--}%
         <b>Criterio: </b>
         <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
         </a>
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
-        %{--</a>--}%
-        %{--<a href="#" class="btn" id="regresar">--}%
-            %{--<i class="icon-arrow-left"></i>--}%
-            %{--Regresar--}%
-        %{--</a>--}%
     </div>
 
 </div>
-
-
 
 <table class="table table-bordered table-striped table-condensed table-hover">
     <thead>
@@ -156,5 +155,59 @@
         location.href="${g.createLink(controller: 'reportes4', action:'reporteRegistradasExcel' )}?buscador=" + $("#buscador_reg").val() + "&estado=" + ${1} + "&criterio=" + $("#criterio").val()
 
     });
+
+//    $("tr").click(function () {
+//
+////       console.log("id:" + $(this).attr("id"))
+//          $(".selectedColumna").removeClass("selectedColumna")
+//
+//            $(this).addClass("selectedColumna")
+//
+//    });
+
+
+    $.contextMenu({
+        selector: '.obra_row',
+        callback: function (key, options) {
+
+            var m = "clicked: " + $(this).attr("id");
+
+            var idFila = $(this).attr("id")
+
+//            console.log("id:" + idFila)
+
+
+            if(key == "registro"){
+
+                location.href = "${g.createLink(controller: 'obra', action: 'registroObra')}" + "?obra=" + idFila;
+
+
+            }
+
+
+
+            if (key == "print") {
+
+                var datos = "?obra="+idFila+"Wsub="+${-1}
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub' )}" + datos
+                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+
+            }
+
+
+        },
+        items: {
+
+            "registro": {name: "Ir al Registro de esta Obra", icon:"left-arrow"},
+
+            "print": {name: "Imprimir Subpresupuesto", icon: "print"
+
+
+            }
+
+        }
+
+    });
+
 
 </script>

@@ -45,6 +45,9 @@ class Reportes3Controller {
     def imprimirTablaSub() {
 //        println "imprimir tabla sub "+params
         def obra = Obra.get(params.obra)
+
+//        println(obra?.fechaCreacionObra)
+
         def detalle
         def valores
         def subPre
