@@ -7069,8 +7069,10 @@ class ReportesController {
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 3]
+        def prmsHeaderHoja4 = [border: Color.WHITE, colspan: 4]
         def prmsHeaderHojaRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT]
         def prmsHeaderHojaLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT]
+        def prmsHeaderHojaLeft2 = [border: Color.WHITE, align: Element.ALIGN_LEFT, colspan: 2]
 
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
 
@@ -7086,6 +7088,8 @@ class ReportesController {
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 6]
         def prmsCellHead5 = [border: Color.WHITE,
                 align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 7]
+        def prmsCellHead6 = [border: Color.WHITE,
+                align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 4]
 
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
@@ -7314,6 +7318,13 @@ class ReportesController {
 
 
         }
+
+
+        addCellTabla(tablaVolObraMemoPresu, new Paragraph(" ", times8bold), prmsCellHead6)
+        addCellTabla(tablaVolObraMemoPresu, new Paragraph(" ", times8bold), prmsCellHead6)
+        addCellTabla(tablaVolObraMemoPresu, new Paragraph(" ", times8bold), prmsCellHead6)
+
+
 
 
         //Presupuesto por Adm Directa
@@ -7803,12 +7814,6 @@ class ReportesController {
         addCellTabla(tablaContMano, new Paragraph(g.formatNumber(number: totalPrueba6, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
 
         addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
-//        addCellTabla(tablaContMano, new Paragraph("", times8bold), prmsCellHead4)
 
 //        document.add(tablaContMano);
 
@@ -7916,7 +7921,7 @@ class ReportesController {
 
         PdfPTable tablaValoresMemoPresu1 = new PdfPTable(4);
         tablaValoresMemoPresu1.setWidthPercentage(100);
-        tablaValoresMemoPresu1.setWidths(arregloEnteros([60, 15, 20, 10]))
+        tablaValoresMemoPresu1.setWidths(arregloEnteros([45, 25, 20, 10]))
 
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHojaRight)
@@ -7933,7 +7938,7 @@ class ReportesController {
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto referencial por contrato:", times10bold), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.totalPresupuesto), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaLeft)
+        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.totalPresupuesto), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
 //        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8normal), prmsHeaderHoja)
@@ -7967,14 +7972,16 @@ class ReportesController {
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
 
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja4)
+        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja4)
+//        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por administración directa:", times10bold), prmsHeaderHoja)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+params.equipos+params.manoObra)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaLeft)
+//        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+params.equipos+params.manoObra)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaLeft)
+        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+totalPrueba3+totalPrueba4)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
+
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
