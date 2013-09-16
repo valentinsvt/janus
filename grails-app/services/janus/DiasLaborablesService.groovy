@@ -15,6 +15,7 @@ class DiasLaborablesService {
      *                                  1: el numero de dias cuando el calculo fue correcto
      *                                     el error si hubo error
      *                                  2: si hubo algun mensaje aunque haya hecho el calculo
+     *                                     si hubo error (no hay los dias laborables), el año para configurar los días laborables
      */
     def diasLaborablesEntre(Date fecha1, Date fecha2, boolean noLaborables) {
         def mensaje = ""
@@ -58,17 +59,17 @@ class DiasLaborablesService {
                 }
                 return [true, Math.abs(ord2 - ord1), mensaje != "" ? "<ul>" + mensaje + "</ul>" : ""]
             } else if (dl2.size() == 0) {
-                return [false, "No se encontró el registro de días laborables para la fecha " + fecha2.format("dd-MM-yyyy")]
+                return [false, "No se encontró el registro de días laborables para la fecha " + fecha2.format("dd-MM-yyyy"), fecha2.format("yyyy")]
 //                return false
             } else {
-                return [false, "Se encontraron varios registros de días laborables para la fecha " + fecha2.format("dd-MM-yyyy")]
+                return [false, "Se encontraron varios registros de días laborables para la fecha " + fecha2.format("dd-MM-yyyy"), fecha2.format("yyyy")]
 //                return false
             }
         } else if (dl1.size() == 0) {
-            return [false, "No se encontró el registro de días laborables para la fecha " + fecha1.format("dd-MM-yyyy")]
+            return [false, "No se encontró el registro de días laborables para la fecha " + fecha1.format("dd-MM-yyyy"), fecha1.format("yyyy")]
 //            return false
         } else {
-            return [false, "Se encontraron varios registros de días laborables para la fecha " + fecha1.format("dd-MM-yyyy")]
+            return [false, "Se encontraron varios registros de días laborables para la fecha " + fecha1.format("dd-MM-yyyy"), fecha1.format("yyyy")]
 //            return false
         }
     }
@@ -90,6 +91,7 @@ class DiasLaborablesService {
      *                                  1: la fecha (Date) cuando el calculo fue correcto
      *                                     el error si hubo error
      *                                  2: si hizo el calculo, la fecha en string con format dd-MM-yyyy
+     *                                     si hubo error (no hay los dias laborables), el año para configurar los días laborables
      *                                  3: si hubo algun mensaje aunque haya hecho el calculo
      */
     def diasLaborablesDesde(Date fecha, int dias, boolean noLaborables) {
@@ -136,9 +138,9 @@ class DiasLaborablesService {
                 if (nuevoDia.size() == 1) {
                     return [true, nuevoDia[0].fecha, nuevoDia[0].fecha.format("dd-MM-yyyy"), mensaje != "" ? "<ul>" + mensaje + "</ul>" : ""]
                 } else if (nuevoDia.size() == 0) {
-                    return [false, "No se encontró el registro del día laborable n. ${nuevoOrd} del año ${anioFecha}"]
+                    return [false, "No se encontró el registro del día laborable n. ${nuevoOrd} del año ${anioFecha}", anioFecha]
                 } else {
-                    return [false, "Se encontraron ${nuevoDia.size()} registros para día laborable n. ${nuevoOrd} del año ${anioFecha}"]
+                    return [false, "Se encontraron ${nuevoDia.size()} registros para día laborable n. ${nuevoOrd} del año ${anioFecha}", anioFecha]
                 }
             } else {
                 def anioAct = anioFecha + 1
@@ -176,7 +178,7 @@ class DiasLaborablesService {
 //                        println "\tdias max anio: " + nuevoDiaMax
 //                        println "\tcontinua? " + cont
                     } else {
-                        return [false, "No se encontraron registros para días laborables del año ${anioAct}"]
+                        return [false, "No se encontraron registros para días laborables del año ${anioAct}", anioAct]
                     }
                 }
 
@@ -188,9 +190,9 @@ class DiasLaborablesService {
                 if (nuevoDia.size() == 1) {
                     return [true, nuevoDia[0].fecha, nuevoDia[0].fecha.format("dd-MM-yyyy"), mensaje != "" ? "<ul>" + mensaje + "</ul>" : ""]
                 } else if (nuevoDia.size() == 0) {
-                    return [false, "No se encontró el registro del día laborable n. ${nuevoOrd} del año ${anioFecha}"]
+                    return [false, "No se encontró el registro del día laborable n. ${nuevoOrd} del año ${anioFecha}", anioFecha]
                 } else {
-                    return [false, "Se encontraron ${nuevoDia.size()} registros para día laborable n. ${nuevoOrd} del año ${anioFecha}"]
+                    return [false, "Se encontraron ${nuevoDia.size()} registros para día laborable n. ${nuevoOrd} del año ${anioFecha}", anioFecha]
                 }
 
 //                println "OK anio: " + anioAct
@@ -201,10 +203,10 @@ class DiasLaborablesService {
             }
 
         } else if (dl.size() == 0) {
-            return [false, "No se encontró el registro de días laborables para la fecha " + fecha.format("dd-MM-yyyy")]
+            return [false, "No se encontró el registro de días laborables para la fecha " + fecha.format("dd-MM-yyyy"), fecha.format("yyyy")]
 //            return false
         } else {
-            return [false, "Se encontraron varios registros de días laborables para la fecha " + fecha.format("dd-MM-yyyy")]
+            return [false, "Se encontraron varios registros de días laborables para la fecha " + fecha.format("dd-MM-yyyy"), fecha.format("yyyy")]
 //            return false
         }
     }

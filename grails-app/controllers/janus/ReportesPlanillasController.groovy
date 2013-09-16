@@ -120,7 +120,7 @@ class ReportesPlanillasController {
     }
 
     private String nombrePersona(persona, tipo) {
-        println "nombrePersona" + persona
+//        println "nombrePersona" + persona
 //        println tipo
         def str = ""
         if (persona) {
@@ -1326,6 +1326,18 @@ class ReportesPlanillasController {
                 fechaMax = null
             }
 
+            if (!fechaMax) {
+//                redirect(action: "errores")
+                def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+                def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
+                def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
+                link += "&nbsp;&nbsp;&nbsp;"
+                link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
+                flash.message = res[1]
+                redirect(action: "errores", params: [link: link])
+                return
+            }
+
             def fechaPresentacion = planilla.fechaPresentacion
             def retraso = fechaPresentacion - fechaMax + 1
 
@@ -1856,12 +1868,19 @@ class ReportesPlanillasController {
         if (obraLiquidacion.size() == 0) {
             println "error 1"
             flash.message = "No se encontró la obra de liquidación"
-            redirect(action: "errores")
+
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def link = "<a href='${url}' class='btn btn-danger'>Regresar</a>"
+
+            redirect(action: "errores", params: [link: link])
             return
         } else if (obraLiquidacion.size() > 1) {
             println "error 2"
             flash.message = "Se encontró más de una obra de liquidación"
-            redirect(action: "errores")
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def link = "<a href='${url}' class='btn btn-danger'>Regresar</a>"
+
+            redirect(action: "errores", params: [link: link])
             return
         }
         obraLiquidacion = obraLiquidacion[0]
@@ -3679,7 +3698,12 @@ class ReportesPlanillasController {
 
         if (!ok) {
             flash.message = "<ul>" + str + "</ul>"
-            redirect(action: "errores", id: contrato.id)
+
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def link = "<a href='${url}' class='btn btn-danger'>Regresar</a>"
+
+            redirect(action: "errores", params: [link: link])
+//            redirect(action: "errores", id: contrato.id)
         } else {
 
 //        println("-->>" + params)
