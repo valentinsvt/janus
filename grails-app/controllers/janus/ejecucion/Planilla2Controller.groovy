@@ -14,28 +14,31 @@ class Planilla2Controller extends janus.seguridad.Shield {
     def errores() {
     }
 
+    def errores2() {
+        return [params: params]
+    }
 
-    def pagos(){
-        def campos = ["id": ["Obra", "string"],"descripcion":["Descripción","string"],"fechaPresentacion":["Fecha Presentación","string"],"memoPagoPlanilla":["Memo pago","string"]]
-        [campos:campos]
+    def pagos() {
+        def campos = ["id": ["Obra", "string"], "descripcion": ["Descripción", "string"], "fechaPresentacion": ["Fecha Presentación", "string"], "memoPagoPlanilla": ["Memo pago", "string"]]
+        [campos: campos]
     }
 
 
-    def buscarPlanilla(){
+    def buscarPlanilla() {
 
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {
             if (params.campos == "id") {
-                if( params.criterios != ""){
+                if (params.criterios != "") {
                     def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%' or codigo like '%${params.criterios.toUpperCase()}%' ")
                     params.criterios = ""
                     obras.eachWithIndex { p, i ->
                         def concursos = janus.pac.Concurso.findAllByObraAndEstado(p, "R")
                         concursos.each { co ->
                             def ofertas = janus.pac.Oferta.findAllByConcurso(co)
-                            ofertas.each { o->
+                            ofertas.each { o ->
                                 def contratos = Contrato.findAllByOferta(o)
-                                contratos.eachWithIndex{ cn,k->
+                                contratos.eachWithIndex { cn, k ->
                                     extraObra += "" + cn.id
                                     if (k < contratos.size() - 1)
                                         extraObra += ","
@@ -56,16 +59,16 @@ class Planilla2Controller extends janus.seguridad.Shield {
             def remove = []
             params.campos.eachWithIndex { p, i ->
                 if (p == "id") {
-                    if( params.criterios != ""){
+                    if (params.criterios != "") {
                         def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%' or codigo like '%${params.criterios.toUpperCase()}%' ")
 
                         obras.eachWithIndex { ob, j ->
                             def concursos = janus.pac.Concurso.findAllByObraAndEstado(ob, "R")
                             concursos.each { co ->
                                 def ofertas = janus.pac.Oferta.findAllByConcurso(co)
-                                ofertas.each { o->
+                                ofertas.each { o ->
                                     def contratos = Contrato.findAllByOferta(o)
-                                    contratos.eachWithIndex{ cn,k->
+                                    contratos.eachWithIndex { cn, k ->
                                         extraObra += "" + cn.id
                                         if (k < contratos.size() - 1)
                                             extraObra += ","
@@ -98,9 +101,9 @@ class Planilla2Controller extends janus.seguridad.Shield {
             return pla.contrato?.codigo
         }
 
-        def listaTitulos = ["OBRA","CONTRATO","DECRIPCION","FECHA PRESENTACION","MEMO PAGO","MONTO"]
-        def listaCampos = ["id","contrato","descripcion","fechaPresentacion","memoPagoPlanilla","valor"]
-        def funciones = [ ["closure": [codObra, "&"]],["closure": [contr, "&"]],null,null,null,null]
+        def listaTitulos = ["OBRA", "CONTRATO", "DECRIPCION", "FECHA PRESENTACION", "MEMO PAGO", "MONTO"]
+        def listaCampos = ["id", "contrato", "descripcion", "fechaPresentacion", "memoPagoPlanilla", "valor"]
+        def funciones = [["closure": [codObra, "&"]], ["closure": [contr, "&"]], null, null, null, null]
         def url = g.createLink(action: "buscarPlanilla", controller: "planilla2")
         def funcionJs = "function(){"
         funcionJs += '}'
@@ -114,7 +117,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             if (params.excel) {
                 session.dominio = Planilla
                 session.funciones = funciones
-                def anchos = [35,35,60,35,35,30]
+                def anchos = [35, 35, 60, 35, 35, 30]
                 /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Planilla", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PAGOS", anchos: anchos, extras: extras, landscape: true])
             } else {
@@ -129,7 +132,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Planilla
             session.funciones = funciones
-            def anchos = [15,15,40,10,10,10]
+            def anchos = [15, 15, 40, 10, 10, 10]
             /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Planilla", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE CHEQUES PAGADOS", anchos: anchos, extras: extras, landscape: true])
         }
@@ -1178,17 +1181,17 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     def valor = 0
                     if (i == 0) { //es mano de obra
                         vlinOferta = per.total
-                        tablaFr += "<td class='number'><div>${numero(p.valor,3)}</div><div class='bold'>${numero(per.total)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(per.total)}</div></td>"
                         valor = per.total
                     } else {
                         vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
-                        tablaFr += "<td class='number'><div>${numero(p.valor,3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
                         valor = vlinOferta
                     }
 
 
                 } else {
-                    def vlin, dec=3
+                    def vlin, dec = 3
                     if (i == 0) {
                         vlin = per.total
 //                        dec = 3
@@ -1373,6 +1376,17 @@ class Planilla2Controller extends janus.seguridad.Shield {
             fechaMax = res[1]
         } else {
             fechaMax = null
+        }
+        if (!fechaMax) {
+//                redirect(action: "errores")
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
+            def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
+            link += "&nbsp;&nbsp;&nbsp;"
+            link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
+            flash.message = res[1]
+            redirect(action: "errores2", params: [link: link])
+            return
         }
 
         def fechaPresentacion = planilla.fechaPresentacion
@@ -1679,7 +1693,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         valor = per.total
                     } else {
                         vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
-                        tablaFr += "<td class='number'><div>${numero(p.valor,3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
+                        tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
                         valor = vlinOferta
                     }
                     def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id}")
@@ -1728,7 +1742,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     if (!per.save(flush: true)) {
                         println "error fr " + per.errors
                     }
-                    tablaFr += "<td class='number'><div>${numero(vlin, 3)}</div><div class='bold'>${numero(valor,3)}</div></td>"
+                    tablaFr += "<td class='number'><div>${numero(vlin, 3)}</div><div class='bold'>${numero(valor, 3)}</div></td>"
                 }
             }
             tablaFr += "</tr>"

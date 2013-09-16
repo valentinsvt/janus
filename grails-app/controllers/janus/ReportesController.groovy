@@ -6891,20 +6891,33 @@ class ReportesController {
         def res1 = diasLaborablesService.diasLaborablesEntre(fechaTemp, finPreparatorio)
         def res2 = diasLaborablesService.diasLaborablesEntre(fechaTempPrecon, finPrecontractual)
         def res3 = diasLaborablesService.diasLaborablesEntre(fechaTempContra, finContractual)
+        def err
         if (res1[0]) {
             diasPreparatorio = res1[1]
         } else {
             diasPreparatorio = null
+            err = "<li>" + res[1] + "</li>"
         }
         if (res2[0]) {
             diasPrecontractual = res2[1]
         } else {
             diasPrecontractual = null
+            err = "<li>" + res[1] + "</li>"
         }
         if (res3[0]) {
             diasContractual = res3[1]
         } else {
             diasContractual = null
+            err = "<li>" + res[1] + "</li>"
+        }
+
+        if (!diasPreparatorio || !diasPrecontractual || !diasContractual) {
+            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
+            def link = "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
+            flash.message = "<ul>" + err + "</ul>"
+            redirect(action: "errores", params: [link: link])
+            return;
+//            redirect(action: "errores")
         }
 
         def baos = new ByteArrayOutputStream()
@@ -8301,6 +8314,10 @@ class ReportesController {
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
 
+    }
+
+    def errores() {
+        return [params: params]
     }
 
 }

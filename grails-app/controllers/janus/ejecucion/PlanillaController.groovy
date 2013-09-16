@@ -2151,6 +2151,18 @@ class PlanillaController extends janus.seguridad.Shield {
                 fechaMax = null
             }
 
+            if (!fechaMax) {
+//                redirect(action: "errores")
+                def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+                def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
+                def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
+                link += "&nbsp;&nbsp;&nbsp;"
+                link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
+                flash.message = res[1]
+                redirect(action: "errores", params: [link: link])
+                return
+            }
+
             def fechaPresentacion = planilla.fechaPresentacion
             def retraso = fechaPresentacion - fechaMax
 
@@ -3162,7 +3174,7 @@ class PlanillaController extends janus.seguridad.Shield {
             default:
                 editable = false
         }
-editable=true
+        editable = true
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
 
@@ -3420,6 +3432,10 @@ editable=true
         }
 
 //        render params
+    }
+
+    def errores() {
+        return [params: params]
     }
 
 }
