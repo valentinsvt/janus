@@ -39,7 +39,7 @@ class Modificaciones implements Serializable {
     }
 
     static constraints = {
-        tipo(blank: true, nullable: true, inList: ['A', 'S', 'R'])
+        tipo(blank: true, nullable: true, inList: ['A', 'S', 'R']) //ampliacion, suspension, r..?
         dias(blank: true, nullable: true)
         fechaInicio(blank: true, nullable: true)
         fechaFin(blank: true, nullable: true)

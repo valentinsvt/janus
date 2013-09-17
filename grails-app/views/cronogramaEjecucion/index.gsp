@@ -421,16 +421,11 @@
                             $("#modalBody-forms").html(msg);
                             $("#modalFooter-forms").html("").append(btnCancel).append(btnSave);
                             $("#modal-forms").modal("show");
-
                         }
                     });
                     return false;
                 });
-
             });
-
-
         </script>
-
     </body>
 </html>
