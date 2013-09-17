@@ -368,7 +368,7 @@ class ElementosTagLib {
         js += '});'
         js += '});'
         js += "</script>"
-
+//       println "js "+js
         out << str
         out << js
     }

@@ -559,7 +559,7 @@ class ContratoController extends janus.seguridad.Shield {
     def save() {
         def contratoInstance
 
-//        println("-->>" + params)
+        println("-->>" + params)
 
         if (params.codigo) {
             params.codigo = params.codigo.toString().toUpperCase()
@@ -567,6 +567,11 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (params.memo) {
             params.memo = params.memo.toString().toUpperCase()
+        }
+
+
+        if(params.fechaSubscripcion){
+            params.fechaSubscripcion = new Date().parse("dd-MM-yyyy", params.fechaSubscripcion)
         }
 
 

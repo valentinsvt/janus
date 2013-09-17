@@ -244,7 +244,7 @@
 
                     <div class="span2 formato">Fecha de Suscripción</div>
 
-                    <div class="span2"><elm:datepicker name="fechaSuscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
+                    <div class="span2"><elm:datepicker name="fechaSubscripcion" class="fechaSuscripcion datepicker required input-small activo" value="${contrato?.fechaSubscripcion}"/></div>
 
                 </div>
 
