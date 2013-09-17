@@ -125,11 +125,22 @@
             %{--<g:link  controller="documento" action="list" title="Documentos de los Proyectos">--}%
             <div  class="ui-corner-all  item fuera">
                 <div  class="ui-corner-all ui-widget-content item">
+%{--
                     <div class="imagen">
                         <img src="${resource(dir: 'images', file: 'oferta.png')}" width="100%" height="100%"/>
                     </div>
                     <div class="texto"><b>Oferentes ganadores</b>:registro en línea los valores de precios unitarios,
                     rubros, volúmenes de obra y cronograma de las ofertas </div>
+--}%
+                    <div class="imagen">
+                        <img src="${resource(dir: 'images', file: 'manuales1.png')}" width="100%" height="100%"/>
+                    </div>
+                    <div class="texto"><b>Manuales:</b>
+                        <g:link controller="manual" action="manualIngreso" target="_blank">Ingreso al Sistema</g:link>,
+                        <g:link controller="manual" action="manualEjecucion" target="_blank">Módulo de APU</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Módulo de obras</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Módulo de Contratación</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Módulo de Fiscalización</g:link>
                 </div>
             </div>
             %{--</g:link>--}%

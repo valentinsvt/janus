@@ -7,6 +7,9 @@ class ManualController {
         redirect([action: 'manualIngresoObras'])
     }
 
+    def manualIngreso() {
+
+    }
 
     def manualIngresoObras() {
 

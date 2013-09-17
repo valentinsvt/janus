@@ -6,13 +6,10 @@
 
         <title>Manual de Usuario</title>
         <style>
-        * {
-            max-width : 1100px;
-            margin    : auto;
-        }
 
         div {
             margin : auto;
+            max-width: 800px;
         }
 
         #header2 {
@@ -22,7 +19,7 @@
             height           : 60px;
             text-align       : center;
             background-color : #ffffff;
-            margin-top       : -9px;
+            margin-top       : 0px;
         }
 
         .centrado {
