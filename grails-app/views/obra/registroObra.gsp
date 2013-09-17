@@ -47,11 +47,13 @@
     }
 
     .error {
-        background  : inherit !important;
+        /*background  : inherit !important;*/
+        background: #D7D7D7;
         border      : solid 2px #C17474;
         font-weight : bold;
         padding     : 10px;
     }
+
     .ui-dialog-titlebar-close{
         background-color: white !important;
         color: black;
@@ -142,7 +144,7 @@
 
 <g:form class="registroObra" name="frm-registroObra" action="save">
 <g:hiddenField name="crono" value="0"/>
-<fieldset class="borde" style="position: relative; height: 120px;float: left">
+<fieldset class="borde" style="position: relative;float: left">
     <g:hiddenField name="id" value="${obra?.id}"/>
     <div class="span12" style="margin-top: 15px" align="center">
 
@@ -212,7 +214,7 @@
 
         <div class="span1 formato" style="margin-left: 20px;">FECHA</div>
 
-        <div class="span1"><elm:datepicker name="fechaCreacionObra" class="fechaCreacionObra datepicker input-small" value="${obra?.fechaCreacionObra}"/></div>
+        <div class="span2" style="margin-left: 10px"><elm:datepicker name="fechaCreacionObra" class="fechaCreacionObra datepicker input-small required" value="${obra?.fechaCreacionObra}" title="Fecha Registro de la Obra"/></div>
 
     </div>
 
@@ -222,7 +224,7 @@
     <div class="span1">Código:</div>
 
     <g:if test="${obra?.codigo != null}">
-        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" disabled="true" maxlength="20" title="Código de la Obra"/></div>
+        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" readonly="readonly" maxlength="20" title="Código de la Obra"/></div>
     </g:if>
     <g:else>
         <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" maxlength="20" title="Código de la Obra"/></div>
@@ -380,7 +382,7 @@
 
     <div class="span1">Fecha</div>
 
-    <div class="span2" style="margin-left: 0;"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small" value="${obra?.fechaPreciosRubros}"/></div>
+    <div class="span2" style="margin-left: 0;"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small required" value="${obra?.fechaPreciosRubros}" title="Fecha Precios"/></div>
 
     <div class="span1" style="margin-left: -20px">Coordenadas WGS84</div>
 
@@ -948,7 +950,7 @@
                     var fec = $("#fechaInicio").val()
                     var msg =""
                     if(obs.length>250)
-                        msg+="<br>El campon observaciones debe tener maximo 250 caracteres."
+                        msg+="<br>El campo observaciones debe tener máximo 250 caracteres."
                     if(!fec || fec==""){
                         msg+="<br>Seleccione una fecha de inicio de obra."
                     }

@@ -275,15 +275,13 @@
             </g:each>
                    <table style="margin-top: 10px; font-size: 12px !important; width: 600px!important">
                        <thead>
-                      <th>
 
-                      </th>
                        </thead>
                        <tbody>
                           <tr>
-                           <td class="theaderBot theaderup padTopBot">
-                           <td style="text-align: left"><b style="font-size: 10px; margin-left: 400px">TOTAL PRESUPUESTO:</b></td>
-                           <td style="text-align: right !important; font-size: 12px"><b><g:formatNumber number="${totalPresupuesto}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                           <td colspan="7" class="theaderBot theaderup padTopBot">
+                           <td style="text-align: right; width: 500px"><b>TOTAL PRESUPUESTO:  </b></td>
+                           <td style="text-align: right; width: 100px "><b><g:formatNumber number="${totalPresupuesto}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
                            </td>
 
                        </tr>
