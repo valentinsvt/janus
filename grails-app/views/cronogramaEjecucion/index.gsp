@@ -321,21 +321,26 @@
                                 var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                                 btnSave.click(function () {
-                                    if ($("#frmSave-suspension").valid()) {
-                                        btnSave.replaceWith(spinner);
-                                        var data = $("#frmSave-suspension").serialize();
-                                        data += "&obra=${obra.id}";
-                                        $.ajax({
-                                            type    : "POST",
-                                            url     : "${createLink(action:'modificacion')}",
-                                            data    : data,
-                                            success : function (msg) {
-                                                //                                            ////console.log(msg);
-                                                $("#modal-forms").modal("hide");
-                                                updateTabla();
-                                            }
-                                        });
-                                    }
+                                    btnSave.replaceWith(spinner);
+                                    var data = "obra=${obra.id}";
+                                    $(".tiny").each(function () {
+                                        var tipo = $(this).data("tipo");
+                                        var val = parseFloat($(this).val()) + parseFloat($(this).data("val1"));
+                                        var crono = $(this).data("id");
+                                        var periodo = $(this).data("id2");
+                                        var vol = $(this).data("id3");
+                                        data += "&" + (tipo + "=" + val + "_" + periodo + "_" + vol + "_" + crono);
+                                    });
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'modificacion')}",
+                                        data    : data,
+                                        success : function (msg) {
+//                                            console.log(msg);
+                                            $("#modal-forms").modal("hide");
+                                            updateTabla();
+                                        }
+                                    });
                                     return false;
                                 });
 
@@ -345,6 +350,12 @@
                                 $("#modal-forms").modal("show");
                             }
                         });
+                    } else {
+                        var btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
+                        $("#modalTitle-forms").html("Modificación");
+                        $("#modalBody-forms").html("Seleccione el rubro a modificar haciendo click sobre la fila adecuada (la fila tomará un color azul - o verde si es parte de la ruta crítica)");
+                        $("#modalFooter-forms").html("").append(btnCancel);
+                        $("#modal-forms").modal("show");
                     }
                     return false;
                 });

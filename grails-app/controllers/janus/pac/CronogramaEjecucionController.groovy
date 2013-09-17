@@ -303,7 +303,7 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             return [msg: "Ya se ha realizado la liquidación del reajuste, ya no puede realizar modificaciones"]
         }
 
-        def planillas = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"))
+//        def planillas = Planilla.findAllByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo("P"))
         def periodos = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaInicio'])
 
         def indirecto = obra.totales / 100
@@ -385,7 +385,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             cantModificable[i] = [
                     dol: 0,
                     por: 0,
-                    can: 0
+                    can: 0,
+                    crono: null
             ]
             if (cronosPer.size() == 1) {
                 cronosPer = cronosPer[0]
@@ -403,7 +404,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
                 cantModificable[i] = [
                         dol: cronosPer.precio,
                         por: cronosPer.porcentaje,
-                        can: cronosPer.cantidad
+                        can: cronosPer.cantidad,
+                        crono: cronosPer.id
                 ]
 //                totalesDol[i] += cronosPer.precio
             }
@@ -412,16 +414,20 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             filaCan += "</td>"
         }
 
+//        println cantModificable
+
         def filaDolPla = "", filaPorPla = "", filaCanPla = ""
         def filaDolMod = "", filaPorMod = "", filaCanMod = ""
         def totDolPla = 0, totPorPla = 0, totCanPla = 0
+        def maxDolAcu = 0, maxPrctAcu = 0, maxCanAcu = 0
+
         periodos.eachWithIndex { periodo, i ->
             filaDolPla += "<td class='dol planilla num ${periodo.tipo}'>"
             filaPorPla += "<td class='prct planilla num ${periodo.tipo}'>"
             filaCanPla += "<td class='fis planilla num ${periodo.tipo}'>"
-            filaDolMod += "<td class='dol planilla num ${periodo.tipo}'>"
-            filaPorMod += "<td class='prct planilla num ${periodo.tipo}'>"
-            filaCanMod += "<td class='fis planilla num ${periodo.tipo}'>"
+            filaDolMod += "<td class='dol modificacion num ${periodo.tipo}'>"
+            filaPorMod += "<td class='prct modificacion num ${periodo.tipo}'>"
+            filaCanMod += "<td class='fis modificacion num ${periodo.tipo}'>"
 
             def planillasPeriodo = Planilla.withCriteria {
                 and {
@@ -437,17 +443,22 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             def cantDia = cronos.cantidad / diasPeriodo
             def totalPlanilla = 0
             def modificable = true
-            println cantModificable[i]
+//            println cantModificable[i]
+
             planillasPeriodo.each { pla ->
-                println "periodo: " + periodo.fechaInicio.format("dd-MM-yyyy") + " - " + periodo.fechaFin.format("dd-MM-yyyy")
-                println "\tplanilla: " + pla.fechaInicio.format("dd-MM-yyyy") + " - " + pla.fechaFin.format("dd-MM-yyyy")
+//                println "periodo: " + periodo.fechaInicio.format("dd-MM-yyyy") + " - " + periodo.fechaFin.format("dd-MM-yyyy")
+//                println "\tplanilla: " + pla.fechaInicio.format("dd-MM-yyyy") + " - " + pla.fechaFin.format("dd-MM-yyyy")
                 if (pla.fechaFin >= periodo.fechaFin) {
                     modificable = false
-                    cantModificable[i] = [
-                            dol: 0,
-                            por: 0,
-                            can: 0
-                    ]
+//                    cantModificable[i] = [
+//                            dol: 0,
+//                            por: 0,
+//                            can: 0
+//                    ]
+                    cantModificable[i].dol = 0
+                    cantModificable[i].por = 0
+                    cantModificable[i].can = 0
+
                 }
                 def diasPlanilla = pla.fechaFin - pla.fechaInicio + 1
                 totalPlanilla += (diasPlanilla * cantDia)
@@ -465,12 +476,32 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
             totCanPla += canPla
 
             if (modificable) {
-                def maxDol = numero((cantModificable[i].dol - totalPlanilla).toDouble().round(2))
-                def maxPor = numero((cantModificable[i].por - porPla).toDouble().round(2))
-                def maxCan = numero((cantModificable[i].can - canPla).toDouble().round(2))
-                filaDolMod += "<input type='number' class='input-mini tiny' value='" + maxDol + "' data-tipo='dol' data-max='" + maxDol + "' />"
-                filaPorMod += "<input type='number' class='input-mini tiny' value='" + maxPor + "' data-tipo='prct' data-max='" + maxPor + "' />"
-                filaCanMod += "<input type='number' class='input-mini tiny' value='" + maxCan + "' data-tipo='fis' data-max='" + maxCan + "' />"
+                def dol = cantModificable[i].dol - totalPlanilla
+                def por = cantModificable[i].por - porPla
+                def can = cantModificable[i].can - canPla
+                def maxDol = numero(dol.toDouble().round(2))
+                def maxPor = numero(por.toDouble().round(2))
+                def maxCan = numero(can.toDouble().round(2))
+
+                maxDolAcu += dol.toDouble()
+                maxPrctAcu += por.toDouble()
+                maxCanAcu += can.toDouble()
+
+                filaDolMod += "<input type='number' class='input-mini tiny dol p${i}' value='" + maxDol +
+                        "' data-tipo='dol' data-total='${totDol}' data-periodo='${i}' data-max='" + maxDolAcu + "' " +
+                        " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                        " data-val1='${totalPlanilla.toDouble().round(2)}' /> " +
+                        "(max. ${maxDolAcu.toDouble().round(2)})"
+                filaPorMod += "<input type='number' class='input-mini tiny prct p${i}' value='" + maxPor +
+                        "' data-tipo='prct' data-total='${totPor}' data-periodo='${i}' data-max='" + maxPrctAcu + "' " +
+                        " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                        " data-val1='${porPla.toDouble().round(2)}'  /> " +
+                        "(max. ${maxPrctAcu.toDouble().round(2)})"
+                filaCanMod += "<input type='number' class='input-mini tiny fis p${i}' value='" + maxCan +
+                        "' data-tipo='fis' data-total='${totCan}' data-periodo='${i}' data-max='" + maxCanAcu + "' " +
+                        " data-id='${cantModificable[i].crono}' data-id2='${periodo.id}' data-id3='${cronos.volumen.id}' " +
+                        " data-val1='${canPla.toDouble().round(2)}' /> " +
+                        "(max. ${maxCanAcu.toDouble().round(2)})"
             }
 
             filaDolPla += "</td>"
@@ -571,6 +602,94 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
     def modificacion() {
 
+        def obra = Obra.get(params.obra.toLong())
+        def modificaciones = [:]
+
+        params.fis.each { p ->
+            def parts = p.split("_")
+            if (parts.size() == 4) {
+                def val = parts[0]
+                def periodo = PeriodoEjecucion.get(parts[1].toLong())
+                def vol = VolumenesObra.get(parts[2].toLong())
+                def crono = parts[3]
+                if (!modificaciones[periodo]) {
+                    modificaciones[periodo] = [
+                            fis: [:],
+                            dol: [:],
+                            prct: [:]
+                    ]
+                }
+                modificaciones[periodo]["fis"].val = val
+                modificaciones[periodo]["fis"].vol = vol
+                modificaciones[periodo]["fis"].crono = crono
+            }
+        }
+
+        params.prct.each { p ->
+            def parts = p.split("_")
+            if (parts.size() == 4) {
+                def val = parts[0]
+                def periodo = PeriodoEjecucion.get(parts[1].toLong())
+                def vol = VolumenesObra.get(parts[2].toLong())
+                def crono = parts[3]
+                if (!modificaciones[periodo]) {
+                    modificaciones[periodo] = [
+                            fis: [:],
+                            dol: [:],
+                            prct: [:]
+                    ]
+                }
+                modificaciones[periodo]["prct"].val = val
+                modificaciones[periodo]["prct"].vol = vol
+                modificaciones[periodo]["prct"].crono = crono
+            }
+        }
+
+        params.dol.each { p ->
+            def parts = p.split("_")
+            if (parts.size() == 4) {
+                def val = parts[0]
+                def periodo = PeriodoEjecucion.get(parts[1].toLong())
+                def vol = VolumenesObra.get(parts[2].toLong())
+                def crono = parts[3]
+                if (!modificaciones[periodo]) {
+                    modificaciones[periodo] = [
+                            fis: [:],
+                            dol: [:],
+                            prct: [:]
+                    ]
+                }
+                modificaciones[periodo]["dol"].val = val
+                modificaciones[periodo]["dol"].vol = vol
+                modificaciones[periodo]["dol"].crono = crono
+            }
+        }
+
+        def ok = "OK"
+
+        modificaciones.each { periodo, mod ->
+            println ".. " + periodo + "\t" + mod
+            def fis = mod.fis
+            def prc = mod.prct
+            def dol = mod.dol
+            CronogramaEjecucion crono
+            if (fis.crono != "null") {
+                crono = CronogramaEjecucion.get(fis.crono.toLong())
+            } else {
+                crono = new CronogramaEjecucion()
+                crono.volumenObra = fis.vol
+                crono.periodo = periodo
+            }
+            crono.precio = dol.val.toDouble()
+            crono.porcentaje = prc.val.toDouble()
+            crono.cantidad = fis.val.toDouble()
+            if (!crono.save(flush: true)) {
+                println "Error al guardar: " + crono.errors
+                ok = "NO"
+            }
+        }
+
+        render ok
     }
 
     def ampliacion_ajax() {}
