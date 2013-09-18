@@ -971,6 +971,179 @@ class Reportes2Controller {
         return [lugar: lugar, cols: params.col, precios: res, grupo: grupo]
     }
 
+    def reporteExcelComposicionTotales() {
+
+//        println("!!!" + params)
+
+        if (!params.tipo) {
+            params.tipo = "-1"
+        }
+        if (!params.sp) {
+            params.sp = '-1'
+        }
+        if (params.tipo == "-1") {
+            params.tipo = "1,2,3"
+        }
+
+        def wsp = ""
+
+        if (params.sp.toString() != "-1") {
+
+            wsp = "      AND v.sbpr__id = ${params.sp} \n"
+        }
+
+        def obra = Obra.get(params.id)
+//        params.tipo = "1,2,3"
+
+        def sql = "SELECT\n" +
+                "  i.itemcdgo              codigo,\n" +
+                "  i.itemnmbr              item,\n" +
+                "  u.unddcdgo              unidad,\n" +
+                "  sum(v.voitcntd)         cantidad,\n" +
+                "  v.voitpcun              punitario,\n" +
+                "  v.voittrnp              transporte,\n" +
+                "  v.voitpcun + v.voittrnp costo,\n" +
+                "  d.dprtdscr              departamento,\n" +
+                "  s.sbgrdscr              subgrupo,\n" +
+                "  g.grpodscr              grupo,\n" +
+                "  g.grpo__id              grid\n" +
+                "FROM vlobitem v\n" +
+                "  LEFT JOIN item i ON v.item__id = i.item__id\n" +
+                "  LEFT JOIN undd u ON i.undd__id = u.undd__id\n" +
+                "  LEFT JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
+                "  LEFT JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
+                "  LEFT JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo})\n" +
+                "WHERE v.obra__id = ${params.id} \n" +
+                "GROUP BY i.itemcdgo, i.itemnmbr, u.unddcdgo, v.voitpcun, v.voittrnp, d.dprtdscr, s.sbgrdscr, g.grpodscr,\n" +
+                "  g.grpo__id\n" +
+                "ORDER BY grid ASC, i.itemnmbr"
+
+/*
+        def sql = "SELECT i.itemcdgo codigo, i.itemnmbr item, u.unddcdgo unidad, sum(v.voitcntd) cantidad, \n" +
+                "v.voitpcun punitario, v.voittrnp transporte, v.voitpcun + v.voittrnp  costo, \n" +
+                "sum((v.voitpcun + v.voittrnp) * v.voitcntd)  total, g.grpodscr grupo, g.grpo__id grid,\n" +
+                "FROM vlobitem v INNER JOIN item i ON v.item__id = i.item__id\n" +
+                "INNER JOIN undd u ON i.undd__id = u.undd__id\n" +
+                "INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
+                "INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
+                "INNER JOIN sbpr b ON v.sbpr__id = b.sbpr__id\n" +
+                "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo}) \n" +
+                "WHERE v.obra__id = ${params.id} and v.voitcntd >0 \n" +
+                "group by i.itemcdgo, i.itemnmbr, u.unddcdgo, v.voitpcun, v.voittrnp, v.voitpcun, \n" +
+                "g.grpo__id, g.grpodscr " +
+                "ORDER BY g.grpo__id ASC, i.itemcdgo"
+*/
+
+//        println sql
+
+        def cn = dbConnectionService.getConnection()
+
+        def res = cn.rows(sql.toString())
+
+//        println("--->>" + res)
+        def errores = ""
+        if (res.size() != 0) {
+
+            //excel
+            WorkbookSettings workbookSettings = new WorkbookSettings()
+            workbookSettings.locale = Locale.default
+
+            def file = File.createTempFile('myExcelDocument', '.xls')
+            file.deleteOnExit()
+            WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
+
+            WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+            WritableCellFormat formatXls = new WritableCellFormat(font)
+
+            def row = 0
+            WritableSheet sheet = workbook.createSheet('Composicion', 0)
+
+            WritableFont times16font = new WritableFont(WritableFont.ARIAL, 11, WritableFont.BOLD, false);
+            WritableCellFormat times16format = new WritableCellFormat(times16font);
+            sheet.setColumnView(0, 20)
+            sheet.setColumnView(1, 60)
+            sheet.setColumnView(2, 10)
+            sheet.setColumnView(3, 20)
+            sheet.setColumnView(4, 20)
+            sheet.setColumnView(5, 20)
+            sheet.setColumnView(6, 20)
+            sheet.setColumnView(7, 25)
+
+            def label
+            def number
+            def fila = 18;
+            def totalE = 0;
+            def totalM = 0;
+            def totalMO = 0;
+            def ultimaFila
+
+            label = new jxl.write.Label(1, 2, " G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 4, "COMPOSICIÓN: " + obra?.nombre, times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 6, obra?.departamento?.direccion?.nombre, times16format);
+            sheet.addCell(label);
+            label = new jxl.write.Label(1, 8, "CÓDIGO: " + obra?.codigo, times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 10, "DOC. REFERENCIA: " + obra?.oficioIngreso, times16format);
+            sheet.addCell(label);
+            label = new jxl.write.Label(1, 12, "FECHA: " + printFecha(obra?.fechaCreacionObra), times16format);
+            sheet.addCell(label);
+            label = new jxl.write.Label(1, 14, "FECHA ACT.PRECIOS: " + printFecha(obra?.fechaPreciosRubros), times16format);
+            sheet.addCell(label);
+
+            label = new jxl.write.Label(0, 16, "CODIGO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 16, "ITEM", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(2, 16, "UNIDAD", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(3, 16, "CANTIDAD", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(4, 16, "P.UNITARIO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(5, 16, "TRANSPORTE", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(6, 16, "COSTO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(7, 16, "TIPO", times16format); sheet.addCell(label);
+
+            res.each {
+                if (it?.item == null) {
+                    it?.item = " "
+                }
+                if (it?.cantidad == null) {
+                    it?.cantidad = 0
+                }
+                if (it?.punitario == null) {
+                    it?.punitario = 0
+                }
+                if (it?.transporte == null) {
+                    it?.transporte = 0
+                }
+                if (it?.costo == null) {
+                    it?.costo = 0
+                }
+
+                label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
+                label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
+                label = new jxl.write.Label(2, fila, it?.unidad ? it?.unidad.toString() : ""); sheet.addCell(label);
+                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(4, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(5, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(6, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
+                label = new jxl.write.Label(7, fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
+
+                fila++
+
+                ultimaFila = fila
+            }
+
+//        println ">>>>>>>>>> " + ultimaFila
+
+            workbook.write();
+            workbook.close();
+            def output = response.getOutputStream()
+            def header = "attachment; filename=" + "ComposicionExcelTotales.xls";
+            response.setContentType("application/octet-stream")
+            response.setHeader("Content-Disposition", header);
+            output.write(file.getBytes());
+        } else {
+            flash.message = "Ha ocurrido un error!"
+            redirect(action: "errores")
+        }
+    }
+
     def reporteExcelComposicion() {
 
 //        println("!!!" + params)
@@ -979,7 +1152,6 @@ class Reportes2Controller {
             params.tipo = "-1"
         }
         if (!params.sp) {
-
             params.sp = '-1'
         }
         if (params.tipo == "-1") {
@@ -1045,151 +1217,158 @@ class Reportes2Controller {
         def res = cn.rows(sql.toString())
 
 //        println("--->>" + res)
-
-        //excel
-        WorkbookSettings workbookSettings = new WorkbookSettings()
-        workbookSettings.locale = Locale.default
-
-        def file = File.createTempFile('myExcelDocument', '.xls')
-        file.deleteOnExit()
-        WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
-
-        WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
-        WritableCellFormat formatXls = new WritableCellFormat(font)
-
-        def row = 0
-        WritableSheet sheet = workbook.createSheet('Composicion', 0)
-
-        WritableFont times16font = new WritableFont(WritableFont.ARIAL, 11, WritableFont.BOLD, false);
-        WritableCellFormat times16format = new WritableCellFormat(times16font);
-        sheet.setColumnView(0, 20)
-        sheet.setColumnView(1, 60)
-        sheet.setColumnView(2, 10)
-        sheet.setColumnView(3, 20)
-        sheet.setColumnView(4, 20)
-        sheet.setColumnView(5, 20)
-        sheet.setColumnView(6, 20)
-        sheet.setColumnView(7, 20)
-        sheet.setColumnView(8, 25)
-        sheet.setColumnView(9, 20)
-
-        def label
-        def number
-        def fila = 18;
-        def totalE = 0;
-        def totalM = 0;
-        def totalMO = 0;
-        def totalEquipo = 0;
-        def totalManoObra = 0;
-        def totalMaterial = 0;
-        def totalDirecto = 0;
-        def ultimaFila
-
-        label = new jxl.write.Label(1, 2, " G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 4, "COMPOSICIÓN: " + obra?.nombre, times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 6, obra?.departamento?.direccion?.nombre, times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 8, "CÓDIGO: " + obra?.codigo, times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 10, "DOC. REFERENCIA: " + obra?.oficioIngreso, times16format);
-        sheet.addCell(label);
-        label = new jxl.write.Label(1, 12, "FECHA: " + printFecha(obra?.fechaCreacionObra), times16format);
-        sheet.addCell(label);
-        label = new jxl.write.Label(1, 14, "FECHA ACT.PRECIOS: " + printFecha(obra?.fechaPreciosRubros), times16format);
-        sheet.addCell(label);
-
-        label = new jxl.write.Label(0, 16, "CODIGO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(1, 16, "ITEM", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(2, 16, "UNIDAD", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(3, 16, "CANTIDAD", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(4, 16, "P.UNITARIO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(5, 16, "TRANSPORTE", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(6, 16, "COSTO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(7, 16, "TOTAL", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(8, 16, "TIPO", times16format); sheet.addCell(label);
-        label = new jxl.write.Label(9, 16, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
-
         def errores = ""
-        if(res.size() == 0){
+        if (res.size() != 0) {
 
-        }
+            //excel
+            WorkbookSettings workbookSettings = new WorkbookSettings()
+            workbookSettings.locale = Locale.default
 
-        res.each {
-            if (it?.item == null) {
-                it?.item = " "
-            }
-            if (it?.cantidad == null) {
-                it?.cantidad = 0
-            }
-            if (it?.punitario == null) {
-                it?.punitario = 0
-            }
-            if (it?.transporte == null) {
-                it?.transporte = 0
-            }
-            if (it?.costo == null) {
-                it?.costo = 0
-            }
-            if (it?.total == null) {
-                it?.total = 0
-            }
+            def file = File.createTempFile('myExcelDocument', '.xls')
+            file.deleteOnExit()
+            WritableWorkbook workbook = Workbook.createWorkbook(file, workbookSettings)
 
-            label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
-            label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
-            label = new jxl.write.Label(2, fila, it?.unidad.toString()); sheet.addCell(label);
-            number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(2) ?: 0); sheet.addCell(number);
-            number = new jxl.write.Number(4, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
-            number = new jxl.write.Number(5, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
-            number = new jxl.write.Number(6, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
-            number = new jxl.write.Number(7, fila, it?.total.toDouble().round(2) ?: 0); sheet.addCell(number);
-            label = new jxl.write.Label(8, fila, it?.grupo.toString()); sheet.addCell(label);
-            label = new jxl.write.Label(9, fila, it?.subpresupuesto.toString()); sheet.addCell(label);
+            WritableFont font = new WritableFont(WritableFont.ARIAL, 12)
+            WritableCellFormat formatXls = new WritableCellFormat(font)
 
-            fila++
+            def row = 0
+            WritableSheet sheet = workbook.createSheet('Composicion', 0)
 
-            if (it?.grid == 1) {
-                totalMaterial = (totalM += it?.total)
+            WritableFont times16font = new WritableFont(WritableFont.ARIAL, 11, WritableFont.BOLD, false);
+            WritableCellFormat times16format = new WritableCellFormat(times16font);
+            sheet.setColumnView(0, 20)
+            sheet.setColumnView(1, 60)
+            sheet.setColumnView(2, 10)
+            sheet.setColumnView(3, 20)
+            sheet.setColumnView(4, 20)
+            sheet.setColumnView(5, 20)
+            sheet.setColumnView(6, 20)
+            sheet.setColumnView(7, 20)
+            sheet.setColumnView(8, 25)
+            sheet.setColumnView(9, 20)
+
+            def label
+            def number
+            def fila = 18;
+            def totalE = 0;
+            def totalM = 0;
+            def totalMO = 0;
+            def totalEquipo = 0;
+            def totalManoObra = 0;
+            def totalMaterial = 0;
+            def totalDirecto = 0;
+            def ultimaFila
+
+            label = new jxl.write.Label(1, 2, " G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 4, "COMPOSICIÓN: " + obra?.nombre, times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 6, obra?.departamento?.direccion?.nombre, times16format);
+            sheet.addCell(label);
+            label = new jxl.write.Label(1, 8, "CÓDIGO: " + obra?.codigo, times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 10, "DOC. REFERENCIA: " + obra?.oficioIngreso, times16format);
+            sheet.addCell(label);
+            label = new jxl.write.Label(1, 12, "FECHA: " + printFecha(obra?.fechaCreacionObra), times16format);
+            sheet.addCell(label);
+            label = new jxl.write.Label(1, 14, "FECHA ACT.PRECIOS: " + printFecha(obra?.fechaPreciosRubros), times16format);
+            sheet.addCell(label);
+
+            label = new jxl.write.Label(0, 16, "CODIGO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(1, 16, "ITEM", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(2, 16, "UNIDAD", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(3, 16, "CANTIDAD", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(4, 16, "P.UNITARIO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(5, 16, "TRANSPORTE", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(6, 16, "COSTO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(7, 16, "TOTAL", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(8, 16, "TIPO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(9, 16, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
+
+            res.each {
+                if (it?.item == null) {
+                    it?.item = " "
+                }
+                if (it?.cantidad == null) {
+                    it?.cantidad = 0
+                }
+                if (it?.punitario == null) {
+                    it?.punitario = 0
+                }
+                if (it?.transporte == null) {
+                    it?.transporte = 0
+                }
+                if (it?.costo == null) {
+                    it?.costo = 0
+                }
+                if (it?.total == null) {
+                    it?.total = 0
+                }
+
+                label = new jxl.write.Label(0, fila, it?.codigo.toString()); sheet.addCell(label);
+                label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
+                label = new jxl.write.Label(2, fila, it?.unidad ? it?.unidad.toString() : ""); sheet.addCell(label);
+                number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(4, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(5, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(6, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(7, fila, it?.total.toDouble().round(2) ?: 0); sheet.addCell(number);
+                label = new jxl.write.Label(8, fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
+                label = new jxl.write.Label(9, fila, it?.subpresupuesto ? it?.subpresupuesto.toString() : "");
+                sheet.addCell(label);
+
+                fila++
+
+                if (it?.grid == 1) {
+                    totalMaterial = (totalM += it?.total)
+                }
+                if (it?.grid == 2) {
+                    totalManoObra = (totalMO += it?.total)
+                }
+                if (it?.grid == 3) {
+                    totalEquipo = (totalE += it?.total)
+                }
+                totalDirecto = totalEquipo + totalManoObra + totalMaterial;
+                ultimaFila = fila
             }
-            if (it?.grid == 2) {
-                totalManoObra = (totalMO += it?.total)
-            }
-            if (it?.grid == 3) {
-                totalEquipo = (totalE += it?.total)
-            }
-            totalDirecto = totalEquipo + totalManoObra + totalMaterial;
-            ultimaFila = fila
-        }
 
 //        println ">>>>>>>>>> " + ultimaFila
-        if (res.size() > 0) {
-            label = new jxl.write.Label(6, ultimaFila, "Total Materiales: ", times16format); sheet.addCell(label);
-            number = new jxl.write.Number(7, ultimaFila, totalMaterial.toDouble()?.round(2) ?: 0);
-            sheet.addCell(number);
+            if (res.size() > 0) {
+                label = new jxl.write.Label(6, ultimaFila, "Total Materiales: ", times16format); sheet.addCell(label);
+                number = new jxl.write.Number(7, ultimaFila, totalMaterial.toDouble()?.round(2) ?: 0);
+                sheet.addCell(number);
 
-            label = new jxl.write.Label(6, ultimaFila + 1, "Total Mano de Obra: ", times16format); sheet.addCell(label);
-            number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra.toDouble()?.round(2) ?: 0);
-            sheet.addCell(number);
+                label = new jxl.write.Label(6, ultimaFila + 1, "Total Mano de Obra: ", times16format);
+                sheet.addCell(label);
+                number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra.toDouble()?.round(2) ?: 0);
+                sheet.addCell(number);
 
-            label = new jxl.write.Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
+                label = new jxl.write.Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
 //        number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo); sheet.addCell(number);
-            number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo.toDouble()?.round(2) ?: 0);
-            sheet.addCell(number);
+                number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo.toDouble()?.round(2) ?: 0);
+                sheet.addCell(number);
 
-            label = new jxl.write.Label(6, ultimaFila + 3, "TOTAL DIRECTO: ", times16format); sheet.addCell(label);
-            number = new jxl.write.Number(7, ultimaFila + 3, totalDirecto.toDouble()?.round(2) ?: 0);
-            sheet.addCell(number);
+                label = new jxl.write.Label(6, ultimaFila + 3, "TOTAL DIRECTO: ", times16format); sheet.addCell(label);
+                number = new jxl.write.Number(7, ultimaFila + 3, totalDirecto.toDouble()?.round(2) ?: 0);
+                sheet.addCell(number);
 
-            workbook.write();
-            workbook.close();
-            def output = response.getOutputStream()
-            def header = "attachment; filename=" + "ComposicionExcel.xls";
-            response.setContentType("application/octet-stream")
-            response.setHeader("Content-Disposition", header);
-            output.write(file.getBytes());
+                workbook.write();
+                workbook.close();
+                def output = response.getOutputStream()
+                def header = "attachment; filename=" + "ComposicionExcel.xls";
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", header);
+                output.write(file.getBytes());
+            } else {
+                flash.message = "Ha ocurrido un error..."
+                redirect(action: "errores")
+            }
         } else {
-            flash.message = "Ha ocurrido un error:"
+            flash.message = "Ha ocurrido un error!"
             redirect(action: "errores")
         }
     }
 
+    def errores() {
+
+    }
 
     def reportePreciosExcel() {
 
