@@ -292,6 +292,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
         if (params.crono.class == java.lang.String) {
             params.crono = [params.crono]
         }
+        def contrato = Contrato.get(params.cont.toLong())
         params.crono.each { str ->
             def parts = str.split("_")
 //            println parts
@@ -310,6 +311,7 @@ class CronogramaContratoController extends janus.seguridad.Shield {
                 crono = crono[0]
             } else if (crono.size() == 0) {
                 crono = new CronogramaContrato()
+                crono.contrato = contrato
             } else {
                 println "WTF MAS DE UN CRONOGRAMA volumen obra " + vol.id + " periodo " + per + " hay " + crono.size()
                 cont = false

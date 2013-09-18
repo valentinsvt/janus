@@ -358,9 +358,16 @@
                             </li>
 
                             <li>
-                                <g:link controller="planilla" action="list" id="${contrato?.id}">
-                                    <i class=" icon-file-alt"></i> Planillas
-                                </g:link>
+                                <g:if test="${contrato.obra.tipo != 'D'}">
+                                    <g:link controller="planilla" action="list" id="${contrato?.id}">
+                                        <i class=" icon-file-alt"></i> Planillas
+                                    </g:link>
+                                </g:if>
+                                <g:else>
+                                    <g:link controller="planilla" action="listDirecta" id="${contrato?.id}">
+                                        <i class=" icon-file-alt"></i> Planillas Directas
+                                    </g:link>
+                                </g:else>
                             </li>
 
                             %{--<li>--}%
@@ -495,18 +502,18 @@
 
         %{--</div>--}%
 
-    <div id="LQDialogo">
+        <div id="LQDialogo">
 
-        <fieldset>
-            <div class="span3">
-                Está seguro de querer iniciar el proceso para generar la Fórmula Polinómica de Liquidación
-            </div>
-        </fieldset>
-    </div>
+            <fieldset>
+                <div class="span3">
+                    Está seguro de querer iniciar el proceso para generar la Fórmula Polinómica de Liquidación
+                </div>
+            </fieldset>
+        </div>
 
 
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
             function log(msg, error) {
                 var sticky = false;
@@ -921,16 +928,15 @@
                 buttons   : {
                     "Aceptar"  : function () {
 
-                            $.ajax({
-                                type    : "POST",
-                                url     : "${createLink(action: 'obraLiquidacion')}",
-                                data    : "id=${contrato?.id}",
-                                success : function (msg) {
-                                    alert(msg);
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${createLink(action: 'obraLiquidacion')}",
+                            data    : "id=${contrato?.id}",
+                            success : function (msg) {
+                                alert(msg);
 
-                                }
-                            });
-
+                            }
+                        });
 
                         $("#LQDialogo").dialog("close")
 
@@ -945,8 +951,6 @@
 
             });
 
-
-
             $("#liquidacion").click(function () {
 
                 if (${contrato?.id != null}) {
@@ -956,8 +960,6 @@
                 }
 
             });
-
-
 
             %{--$("#btn-imprimir").click(function () {--}%
 

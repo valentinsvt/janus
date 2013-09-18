@@ -277,6 +277,7 @@
                     </div>
 
                 </div>
+
                 <div class="span12" style="margin-top: 10px">
 
                     <div class="span2 formato">Multa por incumplimiento del cronograma</div>
@@ -300,7 +301,7 @@
                     <div class="span2 formato">Monto del contrato</div>
 
                     <div class="span3"><g:textField name="monto" class="monto activo"
-                                                    value="${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/></div>
+                                                    value="${g.formatNumber(number: contrato?.monto, maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"/></div>
 
                     <div class="span2 formato">Plazo</div>
 
@@ -315,13 +316,13 @@
 
                     <div class="span1">
                         <g:textField name="porcentajeAnticipo" class="anticipo activo"
-                                     value="${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}"
+                                     value="${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0,  locale: 'ec')}"
                                      style="width: 30px; text-align: right"/> %
                     </div>
 
                     <div class="span2">
                         <g:textField name="anticipo" class="anticipoValor activo" style="width: 105px; text-align: right"
-                                     value="${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                                     value="${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"/>
                     </div>
 
                     <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>

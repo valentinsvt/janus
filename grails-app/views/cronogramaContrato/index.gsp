@@ -980,6 +980,7 @@
                                     dataAjax += "&crono=" + rubro + "_" + i + "_" + dol + "_" + prct + "_" + cant + "&";
                                 }
                             }
+                            dataAjax += "&cont=${contrato.id}";
                             $.ajax({
                                 type    : "POST",
                                 url     : "${createLink(action:'saveCrono_ajax')}",

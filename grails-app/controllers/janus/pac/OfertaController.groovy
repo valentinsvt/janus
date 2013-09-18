@@ -43,7 +43,7 @@ class OfertaController extends janus.seguridad.Shield {
             funcion {
                 eq("codigo", "C")
             }
-        }
+        }.persona
 
         return [ofertaInstance: ofertaInstance, responsablesProceso: responsablesProceso]
     } //form_ajax
