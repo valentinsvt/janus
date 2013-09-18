@@ -296,19 +296,19 @@
                     <thead>
                     <tr>
                         <th colspan="7" class="theaderBot theaderup padTopBot">
-                        <th style="width: 20px;" class="theaderBot theaderup padTopBot">
+                        <th style="width: 20px;">
                             N°
                         </th>
-                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
+                        <th style="width: 80px;">
                             Rubro
                         </th>
-                        <th style="width: 550px;" class="theaderBot theaderup padTopBot">
+                        <th style="width: 550px;">
                             Descripción
                         </th>
-                        <th style="width: 35px;" class="col_unidad theaderBot theaderup padTopBot">
+                        <th style="width: 35px;">
                             Unidad
                         </th>
-                        <th style="width: 80px;" class="theaderBot theaderup padTopBot">
+                        <th style="width: 80px;">
                             Cantidad
                         </th>
                         <th class="col_precio %{--theaderBot theaderup padTopBot--}%" style="width:80px ; text-align: right">P. U.</th>
