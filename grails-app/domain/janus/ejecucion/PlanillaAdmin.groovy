@@ -9,6 +9,7 @@ class PlanillaAdmin {
     Obra obra
     Date fechaIngreso
     String numero
+    String descripcion
     String numeroFactura
     EstadoPlanilla estadoPlanilla
     TipoPlanilla tipoPlanilla
@@ -39,6 +40,7 @@ class PlanillaAdmin {
             fechaOficioEntradaPlanilla column: 'pladfcoe'
             usuario column: 'prsn__id'
             tipoPlanilla column: 'tppl__id'
+            descripcion column: 'pladdscr'
 
         }
     }
@@ -49,6 +51,6 @@ class PlanillaAdmin {
         observaciones(nullable: true,blank: true,size: 1..255)
         oficioEntradaPlanilla(nullable: true,blank: true,size: 1..55)
         fechaOficioEntradaPlanilla(nullable: true,blank: true)
-
+        descripcion(nullable: true,blank: true,size: 1..255)
     }
 }

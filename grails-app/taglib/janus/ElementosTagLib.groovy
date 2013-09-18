@@ -2,6 +2,7 @@ package janus
 
 import janus.ejecucion.PeriodosInec
 import janus.ejecucion.Planilla
+import janus.ejecucion.PlanillaAdmin
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 import org.springframework.beans.SimpleTypeConverter
 import org.springframework.context.MessageSourceResolvable
@@ -56,6 +57,47 @@ class ElementosTagLib {
             }
         }
         out << g.formatNumber(attrs)
+    }
+    Closure headerPlanillaAdm = { attrs ->
+        def str = ""
+        PlanillaAdmin planilla = attrs.planilla
+        Obra obra = planilla.obra
+
+        str += "<div class='well'>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Obra</div>"
+        str += "<div class='span5'>" + obra.nombre + " " + obra?.descripcion + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Lugar</div>"
+        str += "<div class='span5'>" + (obra.lugar?.descripcion ?: "") + "</div>"
+        str += "<div class='span2 bold'>Planilla</div>"
+        str += "<div class='span3'>" + planilla.numero + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Ubicación</div>"
+        str += "<div class='span5'>Parroquia " + obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre + "</div>"
+        str += "<div class='span2 bold'>Monto obra</div>"
+        str += "<div class='span3'>" + formatNumber(number: obra.valor, format: "##,##0", locale: "ec", minFractionDigits: 2, maxFractionDigits: 2) + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Contratista</div>"
+        str += "<div class='span5'>Administración directa</div>"
+        str += "</div>"
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Plazo</div>"
+        str += "<div class='span5'>" + formatNumber(number: (obra.plazoEjecucionMeses)*30+obra.plazoEjecucionDias, minFractionDigits: 0, maxFractionDigits: 0, locale: "ec") + " días</div>"
+        str += "<div class='span2 bold'>Fecha pres. planilla</div>"
+        str += "<div class='span3'>" + planilla.fechaIngreso.format("dd-MM-yyyy") + "</div>"
+        str += "</div>"
+
+        str += "</div>"
+
+        out << str
     }
 
 

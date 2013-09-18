@@ -657,7 +657,7 @@
 
                             <g:if test="${obra.tipo == 'D'}">
                                 <li>
-                                    <a href="#" id="btnPlanillas">
+                                    <a href="${g.createLink(controller: 'planillasAdmin',action: 'list',id: obra?.id)}" id="btnPlanillas">
                                         <i class="icon-file-alt"></i>Planillas
                                     </a>
                                 </li>
