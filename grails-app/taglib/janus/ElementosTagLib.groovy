@@ -101,6 +101,37 @@ class ElementosTagLib {
     }
 
 
+    Closure headerPlanillaAdmin = { attrs ->
+        def str = ""
+        PlanillaAdmin planilla = attrs.planilla
+        Obra obra = planilla.obra
+
+        str += "<div class='well'>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Obra</div>"
+        str += "<div class='span5'>" + obra.nombre + " " + obra?.descripcion + "</div>"
+        str += "<div class='span2 bold'>Planilla</div>"
+        str += "<div class='span3'>" + planilla.numero + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Lugar</div>"
+        str += "<div class='span5'>" + (obra.lugar?.descripcion ?: "") + "</div>"
+        str += "<div class='span2 bold'>Fecha planilla</div>"
+        str += "<div class='span3'>" + planilla.fechaIngreso.format("dd-MM-yyyy") + "</div>"
+        str += "</div>"
+
+        str += "<div class='row'>"
+        str += "<div class='span1 bold'>Ubicación</div>"
+        str += "<div class='span5'>Parroquia " + obra.parroquia?.nombre + " - Cantón " + obra.parroquia?.canton?.nombre + "</div>"
+        str += "</div>"
+
+        str += "</div>"
+
+        out << str
+    }
+
     Closure headerPlanilla = { attrs ->
         def str = ""
         Planilla planilla = attrs.planilla

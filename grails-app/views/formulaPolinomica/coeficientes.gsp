@@ -573,6 +573,7 @@
                             buttons       : {
                                 "Salir"                  : function () {
                                     location.href = url;
+                                    return false;
                                 },
                                 "Continuar en la página" : function () {
                                     return false;

@@ -1,5 +1,8 @@
 package janus.ejecucion
 
+import groovy.json.JsonBuilder
+import janus.Contrato
+import janus.Parametros
 import org.springframework.dao.DataIntegrityViolationException
 
 class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
@@ -9,6 +12,59 @@ class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
     def index() {
         redirect(action: "list", params: params)
     } //index
+
+    def detalleCosto() {
+        def planilla = PlanillaAdmin.get(params.id)
+        def contrato = Contrato.get(params.contrato)
+//        def obra = contrato.oferta.concurso.obra
+        def obra = planilla.obra
+        def editable = true //planilla.fechaMemoSalidaPlanilla == null
+        def iva = Parametros.get(1).iva
+        def dets = []
+
+        def detalles = DetallePlanillaCostoAdmin.findAllByPlanilla(planilla)
+        /*"planilla.id"   :${planilla.id},
+            factura         : factura,
+            rubro           : rubro,
+            "unidad.id"     : unidadId,
+            unidadText      : unidadText,
+            monto           : valor,
+            montoIva        : valorIva,
+            montoIndirectos : valorIndi,
+            indirectos      : $("#thIndirectos").data("indi"),
+            total           : total
+            */
+        detalles.each { dp ->
+            dets.add([
+                    id: dp.id,
+                    "planilla.id": planilla.id,
+                    factura: dp.factura,
+                    rubro: dp.rubro,
+                    "unidad.id": dp.unidadId,
+                    unidadText: dp.unidad.codigo,
+                    monto: dp.monto,
+                    montoIva: dp.montoIva,
+                    montoIndirectos: dp.montoIndirectos,
+                    indirectos: dp.indirectos,
+                    total: dp.montoIva + dp.montoIndirectos
+            ])
+        }
+
+//        def anteriores = Planilla.withCriteria {
+//            eq("tipoPlanilla", TipoPlanilla.findByCodigo("C"))
+//            ne("id", planilla.id)
+//        }
+
+//        def totalAnterior = anteriores.size() > 0 ? anteriores.sum { it.valor } : 0
+
+        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 25
+//        def max = contrato.monto * 0.1
+//        max -= totalAnterior
+
+        def json = new JsonBuilder(dets)
+//        println json.toPrettyString()
+        return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos/*, max: max*/]
+    }
 
     def list() {
         [detallePlanillaCostoAdminInstanceList: DetallePlanillaCostoAdmin.list(params), params: params]

@@ -180,6 +180,20 @@
             font-size : 8px;
         }
 
+        #firmas {
+            margin-top : 55px;
+            width      : 100%;
+        }
+
+        .firma {
+            border-top  : solid 1px #000000;
+            margin      : 0.3cm;
+            width       : 5cm;
+            text-align  : center;
+            float       : left;
+            font-weight : bold;
+        }
+
         </style>
     </head>
 
@@ -292,6 +306,32 @@
                         </div>
                     </div>
                 </g:each>
+            </div>
+
+            <div id="firmas">
+                <div class="firma">
+                    <g:if test="${actaInstance.contrato.administrador}">
+                        ${actaInstance.contrato.administrador.titulo ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}
+                    </g:if>
+                    <br/>
+                    Administrador vigente
+                </div>
+
+                <div class="firma">
+                    <g:if test="${actaInstance.contrato.delegadoPrefecto}">
+                        ${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}
+                    </g:if>
+                    <br/>
+                    Delegado del prefecto
+                </div>
+
+                <div class="firma">
+                    <g:if test="${actaInstance.contrato.oferta.proveedor}">
+                        ${actaInstance.contrato.oferta.proveedor.titulo ?: ""} ${actaInstance.contrato.oferta.proveedor.nombreContacto} ${actaInstance.contrato.oferta.proveedor.apellidoContacto}
+                    </g:if>
+                    <br/>
+                    Contratista
+                </div>
             </div>
 
         </div>

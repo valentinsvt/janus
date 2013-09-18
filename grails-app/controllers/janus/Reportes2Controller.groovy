@@ -971,7 +971,6 @@ class Reportes2Controller {
         return [lugar: lugar, cols: params.col, precios: res, grupo: grupo]
     }
 
-
     def reporteExcelComposicion() {
 
 //        println("!!!" + params)
@@ -1014,12 +1013,12 @@ class Reportes2Controller {
                 "  v.sbpr__id                            sp,\n" +
                 "  b.sbprdscr                            subpresupuesto\n" +
                 "FROM vlobitem v\n" +
-                "INNER JOIN item i ON v.item__id = i.item__id\n" +
-                "INNER JOIN undd u ON i.undd__id = u.undd__id\n" +
-                "INNER JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
-                "INNER JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
-                "INNER JOIN sbpr b ON v.sbpr__id = b.sbpr__id\n" +
-                "INNER JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo})\n" +
+                "LEFT JOIN item i ON v.item__id = i.item__id\n" +
+                "LEFT JOIN undd u ON i.undd__id = u.undd__id\n" +
+                "LEFT JOIN dprt d ON i.dprt__id = d.dprt__id\n" +
+                "LEFT JOIN sbgr s ON d.sbgr__id = s.sbgr__id\n" +
+                "LEFT JOIN sbpr b ON v.sbpr__id = b.sbpr__id\n" +
+                "LEFT JOIN grpo g ON s.grpo__id = g.grpo__id AND g.grpo__id IN (${params.tipo})\n" +
                 "WHERE v.obra__id = ${params.id} \n" + wsp +
                 "ORDER BY v.sbpr__id, grid ASC, i.itemnmbr"
 
@@ -1108,34 +1107,28 @@ class Reportes2Controller {
         label = new jxl.write.Label(8, 16, "TIPO", times16format); sheet.addCell(label);
         label = new jxl.write.Label(9, 16, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
 
+        def errores = ""
+        if(res.size() == 0){
+
+        }
+
         res.each {
-
             if (it?.item == null) {
-
                 it?.item = " "
             }
-
             if (it?.cantidad == null) {
-
-
                 it?.cantidad = 0
             }
             if (it?.punitario == null) {
-
                 it?.punitario = 0
-
             }
             if (it?.transporte == null) {
-
                 it?.transporte = 0
             }
             if (it?.costo == null) {
-
                 it?.costo = 0
-
             }
             if (it?.total == null) {
-
                 it?.total = 0
             }
 
@@ -1165,27 +1158,36 @@ class Reportes2Controller {
             ultimaFila = fila
         }
 
-        label = new jxl.write.Label(6, ultimaFila, "Total Materiales: ", times16format); sheet.addCell(label);
-        number = new jxl.write.Number(7, ultimaFila, totalMaterial.toDouble()?.round(2) ?: 0); sheet.addCell(number);
+//        println ">>>>>>>>>> " + ultimaFila
+        if (res.size() > 0) {
+            label = new jxl.write.Label(6, ultimaFila, "Total Materiales: ", times16format); sheet.addCell(label);
+            number = new jxl.write.Number(7, ultimaFila, totalMaterial.toDouble()?.round(2) ?: 0);
+            sheet.addCell(number);
 
-        label = new jxl.write.Label(6, ultimaFila + 1, "Total Mano de Obra: ", times16format); sheet.addCell(label);
-        number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra.toDouble()?.round(2) ?: 0);
-        sheet.addCell(number);
+            label = new jxl.write.Label(6, ultimaFila + 1, "Total Mano de Obra: ", times16format); sheet.addCell(label);
+            number = new jxl.write.Number(7, ultimaFila + 1, totalManoObra.toDouble()?.round(2) ?: 0);
+            sheet.addCell(number);
 
-        label = new jxl.write.Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(6, ultimaFila + 2, "Total Equipos: ", times16format); sheet.addCell(label);
 //        number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo); sheet.addCell(number);
-        number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo.toDouble()?.round(2) ?: 0); sheet.addCell(number);
+            number = new jxl.write.Number(7, ultimaFila + 2, totalEquipo.toDouble()?.round(2) ?: 0);
+            sheet.addCell(number);
 
-        label = new jxl.write.Label(6, ultimaFila + 3, "TOTAL DIRECTO: ", times16format); sheet.addCell(label);
-        number = new jxl.write.Number(7, ultimaFila + 3, totalDirecto.toDouble()?.round(2) ?: 0); sheet.addCell(number);
+            label = new jxl.write.Label(6, ultimaFila + 3, "TOTAL DIRECTO: ", times16format); sheet.addCell(label);
+            number = new jxl.write.Number(7, ultimaFila + 3, totalDirecto.toDouble()?.round(2) ?: 0);
+            sheet.addCell(number);
 
-        workbook.write();
-        workbook.close();
-        def output = response.getOutputStream()
-        def header = "attachment; filename=" + "ComposicionExcel.xls";
-        response.setContentType("application/octet-stream")
-        response.setHeader("Content-Disposition", header);
-        output.write(file.getBytes());
+            workbook.write();
+            workbook.close();
+            def output = response.getOutputStream()
+            def header = "attachment; filename=" + "ComposicionExcel.xls";
+            response.setContentType("application/octet-stream")
+            response.setHeader("Content-Disposition", header);
+            output.write(file.getBytes());
+        } else {
+            flash.message = "Ha ocurrido un error:"
+            redirect(action: "errores")
+        }
     }
 
 

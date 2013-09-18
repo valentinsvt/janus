@@ -77,9 +77,9 @@
 
             }
 
-            .sorting_desc{
+            .sorting_desc {
 
-              class : sorting !important;
+                class : sorting !important;
 
             }
 
@@ -145,12 +145,11 @@
                             <i class="icon-arrow-left"></i>
                             Regresar
                         </a>
-                        <g:link action="validacion" id="${obra?.id}" controller="composicion" class="btn" >
+                        <g:link action="validacion" id="${obra?.id}" controller="composicion" class="btn">
                             <i class="icon-list"></i>
                             Composición
                         </g:link>
                     </div>
-
 
 
                     <div class="btn-group" data-toggle="buttons-radio">
@@ -206,16 +205,21 @@
 
                     <div class="btn-group">
                         %{--<g:link action="composicion" id="${obra?.id}" params="[tipo: tipo, rend: 'pdf']" class="btn btn-print btnPdf">--}%
-                            %{--<i class="icon-print"></i>--}%
-                            %{--Pdf--}%
+                        %{--<i class="icon-print"></i>--}%
+                        %{--Pdf--}%
                         %{--</g:link>--}%
-                    %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel"> </g:link>--}%
+                        %{--<g:link action="composicion" id="${obra.id}" params="[tipo: tipo, rend: 'xls']" class="btn btn-print btnExcel"> </g:link>--}%
 
                         <a href="#" class="btn  " id="imprimirPdf">
                             <i class="icon-print"></i>
                             PDF
                         </a>
-                        <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel" id="${obra?.id}" params="[sp: sub, tipo: tipo]"><i class="icon-table"></i>Excel</g:link>
+                        <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel" id="${obra?.id}" params="[sp: sub, tipo: tipo]">
+                            <i class="icon-table"></i> Excel
+                        </g:link>
+                        <g:link controller="reportes2" action="reporteExcelComposicionTotales" class="btn btn-print btnExcel" id="${obra?.id}" params="[sp: sub, tipo: tipo]">
+                            <i class="icon-table"></i> Excel totales
+                        </g:link>
                     </div>
                 </div>
             </g:if>
@@ -262,7 +266,7 @@
                         <g:set var="totalEquipo" value="${0}"/>
                         <g:set var="totalMano" value="${0}"/>
                         <g:set var="totalMaterial" value="${0}"/>
-                        <g:each in="${res}" var="r" >
+                        <g:each in="${res}" var="r">
                             <tr>
                                 <td class="">${r.codigo}</td>
                                 <td class="">${r.item}</td>
@@ -288,21 +292,21 @@
 
                                         <g:if test="${r?.total == null}">
 
-                                        <g:set var="totalMaterial" value="${totalMaterial}"/>
+                                            <g:set var="totalMaterial" value="${totalMaterial}"/>
 
                                         </g:if>
                                         <g:else>
 
-                                        <g:set var="totalMaterial" value="${totalMaterial + r?.total}"/>
+                                            <g:set var="totalMaterial" value="${totalMaterial + r?.total}"/>
                                         </g:else>
 
                                     </g:if>
                                     <g:elseif test="${r?.grid == 2}">
                                         <g:if test="${r?.total == null}">
-                                        <g:set var="totalMano" value="${totalMano}"/>
+                                            <g:set var="totalMano" value="${totalMano}"/>
                                         </g:if>
                                         <g:else>
-                                        <g:set var="totalMano" value="${totalMano + r?.total}"/>
+                                            <g:set var="totalMano" value="${totalMano + r?.total}"/>
                                         </g:else>
                                     </g:elseif>
                                     <g:elseif test="${r?.grid == 3}">
@@ -311,11 +315,9 @@
 
                                         </g:if>
                                         <g:else>
-                                        <g:set var="totalEquipo" value="${totalEquipo + r?.total}"/>
+                                            <g:set var="totalEquipo" value="${totalEquipo + r?.total}"/>
 
                                         </g:else>
-
-
 
                                     </g:elseif>
 
@@ -359,7 +361,7 @@
                         bPaginate       : false,
                         bScrollCollapse : true,
                         bFilter         : false,
-                                bSort: false,
+                        bSort           : false,
                         oLanguage       : {
                             sZeroRecords : "No se encontraron datos",
                             sInfo        : "",
@@ -378,26 +380,23 @@
 //                       console.log("-->" + $(".pdf.active").attr("class"))
 //                       console.log("-->" + $(".pdf.active").hasClass('2'))
 
-                        if($(".pdf.active").hasClass("1") == true){
+                        if ($(".pdf.active").hasClass("1") == true) {
 
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMat',id: obra?.id)}?sp=${sub}"
-                        }else {
+                        } else {
                         }
-                        if($(".pdf.active").hasClass("2") == true){
+                        if ($(".pdf.active").hasClass("2") == true) {
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionMano',id: obra?.id)}?sp=${sub}"
-                        }else {
-
+                        } else {
 
                         }
-                        if($(".pdf.active").hasClass("3") == true){
+                        if ($(".pdf.active").hasClass("3") == true) {
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicionEq',id: obra?.id)}?sp=${sub}"
 
-                        }else {
-
+                        } else {
 
                         }
-                        if($(".pdf.active").hasClass("-1") == true){
-
+                        if ($(".pdf.active").hasClass("-1") == true) {
 
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}?sp=${sub}"
                         }

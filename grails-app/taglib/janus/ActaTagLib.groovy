@@ -316,60 +316,62 @@ class ActaTagLib {
         }
 
         def p1 = planillasCosto.size() > 0 ? planillasCosto.first() : null
-                def tabla=""
+        def tabla = ""
         def prct
-        if(p1) {
-        prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
-        tabla = "<table class='table table-bordered table-condensed'>"
+        if (p1) {
+            prct = DetallePlanillaCosto.findByPlanilla(p1)?.indirectos
+            tabla = "<table class='table table-bordered table-condensed'>"
 
-        tabla += "<thead>"
-        tabla += "<tr>"
-        tabla += "<th>Fecha</th>"
-        tabla += "<th>N. planilla</th>"
-        tabla += "<th>Periodo</th>"
-        tabla += "<th>Valor neto</th>"
-        tabla += "<th>% (${numero(numero: prct)})</th>"
-        tabla += "<th>Valor total</th>"
-        tabla += "</tr>"
-        tabla += "</thead>"
-
-        tabla += "<tbody>"
-
-        def totalValor = 0, totalIndi = 0, total = 0
-        planillasCosto.each { planilla ->
-            def plaAv = planilla.padreCosto
-            def periodos = PeriodoPlanilla.findAllByPlanilla(plaAv)
-            def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla)
-            def valor = detalles.sum { it.montoIva } ?: 0
-            def indi = detalles.sum { it.montoIndirectos } ?: 0
-
-            totalValor += valor
-            totalIndi += indi
-            total += valor
-            total += indi
-
+            tabla += "<thead>"
             tabla += "<tr>"
-            tabla += "<td>${fechaConFormato(fecha: planilla.fechaIngreso)}</td>"
-            tabla += "<td>${planilla.numero}</td>"
-            tabla += "<td>${periodos.last().periodo.descripcion}</td>"
-            tabla += "<td class='tar'>${numero(numero: valor)}</td>"
-            tabla += "<td class='tar'>${numero(numero: indi)}</td>"
-            tabla += "<td class='tar'>${numero(numero: valor + indi)}</td>"
+            tabla += "<th>Fecha</th>"
+            tabla += "<th>N. planilla</th>"
+            tabla += "<th>Periodo</th>"
+            tabla += "<th>Valor neto</th>"
+            tabla += "<th>% (${numero(numero: prct)})</th>"
+            tabla += "<th>Valor total</th>"
             tabla += "</tr>"
+            tabla += "</thead>"
+
+            tabla += "<tbody>"
+
+            def totalValor = 0, totalIndi = 0, total = 0
+            planillasCosto.each { planilla ->
+                def plaAv = planilla.padreCosto
+                if (plaAv) {
+                    def periodos = PeriodoPlanilla.findAllByPlanilla(plaAv)
+                    def detalles = DetallePlanillaCosto.findAllByPlanilla(planilla)
+                    def valor = detalles.sum { it.montoIva } ?: 0
+                    def indi = detalles.sum { it.montoIndirectos } ?: 0
+
+                    totalValor += valor
+                    totalIndi += indi
+                    total += valor
+                    total += indi
+
+                    tabla += "<tr>"
+                    tabla += "<td>${fechaConFormato(fecha: planilla.fechaIngreso)}</td>"
+                    tabla += "<td>${planilla.numero}</td>"
+                    tabla += "<td>${periodos.last().periodo.descripcion}</td>"
+                    tabla += "<td class='tar'>${numero(numero: valor)}</td>"
+                    tabla += "<td class='tar'>${numero(numero: indi)}</td>"
+                    tabla += "<td class='tar'>${numero(numero: valor + indi)}</td>"
+                    tabla += "</tr>"
+                }
+            }
+            tabla += "</tbody>"
+
+            tabla += "<tfoot>"
+            tabla += "<tr>"
+            tabla += "<th colspan='3' class='tal'>TOTAL</th>"
+            tabla += "<th class='tar'>${numero(numero: totalValor)}</th>"
+            tabla += "<th class='tar'>${numero(numero: totalIndi)}</th>"
+            tabla += "<th class='tar'>${numero(numero: total)}</th>"
+            tabla += "</tr>"
+            tabla += "</tfoot>"
+
+            tabla += "</table>"
         }
-        tabla += "</tbody>"
-
-        tabla += "<tfoot>"
-        tabla += "<tr>"
-        tabla += "<th colspan='3' class='tal'>TOTAL</th>"
-        tabla += "<th class='tar'>${numero(numero: totalValor)}</th>"
-        tabla += "<th class='tar'>${numero(numero: totalIndi)}</th>"
-        tabla += "<th class='tar'>${numero(numero: total)}</th>"
-        tabla += "</tr>"
-        tabla += "</tfoot>"
-
-        tabla += "</table>"
-    }
         return tabla
     }
 
