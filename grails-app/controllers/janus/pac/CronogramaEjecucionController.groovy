@@ -697,6 +697,104 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
     def ampliacion() {
 //        println "AMPLIACION"
 //        println params
+
+        def dias = params.dias.toInteger()
+        def obra = Obra.get(params.obra)
+
+        def modificacion = new Modificaciones([
+                obra: obra,
+                tipo: "A",
+                dias: dias,
+                fecha: new Date(),
+                motivo: params.motivo,
+                observaciones: params.observaciones,
+                memo: params.memo.toUpperCase()
+        ])
+        if (!modificacion.save(flush: true)) {
+            println "error modificacion: " + modificacion.errors
+        }
+
+        def periodosEj = PeriodoEjecucion.findAllByObra(obra, [sort: "fechaInicio"])
+
+        def ultimoPeriodo = periodosEj.last()
+
+        def fechaIniPer = ultimoPeriodo.fechaInicio
+        def fechaFinPer = ultimoPeriodo.fechaFin
+        def diasPer = fechaFinPer - fechaIniPer + 1
+        def ultimoPer = ultimoPeriodo.numero
+        def errores = false
+
+        if (diasPer < 30) {
+            def diasAddPer = 30 - diasPer
+            if (diasAddPer > dias) {
+                diasAddPer = dias
+            }
+            dias -= diasAddPer
+            def nuevoFin = fechaFinPer + diasAddPer
+
+            ultimoPeriodo.fechaFin = nuevoFin
+            if (!ultimoPeriodo.save(flush: true)) {
+                errores = true
+                println "ERROR!!! ** " + ultimoPeriodo.errors
+            }
+//            println "dias agregados al ultimo per: ${diasAddPer}  " + ultimoPeriodo.numero + "  " + ultimoPeriodo.fechaInicio.format("dd-MM-yyyy") + "  ->  " + nuevoFin.format("dd-MM-yyyy") + " (dias: " + (nuevoFin - ultimoPeriodo.fechaInicio + 1) + ")"
+            fechaFinPer = nuevoFin
+        }
+
+        def periodosAdd = Math.ceil(dias / 30)
+        def diasToAdd = dias
+
+//        println "dias add:" + dias
+//        println "periodos add: " + periodosAdd
+//        println "fin: " + fechaFinPer
+
+        def inicio = fechaFinPer + 1
+        def fin = fechaFinPer + 30
+        def next = ultimoPer + 1
+
+//        println "Periodos anteriores: "
+//        periodosEj.each {
+//            println it.numero + "  " + it.fechaInicio.format("dd-MM-yyyy") + "  ->  " + it.fechaFin.format("dd-MM-yyyy") + " (dias: " + (it.fechaFin - it.fechaInicio + 1) + ")"
+//        }
+//        println "\nPeriodos nuevos"
+        periodosAdd.times {
+            if (!errores) {
+                def add
+                if (diasToAdd > 30) {
+                    add = 30
+                } else {
+                    add = diasToAdd
+                }
+                if (add > 0) {
+                    fin = inicio + (add - 1)
+                    def newPer = new PeriodoEjecucion([
+                            obra: obra,
+                            numero: next,
+                            tipo: "P",
+                            fechaInicio: inicio,
+                            fechaFin: fin
+                    ])
+                    if (!newPer.save(flush: true)) {
+                        errores = true
+                        println "ERROR!!!!: " + newPer.errors
+                    }
+//                println newPer.numero + "  " + newPer.fechaInicio.format("dd-MM-yyyy") + "  ->  " + newPer.fechaFin.format("dd-MM-yyyy") + " (dias: " + (newPer.fechaFin - newPer.fechaInicio + 1) + ")"
+                    inicio = fin + 1
+                    next++
+                    diasToAdd -= add
+                }
+            }
+        }
+        if (!errores) {
+            render "OK"
+        } else {
+            render "NO"
+        }
+    }
+
+    def ampliacion__old() {
+//        println "AMPLIACION"
+//        println params
         def dias = params.dias.toInteger()
         def obra = Obra.get(params.obra)
 
