@@ -611,7 +611,7 @@
                                 type    : "POST",
                                 url     : "${createLink(action:'saveDelegado')}",
                                 data    : {
-                                    id   : "${contrato.id}",
+                                    id   : "${contrato?.id}",
                                     pref : pref
                                 },
                                 success : function (msg) {
