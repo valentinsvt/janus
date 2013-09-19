@@ -60,6 +60,8 @@ class Planilla {
 
     Planilla padreCosto
 
+    Double avanceFisico
+
     static mapping = {
         table 'plnl'
         cache usage: 'read-write', include: 'non-lazy'
@@ -123,6 +125,8 @@ class Planilla {
             fiscalizador column: 'prsnfscl'
 
             padreCosto column: 'plnlpdcs'
+
+            avanceFisico column: 'plnlavfs'
         }
     }
 

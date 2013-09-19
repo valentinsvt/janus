@@ -27,8 +27,8 @@
         }
 
         select.label-important, textarea.label-important {
-            background : none !important;
-            color : #555 !important;
+            background  : none !important;
+            color       : #555 !important;
             text-shadow : none !important;
         }
         </style>
@@ -183,7 +183,7 @@
 
                             <div class="span4">
                                 %{--<elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" minDate="${minDatePres}" maxDate="new Date()" value="${planillaInstance?.fechaOficioEntradaPlanilla}"/>--}%
-                                <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" value="${planillaInstance?.fechaOficioEntradaPlanilla}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger()-1},${fechaMax.format('dd')},0,0,0,0)" />
+                                <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" value="${planillaInstance?.fechaOficioEntradaPlanilla}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
                                 <span class="mandatory">*</span>
 
                                 <p class="help-block ui-helper-hidden"></p>
@@ -198,7 +198,7 @@
 
                             <div class="span4">
                                 %{--<elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" minDate="${minDatePres}" maxDate="new Date()" value="${planillaInstance?.fechaIngreso}"/>--}%
-                                <elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" value="${planillaInstance?.fechaIngreso}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger()-1},${fechaMax.format('dd')},0,0,0,0)"/>
+                                <elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" value="${planillaInstance?.fechaIngreso}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
                                 <span class="mandatory">*</span>
 
                                 <p class="help-block ui-helper-hidden"></p>
@@ -210,7 +210,7 @@
 
                             <div class="span4 hide presentacion">
                                 %{--<elm:datepicker name="fechaPresentacion" class=" span3 required" minDate="${minDatePres}" maxDate="${maxDatePres}" value="${planillaInstance?.fechaPresentacion}"/>--}%
-                                <elm:datepicker name="fechaPresentacion" class=" span3 required" value="${planillaInstance?.fechaPresentacion}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger()-1},${fechaMax.format('dd')},0,0,0,0)"/>
+                                <elm:datepicker name="fechaPresentacion" class=" span3 required" value="${planillaInstance?.fechaPresentacion}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
                                 <span class="mandatory">*</span>
 
                                 <p class="help-block ui-helper-hidden"></p>
@@ -225,6 +225,14 @@
 
                                 <div class="span4">
                                     <g:field type="number" name="diasMultaDisposiciones" class="input-mini required digits" value="${planillaInstance.diasMultaDisposiciones}" maxlength="3"/> días
+                                </div>
+
+                                <div class='span2 formato'>
+                                    Avance físico
+                                </div>
+
+                                <div class="span4">
+                                    <g:field type="number" name="avanceFisico" class="input-mini required number" value="${planillaInstance.avanceFisico}" maxlength="3"/>
                                 </div>
                             </div>
                         </g:if>

@@ -19,6 +19,33 @@ class Reportes5Controller {
     def dbConnectionService
 
     private filasAvance(params) {
+//        def sqlBase = "SELECT\n" +
+//                "  c.cntr__id               id,\n" +
+//                "  b.obracdgo               obra_cod,\n" +
+//                "  b.obranmbr               obra_nmbr,\n" +
+//                "  m.cmndnmbr               comunidad,\n" +
+//                "  a.parrnmbr               parroquia,\n" +
+//                "  k.cntnnmbr               canton,\n" +
+//                "  c.cntrcdgo               num_contrato,\n" +
+//                "  p.prvenmbr               proveedor,\n" +
+//                "  c.cntrmnto               monto,\n" +
+//                "  c.cntrfcsb               fecha,\n" +
+//                "  c.cntrplzo               plazo,\n" +
+//                "  (SELECT\n" +
+//                "  coalesce(sum(plnlmnto), 0)\n" +
+//                "   FROM plnl\n" +
+//                "   WHERE cntr__id = c.cntr__id\n" +
+//                "         AND tppl__id = 3) sum\n" +
+//                "FROM cntr c\n" +
+//                "  INNER JOIN ofrt o ON c.ofrt__id = o.ofrt__id\n" +
+//                "  INNER JOIN cncr n ON o.cncr__id = n.cncr__id\n" +
+//                "  INNER JOIN obra b ON n.obra__id = b.obra__id\n" +
+//                "  INNER JOIN tpob t ON b.tpob__id = t.tpob__id\n" +
+//                "  INNER JOIN prve p ON o.prve__id = p.prve__id\n" +
+//                "  INNER JOIN cmnd m ON b.cmnd__id = m.cmnd__id\n" +
+//                "  INNER JOIN parr a ON m.parr__id = a.parr__id\n" +
+//                "  INNER JOIN cntn k ON a.cntn__id = k.cntn__id"
+
         def sqlBase = "SELECT\n" +
                 "  c.cntr__id               id,\n" +
                 "  b.obracdgo               obra_cod,\n" +
@@ -35,7 +62,14 @@ class Reportes5Controller {
                 "  coalesce(sum(plnlmnto), 0)\n" +
                 "   FROM plnl\n" +
                 "   WHERE cntr__id = c.cntr__id\n" +
-                "         AND tppl__id = 3) sum\n" +
+                "         AND tppl__id = 3) sum,\n" +
+                "  (SELECT\n" +
+                "  plnlavfs\n" +
+                "   FROM plnl\n" +
+                "   WHERE cntr__id = c.cntr__id\n" +
+                "         AND plnlfcin IS NOT null\n" +
+                "   ORDER BY plnlfcin DESC\n" +
+                "   LIMIT 1)                fisico\n" +
                 "FROM cntr c\n" +
                 "  INNER JOIN ofrt o ON c.ofrt__id = o.ofrt__id\n" +
                 "  INNER JOIN cncr n ON o.cncr__id = n.cncr__id\n" +
@@ -81,6 +115,9 @@ class Reportes5Controller {
         }
 
         def sql = sqlBase + filtroBuscador
+
+        println sql
+
         def cn = dbConnectionService.getConnection()
 
 //        println sql
@@ -142,7 +179,7 @@ class Reportes5Controller {
         headersTitulo.setAlignment(Element.ALIGN_CENTER);
         headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
         addEmptyLine(headersTitulo, 1);
-        headersTitulo.add(new Paragraph( "REPORTE DE AVANCE DE OBRAS", titleFont));
+        headersTitulo.add(new Paragraph("REPORTE DE AVANCE DE OBRAS", titleFont));
         headersTitulo.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy").toUpperCase(), titleFont3));
         addEmptyLine(headersTitulo, 1);
         addEmptyLine(headersTitulo, 1);

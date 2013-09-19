@@ -23,7 +23,7 @@
         <b>Buscar Por:</b>
         <g:select name="buscador" from="${['cdgo': 'Codigo', 'nmbr': 'Nombre', 'tipo': 'Tipo', 'cntn': 'Cantón', 'parr': 'Parroquia'
                 , 'cmnd': 'Comunidad', /*'ofig': 'Of. Ingreso', 'ofsl': 'Of. Salida'*/
-               /* , 'mmsl': 'Memo Salida', 'frpl': 'F. Polinómica',*/ 'cntr': 'Núm. Contrato', 'cnts': 'Contratista']}" value="${params.buscador}"
+                /* , 'mmsl': 'Memo Salida', 'frpl': 'F. Polinómica',*/ 'cntr': 'Núm. Contrato', 'cnts': 'Contratista']}" value="${params.buscador}"
                   optionKey="key" optionValue="value" id="buscador_con" style="width: 150px"/>
         %{--<b style="margin-left: 10px">Estado: </b>--}%
         %{--<g:select name="estado" from="${['1':'Todas', '2':'Ingresadas', '3':'Registradas']}" optionKey="key"--}%
@@ -73,7 +73,10 @@
                 Plazo
             </th>
             <th style="width: 80px">
-                % avance
+                % avance económico
+            </th>
+            <th style="width: 80px">
+                Avance físico
             </th>
         </tr>
     </thead>
@@ -92,6 +95,7 @@
                     <td><g:formatDate date="${fila.fecha}" format="dd-MM-yyyy"/></td>
                     <td><g:formatNumber number="${fila.plazo}" maxFractionDigits="0" minFractionDigits="0"/> días</td>
                     <td><g:formatNumber number="${(fila.sum / fila.monto) * 100}" maxFractionDigits="2" minFractionDigits="2"/>%</td>
+                    <td><g:formatNumber number="${fila.fisico}" maxFractionDigits="2" minFractionDigits="2"/></td>
                 </tr>
             </g:each>
         </g:if>
