@@ -56,10 +56,10 @@
                     %{--<i class="icon-double-angle-left"></i>--}%
                     %{--Contrato--}%
                 %{--</g:link>--}%
-                %{--<g:link controller="planilla" action="list" params="[id: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">--}%
-                    %{--<i class="icon-angle-left"></i>--}%
-                    %{--Planillas--}%
-                %{--</g:link>--}%
+                <g:link controller="planillasAdmin" action="list" params="[id: obra?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
+                    <i class="icon-angle-left"></i>
+                    Planillas
+                </g:link>
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -154,7 +154,7 @@
             <tfoot>
                 <tr>
                     <th colspan="6">TOTAL</th>
-                    <td id="tdTotalFinal" class="num bold" data-max="${max}" data-val= ${0}>0.00</td>
+                    <td id="tdTotalFinal" class="num bold" data-max="10000000000" data-val= ${0}>0.00</td>
                     <g:if test="${editable}">
                         <td></td>
                     </g:if>

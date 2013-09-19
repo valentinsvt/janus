@@ -92,9 +92,9 @@
                     <g:link action="detalle" id="${planillaInstance.id}" params="[obra: obra.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                         <i class="icon-reorder icon-large"></i>
                     </g:link>
-                    <g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                        <i class="icon-print"></i>
-                    </g:link>
+                    %{--<g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">--}%
+                        %{--<i class="icon-print"></i>--}%
+                    %{--</g:link>--}%
                 </td>
 
             </tr>

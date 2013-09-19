@@ -128,6 +128,41 @@ class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
         redirect(action: 'list')
     } //save
 
+    def addDetalleCosto() {
+        def detalle = new DetallePlanillaCostoAdmin()
+        if (params.id) {
+            detalle = DetallePlanillaCostoAdmin.get(params.id)
+        }
+        detalle.properties = params
+        if (detalle.save(flush: true)) {
+            def planilla = PlanillaAdmin.get(params.planilla.id)
+            updatePlanilla(planilla)
+            render "OK_" + detalle.id
+        } else {
+            println "ERROR: " + detalle.errors
+            render "NO_Ha ocurrido un error al guardar el rubro"
+        }
+    }
+    def deleteDetalleCosto() {
+        def detalle = DetallePlanillaCostoAdmin.get(params.id)
+        def planilla = PlanillaAdmin.get(detalle.planillaId)
+        detalle.delete(flush: true)
+        updatePlanilla(planilla)
+        render "OK"
+    }
+    private boolean updatePlanilla(planilla) {
+        def detalles = DetallePlanillaCostoAdmin.findAllByPlanilla(planilla)
+        def totalMonto = detalles.size() > 0 ? detalles.sum { it.montoIva } : 0
+        def totalIndi = detalles.size() > 0 ? detalles.sum { it.montoIndirectos } : 0
+        def total = totalMonto + totalIndi
+        planilla.valor = total
+        if (!planilla.save(flush: true)) {
+            println "error al actualizar el valor de la planilla " + planilla.errors
+            return false
+        }
+        return true
+    }
+
     def show_ajax() {
         def detallePlanillaCostoAdminInstance = DetallePlanillaCostoAdmin.get(params.id)
         if (!detallePlanillaCostoAdminInstance) {

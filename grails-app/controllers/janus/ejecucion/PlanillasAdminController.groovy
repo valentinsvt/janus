@@ -116,7 +116,7 @@ class PlanillasAdminController extends janus.seguridad.Shield {
                 redirect(action: 'detalle', id: planillaInstance.id)
                 break;
             case 'C':
-                redirect(action: 'detalleCosto', id: planillaInstance.id)
+                redirect(controller: "detallePlanillaCostoAdmin", action: 'detalleCosto', id: planillaInstance.id)
                 break;
             default:
                 redirect(action: 'list', id: planillaInstance.obra.id)
@@ -124,7 +124,10 @@ class PlanillasAdminController extends janus.seguridad.Shield {
     }
     def detalle(){
         def planilla = PlanillaAdmin.get(params.id)
-
+        if(planilla.tipoPlanilla.codigo=="C") {
+            redirect(controller: "detallePlanillaCostoAdmin",action: "detalleCosto",id:planilla.id)
+            return
+        }
         def obra = planilla.obra
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
 
