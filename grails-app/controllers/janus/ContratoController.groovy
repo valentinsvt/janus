@@ -57,6 +57,23 @@ class ContratoController extends janus.seguridad.Shield {
         }
     }
 
+    def delegadoPrefecto() {
+        def contrato = Contrato.get(params.id)
+        return [contrato: contrato]
+    }
+
+    def saveDelegado() {
+        def contrato = Contrato.get(params.id)
+        def delegado = Persona.get(params.pref)
+
+        contrato.delegadoPrefecto = delegado
+        if (!contrato.save(flush: true)) {
+            render "NO_" + contrato.errors
+        } else {
+            render "OK"
+        }
+    }
+
     def saveRegistrar() {
         def contrato = Contrato.get(params.id)
         contrato.estado = "R"
@@ -570,7 +587,7 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
 
-        if(params.fechaSubscripcion){
+        if (params.fechaSubscripcion) {
             params.fechaSubscripcion = new Date().parse("dd-MM-yyyy", params.fechaSubscripcion)
         }
 
