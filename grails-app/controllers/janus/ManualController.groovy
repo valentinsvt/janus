@@ -29,6 +29,16 @@ class ManualController {
 
     }
 
+    def manualFinanciero () {
+
+
+    }
+
+    def manualComprasPublicas () {
+
+
+    }
+
 
 }
 

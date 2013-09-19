@@ -103,20 +103,23 @@
         <div id="indice">
             <h3>&Iacutendice de contenido</h3> <br>
             <ol>
-                <li><a href="#ModCompras">M&oacutedulo de Compras P&uacuteblicas</a></li>
-                <ul>
-                    <li><a href="#ModCompras">Asignaciones Presupuestarias</a></li>
-                    <li><a href="#PlanAnual">Plan Anual de Compras</a></li>
-                </ul>
-                <li><a href="#Concursos">Concursos</a></li>
-                <li><a href="#Contratos">Contratos</a></li>
-                <ul>
-                    <li><a href="#CronoCon">Cronograma contractual</a></li>
-                    <li><a href="#RegFormula">Registro de la f&oacutermula polin&oacutemica del contrato</a></li>
-                    <li><a href="#BiblioCont">Biblioteca de Contratos</a></li>
+                %{--<li><a href="#ModCompras">M&oacutedulo de Compras P&uacuteblicas</a></li>--}%
+                %{--<ul>--}%
+                    %{--<li><a href="#ModCompras">Asignaciones Presupuestarias</a></li>--}%
+                    %{--<li><a href="#PlanAnual">Plan Anual de Compras</a></li>--}%
+                %{--</ul>--}%
+                %{--<li><a href="#Concursos">Concursos</a></li>--}%
+                %{--<li><a href="#Contratos">Contratos</a></li>--}%
+                %{--<ul>--}%
+                    %{--<li><a href="#CronoCon">Cronograma contractual</a></li>--}%
+                    %{--<li><a href="#RegFormula">Registro de la f&oacutermula polin&oacutemica del contrato</a></li>--}%
+                    %{--<li><a href="#BiblioCont">Biblioteca de Contratos</a></li>--}%
 
-                </ul>
-                <li><a href="#visuaCont">Visualización de Contratos</a></li>
+                %{--</ul>--}%
+                <li><a href="#eje">Ejecución de Obras</a></li>
+
+                        <ul>
+                            <li><a href="#visuaCont">Visualización de Contratos</a></li>
                          <li><a href="#cronoEje">Cronograma de Ejecuci&oacute;n</a></li>
                         <li><a href="#formula">Fórmula Polinómica</a></li>
                         <li><a href="#biblio">Biblioteca</a></li>
@@ -143,489 +146,489 @@
                     <li><a href="#TipoPlan">Tipo de Planilla</a></li>
                     <li><a href="#TipoDesc">Tipo de descuentos por planilla</a></li>
                 </ul>
-
-                <li><a href="#ModFin">M&oacutedulo financiero y tesorer&iacutea</a></li>
-                <ul>
-                    <li><a href="#ModFin">Garant&iacuteas</a></li>
-                    <li><a href="#RegPagos">Registro de pagos de las Planillas</a></li>
-                    <li><a href="#pagoPlanilla">Informe de pago de la Planilla</a></li>
-                </ul>
+                        </ul>
+                %{--<li><a href="#ModFin">M&oacutedulo financiero y tesorer&iacutea</a></li>--}%
+                %{--<ul>--}%
+                    %{--<li><a href="#ModFin">Garant&iacuteas</a></li>--}%
+                    %{--<li><a href="#RegPagos">Registro de pagos de las Planillas</a></li>--}%
+                    %{--<li><a href="#pagoPlanilla">Informe de pago de la Planilla</a></li>--}%
+                %{--</ul>--}%
             </ol>
         </div>
         <br><br><br><br>
 
 
         <!-- Modulo de compras publicas, Asignaciones Presupuestarias -->
-        <h2 class="cursiva">M&oacutedulo de Compras P&uacuteblicas</h2>
+        %{--<h2 class="cursiva">M&oacutedulo de Compras P&uacuteblicas</h2>--}%
 
-        <div class="centrado">
-            <br>
+        %{--<div class="centrado">--}%
+            %{--<br>--}%
 
-            <h2 class="izquierda">Asignaciones Presupuestarias</h2><br>
+            %{--<h2 class="izquierda">Asignaciones Presupuestarias</h2><br>--}%
 
-            <p>Antes de proceder a definir el plan anual de compras se debe registrar
-            en el sistema los valores asignados para cada partida presupuestaria.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen1.png')}"/><br><br>
+            %{--<p>Antes de proceder a definir el plan anual de compras se debe registrar--}%
+            %{--en el sistema los valores asignados para cada partida presupuestaria.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen1.png')}"/><br><br>--}%
 
-            <p>Desde esta pantalla de debe hacer doble clic en el casillero de la partida
-            para acceder a la pantalla donde se puede buscar la partida presupuestaria
-            de la cual se desea ingresar la asignaci&oacuten o techo de inversiones para
-            el año.
-            </p><br>
+            %{--<p>Desde esta pantalla de debe hacer doble clic en el casillero de la partida--}%
+            %{--para acceder a la pantalla donde se puede buscar la partida presupuestaria--}%
+            %{--de la cual se desea ingresar la asignaci&oacuten o techo de inversiones para--}%
+            %{--el año.--}%
+            %{--</p><br>--}%
 
-            <p>Una vez seleccionada la partida se debe ingresar el a&#241o y finalmente el
-            valor del techo de la asignaci&oacuten para ese a&#241o.
-            </p>
+            %{--<p>Una vez seleccionada la partida se debe ingresar el a&#241o y finalmente el--}%
+            %{--valor del techo de la asignaci&oacuten para ese a&#241o.--}%
+            %{--</p>--}%
 
-            <p>En el caso de que una partida no exista, se la puede ingresar al sistema
-            utilizando el bot&oacuten &#34Crear nueva partida&#34
-            </p><br>
+            %{--<p>En el caso de que una partida no exista, se la puede ingresar al sistema--}%
+            %{--utilizando el bot&oacuten &#34Crear nueva partida&#34--}%
+            %{--</p><br>--}%
 
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen2.png')}"/><br><br>
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen2.png')}"/><br><br>--}%
 
 
 
-            <p>Una vez realizada la asignaci&oacuten, se presenta en la zona inferior
-            una lista con los valores de las asignaciones realizadas para el
-            a&#241o que se seleccione.
-            </p> <br>
+            %{--<p>Una vez realizada la asignaci&oacuten, se presenta en la zona inferior--}%
+            %{--una lista con los valores de las asignaciones realizadas para el--}%
+            %{--a&#241o que se seleccione.--}%
+            %{--</p> <br>--}%
 
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen3.png')}"/><br><br>
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen3.png')}"/><br><br>--}%
 
             %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen4.png')}"/>--}%
-        </div>
+        %{--</div>--}%
 
-        <a id="PlanAnual"></a><br>
+        %{--<a id="PlanAnual"></a><br>--}%
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
 
         <!--Plan anual e compras -->
-        <div class="centrado">
-            <h2 class="izquierda">Plan Anual de Compras</h2><br>
+        %{--<div class="centrado">--}%
+            %{--<h2 class="izquierda">Plan Anual de Compras</h2><br>--}%
 
-            <p>Esta pantalla permite agregar, modificar y eliminar planes anuales
-            de compras (PAC). Se accede desde el men&uacute &#34Contrataci&oacuten&#34.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen5.png')}"/><br><br><br>
+            %{--<p>Esta pantalla permite agregar, modificar y eliminar planes anuales--}%
+            %{--de compras (PAC). Se accede desde el men&uacute &#34Contrataci&oacuten&#34.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen5.png')}"/><br><br><br>--}%
 
-            <p>La cabecera de esta pantalla (P.A.C.), permite registrar los procesos
-            de compras p&uacuteblicas que se van a realizar dentro del plan anual
-            de compras. Cada uno de los procesos ingresados aparece en la zona
-            inferior denominada Detalle.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen6.png')}"/><br><br><br>
+            %{--<p>La cabecera de esta pantalla (P.A.C.), permite registrar los procesos--}%
+            %{--de compras p&uacuteblicas que se van a realizar dentro del plan anual--}%
+            %{--de compras. Cada uno de los procesos ingresados aparece en la zona--}%
+            %{--inferior denominada Detalle.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen6.png')}"/><br><br><br>--}%
 
-            <p>Al hacer doble clic en el campo de texto de &#34Partida presupuestaria&#34
-            se abre un dialogo que permite buscar una partida para seleccionarla
-            haciendo clic en el bot&oacuten &#34Visto&#34 a la derecha de la fila deseada.
-            </p><br>
+            %{--<p>Al hacer doble clic en el campo de texto de &#34Partida presupuestaria&#34--}%
+            %{--se abre un dialogo que permite buscar una partida para seleccionarla--}%
+            %{--haciendo clic en el bot&oacuten &#34Visto&#34 a la derecha de la fila deseada.--}%
+            %{--</p><br>--}%
 
-            <p>Si no existe la partida necesaria para el P.A.C. que va a ser creado, se puede
-            crear una nueva. Se hace clic en el <img class="boton" src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen7.png')}"/>
-                bot&oacuten   que aparece a la derecha de la partida.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen8.png')}"/><br><br><br>
+            %{--<p>Si no existe la partida necesaria para el P.A.C. que va a ser creado, se puede--}%
+            %{--crear una nueva. Se hace clic en el <img class="boton" src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen7.png')}"/>--}%
+                %{--bot&oacuten   que aparece a la derecha de la partida.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen8.png')}"/><br><br><br>--}%
 
-            <p>Aqu&iacute se completan los datos necesarios y se hace clic en el bot&oacuten
-            &#34Guardar&#34, y la nueva partida presupuestaria ya puede ser utilizada
-            para crear el P.A.C.
-            </p><br>
+            %{--<p>Aqu&iacute se completan los datos necesarios y se hace clic en el bot&oacuten--}%
+            %{--&#34Guardar&#34, y la nueva partida presupuestaria ya puede ser utilizada--}%
+            %{--para crear el P.A.C.--}%
+            %{--</p><br>--}%
 
-            <p>Tambi&eacuten existe una pantalla de ayuda para ubicar el c&oacutedigo de compras
-            p&uacuteblicas de un determinado bien o servicio, esta pantalla se muestra
-            al hacer doble clic en el campo de texto &#34C&oacutedigo C.P.&#34.
-            </p><br>
+            %{--<p>Tambi&eacuten existe una pantalla de ayuda para ubicar el c&oacutedigo de compras--}%
+            %{--p&uacuteblicas de un determinado bien o servicio, esta pantalla se muestra--}%
+            %{--al hacer doble clic en el campo de texto &#34C&oacutedigo C.P.&#34.--}%
+            %{--</p><br>--}%
 
-        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen9_1.png')}"/><br><br><br>
+        %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen9_1.png')}"/><br><br><br>--}%
 
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen9.png')}"/><br><br><br>
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen9.png')}"/><br><br><br>--}%
 
-            <p>Se terminan de completar los datos requeridos y se seleccionan los cuatrimestres
-            en los cuales se aplica el P.A.C. haciendo clic en los botones. Al hacer clic
-            en el bot&oacuten Agregar se almacenan los datos y se agrega la fila c
-            orrespondiente en la tabla de detalle.
-            </p><br>
+            %{--<p>Se terminan de completar los datos requeridos y se seleccionan los cuatrimestres--}%
+            %{--en los cuales se aplica el P.A.C. haciendo clic en los botones. Al hacer clic--}%
+            %{--en el bot&oacuten Agregar se almacenan los datos y se agrega la fila c--}%
+            %{--orrespondiente en la tabla de detalle.--}%
+            %{--</p><br>--}%
 
-            <p>Para modificar una fila ya ingresada, se hace doble clic, o clic derecho y en
-            &#34Editar&#34 en el men&uacute que aparece, o tambi&eacuten se puede hacer un doble
-            clic sobre la l&iacutenea que se quiere modificar.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10.png')}"/><br><br><br>
+            %{--<p>Para modificar una fila ya ingresada, se hace doble clic, o clic derecho y en--}%
+            %{--&#34Editar&#34 en el men&uacute que aparece, o tambi&eacuten se puede hacer un doble--}%
+            %{--clic sobre la l&iacutenea que se quiere modificar.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10.png')}"/><br><br><br>--}%
 
-            <p>Esto ubica los datos del P.A.C. en el formulario de la parte superior,
-            permitiendo as&iacute modificar los datos  y guardarlos. Los campos techo
-            y usado son informaci&oacuten de los saldos presupuestarios para cada partida
-            y se actualizan en forma inmediata con cada registro que se haga del PAC.
-            </p><br><br>
+            %{--<p>Esto ubica los datos del P.A.C. en el formulario de la parte superior,--}%
+            %{--permitiendo as&iacute modificar los datos  y guardarlos. Los campos techo--}%
+            %{--y usado son informaci&oacuten de los saldos presupuestarios para cada partida--}%
+            %{--y se actualizan en forma inmediata con cada registro que se haga del PAC.--}%
+            %{--</p><br><br>--}%
 
-        <p>Si se desea tambi&eacuten se puede cargar los datos del P.A.C. directamente de un
-           archivo Excel (xls solamente). Para hacer esto, se presiona el bot&oacuten "Subir Excel"
-           (ubicado en la parte inferior derecha del &aacuterea de datos del P.A.C. Esto muestra la
-            pantalla de carga.
+        %{--<p>Si se desea tambi&eacuten se puede cargar los datos del P.A.C. directamente de un--}%
+           %{--archivo Excel (xls solamente). Para hacer esto, se presiona el bot&oacuten "Subir Excel"--}%
+           %{--(ubicado en la parte inferior derecha del &aacuterea de datos del P.A.C. Esto muestra la--}%
+            %{--pantalla de carga.--}%
 
-        </p><br><br>
-
-
-        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_1.png')}"/><br><br><br>
-
-        <p>
-            En esta pantalla se debe completar el requirente, el n&uacute;mero de memorando y la coordinaci&oacute;n antes
-            de seleccionar el archivo. El archivo debe tener la extensi&oacute;n xls para poder
-            se utilizado (Debe ser guardado en modo de compatibilidad con Excel 2003). El archivo debe adem&aacute;s
-            tener un formato en particular (ilustrado m&aacute;s adelante) para que el sistema pueda interpretarlo.
-            El sistema solamente procesa las filas en las cuales el tipo de copra es “OBRA” o “CONSULTORIA”.
-
-        </p><br><br>
-
-        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_2.png')}"/><br><br><br>
-
-        <p>
-
-            Las filas de los t&iacute;tulos deben ser la 7 y la 8.
-        </p>
-        <p>
-
-            Las columnas deben ser (comenzando en la A):
-        </p>
-        <p>
-            * Partida presupuestaria / Cuenta contable
-        </p>
-        <p>
-            * C&oacute;digo categor&iacute;a CPC a nivel 8
-        </p>
-        <p>
-            * Tipo compra
-        </p>
-        <p>
-            * Detalle del producto
-        </p>
-        <p>
-            * Cantidad anual
-        </p>
-        <p>
-            * Unidad
-        </p>
-        <p>
-            * Costo unitario
-        </p>
-        <p>
-            * Cuatrimestre 1 (marcado con una “S” o vac&iacuteo)
-        </p>
-        <p>
-            * Cuatrimestre 2 (marcado con una “S” o vac&iacute;o)
-        </p>
-        <p>
-            * Cuatrimestre 3 (marcado con una “S” o vac&iacute;o)
-        </p><br>
-        <p>
-
-            Al presionar el bot&oacute;n “Subir”, el sistema procesa la informaci&oacute;n y muestra un resumen de lo realizado.
-            Esta operaci&oacute;n puede tardar algunos minutos dependiendo del tamaño del archivo.
-        </p><br>
+        %{--</p><br><br>--}%
 
 
-        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_3.png')}"/><br><br><br>
+        %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_1.png')}"/><br><br><br>--}%
 
-       </div>
+        %{--<p>--}%
+            %{--En esta pantalla se debe completar el requirente, el n&uacute;mero de memorando y la coordinaci&oacute;n antes--}%
+            %{--de seleccionar el archivo. El archivo debe tener la extensi&oacute;n xls para poder--}%
+            %{--se utilizado (Debe ser guardado en modo de compatibilidad con Excel 2003). El archivo debe adem&aacute;s--}%
+            %{--tener un formato en particular (ilustrado m&aacute;s adelante) para que el sistema pueda interpretarlo.--}%
+            %{--El sistema solamente procesa las filas en las cuales el tipo de copra es “OBRA” o “CONSULTORIA”.--}%
 
-        <a id="Concursos"></a><br>
+        %{--</p><br><br>--}%
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
+        %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_2.png')}"/><br><br><br>--}%
+
+        %{--<p>--}%
+
+            %{--Las filas de los t&iacute;tulos deben ser la 7 y la 8.--}%
+        %{--</p>--}%
+        %{--<p>--}%
+
+            %{--Las columnas deben ser (comenzando en la A):--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Partida presupuestaria / Cuenta contable--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* C&oacute;digo categor&iacute;a CPC a nivel 8--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Tipo compra--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Detalle del producto--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Cantidad anual--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Unidad--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Costo unitario--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Cuatrimestre 1 (marcado con una “S” o vac&iacuteo)--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Cuatrimestre 2 (marcado con una “S” o vac&iacute;o)--}%
+        %{--</p>--}%
+        %{--<p>--}%
+            %{--* Cuatrimestre 3 (marcado con una “S” o vac&iacute;o)--}%
+        %{--</p><br>--}%
+        %{--<p>--}%
+
+            %{--Al presionar el bot&oacute;n “Subir”, el sistema procesa la informaci&oacute;n y muestra un resumen de lo realizado.--}%
+            %{--Esta operaci&oacute;n puede tardar algunos minutos dependiendo del tamaño del archivo.--}%
+        %{--</p><br>--}%
+
+
+        %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen10_3.png')}"/><br><br><br>--}%
+
+       %{--</div>--}%
+
+        %{--<a id="Concursos"></a><br>--}%
+
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
 
         <!-- Concursos -->
-        <h2 class="cursiva">Concursos</h2><br>
+        %{--<h2 class="cursiva">Concursos</h2><br>--}%
 
-        <div class="centrado">
-            <p>Esta secci&oacuten permite crear, editar y eliminar procesos, as&iacute
-            como subir documentos, definir par&aacutemetros de evaluaci&oacuten y
-            agregar ofertas. Las acciones de esta pantalla se encuentran en un men&uacute
-            que aparece al hacer clic derecho en las filas de la tabla.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen11.png')}"/><br><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen12.png')}"/><br><br>
-            <p>Al hacer clic en &#34Nuevo proceso&#34 se muestra una ventana para buscar
-            y seleccionar el P.A.C. para el cual se va a crear el proceso. Al seleccionar
-            el P.A.C., se crea un proceso que tiene &uacutenicamente el P.A.C. y el
-            objeto, en el cual se copia la descripci&oacuten del P.A.C.
-            </p><br>
+        %{--<div class="centrado">--}%
+            %{--<p>Esta secci&oacuten permite crear, editar y eliminar procesos, as&iacute--}%
+            %{--como subir documentos, definir par&aacutemetros de evaluaci&oacuten y--}%
+            %{--agregar ofertas. Las acciones de esta pantalla se encuentran en un men&uacute--}%
+            %{--que aparece al hacer clic derecho en las filas de la tabla.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen11.png')}"/><br><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen12.png')}"/><br><br>--}%
+            %{--<p>Al hacer clic en &#34Nuevo proceso&#34 se muestra una ventana para buscar--}%
+            %{--y seleccionar el P.A.C. para el cual se va a crear el proceso. Al seleccionar--}%
+            %{--el P.A.C., se crea un proceso que tiene &uacutenicamente el P.A.C. y el--}%
+            %{--objeto, en el cual se copia la descripci&oacuten del P.A.C.--}%
+            %{--</p><br>--}%
 
-            <p>La opci&oacuten Documentos  muestra una pantalla que permite subir archivos,
-            completar su informaci&oacuten y descargar los documentos ya subidos.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen12_1.png')}"/><br><br>
+            %{--<p>La opci&oacuten Documentos  muestra una pantalla que permite subir archivos,--}%
+            %{--completar su informaci&oacuten y descargar los documentos ya subidos.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen12_1.png')}"/><br><br>--}%
 
-            <p>Si desea incluir nuevos documentos haga un clic en el bot&oacuten Nuevo
-            Documento. La pantalla de subida de archivos aparece.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen13.png')}"/><br><br>
+            %{--<p>Si desea incluir nuevos documentos haga un clic en el bot&oacuten Nuevo--}%
+            %{--Documento. La pantalla de subida de archivos aparece.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen13.png')}"/><br><br>--}%
 
-            <p>Los datos m&aacutes importantes del registro de documentos comprenden el
-            resumen, la descripci&oacuten y las palabras clave, sobre las cuales se
-            realizar&aacuten b&uacutesquedas para poder consultar en la biblioteca.
-            </p><br>
-            <p>
-                La columna “Acciones” de la tabla tiene varios botones. De izquierda a derecha
-                &eacute;stos son: “Ver”, “Editar”, “Descargar” y “Eliminar”
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen14.png')}"/><br><br>
+            %{--<p>Los datos m&aacutes importantes del registro de documentos comprenden el--}%
+            %{--resumen, la descripci&oacuten y las palabras clave, sobre las cuales se--}%
+            %{--realizar&aacuten b&uacutesquedas para poder consultar en la biblioteca.--}%
+            %{--</p><br>--}%
+            %{--<p>--}%
+                %{--La columna “Acciones” de la tabla tiene varios botones. De izquierda a derecha--}%
+                %{--&eacute;stos son: “Ver”, “Editar”, “Descargar” y “Eliminar”--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen14.png')}"/><br><br>--}%
 
-            <p>
-                El bot&oacute;n “Ver” muestra los datos registrados del documento.
-            </p><br>
+            %{--<p>--}%
+                %{--El bot&oacute;n “Ver” muestra los datos registrados del documento.--}%
+            %{--</p><br>--}%
 
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen15.png')}"/><br><br>
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen15.png')}"/><br><br>--}%
 
-            <p>
-                El bot&oacute;n “Editar” muestra el mismo formulario que el bot&oacute;n de creaci&oacute;n,
-                pero con los datos del documento seleccionado, de manera a poder editar la informaci&oacute;n y guardar los cambios.
-            </p>
-            <p>
-                El botón “Descargar” permite guardar de manera local el documento.
+            %{--<p>--}%
+                %{--El bot&oacute;n “Editar” muestra el mismo formulario que el bot&oacute;n de creaci&oacute;n,--}%
+                %{--pero con los datos del documento seleccionado, de manera a poder editar la informaci&oacute;n y guardar los cambios.--}%
+            %{--</p>--}%
+            %{--<p>--}%
+                %{--El botón “Descargar” permite guardar de manera local el documento.--}%
 
-            </p>
-            <p>
-                El botón “Eliminar” elimina definitivamente el documento y sus datos.
-            </p>
+            %{--</p>--}%
+            %{--<p>--}%
+                %{--El botón “Eliminar” elimina definitivamente el documento y sus datos.--}%
+            %{--</p>--}%
 
-            <p>La opci&oacuten Ofertas permite crear, editar y eliminar ofertas, as&iacute
-            como evaluarlas. S&oacute;cutelo los procesos registrados admiten el ingreso de
-            ofertas y evaluaci&oacuten, de modo que estas opciones del men&uacute
-            aparecer&aacuten desactivadas para procesos no registrados. El registro de
-            los procesos se realiza mediante el bot&oacuten Registrar en la pantalla
-            de proceso.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen16.png')}"/><br><br>
+            %{--<p>La opci&oacuten Ofertas permite crear, editar y eliminar ofertas, as&iacute--}%
+            %{--como evaluarlas. S&oacute;cutelo los procesos registrados admiten el ingreso de--}%
+            %{--ofertas y evaluaci&oacuten, de modo que estas opciones del men&uacute--}%
+            %{--aparecer&aacuten desactivadas para procesos no registrados. El registro de--}%
+            %{--los procesos se realiza mediante el bot&oacuten Registrar en la pantalla--}%
+            %{--de proceso.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen16.png')}"/><br><br>--}%
 
-            <p>Para editar los datos de la oferta use el bot&oacuten Editar.</p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen17.png')}"/><br><br>
+            %{--<p>Para editar los datos de la oferta use el bot&oacuten Editar.</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen17.png')}"/><br><br>--}%
 
-            <p>Junto al casillero para el registro del proveedor aparece un bot&oacuten
-            que permite crear un proveedor en el caso de que este no haya sido
-            ingresado en el sistema (Proveedores nuevos).
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen18.png')}"/><br><br>
-
-
-            <p>Para crear una oferta use el bot&oacuten &#34Crear Oferta&#34.</p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen20.png')}"/>
-        </div>
-
-        <a id="Contratos"></a><br>
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
+            %{--<p>Junto al casillero para el registro del proveedor aparece un bot&oacuten--}%
+            %{--que permite crear un proveedor en el caso de que este no haya sido--}%
+            %{--ingresado en el sistema (Proveedores nuevos).--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen18.png')}"/><br><br>--}%
 
 
-        <!-- Contratos -->
-        <h2 class="cursiva">Contratos</h2><br>
+            %{--<p>Para crear una oferta use el bot&oacuten &#34Crear Oferta&#34.</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen20.png')}"/>--}%
+        %{--</div>--}%
 
-        <div class="centrado">
-            <p>En este m&oacutedulo se registran los contratos y sus datos e
-            informaci&oacuten que deber&aacuten regular la ejecuci&oacuten de la obra.
-            Adem&aacutes de registrar los datos m&aacutes importantes del contrato se
-            puede tambi&eacuten subir al sistema el archivo digitalizado o pdf del contrato,
-            de tal forma que sirva como fuente de consulta inmediata para lograr el
-            correcto cumplimiento del contrato.
-            </p><br>
+        %{--<a id="Contratos"></a><br>--}%
 
-            <p>Para acceder a contratos se debe usar la opci&ocuten contratos del men&uacute
-            Ejecuci&oacuten.</p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen21.png')}"/><br><br>
-
-            <p>Al presionar el bot&oacuten lista aparece una pantalla de b&uacutesqueda que
-            nos permite ubicar los contratos por c&oacutedigo o n&uacutemero de contrato
-            y por nombre de la obra.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen24.png')}"/><br><br>
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
 
-            <p>Al presionar en el bot&oacuten &#34visto&#34 en la l&iacutenea deseada, se
-            cargan los datos del contrato y aparece la barra de botones o de herramientas
-            antes descrita.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen25.png')}"/><br><br>
+        %{--<!-- Contratos -->--}%
+        %{--<h2 class="cursiva">Contratos</h2><br>--}%
 
-            <p>En la parte inferior de la pantalla de contratos aparece una barra de herramientas
-            una vez que se ha registrado el contrato o cuando se halla visualizando un contrato
-            ya registrado en el sistema.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen23.png')}"/><br><br>
+        %{--<div class="centrado">--}%
+            %{--<p>En este m&oacutedulo se registran los contratos y sus datos e--}%
+            %{--informaci&oacuten que deber&aacuten regular la ejecuci&oacuten de la obra.--}%
+            %{--Adem&aacutes de registrar los datos m&aacutes importantes del contrato se--}%
+            %{--puede tambi&eacuten subir al sistema el archivo digitalizado o pdf del contrato,--}%
+            %{--de tal forma que sirva como fuente de consulta inmediata para lograr el--}%
+            %{--correcto cumplimiento del contrato.--}%
+            %{--</p><br>--}%
 
-            <p>Esta barra de herramientas permite acceder al registro de garant&iacuteas
-            , el cronograma contractual de la obra, la f&oacutermula polin&oacutemica contractual, una biblioteca de
-            documentos relativos al contrato y la ejecuci&oacuten de la obra.
-            </p><br>
+            %{--<p>Para acceder a contratos se debe usar la opci&ocuten contratos del men&uacute--}%
+            %{--Ejecuci&oacuten.</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen21.png')}"/><br><br>--}%
 
-            <p>La zona para el registro del objeto del contrato puede almacenar
-            aproximadamente hasta 16 l&iacuteneas.
-            </p>
-
-            <p>Esta pantalla registra s&oacutelo los datos m&aacutes importantes del
-            contrato, para acceder al texto completo del contrato hay que consultar
-            en la biblioteca de contratos.
-            </p>
-        </div>
-
-        <a id="CronoCon"></a><br>
-
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
+            %{--<p>Al presionar el bot&oacuten lista aparece una pantalla de b&uacutesqueda que--}%
+            %{--nos permite ubicar los contratos por c&oacutedigo o n&uacutemero de contrato--}%
+            %{--y por nombre de la obra.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen24.png')}"/><br><br>--}%
 
 
-        <!--Cronograma contractual -->
-        <div class="centrado">
-            <h2 class="izquierda">Cronograma contractual</h2><br>
+            %{--<p>Al presionar en el bot&oacuten &#34visto&#34 en la l&iacutenea deseada, se--}%
+            %{--cargan los datos del contrato y aparece la barra de botones o de herramientas--}%
+            %{--antes descrita.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen25.png')}"/><br><br>--}%
 
-            <p>A la pantalla de registro del cronograma contractual se accede haciendo
-            un clic en el bot&oacuten &#34Cronograma&#34, por defecto o como plantilla
-            aparece el cronograma de la obra que se ha ofertado (este ser&aacute tomado
-            del m&oacutedulo de oferentes ganadores que se halla a&uacuten en
-            construcci&oacuten, por el momento se ha tomado el cronograma de referencia
-            de la obra, preparado en el m&oacutedulo de obras).
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen26.png')}"/><br><br>
-            <p>
-                Se pueden filtrar los rubros por subpresupuesto, o mostrar todo.
-            </p><br>
-            <p>
-                Para registrar los valores en el cronograma se debe hacer clic sobre la o las filas a modificar (se muestran el azul las filas seleccionadas) y
-                doble clic en la casilla del mes correspondiente. El sistema muestra la pantalla para el registro
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen27.png')}"/><br><br>
+            %{--<p>En la parte inferior de la pantalla de contratos aparece una barra de herramientas--}%
+            %{--una vez que se ha registrado el contrato o cuando se halla visualizando un contrato--}%
+            %{--ya registrado en el sistema.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen23.png')}"/><br><br>--}%
 
-            <p>
-                El modo de registro del cronograma es id&eacute;ntico al cronograma de la obra,
-                de tal forma que se pueden ingresar valores para varios per&iacute;odos en forma
-                prorrateada tanto de las cantidades como del porcentaje o del valor
-                monetario del avance. Cuando se han seleccionado varias filas simult&aacute;neamente
-                la edición puede &uacute;nicamente realizarse por porcentajes, y los valores
-                ya existentes serán remplazados.
+            %{--<p>Esta barra de herramientas permite acceder al registro de garant&iacuteas--}%
+            %{--, el cronograma contractual de la obra, la f&oacutermula polin&oacutemica contractual, una biblioteca de--}%
+            %{--documentos relativos al contrato y la ejecuci&oacuten de la obra.--}%
+            %{--</p><br>--}%
 
-                <br> Desde la pantalla de cronograma se puede acceder al
-            gr&aacutefico de avance de la obra.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen28.png')}"/><br><br>
+            %{--<p>La zona para el registro del objeto del contrato puede almacenar--}%
+            %{--aproximadamente hasta 16 l&iacuteneas.--}%
+            %{--</p>--}%
 
-            <p>Para regresar al cronograma del contrato presione el bot&oacuten &#34Cronograma&#34.
-            </p>
-        </div>
+            %{--<p>Esta pantalla registra s&oacutelo los datos m&aacutes importantes del--}%
+            %{--contrato, para acceder al texto completo del contrato hay que consultar--}%
+            %{--en la biblioteca de contratos.--}%
+            %{--</p>--}%
+        %{--</div>--}%
 
-        <a id="RegFormula"></a><br>
+        %{--<a id="CronoCon"></a><br>--}%
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
 
-        <!-- Registro de la formula polinomica del contrato -->
-        <div class="centrado">
-            <h2 class="izquierda">Registro de la f&oacutermula polin&oacutemica del contrato</h2><br>
+        %{--<!--Cronograma contractual -->--}%
+        %{--<div class="centrado">--}%
+            %{--<h2 class="izquierda">Cronograma contractual</h2><br>--}%
 
-            <p>A diferencia de la obra, la f&oacutermula polin&oacutemica del contrato se
-            registra en base a los valores prefijados en el documento del contrato y no es
-            necesario agrupar &iacutetems para componer los distintos coeficientes.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen29.png')}"/><br><br>
+            %{--<p>A la pantalla de registro del cronograma contractual se accede haciendo--}%
+            %{--un clic en el bot&oacuten &#34Cronograma&#34, por defecto o como plantilla--}%
+            %{--aparece el cronograma de la obra que se ha ofertado (este ser&aacute tomado--}%
+            %{--del m&oacutedulo de oferentes ganadores que se halla a&uacuten en--}%
+            %{--construcci&oacuten, por el momento se ha tomado el cronograma de referencia--}%
+            %{--de la obra, preparado en el m&oacutedulo de obras).--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen26.png')}"/><br><br>--}%
+            %{--<p>--}%
+                %{--Se pueden filtrar los rubros por subpresupuesto, o mostrar todo.--}%
+            %{--</p><br>--}%
+            %{--<p>--}%
+                %{--Para registrar los valores en el cronograma se debe hacer clic sobre la o las filas a modificar (se muestran el azul las filas seleccionadas) y--}%
+                %{--doble clic en la casilla del mes correspondiente. El sistema muestra la pantalla para el registro--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen27.png')}"/><br><br>--}%
 
-            <p>Las dos formulas deben registrarse, tanto la correspondiente a la cuadrilla tipo
-            como la f&oacutermula polin&oacutemica del reajuste de precios.  Para los dos
-            casos, s&oacutelo se hallan disponibles los &iacutendices que se manejan en
-            el INEC y los de la contralor&iacutea para el caso de la cuadrilla tipo.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen30.png')}"/>
-        </div>
+            %{--<p>--}%
+                %{--El modo de registro del cronograma es id&eacute;ntico al cronograma de la obra,--}%
+                %{--de tal forma que se pueden ingresar valores para varios per&iacute;odos en forma--}%
+                %{--prorrateada tanto de las cantidades como del porcentaje o del valor--}%
+                %{--monetario del avance. Cuando se han seleccionado varias filas simult&aacute;neamente--}%
+                %{--la edición puede &uacute;nicamente realizarse por porcentajes, y los valores--}%
+                %{--ya existentes serán remplazados.--}%
 
-        <a id="BiblioCont"></a><br>
+                %{--<br> Desde la pantalla de cronograma se puede acceder al--}%
+            %{--gr&aacutefico de avance de la obra.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen28.png')}"/><br><br>--}%
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
+            %{--<p>Para regresar al cronograma del contrato presione el bot&oacuten &#34Cronograma&#34.--}%
+            %{--</p>--}%
+        %{--</div>--}%
+
+        %{--<a id="RegFormula"></a><br>--}%
+
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
 
-        <!-- Biblioteca de Contratos -->
-        <div class="centrado">
-            <h2 class="izquierda">Biblioteca de Contratos</h2><br>
+        %{--<!-- Registro de la formula polinomica del contrato -->--}%
+        %{--<div class="centrado">--}%
+            %{--<h2 class="izquierda">Registro de la f&oacutermula polin&oacutemica del contrato</h2><br>--}%
 
-            <p>La biblioteca de contratos permite almacenar en el sistema documentos en formato
-            digital ya sea estos archivos de texto (de Microsoft office o de libre office),
-            hojas de c&aacutelculo, im&aacutegenes o archivos en formato pdf. Esta biblioteca
-            almacena documentos relativos al contrato desde la etapa del proceso hasta
-            la ejecuci&oacuten de la obra.
-            </p><br>
+            %{--<p>A diferencia de la obra, la f&oacutermula polin&oacutemica del contrato se--}%
+            %{--registra en base a los valores prefijados en el documento del contrato y no es--}%
+            %{--necesario agrupar &iacutetems para componer los distintos coeficientes.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen29.png')}"/><br><br>--}%
 
-            <p>Para acceder a la biblioteca haga clic en el bot&oacuten Biblioteca de la barra de
-            herramientas inferior de la pantalla de contratos.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen31.png')}"/><br><br>
+            %{--<p>Las dos formulas deben registrarse, tanto la correspondiente a la cuadrilla tipo--}%
+            %{--como la f&oacutermula polin&oacutemica del reajuste de precios.  Para los dos--}%
+            %{--casos, s&oacutelo se hallan disponibles los &iacutendices que se manejan en--}%
+            %{--el INEC y los de la contralor&iacutea para el caso de la cuadrilla tipo.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen30.png')}"/>--}%
+        %{--</div>--}%
 
-            <p>El sistema muestra la pantalla de documentos cargados obra por obra. En esta
-            pantalla existe un buscador que permite ubicar documentos basados en palabras
-            clave para un r&aacutepido acceso a la informaci&oacuten.
-            </p><br>
+        %{--<a id="BiblioCont"></a><br>--}%
 
-            <p>A continuaci&oacuten se muestra la pantalla resultado de buscar en la biblioteca
-            la palabra "archivo".
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen32.png')}"/><br><br>
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
-            <p>Si desea incluir nuevos documentos haga un clic en el bot&oacute;n Nuevo Documento. La pantalla de subida de archivos aparece.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen33.png')}"/><br><br>
 
-            <p>
-            Los datos m&aacute;s importantes del registro de documentos comprenden el resumen,
-            la descripci&oacute;n y las palabras clave, sobre las cuales se realizar&aacute;n b&uacute;squedas
-            para poder consultar en la biblioteca.
+        %{--<!-- Biblioteca de Contratos -->--}%
+        %{--<div class="centrado">--}%
+            %{--<h2 class="izquierda">Biblioteca de Contratos</h2><br>--}%
 
-            </p><br>
-            <p>
-            La columna “Acciones” de la tabla tiene varios botones.
-            De izquierda a derecha &eacute;stos son: “Ver”, “Editar”, “Descargar” y “Eliminar”
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen34.png')}"/><br><br>
+            %{--<p>La biblioteca de contratos permite almacenar en el sistema documentos en formato--}%
+            %{--digital ya sea estos archivos de texto (de Microsoft office o de libre office),--}%
+            %{--hojas de c&aacutelculo, im&aacutegenes o archivos en formato pdf. Esta biblioteca--}%
+            %{--almacena documentos relativos al contrato desde la etapa del proceso hasta--}%
+            %{--la ejecuci&oacuten de la obra.--}%
+            %{--</p><br>--}%
 
-            <p>
-                El botón “Ver” muestra los datos registrados del documento.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen35.png')}"/><br><br>
+            %{--<p>Para acceder a la biblioteca haga clic en el bot&oacuten Biblioteca de la barra de--}%
+            %{--herramientas inferior de la pantalla de contratos.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen31.png')}"/><br><br>--}%
 
-            <p>El bot&oacute;n “Editar” muestra el mismo formulario que el bot&oacute;n de creaci&oacute;n,
-            pero con los datos del documento seleccionado, de manera a poder editar la informaci&oacute;n y guardar los cambios.
-            </p>
+            %{--<p>El sistema muestra la pantalla de documentos cargados obra por obra. En esta--}%
+            %{--pantalla existe un buscador que permite ubicar documentos basados en palabras--}%
+            %{--clave para un r&aacutepido acceso a la informaci&oacuten.--}%
+            %{--</p><br>--}%
 
-            <p>El bot&oacute;n “Descargar” permite guardar de manera local el documento.
+            %{--<p>A continuaci&oacuten se muestra la pantalla resultado de buscar en la biblioteca--}%
+            %{--la palabra "archivo".--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen32.png')}"/><br><br>--}%
 
-            </p>
-        <p>
-            El bot&oacute;n “Eliminar” elimina definitivamente el documento y sus datos.
-        </p><br>
+            %{--<p>Si desea incluir nuevos documentos haga un clic en el bot&oacute;n Nuevo Documento. La pantalla de subida de archivos aparece.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen33.png')}"/><br><br>--}%
 
-        <p>
-            La opci&oacute;n Ofertas permite crear, editar y eliminar ofertas, as&iacute; como evaluarlas. S&oacute;lo los
-            procesos registrados admiten el ingreso de ofertas y evaluaci&oacute;n, de modo que estas opciones
-            del men&uacute; aparecer&aacute;n desactivadas para procesos no registrados. El registro de los procesos se
-            realiza mediante el bot&oacute;n Registrar en la pantalla de concursos.
-        </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen36.png')}"/><br><br>
+            %{--<p>--}%
+            %{--Los datos m&aacute;s importantes del registro de documentos comprenden el resumen,--}%
+            %{--la descripci&oacute;n y las palabras clave, sobre las cuales se realizar&aacute;n b&uacute;squedas--}%
+            %{--para poder consultar en la biblioteca.--}%
 
-            <p>
-                Para editar los datos de la oferta use el botón Editar.
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen37.png')}"/><br><br><br>
-        </div>
+            %{--</p><br>--}%
+            %{--<p>--}%
+            %{--La columna “Acciones” de la tabla tiene varios botones.--}%
+            %{--De izquierda a derecha &eacute;stos son: “Ver”, “Editar”, “Descargar” y “Eliminar”--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen34.png')}"/><br><br>--}%
 
-    <div class="regresa">
-        <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-    </div><br><br><br>
+            %{--<p>--}%
+                %{--El botón “Ver” muestra los datos registrados del documento.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen35.png')}"/><br><br>--}%
+
+            %{--<p>El bot&oacute;n “Editar” muestra el mismo formulario que el bot&oacute;n de creaci&oacute;n,--}%
+            %{--pero con los datos del documento seleccionado, de manera a poder editar la informaci&oacute;n y guardar los cambios.--}%
+            %{--</p>--}%
+
+            %{--<p>El bot&oacute;n “Descargar” permite guardar de manera local el documento.--}%
+
+            %{--</p>--}%
+        %{--<p>--}%
+            %{--El bot&oacute;n “Eliminar” elimina definitivamente el documento y sus datos.--}%
+        %{--</p><br>--}%
+
+        %{--<p>--}%
+            %{--La opci&oacute;n Ofertas permite crear, editar y eliminar ofertas, as&iacute; como evaluarlas. S&oacute;lo los--}%
+            %{--procesos registrados admiten el ingreso de ofertas y evaluaci&oacute;n, de modo que estas opciones--}%
+            %{--del men&uacute; aparecer&aacute;n desactivadas para procesos no registrados. El registro de los procesos se--}%
+            %{--realiza mediante el bot&oacute;n Registrar en la pantalla de concursos.--}%
+        %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen36.png')}"/><br><br>--}%
+
+            %{--<p>--}%
+                %{--Para editar los datos de la oferta use el botón Editar.--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen37.png')}"/><br><br><br>--}%
+        %{--</div>--}%
+
+    %{--<div class="regresa">--}%
+        %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+    %{--</div><br><br><br>--}%
 
 
 
@@ -1372,103 +1375,103 @@
             %{--</p>--}%
         %{--</div>--}%
 
-        <a id="ModFin"></a><br>
+        %{--<a id="ModFin"></a><br>--}%
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
-
-
-        <!-- Modulo Financiero y Tesoreria, Garantias -->
-        <h2 class="cursiva">M&oacutedulo financiero y tesorer&iacutea</h2><br>
-
-        <div class="centrado">
-            <h2 class=izquierda>Garant&iacuteas</h2><br>
-
-            <p>La pantalla de garant&iacute;as permite registrar y modificar las garant&iacute;as de un contrato.
-            Se accede desde la pantalla de visualizaci&oacute;n del contrato (menú Ejecuci&oacute;n/Contratos)
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen72.png')}"/><br><br>
-
-            <p>
-                El área Contrato muestra los datos contractuales.<br>
-                El área Garantía permite crear o modificar garantías.<br>
-                El área Garantías muestra la lista de las garantías ya ingresadas.
-            </p><br>
-
-            <p>Se puede ingresar los datos de una nueva garant&iacute;a y presionar el bot&oacute;n “Agregar” (bot&oacute;n verde con un signo +) para crear una nueva garant&iacute;a.
-            </p><br>
-            <p>
-                Al hacer doble clic en una garant&iacute;a de la lista se selecciona y se muestran los datos en el formulario de edici&oacute;n
-
-            </p><br>
-            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen73.png')}"/><br><br>
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
 
-            <p>
-                El botón “Agregar” es remplazado por 4 botones, de izquierda a derecha, “Nuevo”, “Guardar”, “Renovar”, “Eliminar”.<br>
-                El botón “Nuevo” limpia el formulario y lo regresa al estado de creación de nueva garantía.<br>
-                El botón “Guardar” graba cualquier cambio realizado en la información de la garantía existente seleccionada.<br>
-                El botón “Renovar” guarda los datos de la garantía pero creando una nueva que sería la renovación de la original.<br>
-                El botón “Eliminar” permite eliminar permanentemente una garantía que no haya sido renovada nunca.<br>
-            </p><br>
-        </div>
+        %{--<!-- Modulo Financiero y Tesoreria, Garantias -->--}%
+        %{--<h2 class="cursiva">M&oacutedulo financiero y tesorer&iacutea</h2><br>--}%
 
-        <a id="RegPagos"></a><br>
+        %{--<div class="centrado">--}%
+            %{--<h2 class=izquierda>Garant&iacuteas</h2><br>--}%
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
+            %{--<p>La pantalla de garant&iacute;as permite registrar y modificar las garant&iacute;as de un contrato.--}%
+            %{--Se accede desde la pantalla de visualizaci&oacute;n del contrato (menú Ejecuci&oacute;n/Contratos)--}%
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen72.png')}"/><br><br>--}%
 
+            %{--<p>--}%
+                %{--El área Contrato muestra los datos contractuales.<br>--}%
+                %{--El área Garantía permite crear o modificar garantías.<br>--}%
+                %{--El área Garantías muestra la lista de las garantías ya ingresadas.--}%
+            %{--</p><br>--}%
 
-        <!-- Registro de pagos de las Planillas -->
-        <div class="centrado">
-            <h2 class="izquierda">Registro de pagos de las Planillas</h2><br>
+            %{--<p>Se puede ingresar los datos de una nueva garant&iacute;a y presionar el bot&oacute;n “Agregar” (bot&oacute;n verde con un signo +) para crear una nueva garant&iacute;a.--}%
+            %{--</p><br>--}%
+            %{--<p>--}%
+                %{--Al hacer doble clic en una garant&iacute;a de la lista se selecciona y se muestran los datos en el formulario de edici&oacute;n--}%
 
-        <p>
-            Para generar los pagos de las planillas se debe abrir la lista de planillas y se hace clic en el bot&oacute;n azul en la columna Pagos.
-        </p><br>
-
-        <p>
-            Este bot&oacute;n cambia dependiendo del usuario y del estado de la planilla.
-        </p><br>
-
-        <p>
-            El usuario Fiscalizador puede “Enviar reajuste” (planilla de anticipo) o “Enviar planilla”. Una vez realizado este paso,
-            el usuario Administrador de contrato puede “Pedir pago”. En este momento, el usuario Financiero puede “Informar pago”.
-            En el caso de la planilla de anticipo, el usuario Administrador de contrato puede “Iniciar obra”. Una vez completados todos
-            los pasos el bot&oacute;n se convierte en un visto verde para informar que el proceso ha sido completado. Cada paso requiere que se
-            ingrese la informaci&oacute;n para genera un tr&aacute;mite que a su vez genera una alerta al usuario correspondiente.
-        </p><br>
-
-        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen74.png')}"/><br><br>
-
-        </div>
+            %{--</p><br>--}%
+            %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen73.png')}"/><br><br>--}%
 
 
+            %{--<p>--}%
+                %{--El botón “Agregar” es remplazado por 4 botones, de izquierda a derecha, “Nuevo”, “Guardar”, “Renovar”, “Eliminar”.<br>--}%
+                %{--El botón “Nuevo” limpia el formulario y lo regresa al estado de creación de nueva garantía.<br>--}%
+                %{--El botón “Guardar” graba cualquier cambio realizado en la información de la garantía existente seleccionada.<br>--}%
+                %{--El botón “Renovar” guarda los datos de la garantía pero creando una nueva que sería la renovación de la original.<br>--}%
+                %{--El botón “Eliminar” permite eliminar permanentemente una garantía que no haya sido renovada nunca.<br>--}%
+            %{--</p><br>--}%
+        %{--</div>--}%
 
-    <a id="pagoPlanilla"></a><br>
+        %{--<a id="RegPagos"></a><br>--}%
 
-    <div class="centrado">
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
-        <h2 class="izquierda">Informe de pago de la planilla</h2><br>
 
-        <p>
-            Una vez que se ha procedido al pago, se debe informar del mismo con lo cual se cierra el proceso de pago de planillas
-            y queda a disposición de todos los usuarios del sistema el proceso como completado junto con los documentos de pago y
-            derivados, como en el caso del pago del anticipo que genera a su vez un oficio de inicio de obra que debe hacerlo el
-            adminsitrador del contrato antes de que el proceso se de por completado. El sistema posee ayudas para generar cada documento
-            o simplemente los genera dependiendo de su complejidad y tipo.
-            El informe de pago de la planilla se registra haciendo clic en “Informar pago” .
-        </p><br>
+        %{--<!-- Registro de pagos de las Planillas -->--}%
+        %{--<div class="centrado">--}%
+            %{--<h2 class="izquierda">Registro de pagos de las Planillas</h2><br>--}%
 
-        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen75.png')}"/><br><br>
+        %{--<p>--}%
+            %{--Para generar los pagos de las planillas se debe abrir la lista de planillas y se hace clic en el bot&oacute;n azul en la columna Pagos.--}%
+        %{--</p><br>--}%
 
-        <p>
-            En caso de que se deba devolver el tr&aacute;mite se lo puede hacer mediante el bot&oacute;n “Devolver” con lo cual el estado de tr&aacute;mite regresa a “Pedir pago”.
-        </p><br>
+        %{--<p>--}%
+            %{--Este bot&oacute;n cambia dependiendo del usuario y del estado de la planilla.--}%
+        %{--</p><br>--}%
 
-    </div>
+        %{--<p>--}%
+            %{--El usuario Fiscalizador puede “Enviar reajuste” (planilla de anticipo) o “Enviar planilla”. Una vez realizado este paso,--}%
+            %{--el usuario Administrador de contrato puede “Pedir pago”. En este momento, el usuario Financiero puede “Informar pago”.--}%
+            %{--En el caso de la planilla de anticipo, el usuario Administrador de contrato puede “Iniciar obra”. Una vez completados todos--}%
+            %{--los pasos el bot&oacute;n se convierte en un visto verde para informar que el proceso ha sido completado. Cada paso requiere que se--}%
+            %{--ingrese la informaci&oacute;n para genera un tr&aacute;mite que a su vez genera una alerta al usuario correspondiente.--}%
+        %{--</p><br>--}%
+
+        %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen74.png')}"/><br><br>--}%
+
+        %{--</div>--}%
+
+
+
+    %{--<a id="pagoPlanilla"></a><br>--}%
+
+    %{--<div class="centrado">--}%
+
+        %{--<h2 class="izquierda">Informe de pago de la planilla</h2><br>--}%
+
+        %{--<p>--}%
+            %{--Una vez que se ha procedido al pago, se debe informar del mismo con lo cual se cierra el proceso de pago de planillas--}%
+            %{--y queda a disposición de todos los usuarios del sistema el proceso como completado junto con los documentos de pago y--}%
+            %{--derivados, como en el caso del pago del anticipo que genera a su vez un oficio de inicio de obra que debe hacerlo el--}%
+            %{--adminsitrador del contrato antes de que el proceso se de por completado. El sistema posee ayudas para generar cada documento--}%
+            %{--o simplemente los genera dependiendo de su complejidad y tipo.--}%
+            %{--El informe de pago de la planilla se registra haciendo clic en “Informar pago” .--}%
+        %{--</p><br>--}%
+
+        %{--<img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen75.png')}"/><br><br>--}%
+
+        %{--<p>--}%
+            %{--En caso de que se deba devolver el tr&aacute;mite se lo puede hacer mediante el bot&oacute;n “Devolver” con lo cual el estado de tr&aacute;mite regresa a “Pedir pago”.--}%
+        %{--</p><br>--}%
+
+    %{--</div>--}%
 
         <div class="regresa">
             <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
