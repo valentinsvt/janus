@@ -12,7 +12,7 @@
 
 <body>
 <div class="hoja">
-<div class="tituloChevere">Composición de ${obra?.descripcion}</div>
+<div class="tituloChevere">Valores reales para la obra: ${obra?.descripcion}</div>
 
 <g:if test="${flash.message}">
     <div class="span12">
@@ -27,9 +27,10 @@
     <div class="btn-group">
         <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn " title="Regresar a la obra">
             <i class="icon-arrow-left"></i>
-            Regresar
+            Regresar Obra
         </a>
-        <button class="btn" id="btn-comp" title="Regresar a composición"><i class="icon-arrow-left"></i>Composición
+        <button class="btn" id="btn-comp" title="Regresar a composición"><i class="icon-arrow-left"></i>
+            Regresar Composición
         </button>
     </div>
 

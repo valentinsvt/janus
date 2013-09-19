@@ -127,7 +127,7 @@
 
     <body>
         <div class="hoja">
-            <div class="tituloChevere">Composición de ${obra?.descripcion}</div>
+            <div class="tituloChevere">Composición de la obra: ${obra?.descripcion}</div>
 
             <g:if test="${flash.message}">
                 <div class="span12">
@@ -145,9 +145,9 @@
                             <i class="icon-arrow-left"></i>
                             Regresar
                         </a>
-                        <g:link action="validacion" id="${obra?.id}" controller="composicion" class="btn">
+                        <g:link action="validacion" id="${obra?.id}" controller="composicion" class="btn" title="Cantidades reales de Materiales, M.O. y Equipos">
                             <i class="icon-list"></i>
-                            Composición
+                            Adm. Directa
                         </g:link>
                     </div>
 
@@ -217,8 +217,8 @@
                         <g:link controller="reportes2" action="reporteExcelComposicion" class="btn btn-print btnExcel" id="${obra?.id}" params="[sp: sub, tipo: tipo]">
                             <i class="icon-table"></i> Excel
                         </g:link>
-                        <g:link controller="reportes2" action="reporteExcelComposicionTotales" class="btn btn-print btnExcel" id="${obra?.id}" params="[sp: sub, tipo: tipo]">
-                            <i class="icon-table"></i> Excel totales
+                        <g:link controller="reportes2" action="reporteExcelComposicionTotales" class="btn btn-print btnExcel" id="${obra?.id}" params="[sp: sub, tipo: tipo]" title="Exportar a excel para definir las cantidades reales de Materiales, M.O. y Equipos">
+                            <i class="icon-table"></i> Adm. Directa
                         </g:link>
                     </div>
                 </div>
