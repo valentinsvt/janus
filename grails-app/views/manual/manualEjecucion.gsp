@@ -108,30 +108,47 @@
                     <li><a href="#ModCompras">Asignaciones Presupuestarias</a></li>
                     <li><a href="#PlanAnual">Plan Anual de Compras</a></li>
                 </ul>
-                <li><a href="#Concursos">Proceso</a></li>
+                <li><a href="#Concursos">Concursos</a></li>
                 <li><a href="#Contratos">Contratos</a></li>
                 <ul>
                     <li><a href="#CronoCon">Cronograma contractual</a></li>
                     <li><a href="#RegFormula">Registro de la f&oacutermula polin&oacutemica del contrato</a></li>
                     <li><a href="#BiblioCont">Biblioteca de Contratos</a></li>
+
                 </ul>
-                <li><a href="#RegControl">Registro y control de Planillas</a></li>
+                <li><a href="#visuaCont">Visualización de Contratos</a></li>
+                         <li><a href="#cronoEje">Cronograma de Ejecuci&oacute;n</a></li>
+                        <li><a href="#formula">Fórmula Polinómica</a></li>
+                        <li><a href="#biblio">Biblioteca</a></li>
+
+
+
+                <li><a href="#planilla">Registro y control de Planillas</a></li>
+                <ul>
+                    <li><a href="#registro">Registro de planilla</a></li>
+                    <li><a href="#costoPorcentaje">PLanilla Costo + Porcentaje</a></li>
+                    <li><a href="#envioPlan">Envio de planilla reajustada</a></li>
+                    <li><a href="#devolucion">Devoluci&oacute;n del tr&aacute;mite de pedir pago</a></li>
+                    <li><a href="#pagoPlan">Pedir el pago de la planilla</a></li>
+                    <li><a href="#informePagoPlan">Informe de pago de la planilla</a></li>
+                </ul>
+                    <li><a href="#administradores">Administradores</a></li>
+                    <li><a href="#fiscalizadores">Fiscalizadores</a></li>
+                    <li><a href="#recepcion">Pedido de Recepción</a></li>
                 <ul>
                     <li><a href="#RegIndices">Registro de &Iacutendices</a></li>
                     <li><a href="#RegDatos">Registro de datos desde el INEC</a></li>
                     <li><a href="#ProDes">Proceso para descargar el archivo desde el INEC</a></li>
-                    <li><a href="#RegCron">Registro del cronograma de ejecuci&oacuten</a></li>
                     <li><a href="#EstPlan">Estado de la planilla</a></li>
                     <li><a href="#TipoPlan">Tipo de Planilla</a></li>
                     <li><a href="#TipoDesc">Tipo de descuentos por planilla</a></li>
-                    <li><a href="#DescPlan">Descuentos por planilla</a></li>
-                    <li><a href="#RegPlan">Registro de Planillas</a></li>
-                    <li><a href="#IngNueva">Ingreso de nuevas planillas</a></li>
                 </ul>
+
                 <li><a href="#ModFin">M&oacutedulo financiero y tesorer&iacutea</a></li>
                 <ul>
                     <li><a href="#ModFin">Garant&iacuteas</a></li>
-                    <li><a href="#RegPagos">Registro de pagos de las Planillas</a></li><a id="ModCompras"></a>
+                    <li><a href="#RegPagos">Registro de pagos de las Planillas</a></li>
+                    <li><a href="#pagoPlanilla">Informe de pago de la Planilla</a></li>
                 </ul>
             </ol>
         </div>
@@ -606,11 +623,109 @@
             <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen37.png')}"/><br><br><br>
         </div>
 
+    <div class="regresa">
+        <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
+    </div><br><br><br>
 
 
 
-        <!-- Registro y control de Planillas -->
+    <a id="visuaCont"></a><br>
+
+    <h2 class="izquierda">Visualización de Contratos</h2><br>
+    <div class="centrado">
+
+           <p>
+               Se accede desde el men&uacute; “Ejecuci&oacute;n” y permite la visualizaci&oacute;n de los datos del contrato.
+           </p><br>
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen38.png')}"/><br><br><br>
+        <p>
+            El botón “Lista” muestra la lista de contratos disponibles
+        </p><br>
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen39.png')}"/><br><br><br>
+        <p>
+            Al presionar el bot&oacute;n “visto” se cargan los datos del contrato seleccionado.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen40.png')}"/><br><br><br>
+
+        <p>
+            En la parte inferior se muestra un men&uacute; que permite acceder al cronograma de ejecuci&oacute;n,
+            a la f&oacute;rmula polin&oacute;mica de ejecuci&oacute;n, al a biblioteca, a la administraci&oacute;n de planillas,
+            al pedido de recepci&oacute;n de la obra, a generar la f&oacute;rmula polin&oacute;mica de liquidaci&oacute;n,
+            al reporte de avance y a la asignaci&oacute;n tanto de administrador como de fiscalizador.
+
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen41.png')}"/><br><br><br>
+
+         </div>
+
+    <div class="regresa">
+        <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
+    </div><br><br><br>
+
+
+
+    <a id="cronoEje"></a><br>
+
+    <h2 class="izquierda">Cronograma de Ejecución</h2><br>
+    <div class="centrado">
+        <p>
+            Muestra el cronograma con la fecha de inicio de obra y con las fechas correspondientes a cada per&iacute;odo.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen42.png')}"/><br><br><br>
+
+        <p>
+            Permite crear ampliaciones del plazo. Esto agrega los d&iacute;as de ampliaci&oacute;n equitativamente en los per&iacute;odos de ejecuci&oacute;n de la obra.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen43.png')}"/><br><br><br>
+
+        <p>
+
+            Tambi&eacute;n permite crear suspensiones de la ejecuci&oacute;n de la obra. Esto suspende la obra entre las fechas ingresadas.
+
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen44.png')}"/><br><br><br>
+
+    </div>
+
+    <div class="regresa">
+        <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
+    </div><br><br><br>
+
+    <a id="formula"></a><br>
+
+    <h2 class="izquierda">Fórmula Polinómica</h2><br>
+    <div class="centrado">
+
+        <p>
+            Permite ver la f&oacute;rmula polin&oacute;mica de ejecuci&oacute;n.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen45.png')}"/><br><br><br>
+
+
+    </div>
+
+    <a id="biblio"></a><br>
+    <h2 class="izquierda">Biblioteca</h2><br>
+    <div class="centrado">
+
+        <p>
+            La biblioteca muestra la misma pantalla que en el caso del registro del contrato, y funciona de manera exactamente igual.
+        </p><br>
+
+    </div>
+
+
+
+    <!-- Registro y control de Planillas -->
         <br><br><br>
+
+    <a id="planilla"></a><br>
 
         <h2 class="cursiva">Registro y control de Planillas</h2><br>
 
@@ -620,24 +735,303 @@
             la orden de pago del anticipo mediante el registro de una planilla de
             anticipo por el valor correspondiente al monto fijado en el contrato
             y el porcentaje correspondiente.
-            </p>
+            </p><br>
 
             <p>Para el control de los pagos y para el c&aacutelculo del reajuste de
             precios el sistema se sirve de los &iacutendices de precios que proporciona
             en INEC para el caso de materiales y equipos, y de los &iacutendices
             proporcionados por la Contralor&iacutea, para el caso de los valores de
             mano de obra.
-            </p>
+            </p><br>
 
             <p>Con el prop&oacutesito de evitar cualquier confusi&oacuten al momento
             de calcular la variaci&oacuten de los &iacutendices, la f&oacutermula
             polin&oacutemica se elabora tomando en cuenta s&oacutelo los &iacutendices
             publicados por el INEC, en lo que se refiere al nombre de los materiales
             y equipos.
-            </p>
+            </p><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen46.png')}"/><br><br><br>
+
+            <p>
+                La lista de planillas depende del usuario, pues los usuarios de fiscalizaci&oacute;n, administraci&oacute;n de contratos y financiero tienen botones diferentes.
+            </p><br>
+
         </div>
 
-        <a id="RegIndices"></a><br>
+        <a id="registro"></a><br>
+
+        <h2 class="cursiva">Registro de planilla</h2><br>
+
+        <div class="centrado">
+
+
+            <p>
+
+                Un usuario Fiscalizador puede crear una Nueva Planilla
+            </p><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen47.png')}"/><br><br><br>
+
+            <p>
+                Una vez completado el formulario se muestra una pantalla para completar los detalles (planillas de avance y de costo+porcentaje).
+                El registro del detalle de la planilla se hace en base a la plantilla de los vol&uacute;menes de obra contratados.
+            </p><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen48.png')}"/><br><br><br>
+
+            <p>
+                Para ingresar valores simplemente seleccione la casilla correspondiente y escriba los valores de cantidad de obra planillados.
+            </p><br>
+
+            <p>
+                Con estos datos ingresados el sistema calcula los valores monetarios de la planilla,
+                luego los valores de Bo y Po a aplicarse para el reajuste de precios conforme los &iacute;ndices de materiales, equipos y mano de obra.
+            </p><br>
+            <p>
+                La fecha que se toma como referencia para el c&aacute;lculo de los diferentes periodos
+                de reajuste corresponde a la del pago de la planilla del anticipo, la misma que se registra utilizando el m&oacute;dulo financiero (a&uacute;n en construcci&oacute;n).
+            </p><br>
+
+            <p>
+                Si la fecha de inicio de obra es menor al 15 del mes, se puede aceptar una planilla en ese mes,
+                caso contrario, se aceptar&aacute; una planilla acumulados los días que restan del mes actual.
+            </p><br>
+
+            <p>
+                Como ejemplo de c&aacute;lculo se presenta a continuaci&oacute;n un detalle de los valores de
+                las variaciones de los &iacute;ndices calculados seg&uacute;n los coeficientes de la f&oacute;rmula polin&oacute;mica
+            </p><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen49.png')}"/><br><br><br>
+
+
+            <p>
+                Una vez definidos los valores de Bo, se calculan los de Po y se obtienen los reajustes correspondientes
+                a aplicarse al valor planillado (Fr -1). El detalle se imprime como la planilla a pagarse.
+
+            </p><br>
+
+            <p>
+                El sistema hace un c&aacute;lculo en funci&oacute;n de los valores de los &iacute;ndices ingresados o cargados desde el INEC.
+                Bo y cada uno de los coeficientes de la f&oacute;rmula se calculan para determinar el valor de Fr y Fr – 1, con los cuales se calcula el valor del reajuste a pagar.
+            </p><br>
+
+            <p>
+                El resumen de los c&aacute;lculos realizados por el sistema se muestra en la pantalla a continuaci&oacute;n,
+                donde se puede observar tanto el c&aacute;lculo de Bo, Po, los valores de Fr y Pr y los datos de la planilla presentada para la cual se ha calculado.
+            </p><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen50.png')}"/><br><br><br>
+
+            <p>
+                Para el caso de planillas de avance de obra se añade la secci&oacute;n de Multas:
+            </p><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen51.png')}"/><br><br><br>
+
+            <p>
+                Para el caso de la planilla de liquidaci&oacute;n se hace el c&aacute;lculo de las multas aplicadas, los descuentos correspondientes al anticipo
+                y un calculo actualizado del reajuste al cual se restan los reajustes aplicados para obtener la diferencia de reajuste a aplicar,
+                algo similar a lo mostrado en el cuadro antes señalado.
+            </p><br>
+
+            <p>
+                El sistema imprime tanto los valores Bo como los Po. Adem&aacute;s lleva un registro hist&oacute;rico de los valores de los &iacute;ndices
+                aplicados en cada reajuste y los de Fr, valores planillados, pagados y reajustes pagados.
+            </p><br>
+
+            <p>
+                En la lista, el botón “resumen” permite visualizar el cálculo de B0, P0, Fr-1
+            </p><br>
+
+            <p>
+
+                El bot&oacute;n imprimir, ubicado a lado del de resumen, genera un PDF con estos c&aacute;lculos, adem&aacute;s de los detalles de la planilla.
+            </p><br>
+        </div>
+
+    <div class="regresa">
+        <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
+    </div><br><br><br>
+
+
+    <a id="costoPorcentaje"></a><br>
+
+    <h2 class="izquierda">Planilla costo + porcentaje</h2><br>
+
+    <div class="centrado">
+
+        <p>
+            Una vez creada una planilla de costo + porcentaje se muestra la pantalla de detalles de planilla.
+
+            En esta pantalla puede registrar rubros adicionales que no constan en los vol&uacute;menes de obra.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen51-1.png')}"/><br><br><br>
+
+        <p>
+            Despu&eacute;s de completar el n&uacute;mero de factura, descripci&oacute;n del rubro, unidad y valor sin IVA, se calculan autom&aacute;ticamente
+            los valores con IVA y de costos indirectos. Estos valores pueden modificarse siempre que la diferencia con el valor
+            original no supere los 10 centavos. Al presionar el bot&oacute;n “Agregar” se registra el rubro adicional.
+        </p><br>
+        <p>
+            El valor total de todas las planillas de costo + porcentaje no puede superar el 10% del monto total del contrato.
+            En caso de exceder este valor se mostrar&aacute; una advertencia y no se permitir&aacute; el registro de rubros adicionales.
+        </p><br>
+
+    </div>
+
+
+    <a id="envioPlan"></a><br>
+
+    <h2 class="izquierda">Envio de planilla reajustada</h2><br>
+
+    <div class="centrado">
+
+        <p>
+            Este proceso lo realiza el fiscalizador y se envía la planilla con el reajuste correspondiente al administrador del contrato para que este solicite su pago.
+
+            La pantalla del Fiscalizador muestra el estado de tr&aacute;mite actual de la planilla.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen52.png')}"/><br><br><br>
+
+        <p>
+            Para enviar la planilla se hace clic en el bot&oacute;n “Enviar planilla”.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen53.png')}"/><br><br><br>
+
+        <p>
+            Luego de enviada la planilla, la pantalla aparece como:
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen54.png')}"/><br><br><br>
+
+        <p>
+            En la pantalla se observa que el tr&aacute;mite se halla ahora en “Administraci&aacute;n de contratos” y en la etapa “Pedir pago”.
+            El sistema muestra el estado actual de tr&aacute;mite de todas las planillas y va activando en forma autom&aacute;tica las opciones del tr&aacute;mite seg&uacute;n corresponda a cada usuario.
+        </p><br>
+
+        <p>
+            Si el usuario de administraci&oacute;n de contratos se conecta al sistema para visualizar las planillas, observar&aacute;
+            que se le ha activado el bot&oacute;n “Pedir pago”, también se halla activo “Devolver”, lo cual permite devolver el tr&aacute;mite de as&iacute; estimarse.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen55.png')}"/><br><br><br>
+
+    </div>
+
+    <a id="devolucion"></a><br>
+
+    <h2 class="izquierda">Devoluci&oacute;n del tr&aacute;mite de pedir Pago</h2><br>
+
+    <div class="centrado">
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen56.png')}"/><br><br><br>
+    </div>
+
+
+    <a id="pagoPlan"></a><br>
+
+    <h2 class="izquierda">Pedir el pago de la planilla</h2><br>
+
+    <div class="centrado">
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen57.png')}"/><br><br><br>
+        <p>
+            El proceso continua con el aporte de la Direcci&oacute;n Financiera, en donde se ver&aacute; el estado de la planilla como:
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen58.png')}"/><br><br><br>
+    </div>
+
+    <a id="informePagoPlan"></a><br>
+
+    <h2 class="izquierda">Informe de pago de la planilla</h2><br>
+
+    <div class="centrado">
+
+
+        <p>
+            Una vez que se ha procedido al pago, se debe informar del mismo con lo cual se cierra el proceso de pago de planillas
+            y queda a disposici&oacute;n de todos los usuarios del sistema el proceso como completado junto con los documentos de pago y derivados,
+        como en el caso del pago del anticipo que genera a su vez un oficio de inicio de obra que debe hacerlo el administrador del
+        contrato antes de que el proceso se de por completado. El sistema posee ayudas para generar cada documento o simplemente los genera dependiendo de su complejidad y tipo.
+        </p><br>
+
+        <p>
+            El informe de pago de la planilla se registra haciendo clic en “Informar pago” .
+        </p><br>
+
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen59.png')}"/><br><br><br>
+
+
+
+        <p>
+            En caso de que se deba devolver el tr&aacute;mite se lo puede hacer mediante el bot&oacute;n “Devolver” con lo cual el estado de tr&aacute;mite regresa a “Pedir pago”.
+        </p><br>
+
+
+
+        <p>
+            El estado de la planilla se visualiza en la lista de planillas como:
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen60.png')}"/><br><br><br>
+
+        <p>
+            Con esto se ha completado el proceso de registro, c&aacute;lculo de reajuste, pedido de pago y pago de la planilla. En cada uno de estos pasos del
+            proceso el sistema permite imprimir los documentos correspondientes mediante el &iacute;cono de “imprimir” (impresora) que aparece junto a acciones y en pagos.
+        </p><br>
+    </div>
+
+    <a id="administradores"></a><br>
+
+    <h2 class="izquierda">Administradores</h2><br>
+
+    <div class="centrado">
+
+        <p>
+            Permite registrar el administrador del contrato y muestra el historial de los administradores anteriores.
+            Al agregar un administrador se le asigna al anterior la fecha final, correspondiente a la fecha inicial del nuevo.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen61.png')}"/><br><br><br>
+
+    </div>
+
+    <a id="fiscalizadores"></a><br>
+
+    <h2 class="izquierda">Fiscalizadores</h2><br>
+
+    <div class="centrado">
+
+        <p>
+            Funciona de manera exactamente igual a los administradores.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen62.png')}"/><br><br><br>
+
+    </div>
+
+    <a id="recepcion"></a><br>
+
+    <h2 class="izquierda">Pedido por Recepci&oacute;n</h2><br>
+
+    <div class="centrado">
+
+        <p>
+            Muestra una pantalla donde &uacute;nicamente se ingresan las fechas de pedido de recepci&oacute;n del contratista y del fiscalizador.
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen63.png')}"/><br><br><br>
+
+    </div>
+
+    <a id="RegIndices"></a><br>
 
         <div class="regresa">
             <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
@@ -649,7 +1043,8 @@
             <h2 class="izquierda">Registro de &Iacutendices</h2><br>
 
             <p>Para el registro de &iacutendices el sistema presenta la siguiente pantalla:</p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen38.png')}"/><br><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen64.png')}"/><br><br>
 
             <p>Salvo que el INEC a&#241ada nuevos materiales o equipos a sus &iacutendices,
             esta lista deber&iacutea mantenerse sin modificaciones.
@@ -659,7 +1054,7 @@
             bot&oacuten &#34Ver&#34 bajo la columna de acciones. Para editar haga un
             clic en Editar, con lo cual aparece una ventana similar a:
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen39.png')}"/>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen65.png')}"/><br><br>
         </div>
 
         <a id="RegDatos"></a><br>
@@ -682,23 +1077,24 @@
             <p>Para crear un nuevo periodo de &Icutendices ingrese a la opci&ocuten
             &#34Periodos de &Iacutendices&#34 del men&uacute Ejecuci&oacuten.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen40.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen66.png')}"/><br><br>
 
             <p>Para crear un nuevo periodo haga clic en &#34Nuevo Periodos INEC&#34.</p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen41.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen67.png')}"/><br><br>
 
             <p>Para cargar el archivo de datos de los &iacutendices haga clic en &#34Subir
             &Iacutendices&#34 y luego ubique el archivo correspondiente, luego de
             haber seleccionado el periodo en el cual se va a cargar los datos.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen42.png')}"/><br><br>
 
             <p>En esta pantalla seleccione el periodo para el cual se van a subir los valores,
             ubique el archivo y presione el bot&oacuten Aceptar. <br> Una vez cargados
             los datos se pueden visualizar a modo de tabla anual mediante la opci&oacuten
             de men&uacute Valores de &Iacutendices.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen43.png')}"/>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen68.png')}"/><br><br>
+
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen69.png')}"/><br><br>
         </div>
 
         <a id="ProDes"></a><br>
@@ -717,13 +1113,13 @@
             a estad&iacutesticas, se hace clic en el men&uacute Estad&iacutesticas
             Econ&oacutemicas y luego en &#34Indice de precios de la construcci&oacuten&#34.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen44.png')}"/><br><br>
+            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen70.png')}"/><br><br>
 
             <p>Finalmente se descarga el archivo en excel requerido, haciendo un clic en
             el enlace correspondiente. En nuestro caso:  &#34&Iacutendice de Precios
             de la Construcci&oacuten Nivel Nacional Febrero 2013 Formato Excel&#34.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen45.png')}"/>
+            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen71.png')}"/>
         </div>
 
         <a id="RegCron"></a><br>
@@ -734,38 +1130,38 @@
 
 
         <!-- Registro del cronograma de ejecucion -->
-        <div class="centrado">
-            <h2 class="izquierda">Registro del cronograma de ejecuci&oacuten</h2><br>
+        %{--<div class="centrado">--}%
+            %{--<h2 class="izquierda">Registro del cronograma de ejecuci&oacuten</h2><br>--}%
 
-            <p>Para el registro y modificaci&oacuten del cronograma de ejecuci&oacuten
-            de la obra seleccione la opci&oacuten &#34Cronograma de ejecuci&oacuten&#34
-            del men&uacute de Ejecuci&oacuten.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen46.png')}"/><br><br>
+            %{--<p>Para el registro y modificaci&oacuten del cronograma de ejecuci&oacuten--}%
+            %{--de la obra seleccione la opci&oacuten &#34Cronograma de ejecuci&oacuten&#34--}%
+            %{--del men&uacute de Ejecuci&oacuten.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen46.png')}"/><br><br>--}%
 
-            <p>Esta pantalla cuenta con varios comandos en su parte superior:</p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen47.png')}"/><br><br>
+            %{--<p>Esta pantalla cuenta con varios comandos en su parte superior:</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen47.png')}"/><br><br>--}%
 
-            <p>Ampliaci&oacuten permite ampliar el plazo de ejecuci&oacuten de la obra.
-            Suspensi&oacuten sirve para crear periodos de suspensi&oacuten de la
-            obra y el bot&oacuten &#34Cambiar fecha de fin&#34 sirve para modificar
-            la fecha de finalizaci&oacuten del &uacuteltimo periodo de
-            ejecuci&oacuten de la obra. <br> Para registrar un ampliaci&oacuten
-            se debe hacer clic en Ampliaci&oacuten:
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen48.png')}"/><br><br>
+            %{--<p>Ampliaci&oacuten permite ampliar el plazo de ejecuci&oacuten de la obra.--}%
+            %{--Suspensi&oacuten sirve para crear periodos de suspensi&oacuten de la--}%
+            %{--obra y el bot&oacuten &#34Cambiar fecha de fin&#34 sirve para modificar--}%
+            %{--la fecha de finalizaci&oacuten del &uacuteltimo periodo de--}%
+            %{--ejecuci&oacuten de la obra. <br> Para registrar un ampliaci&oacuten--}%
+            %{--se debe hacer clic en Ampliaci&oacuten:--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen48.png')}"/><br><br>--}%
 
-            <p>De forma similar para el registro de periodos de suspensi&oacuten
-            de la obra se debe hacer clic en  &#34Suspensi&oacuten&#34, con lo cual
-            aparece la pantalla:
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen49.png')}"/><br><br>
+            %{--<p>De forma similar para el registro de periodos de suspensi&oacuten--}%
+            %{--de la obra se debe hacer clic en  &#34Suspensi&oacuten&#34, con lo cual--}%
+            %{--aparece la pantalla:--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen49.png')}"/><br><br>--}%
 
-            <p>La &uacuteltima opci&oacuten sirve para poner fecha de finalizaci&oacuten
-            a cada periodo del cronograma.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen50.png')}"/>
-        </div>
+            %{--<p>La &uacuteltima opci&oacuten sirve para poner fecha de finalizaci&oacuten--}%
+            %{--a cada periodo del cronograma.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen50.png')}"/>--}%
+        %{--</div>--}%
 
         <a id="EstPlan"></a><br>
 
@@ -782,13 +1178,13 @@
             planilla. En la columna Acciones se encuentran las diferentes tareas
             que se pueden realizar, estas son:  <em>Ver, Editar, Eliminar.</em>
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen51.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen51.png')}"/><br><br>
 
             <p>Al hacer clic en el bot&oacuten <em>Crear Estado Planilla</em> nos
             permitir&aacute crear un nuevo estado. <br> Una ves ingresados
             los datos, se procede a dar clic en <em>Guardar.</em>
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen52.png')}"/>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen52.png')}"/>
         </div>
 
         <a id="TipoPlan"></a>
@@ -801,13 +1197,13 @@
             <h2 class="izquierda">Tipo de Planilla</h2><br>
 
             <p>Presenta una lista de los diferente tipos de planillas.</p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen53.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen53.png')}"/><br><br>
 
             <p>Click en el bot&oacuten Crear Tipo Planilla, nos permitir&aacute
             crear un nuevo tipo de planilla. <br> Terminado de ingresar los
             datos se procede a dar click en Guardar.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen54.png')}"/>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen54.png')}"/>
         </div>
 
         <a id="TipoDesc"></a><br>
@@ -825,156 +1221,156 @@
             aplicados a las planillas. <br> La columna Acciones nos presenta
             un conjunto de acciones las mismas que son: <em>Ver, Editar y Eliminar.</em>
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen55.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen55.png')}"/><br><br>
 
             <p>Clic en el bot&oacuten <em>Crear Tipo de Descuento</em> para crear un
             nuevo tipo de descuento. Para guardar los cambios clic en el
             bot&oacuten <em>Guardar.</em>
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen56.png')}"/>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen56.png')}"/>
         </div>
 
-        <a id="DescPlan"></a>
-        <br><br>
+        %{--<a id="DescPlan"></a>--}%
+        %{--<br><br>--}%
 
 
-        <!-- Descuentos por planilla -->
-        <div class="centrado"><br><br><br>
+        %{--<!-- Descuentos por planilla -->--}%
+        %{--<div class="centrado"><br><br><br>--}%
 
-            <h2 class="izquierda">Descuentos por planilla</h2><br>
+            %{--<h2 class="izquierda">Descuentos por planilla</h2><br>--}%
 
-            <p>Nos presenta una lista con los descuentos por los diferentes tipo de planillas.
-                <br>La columna <em>Acciones</em> posee un conjunto de tareas las
-            cuales son: <em>Ver, Editar, Eliminar.</em>
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen57.png')}"/><br><br>
+            %{--<p>Nos presenta una lista con los descuentos por los diferentes tipo de planillas.--}%
+                %{--<br>La columna <em>Acciones</em> posee un conjunto de tareas las--}%
+            %{--cuales son: <em>Ver, Editar, Eliminar.</em>--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen57.png')}"/><br><br>--}%
 
-            <p>Clic en el bot&oacuten <em>Crear Descuento Tipo Planilla,</em> permite
-            crear un nuevo tipo de descuento.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen58.png')}"/>
-        </div>
+            %{--<p>Clic en el bot&oacuten <em>Crear Descuento Tipo Planilla,</em> permite--}%
+            %{--crear un nuevo tipo de descuento.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen58.png')}"/>--}%
+        %{--</div>--}%
 
-        <a id="RegPlan"></a><br>
+        %{--<a id="RegPlan"></a><br>--}%
 
-        <div class="regresa">
-            <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
-        </div><br><br><br>
-
-
-        <!--Registro de Planillas -->
-        <div class="centrado">
-            <h2 class="izquierda">Registro de Planillas</h2>
-
-            <p>Para el registro de planillas se debe ingresar desde el contrato.
-            Al presionar el bot&oacuten Planillas de la barra de herramientas inferior
-            de la pantalla de contrato se muestra la lista de planilla registras para
-            este contrato u obra.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen59.png')}"/><br><br>
-
-            <p>Para crear una nueva planilla se hace clic en Nueva Planilla:</p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen60.png')}"/><br><br>
-
-            <p>Si se desea actualizar los datos de la planilla se debe hacer uso del
-            bot&oacuten modificar planilla.
-            </p>
-
-            <p>Para el registro de los vol&uacutemenes de obra planillados en el caso
-            de las planilla de avance de obra, se debe crear una planilla del tipo
-            Avance de obra y hacer un clic en &#34Detalle&#34, bot&oacuten que
-            aparece bajo la columna de acciones.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen61.png')}"/><br><br>
-
-            <p>El registro del detalle de la planilla se hace en base a la plantilla
-            de los vol&uacutemenes de obra contratados.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen62.png')}"/><br><br>
-
-            <p>Para ingresar valores simplemente seleccione la casilla correspondiente
-            y escriba los valores de cantidad de obra planillados.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen63.png')}"/><br><br>
-
-            <p>Con estos datos ingresados el sistema calcula los valores monetarios
-            de la planilla, luego los valores de Bo y Po a aplicarse para el
-            reajuste de precios conforme los &iacutendices de materiales,
-            equipos y mano de obra.
-            </p>
-
-            <p>La fecha que se toma como referencia para el c&aacutelculo de los
-            diferentes periodos de reajuste corresponde a la del pago de la
-            planilla del anticipo, la misma que se registra utilizando el
-            m&oacutedulo financiero (a&uacuten en construcci&oacuten).
-            </p>
-
-            <p>Si la fecha de inicio de obra es menor al 15 del mes, se puede aceptar
-            una planilla en ese mes, caso contrario, se aceptar&aacute una planilla
-            acumulados los d&Icuteas que restan del mes actual.
-            </p>
-
-            <p>Como ejemplo de c&aacutelculo se presenta a continuaci&oacuten un
-            detalle de los valores de las variaciones de los &iacutendices
-            calculados seg&uacuten los coeficientes de la f&oacutermula
-            polin&oacutemica.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen64.png')}"/><br><br>
-
-            <p>Una vez definidos los valores de Bo, se calculan los de Po y se
-            obtienen los reajustes correspondientes a aplicarse al valor
-            planillado (Fr -1). El detalle se imprime como la planilla a pagarse.
-            </p>
-
-            <p>El sistema hace un c&aacutelculo en funci&oacuten de los valores de
-            ellos &iacutendices ingresados o cargados desde el INEC. Bo y cada
-            uno de los coeficientes de la f&oacutermula se calculan para determinar
-            el valor de Fr y Fr – 1, con los cuales se calcula el valor del reajuste a pagar.
-            </p>
-
-            <p>El resumen de los c&aacutelculos realizados por el sistema se muestra
-            en la pantalla a continuaci&oacuten, donde se puede observar tanto el
-            c&aacutelculo de Bo, Po, los valores de Fr y Pr y los datos de la planilla
-            presentada para la cual se ha calculado.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen65.png')}"/><br><br>
-
-            <p>Para el caso de planillas de avance de obra se a&#241ade la secci&oacuten de Multas:
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen66.png')}"/><br><br>
-
-            <p>Para el caso de la planilla de liquidaci&oacuten se hace el c&aacutelculo de las
-            multas aplicadas, los descuentos correspondientes al anticipo y un calculo
-            actualizado del reajuste al cual se restan los reajustes aplicados para
-            obtener la diferencia de reajuste a aplicar, algo similar a lo mostrado
-            en el cuadro antes se&#241alado.
-            </p>
-
-            <p>El sistema imprime tanto los valores Bo como los Po. Adem&aacutes lleva un
-            registro hist&oacuterico de los valores de los &iacutendices aplicados
-            en cada reajuste y los de Fr, valores planillados, pagados y reajustes pagados.
-            </p>
-        </div>
-
-        <a id="IngNueva"></a>
-        <br><br>
+        %{--<div class="regresa">--}%
+            %{--<p><a href="#volverIndice">Volver al &Iacutendice</a></p>--}%
+        %{--</div><br><br><br>--}%
 
 
-        <!--Ingreso de nuevas planillas-->
-        <div class="centrado"><br><br><br>
+        %{--<!--Registro de Planillas -->--}%
+        %{--<div class="centrado">--}%
+            %{--<h2 class="izquierda">Registro de Planillas</h2>--}%
 
-            <h2 class="izquierda">Ingreso de nuevas planillas</h2><br>
+            %{--<p>Para el registro de planillas se debe ingresar desde el contrato.--}%
+            %{--Al presionar el bot&oacuten Planillas de la barra de herramientas inferior--}%
+            %{--de la pantalla de contrato se muestra la lista de planilla registras para--}%
+            %{--este contrato u obra.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen59.png')}"/><br><br>--}%
 
-            <p>Al hacer clic en el bot&oacuten Nueva Planilla de la pantalla de lista de
-            planillas a la cual se accede desde el contrato, se abrir&aacute la pantalla
-            para la creaci&oacuten de una nueva planilla.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen67.png')}"/><br><br>
+            %{--<p>Para crear una nueva planilla se hace clic en Nueva Planilla:</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen60.png')}"/><br><br>--}%
 
-            <p>Una vez se ha ingresado los datos procedemos a dar clic en Guardar para
-            terminar el proceso de creaci&oacuten de una planilla.
-            </p>
-        </div>
+            %{--<p>Si se desea actualizar los datos de la planilla se debe hacer uso del--}%
+            %{--bot&oacuten modificar planilla.--}%
+            %{--</p>--}%
+
+            %{--<p>Para el registro de los vol&uacutemenes de obra planillados en el caso--}%
+            %{--de las planilla de avance de obra, se debe crear una planilla del tipo--}%
+            %{--Avance de obra y hacer un clic en &#34Detalle&#34, bot&oacuten que--}%
+            %{--aparece bajo la columna de acciones.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen61.png')}"/><br><br>--}%
+
+            %{--<p>El registro del detalle de la planilla se hace en base a la plantilla--}%
+            %{--de los vol&uacutemenes de obra contratados.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen62.png')}"/><br><br>--}%
+
+            %{--<p>Para ingresar valores simplemente seleccione la casilla correspondiente--}%
+            %{--y escriba los valores de cantidad de obra planillados.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen63.png')}"/><br><br>--}%
+
+            %{--<p>Con estos datos ingresados el sistema calcula los valores monetarios--}%
+            %{--de la planilla, luego los valores de Bo y Po a aplicarse para el--}%
+            %{--reajuste de precios conforme los &iacutendices de materiales,--}%
+            %{--equipos y mano de obra.--}%
+            %{--</p>--}%
+
+            %{--<p>La fecha que se toma como referencia para el c&aacutelculo de los--}%
+            %{--diferentes periodos de reajuste corresponde a la del pago de la--}%
+            %{--planilla del anticipo, la misma que se registra utilizando el--}%
+            %{--m&oacutedulo financiero (a&uacuten en construcci&oacuten).--}%
+            %{--</p>--}%
+
+            %{--<p>Si la fecha de inicio de obra es menor al 15 del mes, se puede aceptar--}%
+            %{--una planilla en ese mes, caso contrario, se aceptar&aacute una planilla--}%
+            %{--acumulados los d&Icuteas que restan del mes actual.--}%
+            %{--</p>--}%
+
+            %{--<p>Como ejemplo de c&aacutelculo se presenta a continuaci&oacuten un--}%
+            %{--detalle de los valores de las variaciones de los &iacutendices--}%
+            %{--calculados seg&uacuten los coeficientes de la f&oacutermula--}%
+            %{--polin&oacutemica.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen64.png')}"/><br><br>--}%
+
+            %{--<p>Una vez definidos los valores de Bo, se calculan los de Po y se--}%
+            %{--obtienen los reajustes correspondientes a aplicarse al valor--}%
+            %{--planillado (Fr -1). El detalle se imprime como la planilla a pagarse.--}%
+            %{--</p>--}%
+
+            %{--<p>El sistema hace un c&aacutelculo en funci&oacuten de los valores de--}%
+            %{--ellos &iacutendices ingresados o cargados desde el INEC. Bo y cada--}%
+            %{--uno de los coeficientes de la f&oacutermula se calculan para determinar--}%
+            %{--el valor de Fr y Fr – 1, con los cuales se calcula el valor del reajuste a pagar.--}%
+            %{--</p>--}%
+
+            %{--<p>El resumen de los c&aacutelculos realizados por el sistema se muestra--}%
+            %{--en la pantalla a continuaci&oacuten, donde se puede observar tanto el--}%
+            %{--c&aacutelculo de Bo, Po, los valores de Fr y Pr y los datos de la planilla--}%
+            %{--presentada para la cual se ha calculado.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen65.png')}"/><br><br>--}%
+
+            %{--<p>Para el caso de planillas de avance de obra se a&#241ade la secci&oacuten de Multas:--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen66.png')}"/><br><br>--}%
+
+            %{--<p>Para el caso de la planilla de liquidaci&oacuten se hace el c&aacutelculo de las--}%
+            %{--multas aplicadas, los descuentos correspondientes al anticipo y un calculo--}%
+            %{--actualizado del reajuste al cual se restan los reajustes aplicados para--}%
+            %{--obtener la diferencia de reajuste a aplicar, algo similar a lo mostrado--}%
+            %{--en el cuadro antes se&#241alado.--}%
+            %{--</p>--}%
+
+            %{--<p>El sistema imprime tanto los valores Bo como los Po. Adem&aacutes lleva un--}%
+            %{--registro hist&oacuterico de los valores de los &iacutendices aplicados--}%
+            %{--en cada reajuste y los de Fr, valores planillados, pagados y reajustes pagados.--}%
+            %{--</p>--}%
+        %{--</div>--}%
+
+        %{--<a id="IngNueva"></a>--}%
+        %{--<br><br>--}%
+
+
+        %{--<!--Ingreso de nuevas planillas-->--}%
+        %{--<div class="centrado"><br><br><br>--}%
+
+            %{--<h2 class="izquierda">Ingreso de nuevas planillas</h2><br>--}%
+
+            %{--<p>Al hacer clic en el bot&oacuten Nueva Planilla de la pantalla de lista de--}%
+            %{--planillas a la cual se accede desde el contrato, se abrir&aacute la pantalla--}%
+            %{--para la creaci&oacuten de una nueva planilla.--}%
+            %{--</p><br>--}%
+            %{--<img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen67.png')}"/><br><br>--}%
+
+            %{--<p>Una vez se ha ingresado los datos procedemos a dar clic en Guardar para--}%
+            %{--terminar el proceso de creaci&oacuten de una planilla.--}%
+            %{--</p>--}%
+        %{--</div>--}%
 
         <a id="ModFin"></a><br>
 
@@ -989,50 +1385,33 @@
         <div class="centrado">
             <h2 class=izquierda>Garant&iacuteas</h2><br>
 
-            <p>Para ingresar en la parte correspondiente a garant&iacuteas, clic en
-            Ejecuci&oacuten en el men&uacute superior, se desplegar&aacute una lista
-            de opciones elegimos, Contratos y Ejecuci&oacuten.
+            <p>La pantalla de garant&iacute;as permite registrar y modificar las garant&iacute;as de un contrato.
+            Se accede desde la pantalla de visualizaci&oacute;n del contrato (menú Ejecuci&oacute;n/Contratos)
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen68.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen72.png')}"/><br><br>
 
-            <p>Se abrir&aacute la pantalla de registro de contratos; elegimos un contrato
-            al dar clic en Lista del men&uacute superior.
+            <p>
+                El área Contrato muestra los datos contractuales.<br>
+                El área Garantía permite crear o modificar garantías.<br>
+                El área Garantías muestra la lista de las garantías ya ingresadas.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen69.png')}"/><br><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen70.png')}"/><br><br>
 
-            <p>Una vez se ha elegido un contrato de la lista de contratos, aparecer&aacute
-            un men&uacute inferior abajo de los datos del contrato. <br> Procedemos
-            a dar clic en Garant&iacuteas del men&uacute inferior.
+            <p>Se puede ingresar los datos de una nueva garant&iacute;a y presionar el bot&oacute;n “Agregar” (bot&oacute;n verde con un signo +) para crear una nueva garant&iacute;a.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen71.png')}"/><br><br>
+            <p>
+                Al hacer doble clic en una garant&iacute;a de la lista se selecciona y se muestran los datos en el formulario de edici&oacute;n
 
-            <p>Se desplegar&aacute la pantalla de Garant&iacuteas.</p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen72.png')}"/><br><br>
-
-            <p>Para poder agregar una garant&iacutea al contrato es necesario llenar
-            los campos en blanco y que son obligatorios de la secci&oacuten
-            intermedia Garant&iacutea en la pantalla.
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen73.png')}"/><br><br>
+            <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen73.png')}"/><br><br>
 
-            <p>A continuaci&oacuten clic en el <img class="boton" src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen74.png')}"/>
-                bot&oacuten verde    para agregar la garant&iacutea al contrato.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen75.png')}"/><br><br>
 
-            <p>Si se desea editar, cambiar de estado o borrar la garant&iacutea ingresada,
-            procedemos a dar doble clic en la garant&iacutea que se necesite editar.
+            <p>
+                El botón “Agregar” es remplazado por 4 botones, de izquierda a derecha, “Nuevo”, “Guardar”, “Renovar”, “Eliminar”.<br>
+                El botón “Nuevo” limpia el formulario y lo regresa al estado de creación de nueva garantía.<br>
+                El botón “Guardar” graba cualquier cambio realizado en la información de la garantía existente seleccionada.<br>
+                El botón “Renovar” guarda los datos de la garantía pero creando una nueva que sería la renovación de la original.<br>
+                El botón “Eliminar” permite eliminar permanentemente una garantía que no haya sido renovada nunca.<br>
             </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen76.png')}"/><br><br>
-
-            <p>El primer bot&oacuten nos permitir&aacute ingresar una nueva garant&iacutea,
-            el segundo bot&oacuten guardar&aacute los cambios hechos a la actual
-            garant&iacutea que est&aacute siendo editada, el tercer bot&oacuten
-            permite agregar una nueva garant&iacutea pero con el estado de la misma
-            cambiada a Renovado, el cuarto bot&oacuten elimina la garant&iacutea seleccionada.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen77.png')}"/>
         </div>
 
         <a id="RegPagos"></a><br>
@@ -1046,47 +1425,50 @@
         <div class="centrado">
             <h2 class="izquierda">Registro de pagos de las Planillas</h2><br>
 
-            <p>Para ingresar en la pantalla de registro de planillas, clic en Ejecuci&oacuten
-            del men&uacute superior una vez desplegadas las opciones elegimos Contratos y
-            Ejecuci&oacuten.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen78.png')}"/><br><br>
+        <p>
+            Para generar los pagos de las planillas se debe abrir la lista de planillas y se hace clic en el bot&oacute;n azul en la columna Pagos.
+        </p><br>
 
-            <p>En la pantalla de Registro de Contratos elegimos un contrato de la lista de contratos.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen79.png')}"/><br><br>
+        <p>
+            Este bot&oacute;n cambia dependiendo del usuario y del estado de la planilla.
+        </p><br>
 
-            <p>Una vez escogido un contrato de la lista aparecer&aacute el men&uacute
-            inferior; en el cual debemos elegir Planillas.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen80.png')}"/><br><br>
+        <p>
+            El usuario Fiscalizador puede “Enviar reajuste” (planilla de anticipo) o “Enviar planilla”. Una vez realizado este paso,
+            el usuario Administrador de contrato puede “Pedir pago”. En este momento, el usuario Financiero puede “Informar pago”.
+            En el caso de la planilla de anticipo, el usuario Administrador de contrato puede “Iniciar obra”. Una vez completados todos
+            los pasos el bot&oacute;n se convierte en un visto verde para informar que el proceso ha sido completado. Cada paso requiere que se
+            ingrese la informaci&oacute;n para genera un tr&aacute;mite que a su vez genera una alerta al usuario correspondiente.
+        </p><br>
 
-            <p>Se desplegar&aacute una lista de planillas con sus diferentes datos y
-            un conjunto de acciones en la &uacuteltima columna.
-            </p>
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen74.png')}"/><br><br>
 
-            <p>El primer <img class="boton" src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen81.png')}"/> bot&oacuten
-            desplegar&aacute los detalles de la planilla en una nueva p&aacutegina.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen82.png')}"/><br><br>
-
-            <p>El segundo <img class="boton" src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen83.png')}"/> bot&oacuten
-            presentar&aacute un resumen de la planilla; con los c&aacutelculos
-            de B0, P0, Fr y Pr.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen84.png')}"/><br><br>
-
-            <p>El &uacuteltimo <img class="boton" src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen85.png')}"/> bot&oacuten
-            corresponde al pago de la planilla, si se encuentra en color verde
-            quiere decir que la planilla debe pagarse, si esta de color blanco
-            la planilla ya ha sido pagada y solo podremos ver un resumen del pago.<br><br>
-                Planilla a pagarse.
-            </p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen86.png')}"/><br><br>
-
-            <p>Planilla Pagada.</p><br>
-            <img src="./${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen87.png')}"/><br><br>
         </div>
+
+
+
+    <a id="pagoPlanilla"></a><br>
+
+    <div class="centrado">
+
+        <h2 class="izquierda">Informe de pago de la planilla</h2><br>
+
+        <p>
+            Una vez que se ha procedido al pago, se debe informar del mismo con lo cual se cierra el proceso de pago de planillas
+            y queda a disposición de todos los usuarios del sistema el proceso como completado junto con los documentos de pago y
+            derivados, como en el caso del pago del anticipo que genera a su vez un oficio de inicio de obra que debe hacerlo el
+            adminsitrador del contrato antes de que el proceso se de por completado. El sistema posee ayudas para generar cada documento
+            o simplemente los genera dependiendo de su complejidad y tipo.
+            El informe de pago de la planilla se registra haciendo clic en “Informar pago” .
+        </p><br>
+
+        <img src="${resource(dir: 'images/imagenesManuales/imagenesEjecucion', file: 'imagen75.png')}"/><br><br>
+
+        <p>
+            En caso de que se deba devolver el tr&aacute;mite se lo puede hacer mediante el bot&oacute;n “Devolver” con lo cual el estado de tr&aacute;mite regresa a “Pedir pago”.
+        </p><br>
+
+    </div>
 
         <div class="regresa">
             <p><a href="#volverIndice">Volver al &Iacutendice</a></p>
