@@ -478,9 +478,9 @@
                         break;
                     case "departamento":
 
-                        if (current == 2) {
-                            parentId = 21;
-                        }
+//                        if (current == 2) {
+//                            parentId = 21;
+//                        }
 
                         menuItems.editar = createUpdate({
                             action    : "update",
