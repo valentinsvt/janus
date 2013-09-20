@@ -135,12 +135,14 @@
                     <div class="imagen">
                         <img src="${resource(dir: 'images', file: 'manuales1.png')}" width="100%" height="100%"/>
                     </div>
-                    <div class="texto"><b>Manuales:</b>
+                    <div class="texto"><b>Manuales del sistema:</b>
                         <g:link controller="manual" action="manualIngreso" target="_blank">Ingreso al Sistema</g:link>,
-                        <g:link controller="manual" action="manualEjecucion" target="_blank">Módulo de APU</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Módulo de obras</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Módulo de Contratación</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Módulo de Fiscalización</g:link>
+                        <g:link controller="manual" action="manualEjecucion" target="_blank">Análisis de Precios Unitarios</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Obras</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Contratación</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Fiscalización</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Financiero</g:link>,
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Oferentes</g:link>
                 </div>
             </div>
             %{--</g:link>--}%
