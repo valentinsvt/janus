@@ -29,7 +29,7 @@
                     ${subgrupoItemsInstance.codigo.toString().padLeft(3, '0')}
                 </g:if>
                 <g:else>
-                    <g:textField name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance.codigo.toString().padLeft(3, '0')}"/>
+                    <g:textField name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance.id ? subgrupoItemsInstance.codigo.toString().padLeft(3, '0') : ''}"/>
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>

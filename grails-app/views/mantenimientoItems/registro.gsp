@@ -108,31 +108,35 @@
             var current = "1";
 
             var icons = {
-                edit                  : "${resource(dir: 'images/tree', file: 'edit.png')}",
-                delete                : "${resource(dir: 'images/tree', file: 'delete.gif')}",
-                info                  : "${resource(dir: 'images/tree', file: 'info.png')}",
+                edit                     : "${resource(dir: 'images/tree', file: 'edit.png')}",
+                delete                   : "${resource(dir: 'images/tree', file: 'delete.gif')}",
+                info                     : "${resource(dir: 'images/tree', file: 'info.png')}",
 
                 %{--grupo_material : "${resource(dir: 'images/tree', file: 'grupo_material.png')}",--}%
-                grupo_material        : "${resource(dir: 'images/tree', file: 'carpeta2.png')}",
+                grupo_material           : "${resource(dir: 'images/tree', file: 'carpeta2.png')}",
                 %{--grupo_manoObra : "${resource(dir: 'images/tree', file: 'grupo_manoObra.png')}",--}%
-                grupo_manoObra        : "${resource(dir: 'images/tree', file: 'carpeta5.png')}",
+                grupo_manoObra           : "${resource(dir: 'images/tree', file: 'carpeta5.png')}",
                 %{--grupo_equipo   : "${resource(dir: 'images/tree', file: 'grupo_equipo.png')}",--}%
-                grupo_equipo          : "${resource(dir: 'images/tree', file: 'carpeta6.png')}",
+                grupo_equipo             : "${resource(dir: 'images/tree', file: 'carpeta6.png')}",
+                grupo_consultoria        : "${resource(dir: 'images/tree', file: 'carpeta5.png')}",
 
                 %{--subgrupo_material : "${resource(dir: 'images/tree', file: 'subgrupo_material.png')}",--}%
-                subgrupo_material     : "${resource(dir: 'images/tree', file: 'carpeta.png')}",
-                subgrupo_manoObra     : "${resource(dir: 'images/tree', file: 'subgrupo_manoObra.png')}",
+                subgrupo_material        : "${resource(dir: 'images/tree', file: 'carpeta.png')}",
+                subgrupo_manoObra        : "${resource(dir: 'images/tree', file: 'subgrupo_manoObra.png')}",
                 %{--subgrupo_equipo   : "${resource(dir: 'images/tree', file: 'subgrupo_equipo.png')}",--}%
-                subgrupo_equipo       : "${resource(dir: 'images/tree', file: 'item_equipo.png')}",
+                subgrupo_equipo          : "${resource(dir: 'images/tree', file: 'item_equipo.png')}",
+                subgrupo_consultoria     : "${resource(dir: 'images/tree', file: 'subgrupo_manoObra.png')}",
 
                 %{--departamento_material : "${resource(dir: 'images/tree', file: 'departamento_material.png')}",--}%
-                departamento_material : "${resource(dir: 'images/tree', file: 'carpeta3.png')}",
-                departamento_manoObra : "${resource(dir: 'images/tree', file: 'departamento_manoObra.png')}",
-                departamento_equipo   : "${resource(dir: 'images/tree', file: 'departamento_equipo.png')}",
+                departamento_material    : "${resource(dir: 'images/tree', file: 'carpeta3.png')}",
+                departamento_manoObra    : "${resource(dir: 'images/tree', file: 'departamento_manoObra.png')}",
+                departamento_equipo      : "${resource(dir: 'images/tree', file: 'departamento_equipo.png')}",
+                departamento_consultoria : "${resource(dir: 'images/tree', file: 'departamento_manoObra.png')}",
 
-                item_material : "${resource(dir: 'images/tree', file: 'item_material.png')}",
-                item_manoObra : "${resource(dir: 'images/tree', file: 'item_manoObra.png')}",
-                item_equipo   : "${resource(dir: 'images/tree', file: 'item_material.png')}"
+                item_material    : "${resource(dir: 'images/tree', file: 'item_material.png')}",
+                item_manoObra    : "${resource(dir: 'images/tree', file: 'item_manoObra.png')}",
+                item_equipo      : "${resource(dir: 'images/tree', file: 'item_material.png')}",
+                item_consultoria : "${resource(dir: 'images/tree', file: 'item_manoObra.png')}"
             };
 
             function log(msg, error) {
@@ -170,7 +174,11 @@
 
                 switch (nodeNivel) {
                     case "grupo":
+//                        console.log(nodeTipo);
                         url = "${createLink(action:'showGr_ajax')}";
+                        if (nodeTipo == "manoObra") {
+                            url = "${createLink(action:'showSg_ajax')}";
+                        }
                         break;
                     case "subgrupo":
                         url = "${createLink(action:'showSg_ajax')}";
@@ -356,12 +364,12 @@
                         break;
                 }
 
-//                ////console.log(nodeNivel);
+//                console.log(nodeNivel);
 
                 switch (nodeNivel) {
                     case "grupo":
                         if (current == 2) {
-                            nodeId = 21;
+//                            nodeId = 21;
                             menuItems.crearHijo = createUpdate({
                                 action    : "create",
                                 label     : "Nuevo subgrupo",
@@ -653,21 +661,35 @@
 
             function initTree(tipo) {
                 var id, rel, label;
+                var li = "";
                 switch (tipo) {
                     case "1":
                         id = "materiales_1";
                         rel = "grupo_material";
                         label = "Materiales";
+                        li = "<li id='" + id + "' class='root hasChildren jstree-closed' rel='" + rel + "' ><a href='#' class='label_arbol'>" + label + "</a></li>";
                         break;
                     case "2":
-                        id = "manoObra_2";
-                        rel = "grupo_manoObra";
-                        label = "Mano de obra";
+//                        id = "manoObra_2";
+//                        rel = "grupo_manoObra";
+//                        label = "Mano de obra";
+//                        extra = "<li id='consultoria_2' class='root hasChildren jstree-closed' rel='grupo_consultoria' ><a href='#' class='label_arbol'>Consultoría</a>";
+                        $.ajax({
+                            type    : "POST",
+                            async   : false,
+                            url     : "${createLink(action:'loadMO')}",
+                            success : function (msg) {
+                                var p = msg.split("*");
+                                li = p[0];
+                                id = p[1];
+                            }
+                        });
                         break;
                     case "3":
                         id = "equipos_3";
                         rel = "grupo_equipo";
                         label = "Equipos";
+                        li = "<li id='" + id + "' class='root hasChildren jstree-closed' rel='" + rel + "' ><a href='#' class='label_arbol'>" + label + "</a></li>";
                         break;
                 }
                 $("#tree").bind("loaded.jstree",
@@ -680,7 +702,7 @@
                             },
                             "plugins"     : ["themes", "html_data", "json_data", "ui", "types", "contextmenu", "search", "crrm"/*, "dnd"/*, "wholerow"*/],
                             "html_data"   : {
-                                "data" : "<ul type='root'><li id='" + id + "' class='root hasChildren jstree-closed' rel='" + rel + "' ><a href='#' class='label_arbol'>" + label + "</a></ul>",
+                                "data" : "<ul type='root'>" + li + "</ul>",
                                 "ajax" : {
                                     "url"   : "${createLink(action: 'loadTreePart')}",
                                     "data"  : function (n) {

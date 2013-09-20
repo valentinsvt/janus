@@ -28,21 +28,21 @@
             <div class="controls">
                 <g:set var="cd1" value="${subgrupo.codigo.toString().padLeft(3, '0')}"/>
                 <g:if test="${departamentoItemInstance.id}">
-                    <g:if test="${subgrupo.id != 21}">
+                    <g:if test="${!mos.contains(subgrupo.id)}">
                         ${cd1}.</g:if>${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}
                 </g:if>
                 <g:else>
-                    <g:if test="${subgrupo.id != 21}">
+                    <g:if test="${!mos.contains(subgrupo.id)}">
                         <div class="input-prepend">
                             <span class="add-on">${cd1}</span>
-                            <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}"/>
+                            <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.id ? departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0') : ''}"/>
                             <span class="mandatory">*</span>
 
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
                     </g:if>
                     <g:else>
-                        <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.codigo.toString().padLeft(3, '0')}"/>
+                        <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.id ? departamentoItemInstance.codigo.toString().padLeft(3, '0') : ''}"/>
                         <span class="mandatory">*</span>
 
                         <p class="help-block ui-helper-hidden"></p>

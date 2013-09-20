@@ -18,7 +18,6 @@ class MantenimientoItemsController extends Shield {
         def ignore = params.ignore ? params.ignore.toBoolean() : false
 
 //        println "all:" + all + "     ignore:" + ignore
-
 //        println id
 //        println tipo
 
@@ -26,15 +25,23 @@ class MantenimientoItemsController extends Shield {
 
         switch (tipo) {
             case "grupo_manoObra":
-                hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])[0].id
-                hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(hijos), [sort: 'codigo'])
-//                println "grupo" + hijos.descripcion
+            case "grupo_consultoria":
+//                hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])[0].id
+                hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(id), [sort: 'codigo'])
                 break;
+//            case "grupo_consultoria":
+//                hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])
+//                if (hijos.size() == 2) {
+//                    hijos = hijos[1].id
+//                }
+//                hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(hijos), [sort: 'codigo'])
+//                break;
             case "grupo_material":
             case "grupo_equipo":
                 hijos = SubgrupoItems.findAllByGrupo(Grupo.get(id), [sort: 'codigo'])
                 break;
             case "subgrupo_manoObra":
+            case "subgrupo_consultoria":
                 hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'codigo'])
 //                println hijos.nombre
                 break;
@@ -43,15 +50,15 @@ class MantenimientoItemsController extends Shield {
                 hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(id), [sort: 'codigo'])
                 break;
             case "departamento_manoObra":
+            case "departamento_consultoria":
             case "departamento_material":
             case "departamento_equipo":
                 hijos = Item.findAllByDepartamento(DepartamentoItem.get(id), [sort: 'codigo'])
                 break;
             case "item_manoObra":
+            case "item_consultoria":
             case "item_material":
             case "item_equipo":
-
-
                 def tipoLista = Item.get(id).tipoLista
 //                println(tipoLista)
 //
@@ -281,6 +288,26 @@ class MantenimientoItemsController extends Shield {
         return tree
     }
 
+    def loadMO() {
+        def hijos = SubgrupoItems.findAllByGrupo(Grupo.get(2), [sort: 'codigo'])
+        def html = ""
+        def open = ""
+        hijos.eachWithIndex { h, i ->
+            def hijosH = DepartamentoItem.findAllBySubgrupo(h, [sort: 'codigo'])
+            def cl = ""
+            if (hijosH.size() > 0) {
+                cl = "hasChildren jstree-closed"
+                open = "manoObra_${h.id}"
+            }
+            html += "<li id='manoObra_${h.id}' class='root ${cl}' rel='grupo_manoObra'>"
+            html += "<a href='#' class='label_arbol'>"
+            html += h.descripcion
+            html += "</a>"
+            html += "</li>"
+        }
+        render html + "*" + open
+    }
+
     def loadTreePart() {
         render(makeBasicTree(params))
     }
@@ -435,7 +462,9 @@ class MantenimientoItemsController extends Shield {
     def loadLugarPorTipo() {
         params.tipo = params.tipo.toString().toUpperCase()
         def lugares = Lugar.findAllByTipo(params.tipo, [sort: 'descripcion'])
-        def sel = g.select(name: "lugar", from: lugares, optionKey: "id", optionValue: { it.descripcion + ' (' + it.tipo + ')' })
+        def sel = g.select(name: "lugar", from: lugares, optionKey: "id", optionValue: {
+            it.descripcion + ' (' + it.tipo + ')'
+        })
         render sel
     }
 
@@ -532,15 +561,14 @@ class MantenimientoItemsController extends Shield {
     }
 
     def formDp_ajax() {
+        def mos = SubgrupoItems.findAllByGrupo(Grupo.get(2), [sort: 'codigo']).id
+
         def subgrupo = SubgrupoItems.get(params.subgrupo)
         def departamentoItemInstance = new DepartamentoItem()
         if (params.id) {
             departamentoItemInstance = DepartamentoItem.get(params.id)
         }
-
-//        println ">>>>>>>" + departamentoItemInstance.subgrupo.grupoId
-
-        return [subgrupo: subgrupo, departamentoItemInstance: departamentoItemInstance]
+        return [subgrupo: subgrupo, departamentoItemInstance: departamentoItemInstance, mos: mos]
     }
 
     def checkCdDp_ajax() {
@@ -734,7 +762,6 @@ class MantenimientoItemsController extends Shield {
         return [item: item, rubro: rubro, precios: precios, fpItems: fpItems, delete: params.delete]
 
     }
-
 
 
     def saveIt_ajax() {
@@ -1018,7 +1045,9 @@ class MantenimientoItemsController extends Shield {
 
         def anio = new Date().format("yyyy").toInteger()
         def anioRef = anio - 1
-        def precioActual = precios.findAll { it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anio}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anio}") }
+        def precioActual = precios.findAll {
+            it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anio}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anio}")
+        }
         precioActual = precioActual.sort { it.fecha }
         if (precioActual) {
             def newest = precioActual[precioActual.size() - 1]
@@ -1026,7 +1055,9 @@ class MantenimientoItemsController extends Shield {
             precioRef = newest.precioUnitario
         } else {
 //            println "no hay precio de este anio (${anio})"
-            def precioAnterior = precios.findAll { it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anioRef}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anioRef}") }
+            def precioAnterior = precios.findAll {
+                it.fecha >= new Date().parse("dd-MM-yyyy", "01-01-${anioRef}") && it.fecha <= new Date().parse("dd-MM-yyyy", "31-12-${anioRef}")
+            }
             if (precioAnterior) {
                 def newest = precioAnterior[precioAnterior.size() - 1]
 //                println "Precio ${anioRef} al " + newest.fecha + " " + newest.precioUnitario + ": se calcula"
@@ -1090,7 +1121,6 @@ class MantenimientoItemsController extends Shield {
         return [item: item, lugarNombre: lugarNombre, lugarId: lugarId, precios: r.precios, lgar: lugarId == "all", fecha: operador == "=" ? fecha.format("dd-MM-yyyy") : null,
                 params: params, precioRef: r.precioRef, anioRef: r.anioRef]
     }
-
 
 
     def formLg_ajax() {
