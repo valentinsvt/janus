@@ -40,6 +40,11 @@ class ManualController {
     }
 
 
+    def manualRegistroObra () {
+
+
+    }
+
 }
 
 

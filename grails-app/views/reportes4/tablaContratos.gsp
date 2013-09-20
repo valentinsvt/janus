@@ -167,6 +167,83 @@
 
 <script type="text/javascript">
 
+
+
+
+    function validarNumDec(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39 || ev.keyCode == 190 || ev.keyCode == 110);
+    }
+
+
+    var val
+    var dec
+
+    $("#criterio_tra").keydown(function (ev) {
+
+        val = $(this).val();
+
+        dec = 6
+
+        if($("#buscador_tra").val() == 'mnto'){
+
+        if (ev.keyCode == 110 || ev.keyCode == 190) {
+
+            if (!dec) {
+                return false;
+            } else {
+                if (val.length == 0) {
+                    $(this).val("0");
+                }
+                if (val.indexOf(".") > -1) {
+                    return false;
+                }
+            }
+
+        } else {
+
+
+            if (val.indexOf(".") > -1) {
+                if (dec) {
+                    var parts = val.split(".");
+                    var l = parts[1].length;
+                    if (l >= dec) {
+                        return false;
+                    }
+                }
+            } else {
+                return validarNumDec(ev);
+            }
+
+
+        }
+
+
+        return validarNumDec(ev);
+    }
+ return true
+    }).keyup(function () {
+
+
+
+            });
+
+
+
     var checkeados = []
 
     $("#buscar").click(function(){
@@ -180,6 +257,8 @@
                 $("#detalle").html(msg)
             }
         });
+
+
     });
 
 
@@ -214,8 +293,19 @@
        }
         else {
 
+
+           if($(this).val() == 'mnto'){
+
+               $("#criterio_tra").val("")
+
+           }
+
+
            $("#fecha_tra").attr("disabled", true).val("")
            $("#criterio_tra").removeAttr("readonly")
+
+
+
 
        }
 

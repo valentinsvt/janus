@@ -137,12 +137,12 @@
                     </div>
                     <div class="texto"><b>Manuales del sistema:</b>
                         <g:link controller="manual" action="manualIngreso" target="_blank">Ingreso al Sistema</g:link>,
-                        <g:link controller="manual" action="manualEjecucion" target="_blank">Análisis de Precios Unitarios</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Obras</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Contratación</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Fiscalización</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Financiero</g:link>,
-                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Oferentes</g:link>
+                        <g:link controller="manual" action="manualIngresoObras" target="_blank">Análisis de Precios Unitarios</g:link>,
+                        <g:link controller="manual" action="manualRegistroObra" target="_blank">Obras</g:link>,
+                        <g:link controller="manual" action="manualComprasPublicas" target="_blank">Contratación</g:link>,
+                        <g:link controller="manual" action="manualEjecucion" target="_blank">Fiscalización</g:link>,
+                        <g:link controller="manual" action="manualFinanciero" target="_blank">Financiero</g:link>,
+                        <g:link controller="manual" action="manualOferentes" target="_blank">Oferentes</g:link>
                 </div>
             </div>
             %{--</g:link>--}%

@@ -448,7 +448,7 @@ class Reportes4Controller {
             case "ofsl":
             case "mmsl":
             case "frpl":
-            case "tipo":
+//            case "tipo":
                 buscador = "obra"+params.buscador
                 filtroBuscador =" and ${buscador} ILIKE ('%${params.criterio}%') "
                 break;
@@ -464,6 +464,9 @@ class Reportes4Controller {
             case "insp":
             case "rvsr":
                 filtroBuscador = " and (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
+                break;
+            case "tipo":
+                filtroBuscador = " and t.tpobdscr ILIKE ('%${params.criterio}%') "
                 break;
 
         }
@@ -608,7 +611,7 @@ class Reportes4Controller {
             case "ofsl":
             case "mmsl":
             case "frpl":
-            case "tipo":
+//            case "tipo":
                 buscador = "obra"+params.buscador
                 filtroBuscador =" and ${buscador} ILIKE ('%${params.criterio}%') "
                 break;
@@ -624,6 +627,9 @@ class Reportes4Controller {
             case "insp":
             case "rvsr":
                 filtroBuscador = " and (s.prsnnmbr ILIKE ('%${params.criterio}%') or s.prsnapll ILIKE ('%${params.criterio}%')) "
+                break;
+            case "tipo":
+                filtroBuscador = " and tpobdscr ILIKE ('%${params.criterio}%') "
                 break;
 
         }
@@ -1230,9 +1236,9 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         document.add(headers);
 
-        PdfPTable tablaRegistradas = new PdfPTable(8);
+        PdfPTable tablaRegistradas = new PdfPTable(7);
         tablaRegistradas.setWidthPercentage(100);
-        tablaRegistradas.setWidths(arregloEnteros([14, 35, 8, 8, 30, 10, 10,10]))
+        tablaRegistradas.setWidths(arregloEnteros([14, 35, 18, 8, 25, 10, 15]))
 
         addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
@@ -1241,7 +1247,7 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
+//        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
 
         res.eachWithIndex {i,j->
 
@@ -1261,7 +1267,7 @@ class Reportes4Controller {
             }
 
             addCellTabla(tablaRegistradas, new Paragraph(i.elaborado, times8normal), prmsCellLeft)
-            addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellLeft)
+//            addCellTabla(tablaRegistradas, new Paragraph(i.estado, times8normal), prmsCellLeft)
 
 
 
@@ -3287,9 +3293,12 @@ class Reportes4Controller {
             case "memo":
 //            case "fcsb":
             case "ofsl":
-            case "mnto":
+//            case "mnto":
                 buscador = "cntr"+params.buscador
                 filtroBuscador =" where ${buscador} ILIKE ('%${params.criterio}%') "
+                break;
+            case "mnto":
+                filtroBuscador = " where c.cntrmnto= '${params.criterio}' "
                 break;
             case "cncr":
                 filtroBuscador = " where r.cncrcdgo ILIKE ('%${params.criterio}%') "
@@ -3506,12 +3515,15 @@ class Reportes4Controller {
             case "memo":
 //            case "fcsb":
             case "ofsl":
-            case "mnto":
+//            case "mnto":
                 buscador = "cntr"+params.buscador
                 filtroBuscador =" where ${buscador} ILIKE ('%${params.criterio}%') "
                 break;
             case "cncr":
                 filtroBuscador = " where r.cncrcdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "mnto":
+                filtroBuscador = " where c.cntrmnto= '${params.criterio}' "
                 break;
             case "parr":
                 filtroBuscador = " where p.parrnmbr ILIKE ('%${params.criterio}%') "
