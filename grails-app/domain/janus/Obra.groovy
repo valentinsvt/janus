@@ -110,6 +110,7 @@ class Obra implements Serializable {
 
     String observacionesInicioObra
 
+    Date fechaImpresionInicioObra
 
     static mapping = {
         table 'obra'
@@ -130,7 +131,7 @@ class Obra implements Serializable {
             claseObra column: 'csob__id'
             departamento column: 'dpto__id'
             departamentoDestino column: 'dptodstn'
-            direccionDestino  column: 'dircdstn'
+            direccionDestino column: 'dircdstn'
             lugar column: 'lgar__id'
             codigo column: 'obracdgo'
             nombre column: 'obranmbr'
@@ -226,6 +227,7 @@ class Obra implements Serializable {
 
             observacionesInicioObra column: 'obraobin'
 
+            fechaImpresionInicioObra column: 'obrafcii'
         }
     }
     static constraints = {
@@ -334,8 +336,9 @@ class Obra implements Serializable {
         firmaInicioObra(blank: true, nullable: true, attributes: [title: 'Firma para el memo de inicio de obra'])
         anexos(blank: true, nullable: true, maxSize: 255, attributes: [title: 'Anexos y planos ingresados a la biblioteca'])
 
-        observacionesInicioObra(blank: true,nullable: true,size: 1..55)
+        observacionesInicioObra(blank: true, nullable: true, size: 1..55)
 
+        fechaImpresionInicioObra(blank: true, nullable: true)
     }
 
     String toString() {

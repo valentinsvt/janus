@@ -3808,7 +3808,8 @@ class ReportesPlanillasController {
             headers.setAlignment(Element.ALIGN_LEFT);
 
             headers.add(new Paragraph("Oficio N°: " + obra.memoInicioObra, times12bold))
-            headers.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy"), times12bold));
+//            headers.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy"), times12bold));
+            headers.add(new Paragraph("Quito, " + fechaConFormato(obra.fechaImpresionInicioObra, "dd MMMM yyyy"), times12bold));
             headers.add(new Paragraph(" ", times10bold));
             headers.add(new Paragraph(" ", times10bold));
             headers.add(new Paragraph(oferta?.proveedor?.titulo, times12bold));

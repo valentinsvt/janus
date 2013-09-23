@@ -887,6 +887,7 @@ class PlanillaController extends janus.seguridad.Shield {
         obra.fechaInicio = fecha
         obra.memoInicioObra = memo
         obra.firmaInicioObra = personaFirma
+        obra.fechaImpresionInicioObra = new Date()
         if (!obra.save(flush: true)) {
             flash.message = "No se pudo iniciar la obra"
             println "Error al guardar la fecha de la obra desde el boton azul: " + obra.errors
@@ -1105,14 +1106,14 @@ class PlanillaController extends janus.seguridad.Shield {
 //        liquidado = false
 
         def fechaMax
-        if(contrato.fechaSubscripcion)
-            fechaMax= contrato.fechaSubscripcion.plus(366)
+        if (contrato.fechaSubscripcion)
+            fechaMax = contrato.fechaSubscripcion.plus(366)
         else
-            fechaMax=new Date()
-        println "fecha max "+fechaMax
+            fechaMax = new Date()
+        println "fecha max " + fechaMax
 
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo,
-                anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado,fechaMax: fechaMax]
+                anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax]
     }
 
 
