@@ -7881,7 +7881,7 @@ class ReportesController {
 
         addCellTabla(tablaTotalCont, new Paragraph(" ", times8bold), prmsCellHead4)
 
-        addCellTabla(tablaTotalCont, new Paragraph("% Costos Indirectos: ", times8bold), prmsCellRight4)
+        addCellTabla(tablaTotalCont, new Paragraph(obra?.totales + "% Costos Indirectos: ", times8bold), prmsCellRight4)
         addCellTabla(tablaTotalCont, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotalCont, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotalCont, new Paragraph(" ", times8bold), prmsCellHead)

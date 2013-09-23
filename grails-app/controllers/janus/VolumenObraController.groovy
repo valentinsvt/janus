@@ -33,7 +33,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra:obra, volumenes:volumenes, campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado,grupos:grupoFiltrado]
+        [obra:obra, volumenes:volumenes, campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado,grupos:grupoFiltrado, persona: persona]
     }
 
     def cargarSubpres(){

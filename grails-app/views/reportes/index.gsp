@@ -131,7 +131,7 @@
                         class="link" dialog="dlgVentas">
                     Transferencias y/o cheques pagados:
                 </g:link>
-                Listado de pagos realizados a partir de la solicitud depagos relativos a las obras.
+                Listado de pagos realizados a partir de la solicitud de pagos relativos a las obras.
             </li>
             <li text="avob" class="item" texto="avob">
                 <g:link controller="reportes5" action="avance" file="Estado_Cambios_Patrimonio.pdf"
