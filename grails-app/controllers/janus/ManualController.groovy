@@ -45,6 +45,11 @@ class ManualController {
 
     }
 
+    def manualReportes () {
+
+
+    }
+
 }
 
 

@@ -142,7 +142,8 @@
                         <g:link controller="manual" action="manualComprasPublicas" target="_blank">Contratación</g:link>,
                         <g:link controller="manual" action="manualEjecucion" target="_blank">Fiscalización</g:link>,
                         <g:link controller="manual" action="manualFinanciero" target="_blank">Financiero</g:link>,
-                        <g:link controller="manual" action="manualOferentes" target="_blank">Oferentes</g:link>
+                        <g:link controller="manual" action="manualOferentes" target="_blank">Oferentes</g:link>,
+                        <g:link controller="manual" action="manualReportes" target="_blank">Reportes</g:link>
                 </div>
             </div>
             %{--</g:link>--}%
