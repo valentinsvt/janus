@@ -405,7 +405,7 @@
 
                             <li>
                                 <a href="#" id="btnPref">
-                                    <i class="icon-user"></i> Delegado prefecto
+                                    <i class="icon-user"></i> Delegado del Prefecto
                                 </a>
                             </li>
 
