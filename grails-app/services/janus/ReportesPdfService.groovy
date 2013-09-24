@@ -62,7 +62,8 @@ class ReportesPdfService {
 //        }
 
         if (params.footer) {
-            HeaderFooter footer = new HeaderFooter(new Phrase(params.footer, fontFooter), false); // true aqui pone numero de pagina
+            HeaderFooter footer = new HeaderFooter(new Phrase(params.footer, fontFooter), false);
+            // true aqui pone numero de pagina
             footer.setBorder(Rectangle.NO_BORDER);
             footer.setBorder(Rectangle.TOP);
             footer.setAlignment(Element.ALIGN_CENTER);
@@ -93,7 +94,7 @@ class ReportesPdfService {
 
         PdfPTable tablaHeader = new PdfPTable(2);
         tablaHeader.setWidthPercentage(100);
-        tablaHeader.setWidths([20.toInteger(), 80.toInteger()])
+//        tablaHeader.setWidths([20, 80])
 
 
         if (params.usuario) {

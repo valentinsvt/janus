@@ -387,16 +387,16 @@
                     <div class="botones">
 
                         <ul class="nav">
-                            <li>
+                            %{--<li>--}%
                             %{--<g:link controller="garantia" action="garantiasContrato" id="">--}%
                             %{--<i class="icon-pencil"></i>Garantías--}%
                             %{--</g:link>--}%
                             %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
-                                <g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">
-                                    <i class="icon-pencil"></i> Garantías
-                                </g:link>
+                                %{--<g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">--}%
+                                    %{--<i class="icon-pencil"></i> Garantías--}%
+                                %{--</g:link>--}%
 
-                            </li>
+                            %{--</li>--}%
                             %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
                             %{--</a></li>--}%
                             <li>
