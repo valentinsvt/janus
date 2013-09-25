@@ -238,7 +238,7 @@
                         <elm:datepicker name="fechaFinalizacion" class="span2 required" onClose="updateDias"/>
                     </div>
 
-                    <div class="span1">
+                    <div class="span1" style="width: 8px;">
                         Días
                     </div>
 
@@ -246,7 +246,15 @@
                         <g:textField name="diasGarantizados" class="span1 required" readonly="true"/>
                     </div>
 
-                    <div class="span3">
+                    %{--<div class="span1 estado hide" style="width: 12px;">--}%
+                    %{--Estado--}%
+                    %{--</div>--}%
+
+                    %{--<div class="span2 estado sel hide">--}%
+                    %{--<g:select name="estado" from="${estadosGarantia}" optionKey="codigo" class="input-medium" optionValue="descripcion"/>--}%
+                    %{--</div>--}%
+
+                    <div class="span2">
                         <div class="btn-toolbar" id="btnsAdd">
                             <div class="btn-group">
                                 <a href="#" id="btnAdd" class="btn btn-success" rel="tooltip" title="Agregar">
@@ -294,6 +302,7 @@
                         <th>Emisión</th>
                         <th>Vencimiento</th>
                         <th>Monto</th>
+                        <th style="width: 55px;">Acciones</th>
                         %{--<th>Fecha</th>--}%
                     </tr>
                 </thead>
@@ -375,6 +384,21 @@
                     }
                 });
             }
+
+            function estado() {
+//                console.log("ASDF");
+//                $(".estado").show();
+                %{--$.ajax({--}%
+                %{--type    : "POST",--}%
+                %{--url     : "${createLink(action:'estados')}",--}%
+                %{--data    : {--}%
+                %{--},--}%
+                %{--success : function (msg) {--}%
+                %{--$(".estado.sel").html(msg);--}%
+                %{--}--}%
+                %{--});--}%
+            }
+
             function botones(tipo) {
                 var $add = $("#btnsAdd"), $edit = $("#btnsEdit");
                 switch (tipo.toLowerCase()) {
@@ -388,15 +412,19 @@
                         $add.show();
                         break;
                 }
+                estado();
             }
 
             function clicks($tr) {
+//                var editables = [1, 2];  //vigente - pedido de cobro
                 $tr.dblclick(function (ev) {
-                    padreCod = $tr.data("codigo");
-                    $(".selected").removeClass("selected");
-                    $(this).addClass("selected");
-                    loadForm($(this).data());
-                    botones("edit");
+                    if ($(this).hasClass("1") || $(this).hasClass("2")) {
+                        padreCod = $tr.data("codigo");
+                        $(".selected").removeClass("selected");
+                        $(this).addClass("selected");
+                        loadForm($(this).data());
+                        botones("edit");
+                    }
                 });
             }
 
@@ -405,16 +433,84 @@
                 var $tr = $("#" + data.id);
                 $.each(data, function (k, v) {
                     if (k == "monto") {
-                        $tr.find(".monto").text(data.monto + " " + data.monedaTxt)
+                        $tr.find(".monto").text(number_format(data.monto, 2, ".", ",") + " " + data.monedaTxt)
                     } else {
                         $tr.find("." + k).text(v);
                     }
                 });
+                botonesRow(data.estadoCdgo, data.id, $tr.find(".acciones"));
+                $tr.attr("title", data.observaciones);
+            }
+
+            function cambiarEstado(id, estado, title) {
+
+                $.box({
+                    imageClass : false,
+                    input      : "<textarea style='width:260px; height: 70px;'></textarea>",
+                    type       : "prompt",
+                    title      : title,
+                    text       : "Observaciones",
+                    iconClose  : false,
+                    dialog     : {
+                        buttons : {
+                            "Guardar"  : function (r) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action:'cambiarEstado')}",
+                                    data    : {
+                                        id     : id,
+                                        estado : estado,
+                                        obs    : r
+                                    },
+                                    success : function (msg) {
+                                        if (msg != "NO") {
+                                            updateRow($.parseJSON(msg));
+                                        }
+                                    }
+                                });
+                            },
+                            "Cancelar" : function () {
+                            }
+                        }
+                    }
+                });
+            }
+
+            function botonesRow(estado, id, $td) {
+                $td.empty();
+                switch (estado) {
+                    case "1": // Vigente
+                        var $devolver = $("<a href='#' class='btn btn-mini' title='Devolver'><i class='icon icon-reply'></i></a>");
+                        var $pedirCobro = $("<a href='#' class='btn btn-mini' title='Pedir Cobro'><i class='icon icon-money'></i></a>");
+
+                        $devolver.click(function () {
+                            cambiarEstado(id, 3, "Devolver garantía");
+                        });
+                        $pedirCobro.click(function () {
+                            cambiarEstado(id, 2, "Pedir cobro de garantía");
+                        });
+
+                        $td.append($devolver).append($pedirCobro);
+                        break;
+                    case "2": // Pedido de cobro
+                        var $efectivizar = $("<a href='#' class='btn btn-mini' title='Efectivizar'><i class='icon icon-archive'></i></a>");
+                        $efectivizar.click(function () {
+                            cambiarEstado(id, 4, "Efectivizar garantía");
+                        });
+                        $td.append($efectivizar);
+                        break;
+                    case  "3" : // Devuelta
+                        break;
+                    case "4" : //Efectivizada
+                        break;
+                    case "5" : //Renovada
+                        break;
+                }
             }
 
             function addRow(data, position) {
 //                ////console.log("add row");
-                var $tr = $("<tr></tr>").data(data).attr("id", data.id).addClass(data.estadoTxt);
+                var $tr = $("<tr></tr>").data(data).attr("id", data.id).addClass(data.estadoTxt).addClass(data.estadoCdgo);
                 //Tipo  #   aseguradora     docu        estado      emision     vencimiento     monto
                 var $tipo = $("<td class='tipoGarantiaTxt'></td>").text(data.tipoGarantiaTxt);
                 var $num = $("<td class='codigo'></td>").text(data.codigo);
@@ -423,9 +519,14 @@
                 var $estado = $("<td class='estadoTxt'></td>").text(data.estadoTxt);
                 var $emision = $("<td class='fechaInicio'></td>").text(data.fechaInicio);
                 var $vencimiento = $("<td class='fechaFinalizacion'></td>").text(data.fechaFinalizacion);
-                var $monto = $("<td class='monto'></td>").text(data.monto + " " + data.monedaTxt);
+                var $monto = $("<td class='monto'></td>").text(number_format(data.monto, 2, ".", ",") + " " + data.monedaTxt);
 
-                $tr.append($tipo).append($num).append($aseguradora).append($doc).append($estado).append($emision).append($vencimiento).append($monto);
+                var $acc = $("<td class='acciones'></td>");
+                botonesRow(data.estadoCdgo, data.id, $acc);
+
+                $tr.append($tipo).append($num).append($aseguradora).append($doc).append($estado).append($emision).append($vencimiento).append($monto).append($acc);
+
+                $tr.attr("title", data.observaciones);
                 clicks($tr);
                 switch (position.toLowerCase()) {
                     case "first":
@@ -491,6 +592,7 @@
                             diasGarantizados         : $("#diasGarantizados").val(),
                             estado                   : 1,
                             estadoTxt                : 'Vigente',
+                            estadoCdgo               : 1,
                             tipo                     : "add"
                         };
                         var continua = true;

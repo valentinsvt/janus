@@ -10,6 +10,41 @@ class GarantiaController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def cambiarEstado() {
+        def garantia = Garantia.get(params.id)
+        def estado = EstadoGarantia.findByCodigo(params.estado)
+        garantia.estado = estado
+        garantia.observaciones = params.obs
+        if (!garantia.save(flush: true)) {
+            render "NO"
+        } else {
+            def data = [
+                    id: garantia.id,
+                    contrato: garantia.contrato.id,
+                    tipoGarantiaTxt: garantia.tipoGarantia.descripcion,
+                    tipoGarantia: garantia.tipoGarantiaId,
+                    codigo: garantia.codigo.trim(),
+                    aseguradoraTxt: garantia.aseguradora.nombre,
+                    aseguradora: garantia.aseguradoraId,
+                    tipoDocumentoGarantiaTxt: garantia.tipoDocumentoGarantia.descripcion,
+                    tipoDocumentoGarantia: garantia.tipoDocumentoGarantiaId,
+                    monto: garantia.monto,
+                    monedaTxt: garantia.moneda.codigo,
+                    moneda: garantia.monedaId,
+                    fechaInicio: formatDate(date: garantia.fechaInicio, format: "dd-MM-yyyy"),
+                    fechaFinalizacion: formatDate(date: garantia.fechaFinalizacion, format: "dd-MM-yyyy"),
+                    diasGarantizados: garantia.diasGarantizados,
+                    estadoTxt: garantia.estado.descripcion,
+                    estadoCdgo: garantia.estado.codigo,
+                    estado: garantia.estadoId,
+                    padre: garantia.padre ? garantia.padre.codigo.trim() : "",
+                    observaciones: garantia.observaciones
+            ]
+            def json = new JsonBuilder(data)
+            render json
+        }
+    }
+
     def garantiasContrato() {
 //        if (!params.id) {
 //            params.id = "5"
@@ -47,13 +82,21 @@ class GarantiaController extends janus.seguridad.Shield {
                     fechaFinalizacion: formatDate(date: garantia.fechaFinalizacion, format: "dd-MM-yyyy"),
                     diasGarantizados: garantia.diasGarantizados,
                     estadoTxt: garantia.estado.descripcion,
+                    estadoCdgo: garantia.estado.codigo,
                     estado: garantia.estadoId,
-                    padre: garantia.padre?garantia.padre.codigo.trim():""
+                    padre: garantia.padre ? garantia.padre.codigo.trim() : "",
+                    observaciones: garantia.observaciones
             ])
         }
         def json = new JsonBuilder(garantias)
 
-        return [contrato: contrato, campos: campos, garantias: json]
+        def estadosGarantia = EstadoGarantia.withCriteria {
+            ne("codigo", "1")
+            ne("codigo", "6")
+            ne("codigo", "4")
+        }
+
+        return [contrato: contrato, campos: campos, garantias: json, estadosGarantia: estadosGarantia]
     }
 
     def deleteGarantia() {
@@ -68,7 +111,7 @@ class GarantiaController extends janus.seguridad.Shield {
 
     def addGarantiaContrato() {
 //        println params
-        def garantia, datos = true, padre=null
+        def garantia, datos = true, padre = null
 
         switch (params.tipo.toString().trim().toLowerCase()) {
             case "add":
@@ -80,7 +123,7 @@ class GarantiaController extends janus.seguridad.Shield {
             case "renew":
                 garantia = new Garantia()
                 padre = Garantia.get(params.id)
-                padre.estado = EstadoGarantia.get(6) //renovada
+                padre.estado = EstadoGarantia.findByCodigo("6") //renovada
                 if (!padre.save(flush: true)) {
                     println "error save padre" + padre.errors
                     println renderErrors(bean: padre)
@@ -96,7 +139,7 @@ class GarantiaController extends janus.seguridad.Shield {
         garantia.moneda = Moneda.get(params.moneda)
         garantia.tipoGarantia = TipoGarantia.get(params.tipoGarantia)
         garantia.tipoDocumentoGarantia = TipoDocumentoGarantia.get(params.tipoDocumentoGarantia)
-        garantia.estado = EstadoGarantia.get(1)  //Vigente
+        garantia.estado = EstadoGarantia.findByCodigo("1")  //Vigente
         garantia.codigo = params.codigo.trim()
         garantia.numeroRenovaciones = 0
         garantia.estadoGarantia = "N" //registrado o no
@@ -124,7 +167,8 @@ class GarantiaController extends janus.seguridad.Shield {
         def extras = ""
 //        def extras = " and tipoItem = 2"
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Aseguradora, "Aseguradora", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+            def lista = buscadorService.buscar(Aseguradora, "Aseguradora", "excluyente", params, true, extras)
+            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
         } else {

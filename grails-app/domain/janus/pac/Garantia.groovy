@@ -20,6 +20,7 @@ class Garantia {
     int diasGarantizados
     String cancelada
     String pedido
+    String observaciones
 
 
     static mapping = {
@@ -48,11 +49,10 @@ class Garantia {
             diasGarantizados column: 'grntdias'
             cancelada column: 'grntcncl'
             pedido column: 'grntpddo'
-
+            observaciones column: 'grntobsv'
         }
 
     }
-
 
 
     static constraints = {
@@ -74,6 +74,6 @@ class Garantia {
         cancelada(size: 1..1, blank: true, nullable: true, attributes: [title: 'código'])
         pedido(size: 1..1, blank: true, nullable: true, attributes: [title: 'código'])
 
-
+        observaciones(maxSize: 511, blank: true, nullable: true, attributes: [title: 'observaciones'])
     }
 }
