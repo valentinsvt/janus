@@ -22,7 +22,7 @@ class AccionesController extends janus.seguridad.Shield  {
     }
 
     def ajaxAcciones = {
-        //println " ajaxAcciones---parametros: ${params}"
+//        println " ajaxAcciones---parametros: ${params}"
 
         def titulos = []
         def resultado = []
