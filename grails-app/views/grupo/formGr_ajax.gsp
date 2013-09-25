@@ -2,7 +2,8 @@
 
 <div id="create" class="span" role="main">
     <g:form class="form-horizontal" name="frmSave" action="saveGr_ajax">
-        <g:hiddenField name="id" value="${subgrupoItemsInstance?.id}"/>
+        %{--<g:hiddenField name="id" value="${subgrupoItemsInstance?.id}"/>--}%
+        <g:hiddenField name="id" value="${grupo?.id}"/>
 
         <div class="control-group">
             <div>
@@ -12,7 +13,7 @@
             </div>
 
             <div class="controls">
-                    <g:select name="direccion.id" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 540px"/>
+                    <g:select name="direccion.id" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 540px" value="${grupo?.direccion?.id}"/>
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>
@@ -29,10 +30,12 @@
 
             <div class="controls">
                 <g:if test="${grupo?.id}">
-                    ${grupo?.codigo?.toString()?.padLeft(3, '0')}
+                    %{--${grupo?.codigo?.toString()?.padLeft(3, '0')}--}%
+                    ${grupo?.codigo?.toString()}
                 </g:if>
                 <g:else>
-                    <g:textField name="codigo" class="allCaps required input-small" value="${grupo?.codigo?.toString()?.padLeft(3, '0')}" maxlength="3"/>
+                    %{--<g:textField name="codigo" class="allCaps required input-small" value="${grupo?.codigo?.toString()?.padLeft(3, '0')}" maxlength="3"/>--}%
+                    <g:textField name="codigo" class="allCaps required input-small" value="${grupo?.codigo?.toString()}" maxlength="3"/>
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>

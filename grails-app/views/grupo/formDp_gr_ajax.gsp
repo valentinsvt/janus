@@ -35,14 +35,16 @@
                     <g:if test="${subgrupo.id != 21}">
                         <div class="input-prepend">
                             <span class="add-on">${cd1}</span>
-                            <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}"/>
+                            %{--<g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance?.codigo?.toString()?.padLeft(3, '0')}" maxlength="3"/>--}%
+                            <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance?.codigo?.toString()}" maxlength="3"/>
                             <span class="mandatory">*</span>
 
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
                     </g:if>
                     <g:else>
-                        <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.codigo.toString().padLeft(3, '0')}"/>
+                        %{--<g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.codigo.toString().padLeft(3, '0')}" maxlength="3"/>--}%
+                        <g:textField name="codigo" class="allCaps required input-small" value="${departamentoItemInstance.codigo.toString()}" maxlength="3"/>
                         <span class="mandatory">*</span>
 
                         <p class="help-block ui-helper-hidden"></p>

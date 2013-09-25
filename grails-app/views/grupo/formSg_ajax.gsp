@@ -31,10 +31,12 @@
 
             <div class="controls">
                 <g:if test="${subgrupoItemsInstance.id}">
-                    ${subgrupoItemsInstance.codigo.toString().padLeft(3, '0')}
+                    %{--${subgrupoItemsInstance.codigo.toString().padLeft(3, '0')}--}%
+                    ${subgrupoItemsInstance.codigo.toString()}
                 </g:if>
                 <g:else>
-                    <g:textField name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance?.codigo?.toString()?.padLeft(3, '0')}"/>
+                    %{--<g:textField name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance?.codigo?.toString()?.padLeft(3, '0')}" maxlength="3"/>--}%
+                    <g:textField name="codigo" class="allCaps required input-small" value="${subgrupoItemsInstance?.codigo?.toString()}" maxlength="3"/>
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>
