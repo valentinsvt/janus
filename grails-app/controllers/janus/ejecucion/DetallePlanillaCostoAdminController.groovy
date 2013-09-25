@@ -120,7 +120,7 @@ class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Detalle Planilla Costo Admin " + detallePlanillaCostoAdminInstance.id
+            flash.message = "Se ha actualizado correctamente Detalle Planilla Costo Admin   " + detallePlanillaCostoAdminInstance.id
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Detalle Planilla Costo Admin " + detallePlanillaCostoAdminInstance.id
