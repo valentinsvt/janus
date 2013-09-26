@@ -37,11 +37,12 @@
         </g:if>
 
         <div style="width: 99.7%;height: 400px;overflow-y: auto;float: right;" id="detalle"></div>
-
+<g:if test="${perfil == 2}">
         <a href="#" class="btn  " id="imprimir">
             <i class="icon-print"></i>
             Imprimir
         </a>
+    </g:if>
         %{--<a href="#" class="btn  " id="excel">--}%
         %{--<i class="icon-table"></i>--}%
         %{--Excel--}%

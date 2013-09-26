@@ -53,10 +53,16 @@ class Reportes4Controller {
 
     def registradas () {
 
+
+     def perfil = session.perfil.id
+
+      return [perfil: perfil]
     }
 
     def presuestadasFinal () {
+        def perfil = session.perfil.id
 
+        return [perfil: perfil]
 
     }
 
@@ -1731,6 +1737,11 @@ class Reportes4Controller {
 
     def contratadas () {
 
+        def perfil = session.perfil.id
+
+        return [perfil: perfil]
+
+
 
 
     }
@@ -2456,8 +2467,9 @@ class Reportes4Controller {
 
     def aseguradoras () {
 
+        def perfil = session.perfil.id
 
-
+        return [perfil: perfil]
     }
 
 
@@ -2851,6 +2863,10 @@ class Reportes4Controller {
 
     def contratistas () {
 
+        def perfil = session.perfil.id
+
+        return [perfil: perfil]
+
 
 
     }
@@ -3235,6 +3251,10 @@ class Reportes4Controller {
 
     def contratos (){
 
+
+        def perfil = session.perfil.id
+
+        return [perfil: perfil]
 
 
     }
@@ -3810,6 +3830,11 @@ class Reportes4Controller {
 
     def garantias () {
 
+        def perfil = session.perfil.id
+
+        return [perfil: perfil]
+
+
     }
 
     private String cleanCriterio(String criterio) {
@@ -4376,6 +4401,12 @@ class Reportes4Controller {
 
 
     def presupuestadas () {
+
+
+        def perfil = session.perfil.id
+
+        return [perfil: perfil]
+
 
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"]]

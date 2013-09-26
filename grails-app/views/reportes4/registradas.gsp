@@ -34,6 +34,7 @@
 
 <div class="row-fluid">
     <div class="span12">
+<g:if test="${perfil == 2}">
 
         <a href="#" class="btn  " id="imprimir">
             <i class="icon-print"></i>
@@ -43,6 +44,7 @@
             <i class="icon-table"></i>
             Excel
         </a>
+        </g:if>
         <a href="#" class="btn" id="regresar">
             <i class="icon-arrow-left"></i>
             Regresar

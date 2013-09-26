@@ -116,7 +116,7 @@ class Reportes5Controller {
 
         def sql = sqlBase + filtroBuscador
 
-        println sql
+//        println sql
 
         def cn = dbConnectionService.getConnection()
 
@@ -125,7 +125,14 @@ class Reportes5Controller {
         return cn.rows(sql.toString())
     }
 
-    def avance() {}
+    def avance() {
+
+
+        def perfil = session.perfil.id
+
+        return [perfil: perfil]
+
+    }
 
     def tablaAvance() {
         params.old = params.criterio
