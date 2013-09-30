@@ -1585,8 +1585,26 @@ class ReportesPlanillasController {
             }
 
             def fechaPresentacion = planilla.fechaPresentacion
-            def retraso = fechaPresentacion - fechaMax + 1
+//            def retraso = fechaPresentacion - fechaMax
 
+            def retraso = diasLaborablesService.diasLaborablesEntre(fechaPresentacion, fechaMax)
+            if (retraso[0]) {
+                retraso = retraso[1]
+            } else {
+                retraso = null
+            }
+
+            if (!retraso) {
+//                redirect(action: "errores")
+                def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+                def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
+                def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
+                link += "&nbsp;&nbsp;&nbsp;"
+                link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
+                flash.message = res[1]
+                redirect(action: "errores", params: [link: link])
+                return
+            }
 
             if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
@@ -1765,7 +1783,7 @@ class ReportesPlanillasController {
                 if (params.completo) {
 
                     def bAnt = planillaAnterior.reajuste
-                    def bAct = planilla.reajuste
+                    def bAct = planilla.reajuste - bAnt
                     def bAcu = bAct + bAnt
 
                     def cpAnt = 0
