@@ -909,7 +909,6 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def anticipo = TipoPlanilla.findByCodigo('A')
         def avance = TipoPlanilla.findByCodigo('P')
-        def avanceLiq = TipoPlanilla.findByCodigo('Q')
         def liquidacion = TipoPlanilla.findByCodigo('L')
         def reajusteDefinitivo = TipoPlanilla.findByCodigo('R')
         def costoPorcentaje = TipoPlanilla.findByCodigo('C')
@@ -960,10 +959,6 @@ class PlanillaController extends janus.seguridad.Shield {
             if (plr) {
                 tiposPlanilla -= plr.tipoPlanilla
             }
-            def plq = Planilla.findByContratoAndTipoPlanilla(contrato, avanceLiq)
-            if (plq) {
-                tiposPlanilla -= plq.tipoPlanilla
-            }
             def plc = Planilla.findByContratoAndTipoPlanilla(contrato, costoPorcentaje)
             if (plc) {
                 def plcs = Planilla.findAllByContratoAndTipoPlanilla(contrato, costoPorcentaje)
@@ -986,7 +981,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 tiposPlanilla -= plp.tipoPlanilla
             }
             planillasAvance.each { pa ->
-                if (pa.fechaMemoPagoPlanilla == null) {
+                if (pa.fechaMemoPagoPlanilla != null) {
+                    //todo: estaba == null revisar q no se dañe nada con el cambio....
                     def costos = Planilla.findAllByPadreCosto(pa)
                     if (costos.size() == 0) {
                         costo = true
@@ -1133,6 +1129,10 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def save() {
+        def tipo = TipoPlanilla.get(params.tipoPlanilla.id.toLong())
+        if (tipo.codigo == "C") {
+            params.avanceFisico = 0
+        }
         if (!params.diasMultaDisposiciones) {
             params.diasMultaDisposiciones = 0
         }
