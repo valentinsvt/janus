@@ -3261,7 +3261,7 @@ class ReportesPlanillasController {
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
 
-        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+
 
         def baos = new ByteArrayOutputStream()
         def name = "memo_pedido_pago_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -3424,7 +3424,7 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaValores)
-
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla.valor + planilla.reajuste - planilla.descuentos - multas)
         def strParrafo3 = "Son ${numerosALetras}"
         Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
         parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
