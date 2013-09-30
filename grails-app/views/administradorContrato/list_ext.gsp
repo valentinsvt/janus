@@ -2,13 +2,13 @@
     <legend>Nuevo Administrador</legend>
 
     <div class="alert alert-error hide" id="divError">
-
     </div>
 
-    <g:select id="administrador" name="administrador.id" from="${janus.Persona.findAllByActivo(1, [sort: 'apellido'])}" optionKey="id" class="many-to-one required"
-              optionValue="${{ it.apellido + ' ' + it.nombre }}"/>
-    desde <elm:datepicker value="${new Date()}" name="desde" class="input-small"/>
-    <a href="#" class="btn btn-success" id="btnAddAdmin" style="margin-top: -9px;"><i class="icon-plus"></i> Agregar</a>
+    <g:select id="administrador" name="administrador.id" from="${janus.Persona.findAllByActivo(1, [sort: 'apellido'])}"
+              optionKey="id" class="many-to-one required" optionValue="${{ it.apellido + ' ' + it.nombre }}"
+              noSelection="['null': 'Seleccione ...']" style="width:300px; margin-right: 20px;"/>
+    Desde: <elm:datepicker value="${new Date()}" name="desde" class="input-small"/>
+    <a href="#" class="btn btn-success" id="btnAddAdmin" style="margin-top: -9px; margin-left: 20px;"><i class="icon-plus"></i> Agregar</a>
 </fieldset>
 
 <div id="tabla"></div>
