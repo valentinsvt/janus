@@ -11,9 +11,10 @@ import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
-import groovy.json.JsonBuilder;
-import janus.actas.Acta;
+import com.lowagie.text.pdf.PdfWriter
+import janus.actas.Acta
+import janus.actas.Avance
+import janus.actas.FraseClima;
 import janus.ejecucion.DetallePlanilla;
 import janus.ejecucion.DetallePlanillaCosto;
 import janus.ejecucion.FormulaPolinomicaContractual;
@@ -24,13 +25,13 @@ import janus.ejecucion.TipoPlanilla;
 import janus.ejecucion.ValorIndice;
 import janus.ejecucion.ValorReajuste;
 import janus.pac.CronogramaEjecucion;
-import janus.pac.PeriodoEjecucion;
-import janus.pac.Garantia;
+import janus.pac.PeriodoEjecucion
 
 import java.awt.Color;
 
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.*;
+import com.lowagie.text.*
+
+import java.text.SimpleDateFormat
 
 class ReportesPlanillasController {
 
@@ -452,6 +453,160 @@ class ReportesPlanillasController {
         response.getOutputStream().write(b)
     }
 
+    def reporteAvanceUI() {
+        def contrato = Contrato.get(params.id.toLong())
+        return [contrato: contrato]
+    }
+
+    def tablaAvance() {
+        def contrato = Contrato.get(params.id.toLong())
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
+        def frases = []
+        def band = 0
+        if (avanceContrato.size() == 0) {
+            band = 1
+        } else if (avanceContrato.size() == 1) {
+            avanceContrato = avanceContrato[0]
+            frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
+        } else {
+            println "Hay mas de un avance para el contrato ${contrato.id} para la fecha ${params.fecha}: ${avanceContrato.id}"
+            avanceContrato = avanceContrato[0]
+            frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
+        }
+        def titulos = [
+                "A.- Resultados de los ensayos de materiales",
+                "B.- Análisis de la cantidad y calidad de ls equipos y maquinaria en obra",
+                "C.- Cuadro de las condiciones climáticas del sitio de la obra",
+                "D.- Detalle de la correspondencia intercambiada con el contratista",
+                "E.- Análisis del personal técnico del contratista",
+                "F.- Actividades más importantes del periodo",
+                "G.- Seguridad industrial y personal",
+                "H.- Cumplimiento de especificaciones técnicas",
+                "I.- Decisiones importantes",
+                "J.- Detalle de reuniones",
+                "K.- Visitas programadas a la obra para el período",
+                "L.- Visitas efectuadas por la fiscalización en el período",
+                "Observaciones",
+                "Conclusiones y recomendaciones"
+        ]
+        def html = ""
+//        if (band == 1) {
+        def dateFormat = new SimpleDateFormat("EEEE dd-MM-yyyy", new Locale("es"))
+        titulos.eachWithIndex { t, i ->
+            html += "<h5>${t}</h5>"
+            if (i == 2) {
+                //lo del clima
+
+                html += "<table border='1' class='tabla'>"
+                html += "<thead>"
+                html += "<tr>"
+                html += "<th>Día</th>"
+                html += "<th>Mañana</th>"
+                html += "<th>Tarde</th>"
+                html += "</tr>"
+                html += "</thead>"
+//                if (frases.size() > 0) {
+//
+//                } else {
+                def planillasAvance = Planilla.withCriteria {
+                    eq("contrato", contrato)
+                    eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
+                    le("fechaFin", fecha)
+                    order("fechaFin", "desc")
+                }
+                def periodo = PeriodoPlanilla.findAllByPlanilla(planillasAvance[0], [sort: "fechaIncio", order: "desc"])
+                def dia = periodo[0].fechaIncio
+                def fin = periodo[0].fechaFin
+                while (dia <= fin) {
+                    def valM = "", valT = ""
+                    if (frases.size() > 0) {
+                        def fr = frases.find { it.fecha == dia }
+                        valM = fr ? fr.manana : ""
+                        valT = fr ? fr.tarde : ""
+                    }
+                    html += "<tr>"
+                    html += "<td>${dateFormat.format(dia).capitalize()}</td>"
+                    html += "<td>${g.textField(name: 'clima_m_' + dia.format('dd-MM-yyyy'), value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+                    html += "<td>${g.textField(name: 'clima_t_' + dia.format('dd-MM-yyyy'), value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+                    html += "</tr>"
+                    dia++
+                }
+//                }
+                html += "</table>"
+            } else {
+                def num = (i + 1).toString().padLeft(2, "0")
+                def val = band == 0 ? avanceContrato["frase" + num] : ""
+                html += g.textArea(name: "texto_${i + 1}", value: val, "class": "texto", "data-num": num, style: "width: 1000px; height:200px;")
+            }
+        }
+//        }
+        html += "<div style='margin-bottom:10px; margin-top:5px;'>" +
+                "<a href='#' id='btnSave' class='btn btn-success'><i class='icon icon-save'></i>Guardar</a>" +
+                "<a href='#' id='btnPrint' class='btn btn-primary' style='margin-left:15px;'><i class='icon icon-print'></i>Imprimir</a>" +
+                "</div>"
+
+        return [html: html, contrato: contrato, fecha: params.fecha]
+    }
+
+    def saveAvance() {
+//        println params
+        def contrato = Contrato.get(params.id)
+        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
+        def errores = ""
+
+        if (avanceContrato.size() == 0) {
+            println "0"
+            avanceContrato = new Avance([contrato: contrato, fecha: fecha])
+        } else if (avanceContrato.size() == 1) {
+            println "1"
+            avanceContrato = avanceContrato[0]
+        } else {
+            println "Hay mas de un avance wtf"
+            avanceContrato = avanceContrato[0]
+        }
+
+        params.texto.each { t ->
+            //numer^texto
+            def parts = t.toString().split("\\^")
+            if (parts.size() == 2) {
+                avanceContrato["frase" + parts[0]] = parts[1]
+            }
+        }
+        if (!avanceContrato.save(flush: true)) {
+            println "Error: " + avanceContrato.errors
+            errores += "<li>Ha ocurrido un error: " + renderErrors(bean: avanceContrato) + "</li>"
+        }
+        params.clima.each { c ->
+            //fecha^manana^tarde
+            def parts = c.toString().split("\\^")
+            if (parts.size() == 3) {
+                def fechaAct = new Date().parse("dd-MM-yyyy", parts[0])
+                def fr = FraseClima.findAllByAvanceAndFecha(avanceContrato, fechaAct)
+                if (fr.size() == 0) {
+                    fr = new FraseClima(avance: avanceContrato, fecha: fechaAct)
+                } else if (fr.size() == 1) {
+                    fr = fr[0]
+                } else {
+                    println "WTF hay ${fr.size()} frases clima para el avance ${avanceContrato.id} para la fecha ${parts[0]}: ${avanceContrato.id}"
+                    fr = fr[0]
+                }
+                fr.manana = parts[1]
+                fr.tarde = parts[2]
+                if (!fr.save(flush: true)) {
+                    println "Error: " + fr.errors
+                    errores += "<li>Ha ocurrido un error: " + renderErrors(bean: fr) + "</li>"
+                }
+            }
+        }
+        if (errores == "") {
+            render "OK"
+        } else {
+            render "<ul>" + errores + "</ul>"
+        }
+    }
+
     def reporteAvance() {
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def contrato = Contrato.get(params.id)
@@ -638,6 +793,10 @@ class ReportesPlanillasController {
         addCellTabla(tablaEvaluacion, new Paragraph(numero(anticipoDescontado, 2) + ' $', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaEvaluacion, new Paragraph(numero(prctAnticipo, 2) + '%', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
+        addCellTabla(tablaEvaluacion, new Paragraph("AVANCE FÍSICO", fontTh), [pl: 20, border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaEvaluacion, new Paragraph(numero(planillasAvance.last().avanceFisico, 2), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaEvaluacion, new Paragraph(' ', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
 //        addCellTabla(tablaEvaluacion, new Paragraph("PROGRAMADO ACUMULADO", fontTh), [pl: 20, border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 //        addCellTabla(tablaEvaluacion, new Paragraph(numero(anticipoDescontado, 2) + ' $', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 //        addCellTabla(tablaEvaluacion, new Paragraph(numero(prctAnticipo, 2) + '%', fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, bcr: Color.WHITE, bwr: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -668,7 +827,94 @@ class ReportesPlanillasController {
 
         document.add(tablaEconomico)
         /* **************************************************************** FIN ECONOMICO **************************************************************************/
+        /* **************************************************************** RESUMEN ******************************************************************************/
+        PdfPTable tablaResumen = new PdfPTable(1);
+        tablaResumen.setWidthPercentage(100);
+        tablaResumen.setSpacingBefore(5f);
+        addCellTabla(tablaResumen, new Paragraph("5.- RESUMEN DE DECISIONES IMPORTANTES DE AVANCE DE OBRA O ACTIVIDADES REALIZADAS EN ESTE PERIODO", fontTitle), [padding: 3, pb: 5, border: Color.WHITE, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        document.add(tablaResumen)
 
+        def avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
+        def frases = []
+        if (avanceContrato.size() == 0) {
+            println "No hay un avance para el contrato ${contrato.id} para la fecha ${params.fecha}"
+            avanceContrato = null
+        } else if (avanceContrato.size() == 1) {
+            avanceContrato = avanceContrato[0]
+            frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
+        } else {
+            println "Hay mas de un avance para el contrato ${contrato.id} para la fecha ${params.fecha}: ${avanceContrato.id}"
+            avanceContrato = avanceContrato[0]
+            frases = FraseClima.findAllByAvance(avanceContrato, [sort: "fecha"])
+        }
+
+        if (avanceContrato) {
+            def titulos = [
+                    "A.- Resultados de los ensayos de materiales",
+                    "B.- Análisis de la cantidad y calidad de ls equipos y maquinaria en obra",
+                    "C.- Cuadro de las condiciones climáticas del sitio de la obra",
+                    "D.- Detalle de la correspondencia intercambiada con el contratista",
+                    "E.- Análisis del personal técnico del contratista",
+                    "F.- Actividades más importantes del periodo",
+                    "G.- Seguridad industrial y personal",
+                    "H.- Cumplimiento de especificaciones técnicas",
+                    "I.- Decisiones importantes",
+                    "J.- Detalle de reuniones",
+                    "K.- Visitas programadas a la obra para el período",
+                    "L.- Visitas efectuadas por la fiscalización en el período",
+                    "Observaciones",
+                    "Conclusiones y recomendaciones"
+            ]
+            def dateFormat = new SimpleDateFormat("EEEE dd-MM-yyyy", new Locale("es"))
+            titulos.eachWithIndex { t, i ->
+                document.add(new Paragraph(t, fontTitle))
+                if (i == 2) {
+                    //lo del clima
+                    def periodo = PeriodoPlanilla.findAllByPlanilla(planillasAvance.last(), [sort: "fechaIncio", order: "desc"])
+                    def dia = periodo[0].fechaIncio
+                    def fin = periodo[0].fechaFin
+
+                    def tablaClima = new PdfPTable(3);
+                    tablaClima.setWidths(arregloEnteros([40, 30, 30]))
+                    tablaClima.setWidthPercentage(50);
+                    tablaClima.setSpacingBefore(5f);
+
+                    addCellTabla(tablaClima, new Paragraph('Día', fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaClima, new Paragraph('Mañana', fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                    addCellTabla(tablaClima, new Paragraph('Tarde', fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+                    while (dia <= fin) {
+                        def valM = "", valT = ""
+                        if (frases.size() > 0) {
+                            def fr = frases.find { it.fecha == dia }
+                            valM = fr ? fr.manana : ""
+                            valT = fr ? fr.tarde : ""
+                        }
+                        addCellTabla(tablaClima, new Paragraph(dateFormat.format(dia).capitalize(), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaClima, new Paragraph(valM, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaClima, new Paragraph(valT, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+                        dia++
+                    }
+                    document.add(tablaClima)
+                } //if i==2: lo del clima
+                else {
+                    def num = (i + 1).toString().padLeft(2, "0")
+                    def val = avanceContrato["frase" + num]
+                    document.add(new Paragraph(val, fontTd))
+                }// if i!= 2: lo q no es el clima
+            }
+        }
+
+        /* **************************************************************** FIN RESUMEN ******************************************************************************/
+
+        /* **************************************************************** FIRMA ******************************************************************************/
+        document.add(new Paragraph(" ", fontTd))
+        document.add(new Paragraph(" ", fontTd))
+        document.add(new Paragraph(" ", fontTd))
+        document.add(new Paragraph(" ", fontTd))
+        document.add(new Paragraph("_________________________________________", fontTd))
+        document.add(new Paragraph("           FIRMA FISCALIZADOR", fontTd))
+        /* **************************************************************** FIN FIRMA ******************************************************************************/
 
         document.close();
         pdfw.close()

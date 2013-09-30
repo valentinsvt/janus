@@ -386,9 +386,12 @@
                             </li>
 
                             <li>
-                                <a href="#" id="btnAvance">
+                            %{--<a href="#" id="btnAvance">--}%
+                            %{--<i class=" icon-paperclip"></i> Reporte de avance--}%
+                            %{--</a>--}%
+                                <g:link controller="reportesPlanillas" action="reporteAvanceUI" id="${contrato?.id}">
                                     <i class=" icon-paperclip"></i> Reporte de avance
-                                </a>
+                                </g:link>
                             </li>
 
                             <li>
@@ -648,10 +651,13 @@
                 return false;
             });
 
-            $("#btnAvance").click(function () {
-                $("#modal-fecha").modal("show");
-                return false;
-            });
+            //            $("#btnAvance").click(function () {
+            ////                $("#modal-fecha").modal("show");
+            //
+            //
+            //
+            //                return false;
+            //            });
             $("#btnVerAvance").click(function () {
                 $(this).replaceWith(spinner);
                 location.href = "${createLink(controller: 'reportesPlanillas', action: 'reporteAvance', id:contrato?.id)}?fecha=" + $("#fechaAvance").val();

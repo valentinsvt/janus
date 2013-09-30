@@ -10,6 +10,16 @@ class GarantiaController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    /*
+     * * Las garantias editables son las q tienen estado "Vigente" o "Pedido de cobro"
+     * * Las q no son editables al dar doble click no pasa nada
+     * * Las "vigentes" tienen botones Devolver y Pedir cobro
+     * * Las "pedido de cobro" tienen boton Efectivizar
+     * * Las observaciones se setean al momento de cambiar el estado con uno de estos botones
+     * * Al cambiar el estado y escribir una observacion se remplaza la existente
+     * * La observacion esta puesta como title del tr correspondiente
+     */
+
     def cambiarEstado() {
         def garantia = Garantia.get(params.id)
         def estado = EstadoGarantia.findByCodigo(params.estado)
