@@ -198,7 +198,7 @@
         },
         items: {
 
-            "registro": {name: "Ir al Registro de esta Obra", icon:"left-arrow"},
+            "registro": {name: "Ir al Registro de esta Obra", icon:"info"},
 
             "print": {name: "Imprimir Subpresupuesto", icon: "print"
 

@@ -98,10 +98,13 @@ class ConcursoController extends janus.seguridad.Shield {
         def registro = { concurso ->
             return (concurso?.estado!="R")?"N":"R"
         }
+        def numero = { concurso ->
+            return (concurso?.numeroCertificacion)?concurso.numeroCertificacion:""
+        }
 
-        def listaTitulos = ["NÚMERO","OBJETO","OBRA/CONSULTORIA","PAC","MONTO","ESTADO"]
-        def listaCampos = ["codigo", "objeto", "obra", "pac", "presupuestoReferencial","estado"]
-        def funciones = [null, null,["closure": [nombreObra, "&"]], ["closure": [pac, "&"]], null,["closure": [registro, "&"]]]
+        def listaTitulos = ["NÚMERO","OBJETO","OBRA/CONSULTORIA","PAC","MONTO","ESTADO","N° CERTIFICACIÓN PRESUPUESTARIA"]
+        def listaCampos = ["codigo", "objeto", "obra", "pac", "presupuestoReferencial","estado", "numeroCertificacion"]
+        def funciones = [null, null,["closure": [nombreObra, "&"]], ["closure": [pac, "&"]], null,["closure": [registro, "&"]],["closure": [numero, "&"]]]
         def url = g.createLink(action: "buscarConcurso", controller: "concurso")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-busqueda").modal("hide");'
@@ -132,7 +135,7 @@ class ConcursoController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Concurso
             session.funciones = funciones
-            def anchos = [12, 38, 25, 10, 5,5]
+            def anchos = [12, 38, 25, 10, 5,5,10]
             /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PROCESOS DE CONTRATACION", anchos: anchos, extras: extras, landscape: true])
         }

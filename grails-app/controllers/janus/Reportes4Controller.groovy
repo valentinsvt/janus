@@ -20,6 +20,7 @@ import jxl.write.WritableFont
 import jxl.write.WritableSheet
 import jxl.write.WritableWorkbook
 
+
 import java.awt.Color
 
 
@@ -2898,9 +2899,15 @@ class Reportes4Controller {
                 "  p.prvegrnt    garante,\n" +
                 "  p.prvenbct    nombrecon,\n" +
                 "  p.prveapct    apellidocon,\n" +
-                "  p.prvefccn    fecha\n" +
+                "  p.prvefccn    fecha,\n" +
+                "  f.cntrfcsb    fechacontrato\n" +
                 "FROM prve p\n" +
-                "  LEFT JOIN espc e ON p.espc__id = e.espc__id\n"
+                "  LEFT JOIN espc e ON p.espc__id = e.espc__id\n"+
+                "  LEFT JOIN ofrt o ON p.prve__id = o.prve__id\n"+
+                "  LEFT JOIN cntr f ON o.ofrt__id = f.ofrt__id\n"
+
+
+
 
         def filtroBuscador = ""
         def buscador=""
@@ -2923,7 +2930,7 @@ class Reportes4Controller {
 
         params.criterio = params.old
         sql = sqlBase + filtroBuscador
-
+//        println(sql)
         cn = dbConnectionService.getConnection()
 
         res = cn.rows(sql.toString())
@@ -2958,9 +2965,12 @@ class Reportes4Controller {
                 "  p.prvegrnt    garante,\n" +
                 "  p.prvenbct    nombrecon,\n" +
                 "  p.prveapct    apellidocon,\n" +
-                "  p.prvefccn    fecha\n" +
+                "  p.prvefccn    fecha,\n" +
+                "  f.cntrfcsb    fechacontrato\n" +
                 "FROM prve p\n" +
-                "  LEFT JOIN espc e ON p.espc__id = e.espc__id\n"
+                "  LEFT JOIN espc e ON p.espc__id = e.espc__id\n"+
+                "  LEFT JOIN ofrt o ON p.prve__id = o.prve__id\n"+
+                "  LEFT JOIN cntr f ON o.ofrt__id = f.ofrt__id\n"
 
         def filtroBuscador = ""
         def buscador=""
@@ -3098,6 +3108,12 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph("Teléfono", times10bold), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(it?.telefono, times10normal), prmsCellLeft)
+
+            addCellTabla(tablaRegistradas, new Paragraph("Fecha Contrato", times10bold), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(" : ", times10normal), prmsCellLeft)
+            addCellTabla(tablaRegistradas, new Paragraph(printFecha(it?.fechacontrato), times10normal), prmsCellLeft)
+
+
 
             addCellTabla(tablaRegistradas, new Paragraph("_____________________________________________________________________________________________________________", times8normal), prmsHeaderHoja4)
 
@@ -4561,6 +4577,7 @@ class Reportes4Controller {
             redirect(controller: "reportes", action: "reporteBuscador2", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Lista de obras", anchos: anchos, extras: extras, landscape: true])
         }
     }
+
 
 
 }

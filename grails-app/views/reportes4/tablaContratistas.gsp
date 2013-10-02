@@ -81,6 +81,10 @@
         <th style="width: 80px">
             Fecha Cont.
         </th>
+        <th style="width: 80px">
+            Fecha Contrato.
+        </th>
+
 
 
     </tr>
@@ -105,6 +109,7 @@
             <td>${cont.telefono}</td>
             <td>${cont.garante}</td>
             <td><g:formatDate date="${cont.fecha}" format="dd-MM-yyyy"/></td>
+            <td><g:formatDate date="${cont.fechacontrato}" format="dd-MM-yyyy"/></td>
 
         </tr>
 

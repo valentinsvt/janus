@@ -157,4 +157,52 @@
 
     });
 
+
+    $.contextMenu({
+        selector: '.obra_row',
+        callback: function (key, options) {
+
+            var m = "clicked: " + $(this).attr("id");
+
+            var idFila = $(this).attr("id")
+
+//            console.log("id:" + idFila)
+
+
+            if(key == "registro"){
+
+                location.href = "${g.createLink(controller: 'obra', action: 'registroObra')}" + "?obra=" + idFila;
+
+
+            }
+
+
+
+            %{--if (key == "print") {--}%
+
+                %{--var datos = "?obra="+idFila+"Wsub="+${-1}--}%
+                %{--var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub' )}" + datos--}%
+                %{--location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url--}%
+
+            %{--}--}%
+
+
+        },
+        items: {
+
+            "registro": {name: "Ir al Registro de esta Obra", icon:"info"}
+
+//            "print": {name: "Imprimir Subpresupuesto", icon: "print"
+
+
+//            }
+
+        }
+
+    });
+
+
+
+
+
 </script>
