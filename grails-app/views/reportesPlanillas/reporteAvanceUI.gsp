@@ -52,7 +52,8 @@
             <legend>
                 Fecha
             </legend>
-            <elm:datepicker name="fecha" value="${new Date()}"/>
+            %{--<elm:datepicker name="fecha" value="${new Date()}"/>--}%
+            <g:select name="fecha" from="${fechas}"/>
             <g:link class="btn btnVer" action="tablaAvance" id="${contrato.id}" style="margin-bottom:9px;">Ver</g:link>
         </fieldset>
 

@@ -69,7 +69,10 @@ class Reportes5Controller {
                 "   WHERE cntr__id = c.cntr__id\n" +
                 "         AND plnlfcin IS NOT null\n" +
                 "   ORDER BY plnlfcin DESC\n" +
-                "   LIMIT 1)                fisico\n" +
+                "   LIMIT 1)                fisico,\n" +
+                "  b.obrafcin               inicio,\n" +
+                "  c.cntrfccn               recepcion_contratista,\n" +
+                "  c.cntrfcfs               recepcion_fisc\n" +
                 "FROM cntr c\n" +
                 "  INNER JOIN ofrt o ON c.ofrt__id = o.ofrt__id\n" +
                 "  INNER JOIN cncr n ON o.cncr__id = n.cncr__id\n" +
@@ -126,12 +129,8 @@ class Reportes5Controller {
     }
 
     def avance() {
-
-
         def perfil = session.perfil.id
-
         return [perfil: perfil]
-
     }
 
     def tablaAvance() {
@@ -198,9 +197,9 @@ class Reportes5Controller {
 
         def res = filasAvance(params)
 
-        def tablaDatos = new PdfPTable(9);
+        def tablaDatos = new PdfPTable(10);
         tablaDatos.setWidthPercentage(100);
-        tablaDatos.setWidths(arregloEnteros([8, 20, 15, 10, 15, 8, 10, 6, 8]))
+        tablaDatos.setWidths(arregloEnteros([7, 18, 13, 9, 14, 7, 9, 6, 7, 10]))
 
         def paramsHead = [border: Color.BLACK,
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
@@ -216,8 +215,16 @@ class Reportes5Controller {
         addCellTabla(tablaDatos, new Paragraph("Fecha suscripción", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("Plazo", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("% Avance", fontTh), paramsHead)
+        addCellTabla(tablaDatos, new Paragraph("Estado", fontTh), paramsHead)
 
         res.each { fila ->
+            def estado = ""
+            if (fila.inicio) {
+                estado = "Iniciada el " + (fila.inicio.format("dd-MM-yyyy"))
+                if (fila.recepcion_contratista && fila.recepcion_fisc) {
+                    estado = "Finalizada el " + (fila.recepcion_fisc.format("dd-MM-yyyy"))
+                }
+            }
             addCellTabla(tablaDatos, new Paragraph(fila.obra_cod, fontTd), prmsCellLeft)
             addCellTabla(tablaDatos, new Paragraph(fila.obra_nmbr, fontTd), prmsCellLeft)
             addCellTabla(tablaDatos, new Paragraph(fila.canton + " - " + fila.parroquia + " - " + fila.comunidad, fontTd), prmsCellLeft)
@@ -227,6 +234,7 @@ class Reportes5Controller {
             addCellTabla(tablaDatos, new Paragraph(fila.fecha.format("dd-MM-yyyy"), fontTd), prmsCellLeft)
             addCellTabla(tablaDatos, new Paragraph(numero(fila.plazo, 0) + " días", fontTd), prmsCellLeft)
             addCellTabla(tablaDatos, new Paragraph(numero((fila.sum / fila.monto) * 100, 2) + "%", fontTd), prmsCellLeft)
+            addCellTabla(tablaDatos, new Paragraph(estado, fontTd), prmsCellLeft)
         }
 
         document.add(tablaDatos)

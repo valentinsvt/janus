@@ -23,6 +23,13 @@
         <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.ui.position.js')}" type="text/javascript"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.js')}" type="text/javascript"></script>
         <link href="${resource(dir: 'js/jquery/plugins/jQuery-contextMenu-gh-pages/src', file: 'jquery.contextMenu.css')}" rel="stylesheet" type="text/css"/>
+
+        <style type="text/css">
+        th {
+            vertical-align : middle !important;
+        }
+        </style>
+
     </head>
 
     <body>
@@ -37,16 +44,16 @@
         </g:if>
 
         <div style="width: 99.7%;height: 400px;overflow-y: auto;float: right;" id="detalle"></div>
-<g:if test="${perfil == 2}">
-        <a href="#" class="btn  " id="imprimir">
-            <i class="icon-print"></i>
-            Imprimir
-        </a>
-    </g:if>
-        %{--<a href="#" class="btn  " id="excel">--}%
-        %{--<i class="icon-table"></i>--}%
-        %{--Excel--}%
-        %{--</a>--}%
+        %{--<g:if test="${perfil == 2}">--}%
+            <a href="#" class="btn  " id="imprimir">
+                <i class="icon-print"></i>
+                Imprimir
+            </a>
+        %{--</g:if>--}%
+    %{--<a href="#" class="btn  " id="excel">--}%
+    %{--<i class="icon-table"></i>--}%
+    %{--Excel--}%
+    %{--</a>--}%
         <a href="#" class="btn" id="regresar">
             <i class="icon-arrow-left"></i>
             Regresar

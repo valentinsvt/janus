@@ -455,7 +455,16 @@ class ReportesPlanillasController {
 
     def reporteAvanceUI() {
         def contrato = Contrato.get(params.id.toLong())
-        return [contrato: contrato]
+
+        def planillasAvance = Planilla.withCriteria {
+            eq("contrato", contrato)
+            eq("tipoPlanilla", TipoPlanilla.findByCodigo("P"))
+            order("fechaInicio", "asc")
+        }
+
+        def fechas = planillasAvance.fechaFin*.format("dd-MM-yyyy")
+
+        return [contrato: contrato, fechas: fechas]
     }
 
     def tablaAvance() {

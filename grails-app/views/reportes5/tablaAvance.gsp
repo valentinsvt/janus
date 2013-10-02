@@ -78,6 +78,9 @@
             <th style="width: 80px">
                 Avance físico
             </th>
+            <th style="width: 80px">
+                Estado
+            </th>
         </tr>
     </thead>
     <tbody id="tabla_material">
@@ -96,6 +99,19 @@
                     <td><g:formatNumber number="${fila.plazo}" maxFractionDigits="0" minFractionDigits="0"/> días</td>
                     <td><g:formatNumber number="${(fila.sum / fila.monto) * 100}" maxFractionDigits="2" minFractionDigits="2"/>%</td>
                     <td><g:formatNumber number="${fila.fisico}" maxFractionDigits="2" minFractionDigits="2"/></td>
+                    <td>
+                        <g:set var="estado" value=""/>
+                        <g:if test="${fila.inicio}">
+                            <g:set var="estado" value="Iniciada el ${fila.inicio?.format('dd-MM-yyyy')}"/>
+                            <g:if test="${fila.recepcion_contratista && fila.recepcion_fisc}">
+                                <g:set var="estado" value="Finalizada el ${fila.recepcion_fisc?.format('dd-MM-yyyy')}"/>
+                            </g:if>
+                        </g:if>
+                        ${estado}
+                        %{--inicio: ${fila.inicio}<br/>--}%
+                        %{--rec_con: ${fila.recepcion_contratista}<br/>--}%
+                        %{--rec_fis: ${fila.recepcion_fisc}--}%
+                    </td>
                 </tr>
             </g:each>
         </g:if>
