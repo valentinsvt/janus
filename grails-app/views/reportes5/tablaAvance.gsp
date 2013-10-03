@@ -89,7 +89,11 @@
 
             <g:each in="${res}" var="fila" status="j">
                 <tr class="obra_row">
-                    <td>${fila.obra_cod}</td>
+                    <td>
+                        <g:link controller="reportesPlanillas" action="reporteAvance" id="${fila.id}">
+                            ${fila.obra_cod}
+                        </g:link>
+                    </td>
                     <td>${fila.obra_nmbr}</td>
                     <td>${fila.canton} - ${fila.parroquia} - ${fila.comunidad}</td>
                     <td>${fila.num_contrato}</td>

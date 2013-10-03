@@ -617,8 +617,32 @@ class ReportesPlanillasController {
     }
 
     def reporteAvance() {
-        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        def fecha
+
+        if (!params.id) {
+            flash.message = "No se puede mostrar el reporte de avance sin seleccionar un contrato."
+            redirect(action: "errores")
+            return
+        }
+
         def contrato = Contrato.get(params.id)
+        def avanceContrato
+
+        if (params.fecha) {
+            fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+            avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
+        } else {
+            avanceContrato = Avance.findAllByContrato(contrato, [sort: "fecha", order: "desc"])
+            if (avanceContrato.size() == 0) {
+                flash.message = "No existe un avance de obra para el contrato seleccionado."
+                redirect(action: "errores")
+                return
+            } else {
+                avanceContrato = [avanceContrato.first()]
+                fecha = avanceContrato.first().fecha
+            }
+        }
+
         def obra = contrato.oferta.concurso.obra
 
         def planillasAvance = Planilla.withCriteria {
@@ -843,7 +867,6 @@ class ReportesPlanillasController {
         addCellTabla(tablaResumen, new Paragraph("5.- RESUMEN DE DECISIONES IMPORTANTES DE AVANCE DE OBRA O ACTIVIDADES REALIZADAS EN ESTE PERIODO", fontTitle), [padding: 3, pb: 5, border: Color.WHITE, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         document.add(tablaResumen)
 
-        def avanceContrato = Avance.findAllByContratoAndFecha(contrato, fecha)
         def frases = []
         if (avanceContrato.size() == 0) {
             println "No hay un avance para el contrato ${contrato.id} para la fecha ${params.fecha}"
