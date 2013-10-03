@@ -234,6 +234,9 @@ class ReportesPlanillasController {
 
         Document document
         document = new Document(PageSize.A4);
+        document.setMargins(60, 30, 60, 60);
+        // margins: left, right, top, bottom
+        // 1 in = 72, 1cm=28.1, 3cm = 86.4
         def pdfw = PdfWriter.getInstance(document, baos);
 
         document.resetHeader()
@@ -312,7 +315,7 @@ class ReportesPlanillasController {
 
         PdfPTable tablaDetalles = new PdfPTable(11);
         tablaDetalles.setWidthPercentage(100);
-        tablaDetalles.setWidths(arregloEnteros([10, 24, 3, 6, 8, 8, 8, 8, 8, 8, 8]))
+        tablaDetalles.setWidths(arregloEnteros([9, 19, 3, 7, 8, 9, 9, 9, 9, 9, 9]))
         tablaDetalles.setSpacingAfter(10f)
 
         addCellTabla(tablaDetalles, new Paragraph("N.", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -333,14 +336,18 @@ class ReportesPlanillasController {
             def difCant = det.cantidad.contratado - det.cantidad.ejecutado
             def difVal = det.valor.contratado - det.valor.ejecutado
             if (difCant >= 0) {
-                cantMas = difCant
-            } else {
+//                cantMas = difCant
                 cantMenos = difCant
+            } else {
+//                cantMenos = difCant
+                cantMas = difCant * -1
             }
             if (difVal >= 0) {
-                valMas = difVal
-            } else {
+//                valMas = difVal
                 valMenos = difVal
+            } else {
+//                valMenos = difVal
+                valMas = difVal * -1
             }
 
             addCellTabla(tablaDetalles, new Paragraph(det.codigo, fontTd), [height: height, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -396,7 +403,7 @@ class ReportesPlanillasController {
 
         PdfPTable tablaDiferencia = new PdfPTable(3);
         tablaDiferencia.setWidthPercentage(100);
-        tablaDiferencia.setWidths(arregloEnteros([64, 12, 24]))
+        tablaDiferencia.setWidths(arregloEnteros([64, 9, 27]))
         tablaDiferencia.setSpacingAfter(10f)
 
         addCellTabla(tablaDiferencia, new Paragraph("DIFERENCIA", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -411,7 +418,7 @@ class ReportesPlanillasController {
 
         PdfPTable tablaCosto = new PdfPTable(3);
         tablaCosto.setWidthPercentage(100);
-        tablaCosto.setWidths(arregloEnteros([64, 12, 24]))
+        tablaCosto.setWidths(arregloEnteros([64, 9, 27]))
         tablaCosto.setSpacingAfter(10f)
 
         addCellTabla(tablaCosto, new Paragraph("OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE", fontTh), [padding: 8, border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -434,7 +441,7 @@ class ReportesPlanillasController {
 
         PdfPTable tablaTotal = new PdfPTable(3);
         tablaTotal.setWidthPercentage(100);
-        tablaTotal.setWidths(arregloEnteros([64, 12, 24]))
+        tablaTotal.setWidths(arregloEnteros([64, 9, 27]))
         tablaTotal.setSpacingAfter(10f)
 
         addCellTabla(tablaTotal, new Paragraph("TOTAL OBRAS ADICIONALES", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
