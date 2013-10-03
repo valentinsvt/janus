@@ -85,7 +85,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         def obra = Obra.get(params.obra)
 //        def rubro2 = Item.get(params.rubro)
 //        def rubro = Item.get(params.id)
-        def rubro = Item.findByCodigo(params.cod)
+        def rubro = Item.findByCodigoIlike(params.cod)
         def sbpr = SubPresupuesto.get(params.sub)
         def volumen
         def msg=""
