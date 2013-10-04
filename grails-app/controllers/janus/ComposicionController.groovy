@@ -301,14 +301,20 @@ class ComposicionController extends janus.seguridad.Shield {
 //                                if (j > 19) {
 //                                println ">>>>>>>>>>>>>>>" + (j + 1)
                                 row = s.getRow(j)
-                                if (row.length == 11) {
+//                                println row*.getContents()
+//                                println row.length
+                                if (row.length >= 5) {
                                     def cod = row[0].getContents()
                                     def nombre = row[1].getContents()
                                     def cant = row[3].getContents()
                                     def nuevaCant = row[4].getContents()
 
+//                                    println "\t\tcod:" + cod + "\tnombre:" + nombre + "\tcant:" + cant + "\tnCant:" + nuevaCant
+
                                     if (cod != "CODIGO") {
+//                                        println "\t\t**"
                                         def item = Item.findAllByCodigo(cod)
+//                                        println "\t\t???" + item
                                         if (item.size() == 1) {
                                             //ok
                                             item = item[0]
@@ -406,7 +412,7 @@ class ComposicionController extends janus.seguridad.Shield {
                 }
             }
         }
-        if(params.data2 && params.data2!=""){
+        if (params.data2 && params.data2 != "") {
             parts = params.data2.split("X")
             parts.each { p ->
                 if (p != "") {
@@ -415,9 +421,9 @@ class ComposicionController extends janus.seguridad.Shield {
                         def comp = Composicion.get(data[0])
                         if (comp) {
                             comp.precio = data[1].toDouble()
-                            comp.transporte=0
-                            if(!comp.save(flush: true))
-                                println "error sva comp "+comp.errors
+                            comp.transporte = 0
+                            if (!comp.save(flush: true))
+                                println "error sva comp " + comp.errors
                         }
                     }
                 }
