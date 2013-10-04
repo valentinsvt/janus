@@ -32,6 +32,6 @@ class DetallePlanillaCostoAdmin {
     }
 
     static constraints = {
-
+        factura(blank: true, nullable: true)
     }
 }

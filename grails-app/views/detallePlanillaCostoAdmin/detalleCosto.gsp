@@ -74,7 +74,7 @@
             <table class="table table-bordered table-condensed ">
                 <thead>
                     <tr>
-                        <th>Factura N.</th>
+                        %{--<th>Factura N.</th>--}%
                         <th>Descripción del rubro</th>
                         <th>Unidad</th>
                         <th>Valor sin IVA</th>
@@ -99,9 +99,9 @@
                 </thead>
                 <tbody>
                     <tr id="trRubro">
-                        <td id="tdFactura">
-                            <input type="text" id="txtFactura" class="input-small int" style="width: 120px;"/>
-                        </td>
+                        %{--<td id="tdFactura">--}%
+                            %{--<input type="text" id="txtFactura" class="input-small int" style="width: 120px;"/>--}%
+                        %{--</td>--}%
                         <td id="tdRubro">
                             <input type="text" id="txtRubro" class="input-xlarge" style="width: 360px;"/>
                         </td>
@@ -136,7 +136,7 @@
         <table class="table table-bordered table-striped table-condensed table-hover">
             <thead>
                 <tr>
-                    <th style="width: 80px;">Factura N.</th>
+                    %{--<th style="width: 80px;">Factura N.</th>--}%
                     <th>Descripción del rubro</th>
                     <th style="width: 70px;">U.</th>
                     <th style="width: 100px;">Valor sin IVA</th>
@@ -282,7 +282,7 @@
                 }
 //                }
 
-                var factura = $.trim($("#txtFactura").val());
+//                var factura = $.trim($("#txtFactura").val());
                 var rubro = $.trim($("#txtRubro").val());
                 var unidadId = $("#selUnidad").val();
                 var unidadText = $("#selUnidad option:selected").text();
@@ -296,11 +296,11 @@
                     $("#tdTotal").text(number_format(total, 2, ".", "")).data("val", total);
                 }
 
-                if (!error && factura != "" && rubro != "" && valor != "" && valorIva != "" && valorIndi != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(valorIndi)) {
+                if (!error /*&& factura != ""*/ && rubro != "" && valor != "" && valorIva != "" && valorIndi != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(valorIndi)) {
 //                            console.log("aqui");
                     var rubro = {
                         "planilla.id"   :${planilla.id},
-                        factura         : factura,
+//                        factura         : factura,
                         rubro           : rubro,
                         "unidad.id"     : unidadId,
                         unidadText      : unidadText,
@@ -352,7 +352,7 @@
             function loadData(data) {
                 var $tr = $("#trRubro");
                 $tr.data(data);
-                $("#txtFactura").val(data.factura);
+//                $("#txtFactura").val(data.factura);
                 $("#txtRubro").val(data.rubro);
                 $("#selUnidad").val(data["unidad.id"]);
                 $("#txtValor").val(data.monto);
@@ -386,7 +386,7 @@
             function addRow(data, highlight) {
                 var $tr = $("<tr></tr>").data(data);
 
-                $("<td>" + data.factura + "</td>").appendTo($tr);
+//                $("<td>" + data.factura + "</td>").appendTo($tr);
                 $("<td>" + data.rubro + "</td>").appendTo($tr);
                 $("<td>" + data.unidadText + "</td>").appendTo($tr);
                 $("<td class='num'>" + number_format(data.monto, 2, ".", ",") + "</td>").appendTo($tr);

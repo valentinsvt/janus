@@ -5,7 +5,8 @@ import janus.VolumenesObra
 
 class PlanillasAdminController extends janus.seguridad.Shield {
     def preciosService
-    def list(){
+
+    def list() {
 
         def obra = Obra.get(params.id)
 
@@ -13,24 +14,28 @@ class PlanillasAdminController extends janus.seguridad.Shield {
 //        println fp
 
         def planillaInstanceList = PlanillaAdmin.findAllByObra(obra, [sort: 'id'])
-        return [ obra:obra, list: planillaInstanceList]
+        return [obra: obra, list: planillaInstanceList]
     }
 
-    def form(){
-        def obra=Obra.get(params.obra)
+    def form() {
+        def obra = Obra.get(params.obra)
         def planillaInstance = new PlanillaAdmin(params)
         planillaInstance.obra = obra
         if (params.id) {
             planillaInstance = PlanillaAdmin.get(params.id)
         }
-
+        def existe = []
 
         def avance = TipoPlanilla.findByCodigo('P')
-        def costoPorcentaje = TipoPlanilla.findByCodigo('C')
-        def tiposPlanilla =[:]
-        tiposPlanilla.put(avance.id,avance.nombre)
-        tiposPlanilla.put(costoPorcentaje.id,costoPorcentaje.nombre)
+        def resumenMateriales = TipoPlanilla.findByCodigo('M')
+        def tiposPlanilla = [:]
+        tiposPlanilla.put(avance.id, avance.nombre)
+        existe.add("P")
 
+        if (PlanillaAdmin.countByObraAndTipoPlanilla(obra, resumenMateriales) == 0) {
+            tiposPlanilla.put(resumenMateriales.id, resumenMateriales.nombre)
+            existe.add("M")
+        }
 
         def planillas = PlanillaAdmin.findAllByObra(obra, [sort: 'fechaIngreso', order: "asc"])
 
@@ -40,22 +45,21 @@ class PlanillasAdminController extends janus.seguridad.Shield {
             planillaInstance.numero = cPlanillas + 1
         }
 
-
         def fechaMax
-        if(obra.fechaInicio)
-            fechaMax= obra.fechaInicio.plus(366)
+        if (obra.fechaInicio)
+            fechaMax = obra.fechaInicio.plus(366)
         else
-            fechaMax=new Date()
-        println "fecha max "+fechaMax
+            fechaMax = new Date()
+        println "fecha max " + fechaMax
 
-        return [planillaInstance: planillaInstance, obra:obra,tiposPlanilla:tiposPlanilla,fechaMax:fechaMax]
+        return [planillaInstance: planillaInstance, obra: obra, tiposPlanilla: tiposPlanilla, fechaMax: fechaMax, existe: existe]
 
     }
 
 
-    def save(){
-        println "save  "+params
-        def obra=Obra.get(params.obra.id)
+    def save() {
+        println "save  " + params
+        def obra = Obra.get(params.obra.id)
         if (params.fechaIngreso) {
             params.fechaIngreso = new Date().parse("dd-MM-yyyy", params.fechaIngreso)
         }
@@ -86,18 +90,18 @@ class PlanillasAdminController extends janus.seguridad.Shield {
         else {
             planillaInstance = new PlanillaAdmin(params)
         } //es create
-        planillaInstance.fechaIngreso=new Date()
-        planillaInstance.usuario=session.usuario
-        planillaInstance.estadoPlanilla=EstadoPlanilla.findByCodigo("I")
-        planillaInstance.tipoPlanilla=TipoPlanilla.get(params.tipoPlanilla.id)
-        planillaInstance.descripcion=params.descripcion
+        planillaInstance.fechaIngreso = new Date()
+        planillaInstance.usuario = session.usuario
+        planillaInstance.estadoPlanilla = EstadoPlanilla.findByCodigo("I")
+        planillaInstance.tipoPlanilla = TipoPlanilla.get(params.tipoPlanilla.id)
+        planillaInstance.descripcion = params.descripcion
         if (!planillaInstance.save(flush: true)) {
             println planillaInstance.errors
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Planilla " + (planillaInstance.id ? planillaInstance.id : "") + "</h4>"
 
             str += g.renderErrors(bean: planillaInstance)
-            params.obra=obra.id
+            params.obra = obra.id
             flash.message = str
             redirect(action: 'form', params: params)
             return
@@ -115,17 +119,18 @@ class PlanillasAdminController extends janus.seguridad.Shield {
             case 'P':
                 redirect(action: 'detalle', id: planillaInstance.id)
                 break;
-            case 'C':
+            case 'M':
                 redirect(controller: "detallePlanillaCostoAdmin", action: 'detalleCosto', id: planillaInstance.id)
                 break;
             default:
                 redirect(action: 'list', id: planillaInstance.obra.id)
         }
     }
-    def detalle(){
+
+    def detalle() {
         def planilla = PlanillaAdmin.get(params.id)
-        if(planilla.tipoPlanilla.codigo=="C") {
-            redirect(controller: "detallePlanillaCostoAdmin",action: "detalleCosto",id:planilla.id)
+        if (planilla.tipoPlanilla.codigo == "C") {
+            redirect(controller: "detallePlanillaCostoAdmin", action: "detalleCosto", id: planilla.id)
             return
         }
         def obra = planilla.obra
@@ -168,7 +173,7 @@ class PlanillasAdminController extends janus.seguridad.Shield {
         return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, editable: editable]
     }
 
-    def saveDetalle(){
+    def saveDetalle() {
         def pln = PlanillaAdmin.get(params.id)
         def err = 0
 
@@ -224,7 +229,7 @@ class PlanillasAdminController extends janus.seguridad.Shield {
                 flash.clase = "alert-success"
                 flash.message = "Planilla guardada exitosamente"
             }
-            redirect( action: "list", id: pln.obra.id)
+            redirect(action: "list", id: pln.obra.id)
             return
 
 
