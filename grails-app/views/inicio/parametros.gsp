@@ -67,9 +67,6 @@
                     o en los  distintos momentos de la contratación y ejecución de obras.
                 </div><br>
 
-                <div class="item" texto="tpin">
-                    <g:link controller="tipoIndice" action="list">Tipo de Indice</g:link> según el INEC y Contraloría.
-                </div><br>
                 <div class="item" texto="tptr">
                     <g:link controller="tipoTramite" action="list">Tipo de Trámite</g:link> para la gestión de procesos y flujo de trabajo
                 </div><br>
@@ -206,6 +203,11 @@
                     <g:link controller="tipoMulta" action="list">Tipo de multa</g:link> que se puede
                     aplicar a una planilla, distintos de a retraso en obra y presentación de la planilla
                 </div><br>
+
+                <div class="item" texto="tpin">
+                    <g:link controller="tipoIndice" action="list">Tipo de Indice</g:link> según el INEC y Contraloría.
+                </div><br>
+
 
                 %{--<div class="item" texto="tppo">--}%
                     %{--<g:link controller="tipoProrroga" action="list">Tipo de prórroga</g:link> que se puede--}%
