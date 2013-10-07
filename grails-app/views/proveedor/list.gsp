@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Proveedors
+            Lista de Proveedores
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -62,8 +62,9 @@
                 <g:each in="${proveedorInstanceList}" status="i" var="proveedorInstance">
                     <tr>
                     
-                        <td>${fieldValue(bean: proveedorInstance, field: "especialidad")}</td>
-                    
+                        %{--<td>${fieldValue(bean: proveedorInstance, field: "especialidad")}</td>--}%
+                        <td>${proveedorInstance?.especialidad?.descripcion}</td>
+
                         <td>${fieldValue(bean: proveedorInstance, field: "tipo")}</td>
                     
                         <td>${fieldValue(bean: proveedorInstance, field: "ruc")}</td>

@@ -16,7 +16,7 @@
         
                 <span aria-labelledby="especialidad-label">
         %{--<g:link controller="especialidadProveedor" action="show" id="${proveedorInstance?.especialidad?.id}">--}%
-                    ${proveedorInstance?.especialidad?.encodeAsHTML()}
+                    ${proveedorInstance?.especialidad?.descripcion?.encodeAsHTML()}
         %{--</g:link>--}%
                 </span>
         
@@ -187,7 +187,7 @@
             <div class="controls">
         
                 <span aria-labelledby="fechaContacto-label">
-                    <g:formatDate date="${proveedorInstance?.fechaContacto}" />
+                    <g:formatDate date="${proveedorInstance?.fechaContacto}" format="dd-MM-yyyy" />
                 </span>
         
             </div>

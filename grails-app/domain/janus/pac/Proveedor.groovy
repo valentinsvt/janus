@@ -58,7 +58,7 @@ class Proveedor {
         especialidad(blank: true, nullable: true)
         tipo(blank: true, nullable: true, maxSize: 1, inList: ['N', 'J'])
         ruc(blank: true, nullable: true, maxSize: 13)
-        nombre(blank: true, nullable: true, maxSize: 20)
+        nombre(blank: true, nullable: true, maxSize: 63)
         nombreContacto(blank: true, nullable: true, maxSize: 31)
         apellidoContacto(blank: true, nullable: true, maxSize: 31)
         garante(blank: true, nullable: true, maxSize: 40)

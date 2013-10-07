@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:select id="especialidad" name="especialidad.id" from="${janus.EspecialidadProveedor.list()}" optionKey="id" class="many-to-one " value="${proveedorInstance?.especialidad?.id}" noSelection="['null': '']"/>
+                <g:select id="especialidad" name="especialidad.id" from="${janus.EspecialidadProveedor.list()}" optionKey="id" optionValue="descripcion" class="many-to-one " value="${proveedorInstance?.especialidad?.id}" noSelection="['null': '']"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -55,7 +55,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="nombre" maxlength="20" class="" value="${proveedorInstance?.nombre}"/>
+                <g:textField name="nombre" maxlength="63" class="" value="${proveedorInstance?.nombre}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
