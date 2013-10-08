@@ -119,12 +119,12 @@ class OfertaController extends janus.seguridad.Shield {
             ofertaInstance.delete(flush: true)
             flash.clase = "alert-success"
             flash.message = "Se ha eliminado correctamente Oferta " + ofertaInstance.id
-            redirect(action: "list")
+            redirect(controller: "concurso", action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
             flash.message = "No se pudo eliminar Oferta " + (ofertaInstance.id ? ofertaInstance.id : "")
-            redirect(action: "list")
+            redirect(controller: "concurso",action: "list")
         }
     } //delete
 } //fin controller

@@ -35,6 +35,10 @@
                     <i class="icon-file"></i>
                     Crear  Oferta
                 </a>
+                <g:link controller="proveedor" action="list" class="btn">
+                    <i class="icon-group"></i>
+                    Proveedores
+                </g:link>
             </div>
 
             <div class="span3" id="busca">
@@ -61,7 +65,7 @@
                 <tbody class="paginate">
                     <g:each in="${ofertaInstanceList}" status="i" var="ofertaInstance">
                         <tr>
-                            <td>${ofertaInstance.proveedor.nombre}</td>
+                            <td>${ofertaInstance?.proveedor?.nombre}</td>
                             <td>${fieldValue(bean: ofertaInstance, field: "descripcion")}</td>
                             <td>${fieldValue(bean: ofertaInstance, field: "monto")}</td>
                             <td><g:formatDate date="${ofertaInstance.fechaEntrega}" format="dd-MM-yyyy"/></td>

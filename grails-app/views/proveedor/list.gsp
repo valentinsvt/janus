@@ -25,6 +25,10 @@
 
         <div class="row">
             <div class="span9 btn-group" role="navigation">
+                <g:link controller="concurso" action="list" class="btn">
+                    <i class="icon-caret-left"></i>
+                    Regresar
+                </g:link>
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
                     Crear  Proveedor
@@ -65,7 +69,7 @@
                         %{--<td>${fieldValue(bean: proveedorInstance, field: "especialidad")}</td>--}%
                         <td>${proveedorInstance?.especialidad?.descripcion}</td>
 
-                        <td>${fieldValue(bean: proveedorInstance, field: "tipo")}</td>
+                        <td>${(proveedorInstance.tipo=="N")?"Natural":"Jurídica"}</td>
                     
                         <td>${fieldValue(bean: proveedorInstance, field: "ruc")}</td>
                     
@@ -131,53 +135,55 @@
                 });
 
                 $(".btn-new").click(function () {
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'form_ajax')}",
-                        success : function (msg) {
-                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+                    %{--$.ajax({--}%
+                        %{--type    : "POST",--}%
+                        %{--url     : "${createLink(action:'form_ajax')}",--}%
+                        %{--success : function (msg) {--}%
+                            %{--var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');--}%
+                            %{--var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');--}%
 
-                            btnSave.click(function () {
-                                submitForm(btnSave);
-                                return false;
-                            });
+                            %{--btnSave.click(function () {--}%
+                                %{--submitForm(btnSave);--}%
+                                %{--return false;--}%
+                            %{--});--}%
 
-                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Proveedor");
-                            $("#modalBody").html(msg);
-                            $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Proveedor").modal("show");
-                        }
-                    });
-                    return false;
+                            %{--$("#modalHeader").removeClass("btn-edit btn-show btn-delete");--}%
+                            %{--$("#modalTitle").html("Crear Proveedor");--}%
+                            %{--$("#modalBody").html(msg);--}%
+                            %{--$("#modalFooter").html("").append(btnOk).append(btnSave);--}%
+                            %{--$("#modal-Proveedor").modal("show");--}%
+                        %{--}--}%
+                    %{--});--}%
+                    %{--return false;--}%
+                    location.href="${g.createLink(action: 'form')}"
                 }); //click btn new
 
                 $(".btn-edit").click(function () {
                     var id = $(this).data("id");
-                    $.ajax({
-                        type    : "POST",
-                        url     : "${createLink(action:'form_ajax')}",
-                        data    : {
-                            id : id
-                        },
-                        success : function (msg) {
-                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+                    %{--$.ajax({--}%
+                        %{--type    : "POST",--}%
+                        %{--url     : "${createLink(action:'form_ajax')}",--}%
+                        %{--data    : {--}%
+                            %{--id : id--}%
+                        %{--},--}%
+                        %{--success : function (msg) {--}%
+                            %{--var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');--}%
+                            %{--var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');--}%
 
-                            btnSave.click(function () {
-                                submitForm(btnSave);
-                                return false;
-                            });
+                            %{--btnSave.click(function () {--}%
+                                %{--submitForm(btnSave);--}%
+                                %{--return false;--}%
+                            %{--});--}%
 
-                            $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Proveedor");
-                            $("#modalBody").html(msg);
-                            $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-Proveedor").modal("show");
-                        }
-                    });
-                    return false;
+                            %{--$("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");--}%
+                            %{--$("#modalTitle").html("Editar Proveedor");--}%
+                            %{--$("#modalBody").html(msg);--}%
+                            %{--$("#modalFooter").html("").append(btnOk).append(btnSave);--}%
+                            %{--$("#modal-Proveedor").modal("show");--}%
+                        %{--}--}%
+                    %{--});--}%
+                    %{--return false;--}%
+                    location.href="${g.createLink(action: 'form')}/"+id
                 }); //click btn edit
 
                 $(".btn-show").click(function () {

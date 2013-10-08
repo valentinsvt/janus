@@ -30,6 +30,20 @@ class ProveedorController extends janus.seguridad.Shield {
         return [proveedorInstance: proveedorInstance]
     } //form_ajax
 
+    def form() {
+        def proveedorInstance = new Proveedor(params)
+        if (params.id) {
+            proveedorInstance = Proveedor.get(params.id)
+            if (!proveedorInstance) {
+                flash.clase = "alert-error"
+                flash.message = "No se encontró Proveedor con id " + params.id
+                redirect(action: "list")
+                return
+            } //no existe el objeto
+        } //es edit
+        return [proveedorInstance: proveedorInstance]
+    } //form_ajax
+
     def form_ajax_fo() {
         def proveedorInstance = new Proveedor(params)
         if (params.id) {
