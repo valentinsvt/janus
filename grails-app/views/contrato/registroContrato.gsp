@@ -96,7 +96,7 @@
 
                     <div class="span2 formato">Memo de Distribución</div>
 
-                    <div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}"/></div>
+                    <div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}" maxlength="15"/></div>
 
 
                     %{--</div>--}%
@@ -706,6 +706,13 @@
                 $("#btn-aceptar").attr("disabled", false)
 
             });
+
+
+            $("#memo").click(function () {
+
+                $("#btn-aceptar").attr("disabled", false)
+
+            })
 
             $("#objeto").click(function () {
 
