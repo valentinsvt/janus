@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Especialidad Proveedors
+            Especialidades de Proveedores
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,7 +24,7 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Crear  Especialidad Proveedor
+                Crear Especialidad de Proveedor
             </a>
         </div>
 
@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción de la Especialidad o Experiencia en.." />
                     
                         <th width="150">Acciones</th>
                     </tr>

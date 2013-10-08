@@ -9,7 +9,7 @@
         <div class="control-group">
             <div>
                 <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripcion
+                    Especialidad
                 </span>
             </div>
             <div class="controls">
