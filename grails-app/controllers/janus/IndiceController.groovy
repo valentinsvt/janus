@@ -311,7 +311,7 @@ class IndiceController extends janus.seguridad.Shield {
         cn.close()
 
         //println datos
-        [datos: datos, anio: params.anio]
+        [datos: datos, anio: params.anio?:3]
     }
 
     def editarIndices() {

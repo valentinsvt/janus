@@ -173,6 +173,10 @@
                     <g:link controller="fuenteFinanciamiento" action="list">Fuente de financiamiento</g:link>
                     Entidad que financia la adquisición o construcción.
                 </div><br>
+                <div class="item" texto="espc">
+                    <g:link controller="especialidadProveedor" action="list">Especialidad del Proveedor o Contratista</g:link>
+                    Experiencia o especialidad en los servicios que presta
+                </div><br>
 
 
             </div>
@@ -379,11 +383,10 @@
     <p>Entidad que financia la adquisición o construcción.</p>
 </div>
 
-
-
-
-
-
+<div id="espc" style="display: none">
+    <h3>Espacialidad del Proveedor</h3>
+    <p>Experiencia o especialidad del proveedor en los servicios que puede proveer</p>
+</div>
 
 
 <div id="edpl" style="display:none">
