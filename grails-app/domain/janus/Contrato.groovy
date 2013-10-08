@@ -129,7 +129,7 @@ class Contrato implements Serializable {
         cuentaContable(blank: true, nullable: true)
         prorroga(blank: true, nullable: true)
         observaciones(blank: true, nullable: true)
-        memo(blank: true, nullable: true)
+        memo(blank: true, nullable: true, maxSize: 20)
         plazo(blank: true, nullable: true)
 
         fechaPedidoRecepcionContratista(blank: true, nullable: true)

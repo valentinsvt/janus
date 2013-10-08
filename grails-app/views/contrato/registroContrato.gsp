@@ -45,8 +45,22 @@
 
     <body>
 
+
+    <g:if test="${flash.message}">
+        <div class="span12" >
+            <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                ${flash.message}
+            </div>
+        </div>
+    </g:if>
+
+
         <div class="row">
-            <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">
+
+
+            %{--<div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">--}%
+            <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
                 <button class="btn" id="btn-nuevo"><i class="icon-plus"></i> Nuevo</button>
                 <g:if test="${contrato?.estado != 'R'}">
@@ -96,24 +110,8 @@
 
                     <div class="span2 formato">Memo de Distribución</div>
 
-                    <div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}" maxlength="15"/></div>
+                    <div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}" maxlength="20"/></div>
 
-
-                    %{--</div>--}%
-
-                    %{--</g:if>--}%
-
-                    %{--<g:else>--}%
-
-                    %{--<div class="span2 formato">Contrato N°</div>--}%
-
-                    %{--<div class="span3"><g:textField name="codigo" class="codigo required caps" value="${contrato?.codigo}"/></div>--}%
-
-                    %{--<div class="span2 formato">Memo de Distribución</div>--}%
-
-                    %{--<div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}"/></div>--}%
-
-                    %{--</g:else>--}%
 
                 </div> <!--DSAFSD-->
             </fieldset>
@@ -194,7 +192,7 @@
                         <div class="span2 formato">Oferta</div>
 
                         <div class="span3" id="div_ofertas">
-                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione']" id="oferta" optionKey="id"></g:select>
+                            <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione']" id="oferta" optionKey="id"/>
                         </div>
                     </div>
 
@@ -327,7 +325,7 @@
 
                     <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
 
-                    <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list()}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id"/></div>
+                    <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list([sort: 'fechaFin'])}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id" /></div>
 
                 </div>
 

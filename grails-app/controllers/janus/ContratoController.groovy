@@ -574,11 +574,11 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
     def cargarOfertas() {
-        println "params " + params
+//        println "params " + params
         def obra = Obra.get(params.id)
-        println "obra " + obra
+//        println "obra " + obra
         def concurso = janus.pac.Concurso.findByObraAndEstado(obra, "R")
-        println "concurso " + concurso
+//        println "concurso " + concurso
         def ofertas = janus.pac.Oferta.findAllByConcurso(concurso)
 //        println ofertas
 //        println ofertas.monto
@@ -609,7 +609,7 @@ class ContratoController extends janus.seguridad.Shield {
     def save() {
         def contratoInstance
 
-        println("-->>" + params)
+//        println("-->>" + params)
 
         if (params.codigo) {
             params.codigo = params.codigo.toString().toUpperCase()
@@ -625,6 +625,11 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
 
+
+
+
+
+
         if (params.id) {
             contratoInstance = Contrato.get(params.id)
             if (!contratoInstance) {
@@ -636,10 +641,26 @@ class ContratoController extends janus.seguridad.Shield {
             contratoInstance.properties = params
         }//es edit
         else {
+
+            if(params.oferta){
+                if(params.oferta.id == '-1'){
+                        flash.clase = "alert-error"
+                        flash.message = "No se puede grabar el Contrato, elija una oferta válida "
+                        redirect(action: 'registroContrato')
+                        return
+
+
+                }
+
+
+            }
+
+
             contratoInstance = new Contrato(params)
 
         } //es create
         if (!contratoInstance.save(flush: true)) {
+
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Contrato " + (contratoInstance.id ? contratoInstance.id : "") + "</h4>"
 
@@ -660,7 +681,8 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Contrato " + contratoInstance.id
+//            flash.message = "Se ha actualizado correctamente Contrato " + contratoInstance.id
+            flash.message = "Se ha actualizado correctamente Contrato " + contratoInstance.codigo
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Contrato " + contratoInstance.id
