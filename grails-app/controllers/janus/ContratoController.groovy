@@ -238,9 +238,9 @@ class ContratoController extends janus.seguridad.Shield {
 
     def buscarContrato() {
 
-//        println "buscar contrato "+params
+        println "buscar contrato "+params
 
-        def extraObra = ""
+        def extraObra = "  "
         if (params.campos instanceof java.lang.String) {
             if (params.campos == "nombre") {
                 def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%'")
@@ -325,7 +325,7 @@ class ContratoController extends janus.seguridad.Shield {
             }
         }
 
-//        println "extra obra "+extraObra
+        println "extra obra "+extraObra
 
         def codObra = { contrato ->
             return contrato?.oferta?.concurso?.obra?.codigo
@@ -487,9 +487,9 @@ class ContratoController extends janus.seguridad.Shield {
         funcionJs += 'location.href="' + g.createLink(action: 'verContrato', controller: 'contrato') + '?contrato="+$(this).attr("regId");'
         funcionJs += '}'
         def numRegistros = 20
-        def extras = " "
+        def extras = " and estado='R' "
         if (extraObra.size() > 0)
-            extras += " and oferta in (${extraObra})"
+            extras += "and oferta in (${extraObra})"
 //        println "extras "+extras
 
         if (!params.reporte) {
