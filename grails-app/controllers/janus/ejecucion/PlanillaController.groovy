@@ -913,7 +913,11 @@ class PlanillaController extends janus.seguridad.Shield {
         def reajusteDefinitivo = TipoPlanilla.findByCodigo('R')
         def costoPorcentaje = TipoPlanilla.findByCodigo('C')
 
+        def resumenMateriales = TipoPlanilla.findByCodigo('M')
+
         def tiposPlanilla = TipoPlanilla.list([sort: 'nombre'])
+
+        tiposPlanilla -= resumenMateriales
 
         def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
         def finalObra = null
@@ -1130,7 +1134,7 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def save() {
         def tipo = TipoPlanilla.get(params.tipoPlanilla.id.toLong())
-        if (tipo.codigo == "C") {
+        if (tipo.codigo == "C" || tipo.codigo == "A") {
             params.avanceFisico = 0
         }
         if (!params.diasMultaDisposiciones) {

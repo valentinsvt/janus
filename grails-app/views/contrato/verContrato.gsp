@@ -341,11 +341,11 @@
                                         <i class=" icon-file-alt"></i> Planillas
                                     </g:link>
                                 </g:if>
-                                <g:else>
-                                    <g:link controller="planilla" action="listDirecta" id="${contrato?.id}">
-                                        <i class=" icon-file-alt"></i> Planillas Directas
-                                    </g:link>
-                                </g:else>
+                                %{--<g:else>--}%
+                                    %{--<g:link controller="planilla" action="listDirecta" id="${contrato?.id}">--}%
+                                        %{--<i class=" icon-file-alt"></i> Planillas Directas--}%
+                                    %{--</g:link>--}%
+                                %{--</g:else>--}%
                             </li>
 
                             %{--<li>--}%
