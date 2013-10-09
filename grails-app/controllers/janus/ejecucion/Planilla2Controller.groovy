@@ -811,6 +811,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def periodos = PeriodoPlanilla.findAllByPlanillaInList(planillasAnteriores, [sort: "id"])
         periodos = periodos.sort { it.fechaIncio }
 //        println periodos.id
+//        println planillasAnteriores
 //        println periodos.periodo.descripcion
 
         def periodos2 = []
@@ -851,14 +852,42 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
 
+        def fechaFinPlanilla = planilla.fechaFin
+        //TODO: borrar esto
+        def dp = planilla.fechaFin.format("dd")
+        def mp = planilla.fechaFin.format("MM").toInteger() - 1
+        def ap = planilla.fechaFin.format("yyyy").toInteger()
+        if (mp == 0) {
+            mp = 12
+            ap = ap - 1
+        }
+        def strp = dp + "-" + mp + "-" + ap
+        fechaFinPlanilla = new Date().parse("dd-MM-yyyy", strp)
+        //TODO: BORRAR HASTA AQUI
+
+
         if (pa.size() == 0) {
             println "creando periodos "
             def inicio = planilla.fechaInicio
-            def fin = getLastDayOfMonth(planilla.fechaInicio)
-//            println "inicio " + inicio + " fin " + fin + "  planilla " + planilla.fechaFin
-            if (fin > planilla.fechaFin) {
-                fin = planilla.fechaFin
-                while (fin <= planilla.fechaFin) {
+
+            //TODO: borrar esto
+            def di = inicio.format("dd")
+            def mi = inicio.format("MM").toInteger() - 1
+            def ai = inicio.format("yyyy").toInteger()
+            if (mi == 0) {
+                mi = 12
+                ai = ai - 1
+            }
+            def stri = di + "-" + mi + "-" + ai
+            inicio = new Date().parse("dd-MM-yyyy", stri)
+            //TODO: BORRAR HASTA AQUI
+
+            def fin = getLastDayOfMonth(inicio)
+
+//            println "inicio " + inicio + " fin " + fin + "  planilla " + fechaFinPlanilla
+            if (fin > fechaFinPlanilla) {
+                fin = fechaFinPlanilla
+                while (fin <= fechaFinPlanilla) {
                     def perInec = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, fin)
 //                    println "----------!!!perinec " + perInec + " inicio " + inicio + "  " + fin
                     def per = verificaIndices(pcs, perInec, 0)
@@ -872,7 +901,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     fin = getLastDayOfMonth(inicio)
                 }
             } else {
-                while (fin <= planilla.fechaFin) {
+                while (fin <= fechaFinPlanilla) {
                     def perInec = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, fin)
 //                    println "----------!!!perinec " + perInec + " inicio " + inicio + "  " + fin
                     def per = verificaIndices(pcs, perInec, 0)
@@ -885,10 +914,10 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     inicio = fin + 1
                     fin = getLastDayOfMonth(inicio)
                 }
-                if (fin > planilla.fechaFin && (fin.format("MM") == planilla.fechaFin.format("MM"))) {
-                    def perInec = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, planilla.fechaFin)
+                if (fin > fechaFinPlanilla && (fin.format("MM") == fechaFinPlanilla.format("MM"))) {
+                    def perInec = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, fechaFinPlanilla)
                     def per = verificaIndices(pcs, perInec, 0)
-                    def periodo = new PeriodoPlanilla([planilla: planilla, periodo: per, fechaIncio: inicio, fechaFin: planilla.fechaFin, titulo: "AVANCE"])
+                    def periodo = new PeriodoPlanilla([planilla: planilla, periodo: per, fechaIncio: inicio, fechaFin: fechaFinPlanilla, titulo: "AVANCE"])
                     if (!periodo.save(flush: true)) {
                         println "error al crear periodo avance " + periodo.errors
                     } else {
@@ -1492,11 +1521,44 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def fechaOferta = planilla.contrato.oferta.fechaEntrega - 30
+
+        //todo: revisar esto
+        fechaOferta = planilla.contrato.periodoValidez.fechaInicio
+
         def fechaAnticipo = planilla.fechaPresentacion
         def periodos = PeriodoPlanilla.findAllByPlanilla(planilla, [sort: "id"])
 
         def perOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaOferta, fechaOferta)
         def perAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaAnticipo, fechaAnticipo)
+
+        //TODO: comentar todo esto despues de las pruebas
+//        def dof = fechaOferta.format("dd")
+//        def mof = fechaOferta.format('MM').toInteger() - 1
+//        def aof = fechaOferta.format('yyyy').toInteger()
+//        if (mof == 0) {
+//            mof = 12
+//            aof = aof - 1
+//        }
+        def dan = fechaAnticipo.format("dd")
+        def man = fechaAnticipo.format('MM').toInteger() - 1
+        def aan = fechaAnticipo.format('yyyy').toInteger()
+        if (man == 0) {
+            man = 12
+            aan = aan - 1
+        }
+//        def stro = dof + "-" + mof + "-" + aof
+        def stra = dan + "-" + man + "-" + aan
+//        def nfo = new Date().parse("dd-MM-yyyy", stro)
+        def nfa = new Date().parse("dd-MM-yyyy", stra)
+
+//        println "" + fechaOferta + " >> " + nfo + " (" + stro + ")"
+//        println "" + fechaAnticipo + " >> " + nfa + " (" + stra + ")"
+
+//        perOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(nfo, nfo)
+        perAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(nfa, nfa)
+
+        //TODO: borrar hasta aqui
+
 //        println "planilla "+planilla+"  "+fechaOferta+"  "+fechaAnticipo+" pers "+periodos+"  "+perOferta+"  "+perAnticipo
         def pcs = FormulaPolinomicaContractual.withCriteria {
             and {
