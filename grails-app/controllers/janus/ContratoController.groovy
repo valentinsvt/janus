@@ -240,7 +240,7 @@ class ContratoController extends janus.seguridad.Shield {
 
         println "buscar contrato "+params
 
-        def extraObra = "  "
+        def extraObra = ""
         if (params.campos instanceof java.lang.String) {
             if (params.campos == "nombre") {
                 def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%'")
