@@ -301,7 +301,7 @@
                             }
                         });
                         if (data == "") {
-                            $("#dlgLoad").dialog("close")
+                            $("#dlgLoad").dialog("close");
                             alert("LLene el detalle de la planilla")
                         } else {
                             $(this).replaceWith(spinner);
