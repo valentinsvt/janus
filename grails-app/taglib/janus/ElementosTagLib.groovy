@@ -13,6 +13,9 @@ class ElementosTagLib {
     static namespace = "elm"
 
     Closure numero = { attrs ->
+        if (attrs.debug == "true" || attrs.debug == true) {
+            println "AQUI: " + attrs
+        }
         if (!attrs.decimales) {
             if (!attrs["format"]) {
                 attrs["format"] = "##,##0"
@@ -25,14 +28,23 @@ class ElementosTagLib {
             }
         } else {
             def dec = attrs.remove("decimales").toInteger()
-            attrs["format"] = "##"
+
+            attrs["format"] = "##,##0"
             if (dec > 0) {
-                attrs["format"] += ","
-                dec.times {
-                    attrs["format"] += "#"
-                }
-                attrs["format"] += "0"
+                attrs["format"] += "."
             }
+            dec.times {
+                attrs["format"] += "#"
+            }
+
+//            attrs["format"] = "##"
+//            if (dec > 0) {
+//                attrs["format"] += ","
+//                dec.times {
+//                    attrs["format"] += "#"
+//                }
+//                attrs["format"] += "0"
+//            }
             attrs.maxFractionDigits = dec
             attrs.minFractionDigits = dec
         }
@@ -90,7 +102,7 @@ class ElementosTagLib {
         str += "</div>"
         str += "<div class='row'>"
         str += "<div class='span1 bold'>Plazo</div>"
-        str += "<div class='span5'>" + formatNumber(number: (obra.plazoEjecucionMeses)*30+obra.plazoEjecucionDias, minFractionDigits: 0, maxFractionDigits: 0, locale: "ec") + " días</div>"
+        str += "<div class='span5'>" + formatNumber(number: (obra.plazoEjecucionMeses) * 30 + obra.plazoEjecucionDias, minFractionDigits: 0, maxFractionDigits: 0, locale: "ec") + " días</div>"
         str += "<div class='span2 bold'>Fecha pres. planilla</div>"
         str += "<div class='span3'>" + planilla.fechaIngreso.format("dd-MM-yyyy") + "</div>"
         str += "</div>"
@@ -166,8 +178,8 @@ class ElementosTagLib {
         if (planilla.tipoPlanilla.codigo == "A") {
             str += 'Anticipo (' + PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion).descripcion + ")"
         } else {
-            if(planilla.tipoPlanilla.codigo == "L") {
-                str+= "Liquidación del reajuste (${planilla.fechaPresentacion.format('dd-MM-yyyy')})"
+            if (planilla.tipoPlanilla.codigo == "L") {
+                str += "Liquidación del reajuste (${planilla.fechaPresentacion.format('dd-MM-yyyy')})"
             } else {
                 str += 'del ' + planilla.fechaInicio.format('dd-MM-yyyy') + ' al ' + planilla.fechaFin.format('dd-MM-yyyy')
             }

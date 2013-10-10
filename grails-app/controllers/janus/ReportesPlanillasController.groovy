@@ -3727,8 +3727,16 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaValores)
-        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla.valor + planilla.reajuste - planilla.descuentos - multas)
-        def strParrafo3 = "Son ${numerosALetras}"
+
+        def total2Num = planilla.valor + planilla.reajuste - planilla.descuentos - multas
+        def menos = ""
+        if(total2Num<0) {
+            total2Num*=-1
+            menos = "MENOS "
+        }
+
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(total2Num)
+        def strParrafo3 = "Son ${menos}${numerosALetras}"
         Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
         parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo3, 1);

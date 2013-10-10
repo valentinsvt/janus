@@ -144,7 +144,7 @@
 
                         <td class="act num cant" data-valor="${cant}">
                             <g:if test="${editable}">
-                                <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${elm.numero(number: cant, cero: 'hide')}"/>
+                                <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${cant}"/>
                             </g:if>
                             <g:else>
                                 <elm:numero number="${cant}" cero="hide"/>
@@ -221,10 +221,10 @@
                     //si no es vacio calcula
                     var precio = $row.find(".precioU").data("valor");
                     var total = (parseFloat(val) * parseFloat(precio));
-                    total = parseFloat(number_format(total, 2, ".", ","))
+                    total = parseFloat(number_format(total, 2, ".", ""));
 
                     //el valor actual
-                    $row.find(".act.num.val").text(total).data("valor", total);
+                    $row.find(".act.num.val").text(number_format(total, 2, ".", ",")).data("valor", total);
 
                     //los acumulados
                     var anterior = parseFloat($antCant.data("valor"));
@@ -257,9 +257,10 @@
             }
 
             function numero($item, val) {
+//                console.log($item, val);
                 if ($item.is("input")) {
                     if (val != 0 && val != "" && !isNaN(val)) {
-                        $item.val(number_format(val, 2, ".", ",")).data("valor", val);
+                        $item.val(number_format(val, 2, ".", "")).data("valor", val);
                     } else {
                         $item.val("").data("valor", 0);
                     }
@@ -299,10 +300,10 @@
                                 data += "&";
                             }
                         });
-                        if(data==""){
+                        if (data == "") {
                             $("#dlgLoad").dialog("close")
                             alert("LLene el detalle de la planilla")
-                        }else{
+                        } else {
                             $(this).replaceWith(spinner);
                             data += "id=${planilla.id}&total=" + $(".totalAct").data("valor");
                             location.href = "${createLink(action:'saveDetalle')}?" + data;
