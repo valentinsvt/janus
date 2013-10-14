@@ -1325,7 +1325,7 @@ class ReportesPlanillasController {
 
         def act = 0
         def act2 = 0
-        def diasTot = 0, totCrono = 0, totPlan = 0, totalMultaRetraso = 0, totalCronoPlanilla=0
+        def diasTot = 0, totCrono = 0, totPlan = 0, totalMultaRetraso = 0
         periodos.each { per ->
             if (per.titulo != "OFERTA") {
                 if (per.titulo == "ANTICIPO") {
@@ -1348,7 +1348,6 @@ class ReportesPlanillasController {
                     addCellTabla(tablaP0, new Paragraph(numero(per.p0, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
                     if (per.planilla == planilla) {
-                        totalCronoPlanilla += per.parcialCronograma
                         def retraso = 0, multa = 0
                         if (per.parcialCronograma > per.parcialPlanilla) {
                             def valorDia = per.parcialCronograma / per.dias
@@ -1646,21 +1645,13 @@ class ReportesPlanillasController {
                 return
             }
 
-            if (fechaMax > fechaPresentacion) {
-                retraso *= -1
-            }
-
             if (retraso > 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
 //                totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
 //                    it.parcialCronograma
 //                }) * (prmlMultaPlanilla / 1000) * retraso
 
-                if (planilla.valor > 0) {
-                    multaPlanilla = (prmlMultaPlanilla / 1000) * planilla.valor
-                } else {
-                    multaPlanilla = (prmlMultaPlanilla / 1000) * totalCronoPlanilla
-                }
+                totalMulta = (prmlMultaPlanilla / 1000) * planilla.valor
             } else {
                 retraso = 0
             }
@@ -1679,7 +1670,7 @@ class ReportesPlanillasController {
             addCellTabla(tablaPml, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("" + retraso, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaPml, new Paragraph(numero(prmlMultaPlanilla, 2) + "‰ de \$" + numero(planilla.valor>0?planilla.valor:totalCronoPlanilla, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaPml, new Paragraph(numero(prmlMultaPlanilla, 2) + "‰ de \$" + numero(planilla.valor, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph('$' + numero(totalMulta, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             document.add(tablaPml);
@@ -3736,16 +3727,8 @@ class ReportesPlanillasController {
         addCellTabla(tablaValores, new Paragraph("${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}", fontThTabla), [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
         document.add(tablaValores)
-
-        def total2Num = planilla.valor + planilla.reajuste - planilla.descuentos - multas
-        def menos = ""
-        if(total2Num<0) {
-            total2Num*=-1
-            menos = "MENOS "
-        }
-
-        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(total2Num)
-        def strParrafo3 = "Son ${menos}${numerosALetras}"
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla.valor + planilla.reajuste - planilla.descuentos - multas)
+        def strParrafo3 = "Son ${numerosALetras}"
         Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
         parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo3, 1);
