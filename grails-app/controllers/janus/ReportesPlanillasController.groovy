@@ -1311,7 +1311,7 @@ class ReportesPlanillasController {
         addCellTabla(tablaP0, new Paragraph("Valor P0", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, rowspan: 2])
 
 
-        PdfPTable tablaMl = new PdfPTable(5);
+        PdfPTable tablaMl = new PdfPTable(6);
         tablaMl.setWidthPercentage(50);
         tablaMl.setHorizontalAlignment(Element.ALIGN_LEFT)
 
@@ -1322,10 +1322,11 @@ class ReportesPlanillasController {
         addCellTabla(tablaMl, new Paragraph("Planillado", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaMl, new Paragraph("Retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaMl, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaMl, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
         def act = 0
         def act2 = 0
-        def diasTot = 0, totCrono = 0, totPlan = 0, totalMultaRetraso = 0
+        def diasTot = 0, totCrono = 0, totPlan = 0, totalMultaRetraso = 0, totalCronoPlanilla=0
         periodos.each { per ->
             if (per.titulo != "OFERTA") {
                 if (per.titulo == "ANTICIPO") {
@@ -1348,18 +1349,20 @@ class ReportesPlanillasController {
                     addCellTabla(tablaP0, new Paragraph(numero(per.p0, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
 
                     if (per.planilla == planilla) {
+                        totalCronoPlanilla += per.parcialCronograma
                         def retraso = 0, multa = 0
                         if (per.parcialCronograma > per.parcialPlanilla) {
                             def valorDia = per.parcialCronograma / per.dias
                             retraso = ((per.parcialCronograma - per.parcialPlanilla) / valorDia).round(2)
-                            multa = ((totalContrato) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
+                            multa = ((per.parcialCronograma) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
                         }
                         totalMultaRetraso += multa
 
                         addCellTabla(tablaMl, new Paragraph(fechaConFormato(per.fechaIncio), fontTd), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                         addCellTabla(tablaMl, new Paragraph(numero(per.parcialCronograma, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         addCellTabla(tablaMl, new Paragraph(numero(per.parcialPlanilla, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                        addCellTabla(tablaMl, new Paragraph(numero(retraso, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMl, new Paragraph(numero(retraso, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaMl, new Paragraph(numero(prmlMultaIncumplimiento, 0) + "‰", fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         addCellTabla(tablaMl, new Paragraph(numero(multa, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                     }
                 }
@@ -1645,13 +1648,26 @@ class ReportesPlanillasController {
                 return
             }
 
-            if (retraso > 0) {
+//            if (retraso > 0) {
+////            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
+////                totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
+////                    it.parcialCronograma
+////                }) * (prmlMultaPlanilla / 1000) * retraso
+//
+//                totalMulta = (prmlMultaPlanilla / 1000) * planilla.valor
+//            } else {
+//                retraso = 0
+//            }
+            def multaPlanilla = 0
+            if (retraso > 0 || planilla.valor == 0) {
 //            totalMulta = (totalContrato) * (prmlMulta / 1000) * retraso
-//                totalMulta = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
-//                    it.parcialCronograma
-//                }) * (prmlMultaPlanilla / 1000) * retraso
-
-                totalMulta = (prmlMultaPlanilla / 1000) * planilla.valor
+//            multaPlanilla = (PeriodoPlanilla.findAllByPlanilla(planilla).sum {
+//                it.parcialCronograma
+//            }) * (prmlMultaPlanilla / 1000) * retraso
+                if (retraso < 0) {
+                    retraso = 0
+                }
+                multaPlanilla = (prmlMultaPlanilla / 1000) * (planilla.valor > 0 ? planilla.valor : totalCronoPlanilla)
             } else {
                 retraso = 0
             }
@@ -1670,9 +1686,9 @@ class ReportesPlanillasController {
             addCellTabla(tablaPml, new Paragraph("Días de retraso", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("" + retraso, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaPml, new Paragraph(numero(prmlMultaPlanilla, 2) + "‰ de \$" + numero(planilla.valor, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaPml, new Paragraph(numero(prmlMultaPlanilla, 2) + "‰ de \$" + numero((planilla.valor > 0 ? planilla.valor : totalCronoPlanilla), 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaPml, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaPml, new Paragraph('$' + numero(totalMulta, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaPml, new Paragraph('$' + numero(multaPlanilla, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             document.add(tablaPml);
             /* ***************************************************** Fin Multa no presentacion ************************************************/
 
