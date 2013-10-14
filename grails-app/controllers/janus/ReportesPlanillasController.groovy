@@ -1312,6 +1312,7 @@ class ReportesPlanillasController {
 
 
         PdfPTable tablaMl = new PdfPTable(6);
+        tablaMl.setWidths(arregloEnteros([18, 19, 17, 15, 15, 16]))
         tablaMl.setWidthPercentage(50);
         tablaMl.setHorizontalAlignment(Element.ALIGN_LEFT)
 
@@ -1748,7 +1749,7 @@ class ReportesPlanillasController {
             addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph(numero(planilla.diasMultaDisposiciones, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaMultaDisp, new Paragraph(numero(prmlMultaDisposiciones, 2) + "‰ de \$" + numero(totalContrato, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaDisp, new Paragraph(numero(prmlMultaDisposiciones, 2) + "‰ de \$" + numero(totalContrato, 2)+" por día", fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(planilla.multaDisposiciones, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             document.add(tablaMultaDisp);

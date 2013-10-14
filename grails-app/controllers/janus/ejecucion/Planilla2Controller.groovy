@@ -1489,7 +1489,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         tablaMlFs += '<th class="tal">Días</th> <td>' + diasNoAcatar + "</td>"
         tablaMlFs += "</tr>"
         tablaMlFs += "<tr>"
-        tablaMlFs += '<th class="tal">Multa</th> <td>' + prmlMultaDisposiciones + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
+        tablaMlFs += '<th class="tal">Multa</th> <td>' + prmlMultaDisposiciones + "&#8240; de \$" + numero(totalContrato, 2) + " por día</td>"
         tablaMlFs += "</tr>"
         tablaMlFs += "<tr>"
         tablaMlFs += '<th class="tal">Total multa</th> <td>$' + numero(multaDisposiciones, 2) + "</td>"
