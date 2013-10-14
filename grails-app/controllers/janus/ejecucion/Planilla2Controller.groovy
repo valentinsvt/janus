@@ -1139,14 +1139,16 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         if (p.parcialCronograma > p.parcialPlanilla) {
                             def valorDia = p.parcialCronograma / p.dias
                             retraso = ((p.parcialCronograma - p.parcialPlanilla) / valorDia).round(2)
-                            multa = ((totalContrato) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
+//                            multa = ((totalContrato) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
+                            multa = ((p.parcialCronograma) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
                         }
                         totalMultaRetraso += multa
                         bodyMultaRetraso += "<tr>"
                         bodyMultaRetraso += "<th class='tal'>${fechaConFormato(p.fechaIncio, 'MMM-yy')}</th>"
                         bodyMultaRetraso += "<td class='number'>${numero(p.parcialCronograma, 2)}</td>"
                         bodyMultaRetraso += "<td class='number'>${numero(p.parcialPlanilla, 2)}</td>"
-                        bodyMultaRetraso += "<td class='number'>${numero(retraso, 2)}</td>"
+                        bodyMultaRetraso += "<td class='number'>${numero(retraso, 0)}</td>"
+                        bodyMultaRetraso += "<td class='number'>${numero(prmlMultaIncumplimiento, 0)} x 1000</td>"
                         bodyMultaRetraso += "<td class='number'>${numero(multa, 2)}</td>"
                         bodyMultaRetraso += "</tr>"
                     }
@@ -1338,6 +1340,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaMl += '<th>Planillado</th>'
             tablaMl += '<th>Retraso</th>'
             tablaMl += '<th>Multa</th>'
+            tablaMl += '<th>Valor</th>'
             tablaMl += '</tr>'
             tablaMl += '</thead>'
             tablaMl += '<tbody>'
@@ -1346,7 +1349,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaMl += '<tfoot>'
             tablaMl += '<tr>'
             tablaMl += '<th>TOTAL</th>'
-            tablaMl += '<td colspan="3"></td>'
+            tablaMl += '<td colspan="4"></td>'
             tablaMl += "<th class='number'>${numero(totalMultaRetraso, 2)}</th>"
             tablaMl += '</tr>'
             tablaMl += '</tfoot>'
