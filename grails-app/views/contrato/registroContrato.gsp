@@ -110,7 +110,7 @@
 
                     <div class="span2 formato">Memo de Distribución</div>
 
-                    <div class="span3"><g:textField name="memo" class="memo caps" value="${contrato?.memo}" maxlength="20"/></div>
+                    <div class="span3"><g:textField name="memo" class="memo caps allCaps" value="${contrato?.memo}" maxlength="20"/></div>
 
 
                 </div> <!--DSAFSD-->

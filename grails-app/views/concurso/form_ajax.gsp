@@ -249,7 +249,7 @@
 
                                     <div class="controls">
                                         <g:textField name="memoRequerimiento" value="${concursoInstance?.memoRequerimiento}"/>
-                                        <p class="help-block ui-helper-hidden"></p>
+                                        <p class="help-block ui-helper-hidden allCaps" ></p>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -260,7 +260,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <g:textField name="memoSif" value="${concursoInstance?.memoSif}"/>
+                                        <g:textField name="memoSif allCaps" value="${concursoInstance?.memoSif}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>

@@ -528,6 +528,12 @@ class ConcursoController extends janus.seguridad.Shield {
         if (params.fechaNotificacionAdjudicacion) {
             params.fechaNotificacionAdjudicacion = new Date().parse("dd-MM-yyyy", params.fechaNotificacionAdjudicacion)
         }
+        if (params.memoRequerimiento) {
+            params.memoRequerimiento = params.memoRequerimiento.toString().toUpperCase()
+        }
+        if (params.memoSif) {
+            params.memoSif = params.memoSif.toString().toUpperCase()
+        }
 
         def concursoInstance
         if (params.id) {
