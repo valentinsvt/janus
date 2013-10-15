@@ -135,7 +135,7 @@
                             </div>
 
                             <div class="span4">
-                                <g:textField name="numero" maxlength="20" class=" required allCaps" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
+                                <g:textField name="numero" maxlength="30" class="span3 required allCaps" value="${fieldValue(bean: planillaInstance, field: 'numero')}"/>
                                 %{--<span class="uneditable-input span3">${planillaInstance.numero}</span>--}%
 
                                 <p class="help-block ui-helper-hidden"></p>

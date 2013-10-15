@@ -72,7 +72,7 @@ class PlanillasAdminController extends janus.seguridad.Shield {
             params.oficioEntradaPlanilla = params.oficioEntradaPlanilla.toString().toUpperCase()
         }
         if (params.numero) {
-            params.numero = params.numero.toUpperCase()
+            params.numero = params.numero.toString().toUpperCase()
         }
         def planillaInstance
 
