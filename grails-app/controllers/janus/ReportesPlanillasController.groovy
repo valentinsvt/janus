@@ -970,6 +970,15 @@ class ReportesPlanillasController {
         def contrato = planilla.contrato
 
         def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
+
+//
+//        println "****************************************"
+//        println planilla
+//        println planilla?.fechaFin
+//        println prej
+//        println prej.size()
+//        println "****************************************"
+
         /* gdo*/
         def liquidacion = false
         if (planilla?.fechaFin) {
@@ -1327,7 +1336,7 @@ class ReportesPlanillasController {
 
         def act = 0
         def act2 = 0
-        def diasTot = 0, totCrono = 0, totPlan = 0, totalMultaRetraso = 0, totalCronoPlanilla=0
+        def diasTot = 0, totCrono = 0, totPlan = 0, totalMultaRetraso = 0, totalCronoPlanilla = 0
         periodos.each { per ->
             if (per.titulo != "OFERTA") {
                 if (per.titulo == "ANTICIPO") {
@@ -1749,7 +1758,7 @@ class ReportesPlanillasController {
             addCellTabla(tablaMultaDisp, new Paragraph("Días", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph(numero(planilla.diasMultaDisposiciones, 0), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph("Multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaMultaDisp, new Paragraph(numero(prmlMultaDisposiciones, 2) + "‰ de \$" + numero(totalContrato, 2)+" por día", fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaDisp, new Paragraph(numero(prmlMultaDisposiciones, 2) + "‰ de \$" + numero(totalContrato, 2) + " por día", fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph("Valor de la multa", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaMultaDisp, new Paragraph('$' + numero(planilla.multaDisposiciones, 2), fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             document.add(tablaMultaDisp);
@@ -1894,6 +1903,10 @@ class ReportesPlanillasController {
 //                    def multasAct = totalMultaRetraso + totalMulta
                     def multasAct = planilla.multaIncumplimiento + planilla.multaRetraso + planilla.multaDisposiciones + planilla.multaPlanilla
                     def multasAcu = multasAnt + multasAct
+
+                    println "multas Ant = " + m1 + " + " + m2 + " + " + m3 + " + " + m4 + " = " + multasAnt
+                    println "multas Act = " + planilla.multaIncumplimiento + " + " + planilla.multaRetraso + " + " + planilla.multaDisposiciones + " + " + planilla.multaPlanilla + " = " + multasAct
+                    println "multas Acu = " + multasAcu
 
                     def totalAnt = cAnt - antAnt - multasAnt
                     def totalAct = cAct - antAct - multasAct
