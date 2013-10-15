@@ -5,7 +5,7 @@ class AccionesController extends janus.seguridad.Shield  {
     def dbConnectionService
 
     def index = {
-        redirect(action: "configurarMenu")
+        redirect(action: "acciones")
     }
 
     /**

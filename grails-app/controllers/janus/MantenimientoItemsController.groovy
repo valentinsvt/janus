@@ -9,6 +9,12 @@ class MantenimientoItemsController extends Shield {
 
     def preciosService
 
+
+    def index() {
+        redirect(action: "registro", params: params)
+    } //index
+
+
     String makeBasicTree(params) {
 
         def id = params.id

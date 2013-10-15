@@ -8,7 +8,7 @@ class AsignacionController extends janus.seguridad.Shield {
     def buscadorService
 
     def index() {
-        redirect(action: "list", params: params)
+        redirect(action: "form_ajax", params: params)
     } //index
 
     def list() {

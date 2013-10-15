@@ -10,7 +10,7 @@ class ObraController extends janus.seguridad.Shield {
     def dbConnectionService
 
     def index() {
-        redirect(action: "list", params: params)
+        redirect(action: "registroObra", params: params)
     } //index
 
     def list() {
@@ -923,6 +923,12 @@ class ObraController extends janus.seguridad.Shield {
 
 //        println("usuario" + usuario)
 //        println("dep" + persona.departamento.id)
+
+        params.oficioIngreso = params.oficioIngreso.toUpperCase()
+        params.memoCantidadObra = params.memoCantidadObra.toUpperCase()
+        params.oficioSalida = params.oficioSalida.toUpperCase()
+        params.memoSalida = params.memoSalida.toUpperCase()
+        params.formulaPolinomica = params.formulaPolinomica.toUpperCase()
 
 
         if (params.fechaOficioSalida) {

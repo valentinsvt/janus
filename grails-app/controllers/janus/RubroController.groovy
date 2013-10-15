@@ -10,7 +10,7 @@ class RubroController extends janus.seguridad.Shield {
     def preciosService
 
     def index() {
-        redirect(action: "list", params: params)
+        redirect(action: "rubroPrincipal", params: params)
     } //index
 
 

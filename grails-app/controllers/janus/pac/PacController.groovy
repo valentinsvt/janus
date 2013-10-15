@@ -10,7 +10,9 @@ class PacController extends janus.seguridad.Shield {
 
     def buscadorService
 
-    def index() {}
+    def index() {
+        redirect(action: "registrarPac")
+    }
 
     def formUploadPac() {
 

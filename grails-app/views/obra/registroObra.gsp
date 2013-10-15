@@ -205,7 +205,7 @@
                     <div class="span1 formato" style="width: 200px;">DOCUMENTO DE REFERENCIA</div>
 
                     <div class="span2">
-                        <g:textField name="oficioIngreso" class="memo" value="${obra?.oficioIngreso}" maxlength="20" style="width: 120px; margin-left: -10px" title="Número del Oficio de Ingreso"/>
+                        <g:textField name="oficioIngreso" class="memo allCaps" value="${obra?.oficioIngreso}" maxlength="20" style="width: 120px; margin-left: -10px" title="Número del Oficio de Ingreso"/>
                         <g:if test="${obra}">
                             <a class="btn btn-small btn-info " id="tramites" href="${g.createLink(action: 'verTramites', controller: 'tramite', id: obra?.oficioIngreso)}" rel="tooltip" title="Ver tramites" style="margin-top: -10px;">
                                 <i class="icon-file-alt"></i></a>
@@ -214,7 +214,7 @@
 
                     <div class="span1 formato" style="width: 220px; margin-left: 40px;">MEMORANDO CANTIDAD DE OBRA</div>
 
-                    <div class="span2"><g:textField name="memoCantidadObra" class="cantidad" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 120px; margin-left: 0px" title="Memorandum u oficio de cantidad de obra"/></div>
+                    <div class="span2"><g:textField name="memoCantidadObra" class="cantidad allCaps" value="${obra?.memoCantidadObra}" maxlength="20" style="width: 120px; margin-left: 0px" title="Memorandum u oficio de cantidad de obra"/></div>
 
                     <div class="span1 formato" style="margin-left: 20px;">FECHA</div>
 
@@ -448,15 +448,15 @@
                     </div>
 
                     <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio
-                    <g:textField name="oficioSalida" class="span2" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
+                    <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
                     </div>
 
                     <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
-                    <g:textField name="memoSalida" class="span2" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
+                    <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
                     </div>
 
                     <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                    <g:textField name="formulaPolinomica" class="span2" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
+                    <g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
                     </div>
 
                     <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha
