@@ -45,19 +45,17 @@
 
     <body>
 
-
-    <g:if test="${flash.message}">
-        <div class="span12" >
-            <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
-                <a class="close" data-dismiss="alert" href="#">×</a>
-                ${flash.message}
+        <g:if test="${flash.message}">
+            <div class="span12">
+                <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
+                    <a class="close" data-dismiss="alert" href="#">×</a>
+                    ${flash.message}
+                </div>
             </div>
-        </div>
-    </g:if>
+        </g:if>
 
 
         <div class="row">
-
 
             %{--<div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;height: 35px;">--}%
             <div class="span12 btn-group" role="navigation" style="margin-left: 0px;width: 100%;">
@@ -68,11 +66,16 @@
                 </g:if>
                 <button class="btn" id="btn-cancelar"><i class="icon-undo"></i> Cancelar</button>
                 <g:if test="${contrato?.id}">
-                    <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
+                    <g:if test="${contrato?.id && contrato?.estado != 'R'}">
+                        <button class="btn" id="btn-borrar"><i class="icon-remove"></i> Eliminar Contrato</button>
+                    </g:if>
                 </g:if>
 
-                <g:if test="${contrato?.estado == 'R' && planilla == []}">
-                    <button class="btn" id="btn-desregistrar"><i class="icon-exclamation"></i> Cambiar Estado</button>
+                <g:if test="${contrato?.estado == 'R'}">
+                    <g:if test="${planilla == []}">
+                        <button class="btn" id="btn-desregistrar"><i class="icon-exclamation"></i> Cambiar Estado
+                        </button>
+                    </g:if>
                 </g:if>
                 <g:if test="${contrato?.id && contrato?.estado != 'R'}">
                     <button class="btn" id="btn-registrar"><i class="icon-exclamation"></i> Registrar</button>
@@ -93,14 +96,24 @@
             </div>
         </div>
 
-
         <g:form class="registroContrato" name="frm-registroContrato" action="save">
 
             <g:hiddenField name="id" value="${contrato?.id}"/>
 
-            <fieldset class="" style="position: relative; height: 50px; border-bottom: 1px solid black; width: 100%;">
 
-                <div class="span12" style="margin-top: 10px" align="center">
+            <g:if test="${contrato?.estado == 'R'}">
+                <g:if test="${planilla != []}">
+                    <fieldset class="" style="position: relative; height: 50px; border-bottom: 1px solid black; width: 100%;">
+                        <div class="alert alert-warning" style="margin-top: 10px">
+                            Este contrato ya está registrado
+                        </div>
+                    </fieldset>
+                </g:if>
+            </g:if>
+
+            <fieldset class="" style="position: relative; padding: 10px;border-bottom: 1px solid black;">
+
+                <div class="span12" style="margin-top: 10px; margin-bottom: 5px;">
 
                     %{--<g:if test="${contrato?.codigo != null}">--}%
 
@@ -111,7 +124,6 @@
                     <div class="span2 formato">Memo de Distribución</div>
 
                     <div class="span3"><g:textField name="memo" class="memo caps allCaps" value="${contrato?.memo}" maxlength="20"/></div>
-
 
                 </div> <!--DSAFSD-->
             </fieldset>
@@ -314,7 +326,7 @@
 
                     <div class="span1">
                         <g:textField name="porcentajeAnticipo" class="anticipo activo"
-                                     value="${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0,  locale: 'ec')}"
+                                     value="${g.formatNumber(number: contrato?.porcentajeAnticipo, maxFractionDigits: 0, minFractionDigits: 0, locale: 'ec')}"
                                      style="width: 30px; text-align: right"/> %
                     </div>
 
@@ -325,7 +337,7 @@
 
                     <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
 
-                    <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list([sort: 'fechaFin'])}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id" /></div>
+                    <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list([sort: 'fechaFin'])}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id"/></div>
 
                 </div>
 
@@ -390,9 +402,9 @@
                             %{--<i class="icon-pencil"></i>Garantías--}%
                             %{--</g:link>--}%
                             %{--<a href="#"><i class="icon-pencil"></i> Garantías</a>--}%
-                                %{--<g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">--}%
-                                    %{--<i class="icon-pencil"></i> Garantías--}%
-                                %{--</g:link>--}%
+                            %{--<g:link controller="garantia" action="garantiasContrato" id="${contrato?.id}">--}%
+                            %{--<i class="icon-pencil"></i> Garantías--}%
+                            %{--</g:link>--}%
 
                             %{--</li>--}%
                             %{--<li><a href="${g.createLink(controller: 'volumenObra', action: 'volObra', id: obra?.id)}"><i class="icon-list-alt"></i>Vol. Obra--}%
@@ -704,7 +716,6 @@
                 $("#btn-aceptar").attr("disabled", false)
 
             });
-
 
             $("#memo").click(function () {
 

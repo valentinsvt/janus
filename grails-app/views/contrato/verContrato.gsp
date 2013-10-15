@@ -210,13 +210,13 @@
                     <div class="span2 formato">Multa por retraso</div>
 
                     <div class="span3">
-                        ${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
+                        ${g.formatNumber(number: contrato?.multaRetraso, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
 
                     <div class="span2 formato">Multa por no presentación de planilla</div>
 
                     <div class="span3">
-                        ${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
+                        ${g.formatNumber(number: contrato?.multaPlanilla, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
                 </div>
 
@@ -224,13 +224,13 @@
                     <div class="span2 formato">Multa por incumplimiento del cronograma</div>
 
                     <div class="span3">
-                        ${g.formatNumber(number: contrato?.multaIncumplimiento, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
+                        ${g.formatNumber(number: contrato?.multaIncumplimiento, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
 
                     <div class="span2 formato">Multa por no acatar disposiciones del fiscalizador</div>
 
                     <div class="span3">
-                        ${g.formatNumber(number: contrato?.multaDisposiciones, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')}&#8240;
+                        ${g.formatNumber(number: contrato?.multaDisposiciones, maxFractionDigits: 0, minFractionDigits: 0, format: '##,##0', locale: 'ec')} x 1000
                     </div>
                 </div>
 

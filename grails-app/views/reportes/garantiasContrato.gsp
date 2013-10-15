@@ -111,9 +111,9 @@
                 </tr>
                 <tr>
                     <td class="bold">Multa por retraso<br/>de obra</td>
-                    <td><elm:numero number="${contrato?.multaRetraso}" decimales="0"/>‰</td>
+                    <td><elm:numero number="${contrato?.multaRetraso}" decimales="0"/> x 1000</td>
                     <td class="bold">Multa por no <br/>presentación de planilla</td>
-                    <td><elm:numero number="${contrato?.multaPlanilla}" decimales="0"/>‰</td>
+                    <td><elm:numero number="${contrato?.multaPlanilla}" decimales="0"/> x 1000</td>
                 </tr>
                 <tr>
                     <td class="bold">Monto</td>

@@ -1146,7 +1146,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         bodyMultaRetraso += "<td class='number'>${numero(p.parcialCronograma, 2)}</td>"
                         bodyMultaRetraso += "<td class='number'>${numero(p.parcialPlanilla, 2)}</td>"
                         bodyMultaRetraso += "<td class='number'>${numero(retraso, 0)}</td>"
-                        bodyMultaRetraso += "<td class='number'>${numero(prmlMultaIncumplimiento, 0)}‰</td>"
+                        bodyMultaRetraso += "<td class='number'>${numero(prmlMultaIncumplimiento, 0)} x 1000</td>"
                         bodyMultaRetraso += "<td class='number'>${numero(multa, 2)}</td>"
                         bodyMultaRetraso += "</tr>"
                     }
@@ -1371,7 +1371,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaMl += '<th class="tal">Días de retraso</th> <td>' + retraso + '</td>'
             tablaMl += "</tr>"
             tablaMl += "<tr>"
-            tablaMl += '<th class="tal">Multa</th> <td>' + prmlMultaRetraso + "&#8240; de \$" + numero(totalContrato, 2) + "</td>"
+            tablaMl += '<th class="tal">Multa</th> <td>' + prmlMultaRetraso + " x 1000 de \$" + numero(totalContrato, 2) + "</td>"
             tablaMl += "</tr>"
             tablaMl += "<tr>"
             tablaMl += '<th class="tal">Total multa</th> <td>$' + numero(totalMultaRetraso, 2) + '</td>'
@@ -1475,7 +1475,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         pMl += '<th class="tal">Días de retraso</th> <td>' + retraso + "</td>"
         pMl += "</tr>"
         pMl += "<tr>"
-        pMl += '<th class="tal">Multa</th> <td>' + prmlMultaPlanilla + "&#8240; de \$" + numero((planilla.valor > 0 ? planilla.valor : totalCronoPlanilla), 2) + "</td>"
+        pMl += '<th class="tal">Multa</th> <td>' + prmlMultaPlanilla + " x 1000 de \$" + numero((planilla.valor > 0 ? planilla.valor : totalCronoPlanilla), 2) + "</td>"
         pMl += "</tr>"
         pMl += "<tr>"
         pMl += '<th class="tal">Total multa</th> <td>$' + numero(multaPlanilla, 2) + "</td>"
@@ -1489,7 +1489,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         tablaMlFs += '<th class="tal">Días</th> <td>' + diasNoAcatar + "</td>"
         tablaMlFs += "</tr>"
         tablaMlFs += "<tr>"
-        tablaMlFs += '<th class="tal">Multa</th> <td>' + prmlMultaDisposiciones + "&#8240; de \$" + numero(totalContrato, 2) + " por día</td>"
+        tablaMlFs += '<th class="tal">Multa</th> <td>' + prmlMultaDisposiciones + " x 1000 de \$" + numero(totalContrato, 2) + " por día</td>"
         tablaMlFs += "</tr>"
         tablaMlFs += "<tr>"
         tablaMlFs += '<th class="tal">Total multa</th> <td>$' + numero(multaDisposiciones, 2) + "</td>"
