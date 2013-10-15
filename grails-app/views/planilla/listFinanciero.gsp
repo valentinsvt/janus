@@ -185,16 +185,19 @@
 
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
-                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                            Enviar reajuste
-                                        </g:if>
-                                        <g:else>
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
                                             Enviar planilla
-                                        </g:else>
+                                        </g:if>
+                                    %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
+                                    %{--Enviar reajuste--}%
+                                    %{--</g:if>--}%
+                                    %{--<g:else>--}%
+                                    %{--Enviar planilla--}%
+                                    %{--</g:else>--}%
                                     </g:if>
-                                    <g:elseif test="${lblBtn == 3}">
+                                    <g:if test="${lblBtn == 3 || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                         Pedir pago
-                                    </g:elseif>
+                                    </g:if>
                                     <g:if test="${lblBtn == 4}">
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Informar pago

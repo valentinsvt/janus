@@ -496,6 +496,16 @@ class PlanillaController extends janus.seguridad.Shield {
                 lblFecha = "Fecha de memo de pedido de pago"
                 fechaMin = planilla.fechaMemoSalidaPlanilla
                 fecha = planilla.fechaMemoSalidaPlanilla
+
+                if (!fechaMin) {
+                    fechaMin = planilla.fechaOficioEntradaPlanilla
+                    fecha = planilla.fechaOficioEntradaPlanilla
+                    planilla.fechaMemoSalidaPlanilla = planilla.fechaOficioEntradaPlanilla
+                    if (!planilla.save(flush: true)) {
+                        println "error aqui: planilla controller l.505: " + planilla.errors
+                    }
+                }
+
                 extra = "Fecha de memo de salida: " + fechaMin.format("dd-MM-yyyy")
 //                tipoTramite = TipoTramite.findByCodigo("PDPG")
                 tiposTramite = TipoTramite.findAllByCodigo("PDPG")
@@ -758,6 +768,9 @@ class PlanillaController extends janus.seguridad.Shield {
             case "3":
                 planilla.memoPedidoPagoPlanilla = memo
                 planilla.fechaMemoPedidoPagoPlanilla = fecha
+                if (planilla.tipoPlanilla.codigo == 'A') {
+                    planilla.fechaMemoSalidaPlanilla = fecha
+                }
                 str = "Pago pedido existosamente"
                 str2 = "No se pudo pedir el pago"
                 tipoTramite = TipoTramite.findByCodigo("PDPG")

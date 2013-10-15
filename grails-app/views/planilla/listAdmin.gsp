@@ -1,4 +1,4 @@
-<%@ page import="janus.ejecucion.Planilla" %>
+<%@ page import="janus.ejecucion.TipoPlanilla; janus.ejecucion.Planilla" %>
 <!doctype html>
 <html>
     <head>
@@ -27,25 +27,35 @@
             Planillas del contrato de la obra ${obra.descripcion}
         </div>
 
+        <g:set var="anticipo" value="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A'))}"/>
+
         <div class="row">
             <div class="span9 btn-group" role="navigation">
                 <g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn" title="Regresar al contrato">
                     <i class="icon-arrow-left"></i>
                     Contrato
                 </g:link>
+
+                <g:if test="${anticipo == 0}">
+                    <g:link action="form" class="btn" params="[contrato: contrato.id]">
+                        <i class="icon-file"></i>
+                        Nueva planilla
+                    </g:link>
+                </g:if>
             %{--<g:link action="form" class="btn" params="[contrato: contrato.id]">--}%
             %{--<i class="icon-file"></i>--}%
             %{--Nueva planilla--}%
             %{--</g:link>--}%
 
 
-                <div class="btn-group">
-                    <a href="#" class="btn  " id="imprimir">
-                        <i class="icon-print"></i>
-                        Imprimir Orden de Inicio de Obra
-                    </a>
-                </div>
-
+                <g:if test="${contrato.obra.fechaInicio}">
+                    <div class="btn-group">
+                        <a href="#" class="btn  " id="imprimir">
+                            <i class="icon-print"></i>
+                            Imprimir Orden de Inicio de Obra
+                        </a>
+                    </div>
+                </g:if>
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>
@@ -194,25 +204,31 @@
 
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
-                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                            Enviar reajuste
-                                        </g:if>
-                                        <g:else>
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
                                             Enviar planilla
-                                        </g:else>
+                                        </g:if>
+                                    %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
+                                    %{--Enviar reajuste--}%
+                                    %{--</g:if>--}%
+                                    %{--<g:else>--}%
+                                    %{--Enviar planilla--}%
+                                    %{--</g:else>--}%
                                     </g:if>
-                                    <g:if test="${lblBtn == 3}">
+                                    <g:if test="${(lblBtn == 3) || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
+                                        <g:set var="lblBtn" value="${3}"/>
                                         <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                             Pedir pago
                                         </a>
-                                        <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}" data-txt="${planillaInstance.tipoPlanilla.codigo == 'A' ? 'reajuste' : 'planilla'}">
-                                            Devolver
-                                        </a>
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
+                                            <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}" data-txt="${planillaInstance.tipoPlanilla.codigo == 'A' ? 'reajuste' : 'planilla'}">
+                                                Devolver
+                                            </a>
+                                        </g:if>
                                     </g:if>
-                                    <g:elseif test="${lblBtn == 4}">
+                                    <g:if test="${lblBtn == 4}">
                                         Informar pago
-                                    </g:elseif>
-                                    <g:elseif test="${lblBtn == 5}">
+                                    </g:if>
+                                    <g:if test="${lblBtn == 5}">
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                             <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                                 Iniciar Obra
@@ -221,7 +237,7 @@
                                         <g:else>
                                             <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                         </g:else>
-                                    </g:elseif>
+                                    </g:if>
                                 </g:if>
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
@@ -237,9 +253,9 @@
                                     </a>
 
                                 </g:if>
-                                %{--<a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">--}%
-                                    %{--Iniciar Obra--}%
-                                %{--</a>--}%
+                            %{--<a href="#" class="btn btn-pagar pg_5" data-id="${planillaInstance.id}" data-tipo="5">--}%
+                            %{--Iniciar Obra--}%
+                            %{--</a>--}%
                             </td>
                         </tr>
                     </g:each>

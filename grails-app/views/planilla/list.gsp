@@ -186,29 +186,29 @@
                                 <g:if test="${lblBtn > 0}">
                                     <g:if test="${lblBtn == 2}">
                                     %{--<a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
-                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                            Enviar reajuste
-                                        </g:if>
-                                        <g:else>
+                                    %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
+                                    %{--Enviar reajuste--}%
+                                    %{--</g:if>--}%
+                                        <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
                                             Enviar planilla
-                                        </g:else>
+                                        </g:if>
                                     %{--</a>--}%
                                     </g:if>
-                                    <g:elseif test="${lblBtn == 3}">
+                                    <g:if test="${lblBtn == 3 || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                         Pedir pago
-                                    </g:elseif>
-                                    <g:elseif test="${lblBtn == 4}">
+                                    </g:if>
+                                    <g:if test="${lblBtn == 4}">
                                         Informar pago
 
-                                    </g:elseif>
-                                    <g:elseif test="${lblBtn == 5}">
+                                    </g:if>
+                                    <g:if test="${lblBtn == 5}">
                                         <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
                                             Iniciar Obra
                                         </g:if>
                                         <g:else>
                                             <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                         </g:else>
-                                    </g:elseif>
+                                    </g:if>
                                 </g:if>
                                 <g:elseif test="${lblBtn == -6}">
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
