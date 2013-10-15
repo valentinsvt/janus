@@ -1097,7 +1097,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
             def diasPlanilla = planilla.fechaFin - planilla.fechaInicio + 1
             def totDiario = totalPlanilla / diasPlanilla
             p.parcialPlanilla = (totDiario * dias).toDouble().round(2)
-            p.p0 = Math.max(p.parcialCronograma, p.parcialPlanilla)
+            if (!liquidacion) {
+                p.p0 = Math.max(p.parcialCronograma, p.parcialPlanilla)
+            }else{
+                p.p0 =  p.parcialPlanilla
+            }
 //            println "p0 "+p.p0
             if (!p.save(flush: true)) {
                 println "error calculo p0 " + p.errors
