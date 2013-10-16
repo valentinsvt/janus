@@ -38,15 +38,13 @@ class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
             dets.add([
                     id: dp.id,
                     "planilla.id": planilla.id,
-                    factura: dp.factura,
                     rubro: dp.rubro,
                     "unidad.id": dp.unidadId,
                     unidadText: dp.unidad.codigo,
-                    monto: dp.monto,
-                    montoIva: dp.montoIva,
-                    montoIndirectos: dp.montoIndirectos,
-                    indirectos: dp.indirectos,
-                    total: dp.montoIva + dp.montoIndirectos
+                    valor: dp.valor,
+                    valorIva: dp.valorIva,
+                    cantidad: dp.cantidad,
+                    total: dp.valorIva * dp.cantidad
             ])
         }
 
@@ -57,13 +55,12 @@ class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
 
 //        def totalAnterior = anteriores.size() > 0 ? anteriores.sum { it.valor } : 0
 
-        def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 25
 //        def max = contrato.monto * 0.1
 //        max -= totalAnterior
 
         def json = new JsonBuilder(dets)
 //        println json.toPrettyString()
-        return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos/*, max: max*/]
+        return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, detalles: json, iva: iva, detallesSize: detalles.size()/*, max: max*/]
     }
 
     def list() {
@@ -143,6 +140,7 @@ class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
             render "NO_Ha ocurrido un error al guardar el rubro"
         }
     }
+
     def deleteDetalleCosto() {
         def detalle = DetallePlanillaCostoAdmin.get(params.id)
         def planilla = PlanillaAdmin.get(detalle.planillaId)
@@ -150,12 +148,11 @@ class DetallePlanillaCostoAdminController extends janus.seguridad.Shield {
         updatePlanilla(planilla)
         render "OK"
     }
+
     private boolean updatePlanilla(planilla) {
         def detalles = DetallePlanillaCostoAdmin.findAllByPlanilla(planilla)
-        def totalMonto = detalles.size() > 0 ? detalles.sum { it.montoIva } : 0
-        def totalIndi = detalles.size() > 0 ? detalles.sum { it.montoIndirectos } : 0
-        def total = totalMonto + totalIndi
-        planilla.valor = total
+        def totalMonto = detalles.size() > 0 ? detalles.sum { it.valorIva * it.cantidad } : 0
+        planilla.valor = totalMonto
         if (!planilla.save(flush: true)) {
             println "error al actualizar el valor de la planilla " + planilla.errors
             return false

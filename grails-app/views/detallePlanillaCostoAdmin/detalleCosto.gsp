@@ -52,10 +52,10 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span9 btn-group" role="navigation">
-                %{--<g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">--}%
-                    %{--<i class="icon-double-angle-left"></i>--}%
-                    %{--Contrato--}%
-                %{--</g:link>--}%
+            %{--<g:link controller="contrato" action="verContrato" params="[contrato: contrato?.id]" class="btn btn-ajax btn-new" title="Regresar al contrato">--}%
+            %{--<i class="icon-double-angle-left"></i>--}%
+            %{--Contrato--}%
+            %{--</g:link>--}%
                 <g:link controller="planillasAdmin" action="list" params="[id: obra?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
                     <i class="icon-angle-left"></i>
                     Planillas
@@ -77,19 +77,11 @@
                         %{--<th>Factura N.</th>--}%
                         <th>Descripción del rubro</th>
                         <th>Unidad</th>
+                        <th>Cantidad</th>
                         <th>Valor sin IVA</th>
                         <th>
                             Valor con IVA<br/>
                             (${iva}%)
-                        </th>
-                        <th id="thIndirectos" data-indi="${indirectos}">
-                            % de indirectos<br/>
-                            <g:if test="${detallesSize == 0}">
-                                <g:select name="indirectos" class="input-mini" value="${indirectos}" from="${0..100}"/>%
-                            </g:if>
-                            <g:else>
-                                ${indirectos}%
-                            </g:else>
                         </th>
                         <th>Valor total</th>
                         <th style="width: 110px;">
@@ -100,7 +92,7 @@
                 <tbody>
                     <tr id="trRubro">
                         %{--<td id="tdFactura">--}%
-                            %{--<input type="text" id="txtFactura" class="input-small int" style="width: 120px;"/>--}%
+                        %{--<input type="text" id="txtFactura" class="input-small int" style="width: 120px;"/>--}%
                         %{--</td>--}%
                         <td id="tdRubro">
                             <input type="text" id="txtRubro" class="input-xlarge" style="width: 360px;"/>
@@ -108,14 +100,14 @@
                         <td id="tdUnidad">
                             <g:select class="input-mini" name="selUnidad" from="${janus.Unidad.list([sort: 'descripcion'])}" optionKey="id" optionValue="codigo"/>
                         </td>
+                        <td id="tdCantidad">
+                            <input type="text" id="txtCantidad" class="input-small number"/>
+                        </td>
                         <td id="tdValor">
                             <input type="text" id="txtValor" class="input-small number"/>
                         </td>
                         <td id="tdValorIva">
                             <input type="text" id="txtValorIva" class="input-small number"/>
-                        </td>
-                        <td id="tdIndirectos">
-                            <input type="text" id="txtIndirectos" class="input-small number"/>
                         </td>
                         <td id="tdTotal" class="num bold" style="font-size: 14px;">
                             0.00
@@ -139,9 +131,9 @@
                     %{--<th style="width: 80px;">Factura N.</th>--}%
                     <th>Descripción del rubro</th>
                     <th style="width: 70px;">U.</th>
+                    <th style="width: 100px;">Cantidad</th>
                     <th style="width: 100px;">Valor sin IVA</th>
                     <th style="width: 100px;">Valor con IVA</th>
-                    <th style="width: 100px;">% de indirectos</th>
                     <th style="width: 100px;">Valor total</th>
                     <g:if test="${editable}">
                         <th style="width: 120px;"></th>
@@ -240,6 +232,7 @@
                 $("#tdTotal").text("0.00");
                 $("#trRubro").removeData();
                 $("#btnSave").hide();
+                $("#btnAdd").show();
             }
 
             function updateVal(tipo) {
@@ -288,27 +281,26 @@
                 var unidadText = $("#selUnidad option:selected").text();
                 var valor = parseFloat($.trim($("#txtValor").val()));
                 var valorIva = parseFloat($.trim($("#txtValorIva").val()));
-                var valorIndi = parseFloat($.trim($("#txtIndirectos").val()));
+                var cant = parseFloat($.trim($("#txtCantidad").val()));
                 var total = 0;
-                if (!error && valor != "" && valorIva != "" && valorIndi != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(valorIndi)) {
-                    total = valorIva + valorIndi;
+                if (!error && valor != "" && valorIva != "" && cant != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(cant)) {
+                    total = valorIva * cant;
                     total = total.toFixed(2);
                     $("#tdTotal").text(number_format(total, 2, ".", "")).data("val", total);
                 }
 
-                if (!error /*&& factura != ""*/ && rubro != "" && valor != "" && valorIva != "" && valorIndi != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(valorIndi)) {
+                if (!error /*&& factura != ""*/ && rubro != "" && valor != "" && valorIva != "" && cant != "" && !isNaN(valor) && !isNaN(valorIva) && !isNaN(cant)) {
 //                            console.log("aqui");
                     var rubro = {
-                        "planilla.id"   :${planilla.id},
+                        "planilla.id" :${planilla.id},
 //                        factura         : factura,
-                        rubro           : rubro,
-                        "unidad.id"     : unidadId,
-                        unidadText      : unidadText,
-                        monto           : valor,
-                        montoIva        : valorIva,
-                        montoIndirectos : valorIndi,
-                        indirectos      : $("#thIndirectos").data("indi"),
-                        total           : total
+                        rubro         : rubro,
+                        "unidad.id"   : unidadId,
+                        unidadText    : unidadText,
+                        valor         : valor,
+                        valorIva      : valorIva,
+                        cantidad      : cant,
+                        total         : total
                     };
                     $("#trRubro").data(rubro);
 //                            console.log($("#trRubro"), rubro);
@@ -355,9 +347,9 @@
 //                $("#txtFactura").val(data.factura);
                 $("#txtRubro").val(data.rubro);
                 $("#selUnidad").val(data["unidad.id"]);
-                $("#txtValor").val(data.monto);
-                $("#txtValorIva").val(data.montoIva);
-                $("#txtIndirectos").val(data.montoIndirectos);
+                $("#txtValor").val(data.valor);
+                $("#txtValorIva").val(data.valorIva);
+                $("#txtCantidad").val(data.cantidad);
                 $("#tdTotal").text(number_format(data.total, 2, ".", ","));
                 $("#btnAdd").hide();
                 $("#btnSave").show();
@@ -389,9 +381,9 @@
 //                $("<td>" + data.factura + "</td>").appendTo($tr);
                 $("<td>" + data.rubro + "</td>").appendTo($tr);
                 $("<td>" + data.unidadText + "</td>").appendTo($tr);
-                $("<td class='num'>" + number_format(data.monto, 2, ".", ",") + "</td>").appendTo($tr);
-                $("<td class='num'>" + number_format(data.montoIva, 2, ".", ",") + "</td>").appendTo($tr);
-                $("<td class='num'>" + number_format(data.montoIndirectos, 2, ".", ",") + "</td>").appendTo($tr);
+                $("<td class='num'>" + number_format(data.cantidad, 2, ".", ",") + "</td>").appendTo($tr);
+                $("<td class='num'>" + number_format(data.valor, 2, ".", ",") + "</td>").appendTo($tr);
+                $("<td class='num'>" + number_format(data.valorIva, 2, ".", ",") + "</td>").appendTo($tr);
                 $("<td class='num'>" + number_format(data.total, 2, ".", ",") + "</td>").appendTo($tr);
 
                 if (${editable}) {
@@ -465,11 +457,6 @@
                     check($(this));
                 });
                 $("#selUnidad").change(function () {
-                    check($(this));
-                });
-                $("#indirectos").change(function () {
-                    $("#thIndirectos").data("indi", $(this).val());
-                    updateVal(1);
                     check($(this));
                 });
 

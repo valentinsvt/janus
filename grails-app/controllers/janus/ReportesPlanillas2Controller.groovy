@@ -790,10 +790,10 @@ class ReportesPlanillas2Controller {
 //                println fechaFinFiscalizador.format("dd-MM-yyyy") + "   ->>   " + prej[0].fechaFin + "       >>>       " + retrasoLiq
 //
                 def retLiq = solucion(fechaFinFiscalizador, prej[0].fechaFin)
-                if(retLiq instanceof java.lang.String){
+                if (retLiq instanceof java.lang.String) {
                     redirect(action: "errores", params: [link: retLiq])
                     return
-                 }
+                }
 //
 //                println "\t\t" + retrasoLiq2
 
@@ -1217,24 +1217,23 @@ class ReportesPlanillas2Controller {
 
 
 
-    def solucion(fechaFinFiscalizador,fechaFin){
+    def solucion(fechaFinFiscalizador, fechaFin) {
         def res3 = diasLaborablesService.diasLaborablesEntre(fechaFinFiscalizador, fechaFin)
-        def  retLiq=-1
+        def retLiq = -1
         println "\t\t" + res3
         if (res3[0]) {
             println "SI existe retrasoLiq2"
             retLiq = res3[1]
-        }
-        else {
-                    println "No existe retrasoLiq2: " + res3
-                    def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
-                    def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res3[2] ?: ""])
-                    def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
-                    link += "&nbsp;&nbsp;&nbsp;"
-                    link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
-                    flash.message = res3[1]
-                  //  redirect(action: "errores", params: [link: link])
-                     return   link
+        } else {
+            println "No existe retrasoLiq2: " + res3
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res3[2] ?: ""])
+            def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
+            link += "&nbsp;&nbsp;&nbsp;"
+            link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
+            flash.message = res3[1]
+            //  redirect(action: "errores", params: [link: link])
+            return link
         }
 //                println "\t\t" + retrasoLiq2 + "     " + retLiq
 //

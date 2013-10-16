@@ -144,7 +144,7 @@
 
                         <td class="act num cant" data-valor="${cant}">
                             <g:if test="${editable}">
-                                <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${cant}"/>
+                                <g:textField name="val_${vol.id}_${planilla.id}" class="input-mini number act" value="${cant > 0 ? cant : ''}"/>
                             </g:if>
                             <g:else>
                                 <elm:numero number="${cant}" cero="hide"/>
@@ -173,6 +173,7 @@
                     </td>
                     <td colspan="3" class="espacio borderLeft borderTop">
                         <b>A) TOTAL AVANCE DE OBRA</b>
+                        <a href="#" id="btnUpdate" class="btn btn-mini btn-success">Actualizar suma</a>
                     </td>
                     <td class="borderLeft borderTop num totalAnt" data-valor="${totalAnterior}" data-valoro="${totalAnterior}" style="font-size: larger">
                         <elm:numero number="${totalAnterior}" cero="hide"/>
@@ -273,6 +274,10 @@
             }
 
             $(function () {
+
+                $("#btnUpdate").click(function() {
+                    return false;
+                });
 
                 $("input.number").first().focus();
 
