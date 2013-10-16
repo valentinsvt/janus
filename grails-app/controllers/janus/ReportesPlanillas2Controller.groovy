@@ -791,7 +791,7 @@ class ReportesPlanillas2Controller {
 //
                 def retLiq = solucion(fechaFinFiscalizador, prej[0].fechaFin)
                 if(retLiq instanceof java.lang.String){
-                    redirect(action: "errores", params: [link: link])
+                    redirect(action: "errores", params: [link: retLiq])
                     return
                  }
 //
