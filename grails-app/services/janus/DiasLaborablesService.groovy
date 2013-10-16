@@ -18,6 +18,11 @@ class DiasLaborablesService {
      *                                     si hubo error (no hay los dias laborables), el año para configurar los días laborables
      */
     def diasLaborablesEntre(Date fecha1, Date fecha2, boolean noLaborables) {
+        println "****"
+        println fecha1
+        println fecha2
+        println noLaborables
+        println "****"
         def mensaje = ""
         def dl1 = DiaLaborable.findAllByFecha(fecha1)
         if (dl1.size() == 1) {
@@ -27,6 +32,7 @@ class DiasLaborablesService {
                 if (noLaborables) {
                     def nuevaFecha1 = fecha1
                     while (ord1 == 0) {
+                        println "while1"
                         nuevaFecha1++
                         dl1 = DiaLaborable.findByFecha(nuevaFecha1)
                         ord1 = dl1.ordinal
@@ -46,6 +52,7 @@ class DiasLaborablesService {
                     if (noLaborables) {
                         def nuevaFecha2 = fecha2
                         while (ord2 == 0) {
+                            println "while2"
                             nuevaFecha2++
                             dl2 = DiaLaborable.findByFecha(nuevaFecha2)
                             ord2 = dl2.ordinal

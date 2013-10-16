@@ -1099,8 +1099,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
             p.parcialPlanilla = (totDiario * dias).toDouble().round(2)
             if (!liquidacion) {
                 p.p0 = Math.max(p.parcialCronograma, p.parcialPlanilla)
-            }else{
-                p.p0 =  p.parcialPlanilla
+            } else {
+                p.p0 = p.parcialPlanilla
             }
 //            println "p0 "+p.p0
             if (!p.save(flush: true)) {
@@ -1359,10 +1359,39 @@ class Planilla2Controller extends janus.seguridad.Shield {
             multaIncumplimiento = totalMultaRetraso
         } else {
             def fechaFinFiscalizador = contrato.fechaPedidoRecepcionFiscalizador
-            def retraso = fechaFinFiscalizador - prej[0].fechaFin + 1
+//            def retraso = fechaFinFiscalizador - prej[0].fechaFin
+//
+//            if (retraso < 0) {
+//                retraso = 0
+//            }
+
+            def retraso = diasLaborablesService.diasLaborablesEntre(fechaFinFiscalizador, prej[0].fechaFin)
+            if (retraso[0]) {
+                retraso = retraso[1]
+            } else {
+                retraso = null
+            }
+
+            if (!retraso) {
+//                redirect(action: "errores")
+                def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+                def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: retraso[2] ?: ""])
+                def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
+                link += "&nbsp;&nbsp;&nbsp;"
+                link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
+                flash.message = retraso[1]
+                redirect(action: "errores", params: [link: link])
+                return
+            }
+
+            if (fechaFinFiscalizador < prej[0].fechaFin) {
+                retraso *= -1
+            }
+
             if (retraso < 0) {
                 retraso = 0
             }
+
             totalMultaRetraso = retraso * ((prmlMultaRetraso / 1000) * totalContrato)
             tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
             tablaMl += '<tr>'
@@ -1438,11 +1467,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
         if (!retraso) {
 //                redirect(action: "errores")
             def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
-            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: res[2] ?: ""])
+            def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: retraso[2] ?: ""])
             def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
             link += "&nbsp;&nbsp;&nbsp;"
             link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
-            flash.message = res[1]
+            flash.message = retraso[1]
             redirect(action: "errores", params: [link: link])
             return
         }
