@@ -60,6 +60,10 @@
                     <i class="icon-angle-left"></i>
                     Planillas
                 </g:link>
+                <g:link controller="reportesPlanillasAdmin" action="reporteMateriales" params="[obra: obra?.id, id: planilla?.id]" class="btn btn-ajax btn-new">
+                    <i class="icon-print"></i>
+                    Imprimir
+                </g:link>
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>

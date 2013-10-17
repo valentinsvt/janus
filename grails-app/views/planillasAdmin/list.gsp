@@ -93,10 +93,16 @@
                                     <g:link controller="detallePlanillaCostoAdmin" action="detalleCosto" id="${planillaInstance.id}" params="[obra: obra.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
+                                    <g:link controller="reportesPlanillasAdmin" action="reporteMateriales" id="${planillaInstance.id}" params="[obra: obra.id]" rel="tooltip" title="Imprimir" class="btn btn-small">
+                                        <i class="icon-print icon-large"></i>
+                                    </g:link>
                                 </g:if>
                                 <g:else>
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[obra: obra.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
+                                    </g:link>
+                                    <g:link controller="reportesPlanillasAdmin" action="reporteDetalle" id="${planillaInstance.id}" params="[obra: obra.id]" rel="tooltip" title="Imprimir" class="btn btn-small">
+                                        <i class="icon-print icon-large"></i>
                                     </g:link>
                                 </g:else>
                             %{--<g:link controller="reportesPlanillas" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">--}%

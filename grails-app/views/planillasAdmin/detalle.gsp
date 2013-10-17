@@ -56,6 +56,10 @@
                     <i class="icon-angle-left"></i>
                     Planillas
                 </g:link>
+                <g:link controller="reportesPlanillasAdmin" action="reporteDetalle" params="[obra: obra?.id, id: planilla?.id]" class="btn btn-ajax btn-new">
+                    <i class="icon-print"></i>
+                    Imprimir
+                </g:link>
                 <g:if test="${editable}">
                     <a href="#" id="btnSave" class="btn btn-success">
                         <i class="icon-save"></i>
@@ -275,7 +279,7 @@
 
             $(function () {
 
-                $("#btnUpdate").click(function() {
+                $("#btnUpdate").click(function () {
                     return false;
                 });
 
