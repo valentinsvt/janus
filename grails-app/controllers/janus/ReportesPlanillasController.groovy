@@ -37,82 +37,9 @@ class ReportesPlanillasController {
 
     def preciosService
     def dbConnectionService
-    def reportesPdfService
     def diasLaborablesService
 
-    def reporteTest() {
-        def name = "test_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
-        def res = reportesPdfService.createDocument([titulo: "TEST",
-                footer: "Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec",
-                header: "pruebas", logo: servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png", usuario: session.usuario])
-        def baos = res.baos
-        def document = res.document
-        def pdfw = res.pdfw
 
-        document.close();
-        pdfw.close()
-        byte[] b = baos.toByteArray();
-        response.setContentType("application/pdf")
-        response.setHeader("Content-disposition", "attachment; filename=" + name)
-        response.setContentLength(b.length)
-        response.getOutputStream().write(b)
-    }
-
-    def reportePrueba() {
-        def baos = new ByteArrayOutputStream()
-        def name = "prueba_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
-        Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
-        Font fontInfo = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
-        Font fontFooter = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
-
-        def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
-        Image logo = Image.getInstance(logoPath);
-        logo.setAlignment(Image.LEFT | Image.TEXTWRAP)
-
-        Document document
-        document = new Document(PageSize.A4);
-        document.setMargins(86.4, 56.2, 50, 10);
-        // margins: left, right, top, bottom
-        // 1 in = 72, 1cm=28.1, 3cm = 86.4
-        def pdfw = PdfWriter.getInstance(document, baos);
-
-        // headers and footers must be added before the document is opened
-        HeaderFooter footer1 = new HeaderFooter(new Phrase("Manuel Larrea N. 13-45 y Antonio Ante / Teléfonos troncal: (593-2)252 7077 - 254 9222 - 254 9020 - 254 9163 / www.pichincha.gob.ec", fontFooter), false);
-        // true aqui pone numero de pagina
-        footer1.setBorder(Rectangle.NO_BORDER);
-        footer1.setBorder(Rectangle.TOP);
-        footer1.setAlignment(Element.ALIGN_CENTER);
-        document.setFooter(footer1);
-
-        document.open();
-        PdfContentByte cb = pdfw.getDirectContent();
-        document.addTitle("Pruebas " + new Date().format("dd_MM_yyyy"));
-        document.addSubject("Generado por el sistema Janus");
-        document.addKeywords("reporte, janus, planillas");
-        document.addAuthor("Janus");
-        document.addCreator("Tedein SA");
-
-        Paragraph preface = new Paragraph();
-        addEmptyLine(preface, 1);
-        preface.setAlignment(Element.ALIGN_CENTER);
-        preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", fontTituloGad));
-        preface.add(new Paragraph("PRUEBAS", fontTituloGad));
-        addEmptyLine(preface, 1);
-//        Paragraph preface2 = new Paragraph();
-//        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), fontInfo))
-//        addEmptyLine(preface2, 1);
-        document.add(logo)
-        document.add(preface);
-//        document.add(preface2);
-
-        document.close();
-        pdfw.close()
-        byte[] b = baos.toByteArray();
-        response.setContentType("application/pdf")
-        response.setHeader("Content-disposition", "attachment; filename=" + name)
-        response.setContentLength(b.length)
-        response.getOutputStream().write(b)
-    }
 
     private String cap(str) {
         return str.replaceAll(/[a-zA-Z_0-9áéíóúÁÉÍÓÚñÑüÜ]+/, {
