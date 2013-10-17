@@ -23,6 +23,7 @@ class DetallePlanillaCostoAdmin {
             unidad column: 'undd__id'
             valor column: 'dpcavlor'
             valorIva column: 'dpcavliv'
+            cantidad column: 'dpcacntd'
         }
     }
 }
