@@ -267,7 +267,8 @@
 //                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/Vias_Principales.kmz");
 //                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/Parroquias_Pichincha.kmz");
                 var kmzLayerVias = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/vias_ok.kmz");
-                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/parroquias_25_prueba.kmz");
+//                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/parroquias_25_prueba.kmz");
+                var kmzLayer = new google.maps.KmlLayer("http://www.tedein.com.ec/archivos/parroquias.kmz");
                 kmzLayerVias.setMap(map);
                 kmzLayer.setMap(map);
 //        limites();

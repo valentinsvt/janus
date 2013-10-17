@@ -336,7 +336,7 @@ class Obra implements Serializable {
         firmaInicioObra(blank: true, nullable: true, attributes: [title: 'Firma para el memo de inicio de obra'])
         anexos(blank: true, nullable: true, maxSize: 255, attributes: [title: 'Anexos y planos ingresados a la biblioteca'])
 
-        observacionesInicioObra(blank: true, nullable: true, size: 1..55)
+        observacionesInicioObra(blank: true, nullable: true, size: 1..255)
 
         fechaImpresionInicioObra(blank: true, nullable: true)
     }
