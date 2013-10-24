@@ -12,7 +12,7 @@ ${html}
                 data += "&texto=" + $(this).data("num") + sep + $(this).val();
             });
             $(".clima").each(function () {
-                var $tarde = $(this).parents("td").next().children("input");
+                var $tarde = $(this).parents("td").next().children("select");
                 data += "&clima=" + $(this).data("fecha") + sep + $(this).val();
                 data += sep + $tarde.val();
             });

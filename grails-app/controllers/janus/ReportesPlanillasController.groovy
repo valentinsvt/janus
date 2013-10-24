@@ -470,8 +470,10 @@ class ReportesPlanillasController {
                     }
                     html += "<tr>"
                     html += "<td>${dateFormat.format(dia).capitalize()}</td>"
-                    html += "<td>${g.textField(name: 'clima_m_' + dia.format('dd-MM-yyyy'), value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
-                    html += "<td>${g.textField(name: 'clima_t_' + dia.format('dd-MM-yyyy'), value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+//                    html += "<td>${g.textField(name: 'clima_m_' + dia.format('dd-MM-yyyy'), value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+//                    html += "<td>${g.textField(name: 'clima_t_' + dia.format('dd-MM-yyyy'), value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+                    html += "<td>${g.select(name: 'clima_m_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valM, "class": "clima", "data-tipo": "m", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
+                    html += "<td>${g.select(name: 'clima_t_' + dia.format('dd-MM-yyyy'), from: ["Lluvioso", "Nublado", "Soleado"], value: valT, "class": "clima2", "data-tipo": "t", "data-fecha": dia.format("dd-MM-yyyy"))}</td>"
                     html += "</tr>"
                     dia++
                 }
