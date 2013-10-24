@@ -70,7 +70,7 @@ class BuscadorTagLib {
 
     def lista(name, value, campos, controlador, accion) {
         def salida = ""
-        salida += '<div style="border:1px solid black;margin-top:10px;float:left;width:95%;font-size:12px !important" class="ui-corner-all">'
+        salida += '<div style="border:1px solid black;margin-top:10px;float:left;width:99%;font-size:12px !important" class="ui-corner-all">'
         salida += '<div class="filaBuscador ui-corner-all" style="margin-left:15px;margin-top:10px;width:100%" >'
         salida += '<div id="campo" style="float: left; margin-right:  5px;">'
         salida += 'Buscar por: <select name="campo" id="campo" style="width: 110px;font-size:12px" >'

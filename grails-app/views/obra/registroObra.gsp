@@ -137,8 +137,8 @@
                 %{--</g:if>--}%
                 </g:if>
             </g:if>
-            <g:if test="${obra}">
-                <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Admin. directa
+            <g:if test="${obra && obra?.tipo != 'D'}">
+                <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
                 </button>
             </g:if>
             <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
@@ -227,7 +227,14 @@
                 </div>
 
             </fieldset>
-            <fieldset class="borde" style="float: left">
+            <fieldset class="borde" style="position: relative;float: left">
+                <g:if test="${obra?.tipo == 'D'}">
+                    <div class="span12" style="margin-top: 15px" align="center">
+                        <p class="css-vertical-text">Administración Directa</p>
+
+                        <div class="linea" style="height: 90%;"></div>
+                    </div>
+                </g:if>
                 <div class="span12" style="margin-top: 10px">
                     <div class="span1">Código:</div>
 
@@ -659,7 +666,7 @@
                                 <a href="#" id="btnVeri"><i class="icon-ok"></i>Precios no Act.</a>
                             </li>
 
-                            <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
+                            <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D' && obra?.fechaInicio}">
                                 <li>
                                     <a href="${g.createLink(controller: 'planillasAdmin', action: 'list', id: obra?.id)}" id="btnPlanillas">
                                         <i class="icon-file-alt"></i>Planillas
@@ -946,6 +953,27 @@
 
             $(function () {
 
+                $("#btn-setAdminDirecta").click(function () {
+                    $.box({
+                        imageClass : "box_info",
+                        title      : "Confirmación",
+                        text       : "<span style='font-size:larger; font-weight: bold;'>¿Está seguro de querer cambiar el tipo de la obra a administración directa?<br/>Recuerde que una vez cambiado el tipo no podrá revertir el cambio.</span>",
+                        iconClose  : false,
+                        dialog     : {
+                            resizable : false,
+                            draggable : false,
+                            buttons   : {
+                                "Cambiar"  : function () {
+                                    location.href = "${createLink(action:'cambiarAdminDir', id:obra?.id)}";
+                                },
+                                "Cancelar" : function () {
+                                }
+                            }
+                        }
+                    });
+                    return false;
+                });
+
                 $("#btn-adminDirecta").click(function () {
                     $("#admDirecta").dialog("open")
                     $(".ui-dialog-titlebar-close").html("X")
@@ -958,7 +986,7 @@
                     modal    : true,
                     buttons  : {
                         "Cerrar"       : function () {
-
+                            $(this).dialog('close');
                         },
                         "Iniciar obra" : function () {
                             var obs = $("#descAdm").val()

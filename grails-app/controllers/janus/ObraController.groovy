@@ -22,26 +22,26 @@ class ObraController extends janus.seguridad.Shield {
 
     }
 
-    def iniciarObraAdm(){
-        println "incio obra dm "+params
-        def obra=Obra.get(params.obra)
+    def iniciarObraAdm() {
+        println "incio obra dm " + params
+        def obra = Obra.get(params.obra)
         def fecha
-        try{
-            fecha=new Date().parse("dd-MM-yyyy",params.fecha)
-            if(!obra.fechaInicio){
-                obra.tipo="D"
-                obra.fechaInicio=fecha
-                obra.observacionesInicioObra=params.obs
+        try {
+            fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+            if (!obra.fechaInicio) {
+                obra.tipo = "D"
+                obra.fechaInicio = fecha
+                obra.observacionesInicioObra = params.obs
                 obra.save(flush: true)
                 render "ok"
                 return
 
-            }else{
+            } else {
                 render "error"
                 return
             }
-        } catch (e){
-            println "error fecha "+e
+        } catch (e) {
+            println "error fecha " + e
             render "error"
             return
         }
@@ -173,9 +173,9 @@ class ObraController extends janus.seguridad.Shield {
         def comu = { c ->
             return c.comunidad?.nombre
         }
-        def listaTitulos = ["CODIGO", "NOMBRE", "DIRECCION", "FECHA REG.",  "SITIO", "PARROQUIA", "COMUNIDAD", "FECHA INICIO","FECHA FIN"]
-        def listaCampos = ["codigo", "nombre", "departamento", "fechaCreacionObra",  "sitio",  "parroquia", "comunidad","fechaInicio","fechaFin" ]
-        def funciones = [null, null, null, ["format": ["dd/MM/yyyy"]], null,["closure": [parr, "&"]], ["closure": [comu, "&"]], ["format": ["dd/MM/yyyy"]], ["format": ["dd/MM/yyyy"]]]
+        def listaTitulos = ["CODIGO", "NOMBRE", "DIRECCION", "FECHA REG.", "SITIO", "PARROQUIA", "COMUNIDAD", "FECHA INICIO", "FECHA FIN"]
+        def listaCampos = ["codigo", "nombre", "departamento", "fechaCreacionObra", "sitio", "parroquia", "comunidad", "fechaInicio", "fechaFin"]
+        def funciones = [null, null, null, ["format": ["dd/MM/yyyy"]], null, ["closure": [parr, "&"]], ["closure": [comu, "&"]], ["format": ["dd/MM/yyyy"]], ["format": ["dd/MM/yyyy"]]]
         def url = g.createLink(action: "buscarObraFin", controller: "obra")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-busqueda").modal("hide");'
@@ -203,7 +203,7 @@ class ObraController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Obra
             session.funciones = funciones
-            def anchos = [7, 16, 23,8,10,10,10,8,8]
+            def anchos = [7, 16, 23, 8, 10, 10, 10, 8, 8]
             /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Obra", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE OBRAS FINALIZADAS", anchos: anchos, extras: extras, landscape: true])
         }
@@ -260,7 +260,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println "fps "+fps
         def totalP = 0
         fps.each { fp ->
-            if (fp.numero=~"p") {
+            if (fp.numero =~ "p") {
 //                println "sumo "+fp.numero+"  "+fp.valor
                 totalP += fp.valor
             }
@@ -268,19 +268,21 @@ class ObraController extends janus.seguridad.Shield {
 
         def totalC = 0
         fps.each { fp ->
-            if (fp.numero=~"c") {
+            if (fp.numero =~ "c") {
 //                println "sumo "+fp.numero+"  "+fp.valor
                 totalC += fp.valor
             }
         }
 //        println "totp "+totalP
-        if (totalP.toDouble().round(6) != 1.000) {
-            render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
-            return
-        }
-        if (totalC.toDouble().round(6) != 1.000) {
-            render "La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000"
-            return
+        if (obra.tipo != 'D') {
+            if (totalP.toDouble().round(6) != 1.000) {
+                render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
+                return
+            }
+            if (totalC.toDouble().round(6) != 1.000) {
+                render "La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000"
+                return
+            }
         }
 
 
@@ -365,6 +367,15 @@ class ObraController extends janus.seguridad.Shield {
         def obra = Obra.get(params.obra.toLong())
         def fps = FormulaPolinomica.countByObra(obra)
         render fps != 0
+    }
+
+    def cambiarAdminDir() {
+        def obra = Obra.get(params.id)
+        obra.tipo = 'D'
+        if (!obra.save(flush: true)) {
+            flash.message = g.renderErrors(bean: obra)
+        }
+        redirect(action: "registroObra", params: [obra: obra.id])
     }
 
     def registroObra() {

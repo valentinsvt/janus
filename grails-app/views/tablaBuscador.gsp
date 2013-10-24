@@ -57,15 +57,15 @@
         var w = $parent.width();
         var oldH = $cont.height();
         var oldW = $cont.width();
-        if (oldH > h - 170) {
+        if (oldH > h - 190) {
             $cont.css({
-                maxHeight : h - 140,
+                maxHeight : h - 160,
                 overflow  : "auto"
             });
         }
-        if (oldW > w - 30) {
+        if (oldW > w - 60) {
             $cont.css({
-                maxWidth : w - 20,
+                maxWidth : w - 50,
                 overflow : "auto"
             });
         }

@@ -47,7 +47,6 @@
         </div>
     </div>
     <script type="text/javascript">
-
         var $cont = $("#divBuscadorTabla");
         var $parent = $cont.parents(".modal-body");
         var h = $parent.height();
@@ -55,9 +54,9 @@
         var oldH = $cont.height();
         var oldW = $cont.width();
 
-        if (oldH > h - 170) {
+        if (oldH > h - 180) {
             $cont.css({
-                maxHeight : h - 140,
+                maxHeight : h - 150,
                 overflow  : "auto"
             });
         }
