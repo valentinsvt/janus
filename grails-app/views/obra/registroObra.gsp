@@ -137,9 +137,13 @@
                 %{--</g:if>--}%
                 </g:if>
             </g:if>
-            <g:if test="${obra?.estado == 'R'}">
+            <g:if test="${obra}">
+                <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Admin. directa
+                </button>
+            </g:if>
+            <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
                 <g:if test="${!obra?.fechaInicio}">
-                    <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra como administración directa
+                    <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
                     </button>
                 </g:if>
             </g:if>
@@ -655,9 +659,9 @@
                                 <a href="#" id="btnVeri"><i class="icon-ok"></i>Precios no Act.</a>
                             </li>
 
-                            <g:if test="${obra.tipo == 'D'}">
+                            <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
                                 <li>
-                                    <a href="${g.createLink(controller: 'planillasAdmin',action: 'list',id: obra?.id)}" id="btnPlanillas">
+                                    <a href="${g.createLink(controller: 'planillasAdmin', action: 'list', id: obra?.id)}" id="btnPlanillas">
                                         <i class="icon-file-alt"></i>Planillas
                                     </a>
                                 </li>

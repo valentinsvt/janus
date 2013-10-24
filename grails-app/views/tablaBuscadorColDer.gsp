@@ -1,50 +1,73 @@
 <g:if test="${lista?.size() > 0}">
-    <div url="${url}" style="max-width: 200%;${(width) ? 'width:' + width + 'px' : ''}">
-        <table id="tablaBuscador" class="table table-bordered table-striped table-condensed table-hover" style="max-width: 100%;width: 100%">
-            <thead>
+    <div id="divBuscadorTabla">
+        <div url="${url}" style="max-width: 200%;${(width) ? 'width:' + width + 'px' : ''}">
+            <table id="tablaBuscador" class="table table-bordered table-striped table-condensed table-hover" style="max-width: 100%;width: 100%">
+                <thead>
 
-                <g:each in="${listaTitulos}">
-                    <th>${it}</th>
-                </g:each>
-                <th style="width: 40px"></th>
+                    <g:each in="${listaTitulos}">
+                        <th>${it}</th>
+                    </g:each>
+                    <th style="width: 40px"></th>
 
-            </thead>
-            <tbody id="paginate">
-                <g:each var="reg" in="${lista}" status="i">
-                    <g:set var="propiedades" value=""></g:set>
-                    <tr style="font-size: 10px !important;">
+                </thead>
+                <tbody id="paginate">
+                    <g:each var="reg" in="${lista}" status="i">
+                        <g:set var="propiedades" value=""></g:set>
+                        <tr style="font-size: 10px !important;">
 
-                        <g:each in="${listaCampos}" var="nombre" status="j">
-                            <g:set var="propiedades" value="${propiedades += " prop_" + nombre + "='" + reg.properties[nombre] + "'"}"></g:set>
-                            <g:if test="${funciones}">
-                                <g:if test="${funciones[j]}">
-                                    <g:set var="prop" value="${bsc.operacion(propiedad: nombre, funcion: funciones[j], registro: reg)}"></g:set>
+                            <g:each in="${listaCampos}" var="nombre" status="j">
+                                <g:set var="propiedades" value="${propiedades += " prop_" + nombre + "='" + reg.properties[nombre] + "'"}"></g:set>
+                                <g:if test="${funciones}">
+                                    <g:if test="${funciones[j]}">
+                                        <g:set var="prop" value="${bsc.operacion(propiedad: nombre, funcion: funciones[j], registro: reg)}"></g:set>
+                                    </g:if>
+                                    <g:else>
+                                        <g:set var="prop" value="${reg.properties[nombre]}"></g:set>
+                                    </g:else>
                                 </g:if>
                                 <g:else>
                                     <g:set var="prop" value="${reg.properties[nombre]}"></g:set>
                                 </g:else>
-                            </g:if>
-                            <g:else>
-                                <g:set var="prop" value="${reg.properties[nombre]}"></g:set>
-                            </g:else>
-                            <td>
-                                ${prop}
-                            </td>
-                        </g:each>
-                        <td style="text-align: right;width: 40px">
-                            <a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}"  regId="${reg?.id}" txtReg="${reg.toString()}"  ${propiedades} >
-                                <i class="icon-share"></i>
-                            </a>
-                            %{--<div style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>--}%
+                                <td>
+                                    ${prop}
+                                </td>
+                            </g:each>
+                            <td style="text-align: right;width: 40px">
+                                <a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>
+                                    <i class="icon-share"></i>
+                                </a>
+                                %{--<div style="float: right; margin-right: 5px;" class="ok btnpq ui-state-default ui-corner-all" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>--}%
                                 %{--<span class="ui-icon ui-icon-circle-check"></span>--}%
-                            %{--</div>--}%
-                        </td>
-                    </tr>
-                </g:each>
-            </tbody>
-        </table>
+                                %{--</div>--}%
+                            </td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
+        </div>
     </div>
     <script type="text/javascript">
+
+        var $cont = $("#divBuscadorTabla");
+        var $parent = $cont.parents(".modal-body");
+        var h = $parent.height();
+        var w = $parent.width();
+        var oldH = $cont.height();
+        var oldW = $cont.width();
+
+        if (oldH > h - 170) {
+            $cont.css({
+                maxHeight : h - 140,
+                overflow  : "auto"
+            });
+        }
+        if (oldW > w - 30) {
+            $cont.css({
+                maxWidth : w - 20,
+                overflow : "auto"
+            });
+        }
+
         <g:if test="${funcionJs}">
         $(".ok").click(${funcionJs});
         </g:if>
