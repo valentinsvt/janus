@@ -467,7 +467,8 @@
                     </div>
 
                     <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                    <g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra?.formulaPolinomica}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
+                    %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
+                    <g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
                     </div>
 
                     <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha

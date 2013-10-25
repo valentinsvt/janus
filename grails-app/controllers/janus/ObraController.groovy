@@ -420,10 +420,25 @@ class ObraController extends janus.seguridad.Shield {
             if (matriz > 0) {
                 matrizOk = true
             }
+
 //            println matriz + "matriz ok: " + matrizOk
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil]
         } else {
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil]
+            /* ********* genera el numero de memo de formula polinoica ********************************* */
+            def dpto = persona.departamento
+            def numActual = dpto.documento
+            def num = numActual + 1
+            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
+                num = 1
+            }
+            def numero = "FP-" + num
+            if (dpto.codigo) {
+                numero += "-" + dpto.codigo
+            }
+            numero += "-" + (new Date().format("yy"))
+            /* ********* fin genera el numero de memo de formula polinoica ***************************** */
+
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil, numero: numero]
         }
 
 
@@ -933,6 +948,9 @@ class ObraController extends janus.seguridad.Shield {
 
         def persona = Persona.get(usuario)
 
+        def dpto = persona.departamento
+        def numero = null
+
 //        println("usuario" + usuario)
 //        println("dep" + persona.departamento.id)
 
@@ -1021,6 +1039,11 @@ class ObraController extends janus.seguridad.Shield {
 
             obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
 
+            numero = dpto.documento + 1
+            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
+                numero = 1
+            }
+
         } //es create
         obraInstance.estado = "N"
         if (!obraInstance.save(flush: true)) {
@@ -1041,7 +1064,13 @@ class ObraController extends janus.seguridad.Shield {
             redirect(action: 'registroObra')
             return
         } else {
-
+            if (numero) {
+                dpto.documento = numero
+                dpto.fechaUltimoDoc = new Date()
+                if (!dpto.save(flush: true)) {
+                    println "Error al actualizar el numero de documento del departamento ${dpto.id}: " + dpto.errors
+                }
+            }
         }
 
         if (params.id) {
