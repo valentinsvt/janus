@@ -142,19 +142,19 @@
         <legend>Set de Firmas</legend>
 
 
-        <div class="span6" style="margin-top: -20px">
+        %{--<div class="span6" style="margin-top: -20px">--}%
+            %{--from="${firmas}"--}%
+            %{--<elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmaDirector}"--}%
+                        %{--optionClass="${{ it?.cargo }}"--}%
+                        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}" style="width: 350px"/>--}%
 
-            <elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmas}"
-                        optionClass="${{ it?.cargo }}"
-                        optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}" style="width: 350px"/>
 
+            %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                %{--<button class="btn btnAdicionar" id="presupuesto">Adicionar</button>--}%
 
-            <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
-                <button class="btn btnAdicionar" id="presupuesto">Adicionar</button>
+            %{--</div>--}%
 
-            </div>
-
-        </div>
+        %{--</div>--}%
 
         <div class="span6" style="width: 700px; margin-top: -20px">
 
@@ -164,8 +164,8 @@
                 <tr>
                     %{--<th style="width: 50px">N°</th>--}%
                     <th style="width: 350px">Nombre</th>
-                    <th style="width: 250px">Puesto</th>
-                    <th style="width: 20px"></th>
+                    <th style="width: 250px">Rol</th>
+                    %{--<th style="width: 20px"></th>--}%
 
                 </tr>
 
@@ -174,68 +174,86 @@
 
                 <tbody id="firmasFijasPresu">
 
-                <g:if test="${obra?.inspector}">
+                %{--Director--}%
 
-                    <tr data-id="${obra?.inspector?.id}">
+                %{--<g:if test="${obra?.inspector}">--}%
 
+                    %{--<tr data-id="${obra?.inspector?.id}">--}%
+                    <tr data-id="${firmaDirector?.id}">
+
+
+
+                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
+
+                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+
+                        %{--</td>--}%
                         %{--<td>--}%
-                        %{--1--}%
+                            %{--${obra?.inspector?.cargo}--}%
+
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>--}%
                         %{--</td>--}%
 
-                        <td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
+                        <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
 
-                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
-
-                        </td>
-                        <td>
-                            ${obra?.inspector?.cargo}
+                         ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
 
                         </td>
                         <td>
-                            <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
+
+                        DIRECTOR
+
                         </td>
+
+
+
+
 
                     </tr>
-                </g:if>
+                %{--</g:if>--}%
 
 
-                <g:if test="${obra?.revisor}">
+                %{--<g:if test="${obra?.revisor}">--}%
                     <tr data-id="${obra?.revisor?.id}">
 
                         %{--<td>--}%
 
                         %{--</td>--}%
                         <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
+                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
                         </td>
                         <td>
-                            ${obra?.revisor?.cargo}
+                            %{--${obra?.revisor?.cargo}--}%
+                            REVISOR
                         </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
-                        </td>
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
 
                     </tr>
-                </g:if>
-                <g:if test="${obra?.responsableObra}">
+                %{--</g:if>--}%
+                %{--<g:if test="${obra?.responsableObra}">--}%
 
                     <tr data-id="${obra?.responsableObra?.id}">
 
                         %{--<td>--}%
 
                         %{--</td>--}%
-                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
-                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
+                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
+                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
                         </td>
                         <td>
-                            ${obra?.responsableObra?.cargo}
+                            %{--${obra?.responsableObra?.cargo}--}%
+                            ELABORÓ
                         </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>
-                        </td>
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
                     </tr>
 
-                </g:if>
+                %{--</g:if>--}%
 
                 </tbody>
 
@@ -383,19 +401,19 @@
 
         <legend>Set de Firmas</legend>
 
-        <div class="span6">
+        %{--<div class="span6">--}%
 
-            <elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"
-                        optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"
-                        optionClass="${{ it?.cargo }}" style="width: 350px"/>
+            %{--<elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"--}%
+                        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
+                        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
 
 
-            <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
-                <button class="btn btnAdicionar" id="memo">Adicionar</button>
+            %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                %{--<button class="btn btnAdicionar" id="memo">Adicionar</button>--}%
 
-            </div>
+            %{--</div>--}%
 
-        </div>
+        %{--</div>--}%
 
         <div class="span6" style="width: 700px; margin-top: -20px">
 
@@ -405,8 +423,8 @@
                 <tr>
                     %{--<th style="width: 50px">N°</th>--}%
                     <th style="width: 350px">Nombre</th>
-                    <th style="width: 250px">Puesto</th>
-                    <th style="width: 20px"></th>
+                    <th style="width: 250px">Rol</th>
+                    %{--<th style="width: 20px"></th>--}%
 
                 </tr>
 
@@ -414,68 +432,97 @@
 
                 <tbody id="firmasFijasMemo">
 
-                <g:if test="${obra?.inspector}">
+                %{--<g:if test="${obra?.inspector}">--}%
 
-                    <tr data-id="${obra?.inspector?.id}">
+                    %{--<tr data-id="${obra?.inspector?.id}">--}%
+                <tr data-id="${firmaDirector?.id}">
 
                         %{--<td>--}%
 
                         %{--</td>--}%
 
-                        <td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
+                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
 
-                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
+                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.inspector?.cargo}--}%
+
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+
+                        <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
+
+                            ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
 
                         </td>
                         <td>
-                            ${obra?.inspector?.cargo}
+
+                            DIRECTOR
 
                         </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
-                        </td>
+
 
                     </tr>
-                </g:if>
+                %{--</g:if>--}%
 
 
-                <g:if test="${obra?.revisor}">
+                %{--<g:if test="${obra?.revisor}">--}%
                     <tr data-id="${obra?.revisor?.id}">
 
+
                         %{--<td>--}%
 
                         %{--</td>--}%
+                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.revisor?.cargo}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+
                         <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
+                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
                         </td>
                         <td>
-                            ${obra?.revisor?.cargo}
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
+                            REVISOR
                         </td>
 
+
                     </tr>
-                </g:if>
-                <g:if test="${obra?.responsableObra}">
+                %{--</g:if>--}%
+                %{--<g:if test="${obra?.responsableObra}">--}%
 
                     <tr data-id="${obra?.responsableObra?.id}">
 
                         %{--<td>--}%
 
                         %{--</td>--}%
-                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
-                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
-                        </td>
-                        <td>
-                            ${obra?.responsableObra?.cargo}
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>
-                        </td>
+                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.responsableObra?.cargo}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+
+                    <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
+                        ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
+                    </td>
+                    <td>
+                        ELABORÓ
+                    </td>
                     </tr>
 
-                </g:if>
+                %{--</g:if>--}%
 
                 </tbody>
 
@@ -571,19 +618,19 @@
             <legend>Set de Firmas</legend>
 
 
-            <div class="span6">
+            %{--<div class="span6">--}%
 
-                <elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmas}"
-                            optionKey="id"
-                            optionValue="${{ it?.nombre + " " + it?.apellido }}" optionClass="${{ it?.cargo }}"
-                            style="width: 350px"/>
+                %{--<elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmas}"--}%
+                            %{--optionKey="id"--}%
+                            %{--optionValue="${{ it?.nombre + " " + it?.apellido }}" optionClass="${{ it?.cargo }}"--}%
+                            %{--style="width: 350px"/>--}%
 
-                <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
-                    <button class="btn btnAdicionar" id="polinomica">Adicionar</button>
+                %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                    %{--<button class="btn btnAdicionar" id="polinomica">Adicionar</button>--}%
 
-                </div>
+                %{--</div>--}%
 
-            </div>
+            %{--</div>--}%
 
             <div class="span6" style="width: 700px; margin-top: -20px">
 
@@ -593,8 +640,8 @@
                     <tr>
                         %{--<th style="width: 50px">N°</th>--}%
                         <th style="width: 350px">Nombre</th>
-                        <th style="width: 250px">Puesto</th>
-                        <th style="width: 20px"></th>
+                        <th style="width: 250px">Rol</th>
+                        %{--<th style="width: 20px"></th>--}%
 
                     </tr>
 
@@ -602,69 +649,98 @@
 
                     <tbody id="firmasFijasPoli">
 
-                    <g:if test="${obra?.inspector}">
+                    %{--<g:if test="${obra?.inspector}">--}%
 
-                        <tr data-id="${obra?.inspector?.id}">
+                        %{--<tr data-id="${obra?.inspector?.id}">--}%
+                    <tr data-id="${firmaDirector?.id}">
 
                             %{--<td>--}%
 
                             %{--</td>--}%
 
-                            <td id="  ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
+                            %{--<td id="  ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
 
-                                ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
+                                %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
 
-                            </td>
-                            <td>
-                                ${obra?.inspector?.cargo}
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--${obra?.inspector?.cargo}--}%
 
-                            </td>
-                            <td>
-                                <a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>
-                            </td>
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--</td>--}%
+
+                        <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
+
+                            ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
+
+                        </td>
+                        <td>
+
+                            DIRECTOR
+
+                        </td>
+
 
                         </tr>
-                    </g:if>
+                    %{--</g:if>--}%
 
 
-                    <g:if test="${obra?.revisor}">
+                    %{--<g:if test="${obra?.revisor}">--}%
                         <tr data-id="${obra?.revisor?.id}">
 
                             %{--<td>--}%
 
                             %{--</td>--}%
-                            <td id="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                                ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
-                            </td>
-                            <td>
-                                ${obra?.revisor?.cargo}
-                            </td>
-                            <td>
-                                <a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>
-                            </td>
+                            %{--<td id="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                                %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--${obra?.revisor?.cargo}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--</td>--}%
+
+                        <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
+                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
+                        </td>
+                        <td>
+                            REVISOR
+                        </td>
 
                         </tr>
-                    </g:if>
-                    <g:if test="${obra?.responsableObra}">
+                    %{--</g:if>--}%
+                    %{--<g:if test="${obra?.responsableObra}">--}%
 
                         <tr data-id="${obra?.responsableObra?.id}">
 
                             %{--<td>--}%
 
                             %{--</td>--}%
-                            <td id="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
-                                ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
-                            </td>
-                            <td>
-                                ${obra?.responsableObra?.cargo}
-                            </td>
-                            <td>
-                                <a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>
+                            %{--<td id="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                                %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--${obra?.responsableObra?.cargo}--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
 
-                            </td>
+                            %{--</td>--}%
+
+                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
+                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
+                        </td>
+                        <td>
+                            ELABORÓ
+                        </td>
+
+
                         </tr>
 
-                    </g:if>
+                    %{--</g:if>--}%
 
                     </tbody>
 
@@ -991,19 +1067,19 @@
 
         <legend>Set de Firmas</legend>
 
-        <div class="span6">
+        %{--<div class="span6">--}%
 
-            <elm:select name="setFirmas" id="cmb_memoPresu" class="selFirmas" from="${firmas}"
-                        optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"
-                        optionClass="${{ it?.cargo }}" style="width: 350px"/>
+            %{--<elm:select name="setFirmas" id="cmb_memoPresu" class="selFirmas" from="${firmas}"--}%
+                        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
+                        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
 
 
-            <div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">
-                <button class="btn btnAdicionar" id="memoPresu">Adicionar</button>
+            %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+                %{--<button class="btn btnAdicionar" id="memoPresu">Adicionar</button>--}%
 
-            </div>
+            %{--</div>--}%
 
-        </div>
+        %{--</div>--}%
 
         <div class="span6" style="width: 700px; margin-top: -20px">
 
@@ -1013,8 +1089,8 @@
                 <tr>
                     %{--<th style="width: 50px">N°</th>--}%
                     <th style="width: 350px">Nombre</th>
-                    <th style="width: 250px">Puesto</th>
-                    <th style="width: 20px"></th>
+                    <th style="width: 250px">Rol</th>
+                    %{--<th style="width: 20px"></th>--}%
 
                 </tr>
 
@@ -1022,68 +1098,98 @@
 
                 <tbody id="firmasFijasMemoPresu">
 
-                <g:if test="${obra?.inspector}">
+                %{--<g:if test="${obra?.inspector}">--}%
 
-                    <tr data-id="${obra?.inspector?.id}">
+                    %{--<tr data-id="${obra?.inspector?.id}">--}%
+                    <tr data-id="${firmaDirector?.id}">
 
                         %{--<td>--}%
 
                         %{--</td>--}%
 
-                        <td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">
+                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
 
-                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }
+                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
 
-                        </td>
-                        <td>
-                            ${obra?.inspector?.cargo}
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.inspector?.cargo}--}%
 
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>
-                        </td>
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+
+                    <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
+
+                        ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
+
+                    </td>
+                    <td>
+
+                        DIRECTOR
+
+                    </td>
+
+
 
                     </tr>
-                </g:if>
+                %{--</g:if>--}%
 
 
-                <g:if test="${obra?.revisor}">
+                %{--<g:if test="${obra?.revisor}">--}%
                     <tr data-id="${obra?.revisor?.id}">
 
                         %{--<td>--}%
 
                         %{--</td>--}%
-                        <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}
-                        </td>
-                        <td>
-                            ${obra?.revisor?.cargo}
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>
-                        </td>
+                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.revisor?.cargo}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+
+                    <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
+                        ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
+                    </td>
+                    <td>
+                        REVISOR
+                    </td>
 
                     </tr>
-                </g:if>
-                <g:if test="${obra?.responsableObra}">
+                %{--</g:if>--}%
+                %{--<g:if test="${obra?.responsableObra}">--}%
 
                     <tr data-id="${obra?.responsableObra?.id}">
 
                         %{--<td>--}%
 
                         %{--</td>--}%
-                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">
-                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}
-                        </td>
-                        <td>
-                            ${obra?.responsableObra?.cargo}
-                        </td>
-                        <td>
-                            <a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>
-                        </td>
+                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--${obra?.responsableObra?.cargo}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
+
+
+
+                    <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
+                        ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
+                    </td>
+                    <td>
+                        ELABORÓ
+                    </td>
                     </tr>
 
-                </g:if>
+                %{--</g:if>--}%
 
                 </tbody>
 
@@ -2503,21 +2609,6 @@
 
     });
 
-    // $(function () {
-    //
-    //     $("#costoPorcentaje").click(function () {
-    //        calculoPorcentaje();
-    //
-    //     });
-    //
-    //     function  calculoPorcentaje() {
-    //         var porcentaje = 0
-    //         porcentaje = ((parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) + parseFloat($("#equiposMemo").val()))*($("#costoPorcentaje").val()))/100
-    //      $("#costoMemo").val(number_format(porcentaje, 2, ".", ""));
-    //     }
-    //
-    //
-    // });
 
     $(function () {
 
