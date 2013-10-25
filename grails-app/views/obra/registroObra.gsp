@@ -162,7 +162,11 @@
 
                 </div>
 
-                <div class="span12" style="margin-top: 10px">
+                <g:if test="${obra?.tipo == 'D'}">
+                    <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
+                </g:if>
+
+                <div class="span12" style="margin-top: 0px">
 
                     <div class="span 1 formato">DIRECCIÓN</div>
 

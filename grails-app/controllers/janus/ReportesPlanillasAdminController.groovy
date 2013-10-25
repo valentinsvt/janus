@@ -50,6 +50,7 @@ class ReportesPlanillasAdminController {
         Font fontTdHeader = new Font(Font.TIMES_ROMAN, 12, Font.NORMAL);
         Font fontThTiny = new Font(Font.TIMES_ROMAN, 7, Font.BOLD);
         Font fontTdTiny = new Font(Font.TIMES_ROMAN, 7, Font.NORMAL);
+        Font fontTdTiny2 = new Font(Font.TIMES_ROMAN, 5, Font.NORMAL);
 
         def logoPath = servletContext.getRealPath("/") + "images/logo_gadpp_reportes.png"
         Image logo = Image.getInstance(logoPath);
@@ -94,7 +95,7 @@ class ReportesPlanillasAdminController {
             tablaHeaderDetalles.setWidthPercentage(100);
             tablaHeaderDetalles.setWidths(arregloEnteros([15, 30, 4, 8, 11, 11, 11, 15, 11, 11, 15]))
             tablaDetalles.setWidthPercentage(100);
-            tablaDetalles.setWidths(arregloEnteros([15, 35, 4, 8, 11, 11, 11, 12, 11, 11, 12]))
+//            tablaDetalles.setWidths(arregloEnteros([16, 35, 3, 8, 11, 11, 11, 12, 11, 12, 12]))
 
             addCellTabla(tablaHeaderDetalles, new Paragraph("Obra", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaHeaderDetalles, new Paragraph(obra.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 10])
@@ -102,8 +103,8 @@ class ReportesPlanillasAdminController {
             addCellTabla(tablaHeaderDetalles, new Paragraph("Lugar", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaHeaderDetalles, new Paragraph((obra.lugar?.descripcion ?: ""), fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 6])
             addCellTabla(tablaHeaderDetalles, new Paragraph("Planilla", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaHeaderDetalles, new Paragraph(planilla.numero, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaHeaderDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaHeaderDetalles, new Paragraph(planilla.numero, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 4])
+//            addCellTabla(tablaHeaderDetalles, new Paragraph(" ", fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
             addCellTabla(tablaHeaderDetalles, new Paragraph("Ubicación", fontThTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaHeaderDetalles, new Paragraph("Parroquia " + obra.parroquia?.nombre + " Cantón " + obra.parroquia?.canton?.nombre, fontTdTiny), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE, colspan: 6])
@@ -124,7 +125,7 @@ class ReportesPlanillasAdminController {
 
             addCellTabla(tablaDetalles, new Paragraph("N.", fontThTiny), [border: Color.BLACK, bwb: 0.1, bcb: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph("Descripción del rubro", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, bwr: borderWidth, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-            addCellTabla(tablaDetalles, new Paragraph("U.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph("U", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph("Precio unit.", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph("Volumen contratado", fontThTiny), [bwb: 0.1, bcb: Color.BLACK, border: Color.BLACK, bwr: borderWidth, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
 
@@ -255,7 +256,8 @@ class ReportesPlanillasAdminController {
 
                 tablaDetalles = new PdfPTable(11);
                 tablaDetalles.setWidthPercentage(100);
-                tablaDetalles.setWidths(arregloEnteros([12, 35, 5, 11, 11, 11, 11, 11, 11, 11, 11]))
+                tablaDetalles.setWidths(arregloEnteros([16, 35, 3, 8, 11, 11, 11, 12, 11, 12, 12]))
+//                tablaDetalles.setWidths(arregloEnteros([15, 35, 5, 11, 11, 11, 11, 11, 11, 12, 12]))
 
                 tablaDetalles.setSpacingAfter(1f);
 
@@ -271,7 +273,8 @@ class ReportesPlanillasAdminController {
                 currentRows++
                 rowsCurPag++
             }
-            addCellTabla(tablaDetalles, new Paragraph(vol.item.codigo, fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//            addCellTabla(tablaDetalles, new Paragraph(vol.item.codigo, fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDetalles, new Paragraph(vol.item.codigo, fontTdTiny2), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
             addCellTabla(tablaDetalles, new Paragraph(vol.item.nombre, fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, bwr: borderWidth, border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
             addCellTabla(tablaDetalles, new Paragraph(vol.item.unidad.codigo, fontTdTiny), [bwt: 0.1, bct: Color.WHITE, bwb: 0.1, bcb: Color.WHITE, height: height, border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])

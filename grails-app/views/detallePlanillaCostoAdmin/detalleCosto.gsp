@@ -56,6 +56,11 @@
             %{--<i class="icon-double-angle-left"></i>--}%
             %{--Contrato--}%
             %{--</g:link>--}%
+                <g:link controller="obra" action="registroObra" params="[obra: obra?.id]" class="btn btn-ajax btn-new" title="Regresar a la obra">
+                    <i class="icon-double-angle-left"></i>
+                    Obra
+                </g:link>
+
                 <g:link controller="planillasAdmin" action="list" params="[id: obra?.id]" class="btn btn-ajax btn-new" title="Regresar a las planillas del contrato">
                     <i class="icon-angle-left"></i>
                     Planillas

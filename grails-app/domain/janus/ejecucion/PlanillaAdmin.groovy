@@ -46,7 +46,7 @@ class PlanillaAdmin {
     }
 
     static constraints = {
-        numero(nullable: true,blank: true,size: 1..10)
+        numero(nullable: true,blank: true,size: 1..30)
         numeroFactura (nullable: true,blank: true,size: 1..10)
         observaciones(nullable: true,blank: true,size: 1..255)
         oficioEntradaPlanilla(nullable: true,blank: true,size: 1..55)

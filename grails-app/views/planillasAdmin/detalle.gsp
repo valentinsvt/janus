@@ -48,7 +48,7 @@
 
         <div class="row" style="margin-bottom: 10px;">
             <div class="span9 btn-group" role="navigation">
-                <g:link controller="contrato" action="registroContrato" params="[obra: obra?.id]" class="btn btn-ajax btn-new" title="Regresar a la obra">
+                <g:link controller="obra" action="registroObra" params="[obra: obra?.id]" class="btn btn-ajax btn-new" title="Regresar a la obra">
                     <i class="icon-double-angle-left"></i>
                     Obra
                 </g:link>
@@ -404,7 +404,7 @@
                         if (totalAcu > v100 && totalAcu <= v125) {
                             $.box({
                                 imageClass : "box_info",
-                                text       : "El monto total supera el 100% del monto del contrato. Se requiere autorización de aumento de cantidad de obra.",
+                                text       : "El monto total supera el 100% del monto del Presupuesto.",
                                 title      : "Alerta",
                                 iconClose  : false,
                                 dialog     : {
@@ -421,7 +421,7 @@
                             $("#btnSave").addClass("disabled");
                             $.box({
                                 imageClass : "box_info",
-                                text       : "El monto total supera el 125% del monto del contrato.",
+                                text       : "El monto total supera el 125% del monto del Presupuesto.",
                                 title      : "Alerta",
                                 iconClose  : false,
                                 dialog     : {

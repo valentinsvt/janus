@@ -426,8 +426,9 @@ class ObraController extends janus.seguridad.Shield {
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
             def dpto = persona.departamento
+            println "........." + dpto.documento
             def numActual = dpto.documento
-            def num = numActual + 1
+            def num = numActual?:0 + 1
             if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
                 num = 1
             }
@@ -789,8 +790,8 @@ class ObraController extends janus.seguridad.Shield {
         def personas = Persona.findAllByDepartamento(departamento)
 
         def funcionInsp = Funcion.get(3)
-        def funcionRevi = Funcion.get(4)
-        def funcionResp = Funcion.get(5)
+        def funcionRevi = Funcion.get(5)
+        def funcionResp = Funcion.get(1)
 
         def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
         def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
@@ -1039,7 +1040,7 @@ class ObraController extends janus.seguridad.Shield {
 
             obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
 
-            numero = dpto.documento + 1
+            numero = dpto.documento?:0 + 1
             if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
                 numero = 1
             }
