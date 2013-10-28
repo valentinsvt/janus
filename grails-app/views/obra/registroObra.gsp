@@ -121,7 +121,10 @@
             </g:if>
             <g:if test="${obra?.liquidacion == 0}">
                 <g:if test="${obra?.departamento?.id == persona?.departamento?.id && Concurso.countByObra(obra) == 0}">
-                    <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+                %{--<g:if test="${obra?.tipo != 'D' || (obra?.tipo == 'D' && obra?.fechaInicio == null)}">--}%
+                    <g:if test="${obra?.fechaInicio == null}">
+                        <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+                    </g:if>
                 </g:if>
 
                 <g:if test="${obra?.id != null}">
@@ -470,10 +473,12 @@
                     <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
                     </div>
 
-                    <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                    %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
-                    <g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
-                    </div>
+                    <g:if test="${obra?.tipo != 'D'}">
+                        <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
+                        %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
+                        <g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
+                        </div>
+                    </g:if>
 
                     <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha
                     <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
