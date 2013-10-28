@@ -473,10 +473,18 @@
                     <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
                     </div>
 
-                    <g:if test="${obra?.tipo != 'D'}">
+                    <g:if test="${obra?.id && obra?.tipo != 'D'}">
                         <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
                         %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
-                        <g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
+                            <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
+                            %{--<g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : ''}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
+                                <div style="font-weight: normal;">${obra?.formulaPolinomica}</div>
+                            </g:if>
+                            <g:else>
+                                <a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">
+                                    Generar
+                                </a>
+                            </g:else>
                         </div>
                     </g:if>
 
@@ -1148,6 +1156,39 @@
                 });
                 $("#cancela").click(function () {
                     $("#modal-matriz").modal("hide")
+                });
+
+                $("#btnGenerarFP").click(function () {
+                    var $btn = $(this).clone(true);
+                    $(this).replaceWith(spinner);
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action: 'generaNumeroFP')}",
+                        data    : "obra=${obra.id}",
+                        success : function (msg) {
+                            var parts = msg.split("_");
+                            if (parts[0] == "OK") {
+                                spinner.replaceWith("<div style='font-weight: normal;'>" + parts[1] + "</div>");
+                            } else {
+                                $.box({
+                                    imageClass : "box_info",
+                                    text       : parts[1],
+                                    title      : "Errores",
+                                    iconClose  : false,
+                                    dialog     : {
+                                        resizable : false,
+                                        draggable : false,
+                                        buttons   : {
+                                            "Aceptar" : function () {
+                                            }
+                                        }
+                                    }
+                                });
+                                spinner.replaceWith($btn);
+                            }
+                        }
+                    });
+                    return false;
                 });
 
                 $("#ok_matiz").click(function () {
