@@ -36,6 +36,22 @@ class PersonaRolController extends janus.seguridad.Shield {
     }
 
 
+    def getSeleccionados () {
+
+
+        def direccion = Direccion.get(params.id)
+
+        def departamentos = Departamento.findAllByDireccion(direccion)
+
+        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+//        println("personas:" + personas)
+
+        return [personas: personas]
+
+    }
+
+
     def obtenerFuncion (){
 
 
@@ -43,6 +59,20 @@ class PersonaRolController extends janus.seguridad.Shield {
         def persona = Persona.get(params.id);
 
         def rol = PersonaRol.findAllByPersona(persona)
+
+        return [persona: persona, rol: rol]
+
+    }
+
+
+    def obtenerFuncionDirector () {
+
+        def persona = Persona.get(params.id);
+
+        def funcion = Funcion.get(9)
+
+        def rol = PersonaRol.findByPersonaOrFuncion(persona, funcion)
+
 
         return [persona: persona, rol: rol]
 
@@ -155,4 +185,54 @@ class PersonaRolController extends janus.seguridad.Shield {
             render "NO"
         }
     } //delete
+
+
+    //asignación del director
+
+    def asignarDirector () {
+
+
+
+        def listaDireccion = Direccion.list()
+
+
+
+
+        return [listaDireccion: listaDireccion]
+
+
+
+    }
+
+
+    def sacarFunciones () {
+
+
+        def direccion = Direccion.get(params.id)
+
+        def departamentos = Departamento.findAllByDireccion(direccion)
+
+        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+
+        def funcion = Funcion.get(9)
+
+
+        def roles = PersonaRol.findAllByPersonaInListAndFuncion(personas, funcion )
+
+        render roles.size()
+
+//        println("roles" + roles)
+
+//        return [roles: roles]
+
+
+
+    }
+
+
+
+
+
+
 } //fin controller

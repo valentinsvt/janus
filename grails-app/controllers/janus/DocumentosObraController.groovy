@@ -122,7 +122,8 @@ class DocumentosObraController {
 
         def firmas = PersonaRol.findAllByFuncionAndPersonaInList(funcionFirmar, firmasAdicionales)
 
-        def firmaDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, firmasAdicionales)
+        def firmaDirector = PersonaRol.findByFuncionOrPersonaInList(funcionDirector, firmasAdicionales)
+
 
 //        println("Director-->" + firmaDirector.persona)
 
