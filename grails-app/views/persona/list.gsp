@@ -35,6 +35,11 @@
                 <i class="icon-user"></i>
                 Colocar Rol en la persona
             </a>
+
+            <a href="#" class="btn btn-ajax btn-dir" id="btn-dir">
+                <i class="icon-user"></i>
+                Asignar Director
+            </a>
         </div>
 
     %{--<div class="span12 btn-group" role="navigation">--}%
@@ -371,6 +376,12 @@
                 $("#btn-rol").click(function () {
 
                     location.href= "${createLink(controller: 'personaRol', action: 'registroPersonaRol')}"
+
+                });
+
+                $("#btn-dir").click(function () {
+
+                    location.href= "${createLink(controller: 'personaRol', action: 'asignarDirector')}"
 
                 });
 
