@@ -32,7 +32,7 @@ class Departamento implements Serializable {
         direccion(blank: true, attributes: [title: 'Direccion'])
         permisos(blank: true, nullable: true, size: 1..124)
         codigo(maxSize: 4, blank: false, unique: true, attributes: [title: 'codigo'])
-        documento(blank: false, unique: true, attributes: [title: 'documento'])
+        documento(blank: false, attributes: [title: 'documento'])
         fechaUltimoDoc(blank: true, nullable: true)
     }
 
