@@ -116,7 +116,9 @@
                 </div>
 
                 <div class="span2">
-                    <g:textField type="text" name="distanciaPeso" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaPeso, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="distanciaPeso" class="inputVar num"
+                                 value="${g.formatNumber(number: obra?.distanciaPeso, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
+                                 title="Distancia de la Obra a la capital del Cantón"/>
                 </div>
 
 
@@ -125,7 +127,9 @@
                 </div>
 
                 <div class="span1">
-                    <g:textField type="text" name="distanciaVolumen" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaVolumen, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="distanciaVolumen" class="inputVar num"
+                                 value="${g.formatNumber(number: obra?.distanciaVolumen, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
+                                 title="Distancia de la Obra a la mina"/>
                 </div>
 
             </div>
@@ -138,7 +142,9 @@
 
                 <div class="span2">
                     %{--<div class="input-append">--}%
-                    <g:textField type="text" name="distanciaPesoEspecial" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaPesoEspecial, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="distanciaPesoEspecial" class="inputVar num"
+                                 value="${g.formatNumber(number: obra?.distanciaPesoEspecial, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
+                                 title="Distancia de la Obra a la fábrica o proveedor especial"/>
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
                 </div>
@@ -149,7 +155,9 @@
 
                 <div class="span1">
                     %{--<div class="input-append">--}%
-                    <g:textField type="text" name="distanciaVolumenMejoramiento" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaVolumenMejoramiento, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="distanciaVolumenMejoramiento" class="inputVar num"
+                                 value="${g.formatNumber(number: obra?.distanciaVolumenMejoramiento, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
+                                 title="Distancia de la Obra a la mina"/>
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
                 </div>
@@ -169,7 +177,9 @@
 
                 <div class="span1">
                     %{--<div class="input-append">--}%
-                    <g:textField type="text" name="distanciaVolumenCarpetaAsfaltica" class="inputVar num" value="${g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"/>
+                    <g:textField type="text" name="distanciaVolumenCarpetaAsfaltica" class="inputVar num"
+                                 value="${g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, maxFractionDigits: 2, minFractionDigits: 2, format: '##,##0', locale: 'ec')}"
+                                 title="Distancia de la Obra a la mina"/>
                     %{--<span class="add-on">km</span>--}%
                     %{--</div>--}%
                 </div>
