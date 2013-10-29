@@ -6,10 +6,21 @@
 --%>
 
 
+
+
 <div class="span1" style="font-weight: bold">Persona:</div>
 <g:select name="persona.id" class="persona" from="${personas}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"
           style="width: 300px"/>
 
+<g:if test="${obtenerDirector != null}">
+
+    <div class="span12" id="directorSel" style="font-weight: bold; color: #4f5dff">Director Actual: ${obtenerDirector?.persona?.nombre + " " +  obtenerDirector?.persona?.apellido}</div>
+
+</g:if>
+<g:else>
+    <div class="span12" id="directorSel" style="font-weight: bold; color: #ff2a08">Director Actual: La Dirección seleccionada no cuenta con un director asignado actualmente.</div>
+
+</g:else>
 
 <script type="text/javascript">
 

@@ -12,6 +12,8 @@ class DocumentosObraController {
 
     def documentosObra () {
 
+        println("params:" + params)
+
         def pr = janus.ReportesController
 
         def nota = new Nota();
@@ -120,15 +122,19 @@ class DocumentosObraController {
         def funcionDirector = Funcion.get(9)
 
 
+        def direccion = departamento.direccion
+
+        def dptoDireccion = Departamento.findAllByDireccion(direccion)
+
+        def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
+
+
         def firmas = PersonaRol.findAllByFuncionAndPersonaInList(funcionFirmar, firmasAdicionales)
 
-        def firmaDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, firmasAdicionales)
+        def firmaDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
 
 
-//        println("Director-->" + firmaDirector.persona)
-
-
-
+//        println("Director-->" + firmaDirector)
 
         //calculo de composición
 

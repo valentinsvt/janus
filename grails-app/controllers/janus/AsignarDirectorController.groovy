@@ -49,7 +49,18 @@ class AsignarDirectorController  {
 
 //        println("personas:" + personas)
 
-            return [personas: personas]
+            def funcionDirector = Funcion.get(9)
+
+            def dptoDireccion = Departamento.findAllByDireccion(direccion)
+
+            def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
+
+            def obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+
+
+
+
+            return [personas: personas, obtenerDirector: obtenerDirector]
 
         }
 
@@ -79,7 +90,6 @@ class AsignarDirectorController  {
             return [persona: persona, rol: rol]
 
         }
-
 
 
         def grabarFuncion () {

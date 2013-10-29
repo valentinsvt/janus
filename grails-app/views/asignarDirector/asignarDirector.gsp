@@ -20,7 +20,16 @@
 
 <body>
 
+
+
+
 <div class="span6">
+
+    %{--<div class="span6" style="font-weight: bold; border-bottom: 100px">Director Actual: </div>--}%
+
+    <div class="span12" id="directorSel"></div>
+
+    <div class="span6">
 
     <div class="span1" style="font-weight: bold">Dirección:</div>
 
@@ -28,13 +37,17 @@
     <g:select name="direccion" class="departamento" from="${listaDireccion}" optionValue="nombre"
               optionKey="id" style="width: 300px" noSelection="['-1': '-Escoja la direccion-']"/>
 
+
+
+    </div>
+
     <div class="span12" id="personasSel"></div>
 
     <hr>
     <div class="span4" id="funcionDiv" style="margin-top: 10px;">
-        <div class="span2" style="margin-left: -50px; font-weight: bold">Función Director:</div>
+        <div class="span2" style="font-weight: bold">Función:</div>
         <elm:select name="funcion" id="funcion" from="${janus.Funcion?.findAllById(9)}" optionValue="descripcion" optionKey="id"
-                    optionClass="${{ it?.descripcion }}" style="margin-left: -10px"/>
+                    optionClass="${{ it?.descripcion }}" style="margin-left: -100px"/>
     </div>
 
     <div class="span2 btn-group" style="margin-left: -10px; margin-top: 10px;">
