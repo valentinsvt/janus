@@ -381,7 +381,7 @@
 
                 $("#btn-dir").click(function () {
 
-                    location.href= "${createLink(controller: 'personaRol', action: 'asignarDirector')}"
+                    location.href= "${createLink(controller: 'asignarDirector', action: 'asignarDirector')}"
 
                 });
 

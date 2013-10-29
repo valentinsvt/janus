@@ -122,10 +122,12 @@ class DocumentosObraController {
 
         def firmas = PersonaRol.findAllByFuncionAndPersonaInList(funcionFirmar, firmasAdicionales)
 
-        def firmaDirector = PersonaRol.findByFuncionOrPersonaInList(funcionDirector, firmasAdicionales)
+        def firmaDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, firmasAdicionales)
 
 
 //        println("Director-->" + firmaDirector.persona)
+
+
 
 
         //calculo de composición
@@ -141,7 +143,7 @@ class DocumentosObraController {
         resEq.sort{it.item.codigo}
 
         [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
-                totalPresupuestoBien: totalPresupuestoBien, persona: persona, resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector.persona]
+                totalPresupuestoBien: totalPresupuestoBien, persona: persona, resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector]
 
 
 

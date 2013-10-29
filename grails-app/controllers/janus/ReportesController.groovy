@@ -3382,9 +3382,18 @@ class ReportesController {
 
 //                println("-->>" + f)
 
-                firmas = Persona.get(f)
+                if(f != ''){
+                    firmas = Persona.get(f)
 
-                addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+
+                }else {
+
+                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+
+
+                }
+
 
             }
 
@@ -4154,9 +4163,22 @@ class ReportesController {
             firmaFijaMemo.each { f ->
 
 
-                firmas = Persona.get(f)
+//                println("f->>" + f)
 
-                addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+                if(f != ''){
+//                    println("entro")
+
+                    firmas = Persona.get(f)
+
+                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+
+                }else {
+
+                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+
+                }
+
+
 
             }
 
@@ -4823,9 +4845,18 @@ class ReportesController {
             firmaFijaFormu.each { f ->
 
 
-                firmas = Persona.get(f)
 
-                addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+                if(f != ''){
+
+                    firmas = Persona.get(f)
+
+                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+
+                }else {
+                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+
+                }
+
 
             }
 
@@ -8181,9 +8212,16 @@ class ReportesController {
             firmaFijaMP.each { f ->
 
 
-                firmas = Persona.get(f)
+                if(f != ''){
+                    firmas = Persona.get(f)
 
-                addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+
+                }else {
+                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+
+                }
+
 
             }
 

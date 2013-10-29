@@ -179,7 +179,9 @@
                 %{--<g:if test="${obra?.inspector}">--}%
 
                     %{--<tr data-id="${obra?.inspector?.id}">--}%
-                    <tr data-id="${firmaDirector?.id}">
+
+                  <g:if test="${firmaDirector != null}">
+                    <tr data-id="${firmaDirector?.persona?.id}">
 
 
 
@@ -196,9 +198,9 @@
                             %{--<a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>--}%
                         %{--</td>--}%
 
-                        <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
+                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
-                         ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
+                         ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
 
                         </td>
                         <td>
@@ -212,6 +214,22 @@
 
 
                     </tr>
+                  </g:if>
+                <g:else>
+
+                    <tr>
+                        <td style="color: #ff2a08">
+
+                            DIRECCIÓN SIN DIRECTOR
+                        </td>
+                        <td>
+                            DIRECTOR
+                        </td>
+
+                    </tr>
+
+
+                </g:else>
                 %{--</g:if>--}%
 
 
@@ -435,7 +453,9 @@
                 %{--<g:if test="${obra?.inspector}">--}%
 
                     %{--<tr data-id="${obra?.inspector?.id}">--}%
-                <tr data-id="${firmaDirector?.id}">
+                <g:if test="${firmaDirector != null}">
+
+                <tr data-id="${firmaDirector?.persona?.id}">
 
                         %{--<td>--}%
 
@@ -454,9 +474,9 @@
                             %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
                         %{--</td>--}%
 
-                        <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
+                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
-                            ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
+                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
 
                         </td>
                         <td>
@@ -467,6 +487,23 @@
 
 
                     </tr>
+                </g:if>
+
+                <g:else>
+
+                    <tr>
+                        <td style="color: #ff2a08">
+
+                            DIRECCIÓN SIN DIRECTOR
+                        </td>
+                        <td>
+                            DIRECTOR
+                        </td>
+
+                    </tr>
+
+
+                </g:else>
                 %{--</g:if>--}%
 
 
@@ -652,7 +689,8 @@
                     %{--<g:if test="${obra?.inspector}">--}%
 
                         %{--<tr data-id="${obra?.inspector?.id}">--}%
-                    <tr data-id="${firmaDirector?.id}">
+<g:if test="${firmaDirector != null}">
+                    <tr data-id="${firmaDirector?.persona?.id}">
 
                             %{--<td>--}%
 
@@ -671,9 +709,9 @@
                                 %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
                             %{--</td>--}%
 
-                        <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
+                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
-                            ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
+                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
 
                         </td>
                         <td>
@@ -684,6 +722,22 @@
 
 
                         </tr>
+</g:if>
+                    <g:else>
+
+                        <tr>
+                            <td style="color: #ff2a08">
+
+                                DIRECCIÓN SIN DIRECTOR
+                            </td>
+                            <td>
+                                DIRECTOR
+                            </td>
+
+                        </tr>
+
+
+                    </g:else>
                     %{--</g:if>--}%
 
 
@@ -1101,7 +1155,8 @@
                 %{--<g:if test="${obra?.inspector}">--}%
 
                     %{--<tr data-id="${obra?.inspector?.id}">--}%
-                    <tr data-id="${firmaDirector?.id}">
+<g:if test="${firmaDirector != null}">
+                    <tr data-id="${firmaDirector?.persona?.id}">
 
                         %{--<td>--}%
 
@@ -1120,9 +1175,9 @@
                             %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
                         %{--</td>--}%
 
-                    <td id="${firmaDirector?.nombre + " " + firmaDirector?.apellido}">
+                    <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
-                        ${firmaDirector?.nombre + " " + firmaDirector?.apellido}
+                        ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
 
                     </td>
                     <td>
@@ -1135,7 +1190,22 @@
 
                     </tr>
                 %{--</g:if>--}%
+</g:if>
+                <g:else>
 
+                    <tr>
+                        <td style="color: #ff2a08">
+
+                            DIRECCIÓN SIN DIRECTOR
+                        </td>
+                        <td>
+                            DIRECTOR
+                        </td>
+
+                    </tr>
+
+
+                </g:else>
 
                 %{--<g:if test="${obra?.revisor}">--}%
                     <tr data-id="${obra?.revisor?.id}">

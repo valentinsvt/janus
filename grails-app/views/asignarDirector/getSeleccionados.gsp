@@ -33,7 +33,7 @@
                     "Aceptar" : function () {
                         $.ajax({
                             type: "POST",
-                            url: "${g.createLink(controller: "personaRol", action: 'delete')}",
+                            url: "${g.createLink(controller: "asignarDirector", action: 'delete')}",
                             data: { id:idRol},
                             success: function (msg) {
                                 if(msg == "OK") {
@@ -70,7 +70,7 @@
         var idPersona = $(".persona").val();
         $.ajax({
             type: "POST",
-            url: "${g.createLink(action: 'obtenerFuncion')}",
+            url: "${g.createLink(action: 'obtenerFuncionDirector')}",
             data : { id: idPersona
             } ,
             success: function (msg) {

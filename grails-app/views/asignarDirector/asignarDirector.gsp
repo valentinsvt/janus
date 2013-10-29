@@ -86,7 +86,7 @@
         $.ajax({
 
             type:'POST',
-            url: "${g.createLink(controller: "personaRol", action: 'sacarFunciones')}",
+            url: "${g.createLink(controller: "asignarDirector", action: 'sacarFunciones')}",
             data: { id: idDireccion
             },
             success: function (msg) {
@@ -127,7 +127,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "${g.createLink(controller: "personaRol", action: 'grabarFuncion')}",
+                            url: "${g.createLink(controller: "asignarDirector", action: 'grabarFuncion')}",
                             data: { id: idPersona,
 
                                 rol: idAcicionar
@@ -172,7 +172,7 @@
 
                 else {
 
-                    alert("Ya existe un director en esta dirección!")
+                    alert("Ya existe un director asignado en esta dirección!")
 
                 }
 
@@ -194,13 +194,13 @@
 
     });
 
-    function loadPersonas() {
+    function cargarPersonas() {
         var idDep = $("#direccion").val();
 
                         console.log("dep-->>" + idDep)
         $.ajax({
             type: "POST",
-            url: "${g.createLink(controller: 'personaRol', action:'getSeleccionados')}",
+            url: "${g.createLink(controller: 'asignarDirector', action:'getSeleccionados')}",
             data: {id: idDep
 
             },
@@ -217,7 +217,7 @@
 
         if ($("#direccion").val() != -1) {
 
-            loadPersonas();
+            cargarPersonas();
 
 
         }
