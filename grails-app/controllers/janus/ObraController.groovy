@@ -999,6 +999,9 @@ class ObraController extends janus.seguridad.Shield {
         params.memoCantidadObra = params.memoCantidadObra.toUpperCase()
         params.oficioSalida = params.oficioSalida.toUpperCase()
         params.memoSalida = params.memoSalida.toUpperCase()
+        params.codigo = params.codigo.toUpperCase()
+
+
         if (params.formulaPolinomica) {
             params.formulaPolinomica = params.formulaPolinomica.toUpperCase()
         }

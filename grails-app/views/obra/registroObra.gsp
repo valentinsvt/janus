@@ -246,10 +246,10 @@
                     <div class="span1">Código:</div>
 
                     <g:if test="${obra?.codigo != null}">
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" readonly="readonly" maxlength="20" title="Código de la Obra"/></div>
+                        <div class="span3"><g:textField name="codigo" class="codigo required allCaps" value="${obra?.codigo}" readonly="readonly" maxlength="20" title="Código de la Obra"/></div>
                     </g:if>
                     <g:else>
-                        <div class="span3"><g:textField name="codigo" class="codigo required" value="${obra?.codigo}" maxlength="20" title="Código de la Obra"/></div>
+                        <div class="span3"><g:textField name="codigo" class="codigo required allCaps" value="${obra?.codigo}" maxlength="20" title="Código de la Obra"/></div>
                     </g:else>
 
                     <div class="span1" style="margin-left: -20px;">Nombre</div>
