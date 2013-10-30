@@ -55,20 +55,13 @@
         $("#hiddenCanton").val($(this).attr("canton"));
         $("#cantNombre").val($(this).attr("cantN"));
 
-
-//        ////console.log("comunidadId:" + comunidad);
-
         var parroquia = $(this).attr("parroquia");
-
-//        ////console.log ("parroquia:" + parroquia);
 
         var canton = $(this).attr("canton");
 
-//        ////console.log("canton:" + canton);
-
-
         $("#busqueda").dialog("close");
 
+        return false;
 
     });
 

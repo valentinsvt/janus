@@ -380,6 +380,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def registroObra() {
 
+        println "---" + params
         def obra
 
         def usuario = session.usuario.id
