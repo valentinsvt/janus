@@ -861,7 +861,6 @@ class ObraController extends janus.seguridad.Shield {
 
         if (params.ordenar == '1') {
 
-
             orden = "asc";
 
         } else {
