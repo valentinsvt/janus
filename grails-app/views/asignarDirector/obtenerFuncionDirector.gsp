@@ -27,6 +27,7 @@
     $(".btnBorrar").click(function () {
         borrar($(this));
 
+
     });
 
 

@@ -42,6 +42,7 @@
     </div>
 
     <div class="span12" id="personasSel"></div>
+    <div class="span12" id="confirmacion"></div>
 
     <hr>
     <div class="span4" id="funcionDiv" style="margin-top: 10px;">
@@ -92,7 +93,7 @@
     $("#adicionar").click(function () {
 
 
-          var idDireccion = $("#direccion").val()
+        var idDireccion = $("#direccion").val()
 
         var existe
 
@@ -103,8 +104,6 @@
             data: { id: idDireccion
             },
             success: function (msg) {
-
-//                console.log("Existe")
 
 
 
@@ -146,6 +145,14 @@
                                 rol: idAcicionar
                             },
                             success: function (msg) {
+
+
+                                var confirmacion = $("#confirmacion")
+
+                                var dir =  $("<div class='span12' id='directorSel' style='font-weight: bold; color: #4f5dff'>Director Seleccionado</div>");
+
+                                confirmacion.html(dir)
+
                                 var parts = msg.split("_");
                                 if (parts[0] == "OK") {
                                     var tr = $("<tr>");
@@ -208,9 +215,10 @@
     });
 
     function cargarPersonas() {
+
         var idDep = $("#direccion").val();
 
-                        console.log("dep-->>" + idDep)
+//                        console.log("dep-->>" + idDep)
         $.ajax({
             type: "POST",
             url: "${g.createLink(controller: 'asignarDirector', action:'getSeleccionados')}",
@@ -225,13 +233,53 @@
         });
     }
 
+    function cargarMensaje () {
+
+
+        var idDep = $("#direccion").val();
+
+//                        console.log("dep-->>" + idDep)
+        $.ajax({
+            type: "POST",
+            url: "${g.createLink(controller: 'asignarDirector', action:'mensaje')}",
+            data: {id: idDep
+
+            },
+            success: function (msg) {
+
+                     $("#confirmacion").html(msg);
+
+
+            }
+        });
+
+    }
+
 
     $("#direccion").change(function () {
 
+
+
         if ($("#direccion").val() != -1) {
-
             cargarPersonas();
+            cargarMensaje();
 
+
+        }else {
+
+            var confirmacion = $("#confirmacion")
+
+            var dir = $("<div class='span12' id='directorSel' style='font-weight: bold'> </div>");
+
+            confirmacion.html(dir)
+
+            var comboPersonas = $("#personasSel")
+
+            comboPersonas.html(dir)
+
+            var bodyTabla = $("#funcionPersona")
+
+            bodyTabla.html("")
 
         }
 

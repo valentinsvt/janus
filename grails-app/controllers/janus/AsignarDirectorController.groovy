@@ -65,6 +65,30 @@ class AsignarDirectorController  {
         }
 
 
+
+    def mensaje () {
+
+    def direccion = Direccion.get(params.id)
+
+        def departamentos = Departamento.findAllByDireccion(direccion)
+
+        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+        def funcionDirector = Funcion.get(9)
+
+        def dptoDireccion = Departamento.findAllByDireccion(direccion)
+
+        def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
+
+        def obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+
+        return [personas: personas, obtenerDirector: obtenerDirector]
+
+
+
+    }
+
+
         def obtenerFuncion (){
 
 
@@ -220,9 +244,6 @@ class AsignarDirectorController  {
 
             render roles.size()
 
-//        println("roles" + roles)
-
-//        return [roles: roles]
 
         }
 
