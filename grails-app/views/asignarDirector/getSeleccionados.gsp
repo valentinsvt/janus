@@ -82,9 +82,18 @@
 
     $(".persona").change(function () {
         cargarFuncion();
+
+
+
     });
 
     function cargarFuncion () {
+
+
+
+
+
+
 
         var idPersona = $(".persona").val();
         $.ajax({
@@ -93,6 +102,16 @@
             data : { id: idPersona
             } ,
             success: function (msg) {
+
+//                var confirmacion = $("#confirmacion")
+//
+////                var dir = $("<div class='span12' id='directorSel' style='font-weight: bold; color: #ff2a08'>Director Actual: </div>");
+//
+//
+//                confirmacion.html(dir)
+
+
+
                 $("#funcionPersona").html(msg);
             }
         });

@@ -149,7 +149,10 @@
 
                                 var confirmacion = $("#confirmacion")
 
-                                var dir =  $("<div class='span12' id='directorSel' style='font-weight: bold; color: #4f5dff'>Director Seleccionado</div>");
+
+                                var comboPersona =  $(".persona option:selected").text()
+
+                                var dir =  $("<div class='span12' id='directorSel' style='font-weight: bold; color: #4f5dff'>Director Seleccionado: "+ comboPersona + "</div>");
 
                                 confirmacion.html(dir)
 
@@ -282,6 +285,9 @@
             bodyTabla.html("")
 
         }
+
+
+
 
 
     });
