@@ -123,7 +123,7 @@ class RubroController extends janus.seguridad.Shield {
         detalle.rubro = rubro
         detalle.item = item
         detalle.cantidad = params.cantidad.toDouble()
-        if (detalle.item.nombre=~"HERRAMIENTA MENOR") {
+        if (detalle.item.codigo=~"103.001.00") {
             detalle.cantidad = 1
             detalle.rendimiento = 1
         } else {
