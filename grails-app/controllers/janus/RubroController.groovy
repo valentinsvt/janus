@@ -123,14 +123,9 @@ class RubroController extends janus.seguridad.Shield {
         detalle.rubro = rubro
         detalle.item = item
         detalle.cantidad = params.cantidad.toDouble()
-        if (detalle.item.id.toInteger() == 2868 || detalle.item.id.toInteger() == 2869 || detalle.item.id.toInteger() == 2870) {
+        if (detalle.item.nombre=~"HERRAMIENTA MENOR") {
             detalle.cantidad = 1
-            if (detalle.item.id.toInteger() == 2868)
-                detalle.rendimiento = 1
-            if (detalle.item.id.toInteger() == 2869)
-                detalle.rendimiento = 1
-            if (detalle.item.id.toInteger() == 2870)
-                detalle.rendimiento = 1
+            detalle.rendimiento = 1
         } else {
             detalle.rendimiento = params.rendimiento.toDouble()
         }
@@ -177,7 +172,7 @@ class RubroController extends janus.seguridad.Shield {
 
         SubgrupoItems.findAllByGrupo(Grupo.get(tipo)).each {
             DepartamentoItem.findAllBySubgrupo(it).each{dp->
-                        extras+=dp.id+","
+                extras+=dp.id+","
             }
         }
         extras+="-1)";
