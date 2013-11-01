@@ -37,6 +37,7 @@
                     Nuevo Proceso
                 </a>
             </div>
+
             <div class="span3" id="busca">
             </div>
         </div>
@@ -78,6 +79,22 @@
                 </tbody>
             </table>
 
+        </div>
+
+        <div class="modal hide fade" id="modal-Delete">
+            <div class="modal-header" id="modalDeleteHeader">
+                <button type="button" class="close darker" data-dismiss="modal">
+                    <i class="icon-remove-circle"></i>
+                </button>
+
+                <h3 id="modalDeleteTitle"></h3>
+            </div>
+
+            <div class="modal-body" id="modalDeleteBody">
+            </div>
+
+            <div class="modal-footer" id="modalDeleteFooter">
+            </div>
         </div>
 
         <div class="modal grande2 hide fade" id="modal-Concurso">
@@ -156,11 +173,11 @@
                                     return false;
                                 });
 
-                                $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                                $("#modalTitle").html("Eliminar Concurso");
-                                $("#modalBody").html("<p>¿Está seguro de querer eliminar este Proceso?</p>");
-                                $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                                $("#modal-Concurso").modal("show");
+                                $("#modalDeleteHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
+                                $("#modalDeleteTitle").html("Eliminar Concurso");
+                                $("#modalDeleteBody").html("<p>¿Está seguro de querer eliminar este Proceso?</p>");
+                                $("#modalDeleteFooter").html("").append(btnOk).append(btnDelete);
+                                $("#modal-Delete").modal("show");
                                 return false;
                             }
                         },
@@ -172,14 +189,14 @@
                             }
                         },
                         %{--"eval"   : {--}%
-                            %{--name     : "Evaluación",--}%
-                            %{--icon     : "eval",--}%
-                            %{--callback : function (key, options) {--}%
-                                %{--location.href = "${g.createLink(controller: 'parametroEvaluacion',action: 'tree')}/" + $(this).attr("id")--}%
-                            %{--},--}%
-                            %{--disabled : function (key, opt) {--}%
-                                %{--return opt.$trigger.attr("reg") != 'R'--}%
-                            %{--}--}%
+                        %{--name     : "Evaluación",--}%
+                        %{--icon     : "eval",--}%
+                        %{--callback : function (key, options) {--}%
+                        %{--location.href = "${g.createLink(controller: 'parametroEvaluacion',action: 'tree')}/" + $(this).attr("id")--}%
+                        %{--},--}%
+                        %{--disabled : function (key, opt) {--}%
+                        %{--return opt.$trigger.attr("reg") != 'R'--}%
+                        %{--}--}%
                         %{--},--}%
                         "ofrt"   : {
                             name     : "Ofertas",
