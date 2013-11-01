@@ -814,7 +814,7 @@
                                     var $cant = $("#tf_cant");
                                     var total = parseFloat($cant.data("total"));
                                     var val = (prct / 100) * total;
-                                    var dol = $precio.data("max") * (prct / 100);
+                                    var dol = $precio.data("total") * (prct / 100);
                                     $cant.val(number_format(val, 2, ".", "")).data("val", val);
                                     $precio.val(number_format(dol, 2, ".", "")).data("val", dol);
                                     if (ev.keyCode != 110 && ev.keyCode != 190) {
@@ -911,9 +911,17 @@
                     var prctAsignado = $.trim($(".prct.rubro" + rubro).children("span").text());
                     var fAsignado = $.trim($(".fis.rubro" + rubro).children("span").text());
 
+                    dolAsignado = dolAsignado.replace(",", "");
+                    prctAsignado = prctAsignado.replace(",", "");
+                    fAsignado = fAsignado.replace(",", "");
+
                     var dolRestante = parseFloat(subtotal) - parseFloat(dolAsignado);
                     var prctRestante = 100 - parseFloat(prctAsignado);
                     var cantRestante = parseFloat(cant) - parseFloat(fAsignado);
+
+                    dolRestante = parseFloat(number_format(dolRestante, 2, ".", ""));
+                    prctRestante = parseFloat(number_format(prctRestante, 2, ".", ""));
+                    cantRestante = parseFloat(number_format(cantRestante, 2, ".", ""));
 
                     $("#spCant").text(cantRestante);
                     $("#spPrct").text(prctRestante);
