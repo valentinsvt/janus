@@ -20,25 +20,26 @@ class ConcursoController extends janus.seguridad.Shield {
 //        def conc = Concurso.count()
         def sec = 1
         def lst = Concurso.list([sort: "id", order: "desc"])
-//        println "________________________________________________________"
-//        println lst
+        println "________________________________________________________"
+        println lst
         if (lst.size() > 1) {
             def last = lst[1].codigo?.split("-")
-//            println last
+            println last
             if (last?.size() > 2) {
-                def cod = last[2].toInteger()
+//                def cod = last[2].toInteger()
+                def cod = last[1].toInteger()
                 sec = cod + 1
-//                println cod
-//                println sec
+                println cod
+                println sec
             }
         }
 
         codigo += concursoInstance.pac.tipoProcedimiento.sigla + "-"
-        codigo += "GADPP" + "-"
-        codigo += sec + "-"
+//        codigo += "GADPP" + "-"
+        codigo += sec + "-DGCP-"
         codigo += new Date().format("yyyy")
-//        println codigo
-//        println "________________________________________________________"
+        println codigo
+        println "________________________________________________________"
         return codigo
     }
 
@@ -460,6 +461,9 @@ class ConcursoController extends janus.seguridad.Shield {
     def save() {
         println "save concurso " + params
 
+        if (params.codigo) {
+            params.codigo = params.codigo.toUpperCase()
+        }
         if (params.fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
         }

@@ -111,7 +111,7 @@ class Concurso {
         obra(blank: true, nullable: true)
         administracion(blank: true, nullable: true)
         pac(blank: true, nullable: true)
-        codigo(blank: true, nullable: true, maxSize: 15)
+        codigo(blank: true, nullable: true, maxSize: 20)
         objeto(blank: true, nullable: true, maxSize: 255)
         costoBases(blank: true, nullable: true)
         porMilBases(blank: true, nullable: true)
