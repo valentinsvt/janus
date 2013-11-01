@@ -21,16 +21,16 @@ class ConcursoController extends janus.seguridad.Shield {
         def sec = 1
         def lst = Concurso.list([sort: "id", order: "desc"])
         println "________________________________________________________"
-        println lst
+//        println lst
         if (lst.size() > 1) {
             def last = lst[1].codigo?.split("-")
-            println last
+//            println last
             if (last?.size() > 2) {
 //                def cod = last[2].toInteger()
                 def cod = last[1].toInteger()
                 sec = cod + 1
-                println cod
-                println sec
+//                println cod
+//                println sec
             }
         }
 
@@ -38,8 +38,8 @@ class ConcursoController extends janus.seguridad.Shield {
 //        codigo += "GADPP" + "-"
         codigo += sec + "-DGCP-"
         codigo += new Date().format("yyyy")
-        println codigo
-        println "________________________________________________________"
+//        println codigo
+//        println "________________________________________________________"
         return codigo
     }
 
