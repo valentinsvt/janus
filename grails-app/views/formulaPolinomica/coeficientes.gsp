@@ -332,29 +332,50 @@
 
                             var indiceNombre = $("#indice option:selected").text();
 
-                            if (valor != "") {
-                                btnSave.replaceWith(spinner);
+                            var cantNombre = $("#tree").find("span:contains('" + indiceNombre + "')").length;
+
+                            if (cantNombre == 0) {
+                                if (valor != "") {
+                                    btnSave.replaceWith(spinner);
 //                                ////console.log("SI!!");
-                                $.ajax({
-                                    type    : "POST",
-                                    url     : "${createLink(action: 'guardarGrupo')}",
-                                    data    : {
-                                        id     : nodeId,
-                                        indice : indice,
-                                        valor  : valor
-                                    },
-                                    success : function (msg) {
-                                        if (msg == "OK") {
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action: 'guardarGrupo')}",
+                                        data    : {
+                                            id     : nodeId,
+                                            indice : indice,
+                                            valor  : valor
+                                        },
+                                        success : function (msg) {
+                                            if (msg == "OK") {
 //                                            valor = number_format(valor,)
-                                            node.attr("nombre", indiceNombre).trigger("change_node.jstree");
-                                            node.attr("valor", valor).trigger("change_node.jstree");
-                                            $("#modal-formula").modal("hide");
-                                            updateSumaTotal();
+                                                node.attr("nombre", indiceNombre).trigger("change_node.jstree");
+                                                node.attr("valor", valor).trigger("change_node.jstree");
+                                                $("#modal-formula").modal("hide");
+                                                updateSumaTotal();
+                                            }
+                                        }
+                                    });
+                                } else {
+//                                ////console.log("NO");
+                                }
+                            } else {
+                                $("#modal-formula").modal("hide");
+                                $.box({
+                                    imageClass : "box_info",
+                                    text       : "No puede ingresar dos coeficientes con el mismo nombre",
+                                    title      : "Alerta",
+                                    iconClose  : false,
+                                    dialog     : {
+                                        resizable     : false,
+                                        draggable     : false,
+                                        closeOnEscape : false,
+                                        buttons       : {
+                                            "Aceptar" : function () {
+                                            }
                                         }
                                     }
                                 });
-                            } else {
-//                                ////console.log("NO");
                             }
                         });
 
@@ -485,10 +506,12 @@
                                                             $("#tblDisponibles").children("tbody").prepend(tr);
                                                             tr.show("pulsate");
                                                             parent.attr("valor", number_format(msgParts[1], 3, '.', '')).trigger("change_node.jstree");
-
 //                                                    console.log( $("#spanTotal"),nodeValor,msg)
                                                             totalInit -= parseFloat(nodeValor);
                                                             $("#spanTotal").text(number_format(totalInit, 3, ".", "")).data("valor", totalInit);
+                                                            if (parent.children("ul").length == 0) {
+                                                                parent.attr("nombre", "").trigger("change_node.jstree");
+                                                            }
                                                         }
                                                     }
                                                 });
@@ -552,6 +575,57 @@
                     var total = parseFloat($("#spanTotal").data("valor"));
 
 //                    console.log(total, Math.abs(total - 1), Math.abs(total - 1) > 0.0001);
+
+                    var liCont = 0;
+                    var liEq = 0;
+                    $("#tree").find("li[rel=fp]").each(function () {
+                        var liNombre = $.trim($(this).attr("nombre"));
+                        var liValor = parseFloat($(this).attr("valor"));
+                        var liUl = $(this).children("ul").length;
+                        var liNextNombre = $.trim($(this).next().attr("nombre"));
+                        if ((liValor > 0 && liNombre == "") || (liUl > 0 && liNombre == "")) {
+                            liCont++;
+                        }
+                        if (liNombre != "" && liNombre == liNextNombre) {
+                            liEq++;
+                        }
+                    });
+                    if (liCont > 0) {
+                        $.box({
+                            imageClass : "box_info",
+                            text       : "Seleccione un nombre para todos los coeficientes con items.",
+                            title      : "Alerta",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable     : false,
+                                draggable     : false,
+                                closeOnEscape : false,
+                                buttons       : {
+                                    "Aceptar" : function () {
+                                    }
+                                }
+                            }
+                        });
+                        return false;
+                    }
+                    if (liEq > 0) {
+                        $.box({
+                            imageClass : "box_info",
+                            text       : "Seleccione un nombre único para cada coeficiente con items.",
+                            title      : "Alerta",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable     : false,
+                                draggable     : false,
+                                closeOnEscape : false,
+                                buttons       : {
+                                    "Aceptar" : function () {
+                                    }
+                                }
+                            }
+                        });
+                        return false;
+                    }
 
                     var tipo = "${tipo}";
                     if (Math.abs(total - 1) <= 0.0001) {
