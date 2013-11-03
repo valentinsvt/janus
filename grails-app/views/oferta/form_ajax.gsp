@@ -43,7 +43,7 @@
         <div class="controls">
             <span id="spProv">
                 <g:select id="proveedor" name="proveedor.id" from="${janus.pac.Proveedor.list()}" optionKey="id" class="many-to-one "
-                          value="${ofertaInstance?.proveedor?.id}" noSelection="['null': '']" optionValue="nombre"/>
+                          value="${ofertaInstance?.proveedor?.id}" noSelection="['null': '']" optionValue="nombre" style="width: 380px;"/>
             </span>
             <span class="mandatory">*</span>
             <a href="#" id="btnProv" class="btn" rel="tooltip" title="Agregar proveedor"><i class="icon-plus"></i></a>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="plazo" class="" value="${fieldValue(bean: ofertaInstance, field: 'plazo')}" style="width:140px;"/>
+            <g:field type="number" name="plazo" class="" value="${fieldValue(bean: ofertaInstance, field: 'plazo')}" style="width:80px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -122,7 +122,7 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="hoja" class="" value="${fieldValue(bean: ofertaInstance, field: 'hoja')}" style="width:140px;"/>
+            <g:field type="number" name="hoja" class="" value="${fieldValue(bean: ofertaInstance, field: 'hoja')}" style="width:50px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -151,7 +151,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="subsecretario" maxlength="40" class="" value="${ofertaInstance?.subsecretario}"/>
+            <g:textField name="subsecretario" maxlength="40" class="" value="${ofertaInstance?.subsecretario}" style="width: 300px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -166,9 +166,7 @@
 
         <div class="controls">
             <g:select name="responsableProceso.id" from="${responsablesProceso}" optionKey="id" optionValue="${{
-                it.apellido + ' ' + it.nombre
-            }}"
-                      value="${ofertaInstance?.responsableProcesoId}" class="required"/>
+                it.apellido + ' ' + it.nombre}}" value="${ofertaInstance?.responsableProcesoId}" class="required" style="width: 360px;"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>

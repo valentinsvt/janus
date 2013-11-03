@@ -28,7 +28,7 @@
 
         <div class="controls">
             %{--<g:textField name="tipo" maxlength="1" class="" value="${proveedorInstance?.tipo}"/>--}%
-            <g:select name="tipo" from="${proveedorInstance.constraints.tipo.inList}" class=" required" value="${proveedorInstance?.tipo}" valueMessagePrefix="proveedor.tipo"/>
+            <g:select name="tipo" from="${proveedorInstance.constraints.tipo.inList}" class=" required" value="${proveedorInstance?.tipo}" valueMessagePrefix="proveedor.tipo" style="width: 100px;"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -55,7 +55,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="nombre" maxlength="20" class="" value="${proveedorInstance?.nombre}"/>
+            <g:textField name="nombre" maxlength="63" class="" value="${proveedorInstance?.nombre}" style="width: 400px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="garante" maxlength="40" class="" value="${proveedorInstance?.garante}"/>
+            <g:textField name="garante" maxlength="40" class="" value="${proveedorInstance?.garante}" style="width: 300px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -106,12 +106,12 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Direccion
+                Dirección
             </span>
         </div>
 
         <div class="controls">
-            <g:textField name="direccion" maxlength="60" class="" value="${proveedorInstance?.direccion}"/>
+            <g:textField name="direccion" maxlength="60" class="" value="${proveedorInstance?.direccion}" style="width: 400px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -139,7 +139,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="telefonos" maxlength="40" class="" value="${proveedorInstance?.telefonos}" style="width: 120px;"/>
+            <g:textField name="telefonos" maxlength="40" class="" value="${proveedorInstance?.telefonos}" style="width: 220px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -168,7 +168,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="email" maxlength="40" class="" value="${proveedorInstance?.email}"/>
+            <g:textField name="email" maxlength="40" class="" value="${proveedorInstance?.email}" style="width: 300px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -224,7 +224,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="titulo" maxlength="4" class="" value="${proveedorInstance?.titulo}"/>
+            <g:textField name="titulo" maxlength="4" class="" value="${proveedorInstance?.titulo}" style="width: 40px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>

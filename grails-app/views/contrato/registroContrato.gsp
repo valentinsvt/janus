@@ -119,7 +119,7 @@
 
                     <div class="span2 formato">Contrato N°</div>
 
-                    <div class="span3"><g:textField name="codigo" class="codigo required caps" value="${contrato?.codigo}"/></div>
+                    <div class="span3"><g:textField name="codigo" maxlength="20" class="codigo required caps" value="${contrato?.codigo}"/></div>
 
                     <div class="span2 formato">Memo de Distribución</div>
 
