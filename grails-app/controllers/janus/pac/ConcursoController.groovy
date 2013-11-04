@@ -20,7 +20,6 @@ class ConcursoController extends janus.seguridad.Shield {
 //        def conc = Concurso.count()
         def sec = 1
         def lst = Concurso.list([sort: "id", order: "desc"])
-        println "________________________________________________________"
 //        println lst
         if (lst.size() > 1) {
             def last = lst[1].codigo?.split("-")
@@ -539,6 +538,7 @@ class ConcursoController extends janus.seguridad.Shield {
             params.memoSif = params.memoSif.toString().toUpperCase()
         }
 
+//        println "params "+params
         def concursoInstance
         if (params.id) {
             concursoInstance = Concurso.get(params.id)

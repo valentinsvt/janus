@@ -260,7 +260,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <g:textField name="memoSif allCaps" value="${concursoInstance?.memoSif}" class="allCaps"/>
+                                        <g:textField name="memoSif" value="${concursoInstance?.memoSif}" class="allCaps"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -331,7 +331,7 @@
 
                                     <div class="controls">
                                         <div class="input-append">
-                                            <g:field type="number" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right;width: 180px;"/>
+                                            <g:field type="text" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right;width: 180px;"/>
                                             <span class="add-on">$</span>
                                         </div>
 
@@ -776,9 +776,10 @@
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'concurso',action:'datosObra')}",
                     data     : "obra=" + $("#obra_id").val(),
                     success  : function (msg) {
-//                ////console.log(msg)
+                //console.log(msg)
                         var parts = msg.split("&&")
-                        $("#presupuestoReferencial").val(number_format(parts[3], 2, ".", " "))
+                        //console.log(parts,number_format(parts[3], 2, ".", " "))
+                        $("#presupuestoReferencial").val(parts[3])
                         $("#obra_busqueda").val(parts[0]).attr("title", parts[1])
 
                     }
@@ -868,6 +869,7 @@
 
             $("#frmSave-Concurso").validate({
                 errorPlacement : function (error, element) {
+//                    console.log(error)
                     element.parent().find(".help-block").html(error).show();
                 },
                 success        : function (label) {
@@ -918,6 +920,7 @@
             });
 
             $("#btnSave").click(function () {
+                console.log("aaa")
                 $("#frmSave-Concurso").submit();
             });
 
