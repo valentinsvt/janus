@@ -149,7 +149,7 @@
                                 %{--<g:set var="fisc" value="${janus.Departamento.get(1)}"/>--}%
                                 %{--<g:select name="fiscalizador.id" from="${janus.Persona.findAllByDepartamento(fisc)}" value="${planillaInstance?.fiscalizador ? planillaInstance.fiscalizadorId : fiscalizadorAnterior}" optionKey="id" optionValue="${{ it.nombre + " " + it.apellido }}"/>--}%
 
-                                ${contrato.fiscalizador.titulo} ${contrato.fiscalizador.nombre} ${contrato.fiscalizador.apellido}
+                                ${contrato.fiscalizador?.titulo} ${contrato.fiscalizador?.nombre} ${contrato.fiscalizador?.apellido}
 
                                 <p class="help-block ui-helper-hidden"></p>
                             </div>

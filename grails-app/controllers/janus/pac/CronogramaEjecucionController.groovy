@@ -1466,7 +1466,8 @@ class CronogramaEjecucionController extends janus.seguridad.Shield {
 
         if (cronogramas == 0) {
             detalle.each { vol ->
-                CronogramaContrato.findAllByVolumenObra(vol).eachWithIndex { crono, cont ->
+                def cronoCon = CronogramaContrato.findAllByVolumenObra(vol)
+                cronoCon.eachWithIndex { crono, cont ->
 
                     def dias = (crono.periodo - 1) * 30 //+ (crono.periodo - 1)
 //                    println ">>>" + dias

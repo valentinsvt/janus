@@ -1565,6 +1565,12 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def contrato = planilla.contrato
         def fechaOferta = planilla.contrato.oferta.fechaEntrega - 30
 
+        if (!planilla) {
+            flash.message = "No se encotró la planilla a generar"
+            redirect(action: "errores")
+            return
+        }
+
         //todo: revisar esto
         fechaOferta = planilla.contrato.periodoValidez.fechaInicio
 
@@ -1631,6 +1637,20 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
         }
 
+        if (ps.size() == 0 && cs.size() == 0 && pcs.size() == 0) {
+            flash.message = "No se encontró la fórmula polinómica contractual. No se puede generar la planilla de anticipo."
+            def link = createLink(controller: "contrato", action: "copiarPolinomica", id: contrato.id)
+            flash.message += "<div style='margin-top:20px;'><a href='${link}' class='btn btn-danger'>Generar fórmula polinómica contractual</a></div>"
+            redirect(action: "errores")
+            return
+        }
+
+//        println "contrato: " + contrato
+//        println "pcs: " + pcs
+//        println "cs: " + cs
+//        println "ps: " + ps
+
+
         if (override && periodos.size() > 0) {
             println "Borrando periodos por alguna razon "
             periodos.each {
@@ -1686,9 +1706,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
             totalCoef += c.valor
             periodos.each { p ->
-                def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice).valor
+//                println "periodo " + p.periodo + " indice: " + c.indice
+//                println "valor: " + ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)
+                def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)?.valor
                 if (!valor) {
-                    println "wtf no valor " + p.periodo + "  " + c.indice
+                    println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
                     valor = 0
                 }
 
@@ -1816,7 +1838,10 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(per.total)}</div></td>"
                         valor = per.total
                     } else {
-                        vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
+                        vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo)?.valor
+                        if (!vlinOferta) {
+                            println "WTF no hay vlinOferta indice: ${p.indice} (${p.indiceId}), periodo: ${per.periodo} (${per.periodoId})"
+                        }
                         tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
                         valor = vlinOferta
                     }
@@ -1841,9 +1866,13 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     if (i == 0) {
                         vlin = per.total
                     } else {
-                        vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
+                        vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo)?.valor
+                        if (!vlin) {
+                            println "WTF no hay vlin: indice: ${p.indice} (${p.indiceId}), periodo: ${per.periodo} (${per.periodoId})"
+                            vlin = 0
+                        }
                     }
-//                    println "error "+p.indice+" "+p.indice.id+"  "+per.periodo.id+"   "+vlin+"  "+vlinOferta+"  "+p.valor+"  "+"  "+per.periodo.id
+//                    println "error l.1875: " + p.indice + " " + p.indice.id + "  " + per.periodo.id + "   " + vlin + "  " + vlinOferta + "  " + p.valor + "  " + "  " + per.periodo.id
                     def valor = (vlin / vlinOferta * p.valor).round(3)
 
                     def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${per.periodo.id} and formulaPolinomica=${p.id}")

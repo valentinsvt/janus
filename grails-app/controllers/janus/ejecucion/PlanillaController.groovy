@@ -2,6 +2,7 @@ package janus.ejecucion
 
 import groovy.json.JsonBuilder
 import janus.*
+import janus.pac.CronogramaContrato
 import janus.pac.CronogramaEjecucion
 import janus.pac.PeriodoEjecucion
 
@@ -362,7 +363,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def pago_ajax() {
-        println "PARAMS: " + params
+//        println "PARAMS: " + params
 
         def fechaMin, fechaMax, fecha
         def planilla = Planilla.get(params.id)
@@ -380,7 +381,7 @@ class PlanillaController extends janus.seguridad.Shield {
             render "No se encontró el administrador del contrato. Por favor asegúrese de que existe un administrador activo para continuar con el trámite."
             return
         }
-        if (!fiscContrato) {
+        if (!fiscContrato && tipo == "2") {
             render "No se encontró el fiscalizador del contrato. Por favor asegúrese de que existe un fiscalizador activo para continuar con el trámite."
             return
         }
@@ -914,6 +915,40 @@ class PlanillaController extends janus.seguridad.Shield {
     def form() {
 //        println params
         def contrato = Contrato.get(params.contrato)
+        def obra = contrato.obra
+
+        /*
+            aqui se valida q haya cronograma de contrato y formula polinomica de contrato
+         */
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def cronos = CronogramaContrato.findAllByVolumenObraInList(detalle)
+        def pcs = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    ilike("numero", "c%")
+                    and {
+                        ne("numero", "P0")
+                        ne("numero", "p01")
+                        ilike("numero", "p%")
+                    }
+                }
+                order("numero", "asc")
+            }
+        }
+        if (cronos.size() == 0 || pcs.size() == 0) {
+            flash.message = "<h3>Ha ocurrido un error</h3><ul>"
+            if (cronos.size() == 0) {
+                flash.message += "<li>No se ha generado el cronograma de contrato. Por favor genérelo para crear planillas.</li>"
+            }
+            if (pcs.size() == 0) {
+                flash.message += "<li>No se ha generado la fórmula polinómica contractual. Por favor genérela para crear planillas.</li>"
+            }
+            flash.message += "</ul>"
+            redirect(action: "errores")
+            return
+        }
+
         def planillaInstance = new Planilla(params)
         planillaInstance.contrato = contrato
         if (params.id) {
