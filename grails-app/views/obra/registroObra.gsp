@@ -140,7 +140,7 @@
                 %{--</g:if>--}%
                 </g:if>
             </g:if>
-            <g:if test="${obra && obra?.tipo != 'D'}">
+            <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
                 <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
                 </button>
             </g:if>
