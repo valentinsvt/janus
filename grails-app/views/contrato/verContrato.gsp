@@ -132,6 +132,9 @@
                         <div class="span2 formato">Contratista</div>
 
                         <div class="span3">${contrato?.oferta?.proveedor?.nombre}</div>
+                        <div class="span1 formato">Estado</div>
+
+                        <div class="span2">${(contrato.estado=="R")?"Registrado":"No registrado"}</div>
                     </div>
                 </g:if>
 
