@@ -3,6 +3,7 @@ package janus
 import janus.ejecucion.FormulaPolinomicaContractual
 import janus.ejecucion.Planilla
 import janus.ejecucion.TipoFormulaPolinomica
+import janus.pac.CronogramaContrato
 import org.springframework.dao.DataIntegrityViolationException
 
 class ContratoController extends janus.seguridad.Shield {
@@ -76,10 +77,82 @@ class ContratoController extends janus.seguridad.Shield {
 
     def saveRegistrar() {
         def contrato = Contrato.get(params.id)
-        contrato.estado = "R"
-        if (contrato.save(flush: true))
-            render "ok"
-        return
+        def obra = contrato.obra
+
+        def errores = ""
+
+        //tiene q tener cronograma y formula polinomica
+        def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        def cronos = CronogramaContrato.findAllByVolumenObraInList(detalle)
+        def pcs = FormulaPolinomicaContractual.withCriteria {
+            and {
+                eq("contrato", contrato)
+                or {
+                    ilike("numero", "c%")
+                    and {
+                        ne("numero", "P0")
+                        ne("numero", "p01")
+                        ilike("numero", "p%")
+                    }
+                }
+                order("numero", "asc")
+            }
+        }
+        if (cronos.size() == 0 || pcs.size() == 0) {
+            if (cronos.size() == 0) {
+                errores += "<li>No ha generado el cronograma de contrato.</li>"
+            }
+            if (pcs.size() == 0) {
+                errores += "<li>No ha generado la fórmula polinómica contractual.</li>"
+            }
+        }
+        def crono = 0
+        detalle.each {
+            def tmp = CronogramaContrato.findAllByVolumenObra(it)
+            tmp.each { tm ->
+                crono += tm.porcentaje
+            }
+            if (crono.toDouble().round(2) != 100.00) {
+                errores += "<li>La suma de porcentajes del volumen de obra: ${it.item.codigo} (${crono.toDouble().round(2)}) en el cronograma contractual es diferente de 100%</li>"
+            }
+            crono = 0
+        }
+        def fps = FormulaPolinomicaContractual.findAllByContrato(contrato)
+//        println "fps "+fps
+        def totalP = 0
+        fps.each { fp ->
+            if (fp.numero =~ "p") {
+//                println "sumo "+fp.numero+"  "+fp.valor
+                totalP += fp.valor
+            }
+        }
+
+        def totalC = 0
+        fps.each { fp ->
+            if (fp.numero =~ "c") {
+//                println "sumo "+fp.numero+"  "+fp.valor
+                totalC += fp.valor
+            }
+        }
+//        println "totp "+totalP
+        if (totalP.toDouble().round(6) != 1.000) {
+            errores += "<li>La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000</li>"
+        }
+        if (totalC.toDouble().round(6) != 1.000) {
+            errores += "<li>La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000</li>"
+        }
+
+        if (errores == "") {
+            contrato.estado = "R"
+            if (contrato.save(flush: true)) {
+                render "ok"
+            } else {
+                render "no_" + renderErrors(bean: contrato)
+            }
+//            render "no_no todavia"
+        } else {
+            render "no_<h5>No puede registrar el contrato</h5><ul>${errores}</ul>"
+        }
     }
 
     def cambiarEstado() {
@@ -238,7 +311,7 @@ class ContratoController extends janus.seguridad.Shield {
 
     def buscarContrato() {
 
-        println "buscar contrato "+params
+        println "buscar contrato " + params
 
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {
@@ -264,7 +337,7 @@ class ContratoController extends janus.seguridad.Shield {
                 params.operadores = ""
             }
             if (params.campos == "prov") {
-                def provs   = janus.pac.Proveedor.findAll("from Proveedor where nombre ilike '%${params.criterios.toUpperCase()}%' or nombreContacto ilike '%${params.criterios.toUpperCase()}%' ")
+                def provs = janus.pac.Proveedor.findAll("from Proveedor where nombre ilike '%${params.criterios.toUpperCase()}%' or nombreContacto ilike '%${params.criterios.toUpperCase()}%' ")
                 params.criterios = ""
                 provs.eachWithIndex { p, i ->
                     def ofertas = janus.pac.Oferta.findAllByProveedor(p)
@@ -304,7 +377,7 @@ class ContratoController extends janus.seguridad.Shield {
 
                 }
                 if (p == "prov") {
-                    def provs   = janus.pac.Proveedor.findAll("from Proveedor where nombre ilike '%${params.criterios[i].toUpperCase()}%' or nombreContacto ilike '%${params.criterios[i].toUpperCase()}%' ")
+                    def provs = janus.pac.Proveedor.findAll("from Proveedor where nombre ilike '%${params.criterios[i].toUpperCase()}%' or nombreContacto ilike '%${params.criterios[i].toUpperCase()}%' ")
                     params.criterios = ""
                     provs.eachWithIndex { pr, j ->
                         def ofertas = janus.pac.Oferta.findAllByProveedor(pr)
@@ -325,7 +398,7 @@ class ContratoController extends janus.seguridad.Shield {
             }
         }
 
-        println "extra obra "+extraObra
+        println "extra obra " + extraObra
 
         def codObra = { contrato ->
             return contrato?.oferta?.concurso?.obra?.codigo
@@ -371,12 +444,12 @@ class ContratoController extends janus.seguridad.Shield {
 
     def buscarContrato2() {
 
-        println "buscar contrato 2 "+params
+        println "buscar contrato 2 " + params
 
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {
             if (params.campos == "nombre") {
-                if(params.criterios.trim()!=""){
+                if (params.criterios.trim() != "") {
                     def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%'")
                     params.criterios = ""
                     obras.eachWithIndex { p, i ->
@@ -400,8 +473,8 @@ class ContratoController extends janus.seguridad.Shield {
 
             }
             if (params.campos == "prov") {
-                if(params.criterios.trim()!=""){
-                    def provs   = janus.pac.Proveedor.findAll("from Proveedor where nombre like '%${params.criterios.toUpperCase()}%' or nombreContacto like '%${params.criterios.toUpperCase()}%'  or apellidoContacto like '%${params.criterios.toUpperCase()}%'")
+                if (params.criterios.trim() != "") {
+                    def provs = janus.pac.Proveedor.findAll("from Proveedor where nombre like '%${params.criterios.toUpperCase()}%' or nombreContacto like '%${params.criterios.toUpperCase()}%'  or apellidoContacto like '%${params.criterios.toUpperCase()}%'")
                     params.criterios = ""
                     provs.eachWithIndex { p, i ->
                         def ofertas = janus.pac.Oferta.findAllByProveedor(p)
@@ -420,7 +493,7 @@ class ContratoController extends janus.seguridad.Shield {
         } else {
             def remove = []
             params.campos.eachWithIndex { p, i ->
-                if (p == "nombre" && params.criterios[i].trim()!="") {
+                if (p == "nombre" && params.criterios[i].trim() != "") {
                     def obras = Obra.findAll("from Obra where nombre like '%${params.criterios[i].toUpperCase()}%'")
 
                     obras.eachWithIndex { ob, j ->
@@ -441,8 +514,8 @@ class ContratoController extends janus.seguridad.Shield {
                         extraObra = "-1"
 
                 }
-                if (p == "prov" && params.criterios[i].trim()!="") {
-                    def provs   = janus.pac.Proveedor.findAll("from Proveedor where nombre like '%${params.criterios[i].toUpperCase()}%' or nombreContacto like '%${params.criterios[i].toUpperCase()}%' or apellidoContacto like '%${params.criterios[i].toUpperCase()}%' ")
+                if (p == "prov" && params.criterios[i].trim() != "") {
+                    def provs = janus.pac.Proveedor.findAll("from Proveedor where nombre like '%${params.criterios[i].toUpperCase()}%' or nombreContacto like '%${params.criterios[i].toUpperCase()}%' or apellidoContacto like '%${params.criterios[i].toUpperCase()}%' ")
                     params.criterios = ""
                     provs.eachWithIndex { pr, j ->
                         def ofertas = janus.pac.Oferta.findAllByProveedor(pr)
@@ -642,12 +715,12 @@ class ContratoController extends janus.seguridad.Shield {
         }//es edit
         else {
 
-            if(params.oferta){
-                if(params.oferta.id == '-1'){
-                        flash.clase = "alert-error"
-                        flash.message = "No se puede grabar el Contrato, elija una oferta válida "
-                        redirect(action: 'registroContrato')
-                        return
+            if (params.oferta) {
+                if (params.oferta.id == '-1') {
+                    flash.clase = "alert-error"
+                    flash.message = "No se puede grabar el Contrato, elija una oferta válida "
+                    redirect(action: 'registroContrato')
+                    return
 
 
                 }

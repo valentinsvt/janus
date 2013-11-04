@@ -18,8 +18,6 @@
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
-
-
         <style type="text/css">
 
         .formato {
@@ -861,15 +859,35 @@
             });
 
             $("#btn-registrar").click(function () {
-
+                var $btn = $(this).clone(true);
+                $(this).replaceWith(spinner);
                 $.ajax({
                     type    : "POST",
                     url     : "${createLink(action: 'saveRegistrar')}",
                     data    : "id=${contrato?.id}",
                     success : function (msg) {
-
-                        %{--location.href = "${g.createLink(action: 'registroContrato')}";--}%
-                        location.href = "${g.createLink(controller: 'contrato', action: 'registroContrato')}" + "?contrato=" + "${contrato?.id}";
+                        var parts = msg.split("_");
+                        if (parts[0] == "ok") {
+                            location.href = "${g.createLink(controller: 'contrato', action: 'registroContrato')}" + "?contrato=" + "${contrato?.id}";
+                        } else {
+                            spinner.replaceWith($btn);
+                            $.box({
+                                imageClass : "box_info",
+                                title      : "Alerta",
+                                text       : parts[1],
+                                iconClose  : false,
+                                dialog     : {
+                                    width         : 400,
+                                    resizable     : false,
+                                    draggable     : false,
+                                    closeOnEscape : false,
+                                    buttons       : {
+                                        "Aceptar" : function () {
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
 //
