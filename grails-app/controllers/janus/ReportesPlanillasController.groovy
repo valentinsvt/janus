@@ -2772,10 +2772,10 @@ class ReportesPlanillasController {
             str += "<li>No se ha registrado la fecha de inicio para la obra. Por favor corrija esto para mostrar la orden de inicio de obra</li>"
             ok = false
         }
-        if (!obra.firmaInicioObra) {
-            str += "<li>No se ha registrado la firma para la orden de inicio para la obra. Por favor corrija esto para mostrar la orden de inicio de obra</li>"
-            ok = false
-        }
+//        if (!obra.firmaInicioObra) {
+//            str += "<li>No se ha registrado la firma para la orden de inicio para la obra. Por favor corrija esto para mostrar la orden de inicio de obra</li>"
+//            ok = false
+//        }
         if (!contrato.numeralPlazo || !contrato.numeralAnticipo || !contrato.clausula) {
             str += "<li>No se han registrado los datos de cláusula y numerales para la orden de inicio de obra. Por favor corrija esto para mostrar la orden de inicio de obra</li>"
             ok = false
@@ -2918,11 +2918,11 @@ class ReportesPlanillasController {
             par1 += g.formatNumber(number: contrato?.plazo, format: "##,##0", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0) + "), "
             par1 += "contados a partir de la fecha de efectivización del anticipo y, en el numeral ${contrato.numeralAnticipo} se dice que se "
             par1 += "entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada "
-            par1 += "la trasferencia de fondos a la cuenta bacaria que para el efecto indique el contratista. "
+            par1 += "la transferencia de fondos a la cuenta bancaria que para el efecto indique el contratista. "
 
             def par2 = "Tesorería de la Corporación, remite a la " + obra?.departamento?.direccion?.nombre.trim()
-            par2 += ", copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$ " + g.formatNumber(number: (planillaDesc?.valor + planillaDesc.reajuste), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2) + " fue "
-            par2 += "acreditado el " + fechaConFormato(planillaDesc?.fechaMemoPagoPlanilla, "dd MMMM yyyy").toLowerCase()
+            par2 += ", copia del reporte de pago del " + contrato?.porcentajeAnticipo + "% del anticipo, por un valor de US\$ " + g.formatNumber(number: (planillaDesc?.valor + planillaDesc.reajuste), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+            par2 += ", menos los descuentos de ley, fue acreditado el " + fechaConFormato(planillaDesc?.fechaMemoPagoPlanilla, "dd MMMM yyyy").toLowerCase()
 
 
             def par3 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° " + contrato?.codigo.trim() + ", será el " + fechaConFormato(obra?.fechaInicio, "dd MMMM yyyy").toLowerCase() + "."
@@ -2954,9 +2954,13 @@ class ReportesPlanillasController {
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
 
-            def firmas = obra.firmaInicioObra
-            addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times12bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times12bold), prmsHeaderHoja)
+//            def firmas = obra.firmaInicioObra
+//            addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times12bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times12bold), prmsHeaderHoja)
+//            document.add(tablaFirmas);
+            def firmas = contrato.administrador
+            addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo ?: "" + " " + firmas?.nombre + " " + firmas?.apellido, times12bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Administrador", times12bold), prmsHeaderHoja)
             document.add(tablaFirmas);
 
 //        def footer = new PdfPTable(1);

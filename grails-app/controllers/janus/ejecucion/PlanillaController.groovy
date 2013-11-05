@@ -884,7 +884,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def planilla = Planilla.get(params.id)
         def memo = params.memo.toString().toUpperCase()
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-        def personaFirma = Persona.get(params.firma.toLong())
+//        def personaFirma = Persona.get(params.firma.toLong())
 
         def contrato = Contrato.get(planilla.contratoId)
         contrato.numeralPlazo = params.numeralPlazo
@@ -900,7 +900,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def obra = Obra.get(planilla.contrato.obra.id)
         obra.fechaInicio = fecha
         obra.memoInicioObra = memo
-        obra.firmaInicioObra = personaFirma
+//        obra.firmaInicioObra = personaFirma
         obra.fechaImpresionInicioObra = new Date()
         if (!obra.save(flush: true)) {
             flash.message = "No se pudo iniciar la obra"

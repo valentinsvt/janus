@@ -77,7 +77,7 @@
 
         <div class="controls">
             <g:field type="number" name="plazo" class="" value="${fieldValue(bean: ofertaInstance, field: 'plazo')}" style="width:80px;"/>
-
+            días
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -166,7 +166,8 @@
 
         <div class="controls">
             <g:select name="responsableProceso.id" from="${responsablesProceso}" optionKey="id" optionValue="${{
-                it.apellido + ' ' + it.nombre}}" value="${ofertaInstance?.responsableProcesoId}" class="required" style="width: 360px;"/>
+                it.apellido + ' ' + it.nombre
+            }}" value="${ofertaInstance?.responsableProcesoId}" class="required" style="width: 360px;"/>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>

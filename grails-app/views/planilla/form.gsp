@@ -167,7 +167,12 @@
 
                         <div class="row">
                             <div class="span2 formato">
-                                Oficio de entrada
+                                <g:if test="${tipos.find { it.codigo == 'A' }}">
+                                    Memo de anticipo
+                                </g:if>
+                                <g:else>
+                                    Oficio de entrada
+                                </g:else>
                             </div>
 
                             <div class="span4">
@@ -178,7 +183,13 @@
                             </div>
 
                             <div class="span2 formato">
-                                Fecha de oficio de entrada
+                                Fecha de
+                                <g:if test="${tipos.find { it.codigo == 'A' }}">
+                                    memo de anticipo
+                                </g:if>
+                                <g:else>
+                                    oficio de entrada
+                                </g:else>
                             </div>
 
                             <div class="span4">

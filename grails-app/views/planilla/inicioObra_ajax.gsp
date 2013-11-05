@@ -30,20 +30,20 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="span2 formato">
-                Firma para el oficio
-            </div>
+        %{--<div class="row">--}%
+            %{--<div class="span2 formato">--}%
+                %{--Firma para el oficio--}%
+            %{--</div>--}%
 
-            <div class="span4">
-                <g:select name="firma" from="${firma}" optionKey="id" optionValue="${{
-                    it.nombre + ' ' + it.apellido + ' (' + it.cargo + ')'
-                }}" id="firma"/>
-                <span class="mandatory">*</span>
+            %{--<div class="span4">--}%
+                %{--<g:select name="firma" from="${firma}" optionKey="id" optionValue="${{--}%
+                    %{--it.nombre + ' ' + it.apellido + ' (' + it.cargo + ')'--}%
+                %{--}}" id="firma"/>--}%
+                %{--<span class="mandatory">*</span>--}%
 
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
+                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--</div>--}%
+        %{--</div>--}%
 
         <div class="row">
             <div class="span2 formato">

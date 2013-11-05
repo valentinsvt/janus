@@ -42,6 +42,17 @@
             <div class="span3" id="busqueda-Planilla"></div>
         </div>
 
+        <div class="row">
+            <div class="span12" role="navigation">
+                <g:if test="${obra.fechaInicio}">
+                    <a href="#" class="btn  " id="imprimir">
+                        <i class="icon-print"></i>
+                        Imprimir Orden de Inicio de Obra
+                    </a>
+                </g:if>
+            </div>
+        </div>
+
         <g:form action="delete" name="frmDelete-Planilla">
             <g:hiddenField name="id"/>
         </g:form>
@@ -273,6 +284,12 @@
                     maxRows        : 10,
                     searchPosition : $("#busqueda-Planilla"),
                     float          : "right"
+                });
+
+                $("#imprimir").click(function () {
+                    location.href = "${g.createLink(controller: 'reportesPlanillas', action: 'reporteContrato', id: obra?.id)}?oficio=" + $("#oficio").val() + "&firma=" + $("#firma").val();
+//                    $("#imprimirDialog").dialog("open");
+
                 });
 
                 $(".btnPedidoPagoAnticipo").click(function () {
