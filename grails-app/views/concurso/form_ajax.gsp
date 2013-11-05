@@ -315,7 +315,7 @@
                                     <div class="controls">
                                         <input type="radio" name="costo" id="rbt_costoBases"
                                             ${(concursoInstance.costoBases > 0 || (concursoInstance.costoBases == 0 && concursoInstance.porMilBases == 0) || !concursoInstance.costoBases || !concursoInstance.porMilBases) ? "checked" : ""}/>
-                                        <g:field type="number" name="costoBases" class="input-mini" value="${concursoInstance.costoBases ?: 200}"/>
+                                        <g:field type="number" name="costoBases" class="input-mini" value="${concursoInstance.costoBases == null?200: concursoInstance.costoBases}"/>
                                         <input type="radio" name="costo" id="rbt_porMilBases" ${concursoInstance.porMilBases > 0 ? "checked" : ""}/>
                                         <g:field type="number" name="porMilBases" class="input-mini" value="${concursoInstance.porMilBases ?: 0}"/> x 1000
                                         <p class="help-block ui-helper-hidden"></p>
