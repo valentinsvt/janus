@@ -46,6 +46,17 @@
             <div class="span12 btn-group" role="navigation" style="margin-left: 0;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
             %{--<button class="btn" id="btn-imprimir" disabled="true"><i class="icon-print"></i> Imprimir</button>--}%
+
+                <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
+                    <i class="icon-book"></i> Biblioteca
+                </g:link>
+                <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
+                    <i class="icon-pencil"></i> Garantías
+                </g:link>
+                <a href="#" class="btn  " id="imprimir_sub">
+                    <i class="icon-print"></i>
+                    Imprimir Presupuesto
+                </a>
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
                     <g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">
                         <i class="icon-th"></i> Cronograma ejecucion
@@ -53,12 +64,7 @@
                     <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}" class="btn">
                         <i class="icon-superscript"></i> Fórmula Polinómica
                     </a>
-                    <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
-                        <i class="icon-book"></i> Biblioteca
-                    </g:link>
-                    <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
-                        <i class="icon-pencil"></i> Garantías
-                    </g:link>
+
                 </g:if>
 
             </div>
@@ -120,6 +126,23 @@
                         <div class="span1 formato">Cantón</div>
 
                         <div class="span2">${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.nombre}</div>
+                    </div>
+
+                    <div class="span12" style="margin-top: 5px">
+                        <div class="span2 formato">Comunidad</div>
+
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.comunidad?.nombre}</div>
+
+                        <div class="span1 formato">Sitio</div>
+
+                        <div class="span5">${contrato?.oferta?.concurso?.obra?.sitio}</div>
+                    </div>
+
+                    <div class="span12" style="margin-top: 5px">
+                        <div class="span2 formato">Localidad</div>
+
+                        <div class="span3">${contrato?.oferta?.concurso?.obra?.barrio}</div>
+
                     </div>
 
                     <div class="span12" style="margin-top: 5px">
@@ -928,6 +951,19 @@
             //                    }
             //                }
             //            })
+
+
+        $("#imprimir_sub").click(function () {
+
+            var subpre = -1
+            var datos = "?obra=${contrato?.oferta?.concurso?.obra?.id}Wsub=" + subpre
+            var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}" + datos
+            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+
+        });
+
+
+
         </script>
     </body>
 </html>
