@@ -868,6 +868,7 @@
                     success : function (msg) {
                         var parts = msg.split("_");
                         if (parts[0] == "ok") {
+                            alert("Contrato registrado");
                             location.href = "${g.createLink(controller: 'contrato', action: 'registroContrato')}" + "?contrato=" + "${contrato?.id}";
                         } else {
                             spinner.replaceWith($btn);
