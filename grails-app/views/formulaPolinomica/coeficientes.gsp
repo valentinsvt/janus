@@ -334,6 +334,10 @@
 
                             var cantNombre = $("#tree").find("span:contains('" + indiceNombre + "')").length;
 
+                            if (indiceNombre == nodeText) {
+                                cantNombre = 0;
+                            }
+
                             if (cantNombre == 0) {
                                 if (valor != "") {
                                     btnSave.replaceWith(spinner);
