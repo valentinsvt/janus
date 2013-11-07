@@ -227,7 +227,7 @@
                 <div class="span12" style="margin-top: 5px">
                     <div class="span2 formato">Objeto del Contrato</div>
 
-                    <div class="span3">${contrato?.objeto}</div>
+                    <div class="span7">${contrato?.objeto}</div>
                 </div>
             </fieldset>
 
