@@ -243,7 +243,7 @@
                                 </div>
 
                                 <div class="span4">
-                                    <g:field type="number" name="avanceFisico" class="input-mini required number" value="${planillaInstance.avanceFisico}" maxlength="3"/>
+                                    <g:field type="number" name="avanceFisico" class="input-mini required number" value="${planillaInstance.avanceFisico}" maxlength="3"/> %
                                 </div>
                             </div>
                         </g:if>
@@ -356,6 +356,77 @@
         </g:else>
 
         <script type="text/javascript">
+
+
+
+            function validarNum(ev) {
+                /*
+                 48-57      -> numeros
+                 96-105     -> teclado numerico
+                 188        -> , (coma)
+                 190        -> . (punto) teclado
+                 110        -> . (punto) teclado numerico
+                 8          -> backspace
+                 46         -> delete
+                 9          -> tab
+                 37         -> flecha izq
+                 39         -> flecha der
+                 */
+                return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                        ev.keyCode == 37 || ev.keyCode == 39);
+            }
+
+            $("#avanceFisico").keydown(function (ev) {
+
+                return validarNum(ev);
+
+            }).keyup(function () {
+
+                        var enteros = $(this).val();
+
+
+                        if (parseFloat(enteros) > 100) {
+
+                            $(this).val(100)
+
+                        }
+                        if (parseFloat(enteros) <= 0) {
+
+                            $(this).val(0)
+
+                        }
+
+                    });
+
+            $("#diasMultaDisposiciones").keydown(function (ev) {
+
+                return validarNum(ev);
+
+            }).keyup(function () {
+
+                        var enteros = $(this).val();
+
+
+                        if (parseFloat(enteros) > 1000) {
+
+                            $(this).val(999)
+
+                        }
+                        if (parseFloat(enteros) <= 0) {
+
+                            $(this).val(0)
+
+                        }
+
+                    });
+
+
+
+
+
+
 
             function checkPeriodo() {
                 if ($("#tipoPlanilla").val() == "3") { //avance
