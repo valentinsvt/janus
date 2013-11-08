@@ -15,6 +15,10 @@
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
 
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-timepicker/js', file: 'jquery-ui-timepicker-addon.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-timepicker/i18n', file: 'jquery.ui.datetimepicker-es.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/jquery-timepicker/css', file: 'jquery-ui-timepicker-addon.css')}" rel="stylesheet">
+
         <style>
         td {
             line-height : 12px !important;
@@ -249,9 +253,10 @@
 
                                     <div class="controls">
                                         <g:textField name="memoRequerimiento" value="${concursoInstance?.memoRequerimiento}" class="allCaps"/>
-                                        <p class="help-block ui-helper-hidden allCaps" ></p>
+                                        <p class="help-block ui-helper-hidden allCaps"></p>
                                     </div>
                                 </div>
+
                                 <div class="control-group">
                                     <div>
                                         <span class="control-label label label-inverse">
@@ -315,7 +320,7 @@
                                     <div class="controls">
                                         <input type="radio" name="costo" id="rbt_costoBases"
                                             ${(concursoInstance.costoBases > 0 || (concursoInstance.costoBases == 0 && concursoInstance.porMilBases == 0) || !concursoInstance.costoBases || !concursoInstance.porMilBases) ? "checked" : ""}/>
-                                        <g:field type="number" name="costoBases" class="input-mini" value="${concursoInstance.costoBases == null?200: concursoInstance.costoBases}"/>
+                                        <g:field type="number" name="costoBases" class="input-mini" value="${concursoInstance.costoBases == null ? 200 : concursoInstance.costoBases}"/>
                                         <input type="radio" name="costo" id="rbt_porMilBases" ${concursoInstance.porMilBases > 0 ? "checked" : ""}/>
                                         <g:field type="number" name="porMilBases" class="input-mini" value="${concursoInstance.porMilBases ?: 0}"/> x 1000
                                         <p class="help-block ui-helper-hidden"></p>
@@ -360,6 +365,10 @@
                     <div class="tab-pane" id="fechas">
                         %{--<div id="cols" style="float: left;">--}%
 
+                        <g:set var="minHour" value="${8}"/>
+                        <g:set var="maxHour" value="${17}"/>
+                        <g:set var="stepMin" value="${15}"/>
+
                         <div class="row">
                             <div class="span5">
                                 <div class="control-group">
@@ -370,7 +379,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}"/>
+                                        <elm:datetimepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -383,7 +392,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}"/>
+                                        <elm:datetimepicker name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -396,7 +405,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}"/>
+                                        <elm:datetimepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -409,7 +418,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}"/>
+                                        <elm:datetimepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -422,7 +431,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}"/>
+                                        <elm:datetimepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -435,7 +444,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaAperturaOfertas" class="" value="${concursoInstance?.fechaAperturaOfertas}"/>
+                                        <elm:datetimepicker name="fechaAperturaOfertas" class="" value="${concursoInstance?.fechaAperturaOfertas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -448,7 +457,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}"/>
+                                        <elm:datetimepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -461,7 +470,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}"/>
+                                        <elm:datetimepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -477,7 +486,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaInicioEvaluacionOferta" class="" value="${concursoInstance?.fechaInicioEvaluacionOferta}"/>
+                                        <elm:datetimepicker name="fechaInicioEvaluacionOferta" class="" value="${concursoInstance?.fechaInicioEvaluacionOferta}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -490,7 +499,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaLimiteResultadosFinales" class="" value="${concursoInstance?.fechaLimiteResultadosFinales}"/>
+                                        <elm:datetimepicker name="fechaLimiteResultadosFinales" class="" value="${concursoInstance?.fechaLimiteResultadosFinales}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -503,7 +512,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}"/>
+                                        <elm:datetimepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -516,7 +525,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}"/>
+                                        <elm:datetimepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -529,7 +538,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}"/>
+                                        <elm:datetimepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -542,7 +551,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}"/>
+                                        <elm:datetimepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -555,7 +564,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}"/>
+                                        <elm:datetimepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -568,7 +577,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datepicker name="fechaNotificacionAdjudicacion" class="" value="${concursoInstance?.fechaNotificacionAdjudicacion}"/>
+                                        <elm:datetimepicker name="fechaNotificacionAdjudicacion" class="" value="${concursoInstance?.fechaNotificacionAdjudicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -776,7 +785,7 @@
                 $.ajax({type : "POST", url : "${g.createLink(controller: 'concurso',action:'datosObra')}",
                     data     : "obra=" + $("#obra_id").val(),
                     success  : function (msg) {
-                //console.log(msg)
+                        //console.log(msg)
                         var parts = msg.split("&&")
                         //console.log(parts,number_format(parts[3], 2, ".", " "))
                         $("#presupuestoReferencial").val(parts[3])

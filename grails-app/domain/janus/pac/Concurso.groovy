@@ -66,6 +66,7 @@ class Concurso {
             objeto column: 'cncrobjt'
             costoBases column: 'cncrbase'
             porMilBases column: 'cncrpmbs'
+
             fechaInicio column: 'cncrfcin'
             fechaPublicacion column: 'cncrfcpu'
             fechaLimitePreguntas column: 'cncrfcpg'

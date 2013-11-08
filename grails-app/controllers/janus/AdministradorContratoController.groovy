@@ -35,12 +35,33 @@ class AdministradorContratoController extends janus.seguridad.Shield {
 //                println newest.fechaInicio
 //                println desde
                 if (newest.fechaInicio < desde) {
-                    newest.fechaFin = desde
+                    newest.fechaFin = desde - 1
                     if (!newest.save(flush: true)) {
                         println "error al poner fecha fin de newest " + newest + " " + newest.errors
                     }
                 } else {
-                    error = "NO_No puede asignar una fecha de inicio inferior a " + newest.fechaInicio.format("dd-MM-yyyy")
+//                    error = "NOPE"
+//                    println "nope:    " + desde.format("dd-MM-yyyy")
+//                    AdministradorContrato.findAllByContrato(contrato).each {
+//                        println it.fechaInicio.format("dd-MM-yyyy") + "    ->    " + it.fechaFin?.format("dd-MM-yyyy")
+//                    }
+                    def overlap = AdministradorContrato.withCriteria {
+                        eq("contrato", contrato)
+                        le("fechaInicio", desde)
+                        or {
+                            ge("fechaFin", desde)
+                            isNull("fechaFin")
+                        }
+                    }
+//                    println "** "
+//                    overlap.each {
+//                        println it.fechaInicio.format("dd-MM-yyyy") + "    ->    " + it.fechaFin?.format("dd-MM-yyyy")
+//                    }
+                    if (overlap.size() > 0) {
+                        error = "NO_No puede asignar una fecha de inicio entre ${overlap.fechaInicio*.format('dd-MM-yyyy')} y ${overlap.fechaFin*.format('dd-MM-yyyy')}"
+                    }
+                    nuevo.fechaFin = newest.fechaInicio - 1
+//                    error = "NO_No puede asignar una fecha de inicio inferior a " + newest.fechaInicio.format("dd-MM-yyyy")
                 }
             }
         }

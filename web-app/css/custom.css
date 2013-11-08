@@ -115,6 +115,12 @@ body {
     background-repeat   : no-repeat;
 }
 
+.datetimepicker {
+    background-image    : url(../images/calendarTime.png) !important;
+    background-position : right;
+    background-repeat   : no-repeat;
+}
+
 .datepicker.disabled {
     background-image    : url(../images/calendar_disabled.png) !important;
     background-position : right;
@@ -345,9 +351,9 @@ th.desc a {
     margin-top  : -300px;
 }
 
-.topModal{
+.topModal {
 
-    margin-top: -430px;
+    margin-top : -430px;
 
 }
 
@@ -402,35 +408,39 @@ tr.success td.alerta {
 
 .verde {
     /*background-color : darkgreen !important;*/
-    width: 30px;
-    height: 30px;
-    float: left;
-    margin-left:5px;
-    margin-right:5px;
+    width            : 30px;
+    height           : 30px;
+    float            : left;
+    margin-left      : 5px;
+    margin-right     : 5px;
     background-image : url(../images/semaforos/verde.png) !important;
 }
+
 tr.warning td.alerta {
     /*background-color : darkgoldenrod !important;*/
     background-image : url(../images/semaforos/amarillo.png) !important;
 }
+
 .amarillo {
-    width: 30px;
-    height: 30px;
-    float: left;
-    margin-left:5px;
-    margin-right:5px;
+    width            : 30px;
+    height           : 30px;
+    float            : left;
+    margin-left      : 5px;
+    margin-right     : 5px;
     /*background-color : darkgoldenrod !important;*/
     background-image : url(../images/semaforos/amarillo.png) !important;
 }
+
 .rojo {
-    margin-left:5px;
-    margin-right:5px;
-    width: 30px;
-    height: 30px;
-    float: left;
+    margin-left      : 5px;
+    margin-right     : 5px;
+    width            : 30px;
+    height           : 30px;
+    float            : left;
     /*background-color : darkred !important;*/
     background-image : url(../images/semaforos/rojo.png) !important;
 }
+
 tr.error td.alerta {
     /*background-color : darkred !important;*/
     background-image : url(../images/semaforos/rojo.png) !important;

@@ -459,6 +459,162 @@ class ElementosTagLib {
     }
 
     /**
+     * attrs:
+     *      class       clase
+     *      name        name
+     *      id          id (opcional, si no existe usa el mismo name)
+     *      value       value (groovy Date)
+     *      format      format para el Date (groovy)
+     *      onClose     funcion js a ejecutarse cuando se cierra el datepicker (se usa <elm:datepicker onClose="funcion" />
+     *      onSelect    funcion js a ejecutarse cuando se selecciona una fecha (se usa <elm:datepicker onSelect="funcion" />
+     *      yearRange   rango de años en el select de años:  The range of years displayed in the year drop-down: either relative to today's year ("-nn:+nn"),
+     *                                                       relative to the currently selected year ("c-nn:c+nn"), absolute ("nnnn:nnnn"), or combinations of these formats ("nnnn:-nn").
+     *                                                       Note that this option only affects what appears in the drop-down, to restrict which dates may be selected use the minDate and/or maxDate options.
+     *      minDate     fecha minima seleccionable
+     *      maxDate     fecha maxima seleccionable:   The minimum selectable date. When set to null, there is no minimum.
+     *                                                  Multiple types supported:
+     *                                                       Date: A date object containing the minimum date.
+     *                                                       Number: A number of days from today. For example 2 represents two days from today and -1 represents yesterday.
+     *                                                       String: A string in the format defined by the dateFormat option, or a relative date.
+     *                                                                      Relative dates must contain value and period pairs;
+     *                                                                      valid periods are "y" for years, "m" for months, "w" for weeks, and "d" for days.
+     *                                                                      For example, "+1m +7d" represents one month and seven days from today.
+     *
+     */
+    def datetimepicker = { attrs ->
+        def str = ""
+        def clase = attrs.remove("class")
+        def name = attrs.remove("name")
+        def id = attrs.id ? attrs.remove("id") : name
+        if (id.contains(".")) {
+            id = id.replaceAll("\\.", "_")
+        }
+
+        def value = attrs.remove("value")
+        if (value.toString() == 'none') {
+            value = null
+        } else if (!value) {
+            value = null
+        }
+
+        def format = attrs.format ? attrs.remove("format") : "dd-MM-yyyy"
+        def formatJs = format
+        formatJs = formatJs.replaceAll("M", "m")
+        formatJs = formatJs.replaceAll("yyyy", "yy")
+
+        def timeFormat = attrs.timeFormat ? attrs.remove("format") : "HH:mm"
+
+        def dateTimeFormat = format + " " + timeFormat
+
+        str += "<input type='text'  autocomplete='off' class='datetimepicker " + clase + "' name='" + name + "' id='" + id + "' value='" + g.formatDate(date: value, format: dateTimeFormat) + "'"
+        str += renderAttributes(attrs)
+        str += "/>"
+
+        def js = "<script type='text/javascript'>"
+        js += '$(function() {'
+        js += '$("#' + id + '").datetimepicker({'
+        js += 'dateFormat: "' + formatJs + '",'
+        js += 'changeMonth: true,'
+        js += 'changeYear: true'
+        if (attrs.onClose) {
+            js += ','
+            js += 'onClose: ' + attrs.onClose
+        }
+        if (attrs.onSelect) {
+            js += ','
+            js += 'onSelect: ' + attrs.onSelect
+        }
+        if (attrs.yearRange) {
+            js += ','
+//            println attrs.yearRange
+            js += 'yearRange: "' + attrs.yearRange + '"'
+        }
+        if (attrs.minDate) {
+            js += ","
+            js += "minDate:" + attrs.minDate
+        }
+        if (attrs.maxDate) {
+            js += ","
+            js += "maxDate:" + attrs.maxDate
+        }
+        /* **************** hasta aqui lo de date....ahora lo de time ******************************* */
+        if (attrs.controlType) {
+            js += ","
+            js += "controlType: '${attrs.controlType}'"
+        }
+        js += ","
+        js += "timeFormat: '${timeFormat}',"
+        js += "timeText: 'Hora',"
+        js += "hourText: 'Horas',"
+        js += "minuteText: 'Minutos',"
+        js += "secondText: 'Segundos',"
+        js += "currentText: 'Ahora',"
+        js += "closeText: 'Aceptar'"
+
+        if (attrs.minHour) {
+            js += ","
+            js += "hourMin:" + attrs.minHour
+        }
+        if (attrs.minMin) {
+            js += ","
+            js += "minuteMin:" + attrs.minMin
+        }
+        if (attrs.minSec) {
+            js += ","
+            js += "secondMin:" + attrs.minSec
+        }
+        if (attrs.maxHour) {
+            js += ","
+            js += "hourMax:" + attrs.maxHour
+        }
+        if (attrs.maxMin) {
+            js += ","
+            js += "minuteMax:" + attrs.maxMin
+        }
+        if (attrs.maxSec) {
+            js += ","
+            js += "secondMax:" + attrs.maxSec
+        }
+
+        if (attrs.hourGrid) {
+            js += ","
+            js += "hourGrid:" + attrs.hourGrid
+        }
+
+        if (attrs.minuteGrid) {
+            js += ","
+            js += "minuteGrid:" + attrs.minuteGrid
+        }
+
+        if (attrs.secondGrid) {
+            js += ","
+            js += "secondGrid:" + attrs.secondGrid
+        }
+
+        if (attrs.stepHour) {
+            js += ","
+            js += "stepHour:" + attrs.stepHour
+        }
+
+        if (attrs.stepMinute) {
+            js += ","
+            js += "stepMinute:" + attrs.stepMinute
+        }
+
+        if (attrs.stepSecond) {
+            js += ","
+            js += "stepSecond:" + attrs.stepSecond
+        }
+
+        js += '});'
+        js += '});'
+        js += "</script>"
+//       println "js "+js
+        out << str
+        out << js
+    }
+
+    /**
      * A helper tag for creating HTML selects.<br/>
      *
      * Examples:<br/>

@@ -43,13 +43,13 @@ class ConcursoController extends janus.seguridad.Shield {
     }
 
 
-    def concursos(){
+    def concursos() {
         def campos = ["codigo": ["Código", "string"], "objeto": ["Objeto", "string"], "fechaInicio": ["Fecha inicio", "string"], "presupuestoReferencial": ["Presupuesto", "string"], "obra": ["Obra", "string"]]
-        [campos:campos]
+        [campos: campos]
     }
 
 
-    def buscarConcurso(){
+    def buscarConcurso() {
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {
             if (params.campos == "obra") {
@@ -96,15 +96,15 @@ class ConcursoController extends janus.seguridad.Shield {
             return concurso?.obra?.nombre
         }
         def registro = { concurso ->
-            return (concurso?.estado!="R")?"N":"R"
+            return (concurso?.estado != "R") ? "N" : "R"
         }
         def numero = { concurso ->
-            return (concurso?.numeroCertificacion)?concurso.numeroCertificacion:""
+            return (concurso?.numeroCertificacion) ? concurso.numeroCertificacion : ""
         }
 
-        def listaTitulos = ["NÚMERO","OBJETO","OBRA/CONSULTORIA","PAC","MONTO","ESTADO","N° CERTIFICACIÓN PRESUPUESTARIA"]
-        def listaCampos = ["codigo", "objeto", "obra", "pac", "presupuestoReferencial","estado", "numeroCertificacion"]
-        def funciones = [null, null,["closure": [nombreObra, "&"]], ["closure": [pac, "&"]], null,["closure": [registro, "&"]],["closure": [numero, "&"]]]
+        def listaTitulos = ["NÚMERO", "OBJETO", "OBRA/CONSULTORIA", "PAC", "MONTO", "ESTADO", "N° CERTIFICACIÓN PRESUPUESTARIA"]
+        def listaCampos = ["codigo", "objeto", "obra", "pac", "presupuestoReferencial", "estado", "numeroCertificacion"]
+        def funciones = [null, null, ["closure": [nombreObra, "&"]], ["closure": [pac, "&"]], null, ["closure": [registro, "&"]], ["closure": [numero, "&"]]]
         def url = g.createLink(action: "buscarConcurso", controller: "concurso")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-busqueda").modal("hide");'
@@ -114,13 +114,13 @@ class ConcursoController extends janus.seguridad.Shield {
         def extras = " "
         if (extraObra.size() > 0)
             extras += " and obra in (${extraObra})"
-        println "extras "+extras
+        println "extras " + extras
 
         if (!params.reporte) {
             if (params.excel) {
                 session.dominio = Concurso
                 session.funciones = funciones
-                def anchos = [35, 70, 70, 35, 20,10]
+                def anchos = [35, 70, 70, 35, 20, 10]
                 /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PROCESOS DE CONTRATACION", anchos: anchos, extras: extras, landscape: true])
             } else {
@@ -135,7 +135,7 @@ class ConcursoController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Concurso
             session.funciones = funciones
-            def anchos = [12, 38, 25, 10, 5,5,10]
+            def anchos = [12, 38, 25, 10, 5, 5, 10]
             /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PROCESOS DE CONTRATACION", anchos: anchos, extras: extras, landscape: true])
         }
@@ -464,50 +464,51 @@ class ConcursoController extends janus.seguridad.Shield {
             params.codigo = params.codigo.toUpperCase()
         }
         if (params.fechaInicio) {
-            params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+            params.fechaInicio = new Date().parse("dd-MM-yyyy HH:mm", params.fechaInicio)
         }
         if (params.fechaLimitePreguntas) {
-            params.fechaLimitePreguntas = new Date().parse("dd-MM-yyyy", params.fechaLimitePreguntas)
+            params.fechaLimitePreguntas = new Date().parse("dd-MM-yyyy HH:mm", params.fechaLimitePreguntas)
         }
         if (params.fechaPublicacion) {
-            params.fechaPublicacion = new Date().parse("dd-MM-yyyy", params.fechaPublicacion)
+            params.fechaPublicacion = new Date().parse("dd-MM-yyyy HH:mm", params.fechaPublicacion)
+            println params.fechaPublicacion
         }
         if (params.fechaLimiteEntregaOfertas) {
-            params.fechaLimiteEntregaOfertas = new Date().parse("dd-MM-yyyy", params.fechaLimiteEntregaOfertas)
+            params.fechaLimiteEntregaOfertas = new Date().parse("dd-MM-yyyy HH:mm", params.fechaLimiteEntregaOfertas)
         }
         if (params.fechaLimiteRespuestas) {
-            params.fechaLimiteRespuestas = new Date().parse("dd-MM-yyyy", params.fechaLimiteRespuestas)
+            params.fechaLimiteRespuestas = new Date().parse("dd-MM-yyyy HH:mm", params.fechaLimiteRespuestas)
         }
         if (params.fechaLimiteRespuestaConvalidacion) {
-            params.fechaLimiteRespuestaConvalidacion = new Date().parse("dd-MM-yyyy", params.fechaLimiteRespuestaConvalidacion)
+            params.fechaLimiteRespuestaConvalidacion = new Date().parse("dd-MM-yyyy HH:mm", params.fechaLimiteRespuestaConvalidacion)
         }
         if (params.fechaLimiteSolicitarConvalidacion) {
-            params.fechaLimiteSolicitarConvalidacion = new Date().parse("dd-MM-yyyy", params.fechaLimiteSolicitarConvalidacion)
+            params.fechaLimiteSolicitarConvalidacion = new Date().parse("dd-MM-yyyy HH:mm", params.fechaLimiteSolicitarConvalidacion)
         }
         if (params.fechaInicioPuja) {
-            params.fechaInicioPuja = new Date().parse("dd-MM-yyyy", params.fechaInicioPuja)
+            params.fechaInicioPuja = new Date().parse("dd-MM-yyyy HH:mm", params.fechaInicioPuja)
         }
         if (params.fechaCalificacion) {
-            params.fechaCalificacion = new Date().parse("dd-MM-yyyy", params.fechaCalificacion)
+            params.fechaCalificacion = new Date().parse("dd-MM-yyyy HH:mm", params.fechaCalificacion)
         }
         if (params.fechaAdjudicacion) {
-            params.fechaAdjudicacion = new Date().parse("dd-MM-yyyy", params.fechaAdjudicacion)
+            params.fechaAdjudicacion = new Date().parse("dd-MM-yyyy HH:mm", params.fechaAdjudicacion)
         }
         if (params.fechaFinPuja) {
-            params.fechaFinPuja = new Date().parse("dd-MM-yyyy", params.fechaFinPuja)
+            params.fechaFinPuja = new Date().parse("dd-MM-yyyy HH:mm", params.fechaFinPuja)
         }
 
         if (params.fechaAperturaOfertas) {
-            params.fechaAperturaOfertas = new Date().parse("dd-MM-yyyy", params.fechaAperturaOfertas)
+            params.fechaAperturaOfertas = new Date().parse("dd-MM-yyyy HH:mm", params.fechaAperturaOfertas)
         }
         if (params.fechaLimiteResultadosFinales) {
-            params.fechaLimiteResultadosFinales = new Date().parse("dd-MM-yyyy", params.fechaLimiteResultadosFinales)
+            params.fechaLimiteResultadosFinales = new Date().parse("dd-MM-yyyy HH:mm", params.fechaLimiteResultadosFinales)
         }
         if (params.fechaInicioEvaluacionOferta) {
-            params.fechaInicioEvaluacionOferta = new Date().parse("dd-MM-yyyy", params.fechaInicioEvaluacionOferta)
+            params.fechaInicioEvaluacionOferta = new Date().parse("dd-MM-yyyy HH:mm", params.fechaInicioEvaluacionOferta)
         }
         if (params.fechaAceptacionProveedor) {
-            params.fechaAceptacionProveedor = new Date().parse("dd-MM-yyyy", params.fechaAceptacionProveedor)
+            params.fechaAceptacionProveedor = new Date().parse("dd-MM-yyyy HH:mm", params.fechaAceptacionProveedor)
         }
 
         if (params.fechaInicioPreparatorio) {
@@ -529,7 +530,7 @@ class ConcursoController extends janus.seguridad.Shield {
             params.fechaFinContractual = new Date().parse("dd-MM-yyyy", params.fechaFinContractual)
         }
         if (params.fechaNotificacionAdjudicacion) {
-            params.fechaNotificacionAdjudicacion = new Date().parse("dd-MM-yyyy", params.fechaNotificacionAdjudicacion)
+            params.fechaNotificacionAdjudicacion = new Date().parse("dd-MM-yyyy HH:mm", params.fechaNotificacionAdjudicacion)
         }
         if (params.memoRequerimiento) {
             params.memoRequerimiento = params.memoRequerimiento.toString().toUpperCase()

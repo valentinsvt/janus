@@ -1324,7 +1324,7 @@
                 $("#btnDeleteCronograma").click(function () {
                     $.box({
                         imageClass : "box_info",
-                        text       : "Se eliminará todo el cronograma, continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
+                        text       : "Se eliminará todo el cronograma, desea continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
                         title      : "Confirmación",
                         iconClose  : false,
                         dialog     : {
