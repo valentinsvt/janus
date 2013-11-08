@@ -367,7 +367,7 @@
 
                         <g:set var="minHour" value="${8}"/>
                         <g:set var="maxHour" value="${17}"/>
-                        <g:set var="stepMin" value="${15}"/>
+                        <g:set var="stepMin" value="${10}"/>
 
                         <div class="row">
                             <div class="span5">
@@ -379,7 +379,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false" name="fechaPublicacion" class="" value="${concursoInstance?.fechaPublicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -392,7 +392,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaAceptacionProveedor" class="" value="${concursoInstance?.fechaAceptacionProveedor}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -405,7 +405,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaLimitePreguntas" class="" value="${concursoInstance?.fechaLimitePreguntas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -418,7 +418,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaLimiteRespuestas" class="" value="${concursoInstance?.fechaLimiteRespuestas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -431,7 +431,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaLimiteEntregaOfertas" class="" value="${concursoInstance?.fechaLimiteEntregaOfertas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -444,7 +444,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaAperturaOfertas" class="" value="${concursoInstance?.fechaAperturaOfertas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaAperturaOfertas" class="" value="${concursoInstance?.fechaAperturaOfertas}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -457,7 +457,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaLimiteSolicitarConvalidacion" class="" value="${concursoInstance?.fechaLimiteSolicitarConvalidacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -470,7 +470,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaLimiteRespuestaConvalidacion" class="" value="${concursoInstance?.fechaLimiteRespuestaConvalidacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -486,7 +486,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaInicioEvaluacionOferta" class="" value="${concursoInstance?.fechaInicioEvaluacionOferta}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaInicioEvaluacionOferta" class="" value="${concursoInstance?.fechaInicioEvaluacionOferta}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -499,7 +499,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaLimiteResultadosFinales" class="" value="${concursoInstance?.fechaLimiteResultadosFinales}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaLimiteResultadosFinales" class="" value="${concursoInstance?.fechaLimiteResultadosFinales}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -512,7 +512,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaAdjudicacion" class="" value="${concursoInstance?.fechaAdjudicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -525,7 +525,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaInicio" class="" value="${concursoInstance?.fechaInicio}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -538,7 +538,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaCalificacion" class="" value="${concursoInstance?.fechaCalificacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -551,7 +551,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaInicioPuja" class="" value="${concursoInstance?.fechaInicioPuja}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -564,7 +564,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaFinPuja" class="" value="${concursoInstance?.fechaFinPuja}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -577,7 +577,7 @@
                                     </div>
 
                                     <div class="controls">
-                                        <elm:datetimepicker name="fechaNotificacionAdjudicacion" class="" value="${concursoInstance?.fechaNotificacionAdjudicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
+                                        <elm:datetimepicker showTime="false"name="fechaNotificacionAdjudicacion" class="" value="${concursoInstance?.fechaNotificacionAdjudicacion}" controlType="select" minHour="${minHour}" maxHour="${maxHour}" stepMinute="${stepMin}"/>
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>

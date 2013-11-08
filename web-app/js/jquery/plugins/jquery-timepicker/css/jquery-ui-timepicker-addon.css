@@ -3,7 +3,9 @@
 }
 
 .ui-timepicker-div dl {
-    text-align : left;
+    text-align    : left;
+    margin-bottom : 5px;
+    margin-top    : 5px;
 }
 
 .ui-timepicker-div dl dt {
@@ -13,7 +15,7 @@
 }
 
 .ui-timepicker-div dl dd {
-    margin : 0 10px 10px 40%;
+    margin : 0 0 2px 40%;
 }
 
 .ui-timepicker-div td {

@@ -550,7 +550,10 @@ class ElementosTagLib {
         js += "secondText: 'Segundos',"
         js += "currentText: 'Ahora',"
         js += "closeText: 'Aceptar'"
-
+        if (attrs.showTime) {
+            js += ","
+            js += "showTime:" + attrs.showTime
+        }
         if (attrs.minHour) {
             js += ","
             js += "hourMin:" + attrs.minHour
