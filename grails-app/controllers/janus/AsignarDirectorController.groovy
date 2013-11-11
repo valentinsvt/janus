@@ -47,15 +47,36 @@ class AsignarDirectorController  {
 
             def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
 
-//        println("personas:" + personas)
+//           println("personas:" + personas)
 
             def funcionDirector = Funcion.get(9)
 
             def dptoDireccion = Departamento.findAllByDireccion(direccion)
 
+//            println("dptoDire" + dptoDireccion)
+
             def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
 
-            def obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+//            println("personaDireccion" + personalDireccion)
+//
+//            def obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+//
+//            println("od" + obtenerDirector)
+
+            def obtenerDirector
+
+
+            if(personalDireccion != []){
+
+
+               obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+
+
+            }else {
+
+
+                obtenerDirector = null
+            }
 
 
 
@@ -80,7 +101,27 @@ class AsignarDirectorController  {
 
         def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
 
-        def obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+//        def obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+
+//        println("od" + obtenerDirector)
+
+
+        def obtenerDirector
+
+
+        if(personalDireccion != []){
+
+
+            obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+
+
+        }else {
+
+
+            obtenerDirector = null
+        }
+
+
 
         return [personas: personas, obtenerDirector: obtenerDirector]
 

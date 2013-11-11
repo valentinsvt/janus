@@ -35,7 +35,7 @@
 
 
     <g:select name="direccion" class="departamento" from="${listaDireccion}" optionValue="nombre"
-              optionKey="id" style="width: 300px" noSelection="['-1': '-Escoja la direccion-']"/>
+              optionKey="id" style="width: 400px" noSelection="['-1': '-Escoja la direccion-']"/>
 
 
 

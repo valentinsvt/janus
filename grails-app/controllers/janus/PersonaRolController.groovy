@@ -18,6 +18,10 @@ class PersonaRolController extends janus.seguridad.Shield {
 
     def registroPersonaRol (){
 
+        def funciones = Funcion.findAllByCodigoNotLike("D")
+
+        return[funciones: funciones]
+
 
     }
 

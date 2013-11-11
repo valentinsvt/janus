@@ -1,7 +1,7 @@
 
-<div class="span1" style="font-weight: bold">Persona:</div>
+<div class="span1" style="font-weight: bold; margin-left: -1px">Persona:</div>
 <g:select name="persona.id" class="persona" from="${personas}" optionValue="${{it.nombre + ' ' + it.apellido}}" optionKey="id"
-style="width: 300px"/>
+style="width: 400px"/>
 
 
 <script type="text/javascript">
