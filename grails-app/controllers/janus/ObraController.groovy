@@ -390,6 +390,31 @@ class ObraController extends janus.seguridad.Shield {
 
         def persona = Persona.get(usuario)
 
+
+        def direccion = Direccion.get(persona?.departamento?.direccion?.id)
+
+
+        def grupo = Grupo.findByDireccion(direccion)
+
+//        def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
+
+
+        def programa = Programacion.findAllByGrupo(grupo)
+
+        def tipoObra = TipoObra.findAllByGrupo(grupo)
+
+        def claseObra = ClaseObra.findAllByGrupo(grupo)
+
+
+//        println("grupo" + grupo)
+//        println("subpresupuest" + subPresupuesto1)
+//        println("direccion" + direccion.id)
+//        println("programa" + programa)
+//        println("tipo" + tipoObra)
+//        println("clase" + claseObra)
+
+
+
         def matrizOk = false
 
         def prov = Provincia.list();
@@ -423,7 +448,7 @@ class ObraController extends janus.seguridad.Shield {
             }
 
 //            println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento
@@ -440,7 +465,7 @@ class ObraController extends janus.seguridad.Shield {
 //            numero += "-" + (new Date().format("yy"))
             /* ********* fin genera el numero de memo de formula polinoica ***************************** */
 
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/]
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra]
         }
 
 

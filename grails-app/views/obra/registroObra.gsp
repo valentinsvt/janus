@@ -261,7 +261,8 @@
                     <div class="span1">Programa</div>
 
                     <div class="span3">
-                        <g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list([sort: 'descripcion'])}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
+                        %{--<g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list([sort: 'descripcion'])}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>--}%
+                        <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
 
                         <a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">
                             <i class="icon-plus-sign"></i>
@@ -271,10 +272,9 @@
                     <div class="span1" style="margin-left: 0;">Tipo</div>
 
                     <div class="span3" id="divTipoObra">
-                        <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
-                        %{--</div>--}%
+                        %{--<g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>--}%
+                        <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
 
-                        %{--<div class="span2" style="margin-left:78px;">--}%
                         <a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">
                             <i class="icon-plus-sign"></i>
                         </a>
@@ -284,7 +284,9 @@
                     <div class="span1" style="margin-left: 10px">Clase</div>
 
                     <div class="span3">
-                        <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list([sort: 'descripcion'])}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
+                        %{--<g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list([sort: 'descripcion'])}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>--}%
+                        <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
+
                         <a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">
                             <i class="icon-plus-sign"></i>
                         </a>

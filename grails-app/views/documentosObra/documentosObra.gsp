@@ -1314,7 +1314,7 @@
 
         <div class="span3" style="margin-top: 10px">
 
-            Meses <g:textField name="mesesReajuste" style="width: 55px; margin-left: 20px"/>
+            Meses: <g:textField name="mesesReajuste" style="width: 55px; margin-left: 20px"/>
         </div>
 
     </fieldset>
@@ -1337,9 +1337,8 @@
 
     <fieldset>
         <div class="span3">
-
-            Es necesario colocar un número válido en el campo Meses!!
-
+        <br>
+            Es necesario colocar un número válido en el campo <b>Meses</b> !!
         </div>
     </fieldset>
 </div>
@@ -1417,7 +1416,7 @@
 
         <div class="span3" style="margin-top: 10px">
 
-            Meses <g:textField name="mesesReajusteMemo" style="width: 55px; margin-left: 20px"/>
+            Meses: <g:textField name="mesesReajusteMemo" style="width: 55px; margin-left: 20px"/>
         </div>
 
     </fieldset>
@@ -2513,6 +2512,7 @@
 
     });
 
+
     $("#reajustePresupuestoDialog").dialog({
 
         autoOpen: false,
@@ -2647,7 +2647,7 @@
         width: 350,
         height: 200,
         position: 'center',
-        title: 'No existe un valor en el campo Meses!',
+        title: 'No existe un valor en el campo Meses',
         buttons: {
             "Aceptar": function () {
 
