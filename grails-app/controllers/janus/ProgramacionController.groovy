@@ -30,7 +30,13 @@ class ProgramacionController extends janus.seguridad.Shield {
     } //form_ajax
 
     def form_ext_ajax() {
+
+//        println("form" + params)
+
+        def grupo = params.grupo
+
         def programacionInstance = new Programacion(params)
+
         if (params.id) {
             programacionInstance = Programacion.get(params.id)
             if (!programacionInstance) {
@@ -40,7 +46,7 @@ class ProgramacionController extends janus.seguridad.Shield {
                 return
             } //no existe el objeto
         } //es edit
-        return [programacionInstance: programacionInstance]
+        return [programacionInstance: programacionInstance, grupo: grupo]
     } //form_ajax
 
     def save() {
@@ -88,7 +94,12 @@ class ProgramacionController extends janus.seguridad.Shield {
     } //save
 
     def save_ext() {
-        println params
+//        println ("save" + params)
+
+        def grupo = Grupo.get(params.grupo)
+
+        params.grupo = grupo
+
         def programacionInstance, message
 
         if (params.fechaInicio) {
@@ -110,6 +121,7 @@ class ProgramacionController extends janus.seguridad.Shield {
         }//es edit
         else {
             programacionInstance = new Programacion(params)
+//            programacionInstance.grupo = grupo
         } //es create
         if (!programacionInstance.save(flush: true)) {
             def str = "<h4>No se pudo guardar Programacion " + (programacionInstance.id ? programacionInstance.id : "") + "</h4>"

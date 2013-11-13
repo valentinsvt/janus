@@ -3,6 +3,7 @@
 <div id="create-TipoObra" class="span" role="main">
 <g:form class="form-horizontal" name="frmSave-TipoObra" controller="tipoObra" action="saveTipoObra">
     <g:hiddenField name="id" value="${tipoObraInstance?.id}"/>
+    <g:hiddenField name="grupo" value="${grupo}"/>
 
     <div class="control-group">
         <div>

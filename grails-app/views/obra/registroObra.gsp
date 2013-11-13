@@ -460,11 +460,14 @@
 
                 <div class="span12" style="margin-top: 10px">
                     <div class="span2 formato" style="width: 230px;">Destino: Dirección
-                    <g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+                    %{--<g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
+                    <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+
                     </div>
 
                     <div class="span2 formato" style="width: 230px;">Destino: Coordinación
-                    <g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id + ' order by descripcion')}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+                    %{--<g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id + ' order by descripcion')}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
+                    <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
                     </div>
 
                     <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio
@@ -1833,6 +1836,7 @@
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'crearTipoObra')}",
+                        data:    "grupo=${grupoDir?.id}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
@@ -1873,6 +1877,7 @@
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(controller: "claseObra", action:'form_ext_ajax')}",
+                        data    : "grupo=${grupoDir?.id}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
@@ -1908,9 +1913,11 @@
 
                 $("#btnCrearPrograma").click(function () {
 
+
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(controller:'programacion', action:'form_ext_ajax')}",
+                        data    : "grupo=${grupoDir?.id}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');

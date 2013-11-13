@@ -396,7 +396,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def grupo = Grupo.findByDireccion(direccion)
 
-//        def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
+        def departamentos = Departamento.findAllByDireccion(direccion)
 
 
         def programa = Programacion.findAllByGrupo(grupo)
@@ -448,7 +448,7 @@ class ObraController extends janus.seguridad.Shield {
             }
 
 //            println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento
@@ -465,7 +465,7 @@ class ObraController extends janus.seguridad.Shield {
 //            numero += "-" + (new Date().format("yy"))
             /* ********* fin genera el numero de memo de formula polinoica ***************************** */
 
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra]
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos]
         }
 
 
@@ -1259,6 +1259,8 @@ class ObraController extends janus.seguridad.Shield {
 
 //        println(params)
 
+        def grupo = params.grupo
+
         def tipoObraInstance = new TipoObra(params)
         if (params.id) {
             tipoObraInstance = TipoObra.get(params.id)
@@ -1269,7 +1271,7 @@ class ObraController extends janus.seguridad.Shield {
                 return
             }
         }
-        return [tipoObraInstance: tipoObraInstance]
+        return [tipoObraInstance: tipoObraInstance, grupo: grupo]
     }
 
 

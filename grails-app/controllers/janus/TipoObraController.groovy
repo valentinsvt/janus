@@ -103,6 +103,12 @@ class TipoObraController extends janus.seguridad.Shield {
 
     def saveTipoObra () {
         def tipoObraInstance
+
+        def grupo = Grupo.get(params.grupo)
+
+        params.grupo = grupo
+
+
         if(params.id) {
             tipoObraInstance = TipoObra.get(params.id)
             if(!tipoObraInstance) {

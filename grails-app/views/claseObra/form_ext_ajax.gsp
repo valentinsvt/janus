@@ -3,6 +3,7 @@
 <div id="create-claseObraInstance" class="span" role="main">
 <g:form class="form-horizontal" name="frmSave-claseObraInstance" action="save_ext">
     <g:hiddenField name="id" value="${claseObraInstance?.id}"/>
+    <g:hiddenField name="grupo" value="${grupo}"/>
 
     <div class="control-group">
         <div>

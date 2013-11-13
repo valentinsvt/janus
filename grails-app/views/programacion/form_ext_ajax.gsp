@@ -3,6 +3,7 @@
 <div id="create-programacionInstance" class="span" role="main">
 <g:form class="form-horizontal" name="frmSave-programacionInstance" action="save_ext">
     <g:hiddenField name="id" value="${programacionInstance?.id}"/>
+    <g:hiddenField name="grupo" value="${grupo}" />
 
     <div class="control-group">
         <div>

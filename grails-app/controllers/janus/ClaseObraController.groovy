@@ -16,6 +16,9 @@ class ClaseObraController extends janus.seguridad.Shield {
     } //list
 
     def form_ext_ajax() {
+
+        def grupo = params.grupo
+
         def claseObraInstance = new ClaseObra(params)
         if (params.id) {
             claseObraInstance = ClaseObra.get(params.id)
@@ -26,10 +29,14 @@ class ClaseObraController extends janus.seguridad.Shield {
                 return
             } //no existe el objeto
         } //es edit
-        return [claseObraInstance: claseObraInstance]
+        return [claseObraInstance: claseObraInstance, grupo: grupo]
     } //form_ajax
 
     def save_ext() {
+
+        def grupo = Grupo.get(params.grupo)
+        params.grupo = grupo
+
         def claseObraInstance, message
         if (params.id) {
             claseObraInstance = ClaseObra.get(params.id)
