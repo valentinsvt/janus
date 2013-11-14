@@ -382,9 +382,10 @@
                     var par = $("#texto_busqueda").val()
                     var primero = null
                     if (par.length > 0) {
+                        var mayus = par.toUpperCase()
                         $("th").each(function () {
-                            var mayus = par.toUpperCase()
-                            if ($(this).html().match(mayus)) {
+//                            console.log($(this),$(this).html(),mayus)
+                            if ($(this).html().toUpperCase().match(mayus)) {
                                 if (!$(this).hasClass("selectedColumna"))
                                     $(this).click();
                                 if (!primero)
