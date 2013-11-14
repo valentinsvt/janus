@@ -548,7 +548,7 @@ class ElementosTagLib {
         js += "hourText: 'Horas',"
         js += "minuteText: 'Minutos',"
         js += "secondText: 'Segundos',"
-        js += "currentText: 'Ahora',"
+        js += "currentText: 'Hoy',"
         js += "closeText: 'Aceptar'"
         if (attrs.showTime) {
             js += ","

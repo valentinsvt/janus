@@ -84,7 +84,7 @@
                     <img src="${resource(dir: 'images', file: 'apu1.png')}" width="100%" height="100%"/>
                 </div>
 
-                <div class="texto"><b>Precios unitarios y análisis de precios</b>: registro y mantenimiento de
+                <div class="texto"><b>Precios y análisis de precios unitarios</b>: registro y mantenimiento de
                 ítems y rubros. Análisis de precios, rendimientos y listas de precios...</div>
             </div>
         </div>

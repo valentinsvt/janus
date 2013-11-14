@@ -7,7 +7,7 @@ class Departamento implements Serializable {
 
     String codigo
 
-    Integer documento
+    Integer documento = 0
     Date fechaUltimoDoc
 
     static mapping = {
