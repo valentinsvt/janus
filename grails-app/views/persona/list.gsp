@@ -37,8 +37,13 @@
             </a>
 
             <a href="#" class="btn btn-ajax btn-dir" id="btn-dir">
-                <i class="icon-user"></i>
+                <i class="icon-star"></i>
                 Asignar Director
+            </a>
+
+            <a href="#" class="btn btn-ajax btn-cor" id="btn-cor">
+                <i class="icon-male"></i>
+                Asignar Coordinador
             </a>
         </div>
 
@@ -382,6 +387,12 @@
                 $("#btn-dir").click(function () {
 
                     location.href= "${createLink(controller: 'asignarDirector', action: 'asignarDirector')}"
+
+                });
+
+                $("#btn-cor").click(function () {
+
+                    location.href= "${createLink(controller: 'asignarCoordinador', action: 'asignarCoordinador')}"
 
                 });
 

@@ -121,6 +121,8 @@ class DocumentosObraController {
 
         def funcionDirector = Funcion.get(9)
 
+        def funcionCoordinador = Funcion.get(10)
+
 
         def direccion = departamento.direccion
 
@@ -133,6 +135,7 @@ class DocumentosObraController {
 
         def firmaDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
 
+        def coordinadores = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoordinador, personalDireccion)
 
 //        println("Director-->" + firmaDirector)
 
@@ -149,9 +152,7 @@ class DocumentosObraController {
         resEq.sort{it.item.codigo}
 
         [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
-                totalPresupuestoBien: totalPresupuestoBien, persona: persona, resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector]
-
-
+                totalPresupuestoBien: totalPresupuestoBien, persona: persona, resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores]
 
     }
 

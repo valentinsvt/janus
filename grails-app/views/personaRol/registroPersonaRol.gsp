@@ -25,8 +25,13 @@
     <div class="span1" style="font-weight: bold">Dirección:</div>
 
 
-    <g:select name="departamento" class="departamento" from="${janus.Departamento.list()}" optionValue="descripcion"
-              optionKey="id" style="width: 400px" noSelection="['-1': '-Escoja el departamento-']"/>
+    %{--<g:select name="departamento" class="departamento" from="${janus.Departamento.list()}" optionValue="descripcion"--}%
+              %{--optionKey="id" style="width: 400px" noSelection="['-1': '-Escoja el departamento-']"/>--}%
+
+    <g:select name="departamento" class="departamento" from="${janus.Direccion.list([sort: 'nombre'])}" optionValue="nombre"
+              optionKey="id" style="width: 400px" noSelection="['-1': '-Escoja la direccion-']"/>
+
+
 
     <div class="span12" id="filaPersonas"></div>
 
@@ -250,7 +255,7 @@
     function loadPersonas() {
         var idDep = $("#departamento").val();
 
-//                        ////console.log("dep-->>" + idDep)
+//                        console.log("dep-->>" + idDep)
         $.ajax({
             type: "POST",
             url: "${g.createLink(controller: 'personaRol', action:'getPersonas')}",

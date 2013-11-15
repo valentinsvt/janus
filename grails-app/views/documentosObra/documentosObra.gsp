@@ -173,105 +173,104 @@
 
 
                 <tbody id="firmasFijasPresu">
-
-                %{--Director--}%
-
-                %{--<g:if test="${obra?.inspector}">--}%
-
-                    %{--<tr data-id="${obra?.inspector?.id}">--}%
-
                   <g:if test="${firmaDirector != null}">
                     <tr data-id="${firmaDirector?.persona?.id}">
-
-
-
-                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
-
-                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
-
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--${obra?.inspector?.cargo}--}%
-
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
-
                         <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
                          ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-
                         </td>
                         <td>
-
                         DIRECTOR
-
                         </td>
-
-
-
-
-
                     </tr>
                   </g:if>
                 <g:else>
-
                     <tr>
                         <td style="color: #ff2a08">
-
                             DIRECCIÓN SIN DIRECTOR
                         </td>
                         <td>
                             DIRECTOR
                         </td>
+                    </tr>
+               </g:else>
+
+                 <g:if test="${obra?.inspector?.id != null}">
+                   <tr data-id="${obra?.inspector?.id}">
+
+                       <td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">
+                       ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}
+                       </td>
+                       <td>
+
+                       RESPONSABLE DEL PROYECTO
+                       </td>
+                   </tr>
+                </g:if>
+                <g:else>
+
+                    <tr>
+                        <td style="color: #ff2a08">
+
+                            SIN RESPONSABLE DEL PROYECTO
+                        </td>
+                        <td>
+                            RESPONSABLE DEL PROYECTO
+                        </td>
 
                     </tr>
-
-
                 </g:else>
-                %{--</g:if>--}%
 
-
-                %{--<g:if test="${obra?.revisor}">--}%
-                    <tr data-id="${obra?.revisor?.id}">
-
-                        %{--<td>--}%
-
-                        %{--</td>--}%
-                        <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
+                <g:if test="${coordinadores != null}">
+                    <tr>
+                        <td>
+                        <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
                         </td>
                         <td>
-                            %{--${obra?.revisor?.cargo}--}%
-                            REVISOR
+                            COORDINADOR
                         </td>
-                        %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
-
                     </tr>
-                %{--</g:if>--}%
-                %{--<g:if test="${obra?.responsableObra}">--}%
-
-                    <tr data-id="${obra?.responsableObra?.id}">
-
-                        %{--<td>--}%
-
-                        %{--</td>--}%
-                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
-                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
+                </g:if>
+                <g:else>
+                    <tr>
+                        <td style="color: #ff2a08">
+                            SIN COORDINADOR
                         </td>
                         <td>
-                            %{--${obra?.responsableObra?.cargo}--}%
-                            ELABORÓ
+                            COORDINADOR
                         </td>
-                        %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaPresu'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
                     </tr>
+                </g:else>
 
-                %{--</g:if>--}%
+
+
+
+                    %{--<tr data-id="${obra?.revisor?.id}">--}%
+
+                    %{----}%
+                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+
+                            %{--SUPERVISIÓN--}%
+                        %{--</td>--}%
+                   %{----}%
+
+                    %{--</tr>--}%
+
+
+                    %{--<tr data-id="${obra?.responsableObra?.id}">--}%
+
+                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
+                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--ELABORÓ--}%
+                        %{--</td>                     --}%
+                    %{--</tr>--}%
+
+
 
                 </tbody>
 
@@ -528,7 +527,7 @@
                             ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
                         </td>
                         <td>
-                            REVISOR
+                            SUPERVISIÓN
                         </td>
 
 
@@ -761,7 +760,7 @@
                             ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
                         </td>
                         <td>
-                            REVISOR
+                            SUPERVISIÓN
                         </td>
 
                         </tr>
@@ -1227,7 +1226,7 @@
                         ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
                     </td>
                     <td>
-                        REVISOR
+                        SUPERVISIÓN
                     </td>
 
                     </tr>
@@ -1476,6 +1475,8 @@
     var reajusteMesesMemo;
 
     var paraMemo1;
+
+    var firmaCoordinador;
 
 
     function validarNum(ev) {
@@ -1993,6 +1994,8 @@
     });
 
 
+
+
     $("#btnImprimir").click(function () {
         if(!$(this).hasClass("disabled")) {
             reajusteMemo = $("#reajusteMemo").val()
@@ -2005,9 +2008,23 @@
 
             if (active == 0) {
 
+                var idCoordinador = $("#coordinador").val()
+
+                var idFirmaCoor
+
+                if(idCoordinador != null){
+
+                    idFirmaCoor= $("#coordinador").val()
+                }else{
+
+                    idFirmaCoor = ''
+                }
+
+
 
                 firmasId = [];
                 firmasFijas = [];
+                firmaCoordinador = idFirmaCoor
 
                 $("#bodyFirmas_presupuesto").children("tr").each(function (i) {
                     firmasId[i] = $(this).data("id")
@@ -2550,7 +2567,7 @@
                     var tipoReporte = tipoClick;
 
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
-                            + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas
+                            + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador
 
 
                     $("#reajustePresupuestoDialog").dialog("close");

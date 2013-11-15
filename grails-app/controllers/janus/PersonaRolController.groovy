@@ -18,9 +18,11 @@ class PersonaRolController extends janus.seguridad.Shield {
 
     def registroPersonaRol (){
 
-        def funciones = Funcion.findAllByCodigoNotLike("D")
+        def funciones = Funcion.findAllByCodigoNotLikeAndCodigoNotLike("D","O")
 
-        return[funciones: funciones]
+        def listaDireccion = Direccion.list()
+
+        return[funciones: funciones, listaDireccion: listaDireccion]
 
 
     }
@@ -28,15 +30,20 @@ class PersonaRolController extends janus.seguridad.Shield {
 
     def getPersonas () {
 
-        def departamento = Departamento.get(params.id)
+//        println(params)
 
-        def personas = Persona.findAllByDepartamento(departamento)
+//        def departamento = Departamento.get(params.id)
+
+//        def personas = Persona.findAllByDepartamento(departamento)
+
+        def direccion = Direccion.get(params.id)
+
+        def departamentos = Departamento.findAllByDireccion(direccion)
+
+        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
 
 
         return [personas : personas]
-
-
-
     }
 
 

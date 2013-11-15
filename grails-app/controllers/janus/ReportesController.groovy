@@ -2591,6 +2591,8 @@ class ReportesController {
 
         def firmaFija
 
+        def firmaCoordinador
+
         def cuenta = 0;
 
         def cantidadMeses = params.meses
@@ -2624,7 +2626,7 @@ class ReportesController {
 
         }
 
-        cuenta = firma.size() + firmaFija.size()
+        cuenta = firma.size() + firmaFija.size() + 1
 
 //        println("#:" + cuenta)
 //        println("#:" + params.firmasFijas.trim().size())
@@ -3380,7 +3382,7 @@ class ReportesController {
 
             firmaFija.each { f ->
 
-//                println("-->>" + f)
+                println("-->>" + f)
 
                 if(f != ''){
                     firmas = Persona.get(f)
@@ -3396,6 +3398,24 @@ class ReportesController {
 
 
             }
+
+            if(params.firmaCoordinador != ''){
+
+
+
+                def personaRol = PersonaRol.get(params.firmaCoordinador)
+
+                firmaCoordinador = personaRol.persona
+                addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.titulo + " " + firmaCoordinador?.nombre + " " + firmaCoordinador?.apellido, times8bold), prmsHeaderHoja)
+
+            }else{
+
+                addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+            }
+
+
+
+
 
 //            firma.each { f ->
 //
@@ -3413,9 +3433,9 @@ class ReportesController {
 
                 firmas = Persona.get(firmaFija[0])
 
-                addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("REVISOR", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("SUPERVISIÓN", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
 
 
 //            }
