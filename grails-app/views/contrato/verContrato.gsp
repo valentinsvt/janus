@@ -47,22 +47,26 @@
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
             %{--<button class="btn" id="btn-imprimir" disabled="true"><i class="icon-print"></i> Imprimir</button>--}%
 
-                <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
-                    <i class="icon-book"></i> Biblioteca
-                </g:link>
-                <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
-                    <i class="icon-pencil"></i> Garantías
-                </g:link>
-                <a href="#" class="btn  " id="imprimir_sub">
-                    <i class="icon-print"></i>
-                    Imprimir Presupuesto
-                </a>
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
+                    <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
+                        <i class="icon-book"></i> Biblioteca
+                    </g:link>
+                    <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
+                        <i class="icon-pencil"></i> Garantías
+                    </g:link>
                     <g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">
                         <i class="icon-th"></i> Cronograma ejecucion
                     </g:link>
                     <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}" class="btn">
                         <i class="icon-superscript"></i> Fórmula Polinómica
+                    </a>
+                    <a href="#" class="btn  " id="imprimir_sub">
+                        <i class="icon-print"></i>
+                        Imprimir Presupuesto
+                    </a>
+                    <a href="#" class="btn  " id="btnRubros">
+                        <i class="icon-print"></i>
+                        Rubros
                     </a>
 
                 </g:if>
@@ -962,6 +966,46 @@
 
         });
 
+            $("#btnRubros").click(function () {
+                var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
+                $.box({
+                    imageClass : "box_info",
+                    text       : "Desea imprimir con desglose de transporte?",
+                    title      : "Confirme",
+                    iconClose  : false,
+                    dialog     : {
+                        resizable : false,
+                        draggable : false,
+                        buttons   : {
+
+                            "Sí"  : function () {
+                                url += "1";
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                            },
+                            "No"  : function () {
+                                url += "0";
+//                                    location.href = url;
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                            },
+                            "Exportar a Excel"  : function () {
+                                var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${contrato?.oferta?.concurso?.obra?.id}&transporte=";
+                                url += "1";
+                                location.href = url;
+
+                            },
+                            "Ilustraciones y Especificaciones" : function () {
+                                var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${contrato?.oferta?.concurso?.obra?.id}&tipo=ie";
+                                location.href = url;
+                            },
+
+                            "Cancelar" : function () {
+
+                            }
+                        }
+                    }
+                });
+                return false;
+            });
 
 
         </script>
