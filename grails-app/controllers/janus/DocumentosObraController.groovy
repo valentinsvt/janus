@@ -12,7 +12,7 @@ class DocumentosObraController {
 
     def documentosObra () {
 
-        println("params:" + params)
+//        println("params:" + params)
 
         def pr = janus.ReportesController
 

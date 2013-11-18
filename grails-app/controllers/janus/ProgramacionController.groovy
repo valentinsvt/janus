@@ -100,6 +100,8 @@ class ProgramacionController extends janus.seguridad.Shield {
 
         params.grupo = grupo
 
+        def programa = Programacion.findAllByGrupo(grupo)
+
         def programacionInstance, message
 
         if (params.fechaInicio) {
@@ -121,7 +123,7 @@ class ProgramacionController extends janus.seguridad.Shield {
         }//es edit
         else {
             programacionInstance = new Programacion(params)
-//            programacionInstance.grupo = grupo
+
         } //es create
         if (!programacionInstance.save(flush: true)) {
             def str = "<h4>No se pudo guardar Programacion " + (programacionInstance.id ? programacionInstance.id : "") + "</h4>"
@@ -149,9 +151,18 @@ class ProgramacionController extends janus.seguridad.Shield {
         }
         println message
 
-        def sel = g.select(id: "programacion", name: "programacion.id", "class": "programacion required", from: Programacion?.list(), value: programacionInstance.id, optionValue: "descripcion",
+//        def sel = g.select(id: "programacion", name: "programacion.id", "class": "programacion required", from: Programacion?.list(), value: programacionInstance.id, optionValue: "descripcion",
+//                optionKey: "id", title: "Programa")
+
+        def sel = g.select(id: "programacion", name: "programacion.id", "class": "programacion required", from: Programacion.findAllByGrupo(grupo), value: programacionInstance.id, optionValue: "descripcion",
                 optionKey: "id", title: "Programa")
-        render sel
+
+//        <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
+
+
+
+
+                render sel
     } //save
 
     def show_ajax() {

@@ -1961,6 +1961,7 @@ class ReportesController {
         PdfPCell cell = new PdfPCell(paragraph);
 //        println "params "+params
         cell.setBorderColor(Color.BLACK);
+
         if (params.border) {
             if (!params.bordeBot)
                 if (!params.bordeTop)
@@ -1999,7 +2000,18 @@ class ReportesController {
                 cell.setBorderWidthTop(0)
             }
         }
-        table.addCell(cell);
+//        if (params.bordeLeft) {
+//            cell.setBorderWidthTop(0)
+//            cell.setBorderWidthLeft(1)
+//            cell.setBorderWidthRight(0)
+//            cell.setBorderWidthBottom(0)
+//            cell.setPaddingLeft(7);
+//
+//        }
+
+
+
+         table.addCell(cell);
     }
 
 
@@ -2632,16 +2644,16 @@ class ReportesController {
 //        println("#:" + params.firmasFijas.trim().size())
 
         def prmsHeaderHoja = [border: Color.WHITE]
-
-
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
+        def prmsHeaderHoja4 = [border: Color.WHITE, bordeTop: "1"]
+        def prmsHeaderHoja5 = [border: Color.WHITE, bordeBot: "1"]
+        def prmsHeaderHoja6 = [border: Color.WHITE, bordeLeft: "1"]
+
 
 
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-
-
 
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
@@ -3382,7 +3394,7 @@ class ReportesController {
 
             firmaFija.each { f ->
 
-                println("-->>" + f)
+//                println("-->>" + f)
 
                 if(f != ''){
                     firmas = Persona.get(f)
@@ -3517,7 +3529,40 @@ class ReportesController {
 //
 //        }
 
-//        println("--->>>2" + document.getPageSize())
+
+
+        //sumilla
+
+        Paragraph txtSumilla = new Paragraph();
+        addEmptyLine(txtSumilla, 1);
+        txtSumilla.setAlignment(Element.ALIGN_LEFT);
+        txtSumilla.add(new Paragraph("Sumilla, ", times8bold));
+        txtSumilla.add(new Paragraph(" ", times8bold));
+        document.add(txtSumilla);
+
+        PdfPTable tablaSumilla = new PdfPTable(4);
+        tablaSumilla.setWidthPercentage(100);
+        tablaSumilla.getDefaultCell().setBorderWidthLeft(5);
+
+
+        addCellTabla(tablaSumilla, new Paragraph(obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido, times8bold), prmsHeaderHoja4)
+        addCellTabla(tablaSumilla, new Paragraph(" ", times8bold), prmsHeaderHoja4)
+        addCellTabla(tablaSumilla, new Paragraph(obra?.revisor?.titulo + " " +  obra?.revisor?.nombre + " " + obra?.revisor?.apellido, times8bold), prmsHeaderHoja4)
+        addCellTabla(tablaSumilla, new Paragraph(" ", times8bold), prmsHeaderHoja4)
+
+        addCellTabla(tablaSumilla, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaSumilla, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaSumilla, new Paragraph("SUPERVISIÓN", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaSumilla, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaSumilla, new Paragraph(" ", times8bold), prmsHeaderHoja5)
+        addCellTabla(tablaSumilla, new Paragraph("_________________________", times8bold), prmsHeaderHoja5)
+        addCellTabla(tablaSumilla, new Paragraph(" ", times8bold), prmsHeaderHoja5)
+        addCellTabla(tablaSumilla, new Paragraph("_________________________", times8bold), prmsHeaderHoja5)
+
+
+        document.add(tablaSumilla);
+
         println(document.getPageNumber())
         document.close();
         pdfw.close()

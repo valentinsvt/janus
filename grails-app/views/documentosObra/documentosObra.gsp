@@ -2061,14 +2061,16 @@
 
                 } else {
 
+//                    $("#reajustePresupuestoDialog").dialog("open")
 
-                    $("#reajustePresupuestoDialog").dialog("open")
+                    proyeccion = $("#proyeccionReajuste").is(':checked');
+                    reajusteIva = $("#reajusteIva").is(':checked');
+                    reajusteMeses = $("#mesesReajuste").val();
 
-                    %{--var tipoReporte = tipoClick;--}%
+                    var tipoReporte = tipoClick;
 
-                    %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue--}%
-                    %{--+ "&firmasId=" + firmasId--}%
-
+                    location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
+                            + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador
                 }
 
             }

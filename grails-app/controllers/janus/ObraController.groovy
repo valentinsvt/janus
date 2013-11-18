@@ -390,14 +390,11 @@ class ObraController extends janus.seguridad.Shield {
 
         def persona = Persona.get(usuario)
 
-
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
-
 
         def grupo = Grupo.findByDireccion(direccion)
 
         def departamentos = Departamento.findAllByDireccion(direccion)
-
 
         def programa = Programacion.findAllByGrupo(grupo)
 
@@ -846,15 +843,10 @@ class ObraController extends janus.seguridad.Shield {
 //        println(params)
 
         def obra = Obra.get(params.obra)
-
         def usuario = session.usuario.id
-
         def persona = Persona.get(usuario)
-
         def departamento = Departamento.get(params.id)
-
         def personas = Persona.findAllByDepartamento(departamento)
-
         def funcionInsp = Funcion.get(3)
         def funcionRevi = Funcion.get(5)
         def funcionResp = Funcion.get(1)

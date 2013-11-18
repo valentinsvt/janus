@@ -39,12 +39,12 @@
 
         <div class="span1" style="margin-left: -10px">Elaboró presupuesto</div>
 
-        %{--<g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${obra?.responsableObra?.id}"/>--}%
-        %{--<div class="span3"><g:textField name="responsableText" class="responsable required" value="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}" readonly="readonly" title="Persona responsable de la Obra"/></div>--}%
+        <g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${obra?.responsableObra?.id}"/>
+        <div class="span3"><g:textField name="responsableText" class="responsable required" value="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}" readonly="readonly" title="Persona responsable de la Obra"/></div>
 
 
-        <g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${persona?.id}"/>
-        <div class="span3"><g:textField name="responsableText" class="responsable" value="${persona?.nombre + " " + persona?.apellido}" readonly="readonly" title="Persona quien Elaboró"/></div>
+        %{--<g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${persona?.id}"/>--}%
+        %{--<div class="span3"><g:textField name="responsableText" class="responsable" value="${persona?.nombre + " " + persona?.apellido}" readonly="readonly" title="Persona quien Elaboró"/></div>--}%
 
     %{--</g:else>--}%
 
@@ -68,6 +68,9 @@
 
     <g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${obra?.responsableObra?.id}"/>
     <div class="span3"><g:textField name="responsableText" class="responsable required" value="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}" readonly="readonly" title="Persona responsable de la Obra"/></div>
+
+    %{--<g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${persona?.id}"/>--}%
+    %{--<div class="span3"><g:textField name="responsableText" class="responsable" value="${persona?.nombre + " " + persona?.apellido}" readonly="readonly" title="Persona quien Elaboró"/></div>--}%
 
 </g:else>
 

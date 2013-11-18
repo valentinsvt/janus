@@ -75,8 +75,13 @@ class ClaseObraController extends janus.seguridad.Shield {
         }
 
         println message
-        def sel = g.select(id: "claseObra", name: "claseObra.id", "class": "claseObra required", from: ClaseObra?.list(), value: claseObraInstance.id,
+//        def sel = g.select(id: "claseObra", name: "claseObra.id", "class": "claseObra required", from: ClaseObra?.list(), value: claseObraInstance.id,
+//                optionValue: "descripcion", optionKey: "id", style: "margin-left: -35px; width: 230px", title: "Clase de Obra")
+
+        def sel = g.select(id: "claseObra", name: "claseObra.id", "class": "claseObra required", from: ClaseObra.findAllByGrupo(grupo), value: claseObraInstance.id,
                 optionValue: "descripcion", optionKey: "id", style: "margin-left: -35px; width: 230px", title: "Clase de Obra")
+
+
         render sel
     } //save
 

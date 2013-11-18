@@ -151,7 +151,8 @@ class TipoObraController extends janus.seguridad.Shield {
 //            flash.message = "Se ha creado correctamente el Tipo de Obra: " + tipoObraInstance.descripcion
 //        }
 
-        def sel = g.select(name:"tipoObjetivo.id", class:"tipoObjetivo required", from:janus.TipoObra?.list(), value:tipoObraInstance?.id, optionValue:"descripcion", optionKey:"id", style:"margin-left: -60px; width: 290px")
+//        def sel = g.select(name:"tipoObjetivo.id", class:"tipoObjetivo required", from:janus.TipoObra?.list(), value:tipoObraInstance?.id, optionValue:"descripcion", optionKey:"id", style:"margin-left: -60px; width: 290px")
+        def sel = g.select(name:"tipoObjetivo.id", class:"tipoObjetivo required", from:TipoObra.findAllByGrupo(grupo), value:tipoObraInstance?.id, optionValue:"descripcion", optionKey:"id", style:"margin-left: -60px; width: 290px")
 
          render sel
 //        redirect(controller: 'obra', action: 'registroObra')
