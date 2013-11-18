@@ -107,10 +107,11 @@ class Obra implements Serializable {
     Persona firmaInicioObra
     String anexos
 
-
     String observacionesInicioObra
-
     Date fechaImpresionInicioObra
+
+    double longitudVia
+    double anchoVia
 
     static mapping = {
         table 'obra'
@@ -226,8 +227,10 @@ class Obra implements Serializable {
             anexos column: 'obraanxo'
 
             observacionesInicioObra column: 'obraobin'
-
             fechaImpresionInicioObra column: 'obrafcii'
+
+            longitudVia column: 'obralgvi'
+            anchoVia column: 'obraanvi'
         }
     }
     static constraints = {
@@ -339,6 +342,8 @@ class Obra implements Serializable {
         observacionesInicioObra(blank: true, nullable: true, size: 1..255)
 
         fechaImpresionInicioObra(blank: true, nullable: true)
+        longitudVia(blank: true, nullable: true, attributes: [title: 'longitud de la vía'])
+        anchoVia(blank: true, nullable: true, attributes: [title: 'ancho de la vía'])
     }
 
     String toString() {

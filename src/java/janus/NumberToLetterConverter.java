@@ -90,7 +90,7 @@ public abstract class NumberToLetterConverter {
         if (miles == 1)
             converted.append("MIL ");
         else if (miles > 1)
-            converted.append(convertNumber(String.valueOf(miles)) + "MIL ");
+            converted.append(convertNumber(String.valueOf(miles)) + " MIL ");
 
         // Descompone el ultimo trio de unidades
         int cientos = Integer.parseInt(String.valueOf(getDigitAt(
@@ -175,7 +175,7 @@ public abstract class NumberToLetterConverter {
         if (miles == 1)
             converted.append("MIL ");
         else if (miles > 1)
-            converted.append(convertNumber(String.valueOf(miles)) + "MIL ");
+            converted.append(convertNumber(String.valueOf(miles)) + " MIL ");
 
         // Descompone el ultimo trio de unidades
         int cientos = Integer.parseInt(String.valueOf(getDigitAt(

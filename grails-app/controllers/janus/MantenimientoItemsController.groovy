@@ -683,8 +683,12 @@ class MantenimientoItemsController extends Shield {
 
     def checkCdIt_ajax() {
         def dep = DepartamentoItem.get(params.dep)
-        params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
-//        println params
+        if (dep.subgrupo.grupo.id != 2)
+            params.codigo = dep.subgrupo.codigo.toString().padLeft(3, '0') + "." + dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+        else
+            params.codigo = dep.codigo.toString().padLeft(3, '0') + "." + params.codigo
+        //println params
+        //println dep.subgrupo.grupo.id
         if (params.id) {
             def item = Item.get(params.id)
             if (params.codigo.toString().trim() == item.codigo.toString().trim()) {
