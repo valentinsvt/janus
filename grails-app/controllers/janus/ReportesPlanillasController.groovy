@@ -2906,7 +2906,7 @@ class ReportesPlanillasController {
             headers.add(new Paragraph(oferta?.proveedor?.titulo, times12bold));
             headers.add(new Paragraph(oferta?.proveedor?.nombreContacto.toUpperCase() + " " + oferta?.proveedor?.apellidoContacto.toUpperCase(), times12bold));
             if (oferta?.proveedor?.tipo == 'J')
-               headers.add(new Paragraph(oferta?.proveedor?.nombre.toUpperCase(), times12bold));
+                headers.add(new Paragraph(oferta?.proveedor?.nombre.toUpperCase(), times12bold));
 
             headers.add(new Paragraph("Presente", times12bold));
             headers.add(new Paragraph("", times10bold));
@@ -2967,7 +2967,17 @@ class ReportesPlanillasController {
 //            addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times12bold), prmsHeaderHoja)
 //            document.add(tablaFirmas);
             def firmas = contrato.administrador
-            addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo ?: "" + " " + firmas?.nombre + " " + firmas?.apellido, times12bold), prmsHeaderHoja)
+            def firma = firmas?.titulo?:""
+            firma+=firmas?.nombre+" "+firmas?.apellido
+//            println "***************************************"
+//            println contrato.administrador
+//            println firmas
+//            println firmas.titulo
+//            println firmas.nombre
+//            println firmas.apellido
+//            println firma
+//            println "***************************************"
+            addCellTabla(tablaFirmas, new Paragraph(firma, times12bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("Administrador", times12bold), prmsHeaderHoja)
             document.add(tablaFirmas);
 
