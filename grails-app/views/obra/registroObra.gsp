@@ -302,9 +302,13 @@
                 </div>
 
                 <div class="span12">
-                    <div class="span3" style="width: 200px;">Referencia (Gestión/Disposición):</div>
+                    <div class="span3" style="width: 185px;">Referencia (Gestión/Disposición):</div>
+                    <div class="span5"><g:textField name="referencia" class="referencia" style="width: 470px; margin-left: -20px" value="${obra?.referencia}" maxlength="127" title="Referencia de la disposición para realizar la Obra"/></div>
+                    <div class="span1" style="width: 100px;">Longitud de la vía:</div>
+                    <div class="span1"><g:textField name="longitudVia" class="referencia" style="width: 80px; margin-left: -20px" maxlength="9" value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Longitud de la vía en metros. Sólo obras viales"/></div>
+                    <div class="span1" style="width: 90px;">Ancho de la vía:</div>
+                    <div class="span1"><g:textField name="anchoVia" class="referencia" style="width: 50px; margin-left: -10px" maxlength="4" value="${g.formatNumber(number: obra?.anchoVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Ancho de la vía en metros. Sólo obras viales"/></div>
 
-                    <div class="span6"><g:textField name="referencia" class="referencia" style="width: 880px" value="${obra?.referencia}" maxlength="127" title="Referencia de la disposición para realizar la Obra"/></div>
                 </div>
 
                 <div class="span12" id="filaPersonas">
