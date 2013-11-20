@@ -623,7 +623,7 @@
     <div class="modal-footer" id="modal_trans_footer">
         <a href="#" data-dismiss="modal" class="btn btn-primary">OK</a>
     </div>
-
+03.001.00
     <div id="imprimirTransporteDialog">
 
         <fieldset>

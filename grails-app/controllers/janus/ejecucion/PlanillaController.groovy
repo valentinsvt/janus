@@ -16,6 +16,175 @@ class PlanillaController extends janus.seguridad.Shield {
 
     }
 
+    def configOrdenInicioObra() {
+        def obra = Obra.get(params.id)
+        def concurso = janus.pac.Concurso.findByObra(obra)
+        def oferta = janus.pac.Oferta.findByConcurso(concurso)
+        def contrato = Contrato.findByOferta(oferta)
+
+        def texto = Pdfs.findAllByObra(obra)
+        def textos = []
+
+        if (texto.size() == 0) {
+
+            def planillaDesc = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigoIlike("A"))
+
+            def edit11 = "Para los fines consiguientes me permito indicarle que la fecha de inicio del contrato N° "
+            def str11 = contrato?.codigo.trim()
+            def edit12 = ", para la construcción de "
+            def str12 = obra?.descripcion.trim()
+            def edit13 = ", ubicada en la Parroquia "
+            def str13 = obra?.parroquia?.nombre.trim()
+            def edit14 = ", Distrito Metropolitano de Quito, de la Provincia de Pichincha, por un valor de US\$ "
+            def str14 = g.formatNumber(number: contrato?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+            def edit15 = " sin incluir IVA, consta de la cláusula octava, numeral 8.01, que señala que el plazo total que el contratista tiene para ejecutar, terminar y entregar a entera satisfacción es de "
+            def str15 = NumberToLetterConverter.numberToLetter(contrato?.plazo).toLowerCase() + " días calendario (" + g.formatNumber(number: contrato?.plazo, format: "##,##0", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0) + "), "
+            def edit16 = "contados a partir de la fecha de efectivización del anticipo y, en el numeral 8.02 se dice que se entenderá entregado el anticipo una vez transcurridas veinte y cuatro (24) horas de realizada "
+            edit16 += "la transferencia de fondos a la cuenta bancaria que para el efecto indique el contratista. "
+
+            def edit21 = "Tesorería de la Corporación, remite a la "
+            def str21 = obra?.departamento?.direccion?.nombre.trim()
+            def edit22 = ", copia del reporte de pago del "
+            def str22 = contrato?.porcentajeAnticipo + "%"
+            def edit23 = " del anticipo, por un valor de US\$ "
+            def str23 = g.formatNumber(number: (planillaDesc?.valor + planillaDesc.reajuste), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+            def edit24 = ", menos los descuentos de ley, fue acreditado el "
+            def str24 = fechaConFormato(planillaDesc?.fechaMemoPagoPlanilla, "dd MMMM yyyy").toLowerCase()
+
+            def edit31 = "Por las razones indicadas la fecha de inicio de la obra, del contrato N° "
+            def str31 = contrato?.codigo.trim()
+            def edit32 = ", será el "
+            def str32 = fechaConFormato(obra?.fechaInicio, "dd MMMM yyyy").toLowerCase() + "."
+
+            textos[0] = [
+                    [tipo: "E", string: edit11, w: "580px", h: "20px"],
+                    [tipo: "S", string: str11, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit12, w: "210px", h: "20px"],
+                    [tipo: "S", string: str12, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit13, w: "280px", h: "20px"],
+                    [tipo: "S", string: str13, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit14, w: "560px", h: "20px"],
+                    [tipo: "S", string: str14, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit15, w: "940px", h: "20px"],
+                    [tipo: "S", string: str15, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit16, w: "940px", h: "40px"]
+            ]
+            textos[1] = [
+                    [tipo: "E", string: edit21, w: "300px", h: "20px"],
+                    [tipo: "S", string: str21, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit22, w: "225px", h: "20px"],
+                    [tipo: "S", string: str22, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit23, w: "240px", h: "20px"],
+                    [tipo: "S", string: str23, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit24, w: "330px", h: "20px"],
+                    [tipo: "S", string: str24, w: "20px", h: "20px"]
+            ]
+            textos[2] = [
+                    [tipo: "E", string: edit31, w: "485px", h: "20px"],
+                    [tipo: "S", string: str31, w: "20px", h: "20px"],
+                    [tipo: "E", string: edit32, w: "90px", h: "20px"],
+                    [tipo: "S", string: str32, w: "20px", h: "20px"]
+            ]
+        } else if (texto.size() > 1) {
+            println "Se encontraron ${texto.size()} textos para la obra ${obra.id}: ${texto.id}"
+            texto = texto.first()
+        } else {
+            texto = texto.first()
+        }
+        return [obra: obra, contrato: contrato, textos: textos, texto: texto]
+    }
+
+    def saveInicioObra() {
+        def obra = Obra.get(params.id)
+        def concurso = janus.pac.Concurso.findByObra(obra)
+        def oferta = janus.pac.Oferta.findByConcurso(concurso)
+        def contrato = Contrato.findByOferta(oferta)
+        def planillaDesc = Planilla.findByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigoIlike("A"))
+        def texto = new Pdfs()
+        texto.obra = obra
+        texto.fecha = new Date()
+
+        def str11 = contrato?.codigo.trim()
+        def str12 = obra?.descripcion.trim()
+        def str13 = obra?.parroquia?.nombre.trim()
+        def str14 = g.formatNumber(number: contrato?.monto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+        def str15 = NumberToLetterConverter.numberToLetter(contrato?.plazo).toLowerCase() + " días calendario (" + g.formatNumber(number: contrato?.plazo, format: "##,##0", locale: "ec", maxFractionDigits: 0, minFractionDigits: 0) + "), "
+
+        def str21 = obra?.departamento?.direccion?.nombre.trim()
+        def str22 = contrato?.porcentajeAnticipo + "%"
+        def str23 = g.formatNumber(number: (planillaDesc?.valor + planillaDesc.reajuste), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+        def str24 = fechaConFormato(planillaDesc?.fechaMemoPagoPlanilla, "dd MMMM yyyy").toLowerCase()
+
+        def str31 = contrato?.codigo.trim()
+        def str32 = fechaConFormato(obra?.fechaInicio, "dd MMMM yyyy").toLowerCase() + "."
+
+        def textos = []
+
+        textos[0] = [
+                "edit11",  // 0    1
+                str11,     // 1
+                "edit12",  // 2    2
+                str12,     // 3
+                "edit13",  // 4    3
+                str13,     // 5
+                "edit14",  // 6    4
+                str14,     // 7
+                "edit15",  // 8    5
+                str15,     // 9
+                "edit16"   // 10   6
+        ]
+        textos[1] = [
+                "edit21",  // 0    1
+                str21,     // 1
+                "edit22",  // 2    2
+                str22,     // 3
+                "edit23",  // 4    3
+                str23,     // 5
+                "edit24",  // 6    4
+                str24      // 7
+        ]
+        textos[2] = [
+                "edit31",  // 0    1
+                str31,     // 1
+                "edit32",  // 2    2
+                str32      // 3
+        ]
+
+        params.each { k, v ->
+            if (k.contains("edit")) {
+                def parts = k.split("_")
+                def parrafo = parts[1].toInteger()
+                def edit = parts[2].toInteger()
+                def np = parrafo - 1
+                def ne = edit + (edit - 2)
+//                println "" + parrafo + "(" + (parrafo - 1 + ")" + "   " + edit + "(" + (edit + (edit - 2))) + ")" + "    " + v
+                textos[np][ne] = v
+            }
+        }
+        def parrafos = []
+        textos.eachWithIndex { p, i ->
+            if (!parrafos[i]) {
+                parrafos[i] = ""
+            }
+            p.each { str ->
+                parrafos[i] += str
+            }
+        }
+        texto.parrafo1 = parrafos[0]
+        texto.parrafo2 = parrafos[1]
+        texto.parrafo3 = parrafos[2]
+        texto.parrafo4 = params.extra.trim()
+
+        if (texto.save([flush: true])) {
+            flash.clase = "alert-success"
+            flash.message = "Orden de inicio de obra guardado exitosamente."
+        } else {
+            flash.clase = "alert-error"
+            flash.message = "Ha ocurrido un error al guardar la orden de inicio de obra."
+        }
+        redirect(action: "configOrdenInicioObra", id: obra.id)
+    }
+
     def errorIndice() {
         def planilla = Planilla.get(params.id)
         return [planilla: planilla, errores: params.errores, alertas: params.alertas]
@@ -1340,15 +1509,36 @@ class PlanillaController extends janus.seguridad.Shield {
         render html
     }
 
-    def fechaConFormato(fecha, formato) {
+    private String fechaConFormato(fecha, formato) {
         def meses = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
-        def strFecha
-        switch (formato) {
-            case "MMM-yy":
-                strFecha = meses[fecha.format("MM").toInteger()] + "-" + fecha.format("yy")
-                break;
+        def mesesLargo = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+        def strFecha = ""
+//        println ">>" + fecha + "    " + formato
+        if (fecha) {
+            switch (formato) {
+                case "MMM-yy":
+                    strFecha = meses[fecha.format("MM").toInteger()] + "-" + fecha.format("yy")
+                    break;
+                case "dd-MM-yyyy":
+                    strFecha = "" + fecha.format("dd-MM-yyyy")
+                    break;
+                case "dd-MMM-yyyy":
+                    strFecha = "" + fecha.format("dd") + "-" + meses[fecha.format("MM").toInteger()] + "-" + fecha.format("yyyy")
+                    break;
+                case "dd MMMM yyyy":
+                    strFecha = "" + fecha.format("dd") + " de " + mesesLargo[fecha.format("MM").toInteger()] + " de " + fecha.format("yyyy")
+                    break;
+                default:
+                    strFecha = "Formato " + formato + " no reconocido"
+                    break;
+            }
         }
+//        println ">>>>>>" + strFecha
         return strFecha
+    }
+
+    private String fechaConFormato(fecha) {
+        return fechaConFormato(fecha, "MMM-yy")
     }
 
 
