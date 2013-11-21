@@ -7,13 +7,15 @@ class DocumentoObraController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    String pathBiblioteca = "archivosBiblioteca"
+
     def index() {
         redirect(action: "list", params: params)
     } //index
 
     def downloadFile() {
         def doc = DocumentoObra.get(params.id)
-        def folder = "archivosObra"
+        def folder = pathBiblioteca
         def path = servletContext.getRealPath("/") + folder + File.separatorChar + doc.path
 
 //        println servletContext.getRealPath("/")
@@ -77,7 +79,7 @@ class DocumentoObraController extends janus.seguridad.Shield {
         //handle uploaded file
 //        println "upload....."
 //        println params
-        def folder = "archivosObra"
+        def folder = pathBiblioteca
         def path = servletContext.getRealPath("/") + folder   //web-app/archivos
         new File(path).mkdirs()
 
@@ -227,7 +229,7 @@ class DocumentoObraController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha eliminado correctamente Documento Obra " + documentoObraInstance.id
 
-            def folder = "archivosObra"
+            def folder = pathBiblioteca
             path = servletContext.getRealPath("/") + folder + File.separatorChar + path
             def file = new File(path)
             file.delete()

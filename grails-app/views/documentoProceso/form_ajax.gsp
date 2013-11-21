@@ -4,6 +4,7 @@
     <g:uploadForm class="form-horizontal" name="frmSave-DocumentoProceso" action="save">
         <g:hiddenField name="id" value="${documentoProcesoInstance?.id}"/>
         <g:hiddenField name="concurso.id" value="${concurso.id}"/>
+        <g:hiddenField name="contrato" value="${contrato?.id}"/>
 
         <div class="control-group">
             <div>

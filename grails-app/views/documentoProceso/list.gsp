@@ -148,7 +148,8 @@
                         type    : "POST",
                         url     : "${createLink(action:'form_ajax')}",
                         data    : {
-                            concurso : ${concurso.id}
+                            concurso : ${concurso.id},
+                            contrato : ${contrato?.id?:""}
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -176,7 +177,8 @@
                         url     : "${createLink(action:'form_ajax')}",
                         data    : {
                             id       : id,
-                            concurso : ${concurso.id}
+                            concurso : ${concurso.id},
+                            contrato : ${contrato?.id?:""}
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
