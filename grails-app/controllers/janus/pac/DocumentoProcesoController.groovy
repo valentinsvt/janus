@@ -7,43 +7,122 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    String pathBiblioteca = "archivosBiblioteca"
+
+    def errores() {
+        return [params: params]
+    }
+
     def index() {
         redirect(action: "list", params: params)
     } //index
 
     def downloadFile() {
         def doc = DocumentoProceso.get(params.id)
-        def folder = "archivos"
+        def folder = pathBiblioteca
         def path = servletContext.getRealPath("/") + folder + File.separatorChar + doc.path
 
 //        println servletContext.getRealPath("/")
 //        println path
 
         def file = new File(path)
-        def b = file.getBytes()
+        if (file.exists()) {
+            def b = file.getBytes()
 
-        def ext = doc.path.split("\\.")
-        ext = ext[ext.size() - 1]
+            def ext = doc.path.split("\\.")
+            ext = ext[ext.size() - 1]
 //        println ext
 
-        response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
-        response.setHeader("Content-disposition", "attachment; filename=" + doc.path)
-        response.setContentLength(b.length)
-        response.getOutputStream().write(b)
+            response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
+            response.setHeader("Content-disposition", "attachment; filename=" + doc.path)
+            response.setContentLength(b.length)
+            response.getOutputStream().write(b)
+        } else {
+
+            redirect(action: "errores")
+        }
     }
 
     def list() {
         def contrato = null
+        def concurso = Concurso.get(params.id)
+        def documentosContrato = DocumentoProceso.findAllByConcurso(concurso)
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
+//            println "copiar los docs de la obra aqui : Plano y Justificativo "
+            /* copiar los docs de la obra aqui : Plano y Justificativo */
+            def obra = contrato.obra
+            def documentos = DocumentoObra.findAllByObra(obra)
+            def plano = documentos.findAll { it.nombre.toLowerCase().contains("plano") }
+            def justificativo = documentos.findAll { it.nombre.toLowerCase().contains("justificativo") }
+
+            def planoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("plano") }
+            def justificativoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("justificativo") }
+
+            def error = ""
+            def msg = ""
+            if (planoContrato.size() == 0) {
+                if (plano.size() == 0) {
+                    error += "<li>No se ha registrado un documento 'Plano' en la biblioteca de la obra.</li>"
+                } else {
+                    if (plano.size() > 1) {
+                        error += "<li>Se han encontrado ${plano.size()} documentos de plano de la obra. Se ha copiado el primero encontrado.</li>"
+                    }
+                    plano = plano.first()
+                    def pl = new DocumentoProceso(
+                            etapa: Etapa.get(4),
+                            concurso: concurso,
+                            descripcion: plano.descripcion,
+                            palabrasClave: plano.palabrasClave,
+                            resumen: plano.resumen,
+                            nombre: plano.nombre,
+                            path: plano.path)
+                    if (!pl.save(flush: true)) {
+                        error += "<li>No se pudo copiar el archivo de plano de la obra: " + renderErrors(bean: pl) + "</li>"
+                    } else {
+                        msg += "<li>Se ha copiado exitosamente el archivo de plano de la obra</li>"
+                    }
+                }
+            }
+            if (justificativoContrato.size() == 0) {
+                if (justificativo.size() == 0) {
+                    error += "<li>No se ha registrado un documento 'Justificativo de cantidad de obra' en la biblioteca de la obra.</li>"
+                } else {
+                    if (justificativo.size() > 1) {
+                        error += "<li>Se han encontrado ${justificativo.size()} documentos de justificativo de cantidad de la obra. Se ha copiado el primero encontrado.</li>"
+                    }
+                    justificativo = justificativo.first()
+                    def js = new DocumentoProceso(
+                            etapa: Etapa.get(4),
+                            concurso: concurso,
+                            descripcion: justificativo.descripcion,
+                            palabrasClave: justificativo.palabrasClave,
+                            resumen: justificativo.resumen,
+                            nombre: justificativo.nombre,
+                            path: justificativo.path)
+                    if (!js.save(flush: true)) {
+                        error += "<li>No se pudo copiar el archivo de justificativo de cantidad de la obra: " + renderErrors(bean: js) + "</li>"
+                    } else {
+                        msg += "<li>Se ha copiado exitosamente el archivo de justificativo de cantidad de la obra</li>"
+                    }
+                }
+            }
+            if (error != "") {
+                flash.clase = "alert-error"
+                flash.message = "<ul>${error}</ul>"
+            }
+            if (msg != "") {
+                flash.clase = "alert-success"
+                flash.message = "<ul>${msg}</ul>"
+            }
         }
-        def concurso = Concurso.get(params.id)
-        def documentos = DocumentoProceso.findAllByConcurso(concurso)
-        return [concurso: concurso, documentoProcesoInstanceList: documentos, params: params, contrato: contrato]
+
+        return [concurso: concurso, documentoProcesoInstanceList: documentosContrato, params: params, contrato: contrato]
     } //list
 
     def form_ajax() {
         def concurso = Concurso.get(params.concurso)
+        def contrato = Contrato.get(params.contrato)
         def documentoProcesoInstance = new DocumentoProceso(params)
         if (params.id) {
             documentoProcesoInstance = DocumentoProceso.get(params.id)
@@ -55,7 +134,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             } //no existe el objeto
         } //es edit
         documentoProcesoInstance.concurso = concurso
-        return [documentoProcesoInstance: documentoProcesoInstance, concurso: concurso]
+        return [documentoProcesoInstance: documentoProcesoInstance, concurso: concurso, contrato: contrato]
     } //form_ajax
 
     def save() {
@@ -65,7 +144,11 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             if (!documentoProcesoInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Documento Proceso con id " + params.id
-                redirect(action: 'list', id: params.concurso.id)
+                if (params.contrato) {
+                    redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato])
+                } else {
+                    redirect(action: 'list', id: params.concurso.id)
+                }
                 return
             }//no existe el objeto
             documentoProcesoInstance.properties = params
@@ -78,7 +161,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
         //handle uploaded file
 //        println "upload....."
 //        println params
-        def folder = "archivos"
+        def folder = pathBiblioteca
         def path = servletContext.getRealPath("/") + folder   //web-app/archivos
         new File(path).mkdirs()
 
@@ -155,7 +238,11 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Documento Proceso " + documentoProcesoInstance.id
         }
-        redirect(action: 'list', id: params.concurso.id)
+        if (params.contrato) {
+            redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato])
+        } else {
+            redirect(action: 'list', id: params.concurso.id)
+        }
     } //save
 
     def show_ajax() {
