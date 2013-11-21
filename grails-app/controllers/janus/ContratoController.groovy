@@ -3,7 +3,9 @@ package janus
 import janus.ejecucion.FormulaPolinomicaContractual
 import janus.ejecucion.Planilla
 import janus.ejecucion.TipoFormulaPolinomica
+import janus.pac.Concurso
 import janus.pac.CronogramaContrato
+import janus.pac.DocumentoProceso
 import org.springframework.dao.DataIntegrityViolationException
 
 class ContratoController extends janus.seguridad.Shield {
@@ -140,6 +142,20 @@ class ContratoController extends janus.seguridad.Shield {
         }
         if (totalC.toDouble().round(6) != 1.000) {
             errores += "<li>La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000</li>"
+        }
+
+        //tiene q tener al menos 2 documentos: plano y justificativo de cantidad de obra
+        def concurso = Concurso.findByObra(obra)
+        def documentosContrato = DocumentoProceso.findAllByConcurso(concurso)
+
+        def planoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("plano") }
+        def justificativoContrato = documentosContrato.findAll { it.nombre.toLowerCase().contains("justificativo") }
+
+        if (planoContrato.size() == 0) {
+            errores += "<li>Debe cargar un documento a la biblioteca con nombre 'Plano'</li>"
+        }
+        if (justificativoContrato.size() == 0) {
+            errores += "<li>Debe cargar un documento a la biblioteca con nombre 'Justificativo de cantidad de obra'</li>"
         }
 
         if (errores == "") {
