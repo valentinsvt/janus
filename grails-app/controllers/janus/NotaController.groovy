@@ -29,13 +29,15 @@ class NotaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
 //         println "params "+params
         if (params.piePaginaSel) {
-
-            params.id = params.piePaginaSel
-
+            if (params.piePaginaSel != '-1'){
+                params.id = params.piePaginaSel
+            }else{
+                   params.id = null
+            }
         }
-
 
         def notaInstance
         if (params.id) {
@@ -43,7 +45,7 @@ class NotaController extends janus.seguridad.Shield {
             if (!notaInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Nota con id " + params.id
-                redirect(action: 'list')
+                redirect(controller: 'documentosObra', action: 'documentosObra', id: params.obra)
                 return
             }//no existe el objeto
             notaInstance.properties = params
@@ -66,16 +68,16 @@ class NotaController extends janus.seguridad.Shield {
             str += "</ul>"
 
             flash.message = str
-            redirect(action: 'list')
+//            redirect(action: 'list')
             return
         }
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Nota " + notaInstance.id
+            flash.message = "Se ha actualizado correctamente la Nota " + notaInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Nota " + notaInstance.id
+            flash.message = "Se ha creado correctamente la Nota " + notaInstance.descripcion
         }
 //        redirect(action: 'list')
         redirect(controller: 'documentosObra',action: 'documentosObra',id: params.obra)
@@ -87,18 +89,22 @@ class NotaController extends janus.seguridad.Shield {
         if (!notaInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Nota con id " + params.id
-            redirect(action: "list")
+//            redirect(action: "list")
             return
         }
         [notaInstance: notaInstance]
     } //show
 
     def delete() {
+        def mensaje
+//        println("params" + params)
+
         def notaInstance = Nota.get(params.id)
         if (!notaInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Nota con id " + params.id
-            redirect(action: "list")
+//            redirect(controller: 'documentosObra', action: "documentosObra", id: params.obra)
+            render "no"
             return
         }
 
@@ -106,12 +112,18 @@ class NotaController extends janus.seguridad.Shield {
             notaInstance.delete(flush: true)
             flash.clase = "alert-success"
             flash.message = "Se ha eliminado correctamente Nota " + notaInstance.id
-            redirect(action: "list")
+            render "ok"
+//            redirect(controller: 'documentosObra', action: "documentosObra", id: params.obra)
+            return
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
             flash.message = "No se pudo eliminar Nota " + (notaInstance.id ? notaInstance.id : "")
-            redirect(action: "list")
+            render "no"
+//            redirect(controller: 'documentosObra', action: "documentosObra", id: params.obra)
         }
+
+//        redirect(controller: 'documentosObra', action: "documentosObra", id: params.obra)
+
     } //delete
 } //fin controller

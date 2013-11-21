@@ -30,6 +30,13 @@
 
     }
 
+    .error {
+
+        color: #ff072f;
+        margin-left: 140px;
+
+    }
+
 
 
     </style>
@@ -39,6 +46,32 @@
 </head>
 
 <body>
+
+
+<g:if test="${flash.message}">
+    <div class="span6" style="float:right; width: 400px">
+        <div class="alert ${flash.clase ?: 'alert-info'}" role="status" style="margin-bottom: 0px; margin-left: 15px;">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            ${flash.message}
+        </div>
+    </div>
+</g:if>
+
+<div class="span12 hide" style="margin-bottom: 10px;" id="divError">
+    <div class="alert alert-error" role="status">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <span id="spanError"></span>
+    </div>
+</div>
+
+<div class="span12 hide" style="margin-bottom: 10px;" id="divOk">
+    <div class="alert alert-info" role="status">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        <span id="spanOk"></span>
+    </div>
+</div>
+
+
 
 <div id="tabs" style="width: 800px; height: 1150px">
 
@@ -80,49 +113,47 @@
     <g:form class="registroNota" name="frm-nota" controller="nota" action="save">
         <fieldset class="borde">
 
-            <div style="margin-top: -20px; margin-bottom: 20px; margin-left: 30px">
+            %{--<div style="margin-top: -20px; margin-bottom: 20px; margin-left: 30px">--}%
 
-                <g:checkBox name="forzar" checked="false"/> Forzar nueva Página para las Notas de Pie de Página
+            %{--<g:checkBox name="forzar" checked="false"/> Forzar nueva Página para las Notas de Pie de Página--}%
 
-            </div>
+            %{--</div>--}%
 
             <legend>Pie de Página</legend>
 
             <div class="span6" style="margin-top: -10px">
 
                 <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion"
-                          optionKey="id" style="width: 350px"/>
+                          optionKey="id" style="width: 350px;" noSelection="['-1':'Seleccione una nota...']" />
 
                 <div class="btn-group" style="margin-left: 350px; margin-top: -60px; margin-bottom: 10px">
-                    <a class="btn" id="btnNuevo">Nuevo</a>
-                    <a class="btn" id="btnCancelar">Cancelar</a>
-                    <a class="btn" id="btnEditar">Editar</a>
-                    <a class="btn" id="btnAceptar">Aceptar</a>
+                    <a class="btn" id="btnNuevo"><i class="icon-pencil"></i> Nuevo</a>
+                    <a class="btn" id="btnCancelar"><i class="icon-eraser"></i> Cancelar</a>
+                    %{--<a class="btn" id="btnEditar">Editar</a>--}%
+                    <a class="btn" id="btnAceptar"><i class="icon-ok"></i> Grabar</a>
+                    <a class="btn" id="btnEliminar"><i class="icon-remove"></i> Eliminar</a>
                 </div>
 
             </div>
-
-            %{--<g:hiddenField name="nota" value="${nota?.id}"/>--}%
             <g:hiddenField name="obra" value="${obra?.id}"/>
 
-            <div class="span6">
-
-                <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 685px" disabled="true"/>
-
+            <div class="span7">
+                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 500px; margin-left: 20px" class="required"/> </div>
             </div>
 
+
+
             <div class="span6">
+                <div class="span2" style="margin-left: -1px"> Descripción de la Nota </div>
 
                 <g:textArea name="texto" value="${nota?.texto}" rows="5" cols="5"
-                            style="height: 125px; width:685px ; resize: none" disabled="true"/>
-
+                            style="height: 125px; width:685px ; resize: none"/>
             </div>
-
 
             <div class="span6" style="margin-top: 5px; margin-bottom: 10px">
 
                 <g:checkBox name="notaAdicional" checked="false"
-                            disabled="true"/> Nota al Pie Adicional (15 líneas aprox)
+                /> Nota al Pie Adicional (15 líneas aprox)
 
             </div>
 
@@ -130,7 +161,7 @@
             <div class="span6">
 
                 <g:textArea name="adicional" value="${nota?.adicional}" rows="5" cols="5"
-                            style="height: 125px; width:685px ; resize: none" disabled="true"/>
+                            style="height: 125px; width:685px ; resize: none" />
 
             </div>
 
@@ -150,16 +181,16 @@
 
 
         %{--<div class="span6" style="margin-top: -20px">--}%
-            %{--from="${firmas}"--}%
-            %{--<elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmaDirector}"--}%
-                        %{--optionClass="${{ it?.cargo }}"--}%
-                        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}" style="width: 350px"/>--}%
+        %{--from="${firmas}"--}%
+        %{--<elm:select name="setFirmas" id="cmb_presupuesto" class="selFirmas" from="${firmaDirector}"--}%
+        %{--optionClass="${{ it?.cargo }}"--}%
+        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}" style="width: 350px"/>--}%
 
 
-            %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
-                %{--<button class="btn btnAdicionar" id="presupuesto">Adicionar</button>--}%
+        %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+        %{--<button class="btn btnAdicionar" id="presupuesto">Adicionar</button>--}%
 
-            %{--</div>--}%
+        %{--</div>--}%
 
         %{--</div>--}%
 
@@ -180,17 +211,17 @@
 
 
                 <tbody id="firmasFijasPresu">
-                  <g:if test="${firmaDirector != null}">
+                <g:if test="${firmaDirector != null}">
                     <tr data-id="${firmaDirector?.persona?.id}">
                         <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
-                         ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
+                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
                         </td>
                         <td>
-                        DIRECTOR
+                            DIRECTOR
                         </td>
                     </tr>
-                  </g:if>
+                </g:if>
                 <g:else>
                     <tr>
                         <td style="color: #ff2a08">
@@ -200,19 +231,19 @@
                             DIRECTOR
                         </td>
                     </tr>
-               </g:else>
+                </g:else>
 
-                 <g:if test="${obra?.inspector?.id != null}">
-                   <tr data-id="${obra?.inspector?.id}">
+                <g:if test="${obra?.inspector?.id != null}">
+                    <tr data-id="${obra?.inspector?.id}">
 
-                       <td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">
-                       ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}
-                       </td>
-                       <td>
+                        <td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">
+                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}
+                        </td>
+                        <td>
 
-                       RESPONSABLE DEL PROYECTO
-                       </td>
-                   </tr>
+                            RESPONSABLE DEL PROYECTO
+                        </td>
+                    </tr>
                 </g:if>
                 <g:else>
 
@@ -231,7 +262,7 @@
                 <g:if test="${coordinadores != null}">
                     <tr>
                         <td>
-                        <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
                         </td>
                         <td>
                             COORDINADOR
@@ -252,30 +283,30 @@
 
 
 
-                    %{--<tr data-id="${obra?.revisor?.id}">--}%
+                %{--<tr data-id="${obra?.revisor?.id}">--}%
 
-                    %{----}%
-                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
+                %{----}%
+                %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
+                %{--</td>--}%
+                %{--<td>--}%
 
-                            %{--SUPERVISIÓN--}%
-                        %{--</td>--}%
-                   %{----}%
+                %{--SUPERVISIÓN--}%
+                %{--</td>--}%
+                %{----}%
 
-                    %{--</tr>--}%
+                %{--</tr>--}%
 
 
-                    %{--<tr data-id="${obra?.responsableObra?.id}">--}%
+                %{--<tr data-id="${obra?.responsableObra?.id}">--}%
 
-                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
-                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--ELABORÓ--}%
-                        %{--</td>                     --}%
-                    %{--</tr>--}%
+                %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
+                %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
+                %{--</td>--}%
+                %{--<td>--}%
+                %{--ELABORÓ--}%
+                %{--</td>                     --}%
+                %{--</tr>--}%
 
 
 
@@ -427,15 +458,15 @@
 
         %{--<div class="span6">--}%
 
-            %{--<elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"--}%
-                        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
-                        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
+        %{--<elm:select name="setFirmas" id="cmb_memo" class="selFirmas" from="${firmas}"--}%
+        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
+        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
 
 
-            %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
-                %{--<button class="btn btnAdicionar" id="memo">Adicionar</button>--}%
+        %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+        %{--<button class="btn btnAdicionar" id="memo">Adicionar</button>--}%
 
-            %{--</div>--}%
+        %{--</div>--}%
 
         %{--</div>--}%
 
@@ -458,10 +489,10 @@
 
                 %{--<g:if test="${obra?.inspector}">--}%
 
-                    %{--<tr data-id="${obra?.inspector?.id}">--}%
+                %{--<tr data-id="${obra?.inspector?.id}">--}%
                 <g:if test="${firmaDirector != null}">
 
-                <tr data-id="${firmaDirector?.persona?.id}">
+                    <tr data-id="${firmaDirector?.persona?.id}">
 
                         %{--<td>--}%
 
@@ -469,15 +500,15 @@
 
                         %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
 
-                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
 
                         %{--</td>--}%
                         %{--<td>--}%
-                            %{--${obra?.inspector?.cargo}--}%
+                        %{--${obra?.inspector?.cargo}--}%
 
                         %{--</td>--}%
                         %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
                         %{--</td>--}%
 
                         <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
@@ -514,48 +545,48 @@
 
 
                 %{--<g:if test="${obra?.revisor}">--}%
-                    <tr data-id="${obra?.revisor?.id}">
+                <tr data-id="${obra?.revisor?.id}">
 
 
-                        %{--<td>--}%
+                    %{--<td>--}%
 
-                        %{--</td>--}%
-                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--${obra?.revisor?.cargo}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
+                    %{--</td>--}%
+                    %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                    %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--${obra?.revisor?.cargo}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                    %{--</td>--}%
 
-                        <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
-                        </td>
-                        <td>
-                            SUPERVISIÓN
-                        </td>
+                    <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
+                        ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
+                    </td>
+                    <td>
+                        SUPERVISIÓN
+                    </td>
 
 
-                    </tr>
+                </tr>
                 %{--</g:if>--}%
                 %{--<g:if test="${obra?.responsableObra}">--}%
 
-                    <tr data-id="${obra?.responsableObra?.id}">
+                <tr data-id="${obra?.responsableObra?.id}">
 
-                        %{--<td>--}%
+                    %{--<td>--}%
 
-                        %{--</td>--}%
-                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
-                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--${obra?.responsableObra?.cargo}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
+                    %{--</td>--}%
+                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                    %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--${obra?.responsableObra?.cargo}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                    %{--</td>--}%
 
                     <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
                         ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
@@ -563,7 +594,7 @@
                     <td>
                         ELABORÓ
                     </td>
-                    </tr>
+                </tr>
 
                 %{--</g:if>--}%
 
@@ -588,132 +619,132 @@
 
 <div id="tab-polinomica" class="tab" style="">
 
-    <div class="textoFormula">
+<div class="textoFormula">
 
-        <fieldset class="borde">
+    <fieldset class="borde">
 
-            <div class="span6" style="margin-top: 10px">
-                <div class="span2">Fórmula Polinómica N°</div>
+        <div class="span6" style="margin-top: 10px">
+            <div class="span2">Fórmula Polinómica N°</div>
 
-                <div class="span3"><g:textField name="numeroFor" value="${obra?.formulaPolinomica}"
-                                                disabled="true"/></div>
+            <div class="span3"><g:textField name="numeroFor" value="${obra?.formulaPolinomica}"
+                                            disabled="true"/></div>
+        </div>
+
+        <div class="span6">
+            <div class="span2">Fecha de Lista de Precios:</div>
+
+            <div class="span3"><g:textField name="fechaFor"
+                                            value="${formatDate(date: obra?.fechaPreciosRubros, format: "yyyy-MM-dd")}"
+                                            style="width: 100px" disabled="true"/></div>
+        </div>
+
+        <div class="span6">
+            <div class="span2">Monto del Contrato:</div>
+
+            <div class="span3">
+                <g:textField name="montoFor"
+                             value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"
+                             disabled="true"/>
             </div>
+        </div>
+
+    </fieldset>
+
+</div>
+
+
+<div class="texto">
+
+    <fieldset class="borde">
+        <legend>Nota</legend>
+
+        <g:form class="memoGrabar" name="frm-formula" controller="auxiliar" action="saveDoc">
+
+            <g:hiddenField name="id" value="${"1"}"/>
+
+            <g:hiddenField name="obra" value="${obra?.id}"/>
 
             <div class="span6">
-                <div class="span2">Fecha de Lista de Precios:</div>
+                <div class="span3"><g:textArea name="notaFormula" rows="4" value="${auxiliarFijo?.notaFormula}"
+                                               cols="4"
+                                               style="width: 690px; margin-left: -30px; height: 70px; resize: none"
+                                               disabled="true"/></div>
 
-                <div class="span3"><g:textField name="fechaFor"
-                                                value="${formatDate(date: obra?.fechaPreciosRubros, format: "yyyy-MM-dd")}"
-                                                style="width: 100px" disabled="true"/></div>
             </div>
+        </g:form>
+        <div class="span6" style="margin-top: 10px">
+            <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
+                <button class="btn" id="btnEditarFor">Editar</button>
+                <button class="btn" id="btnAceptarFor">Aceptar</button>
 
-            <div class="span6">
-                <div class="span2">Monto del Contrato:</div>
-
-                <div class="span3">
-                    <g:textField name="montoFor"
-                                 value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"
-                                 disabled="true"/>
-                </div>
             </div>
+        </div>
 
-        </fieldset>
+    </fieldset>
 
-    </div>
-
-
-    <div class="texto">
-
-        <fieldset class="borde">
-            <legend>Nota</legend>
-
-            <g:form class="memoGrabar" name="frm-formula" controller="auxiliar" action="saveDoc">
-
-                <g:hiddenField name="id" value="${"1"}"/>
-
-                <g:hiddenField name="obra" value="${obra?.id}"/>
-
-                <div class="span6">
-                    <div class="span3"><g:textArea name="notaFormula" rows="4" value="${auxiliarFijo?.notaFormula}"
-                                                   cols="4"
-                                                   style="width: 690px; margin-left: -30px; height: 70px; resize: none"
-                                                   disabled="true"/></div>
-
-                </div>
-            </g:form>
-            <div class="span6" style="margin-top: 10px">
-                <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                    <button class="btn" id="btnEditarFor">Editar</button>
-                    <button class="btn" id="btnAceptarFor">Aceptar</button>
-
-                </div>
-            </div>
-
-        </fieldset>
-
-    </div>
+</div>
 
 
-    <div class="setFirmas" style="margin-top: -10px">
+<div class="setFirmas" style="margin-top: -10px">
 
-        <fieldset class="borde">
+    <fieldset class="borde">
 
-            <legend>Set de Firmas</legend>
+        <legend>Set de Firmas</legend>
 
 
-            %{--<div class="span6">--}%
+        %{--<div class="span6">--}%
 
-                %{--<elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmas}"--}%
-                            %{--optionKey="id"--}%
-                            %{--optionValue="${{ it?.nombre + " " + it?.apellido }}" optionClass="${{ it?.cargo }}"--}%
-                            %{--style="width: 350px"/>--}%
+        %{--<elm:select name="setFirmas" id="cmb_polinomica" class="selFirmas" from="${firmas}"--}%
+        %{--optionKey="id"--}%
+        %{--optionValue="${{ it?.nombre + " " + it?.apellido }}" optionClass="${{ it?.cargo }}"--}%
+        %{--style="width: 350px"/>--}%
 
-                %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
-                    %{--<button class="btn btnAdicionar" id="polinomica">Adicionar</button>--}%
+        %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+        %{--<button class="btn btnAdicionar" id="polinomica">Adicionar</button>--}%
 
-                %{--</div>--}%
+        %{--</div>--}%
 
-            %{--</div>--}%
+        %{--</div>--}%
 
-            <div class="span6" style="width: 700px; margin-top: -20px">
+        <div class="span6" style="width: 700px; margin-top: -20px">
 
-                <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasFor">
+            <table class="table table-bordered table-striped table-hover table-condensed" id="tablaFirmasFor">
 
-                    <thead>
-                    <tr>
-                        %{--<th style="width: 50px">N°</th>--}%
-                        <th style="width: 350px">Nombre</th>
-                        <th style="width: 250px">Rol</th>
-                        %{--<th style="width: 20px"></th>--}%
+                <thead>
+                <tr>
+                    %{--<th style="width: 50px">N°</th>--}%
+                    <th style="width: 350px">Nombre</th>
+                    <th style="width: 250px">Rol</th>
+                    %{--<th style="width: 20px"></th>--}%
 
-                    </tr>
+                </tr>
 
-                    </thead>
+                </thead>
 
-                    <tbody id="firmasFijasPoli">
+                <tbody id="firmasFijasPoli">
 
-                    %{--<g:if test="${obra?.inspector}">--}%
+                %{--<g:if test="${obra?.inspector}">--}%
 
-                        %{--<tr data-id="${obra?.inspector?.id}">--}%
-<g:if test="${firmaDirector != null}">
+                %{--<tr data-id="${obra?.inspector?.id}">--}%
+                <g:if test="${firmaDirector != null}">
                     <tr data-id="${firmaDirector?.persona?.id}">
 
-                            %{--<td>--}%
+                        %{--<td>--}%
 
-                            %{--</td>--}%
+                        %{--</td>--}%
 
-                            %{--<td id="  ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
+                        %{--<td id="  ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
 
-                                %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
 
-                            %{--</td>--}%
-                            %{--<td>--}%
-                                %{--${obra?.inspector?.cargo}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--${obra?.inspector?.cargo}--}%
 
-                            %{--</td>--}%
-                            %{--<td>--}%
-                                %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
-                            %{--</td>--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                        %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--</td>--}%
 
                         <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
@@ -727,96 +758,96 @@
                         </td>
 
 
-                        </tr>
-</g:if>
-                    <g:else>
+                    </tr>
+                </g:if>
+                <g:else>
 
-                        <tr>
-                            <td style="color: #ff2a08">
+                    <tr>
+                        <td style="color: #ff2a08">
 
-                                DIRECCIÓN SIN DIRECTOR
-                            </td>
-                            <td>
-                                DIRECTOR
-                            </td>
-
-                        </tr>
-
-
-                    </g:else>
-                    %{--</g:if>--}%
-
-
-                    %{--<g:if test="${obra?.revisor}">--}%
-                        <tr data-id="${obra?.revisor?.id}">
-
-                            %{--<td>--}%
-
-                            %{--</td>--}%
-                            %{--<td id="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                                %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
-                            %{--</td>--}%
-                            %{--<td>--}%
-                                %{--${obra?.revisor?.cargo}--}%
-                            %{--</td>--}%
-                            %{--<td>--}%
-                                %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
-                            %{--</td>--}%
-
-                        <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                            ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
+                            DIRECCIÓN SIN DIRECTOR
                         </td>
                         <td>
-                            SUPERVISIÓN
+                            DIRECTOR
                         </td>
 
-                        </tr>
-                    %{--</g:if>--}%
-                    %{--<g:if test="${obra?.responsableObra}">--}%
-
-                        <tr data-id="${obra?.responsableObra?.id}">
-
-                            %{--<td>--}%
-
-                            %{--</td>--}%
-                            %{--<td id="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
-                                %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
-                            %{--</td>--}%
-                            %{--<td>--}%
-                                %{--${obra?.responsableObra?.cargo}--}%
-                            %{--</td>--}%
-                            %{--<td>--}%
-                                %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
-
-                            %{--</td>--}%
-
-                        <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
-                            ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
-                        </td>
-                        <td>
-                            ELABORÓ
-                        </td>
+                    </tr>
 
 
-                        </tr>
-
-                    %{--</g:if>--}%
-
-                    </tbody>
+                </g:else>
+                %{--</g:if>--}%
 
 
+                %{--<g:if test="${obra?.revisor}">--}%
+                <tr data-id="${obra?.revisor?.id}">
 
-                    <tbody id="bodyFirmas_polinomica">
+                    %{--<td>--}%
 
-                    </tbody>
+                    %{--</td>--}%
+                    %{--<td id="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                    %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--${obra?.revisor?.cargo}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
+                    %{--</td>--}%
 
-                </table>
+                    <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
+                        ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
+                    </td>
+                    <td>
+                        SUPERVISIÓN
+                    </td>
 
-            </div>
+                </tr>
+                %{--</g:if>--}%
+                %{--<g:if test="${obra?.responsableObra}">--}%
 
-        </fieldset>
+                <tr data-id="${obra?.responsableObra?.id}">
 
-    </div>
+                    %{--<td>--}%
+
+                    %{--</td>--}%
+                    %{--<td id="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                    %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--${obra?.responsableObra?.cargo}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
+
+                    %{--</td>--}%
+
+                    <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
+                        ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
+                    </td>
+                    <td>
+                        ELABORÓ
+                    </td>
+
+
+                </tr>
+
+                %{--</g:if>--}%
+
+                </tbody>
+
+
+
+                <tbody id="bodyFirmas_polinomica">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </fieldset>
+
+</div>
 
 </div>
 
@@ -1002,10 +1033,10 @@
 
             </div>
 
-            %{--<div class="span6">--}%
+        %{--<div class="span6">--}%
 
 
-            %{--</div>--}%
+        %{--</div>--}%
 
         </g:form>
 
@@ -1129,15 +1160,15 @@
 
         %{--<div class="span6">--}%
 
-            %{--<elm:select name="setFirmas" id="cmb_memoPresu" class="selFirmas" from="${firmas}"--}%
-                        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
-                        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
+        %{--<elm:select name="setFirmas" id="cmb_memoPresu" class="selFirmas" from="${firmas}"--}%
+        %{--optionKey="id" optionValue="${{ it?.nombre + ' ' + it?.apellido }}"--}%
+        %{--optionClass="${{ it?.cargo }}" style="width: 350px"/>--}%
 
 
-            %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
-                %{--<button class="btn btnAdicionar" id="memoPresu">Adicionar</button>--}%
+        %{--<div class="btn-group" style="margin-left: 400px; margin-top: -60px; margin-bottom: 10px">--}%
+        %{--<button class="btn btnAdicionar" id="memoPresu">Adicionar</button>--}%
 
-            %{--</div>--}%
+        %{--</div>--}%
 
         %{--</div>--}%
 
@@ -1160,8 +1191,8 @@
 
                 %{--<g:if test="${obra?.inspector}">--}%
 
-                    %{--<tr data-id="${obra?.inspector?.id}">--}%
-<g:if test="${firmaDirector != null}">
+                %{--<tr data-id="${obra?.inspector?.id}">--}%
+                <g:if test="${firmaDirector != null}">
                     <tr data-id="${firmaDirector?.persona?.id}">
 
                         %{--<td>--}%
@@ -1170,33 +1201,33 @@
 
                         %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
 
-                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
 
                         %{--</td>--}%
                         %{--<td>--}%
-                            %{--${obra?.inspector?.cargo}--}%
+                        %{--${obra?.inspector?.cargo}--}%
 
                         %{--</td>--}%
                         %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
                         %{--</td>--}%
 
-                    <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
+                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
 
-                        ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
+                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
 
-                    </td>
-                    <td>
+                        </td>
+                        <td>
 
-                        DIRECTOR
+                            DIRECTOR
 
-                    </td>
+                        </td>
 
 
 
                     </tr>
                 %{--</g:if>--}%
-</g:if>
+                </g:if>
                 <g:else>
 
                     <tr>
@@ -1214,20 +1245,20 @@
                 </g:else>
 
                 %{--<g:if test="${obra?.revisor}">--}%
-                    <tr data-id="${obra?.revisor?.id}">
+                <tr data-id="${obra?.revisor?.id}">
 
-                        %{--<td>--}%
+                    %{--<td>--}%
 
-                        %{--</td>--}%
-                        %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                            %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--${obra?.revisor?.cargo}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
+                    %{--</td>--}%
+                    %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                    %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--${obra?.revisor?.cargo}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                    %{--</td>--}%
 
                     <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
                         ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
@@ -1236,24 +1267,24 @@
                         SUPERVISIÓN
                     </td>
 
-                    </tr>
+                </tr>
                 %{--</g:if>--}%
                 %{--<g:if test="${obra?.responsableObra}">--}%
 
-                    <tr data-id="${obra?.responsableObra?.id}">
+                <tr data-id="${obra?.responsableObra?.id}">
 
-                        %{--<td>--}%
+                    %{--<td>--}%
 
-                        %{--</td>--}%
-                        %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
-                            %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--${obra?.responsableObra?.cargo}--}%
-                        %{--</td>--}%
-                        %{--<td>--}%
-                            %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
-                        %{--</td>--}%
+                    %{--</td>--}%
+                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
+                    %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--${obra?.responsableObra?.cargo}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                    %{--<a href='#' class='btn btn-danger borrarFirmaMemoPresu'><i class='icon-trash icon-large'></i></a>--}%
+                    %{--</td>--}%
 
 
 
@@ -1263,7 +1294,7 @@
                     <td>
                         ELABORÓ
                     </td>
-                    </tr>
+                </tr>
 
                 %{--</g:if>--}%
 
@@ -1345,7 +1376,7 @@
 
     <fieldset>
         <div class="span3">
-        <br>
+            <br>
             Es necesario colocar un número válido en el campo <b>Meses</b> !!
         </div>
     </fieldset>
@@ -1996,10 +2027,10 @@
 
         if(active == 4){
 
-             $("#btnImprimir").hide()
-                }
+            $("#btnImprimir").hide()
+        }
         else {
-             $("#btnImprimir").show()
+            $("#btnImprimir").show()
         }
     });
 
@@ -2228,36 +2259,36 @@
             reajusteMemo = $("#reajusteMemo").val()
             var active = $("#tabs").tabs("option", "active");
 
-           if (active == 2) {
+            if (active == 2) {
 
-               firmasIdFormu = [];
-               firmasFijasFormu = [];
+                firmasIdFormu = [];
+                firmasFijasFormu = [];
 
-               $("#bodyFirmas_polinomica").children("tr").each(function (i) {
-                   firmasIdFormu[i] = $(this).data("id")
+                $("#bodyFirmas_polinomica").children("tr").each(function (i) {
+                    firmasIdFormu[i] = $(this).data("id")
 
-               })
+                })
 
-               $("#firmasFijasPoli").children("tr").each(function (i) {
-
-
-                   firmasFijasFormu[i] = $(this).data("id")
-
-               });
-
-               if (firmasIdFormu.length == 0) {
-                   firmasIdFormu = "";
-               }
-               if(firmasFijasFormu.length == 0){
-
-                   firmasFijasFormu="";
-
-               }
-
-               location.href = "${g.createLink(controller: 'reportes5' ,action: 'reporteFormulaExcel',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
+                $("#firmasFijasPoli").children("tr").each(function (i) {
 
 
-           }
+                    firmasFijasFormu[i] = $(this).data("id")
+
+                });
+
+                if (firmasIdFormu.length == 0) {
+                    firmasIdFormu = "";
+                }
+                if(firmasFijasFormu.length == 0){
+
+                    firmasFijasFormu="";
+
+                }
+
+                location.href = "${g.createLink(controller: 'reportes5' ,action: 'reporteFormulaExcel',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
+
+
+            }
 
         }
 
@@ -2326,11 +2357,11 @@
 
         loadNota();
 
-        $("#piePaginaSel").attr("disabled", false);
-        $("#descripcion").attr("disabled", true);
-        $("#texto").attr("disabled", true);
-        $("#adicional").attr("disabled", true);
-        $("#notaAdicional").attr("disabled", true)
+//        $("#piePaginaSel").attr("disabled", false);
+//        $("#descripcion").attr("disabled", true);
+//        $("#texto").attr("disabled", true);
+//        $("#adicional").attr("disabled", true);
+//        $("#notaAdicional").attr("disabled", true)
 
     });
 
@@ -2383,44 +2414,41 @@
 
     });
 
+    $("#frm-nota").validate();
+
     $("#btnAceptar").click(function () {
 
         $("#frm-nota").submit();
-
-        %{--success_func( location.href="${g.createLink(controller: 'documentosObra',action: 'documentosObra',id: obra?.id)}")--}%
 
     });
 
     $("#btnNuevo").click(function () {
 
+//        $("#piePaginaSel").attr("disabled", true);
 
-//        $("input[type=text]").val("");
-//            $("textarea").val("");
-        $("#piePaginaSel").attr("disabled", true);
-
-        $("#descripcion").attr("disabled", false);
-        $("#texto").attr("disabled", false);
-
+//        $("#descripcion").attr("disabled", false);
+//        $("#texto").attr("disabled", false);
+//
         $("#notaAdicional").attr("checked", true)
 
-        $("#adicional").attr("disabled", false);
+//        $("#adicional").attr("disabled", false);
         $("#descripcion").val("");
         $("#texto").val("");
         $("#adicional").val("");
 
-        $("#notaAdicional").attr("disabled", false)
+//        $("#notaAdicional").attr("disabled", false)
 
     });
 
     $("#btnCancelar").click(function () {
 
-        $("#piePaginaSel").attr("disabled", false);
+//        $("#piePaginaSel").attr("disabled", false);
         loadNota();
 
-        $("#descripcion").attr("disabled", true);
-        $("#texto").attr("disabled", true);
-        $("#adicional").attr("disabled", true);
-        $("#notaAdicional").attr("disabled", true)
+//        $("#descripcion").attr("disabled", true);
+//        $("#texto").attr("disabled", true);
+//        $("#adicional").attr("disabled", true);
+//        $("#notaAdicional").attr("disabled", true)
     });
 
     function desbloquear() {
@@ -2433,31 +2461,31 @@
 
     }
 
-    $("#btnEditar").click(function () {
-
-        loadNota();
-        desbloquear();
-
-    });
+    //    $("#btnEditar").click(function () {
+    //
+    //        loadNota();
+    //        desbloquear();
+    //
+    //    });
 
     $("#notaAdicional").click(function () {
 
 
 //        ////console.log("click")
 
-        if ($("#notaAdicional").attr("checked") == "checked") {
-
-//            ////console.log("checked")
-            $("#adicional").attr("disabled", false)
-
-        }
-
-        else {
-
-//            ////console.log(" no checked")
-            $("#adicional").attr("disabled", true)
-//            $("#adicional").val("");
-        }
+//        if ($("#notaAdicional").attr("checked") == "checked") {
+//
+////            ////console.log("checked")
+//            $("#adicional").attr("disabled", false)
+//
+//        }
+//
+//        else {
+//
+////            ////console.log(" no checked")
+//            $("#adicional").attr("disabled", true)
+////            $("#adicional").val("");
+//        }
 
     });
 
@@ -2732,6 +2760,41 @@
         }
 
     });
+
+    $("#btnEliminar").click(function () {
+
+        var idNota = $("#piePaginaSel").val()
+
+        if(idNota == "-1"){
+
+         alert("No se puede eliminar!")
+
+        }else {
+
+        $.ajax({
+
+            type: "POST",
+            url: "${createLink(controller:'nota' ,action: 'delete')}",
+            data : {
+                id: idNota,
+                obra: ${obra?.id}
+            },
+            success: function (msg){
+                if(msg == "ok") {
+                    location.reload(true);
+                } else {
+//                    $("#spanOk").html("Ha ocurrido un error al eliminar");
+//                    $("#divOk").show();
+                    location.reload(true);
+                }
+            }
+        })
+
+        }
+
+    });
+
+
 
 
     $(function () {
