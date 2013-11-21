@@ -1,5 +1,6 @@
 package janus
 
+import janus.pac.DocumentoObra
 import org.springframework.dao.DataIntegrityViolationException
 
 class ObraController extends janus.seguridad.Shield {
@@ -285,6 +286,23 @@ class ObraController extends janus.seguridad.Shield {
             }
         }
 
+        def documentos = DocumentoObra.findAllByObra(obra)
+        if (documentos.size() < 2) {
+            render "Debe ingresar al menos 2 documentos en la biblioteca de la obra: 'Plano' y 'Justificativo de cantidad de obra'"
+            return
+        } else {
+            def plano = documentos.findAll { it.nombre.toLowerCase().contains("plano") }
+            if (plano.size() == 0) {
+                render "Debe ingresar un documento en la biblioteca de la obra con nombre 'Plano'"
+                return
+            }
+            def justificacion = documentos.findAll { it.nombre.toLowerCase().contains("justificativo") }
+            if (justificacion.size() == 0) {
+                render "Debe ingresar un documento en la biblioteca de la obra con nombre 'Justificativo de cantidad de obra'"
+                return
+            }
+        }
+
 
         obraService.registrarObra(obra)
         obra.estado = "R"
@@ -402,14 +420,12 @@ class ObraController extends janus.seguridad.Shield {
 
         def claseObra = ClaseObra.findAllByGrupo(grupo)
 
-
 //        println("grupo" + grupo)
 //        println("subpresupuest" + subPresupuesto1)
 //        println("direccion" + direccion.id)
 //        println("programa" + programa)
 //        println("tipo" + tipoObra)
 //        println("clase" + claseObra)
-
 
 
         def matrizOk = false
@@ -1018,18 +1034,18 @@ class ObraController extends janus.seguridad.Shield {
         params.memoSalida = params.memoSalida.toUpperCase()
         params.codigo = params.codigo.toUpperCase()
 
-        if (params.anchoVia){
+        if (params.anchoVia) {
             params.anchoVia = params.anchoVia.toDouble()
 
-        }else {
+        } else {
 
             params.anchoVia = 0
         }
 
-        if (params.longitudVia){
+        if (params.longitudVia) {
 
             params.longitudVia = params.longitudVia.toDouble()
-        }else {
+        } else {
 
             params.longitudVia = 0
 

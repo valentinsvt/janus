@@ -100,7 +100,7 @@ class DocumentoObraController extends janus.seguridad.Shield {
                     ext = obj
                 }
             }
-
+            ext = ext.toLowerCase()
             if (!accepted.contains(ext)) {
                 flash.message = "El archivo tiene que ser de tipo jpg, png o pdf"
                 flash.clase = "alert-error"
