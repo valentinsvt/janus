@@ -110,8 +110,8 @@ class Obra implements Serializable {
     String observacionesInicioObra
     Date fechaImpresionInicioObra
 
-    double longitudVia
-    double anchoVia
+    double longitudVia = 0
+    double anchoVia = 0
 
     static mapping = {
         table 'obra'

@@ -71,7 +71,7 @@
 
     <body>
         <g:if test="${flash.message}">
-            <div class="span12" style="height: 35px;margin-bottom: 10px;">
+            <div class="span12" style="margin-bottom: 10px;">
                 <div class="alert ${flash.clase ?: 'alert-info'}" role="status">
                     <a class="close" data-dismiss="alert" href="#">×</a>
                     ${flash.message}
@@ -79,14 +79,14 @@
             </div>
         </g:if>
 
-        <div class="span12 hide" style="height: 35px;margin-bottom: 10px;" id="divError">
+        <div class="span12 hide" style="margin-bottom: 10px;" id="divError">
             <div class="alert alert-error" role="status">
                 <a class="close" data-dismiss="alert" href="#">×</a>
                 <span id="spanError"></span>
             </div>
         </div>
 
-        <div class="span12 hide" style="height: 35px;margin-bottom: 10px;" id="divOk">
+        <div class="span12 hide" style="margin-bottom: 10px;" id="divOk">
             <div class="alert alert-info" role="status">
                 <a class="close" data-dismiss="alert" href="#">×</a>
                 <span id="spanOk"></span>
@@ -305,10 +305,9 @@
                     <div class="span3" style="width: 185px;">Referencia (Gestión/Disposición):</div>
                     <div class="span5"><g:textField name="referencia" class="referencia" style="width: 470px; margin-left: -20px" value="${obra?.referencia}" maxlength="127" title="Referencia de la disposición para realizar la Obra"/></div>
                     <div class="span1" style="width: 100px;">Longitud de la vía:</div>
-                    <div class="span1"><g:textField name="longitudVia" class="referencia" style="width: 80px; margin-left: -20px" maxlength="9" value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Longitud de la vía en metros. Sólo obras viales"/></div>
+                    <div class="span1"><g:textField name="longitudVia" class="referencia number" type="number" style="width: 80px; margin-left: -20px" maxlength="9" value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Longitud de la vía en metros. Sólo obras viales"/></div>
                     <div class="span1" style="width: 90px;">Ancho de la vía:</div>
-                    <div class="span1"><g:textField name="anchoVia" class="referencia" style="width: 50px; margin-left: -10px" maxlength="4" value="${g.formatNumber(number: obra?.anchoVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Ancho de la vía en metros. Sólo obras viales"/></div>
-
+                    <div class="span1"><g:textField name="anchoVia" class="referencia number" type="number" style="width: 50px; margin-left: -10px" maxlength="4" value="${g.formatNumber(number: obra?.anchoVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Ancho de la vía en metros. Sólo obras viales"/></div>
                 </div>
 
                 <div class="span12" id="filaPersonas">
@@ -884,6 +883,69 @@
 
                     });
 
+
+               $("#longitudVia").bind({
+                   keydown : function (ev) {
+                       // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+                       if (ev.keyCode == 190 || ev.keyCode == 110) {
+                           var val = $(this).val();
+                           if (val.length == 0) {
+                               $(this).val("0");
+                           }
+                           return val.indexOf(".") == -1;
+                       } else {
+                           // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                           return validarNum(ev);
+                       }
+                   }, //keydown
+                   keyup   : function () {
+                       var val = $(this).val();
+                       // esta parte valida q no ingrese mas de 2 decimales
+                       var parts = val.split(".");
+                       if (parts.length > 1) {
+                           if (parts[1].length > 5) {
+                               parts[1] = parts[1].substring(0, 5);
+                               val = parts[0] + "." + parts[1];
+                               $(this).val(val);
+                           }
+                       }
+
+                   }
+
+               });
+
+            $("#anchoVia").bind({
+                keydown : function (ev) {
+                    // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+                    if (ev.keyCode == 190 || ev.keyCode == 110) {
+                        var val = $(this).val();
+                        if (val.length == 0) {
+                            $(this).val("0");
+                        }
+                        return val.indexOf(".") == -1;
+                    } else {
+                        // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                        return validarNum(ev);
+                    }
+                }, //keydown
+                keyup   : function () {
+                    var val = $(this).val();
+                    // esta parte valida q no ingrese mas de 2 decimales
+                    var parts = val.split(".");
+                    if (parts.length > 1) {
+                        if (parts[1].length > 5) {
+                            parts[1] = parts[1].substring(0, 5);
+                            val = parts[0] + "." + parts[1];
+                            $(this).val(val);
+                        }
+                    }
+
+                }
+
+            });
+
+
+
             $("#plazo").keydown(function (ev) {
 
                 return validarNum(ev);
@@ -1415,6 +1477,7 @@
                 $("#btnRubros").click(function () {
 
                     %{--var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'--}%
+
 
                     var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
                     %{--var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";--}%

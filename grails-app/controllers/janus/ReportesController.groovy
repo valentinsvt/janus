@@ -3965,7 +3965,7 @@ class ReportesController {
         PdfPTable tablaPie = new PdfPTable(4);
         tablaPie.setWidthPercentage(90);
 
-        addCellTabla(tablaPie, new Paragraph("Fecha de actualizacion: ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaPie, new Paragraph("Fecha de actualización: ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph(printFecha(obra?.fechaPreciosRubros), times10normal), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph("Monto del Contrato : ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaPie, new Paragraph("\$ " + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), fonts.times10normal), prmsHeaderHoja)

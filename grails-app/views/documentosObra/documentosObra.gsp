@@ -24,6 +24,13 @@
         font-size: 12px;
     }
 
+    .aparecer {
+
+        display: none;
+
+    }
+
+
 
     </style>
 
@@ -1283,6 +1290,8 @@
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
     <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
     <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+    <button class="btn aparecer" id="btnDocExcel" ><i class="icon-print"></i> Excel</button>
+
 </div>
 
 
@@ -1971,26 +1980,27 @@
 
     var active2 = $("#tabs").tabs("option", "event")
 
-    //    ////console.log(active2)
-
 
 
     $("#tabs").click(function () {
 
         var active = $("#tabs").tabs("option", "active")
 
-        if(active == 4){
 
-      $("#btnImprimir").hide()
-//            $("#btnImprimir").addClass("disabled");
-
+        if(active != 2){
+            $("#btnDocExcel").hide();
         }
         else {
-//            $("#btnImprimir").removeClass("disabled");
-           $("#btnImprimir").show()
-
+            $("#btnDocExcel").show();
         }
 
+        if(active == 4){
+
+             $("#btnImprimir").hide()
+                }
+        else {
+             $("#btnImprimir").show()
+        }
     });
 
 
@@ -2211,28 +2221,56 @@
 
     });
 
+
+    $("#btnDocExcel").click(function () {
+
+        if(!$(this).hasClass("disabled")) {
+            reajusteMemo = $("#reajusteMemo").val()
+            var active = $("#tabs").tabs("option", "active");
+
+           if (active == 2) {
+
+               firmasIdFormu = [];
+               firmasFijasFormu = [];
+
+               $("#bodyFirmas_polinomica").children("tr").each(function (i) {
+                   firmasIdFormu[i] = $(this).data("id")
+
+               })
+
+               $("#firmasFijasPoli").children("tr").each(function (i) {
+
+
+                   firmasFijasFormu[i] = $(this).data("id")
+
+               });
+
+               if (firmasIdFormu.length == 0) {
+                   firmasIdFormu = "";
+               }
+               if(firmasFijasFormu.length == 0){
+
+                   firmasFijasFormu="";
+
+               }
+
+               location.href = "${g.createLink(controller: 'reportes5' ,action: 'reporteFormulaExcel',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
+
+
+           }
+
+        }
+
+    });
+
     $("#btnExcel").click(function () {
-
-
         $("#cambioMonedaExcel").dialog("open")
-
-        %{--location.href = "${g.createLink(controller: 'reportes',action: 'documentosObraExcel',id: obra?.id)}"--}%
-
     });
 
     $("#btnAceptarMemo").click(function () {
 
         $("#frm-memo").submit();
-
-        %{--success_func(location.href = "${g.createLink(controller: 'documentosObra',action: 'documentosObra',id: obra?.id)}")--}%
-        %{--var tipoReporte = tipoClickMemo;--}%
-
-        %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo--}%
-        %{--+ "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo--}%
     });
-
-
-
 
     $("#btnEditarFor").click(function () {
 
@@ -2285,9 +2323,6 @@
     });
 
     $("#piePaginaSel").change(function () {
-
-
-//        ////console.log("entro")
 
         loadNota();
 
