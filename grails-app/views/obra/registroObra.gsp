@@ -177,7 +177,7 @@
                     %{--value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 450px" disabled="true" title="Departamento actual del usuario"/></div>--}%
                     <div class="span3">
                         <g:if test="${obra?.id}">
-                            <g:hiddenField name="departamento.id" id="departamento" value="${obra.departamentoId}"/>
+                            <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamentoId}"/>
 
                             <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
                                          style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>

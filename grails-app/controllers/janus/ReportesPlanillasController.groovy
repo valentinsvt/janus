@@ -2526,8 +2526,10 @@ class ReportesPlanillasController {
         addEmptyLine(parrafo3, 1);
         document.add(parrafo3)
 
-        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
-                "Dirección la fecha de pago del anticipo reajustado y su valor."
+//        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
+//                "Dirección la fecha de pago del anticipo reajustado y su valor."
+
+        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del valor a pagar a la cuenta del contratista."
         Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
         parrafo4.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo4, 1);
@@ -2741,8 +2743,9 @@ class ReportesPlanillasController {
         addEmptyLine(parrafo3, 1);
         document.add(parrafo3)
 
-        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
-                "Dirección la fecha de pago del anticipo reajustado y su valor."
+//        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
+//                "Dirección la fecha de pago del anticipo reajustado y su valor."
+        def srtParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del anticipo a la cuenta del contratista."
         Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
         parrafo4.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo4, 1);
