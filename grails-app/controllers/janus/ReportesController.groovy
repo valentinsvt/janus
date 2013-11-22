@@ -2281,11 +2281,13 @@ class ReportesController {
 
         if (obra?.oficioSalida == null) {
 
-            headers.add(new Paragraph("Oficio N°:" + " ", times12bold));
+            headers.add(new Paragraph("Oficio" + " ", times12bold));
+
 
         } else {
 
-            headers.add(new Paragraph("Oficio N°:" + obra?.oficioSalida, times12bold));
+            headers.add(new Paragraph("Oficio", times12bold));
+            headers.add(new Paragraph("N°. " + obra?.oficioSalida, times12bold));
 
         }
 
