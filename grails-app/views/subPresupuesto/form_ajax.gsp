@@ -14,8 +14,8 @@
 
         <div class="controls">
 
-            %{--<g:select name="grupo.id" from="${janus.Grupo.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>--}%
-            <g:select name="grupo.id" from="${grupo}" optionKey="id" optionValue="descripcion"/>
+            %{--<g:select name="grupo.id" from="${grupo}" optionKey="id" optionValue="descripcion"/>--}%
+            <g:select name="grupo.id" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"/>
 
            <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -39,12 +39,12 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Descripcion
+                Descripción
             </span>
         </div>
 
         <div class="controls">
-            <g:textArea cols="15" rows="3" name="descripcion" maxlength="127" class=" required allCaps" value="${subPresupuestoInstance?.descripcion}"/>
+            <g:textArea cols="15" rows="3" name="descripcion" maxlength="127" class=" required allCaps" value="${subPresupuestoInstance?.descripcion}" style="resize: none" />
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>

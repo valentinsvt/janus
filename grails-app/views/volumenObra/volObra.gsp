@@ -107,9 +107,6 @@
                         <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"
                                                      style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>
 
-
-
-                    %{--**${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}--}%
                     </div>
                 </div>
 
@@ -362,12 +359,15 @@
 
                 });
 
+                %{--var idObra = ${obra}--}%
+
                 $("#btnCrearSP").click(function () {
                     var $btnOrig = $(this).clone(true);
+
 //                    $(this).replaceWith(spinner);
                     $.ajax({
                         type    : "POST",
-                        url     : "${createLink(controller:"subPresupuesto",action:'form_ajax')}",
+                        url     : "${createLink(controller:"subPresupuesto",action:'form_ajax')}?obra=" + ${obra?.id},
                         success : function (msg) {
                             $("#modalBody-sp").html(msg);
 

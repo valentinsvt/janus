@@ -165,12 +165,10 @@
             <div style="margin-top: 20px">
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
-                        %{--<b>Fecha:</b> ${new java.util.Date().format("dd-MM-yyyy")}--}%
                         <b>Fecha:</b> ${fechaNueva}
                     </div>
 
                     <div class="span4">
-                        %{--<b>Fecha Act. P.U:</b> ${obra.fechaPreciosRubros?.format("dd-MM-yyyy")}--}%
                         <b>Fecha Act. P.U:</b> ${fechaPU}
                     </div>
                 </div>
@@ -201,9 +199,9 @@
 
                 </div>
 
-
-
             </div>
+
+
             <g:set var="total1" value="${0}"></g:set>
             <g:set var="total2" value="${0}"></g:set>
             <g:set var="totalPrueba" value="${0}"></g:set>

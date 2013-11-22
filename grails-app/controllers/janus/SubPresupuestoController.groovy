@@ -16,6 +16,10 @@ class SubPresupuestoController extends janus.seguridad.Shield {
 
     def form_ajax() {
 
+        println("params" + params)
+
+        def obra = Obra.get(params.obra)
+
         def grupo = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
 
         def subPresupuestoInstance = new SubPresupuesto(params)
@@ -29,7 +33,7 @@ class SubPresupuestoController extends janus.seguridad.Shield {
                 return
             } //no existe el objeto
         } //es edit
-        return [subPresupuestoInstance: subPresupuestoInstance, grupo: grupo]
+        return [subPresupuestoInstance: subPresupuestoInstance, grupo: grupo, obra: obra]
     } //form_ajax
 
     def save() {

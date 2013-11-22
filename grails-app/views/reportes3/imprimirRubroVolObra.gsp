@@ -184,15 +184,7 @@
                         </g:else>
 
                     </div>
-
-                    %{--<div class="span4">--}%
-                       %{----}%
-                    %{--</div>--}%
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span12">
-
+                    <div class="span3">
                         <g:if test="${fechaPrecios}">
 
                             <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
@@ -202,35 +194,56 @@
                         </g:else>
 
                     </div>
+
+
                 </div>
+
+                %{--<div class="row-fluid">--}%
+                    %{--<div class="span12">--}%
+
+                        %{--<g:if test="${fechaPrecios}">--}%
+
+                            %{--<b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                            %{--<b>Fecha Act. P.U:</b>--}%
+                        %{--</g:else>--}%
+
+                    %{--</div>--}%
+                %{--</div>--}%
+                <div class="row-fluid">
+                    <div class="span12">
+
+                        <b>Código Obra:</b> ${obra?.codigo}
+                    </div>
+                </div>
+
+
                 <div class="row-fluid">
                     <div class="span12">
 
                         <b>Presupuesto:</b> ${obra?.nombre}
                     </div>
                 </div>
-                <div class="row-fluid">
-                <div class="span12">
 
-                    <b>Código Obra:</b> ${obra?.codigo}
-                </div>
-               </div>
                 <div class="row-fluid">
                     <div class="span3" style="margin-right: 195px !important;">
-                        <b>Código:</b> ${rubro?.codigo}
+                        <b>Código de rubro:</b> ${rubro?.codigo}
                     </div>
 
-                    %{--<div class="span4">--}%
-                       %{----}%
-                    %{--</div>--}%
-                </div>
-
-                <div class="row-fluid">
-                    <div class="span12">
+                    <div class="span3">
 
                         <b>Unidad:</b> ${rubro?.unidad?.codigo}
                     </div>
+
                 </div>
+
+                %{--<div class="row-fluid">--}%
+                    %{--<div class="span12">--}%
+
+                        %{--<b>Unidad:</b> ${rubro?.unidad?.codigo}--}%
+                    %{--</div>--}%
+                %{--</div>--}%
 
 
 

@@ -47,7 +47,6 @@ class Reportes3Controller {
         def obra = Obra.get(params.obra)
 
 //        println(obra?.fechaCreacionObra)
-
         def detalle
         def valores
         def subPre
@@ -59,47 +58,26 @@ class Reportes3Controller {
             subPre= SubPresupuesto.get(params.sub).descripcion
 
         }else {
-
             subPre= -1
-
         }
 
 
         if (params.sub)
 //            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
-
             if (params.sub == '-1'){
                 valores = preciosService.rbro_pcun_v2(obra.id)
-
             }else {
-
-                valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
-
+               valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
             }
         else
 //            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
             valores = preciosService.rbro_pcun_v2(obra.id)
 
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
-
         def precios = [:]
-
         def indirecto = obra.totales / 100
         preciosService.ac_rbroObra(obra.id)
-//        println "indirecto "+indirecto
 
-//        detalle.each{
-////            def parametros = ""+it.item.id+","+lugar.id+",'"+fecha.format("yyyy-MM-dd")+"',"+dsps.toDouble()+","+dsvl.toDouble()+","+rendimientos["rdps"]+","+rendimientos["rdvl"]
-//
-//            def res = preciosService.presioUnitarioVolumenObra("sum(parcial)+sum(parcial_t) precio ",obra.id,it.item.id)
-////            def res = preciosService.rb_precios("sum(parcial)+sum(parcial_t) precio ",parametros,"")
-//            precios.put(it.id.toString(),(res["precio"][0]+res["precio"][0]*indirecto).toDouble().round(2))
-//        }
-//
-//        println "precios "+precios
-
-
-//        [detalle: detalle, precios: precios, subPres: subPres, subPre: SubPresupuesto.get(params.sub).descripcion, obra: obra, indirectos: indirecto * 100, valores: valores]
         [detalle: detalle, precios: precios, subPres: subPres, subPre: subPre, obra: obra, indirectos: indirecto * 100, valores: valores, fechaNueva: fechaNueva, fechaPU: fechaPU]
 
     }
