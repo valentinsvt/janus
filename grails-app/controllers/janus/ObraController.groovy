@@ -1,6 +1,7 @@
 package janus
 
 import janus.pac.DocumentoObra
+import janus.pac.TipoProcedimiento
 import org.springframework.dao.DataIntegrityViolationException
 
 class ObraController extends janus.seguridad.Shield {
@@ -275,14 +276,18 @@ class ObraController extends janus.seguridad.Shield {
             }
         }
 //        println "totp "+totalP
-        if (obra.tipo != 'D') {
-            if (totalP.toDouble().round(6) != 1.000) {
-                render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
-                return
-            }
-            if (totalC.toDouble().round(6) != 1.000) {
-                render "La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000"
-                return
+        def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
+        def valorObra = obra.valor
+        if (valorObra <= valorMenorCuantia) {
+            if (obra.tipo != 'D') {
+                if (totalP.toDouble().round(6) != 1.000) {
+                    render "La suma de los coeficientes de la formula polinómica (${totalP}) es diferente a 1.000"
+                    return
+                }
+                if (totalC.toDouble().round(6) != 1.000) {
+                    render "La suma de los coeficientes de la Cuadrilla tipo (${totalC}) es diferente a 1.000"
+                    return
+                }
             }
         }
 
@@ -485,6 +490,15 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def generaNumeroFP() {
+        /*
+        El sistema debe generar un número de fórmula polinómica de liquidación en el formato: FP-nnn-CEV-13-LIQ,
+        para oferentes:  FP-nnn-CEV-13-OFE. Para las otras obras el formato se mantiene (FP-nnn-CEV-13).
+
+                1. Obra normal          int obra.liquidacion = 0        FP-nnn-CEV-13
+                2. Obra liquidación     int obra.liquidacion = 1        FP-nnn-CEV-13-LIQ
+                3. Obra de oferentes    int obra.liquidacion = 2        FP-nnn-CEV-13-OFE
+         */
+
         def obra = Obra.get(params.obra)
         if (!obra) {
             render "NO_No se encontró la obra"
@@ -506,6 +520,12 @@ class ObraController extends janus.seguridad.Shield {
             numero += "-" + dpto.codigo
         }
         numero += "-" + (new Date().format("yy"))
+
+        if (obra.liquidacion == 1) {
+            numero += "-LIQ"
+        } else if (obra.liquidacion == 2) {
+            numero += "-OFE"
+        }
 
         obra.formulaPolinomica = numero
         if (obra.save(flush: true)) {

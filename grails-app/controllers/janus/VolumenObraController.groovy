@@ -1,17 +1,19 @@
 package janus
 
-class VolumenObraController extends janus.seguridad.Shield{
+import janus.pac.TipoProcedimiento
+
+class VolumenObraController extends janus.seguridad.Shield {
     def buscadorService
     def preciosService
 
-    def volObra(){
+    def volObra() {
 
-        def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1','2', '3');
+        def grupoFiltrado = Grupo.findAllByCodigoNotIlikeAndCodigoNotIlikeAndCodigoNotIlike('1', '2', '3');
         def subpreFiltrado = []
         def var
 
 //        def grupos = Grupo.list([sort: "descripcion"])
-        subpreFiltrado=SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
+        subpreFiltrado = SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
 //        println("-->>" + subpreFiltrado)
 
 
@@ -28,59 +30,58 @@ class VolumenObraController extends janus.seguridad.Shield{
         def obra = Obra.get(params.id)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
-
-
+        def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra:obra, volumenes:volumenes, campos:campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado,grupos:grupoFiltrado, persona: persona]
+        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia]
     }
 
-    def cargarSubpres(){
+    def cargarSubpres() {
         def grupo = Grupo.get(params.grupo)
         def subs = SubPresupuesto.findAllByGrupo(grupo)
-        [subs:subs]
+        [subs: subs]
     }
 
 
 
-    def setMontoObra(){
+    def setMontoObra() {
         def tot = params.monto
-        try{
-            tot=tot.toDouble()
-        }catch (e) {
-            tot=0
+        try {
+            tot = tot.toDouble()
+        } catch (e) {
+            tot = 0
         }
-        def obra =Obra.get(params.obra)
-        if(obra.valor!=tot){
-            obra.valor=tot
+        def obra = Obra.get(params.obra)
+        if (obra.valor != tot) {
+            obra.valor = tot
             obra.save(flush: true)
         }
     }
 
-    def cargaCombosEditar(){
+    def cargaCombosEditar() {
 
         def sub = SubPresupuesto.get(params.id)
-        def grupo=sub?.grupo
-        def subs= SubPresupuesto.findAllByGrupo(grupo)
-        [subs:subs,sub:sub]
+        def grupo = sub?.grupo
+        def subs = SubPresupuesto.findAllByGrupo(grupo)
+        [subs: subs, sub: sub]
     }
 
 
-    def buscarRubroCodigo(){
+    def buscarRubroCodigo() {
 //        println "aqui "+params
-        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim()?.toUpperCase(),TipoItem.get(2))
-        if (rubro){
-            render ""+rubro.id+"&&"+rubro.tipoLista?.id+"&&"+rubro.nombre+"&&"+rubro.unidad?.codigo
+        def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim()?.toUpperCase(), TipoItem.get(2))
+        if (rubro) {
+            render "" + rubro.id + "&&" + rubro.tipoLista?.id + "&&" + rubro.nombre + "&&" + rubro.unidad?.codigo
             return
-        } else{
+        } else {
             render "-1"
             return
         }
     }
 
 
-    def addItem(){
+    def addItem() {
 //        println "addItem " + params
         def obra = Obra.get(params.obra)
 //        def rubro2 = Item.get(params.rubro)
@@ -88,25 +89,25 @@ class VolumenObraController extends janus.seguridad.Shield{
         def rubro = Item.findByCodigoIlike(params.cod)
         def sbpr = SubPresupuesto.get(params.sub)
         def volumen
-        def msg=""
+        def msg = ""
 //        if (params.vlob_id)
         if (params.id)
             volumen = VolumenesObra.get(params.id)
         else {
 
-            volumen=new VolumenesObra()
+            volumen = new VolumenesObra()
 //            def v=VolumenesObra.findByItemAndObra(rubro,obra)
             def v = VolumenesObra.findAll("from VolumenesObra where obra=${obra.id} and item=${rubro.id} and subPresupuesto=${sbpr.id}")
 //            println "v "+v
-            if(v.size()>0){
-                v=v.pop()
-                if(params.override=="1"){
-                    v.cantidad+=params.cantidad.toDouble()
+            if (v.size() > 0) {
+                v = v.pop()
+                if (params.override == "1") {
+                    v.cantidad += params.cantidad.toDouble()
                     v.save(flush: true)
-                    redirect(action: "tabla",params: [obra:obra.id,sub:v.subPresupuesto.id,ord: 1])
+                    redirect(action: "tabla", params: [obra: obra.id, sub: v.subPresupuesto.id, ord: 1])
                     return
-                }else{
-                    msg="error"
+                } else {
+                    msg = "error"
                     render msg
                     return
                 }
@@ -115,29 +116,29 @@ class VolumenObraController extends janus.seguridad.Shield{
 //        println "volumn :" + volumen
 
         volumen.cantidad = params.cantidad.toDouble()
-        volumen.orden    = params.orden.toInteger()
+        volumen.orden = params.orden.toInteger()
         volumen.subPresupuesto = SubPresupuesto.get(params.sub)
         volumen.obra = obra
         volumen.item = rubro
-        if (!volumen.save(flush: true)){
+        if (!volumen.save(flush: true)) {
             println "error volumen obra " + volumen.errors
             render "error"
-        }else{
-            preciosService.actualizaOrden(volumen,"insert")
-            redirect(action: "tabla",params: [obra:obra.id,sub:volumen.subPresupuesto.id,ord: 1])
+        } else {
+            preciosService.actualizaOrden(volumen, "insert")
+            redirect(action: "tabla", params: [obra: obra.id, sub: volumen.subPresupuesto.id, ord: 1])
         }
     }
 
-    def copiarItem () {
+    def copiarItem() {
 
 //        println "copiarItem "+params
-        def obra= Obra.get(params.obra)
+        def obra = Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
         def sbprDest = SubPresupuesto.get(params.subDest)
         def sbpr = SubPresupuesto.get(params.sub)
 
-        def itemVolumen = VolumenesObra.findByItemAndSubPresupuesto(rubro,sbpr)
-        def itemVolumenDest = VolumenesObra.findByItemAndSubPresupuestoAndObra(rubro,sbprDest,obra)
+        def itemVolumen = VolumenesObra.findByItemAndSubPresupuesto(rubro, sbpr)
+        def itemVolumenDest = VolumenesObra.findByItemAndSubPresupuestoAndObra(rubro, sbprDest, obra)
 
         def volumen
 
@@ -146,7 +147,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (params.id)
             volumen = VolumenesObra.get(params.id)
         else {
-            if (itemVolumenDest){
+            if (itemVolumenDest) {
 
                 flash.clase = "alert-error"
                 flash.message = "No se puede copiar el rubro " + rubro.nombre
@@ -158,33 +159,33 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
                 if (volumen == null)
-                    volumen=new VolumenesObra()
+                    volumen = new VolumenesObra()
 
             }
         }
 
-        volumen.cantidad=itemVolumen.cantidad.toDouble()
-        volumen.orden=(volu.orden.size().toInteger())+1
-        volumen.subPresupuesto=SubPresupuesto.get(params.subDest)
-        volumen.obra=obra
-        volumen.item=rubro
+        volumen.cantidad = itemVolumen.cantidad.toDouble()
+        volumen.orden = (volu.orden.size().toInteger()) + 1
+        volumen.subPresupuesto = SubPresupuesto.get(params.subDest)
+        volumen.obra = obra
+        volumen.item = rubro
 
-        if (!volumen.save(flush: true)){
+        if (!volumen.save(flush: true)) {
 //            println "error volumen obra "+volumen.errors
 
             flash.clase = "alert-error"
             flash.message = "Error, no es posible completar la acción solicitada "
 
-            redirect(action: "tablaCopiarRubro",params: [obra:obra.id])
+            redirect(action: "tablaCopiarRubro", params: [obra: obra.id])
 
 //            render "error"
-        }else{
-            preciosService.actualizaOrden(volumen,"insert")
+        } else {
+            preciosService.actualizaOrden(volumen, "insert")
 
             flash.clase = "alert-success"
             flash.message = "Copiado rubro " + rubro.nombre
 
-            redirect(action: "tablaCopiarRubro",params: [obra:obra.id,sub:volumen.subPresupuesto.id])
+            redirect(action: "tablaCopiarRubro", params: [obra: obra.id, sub: volumen.subPresupuesto.id])
         }
 
 
@@ -192,8 +193,7 @@ class VolumenObraController extends janus.seguridad.Shield{
 
 
 
-    def tabla(){
-
+    def tabla() {
 
 
         def usuario = session.usuario.id
@@ -213,7 +213,7 @@ class VolumenObraController extends janus.seguridad.Shield{
         def valores
         def orden
 
-        if (params.ord == '1'){
+        if (params.ord == '1') {
             orden = 'asc'
         } else {
             orden = 'desc'
@@ -223,17 +223,16 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (params.sub && params.sub != "-1") {
 //            println("entro1")
 //        detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
-            valores = preciosService.rbro_pcun_v5(obra.id,params.sub,orden)
+            valores = preciosService.rbro_pcun_v5(obra.id, params.sub, orden)
 //          detalle= VolumenesObra.findAllBySubPresupuesto(SubPresupuesto.get(params.sub))
 //            println("detalle" + detalle)
-        }
-        else  {
+        } else {
 //            println("entro2")
 //        detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-            valores = preciosService.rbro_pcun_v4(obra.id,orden)
+            valores = preciosService.rbro_pcun_v4(obra.id, orden)
         }
 
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
@@ -245,53 +244,53 @@ class VolumenObraController extends janus.seguridad.Shield{
         def prvl = 0
 
 //        /*Todo ver como mismo es esta suma*/
-        def indirecto = obra.totales/100
+        def indirecto = obra.totales / 100
 
 
-        [subPres:subPres, subPre:params.sub, obra: obra, precioVol:prch, precioChof:prvl, indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado,msg:params.msg, persona: persona]
+        [subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado, msg: params.msg, persona: persona]
 
     }
 
-    def eliminarRubro(){
-        println "elm rubro "+params
+    def eliminarRubro() {
+        println "elm rubro " + params
         def vol = VolumenesObra.get(params.id)
         def obra = vol.obra
         def orden = vol.orden
-        def msg="ok"
+        def msg = "ok"
         def cronos = Cronograma.findAllByVolumenObra(vol)
-        cronos.each {c->
-            if(c.porcentaje==0){
+        cronos.each { c ->
+            if (c.porcentaje == 0) {
                 c.delete(flush: true)
-            }else{
-                msg="Error no se puede borrar el rubro porque esta presente en el cronograma con un valor diferente de cero."
+            } else {
+                msg = "Error no se puede borrar el rubro porque esta presente en el cronograma con un valor diferente de cero."
             }
         }
 
-        try{
-            if(msg=="ok"){
-                preciosService.actualizaOrden(vol,"delete")
+        try {
+            if (msg == "ok") {
+                preciosService.actualizaOrden(vol, "delete")
                 vol.delete(flush: true)
             }
 
-        }catch (e){
-            println "e "+e
-            msg="Error"
+        } catch (e) {
+            println "e " + e
+            msg = "Error"
         }
-        redirect(action: "tabla",params: [obra:obra.id, sub: vol.subPresupuesto.id, ord: 1,msg:msg])
+        redirect(action: "tabla", params: [obra: obra.id, sub: vol.subPresupuesto.id, ord: 1, msg: msg])
 
 
     }
 
-    def copiarRubros () {
+    def copiarRubros() {
 
         def obra = Obra.get(params.obra)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
-        return[obra: obra, volumenes:  volumenes]
+        return [obra: obra, volumenes: volumenes]
 
     }
 
-    def tablaCopiarRubro () {
+    def tablaCopiarRubro() {
 
 
         def usuario = session.usuario.id
@@ -312,13 +311,12 @@ class VolumenObraController extends janus.seguridad.Shield{
         if (params.sub && params.sub != "null") {
             valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
 
-        }
-        else{
+        } else {
             valores = preciosService.rbro_pcun_v2(obra.id)
 
         }
 
-        def subPres = VolumenesObra.findAllByObra(obra,[sort:"orden"]).subPresupuesto.unique()
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
 
         def precios = [:]
@@ -328,13 +326,11 @@ class VolumenObraController extends janus.seguridad.Shield{
         def lugar = obra.lugar
         def prch = 0
         def prvl = 0
-        def indirecto = obra.totales/100
+        def indirecto = obra.totales / 100
 
         preciosService.ac_rbroObra(obra.id)
 
-        [precios:precios,subPres:subPres,subPre:params.sub,obra: obra,precioVol:prch,precioChof:prvl,indirectos:indirecto*100, valores: valores, subPresupuesto1: subPresupuesto1]
-
-
+        [precios: precios, subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores, subPresupuesto1: subPresupuesto1]
 
 
     }
@@ -342,8 +338,8 @@ class VolumenObraController extends janus.seguridad.Shield{
 
     def buscaRubro() {
 
-        def listaTitulos = ["Código", "Descripción","Unidad"]
-        def listaCampos = ["codigo", "nombre","unidad"]
+        def listaTitulos = ["Código", "Descripción", "Unidad"]
+        def listaCampos = ["codigo", "nombre", "unidad"]
         def funciones = [null, null]
         def url = g.createLink(action: "buscaRubro", controller: "rubro")
         def funcionJs = "function(){"
