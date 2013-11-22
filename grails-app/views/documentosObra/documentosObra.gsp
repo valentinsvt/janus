@@ -124,9 +124,9 @@
             <div class="span6" style="margin-top: -10px">
 
                 <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion"
-                          optionKey="id" style="width: 350px;" noSelection="['-1':'Seleccione una nota...']" />
+                          optionKey="id" style="width: 300px;" noSelection="['-1':'Seleccione una nota...']" />
 
-                <div class="btn-group" style="margin-left: 350px; margin-top: -60px; margin-bottom: 10px">
+                <div class="btn-group" style="margin-left: 310px; margin-top: -60px; margin-bottom: 10px">
                     <a class="btn" id="btnNuevo"><i class="icon-pencil"></i> Nuevo</a>
                     <a class="btn" id="btnCancelar"><i class="icon-eraser"></i> Cancelar</a>
                     %{--<a class="btn" id="btnEditar">Editar</a>--}%
@@ -138,7 +138,7 @@
             <g:hiddenField name="obra" value="${obra?.id}"/>
 
             <div class="span7">
-                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 500px; margin-left: 20px" class="required"/> </div>
+                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" class="required"/> </div>
             </div>
 
 
