@@ -407,8 +407,9 @@ class ConcursoController extends janus.seguridad.Shield {
             }
         }
 
+        def limite = TipoProcedimiento.findBySigla("MCD").techo
 
-        def extras = " "
+        def extras = " and (valor<${limite}  or or liquidacion = 1) "
         if (extraParr.size() > 1)
             extras += " and parroquia in (${extraParr})"
         if (extraCom.size() > 1)
