@@ -157,12 +157,9 @@
 
             </div>
 
-
             <div class="span6">
-
                 <g:textArea name="adicional" value="${nota?.adicional}" rows="5" cols="5"
                             style="height: 125px; width:685px ; resize: none" />
-
             </div>
 
             <g:hiddenField name="obraTipo" value="${obra?.claseObra?.tipo}"/>
