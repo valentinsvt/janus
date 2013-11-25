@@ -159,7 +159,7 @@
                     <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo S.I.F.
                     </button>
                 </g:if>
-                <g:if test="${!obra?.fechaInicio && obra.estadoSif!='R'}">
+                <g:if test="${!obra?.fechaInicio && obra?.estadoSif!='R'}">
                     <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
                     </button>
                 </g:if>
@@ -1129,10 +1129,10 @@
                 $("#btn-memoSIF").click(function () {
                     $.box({
                         imageClass : "box_light",
-                        input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' ${(obra.estadoSif=='R')?'disabled':''} value='" + memoSIF + "' />",
+                        input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' ${(obra?.estadoSif=='R')?'disabled':''} value='" + memoSIF + "' />",
                         type       : "prompt",
                         title      : "Memo S.I.F.",
-                        <g:if test="${obra.estadoSif=='R'}">
+                        <g:if test="${obra?.estadoSif=='R'}">
                         text       : "Memorando S.I.F. aprobado",
                         </g:if>
                         <g:else>
@@ -1143,7 +1143,7 @@
                                 $(".ui-dialog-titlebar-close").html("X");
                             },
                             buttons : {
-                                <g:if test="${obra.estadoSif=='R'}">
+                                <g:if test="${obra?.estadoSif=='R'}">
                                 "Cerrar" :function(r){
 
                                 }
