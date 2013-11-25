@@ -114,6 +114,7 @@ class Obra implements Serializable {
     double anchoVia = 0
 
     String memoSif
+    String estadoSif
 
     static mapping = {
         table 'obra'
@@ -235,6 +236,7 @@ class Obra implements Serializable {
             anchoVia column: 'obraanvi'
 
             memoSif column: 'obrammsf'
+            estadoSif column: 'obraetsf'
         }
     }
     static constraints = {
@@ -350,6 +352,7 @@ class Obra implements Serializable {
         anchoVia(blank: true, nullable: true, attributes: [title: 'ancho de la vía'])
 
         memoSif(blank: true, maxSize: 20, nullable: true)
+        estadoSif(blank: true, maxSize: 1, nullable: true)
     }
 
     String toString() {

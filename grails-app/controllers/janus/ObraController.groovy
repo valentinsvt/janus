@@ -412,6 +412,14 @@ class ObraController extends janus.seguridad.Shield {
         }
     }
 
+    def aprobarSif(){
+        def obra=Obra.get(params.obra)
+        obra.estadoSif="R"
+        obra.save(flush: true)
+        flash.message="Memo S.I.F. aprobado"
+        render "ok"
+    }
+
     def registroObra() {
 
         println "---" + params

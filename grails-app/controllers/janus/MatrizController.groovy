@@ -22,7 +22,8 @@ class MatrizController extends janus.seguridad.Shield {
 //        println "sql desc "+sql
         def columnas = []
         def filas = []
-
+        def cont = 0
+        def indices = ["mano":[],"saldo":[],"total":[]]
         cn.eachRow(sql.toString()){r->
             def col = ""
             if (r[2] != "R") {
@@ -34,16 +35,29 @@ class MatrizController extends janus.seguridad.Shield {
                     col = Item.get(parts[0].toLong()).nombre
 
                 }catch (e){
-                    println "matriz controller l 37: "+"error: " + e
+                    //println "matriz controller l 37: "+"error: " + e
                     col = parts[0]
                 }
 
+                if(col=~"Mano de Obra"){
+                    indices["mano"].add(cont)
+                }
+                if(col=~"SALDO"){
+                    indices["saldo"].add(cont)
+                }
+                if(col=~"TOTAL"){
+                    indices["total"].add(cont)
+                }
+                //println "col "+col
                 col += " " + parts[1]?.replaceAll("T","<br/>Total")?.replaceAll("U","<br/>Unitario")
             }
 
-            //println col
+
             columnas.add([r[0], col, r[2]])
+            cont++
         }
+       // println "indices "+indices
+        session.indices = indices
         def titulo = Obra.get(obra).desgloseTransporte == "S" ? 'Matriz con desglose de Transporte' : 'Matriz sin desglose de Transporte'
         [obra: obra, cols: columnas, titulo: titulo]
     }
@@ -52,6 +66,7 @@ class MatrizController extends janus.seguridad.Shield {
         //println "matriz "+params
         def obra = params.id
         def offset = params.inicio
+        def indices=session.indices
         if (!offset)
             offset = 0
         else
@@ -90,7 +105,7 @@ class MatrizController extends janus.seguridad.Shield {
         if (filas.size()==0)
             render "fin"
         else
-            [filas:filas,cols:columnas,obraId:params.id,offset:offset]
+            [filas:filas,cols:columnas,obraId:params.id,offset:offset,indices:indices]
 
 
     }

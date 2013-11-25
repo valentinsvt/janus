@@ -159,6 +159,10 @@
                     <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo S.I.F.
                     </button>
                 </g:if>
+                <g:if test="${!obra?.fechaInicio && obra.estadoSif!='R'}">
+                    <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
+                    </button>
+                </g:if>
             </g:if>
 
         </div>
@@ -1069,6 +1073,37 @@
             }
 
             $(function () {
+                var memoSIF = "${obra?.memoSif?:''}";
+                $("#btn-aprobarSif").click(function(){
+                    $.box({
+                        imageClass : "box_light",
+                        input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' disabled value='" + memoSIF + "' />",
+                        type       : "prompt",
+                        title      : "Memo S.I.F.",
+                        text       : "Desea aprobar el memorando S.I.F.",
+                        dialog     : {
+                            open    : function (event, ui) {
+                                $(".ui-dialog-titlebar-close").html("X");
+                            },
+                            buttons : {
+                                "Aprobar" : function (r) {
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'aprobarSif')}",
+                                        data    : {
+                                            obra : "${obra?.id}",
+                                        },
+                                        success : function (msg) {
+                                            if (msg== "ok") {
+                                                window.reload(true);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                });
 
                 $("#btn-setAdminDirecta").click(function () {
                     $.box({
@@ -1090,20 +1125,31 @@
                     });
                     return false;
                 });
-                var memoSIF = "${obra?.memoSif?:''}";
+
                 $("#btn-memoSIF").click(function () {
                     $.box({
                         imageClass : "box_light",
-                        input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' value='" + memoSIF + "' />",
+                        input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' ${(obra.estadoSif=='R')?'disabled':''} value='" + memoSIF + "' />",
                         type       : "prompt",
                         title      : "Memo S.I.F.",
+                        <g:if test="${obra.estadoSif=='R'}">
+                        text       : "Memorando S.I.F. aprobado",
+                        </g:if>
+                        <g:else>
                         text       : "Ingrese el número de memorando de envío al S.I.F.",
+                        </g:else>
                         dialog     : {
                             open    : function (event, ui) {
                                 $(".ui-dialog-titlebar-close").html("X");
                             },
                             buttons : {
-                                "OK" : function (r) {
+                                <g:if test="${obra.estadoSif=='R'}">
+                                "Cerrar" :function(r){
+
+                                }
+                                </g:if>
+                                <g:else>
+                                "Guardar" : function (r) {
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'saveMemoSIF')}",
@@ -1122,6 +1168,7 @@
                                         }
                                     });
                                 }
+                                </g:else>
                             }
                         }
                     });
