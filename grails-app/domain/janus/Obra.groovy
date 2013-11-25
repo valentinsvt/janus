@@ -113,6 +113,8 @@ class Obra implements Serializable {
     double longitudVia = 0
     double anchoVia = 0
 
+    String memoSif
+
     static mapping = {
         table 'obra'
         cache usage: 'read-write', include: 'non-lazy'
@@ -231,6 +233,8 @@ class Obra implements Serializable {
 
             longitudVia column: 'obralgvi'
             anchoVia column: 'obraanvi'
+
+            memoSif column: 'obrammsf'
         }
     }
     static constraints = {
@@ -344,6 +348,8 @@ class Obra implements Serializable {
         fechaImpresionInicioObra(blank: true, nullable: true)
         longitudVia(blank: true, nullable: true, attributes: [title: 'longitud de la vía'])
         anchoVia(blank: true, nullable: true, attributes: [title: 'ancho de la vía'])
+
+        memoSif(blank: true, maxSize: 20, nullable: true)
     }
 
     String toString() {

@@ -32,3 +32,7 @@
 .box_loading {
     background : url(images/loading_bg.gif);
 }
+
+.box_light {
+    background : url(images/dialog-information.png);
+}

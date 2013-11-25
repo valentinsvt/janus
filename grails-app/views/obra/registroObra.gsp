@@ -24,6 +24,10 @@
         <script src="${resource(dir: 'js/jquery/plugins/editable/inputs-ext/coords', file: 'coords.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/editable/inputs-ext/coords', file: 'coords.css')}" rel="stylesheet"/>
 
+        <script src="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.js')}"></script>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.css')}" rel="stylesheet"/>
+        <link href="${resource(dir: 'js/jquery/plugins/jgrowl', file: 'jquery.jgrowl.customThemes.css')}" rel="stylesheet"/>
+
         <style type="text/css">
 
         .formato {
@@ -147,6 +151,12 @@
             <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
                 <g:if test="${!obra?.fechaInicio}">
                     <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+                    </button>
+                </g:if>
+            </g:if>
+            <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
+                <g:if test="${!obra?.fechaInicio}">
+                    <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo S.I.F.
                     </button>
                 </g:if>
             </g:if>
@@ -303,10 +313,15 @@
 
                 <div class="span12">
                     <div class="span3" style="width: 185px;">Referencia (Gestión/Disposición):</div>
+
                     <div class="span5"><g:textField name="referencia" class="referencia" style="width: 470px; margin-left: -20px" value="${obra?.referencia}" maxlength="127" title="Referencia de la disposición para realizar la Obra"/></div>
+
                     <div class="span1" style="width: 100px;">Longitud de la vía:</div>
+
                     <div class="span1"><g:textField name="longitudVia" class="referencia number" type="number" style="width: 80px; margin-left: -20px" maxlength="9" value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Longitud de la vía en metros. Sólo obras viales"/></div>
+
                     <div class="span1" style="width: 90px;">Ancho de la vía:</div>
+
                     <div class="span1"><g:textField name="anchoVia" class="referencia number" type="number" style="width: 50px; margin-left: -10px" maxlength="4" value="${g.formatNumber(number: obra?.anchoVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Ancho de la vía en metros. Sólo obras viales"/></div>
                 </div>
 
@@ -809,7 +824,6 @@
 
         </div>
 
-
         <div id="errorDialog">
             <fieldset>
                 <div class="span3">
@@ -821,6 +835,23 @@
 
 
         <script type="text/javascript">
+
+            $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
+
+            function log(msg, error) {
+                var sticky = false;
+                var theme = "success";
+                if (error) {
+                    sticky = true;
+                    theme = "error";
+                }
+                $.jGrowl(msg, {
+                    speed      : 'slow',
+                    sticky     : sticky,
+                    theme      : theme,
+                    themeState : ''
+                });
+            }
 
             function enviarLq() {
                 var data = "";
@@ -883,36 +914,35 @@
 
                     });
 
+            $("#longitudVia").bind({
+                keydown : function (ev) {
+                    // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
+                    if (ev.keyCode == 190 || ev.keyCode == 110) {
+                        var val = $(this).val();
+                        if (val.length == 0) {
+                            $(this).val("0");
+                        }
+                        return val.indexOf(".") == -1;
+                    } else {
+                        // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
+                        return validarNum(ev);
+                    }
+                }, //keydown
+                keyup   : function () {
+                    var val = $(this).val();
+                    // esta parte valida q no ingrese mas de 2 decimales
+                    var parts = val.split(".");
+                    if (parts.length > 1) {
+                        if (parts[1].length > 5) {
+                            parts[1] = parts[1].substring(0, 5);
+                            val = parts[0] + "." + parts[1];
+                            $(this).val(val);
+                        }
+                    }
 
-               $("#longitudVia").bind({
-                   keydown : function (ev) {
-                       // esta parte valida el punto: si empieza con punto le pone un 0 delante, si ya hay un punto lo ignora
-                       if (ev.keyCode == 190 || ev.keyCode == 110) {
-                           var val = $(this).val();
-                           if (val.length == 0) {
-                               $(this).val("0");
-                           }
-                           return val.indexOf(".") == -1;
-                       } else {
-                           // esta parte valida q sean solo numeros, punto, tab, backspace, delete o flechas izq/der
-                           return validarNum(ev);
-                       }
-                   }, //keydown
-                   keyup   : function () {
-                       var val = $(this).val();
-                       // esta parte valida q no ingrese mas de 2 decimales
-                       var parts = val.split(".");
-                       if (parts.length > 1) {
-                           if (parts[1].length > 5) {
-                               parts[1] = parts[1].substring(0, 5);
-                               val = parts[0] + "." + parts[1];
-                               $(this).val(val);
-                           }
-                       }
+                }
 
-                   }
-
-               });
+            });
 
             $("#anchoVia").bind({
                 keydown : function (ev) {
@@ -943,8 +973,6 @@
                 }
 
             });
-
-
 
             $("#plazo").keydown(function (ev) {
 
@@ -1062,10 +1090,46 @@
                     });
                     return false;
                 });
+                var memoSIF = "${obra?.memoSif?:''}";
+                $("#btn-memoSIF").click(function () {
+                    $.box({
+                        imageClass : "box_light",
+                        input      : "<input type='text' name='memoSIF' id='memoSIF' maxlength='20' class='allCaps' value='" + memoSIF + "' />",
+                        type       : "prompt",
+                        title      : "Memo S.I.F.",
+                        text       : "Ingrese el número de memorando de envío al S.I.F.",
+                        dialog     : {
+                            open    : function (event, ui) {
+                                $(".ui-dialog-titlebar-close").html("X");
+                            },
+                            buttons : {
+                                "OK" : function (r) {
+                                    $.ajax({
+                                        type    : "POST",
+                                        url     : "${createLink(action:'saveMemoSIF')}",
+                                        data    : {
+                                            obra : "${obra?.id}",
+                                            memo : r
+                                        },
+                                        success : function (msg) {
+                                            var parts = msg.split("_");
+                                            if (parts[0] == "OK") {
+                                                memoSIF = parts[1];
+                                                log("Se ha guardado correctamente el número de memorando de envío al S.I.F.", false);
+                                            } else {
+                                                log(parts[1], true);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
+                });
 
                 $("#btn-adminDirecta").click(function () {
-                    $("#admDirecta").dialog("open")
-                    $(".ui-dialog-titlebar-close").html("X")
+                    $("#admDirecta").dialog("open");
+                    $(".ui-dialog-titlebar-close").html("X");
                 });
                 $("#admDirecta").dialog({
                     autoOpen : false,
@@ -1477,7 +1541,6 @@
                 $("#btnRubros").click(function () {
 
                     %{--var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'--}%
-
 
                     var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
                     %{--var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";--}%
@@ -1903,7 +1966,7 @@
                     $.ajax({
                         type    : "POST",
                         url     : "${createLink(action:'crearTipoObra')}",
-                        data:    "grupo=${grupoDir?.id}",
+                        data    : "grupo=${grupoDir?.id}",
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
@@ -1979,7 +2042,6 @@
                 });
 
                 $("#btnCrearPrograma").click(function () {
-
 
                     $.ajax({
                         type    : "POST",

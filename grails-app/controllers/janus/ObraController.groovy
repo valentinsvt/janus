@@ -401,6 +401,17 @@ class ObraController extends janus.seguridad.Shield {
         redirect(action: "registroObra", params: [obra: obra.id])
     }
 
+    def saveMemoSIF() {
+        def obra = Obra.get(params.obra)
+        def memo = params.memo.trim().toUpperCase()
+        obra.memoSif = memo
+        if (obra.save(flush: true)) {
+            render "OK_${memo}"
+        } else {
+            render "NO_" + renderErrors(bean: obra)
+        }
+    }
+
     def registroObra() {
 
         println "---" + params
