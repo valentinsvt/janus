@@ -289,7 +289,10 @@
                 var total = 0;
 
                 $("#tree").children("ul").children("li").each(function () {
-                    total += parseFloat($(this).attr("valor"));
+                    var val = $(this).attr("valor");
+                    val = val.replace(",", ".");
+                    val = parseFloat(val);
+                    total += val;
                 });
                 $("#spanTotal").text(number_format(total, 3, ".", "")).data("valor", total);
             }
