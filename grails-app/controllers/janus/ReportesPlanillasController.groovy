@@ -2745,7 +2745,7 @@ class ReportesPlanillasController {
 
 //        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
 //                "Dirección la fecha de pago del anticipo reajustado y su valor."
-        def srtParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del anticipo a la cuenta del contratista."
+        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del anticipo a la cuenta del contratista."
         Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
         parrafo4.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo4, 1);
