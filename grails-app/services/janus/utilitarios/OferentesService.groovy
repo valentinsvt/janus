@@ -7,6 +7,29 @@ class OferentesService {
     def dbConnectionService
     def grailsApplication
 
+
+    def list(tipo,oferente){
+        def cn  =dbConnectionService.getConnectionOferentes()
+        def sql ="select o.obra__id,o.ofrt__id,p.prsnnmbr || ' ' || p.prsnapll,p.prsnjnid,obracdgo,obranmbr,obraetdo,obrajnid from obra o ,prsn p where o.ofrt__id=p.prsn__id X &"
+        def where =" and o.obraetdo = '${tipo?.toUpperCase()}' "
+        def result  =[]
+        if(tipo && tipo!="" && tipo!=" "){
+           sql= sql.replaceAll("X",where)
+        }else{
+            sql = sql.replaceAll("X"," ")
+        }
+        if(oferente && oferente!="" && oferente!=" ") {
+            sql= sql.replaceAll("&"," and (prsnnmbr || ' ' || prsnapll) ilike '%${oferente}%'  ")
+        }else{
+            sql = sql.replaceAll("&"," ")
+        }
+        cn.eachRow(sql.toString()){r->
+            result.add(r.toRowResult())
+        }
+        return result
+
+    }
+
     def exportDominio(dominio, campoReferencia, objeto) {
         def mapa = GrailsDomainBinder.getMapping(dominio)
         def tabla = mapa.table.name

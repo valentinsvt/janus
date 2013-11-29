@@ -159,7 +159,7 @@
                     <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo S.I.F.
                     </button>
                 </g:if>
-                <g:if test="${!obra?.fechaInicio && obra?.estadoSif!='R'}">
+                <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
                     <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
                     </button>
                 </g:if>
