@@ -285,7 +285,7 @@
                                 <b>COSTO UNITARIO DIRECTO</b>
                             </td>
                             <td style="text-align: right">
-                               <b> <g:formatNumber number="${totalRubro}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/></b>
+                               <b> <g:formatNumber number="${totalRubro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                             </td>
                         </tr>
                         <tr>
@@ -293,7 +293,7 @@
                                 <b>COSTOS INDIRECTOS</b>
                             </td>
                             <td style="text-align: right">
-                               <b> <g:formatNumber number="${totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/></b>
+                               <b> <g:formatNumber number="${totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                             </td>
                         </tr>
                         <tr>
@@ -301,7 +301,7 @@
                                 <b>COSTO TOTAL DEL RUBRO</b>
                             </td>
                             <td style="text-align: right">
-                              <b>  <g:formatNumber number="${totalRubro + totalIndi}" format="##,#####0" minFractionDigits="5" maxFractionDigits="7" locale="ec"/></b>
+                              <b>  <g:formatNumber number="${totalRubro + totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                             </td>
                         </tr>
                         <tr>

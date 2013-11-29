@@ -1458,21 +1458,21 @@ class ReportesController {
                             "                            <td style=\"width: 350px;\">\n" +
                             "                                <b>COSTO UNITARIO DIRECTO</b>\n" +
                             "                            </td>\n" +
-                            "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro, format: "##,##0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
+                            "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") +
                             "                            </b></td>\n" +
                             "                        </tr>\n" +
                             "                        <tr>\n" +
                             "                            <td>\n" +
                             "                                <b>COSTOS INDIRECTOS</b>\n" +
                             "                            </td>\n" +
-                            "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalIndi, format: "##,##0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
+                            "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalIndi, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") +
                             "                            </b></td>\n" +
                             "                        </tr>\n" +
                             "                        <tr>\n" +
                             "                            <td>\n" +
                             "                                <b>COSTO TOTAL DEL RUBRO</b>\n" +
                             "                            </td>\n" +
-                            "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro + totalIndi, format: "##,##0", minFractionDigits: 5, maxFractionDigits: 5, locale: "ec") +
+                            "                            <td style=\"text-align: right\"><b>" + g.formatNumber(number: totalRubro + totalIndi, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") +
                             "                            </b></td>\n" +
                             "                        </tr>\n" +
                             "                        <tr>\n" +
