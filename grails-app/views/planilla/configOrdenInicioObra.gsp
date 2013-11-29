@@ -16,7 +16,7 @@
     <body>
 
         <div class="tituloTree">
-            Planillas del contrato de la obra ${obra.descripcion}
+            Orden de inicio de la obra ${obra.descripcion}
         </div>
 
         <div class="row" style="margin-bottom: 15px;">
