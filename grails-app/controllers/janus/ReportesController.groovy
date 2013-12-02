@@ -3273,8 +3273,8 @@ class ReportesController {
 
         PdfPTable tablaBaseMemo = new PdfPTable(3);
         tablaMemo.setWidthPercentage(100);
-        tablaBaseMemo.setWidthPercentage(100);
-        tablaBaseMemo.setWidths(arregloEnteros([50, 15, 31]))
+        tablaBaseMemo.setWidthPercentage(90);
+        tablaBaseMemo.setWidths(arregloEnteros([70, 20, 25]))
 
 
         if (tipo == '1') {
@@ -3288,8 +3288,8 @@ class ReportesController {
                 ivaTotal = (totalBase.toDouble() * paux?.iva) / 100
                 valorTotal = totalBase.toDouble() + ivaTotal;
 
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHojaRight)
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHoja)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHoja)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 
@@ -3297,8 +3297,8 @@ class ReportesController {
                 addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHojaRight)
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHoja)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHoja)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph("VALOR TOTAL INCLUIDO IVA:", times10bold), prmsHeaderHojaRight)
@@ -3307,6 +3307,7 @@ class ReportesController {
             }
 
             //solo proyeccion del reajuste
+
 
             if (params.proyeccionMemo == 'true' && cantidadMesesMemo >= '1' && params.reajusteIvaMemo == 'false') {
 
@@ -3329,7 +3330,7 @@ class ReportesController {
 //                addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
 
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHoja)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
@@ -3370,7 +3371,7 @@ class ReportesController {
 //                addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 //                addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHoja)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
@@ -3383,8 +3384,8 @@ class ReportesController {
                 addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHojaRight)
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHoja)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHoja)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph("VALOR TOTAL INCLUIDO IVA:", times10bold), prmsHeaderHojaRight)
@@ -3397,8 +3398,8 @@ class ReportesController {
 
                 valorTotal = totalBase.toDouble();
 
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHojaRight)
-                addCellTabla(tablaBaseMemo, new Paragraph("______________", times10bold), prmsHeaderHoja)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("_______________", times10bold), prmsHeaderHoja)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
                 addCellTabla(tablaBaseMemo, new Paragraph("Valor Total :", times10bold), prmsHeaderHojaRight)
