@@ -107,10 +107,11 @@ class Obra implements Serializable {
     Persona firmaInicioObra
     String anexos
 
-    String observacionesInicioObra
-    Date fechaImpresionInicioObra
 
-    double longitudVia = 0
+    String observacionesInicioObra
+	Date fechaImpresionInicioObra
+
+	double longitudVia = 0
     double anchoVia = 0
 
     String memoSif
@@ -336,6 +337,7 @@ class Obra implements Serializable {
         desgloseTransporte(size: 1..1, blank: true, nullable: true, attributes: [title: 'Desglose de transporte'])
 
         coordenadas(size: 0..254, blank: true, nullable: true, attributes: [title: 'Coordenadas en formato WGS84'])
+
 
         transporteCamioneta(blank: true, nullable: true, attibutes: [title: 'Transporte en Camioneta'])
         transporteAcemila(blank: true, nullable: true, attributes: [title: 'Transporte en Acémila'])
