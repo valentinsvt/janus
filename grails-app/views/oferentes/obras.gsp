@@ -46,7 +46,7 @@
                 <b>Registradas:</b>
             </div>
             <div class="span1" style="width: 40px;">
-               <input type="checkbox" id="reg" value="R" ${(tipo=="R")?"checked":""}>
+                <input type="checkbox" id="reg" value="R" ${(tipo=="R")?"checked":""}>
             </div>
             <div class="span1">
                 <b>Oferente:</b>
@@ -100,10 +100,12 @@
                         ${r["obraetdo"]}
                     </td>
                     <td>
-                        <a href="#" class="btn btn-ajax btn-new copiar" oferente="${r['prsnjnid']}" obra="${r['obrajnid']}" title="copiar">
-                            <i class="icon-copy"></i>
-                            Copiar
-                        </a>
+                        <g:if test="${r['obraetdo']=='R'}">
+                            <a href="#" class="btn btn-ajax btn-new copiar" oferente="${r['prsnjnid']}" obra="${r['obrajnid']}"  obraOf="${r['obra__id']}" title="copiar">
+                                <i class="icon-copy"></i>
+                                Copiar
+                            </a>
+                        </g:if>
                     </td>
                 </tr>
             </g:each>
@@ -113,19 +115,53 @@
     </div>
 </div>
 
-   <script type="text/javascript">
-       $("#buscar").click(function(){
-           var tipo = ""
-           if($("#reg").is(':checked')){
-               tipo="&tipo=r"
-           }
-           location.href="${g.createLink(action: 'obras')}?oferente="+$("#oferente").val()+tipo
-       })
-       $("#limpiar").click(function(){
-           $("#reg").removeAttr("checked")
-           $("#oferente").val("")
-       })
-   </script>
+<script type="text/javascript">
+    $("#buscar").click(function(){
+        var tipo = ""
+        if($("#reg").is(':checked')){
+            tipo="&tipo=r"
+        }
+        location.href="${g.createLink(action: 'obras')}?oferente="+$("#oferente").val()+tipo
+    })
+    $("#limpiar").click(function(){
+        $("#reg").removeAttr("checked")
+        $("#oferente").val("")
+    })
+    $(".copiar").click(function(){
+        var obra= $(this).attr("obra")
+        var oferente =$(this).attr("oferente")
+        var obraOf =$(this).attr("obraOf")
+
+        if(confirm("Esta seguro?")){
+            $("#dlgLoad").dialog("open")
+            $.ajax({type : "POST", url : "${g.createLink(controller: 'oferentes',action:'copiarObra')}",
+                data     : "obra="+obra+"&oferente="+oferente+"&obraOf="+obraOf,
+                success  : function (msg) {
+                    $("#dlgLoad").dialog("close")
+                     if(msg!="error"){
+                                location.href="${g.createLink(controller: 'obra',action: 'registroObra')}?obra="+msg
+                     }else{
+                         $.box({
+                             imageClass : "box_info",
+                             text       : "Error al copiar la obra",
+                             title      : "Alerta",
+                             iconClose  : false,
+                             dialog     : {
+                                 resizable : false,
+                                 draggable : false,
+                                 buttons   : {
+                                     "Aceptar" : function () {
+                                         window.location.reload(true)
+                                     }
+                                 }
+                             }
+                         });
+                     }
+                }
+            });
+        }
+    })
+</script>
 
 </body>
 </html>

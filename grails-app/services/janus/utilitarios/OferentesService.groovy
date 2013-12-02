@@ -1,5 +1,6 @@
 package janus.utilitarios
 
+import janus.SubPresupuesto
 import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsDomainBinder
 
 class OferentesService {
@@ -14,7 +15,7 @@ class OferentesService {
         def where =" and o.obraetdo = '${tipo?.toUpperCase()}' "
         def result  =[]
         if(tipo && tipo!="" && tipo!=" "){
-           sql= sql.replaceAll("X",where)
+            sql= sql.replaceAll("X",where)
         }else{
             sql = sql.replaceAll("X"," ")
         }
@@ -26,9 +27,93 @@ class OferentesService {
         cn.eachRow(sql.toString()){r->
             result.add(r.toRowResult())
         }
+        cn.close()
         return result
 
     }
+
+    def copiaVolumen(janusId,oferentesId){
+
+        def cn  =dbConnectionService.getConnectionOferentes()
+        def cnJ=dbConnectionService.getConnection()
+        def error=false
+        try{
+
+            def sql = "select * from vlobitem where obra__id=${oferentesId}"
+            def insert ="insert into vlobitem values (&)"
+            def campos=""
+            cn.eachRow(sql.toString()){r->
+                def ar = r.toRowResult()
+                ar.eachWithIndex(){c,i->
+                    if(i==0){
+                        campos+="default,"
+                    }else{
+                        if(c.key=="obra__id")
+                            campos+=janusId
+                        else{
+                            if(c.key=="itemcdgo")
+                                campos+="'"+janusId+"'"
+                            else
+                                campos+=c.value
+                        }
+                        if(i<ar.size()-1){
+                            campos+=","
+                        }
+                    }
+
+                }
+                //println "campos "+insert.replaceAll("&",campos).toString()
+                cnJ.execute(insert.replaceAll("&",campos).toString())
+                campos=""
+            }
+
+            def subs = SubPresupuesto.list()?.id
+            sql = "select * from sbpr where sbpr__id not in ("
+            subs.eachWithIndex { s, i ->
+                sql+=s
+                if(i<subs.size()-1){
+                    sql+=","
+                }
+            }
+            sql+=")"
+            cn.eachRow(sql.toString()){r->
+                cnJ.execute("insert into sbpr values(${r['sbpr__id']},'${r['sbprdscr']}',${r['sbprtipo']},${r['grpo__id']})")
+            }
+
+            sql="select * from vlob where obra__id=${oferentesId}"
+            insert ="insert into vlob values (&)"
+            cn.eachRow(sql.toString()){r->
+                def ar = r.toRowResult()
+                ar.eachWithIndex(){c,i->
+                    if(i==0){
+                        campos+="default,"
+                    }else{
+                        if(c.key=="obra__id")
+                            campos+=janusId
+                        else{
+                            campos+=c.value
+                        }
+                        if(i<ar.size()-1){
+                            campos+=","
+                        }
+                    }
+                }
+                //println "campos "+insert.replaceAll("&",campos).toString()
+                cnJ.execute(insert.replaceAll("&",campos).toString())
+                campos=""
+            }
+            cn.execute("update obra set obraetdo='C' where obra__id=${oferentesId}".toString())
+        }catch (e){
+            error=true
+            println "ERROR "+e
+        }
+        finally {
+            cn.close()
+            cnJ.close()
+        }
+        return error
+    }
+
 
     def exportDominio(dominio, campoReferencia, objeto) {
         def mapa = GrailsDomainBinder.getMapping(dominio)

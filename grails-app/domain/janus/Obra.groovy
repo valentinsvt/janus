@@ -115,6 +115,7 @@ class Obra implements Serializable {
 
     String memoSif
     String estadoSif
+    Persona oferente=null
 
     static mapping = {
         table 'obra'
@@ -237,11 +238,12 @@ class Obra implements Serializable {
 
             memoSif column: 'obrammsf'
             estadoSif column: 'obraetsf'
+            oferente column: 'ofrt__id'
         }
     }
     static constraints = {
 
-        codigo(size: 1..20, blank: false, attributes: [title: 'numero'])
+        codigo(size: 1..25, blank: false, attributes: [title: 'numero'])
         nombre(size: 1..127, blank: true, nullable: true, attributes: [title: 'nombre'])
         responsableObra(blank: true, nullable: true, attributes: [title: 'responsableObra'])
         revisor(blank: true, nullable: true, attributes: [title: 'revisor'])
@@ -353,6 +355,7 @@ class Obra implements Serializable {
 
         memoSif(blank: true, maxSize: 20, nullable: true)
         estadoSif(blank: true, maxSize: 1, nullable: true)
+        oferente(blank:true,nullable:true)
     }
 
     String toString() {
