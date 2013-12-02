@@ -349,6 +349,7 @@ class CronogramaController extends janus.seguridad.Shield {
     }
 
     def cronogramaObra() {
+
         def obra = Obra.get(params.id)
         def subpres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
@@ -364,6 +365,9 @@ class CronogramaController extends janus.seguridad.Shield {
         } else {
             detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
         }
+
+        def detalleP = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+
 
         def precios = [:]
         def indirecto = obra.totales / 100
@@ -381,7 +385,7 @@ class CronogramaController extends janus.seguridad.Shield {
 //            println res
 //            precios.put(it.id.toString(), res)
         }
-        return [detalle: detalle, precios: precios, obra: obra, subpres: subpres, subpre: subpre]
+        return [detalle: detalle, detalleP: detalleP, precios: precios, obra: obra, subpres: subpres, subpre: subpre]
     }
 
     def cronogramaObra_antesPresupuestos() {

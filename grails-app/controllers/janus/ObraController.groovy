@@ -329,7 +329,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def calculaPlazo() {
-//        println "calculaPlazo: " + params
+        println "calculaPlazo: " + params
         def obra = Obra.get(params.id)
 
         if (!params.personas) params.personas = obra.plazoPersonas
@@ -345,6 +345,12 @@ class ObraController extends janus.seguridad.Shield {
         def cn = dbConnectionService.getConnection()
         def resultM = cn.rows(sqlM.toString())
         def resultR = cn.rows(sqlR.toString())
+
+
+        println "\n\n"
+        println resultM
+        println resultR
+        println "\n\n"
 
         if (params.save.toString() == "0") {
             return [obra: obra, resultM: resultM, resultR: resultR, params: params]
@@ -412,11 +418,11 @@ class ObraController extends janus.seguridad.Shield {
         }
     }
 
-    def aprobarSif(){
-        def obra=Obra.get(params.obra)
-        obra.estadoSif="R"
+    def aprobarSif() {
+        def obra = Obra.get(params.obra)
+        obra.estadoSif = "R"
         obra.save(flush: true)
-        flash.message="Memo S.I.F. aprobado"
+        flash.message = "Memo S.I.F. aprobado"
         render "ok"
     }
 
