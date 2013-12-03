@@ -214,7 +214,7 @@ class BuscadorService {
             if(sql=~"where")
                 sql += extras
             else
-                sql+= " where "+extras.replaceFirst(" and ","").replaceFirst(" or ","")
+                sql+= " where "+extras.replaceFirst(" and ","")
         }
         println "sql " + sql  + orderby+" --> pars "+res
         lista = dominio.findAll((sql+orderby).toString(), res,[max: 200])
