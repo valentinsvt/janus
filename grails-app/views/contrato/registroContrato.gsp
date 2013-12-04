@@ -435,7 +435,7 @@
                             </li>
 
                             <li>
-                                <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
+                                <g:link controller="documentoProceso" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id, show: 1]">
                                     <i class="icon-book"></i>Biblioteca
                                 </g:link>
                             </li>

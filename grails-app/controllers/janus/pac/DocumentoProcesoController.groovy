@@ -123,6 +123,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
     def form_ajax() {
         def concurso = Concurso.get(params.concurso)
         def contrato = Contrato.get(params.contrato)
+        def show = params.show
         def documentoProcesoInstance = new DocumentoProceso(params)
         if (params.id) {
             documentoProcesoInstance = DocumentoProceso.get(params.id)
@@ -134,7 +135,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             } //no existe el objeto
         } //es edit
         documentoProcesoInstance.concurso = concurso
-        return [documentoProcesoInstance: documentoProcesoInstance, concurso: concurso, contrato: contrato]
+        return [documentoProcesoInstance: documentoProcesoInstance, concurso: concurso, contrato: contrato, show: show]
     } //form_ajax
 
     def save() {
@@ -145,7 +146,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Documento Proceso con id " + params.id
                 if (params.contrato) {
-                    redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato])
+                    redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato, show: params.show])
                 } else {
                     redirect(action: 'list', id: params.concurso.id)
                 }
@@ -239,7 +240,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             flash.message = "Se ha creado correctamente Documento Proceso " + documentoProcesoInstance.id
         }
         if (params.contrato) {
-            redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato])
+            redirect(action: 'list', id: params.concurso.id, params: [contrato: params.contrato, show: params.show])
         } else {
             redirect(action: 'list', id: params.concurso.id)
         }
@@ -275,12 +276,21 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             def file = new File(path)
             file.delete()
 
-            redirect(action: "list", id: cid)
+            if (params.contrato) {
+                redirect(action: "list", id: cid, params: [contrato: params.contrato, show: params.show])
+            } else {
+                redirect(action: "list", id: cid)
+            }
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
             flash.message = "No se pudo eliminar Documento Proceso " + (documentoProcesoInstance.id ? documentoProcesoInstance.id : "")
-            redirect(action: "list")
+
+            if (params.contrato) {
+                redirect(action: "list", id: cid, params: [contrato: params.contrato])
+            } else {
+                redirect(action: "list", id: cid)
+            }
         }
     } //delete
 } //fin controller

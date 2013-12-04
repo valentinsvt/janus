@@ -35,10 +35,18 @@
         <div class="row">
             <div class="span9 btn-group" role="navigation">
                 <g:if test="${contrato}">
-                    <g:link controller="contrato" action="verContrato" class="btn" params="[contrato: contrato.id]">
-                        <i class="icon-caret-left"></i>
-                        Regresar
-                    </g:link>
+                    <g:if test="${params.show == '1'}">
+                        <g:link controller="contrato" action="registroContrato" class="btn" params="[contrato: contrato.id]">
+                            <i class="icon-caret-left"></i>
+                            Regresar
+                        </g:link>
+                    </g:if>
+                    <g:else>
+                        <g:link controller="contrato" action="verContrato" class="btn" params="[contrato: contrato.id]">
+                            <i class="icon-caret-left"></i>
+                            Regresar
+                        </g:link>
+                    </g:else>
                 </g:if>
                 <g:else>
                     <g:link controller="concurso" action="list" class="btn">
@@ -58,6 +66,8 @@
 
         <g:form action="delete" name="frmDelete-DocumentoProceso">
             <g:hiddenField name="id"/>
+            <g:hiddenField name="contrato" value="${contrato?.id}"/>
+            <g:hiddenField name="show" value="${params.show}"/>
         </g:form>
 
         <div id="list-DocumentoProceso" role="main">
@@ -149,7 +159,8 @@
                         url     : "${createLink(action:'form_ajax')}",
                         data    : {
                             concurso : ${concurso.id},
-                            contrato : ${contrato?.id?:""}
+                            contrato : "${contrato?.id}",
+                            show     : "${params.show}"
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
@@ -178,7 +189,8 @@
                         data    : {
                             id       : id,
                             concurso : ${concurso.id},
-                            contrato : ${contrato?.id?:""}
+                            contrato : "${contrato?.id}",
+                            show     : "${params.show}"
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');

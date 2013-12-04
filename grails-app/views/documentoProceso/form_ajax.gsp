@@ -5,6 +5,7 @@
         <g:hiddenField name="id" value="${documentoProcesoInstance?.id}"/>
         <g:hiddenField name="concurso.id" value="${concurso.id}"/>
         <g:hiddenField name="contrato" value="${contrato?.id}"/>
+        <g:hiddenField name="show" value="${show}"/>
 
         <div class="control-group">
             <div>
