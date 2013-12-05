@@ -272,8 +272,11 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def save() {
-        println "params "+params
-//        println(params.password)
+//        println "params "+params
+//        println("password:-->>" + params.password)
+//        println("password2:-->>" + params.password.encodeAsMD5())
+//        println("password3:-->>" + Persona.get(params.id).password)
+
         def personaInstance
 
         if (params.fechaInicio) {
@@ -294,7 +297,7 @@ class PersonaController extends janus.seguridad.Shield {
 //            println(params.password.encodeAsMD5())
 //            println(Persona.get(params.id).password)
 
-            if ((params.password.encodeAsMD5()) == Persona.get(params.id).password){
+            if ((params.password) == Persona.get(params.id).password){
 
                 params.password = Persona.get(params.id).password
 
@@ -367,8 +370,8 @@ class PersonaController extends janus.seguridad.Shield {
 
         }
         def  perfiles = Sesn.findAllByUsuario(personaInstance)
-        println "perfile nue "+perfilesNue
-        println "!!!  "+perfiles.perfil.id
+//        println "perfile nue "+perfilesNue
+//        println "!!!  "+perfiles.perfil.id
 
 
         def borrar=true

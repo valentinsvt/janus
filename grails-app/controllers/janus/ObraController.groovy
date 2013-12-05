@@ -444,13 +444,28 @@ class ObraController extends janus.seguridad.Shield {
 
         def departamentos = Departamento.findAllByDireccion(direccion)
 
-        def programa = Programacion.findAllByGrupo(grupo)
+        def programa
+        def tipoObra
+        def claseObra
 
-        def tipoObra = TipoObra.findAllByGrupo(grupo)
+        if(grupo != null){
 
-        def claseObra = ClaseObra.findAllByGrupo(grupo)
+            println("entro!!")
+
+            programa = Programacion.findAllByGrupo(grupo)
+            tipoObra = TipoObra.findAllByGrupo(grupo)
+            claseObra = ClaseObra.findAllByGrupo(grupo)
+
+        }else {
+
+            programa = -1
+            tipoObra = -1
+            claseObra = -1
+
+        }
 
 //        println("grupo" + grupo)
+//        println("direccion" + direccion)
 //        println("subpresupuest" + subPresupuesto1)
 //        println("direccion" + direccion.id)
 //        println("programa" + programa)
