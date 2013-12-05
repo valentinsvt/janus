@@ -236,10 +236,10 @@ class Obra implements Serializable {
 
             longitudVia column: 'obralgvi'
             anchoVia column: 'obraanvi'
-
+            oferente column: 'ofrt__id'
             memoSif column: 'obrammsf'
             estadoSif column: 'obraetsf'
-            oferente column: 'ofrt__id'
+
         }
     }
     static constraints = {

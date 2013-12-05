@@ -15,11 +15,11 @@ class ExportController extends janus.seguridad.Shield {
         def oferente = Persona.get(params.oferente)
         def r = oferentesService.exportDominio(janus.Persona, "prsnjnid", oferente)
 
-//        println ">>>>" + r
+        //println ">>>>" + r
         if (r !=-1) {
             def oferenteId = r
             def res = oferentesService.exportDominio(janus.Obra, "obrajnid", obra, params.oferente, "ofrt__id", r, "ofrt__id", "select * from obra where obrajnid=${obra.id} and ofrt__id=${r}")
-
+            //println "res "+res
             if (res !=-1) {
                 def obraJnId=res
                 def vols = VolumenesObra.findAllByObra(obra)

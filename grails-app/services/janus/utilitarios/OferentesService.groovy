@@ -137,7 +137,7 @@ class OferentesService {
     }
 
     def exportDominio(dominio, campoReferencia, objeto, oferente, campoOferente, personaId, personaCol, sqlValidacion) {
-//        println "dom "+dominio+" camp "+campoReferencia+"  obt "+objeto
+        //println "dom "+dominio+" camp "+campoReferencia+"  obt "+objeto
         def sql = "insert into % & values # "
         def campos = "("
         def valores = "("
@@ -147,7 +147,7 @@ class OferentesService {
         def validacion = sqlValidacion
         mapa.columns.eachWithIndex { c, i ->
 //            println "it " + c.key + " " + c.value.type + "  " + c.value.getColumn() + " " + c
-//            print " " + c.key + " " + c.value.getColumn() + " ====> "
+           // print " " + c.key + " " + c.value.getColumn() + " ====> "
 
             if (!personaCol || (personaCol && personaCol != c.value.getColumn())) {
                 campos += "" + c.value.getColumn()
@@ -159,10 +159,12 @@ class OferentesService {
                 }
                 valores += "" + campoASql(p, objeto)
                 if (i < mapa.columns.size() - 1) {
+                   // println "puso coma "+i
                     valores += ","
                 }
             }
         }
+        //println "campos antes de extas "+campos
         if (personaCol && personaId) {
             campos += ",${personaCol}"
             valores += ",${personaId}"
@@ -176,7 +178,7 @@ class OferentesService {
         campos += ")"
         valores += ")"
 
-//        println "\ncampos " + campos
+          println "\ncampos " + campos
 //        println "valores " + valores
         sql = sql.replace("%", tabla)
         sql = sql.replace("&", campos)
@@ -184,18 +186,18 @@ class OferentesService {
 //        println "\nsql " + sql
         def cn = dbConnectionService.getConnectionOferentes()
         def count = 0
-//        println "validacion " + validacion
+        println "validacion " + validacion
         cn.eachRow(validacion.toString()) { r ->
             //println "r " + r
             count = r[0]
         }
-//        println "res val "+count
+        println "res val "+count
         if (count == 0) {
             def res
             try {
-//                println "insert "+sql
+                println "insert "+sql
                 res = cn.executeInsert(sql.toString())
-//                println "res "+res
+                println "res "+res
                 res=res[0][0]
 //                println "res "+res
             } catch (e) {
@@ -213,7 +215,7 @@ class OferentesService {
 
 
     def exportDominioSinReferencia(dominio, objeto, oferente, campoOferente,sqlValidacion){
-//        println "dom "+dominio+"  obt "+objeto
+        println "dom "+dominio+"  obt "+objeto
         def sql = "insert into % & values # "
         def campos = "("
         def valores = "("
