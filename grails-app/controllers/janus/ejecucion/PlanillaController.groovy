@@ -16,6 +16,171 @@ class PlanillaController extends janus.seguridad.Shield {
 
     }
 
+    def configPedidoPagoAnticipo() {
+        def planilla = Planilla.get(params.id)
+        def contrato = planilla.contrato
+        def obra = contrato.obra
+
+        def texto = Pdfs.findAllByPlanilla(planilla)
+        def textos = []
+
+        def tabla = "<table border='0'>"
+        tabla += "<tr>"
+        if (planilla.tipoPlanilla.codigo == 'A') {
+            tabla += "<th class='tl'>${numero(contrato?.porcentajeAnticipo, 0)}% de anticipo</t>"
+        } else {
+            tabla += "<th class='tl'>Valor planilla</t>"
+        }
+        tabla += "<td class='tr'>${numero(planilla.valor, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>(+) Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}</th>"
+        tabla += "<td class='tr'>${numero(planilla.reajuste, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>SUMA</th>"
+        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
+        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "</table>"
+
+        if (texto.size() == 0) {
+
+            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+
+            def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+                    "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+                    "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+                    "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+
+            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+            def editParrafo2 = "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
+
+            def strParrafo3 = "Son ${numerosALetras}"
+
+            def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del anticipo a la cuenta del contratista."
+
+            textos[0] = [
+                    [tipo: "S", string: strParrafo1]
+            ]
+            textos[1] = [
+                    [tipo: "S", string: strParrafo2],
+                    [tipo: "E", string: editParrafo2, w: "940px", h: "25px"]
+            ]
+            textos[2] = [
+                    [tipo: "S", string: tabla]
+            ]
+            textos[3] = [
+                    [tipo: "S", string: strParrafo3]
+            ]
+            textos[4] = [
+                    [tipo: "E", string: strParrafo4, w: "940px", h: "50px"]
+            ]
+
+        } else if (texto.size() > 1) {
+            println "Se encontraron ${texto.size()} textos para la obra ${obra.id}: ${texto.id}"
+            texto = texto.first()
+        } else {
+            texto = texto.first()
+        }
+
+        return [planilla: planilla, obra: obra, contrato: contrato, textos: textos, texto: texto, tabla: tabla]
+    }
+
+    def configPedidoPago() {
+        def planilla = Planilla.get(params.id)
+        def contrato = planilla.contrato
+        def obra = contrato.obra
+
+        def texto = Pdfs.findAllByPlanilla(planilla)
+        def textos = []
+
+        def multas = 0
+        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+
+        def tabla = "<table border='0'>"
+        tabla += "<tr>"
+        if (planilla.tipoPlanilla.codigo == 'A') {
+            tabla += "<th class='tl'>${numero(contrato?.porcentajeAnticipo, 0)}% de anticipo</t>"
+        } else {
+            tabla += "<th class='tl'>Valor planilla</t>"
+        }
+        tabla += "<td class='tr'>${numero(planilla.valor, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>(+) Reajuste provisional ${planilla.tipoPlanilla.codigo == 'A' ? 'del anticipo' : ''}</th>"
+        tabla += "<td class='tr'>${numero(planilla.reajuste, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>(-) Anticipo</th>"
+        tabla += "<td class='tr'>${numero(planilla.descuentos, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>(-) Multas</th>"
+        tabla += "<td class='tr'>${numero(multas, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>SUMA</th>"
+        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "<tr>"
+        tabla += "<th class='tl'>A FAVOR DEL CONTRATISTA</th>"
+        tabla += "<td class='tr'>${numero(planilla.valor + planilla.reajuste - planilla.descuentos - multas, 2)}</td>"
+        tabla += "</tr>"
+        tabla += "</table>"
+
+        if (texto.size() == 0) {
+
+            def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas
+            def neg = ""
+            if (totalLetras < 0) {
+                totalLetras = totalLetras * -1
+                neg = "MENOS "
+            }
+            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
+
+            def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+                    "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+                    "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+                    "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+
+            def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del valor a pagar de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+            def editParrafo2 = "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
+
+            def strParrafo3 = "Son ${neg}${numerosALetras}"
+
+            def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del valor a pagar a la cuenta del contratista."
+
+            textos[0] = [
+                    [tipo: "S", string: strParrafo1]
+            ]
+            textos[1] = [
+                    [tipo: "S", string: strParrafo2],
+                    [tipo: "E", string: editParrafo2, w: "940px", h: "25px"]
+            ]
+            textos[2] = [
+                    [tipo: "S", string: tabla]
+            ]
+            textos[3] = [
+                    [tipo: "S", string: strParrafo3]
+            ]
+            textos[4] = [
+                    [tipo: "E", string: strParrafo4, w: "940px", h: "50px"]
+            ]
+
+        } else if (texto.size() > 1) {
+            println "Se encontraron ${texto.size()} textos para la obra ${obra.id}: ${texto.id}"
+            texto = texto.first()
+        } else {
+            texto = texto.first()
+        }
+
+        return [planilla: planilla, obra: obra, contrato: contrato, textos: textos, texto: texto, tabla: tabla]
+    }
+
     def configOrdenInicioObra() {
         def obra = Obra.get(params.id)
         def concurso = janus.pac.Concurso.findByObra(obra)
@@ -58,32 +223,32 @@ class PlanillaController extends janus.seguridad.Shield {
 
             textos[0] = [
                     [tipo: "E", string: edit11, w: "580px", h: "20px"],
-                    [tipo: "S", string: str11, w: "20px", h: "20px"],
+                    [tipo: "S", string: str11],
                     [tipo: "E", string: edit12, w: "210px", h: "20px"],
-                    [tipo: "S", string: str12, w: "20px", h: "20px"],
+                    [tipo: "S", string: str12],
                     [tipo: "E", string: edit13, w: "280px", h: "20px"],
-                    [tipo: "S", string: str13, w: "20px", h: "20px"],
+                    [tipo: "S", string: str13],
                     [tipo: "E", string: edit14, w: "560px", h: "20px"],
-                    [tipo: "S", string: str14, w: "20px", h: "20px"],
+                    [tipo: "S", string: str14],
                     [tipo: "E", string: edit15, w: "940px", h: "20px"],
-                    [tipo: "S", string: str15, w: "20px", h: "20px"],
+                    [tipo: "S", string: str15],
                     [tipo: "E", string: edit16, w: "940px", h: "40px"]
             ]
             textos[1] = [
                     [tipo: "E", string: edit21, w: "300px", h: "20px"],
-                    [tipo: "S", string: str21, w: "20px", h: "20px"],
+                    [tipo: "S", string: str21],
                     [tipo: "E", string: edit22, w: "225px", h: "20px"],
-                    [tipo: "S", string: str22, w: "20px", h: "20px"],
+                    [tipo: "S", string: str22],
                     [tipo: "E", string: edit23, w: "240px", h: "20px"],
-                    [tipo: "S", string: str23, w: "20px", h: "20px"],
+                    [tipo: "S", string: str23],
                     [tipo: "E", string: edit24, w: "330px", h: "20px"],
-                    [tipo: "S", string: str24, w: "20px", h: "20px"]
+                    [tipo: "S", string: str24]
             ]
             textos[2] = [
                     [tipo: "E", string: edit31, w: "485px", h: "20px"],
-                    [tipo: "S", string: str31, w: "20px", h: "20px"],
+                    [tipo: "S", string: str31],
                     [tipo: "E", string: edit32, w: "90px", h: "20px"],
-                    [tipo: "S", string: str32, w: "20px", h: "20px"]
+                    [tipo: "S", string: str32]
             ]
         } else if (texto.size() > 1) {
             println "Se encontraron ${texto.size()} textos para la obra ${obra.id}: ${texto.id}"
@@ -183,6 +348,121 @@ class PlanillaController extends janus.seguridad.Shield {
             flash.message = "Ha ocurrido un error al guardar la orden de inicio de obra."
         }
         redirect(action: "configOrdenInicioObra", id: obra.id)
+    }
+
+    def savePedidoPagoAnticipo() {
+        def planilla = Planilla.get(params.id)
+        def contrato = planilla.contrato
+        def obra = contrato.obra
+        def texto = new Pdfs()
+        texto.planilla = planilla
+        texto.fecha = new Date()
+
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+
+        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+
+        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+
+        def strParrafo3 = "Son ${numerosALetras}"
+
+        def textos = []
+        textos[0] = [
+                strParrafo1
+        ]
+        textos[1] = [
+                strParrafo2,
+                params["edit_2_1"]
+        ]
+        textos[2] = [
+                // tabla
+        ]
+        textos[3] = [
+                strParrafo3
+        ]
+        textos[4] = [
+                params["edit_5_1"]
+        ]
+
+        texto.parrafo1 = strParrafo1
+        texto.parrafo2 = strParrafo2 + " " + params["edit_2_1"]
+        texto.parrafo3 = strParrafo3
+        texto.parrafo4 = params["edit_5_1"]
+        texto.parrafo5 = params.extra?.trim()
+
+        if (texto.save([flush: true])) {
+            flash.clase = "alert-success"
+            flash.message = "Pedido de pago del anticipo guardado exitosamente."
+        } else {
+            flash.clase = "alert-error"
+            flash.message = "Ha ocurrido un error al guardar el pedido de pago del anticipo."
+        }
+        redirect(action: "configPedidoPagoAnticipo", id: planilla.id)
+    }
+
+    def savePedidoPago() {
+        def planilla = Planilla.get(params.id)
+        def contrato = planilla.contrato
+        def obra = contrato.obra
+        def texto = new Pdfs()
+        texto.planilla = planilla
+        texto.fecha = new Date()
+
+        def multas = 0
+        multas = planilla.multaDisposiciones + planilla.multaIncumplimiento + planilla.multaPlanilla + planilla.multaRetraso
+
+        def totalLetras = planilla.valor + planilla.reajuste - planilla.descuentos - multas
+        def neg = ""
+        if (totalLetras < 0) {
+            totalLetras = totalLetras * -1
+            neg = "MENOS "
+        }
+        def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
+
+        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+
+        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del valor a pagar de la planilla, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} "
+
+        def strParrafo3 = "Son ${neg}${numerosALetras}"
+
+        def textos = []
+        textos[0] = [
+                strParrafo1
+        ]
+        textos[1] = [
+                strParrafo2,
+                params["edit_2_1"]
+        ]
+        textos[2] = [
+                // tabla
+        ]
+        textos[3] = [
+                strParrafo3
+        ]
+        textos[4] = [
+                params["edit_5_1"]
+        ]
+
+        texto.parrafo1 = strParrafo1
+        texto.parrafo2 = strParrafo2 + " " + params["edit_2_1"]
+        texto.parrafo3 = strParrafo3
+        texto.parrafo4 = params["edit_5_1"]
+        texto.parrafo5 = params.extra?.trim()
+
+        if (texto.save([flush: true])) {
+            flash.clase = "alert-success"
+            flash.message = "Pedido de pago de la planilla guardado exitosamente."
+        } else {
+            flash.clase = "alert-error"
+            flash.message = "Ha ocurrido un error al guardar el pedido de pago de la planilla."
+        }
+        redirect(action: "configPedidoPago", id: planilla.id)
     }
 
     def errorIndice() {
@@ -1541,6 +1821,59 @@ class PlanillaController extends janus.seguridad.Shield {
         return fechaConFormato(fecha, "MMM-yy")
     }
 
+    private String cap(str) {
+        return str.replaceAll(/[a-zA-Z_0-9áéíóúÁÉÍÓÚñÑüÜ]+/, {
+            it[0].toUpperCase() + ((it.size() > 1) ? it[1..-1].toLowerCase() : '')
+        })
+    }
+
+    private String nombrePersona(persona, tipo) {
+//        println "nombrePersona" + persona
+//        println tipo
+        def str = ""
+        if (persona) {
+            switch (tipo) {
+                case "pers":
+                    str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombre + " " + persona.apellido)
+                    break;
+                case "prov":
+                    str = cap((persona.titulo ? persona.titulo + " " : "") + persona.nombreContacto + " " + persona.apellidoContacto)
+                    break;
+            }
+        }
+//        println str
+//        println "****************************************************"
+        return str
+    }
+
+    private String nombrePersona(persona) {
+        return nombrePersona(persona, "pers")
+    }
+
+    private String numero(num, decimales, cero) {
+        if (num == 0 && cero.toString().toLowerCase() == "hide") {
+            return " ";
+        }
+        if (decimales == 0) {
+            return formatNumber(number: num, minFractionDigits: decimales, maxFractionDigits: decimales, locale: "ec")
+        } else {
+            def format
+            if (decimales == 2) {
+                format = "##,##0"
+            } else if (decimales == 3) {
+                format = "##,###0"
+            }
+            return formatNumber(number: num, minFractionDigits: decimales, maxFractionDigits: decimales, locale: "ec", format: format)
+        }
+    }
+
+    private String numero(num, decimales) {
+        return numero(num, decimales, "show")
+    }
+
+    private String numero(num) {
+        return numero(num, 3)
+    }
 
     def resumen() {
         //para volver a generar los valores de reajuste poner esta variable en true!!

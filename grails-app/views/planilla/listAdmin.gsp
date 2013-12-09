@@ -48,14 +48,14 @@
             %{--</g:link>--}%
 
 
-                <g:if test="${contrato.obra.fechaInicio}">
-                    <div class="btn-group">
-                        <a href="#" class="btn  " id="imprimir">
-                            <i class="icon-print"></i>
-                            Imprimir Orden de Inicio de Obra
-                        </a>
-                    </div>
-                </g:if>
+            %{--<g:if test="${contrato.obra.fechaInicio}">--}%
+            %{--<div class="btn-group">--}%
+            %{--<a href="#" class="btn  " id="imprimir">--}%
+            %{--<i class="icon-print"></i>--}%
+            %{--Imprimir Orden de Inicio de Obra--}%
+            %{--</a>--}%
+            %{--</div>--}%
+            %{--</g:if>--}%
             </div>
 
             <div class="span3" id="busqueda-Planilla"></div>

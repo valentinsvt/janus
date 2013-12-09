@@ -1,22 +1,34 @@
 <%--
   Created by IntelliJ IDEA.
   User: luz
-  Date: 11/18/13
-  Time: 3:47 PM
+  Date: 12/9/13
+  Time: 11:59 AM
   To change this template use File | Settings | File Templates.
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <title>Configurar Orden de inicio de obra</title>
+        <title>Config. Pedido de pago planilla</title>
         <meta name="layout" content="main"/>
+
+        <style type="text/css">
+        .tl {
+            text-align : left;
+            width      : 275px;
+        }
+
+        .tr {
+            text-align : right;
+            width      : 75px;
+        }
+        </style>
+
     </head>
 
     <body>
-
         <div class="tituloTree">
-            Orden de inicio de la obra ${obra.descripcion}
+            Pedido de pago de planilla de la obra ${obra.descripcion}
         </div>
 
         <div class="row" style="margin-bottom: 15px;">
@@ -48,16 +60,16 @@
             </div>
         </g:if>
         <g:if test="${textos.size() > 0}">
-            <g:form action="saveInicioObra" id="${obra.id}" name="frmInicio" style="width: 1000px;">
+            <g:form action="savePedidoPago" id="${planilla.id}" name="frmInicio" style="width: 1000px;">
                 <div class="alert alert-info info">
                     <i class="icon icon-info-sign icon-5x pull-left"></i>
 
                     <p>
-                        No se ha configurado la orden de inicio de obra. A continuación se presenta el texto por defecto. Realice las modifcaciones necesarias y haga cilck en el botón Guardar.
+                        No se ha configurado el pedido de pago de la planilla. A continuación se presenta el texto por defecto. Realice las modifcaciones necesarias y haga cilck en el botón Guardar.
                     </p>
 
                     <p>
-                        <span style="font-size: larger; font-weight: bold;">Tenga en cuenta que una vez guardada no se podrá modificar.</span>
+                        <span style="font-size: larger; font-weight: bold;">Tenga en cuenta que una vez guardado no se podrá modificar.</span>
                     </p>
                 </div>
 
@@ -93,7 +105,7 @@
                 <i class="icon icon-info-sign icon-3x pull-left"></i>
 
                 <p>
-                    La orden de inicio de obra ya se ha configurado por lo que no podrá ser modificada.
+                    El pedido de pago de la planilla ya se ha configurado por lo que no podrá ser modificado.
                 </p>
             </div>
 
@@ -111,7 +123,15 @@
                 </p>
 
                 <p>
+                    ${tabla}
+                </p>
+
+                <p>
                     ${texto.parrafo4}
+                </p>
+
+                <p>
+                    ${texto.parrafo5}
                 </p>
             </div>
         </g:else>

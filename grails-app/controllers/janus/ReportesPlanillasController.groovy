@@ -2334,6 +2334,32 @@ class ReportesPlanillasController {
         def planilla = Planilla.get(params.id)
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
+
+        def ok = true
+        def str = ""
+
+        def texto = Pdfs.findAllByPlanilla(planilla)
+        if (texto.size() == 0) {
+            redirect(controller: "planilla", action: "configPedidoPago", id: planilla.id)
+            return
+        } else if (texto.size() > 1) {
+            str += "<li>Se encontraron ${texto.size()} textos. No se pudo generar el pdf.</li>"
+            ok = false
+        } else {
+            texto = texto.first()
+        }
+
+        if (!ok) {
+            flash.message = "<ul>" + str + "</ul>"
+
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def link = "<a href='${url}' class='btn btn-danger'>Regresar</a>"
+
+            redirect(action: "errores", params: [link: link])
+            return
+        }
+
+
         def tramite = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
         def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
@@ -2346,8 +2372,6 @@ class ReportesPlanillasController {
             def res = preciosService.precioUnitarioVolumenObraSinOrderBy("sum(parcial)+sum(parcial_t) precio ", obra.id, it.item.id)
             precios.put(it.id.toString(), (res["precio"][0] + res["precio"][0] * indirecto).toDouble().round(2))
         }
-
-
 
         def baos = new ByteArrayOutputStream()
         def name = "memo_pedido_pago_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -2467,18 +2491,20 @@ class ReportesPlanillasController {
         /* *********************************** FIN DATOS MEMO **********************************/
 
         /* *********************************** CONTENIDOS **********************************/
-        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
-                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
-                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
-                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
-        Paragraph parrafo1 = new Paragraph(strParrafo1, fontContenido);
+//        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+//                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+//                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+//                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+//        Paragraph parrafo1 = new Paragraph(strParrafo1, fontContenido);
+        Paragraph parrafo1 = new Paragraph(texto.parrafo1, fontContenido);
         parrafo1.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo1, 1);
         document.add(parrafo1)
 
-        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} " +
-                "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
-        Paragraph parrafo2 = new Paragraph(strParrafo2, fontContenido);
+//        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} " +
+//                "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
+//        Paragraph parrafo2 = new Paragraph(strParrafo2, fontContenido);
+        Paragraph parrafo2 = new Paragraph(texto.parrafo2, fontContenido);
         parrafo2.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo2, 1);
         document.add(parrafo2)
@@ -2520,8 +2546,9 @@ class ReportesPlanillasController {
             neg = "MENOS "
         }
         def numerosALetras = NumberToLetterConverter.convertNumberToLetter(totalLetras)
-        def strParrafo3 = "Son ${neg}${numerosALetras}"
-        Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
+//       def strParrafo3 = "Son ${neg}${numerosALetras}"
+//        Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
+        Paragraph parrafo3 = new Paragraph(texto.parrafo3, fontContenido);
         parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo3, 1);
         document.add(parrafo3)
@@ -2529,11 +2556,16 @@ class ReportesPlanillasController {
 //        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
 //                "Dirección la fecha de pago del anticipo reajustado y su valor."
 
-        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del valor a pagar a la cuenta del contratista."
-        Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
+//        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del valor a pagar a la cuenta del contratista."
+//        Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
+        Paragraph parrafo4 = new Paragraph(texto.parrafo4, fontContenido);
         parrafo4.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo4, 1);
         document.add(parrafo4)
+
+        Paragraph parrafo5 = new Paragraph(texto.parrafo5, fontContenido);
+        parrafo5.setAlignment(Element.ALIGN_JUSTIFIED);
+        document.add(parrafo5)
         /* *********************************** FIN CONTENIDOS **********************************/
 
         /* *********************************** FIRMA **********************************/
@@ -2560,6 +2592,31 @@ class ReportesPlanillasController {
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
 //        def tramite = Tramite.findByPlanilla(planilla)
+
+        def ok = true
+        def str = ""
+
+        def texto = Pdfs.findAllByPlanilla(planilla)
+        if (texto.size() == 0) {
+            redirect(controller: "planilla", action: "configPedidoPagoAnticipo", id: planilla.id)
+            return
+        } else if (texto.size() > 1) {
+            str += "<li>Se encontraron ${texto.size()} textos. No se pudo generar el pdf.</li>"
+            ok = false
+        } else {
+            texto = texto.first()
+        }
+
+        if (!ok) {
+            flash.message = "<ul>" + str + "</ul>"
+
+            def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
+            def link = "<a href='${url}' class='btn btn-danger'>Regresar</a>"
+
+            redirect(action: "errores", params: [link: link])
+            return
+        }
+
         def tramite = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
         def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
 
@@ -2567,7 +2624,7 @@ class ReportesPlanillasController {
         def precios = [:]
         def indirecto = obra.totales / 100
 
-        println "tramite: $tramite, personas del tramite: " + prsn
+//        println "tramite: $tramite, personas del tramite: " + prsn
 
         preciosService.ac_rbroObra(obra.id)
 
@@ -2696,18 +2753,20 @@ class ReportesPlanillasController {
         /* *********************************** FIN DATOS MEMO **********************************/
 
         /* *********************************** CONTENIDOS **********************************/
-        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
-                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
-                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
-                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
-        Paragraph parrafo1 = new Paragraph(strParrafo1, fontContenido);
+//        def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
+//                "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
+//                "ubicada en el Barrio ${contrato?.oferta?.concurso?.obra?.barrio}, Parroquia ${contrato?.oferta?.concurso?.obra?.parroquia}, " +
+//                "Cantón ${contrato?.oferta?.concurso?.obra?.parroquia?.canton}, de la Provincia de ${contrato?.oferta?.concurso?.obra?.parroquia?.canton?.provincia?.nombre}"
+//        Paragraph parrafo1 = new Paragraph(strParrafo1, fontContenido);
+        Paragraph parrafo1 = new Paragraph(texto.parrafo1, fontContenido);
         parrafo1.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo1, 1);
         document.add(parrafo1)
 
-        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} " +
-                "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
-        Paragraph parrafo2 = new Paragraph(strParrafo2, fontContenido);
+//        def strParrafo2 = "Sírvase disponer el trámite respectivo para el pago del ${numero(contrato?.porcentajeAnticipo, 0)}% del anticipo, a favor de ${nombrePersona(contrato?.oferta?.proveedor, 'prov')} " +
+//                "según claúsula sexta, literal a) del citado documento. El detalle es el siguiente:"
+//        Paragraph parrafo2 = new Paragraph(strParrafo2, fontContenido);
+        Paragraph parrafo2 = new Paragraph(texto.parrafo2, fontContenido);
         parrafo2.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo2, 1);
         document.add(parrafo2)
@@ -2737,19 +2796,26 @@ class ReportesPlanillasController {
 
         document.add(tablaValores)
 
-        def strParrafo3 = "Son ${numerosALetras}"
-        Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
+//        def strParrafo3 = "Son ${numerosALetras}"
+//        Paragraph parrafo3 = new Paragraph(strParrafo3, fontContenido);
+        Paragraph parrafo3 = new Paragraph(texto.parrafo3, fontContenido);
         parrafo3.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo3, 1);
         document.add(parrafo3)
 
 //        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta " +
 //                "Dirección la fecha de pago del anticipo reajustado y su valor."
-        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del anticipo a la cuenta del contratista."
-        Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
+//        def strParrafo4 = "A fin de en forma oportuna dar al contratista la orden de inicio de la obra, informar a esta Dirección la fecha de transferencia del anticipo a la cuenta del contratista."
+//        Paragraph parrafo4 = new Paragraph(strParrafo4, fontContenido);
+        Paragraph parrafo4 = new Paragraph(texto.parrafo4, fontContenido);
         parrafo4.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafo4, 1);
         document.add(parrafo4)
+
+        Paragraph parrafo5 = new Paragraph(texto.parrafo5 ?: "", fontContenido);
+        parrafo5.setAlignment(Element.ALIGN_JUSTIFIED);
+        addEmptyLine(parrafo5, 1);
+        document.add(parrafo5)
         /* *********************************** FIN CONTENIDOS **********************************/
 
         /* *********************************** FIRMA **********************************/
