@@ -152,8 +152,9 @@
 
             <div class="span6" style="margin-top: 5px; margin-bottom: 10px">
 
-                <g:checkBox name="notaAdicional" checked="false"
-                /> Nota al Pie Adicional (15 líneas aprox)
+                %{--<g:checkBox name="notaAdicional" checked="false"--}%
+                %{--/> --}%
+                Nota al Pie Adicional (15 líneas aprox)
 
             </div>
 
@@ -436,8 +437,8 @@
 
         <div class="span6" style="margin-top: 10px">
             <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarMemo">Editar</button>
-                <button class="btn" id="btnAceptarMemo">Aceptar</button>
+                <button class="btn" id="btnEditarMemo"><i class="icon-pencil"></i> Editar</button>
+                <button class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Aceptar</button>
 
             </div>
         </div>
@@ -671,8 +672,8 @@
         </g:form>
         <div class="span6" style="margin-top: 10px">
             <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarFor">Editar</button>
-                <button class="btn" id="btnAceptarFor">Aceptar</button>
+                <button class="btn" id="btnEditarFor"><i class="icon-pencil"></i> Editar</button>
+                <button class="btn" id="btnAceptarFor"><i class="icon-ok"></i> Aceptar</button>
 
             </div>
         </div>
@@ -913,8 +914,8 @@
 
             <div class="span6" style="margin-top: 10px">
                 <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                    <button class="btn" id="btnEditarTextoF">Editar</button>
-                    <button class="btn" id="btnAceptarTextoF">Aceptar</button>
+                    <button class="btn" id="btnEditarTextoF"><i class="icon-pencil"></i> Editar</button>
+                    <button class="btn" id="btnAceptarTextoF"><i class="icon-ok"></i> Aceptar</button>
 
                 </div>
             </div>
@@ -928,7 +929,8 @@
         <fieldset class="borde">
             <legend>Pie de Página</legend>
 
-            <g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="saveDoc">
+            %{--<g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="saveDoc">--}%
+            <g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="savePiePaginaTF">
 
                 <g:hiddenField name="id" value="${"1"}"/>
 
@@ -958,8 +960,8 @@
 
             <div class="span6" style="margin-top: 10px">
                 <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                    <button class="btn" id="btnEditarTextoRet">Editar</button>
-                    <button class="btn" id="btnAceptarTextoRet">Aceptar</button>
+                    <button class="btn" id="btnEditarTextoRet"><i class="icon-pencil"></i> Editar</button>
+                    <button class="btn" id="btnAceptarTextoRet"><i class="icon-ok"></i> Aceptar</button>
 
                 </div>
             </div>
@@ -1039,8 +1041,8 @@
 
         <div class="span6">
             <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarMemoPresu">Editar</button>
-                <button class="btn" id="btnAceptarMemoPresu">Aceptar</button>
+                <button class="btn" id="btnEditarMemoPresu"><i class="icon-pencil"></i> Editar</button>
+                <button class="btn" id="btnAceptarMemoPresu"><i class="icon-ok"></i> Aceptar</button>
 
             </div>
         </div>
@@ -1065,8 +1067,8 @@
 
         <div class="span6">
             <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarAdjunto">Editar</button>
-                <button class="btn" id="btnAceptarAdjunto">Aceptar</button>
+                <button class="btn" id="btnEditarAdjunto"><i class="icon-pencil"></i> Editar</button>
+                <button class="btn" id="btnAceptarAdjunto"><i class="icon-ok"></i> Aceptar</button>
 
             </div>
         </div>
@@ -1318,7 +1320,7 @@
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
     <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
     <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-    <button class="btn aparecer" id="btnDocExcel" ><i class="icon-print"></i> Excel</button>
+    <button class="btn aparecer" id="btnDocExcel" ><i class="icon-list-alt"></i> Excel</button>
 
 </div>
 
@@ -2093,6 +2095,10 @@
 
                 }
 
+
+
+
+
                 if (tipoClick == null) {
 
                     $("#tipoReporteDialog").dialog("open");
@@ -2465,26 +2471,24 @@
     //
     //    });
 
-    $("#notaAdicional").click(function () {
-
-
-//        ////console.log("click")
-
-//        if ($("#notaAdicional").attr("checked") == "checked") {
+//    $("#notaAdicional").click(function () {
 //
-////            ////console.log("checked")
-//            $("#adicional").attr("disabled", false)
+//
+//        ////console.log("click")
+//
+//        if ($("#notaAdicional").attr("checked") == "checked") {
 //
 //        }
 //
 //        else {
 //
-////            ////console.log(" no checked")
-//            $("#adicional").attr("disabled", true)
-////            $("#adicional").val("");
 //        }
-
-    });
+//
+//
+//
+//
+//
+//    });
 
 
     $("#borrarFirmaPresuDialog").dialog({
