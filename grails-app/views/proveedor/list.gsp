@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <g:link controller="concurso" action="list" class="btn">
                     <i class="icon-caret-left"></i>
-                    Regresar
+                    Ir a Concurso
                 </g:link>
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
