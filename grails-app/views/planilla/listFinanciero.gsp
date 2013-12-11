@@ -78,6 +78,7 @@
                 <g:set var="prej" value="${janus.pac.PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])}"/>
                 <tbody class="paginate">
                     <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
+                        <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}" />
                         <tr style="font-size: 10px">
                             <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
                             <td>
@@ -177,6 +178,7 @@
                             %{--</a>--}%
                             </td>
                             <td style="text-align: center;">
+                    <g:if test="${periodosOk.size() > 0}">
                                 <g:set var="lblBtn" value="${-1}"/>
                                 <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
                                     <g:set var="lblBtn" value="${2}"/>
@@ -242,6 +244,12 @@
                                     </a>
 
                                 </g:if>
+                                </g:if>
+                                <g:else>
+                                    <div class="badge badge-important">
+                                        Existe un error en los valores de índice.<br/> Revise el resumen.
+                                    </div>
+                                </g:else>
                             </td>
                         </tr>
                     </g:each>

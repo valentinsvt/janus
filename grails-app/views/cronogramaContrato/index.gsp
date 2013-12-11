@@ -981,6 +981,7 @@
                                 }
                             }
                             dataAjax += "&cont=${contrato.id}";
+//                            console.log("-->>" + dataAjax)
                             $.ajax({
                                 type    : "POST",
                                 url     : "${createLink(action:'saveCrono_ajax')}",
@@ -1115,7 +1116,8 @@
                                             }
                                         }
                                     });
-
+                                    dataAjax += "&cont=${contrato.id}";
+//                                    console.log("-->>" + dataAjax)
                                     $.ajax({
                                         type    : "POST",
                                         url     : "${createLink(action:'saveCrono_ajax')}",

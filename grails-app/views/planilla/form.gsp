@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.ejecucion.TipoPlanilla; janus.ejecucion.Planilla" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
         <meta name="layout" content="main">
@@ -36,6 +36,10 @@
 
     <body>
 
+    <g:set var="planillaAnticipo" value="${Planilla.findByTipoPlanillaAndContrato(TipoPlanilla.findByCodigo('A'), contrato)}" />
+    <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaAnticipo)}" />
+
+    <g:if test="${tipos.find { it.codigo == 'A'} || periodosOk.size() > 1}">
         <div class="btn-toolbar" style="margin-bottom: 20px;">
             <div class="btn-group">
                 <g:link action="list" id="${contrato.id}" class="btn">
@@ -354,6 +358,19 @@
                 </p>
             </div>
         </g:else>
+
+    </g:if>
+    <g:else>
+        <div class="alert alert-danger">
+            <h3>Alerta: ha ocurrido un error</h3>
+            <p>
+                El contrato no posee los períodos necesarios para crear planillas. <br/>
+                Posiblemente al generar la planilla de anticipo no se encontraron valores de índice para algunos rubros.<br/>
+                Por favor revise y corrija esto para intentar nuevamente.<br/>
+            </p>
+            <g:link action="list" id="${contrato.id}" class="btn btn-danger">Regresar</g:link>
+        </div>
+    </g:else>
 
         <script type="text/javascript">
 

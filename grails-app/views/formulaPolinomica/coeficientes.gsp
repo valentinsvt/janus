@@ -335,7 +335,16 @@
 
                             var indiceNombre = $("#indice option:selected").text();
 
-                            var cantNombre = $("#tree").find("span:contains('" + indiceNombre + "')").length;
+                            var cantNombre = 0;
+
+                            var $spans =   $("#tree").find("span:contains('" + indiceNombre + "')");
+                            $spans.each(function() {
+                                var t= $.trim($(this).text());
+                                if(t == indiceNombre) {
+                                    cantNombre++;
+                                }
+                            });
+
 
                             if (indiceNombre == nodeText) {
                                 cantNombre = 0;

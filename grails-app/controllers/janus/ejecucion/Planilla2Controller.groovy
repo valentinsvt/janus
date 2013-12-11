@@ -1557,6 +1557,23 @@ class Planilla2Controller extends janus.seguridad.Shield {
         [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, tablaMlFs: tablaMlFs, liquidacion: liquidacion]
     }
 
+    def deletePeriodosPlanilla() {
+        println "delete periodos: "+params
+        def planilla = Planilla.get(params.id)
+        def periodos = PeriodoPlanilla.findAllByPlanilla(planilla, [sort: "id"])
+        def cont = 0
+        periodos.each {
+            try {
+                println "\tEliminando ${it.id}"
+                it.delete(flush: true)
+                cont++
+            } catch(e) {
+                println "error al eliminar: "+e.printStackTrace()
+            }
+        }
+        render "Eliminados ${cont} periodos"
+    }
+
     def anticipo() {
 
         def planilla = Planilla.get(params.id)
@@ -1566,7 +1583,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def fechaOferta = planilla.contrato.oferta.fechaEntrega - 30
 
         if (!planilla) {
-            flash.message = "No se encotró la planilla a generar"
+            flash.message = "No se encontró la planilla a generar"
             redirect(action: "errores")
             return
         }
@@ -1659,27 +1676,44 @@ class Planilla2Controller extends janus.seguridad.Shield {
             periodos = []
         }
 
+        def erroresPeriodos = false
 
+        perOferta = verificaIndices(pcs, perOferta, 0)
+        perAnticipo = verificaIndices(pcs, perAnticipo, 0)
 
-        if (periodos.size() == 0) {
+        if (periodos.size() == 0 && perOferta && perAnticipo) {
             println "creando periodos "
 //            pcs.each {c->
 //            println " per o " + perOferta + "  per a " + perAnticipo
-            perOferta = verificaIndices(pcs, perOferta, 0)
-            perAnticipo = verificaIndices(pcs, perAnticipo, 0)
 //            println " per o " + perOferta + "  per a " + perAnticipo
 
-            def p1 = new PeriodoPlanilla([planilla: planilla, periodo: perOferta, fechaIncio: fechaOferta, fechaFin: getLastDayOfMonth(fechaOferta), titulo: "OFERTA"])
-            if (!p1.save(flush: true)) {
-                println "p1 " + p1.errors
+            if(perOferta) {
+                def p1 = new PeriodoPlanilla([planilla: planilla, periodo: perOferta, fechaIncio: fechaOferta, fechaFin: getLastDayOfMonth(fechaOferta), titulo: "OFERTA"])
+                if (!p1.save(flush: true)) {
+                    println "p1 " + p1.errors
+                }
+                periodos.add(p1)
+            } else {
+                erroresPeriodos = true
             }
-            def p2 = new PeriodoPlanilla([planilla: planilla, periodo: perAnticipo, fechaIncio: fechaAnticipo, fechaFin: getLastDayOfMonth(fechaAnticipo), titulo: "ANTICIPO"])
-            if (!p2.save(flush: true)) {
-                println "p2 " + p2.errors
+            if(perAnticipo) {
+                def p2 = new PeriodoPlanilla([planilla: planilla, periodo: perAnticipo, fechaIncio: fechaAnticipo, fechaFin: getLastDayOfMonth(fechaAnticipo), titulo: "ANTICIPO"])
+                if (!p2.save(flush: true)) {
+                    println "p2 " + p2.errors
+                }
+                periodos.add(p2)
+            } else {
+                erroresPeriodos = true
             }
-            periodos.add(p1)
-            periodos.add(p2)
+        } else {
+            erroresPeriodos = true
+        }
 
+        if(erroresPeriodos) {
+            def link = g.link(controller: 'planilla', action: 'list', id: contrato.id, class: 'btn btn-danger') { "Regresar" }
+            flash.message = "<p><ul>"+flash.message+"</ul></p><p>"+link+"</p>"
+            redirect(action: "errores")
+            return
         }
 
 
@@ -1943,7 +1977,9 @@ class Planilla2Controller extends janus.seguridad.Shield {
     }
 
     def verificaIndices(pcs, per, i) {
-
+        if (!flash.message) {
+            flash.message = ""
+        }
 //        println "\t"+i+"   "+per
         def perNuevo = per
         if (per != null) {
