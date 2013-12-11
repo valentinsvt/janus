@@ -342,7 +342,6 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
     def buscarObra() {
-
         def extraParr = ""
         def extraCom = ""
         if (params.campos instanceof java.lang.String) {
@@ -409,7 +408,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
         def limite = TipoProcedimiento.findBySigla("MCD").techo
 
-        def extras = " and (valor<${limite}  or  liquidacion = 1) "
+        def extras = " and (valor<${limite}  or  liquidacion = 1) and estadoSif='R' "
         if (extraParr.size() > 1)
             extras += " and parroquia in (${extraParr})"
         if (extraCom.size() > 1)
