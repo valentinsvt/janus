@@ -504,9 +504,14 @@ class ObraController extends janus.seguridad.Shield {
             if (matriz > 0) {
                 matrizOk = true
             }
+            def concurso = janus.pac.Concurso.findByObra(obra)
+            if(concurso){
+             if(!concurso.fechaLimiteEntregaOfertas)
+                 concurso=null
 
+            }
 //            println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos,concurso:concurso]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento

@@ -137,7 +137,7 @@
                     </g:if>
                 </g:if>
 
-                <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR'}">
+                <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
                 %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">--}%
                     <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
                     </button>
