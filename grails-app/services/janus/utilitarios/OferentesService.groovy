@@ -79,33 +79,36 @@ class OferentesService {
             cn.eachRow(sql.toString()){r->
                 cnJ.execute("insert into sbpr values(${r['sbpr__id']},'${r['sbprdscr']}',${r['sbprtipo']},${r['grpo__id']})")
             }
-
+            println "vlob"
             sql="select vlob.*,item.itemjnid from vlob,item where item.item__id=vlob.item__id and obra__id=${oferentesId}"
             insert ="insert into vlob values (&)"
             cn.eachRow(sql.toString()){r->
+                println "r "+r
                 def ar = r.toRowResult()
                 ar.eachWithIndex(){c,i->
                     if(i==0){
                         campos+="default,"
                     }else{
-                        if(c.key=="obra__id")
-                            campos+=janusId
-                        else{
-                            if(c.key=="item__id"){
-                               ar.each{cm->
-                                   if(cm.key=="itemjnid")
-                                       campos+=cm.value
-                               }
+                        if(c.key!="itemjnid"){
+                            if(c.key=="obra__id")
+                                campos+=janusId
+                            else{
+                                if(c.key=="item__id"){
+                                    ar.each{cm->
+                                        if(cm.key=="itemjnid")
+                                            campos+=cm.value
+                                    }
+                                }
+                                else
+                                    campos+=c.value
                             }
-                            else
-                            campos+=c.value
                         }
-                        if(i<ar.size()-1){
+                        if(i<ar.size()-2){
                             campos+=","
                         }
                     }
                 }
-                //println "campos "+insert.replaceAll("&",campos).toString()
+                println "campos "+insert.replaceAll("&",campos).toString()
                 cnJ.execute(insert.replaceAll("&",campos).toString())
                 campos=""
             }
