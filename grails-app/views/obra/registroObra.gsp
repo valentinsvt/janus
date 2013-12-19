@@ -1829,6 +1829,7 @@
                                     oferente : oferente
                                 },
                                 success : function (msg) {
+//                                    console.log(msg)
                                     $("#dlgLoad").dialog("close");
                                     $("#copiarDialogOfe").dialog("close");
                                     var parts = msg.split('_');

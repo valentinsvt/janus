@@ -80,7 +80,7 @@ class OferentesService {
                 cnJ.execute("insert into sbpr values(${r['sbpr__id']},'${r['sbprdscr']}',${r['sbprtipo']},${r['grpo__id']})")
             }
 
-            sql="select * from vlob where obra__id=${oferentesId}"
+            sql="select vlob.*,item.itemjnid from vlob,item where item.item__id=vlob.item__id and obra__id=${oferentesId}"
             insert ="insert into vlob values (&)"
             cn.eachRow(sql.toString()){r->
                 def ar = r.toRowResult()
@@ -91,6 +91,13 @@ class OferentesService {
                         if(c.key=="obra__id")
                             campos+=janusId
                         else{
+                            if(c.key=="item__id"){
+                               ar.each{cm->
+                                   if(cm.key=="itemjnid")
+                                       campos+=cm.value
+                               }
+                            }
+                            else
                             campos+=c.value
                         }
                         if(i<ar.size()-1){
