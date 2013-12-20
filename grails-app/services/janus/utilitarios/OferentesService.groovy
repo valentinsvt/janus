@@ -79,11 +79,10 @@ class OferentesService {
             cn.eachRow(sql.toString()){r->
                 cnJ.execute("insert into sbpr values(${r['sbpr__id']},'${r['sbprdscr']}',${r['sbprtipo']},${r['grpo__id']})")
             }
-            println "vlob"
+
             sql="select vlob.*,item.itemjnid from vlob,item where item.item__id=vlob.item__id and obra__id=${oferentesId}"
             insert ="insert into vlob values (&)"
             cn.eachRow(sql.toString()){r->
-                println "r "+r
                 def ar = r.toRowResult()
                 ar.eachWithIndex(){c,i->
                     if(i==0){
@@ -108,10 +107,86 @@ class OferentesService {
                         }
                     }
                 }
-                println "campos "+insert.replaceAll("&",campos).toString()
+                //println "campos "+insert.replaceAll("&",campos).toString()
                 cnJ.execute(insert.replaceAll("&",campos).toString())
                 campos=""
             }
+
+            /*Copia de obit y obrb*/
+            println "obit y obrb ----------------------------------------------------------              ------------------"
+
+            sql="select o.*,i.itemjnid from obrb o,item i where o.rbrocdgo = i.item__id and o.obra__id=${oferentesId}"
+            insert ="insert into obrb values (&)"
+            cn.eachRow(sql.toString()){r->
+                //println "r "+r
+                def ar = r.toRowResult()
+                ar.eachWithIndex(){c,i->
+                    if(i==0){
+                        campos+="default,"
+                    }else{
+                        if(c.key!="itemjnid"){
+                            if(c.key=="obra__id")
+                                campos+=janusId
+                            else{
+                                if(c.key=="rbrocdgo"){
+                                    ar.each{cm->
+                                        if(cm.key=="itemjnid")
+                                            campos+=cm.value
+                                    }
+                                }
+                                else
+                                    campos+=c.value
+                            }
+                        }
+                        if(i<ar.size()-2){
+                            campos+=","
+                        }
+                    }
+                }
+                //println "insert obrb "+insert.replaceAll("&",campos).toString()
+                cnJ.execute(insert.replaceAll("&",campos).toString())
+                campos=""
+            }
+
+            //obit
+            //println "obit ---------------------- !!"
+            sql="select  o.*,i.itemjnid from obit o,item i where o.item__id = i.item__id and o.obra__id=${oferentesId}"
+            insert ="insert into obit values (&)"
+            cn.eachRow(sql.toString()){r->
+                //println "r "+r
+                def ar = r.toRowResult()
+                ar.eachWithIndex(){c,i->
+                    if(i==0){
+                        campos+="default,"
+                    }else{
+                        if(c.key!="itemjnid"){
+                            if(c.key=="obra__id")
+                                campos+=janusId
+                            else{
+                                if(c.key=="item__id"){
+                                    ar.each{cm->
+                                        if(cm.key=="itemjnid")
+                                            if(cm.value!="" && cm.value!=null)
+                                                campos+=cm.value
+                                            else
+                                                campos+=c.value
+                                    }
+                                }
+                                else
+                                    campos+=c.value
+                            }
+                        }
+                        if(i<ar.size()-2){
+                            campos+=","
+                        }
+                    }
+                }
+                //println "insert boit "+insert.replaceAll("&",campos).toString()
+                cnJ.execute(insert.replaceAll("&",campos).toString())
+                campos=""
+            }
+
+
             cn.execute("update obra set obraetdo='C' where obra__id=${oferentesId}".toString())
         }catch (e){
             error=true
@@ -157,7 +232,7 @@ class OferentesService {
         def validacion = sqlValidacion
         mapa.columns.eachWithIndex { c, i ->
 //            println "it " + c.key + " " + c.value.type + "  " + c.value.getColumn() + " " + c
-           // print " " + c.key + " " + c.value.getColumn() + " ====> "
+            // print " " + c.key + " " + c.value.getColumn() + " ====> "
 
             if (!personaCol || (personaCol && personaCol != c.value.getColumn())) {
                 campos += "" + c.value.getColumn()
@@ -169,7 +244,7 @@ class OferentesService {
                 }
                 valores += "" + campoASql(p, objeto)
                 if (i < mapa.columns.size() - 1) {
-                   // println "puso coma "+i
+                    // println "puso coma "+i
                     valores += ","
                 }
             }
@@ -188,7 +263,7 @@ class OferentesService {
         campos += ")"
         valores += ")"
 
-          println "\ncampos " + campos
+        println "\ncampos " + campos
 //        println "valores " + valores
         sql = sql.replace("%", tabla)
         sql = sql.replace("&", campos)
