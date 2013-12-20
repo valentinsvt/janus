@@ -38,7 +38,6 @@ class OferentesService {
         def cnJ=dbConnectionService.getConnection()
         def error=false
         try{
-
             def sql = "select * from vlobitem where obra__id=${oferentesId}"
             def insert ="insert into vlobitem values (&)"
             def campos=""
@@ -66,7 +65,7 @@ class OferentesService {
                 cnJ.execute(insert.replaceAll("&",campos).toString())
                 campos=""
             }
-
+            println "subs"
             def subs = SubPresupuesto.list()?.id
             sql = "select * from sbpr where sbpr__id not in ("
             subs.eachWithIndex { s, i ->
@@ -79,7 +78,7 @@ class OferentesService {
             cn.eachRow(sql.toString()){r->
                 cnJ.execute("insert into sbpr values(${r['sbpr__id']},'${r['sbprdscr']}',${r['sbprtipo']},${r['grpo__id']})")
             }
-
+            println "vlob"
             sql="select vlob.*,item.itemjnid from vlob,item where item.item__id=vlob.item__id and obra__id=${oferentesId}"
             insert ="insert into vlob values (&)"
             cn.eachRow(sql.toString()){r->
@@ -149,11 +148,11 @@ class OferentesService {
             }
 
             //obit
-            //println "obit ---------------------- !!"
+            println "obit ---------------------- !!"
             sql="select  o.*,i.itemjnid from obit o,item i where o.item__id = i.item__id and o.obra__id=${oferentesId}"
             insert ="insert into obit values (&)"
             cn.eachRow(sql.toString()){r->
-                //println "r "+r
+               //println "r "+r
                 def ar = r.toRowResult()
                 ar.eachWithIndex(){c,i->
                     if(i==0){
@@ -172,8 +171,19 @@ class OferentesService {
                                                 campos+=c.value
                                     }
                                 }
-                                else
-                                    campos+=c.value
+                                else{
+                                    try{
+                                        if(c.value!=null && c.value!="null"){
+                                            def v = c.value.toDouble()
+                                            campos+=v
+                                        }else{
+                                            campos+=c.value
+                                        }
+                                    }catch(e){
+                                        //println "es string "+c.value
+                                        campos+="'"+c.value+"'"
+                                    }
+                                }
                             }
                         }
                         if(i<ar.size()-2){
