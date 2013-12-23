@@ -29,6 +29,7 @@ class OferentesController extends janus.seguridad.Shield {
         copia.codigo=obra.codigo+"-OF"
         copia.estado="R"
         copia.save(flush: true)
+        oferentesService.copiaDatosObra(copia.id,ofId)
         //println "id "+copia.id
         if(oferentesService.copiaVolumen(copia.id,ofId))
             render "error"

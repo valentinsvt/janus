@@ -32,6 +32,36 @@ class OferentesService {
 
     }
 
+
+
+    def copiaDatosObra(jnId,ofId){
+        def cn  =dbConnectionService.getConnectionOferentes()
+        def cnJ=dbConnectionService.getConnection()
+        try{
+            def update ="update obra set & where obra__id=${jnId}"
+            def valores="indidrob=&,indimntn=&,indiadmn=&,indigrnt=&,indicsfn=&,indivhcl=&,indiprmo=&,inditmbr=&,inditotl=&,indiutil=&,indiimpr=&,indignrl=&,obraindi=&,indicntr=&,obratrnp=''"
+            def sql = "select indidrob,indimntn,indiadmn,indigrnt,indicsfn,indivhcl,indiprmo,inditmbr,inditotl,indiutil,indiimpr,indignrl,obraindi,indicntr  from obra where obra__id=${ofId}"
+           // println "sql "+sql
+            cn.eachRow(sql.toString()){r->
+                //println " r "+r
+                def ar = r.toRowResult()
+                ar.eachWithIndex(){c,i->
+                    valores=valores.replaceFirst("&",c.value.toString())
+                }
+            }
+            update=update.replace("&",valores)
+            //println "update "+update
+            cnJ.execute(update.toString())
+
+        }catch(e){
+            println "ERROR copia datos obra ${jnId}---${ofId}"+e
+        }
+        finally {
+            cn.close()
+            cnJ.close()
+        }
+    }
+
     def copiaVolumen(janusId,oferentesId){
 
         def cn  =dbConnectionService.getConnectionOferentes()

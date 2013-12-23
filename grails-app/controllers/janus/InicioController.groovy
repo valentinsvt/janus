@@ -9,7 +9,7 @@ import janus.seguridad.Prfl
 
 class InicioController extends janus.seguridad.Shield {
     def dbConnectionService
-
+    //def oferentesService
 
     def index() {
         def cn = dbConnectionService.getConnection()
@@ -21,7 +21,8 @@ class InicioController extends janus.seguridad.Shield {
             prms << d.accnnmbr
         }
         cn.close()
-        println prms
+        //println prms
+        //oferentesService.copiaDatosObra(1475,1491)
         return [prms: prms]
     }
 
