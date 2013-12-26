@@ -166,6 +166,9 @@
                 var chofer =
                 ${precioChof}
                 var clickImprimir = $(this).attr("id");
+
+                console.log("c" + clickImprimir)
+
                 var fechaSalida1 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
 
 

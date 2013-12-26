@@ -232,6 +232,9 @@ class VolumenObraController extends janus.seguridad.Shield {
             valores = preciosService.rbro_pcun_v4(obra.id, orden)
         }
 
+
+        println("-->>" + valores)
+
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
         def precios = [:]
