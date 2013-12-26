@@ -22,7 +22,7 @@ class OferentesController extends janus.seguridad.Shield {
         def ofId=params.obraOf
         def copia= new Obra()
         Obra.properties.declaredFields.each {
-           // println "campo--> "+it.getName()
+            // println "campo--> "+it.getName()
             copia.properties[it.getName()]=obra.properties[it.getName()]
         }
         copia.oferente=oferente
@@ -31,7 +31,14 @@ class OferentesController extends janus.seguridad.Shield {
         copia.save(flush: true)
         oferentesService.copiaDatosObra(copia.id,ofId)
         //println "id "+copia.id
-        if(oferentesService.copiaVolumen(copia.id,ofId))
+
+        def error = oferentesService.copiaVolumen(copia.id,ofId)
+        println "formula "
+        error= oferentesService.copiaFormula(copia.id,ofId)
+        println " crono "
+        error= oferentesService.copiaCrono(copia.id,ofId)
+
+        if(error)
             render "error"
         else
             render copia.id

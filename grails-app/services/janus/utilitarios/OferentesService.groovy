@@ -1,6 +1,7 @@
 package janus.utilitarios
 
 import janus.SubPresupuesto
+import janus.VolumenesObra
 import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsDomainBinder
 
 class OferentesService {
@@ -41,7 +42,7 @@ class OferentesService {
             def update ="update obra set & where obra__id=${jnId}"
             def valores="indidrob=&,indimntn=&,indiadmn=&,indigrnt=&,indicsfn=&,indivhcl=&,indiprmo=&,inditmbr=&,inditotl=&,indiutil=&,indiimpr=&,indignrl=&,obraindi=&,indicntr=&,obratrnp=''"
             def sql = "select indidrob,indimntn,indiadmn,indigrnt,indicsfn,indivhcl,indiprmo,inditmbr,inditotl,indiutil,indiimpr,indignrl,obraindi,indicntr  from obra where obra__id=${ofId}"
-           // println "sql "+sql
+            // println "sql "+sql
             cn.eachRow(sql.toString()){r->
                 //println " r "+r
                 def ar = r.toRowResult()
@@ -182,7 +183,7 @@ class OferentesService {
             sql="select  o.*,i.itemjnid from obit o,item i where o.item__id = i.item__id and o.obra__id=${oferentesId}"
             insert ="insert into obit values (&)"
             cn.eachRow(sql.toString()){r->
-               //println "r "+r
+                //println "r "+r
                 def ar = r.toRowResult()
                 ar.eachWithIndex(){c,i->
                     if(i==0){
@@ -228,6 +229,108 @@ class OferentesService {
 
 
             cn.execute("update obra set obraetdo='C' where obra__id=${oferentesId}".toString())
+        }catch (e){
+            error=true
+            println "ERROR "+e
+        }
+        finally {
+            cn.close()
+            cnJ.close()
+        }
+        return error
+    }
+
+
+    def copiaFormula(janusId,oferentesId){
+        def cn  =dbConnectionService.getConnectionOferentes()
+        def cnJ=dbConnectionService.getConnection()
+        def error=false
+        try{
+            def sql = "select * from fpob where obra__id=${oferentesId}"
+            def insert ="insert into fpob values (&)"
+            def campos=""
+            cn.eachRow(sql.toString()){r->
+                def ar = r.toRowResult()
+                ar.eachWithIndex(){c,i->
+                    if(i==0){
+                        campos+="default,"
+                    }else{
+                        if(c.key=="obra__id")
+                            campos+=janusId
+                        else{
+                            if(c.key=="fpobnmro")
+                                campos+="'"+c.value+"'"
+                            else
+                                campos+=c.value
+                        }
+                        if(i<ar.size()-1){
+                            campos+=","
+                        }
+                    }
+
+                }
+                //println "campos "+insert.replaceAll("&",campos).toString()
+                cnJ.execute(insert.replaceAll("&",campos).toString())
+                campos=""
+            }
+
+        }catch (e){
+            error=true
+            println "ERROR "+e
+        }
+        finally {
+            cn.close()
+            cnJ.close()
+        }
+        return error
+    }
+
+    def copiaCrono(janusId,oferentesId){
+        def cn  =dbConnectionService.getConnectionOferentes()
+        def cnJ=dbConnectionService.getConnection()
+        def error=false
+        def obra=janus.Obra.get(janusId)
+        def vols = VolumenesObra.findAllByObra(obra,[sort:"orden"])
+        try{
+            def sql = "select c.*,i.itemjnid from crno c , vlob v, item i where c.vlob__id=v.vlob__id and v.item__id=i.item__id and v.obra__id=${oferentesId}"
+            def insert ="insert into crno values (&)"
+            def campos=""
+            cn.eachRow(sql.toString()){r->
+                def ar = r.toRowResult()
+                //println "r -> "+r
+                ar.eachWithIndex(){c,i->
+                    if(i==0){
+                        campos+="default,"
+                    }else{
+                        if(c.key!="itemjnid"){
+                            if(c.key=="vlob__id"){
+                                def jnid
+                                ar.each{cm->
+                                    if(cm.key=="itemjnid")
+                                        jnid=cm.value?.toInteger()
+                                }
+                                //println "jnid --> "+jnid
+                                vols.each {v->
+                                    if(v.item.id.toInteger()==jnid){
+                                        campos+=v.id
+                                    }
+                                }
+
+                            }else{
+                                campos+=c.value
+                            }
+                            if(i<ar.size()-2){
+                                campos+=","
+                            }
+                        }
+                    }
+
+                }
+                //println "campos "+insert.replaceAll("&",campos).toString()
+                cnJ.execute(insert.replaceAll("&",campos).toString())
+                campos=""
+            }
+
         }catch (e){
             error=true
             println "ERROR "+e
