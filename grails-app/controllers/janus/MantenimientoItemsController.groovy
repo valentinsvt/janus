@@ -8,7 +8,7 @@ import java.text.DecimalFormat
 class MantenimientoItemsController extends Shield {
 
     def preciosService
-
+    def oferentesService
 
     def index() {
         redirect(action: "registro", params: params)
@@ -768,10 +768,14 @@ class MantenimientoItemsController extends Shield {
 
     def copiarOferentes() {
         def item = Item.get(params.id)
-
+        def res=null
+        res = oferentesService.exportDominio(janus.Item, "itemjnid", item, null, "ofrt__id",null, "ofrt__id","select * from item where itemcdgo='${item.codigo}'")
 
 //        render "NO_Ha ocurrido un error"
-        render "OK"
+        if(res)
+            render "OK"
+        else
+            render "NO_Ha ocurrido un error"
     }
 
     def saveIt_ajax() {
