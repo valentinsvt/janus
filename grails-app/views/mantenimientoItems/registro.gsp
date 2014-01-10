@@ -97,6 +97,20 @@
             </div>
         </div>
 
+        <div class="modal hide fade" id="modal-small">
+            <div class="modal-header" id="modalHeaderSmall">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+
+                <h3 id="modalTitleSmall"></h3>
+            </div>
+
+            <div class="modal-body" id="modalBodySmall">
+            </div>
+
+            <div class="modal-footer" id="modalFooterSmall">
+            </div>
+        </div>
+
         <script type="text/javascript">
 
             $.jGrowl.defaults.closerTemplate = '<div>[ cerrar todo ]</div>';
@@ -111,6 +125,7 @@
                 edit                     : "${resource(dir: 'images/tree', file: 'edit.png')}",
                 delete                   : "${resource(dir: 'images/tree', file: 'delete.gif')}",
                 info                     : "${resource(dir: 'images/tree', file: 'info.png')}",
+                copiar                   : "${resource(dir: 'images/tree', file: 'copiar.png')}",
 
                 %{--grupo_material : "${resource(dir: 'images/tree', file: 'grupo_material.png')}",--}%
                 grupo_material           : "${resource(dir: 'images/tree', file: 'carpeta2.png')}",
@@ -589,6 +604,33 @@
                                         $("#modalBody").html(msg);
                                         $("#modalFooter").html("").append(btnOk);
                                         $("#modal-tree").modal("show");
+                                    }
+                                });
+                            }
+                        };
+                        menuItems.copiar = {
+                            label            : "Copiar a oferentes",
+                            separator_before : false, // Insert a separator before the item
+                            separator_after  : false, // Insert a separator after the item
+                            icon             : icons.copiar,
+                            action           : function (obj) {
+                                $.ajax({
+                                    type    : "POST",
+                                    url     : "${createLink(action: 'copiarOferentes')}",
+                                    data    : {
+                                        id : nodeId
+                                    },
+                                    success : function (msg) {
+                                        var p = msg.split("_");
+                                        var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Aceptar</a>');
+                                        $("#modalTitleSmall").html("Información");
+                                        if (p[0] == "OK") {
+                                            $("#modalBodySmall").html("El item fue copiado a oferentes");
+                                        } else {
+                                            $("#modalBodySmall").html(p[1]);
+                                        }
+                                        $("#modalFooterSmall").html("").append(btnOk);
+                                        $("#modal-small").modal("show");
                                     }
                                 });
                             }
