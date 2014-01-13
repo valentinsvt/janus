@@ -154,6 +154,9 @@ class PreciosService {
     }
 
     def getPrecioRubroItemOrder(fecha, lugar, items, order, sort) {
+
+//        println(items)
+
         def cn = dbConnectionService.getConnection()
         def itemsId = items
         def res = []

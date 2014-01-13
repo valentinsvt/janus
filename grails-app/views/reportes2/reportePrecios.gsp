@@ -98,8 +98,10 @@
                 <div class="right strong">FECHA DE CONSULTA: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
             </div>
 
-            <table border="1">
-                <thead>
+
+            <g:if test="${precios.size() > 0 }">
+                <table border="1">
+                    <thead>
                     <tr>
                         <th>
                             CODIGO
@@ -128,8 +130,8 @@
                             </th>
                         </g:if>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     <g:each in="${precios}" var="precio" status="i">
                         <tr class="${i % 2 == 0 ? 'even' : 'odd'}">
                             <td>
@@ -168,8 +170,13 @@
                             </g:if>
                         </tr>
                     </g:each>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </g:if>
+            <g:else>
+                No se encontraron datos
+            </g:else>
+
         </div>
     </body>
 </html>

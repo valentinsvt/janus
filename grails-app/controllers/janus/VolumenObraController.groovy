@@ -233,7 +233,7 @@ class VolumenObraController extends janus.seguridad.Shield {
         }
 
 
-        println("-->>" + valores)
+//        println("-->>" + valores)
 
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 

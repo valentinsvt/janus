@@ -56,7 +56,7 @@
                     
                         <td>${fieldValue(bean: tipoMultaInstance, field: "descripcion")}</td>
                     
-                        <td>${fieldValue(bean: tipoMultaInstance, field: "porcentaje")}</td>
+                        <td><g:formatNumber number="${tipoMultaInstance.porcentaje}" maxFractionDigits="4" minFractionDigits="4"/> </td>
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${tipoMultaInstance.id}">

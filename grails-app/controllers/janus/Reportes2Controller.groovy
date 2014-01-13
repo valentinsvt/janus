@@ -962,11 +962,26 @@ class Reportes2Controller {
             items += it
         }
         def res = []
+
+
+//        items = []
+        def tmp
+
 //        println items
-        def tmp = preciosService.getPrecioRubroItemOrder(fecha, lugar, items, orden, "asc")
-        tmp.each {
-            res.add(PrecioRubrosItems.get(it))
+        if(items == [] || items == ''){
+
+            res = []
+
+        }else {
+
+            tmp = preciosService.getPrecioRubroItemOrder(fecha, lugar, items, orden, "asc")
+            tmp.each {
+                res.add(PrecioRubrosItems.get(it))
+            }
+
+
         }
+
 
         return [lugar: lugar, cols: params.col, precios: res, grupo: grupo]
     }

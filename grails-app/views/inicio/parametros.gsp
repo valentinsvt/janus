@@ -203,10 +203,10 @@
                     a cada tipo de planilla.
                 </div><br>
 
-                <div class="item" texto="tpml">
-                    <g:link controller="tipoMulta" action="list">Tipo de multa</g:link> que se puede
-                    aplicar a una planilla, distintos de a retraso en obra y presentación de la planilla
-                </div><br>
+                %{--<div class="item" texto="tpml">--}%
+                    %{--<g:link controller="tipoMulta" action="list">Tipo de multa</g:link> que se puede--}%
+                    %{--aplicar a una planilla, distintos de a retraso en obra y presentación de la planilla--}%
+                %{--</div><br>--}%
 
                 <div class="item" texto="tpin">
                     <g:link controller="tipoIndice" action="list">Tipo de Indice</g:link> según el INEC y Contraloría.
