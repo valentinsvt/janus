@@ -14,24 +14,24 @@
 
 
 .context-menu-list {
-    margin:0; 
+    margin:0;
     padding:5px;
-    
+
     min-width: 120px;
     max-width: 250px;
     display: inline-block;
     position: absolute;
     list-style-type: none;
-    
+
     border: 1px solid #DDD;
     background: #EEE;
-    
+
     -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
        -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         -ms-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
          -o-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-    
+
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px;
 }
@@ -105,6 +105,7 @@
 .context-menu-item.mn-icon-view { background-image: url(images/view.png); }
 .context-menu-item.mn-icon-ofrt { background-image: url(images/ofertas.png); }
 .context-menu-item.mn-icon-info { background-image: url(images/info.png); }
+.context-menu-item.mn-icon-copiar { background-image: url(images/copiar.png); }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }
@@ -124,7 +125,7 @@
 .context-menu-input > label > select {
     display: block;
     width: 100%;
-    
+
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
         -ms-box-sizing: border-box;
