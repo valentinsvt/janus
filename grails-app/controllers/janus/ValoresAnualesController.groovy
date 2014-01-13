@@ -70,10 +70,10 @@ class ValoresAnualesController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Valores Anuales " + valoresAnualesInstance.id
+            flash.message = "Se ha actualizado correctamente Valores Anuales " + valoresAnualesInstance.anio
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Valores Anuales " + valoresAnualesInstance.id
+            flash.message = "Se ha creado correctamente Valores Anuales " + valoresAnualesInstance.anio
         }
         redirect(action: 'list')
     } //save

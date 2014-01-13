@@ -8,7 +8,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Anio
+                    Año
                 </span>
             </div>
 
@@ -64,7 +64,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Factor Costo Repuestos Reparaciones
+                    Factor CRR
                 </span>
             </div>
 
@@ -78,7 +78,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Sueldo Basico Unificado
+                    Sueldo Básico Unificado
                 </span>
             </div>
 
@@ -92,7 +92,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Tasa Interes Anual
+                    Tasa Interés Anual
                 </span>
             </div>
 
@@ -102,6 +102,22 @@
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
+
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Seguro
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="seguro" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'seguro')}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
+
                 
     </g:form>
 

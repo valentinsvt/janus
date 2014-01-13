@@ -117,6 +117,11 @@
                 <div class="item" texto="var">
                     <g:link controller="inicio" action="variables">Valores de costos indirectos y transporte</g:link> valores por defecto que se usan en las obras.
                 </div><br>
+
+                <div class="item" texto="anua">
+                    <g:link controller="valoresAnuales" action="list">Valores Anuales</g:link>
+                </div><br>
+
             </div>
 
             <div id="cntr" class="ui-widget-content" style="height: 560px">
@@ -331,6 +336,11 @@
     <h3>Variables</h3><br>
     <p>Valores de parámetros de transporte y costos indirectos que se usan por defecto en las obras.</p>
 </div>
+<div id="anua" style="display:none">
+    <h3>Variables Anuales</h3><br>
+    <p>Valores de las variables anuales.</p>
+</div>
+
 
 <div id="tpcr" style="display:none">
     <h3>Tipo de contrato</h3><br>

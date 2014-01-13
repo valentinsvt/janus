@@ -26,8 +26,8 @@
         <div class="row">
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
-                    <i class="icon-file"></i>
-                    Crear  Valores Anuales
+                    <i class="icon-plus"></i>
+                     Crear Valores Anuales
                 </a>
             </div>
             <div class="span3" id="busqueda-ValoresAnuales"></div>
@@ -43,7 +43,7 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="anio" title="Anio" />
+                        <g:sortableColumn property="anio" title="Año" />
                     
                         <g:sortableColumn property="costoDiesel" title="Costo Diesel" />
                     
@@ -53,7 +53,12 @@
                     
                         <g:sortableColumn property="factorCostoRepuestosReparaciones" title="Factor Costo Repuestos Reparaciones" />
                     
-                        <g:sortableColumn property="sueldoBasicoUnificado" title="Sueldo Basico Unificado" />
+                        <g:sortableColumn property="sueldoBasicoUnificado" title="Sueldo Básico Unificado" />
+
+                        <g:sortableColumn property="tasaInteresAnual" title="Tasa de Interés Anual" />
+
+                        <g:sortableColumn property="seguro" title="Seguro" />
+
                     
                         <th width="150">Acciones</th>
                     </tr>
@@ -73,7 +78,12 @@
                         <td>${fieldValue(bean: valoresAnualesInstance, field: "factorCostoRepuestosReparaciones")}</td>
                     
                         <td>${fieldValue(bean: valoresAnualesInstance, field: "sueldoBasicoUnificado")}</td>
-                    
+
+                        <td>${fieldValue(bean: valoresAnualesInstance, field: "tasaInteresAnual")}</td>
+
+                        <td>${fieldValue(bean: valoresAnualesInstance, field: "seguro")}</td>
+
+
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${valoresAnualesInstance.id}">
                                 <i class="icon-zoom-in icon-large"></i>

@@ -9,7 +9,7 @@
         <div class="control-group">
             <div>
                 <span id="anio-label" class="control-label label label-inverse">
-                    Anio
+                    Año
                 </span>
             </div>
             <div class="controls">
@@ -77,7 +77,8 @@
         <div class="control-group">
             <div>
                 <span id="factorCostoRepuestosReparaciones-label" class="control-label label label-inverse">
-                    Factor Costo Repuestos Reparaciones
+                    %{--Factor Costo Repuestos Reparaciones--}%
+                    Factor CRR
                 </span>
             </div>
             <div class="controls">
@@ -94,7 +95,7 @@
         <div class="control-group">
             <div>
                 <span id="sueldoBasicoUnificado-label" class="control-label label label-inverse">
-                    Sueldo Basico Unificado
+                    Sueldo Básico Unificado
                 </span>
             </div>
             <div class="controls">
@@ -111,7 +112,7 @@
         <div class="control-group">
             <div>
                 <span id="tasaInteresAnual-label" class="control-label label label-inverse">
-                    Tasa Interes Anual
+                    Tasa Interés Anual
                 </span>
             </div>
             <div class="controls">
@@ -123,6 +124,26 @@
             </div>
         </div>
     </g:if>
+
+        <g:if test="${valoresAnualesInstance?.tasaInteresAnual}">
+            <div class="control-group">
+                <div>
+                    <span id="seguro-label" class="control-label label label-inverse">
+                        Seguro
+                    </span>
+                </div>
+                <div class="controls">
+
+                    <span aria-labelledby="tasaInteresAnual-label">
+                        <g:fieldValue bean="${valoresAnualesInstance}" field="seguro"/>
+                    </span>
+
+                </div>
+            </div>
+        </g:if>
+
+
+
     
     </form>
 </div>
