@@ -40,6 +40,20 @@ class DocumentoObraController extends janus.seguridad.Shield {
 
         def obra = Obra.get(params.id)
         def documentos = DocumentoObra.findAllByObra(obra)
+
+        def plano = documentos.findAll { it.nombre.toLowerCase().contains("plano") }
+        def justificativo = documentos.findAll { it.nombre.toLowerCase().contains("justificativo") }
+        def error = ""
+        if (plano.size() == 0)
+            error = "<li>No se ha registrado el documento 'Plano' en la biblioteca de la obra.</li>"
+        if (justificativo.size() == 0)
+            error += "<li>No se ha registrado el documento 'Justificativo de cantidad de obra' en la biblioteca de la obra.</li>"
+
+        if (error != "") {
+            flash.clase = "alert-error"
+            flash.message = "<ul>${error}</ul>"
+        }
+
         return [obra: obra, documentoObraInstanceList: documentos, params: params]
     } //list
 

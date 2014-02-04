@@ -74,7 +74,7 @@
                     <i class="icon icon-info-sign icon-2x pull-left"></i>
 
                     <p>
-                        El presupuesto supera el límite de menor cuantía según el dato actual registrado, por lo que la obra no requiere fórmula polinómica ni cuadrilla tipo
+                        El presupuesto supera el límite de menor cuantía según el dato actual registrado, por lo que no es obligatoria la elaboración de la fórmula polinómica ni cuadrilla tipo para esta obra.
                     </p>
                 </div>
             </div>

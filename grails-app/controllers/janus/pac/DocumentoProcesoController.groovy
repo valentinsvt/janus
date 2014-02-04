@@ -63,7 +63,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             def msg = ""
             if (planoContrato.size() == 0) {
                 if (plano.size() == 0) {
-                    error += "<li>No se ha registrado un documento 'Plano' en la biblioteca de la obra.</li>"
+                    error += "<li>No se ha registrado el documento 'Plano' en la biblioteca de la obra.</li>"
                 } else {
                     if (plano.size() > 1) {
                         error += "<li>Se han encontrado ${plano.size()} documentos de plano de la obra. Se ha copiado el primero encontrado.</li>"
@@ -86,7 +86,7 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
             }
             if (justificativoContrato.size() == 0) {
                 if (justificativo.size() == 0) {
-                    error += "<li>No se ha registrado un documento 'Justificativo de cantidad de obra' en la biblioteca de la obra.</li>"
+                    error += "<li>No se ha registrado el documento 'Justificativo de cantidad de obra' en la biblioteca de la obra.</li>"
                 } else {
                     if (justificativo.size() > 1) {
                         error += "<li>Se han encontrado ${justificativo.size()} documentos de justificativo de cantidad de la obra. Se ha copiado el primero encontrado.</li>"

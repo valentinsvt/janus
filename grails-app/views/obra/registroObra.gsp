@@ -156,7 +156,7 @@
             </g:if>
             <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
                 <g:if test="${!obra?.fechaInicio}">
-                    <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo S.I.F.
+                    <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
                     </button>
                 </g:if>
                 <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
