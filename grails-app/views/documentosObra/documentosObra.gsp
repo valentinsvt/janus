@@ -46,8 +46,6 @@
 </head>
 
 <body>
-
-
 <g:if test="${flash.message}">
     <div class="span6" style="float:right; width: 400px">
         <div class="alert ${flash.clase ?: 'alert-info'}" role="status" style="margin-bottom: 0px; margin-left: 15px;">
@@ -929,7 +927,7 @@
         <fieldset class="borde">
             <legend>Pie de Página</legend>
 
-            %{--<g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="saveDoc">--}%
+        %{--<g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="saveDoc">--}%
             <g:form class="memoGrabar" name="frm-textoFijoRet" controller="auxiliar" action="savePiePaginaTF">
 
                 <g:hiddenField name="id" value="${"1"}"/>
@@ -1319,7 +1317,7 @@
 
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
     <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
-    <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+    <a href="#" class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</a>
     <button class="btn aparecer" id="btnDocExcel" ><i class="icon-list-alt"></i> Excel</button>
 
 </div>
@@ -2034,8 +2032,6 @@
     });
 
 
-
-
     $("#btnImprimir").click(function () {
         if(!$(this).hasClass("disabled")) {
             reajusteMemo = $("#reajusteMemo").val()
@@ -2062,24 +2058,28 @@
 
 
 
-                firmasId = [];
-                firmasFijas = [];
+                firmasId = '';
+                firmasFijas = '';
                 firmaCoordinador = idFirmaCoor
 
-                $("#bodyFirmas_presupuesto").children("tr").each(function (i) {
-                    firmasId[i] = $(this).data("id")
-
-
-                });
+//                $("#bodyFirmas_presupuesto").children("tr").each(function (i) {
+//                    firmasId[i] = $(this).data("id")
+//
+//
+//                });
 
                 $("#firmasFijasPresu").children("tr").each(function (i) {
+                    if($(this).data("id")){
+                        if(firmasFijas != ''){
 
+                            firmasFijas +=','
+                        }
+                        firmasFijas += $(this).data("id")
 
-                    firmasFijas[i] = $(this).data("id")
+                    }
 
 
                 });
-
 //           console.log("1:" + firmasFijas)
 
                 notaValue = $("#piePaginaSel").val();
@@ -2105,16 +2105,43 @@
 
                 } else {
 
-//                    $("#reajustePresupuestoDialog").dialog("open")
-
                     proyeccion = $("#proyeccionReajuste").is(':checked');
                     reajusteIva = $("#reajusteIva").is(':checked');
                     reajusteMeses = $("#mesesReajuste").val();
 
                     var tipoReporte = tipoClick;
 
-                    location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
-                            + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador
+                    %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue--}%
+                    %{--+ "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador--}%
+
+                    $.ajax({
+
+                        type: "POST",
+                        url : "${createLink(controller: 'nota', action: 'saveNota')}",
+                        data: {
+                            piePaginaSel : $("#piePaginaSel").val(),
+                            obra         : ${obra?.id},
+                            descripcion  : $("#descripcion").val(),
+                            texto        : $("#texto").val(),
+                            adicional     : $("#adicional").val(),
+                            obraTipo     : "${obra?.claseObra?.tipo}"
+                        },
+                        success : function (msg)  {
+                            var part = msg.split('_')
+                            if(part[0] == 'ok'){
+                                $("#divOk").show(msg);
+
+                                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + part[1]
+                                        + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador
+
+
+                            }
+                        }
+
+
+                    });
+
+
                 }
 
             }
@@ -2202,7 +2229,6 @@
                     firmasFijasFormu="";
 
                 }
-
                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
 
             }
@@ -2253,6 +2279,8 @@
         }
 
 
+
+        return false;
     });
 
 
@@ -2471,24 +2499,24 @@
     //
     //    });
 
-//    $("#notaAdicional").click(function () {
-//
-//
-//        ////console.log("click")
-//
-//        if ($("#notaAdicional").attr("checked") == "checked") {
-//
-//        }
-//
-//        else {
-//
-//        }
-//
-//
-//
-//
-//
-//    });
+    //    $("#notaAdicional").click(function () {
+    //
+    //
+    //        ////console.log("click")
+    //
+    //        if ($("#notaAdicional").attr("checked") == "checked") {
+    //
+    //        }
+    //
+    //        else {
+    //
+    //        }
+    //
+    //
+    //
+    //
+    //
+    //    });
 
 
     $("#borrarFirmaPresuDialog").dialog({
@@ -2768,28 +2796,28 @@
 
         if(idNota == "-1"){
 
-         alert("No se puede eliminar!")
+            alert("No se puede eliminar!")
 
         }else {
 
-        $.ajax({
+            $.ajax({
 
-            type: "POST",
-            url: "${createLink(controller:'nota' ,action: 'delete')}",
-            data : {
-                id: idNota,
-                obra: ${obra?.id}
-            },
-            success: function (msg){
-                if(msg == "ok") {
-                    location.reload(true);
-                } else {
+                type: "POST",
+                url: "${createLink(controller:'nota' ,action: 'delete')}",
+                data : {
+                    id: idNota,
+                    obra: ${obra?.id}
+                },
+                success: function (msg){
+                    if(msg == "ok") {
+                        location.reload(true);
+                    } else {
 //                    $("#spanOk").html("Ha ocurrido un error al eliminar");
 //                    $("#divOk").show();
-                    location.reload(true);
+                        location.reload(true);
+                    }
                 }
-            }
-        })
+            })
 
         }
 

@@ -118,6 +118,20 @@
         </div>
 
 
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Inflación
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:field type="number" name="inflacion" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'inflacion')}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+
                 
     </g:form>
 

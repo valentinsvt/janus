@@ -2155,7 +2155,7 @@ class ReportesController {
 
         def meses = 0;
 
-        def firma
+        def firma=[]
 
         def firmas
 
@@ -2177,12 +2177,12 @@ class ReportesController {
 
 //        firma = params.firmasId.split(",")
 
-        if (params.firmasId.trim().size() > 0) {
-            firma = params.firmasId.split(",")
-            firma = firma.toList().unique()
-        } else {
-            firma = []
-        }
+//        if (params.firmasId?.trim().size() > 0) {
+//            firma = params.firmasId.split(",")
+//            firma = firma.toList().unique()
+//        } else {
+//            firma = []
+//        }
 
 //        cuenta = firma.size()
 
@@ -2567,6 +2567,8 @@ class ReportesController {
 //
 //            println(paux?.inflacion)
 //            println(totalPresupuesto)
+
+
 
             inflacion = paux.inflacion
             meses = params.meses
@@ -3311,13 +3313,18 @@ class ReportesController {
 
             if (params.proyeccionMemo == 'true' && cantidadMesesMemo >= '1' && params.reajusteIvaMemo == 'false') {
 
-                inflacion = paux?.inflacion
+                def anio = new Date().getYear()
+
+                inflacion = ValoresAnuales.findByAnio((anio+1900)).inflacion
+
+
+//                inflacion = paux?.inflacion
                 mesesMemo = params.reajusteMesesMemo
 
                 proyeccionTotalMemo = (totalBase.toDouble() * ((inflacion / 1200) * mesesMemo.toInteger()))
                 valorTotal = totalBase.toDouble() + proyeccionTotalMemo;
 
-                addCellTabla(tablaBaseMemo, new Paragraph("Proyección del Reajuste (" + "Período: " + g.formatNumber(number: mesesMemo, format: "##.##", locale: "ec") + " meses, " + "Inflación: " + g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec") + "%):", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("Proyección del Reajuste (" + "Período: " + g.formatNumber(number: mesesMemo, format: "##.##", locale: "ec") + " meses, " + "Inflación: " + g.formatNumber(number: inflacion, format: "####.##", locale: "ec") + "%):", times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
@@ -3343,7 +3350,12 @@ class ReportesController {
 
             if (params.proyeccionMemo == 'true' && cantidadMesesMemo >= '1' && params.reajusteIvaMemo == 'true') {
 
-                inflacion = paux?.inflacion
+                def anio = new Date().getYear()
+
+
+                inflacion = ValoresAnuales.findByAnio((anio+1900)).inflacion
+
+//                inflacion = paux?.inflacion
                 mesesMemo = params.reajusteMesesMemo
 
                 proyeccionTotalMemo = (totalBase.toDouble() * ((inflacion / 1200) * mesesMemo.toInteger()))
@@ -3355,7 +3367,7 @@ class ReportesController {
                 subTotalMemo = (totalBase.toDouble() + proyeccionTotalMemo)
 
 
-                addCellTabla(tablaBaseMemo, new Paragraph("Proyección del Reajuste (" + "Período: " + g.formatNumber(number: mesesMemo, format: "##.##", locale: "ec") + " meses, " + "Inflación: " + g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec") + "%):", times10bold), prmsHeaderHojaRight)
+                addCellTabla(tablaBaseMemo, new Paragraph("Proyección del Reajuste (" + "Período: " + g.formatNumber(number: mesesMemo, format: "##.##", locale: "ec") + " meses, " + "Inflación: " + g.formatNumber(number: inflacion, format: "####.##", locale: "ec") + "%):", times10bold), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: proyeccionTotalMemo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
                 addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 

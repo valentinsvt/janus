@@ -144,6 +144,25 @@
 
 
 
+        <g:if test="${valoresAnualesInstance?.inflacion}">
+            <div class="control-group">
+                <div>
+                    <span id="inflacion-label" class="control-label label label-inverse">
+                       Inflación
+                    </span>
+                </div>
+                <div class="controls">
+
+                    <span aria-labelledby="tasaInteresAnual-label">
+                        <g:fieldValue bean="${valoresAnualesInstance}" field="inflacion"/>
+                    </span>
+
+                </div>
+            </div>
+        </g:if>
+
+
+
     
     </form>
 </div>

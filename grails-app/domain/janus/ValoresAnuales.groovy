@@ -10,6 +10,7 @@ class ValoresAnuales {
     Double costoDiesel
     Double costoLubricante
     Double costoGrasa
+    double inflacion
 
     static mapping = {
         table 'vlan'
@@ -27,6 +28,7 @@ class ValoresAnuales {
             costoDiesel column: 'vlancsdi'
             costoLubricante column: 'vlancslb'
             costoGrasa column: 'vlancsgr'
+            inflacion column: 'vlaninfl'
         }
     }
     static constraints = {

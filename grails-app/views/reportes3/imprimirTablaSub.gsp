@@ -110,7 +110,8 @@
 
         th, td {
             font-size : 10px !important;
-        }
+            /*float: left;*/
+                   }
 
         .row-fluid {
             width  : 100%;
@@ -134,6 +135,12 @@
             float  : left;
             height : 100%;
         }
+
+            .fijo {
+
+                table-layout: fixed;
+
+            }
 
 
         </style>
@@ -210,28 +217,29 @@
             <g:if test="${subPre == -1}">
             <g:each in="${subPres}" var="sp" status="sub">
               <div style="font-size: 12px; font-weight: bold">${sp.descripcion}</div>
-            <table class="table table-bordered table-striped table-condensed table-hover">
+            <table class="table table-bordered table-striped table-condensed table-hover" style="width: 600px !important">
                 <thead >
-                    <tr >
-
+                    <tr>
                         <th colspan="7" class="theaderBot theaderup padTopBot">
-                        <th style="width: 20px;" %{--class="theaderBot theaderup padTopBot"--}%>
+
+                        <th style="width: 20px; text-align: center">
                             N°
                         </th>
-                        <th style="width: 80px;" %{--class="theaderBot theaderup padTopBot"--}%>
+                        <th style="width: 90px; text-align: center" >
                             Rubro
                         </th>
-                        <th style="width: 400px;" %{--class="theaderBot theaderup padTopBot"--}%>
+
+                        <th style="width: 210px;">
                             Descripción
                         </th>
-                        <th style="width: 45px; text-align: left" %{--class="col_unidad theaderBot theaderup padTopBot"--}%>
+                        <th style="width: 40px; text-align: right">
                             Unidad
                         </th>
-                        <th style="width: 80px;" %{--class="theaderBot theaderup padTopBot"--}%>
+                        <th style="width: 80px; text-align: right">
                             Cantidad
                         </th>
-                        <th class="col_precio %{--theaderBot theaderup padTopBot--}%" style="width:80px ; text-align: right">P. U.</th>
-                        <th class="col_total %{-- theaderBot theaderup padTopBot--}%" style="width:80px; text-align: right">C.Total</th>
+                        <th class="col_precio " style="width:80px ; text-align: right">P. U.</th>
+                        <th class="col_total " style="width:80px; text-align: right">C.Total</th>
                     </th>
                     </tr>
                 </thead>
@@ -241,25 +249,40 @@
                 <g:each in="${valores}" var="val" status="j">
                     <g:if test="${val.sbpr__id == sp.id}">
                     <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
-                       %{--<td style="width: 765px">--}%
+
+                        <td colspan="7">
                         <td style="width: 20px" class="orden">${val.vlobordn}</td>
-                        %{--<td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>--}%
-                        <td class="cdgo" style="width: 80px">${val.rbrocdgo.trim()}</td>
-                        <td class="nombre" style="width: 400px">${val.rbronmbr.trim()}</td>
-                        <td style="width: 45px;text-align: right" class="col_unidad">${val.unddcdgo.trim()}</td>
+
+                        <td class="cdgo" style="width: 90px; text-align: left">
+
+
+                        <g:if test="${val.rbrocdgo.size() > 15}">
+                            ${val.rbrocdgo.trim().substring(0,11)}  <br/>${val.rbrocdgo.trim().substring(12,val.rbrocdgo.size()-1)}
+                        </g:if>
+                        <g:else>
+                            ${val.rbrocdgo.trim()}
+                        </g:else>
+                       </td>
+
+                        %{--<td class="cdgo" style="width: 90px; text-align: left">${val.rbrocdgo.trim()}</td>--}%
+
+                        <td class="nombre" style="width: 210px !important">${val.rbronmbr.trim()}</td>
+                        <td style="width: 40px;text-align: right" class="col_unidad">${val.unddcdgo.trim()}</td>
                         <td style="text-align: right; width: 80px" class="cant">
                             <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                         </td>
                         <td class="col_precio" style="text-align: right; width: 80px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
                         <td class="col_total total" style="text-align: right; width: 80px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                        %{--</td>--}%
+                        </td>
+
+
                         <g:set var="total" value="${total.toDouble() + val.totl}"></g:set>
 
                        <g:hiddenField name="totales" value="${totales = val.totl}"/>
                         <g:hiddenField name="totalPrueba" value="${totalPrueba = total2+=totales}"/>
                         <g:hiddenField name="totalPresupuesto" value="${totalPresupuesto = total1 += totales}"/>
 
-                                            </tr>
+                    </tr>
                     </g:if>
                 </g:each>
 
@@ -348,5 +371,15 @@
 
             </g:else>
         </div>
+
+    <script type="text/javascript">
+
+       console.log(${valores.rbrocdgo});
+
+//        cadena = 'pedro@hotmail.com';
+//        cadena = cadena.split('@');
+//        document.write(cadena[0]+'<br/>@'+cadena[1]);
+    </script>
+
     </body>
 </html>

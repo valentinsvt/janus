@@ -249,6 +249,8 @@
             var datos = "?obra=${obra.id}Wsub=" + $("#subPres_desc").val()
             var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}" + datos
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+
+
         } else {
 
             alert("Escoja un subpresupuesto")

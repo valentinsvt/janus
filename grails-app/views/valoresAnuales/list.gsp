@@ -59,6 +59,8 @@
 
                         <g:sortableColumn property="seguro" title="Seguro" />
 
+                        <g:sortableColumn property="inflacion" title="Inflación"/>
+
                     
                         <th width="150">Acciones</th>
                     </tr>
@@ -82,6 +84,8 @@
                         <td>${fieldValue(bean: valoresAnualesInstance, field: "tasaInteresAnual")}</td>
 
                         <td>${fieldValue(bean: valoresAnualesInstance, field: "seguro")}</td>
+
+                        <td>${fieldValue(bean: valoresAnualesInstance, field: "inflacion")}</td>
 
 
                         <td>
