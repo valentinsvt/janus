@@ -79,7 +79,6 @@
 
                 $(".modulo").click(function () {
                     var datos = armar()
-                    //alert(datos)
                     $.ajax({
                         type    : "POST", url : "../ajaxPermisos",
                         data    : "ids=" + datos + "&prfl=" + $('#perfil').val() + "&tpac=" + tipo(),

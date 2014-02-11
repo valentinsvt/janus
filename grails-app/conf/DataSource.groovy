@@ -13,10 +13,10 @@ environments {
     development {
         dataSource {
             dbCreate = "update"
-//            url = "jdbc:postgresql://10.0.0.3:5432/janus"
-//            url = "jdbc:postgresql://10.0.0.2:5432/janus3"
-            url = "jdbc:postgresql://10.0.0.2:5432/janus4"
-//            url = "jdbc:postgresql://127.0.0.1:5432/consultoria"
+//            url = "jdbc:postgresql://10.0.0.3:5432/janus2"
+            url = "jdbc:postgresql://10.0.0.2:5432/janus"
+//            url = "jdbc:postgresql://10.0.0.3:5432/janus4"
+//            url = "jdbc:postgresql://127.0.0.1:5432/gadpp"
             username = "postgres"
             password = "postgres"
         }
@@ -27,7 +27,6 @@ environments {
             password = 'postgres'
 //            url = 'jdbc:postgresql://127.0.0.1:5432/oferentes'
             url = 'jdbc:postgresql://10.0.0.2:5432/oferentes'
-//            url = 'jdbc:postgresql://10.0.0.2:5432/ofer'
             dbCreate = 'update'
         }
     }
@@ -74,24 +73,5 @@ environments {
             dbCreate = 'update'
         }
     }
-
-    consultoria {
-        dataSource {
-            dbCreate = "update"
-            //url = "jdbc:postgresql://127.0.0.1:5432/janus"
-            url = "jdbc:postgresql://127.0.0.1:5432/consultoria"
-            username = "postgres"
-            password = "janus"
-        }
-        dataSource_oferentes {
-            dialect = org.hibernate.dialect.PostgreSQLDialect
-            driverClassName = 'org.postgresql.Driver'
-            url = "jdbc:postgresql://127.0.0.1:5432/oferentes"
-            username = "postgres"
-            password = "janus"
-            dbCreate = 'update'
-        }
-    }
-
 
 }
