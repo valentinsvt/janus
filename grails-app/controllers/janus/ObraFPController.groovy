@@ -269,6 +269,8 @@ class ObraFPController {
         formulaPolinomica(obra__id)                 /* cambio obra__id */
 //        println "fin matriz"
         render "ok"
+
+        acColumnasMo(obra__id)
     }
 
     def verificaMatriz(id) {
@@ -940,6 +942,7 @@ class ObraFPController {
         def cntd = 0.0
         ejecutaSQL("update mfcl set clmntipo = null where obra__id = ${id} and clmndscr like '%U'")
         tx_sql = "select codigo from mfrb where obra__id = ${id} and codigo not like 'sS%'"
+        //println tx_sql
         cn.eachRow(tx_sql.toString()) { row ->
             tx_cr = "select sum(valor) suma from mfvl v, mfcl c "
             tx_cr += "where c.obra__id = ${id} and c.obra__id = v.obra__id and codigo = '${row.codigo}' and c.clmncdgo = v.clmncdgo and clmntipo = 'O'"
@@ -981,6 +984,39 @@ class ObraFPController {
         cn1.close()
         actualizaS1(id, "TOTAL_T")
     }
+
+    /* actualiza en uniario MO el total de la suma de totales columnas para comprobación */
+    def acColumnasMo(id) {
+        def cn = dbConnectionService.getConnection()
+        def tx_sql = ""
+        def clmn = 0
+        def sumaS1 = 0.0
+        def sumaS2 = 0.0
+        tx_sql = "select sum(valor) total from mfcl c, mfvl v where c.clmncdgo = v.clmncdgo and " +
+                "c.obra__id = v.obra__id and c.obra__id = ${id} and clmndscr like '%_T' and " +
+                "codigo = 'sS1' and clmntipo in ('O')"
+        cn.eachRow(tx_sql.toString()) { row ->
+           sumaS1 = row.total
+        }
+        tx_sql = "select sum(valor) total from mfcl c, mfvl v where c.clmncdgo = v.clmncdgo and " +
+                "c.obra__id = v.obra__id and c.obra__id = ${id} and clmndscr like '%_T' and " +
+                "codigo = 'sS2' and clmntipo in ('O')"
+        cn.eachRow(tx_sql.toString()) { row ->
+           sumaS2 = row.total
+        }
+
+        tx_sql = "select clmncdgo from mfcl where obra__id = ${id} and clmndscr = '${id_manoDeObra}_U'"
+        cn.eachRow(tx_sql.toString()) { row ->
+            clmn = row.clmncdgo
+        }
+
+        ejecutaSQL("update mfvl set valor = ${sumaS1} where obra__id = ${id} and clmncdgo = '${clmn}' and codigo = 'sS1'")
+        ejecutaSQL("update mfvl set valor = ${sumaS2} where obra__id = ${id} and clmncdgo = '${clmn}' and codigo = 'sS2'")
+
+        cn.close()
+        actualizaS1(id, "TOTAL_T")
+    }
+
 
     def totalSx(id, columna, sx) {
         def cn = dbConnectionService.getConnection()

@@ -72,9 +72,10 @@
             <div class="row" style="margin-top: 10px;">
                 <div class="alert alert-warning" style="font-weight: bold; font-size: 13px;">
                     <i class="icon icon-info-sign icon-2x pull-left"></i>
-
                     <p>
-                        El presupuesto supera el límite de menor cuantía según el dato actual registrado, por lo que no es obligatoria la elaboración de la fórmula polinómica ni cuadrilla tipo para esta obra.
+                        El presupuesto supera el límite de menor cuantía según lo registrado,
+                        por lo que no es obligatoria la elaboración de la fórmula polinómica ni cuadrilla tipo
+                        para registrar esta obra.
                     </p>
                 </div>
             </div>
