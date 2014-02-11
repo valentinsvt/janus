@@ -121,9 +121,11 @@
 
             <div class="span6" style="margin-top: -10px">
 
+
+              <div id="div_sel">
                 <g:select name="piePaginaSel" from="${nota?.list()}" value="${nota?.id}" optionValue="descripcion"
                           optionKey="id" style="width: 300px;" noSelection="['-1':'Seleccione una nota...']" />
-
+              </div>
                 <div class="btn-group" style="margin-left: 310px; margin-top: -60px; margin-bottom: 10px">
                     <a class="btn" id="btnNuevo"><i class="icon-pencil"></i> Nuevo</a>
                     <a class="btn" id="btnCancelar"><i class="icon-eraser"></i> Cancelar</a>
@@ -2217,7 +2219,7 @@
 
                 });
 
-//            console.log("3:" + firmasFijasFormu)
+//            console.log("3:" + firmasIdFormu)
 
 
 
@@ -2449,25 +2451,70 @@
 
     $("#btnAceptar").click(function () {
 
-        $("#frm-nota").submit();
+//        $("#frm-nota").submit();
+
+
+
+        $.ajax({
+
+            type: "POST",
+            url : "${createLink(controller: 'nota', action: 'save')}",
+            data: {
+                piePaginaSel : $("#piePaginaSel").val(),
+                obra         : ${obra?.id},
+                descripcion  : $("#descripcion").val(),
+                texto        : $("#texto").val(),
+                adicional     : $("#adicional").val(),
+                obraTipo     : "${obra?.claseObra?.tipo}"
+            },
+            success : function (msg)  {
+//                var part = msg.split('_')
+
+
+                var part = msg
+                if(part == '1'){
+//                    $("#divOk").show(msg);
+
+//                    location.reload(true)
+
+                    alert("Nota actualizada correctamente")
+
+                }else if(part =='2'){
+
+                    alert("Nota creada correctamente")
+
+                    $.ajax({type: "POST", url: "${g.createLink(controller: 'documentosObra',action:'cargarPieSel')}",
+                        data: "id=" + $(this).attr("sub"),
+                        success: function (msg) {
+                            $("#div_sel").html(msg)
+                        }
+                    });
+
+
+                }
+            }
+
+
+        });
+
+
+
+
+
+
+
 
     });
 
     $("#btnNuevo").click(function () {
 
-//        $("#piePaginaSel").attr("disabled", true);
+        $("#piePaginaSel").val('-1')
 
-//        $("#descripcion").attr("disabled", false);
-//        $("#texto").attr("disabled", false);
-//
         $("#notaAdicional").attr("checked", true)
 
-//        $("#adicional").attr("disabled", false);
         $("#descripcion").val("");
         $("#texto").val("");
         $("#adicional").val("");
-
-//        $("#notaAdicional").attr("disabled", false)
 
     });
 

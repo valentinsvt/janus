@@ -9,6 +9,20 @@ class DocumentosObraController {
 
     def preciosService
 
+    def cargarPieSel (){
+
+        def nota = Nota.list()
+
+        def idFinal = Nota.list().last().id
+
+
+
+        return [nota: nota, idFinal: idFinal]
+
+
+    }
+
+
 
     def documentosObra () {
 

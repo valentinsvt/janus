@@ -3958,27 +3958,64 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
 
-            firmaFijaFormu.each { f ->
 
-                if(f != ''){
+            def arregloFirmas = []
 
-                    firmas = Persona.get(f)
 
-                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+            firmaFijaFormu.each {f->
 
-                }else {
-                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
 
-                }
+                firmas = Persona.get(f)
+
+                arregloFirmas += firmas
 
 
             }
 
+            println("fr" + arregloFirmas)
+
+
+//            firmaFijaFormu.eachWithIndex { g, f->
+//
+//
+//
+//                if(g != '' ){
+//
+//                    firmas = Persona.get(g)
+//
+//                    println("-->>" + firmas)
+//
+//                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
+//
+//                }else {
+//                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+//
+//                }
+//
+//
+//            }
+
                 firmas = Persona.get(firmaFijaFormu[0])
 
-                addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("REVISOR", times8bold), prmsHeaderHoja)
+
+
+              addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[2]?.titulo + " " + arregloFirmas[2]?.nombre + " " + arregloFirmas[2]?.apellido, times8bold), prmsHeaderHoja)
+              addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[0]?.titulo + " " + arregloFirmas[0]?.nombre + " " + arregloFirmas[0]?.apellido, times8bold), prmsHeaderHoja)
+              addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.titulo + " " + arregloFirmas[1]?.nombre + " " + arregloFirmas[1]?.apellido, times8bold), prmsHeaderHoja)
+
+//
+//                addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph("REVISOR", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+
+
             addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo, times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("REVISOR", times8bold), prmsHeaderHoja)
+
+
+
+
 //            }
 
             document.add(tablaFirmas);
