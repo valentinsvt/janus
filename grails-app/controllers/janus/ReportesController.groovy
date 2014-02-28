@@ -3550,45 +3550,27 @@ class ReportesController {
     }
 
 
-    def reporteDocumentosObraFormu() {
+    def reporteDocumentosObraFormu() {   /* fórmula polinómica */
 
 //        println("paramsf" + params)
 
         def auxiliar = Auxiliar.get(1)
-
 //        println(auxiliar)
-
         def auxiliarFijo = Auxiliar.get(1)
-
         def obra = Obra.get(params.id)
-
         def firma
-
         def firmas
-
         def firmaFijaFormu
-
         def cuenta = 0;
-
         def formula = FormulaPolinomica.findAllByObra(obra)
-
         def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%', [sort: 'numero'])
-
-
-
         def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%', [sort: 'numero'])
-//
 //        println("---->>>>>"+ps)
-
         def c
-
         def z = []
-
         def banderafp = 0
-
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor;
-
 
         if (params.firmasIdFormu.trim().size() > 0) {
             firma = params.firmasIdFormu.split(",")
@@ -3599,36 +3581,25 @@ class ReportesController {
         }
 
         if (params.firmasFijasFormu.trim().size() > 0) {
-
             firmaFijaFormu = params.firmasFijasFormu.split(",")
 //            firmaFijaFormu = firmaFijaFormu.toList().unique()
-
         } else {
-
             firmaFijaFormu = []
         }
-
-
 
         cuenta = firma.size() + firmaFijaFormu.size()
 
         def totalBase = params.totalPresupuesto
 
-
         if (obra?.formulaPolinomica == null) {
-
             obra?.formulaPolinomica = ""
-
         }
-
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja4 = [border: Color.WHITE, bordeTop: "1"]
 
-
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
         def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 2]
-
 
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
@@ -3647,8 +3618,6 @@ class ReportesController {
 
         def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight]
-
-
 
         def baos = new ByteArrayOutputStream()
         def name = "formulaPolinomica_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -3676,8 +3645,6 @@ class ReportesController {
         document.addCreator("Tedein SA")
         document.setMargins(40, 20, 20, 20)
 
-
-
         Paragraph headers = new Paragraph();
 
         headers.setAlignment(Element.ALIGN_CENTER);
@@ -3686,7 +3653,6 @@ class ReportesController {
         headers.add(new Paragraph("FÓRMULA POLINÓMICA", times12bold))
         headers.add(new Paragraph(obra?.formulaPolinomica, times12bold))
         document.add(headers);
-
 
         Paragraph txtIzq = new Paragraph();
         txtIzq.setAlignment(Element.ALIGN_CENTER);
@@ -3885,7 +3851,8 @@ class ReportesController {
 
 //                addCellTabla(tablaCuadrilla, new Paragraph(" ", times10normal), prmsHeaderHoja)
                 addCellTabla(tablaCuadrilla, new Paragraph(i?.numero, times10normal), prmsHeaderHoja)
-                addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
+//                addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
+                addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor, format: "##.##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times10normal), prmsHeaderHoja)
 
                 addCellTabla(tablaCuadrilla, new Paragraph(i?.indice?.descripcion, times10normal), prmsHeaderHoja)
 

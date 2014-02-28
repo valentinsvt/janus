@@ -2202,7 +2202,7 @@
 
             }
 
-            if (active == 2) {
+            if (active == 2) {     /* fórmula polinómica */
 
                 firmasIdFormu = [];
                 firmasFijasFormu = [];

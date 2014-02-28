@@ -29,46 +29,27 @@ class DocumentosObraController {
 //        println("params:" + params)
 
         def pr = janus.ReportesController
-
         def nota = new Nota();
-
         def auxiliar = new Auxiliar();
-
         def auxiliarFijo = Auxiliar.get(1);
-
         def usuario = session.usuario.id
-
         def persona = Persona.get(usuario)
-
-//        println(params)
-
         def obra = Obra.get(params.id)
-
 //        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra,'c%')
-
 //        println("cuadrilla:" + cuadrilla)
-
         def departamento = Departamento.get(obra?.departamento?.id)
-
 //        println("departamento: " + obra?.departamento?.id)
-
         def personas = Persona.list()
-
         def departamentos = Departamento.list()
-
        //totalPresupuesto
-
         def detalle
-
         detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-
 
         def precios = [:]
         def fecha = obra.fechaPreciosRubros
         def dsps = obra.distanciaPeso
         def dsvl = obra.distanciaVolumen
         def lugar = obra.lugar
-
 
         def prch = 0
         def prvl = 0
