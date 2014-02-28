@@ -223,7 +223,11 @@
             };
 
             function updateCoef($row) {
-                $("#spanCoef").text($.trim($row.attr("numero")) + ": " + $.trim($row.attr("nombre")));
+                var nombreOk = true;
+                if ($.trim($row.attr("nombre")) == "") {
+                    nombreOk = false;
+                }
+                $("#spanCoef").text($.trim($row.attr("numero")) + ": " + $.trim($row.attr("nombre"))).parent().data("nombreOk", nombreOk);
             }
             function updateTotal(val) {
                 $("#spanSuma").text("(" + number_format(val, 3, ".", ",") + ")").data("total", val);
@@ -337,14 +341,13 @@
 
                             var cantNombre = 0;
 
-                            var $spans =   $("#tree").find("span:contains('" + indiceNombre + "')");
-                            $spans.each(function() {
-                                var t= $.trim($(this).text());
-                                if(t == indiceNombre) {
+                            var $spans = $("#tree").find("span:contains('" + indiceNombre + "')");
+                            $spans.each(function () {
+                                var t = $.trim($(this).text());
+                                if (t == indiceNombre) {
                                     cantNombre++;
                                 }
                             });
-
 
                             if (indiceNombre == nodeText) {
                                 cantNombre = 0;
@@ -713,100 +716,118 @@
                 });
 
                 $("#btnAgregarItems").click(function () {
-                    var $btn = $(this);
-                    if (!$btn.hasClass("disabled")) {
-                        $btn.hide().after(spinner);
-                        var $target = $("a.selected").parent();
+                    if ($(this).data("nombreOk")) {
+                        var $btn = $(this);
+                        if (!$btn.hasClass("disabled")) {
+                            $btn.hide().after(spinner);
+                            var $target = $("a.selected").parent();
 
-                        var total = parseFloat($target.attr("valor"));
+                            var total = parseFloat($target.attr("valor"));
 
-                        var rows2add = [];
-                        var dataAdd = {
-                            formula : $target.attr("id"),
-                            items   : []
-                        };
+                            var rows2add = [];
+                            var dataAdd = {
+                                formula : $target.attr("id"),
+                                items   : []
+                            };
 
-                        var numero = $target.attr("numero");
-                        var msg = "";
+                            var numero = $target.attr("numero");
+                            var msg = "";
 
-                        $tabla.children("tbody").children("tr.selected").each(function () {
-                            var data = $(this).data();
-//                            console.log($.trim(numero.toLowerCase()), total, parseFloat(data.valor));
-//                            console.log($.trim(numero.toLowerCase()) == "px");
-//                            console.log(total + parseFloat(data.valor), total + parseFloat(data.valor) > 0.2);
-                            if ($.trim(numero.toLowerCase()) == "px" && total + parseFloat(data.valor) > 0.2) {
-                                msg += "<li>No se puede agregar " + data.nombre + " pues el valor de px no puede superar 0.20</li>";
-                            } else {
-                                rows2add.push({add : {attr : {item : data.item, numero : data.codigo, nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
-                                total += parseFloat(data.valor);
-                                dataAdd.items.push(data.item + "_" + data.valor);
-                            }
-                        });
-
-//                        console.log(dataAdd, msg);
-                        if (msg != "") {
-                            $("#divError").html("<ul>" + msg + "</ul>").show("pulsate", 2000, function () {
-                                setTimeout(function () {
-                                    $("#divError").hide("blind");
-                                }, 5000);
-                            });
-//                            $tabla.children("tbody").children("tr.selected").removeClass(".selected");
-//                            $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
-                            $btn.show();
-                            spinner.remove();
-                        } else {
-                            $.ajax({
-                                async   : false,
-                                type    : "POST",
-                                url     : "${createLink(action:'addItemFormula')}",
-                                data    : dataAdd,
-                                success : function (msg) {
-//                                ////console.log(msg);
-                                    var msgParts = msg.split("_");
-                                    if (msgParts[0] == "OK") {
-
-                                        var totalInit = parseFloat($("#spanTotal").data("valor"));
-
-                                        var insertados = {};
-                                        var inserted = msgParts[1].split(",");
-                                        for (var i = 0; i < inserted.length; i++) {
-                                            var j = inserted[i];
-                                            if (j != "") {
-                                                var p = j.split(":");
-                                                insertados[p[0]] = p[1];
-                                            }
-                                        }
-
-//                                    ////console.log("insertados", insertados);
-                                        for (i = 0; i < rows2add.length; i++) {
-                                            var it = rows2add[i];
-                                            var add = it.add;
-                                            var rem = it.remove;
-
-                                            add.attr.id = "it_" + insertados[add.attr.item];
-                                            totalInit += parseFloat(add.attr.valor);
-//                                        ////console.log(add.attr.item, add);
-
-                                            $tree.jstree("create_node", $target, "first", add);
-                                            if (!$target.hasClass("jstree-open")) {
-                                                $('#tree').jstree("open_node", $target);
-                                            }
-                                            rem.remove();
-                                        }
-                                        $("#spanTotal").text(number_format(totalInit, 3, ".", "")).data("valor", totalInit);
-                                    }
+                            $tabla.children("tbody").children("tr.selected").each(function () {
+                                var data = $(this).data();
+                                //                            console.log($.trim(numero.toLowerCase()), total, parseFloat(data.valor));
+                                //                            console.log($.trim(numero.toLowerCase()) == "px");
+                                //                            console.log(total + parseFloat(data.valor), total + parseFloat(data.valor) > 0.2);
+                                if ($.trim(numero.toLowerCase()) == "px" && total + parseFloat(data.valor) > 0.2) {
+                                    msg += "<li>No se puede agregar " + data.nombre + " pues el valor de px no puede superar 0.20</li>";
+                                } else {
+                                    rows2add.push({add : {attr : {item : data.item, numero : data.codigo, nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
+                                    total += parseFloat(data.valor);
+                                    dataAdd.items.push(data.item + "_" + data.valor);
                                 }
                             });
 
-                            $target.find("li").children("a, .jstree-grid-cell").unbind("hover").unbind("click");
-                            treeNodeEvents($target.find("li").children("a, .jstree-grid-cell"));
+                            //                        console.log(dataAdd, msg);
+                            if (msg != "") {
+                                $("#divError").html("<ul>" + msg + "</ul>").show("pulsate", 2000, function () {
+                                    setTimeout(function () {
+                                        $("#divError").hide("blind");
+                                    }, 5000);
+                                });
+                                //                            $tabla.children("tbody").children("tr.selected").removeClass(".selected");
+                                //                            $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
+                                $btn.show();
+                                spinner.remove();
+                            } else {
+                                $.ajax({
+                                    async   : false,
+                                    type    : "POST",
+                                    url     : "${createLink(action:'addItemFormula')}",
+                                    data    : dataAdd,
+                                    success : function (msg) {
+                                        //                                ////console.log(msg);
+                                        var msgParts = msg.split("_");
+                                        if (msgParts[0] == "OK") {
 
-                            $target.attr("valor", number_format(total, 3, ".", ",")).trigger("change_node.jstree");
-                            $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
-                            updateTotal(0);
-                            $btn.show();
-                            spinner.remove();
+                                            var totalInit = parseFloat($("#spanTotal").data("valor"));
+
+                                            var insertados = {};
+                                            var inserted = msgParts[1].split(",");
+                                            for (var i = 0; i < inserted.length; i++) {
+                                                var j = inserted[i];
+                                                if (j != "") {
+                                                    var p = j.split(":");
+                                                    insertados[p[0]] = p[1];
+                                                }
+                                            }
+
+                                            //                                    ////console.log("insertados", insertados);
+                                            for (i = 0; i < rows2add.length; i++) {
+                                                var it = rows2add[i];
+                                                var add = it.add;
+                                                var rem = it.remove;
+
+                                                add.attr.id = "it_" + insertados[add.attr.item];
+                                                totalInit += parseFloat(add.attr.valor);
+                                                //                                        ////console.log(add.attr.item, add);
+
+                                                $tree.jstree("create_node", $target, "first", add);
+                                                if (!$target.hasClass("jstree-open")) {
+                                                    $('#tree').jstree("open_node", $target);
+                                                }
+                                                rem.remove();
+                                            }
+                                            $("#spanTotal").text(number_format(totalInit, 3, ".", "")).data("valor", totalInit);
+                                        }
+                                    }
+                                });
+
+                                $target.find("li").children("a, .jstree-grid-cell").unbind("hover").unbind("click");
+                                treeNodeEvents($target.find("li").children("a, .jstree-grid-cell"));
+
+                                $target.attr("valor", number_format(total, 3, ".", ",")).trigger("change_node.jstree");
+                                $("#btnRemoveSelection, #btnAgregarItems").addClass("disabled");
+                                updateTotal(0);
+                                $btn.show();
+                                spinner.remove();
+                            }
                         }
+                    } else {
+                        $.box({
+                            imageClass : "box_info",
+                            title      : "Alerta",
+                            text       : "Por favor seleccione el nombre del índice antes de agregar ítems.",
+                            iconClose  : false,
+                            dialog     : {
+                                resizable     : false,
+                                draggable     : false,
+                                closeOnEscape : false,
+                                buttons       : {
+                                    "Aceptar" : function () {
+                                    }
+                                }
+                            }
+                        });
                     }
                     return false;
                 });
