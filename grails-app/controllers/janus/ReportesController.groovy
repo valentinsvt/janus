@@ -3852,7 +3852,7 @@ class ReportesController {
 //                addCellTabla(tablaCuadrilla, new Paragraph(" ", times10normal), prmsHeaderHoja)
                 addCellTabla(tablaCuadrilla, new Paragraph(i?.numero, times10normal), prmsHeaderHoja)
 //                addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor, format: "##.####", locale: "ec"), times10normal), prmsHeaderHoja)
-                addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor, format: "##.##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times10normal), prmsHeaderHoja)
+                addCellTabla(tablaCuadrilla, new Paragraph(g.formatNumber(number: i?.valor.toFloat(), format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times10normal), prmsHeaderHoja)
 
                 addCellTabla(tablaCuadrilla, new Paragraph(i?.indice?.descripcion, times10normal), prmsHeaderHoja)
 
