@@ -223,7 +223,6 @@ class Reportes5Controller {
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
         def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
 
-
         addCellTabla(tablaDatos, new Paragraph("Código", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("Nombre", fontTh), paramsHead)
         addCellTabla(tablaDatos, new Paragraph("Cantón-Parroquia-Comunidad", fontTh), paramsHead)
@@ -358,7 +357,6 @@ class Reportes5Controller {
         array.eachWithIndex { it, i ->
             ia[i] = it.toInteger()
         }
-
         return ia
     }
 
@@ -435,7 +433,6 @@ class Reportes5Controller {
             cell.setBorderWidthRight(0)
             cell.setBorderWidthBottom(0)
             cell.setPaddingTop(7);
-
         }
         if (params.bordeBot) {
             cell.setBorderWidthBottom(1)
@@ -447,79 +444,49 @@ class Reportes5Controller {
                 cell.setBorderWidthTop(0)
             }
         }
-
         table.addCell(cell);
     }
 
 
-    def reporteFormulaExcel () {
-
-
+    def reporteFormulaExcel() {
         def auxiliar = Auxiliar.get(1)
-
         def auxiliarFijo = Auxiliar.get(1)
-
         def obra = Obra.get(params.id)
-
         def firma
-
         def firmas
-
         def firmaFijaFormu
-
         def cuenta = 0;
-
         def formula = FormulaPolinomica.findAllByObra(obra)
-
         def ps = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'p%', [sort: 'numero'])
-
         def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra, 'c%', [sort: 'numero'])
-
         def c
-
         def z = []
-
         def banderafp = 0
-
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor;
-
 
         if (params.firmasIdFormu.trim().size() > 0) {
             firma = params.firmasIdFormu.split(",")
             firma = firma.toList().unique()
-
         } else {
             firma = []
         }
-
         if (params.firmasFijasFormu.trim().size() > 0) {
-
             firmaFijaFormu = params.firmasFijasFormu.split(",")
 //            firmaFijaFormu = firmaFijaFormu.toList().unique()
-
         } else {
-
             firmaFijaFormu = []
         }
-
-
 
         cuenta = firma.size() + firmaFijaFormu.size()
 
         def totalBase = params.totalPresupuesto
 
-
         if (obra?.formulaPolinomica == null) {
-
             obra?.formulaPolinomica = ""
-
         }
 
-
-    //excel
-
-
+        //excel
         WorkbookSettings workbookSettings = new WorkbookSettings()
         workbookSettings.locale = Locale.default
 
@@ -536,7 +503,6 @@ class Reportes5Controller {
         // fija el ancho de la columna
         // sheet.setColumnView(1,40)
 
-
 //        params.id = params.id.split(",")
 //        if (params.id.class == java.lang.String) {
 //            params.id = [params.id]
@@ -552,7 +518,6 @@ class Reportes5Controller {
         sheet.setColumnView(6, 25)
         sheet.setColumnView(7, 25)
 
-
         def label
         def number
         def nmro
@@ -564,12 +529,9 @@ class Reportes5Controller {
 
         label = new Label(1, 2, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
 
-
         label = new Label(1, 4, "FÓRMULA POLINÓMICA", times16format); sheet.addCell(label);
 
-
         label = new Label(1, 6, obra?.formulaPolinomica, times16format); sheet.addCell(label);
-
 
         label = new Label(1, 8, "De existir variaciones en los costos de los componentes de precios unitarios estipulados en el contrato para la contrucción de:", times16format);
         sheet.addCell(label);
@@ -580,20 +542,22 @@ class Reportes5Controller {
         label = new Label(2, 11, obra?.tipoObjetivo?.descripcion, times16format); sheet.addCell(label);
         label = new Label(1, 12, "Código Obra: ", times16format); sheet.addCell(label);
         label = new Label(2, 12, obra?.codigo, times16format); sheet.addCell(label);
-        label = new Label(1, 13, "Ubicación: ", times16format);sheet.addCell(label);
-        label = new Label(2, 13,  obra?.sitio, times16format);sheet.addCell(label);
-        label = new Label(1, 14, "Fecha: ", times16format);sheet.addCell(label);
-        label = new Label(2, 14,  printFecha(obra?.fechaOficioSalida), times16format);sheet.addCell(label);
-        label = new Label(1, 15, "Cantón: ", times16format);sheet.addCell(label);
-        label = new Label(2, 15, obra?.parroquia?.canton?.nombre, times16format);sheet.addCell(label);
-        label = new Label(1, 16, "Parroquia: ", times16format);sheet.addCell(label);
-        label = new Label(2, 16, obra?.parroquia?.nombre, times16format);sheet.addCell(label);
-        label = new Label(1, 17, "Coordenadas: ", times16format);sheet.addCell(label);
-        label = new Label(2, 17, obra?.coordenadas, times16format);sheet.addCell(label);
+        label = new Label(1, 13, "Ubicación: ", times16format); sheet.addCell(label);
+        label = new Label(2, 13, obra?.sitio, times16format); sheet.addCell(label);
+        label = new Label(1, 14, "Fecha: ", times16format); sheet.addCell(label);
+        label = new Label(2, 14, printFecha(obra?.fechaOficioSalida), times16format); sheet.addCell(label);
+        label = new Label(1, 15, "Cantón: ", times16format); sheet.addCell(label);
+        label = new Label(2, 15, obra?.parroquia?.canton?.nombre, times16format); sheet.addCell(label);
+        label = new Label(1, 16, "Parroquia: ", times16format); sheet.addCell(label);
+        label = new Label(2, 16, obra?.parroquia?.nombre, times16format); sheet.addCell(label);
+        label = new Label(1, 17, "Coordenadas: ", times16format); sheet.addCell(label);
+        label = new Label(2, 17, obra?.coordenadas, times16format); sheet.addCell(label);
 
-        label = new Label(1, 19, "Los costos se reajustarán para efecto de pago, mediante la fórmula general: ", times16format);sheet.addCell(label);
+        label = new Label(1, 19, "Los costos se reajustarán para efecto de pago, mediante la fórmula general: ", times16format);
+        sheet.addCell(label);
 
-        label = new Label(1, 21, "Pr = Po (p01B1/Bo + p02C1/Co + p03D1/Do + p04E1/Eo + p05F1/Fo + p06G1/Go + p07H1/Ho + p08I1/Io + p09J1/Jo + p10K1/Ko + pxX1/Xo) ", times16format);sheet.addCell(label);
+        label = new Label(1, 21, "Pr = Po (p01B1/Bo + p02C1/Co + p03D1/Do + p04E1/Eo + p05F1/Fo + p06G1/Go + p07H1/Ho + p08I1/Io + p09J1/Jo + p10K1/Ko + pxX1/Xo) ", times16format);
+        sheet.addCell(label);
 
         def textoFormula = "Pr=Po(";
         def txInicio = "Pr = Po (";
@@ -625,7 +589,6 @@ class Reportes5Controller {
                     valores[3] = j
                 }
                 if (j.numero == 'p05') {
-
                     tx[4] = g.formatNumber(number: j.valor, maxFractionDigits: 3, minFractionDigits: 3) + "F1/Fo"
                     valores[4] = j
                 }
@@ -634,21 +597,17 @@ class Reportes5Controller {
                     valores[5] = j
                 }
                 if (j.numero == 'p07') {
-
-                    def p07valores =
-                        tx[6] = g.formatNumber(number: j.valor, maxFractionDigits: 3, minFractionDigits: 3) + "H1/Ho"
+//                    def p07valores =
+                    tx[6] = g.formatNumber(number: j.valor, maxFractionDigits: 3, minFractionDigits: 3) + "H1/Ho"
                     valores[6] = j
                 }
                 if (j.numero == 'p08') {
-
                     tx[7] = g.formatNumber(number: j.valor, maxFractionDigits: 3, minFractionDigits: 3) + "I1/Io"
                     valores[7] = j
                 }
                 if (j.numero == 'p09') {
-
                     tx[8] = g.formatNumber(number: j.valor, maxFractionDigits: 3, minFractionDigits: 3) + "J1/Jo"
                     valores[8] = j
-
                 }
                 if (j.numero == 'p10') {
 
@@ -659,9 +618,7 @@ class Reportes5Controller {
                     tx[10] = g.formatNumber(number: j.valor, maxFractionDigits: 3, minFractionDigits: 3) + "X1/Xo"
                     valores[10] = j
                 }
-
             }
-
         }
 
         def formulaStr = txInicio
@@ -671,97 +628,94 @@ class Reportes5Controller {
                 if (k < tx.size() - 1)
                     formulaStr += " + "
             }
-
         }
         formulaStr += txFin
-        label = new Label(1, 23, formulaStr, times16format);sheet.addCell(label);
-        label = new Label(1, 24, " ", times16format);sheet.addCell(label);
+        label = new Label(1, 23, formulaStr, times16format); sheet.addCell(label);
+        label = new Label(1, 24, " ", times16format); sheet.addCell(label);
 
         def valorTotal = 0
         def salto = 1
 
-        valores.eachWithIndex { i,j ->
+        valores.eachWithIndex { i, j ->
 
             if (i) {
-               if (i.valor != 0.0 || i.valor != 0) {
+                if (i.valor != 0.0 || i.valor != 0) {
 
-                    label = new Label(1, 24+salto, i.numero + "= " + g.formatNumber(number: i.valor, format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec") +
-                            "    Coeficiente del Componente    " + i?.indice?.descripcion.toUpperCase() , times16format);sheet.addCell(label);
+                    label = new Label(1, 24 + salto, i.numero + "= " + g.formatNumber(number: i.valor, format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec") +
+                            "    Coeficiente del Componente    " + i?.indice?.descripcion.toUpperCase(), times16format);
+                    sheet.addCell(label);
                     valorTotal = i.valor + valorTotal
                     salto++
                 }
             }
         }
 
-        def salto2 = 24+salto
+        def salto2 = 24 + salto
 
-        label = new Label(1, salto2, "___________________", times16format);sheet.addCell(label);
-        label = new Label(1, salto2+1, "SUMAN : " + g.formatNumber(number: valorTotal, format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times16format);sheet.addCell(label);
+        label = new Label(1, salto2, "___________________", times16format); sheet.addCell(label);
+        label = new Label(1, salto2 + 1, "SUMAN : " + g.formatNumber(number: valorTotal, format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times16format);
+        sheet.addCell(label);
 
-        label = new Label(1, salto2+3, "CUADRILLA TIPO", times16format);sheet.addCell(label);
-        label = new Label(2, salto2+3, "CLASE OBRERO", times16format);sheet.addCell(label);
+        label = new Label(1, salto2 + 3, "CUADRILLA TIPO", times16format); sheet.addCell(label);
+        label = new Label(2, salto2 + 3, "CLASE OBRERO", times16format); sheet.addCell(label);
 
         def valorTotalCuadrilla = 0;
-        def salto3 = salto2+5
+        def salto3 = salto2 + 5
 
-        cuadrilla.eachWithIndex { i, s->
+        cuadrilla.eachWithIndex { i, s ->
 
 
             if (i.valor != 0.0 || i.valor != 0) {
-                label = new Label(1, salto3, i?.numero + "  " + g.formatNumber(number: i?.valor, format: "##.####", locale: "ec"), times16format);sheet.addCell(label);
-                label = new Label(2, salto3, i?.indice?.descripcion, times16format);sheet.addCell(label);
+                label = new Label(1, salto3, i?.numero + "  " + g.formatNumber(number: i?.valor, format: "##.####", locale: "ec"), times16format);
+                sheet.addCell(label);
+                label = new Label(2, salto3, i?.indice?.descripcion, times16format); sheet.addCell(label);
                 valorTotalCuadrilla = i.valor + valorTotalCuadrilla
                 salto3++
             } else {
             }
-
         }
 
-        label = new Label(1, salto3+1, "___________________", times16format);sheet.addCell(label);
-        label = new Label(1, salto3+2, "SUMAN : " + g.formatNumber(number: valorTotalCuadrilla, format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times16format);sheet.addCell(label);
+        label = new Label(1, salto3 + 1, "___________________", times16format); sheet.addCell(label);
+        label = new Label(1, salto3 + 2, "SUMAN : " + g.formatNumber(number: valorTotalCuadrilla, format: "##,##0", minFractionDigits: 3, maxFractionDigits: 3, locale: "ec"), times16format);
+        sheet.addCell(label);
 
-        label = new Label(1, salto3+4, auxiliarFijo?.notaFormula, times16format);sheet.addCell(label);
+        label = new Label(1, salto3 + 4, auxiliarFijo?.notaFormula, times16format); sheet.addCell(label);
 
-        label = new Label(1, salto3+6, "Fecha de actualización", times16format);sheet.addCell(label);
-        label = new Label(2, salto3+6, printFecha(obra?.fechaPreciosRubros), times16format);sheet.addCell(label);
-        label = new Label(3, salto3+6, "Monto del Contrato", times16format);sheet.addCell(label);
-        label = new Label(4, salto3+6, "\$" + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times16format);sheet.addCell(label);
+        label = new Label(1, salto3 + 6, "Fecha de actualización", times16format); sheet.addCell(label);
+        label = new Label(2, salto3 + 6, printFecha(obra?.fechaPreciosRubros), times16format); sheet.addCell(label);
+        label = new Label(3, salto3 + 6, "Monto del Contrato", times16format); sheet.addCell(label);
+        label = new Label(4, salto3 + 6, "\$" + g.formatNumber(number: totalBase, minFractionDigits: 2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times16format);
+        sheet.addCell(label);
 
-        label = new Label(1, salto3+8, "Atentamente,  ", times16format);sheet.addCell(label);
-
-
+        label = new Label(1, salto3 + 8, "Atentamente,  ", times16format); sheet.addCell(label);
 
         if (cuenta == 3) {
+            label = new Label(1, salto3 + 13, "______________________________________", times16format);
+            sheet.addCell(label);
+            label = new Label(2, salto3 + 13, "______________________________________", times16format);
+            sheet.addCell(label);
+            label = new Label(3, salto3 + 13, "______________________________________", times16format);
+            sheet.addCell(label);
+            def salto4 = salto3 + 13
 
-            label = new Label(1, salto3+13, "______________________________________", times16format);sheet.addCell(label);
-            label = new Label(2, salto3+13, "______________________________________", times16format);sheet.addCell(label);
-            label = new Label(3, salto3+13, "______________________________________", times16format);sheet.addCell(label);
-            def salto4 = salto3+13
+            firmaFijaFormu.eachWithIndex { f, h ->
 
-            firmaFijaFormu.eachWithIndex { f,h ->
-
-                if(f != ''){
+                if (f != '') {
 
                     firmas = Persona.get(f)
 
-                    label = new Label(h+1, salto4+1,firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido , times16format);sheet.addCell(label);
-                }else {
-                    label = new Label(h+1, salto4+1, "Sin asignar,  ", times16format);sheet.addCell(label);
-
-
+                    label = new Label(h + 1, salto4 + 1, firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times16format);
+                    sheet.addCell(label);
+                } else {
+                    label = new Label(h + 1, salto4 + 1, "Sin asignar,  ", times16format); sheet.addCell(label);
                 }
-
-
             }
 
             firmas = Persona.get(firmaFijaFormu[0])
-            label = new Label(1, salto4+2,firmas?.cargo , times16format);sheet.addCell(label);
-            label = new Label(2, salto4+2,"REVISOR", times16format);sheet.addCell(label);
-            label = new Label(3, salto4+2,"ELABORÓ" , times16format);sheet.addCell(label);
-
+            label = new Label(1, salto4 + 2, firmas?.cargo, times16format); sheet.addCell(label);
+            label = new Label(2, salto4 + 2, "REVISOR", times16format); sheet.addCell(label);
+            label = new Label(3, salto4 + 2, "ELABORÓ", times16format); sheet.addCell(label);
         }
-
-
 
         workbook.write();
         workbook.close();
@@ -770,12 +724,100 @@ class Reportes5Controller {
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
-
-
-
-
-
     }
 
+    def imprimirCoeficientes() {
+
+        def obra = Obra.get(params.id)
+
+        def baos = new ByteArrayOutputStream()
+        def name = "coeficientes_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+//            println "name "+name
+        Font titleFont = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font titleFont3 = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font titleFont2 = new Font(Font.TIMES_ROMAN, 16, Font.BOLD);
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+
+        Font fontTh = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font fontTd = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL);
+
+        Document document
+        document = new Document(PageSize.A4);
+        def pdfw = PdfWriter.getInstance(document, baos);
+
+        HeaderFooter footer1 = new HeaderFooter(new Phrase(" ", times8normal), true);
+        // true aqui pone numero de pagina
+        footer1.setBorder(Rectangle.NO_BORDER);
+//        footer1.setBorder(Rectangle.TOP);
+        footer1.setAlignment(Element.ALIGN_CENTER);
+
+        document.setFooter(footer1);
+
+        document.open();
+        document.addTitle("Coeficientes " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("reporte, janus,coeficientes");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+//        println titulo
+        Paragraph headersTitulo = new Paragraph();
+        addEmptyLine(headersTitulo, 1)
+        headersTitulo.setAlignment(Element.ALIGN_CENTER);
+        headersTitulo.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", titleFont2));
+        addEmptyLine(headersTitulo, 1);
+        headersTitulo.add(new Paragraph("COEFICIENTES DE LA FÓRMULA POLINÓMICA DE LA OBRA ${obra.nombre}", titleFont));
+//        headersTitulo.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy").toUpperCase(), titleFont3));
+        addEmptyLine(headersTitulo, 1);
+        addEmptyLine(headersTitulo, 1);
+
+        document.add(headersTitulo)
+
+        def sql = "SELECT DISTINCT\n" +
+//                "  v.voit__id id,\n" +
+//                "  i.item__id iid,\n" +
+                "  i.itemcdgo codigo,\n" +
+                "  i.itemnmbr item,\n" +
+                "  v.voitcoef aporte,\n" +
+                "  v.voitpcun precio,\n" +
+                "  g.grpodscr grupo\n" +
+                "FROM vlobitem v\n" +
+                "  INNER JOIN item i ON v.item__id = i.item__id\n" +
+                "  INNER JOIN grpo g ON v.voitgrpo = g.grpo__id\n" +
+                "WHERE v.obra__id = ${params.id}\n" +
+                "      AND voitgrpo IN (1, 2)\n" + //cambiar aqui si hay que filtrar solo mano de obra o no: 1:formula polinomica, 2:mano de obra
+                "ORDER BY g.grpodscr, i.itemnmbr;"
+
+        def tablaDatos = new PdfPTable(3);
+        tablaDatos.setWidthPercentage(100);
+        tablaDatos.setWidths(arregloEnteros([15, 77, 8]))
+
+        addCellTabla(tablaDatos, new Paragraph("Item", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatos, new Paragraph("Descripción", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatos, new Paragraph("Aporte", fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+
+        def grupo = "null"
+
+        def cn = dbConnectionService.getConnection()
+        cn.eachRow(sql.toString()) { row ->
+            if (row.grupo != grupo) {
+                grupo = row.grupo
+                addCellTabla(tablaDatos, new Paragraph(row.grupo, fontTh), [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: 3])
+            }
+            addCellTabla(tablaDatos, new Paragraph(row.codigo, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDatos, new Paragraph(row.item, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaDatos, new Paragraph(numero(row.aporte, 5), fontTd), [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+        }
+
+        document.add(tablaDatos)
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
 
 }

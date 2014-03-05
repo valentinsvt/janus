@@ -187,11 +187,12 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
             def json = new JsonBuilder(data)
 //            println json.toPrettyString()
             def sql = "SELECT distinct\n" +
-//                    "  v.voit__id                            id,\n" +
-                    "  i.item__id                            iid,\n" +
-                    "  i.itemcdgo                            codigo,\n" +
-                    "  i.itemnmbr                            item,\n" +
-                    "  v.voitcoef                            aporte\n" +
+//                    "  v.voit__id      id,\n" +
+                    "  i.item__id        iid,\n" +
+                    "  i.itemcdgo        codigo,\n" +
+                    "  i.itemnmbr        item,\n" +
+                    "  v.voitpcun        precio,\n" +
+                    "  v.voitcoef        aporte\n" +
                     "FROM vlobitem v\n" +
                     "  INNER JOIN item i ON v.item__id = i.item__id\n" +
                     "WHERE v.obra__id = ${obra.id} AND voitgrpo IN (${params.filtro})\n and v.item__id NOT IN (SELECT\n" +

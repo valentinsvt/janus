@@ -128,6 +128,10 @@
                 <i class="icon-trash"></i>
                 Borrar la Fórmula Polinomica
             </a>
+            <g:link controller="reportes5" action="imprimirCoeficientes" id="${obra?.id}" class="btn btnImprimir" title="Imprimir la Fórmula Polinómica" style="margin-top: -10px;">
+                <i class="icon-print"></i>
+                Imprimir coeficientes
+            </g:link>
         </div>
 
         <div class="row">
@@ -171,6 +175,7 @@
                                 <tr>
                                     <th>Item</th>
                                     <th>Descripción</th>
+                                    ${tipo == 'c' ? '<th>Precio unitario</th>':''}
                                     <th>Aporte</th>
                                 </tr>
                             </thead>
@@ -183,6 +188,11 @@
                                         <td>
                                             ${r.item}
                                         </td>
+                                        <g:if test="${tipo == 'c'}">
+                                            <td class="numero">
+                                                <g:formatNumber number="${r.precio ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>
+                                            </td>
+                                        </g:if>
                                         <td class="numero">
                                             <g:formatNumber number="${r.aporte ?: 0}" maxFractionDigits="5" minFractionDigits="5" locale='ec'/>
                                         </td>
@@ -716,9 +726,9 @@
                 });
 
                 $("#btnAgregarItems").click(function () {
-                    if ($(this).data("nombreOk")) {
-                        var $btn = $(this);
-                        if (!$btn.hasClass("disabled")) {
+                    var $btn = $(this);
+                    if (!$btn.hasClass("disabled")) {
+                        if ($(this).data("nombreOk")) {
                             $btn.hide().after(spinner);
                             var $target = $("a.selected").parent();
 
@@ -811,24 +821,25 @@
                                 $btn.show();
                                 spinner.remove();
                             }
-                        }
-                    } else {
-                        $.box({
-                            imageClass : "box_info",
-                            title      : "Alerta",
-                            text       : "Por favor seleccione el nombre del índice antes de agregar ítems.",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable     : false,
-                                draggable     : false,
-                                closeOnEscape : false,
-                                buttons       : {
-                                    "Aceptar" : function () {
+                        } else {
+                            $.box({
+                                imageClass : "box_info",
+                                title      : "Alerta",
+                                text       : "Por favor seleccione el nombre del índice antes de agregar ítems.",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable     : false,
+                                    draggable     : false,
+                                    closeOnEscape : false,
+                                    buttons       : {
+                                        "Aceptar" : function () {
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
+
                     return false;
                 });
 
