@@ -175,13 +175,13 @@
                                 <tr>
                                     <th>Item</th>
                                     <th>Descripción</th>
-                                    ${tipo == 'c' ? '<th>Precio unitario</th>':''}
+                                    ${tipo == 'c' ? '<th>Precio unitario</th>' : ''}
                                     <th>Aporte</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <g:each in="${rows}" var="r">
-                                    <tr data-item="${r.iid}" data-codigo="${r.codigo}" data-nombre="${r.item}" data-valor="${r.aporte ?: 0}">
+                                    <tr data-item="${r.iid}" data-codigo="${r.codigo}" data-nombre="${r.item}" data-valor="${r.aporte ?: 0}" data-precio="${r.precio ?: 0}" data-grupo="${r.grupo}">
                                         <td>
                                             ${r.codigo}
                                         </td>
@@ -430,7 +430,7 @@
                                 });
                                 </g:if>
                                 <g:else>
-                                alert("No puede modificar los coeficientes de una obra ya registrada")
+                                alert("No puede modificar los coeficientes de una obra ya registrada");
                                 </g:else>
                             }
                         };
@@ -479,6 +479,9 @@
                         var nodeValor = node.attr("valor");
                         var nodeItem = node.attr("item");
 
+                        var nodePrecio = node.attr("precio");
+                        var nodeGrupo = node.attr("grupo");
+
                         /*** Selecciona el nodo y su padre ***/
                         var $seleccionados = $("a.selected, div.selected, a.editable, div.editable");
                         $seleccionados.removeClass("selected editable");
@@ -522,12 +525,19 @@
                                                             var tdItem = $("<td>").append(nodeCod);
                                                             var tdDesc = $("<td>").append(nodeDes);
                                                             var tdApor = $("<td class='numero'>").append(number_format(nodeValor, 5, '.', ''));
-                                                            tr.append(tdItem).append(tdDesc).append(tdApor);
+                                                            var tdPrec = $("<td class='numero'>").append(number_format(nodePrecio, 5, '.', ''));
+                                                            tr.append(tdItem).append(tdDesc);
+                                                            if (nodeGrupo.toString() == "2") {
+                                                                tr.append(tdPrec);
+                                                            }
+                                                            tr.append(tdApor);
                                                             tr.data({
                                                                 valor  : nodeValor,
                                                                 nombre : nodeDes,
                                                                 codigo : nodeCod,
-                                                                item   : nodeItem
+                                                                item   : nodeItem,
+                                                                precio : nodePrecio,
+                                                                grupo  : nodeGrupo
                                                             });
                                                             tr.click(function () {
                                                                 clickTr(tr);
@@ -751,7 +761,7 @@
                                 if ($.trim(numero.toLowerCase()) == "px" && total + parseFloat(data.valor) > 0.2) {
                                     msg += "<li>No se puede agregar " + data.nombre + " pues el valor de px no puede superar 0.20</li>";
                                 } else {
-                                    rows2add.push({add : {attr : {item : data.item, numero : data.codigo, nombre : data.nombre, valor : data.valor}, data : "   "}, remove : $(this)});
+                                    rows2add.push({add : {attr : {item : data.item, numero : data.codigo, nombre : data.nombre, valor : data.valor, precio : data.precio, grupo : data.grupo}, data : "   "}, remove : $(this)});
                                     total += parseFloat(data.valor);
                                     dataAdd.items.push(data.item + "_" + data.valor);
                                 }

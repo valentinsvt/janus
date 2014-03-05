@@ -164,6 +164,18 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     if (children.size() > 0) {
                         mapFormula.children = []
                         children.each { ch ->
+                            def sqlPrecio = "SELECT DISTINCT\n" +
+                                    "  v.voitpcun precio,\n" +
+                                    "  v.voitgrpo grupo\n" +
+                                    "FROM vlobitem v\n" +
+                                    "WHERE item__id = ${ch.itemId} AND v.obra__id = ${obra.id};"
+
+                            def precio = 0, grupo = 0
+                            cn.eachRow(sqlPrecio.toString()) { row ->
+                                precio = row.precio
+                                grupo = row.grupo
+                            }
+
                             def mapItem = [
                                     data: " ",
                                     attr: [
@@ -171,6 +183,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                                             numero: ch.item.codigo,
                                             nombre: ch.item.nombre,
                                             item: ch.itemId,
+                                            precio: precio,
+                                            grupo: grupo,
                                             valor: g.formatNumber(number: ch.valor, maxFractionDigits: 5, minFractionDigits: 5),
 //                                            valor: ch.valor,
                                             rel: "it"
@@ -192,6 +206,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     "  i.itemcdgo        codigo,\n" +
                     "  i.itemnmbr        item,\n" +
                     "  v.voitpcun        precio,\n" +
+                    "  v.voitgrpo        grupo,\n" +
                     "  v.voitcoef        aporte\n" +
                     "FROM vlobitem v\n" +
                     "  INNER JOIN item i ON v.item__id = i.item__id\n" +
