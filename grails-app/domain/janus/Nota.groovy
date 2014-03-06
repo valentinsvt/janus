@@ -7,6 +7,7 @@ class Nota implements Serializable {
     String descripcion;
     String texto
     String adicional
+    String tipo
 
 
     static mapping = {
@@ -23,6 +24,7 @@ class Nota implements Serializable {
             descripcion column: 'notadscr'
             texto column: 'notatext'
             adicional column: 'notaadcn'
+            tipo column: 'notatipo'
     }
     }
 
@@ -32,6 +34,7 @@ class Nota implements Serializable {
         descripcion(size: 1..253, blank:true, attributes: [title: 'descripcion'])
         texto(size: 1..253, blank: true, attributes: [title: 'texto'])
         adicional(size: 1..253, blank: true, nullable: true, attributes: [title: 'adicional'])
+        tipo(size: 1..15, blank: true, nullable: true, attributes: [title: 'tipo'])
 
 
     }

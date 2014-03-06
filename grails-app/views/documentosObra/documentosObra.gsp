@@ -129,7 +129,6 @@
                 <div class="btn-group" style="margin-left: 310px; margin-top: -60px; margin-bottom: 10px">
                     <a class="btn" id="btnNuevo"><i class="icon-pencil"></i> Nuevo</a>
                     <a class="btn" id="btnCancelar"><i class="icon-eraser"></i> Cancelar</a>
-                    %{--<a class="btn" id="btnEditar">Editar</a>--}%
                     <a class="btn" id="btnAceptar"><i class="icon-ok"></i> Grabar</a>
                     <a class="btn" id="btnEliminar"><i class="icon-remove"></i> Eliminar</a>
                 </div>
@@ -413,13 +412,36 @@
 
             <g:hiddenField name="obra" value="${obra?.id}"/>
 
+        <div class="span6" style="margin-top: -10px; margin-left: 110px">
+            <div id="divSelMemo">
+                <g:select name="selMemo" from="${notaMemo}" value="${nota?.id}" optionValue="descripcion"
+                          optionKey="id" style="width: 300px;" noSelection="['-1':'Seleccione una nota...']" />
+            </div>
+
+            <div class="span6" style="margin-top: 10px">
+                <div class="btn-group" style="margin-left: 310px; margin-bottom: 10px; margin-top: -80px">
+                    %{--<button class="btn" id="btnEditarMemo"><i class="icon-pencil"></i> Editar</button>--}%
+                    %{--<button class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Aceptar</button>--}%
+                    <a class="btn" id="btnNuevoMemo"><i class="icon-pencil"></i> Nuevo</a>
+                    %{--<a class="btn" id="btnCancelarMemo"><i class="icon-eraser"></i> Cancelar</a>--}%
+                    <a class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Grabar</a>
+                    <a class="btn" id="btnEliminarMemo"><i class="icon-remove"></i> Eliminar</a>
+                </div>
+            </div>
+           </div>
+
+            <div class="span7" style="margin-left: 100px">
+                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionMemo" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" /> </div>
+            </div>
+
+
             <div class="span6">
 
                 <div class="span1">Texto</div>
 
                 <div class="span3"><g:textArea name="memo1" value="${auxiliarFijo?.memo1}" rows="4" cols="4"
                                                style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
-                                               disabled="true"/></div>
+                                               /></div>
 
             </div>
 
@@ -429,19 +451,12 @@
 
                 <div class="span3"><g:textArea name="memo2" value="${auxiliarFijo?.memo2}" rows="4" cols="4"
                                                style="width: 600px; height: 55px; margin-left: -50px; resize: none;"
-                                               disabled="true"/></div>
+                                               /></div>
 
             </div>
 
         </g:form>
 
-        <div class="span6" style="margin-top: 10px">
-            <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarMemo"><i class="icon-pencil"></i> Editar</button>
-                <button class="btn" id="btnAceptarMemo"><i class="icon-ok"></i> Aceptar</button>
-
-            </div>
-        </div>
 
     </fieldset>
 
@@ -543,56 +558,41 @@
 
 
                 %{--<g:if test="${obra?.revisor}">--}%
-                <tr data-id="${obra?.revisor?.id}">
 
 
-                    %{--<td>--}%
-
-                    %{--</td>--}%
+             %{--inicio revisor--}%
+                %{--<tr data-id="${obra?.revisor?.id}">--}%
                     %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                    %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
+                        %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
                     %{--</td>--}%
                     %{--<td>--}%
-                    %{--${obra?.revisor?.cargo}--}%
+                        %{--SUPERVISIÓN--}%
                     %{--</td>--}%
-                    %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
-                    %{--</td>--}%
-
-                    <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                        ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
-                    </td>
-                    <td>
-                        SUPERVISIÓN
-                    </td>
+                %{--</tr>--}%
+              %{--fin revisor--}%
 
 
-                </tr>
+
+
                 %{--</g:if>--}%
                 %{--<g:if test="${obra?.responsableObra}">--}%
 
-                <tr data-id="${obra?.responsableObra?.id}">
 
-                    %{--<td>--}%
 
-                    %{--</td>--}%
-                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
-                    %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--${obra?.responsableObra?.cargo}--}%
+                %{--inicio elaboro--}%
+                %{--<tr data-id="${obra?.responsableObra?.id}">--}%
+               %{----}%
+
+                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
+                        %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
                     %{--</td>--}%
                     %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                        %{--ELABORÓ--}%
                     %{--</td>--}%
+                %{--</tr>--}%
+               %{--fin elaboro --}%
 
-                    <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
-                        ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
-                    </td>
-                    <td>
-                        ELABORÓ
-                    </td>
-                </tr>
+
 
                 %{--</g:if>--}%
 
@@ -662,22 +662,37 @@
 
             <g:hiddenField name="obra" value="${obra?.id}"/>
 
-            <div class="span6">
-                <div class="span3"><g:textArea name="notaFormula" rows="4" value="${auxiliarFijo?.notaFormula}"
-                                               cols="4"
-                                               style="width: 690px; margin-left: -30px; height: 70px; resize: none"
-                                               disabled="true"/></div>
 
-            </div>
         </g:form>
-        <div class="span6" style="margin-top: 10px">
-            <div class="btn-group" style="margin-left: 280px; margin-bottom: 10px">
-                <button class="btn" id="btnEditarFor"><i class="icon-pencil"></i> Editar</button>
-                <button class="btn" id="btnAceptarFor"><i class="icon-ok"></i> Aceptar</button>
+        <div class="span6">
 
+        <div id="divSelFormu">
+            <g:select name="selFormu" from="${notaFormu}" value="${nota?.id}" optionValue="descripcion"
+                      optionKey="id" style="width: 300px;" noSelection="['-1':'Seleccione una nota...']" />
+        </div>
+
+            <div class="span6">
+                <div class="btn-group" style="margin-left: 310px; margin-bottom: 10px; margin-top: -60px">
+                    <a class="btn" id="btnNuevoFormu"><i class="icon-pencil"></i> Nuevo</a>
+                    <a class="btn" id="btnAceptarFormu"><i class="icon-ok"></i> Grabar</a>
+                    <a class="btn" id="btnEliminarFormu"><i class="icon-remove"></i> Eliminar</a>
+                </div>
             </div>
         </div>
 
+
+        <div class="span7" style="margin-left: 30px">
+            <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionFormu" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px"/> </div>
+        </div>
+
+
+        <div class="span6">
+            <div class="span3"><g:textArea name="notaFormula" rows="4" value="${notaFormu}"
+                                           cols="4"
+                                           style="width: 690px; margin-left: -30px; height: 70px; resize: none"
+            /></div>
+
+        </div>
     </fieldset>
 
 </div>
@@ -1697,6 +1712,41 @@
 
     loadNota();
 
+
+    function loadNotaMemo () {
+        var idPie = $("#selMemo").val();
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: "${g.createLink(action: 'getDatosMemo')}",
+            data: {id: idPie},
+            success: function (msg){
+                $("#descripcionMemo").val(msg.descripcion);
+                $("#memo1").val(msg.texto);
+                $("#memo2").val(msg.adicional);
+            }
+        })
+    }
+
+    loadNotaMemo();
+
+    function loadNotaFormu () {
+        var idPie = $("#selFormu").val();
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: "${g.createLink(action: 'getDatosFormu')}",
+            data: {id: idPie},
+            success: function (msg){
+                $("#descripcionFormu").val(msg.descripcion);
+                $("#notaFormula").val(msg.texto);
+            }
+        })
+    }
+
+
+   loadNotaFormu();
+
     $("#tabs").tabs();
 
     $("#btnSalir").click(function () {
@@ -2088,19 +2138,10 @@
 
 
                 if ($("#forzar").attr("checked") == "checked") {
-
                     forzarValue = 1;
-
                 } else {
-
                     forzarValue = 2;
-
                 }
-
-
-
-
-
                 if (tipoClick == null) {
 
                     $("#tipoReporteDialog").dialog("open");
@@ -2129,9 +2170,10 @@
                             obraTipo     : "${obra?.claseObra?.tipo}"
                         },
                         success : function (msg)  {
-                            var part = msg.split('_')
+                            var part = msg.split('_');
+//                            console.log(msg)
                             if(part[0] == 'ok'){
-                                $("#divOk").show(msg);
+//                                $("#divOk").show(msg);
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + part[1]
                                         + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador
@@ -2139,20 +2181,13 @@
 
                             }
                         }
-
-
                     });
-
-
                 }
-
             }
 
             if (active == 1) {
-
                 firmasIdMemo = [];
                 firmasFijasMemo = [];
-
                 var paraMemo =  $("#paraMemo").val()
 
                 $("#bodyFirmas_memo").children("tr").each(function (i) {
@@ -2231,7 +2266,7 @@
                     firmasFijasFormu="";
 
                 }
-                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
+                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu + "&notaFormula=" + $("#notaFormula").val()
 
             }
 
@@ -2331,10 +2366,10 @@
         $("#cambioMonedaExcel").dialog("open")
     });
 
-    $("#btnAceptarMemo").click(function () {
-
-        $("#frm-memo").submit();
-    });
+//    $("#btnAceptarMemo").click(function () {
+//
+//        $("#frm-memo").submit();
+//    });
 
     $("#btnEditarFor").click(function () {
 
@@ -2342,10 +2377,10 @@
 
     });
 
-    $("#btnAceptarFor").click(function () {
-
-        $("#frm-formula").submit();
-    });
+//    $("#btnAceptarFor").click(function () {
+//
+//        $("#frm-formula").submit();
+//    });
 
     $("#btnAceptarMemoPresu").click(function () {
 
@@ -2389,13 +2424,14 @@
     $("#piePaginaSel").change(function () {
 
         loadNota();
+    });
 
-//        $("#piePaginaSel").attr("disabled", false);
-//        $("#descripcion").attr("disabled", true);
-//        $("#texto").attr("disabled", true);
-//        $("#adicional").attr("disabled", true);
-//        $("#notaAdicional").attr("disabled", true)
+    $("#selMemo").change(function () {
+       loadNotaMemo();
+    });
 
+    $("#selFormu").change(function () {
+       loadNotaFormu();
     });
 
     $(".btnQuitar").click(function () {
@@ -2452,11 +2488,7 @@
     $("#btnAceptar").click(function () {
 
 //        $("#frm-nota").submit();
-
-
-
         $.ajax({
-
             type: "POST",
             url : "${createLink(controller: 'nota', action: 'save')}",
             data: {
@@ -2469,8 +2501,6 @@
             },
             success : function (msg)  {
 //                var part = msg.split('_')
-
-
                 var part = msg
                 if(part == '1'){
 //                    $("#divOk").show(msg);
@@ -2489,21 +2519,77 @@
                             $("#div_sel").html(msg)
                         }
                     });
-
-
                 }
             }
-
-
         });
+    });
 
 
+    $("#btnAceptarMemo").click(function () {
 
+        $.ajax({
+           type: 'POST',
+            url: '${createLink(controller: 'nota', action: 'saveNotaMemo')}',
+            data: {
+                obra: ${obra?.id},
+                texto: $("#memo1").val(),
+                pie:   $("#memo2").val(),
+                obraTipo: "${obra?.claseObra?.tipo}",
+                selMemo: $("#selMemo").val(),
+                descripcion : $("#descripcionMemo").val()
+            },
+            success :  function (msg) {
+               var part = msg
+               if(part == '1'){
+                   alert("Nota actualizada correctamente")
+               }else if (part == '2'){
+                   alert ("Nota creada correctamente")
+                   $.ajax({
+                       type: 'POST',
+                       url: "${createLink(controller: 'documentosObra', action: 'cargarSelMemo')}",
+                       data: "id=" + $(this).attr("sub"),
+                       success: function (msg) {
+                           $("#divSelMemo").html(msg);
+                       }
 
+                   })
+               }
 
+            }
+        });
+    });
 
+    $("#btnAceptarFormu").click(function () {
 
+        $.ajax({
+            type: 'POST',
+            url: '${createLink(controller: 'nota', action: 'saveNotaFormu')}',
+            data: {
+                obra: ${obra?.id},
+                texto: $("#notaFormula").val(),
+                obraTipo: "${obra?.claseObra?.tipo}",
+                selFormu: $("#selFormu").val(),
+                descripcion : $("#descripcionFormu").val()
+            },
+            success :  function (msg) {
+                var part = msg
+                if(part == '1'){
+                    alert("Nota actualizada correctamente")
+                }else if (part == '2'){
+                    alert ("Nota creada correctamente")
+                    $.ajax({
+                        type: 'POST',
+                        url: "${createLink(controller: 'documentosObra', action: 'cargarSelFormu')}",
+                        data: "id=" + $(this).attr("sub"),
+                        success: function (msg) {
+                            $("#divSelFormu").html(msg);
+                        }
 
+                    })
+                }
+
+            }
+        });
     });
 
     $("#btnNuevo").click(function () {
@@ -2518,15 +2604,28 @@
 
     });
 
+
+    $("#btnNuevoMemo").click(function () {
+
+        $("#memo1").val("");
+        $("#memo2").val("");
+        $("#descripcionMemo").val("");
+        $("#selMemo").val('-1')
+
+    });
+
+
+    $("#btnNuevoFormu").click(function () {
+
+        $("#notaFormula").val("");
+        $("#descripcionFormu").val("");
+        $("#selFormu").val('-1');
+
+    });
+
+
     $("#btnCancelar").click(function () {
-
-//        $("#piePaginaSel").attr("disabled", false);
         loadNota();
-
-//        $("#descripcion").attr("disabled", true);
-//        $("#texto").attr("disabled", true);
-//        $("#adicional").attr("disabled", true);
-//        $("#notaAdicional").attr("disabled", true)
     });
 
     function desbloquear() {
@@ -2538,32 +2637,6 @@
         $("#notaAdicional").attr("disabled", false)
 
     }
-
-    //    $("#btnEditar").click(function () {
-    //
-    //        loadNota();
-    //        desbloquear();
-    //
-    //    });
-
-    //    $("#notaAdicional").click(function () {
-    //
-    //
-    //        ////console.log("click")
-    //
-    //        if ($("#notaAdicional").attr("checked") == "checked") {
-    //
-    //        }
-    //
-    //        else {
-    //
-    //        }
-    //
-    //
-    //
-    //
-    //
-    //    });
 
 
     $("#borrarFirmaPresuDialog").dialog({
@@ -2631,43 +2704,23 @@
         title: 'Tasa de cambio',
         buttons: {
             "Aceptar": function () {
-
                 tasaCambio = $("#cambioMoneda").val()
-
                 if (tasaCambio == "") {
-
                     $("#tasaCeroDialog").dialog("open");
-
                 } else {
-
                     var url = "${g.createLink(controller: 'reportes',action: 'documentosObraTasaExcel',id: obra?.id)}?tasa=" + tasaCambio
-//                             ////console.log(url)
                     location.href = url
-
                 }
-
                 $("#cambioMonedaExcel").dialog("close");
-
-
             },
             "Sin cambio": function () {
-
                 location.href = "${g.createLink(controller: 'reportes',action: 'documentosObraExcel',id: obra?.id)}"
-
                 $("#cambioMonedaExcel").dialog("close");
-
-
             },
             "Cancelar": function () {
-
                 $("#cambioMonedaExcel").dialog("close");
-
             }
-
-
         }
-
-
     });
 
 
@@ -2689,42 +2742,20 @@
                 reajusteIva = $("#reajusteIva").is(':checked');
                 reajusteMeses = $("#mesesReajuste").val();
 
-//
-//                        ////console.log(proyeccion)
-//                        ////console.log(reajusteMeses)
-
-//
                 if (proyeccion == true && reajusteMeses == "") {
-
-
-//                            ////console.log("entro!!")
-
                     $("#mesesCeroDialog").dialog("open")
-
-
-                } else {
-
-
+                }
+                else {
                     var tipoReporte = tipoClick;
-
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue
                             + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador
-
-
                     $("#reajustePresupuestoDialog").dialog("close");
-
                 }
-
-
             },
             "Cancelar": function () {
-
-
                 $("#reajustePresupuestoDialog").dialog("close");
-
             }
         }
-
     });
 
 
@@ -2838,17 +2869,11 @@
     });
 
     $("#btnEliminar").click(function () {
-
         var idNota = $("#piePaginaSel").val()
-
         if(idNota == "-1"){
-
             alert("No se puede eliminar!")
-
         }else {
-
             $.ajax({
-
                 type: "POST",
                 url: "${createLink(controller:'nota' ,action: 'delete')}",
                 data : {
@@ -2857,7 +2882,14 @@
                 },
                 success: function (msg){
                     if(msg == "ok") {
-                        location.reload(true);
+                    alert("Nota Eliminada!");
+                        $.ajax({type: "POST", url: "${g.createLink(controller: 'documentosObra',action:'cargarPieSel')}",
+                            data: "id=" + $(this).attr("sub"),
+                            success: function (msg) {
+                                $("#div_sel").html(msg)
+                            }
+                        });
+                        loadNota();
                     } else {
 //                    $("#spanOk").html("Ha ocurrido un error al eliminar");
 //                    $("#divOk").show();
@@ -2865,10 +2897,82 @@
                     }
                 }
             })
+        }
+    });
 
+    $("#btnEliminarMemo").click(function () {
+
+        var idNota = $("#selMemo").val()
+        if(idNota == "-1"){
+            alert("No se puede eliminar!")
+        }else {
+            $.ajax({
+                type: "POST",
+                url: "${createLink(controller:'nota' ,action: 'delete')}",
+                data : {
+                    id: idNota,
+                    obra: ${obra?.id}
+                },
+                success: function (msg){
+                    if(msg == "ok") {
+//
+                        alert("Nota eliminada!")
+                        $.ajax({
+                            type: 'POST',
+                            url: "${createLink(controller: 'documentosObra', action: 'cargarSelMemo')}",
+                            data: "id=" + $(this).attr("sub"),
+                            success: function (msg) {
+                                $("#divSelMemo").html(msg);
+                            }
+
+                        })
+                        loadNotaMemo();
+                    } else {
+                        location.reload(true);
+                    }
+                }
+            })
         }
 
     });
+
+
+    $("#btnEliminarFormu").click(function () {
+
+        var idNota = $("#selFormu").val()
+        if(idNota == "-1"){
+            alert("No se puede eliminar!")
+        }else {
+            $.ajax({
+                type: "POST",
+                url: "${createLink(controller:'nota' ,action: 'delete')}",
+                data : {
+                    id: idNota,
+                    obra: ${obra?.id}
+                },
+                success: function (msg){
+                    if(msg == "ok") {
+//
+                        alert("Nota eliminada!")
+                        $.ajax({
+                            type: 'POST',
+                            url: "${createLink(controller: 'documentosObra', action: 'cargarSelFormu')}",
+                            data: "id=" + $(this).attr("sub"),
+                            success: function (msg) {
+                                $("#divSelFormu").html(msg);
+                            }
+
+                        })
+                        loadNotaFormu();
+                    } else {
+                        location.reload(true);
+                    }
+                }
+            })
+        }
+
+    });
+
 
 
 

@@ -10,18 +10,22 @@ class DocumentosObraController {
     def preciosService
 
     def cargarPieSel (){
-
         def nota = Nota.list()
-
         def idFinal = Nota.list().last().id
-
-
-
         return [nota: nota, idFinal: idFinal]
-
-
     }
 
+    def cargarSelMemo () {
+        def notaMemo = Nota.findAllByTipo('memo')
+        def idFinal = notaMemo.last()
+        return [notaMemo: notaMemo, nota: idFinal]
+    }
+
+    def cargarSelFormu () {
+        def notaFormu = Nota.findAllByTipo('formula')
+        def idFinal = notaFormu.last()
+        return [notaFormu: notaFormu, nota: idFinal]
+    }
 
 
     def documentosObra () {
@@ -41,6 +45,11 @@ class DocumentosObraController {
 //        println("departamento: " + obra?.departamento?.id)
         def personas = Persona.list()
         def departamentos = Departamento.list()
+
+        //selector notas
+        def notaMemo = Nota.findAllByTipo('memo')
+        def notaFormu = Nota.findAllByTipo('formula');
+
        //totalPresupuesto
         def detalle
         detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
@@ -147,16 +156,14 @@ class DocumentosObraController {
         resEq.sort{it.item.codigo}
 
         [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
-                totalPresupuestoBien: totalPresupuestoBien, persona: persona, resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores]
+                totalPresupuestoBien: totalPresupuestoBien, persona: persona,
+                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu]
 
     }
 
 
     def getDatos () {
-
         def nota = Nota.get(params.id)
-
-
         def map
         if (nota) {
             map=[
@@ -175,7 +182,52 @@ class DocumentosObraController {
             ]
         }
         def json = new JsonBuilder( map)
+        render json
+    }
 
+    def getDatosMemo () {
+        def nota = Nota.get(params.id)
+        def map
+        if (nota) {
+            map=[
+                    id: nota.id,
+                    descripcion: nota.descripcion?:"",
+                    texto: nota.texto,
+                    adicional:nota.adicional?:""
+            ]
+        } else {
+
+            map=[
+                    id: "",
+                    descripcion: "",
+                    texto: "",
+                    adicional:""
+            ]
+        }
+        def json = new JsonBuilder( map)
+        render json
+    }
+
+    def getDatosFormu () {
+        def nota = Nota.get(params.id)
+        def map
+        if (nota) {
+            map=[
+                    id: nota.id,
+                    descripcion: nota.descripcion?:"",
+                    texto: nota.texto,
+                    adicional:nota.adicional?:""
+            ]
+        } else {
+
+            map=[
+                    id: "",
+                    descripcion: "",
+                    texto: "",
+                    adicional:""
+            ]
+        }
+        def json = new JsonBuilder( map)
         render json
     }
 
