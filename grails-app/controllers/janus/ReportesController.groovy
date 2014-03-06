@@ -3844,7 +3844,7 @@ class ReportesController {
 
             addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("REVISOR", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("DIRECTOR DE GESTION DE VIALIDAD", times8bold), prmsHeaderHoja)
 
 
 
