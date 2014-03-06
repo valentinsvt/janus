@@ -2190,6 +2190,9 @@
                 firmasFijasMemo = [];
                 var paraMemo =  $("#paraMemo").val()
 
+                var textoMemo = $("#memo1").val()
+                var pieMemo = $("#memo2").val()
+
                 $("#bodyFirmas_memo").children("tr").each(function (i) {
 
                     firmasIdMemo[i] = $(this).data("id")
@@ -2224,9 +2227,8 @@
                     var tipoReporte = tipoClickMemo;
 
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo
-
-                }
+                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
+                            "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo}
 
 
                 %{--var tipoReporte = tipoClickMemo;--}%
@@ -2787,7 +2789,7 @@
                     var tipoReporte = tipoClickMemo;
 
                     location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo  + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo
+                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo  + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val()
 
                     $("#reajusteMemoDialog").dialog("close");
 

@@ -3400,7 +3400,10 @@ class ReportesController {
         addCellTabla(tablaAdicionar, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaAdicionar, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaAdicionar, new Paragraph(auxiliarFijo?.memo2, times10normal), prmsHeaderHoja)
+        addCellTabla(tablaAdicionar, new Paragraph(params.texto, times10normal), prmsHeaderHoja)
+
+        addCellTabla(tablaAdicionar, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaAdicionar, new Paragraph(params.pie, times10normal), prmsHeaderHoja)
 
         document.add(tablaAdicionar)
 
