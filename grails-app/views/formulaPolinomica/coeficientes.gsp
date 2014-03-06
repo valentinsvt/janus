@@ -6,6 +6,12 @@
         <title>
             AJUSTE DE LA F.P. Y C. TIPO
         </title>
+        %{--gdo--}%
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
+        <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
+
+
+
         <script src="${resource(dir: 'js/jquery/plugins/', file: 'jquery.livequery.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/box/js', file: 'jquery.luz.box.js')}"></script>
         <link href="${resource(dir: 'js/jquery/plugins/box/css', file: 'jquery.luz.box.css')}" rel="stylesheet">
@@ -18,6 +24,7 @@
         <link href="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/css', file: 'jquery.dataTables.css')}" rel="stylesheet">
 
         <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
+
 
         <style type="text/css">
         #tree {
@@ -132,6 +139,9 @@
                 <i class="icon-print"></i>
                 Imprimir coeficientes
             </g:link>
+            <a href="#" id="creaIndice" class="btn" title="Crear Índices" style="margin-top: -10px;">
+                Crear Índices
+            </a>
         </div>
 
         <div class="row">
@@ -218,6 +228,19 @@
             <div class="modal-footer" id="modalFooter-formula">
             </div>
         </div>
+
+    <div class="modal hide fade" id="modal-indice" style="width: 640px;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3 id="modalTitle-Indc"></h3>
+        </div>
+
+        <div class="modal-body" id="modalBody-Indc">
+        </div>
+
+        <div class="modal-footer" id="modalFooter-Indc">
+        </div>
+    </div>
 
         <script type="text/javascript">
 
@@ -951,6 +974,46 @@
                                 ]
                             }
                         });
+
+                $("#creaIndice").click(function () {
+                    if (confirm("Crear un nuevo Indice INEC, esto debe hacerlo sólo el INCOP \n¿Continuar?")) {
+                        $.ajax({
+                            type    : "POST",
+                            url :  "${createLink(action:'creaIndice')}",
+                            success : function (msg) {
+                                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
+                                var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
+
+                                btnSave.click(function () {
+                                    if ($("#frmSave-Indice").valid()) {
+                                        btnSave.replaceWith(spinner);
+                                        $.ajax({
+                                            type    : "POST",
+                                            url     : "${createLink(controller: 'indice', action:'grabar')}",
+                                            data    : $("#frmSave-Indice").serialize(),
+                                            success : function (msg) {
+                                                if(msg == 'ok'){
+                                                   $("#modal-indice").modal("hide");
+                                                }
+                                            }
+                                        });
+                                        return false;
+                                        location.reload(true);
+                                    }
+                                });
+
+                                $("#modalTitle-Indc").html("Crear Índices   INEC");
+                                $("#modalBody-Indc").html(msg);
+                                $("#modalFooter-Indc").html("").append(btnOk).append(btnSave);
+                                $("#modal-indice").modal("show");
+                            }
+                        });
+//                        location.reload(true);
+                        return false;
+                    }
+                });
+
+
 
             })
             ;

@@ -448,5 +448,9 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
         render ok
     }
 
+    def creaIndice() {
+        println "crear indice"
+        redirect(controller: "Indice", action: "form_adicional")
+    }
 
 } //fin controller
