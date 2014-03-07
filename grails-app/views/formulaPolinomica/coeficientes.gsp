@@ -976,7 +976,8 @@
                         });
 
                 $("#creaIndice").click(function () {
-                    if (confirm("Crear un nuevo Indice INEC, esto debe hacerlo sólo el INCOP \n¿Continuar?")) {
+                    if (confirm("¿Crear un nuevo Indice INEC?. \nSe deberá luego solicitar al INEC su calificación.\n" +
+                            "¿Continuar?")) {
                         $.ajax({
                             type    : "POST",
                             url :  "${createLink(action:'creaIndice')}",
