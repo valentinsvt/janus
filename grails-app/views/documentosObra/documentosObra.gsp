@@ -215,7 +215,8 @@
                             ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
                         </td>
                         <td>
-                            DIRECTOR
+                            %{--DIRECTOR--}%
+                            ${firmaDirector?.persona?.cargo?.toUpperCase()}
                         </td>
                     </tr>
                 </g:if>
@@ -2125,6 +2126,8 @@
                         if(firmasFijas != ''){
 
                             firmasFijas +=','
+                        }else {
+                            firmasFijas +='-1,'
                         }
                         firmasFijas += $(this).data("id")
 

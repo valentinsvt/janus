@@ -5,6 +5,7 @@ import com.lowagie.text.*
 import com.lowagie.text.Font
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
+import com.lowagie.text.pdf.PdfTable
 import com.lowagie.text.pdf.PdfWriter
 import janus.ejecucion.*
 import janus.pac.CronogramaEjecucion
@@ -2453,12 +2454,12 @@ class ReportesController {
 
 //        tablaHeaderVol.setWidths(arregloEnteros([100, 0, 0, 0, 0, 0]))
 
-        addCellTabla(tablaVolObra, new Paragraph("Rubro N°", times8bold), prmsCellHead2)
-        addCellTabla(tablaVolObra, new Paragraph("Descripción", times8bold), prmsCellHead2)
-        addCellTabla(tablaVolObra, new Paragraph("Unidad", times8bold), prmsCellHead2)
-        addCellTabla(tablaVolObra, new Paragraph("Cantidad", times8bold), prmsCellHead3)
-        addCellTabla(tablaVolObra, new Paragraph("P. Unitario", times8bold), prmsCellHead3)
-        addCellTabla(tablaVolObra, new Paragraph("Costo Total", times8bold), prmsCellHead3)
+        addCellTabla(tablaVolObra, new Paragraph("RUBRO N°", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("DESCRIPCIÓN", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("UNIDAD", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("CANTIDAD", times8bold), prmsCellHead3)
+        addCellTabla(tablaVolObra, new Paragraph("P. UNITARIO", times8bold), prmsCellHead3)
+        addCellTabla(tablaVolObra, new Paragraph("COSTO TOTAL", times8bold), prmsCellHead3)
 
         subPres.each { s ->
 
@@ -2490,8 +2491,8 @@ class ReportesController {
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellCenter)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("Total", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("Subpresupuesto:", times8bold), prmsCellLeft)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("SUBTOTAL:", times8bold), prmsCellLeft)
             addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
@@ -2510,7 +2511,7 @@ class ReportesController {
         tablaTotal.setWidths(arregloEnteros([85, 0, 0, 0, 0, 15]))
 
 
-        addCellTabla(tablaTotal, new Paragraph("Total del presupuesto: ", times8bold), prmsCellRight2)
+        addCellTabla(tablaTotal, new Paragraph("TOTAL DEL PRESUPUESTO: ", times8bold), prmsCellRight2)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
@@ -2758,7 +2759,7 @@ class ReportesController {
 
         }
 
-        if (cuenta == 3) {
+//        if (cuenta == 3) {
 
 
             PdfPTable tablaFirmas = new PdfPTable(3);
@@ -2788,27 +2789,58 @@ class ReportesController {
 
 //            println("firmas fijas" + firmaFija)
 
+            def el0
+            def el1
+            def el2
+
+//        println("firma fija" + firmaFija.size())
+
+           if(firmaFija.size() == 3){
+
+
+               el1 = firmaFija[1]
+               el2 = firmaFija[2]
+
+               firmaFija[0] = el1
+               firmaFija[1] = el2
+
+            }
+
             firmaFija.each {f->
                 firmas = Persona.get(f)
                 arregloFirmas += firmas
             }
+//
+//            println("firmas:" + arregloFirmas[1])
+//            println("firmas:" + arregloFirmas[0])
 
-//            println("firmas:" + arregloFirmas)
-            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.nombre.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.apellido.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.nombre.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.apellido.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+          if(arregloFirmas[0] == null){
+              addCellTabla(tablaFirmas, new Paragraph("Director no asignado", times8bold), prmsHeaderHoja)
+          }else{
+              addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+          }
 
             if(params.firmaCoordinador != ''){
                 def personaRol = PersonaRol.get(params.firmaCoordinador)
                 firmaCoordinador = personaRol.persona
-                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             }else{
-               addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+            }
+
+            if(arregloFirmas[1]){
+                addCellTabla(tablaFirmas, new Paragraph("RESPONSABLE DEL PROYECTO", times8bold), prmsHeaderHoja)
+            } else{
+                addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             }
 
 
-            addCellTabla(tablaFirmas, new Paragraph("RESPONSABLE DEL PROYECTO", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph((firmas?.cargo.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("DIRECTOR DE GESTIÓN DE VIALIDAD", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.cargo?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[0]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
 
 
 //            firmaFija.each { f ->
@@ -2849,16 +2881,19 @@ class ReportesController {
             document.add(tablaFirmas);
 
 
-        }
+//        }
 
 
         //sumilla
 
         PdfPTable table3 = new PdfPTable(2);
-        table3.setWidthPercentage(50);
+        table3.setHorizontalAlignment(Element.ALIGN_LEFT)
+        table3.setWidthPercentage(30);
+        table3.setWidths(arregloEnteros([15, 15]))
         PdfPTable nested2 = new PdfPTable(1);
         PdfPTable nested3 = new PdfPTable(1);
         PdfPCell cell1 = new PdfPCell(new Paragraph("SUMILLA", times8bold));
+
         cell1.setColspan(2);
         table3.addCell(cell1)
         PdfPCell cell4 = new PdfPCell(new Paragraph((obra?.responsableObra?.titulo?.toUpperCase() ?: '') + " " + (obra?.responsableObra?.nombre?.toUpperCase() ?: '')+ " " + (obra?.responsableObra?.apellido?.toUpperCase() ?: ''), times8bold));
@@ -2876,6 +2911,8 @@ class ReportesController {
 //        table3.addCell(" ");
         table3.addCell(new PdfPCell(nested3));
 //        table3.addCell(" ");
+
+
         document.add(table3);
 
         println(document.getPageNumber())
@@ -3008,12 +3045,12 @@ class ReportesController {
 
         if (obra?.memoSalida == null) {
             addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph("N°:", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("Memo N°:", times10bold), prmsHeaderHoja)
         } else {
 
 
             addCellTabla(tablaCabecera, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaCabecera, new Paragraph("N°: " + obra?.memoSalida, times10bold), prmsHeaderHoja)
+            addCellTabla(tablaCabecera, new Paragraph("Memo N°: " + obra?.memoSalida, times10bold), prmsHeaderHoja)
         }
 
         PdfPTable tablaQuito = new PdfPTable(2);
