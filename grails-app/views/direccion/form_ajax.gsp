@@ -13,7 +13,21 @@
             </div>
 
             <div class="controls">
-                <g:textField name="nombre" maxlength="63" class=" required" value="${direccionInstance?.nombre}" style="width: 300px;"/>
+                <g:textField name="nombre" maxlength="63" class=" required" value="${direccionInstance?.nombre}" style="width:440px;"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
+                
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Jefatura
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="jefatura" maxlength="63" class=" required" value="${direccionInstance?.jefatura}" style="width:400px;" />
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

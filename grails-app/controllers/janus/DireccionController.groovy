@@ -11,17 +11,17 @@ class DireccionController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        [direccionInstanceList: Direccion.list([sort: 'nombre']), params: params]
+        [direccionInstanceList: Direccion.list(params), params: params]
     } //list
 
     def form_ajax() {
         def direccionInstance = new Direccion(params)
-        if (params.id) {
+        if(params.id) {
             direccionInstance = Direccion.get(params.id)
-            if (!direccionInstance) {
+            if(!direccionInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Direccion con id " + params.id
-                redirect(action: "list")
+                flash.message =  "No se encontró Direccion con id " + params.id
+                redirect(action:  "list")
                 return
             } //no existe el objeto
         } //es edit
@@ -30,9 +30,9 @@ class DireccionController extends janus.seguridad.Shield {
 
     def save() {
         def direccionInstance
-        if (params.id) {
+        if(params.id) {
             direccionInstance = Direccion.get(params.id)
-            if (!direccionInstance) {
+            if(!direccionInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Direccion con id " + params.id
                 redirect(action: 'list')
@@ -50,7 +50,7 @@ class DireccionController extends janus.seguridad.Shield {
             str += "<ul>"
             direccionInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex { arg, i ->
+                err.arguments.eachWithIndex {  arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -62,7 +62,7 @@ class DireccionController extends janus.seguridad.Shield {
             return
         }
 
-        if (params.id) {
+        if(params.id) {
             flash.clase = "alert-success"
             flash.message = "Se ha actualizado correctamente Direccion " + direccionInstance.id
         } else {
@@ -76,7 +76,7 @@ class DireccionController extends janus.seguridad.Shield {
         def direccionInstance = Direccion.get(params.id)
         if (!direccionInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Direccion con id " + params.id
+            flash.message =  "No se encontró Direccion con id " + params.id
             redirect(action: "list")
             return
         }
@@ -87,7 +87,7 @@ class DireccionController extends janus.seguridad.Shield {
         def direccionInstance = Direccion.get(params.id)
         if (!direccionInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró Direccion con id " + params.id
+            flash.message =  "No se encontró Direccion con id " + params.id
             redirect(action: "list")
             return
         }
@@ -95,12 +95,12 @@ class DireccionController extends janus.seguridad.Shield {
         try {
             direccionInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Direccion " + direccionInstance.id
+            flash.message =  "Se ha eliminado correctamente Direccion " + direccionInstance.id
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Direccion " + (direccionInstance.id ? direccionInstance.id : "")
+            flash.message =  "No se pudo eliminar Direccion " + (direccionInstance.id ? direccionInstance.id : "")
             redirect(action: "list")
         }
     } //delete

@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}"/>
+                <g:field type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width:60px;" />
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -27,8 +27,8 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="costoDiesel" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoDiesel')}"/>
-                <span class="mandatory">*</span>
+                <g:field type="number" name="costoDiesel" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoDiesel')}" style="width:60px;"/>
+                <span class="mandatory">*</span> Galón
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -41,8 +41,8 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="costoGrasa" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoGrasa')}"/>
-                <span class="mandatory">*</span>
+                <g:field type="number" name="costoGrasa" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoGrasa')}" style="width:60px;"/>
+                <span class="mandatory">*</span> Kilo
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -55,8 +55,8 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="costoLubricante" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoLubricante')}"/>
-                <span class="mandatory">*</span>
+                <g:field type="number" name="costoLubricante" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoLubricante')}" style="width:60px;"/>
+                <span class="mandatory">*</span> Galón
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -69,7 +69,8 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="factorCostoRepuestosReparaciones" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'factorCostoRepuestosReparaciones')}"/>
+                <g:field type="number" name="factorCostoRepuestosReparaciones" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                        field: 'factorCostoRepuestosReparaciones')}" style="width:60px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -83,8 +84,9 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="sueldoBasicoUnificado" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'sueldoBasicoUnificado')}"/>
-                <span class="mandatory">*</span>
+                <g:field type="number" name="sueldoBasicoUnificado" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                        field: 'sueldoBasicoUnificado')}" style="width:60px;"/>
+                <span class="mandatory">*</span> Dólares
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -97,8 +99,9 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="tasaInteresAnual" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'tasaInteresAnual')}"/>
-                <span class="mandatory">*</span>
+                <g:field type="number" name="tasaInteresAnual" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                        field: 'tasaInteresAnual')}" style="width:60px;"/>
+                <span class="mandatory">*</span> %. Ej: 13
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -111,8 +114,9 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="seguro" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'seguro')}"/>
-                <span class="mandatory">*</span>
+                <g:field type="number" name="seguro" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                        field: 'seguro')}" style="width:60px;"/>
+                <span class="mandatory">*</span> Prima anual: Ej: 0.03
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -126,8 +130,9 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="inflacion" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'inflacion')}"/>
-                <span class="mandatory">*</span>
+                <g:field type="number" name="inflacion" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                        field: 'inflacion')}" style="width:60px;"/>
+                <span class="mandatory">*</span> % Anual
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

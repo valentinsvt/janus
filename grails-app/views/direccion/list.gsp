@@ -45,6 +45,8 @@
                     
                         <g:sortableColumn property="nombre" title="Nombre" />
                     
+                        <g:sortableColumn property="jefatura" title="Jefatura" />
+                    
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
@@ -53,6 +55,8 @@
                     <tr>
                     
                         <td>${fieldValue(bean: direccionInstance, field: "nombre")}</td>
+                    
+                        <td>${fieldValue(bean: direccionInstance, field: "jefatura")}</td>
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${direccionInstance.id}">
@@ -73,7 +77,8 @@
 
         </div>
 
-        <div class="modal hide fade" id="modal-Direccion">
+        <div class="modal hide fade" id="modal-Direccion" style="width: 700px; margin-left: -400px;">
+        %{--<div class="modal hide fade" id="modal-Direccion" style="width: 700px;">--}%
             <div class="modal-header" id="modalHeader">
                 <button type="button" class="close darker" data-dismiss="modal">
                     <i class="icon-remove-circle"></i>
@@ -192,8 +197,8 @@
                     });
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
-                    $("#modalTitle").html("Eliminar Direccion");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Direccion?</p>");
+                    $("#modalTitle").html("Eliminar Dirección");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar esta Dirección?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-Direccion").modal("show");
                     return false;

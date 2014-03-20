@@ -22,5 +22,22 @@
         </div>
     </g:if>
     
+    <g:if test="${direccionInstance?.jefatura}">
+        <div class="control-group">
+            <div>
+                <span id="jefatura-label" class="control-label label label-inverse">
+                    Jefatura
+                </span>
+            </div>
+            <div class="controls">
+        
+                <span aria-labelledby="jefatura-label">
+                    <g:fieldValue bean="${direccionInstance}" field="jefatura"/>
+                </span>
+        
+            </div>
+        </div>
+    </g:if>
+    
     </form>
 </div>

@@ -2,6 +2,7 @@ package janus
 
 class Direccion {
     String nombre
+    String jefatura
     static mapping = {
         table 'dire'
         cache usage: 'read-write', include: 'non-lazy'
@@ -10,11 +11,13 @@ class Direccion {
         version false
         columns {
             id column: 'dire__id'
-            nombre column: 'diredscr'
+            nombre   column: 'diredscr'
+            jefatura column: 'direjefe'
         }
     }
     static constraints = {
         nombre(size: 1..63, blank: false, attributes: [title: 'Nombre de la Dirección'])
+        jefatura(size: 1..63, blank: false, attributes: [title: 'Nombre del cargo del Jefe'])
     }
 
     String toString() {
