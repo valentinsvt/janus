@@ -204,23 +204,27 @@ class NotaController extends janus.seguridad.Shield {
             if (!notaInstance) {
                 flash.clase = "alert-error"
                 flash.message = "No se encontró Nota con id " + params.id
-                redirect(controller: 'documentosObra', action: 'documentosObra', id: params.obra)
+//                redirect(controller: 'documentosObra', action: 'documentosObra', id: params.obra)
                 return
             }//no existe el objeto
             notaInstance.properties = params
             notaInstance.tipo = 'memo'
         }//es edit
         else {
-            notaInstance = new Nota()
-            notaInstance.adicional = params.pie
-            notaInstance.texto = params.texto
-            notaInstance.tipo = 'memo'
-            if(params.descripcion != ''){
-                notaInstance.descripcion = params.descripcion
-            }else {
-                notaInstance.descripcion = "Nota Memo " + fecha.format("dd-MM-yyyy");
-            }
 
+            if(params.adicional == '' && params.texto == ''){
+
+            }else {
+                notaInstance = new Nota()
+                notaInstance.adicional = params.pie
+                notaInstance.texto = params.texto
+                notaInstance.tipo = 'memo'
+                if(params.descripcion != ''){
+                    notaInstance.descripcion = params.descripcion
+                }else {
+                    notaInstance.descripcion = "Nota Memo " + fecha.format("dd-MM-yyyy");
+                }
+            }
         } //es create
         if (!notaInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -241,23 +245,60 @@ class NotaController extends janus.seguridad.Shield {
             return
         }
 
-        def grabado = ''
+//        def grabado = ''
+//
+//        if (params.id) {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha actualizado correctamente la Nota " + notaInstance.descripcion
+//
+//            grabado = '1'
+//
+//        } else {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha creado correctamente la Nota " + notaInstance.descripcion
+//            grabado = '2'
+//        }
+//
+//        render grabado
 
-        if (params.id) {
-            flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente la Nota " + notaInstance.descripcion
 
-            grabado = '1'
+
+
+        if (notaInstance && notaInstance.save(flush: true)) {
+
+            render "ok_"+notaInstance?.id
 
         } else {
-            flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente la Nota " + notaInstance.descripcion
-            grabado = '2'
+            flash.clase = "alert-error"
+            def str
+            if(notaInstance) {
+                str = "<h4>No se pudo guardar Nota " + (notaInstance.id ? notaInstance.id : "") + "</h4>"
+
+                str += "<ul>"
+                notaInstance.errors.allErrors.each { err ->
+                    def msg = err.defaultMessage
+                    err.arguments.eachWithIndex {  arg, i ->
+                        msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                    }
+                    str += "<li>" + msg + "</li>"
+                }
+                str += "</ul>"
+            } else {
+//                str = "No se pudo guardar porque la descripción y el texto están vacíos"
+            }
+
+            flash.message = str
+            render "ok"
+//            redirect(action: 'list')
+            return
+
         }
-//        redirect(action: 'list')
-//        redirect(controller: 'documentosObra',action: 'documentosObra',id: params.obra)
-        render grabado
+
     } //save
+
+
+
+
 
 
     //save notaFormu

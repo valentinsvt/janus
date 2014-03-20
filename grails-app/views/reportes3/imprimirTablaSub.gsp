@@ -191,7 +191,7 @@
     </div>
     <div class="row-fluid">
         <div class="span12" style="margin-right: 195px !important;">
-            <b>Doc. Referencia:</b> ${obra?.oficioIngreso} ${obra?.referencia}
+            <b>Doc. Referencia:</b> ${obra?.referencia}
         </div>
     </div>
 
@@ -308,6 +308,36 @@
         </tr>
         </tbody>
     </table>
+
+
+    <div style="margin-top: 20px">
+        <div class="row-fluid">
+            <div class="span12" style="margin-right: 100px !important; font-size: 12px; margin-bottom: 15px">
+                <b>  CONDICIONES DEL CONTRATO </b>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6" style="margin-right: 100px !important;">
+                <b>  Plazo de Ejecución: </b> <g:formatNumber number="${obra?.plazoEjecucionMeses}" format="##" locale="ec"/> mes(es)
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6" style="margin-right: 195px !important;">
+                <b> Anticipo: </b> <g:formatNumber number="${obra?.porcentajeAnticipo}" format="##,##0" locale="ec"/> %
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span6" style="margin-right: 195px !important;">
+                <b>Elaboró: </b> ${obra?.responsableObra?.titulo ?: ''} ${obra?.responsableObra?.nombre ?: ''} ${obra?.responsableObra?.apellido ?: ''}
+            </div>
+        </div>
+    </div>
+
+
+
 
 </g:if>
 

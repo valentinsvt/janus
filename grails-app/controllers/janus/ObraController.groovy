@@ -926,15 +926,24 @@ class ObraController extends janus.seguridad.Shield {
         def obra = Obra.get(params.obra)
         def usuario = session.usuario.id
         def persona = Persona.get(usuario)
+        def rolUsuario = PersonaRol.findByPersona(persona)
         def departamento = Departamento.get(params.id)
+        def direccion = departamento.direccion
         def personas = Persona.findAllByDepartamento(departamento)
         def funcionInsp = Funcion.get(3)
         def funcionRevi = Funcion.get(5)
         def funcionResp = Funcion.get(1)
 
+
         def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
         def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
+
+
+//        println("---->>" + personasRolResp)
+//        println("---->>" + personas)
+
+
 //
 //        println(personasRolInsp)
 //        println(personasRolRevi)

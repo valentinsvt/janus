@@ -215,8 +215,8 @@
                             ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
                         </td>
                         <td>
-                            %{--DIRECTOR--}%
-                            ${firmaDirector?.persona?.cargo?.toUpperCase()}
+                            DIRECTOR
+                            %{--${firmaDirector?.persona?.cargo?.toUpperCase()}--}%
                         </td>
                     </tr>
                 </g:if>
@@ -1490,6 +1490,7 @@
     var forzarValue;
 
     var notaValue;
+    var notaMemoValue;
 
     var firmasId = [];
     var firmasIdMP = [];
@@ -2157,9 +2158,6 @@
 
                     var tipoReporte = tipoClick;
 
-                    %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + notaValue--}%
-                    %{--+ "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador--}%
-
                     $.ajax({
 
                         type: "POST",
@@ -2191,21 +2189,21 @@
             if (active == 1) {
                 firmasIdMemo = [];
                 firmasFijasMemo = [];
+
+
+                notaMemoValue = $("#selMemo").val()
+
                 var paraMemo =  $("#paraMemo").val()
 
                 var textoMemo = $("#memo1").val()
                 var pieMemo = $("#memo2").val()
 
                 $("#bodyFirmas_memo").children("tr").each(function (i) {
-
                     firmasIdMemo[i] = $(this).data("id")
                 })
 
                 $("#firmasFijasMemo").children("tr").each(function (i) {
-
-
                     firmasFijasMemo[i] = $(this).data("id")
-
                 });
 
 //            console.log("2:" + firmasFijasMemo)
@@ -2229,16 +2227,41 @@
 
                     var tipoReporte = tipoClickMemo;
 
-                    location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                            "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo}
+                    $.ajax({
+
+                        type: "POST",
+                        url : "${createLink(controller: 'nota', action: 'saveNotaMemo')}",
+                        data: {
+                            piePaginaSel : $("#selMemo").val(),
+                            obra         : ${obra?.id},
+                            descripcion  : $("#descripcionMemo").val(),
+                            texto        : $("#memo2").val(),
+                            adicional     : $("#memo1").val(),
+                            obraTipo     : "${obra?.claseObra?.tipo}"
+                        },
+                        success : function (msg)  {
+                            var part = msg.split('_');
+//                            console.log(msg)
+                            if(part[0] == 'ok'){
+//                                $("#divOk").show(msg);
+
+                                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + part[1]--}%
+                                        %{--+ "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador--}%
 
 
-                %{--var tipoReporte = tipoClickMemo;--}%
+                                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
+                                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1]
 
-                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo--}%
-                %{--+ "&totalPresupuesto=" + totalPres--}%
-                %{--+ "&reajusteMemo=" + reajusteMemo--}%
+                            }
+                        }
+                    });
+
+
+
+
+
+                }
 
             }
 
@@ -2789,10 +2812,38 @@
 
                 } else {
 
+                    %{--var tipoReporte = tipoClickMemo;--}%
+
+                    %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo--}%
+                            %{--+ "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo  + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val()--}%
+
+
                     var tipoReporte = tipoClickMemo;
 
-                    location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                            + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo + "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo  + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val()
+                    $.ajax({
+
+                        type: "POST",
+                        url : "${createLink(controller: 'nota', action: 'saveNotaMemo')}",
+                        data: {
+                            piePaginaSel : $("#selMemo").val(),
+                            obra         : ${obra?.id},
+                            descripcion  : $("#descripcionMemo").val(),
+                            texto        : $("#memo1").val(),
+                            pie          : $("#memo2").val(),
+                            obraTipo     : "${obra?.claseObra?.tipo}"
+                        },
+                        success : function (msg)  {
+                            var part = msg.split('_');
+//                            console.log(msg)
+                            if(part[0] == 'ok'){
+
+                                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
+                                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +  "&notaValue=" + part[1]
+
+                            }
+                        }
+                    });
 
                     $("#reajusteMemoDialog").dialog("close");
 
