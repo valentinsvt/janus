@@ -464,6 +464,8 @@ class ItemController extends janus.seguridad.Shield {
                         sql += " and rbpcrgst != 'R'"
                     }
 
+
+
 //                    println "^^" + sql
 
                     def totalCount
@@ -493,30 +495,58 @@ class ItemController extends janus.seguridad.Shield {
             } else {
 //                println("entro2")
                 if (!params.totalRows) {
+                    def sql2
 
-//                    sql = "select count(distinct rbpc.item__id) "
-//                    sql += "from rbpc, item "
-//                    sql += ", dprt, sbgr, grpo "
-//                    sql += "where lgar__id=${lugar.id} "
-//                    sql += "and rbpc.item__id = item.item__id "
-//                    sql += "and item.dprt__id = dprt.dprt__id "
-//                    sql += "and dprt.sbgr__id = sbgr.sbgr__id "
-//                    sql += "and sbgr.grpo__id = grpo.grpo__id "
-//                    sql += "and grpo.grpo__id =${tipo.id}"
-//                    if (params.reg == "R") {
-//                        sql += " and rbpcrgst = 'R'"
-//                    } else if (params.reg == "N") {
-//                        sql += " and rbpcrgst != 'R'"
-//                    }
+                    sql2 = "select count(distinct rbpc.item__id) "
+                    sql2 += "from rbpc, item "
+                    sql2 += ", dprt, sbgr, grpo "
+                    sql2 += "where lgar__id=${lugar.id} "
+                    sql2 += "and rbpc.item__id = item.item__id "
+                    sql2 += "and item.dprt__id = dprt.dprt__id "
+                    sql2 += "and dprt.sbgr__id = sbgr.sbgr__id "
+                    sql2 += "and sbgr.grpo__id = grpo.grpo__id "
+                    sql2 += "and grpo.grpo__id =${tipo.id}"
+                    if (params.reg == "R") {
+                        sql2 += " and rbpcrgst = 'R'"
+                    } else if (params.reg == "N") {
+                        sql2 += " and rbpcrgst != 'R'"
+                    }
 //                    println("**" + sql)
 
+
+
+                    cn.eachRow(sql.toString()) { row ->
+//                println "\t" + row[0]
+                        if (itemsIds != "") {
+                            itemsIds += ","
+                        }
+                        itemsIds += row[0]
+                    }
+
+//          println itemsIds
+                    if (itemsIds == ""){
+                        itemsIds = '-1'
+                    }
+
+                    def precios2 = preciosService.getPrecioRubroItemEstado(f, lugar, itemsIds, estado)
+
+
+                    rubroPrecio = []
+
+
                     def totalCount = 0
+                    def totalCount1 = 0
 //                    cn.eachRow(sql.toString()) { row ->
 //                        totalCount = row[0]
 //                    }
 
 
+                    precios2.each {
+                        def pri = PrecioRubrosItems.get(it)
+//                println "\t" + it + "   " + pri.registrado + "    " + pri.itemId
+                        rubroPrecio.add(pri)
 
+                    }
 
 
 //                    println("RP" + rubroPrecio)
@@ -526,14 +556,15 @@ class ItemController extends janus.seguridad.Shield {
 
                        totalCount = 0
                     }else {
-                      cn.eachRow(sql.toString()) { row ->
-                            println("row" + row)
+
+                      cn.eachRow(sql2.toString()) { row ->
+                            println("row" + (row))
                             totalCount= row[0]
                         }
 
                     }
 
-                    println("totalCount"  + totalCount)
+                    println("totalCount"  + (totalCount))
 
                     params.totalRows = totalCount
 
