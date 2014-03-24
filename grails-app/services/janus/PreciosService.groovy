@@ -101,6 +101,7 @@ class PreciosService {
         return res
     }
 
+
     def getPrecioRubroItemEstadoNoFecha(lugar, items, registrado) {
         def cn = dbConnectionService.getConnection()
         def itemsId = items
