@@ -306,7 +306,7 @@ class NotaController extends janus.seguridad.Shield {
 
     def saveNotaFormu() {
 
-        println ("params " + params)
+//        println ("params " + params)
 
         def fecha = new Date();
 
@@ -358,20 +358,54 @@ class NotaController extends janus.seguridad.Shield {
             return
         }
 
-        def grabado = ''
+//        def grabado = ''
+//
+//        if (params.id) {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha actualizado correctamente la Nota " + notaInstance.descripcion
+//
+//            grabado = '1'
+//
+//        } else {
+//            flash.clase = "alert-success"
+//            flash.message = "Se ha creado correctamente la Nota " + notaInstance.descripcion
+//            grabado = '2'
+//        }
+//        render grabado
 
-        if (params.id) {
-            flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente la Nota " + notaInstance.descripcion
+        if (notaInstance && notaInstance.save(flush: true)) {
 
-            grabado = '1'
+            render "ok_"+notaInstance?.id
 
         } else {
-            flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente la Nota " + notaInstance.descripcion
-            grabado = '2'
+            flash.clase = "alert-error"
+            def str
+            if(notaInstance) {
+                str = "<h4>No se pudo guardar Nota " + (notaInstance.id ? notaInstance.id : "") + "</h4>"
+
+                str += "<ul>"
+                notaInstance.errors.allErrors.each { err ->
+                    def msg = err.defaultMessage
+                    err.arguments.eachWithIndex {  arg, i ->
+                        msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                    }
+                    str += "<li>" + msg + "</li>"
+                }
+                str += "</ul>"
+            } else {
+//                str = "No se pudo guardar porque la descripción y el texto están vacíos"
+            }
+
+            flash.message = str
+            render "ok"
+//            redirect(action: 'list')
+            return
+
         }
-        render grabado
+
+
+
+
     } //save
 
 

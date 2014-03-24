@@ -34,10 +34,10 @@
         <div class="span1" style="margin-left: -10px">Elaboró presupuesto</div>
 
 
-        <g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${persona?.id}"/>
-        <div class="span3"><g:textField name="responsableText" class="responsable required" value="${persona?.nombre + " " + persona?.apellido}" readonly="readonly" title="Persona responsable de la Obra"/></div>
+        %{--<g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${persona?.id}"/>--}%
+        %{--<div class="span3"><g:textField name="responsableText" class="responsable required" value="${persona?.nombre + " " + persona?.apellido}" readonly="readonly" title="Persona responsable de la Obra"/></div>--}%
 
-    %{--<div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasRolResp}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>--}%
+    <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasRolResp}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>
 
 
 </g:if>

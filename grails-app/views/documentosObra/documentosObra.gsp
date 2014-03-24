@@ -2217,14 +2217,10 @@
                     firmasFijasMemo = "";
                 }
 
-
                 if (tipoClickMemo == 1) {
-
                     $("#reajusteMemoDialog").dialog("open")
-
                 }
                 else {
-
                     var tipoReporte = tipoClickMemo;
 
                     $.ajax({
@@ -2252,17 +2248,10 @@
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
                                         "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1]
-
                             }
                         }
                     });
-
-
-
-
-
                 }
-
             }
 
             if (active == 2) {     /* fórmula polinómica */
@@ -2272,30 +2261,40 @@
 
                 $("#bodyFirmas_polinomica").children("tr").each(function (i) {
                     firmasIdFormu[i] = $(this).data("id")
-
-                })
+                });
 
                 $("#firmasFijasPoli").children("tr").each(function (i) {
-
-
                     firmasFijasFormu[i] = $(this).data("id")
-
                 });
 
 //            console.log("3:" + firmasIdFormu)
-
-
-
                 if (firmasIdFormu.length == 0) {
                     firmasIdFormu = "";
                 }
                 if(firmasFijasFormu.length == 0){
-
                     firmasFijasFormu="";
-
                 }
-                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu + "&notaFormula=" + $("#notaFormula").val()
+                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu + "&notaFormula=" + $("#notaFormula").val()--}%
 
+
+                $.ajax({
+                    type: "POST",
+                    url : "${createLink(controller: 'nota', action: 'saveNotaFormu')}",
+                    data: {
+                        selFormu     : $("#selFormu").val(),
+                        obra         : ${obra?.id},
+                        descripcion  : $("#descripcionFormu").val(),
+                        texto        : $("#notaFormula").val(),
+                        obraTipo     : "${obra?.claseObra?.tipo}"
+                    },
+                    success : function (msg)  {
+                        var part = msg.split('_');
+//                            console.log(msg)
+                        if(part[0] == 'ok'){
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1]
+                        }
+                    }
+                });
             }
 
             //memoAdmi
@@ -2324,30 +2323,17 @@
                 });
 
                 $("#firmasFijasMemoPresu").children("tr").each(function (i) {
-
-
                     firmasFijasMP[i] = $(this).data("id")
-
-
                 });
-
 
                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reportedocumentosObraMemoAdmi',id: obra?.id)}?firmasIdMP=" +
                         firmasIdMP + "&totalPresupuesto=" + totalPres + "&firmasFijasMP=" + firmasFijasMP + "&materiales=" + materiales +
                         "&manoObra=" + manoObra + "&equipos=" + equipos + "&costoPorcentaje=" + costoPorcentaje + "&costo=" + costo + "&total=" + total +
                         "&texto=" + texto + "&para=" + para + "&de=" + de + "&fecha=" + fecha + "&asunto=" + asunto
-
-
-
-
             }
         }
-
-
-
         return false;
     });
-
 
     $("#btnDocExcel").click(function () {
 
