@@ -9,6 +9,7 @@ class MantenimientoItemsController extends Shield {
 
     def preciosService
     def oferentesService
+    def dbConnectionService
 
     def index() {
         redirect(action: "registro", params: params)
@@ -1144,7 +1145,26 @@ class MantenimientoItemsController extends Shield {
             lugarInstance = Lugar.get(params.id)
             tipo = lugarInstance.tipo
         }
-        return [lugarInstance: lugarInstance, all: params.all, tipo: tipo]
+        def codigos = []
+
+        def sql
+
+        sql = "select lgarcdgo from lgar "
+        sql += "order by lgarcdgo"
+
+        def cn = dbConnectionService.getConnection()
+
+        cn.eachRow(sql.toString()) {row->
+           codigos += row[0]
+        }
+
+//        println(sql);
+//        println(codigos)
+
+        def ultimo = codigos.last()
+
+
+        return [lugarInstance: lugarInstance, all: params.all, tipo: tipo, ultimo: ultimo]
     }
 
     def checkCdLg_ajax() {

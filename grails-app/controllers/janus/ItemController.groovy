@@ -455,27 +455,61 @@ class ItemController extends janus.seguridad.Shield {
 //                println("entro 1")
 
                 if (!params.totalRows) {
-                    sql = "select count(distinct rbpc.item__id) "
-                    sql += "from rbpc "
-                    sql += "where lgar__id=${lugar.id} "
+                    def sql3
+
+                    sql3 = "select count(distinct rbpc.item__id) "
+                    sql3 += "from rbpc "
+                    sql3 += "where lgar__id=${lugar.id} "
                     if (params.reg == "R") {
-                        sql += " and rbpcrgst = 'R'"
+                        sql3 += " and rbpcrgst = 'R'"
                     } else if (params.reg == "N") {
-                        sql += " and rbpcrgst != 'R'"
+                        sql3 += " and rbpcrgst != 'R'"
                     }
-
-
 
 //                    println "^^" + sql
 
-                    def totalCount
-                    cn.eachRow(sql.toString()) { row ->
-                        totalCount = row[0]
+                    cn.eachRow(sql3.toString()) { row ->
+//                println "\t" + row[0]
+                        if (itemsIds != "") {
+                            itemsIds += ","
+                        }
+                        itemsIds += row[0]
+                    }
+
+//          println itemsIds
+                    if (itemsIds == ""){
+                        itemsIds = '-1'
+                    }
+
+                    def precios3 = preciosService.getPrecioRubroItemEstado(f, lugar, itemsIds, estado)
+
+                    rubroPrecio = []
+
+                    def totalCount = 0
+                    precios3.each {
+                        def pri = PrecioRubrosItems.get(it)
+                        rubroPrecio.add(pri)
+                    }
+
+//                    println("RP" + rubroPrecio)
+//                    println("max" + params.max)
+
+                    if(rubroPrecio == []){
+                        totalCount = 0
+                    }else {
+                        cn.eachRow(sql3.toString()) { row ->
+//                            println("row" + (row))
+                            totalCount= row[0]
+                        }
                     }
 
                     params.totalRows = totalCount
 
-                    params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+                    if(params.totalRows == 0){
+                        params.totalPags = 0
+                    }else {
+                        params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
+                    }
 
                     if (params.totalPags <= 10) {
                         params.first = 1
@@ -513,9 +547,7 @@ class ItemController extends janus.seguridad.Shield {
                     }
 //                    println("**" + sql)
 
-
-
-                    cn.eachRow(sql.toString()) { row ->
+                    cn.eachRow(sql2.toString()) { row ->
 //                println "\t" + row[0]
                         if (itemsIds != "") {
                             itemsIds += ","
@@ -530,41 +562,29 @@ class ItemController extends janus.seguridad.Shield {
 
                     def precios2 = preciosService.getPrecioRubroItemEstado(f, lugar, itemsIds, estado)
 
-
                     rubroPrecio = []
-
 
                     def totalCount = 0
                     def totalCount1 = 0
-//                    cn.eachRow(sql.toString()) { row ->
-//                        totalCount = row[0]
-//                    }
-
-
                     precios2.each {
                         def pri = PrecioRubrosItems.get(it)
 //                println "\t" + it + "   " + pri.registrado + "    " + pri.itemId
                         rubroPrecio.add(pri)
-
                     }
-
 
 //                    println("RP" + rubroPrecio)
 //                    println("max" + params.max)
 
                     if(rubroPrecio == []){
-
                        totalCount = 0
                     }else {
-
                       cn.eachRow(sql2.toString()) { row ->
-                            println("row" + (row))
+//                            println("row" + (row))
                             totalCount= row[0]
                         }
-
                     }
 
-                    println("totalCount"  + (totalCount))
+//                    println("totalCount"  + (totalCount))
 
                     params.totalRows = totalCount
 
@@ -574,7 +594,7 @@ class ItemController extends janus.seguridad.Shield {
                         params.totalPags = Math.ceil(params.totalRows / params.max).toInteger()
                     }
 
-                    println("paginas" + params.totalPags)
+//                    println("paginas" + params.totalPags)
 
                     if (params.totalPags <= 10) {
                         params.first = 1

@@ -21,6 +21,8 @@
             </div>
         </div>
 
+
+
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
@@ -30,8 +32,7 @@
 
             <div class="controls">
                 <g:field type="number" name="codigo" class="allCaps required input-small" value="${fieldValue(bean: lugarInstance, field: 'codigo')}"/>
-                <span class="mandatory">*</span>
-
+                <span class="mandatory">*</span>   Último código usado: ${ultimo}
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

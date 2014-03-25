@@ -28,7 +28,7 @@
                 <g:else>
                     <elm:datepicker name="fecha" id="fechaPrecio" class="datepicker required" style="width: 100px"
                                     yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"
-                                    maxDate="new Date()"/>
+                                    maxDate="${(new Date().format('MM').toInteger() + 60).toString()}"/>
                 </g:else>
 
                 <span class="mandatory">*</span>
