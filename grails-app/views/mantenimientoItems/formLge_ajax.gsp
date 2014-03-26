@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: gato
+  Date: 26/03/14
+  Time: 11:53 AM
+--%>
+
 <%@ page import="janus.Lugar" %>
 
 <div id="create" class="span" role="main">
@@ -31,8 +38,7 @@
             </div>
 
             <div class="controls">
-                %{--<g:field type="number" name="codigo" class="allCaps required input-small" readonly="true" value="${fieldValue(bean: lugarInstance, field: 'codigo')}"/>--}%
-                <g:field type="number" name="codigo" class="allCaps required input-small" readonly="true" value="${ultimo+1}"/>
+                <g:field type="number" name="codigo" class="allCaps required input-small" readonly="true" value="${fieldValue(bean: lugarInstance, field: 'codigo')}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

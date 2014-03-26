@@ -458,7 +458,7 @@
                                 icon      : icons.edit,
                                 sepBefore : false,
                                 sepAfter  : false,
-                                url       : "${createLink(action:'formLg_ajax')}",
+                                url       : "${createLink(action:'formLge_ajax')}",
                                 data      : {
                                     id  : nodeId,
                                     all : showLugar.all

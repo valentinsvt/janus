@@ -1167,6 +1167,22 @@ class MantenimientoItemsController extends Shield {
         return [lugarInstance: lugarInstance, all: params.all, tipo: tipo, ultimo: ultimo]
     }
 
+
+    def formLge_ajax() {
+
+
+        def lugarInstance = new Lugar()
+        def tipo = "C"
+        if (params.id) {
+            lugarInstance = Lugar.get(params.id)
+            tipo = lugarInstance.tipo
+        }
+
+        return [lugarInstance: lugarInstance, all: params.all, tipo: tipo]
+
+
+    }
+
     def checkCdLg_ajax() {
         if (params.id) {
             def lugar = Lugar.get(params.id)
