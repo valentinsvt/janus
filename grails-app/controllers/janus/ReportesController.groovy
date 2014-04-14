@@ -1196,9 +1196,21 @@ class ReportesController {
 
         rubros = VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique()
 
-        rubros.each { rubro ->
+//        println rubros.size()
 
-            def nombre = rubro.nombre.replaceAll('<', '(menor)').replaceAll('>', '(mayor)')
+//        def cont = 0
+//        def max = 500
+
+        rubros.eachWithIndex {rubro, indice ->
+//            if (indice > cont*max && indice <= (cont+1)*max) {
+            //def nombre = rubro.nombre.replaceAll('<', '(menor)').replaceAll('>', '(mayor)').replaceAll('"', '(pulgadas)')
+//            println indice+" "+rubro.nombre
+            def nombre = rubro.nombre.decodeHTML()
+
+            nombre = nombre.replaceAll(/</, /&lt;/)
+            nombre = nombre.replaceAll(/>/, /&gt;/)
+//                nombre = "TEST"
+//            println "\t"+nombre
 
             def header, tablas, footer, nota
             def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
@@ -1256,7 +1268,7 @@ class ReportesController {
                     "               <div class=\"row-fluid\">\n" +
                     "                    <div class=\"span12\">\n" +
                     "\n" +
-                    "                        <b>Presupuesto:</b> ${obra?.nombre}\n" +
+                    "                        <b>Presupuesto:</b> ${obra?.nombre.decodeHTML()}\n" +
                     "                    </div>\n" +
                     "                </div>\n" +
                     "                <div class=\"row-fluid\">\n" +
@@ -1316,6 +1328,7 @@ class ReportesController {
 
             res.each { r ->
 //            println "res "+res
+
                 if (r["grpocdgo"] == 3) {
                     tablaHer += "<tr>"
                     tablaHer += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
@@ -1501,6 +1514,7 @@ class ReportesController {
 
 
         }
+//        }
 
         [html: html]
 

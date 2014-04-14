@@ -25,7 +25,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def iniciarObraAdm() {
-        println "incio obra dm " + params
+        //println "incio obra dm " + params
         def obra = Obra.get(params.obra)
         def fecha
         try {
@@ -329,7 +329,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def calculaPlazo() {
-        println "calculaPlazo: " + params
+        //println "calculaPlazo: " + params
         def obra = Obra.get(params.id)
 
         if (!params.personas) params.personas = obra.plazoPersonas
@@ -340,17 +340,17 @@ class ObraController extends janus.seguridad.Shield {
                 "from obra_comp_v2(${params.id}) where grpo__id = 2 and itemcntd > 0 group by itemcdgo, itemnmbr order by dias desc"
         def sqlR = "select itemcdgo, itemnmbr, unddcdgo, sum(rbrocntd) rbrocntd, sum(dias) dias " +
                 "from plazo(${params.id},${params.personas},${params.maquinas},${params.save}) group by itemcdgo, itemnmbr, unddcdgo"
-        println sqlM
-        println sqlR
+        //println sqlM
+        //println sqlR
         def cn = dbConnectionService.getConnection()
         def resultM = cn.rows(sqlM.toString())
         def resultR = cn.rows(sqlR.toString())
 
 
-        println "\n\n"
-        println resultM
-        println resultR
-        println "\n\n"
+        //println "\n\n"
+        //println resultM
+        //println resultR
+        //println "\n\n"
 
         if (params.save.toString() == "0") {
             return [obra: obra, resultM: resultM, resultR: resultR, params: params]

@@ -332,7 +332,16 @@ class PreciosService {
 //        println "sql pcvl "+sql
         def result = []
         cn.eachRow(sql.toString()) { r ->
-            result.add(r.toRowResult())
+            def row = r.toRowResult()
+//            println "r --> " +row['itemnmbr']
+            def nombre =   row.itemnmbr
+//            nombre = nombre.replaceAll(/"/, /pulgadas/)
+//            nombre = nombre.replaceAll(/'/, /pie/)
+            nombre = nombre.replaceAll(/</, /&lt;/)
+            nombre = nombre.replaceAll(/>/, /&gt;/)
+            row.itemnmbr = nombre
+//            println "*r --> " +row['itemnmbr']
+            result.add(row)
         }
         cn.close()
         return result
