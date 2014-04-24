@@ -185,24 +185,69 @@
 
                 <div class="span12" style="margin-top: 0px">
 
-                    <div class="span 1 formato">DIRECCIÓN</div>
+                    <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                        <div class="span 1 formato">REQUIRENTE</div>
+
+                        <div class="span3">
+                            <g:if test="${obra?.id}">
+                                <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamentoId}"/>
+
+                                <g:select name="departamento.id" from="${janus.Direccion.list()}" id="departamentoObra" value="${persona?.departamento?.id}"
+                                    optionKey="id" optionValue="nombre" style="width: 670px; margin-left: 40px"/>
+
+                                %{--<g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"--}%
+                                             %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
+                            </g:if>
+                            <g:else>
+                                <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
+
+
+                                <g:select name="departamentoText" from="${janus.Direccion.list()}" id="departamentoObra" value="${persona?.departamento?.id}"
+                                          optionKey="id" optionValue="nombre" style="width: 670px; margin-left: 40px"/>
+
+                                %{--<g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"--}%
+                                             %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
+                            </g:else>
+                        </div>
+
+                    </g:if>
+                    <g:else>
+                        <div class="span 1 formato">DIRECCIÓN</div>
+
+                        <div class="span3">
+                            <g:if test="${obra?.id}">
+                                <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamentoId}"/>
+
+                                <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
+                                             style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                            </g:if>
+                            <g:else>
+                                <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
+
+                                <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
+                                             style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                            </g:else>
+                        </div>
+                    </g:else>
 
                     %{--<div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" id="departamentoObra"--}%
                     %{--value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 450px" disabled="true" title="Departamento actual del usuario"/></div>--}%
-                    <div class="span3">
-                        <g:if test="${obra?.id}">
-                            <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamentoId}"/>
 
-                            <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
-                                         style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
-                        </g:if>
-                        <g:else>
-                            <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
 
-                            <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
-                                         style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
-                        </g:else>
-                    </div>
+                    %{--<div class="span3">--}%
+                        %{--<g:if test="${obra?.id}">--}%
+                            %{--<g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamentoId}"/>--}%
+
+                            %{--<g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"--}%
+                                         %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                            %{--<g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>--}%
+
+                            %{--<g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"--}%
+                                         %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
+                        %{--</g:else>--}%
+                    %{--</div>--}%
 
                     <div class="span1" style="margin-left: 506px; font-weight: bold">ESTADO</div>
 
@@ -510,46 +555,54 @@
 
                 </div>
 
-                <div class="span12" style="margin-top: 10px">
-                    <div class="span2 formato" style="width: 230px;">Destino: Dirección
-                    %{--<g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
-                    <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    <div class="span12" style="margin-top: 10px" id="dirSalida">
 
                     </div>
+                </g:if>
+                <g:else>
+                    <div class="span12" style="margin-top: 10px" id="dirSalida">
+                        <div class="span2 formato" style="width: 230px;">Destino: Dirección
+                        %{--<g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
+                        <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
 
-                    <div class="span2 formato" style="width: 230px;">Destino: Coordinación
-                    %{--<g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id + ' order by descripcion')}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
-                    <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
-                    </div>
-
-                    <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio
-                    <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
-                    </div>
-
-                    <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
-                    <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
-                    </div>
-
-                    <g:if test="${obra?.id && obra?.tipo != 'D'}">
-                        <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                        %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
-                            <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
-                            %{--<g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : ''}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
-                                <div style="font-weight: normal;">${obra?.formulaPolinomica}</div>
-                            </g:if>
-                            <g:else>
-                                <a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">
-                                    Generar
-                                </a>
-                            </g:else>
                         </div>
-                    </g:if>
 
-                    <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha
-                    <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
-                                    value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
+                        <div class="span2 formato" style="width: 230px;">Destino: Coordinación
+                        %{--<g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id + ' order by descripcion')}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
+                        <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
+                        </div>
+
+                        <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio
+                        <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
+                        </div>
+
+                        <div class="span1 formato" style="width: 120px; margin-left: 20px;">Memorando
+                        <g:textField name="memoSalida" class="span2 allCaps" value="${obra?.memoSalida}" maxlength="20" title="Memorandum de salida" style="width: 120px;"/>
+                        </div>
+
+                        <g:if test="${obra?.id && obra?.tipo != 'D'}">
+                            <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
+                            %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
+                                <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
+                                %{--<g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : ''}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
+                                    <div style="font-weight: normal;">${obra?.formulaPolinomica}</div>
+                                </g:if>
+                                <g:else>
+                                    <a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">
+                                        Generar
+                                    </a>
+                                </g:else>
+                            </div>
+                        </g:if>
+
+                        <div class="span1 formato" style="width: 100px; margin-left: 40px;">Fecha
+                        <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
+                                        value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
+                        </div>
                     </div>
-                </div>
+                </g:else>
 
                 <div class="span12" style="margin-top: 10px">
 
@@ -1310,6 +1363,11 @@
 
                 loadPersonas();
 
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                loadSalida();
+                </g:if>
+
+
                 <g:if test="${obra}">
 
                 $(".plazo").blur(function () {
@@ -1602,9 +1660,51 @@
 
                 $("#departamentoObra").change(function () {
 
-                    loadPersonas();
+                    %{--var direccionEl = $("#departamentoObra").val()--}%
+                    %{--var idObra = ${obra?.id}--}%
+
+%{--//                    console.log("DP:" + direccionEl)--}%
+%{--//                    console.log("ID:" + idObra)--}%
+
+                    %{--$.ajax({--}%
+                        %{--type    : "POST",--}%
+                        %{--url     : "${g.createLink(action:'getSalida')}",--}%
+                        %{--data    : {direccion : direccionEl,--}%
+                                   %{--obra      : idObra--}%
+                        %{--},--}%
+                        %{--success : function (msg) {--}%
+
+                            %{--$("#dirSalida").html(msg);--}%
+                        %{--}--}%
+                    %{--});--}%
+
+                    loadSalida();
+
 
                 });
+
+
+                function loadSalida() {
+
+                    var direccionEl = $("#departamentoObra").val()
+                    var idObra = ${obra?.id}
+
+//                    console.log("DP:" + direccionEl)
+//                    console.log("ID:" + idObra)
+
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${g.createLink(action:'getSalida')}",
+                                data    : {direccion : direccionEl,
+                                    obra      : idObra
+                                },
+                                success : function (msg) {
+
+                                    $("#dirSalida").html(msg);
+                                }
+                            });
+
+                }
 
                 $("#copiarObra").click(function () {
 

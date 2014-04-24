@@ -4,6 +4,7 @@
 <div id="create-Departamento" class="span" role="main">
     <g:form class="form-horizontal" name="frmSave-Departamento" action="save">
         <g:hiddenField name="id" value="${departamentoInstance?.id}"/>
+        <g:hiddenField name="documento" value="${0}"/>
                 
         <div class="control-group">
             <div>
@@ -57,7 +58,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="4" class=" required" value="${departamentoInstance?.codigo}"/>
+                <g:textField name="codigo" maxlength="6" class=" required" value="${departamentoInstance?.codigo}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

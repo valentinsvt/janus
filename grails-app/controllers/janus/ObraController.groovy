@@ -428,7 +428,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def registroObra() {
 
-        println "---" + params
+//        println "---" + params
         def obra
 
         def usuario = session.usuario.id
@@ -943,8 +943,6 @@ class ObraController extends janus.seguridad.Shield {
 //        println("---->>" + personasRolResp)
 //        println("---->>" + personas)
 
-
-//
 //        println(personasRolInsp)
 //        println(personasRolRevi)
 //        println(personasRolResp)
@@ -956,6 +954,18 @@ class ObraController extends janus.seguridad.Shield {
 //        println(personas)
 
         return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona]
+    }
+
+
+    def getSalida () {
+
+//        println("params:" + params)
+
+        def direccion = Direccion.get(params.direccion)
+        def departamentos = Departamento.findAllByDireccion(direccion)
+        def obra = Obra.get(params.obra)
+
+        return [dire: direccion, depar: departamentos, obra: obra]
     }
 
     def situacionGeografica() {
