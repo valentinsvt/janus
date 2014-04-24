@@ -2184,6 +2184,8 @@ class ReportesController {
 
         def firmaCoordinador
 
+        def personaElaboro
+
         def cuenta = 0;
 
         def cantidadMeses = params.meses
@@ -2302,7 +2304,8 @@ class ReportesController {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+//        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
+        headers.add(new Paragraph("Unidad Técnica de Fijación de Precios Unitarios", times12bold));
 
         if (obra?.oficioSalida == null) {
 
@@ -2310,10 +2313,9 @@ class ReportesController {
 
 
         } else {
-
-            headers.add(new Paragraph("Oficio", times12bold));
-            headers.add(new Paragraph("N°. " + obra?.oficioSalida, times12bold));
-
+//            headers.add(new Paragraph("Oficio", times12bold));
+//            headers.add(new Paragraph("N°. " + obra?.oficioSalida, times12bold));
+            headers.add(new Paragraph("Oficio N°. " + obra?.oficioSalida, times12bold));
         }
 
 //        headers.add(new Paragraph("Quito, " + formatDate(date: obra?.fechaOficioSalida, format: "dd-MM-yyyy"), times10bold));
@@ -2347,9 +2349,9 @@ class ReportesController {
         tablaPresupuesto.setWidthPercentage(100);
         tablaPresupuesto.setWidths(arregloEnteros([12, 2, 13, 2, 8, 2, 26]))
 
-//        addCellTabla(tablaPresupuesto, new Paragraph("Dirección", times8bold), prmsHeaderHoja)
-//        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-//        addCellTabla(tablaPresupuesto, new Paragraph(obra?.departamento?.direccion?.nombre, times8normal), prmsHeaderHoja3)
+        addCellTabla(tablaPresupuesto, new Paragraph("Requirente", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.departamento?.direccion?.nombre, times8normal), prmsHeaderHoja3)
 
         addCellTabla(tablaPresupuesto, new Paragraph("Código", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
@@ -2392,7 +2394,7 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8normal), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("Inspeccionó", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Responsable del Proyecto", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
 
@@ -2596,19 +2598,10 @@ class ReportesController {
         }
 
         if (params.proyeccion == 'true' && cantidadMeses.toInteger() >= 1 && params.iva == 'true') {
-
-//            println("entroProyeccion + Iva")
-//
-//            println(paux?.inflacion)
-//            println(totalPresupuesto)
-
             inflacion = paux.inflacion
             meses = params.meses
-
             proyeccionTotal = (totalPresupuesto * ((inflacion / 1200) * meses.toInteger()))
-
             ivaTotal = ((totalPresupuesto + proyeccionTotal) * paux?.iva) / 100;
-
             presupuestoTotal = ((totalPresupuesto + proyeccionTotal) + ivaTotal)
 
             addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste (período: " + meses + " meses, inflación: " + inflacion + " % ) :", times8bold), prmsCellRight)
@@ -2633,23 +2626,19 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
         }
 
-
         Paragraph txtCondiciones = new Paragraph();
         addEmptyLine(txtCondiciones, 1);
         txtCondiciones.setAlignment(Element.ALIGN_LEFT);
         txtCondiciones.add(new Paragraph("CONDICIONES DEL CONTRATO", times10bold));
         txtCondiciones.add(new Paragraph(" ", times10bold));
 
-
         PdfPTable tablaCondiciones = new PdfPTable(3);
         tablaCondiciones.setWidthPercentage(100);
         tablaCondiciones.setWidths(arregloEnteros([7, 2, 60]))
 
-
         addCellTabla(tablaCondiciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
-
 
         addCellTabla(tablaCondiciones, new Paragraph("Plazo de Ejecución", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph(" : ", times8bold), prmsHeaderHoja)
@@ -2664,14 +2653,12 @@ class ReportesController {
         addCellTabla(tablaCondiciones, new Paragraph((obra?.responsableObra?.titulo ?: '') + " " + (obra?.responsableObra?.nombre ?: '')+ " " + (obra?.responsableObra?.apellido ?: ''), times8normal), prmsHeaderHoja)
 //        addCellTabla(tablaCondiciones, new Paragraph(obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
 
-
         document.add(tablaPresupuesto);
         document.add(tablaCoordenadas);
         document.add(tablaReferencia);
         document.add(tablaVolObra)
         document.add(tablaTotal);
 //        document.newPage();
-
 //        document.add(txtCondiciones);
 //        document.add(tablaCondiciones)
 
@@ -2692,7 +2679,6 @@ class ReportesController {
             headerForzar.add(new Paragraph(" ", times12bold));
             headerForzar.add(new Paragraph(" ", times12bold));
 
-
             tablaRetenciones.setWidthPercentage(100);
             tablaRetenciones.setWidths(arregloEnteros([7, 2, 60]))
 
@@ -2712,18 +2698,15 @@ class ReportesController {
             addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaRetenciones, new Paragraph(nota?.adicional, times8normal), prmsHeaderHoja)
 
-
 //            Paragraph txtRetenciones = new Paragraph();
             addEmptyLine(txtRetenciones, 1);
             txtRetenciones.setAlignment(Element.ALIGN_LEFT);
             txtRetenciones.add(new Paragraph("Atentamente, ", times8bold));
             txtRetenciones.add(new Paragraph(" ", times8bold));
 
-//
 //            document.add(headerForzar);
 //            document.add(tablaRetenciones);
 //            document.add(txtRetenciones);
-
 
         } else {
 
@@ -2776,7 +2759,7 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
 
             def arregloFirmas = []
@@ -2805,60 +2788,65 @@ class ReportesController {
 
         //nombres
 
-            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-
-            if(params.firmaCoordinador != ''){
-                def personaRol = PersonaRol.get(params.firmaCoordinador)
-                firmaCoordinador = personaRol.persona
-                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-            }else{
-               addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
-            }
-
-
-        if(arregloFirmas[0] == null){
-            addCellTabla(tablaFirmas, new Paragraph("Director no asignado", times8bold), prmsHeaderHoja)
-        }else{
-            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-        }
-
-            //cargos
-
-            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.cargo?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[0]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph( (obra?.departamento?.direccion?.jefatura?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-
-
-//            firmaFija.each { f ->
-//
-////                println("-->>" + f)
-//
-//                if(f != ''){
-//                    firmas = Persona.get(f)
-//                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo.toUpperCase() + " " + firmas?.nombre.toUpperCase() + " " + firmas?.apellido.toUpperCase(), times8bold), prmsHeaderHoja)
-//                }else {
-//                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
-//                }
-//            }
+//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
 //
 //            if(params.firmaCoordinador != ''){
 //                def personaRol = PersonaRol.get(params.firmaCoordinador)
 //                firmaCoordinador = personaRol.persona
-//                addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.titulo.toUpperCase() + " " + firmaCoordinador?.nombre.toUpperCase() + " " + firmaCoordinador?.apellido.toUpperCase(), times8bold), prmsHeaderHoja)
+//                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
 //            }else{
-//               addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
+//               addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
 //            }
 //
-//            firmas = Persona.get(firmaFija[0])
-//            addCellTabla(tablaFirmas, new Paragraph(firmas?.cargo.toUpperCase(), times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph("RESPONSABLE DEL PROYECTO", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph("DIRECTOR DE GESTIÓN DE VIALIDAD", times8bold), prmsHeaderHoja)
+//
+//           if(arregloFirmas[0] == null){
+//            addCellTabla(tablaFirmas, new Paragraph("Director no asignado", times8bold), prmsHeaderHoja)
+//              }else{
+//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+//              }
+
+        //cambio firmas 24/04
+
+//        println("firma: " + params.firmaElaboro)
+        if(params.firmaElaboro){
+            personaElaboro = Persona.get(params.firmaElaboro)
+            addCellTabla(tablaFirmas, new Paragraph((personaElaboro?.titulo?.toUpperCase() ?: '') + " " + (personaElaboro?.nombre.toUpperCase() ?: '' ) + " " + (personaElaboro?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        }
+
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
+        if(params.firmaCoordinador != ''){
+            def personaRol = PersonaRol.get(params.firmaCoordinador)
+            firmaCoordinador = personaRol.persona
+            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+        }
 
 
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+
+        //cargos
+
+//            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.cargo?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph( (obra?.departamento?.direccion?.jefatura?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+
+               addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+
+
+               addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+               addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.cargo?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
@@ -2919,7 +2907,7 @@ class ReportesController {
         celda1.addElement(tablaRetenciones)
         celda1.addElement(txtRetenciones)
         celda1.addElement(tablaFirmas)
-        celda1.addElement(table3)
+//        celda1.addElement(table3)
 
         celda1.setColspan(1)
 //        celda2.setColspan(1)
@@ -3064,7 +3052,8 @@ class ReportesController {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times14bold));
+//        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times14bold));
+        headers.add(new Paragraph("UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", times14bold));
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("MEMORANDO", times14bold))
 
@@ -3427,6 +3416,8 @@ class ReportesController {
         def firma2 = obra?.revisor;
         def nota
 
+        def personaElaboro
+
         if (params.notaValue && params.notaValue != '' && params.notaValue != 'null' && params.notaValue != 'undefined') {
             nota = Nota.get(params.notaValue)
         } else {
@@ -3761,7 +3752,7 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
 
             def arregloFirmas = []
@@ -3771,41 +3762,45 @@ class ReportesController {
                 arregloFirmas += firmas
             }
 
-//            println("fr" + arregloFirmas)
+            firmas = Persona.get(firmaFijaFormu[0])
 
+//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[2]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[0]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[0]?.apellido?.toUpperCase() ?: '') , times8bold), prmsHeaderHoja)
 
-//            firmaFijaFormu.eachWithIndex { g, f->
-//
-//
-//
-//                if(g != '' ){
-//
-//                    firmas = Persona.get(g)
-//
-//                    println("-->>" + firmas)
-//
-//                    addCellTabla(tablaFirmas, new Paragraph(firmas?.titulo + " " + firmas?.nombre + " " + firmas?.apellido, times8bold), prmsHeaderHoja)
-//
-//                }else {
-//                    addCellTabla(tablaFirmas, new Paragraph("Sin Asignar", times8bold), prmsHeaderHoja)
-//
-//                }
-//
-//
-//            }
+            //cambio firmas 24/4
 
-                firmas = Persona.get(firmaFijaFormu[0])
-
+            if(arregloFirmas[2]){
             addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[2]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[0]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[0]?.apellido?.toUpperCase() ?: '') , times8bold), prmsHeaderHoja)
+            }else {
+                addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            }
+
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
+            if(arregloFirmas[1]){
+                addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            }else{
+                addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+            }
 
             //cargos
 
+//            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[2]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph((obra?.departamento?.direccion?.jefatura?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+
+            addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+
+
             addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[2]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph((obra?.departamento?.direccion?.jefatura?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-//            }
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.cargo?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+
             document.add(tablaFirmas);
         }
 

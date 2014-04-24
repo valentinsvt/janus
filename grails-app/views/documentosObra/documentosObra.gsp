@@ -1533,6 +1533,7 @@
     var paraMemo1;
 
     var firmaCoordinador;
+    var firmaElaboro;
 
 
     function validarNum(ev) {
@@ -2115,6 +2116,8 @@
                 firmasId = '';
                 firmasFijas = '';
                 firmaCoordinador = idFirmaCoor
+                firmaElaboro = ${obra?.responsableObra?.id}
+
 
 //                $("#bodyFirmas_presupuesto").children("tr").each(function (i) {
 //                    firmasId[i] = $(this).data("id")
@@ -2177,7 +2180,7 @@
 //                                $("#divOk").show(msg);
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + part[1]
-                                        + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador
+                                        + "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador + "&firmaElaboro=" + firmaElaboro
 
 
                             }
@@ -2291,7 +2294,8 @@
                         var part = msg.split('_');
 //                            console.log(msg)
                         if(part[0] == 'ok'){
-                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1]
+                            location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
+                                    + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id}
                         }
                     }
                 });

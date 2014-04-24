@@ -147,8 +147,12 @@
         <b>G.A.D. PROVINCIA DE PICHINCHA</b>
     </p>
 
+    %{--<p style="font-size: 14px">--}%
+        %{--<b> ${obra?.departamento?.direccion?.nombre}</b>--}%
+    %{--</p>--}%
+
     <p style="font-size: 14px">
-        <b> ${obra?.departamento?.direccion?.nombre}</b>
+        <b>UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b>
     </p>
 
     <p style="font-size: 14px">
@@ -163,6 +167,14 @@
 </div>
 
 <div style="margin-top: 20px">
+
+    <div class="row-fluid">
+        <div class="span6" style="margin-right: 195px !important;">
+            <b>Requirente:</b> ${obra?.departamento?.direccion?.nombre}
+        </div>
+
+    </div>
+
     <div class="row-fluid">
         <div class="span3" style="margin-right: 195px !important;">
             <b>Fecha:</b> ${fechaNueva}
