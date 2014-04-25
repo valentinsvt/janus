@@ -16,7 +16,6 @@ class VolumenObraController extends janus.seguridad.Shield {
         subpreFiltrado = SubPresupuesto.findAllByGrupo(grupoFiltrado[0])
 //        println("-->>" + subpreFiltrado)
 
-
         def usuario = session.usuario.id
 
         def persona = Persona.get(usuario)
@@ -24,6 +23,9 @@ class VolumenObraController extends janus.seguridad.Shield {
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
 
         def grupo = Grupo.findAllByDireccion(direccion)
+//
+//        println("direccion:" + direccion)
+//        println("grupo:" + grupo)
 
         def subPresupuesto1 = SubPresupuesto.findAllByGrupoInList(grupo)
 
@@ -38,6 +40,7 @@ class VolumenObraController extends janus.seguridad.Shield {
     }
 
     def cargarSubpres() {
+//        println("params" + params)
         def grupo = Grupo.get(params.grupo)
         def subs = SubPresupuesto.findAllByGrupo(grupo)
         [subs: subs]

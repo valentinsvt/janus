@@ -103,10 +103,11 @@
                     </div>
 
                     <div class="span3" style="width: 320px; margin-top: -8px;">
-                        %{--<b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupos}" optionKey="id" optionValue="descripcion"--}%
-                        %{--style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>--}%
-                        <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"
-                                                     style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>
+                        <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupoFiltrado}" optionKey="id" optionValue="descripcion"
+                        style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>
+
+                        %{--<b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"--}%
+                                                     %{--style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>--}%
 
                     </div>
                 </div>
@@ -123,6 +124,8 @@
                             %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
 
                         </span>
+
+                    <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
                         <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-plus"></i>
                         </a>
@@ -132,6 +135,11 @@
                         <a href="#" class="btn" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-edit"></i>
                         </a>
+
+                    </g:if>
+                        <g:else>
+
+                        </g:else>
 
                     </div>
 

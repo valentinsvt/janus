@@ -322,7 +322,21 @@
                     <div class="span3">
                         %{--<g:select id="programacion" name="programacion.id" class="programacion required" from="${janus.Programacion?.list([sort: 'descripcion'])}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>--}%
 
-                        <g:if test="${programa != -1}">
+                        %{--<g:if test="${programa != -1}">--}%
+
+                            %{--<g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>--}%
+                            %{--<a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">--}%
+                                %{--<i class="icon-plus-sign"></i>--}%
+                            %{--</a>--}%
+
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+
+                            %{--<g:textField name="programacion" class="programacion" value="${obra?.programacion?.descripcion}" readonly="true"/>--}%
+                        %{--</g:else>--}%
+
+
+                        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
 
                             <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
                             <a href="#" class="btn btn-small btn-info" id="btnCrearPrograma" title="Crear Programa" style="margin-top: -10px;">
@@ -331,9 +345,9 @@
 
                         </g:if>
                         <g:else>
-
-                            <g:textField name="programacion" class="programacion" value="${obra?.programacion?.descripcion}" readonly="true"/>
+                            <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
                         </g:else>
+
 
 
                     </div>
@@ -343,19 +357,24 @@
                     <div class="span3" id="divTipoObra">
                         %{--<g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${janus.TipoObra?.list([sort: 'descripcion'])}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>--}%
 
-                         <g:if test="${tipoObra != -1}">
+                         %{--<g:if test="${tipoObra != -1}">--}%
+                             %{--<g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>--}%
+                             %{--<a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">--}%
+                                 %{--<i class="icon-plus-sign"></i>--}%
+                             %{--</a>--}%
+                         %{--</g:if>--}%
+                        %{--<g:else>--}%
+                            %{--<g:textField name="tipoObra" class="tipoObra" value="${obra?.tipoObjetivo?.descripcion}"  style="margin-left: -60px; width: 280px" title="Tipo de Obra" readonly="true"/>--}%
+                        %{--</g:else>--}%
 
-                             <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
-
-
-                             <a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">
-                                 <i class="icon-plus-sign"></i>
-                             </a>
-
-                         </g:if>
+                        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                            <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
+                            <a href="#" class="btn btn-small btn-info" id="btnCrearTipoObra" title="Crear Tipo" style="margin-top: -10px;">
+                                <i class="icon-plus-sign"></i>
+                            </a>
+                        </g:if>
                         <g:else>
-
-                            <g:textField name="tipoObra" class="tipoObra" value="${obra?.tipoObjetivo?.descripcion}"  style="margin-left: -60px; width: 280px" title="Tipo de Obra" readonly="true"/>
+                            <g:select id="tipoObra" name="tipoObjetivo.id" class="tipoObjetivo required" from="${tipoObra}" value="${obra?.tipoObjetivo?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -60px; width: 290px" title="Tipo de Obra"/>
                         </g:else>
 
                     </div>
@@ -366,18 +385,26 @@
                     <div class="span3">
                         %{--<g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${janus.ClaseObra?.list([sort: 'descripcion'])}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>--}%
 
-                        <g:if  test="${claseObra != -1}">
-                          <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
+                        %{--<g:if  test="${claseObra != -1}">--}%
+                          %{--<g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>--}%
+                            %{--<a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">--}%
+                                %{--<i class="icon-plus-sign"></i>--}%
+                            %{--</a>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                            %{--<g:textField name="claseObra" class="claseObra" value="${obra?.claseObra?.descripcion}" style="margin-left: -35px; width: 230px" title="Clase de Obra" readonly="true"/>--}%
+                        %{--</g:else>--}%
 
+                        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                            <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
                             <a href="#" class="btn btn-small btn-info" id="btnCrearClase" title="Crear Clase" style="margin-top: -10px;">
                                 <i class="icon-plus-sign"></i>
                             </a>
-
                         </g:if>
                         <g:else>
-                            <g:textField name="claseObra" class="claseObra" value="${obra?.claseObra?.descripcion}" style="margin-left: -35px; width: 230px" title="Clase de Obra" readonly="true"/>
-                        </g:else>
+                            <g:select id="claseObra" name="claseObra.id" class="claseObra required" from="${claseObra}" value="${obra?.claseObra?.id}" optionValue="descripcion" optionKey="id" style="margin-left: -35px; width: 230px" title="Clase de Obra"/>
 
+                        </g:else>
 
                     </div>
                 </div>

@@ -448,21 +448,25 @@ class ObraController extends janus.seguridad.Shield {
         def tipoObra
         def claseObra
 
-        if(grupo != null){
 
-            println("entro!!")
 
-            programa = Programacion.findAllByGrupo(grupo)
-            tipoObra = TipoObra.findAllByGrupo(grupo)
-            claseObra = ClaseObra.findAllByGrupo(grupo)
 
-        }else {
+//filtro original combos programa tipo clase
 
-            programa = -1
-            tipoObra = -1
-            claseObra = -1
+//        if(grupo != null){
+//            programa = Programacion.findAllByGrupo(grupo)
+//            tipoObra = TipoObra.findAllByGrupo(grupo)
+//            claseObra = ClaseObra.findAllByGrupo(grupo)
+//        }else {
+//            programa = -1
+//            tipoObra = -1
+//            claseObra = -1
+//        }
 
-        }
+
+        programa = Programacion.list();
+        tipoObra = TipoObra.list();
+        claseObra = ClaseObra.list();
 
 //        println("grupo" + grupo)
 //        println("direccion" + direccion)
