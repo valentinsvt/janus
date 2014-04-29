@@ -973,31 +973,31 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def situacionGeografica() {
+//        println "situacionGeografica" + params
         def comunidades
-
         def orden;
-
         def colorProv, colorCant, colorParr, colorComn;
-
+        def txwh = "where cntn.prov__id = prov.prov__id and parr.cntn__id = cntn.cntn__id and cmnd.parr__id = parr.parr__id"
+        def select = "select provnmbr, cntnnmbr, parrnmbr, cmndnmbr, prov.prov__id, cntn.cntn__id, parr.parr__id, cmnd.cmnd__id from prov, cntn, parr, cmnd"
+        def campos = ['provnmbr', 'cntnnmbr', 'parrnmbr', 'cmndnmbr']
+        def cmpo = params.buscarPor.toInteger()
+        def sqlTx = ""
 
         if (params.ordenar == '1') {
-
             orden = "asc";
-
         } else {
-
             orden = "desc";
-
         }
 
+        txwh += " and ${campos[cmpo - 1]} ilike '%${params.criterio}%'"
 
+        sqlTx = "${select} ${txwh} order by ${campos[cmpo - 1]} ".toString()
+
+/*
         switch (params.buscarPor) {
 
             case "1":
-
-
                 colorProv = "#00008B";
-
                 if (params.criterio != "") {
                     comunidades = Comunidad.withCriteria {
                         parroquia {
@@ -1014,24 +1014,16 @@ class ObraController extends janus.seguridad.Shield {
                     }
                 } else {
                     comunidades = Comunidad.list(order: "nombre")
-
-
                 }
-
-
                 break
             case "2":
-
                 colorCant = "#00008B";
-
                 if (params.criterio != "") {
                     comunidades = Comunidad.withCriteria {
                         parroquia {
                             canton {
-
                                 ilike("nombre", "%" + params.criterio + "%")
                                 order("nombre", orden)
-
                             }
                             order("nombre", orden)
                         }
@@ -1040,13 +1032,9 @@ class ObraController extends janus.seguridad.Shield {
                 } else {
                     comunidades = Comunidad.list(order: "nombre")
                 }
-
                 break
             case "3":
-
-
                 colorParr = "#00008B";
-
                 if (params.criterio != "") {
 //                    println params
                     comunidades = Comunidad.withCriteria {
@@ -1059,31 +1047,22 @@ class ObraController extends janus.seguridad.Shield {
                 } else {
                     comunidades = Comunidad.list()
                 }
-
                 break
             case "4":
-//
-
                 colorComn = "#00008B";
-
                 if (params.criterio != "") {
                     comunidades = Comunidad.withCriteria {
-
-
                         ilike("nombre", "%" + params.criterio + "%")
                         order("nombre", orden)
-
-
                     }
                 } else {
                     comunidades = Comunidad.list()
                 }
-
                 break
-
         }
-
-
+*/
+        def cn = dbConnectionService.getConnection()
+        comunidades = cn.rows(sqlTx)
         [comunidades: comunidades, colorComn: colorComn, colorProv: colorProv, colorParr: colorParr, colorCant: colorCant]
 
     }
