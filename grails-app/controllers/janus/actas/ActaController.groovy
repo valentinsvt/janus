@@ -96,6 +96,7 @@ class ActaController extends janus.seguridad.Shield {
     } //list
 
     def form() {
+        println "**************"+params
         if (!params.tipo) {
             params.tipo = 'P' //provisional
         }
@@ -111,8 +112,10 @@ class ActaController extends janus.seguridad.Shield {
 //        def tipos = new Acta().constraints.tipo.inList
         def tipos = [params.tipo]
 
+
         def actaProv = null
         if (params.contrato || params.id) {
+            println "**1"
             def secciones = []
             def actaInstance = new Acta(params)
             if (params.id) {
@@ -126,10 +129,10 @@ class ActaController extends janus.seguridad.Shield {
                 } //no existe el objeto
 
                 def sec = actaInstance.secciones
-
                 if (sec.size() == 0) {
                     def contrato = actaInstance.contrato
                     def obra = contrato.oferta.concurso.obra
+
 
                     if (tipo == 'P') {
                         secciones = [
@@ -246,14 +249,14 @@ class ActaController extends janus.seguridad.Shield {
                         } //secciones.each para guardar
                     } // es provisional: se crean las secciones/parrafos por default
                     else if (tipo == 'D') {
-//                        println "AQUIQQQQQ"
+                        println "AQUIQQQQQ"
                         contrato = actaInstance.contrato
                         actaProv = Acta.findAllByContratoAndTipo(contrato, 'P')
                         if (actaProv.size() == 1) {
                             actaProv = actaProv[0]
-//                            println actaProv
-//                            println actaProv.fechaRegistro
-//                            println actaProv.registrada
+                            println actaProv
+                            println actaProv.fechaRegistro
+                            println actaProv.registrada
                             if (actaProv.fechaRegistro && actaProv.registrada == 1) {
 //                                println "ASDFASDFASDF"
                                 //secciones
@@ -311,9 +314,11 @@ class ActaController extends janus.seguridad.Shield {
             } //es edit
             else {
                 if (params.contrato) {
+                    println"**2"
                     def sec = []
                     def contrato = Contrato.get(params.contrato)
                     def actas = Acta.findAllByContratoAndTipo(contrato, tipo)
+                    println "**3"+actas
                     if (actas.size() == 0) {
 
                         def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -332,7 +337,9 @@ class ActaController extends janus.seguridad.Shield {
                             }
                         }
                     } else if (actas.size() == 1) {
+                        println "**4"
                         actaInstance = actas[0]
+                        actaProv =  Acta.findByContratoAndTipo(contrato, "P")
                         sec = actaInstance.secciones
                     } else {
                         actaInstance = actas.find { it.tipo == 'P' }
@@ -361,6 +368,14 @@ class ActaController extends janus.seguridad.Shield {
 //            println jsonSecciones.toPrettyString()
 
             def editable = actaInstance.registrada == 0 && !actaInstance.fechaRegistro
+            println "#################################"
+            println actaInstance.id
+            println actaInstance.registrada
+            println actaInstance.fechaRegistro
+            println actaProv.id
+            println actaProv.registrada
+            println actaProv.fechaRegistro
+            println "#################################"
             if (tipo == 'D') {
                 if (actaProv.registrada != 1 || !actaProv.fechaRegistro) {
                     flash.message = "No ha registrado el acta provisional, no puede generar el acta definitiva."
@@ -369,7 +384,7 @@ class ActaController extends janus.seguridad.Shield {
                 }
 
                 def diasDefinitiva = 180
-                def fechaProv = actaProv.fechaRegistro
+                def fechaProv = actaInstance.fechaRegistro
                 def hoy = new Date()
 
                 /* TODO:

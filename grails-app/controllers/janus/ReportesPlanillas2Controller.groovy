@@ -713,6 +713,13 @@ class ReportesPlanillas2Controller {
                 retraso = null
             }
 
+//            println ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+//            println planilla.id
+//            println fechaPresentacion
+//            println fechaMax
+//            println res2
+//            println ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+
             if (!retraso) {
 //                redirect(action: "errores")
                 def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
@@ -723,6 +730,10 @@ class ReportesPlanillas2Controller {
                 flash.message = res2[1]
                 redirect(action: "errores", params: [link: link])
                 return
+            }
+
+            if (fechaPresentacion < fechaMax) {
+                retraso *= -1
             }
 
 //            if (retraso > 0) {
