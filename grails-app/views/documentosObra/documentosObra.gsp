@@ -69,7 +69,7 @@
     </div>
 </div>
 
-
+<div style='page-break-after: auto'></div>
 
 <div id="tabs" style="width: 800px; height: 1150px">
 
@@ -93,7 +93,7 @@
 
         <div class="span6" style="margin-bottom: 10px; margin-top: -20px">
 
-            <input type="radio" name="tipoPresupuesto" class="radioPresupuesto" value="1"/>  Base de Contrato
+            <input type="radio" name="tipoPresupuesto" class="radioPresupuesto uno" value="1" checked="true"/>  Base de Contrato
 
             <input type="radio" name="tipoPresupuesto" class="radioPresupuesto" value="2"
                    style="margin-left: 220px"/> Presupuesto Referencial
@@ -338,8 +338,8 @@
             <input type="radio" name="tipoPresupuestoMemo" class="radioPresupuestoMemo" value="1"
                    checked="true"/>  Base de Contrato
 
-            <input type="radio" name="tipoPresupuestoMemo" class="radioPresupuestoMemo" value="2"
-                   style="margin-left: 220px"/> Presupuesto Referencial
+            %{--<input type="radio" name="tipoPresupuestoMemo" class="radioPresupuestoMemo" value="2"--}%
+                   %{--style="margin-left: 220px"/> Presupuesto Referencial--}%
 
         </div>
     </fieldset>
@@ -2008,12 +2008,12 @@
 
 
 
-    $(".radioPresupuesto").click(function () {
-
-        tipoClick = $(this).attr("value")
-
-        return tipoClick
-    });
+//    $(".radioPresupuesto").click(function () {
+//
+//        tipoClick = $(this).attr("value")
+//
+//        return tipoClick
+//    });
 
     $(".radioPresupuestoMemo").click(function () {
 
@@ -2149,7 +2149,7 @@
                 } else {
                     forzarValue = 2;
                 }
-                if (tipoClick == null) {
+                if (1!=1) {
 
                     $("#tipoReporteDialog").dialog("open");
 
@@ -2159,7 +2159,14 @@
                     reajusteIva = $("#reajusteIva").is(':checked');
                     reajusteMeses = $("#mesesReajuste").val();
 
-                    var tipoReporte = tipoClick;
+                    var tipoReporte
+
+                    if($(".uno").is(':checked')){
+                        tipoReporte = 1
+
+                    }else{
+                        tipoReporte = 2
+                    }
 
                     $.ajax({
 
@@ -3042,6 +3049,9 @@
 
         });
 
+
+
+        $(".uno").prop("checked", true)
 
 
         $("#equiposMemo,#manoObraMemo,#materialesMemo").keydown(function (ev) {

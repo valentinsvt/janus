@@ -1212,11 +1212,11 @@ class ReportesController {
 //                nombre = "TEST"
 //            println "\t"+nombre
 
-            def header, tablas, footer, nota
+            def header, tablas, footer, nota, salto
             def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
 
             header =
-                    "  <div class=\"tituloPdf\">\n" +
+                    "  <div class=\"tituloPdf\" style=\"page-break-before: always\">\n" +
                             "                <p style=\"font-size: 18px\">\n" +
                             "                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
                             "                </p>\n" +
@@ -1505,12 +1505,12 @@ class ReportesController {
                             "                    </tbody>\n" +
                             "                </table>"
 
-            nota = "                <div  style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left\">\n" +
+            nota = "                <div  style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left;\">\n" +
                     "                        <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales\n" +
                     "                    </div>"
 
 
-            html += "<div class='divRubro'>" + header + tablas + footer + nota + "</div>"
+            html += "<div class='divRubro'>" + header + tablas + footer + nota + salto + "</div>"
 
 
         }
