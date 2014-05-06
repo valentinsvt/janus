@@ -1216,7 +1216,7 @@ class ReportesController {
             def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
 
             header =
-                    "  <div class=\"tituloPdf\" style=\"page-break-before: always\">\n" +
+                    "  <div class=\"tituloPdf\" >\n" +
                             "                <p style=\"font-size: 18px\">\n" +
                             "                    <b>G.A.D. PROVINCIA DE PICHINCHA</b>\n" +
                             "                </p>\n" +
@@ -1387,6 +1387,7 @@ class ReportesController {
                     tablaTrans += "<tr>"
                     tablaTrans += "<td style='width: 80px;'>" + r["itemcdgo"] + "</td>"
                     tablaTrans += "<td>" + r["itemnmbr"] + "</td>"
+//                    println " -------------------" + r
                     if (r["tplscdgo"].trim() == 'P' || r["tplscdgo"].trim() == 'P1') {
                         tablaTrans += "<td style='width: 50px;text-align: right'>" + "ton-km" + "</td>"
                     } else {
@@ -1505,12 +1506,13 @@ class ReportesController {
                             "                    </tbody>\n" +
                             "                </table>"
 
-            nota = "                <div  style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left;\">\n" +
+//            nota = "                <div class='divRubro' style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left; page-break-after: always\">\n" +
+            nota = "                <div class='divRubro' style=\"width: 100%;float: left;height: 20px;text-align: left; \">\n" +
                     "                        <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales\n" +
                     "                    </div>"
 
 
-            html += "<div class='divRubro'>" + header + tablas + footer + nota + salto + "</div>"
+            html += "<div class='divRubro' style=\"page-break-after: always\">" + header + tablas + footer + nota + "</div>"
 
 
         }

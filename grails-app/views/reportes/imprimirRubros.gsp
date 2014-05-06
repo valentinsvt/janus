@@ -145,9 +145,9 @@
     }
 
     .divRubro {
-        page-break-after : always !important;
+        /*page-break-after : always !important;*/
         /*margin-bottom: 300px !important;*/
-        margin-top: 100px !important
+        /*margin-top: 100px !important*/
     }
     .espacioFooter {
 
