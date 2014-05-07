@@ -37,7 +37,11 @@
     <body>
 
     <g:set var="planillaAnticipo" value="${Planilla.findByTipoPlanillaAndContrato(TipoPlanilla.findByCodigo('A'), contrato)}" />
-    <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaAnticipo)}" />
+
+    <g:set var="periodosOk" value="${[]}" />
+    <g:if test="${planillaAnticipo}">
+        <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaAnticipo)}" />
+    </g:if>
 
     <g:if test="${tipos.find { it.codigo == 'A'} || periodosOk.size() > 1}">
         <div class="btn-toolbar" style="margin-bottom: 20px;">

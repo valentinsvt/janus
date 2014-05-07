@@ -1681,6 +1681,10 @@ class Planilla2Controller extends janus.seguridad.Shield {
         perOferta = verificaIndices(pcs, perOferta, 0)
         perAnticipo = verificaIndices(pcs, perAnticipo, 0)
 
+        if(!(perOferta&&perAnticipo)) {
+            erroresPeriodos=false;
+        }
+
         if (periodos.size() == 0 && perOferta && perAnticipo) {
             println "creando periodos "
 //            pcs.each {c->
@@ -1705,8 +1709,6 @@ class Planilla2Controller extends janus.seguridad.Shield {
             } else {
                 erroresPeriodos = true
             }
-        } else {
-            erroresPeriodos = true
         }
 
         if(erroresPeriodos) {
