@@ -73,12 +73,63 @@ class Reportes3Controller {
 //            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
             valores = preciosService.rbro_pcun_v2(obra.id)
 
+        def nombres = []
+        def corregidos = []
+        def prueba = []
+        valores.each {
+
+            nombres += it.rbronmbr
+
+        }
+
+
+        nombres.each {
+
+            def text = (it ?: '')
+//        println "--------------------------------------------------------------"
+//        println text
+//            text = text.replaceAll("&lt;", "*lt*")
+//            text = text.replaceAll("&gt;", "*gt*")
+
+            text = text.decodeHTML()
+            text = text.replaceAll(/</, /&lt;/);
+            text = text.replaceAll(/>/, /&gt;/);
+//        println "--------------------------------------------------------------"
+//        text = util.clean(str: text)
+//            text = text.decodeHTML()
+//            text = text.replaceAll("\\*lt\\*", "&lt;")
+//            text = text.replaceAll("\\*gt\\*", "&gt;")
+//            text = text.replaceAll(/&lt;/, /</)
+//            text = text.replaceAll(/&gt;/,/>/ )
+
+             corregidos += text
+
+        }
+
+
+        valores.eachWithIndex{ j,i->
+
+
+            j.rbronmbr = corregidos[i]
+
+        }
+
+        valores.each {
+            prueba += it.rbronmbr
+
+        }
+
+//
+//        println("nombres" + nombres)
+//        println("corregidos" + corregidos)
+//        println("prueba" + prueba)
+
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
         def precios = [:]
         def indirecto = obra.totales / 100
         preciosService.ac_rbroObra(obra.id)
 
-        [detalle: detalle, precios: precios, subPres: subPres, subPre: subPre, obra: obra, indirectos: indirecto * 100, valores: valores, fechaNueva: fechaNueva, fechaPU: fechaPU]
+        [detalle: detalle, precios: precios, subPres: subPres, subPre: subPre, obra: obra, indirectos: indirecto * 100, valores: valores, fechaNueva: fechaNueva, fechaPU: fechaPU, corregidos: corregidos]
 
     }
 

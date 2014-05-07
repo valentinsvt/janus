@@ -1762,6 +1762,7 @@
                                     url += "1";
 //                                    location.href = url;
                                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                                    %{--location.href = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&desglose=1";--}%
                                 },
                                 "No"                               : function () {
                                     url += "0";

@@ -260,7 +260,6 @@
             </tr>
 
             </thead>
-            %{--<div style="font-size: 12px; font-weight: bold">${sp.descripcion}</div>--}%
             <tbody id="tabla_material">
             <g:set var="total" value="${0}"></g:set>
 
@@ -279,8 +278,14 @@
                             ${val.rbrocdgo.trim()}
                         </g:else>
                     </td>
-                    <td class="nombre" style="width: 210px !important">${val.rbronmbr.trim()}</td>
-                    <td style="width: 40px;text-align: right" class="col_unidad">${val.unddcdgo.trim()}</td>
+
+                        %{--<g:set var="nombre" value="${val?.rbronmbr?.trim()?.replaceAll('<', '(menor)')}"/>--}%
+
+                        %{--<td>${nombre}</td>--}%
+
+                        <td class="nombre">${val.rbronmbr}</td>
+
+                        <td style="width: 40px;text-align: right" class="col_unidad">${val.unddcdgo.trim()}</td>
                     <td style="text-align: right; width: 80px" class="cant">
                         <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                     </td>
@@ -387,9 +392,16 @@
             <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
 
                 <td style="width: 20px" class="orden">${val.vlobordn}</td>
-                %{--<td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>--}%
+                <td></td>
+                <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
                 <td class="cdgo">${val.rbrocdgo.trim()}</td>
-                <td class="nombre">${val.rbronmbr.trim()}</td>
+
+                %{--<g:set var="nombre" value="${val?.rbronmbr?.trim()?.replaceAll('<', '(menor)')}"/>--}%
+
+                %{--<td>${nombre}</td>--}%
+
+                <td class="nombre">${val.rbronmbr}</td>
+
                 <td style="width: 60px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
                 <td style="text-align: right" class="cant">
                     <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
@@ -397,7 +409,7 @@
                 <td class="col_precio" style="text-align: right; width: 80px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
                 <td class="col_total total" style="text-align: right; width: 80px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
 
-                <g:set var="total" value="${total.toDouble() + val.totl}"></g:set>
+                <g:set var="total" value="${total.toDouble() + val.totl}"/>
             </tr>
 
         </g:each>
@@ -421,6 +433,11 @@
     //        cadena = 'pedro@hotmail.com';
     //        cadena = cadena.split('@');
     //        document.write(cadena[0]+'<br/>@'+cadena[1]);
+
+
+
+
+
 </script>
 
 </body>

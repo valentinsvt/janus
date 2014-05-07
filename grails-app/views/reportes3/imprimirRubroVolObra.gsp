@@ -198,19 +198,6 @@
 
                 </div>
 
-                %{--<div class="row-fluid">--}%
-                    %{--<div class="span12">--}%
-
-                        %{--<g:if test="${fechaPrecios}">--}%
-
-                            %{--<b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}--}%
-                        %{--</g:if>--}%
-                        %{--<g:else>--}%
-                            %{--<b>Fecha Act. P.U:</b>--}%
-                        %{--</g:else>--}%
-
-                    %{--</div>--}%
-                %{--</div>--}%
                 <div class="row-fluid">
                     <div class="span12">
 
@@ -237,28 +224,10 @@
                     </div>
 
                 </div>
-
-                %{--<div class="row-fluid">--}%
-                    %{--<div class="span12">--}%
-
-                        %{--<b>Unidad:</b> ${rubro?.unidad?.codigo}--}%
-                    %{--</div>--}%
-                %{--</div>--}%
-
-
-
-                %{--<div class="row-fluid">--}%
-                    %{--<div class="span12">--}%
-
-                        %{--<b>Doc. Referencia:</b> ${obra?.oficioIngreso}--}%
-                    %{--</div>--}%
-                %{--</div>--}%
-
-
                 <div class="row-fluid">
                     <div class="span12">
                         <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>
-                        <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(mayor)')}"></g:set>
+                        %{--<g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(mayor)')}"></g:set>--}%
                         <b>Descripción:</b> ${nombre}
                     </div>
                 </div>

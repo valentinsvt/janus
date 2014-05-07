@@ -1230,7 +1230,7 @@ class ReportesController {
                             "                </p>\n" +
                             "\n" +
                             "            </div>\n " +
-                            " <div style=\"margin-top: 20px\">\n" +
+                            " <div style=\"margin-top: 1px\">\n" +
                             "                <div class=\"row-fluid\">\n" +
                             " <div class=\"span3\" style=\"margin-right: 195px !important;\">\n"
             if (fecha2) {
@@ -1259,12 +1259,6 @@ class ReportesController {
                     "                    </div>\n" +
                     "                </div>\n" +
                     "\n" +
-//                    "                <div class=\"row-fluid\">\n" +
-//                    "                    <div class=\"span12\">\n" +
-//                    "\n" +
-//                    "                        <b>Doc. Referencia:</b> ${obra?.oficioIngreso}\n" +
-//                    "                    </div>\n" +
-//                    "                </div>\n" +
                     "               <div class=\"row-fluid\">\n" +
                     "                    <div class=\"span12\">\n" +
                     "\n" +
@@ -1364,9 +1358,6 @@ class ReportesController {
                         tablaMat += "<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbrocntd"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + g.formatNumber(number: r["rbpcpcun"], format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5", locale: "ec") + "</td>"
-//                    tablaMat+="<td style='width: 50px;text-align: center'>${r['unddcdgo']}</td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'>${r['itempeso']}</td>"
-//                    tablaMat += "<td style='width: 50px;text-align: right'></td>"
                         tablaMat += "<td style='width: 50px;text-align: right'>" + r["parcial"] + "</td>"
                         totalMat += r["parcial"]
                     }
@@ -1410,10 +1401,7 @@ class ReportesController {
                     total += r["parcial_t"]
                     tablaTrans += "</tr>"
                 } else {
-
                 }
-
-
             }
 
 
@@ -1443,36 +1431,18 @@ class ReportesController {
             tablaIndi += "<tbody><tr><td>COSTOS INDIRECTOS</td><td style='text-align:center'>${indi}%</td><td style='text-align:right'>${g.formatNumber(number: totalIndi, format: "##,##0", minFractionDigits: "5", maxFractionDigits: "5")}</td></tr></tbody>"
             tablaIndi += "</table>"
 
-//            if (total == 0 || params.trans == 'no')
-//                tablaTrans = ""
-//            if (totalHer == 0)
-//                tablaHer = ""
-//            if (totalMan == 0)
-//                tablaMano = ""
-//            if (totalMat == 0)
-//                tablaMat = ""
-
             tablas = "<div style=\"width: 100%;margin-top: 10px;\">"
 
             if (params.desglose == '0') {
-
-
                 tablas += tablaHer + tablaMano + tablaMat + tablaIndi
-
-
             } else {
-
-
                 tablas += tablaHer + tablaMano + tablaMat + tablaTrans + tablaIndi
-
-
             }
-
 
             tablas += "</div>"
 
             footer =
-                    " <table class=\"table table-bordered table-striped table-condensed table-hover\" style=\"margin-top: 20px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000;\">\n" +
+                    " <table class=\"table table-bordered table-striped table-condensed table-hover\" style=\"margin-top: 20px;margin-left: 300px;width: 50%;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000;\">\n" +
                             "                    <tbody>\n" +
                             "                        <tr>\n" +
                             "                            <td style=\"width: 350px;\">\n" +
@@ -1507,12 +1477,12 @@ class ReportesController {
                             "                </table>"
 
 //            nota = "                <div class='divRubro' style=\"width: 100%;float: left;height: 20px;margin-top: 10px;text-align: left; page-break-after: always\">\n" +
-            nota = "                <div class='divRubro' style=\"width: 100%;float: left;height: 20px;text-align: left; \">\n" +
+
+            nota = "                <div style=\"width: 100%;float: left;height: 20px;text-align: left; \">\n" +
                     "                        <b>Nota:</b> Los cálculos se hacen con todos los decimales y el resultado final se lo redondea a dos decimales\n" +
                     "                    </div>"
 
-
-            html += "<div class='divRubro' style=\"page-break-after: always\">" + header + tablas + footer + nota + "</div>"
+            html += "<div class='divRubro'>" + header + tablas + footer + nota + "</div>"
 
 
         }

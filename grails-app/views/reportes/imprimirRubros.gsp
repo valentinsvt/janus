@@ -43,9 +43,11 @@
         height        : 100px;
         font-size     : 11px;
         /*font-weight   : bold;*/
-        text-align    : center;
+        text-align    : center !important;
         margin-bottom : 5px;
         width         : 95%;
+        /*margin-top:    130px;*/
+
         /*font-family       : 'Tulpen One', cursive !important;*/
         /*font-family : "Open Sans Condensed" !important;*/
     }
@@ -145,7 +147,8 @@
     }
 
     .divRubro {
-        /*page-break-after : always !important;*/
+        page-break-after : always !important;
+        /*display: block !important;*/
         /*margin-bottom: 300px !important;*/
         /*margin-top: 100px !important*/
     }

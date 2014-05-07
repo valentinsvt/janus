@@ -26,4 +26,25 @@ class Rubro implements Serializable {
         rubro(blank: false, nullable: false, attributes: [title: 'rubro'])
         fecha(blank: true, nullable: true, attributes: [title: 'fecha'])
     }
+
+
+
+//
+//    def textoCorregido (texto) {
+//
+//        def text = (texto ?: '')
+////        println "--------------------------------------------------------------"
+////        println text
+//        text = text.replaceAll("&lt;", "*lt*")
+//        text = text.replaceAll("&gt;", "*gt*")
+////        println "--------------------------------------------------------------"
+////        text = util.clean(str: text)
+//        text = text.decodeHTML()
+//        text = text.replaceAll("\\*lt\\*", "&lt;")
+//        text = text.replaceAll("\\*gt\\*", "&gt;")
+//
+//    return text
+//
+//    }
+
 }
