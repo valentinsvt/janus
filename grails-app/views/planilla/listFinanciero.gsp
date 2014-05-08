@@ -178,7 +178,7 @@
                             %{--</a>--}%
                             </td>
                             <td style="text-align: center;">
-                                <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C'}">
+                                <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C' || planillaInstance.tipoPlanilla.codigo == 'L'}">
                                     <g:set var="lblBtn" value="${-1}"/>
                                     <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
                                         <g:set var="lblBtn" value="${2}"/>

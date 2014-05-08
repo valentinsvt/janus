@@ -96,7 +96,7 @@ class ActaController extends janus.seguridad.Shield {
     } //list
 
     def form() {
-        println "**************"+params
+        println "**************" + params
         if (!params.tipo) {
             params.tipo = 'P' //provisional
         }
@@ -137,25 +137,25 @@ class ActaController extends janus.seguridad.Shield {
                     if (tipo == 'P') {
                         secciones = [
                                 [
-                                        numero: 1,
-                                        titulo: "ANTECEDENTES",
+                                        numero  : 1,
+                                        titulo  : "ANTECEDENTES",
                                         parrafos: [
                                                 [
-                                                        numero: 1,
+                                                        numero   : 1,
                                                         contenido: "La presente Acta se suscribe en atención a la solicitud formulada por el contratista el " + fechaConFormato(contrato.fechaPedidoRecepcionContratista, "dd MMMM yyyy") + " y tramitada mediante hoja de control y trámite N."
                                                 ],
                                                 [
-                                                        numero: 2,
+                                                        numero   : 2,
                                                         contenido: "En cumplimiento del artículo 81 de la Ley Orgánica del Sistema Nacional de Contratación Pública el señor Prefecto autoriza el trámite solicitado por el contratista medinte hoja de control y trámite N."
                                                 ],
                                         ]
                                 ],
                                 [
-                                        numero: 2,
-                                        titulo: "CONDICIONES GENERALES DE EJECUCIÓN",
+                                        numero  : 2,
+                                        titulo  : "CONDICIONES GENERALES DE EJECUCIÓN",
                                         parrafos: [
                                                 [
-                                                        numero: 1,
+                                                        numero   : 1,
                                                         contenido: "Mediante contrato " + contrato.codigo + " suscrito el " + fechaConFormato(contrato.fechaSubscripcion, "dd-MM-yyyy") + " el contratista " +
                                                                 "" + nombrePersona(contrato.oferta.proveedor, "prov") + " se compromete a construir <strong>" + contrato.objeto + "</strong> en " +
                                                                 "<strong>" + obra.sitio + "</strong> - <strong>Parroquia " + obra.parroquia.nombre + " - Cantón " + obra.parroquia.canton.nombre + "</strong>" +
@@ -169,47 +169,47 @@ class ActaController extends janus.seguridad.Shield {
                                         titulo: "CONDICIONES OPERATIVAS"
                                 ],
                                 [
-                                        numero: 4,
-                                        titulo: "LIQUIDACIÓN ECONÓMICA",
+                                        numero  : 4,
+                                        titulo  : "LIQUIDACIÓN ECONÓMICA",
                                         parrafos: [
                                                 [
-                                                        numero: 1,
+                                                        numero   : 1,
                                                         contenido: "<strong>OBRA EJECUTADA.-</strong> Los rubros ejecutados y pagados en las planillas correspondientes son los siguientes",
                                                         tipoTabla: "RBR"
                                                 ],
                                                 [
-                                                        numero: 2,
+                                                        numero   : 2,
                                                         contenido: "<strong>DETALLE DE PLANILLAS.-</strong> Los rubros ejecutados por el contratista, medidos en la obra y aceptados por las partes, se hallan consignados en planillas de pago de acuerdo al siguiente detalle:",
                                                         tipoTabla: "DTP"
                                                 ],
                                                 [
-                                                        numero: 3,
+                                                        numero   : 3,
                                                         contenido: "<strong>DETALLE DE OBRAS ADICIONALES:</strong>",
                                                         tipoTabla: "OAD"
                                                 ],
                                                 [
-                                                        numero: 4,
+                                                        numero   : 4,
                                                         contenido: "<strong>RESUMEN DE OBRAS BAJO LA MODALIDAD COSTO + PORCENTAJE:</strong>",
                                                         tipoTabla: "OCP"
                                                 ],
                                                 [
-                                                        numero: 5,
+                                                        numero   : 5,
                                                         contenido: "<strong>RESUMEN DE REAJUSTES DE PRECIOS:</strong>",
                                                         tipoTabla: "RRP"
                                                 ],
                                                 [
-                                                        numero: 6,
+                                                        numero   : 6,
                                                         contenido: "<strong>RESUMEN GENERAL DE VALORES:</strong>",
                                                         tipoTabla: "RGV"
                                                 ]
                                         ]
                                 ],
                                 [
-                                        numero: 5,
-                                        titulo: "LIQUIDACIÓN DE PLAZOS",
+                                        numero  : 5,
+                                        titulo  : "LIQUIDACIÓN DE PLAZOS",
                                         parrafos: [
                                                 [
-                                                        numero: 1,
+                                                        numero   : 1,
                                                         contenido: "El plazo de entrega de la obra, según el contrato, es de: <strong>" + numero(contrato.plazo, 0) + " días calendario</strong>" +
                                                                 " contados a partir del " + fechaConFormato(obra.fechaInicio, "dd-MM-yyyy") + " según orden de inicio impartida por la Dirección de " +
                                                                 "Fiscalización mediante "
@@ -220,29 +220,29 @@ class ActaController extends janus.seguridad.Shield {
 
                         secciones.each { s ->
                             def seccion = new Seccion([
-                                    acta: actaInstance,
+                                    acta  : actaInstance,
                                     numero: s.numero,
                                     titulo: s.titulo
                             ])
                             if (!seccion.save(flush: true)) {
                                 println "error al guardar seccion " + s.numero + ": " + seccion.errors
                             } else {
-                                s.id=seccion.id
+                                s.id = seccion.id
                                 s.parrafos.each { p ->
                                     def tipoTabla = null
                                     if (p.tipoTabla) {
                                         tipoTabla = p.tipoTabla
                                     }
                                     def parrafo = new Parrafo([
-                                            seccion: seccion,
-                                            numero: p.numero,
+                                            seccion  : seccion,
+                                            numero   : p.numero,
                                             contenido: p.contenido,
                                             tipoTabla: tipoTabla
                                     ])
                                     if (!parrafo.save(flush: true)) {
                                         println "error al guardar el parrafo (" + seccion.numero + ") " + p.numero + ": " + parrafo.errors
                                     } else {
-                                        p.id=parrafo.id
+                                        p.id = parrafo.id
                                     }
                                 }
                             }
@@ -264,15 +264,15 @@ class ActaController extends janus.seguridad.Shield {
                                     def nuevaSec = new Seccion([
                                             numero: seccion.numero,
                                             titulo: seccion.titulo,
-                                            acta: actaInstance
+                                            acta  : actaInstance
                                     ])
                                     if (nuevaSec.save(flush: true)) {
                                         seccion.parrafos.each { parrafo ->
                                             def nuevoParr = new Parrafo([
-                                                    numero: parrafo.numero,
+                                                    numero   : parrafo.numero,
                                                     contenido: parrafo.contenido,
                                                     tipoTabla: parrafo.tipoTabla,
-                                                    seccion: nuevaSec
+                                                    seccion  : nuevaSec
                                             ])
                                             if (!nuevoParr.save(flush: true)) {
                                                 println "error al guardar: " + nuevoParr.errors
@@ -303,8 +303,8 @@ class ActaController extends janus.seguridad.Shield {
                     objSec.parrafos = []
                     Parrafo.findAllBySeccion(s).each { p ->
                         objSec.parrafos.add([
-                                id: p.id,
-                                numero: p.numero,
+                                id       : p.id,
+                                numero   : p.numero,
                                 contenido: p.contenido,
                                 tipoTabla: p.tipoTabla
                         ])
@@ -314,11 +314,11 @@ class ActaController extends janus.seguridad.Shield {
             } //es edit
             else {
                 if (params.contrato) {
-                    println"**2"
+                    println "**2"
                     def sec = []
                     def contrato = Contrato.get(params.contrato)
                     def actas = Acta.findAllByContratoAndTipo(contrato, tipo)
-                    println "**3"+actas
+                    println "**3" + actas
                     if (actas.size() == 0) {
 
                         def meses = ['', "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -339,7 +339,7 @@ class ActaController extends janus.seguridad.Shield {
                     } else if (actas.size() == 1) {
                         println "**4"
                         actaInstance = actas[0]
-                        actaProv =  Acta.findByContratoAndTipo(contrato, "P")
+                        actaProv = Acta.findByContratoAndTipo(contrato, "P")
                         sec = actaInstance.secciones
                     } else {
                         actaInstance = actas.find { it.tipo == 'P' }
@@ -353,8 +353,8 @@ class ActaController extends janus.seguridad.Shield {
                         objSec.parrafos = []
                         s.parrafos.each { p ->
                             objSec.parrafos.add([
-                                    id: p.id,
-                                    numero: p.numero,
+                                    id       : p.id,
+                                    numero   : p.numero,
                                     contenido: p.contenido,
                                     tipoTabla: p.tipoTabla
                             ])
@@ -368,14 +368,14 @@ class ActaController extends janus.seguridad.Shield {
 //            println jsonSecciones.toPrettyString()
 
             def editable = actaInstance.registrada == 0 && !actaInstance.fechaRegistro
-            println "#################################"
-            println actaInstance.id
-            println actaInstance.registrada
-            println actaInstance.fechaRegistro
-            println actaProv.id
-            println actaProv.registrada
-            println actaProv.fechaRegistro
-            println "#################################"
+//            println "#################################"
+//            println actaInstance.id
+//            println actaInstance.registrada
+//            println actaInstance.fechaRegistro
+//            println actaProv.id
+//            println actaProv.registrada
+//            println actaProv.fechaRegistro
+//            println "#################################"
             if (tipo == 'D') {
                 if (actaProv.registrada != 1 || !actaProv.fechaRegistro) {
                     flash.message = "No ha registrado el acta provisional, no puede generar el acta definitiva."
@@ -443,7 +443,7 @@ class ActaController extends janus.seguridad.Shield {
             flash.clase = "alert-error"
             flash.message = "Ha ocurrido un error al registrar el acta: " + g.renderErrors(bean: acta)
         }
-        redirect(action: "form", id: params.id)
+        redirect(controller: "planilla", action: "list", id: acta.contrato.id)
     }
 
     def save() {

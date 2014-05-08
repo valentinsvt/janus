@@ -53,7 +53,11 @@
 
         <div class="row">
             <div class="span12" role="navigation">
-                <g:if test="${planillaInstanceList.size() > 0 && planillaInstanceList.last() && planillaInstanceList.last()?.fechaFin && prej[0] && prej[0]?.fechaFin && planillaInstanceList.last()?.fechaFin >= prej[0]?.fechaFin}">
+                <g:if test="${ultimaAvance &&
+                        ultimaAvance.fechaFin &&
+                        prej[0] &&
+                        prej[0]?.fechaFin &&
+                        ultimaAvance?.fechaFin >= prej[0]?.fechaFin}">
                     <div class="btn-group">
                         <g:link controller="reportesPlanillas" action="reporteDiferencias" class="btn" id="${contrato.id}">
                             <i class="icon-exchange"></i>
@@ -141,11 +145,11 @@
                             %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">--}%
                             %{--<i class="icon-zoom-in icon-large"></i>--}%
                             %{--</a>--}%
-                                %{--<g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo != 'A'}">--}%
-                                    %{--<g:link action="" href="#" class="btn btn-small" rel="tooltip" id="${planillaInstance.id}" title="Editar">--}%
-                                        %{--<i class="icon-pencil icon-large"></i>--}%
-                                    %{--</g:link>--}%
-                                %{--</g:if>--}%
+                            %{--<g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo != 'A'}">--}%
+                            %{--<g:link action="" href="#" class="btn btn-small" rel="tooltip" id="${planillaInstance.id}" title="Editar">--}%
+                            %{--<i class="icon-pencil icon-large"></i>--}%
+                            %{--</g:link>--}%
+                            %{--</g:if>--}%
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
@@ -211,7 +215,7 @@
                             %{--</a>--}%
                             </td>
                             <td style="text-align: center;">
-                                <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C'}">
+                                <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C' || planillaInstance.tipoPlanilla.codigo == 'L'}">
                                     <g:set var="lblBtn" value="${-1}"/>
                                     <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
                                         <g:set var="lblBtn" value="${2}"/>
@@ -277,9 +281,9 @@
                                     </g:if>
                                 </g:if>
                                 <g:else>
-                                    %{--<div class="badge badge-important">--}%
-                                        %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
-                                    %{--</div>--}%
+                                %{--<div class="badge badge-important">--}%
+                                %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
+                                %{--</div>--}%
                                 </g:else>
                             </td>
                         </tr>

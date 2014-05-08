@@ -501,23 +501,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listFiscalizador() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-        switch (codigoPerfil) {
-            case "FINA":
-                redirect(action: 'listFinanciero', id: params.id)
-                return
-                break;
-            case "ADCT":
-                redirect(action: 'listAdmin', id: params.id)
-                return
-                break;
-            case "FISC":
-//                redirect(action: 'listFiscalizador', id: params.id)
+//        switch (codigoPerfil) {
+//            case "FINA":
+//                redirect(action: 'listFinanciero', id: params.id)
 //                return
-                break;
-            default:
-                redirect(action: 'list', id: params.id)
-                return
-        }
+//                break;
+//            case "ADCT":
+//                redirect(action: 'listAdmin', id: params.id)
+//                return
+//                break;
+//            case "FISC":
+////                redirect(action: 'listFiscalizador', id: params.id)
+////                return
+//                break;
+//            default:
+//                redirect(action: 'list', id: params.id)
+//                return
+//        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -525,29 +525,36 @@ class PlanillaController extends janus.seguridad.Shield {
 //        println fp
         def firma = Persona.findAllByCargoIlike("Direct%");
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
-        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma]
+
+        def tipoAvance = TipoPlanilla.findByCodigo('P')
+        def planillasAvance = Planilla.findAllByContratoAndTipoPlanilla(contrato, tipoAvance, [sort: "id", order: "asc"])
+        def ultimaAvance = null
+        if (planillasAvance.size() > 0) {
+            ultimaAvance = planillasAvance.last()
+        }
+        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma, ultimaAvance: ultimaAvance]
     }
 
     def listAdmin() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-        switch (codigoPerfil) {
-            case "FINA":
-                redirect(action: 'listFinanciero', id: params.id)
-                return
-                break;
-            case "ADCT":
-//                redirect(action: 'listAdmin', id: params.id)
+//        switch (codigoPerfil) {
+//            case "FINA":
+//                redirect(action: 'listFinanciero', id: params.id)
 //                return
-                break;
-            case "FISC":
-                redirect(action: 'listFiscalizador', id: params.id)
-                return
-                break;
-            default:
-                redirect(action: 'list', id: params.id)
-                return
-        }
+//                break;
+//            case "ADCT":
+////                redirect(action: 'listAdmin', id: params.id)
+////                return
+//                break;
+//            case "FISC":
+//                redirect(action: 'listFiscalizador', id: params.id)
+//                return
+//                break;
+//            default:
+//                redirect(action: 'list', id: params.id)
+//                return
+//        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -563,23 +570,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listFinanciero() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-        switch (codigoPerfil) {
-            case "FINA":
-//                redirect(action: 'listFinanciero', id: params.id)
+//        switch (codigoPerfil) {
+//            case "FINA":
+////                redirect(action: 'listFinanciero', id: params.id)
+////                return
+//                break;
+//            case "ADCT":
+//                redirect(action: 'listAdmin', id: params.id)
 //                return
-                break;
-            case "ADCT":
-                redirect(action: 'listAdmin', id: params.id)
-                return
-                break;
-            case "FISC":
-                redirect(action: 'listFiscalizador', id: params.id)
-                return
-                break;
-            default:
-                redirect(action: 'list', id: params.id)
-                return
-        }
+//                break;
+//            case "FISC":
+//                redirect(action: 'listFiscalizador', id: params.id)
+//                return
+//                break;
+//            default:
+//                redirect(action: 'list', id: params.id)
+//                return
+//        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -1414,7 +1421,10 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def tiposPlanilla = TipoPlanilla.list([sort: 'nombre'])
 
+        println "1: " + tiposPlanilla.codigo
+
         tiposPlanilla -= resumenMateriales
+        println "2: " + tiposPlanilla.codigo
 
         def periodosEjec = PeriodoEjecucion.findAllByObra(contrato.oferta.concurso.obra, [sort: "fechaFin"])
         def finalObra = null
@@ -1445,20 +1455,25 @@ class PlanillaController extends janus.seguridad.Shield {
         def esAnticipo = false
         if (cPlanillas == 0) {
             tiposPlanilla = TipoPlanilla.findAllByCodigo('A')
+            println "3: " + tiposPlanilla.codigo
             esAnticipo = true
         } else {
             if (pla) {
                 tiposPlanilla -= pla.tipoPlanilla
+                println "4: " + tiposPlanilla.codigo
             }
             def pll = Planilla.findByContratoAndTipoPlanilla(contrato, liquidacion)
             if (pll) {
                 tiposPlanilla -= pll.tipoPlanilla
+                println "5: " + tiposPlanilla.codigo
                 liquidado = true
                 tiposPlanilla = []
+                println "6: " + tiposPlanilla.codigo
             }
             def plr = Planilla.findByContratoAndTipoPlanilla(contrato, reajusteDefinitivo)
             if (plr) {
                 tiposPlanilla -= plr.tipoPlanilla
+                println "7: " + tiposPlanilla.codigo
             }
             def plc = Planilla.findByContratoAndTipoPlanilla(contrato, costoPorcentaje)
             if (plc) {
@@ -1469,17 +1484,20 @@ class PlanillaController extends janus.seguridad.Shield {
 //                println tt
                 if (tt >= (contrato.monto * 0.1).round(2)) {
                     tiposPlanilla -= plc.tipoPlanilla
+                    println "8: " + tiposPlanilla.codigo
                 }
             }
-            if (tiposPlanilla.find { it.codigo == "P" }) {
-                tiposPlanilla -= liquidacion
-            }
+//            if (tiposPlanilla.find { it.codigo == "P" }) {
+//                tiposPlanilla -= liquidacion
+//                println "9: "+tiposPlanilla.codigo
+//            }
         }
         def costo = false
         if (planillasAvance.size() > 0) {
             if (planillasAvance.last().fechaFin == finalObra) {
                 def plp = Planilla.findByContratoAndTipoPlanilla(contrato, avance)
                 tiposPlanilla -= plp.tipoPlanilla
+                println "10: " + tiposPlanilla.codigo
             }
             planillasAvance.each { pa ->
                 if (pa.fechaMemoPagoPlanilla != null) {
@@ -1489,11 +1507,15 @@ class PlanillaController extends janus.seguridad.Shield {
                         costo = true
                     }
                 }
-
             }
+        }
+        if (tiposPlanilla.find { it.codigo == "P" }) {
+            tiposPlanilla -= liquidacion
+            println "9: " + tiposPlanilla.codigo
         }
         if (!costo) {
             tiposPlanilla.remove(TipoPlanilla.findByCodigo("C"))
+            println "11: " + tiposPlanilla.codigo
         }
 
         if (!params.id) {
@@ -1609,6 +1631,7 @@ class PlanillaController extends janus.seguridad.Shield {
             fechaMax = new Date()
 //        println "fecha max " + fechaMax
 
+        println "12: " + tiposPlanilla.codigo
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
                 minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax]
@@ -1639,6 +1662,13 @@ class PlanillaController extends janus.seguridad.Shield {
         }
         if (tipo.codigo == "C" || tipo.codigo == "A") {
             params.avanceFisico = 0
+        }
+        if (tipo.codigo == 'L') {
+            def contrato = Contrato.get(params.contrato.id)
+            def tipoAvance = TipoPlanilla.findByCodigo('P')
+            def planillasAvance = Planilla.findAllByContratoAndTipoPlanilla(contrato, tipoAvance, [sort: "id", order: "asc"])
+            def ultimaAvance = planillasAvance.last()
+            params.avanceFisico = ultimaAvance.avanceFisico
         }
         if (!params.diasMultaDisposiciones) {
             params.diasMultaDisposiciones = 0
@@ -3756,17 +3786,17 @@ class PlanillaController extends janus.seguridad.Shield {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
         /*TODO: descomentar esto para que bloquee segun el perfil */
-        switch (codigoPerfil) {
-            case "FINA":
-            case "ADCT":
-                editable = false
-                break;
-            case "FISC":
-//                editable = editable
-                break;
-            default:
-                editable = false
-        }
+//        switch (codigoPerfil) {
+//            case "FINA":
+//            case "ADCT":
+//                editable = false
+//                break;
+//            case "FISC":
+////                editable = editable
+//                break;
+//            default:
+//                editable = false
+//        }
         /* DESCOMENTAR HASTA AQUI */
 //        editable = true
 

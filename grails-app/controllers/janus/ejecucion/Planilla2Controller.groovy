@@ -1378,21 +1378,21 @@ class Planilla2Controller extends janus.seguridad.Shield {
 //                retraso = 0
 //            }
 
-            def retraso = diasLaborablesService.diasLaborablesEntre(fechaFinFiscalizador, prej[0].fechaFin)
-            if (retraso[0]) {
-                retraso = retraso[1]
+            def ret = diasLaborablesService.diasLaborablesEntre(fechaFinFiscalizador, prej[0].fechaFin)
+            def retraso = null
+            if (ret[0]) {
+                retraso = ret[1]
             } else {
                 retraso = null
             }
-
-            if (!retraso) {
+            if (retraso == false) {
 //                redirect(action: "errores")
                 def url = g.createLink(controller: "planilla", action: "list", id: contrato.id)
-                def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: retraso[2] ?: ""])
+                def url2 = g.createLink(controller: "diaLaborable", action: "calendario", params: [anio: ret[2] ?: ""])
                 def link = "<a href='${url}' class='btn btn-danger'>Lista de planillas</a>"
                 link += "&nbsp;&nbsp;&nbsp;"
                 link += "<a href='${url2}' class='btn btn-primary'>Configurar días laborables</a>"
-                flash.message = retraso[1]
+                flash.message = ret[1]
                 redirect(action: "errores", params: [link: link])
                 return
             }

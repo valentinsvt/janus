@@ -204,7 +204,7 @@
                             %{--</a>--}%
                             </td>
                             <td style="text-align: center;">
-                                <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C'}">
+                                <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C' || planillaInstance.tipoPlanilla.codigo == 'L'}">
                                     <g:set var="lblBtn" value="${-1}"/>
                                     <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
                                         <g:set var="lblBtn" value="${2}"/>
@@ -278,9 +278,9 @@
                                 %{--</a>--}%
                                 </g:if>
                                 <g:else>
-                                    %{--<div class="badge badge-important">--}%
-                                        %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
-                                    %{--</div>--}%
+                                %{--<div class="badge badge-important">--}%
+                                %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
+                                %{--</div>--}%
                                 </g:else>
                             </td>
                         </tr>

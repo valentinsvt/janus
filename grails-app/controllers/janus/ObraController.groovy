@@ -346,7 +346,6 @@ class ObraController extends janus.seguridad.Shield {
         def resultM = cn.rows(sqlM.toString())
         def resultR = cn.rows(sqlR.toString())
 
-
         //println "\n\n"
         //println resultM
         //println resultR
@@ -448,9 +447,6 @@ class ObraController extends janus.seguridad.Shield {
         def tipoObra
         def claseObra
 
-
-
-
 //filtro original combos programa tipo clase
 
 //        if(grupo != null){
@@ -509,13 +505,13 @@ class ObraController extends janus.seguridad.Shield {
                 matrizOk = true
             }
             def concurso = janus.pac.Concurso.findByObra(obra)
-            if(concurso){
-             if(!concurso.fechaLimiteEntregaOfertas)
-                 concurso=null
+            if (concurso) {
+                if (!concurso.fechaLimiteEntregaOfertas)
+                    concurso = null
 
             }
 //            println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos,concurso:concurso]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, concurso: concurso]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento
@@ -558,7 +554,12 @@ class ObraController extends janus.seguridad.Shield {
             return
         }
         def dpto = obra.departamento
+//        println "........." + obra.id
+//        println "........." + dpto
 //        println "........." + dpto.documento
+//        println "........." + dpto.fechaUltimoDoc
+//        println "........." + dpto.codigo
+
         def numActual = dpto.documento
         def num = numActual ?: 0 + 1
         if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
@@ -566,6 +567,9 @@ class ObraController extends janus.seguridad.Shield {
         }
         def numero = "FP-" + num
         if (dpto.codigo) {
+            numero += "-" + dpto.codigo
+        } else {
+            dpto.codigo = dpto.id
             numero += "-" + dpto.codigo
         }
         numero += "-" + (new Date().format("yy"))
@@ -575,7 +579,7 @@ class ObraController extends janus.seguridad.Shield {
         } else if (obra.liquidacion == 2) {
             numero += "-OFE"
         }
-
+//        println numero
         obra.formulaPolinomica = numero
         if (obra.save(flush: true)) {
             dpto.documento = num
@@ -943,7 +947,6 @@ class ObraController extends janus.seguridad.Shield {
         def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
 
-
 //        println("---->>" + personasRolResp)
 //        println("---->>" + personas)
 
@@ -961,7 +964,7 @@ class ObraController extends janus.seguridad.Shield {
     }
 
 
-    def getSalida () {
+    def getSalida() {
 
 //        println("params:" + params)
 
