@@ -501,23 +501,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listFiscalizador() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-//        switch (codigoPerfil) {
-//            case "FINA":
-//                redirect(action: 'listFinanciero', id: params.id)
+        switch (codigoPerfil) {
+            case "FINA":
+                redirect(action: 'listFinanciero', id: params.id)
+                return
+                break;
+            case "ADCT":
+                redirect(action: 'listAdmin', id: params.id)
+                return
+                break;
+            case "FISC":
+//                redirect(action: 'listFiscalizador', id: params.id)
 //                return
-//                break;
-//            case "ADCT":
-//                redirect(action: 'listAdmin', id: params.id)
-//                return
-//                break;
-//            case "FISC":
-////                redirect(action: 'listFiscalizador', id: params.id)
-////                return
-//                break;
-//            default:
-//                redirect(action: 'list', id: params.id)
-//                return
-//        }
+                break;
+            default:
+                redirect(action: 'list', id: params.id)
+                return
+        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -531,23 +531,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listAdmin() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-//        switch (codigoPerfil) {
-//            case "FINA":
-//                redirect(action: 'listFinanciero', id: params.id)
+        switch (codigoPerfil) {
+            case "FINA":
+                redirect(action: 'listFinanciero', id: params.id)
+                return
+                break;
+            case "ADCT":
+//                redirect(action: 'listAdmin', id: params.id)
 //                return
-//                break;
-//            case "ADCT":
-////                redirect(action: 'listAdmin', id: params.id)
-////                return
-//                break;
-//            case "FISC":
-//                redirect(action: 'listFiscalizador', id: params.id)
-//                return
-//                break;
-//            default:
-//                redirect(action: 'list', id: params.id)
-//                return
-//        }
+                break;
+            case "FISC":
+                redirect(action: 'listFiscalizador', id: params.id)
+                return
+                break;
+            default:
+                redirect(action: 'list', id: params.id)
+                return
+        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -563,23 +563,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listFinanciero() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-//        switch (codigoPerfil) {
-//            case "FINA":
-////                redirect(action: 'listFinanciero', id: params.id)
-////                return
-//                break;
-//            case "ADCT":
-//                redirect(action: 'listAdmin', id: params.id)
+        switch (codigoPerfil) {
+            case "FINA":
+//                redirect(action: 'listFinanciero', id: params.id)
 //                return
-//                break;
-//            case "FISC":
-//                redirect(action: 'listFiscalizador', id: params.id)
-//                return
-//                break;
-//            default:
-//                redirect(action: 'list', id: params.id)
-//                return
-//        }
+                break;
+            case "ADCT":
+                redirect(action: 'listAdmin', id: params.id)
+                return
+                break;
+            case "FISC":
+                redirect(action: 'listFiscalizador', id: params.id)
+                return
+                break;
+            default:
+                redirect(action: 'list', id: params.id)
+                return
+        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -747,14 +747,14 @@ class PlanillaController extends janus.seguridad.Shield {
 
             def estadoTramite = EstadoTramite.findByCodigo("C")
             def tramite = new Tramite([
-                    planilla: planilla,
-                    tipoTramite: tipoTramite,
+                    planilla    : planilla,
+                    tipoTramite : tipoTramite,
                     tramitePadre: tramitePadre,
-                    estado: estadoTramite,
-                    descripcion: params.asunto,
-                    memo: memo,
-                    fecha: fecha,
-                    fechaEnvio: new Date()
+                    estado      : estadoTramite,
+                    descripcion : params.asunto,
+                    memo        : memo,
+                    fecha       : fecha,
+                    fechaEnvio  : new Date()
             ])
             if (!tramite.save(flush: true)) {
                 println "Error al guardar el tramite: "
@@ -782,9 +782,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     def rol = RolTramite.get(rolId.toLong())
                     def pers = Persona.get(val.toLong())
                     def personaTramite = new PersonasTramite([
-                            tramite: tramite,
-                            rolTramite: rol,
-                            persona: pers,
+                            tramite     : tramite,
+                            rolTramite  : rol,
+                            persona     : pers,
                             departamento: pers.departamento
                     ])
                     if (!personaTramite.save(flush: true)) {
@@ -890,18 +890,18 @@ class PlanillaController extends janus.seguridad.Shield {
                 if (!tipoTramite) {
                     println "NOP: crear un tipo de tramite con codigo ENRJ, para: " + obraDpto
                     tipoTramite = new TipoTramite([
-                            padre: null,
-                            codigo: "ENRJ",
-                            tiempo: 5,
-                            descripcion: "Enviar reajuste (fiscalización a " + obraDpto.descripcion.toLowerCase() + ")",
-                            tipo: "P",
+                            padre            : null,
+                            codigo           : "ENRJ",
+                            tiempo           : 5,
+                            descripcion      : "Enviar reajuste (fiscalización a " + obraDpto.descripcion.toLowerCase() + ")",
+                            tipo             : "P",
                             requiereRespuesta: "S"
                     ])
                     if (tipoTramite.save(flush: true)) {
                         println "Creado tipo de tramite OK, creando dptos"
                         def dDe = new DepartamentoTramite([
-                                tipoTramite: tipoTramite,
-                                rolTramite: RolTramite.findByCodigo("DE"),
+                                tipoTramite : tipoTramite,
+                                rolTramite  : RolTramite.findByCodigo("DE"),
                                 departamento: dptoFiscalizacion
 //                                departamento: Departamento.get(1) //Fiscalizacion
                         ])
@@ -909,8 +909,8 @@ class PlanillaController extends janus.seguridad.Shield {
                             println "error al guardar DE: " + dDe.errors
                         }
                         def dPara = new DepartamentoTramite([
-                                tipoTramite: tipoTramite,
-                                rolTramite: RolTramite.findByCodigo("PARA"),
+                                tipoTramite : tipoTramite,
+                                rolTramite  : RolTramite.findByCodigo("PARA"),
                                 departamento: obraDpto
                         ])
                         if (!dPara.save(flush: true)) {
@@ -983,26 +983,26 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
                     //////////////////////////////////
                     tipoTramite = new TipoTramite([
-                            padre: tipoTramitePadre,
-                            codigo: "PDPG",
-                            tiempo: 2,
-                            descripcion: "Pedir pago planilla (" + (obraDpto.descripcion.size() <= 22 ? obraDpto.descripcion.toLowerCase() : obraDpto.descripcion.toLowerCase()[0..22]) + " a dir. financiera)",
-                            tipo: "P",
+                            padre            : tipoTramitePadre,
+                            codigo           : "PDPG",
+                            tiempo           : 2,
+                            descripcion      : "Pedir pago planilla (" + (obraDpto.descripcion.size() <= 22 ? obraDpto.descripcion.toLowerCase() : obraDpto.descripcion.toLowerCase()[0..22]) + " a dir. financiera)",
+                            tipo             : "P",
                             requiereRespuesta: "S"
                     ])
                     if (tipoTramite.save(flush: true)) {
                         println "Creado tipo de tramite OK, creando dptos"
                         def dDe = new DepartamentoTramite([
-                                tipoTramite: tipoTramite,
-                                rolTramite: RolTramite.findByCodigo("DE"),
+                                tipoTramite : tipoTramite,
+                                rolTramite  : RolTramite.findByCodigo("DE"),
                                 departamento: obraDpto
                         ])
                         if (!dDe.save(flush: true)) {
                             println "error al guardar DE: " + dDe.errors
                         }
                         def dPara = new DepartamentoTramite([
-                                tipoTramite: tipoTramite,
-                                rolTramite: RolTramite.findByCodigo("PARA"),
+                                tipoTramite : tipoTramite,
+                                rolTramite  : RolTramite.findByCodigo("PARA"),
                                 departamento: dptoDirFinanciera //dir. financiera
 //                                departamento: Departamento.get(11) //dir. financiera
                         ])
@@ -1066,18 +1066,18 @@ class PlanillaController extends janus.seguridad.Shield {
                     }
                     //////////////////////////////////
                     tipoTramite = new TipoTramite([
-                            padre: tipoTramitePadre,
-                            codigo: "INPG",
-                            tiempo: 15,
-                            descripcion: "Informar pago planilla (" + (obraDpto.descripcion.size() <= 19 ? obraDpto.descripcion.toLowerCase() : obraDpto.descripcion.toLowerCase()[0..19]) + " a dir. financiera)",
-                            tipo: "P",
+                            padre            : tipoTramitePadre,
+                            codigo           : "INPG",
+                            tiempo           : 15,
+                            descripcion      : "Informar pago planilla (" + (obraDpto.descripcion.size() <= 19 ? obraDpto.descripcion.toLowerCase() : obraDpto.descripcion.toLowerCase()[0..19]) + " a dir. financiera)",
+                            tipo             : "P",
                             requiereRespuesta: "N"
                     ])
                     if (tipoTramite.save(flush: true)) {
                         println "Creado tipo de tramite OK, creando dptos"
                         def dDe = new DepartamentoTramite([
-                                tipoTramite: tipoTramite,
-                                rolTramite: RolTramite.findByCodigo("DE"),
+                                tipoTramite : tipoTramite,
+                                rolTramite  : RolTramite.findByCodigo("DE"),
                                 departamento: dptoDirFinanciera //dir. financiera
 //                                departamento: Departamento.get(11) //dir. financiera
                         ])
@@ -1085,8 +1085,8 @@ class PlanillaController extends janus.seguridad.Shield {
                             println "error al guardar DE: " + dDe.errors
                         }
                         def dPara = new DepartamentoTramite([
-                                tipoTramite: tipoTramite,
-                                rolTramite: RolTramite.findByCodigo("PARA"),
+                                tipoTramite : tipoTramite,
+                                rolTramite  : RolTramite.findByCodigo("PARA"),
                                 departamento: obraDpto
                         ])
                         if (!dPara.save(flush: true)) {
@@ -1261,14 +1261,14 @@ class PlanillaController extends janus.seguridad.Shield {
 
             def estadoTramite = EstadoTramite.findByCodigo("C")
             def tramite = new Tramite([
-                    planilla: planilla,
-                    tipoTramite: tipoTramite,
+                    planilla    : planilla,
+                    tipoTramite : tipoTramite,
                     tramitePadre: tramitePadre,
-                    estado: estadoTramite,
-                    descripcion: params.asunto,
-                    memo: memo,
-                    fecha: fecha,
-                    fechaEnvio: new Date()
+                    estado      : estadoTramite,
+                    descripcion : params.asunto,
+                    memo        : memo,
+                    fecha       : fecha,
+                    fechaEnvio  : new Date()
             ])
             if (!tramite.save(flush: true)) {
                 println "Error al guardar el tramite: "
@@ -1296,9 +1296,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     def rol = RolTramite.get(rolId.toLong())
                     def pers = Persona.get(val.toLong())
                     def personaTramite = new PersonasTramite([
-                            tramite: tramite,
-                            rolTramite: rol,
-                            persona: pers,
+                            tramite     : tramite,
+                            rolTramite  : rol,
+                            persona     : pers,
                             departamento: pers.departamento
                     ])
                     if (!personaTramite.save(flush: true)) {
@@ -1607,10 +1607,11 @@ class PlanillaController extends janus.seguridad.Shield {
             fechaMax = contrato.fechaSubscripcion.plus(366)
         else
             fechaMax = new Date()
-        println "fecha max " + fechaMax
+//        println "fecha max " + fechaMax
 
-        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra, periodos: periodos, esAnticipo: esAnticipo,
-                anticipoPagado: anticipoPagado, maxDatePres: maxDatePres, minDatePres: minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax]
+        return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
+                periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
+                minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax]
     }
 
 
@@ -1630,7 +1631,12 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def save() {
-        def tipo = TipoPlanilla.get(params.tipoPlanilla.id.toLong())
+        def tipo
+        if (params.id) {
+            tipo = Planilla.get(params.id).tipoPlanilla
+        } else {
+            tipo = TipoPlanilla.get(params.tipoPlanilla.id.toLong())
+        }
         if (tipo.codigo == "C" || tipo.codigo == "A") {
             params.avanceFisico = 0
         }
@@ -1663,8 +1669,9 @@ class PlanillaController extends janus.seguridad.Shield {
             params.numero = params.numero.toString().toUpperCase()
         }
         def planillaInstance
-
+        session.override = false
         if (params.id) {
+            params.fechaPresentacion = params.fechaIngreso
             planillaInstance = Planilla.get(params.id)
             if (!planillaInstance) {
                 flash.clase = "alert-error"
@@ -1674,6 +1681,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 return
             }//no existe el objeto
             planillaInstance.properties = params
+            session.override = true
         }//es edit
         else {
             planillaInstance = new Planilla(params)
@@ -2112,11 +2120,11 @@ class PlanillaController extends janus.seguridad.Shield {
                             alertasIndice += alert
                         }
                         vr = new ValorReajuste([
-                                valor: val * c.valor,
+                                valor            : val * c.valor,
                                 formulaPolinomica: formulaTmp,
-                                obra: obra,
-                                periodoIndice: per,
-                                planilla: pl
+                                obra             : obra,
+                                periodoIndice    : per,
+                                planilla         : pl
                         ])
                         if (!vr.save(flush: true)) {
                             println "vr errors " + vr.errors
@@ -2204,9 +2212,9 @@ class PlanillaController extends janus.seguridad.Shield {
             def vrB0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, fpB0)
             if (!vrB0) {
                 vrB0 = new ValorReajuste([
-                        obra: obra,
-                        planilla: pl,
-                        periodoIndice: per,
+                        obra             : obra,
+                        planilla         : pl,
+                        periodoIndice    : per,
                         formulaPolinomica: fpB0
                 ])
             }
@@ -2343,9 +2351,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
                     if (!vrP0) {
                         vrP0 = new ValorReajuste([
-                                obra: obra,
-                                planilla: planillaAnticipo,
-                                periodoIndice: per,
+                                obra             : obra,
+                                planilla         : planillaAnticipo,
+                                periodoIndice    : per,
                                 formulaPolinomica: p0
                         ])
                     }
@@ -2435,9 +2443,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
                     if (!vrP0) {
                         vrP0 = new ValorReajuste([
-                                obra: obra,
-                                planilla: planillaActual,
-                                periodoIndice: per,
+                                obra             : obra,
+                                planilla         : planillaActual,
+                                periodoIndice    : per,
                                 formulaPolinomica: p0
                         ])
                     }
@@ -2594,7 +2602,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     tbodyFr += "</td>"
                     if (!tots[j - 1]) {
                         tots[j - 1] = [
-                                per: cp.value.periodo,
+                                per  : cp.value.periodo,
                                 total: 0
                         ]
                     }
@@ -2615,9 +2623,9 @@ class PlanillaController extends janus.seguridad.Shield {
             def vrFr1 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(t.per, fpFr)
             if (!vrFr1) {
                 vrFr1 = new ValorReajuste([
-                        obra: obra,
-                        planilla: planilla,
-                        periodoIndice: t.per,
+                        obra             : obra,
+                        planilla         : planilla,
+                        periodoIndice    : t.per,
                         formulaPolinomica: fpFr
                 ])
             }
@@ -2951,11 +2959,11 @@ class PlanillaController extends janus.seguridad.Shield {
                         val = 1
                     }
                     def vr = new ValorReajuste([
-                            valor: val * c.valor,
+                            valor            : val * c.valor,
                             formulaPolinomica: FormulaPolinomicaContractual.findByIndiceAndContrato(c.indice, contrato),
-                            obra: obra,
-                            periodoIndice: per,
-                            planilla: pl
+                            obra             : obra,
+                            periodoIndice    : per,
+                            planilla         : pl
                     ])
                     if (!vr.save(flush: true)) {
                         println "vr errors " + vr.errors
@@ -3007,9 +3015,9 @@ class PlanillaController extends janus.seguridad.Shield {
             def vrB0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, fpB0)
             if (!vrB0) {
                 vrB0 = new ValorReajuste([
-                        obra: obra,
-                        planilla: pl,
-                        periodoIndice: per,
+                        obra             : obra,
+                        planilla         : pl,
+                        periodoIndice    : per,
                         formulaPolinomica: fpB0
                 ])
             }
@@ -3133,9 +3141,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
                     if (!vrP0) {
                         vrP0 = new ValorReajuste([
-                                obra: obra,
-                                planilla: planillaAnticipo,
-                                periodoIndice: per,
+                                obra             : obra,
+                                planilla         : planillaAnticipo,
+                                periodoIndice    : per,
                                 formulaPolinomica: p0
                         ])
                     }
@@ -3218,9 +3226,9 @@ class PlanillaController extends janus.seguridad.Shield {
                     def vrP0 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(per, p0)
                     if (!vrP0) {
                         vrP0 = new ValorReajuste([
-                                obra: obra,
-                                planilla: planillaActual,
-                                periodoIndice: per,
+                                obra             : obra,
+                                planilla         : planillaActual,
+                                periodoIndice    : per,
                                 formulaPolinomica: p0
                         ])
                     }
@@ -3353,7 +3361,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     tbodyFr += "</td>"
                     if (!tots[j - 1]) {
                         tots[j - 1] = [
-                                per: cp.value.periodo,
+                                per  : cp.value.periodo,
                                 total: 0
                         ]
                     }
@@ -3374,9 +3382,9 @@ class PlanillaController extends janus.seguridad.Shield {
             def vrFr1 = ValorReajuste.findByPeriodoIndiceAndFormulaPolinomica(t.per, fpFr)
             if (!vrFr1) {
                 vrFr1 = new ValorReajuste([
-                        obra: obra,
-                        planilla: planilla,
-                        periodoIndice: t.per,
+                        obra             : obra,
+                        planilla         : planilla,
+                        periodoIndice    : t.per,
                         formulaPolinomica: fpFr
                 ])
             }
@@ -3636,11 +3644,11 @@ class PlanillaController extends janus.seguridad.Shield {
                         val = 1
                     }
                     def vr = new ValorReajuste([
-                            valor: val * c.valor,
+                            valor            : val * c.valor,
                             formulaPolinomica: FormulaPolinomicaContractual.findByIndiceAndContrato(c.indice, contrato),
-                            obra: obra,
-                            periodoIndice: per,
-                            planilla: planilla
+                            obra             : obra,
+                            periodoIndice    : per,
+                            planilla         : planilla
                     ])
                     if (!vr.save(flush: true)) {
                         println "vr errors " + vr.errors
@@ -3742,23 +3750,32 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def editable = planilla.fechaMemoSalidaPlanilla == null
 //        editable = PeriodoPlanilla.findAllByPlanilla(planilla).size() == 0
-//        println editable
+//        println "editable: " + editable
+
 
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-        switch (codigoPerfil) {
-            case "FINA":
-            case "ADCT":
-                editable = false
-                break;
-            case "FISC":
-//                editable = editable
-                break;
-            default:
-                editable = false
-        }
-        editable = true
-        return [planilla: planilla, detalle: detalle, precios: precios, obra: obra, planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
+        /*TODO: descomentar esto para que bloquee segun el perfil */
+//        switch (codigoPerfil) {
+//            case "FINA":
+//            case "ADCT":
+//                editable = false
+//                break;
+//            case "FISC":
+////                editable = editable
+//                break;
+//            default:
+//                editable = false
+//        }
+        /* DESCOMENTAR HASTA AQUI */
+//        editable = true
+
+//        println planilla.fechaMemoSalidaPlanilla
+//        println codigoPerfil
+//        println editable
+
+        return [planilla           : planilla, detalle: detalle, precios: precios, obra: obra,
+                planillasAnteriores: planillasAnteriores, contrato: contrato, editable: editable]
     }
 
     private boolean updatePlanilla(planilla) {
@@ -3820,17 +3837,17 @@ class PlanillaController extends janus.seguridad.Shield {
             */
         detalles.each { dp ->
             dets.add([
-                    id: dp.id,
-                    "planilla.id": planilla.id,
-                    factura: dp.factura,
-                    rubro: dp.rubro,
-                    "unidad.id": dp.unidadId,
-                    unidadText: dp.unidad.codigo,
-                    monto: dp.monto,
-                    montoIva: dp.montoIva,
+                    id             : dp.id,
+                    "planilla.id"  : planilla.id,
+                    factura        : dp.factura,
+                    rubro          : dp.rubro,
+                    "unidad.id"    : dp.unidadId,
+                    unidadText     : dp.unidad.codigo,
+                    monto          : dp.monto,
+                    montoIva       : dp.montoIva,
                     montoIndirectos: dp.montoIndirectos,
-                    indirectos: dp.indirectos,
-                    total: dp.montoIva + dp.montoIndirectos
+                    indirectos     : dp.indirectos,
+                    total          : dp.montoIva + dp.montoIndirectos
             ])
         }
 
@@ -3847,7 +3864,9 @@ class PlanillaController extends janus.seguridad.Shield {
 
         def json = new JsonBuilder(dets)
 //        println json.toPrettyString()
-        return [planilla: planilla, obra: obra, contrato: contrato, editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
+
+        return [planilla: planilla, obra: obra, contrato: contrato,
+                editable: editable, detalles: json, iva: iva, detallesSize: detalles.size(), indirectos: indirectos, max: max]
     }
 
 
@@ -3863,15 +3882,15 @@ class PlanillaController extends janus.seguridad.Shield {
         def dets = []
         DetallePlanilla.findAllByPlanillaAndItemIsNotNull(planilla).each { det ->
             dets.add([
-                    edit: true,
-                    id: det.id,
-                    item: det.itemId,
-                    unidad: det.item.unidad.codigo,
-                    nombre: det.item.nombre,
-                    codigo: det.item.codigo,
+                    edit    : true,
+                    id      : det.id,
+                    item    : det.itemId,
+                    unidad  : det.item.unidad.codigo,
+                    nombre  : det.item.nombre,
+                    codigo  : det.item.codigo,
                     cantidad: det.cantidad,
-                    precio: det.monto,
-                    total: det.cantidad * det.monto
+                    precio  : det.monto,
+                    total   : det.cantidad * det.monto
             ])
         }
         def json = new JsonBuilder(dets)
@@ -3902,9 +3921,9 @@ class PlanillaController extends janus.seguridad.Shield {
         } else {
             detalle = new DetallePlanilla([
                     planilla: planilla,
-                    item: item,
+                    item    : item,
                     cantidad: cant,
-                    monto: prec
+                    monto   : prec
             ])
         }
         if (!detalle.save(flush: true)) {
@@ -3965,10 +3984,10 @@ class PlanillaController extends janus.seguridad.Shield {
                 def val = parts[2].toDouble()
 
                 def detalle = new DetallePlanilla([
-                        planilla: pln,
+                        planilla   : pln,
                         volumenObra: vol,
-                        cantidad: cant,
-                        monto: val
+                        cantidad   : cant,
+                        monto      : val
                 ])
                 if (!detalle.save(flush: true)) {
                     println "error guardando detalle (create) " + detalle.errors

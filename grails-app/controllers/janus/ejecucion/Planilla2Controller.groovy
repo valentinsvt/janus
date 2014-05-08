@@ -140,6 +140,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
 
     def liquidacion() {
+        session.override = false
 //        println "params " + params
         def planilla = Planilla.get(params.id)
         def override = false
@@ -756,6 +757,10 @@ class Planilla2Controller extends janus.seguridad.Shield {
 //        println "params " + params
         def planilla = Planilla.get(params.id)
         def override = false
+        if (session.override == "true" || session.override == true) {
+            override = true
+            session.override = false
+        }
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
 
@@ -842,6 +847,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
         }
 
+
+
         def bodyMultaRetraso = ""
 
         def totalContrato = contrato.monto
@@ -851,7 +858,13 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def prmlMultaRetraso = contrato.multaRetraso
 
         def pa = PeriodoPlanilla.findAllByPlanilla(planilla)
-
+        if (override && pa.size() > 0) {
+            println "Borrando periodos por alguna razon "
+            pa.each {
+                it.delete(flush: true)
+            }
+            pa = []
+        }
         def fechaFinPlanilla = planilla.fechaFin
 //        //TODO: borrar esto
 //        def dp = planilla.fechaFin.format("dd")
@@ -1558,7 +1571,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
     }
 
     def deletePeriodosPlanilla() {
-        println "delete periodos: "+params
+        println "delete periodos: " + params
         def planilla = Planilla.get(params.id)
         def periodos = PeriodoPlanilla.findAllByPlanilla(planilla, [sort: "id"])
         def cont = 0
@@ -1567,8 +1580,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 println "\tEliminando ${it.id}"
                 it.delete(flush: true)
                 cont++
-            } catch(e) {
-                println "error al eliminar: "+e.printStackTrace()
+            } catch (e) {
+                println "error al eliminar: " + e.printStackTrace()
             }
         }
         render "Eliminados ${cont} periodos"
@@ -1578,6 +1591,10 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         def planilla = Planilla.get(params.id)
         def override = false
+        if (session.override == "true" || session.override == true) {
+            override = true
+            session.override = false
+        }
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
         def fechaOferta = planilla.contrato.oferta.fechaEntrega - 30
@@ -1681,8 +1698,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
         perOferta = verificaIndices(pcs, perOferta, 0)
         perAnticipo = verificaIndices(pcs, perAnticipo, 0)
 
-        if(!(perOferta&&perAnticipo)) {
-            erroresPeriodos=false;
+        if (!(perOferta && perAnticipo)) {
+            erroresPeriodos = false;
         }
 
         if (periodos.size() == 0 && perOferta && perAnticipo) {
@@ -1691,7 +1708,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 //            println " per o " + perOferta + "  per a " + perAnticipo
 //            println " per o " + perOferta + "  per a " + perAnticipo
 
-            if(perOferta) {
+            if (perOferta) {
                 def p1 = new PeriodoPlanilla([planilla: planilla, periodo: perOferta, fechaIncio: fechaOferta, fechaFin: getLastDayOfMonth(fechaOferta), titulo: "OFERTA"])
                 if (!p1.save(flush: true)) {
                     println "p1 " + p1.errors
@@ -1700,7 +1717,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             } else {
                 erroresPeriodos = true
             }
-            if(perAnticipo) {
+            if (perAnticipo) {
                 def p2 = new PeriodoPlanilla([planilla: planilla, periodo: perAnticipo, fechaIncio: fechaAnticipo, fechaFin: getLastDayOfMonth(fechaAnticipo), titulo: "ANTICIPO"])
                 if (!p2.save(flush: true)) {
                     println "p2 " + p2.errors
@@ -1711,9 +1728,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
         }
 
-        if(erroresPeriodos) {
-            def link = g.link(controller: 'planilla', action: 'list', id: contrato.id, class: 'btn btn-danger') { "Regresar" }
-            flash.message = "<p><ul>"+flash.message+"</ul></p><p>"+link+"</p>"
+        if (erroresPeriodos) {
+            def link = g.link(controller: 'planilla', action: 'list', id: contrato.id, class: 'btn btn-danger') {
+                "Regresar"
+            }
+            flash.message = "<p><ul>" + flash.message + "</ul></p><p>" + link + "</p>"
             redirect(action: "errores")
             return
         }

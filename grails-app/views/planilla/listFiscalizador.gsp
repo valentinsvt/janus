@@ -104,7 +104,9 @@
                 </thead>
                 <tbody class="paginate">
                     <g:each in="${planillaInstanceList}" status="i" var="planillaInstance">
-                        <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}" />
+                        <g:set var="periodosOk" value="${janus.ejecucion.PeriodoPlanilla.findAllByPlanilla(planillaInstance)}"/>
+                        <g:set var="eliminable" value="${planillaInstance.fechaMemoSalidaPlanilla == null}"/>
+
                         <tr style="font-size: 10px">
                             <td>${fieldValue(bean: planillaInstance, field: "numero")}</td>
                             <td>
@@ -139,6 +141,11 @@
                             %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${planillaInstance.id}">--}%
                             %{--<i class="icon-zoom-in icon-large"></i>--}%
                             %{--</a>--}%
+                                %{--<g:if test="${eliminable && planillaInstance.tipoPlanilla.codigo != 'A'}">--}%
+                                    %{--<g:link action="" href="#" class="btn btn-small" rel="tooltip" id="${planillaInstance.id}" title="Editar">--}%
+                                        %{--<i class="icon-pencil icon-large"></i>--}%
+                                    %{--</g:link>--}%
+                                %{--</g:if>--}%
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
@@ -204,75 +211,75 @@
                             %{--</a>--}%
                             </td>
                             <td style="text-align: center;">
-                    <g:if test="${periodosOk.size() > 0}">
-                                <g:set var="lblBtn" value="${-1}"/>
-                                <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
-                                    <g:set var="lblBtn" value="${2}"/>
-                                    <g:if test="${planillaInstance.fechaMemoSalidaPlanilla}">
-                                        <g:set var="lblBtn" value="${3}"/>
-                                        <g:if test="${planillaInstance.fechaMemoPedidoPagoPlanilla}">
-                                            <g:set var="lblBtn" value="${4}"/>
-                                            <g:if test="${planillaInstance.fechaMemoPagoPlanilla}">
-                                                <g:set var="lblBtn" value="${5}"/>
+                                <g:if test="${periodosOk.size() > 0 || planillaInstance.tipoPlanilla.codigo == 'C'}">
+                                    <g:set var="lblBtn" value="${-1}"/>
+                                    <g:if test="${planillaInstance.fechaOficioEntradaPlanilla}">
+                                        <g:set var="lblBtn" value="${2}"/>
+                                        <g:if test="${planillaInstance.fechaMemoSalidaPlanilla}">
+                                            <g:set var="lblBtn" value="${3}"/>
+                                            <g:if test="${planillaInstance.fechaMemoPedidoPagoPlanilla}">
+                                                <g:set var="lblBtn" value="${4}"/>
+                                                <g:if test="${planillaInstance.fechaMemoPagoPlanilla}">
+                                                    <g:set var="lblBtn" value="${5}"/>
+                                                </g:if>
                                             </g:if>
                                         </g:if>
                                     </g:if>
-                                </g:if>
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && planillaInstance.contrato.oferta.concurso.obra.fechaInicio}">
-                                    <g:set var="lblBtn" value="${-6}"/>
-                                </g:if>
+                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && planillaInstance.contrato.oferta.concurso.obra.fechaInicio}">
+                                        <g:set var="lblBtn" value="${-6}"/>
+                                    </g:if>
 
-                                <g:if test="${lblBtn > 0}">
-                                    <g:if test="${lblBtn == 2}">
-                                        <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
-                                            <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
-                                                Enviar planilla
-                                            </a>
+                                    <g:if test="${lblBtn > 0}">
+                                        <g:if test="${lblBtn == 2}">
+                                            <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
+                                                <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                                    Enviar planilla
+                                                </a>
+                                            </g:if>
+                                        %{--<a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
+                                        %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
+                                        %{--Enviar reajuste--}%
+                                        %{--</g:if>--}%
+                                        %{--<g:else>--}%
+                                        %{--Enviar planilla--}%
+                                        %{--</g:else>--}%
+                                        %{--</a>--}%
                                         </g:if>
-                                    %{--<a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">--}%
-                                    %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">--}%
-                                    %{--Enviar reajuste--}%
-                                    %{--</g:if>--}%
-                                    %{--<g:else>--}%
-                                    %{--Enviar planilla--}%
-                                    %{--</g:else>--}%
-                                    %{--</a>--}%
-                                    </g:if>
-                                    <g:if test="${lblBtn == 3 || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
-                                        Pedir pago
-                                    </g:if>
-                                    <g:if test="${lblBtn == 4}">
-                                        Informar pago
-                                    </g:if>
-                                    <g:if test="${lblBtn == 5}">
-                                        <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
-                                            Iniciar Obra
+                                        <g:if test="${lblBtn == 3 || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
+                                            Pedir pago
                                         </g:if>
-                                        <g:else>
-                                            <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
-                                        </g:else>
+                                        <g:if test="${lblBtn == 4}">
+                                            Informar pago
+                                        </g:if>
+                                        <g:if test="${lblBtn == 5}">
+                                            <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A'}">
+                                                Iniciar Obra
+                                            </g:if>
+                                            <g:else>
+                                                <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
+                                            </g:else>
+                                        </g:if>
                                     </g:if>
-                                </g:if>
-                                <g:elseif test="${lblBtn == -6}">
-                                    <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
-                                </g:elseif>
+                                    <g:elseif test="${lblBtn == -6}">
+                                        <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
+                                    </g:elseif>
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
-                                    <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
-                                        <i class="icon-print"></i>
-                                    </a>
-                                </g:if>
-                                <g:if test="${(planillaInstance.tipoPlanilla.codigo == 'P' || planillaInstance.tipoPlanilla.codigo == 'Q') && Math.abs(lblBtn) > 3}">
-                                    <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
-                                        <i class="icon-print"></i>
-                                    </a>
+                                    <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
+                                        <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                            <i class="icon-print"></i>
+                                        </a>
+                                    </g:if>
+                                    <g:if test="${(planillaInstance.tipoPlanilla.codigo == 'P' || planillaInstance.tipoPlanilla.codigo == 'Q') && Math.abs(lblBtn) > 3}">
+                                        <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
+                                            <i class="icon-print"></i>
+                                        </a>
 
-                                </g:if>
+                                    </g:if>
                                 </g:if>
                                 <g:else>
-                                    <div class="badge badge-important">
-                                        Existe un error en los valores de índice.<br/> Revise el resumen.
-                                    </div>
+                                    %{--<div class="badge badge-important">--}%
+                                        %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
+                                    %{--</div>--}%
                                 </g:else>
                             </td>
                         </tr>

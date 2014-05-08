@@ -2870,10 +2870,10 @@ class ReportesPlanillasController {
 //            str += "<li>No se ha registrado la firma para la orden de inicio para la obra. Por favor corrija esto para mostrar la orden de inicio de obra</li>"
 //            ok = false
 //        }
-        if (!contrato.numeralPlazo || !contrato.numeralAnticipo || !contrato.clausula) {
-            str += "<li>No se han registrado los datos de cláusula y numerales para la orden de inicio de obra. Por favor corrija esto para mostrar la orden de inicio de obra</li>"
-            ok = false
-        }
+//        if (!contrato.numeralPlazo || !contrato.numeralAnticipo || !contrato.clausula) {
+//            str += "<li>No se han registrado los datos de cláusula y numerales para la orden de inicio de obra. Por favor corrija esto para mostrar la orden de inicio de obra</li>"
+//            ok = false
+//        }
 
         if (!ok) {
             flash.message = "<ul>" + str + "</ul>"
