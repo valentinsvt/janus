@@ -3756,17 +3756,17 @@ class PlanillaController extends janus.seguridad.Shield {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
         /*TODO: descomentar esto para que bloquee segun el perfil */
-//        switch (codigoPerfil) {
-//            case "FINA":
-//            case "ADCT":
-//                editable = false
-//                break;
-//            case "FISC":
-////                editable = editable
-//                break;
-//            default:
-//                editable = false
-//        }
+        switch (codigoPerfil) {
+            case "FINA":
+            case "ADCT":
+                editable = false
+                break;
+            case "FISC":
+//                editable = editable
+                break;
+            default:
+                editable = false
+        }
         /* DESCOMENTAR HASTA AQUI */
 //        editable = true
 
