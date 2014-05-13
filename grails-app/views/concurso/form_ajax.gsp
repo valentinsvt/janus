@@ -1,4 +1,4 @@
-<%@ page import="janus.pac.Concurso" %>
+<%@ page import="janus.pac.Concurso; janus.Contrato; janus.pac.Oferta"%>
 <!doctype html>
 <html>
     <head>
@@ -63,9 +63,10 @@
                         <i class="icon-save"></i> Guardar
                     </a>
                 </g:if>
-                <a href="#" class="btn" id="btnRegi">
-                    <i class="icon-exchange"></i> Cambiar Estado
-                </a>
+
+                <g:if test="${Oferta.countByConcurso(concursoInstance) == 0}">
+                        <button class="btn" id="btn-desregistrar"><i class="icon-exchange"></i> Cambiar Estado</button>
+                </g:if>
             </div>
         </div>
 

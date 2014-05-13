@@ -85,7 +85,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Fecha Entrega
+                Fecha Entrega de la Oferta
             </span>
         </div>
 

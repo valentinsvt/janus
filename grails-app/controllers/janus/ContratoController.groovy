@@ -50,13 +50,16 @@ class ContratoController extends janus.seguridad.Shield {
     def verContrato() {
         def contrato
         def obra = Obra.get(params.obra)
+        /* sólo si el usaurio es un Directos puede acceder al os botones de Adminsitrador, Fiscalizador y Delegado */
+        def esDirector = PersonaRol.countByFuncionAndPersona(Funcion.findByCodigo("D"), session.user) == 1 ? "S": "N"
+//        println ":::::" + PersonaRol.countByFuncionAndPersona(Funcion.findByCodigo("D"), session.user)
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
-            [campos: campos, contrato: contrato]
+            [campos: campos, contrato: contrato, esDirector: esDirector]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
-            [campos: campos]
+            [campos: campos, esDirector: esDirector]
         }
     }
 

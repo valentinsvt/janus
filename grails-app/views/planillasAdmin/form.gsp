@@ -115,7 +115,7 @@
 
                 <div class="row">
                     <div class="span2 formato">
-                        Oficio de entrada
+                        Memorando de entrada
                     </div>
 
                     <div class="span4">
@@ -126,12 +126,14 @@
                     </div>
 
                     <div class="span2 formato">
-                        Fecha de oficio de entrada
+                        Fecha de memorando
                     </div>
 
                     <div class="span4">
                         %{--<elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" minDate="${minDatePres}" maxDate="new Date()" value="${planillaInstance?.fechaOficioEntradaPlanilla}"/>--}%
-                        <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" value="${planillaInstance?.fechaOficioEntradaPlanilla}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                        <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" value="${planillaInstance?.fechaOficioEntradaPlanilla}"
+                                        minDate="new Date(${fechaMin.format('yyyy')},${fechaMin.format('MM').toInteger() - 1},${fechaMin.format('dd')},0,0,0,0)"
+                                        maxDate="new Date()"/>
                         <span class="mandatory">*</span>
 
                         <p class="help-block ui-helper-hidden"></p>

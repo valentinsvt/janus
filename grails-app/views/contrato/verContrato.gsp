@@ -113,13 +113,9 @@
 
                 <g:if test="${contrato?.codigo != null}">
                     <div class="span12">
-                        <div class="span2 formato">Obra</div>
-
-                        <div class="span3">${contrato?.oferta?.concurso?.obra?.codigo}</div>
-
-                        <div class="span1 formato">Nombre</div>
-
-                        <div class="span3">${contrato?.oferta?.concurso?.obra?.nombre}</div>
+                        <div class="span1 formato">Obra</div>
+                        <div class="span10 formato">${contrato?.oferta?.concurso?.obra?.codigo} - ${contrato?.oferta?.concurso?.obra?.nombre}
+                        (${contrato?.oferta?.concurso?.obra?.departamento?.direccion?.nombre})</div>
                     </div>
 
                     <div class="span12" style="margin-top: 5px">
@@ -292,11 +288,11 @@
 
 
                 <div class="span12" style="margin-top: 10px">
-                    <div class="span2 formato">Administrador</div>
+                    <div class="span2 formato">Administrador delegado</div>
 
                     <div class="span3">${contrato?.administrador?.titulo} ${contrato?.administrador?.nombre} ${contrato?.administrador?.apellido}</div>
 
-                    <div class="span2 formato">Fiscalizador</div>
+                    <div class="span2 formato">Fiscalizador delegado</div>
 
                     <div class="span3">${contrato?.fiscalizador?.titulo} ${contrato?.fiscalizador?.nombre} ${contrato?.fiscalizador?.apellido}</div>
                 </div>
@@ -425,21 +421,27 @@
                             </li>
 
                             <li>
+                                <g:if test="${esDirector == 'S'}">
                                 <a href="#" id="btnAdmin">
                                     <i class="icon-user"></i> Administrador
                                 </a>
+                                </g:if>
                             </li>
 
                             <li>
+                                <g:if test="${esDirector == 'S'}">
                                 <a href="#" id="btnFisc">
                                     <i class="icon-user"></i> Fiscalizador
                                 </a>
+                                </g:if>
                             </li>
 
                             <li>
+                                <g:if test="${esDirector == 'S'}">
                                 <a href="#" id="btnPref">
                                     <i class="icon-user"></i> Delegado del Prefecto
                                 </a>
+                                </g:if>
                             </li>
 
                         </ul>

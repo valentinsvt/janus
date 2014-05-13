@@ -288,7 +288,7 @@
 
         $("#item_codigo").dblclick(function () {
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-            $("#modalTitle").html("Lista de rubros");
+            $("#modalTitle").html("Lista de materiales");
             $("#modalFooter").html("").append(btnOk);
             $("#modal-rubro").modal("show");
             $("#buscarDialog").unbind("click")

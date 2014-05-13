@@ -26,15 +26,21 @@ class PlanillasAdminController extends janus.seguridad.Shield {
         }
         def existe = []
 
-        def avance = TipoPlanilla.findByCodigo('P')
+//        def avance = TipoPlanilla.findByCodigo('P')
+        def avance = TipoPlanilla.findByCodigo('D')
         def resumenMateriales = TipoPlanilla.findByCodigo('M')
         def tiposPlanilla = [:]
-        tiposPlanilla.put(avance.id, avance.nombre)
-        existe.add("P")
+//        println avance
+//        tiposPlanilla.put(avance.id, avance.nombre)
+//        existe.add("P")
 
         if (PlanillaAdmin.countByObraAndTipoPlanilla(obra, resumenMateriales) == 0) {
             tiposPlanilla.put(resumenMateriales.id, resumenMateriales.nombre)
             existe.add("M")
+        }
+        if (PlanillaAdmin.countByObraAndTipoPlanilla(obra, avance) == 0) {
+            tiposPlanilla.put(avance.id, avance.nombre)
+            existe.add("D")
         }
 
         def planillas = PlanillaAdmin.findAllByObra(obra, [sort: 'fechaIngreso', order: "asc"])
@@ -45,14 +51,15 @@ class PlanillasAdminController extends janus.seguridad.Shield {
             planillaInstance.numero = cPlanillas + 1
         }
 
-        def fechaMax
+        def fechaMin
         if (obra.fechaInicio)
-            fechaMax = obra.fechaInicio.plus(366)
+//            fechaMin = obra.fechaInicio.plus(600)   // antes 366
+            fechaMin = obra.fechaInicio
         else
-            fechaMax = new Date()
-        println "fecha max " + fechaMax
+            fechaMin = new Date()
+        println "fecha max... " + obra.fechaInicio.plus(600) + "  Mínimo: " + obra.fechaInicio
 
-        return [planillaInstance: planillaInstance, obra: obra, tiposPlanilla: tiposPlanilla, fechaMax: fechaMax, existe: existe]
+        return [planillaInstance: planillaInstance, obra: obra, tiposPlanilla: tiposPlanilla, fechaMin: fechaMin, existe: existe]
 
     }
 

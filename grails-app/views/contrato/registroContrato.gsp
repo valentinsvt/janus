@@ -587,7 +587,8 @@
                 var porcentaje = $("#porcentajeAnticipo").val();
                 var monto = $("#monto").val().replace(",", "");
                 var anticipoValor = (porcentaje * (monto)) / 100;
-                $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
+//                $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
+//                $("#monto").val(number_format(monto, 2, ".", ","));
             }
 
             $("#frm-registroContrato").validate();
@@ -968,6 +969,11 @@
 
             });
 
+//            $("#anticipo").val(number_format(anticipoValor, 2, ".", ","));
+//            var monto = $("#monto").val().replace(",", "");
+//            var anticipo = $("#anticipo").val().replace(",", "");
+//            $("#monto").val(number_format(monto, 2, ".", ","));
+//            $("#anticipo").val(number_format(anticipo, 2, ".", ","));
 
         </script>
 
