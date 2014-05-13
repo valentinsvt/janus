@@ -223,6 +223,16 @@
 
                 <div class="row">
                     <div class="span1">
+                        Observaciones
+                    </div>
+                    <div class="span10">
+                        <g:textField name="observaciones" class="span10"/>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="span1">
                         Emisión
                     </div>
 
@@ -593,7 +603,8 @@
                             estado                   : 1,
                             estadoTxt                : 'Vigente',
                             estadoCdgo               : 1,
-                            tipo                     : "add"
+                            tipo                     : "add",
+                            observaciones            : $("#observaciones").val()
                         };
                         var continua = true;
                         if (btn == "btnAdd") {

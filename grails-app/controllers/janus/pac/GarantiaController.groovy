@@ -154,6 +154,7 @@ class GarantiaController extends janus.seguridad.Shield {
         garantia.numeroRenovaciones = 0
         garantia.estadoGarantia = "N" //registrado o no
         garantia.padre = padre
+        garantia.observaciones = params.observaciones
 
         if (!garantia.save(flush: true)) {
             println "Errores: " + garantia.errors
