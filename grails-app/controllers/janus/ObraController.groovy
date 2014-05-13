@@ -30,16 +30,22 @@ class ObraController extends janus.seguridad.Shield {
         def fecha
         try {
             fecha = new Date().parse("dd-MM-yyyy", params.fecha)
-            if (!obra.fechaInicio) {
-                obra.tipo = "D"
-                obra.fechaInicio = fecha
-                obra.observacionesInicioObra = params.obs
-                obra.save(flush: true)
-                render "ok"
-                return
+            if (fecha > obra.fechaCreacionObra) {
+                if (!obra.fechaInicio) {
+                    obra.tipo = "D"
+                    obra.fechaInicio = fecha
+                    obra.observacionesInicioObra = params.obs
+                    obra.save(flush: true)
+                    render "ok"
+                    return
+
+                } else {
+                    render "error"
+                    return
+                }
 
             } else {
-                render "error"
+                render "La fecha de inicio de la obra debe ser mayor a ${obra.fechaCreacionObra.format('dd-MMM-yyyy')}"
                 return
             }
         } catch (e) {
@@ -427,25 +433,27 @@ class ObraController extends janus.seguridad.Shield {
 
     def registroObra() {
 
+        def cn = dbConnectionService.getConnection()
+        println "---" + params
 //        println "---" + params
         def obra
-
         def usuario = session.usuario.id
-
         def perfil = session.perfil
-
-
         def persona = Persona.get(usuario)
-
         def direccion = Direccion.get(persona?.departamento?.direccion?.id)
-
         def grupo = Grupo.findByDireccion(direccion)
-
         def departamentos = Departamento.findAllByDireccion(direccion)
-
         def programa
         def tipoObra
         def claseObra
+
+        def fechaPrecio = new Date()
+        cn.eachRow("select max(rbpcfcha) fcha from rbpc, item where rbpc.item__id = item.item__id and " +
+                "itemnmbr ilike '%cemento%port%1'"){d ->
+            fechaPrecio = d.fcha
+        }
+
+//        println "fecha: " + fechaPrecio
 
 //filtro original combos programa tipo clase
 
@@ -485,7 +493,6 @@ class ObraController extends janus.seguridad.Shield {
 
             def formula = FormulaPolinomica.findByObra(obra)
 
-            def cn = dbConnectionService.getConnection()
 
             def sqlVer = "SELECT\n" +
                     "voit__id             id\n" +
@@ -510,7 +517,8 @@ class ObraController extends janus.seguridad.Shield {
                     concurso = null
 
             }
-//            println matriz + "matriz ok: " + matrizOk
+            cn.close()
+//  println matriz + "matriz ok: " + matrizOk
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, concurso: concurso]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
@@ -528,7 +536,7 @@ class ObraController extends janus.seguridad.Shield {
 //            numero += "-" + (new Date().format("yy"))
             /* ********* fin genera el numero de memo de formula polinoica ***************************** */
 
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos]
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio]
         }
 
 
@@ -1211,6 +1219,10 @@ class ObraController extends janus.seguridad.Shield {
 //            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
 //                numero = 1
 //            }
+            /* si pefiles administración directa o cogestion pone obratipo = 'D' */
+            if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {
+                obraInstance.tipo = 'D'
+            }
 
         } //es create
         obraInstance.estado = "N"

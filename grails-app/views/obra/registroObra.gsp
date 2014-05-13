@@ -180,7 +180,13 @@
                 </div>
 
                 <g:if test="${obra?.tipo == 'D'}">
-                    <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
+                    <g:if test="${session.perfil.codigo == 'ADDI'}">
+                        <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
+                    </g:if>
+                    %{--<g:if test="${session.perfil.codigo == 'ADDI'}">--}%
+                    <g:if test="${session.perfil.codigo == 'COGS'}">
+                        <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">COGESTIÓN</div>
+                    </g:if>
                 </g:if>
 
                 <div class="span12" style="margin-top: 0px">
@@ -530,7 +536,7 @@
 
                     <div class="span1">Fecha</div>
 
-                    <div class="span2" style="margin-left: 0;"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small required" value="${obra?.fechaPreciosRubros}" title="Fecha Precios"/></div>
+                    <div class="span2" style="margin-left: 0;"><elm:datepicker name="fechaPreciosRubros" class="fechaPreciosRubros datepicker input-small required" value="${obra?.fechaPreciosRubros?:fcha}" title="Fecha Precios"/></div>
 
                     <div class="span1" style="margin-left: -20px">Coordenadas WGS84</div>
 
@@ -1329,7 +1335,8 @@
                                         else {
                                             $.box({
                                                 imageClass : "box_info",
-                                                text       : "Ha ocurrido un error, revice los datos ingresados",
+//                                                text       : "Ha ocurrido un error, revice la fecha de incio de obra",
+                                                text       : msg,
                                                 title      : "Errores",
                                                 iconClose  : false,
                                                 dialog     : {
