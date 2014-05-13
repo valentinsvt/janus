@@ -400,6 +400,7 @@ class PreciosService {
 
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rbro_pcun_v2(" + obra + ") order by vlobordn asc"
+        println(sql)
         def result = []
         cn.eachRow(sql.toString()) { r ->
             result.add(r.toRowResult())

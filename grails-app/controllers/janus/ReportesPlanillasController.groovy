@@ -2476,10 +2476,12 @@ class ReportesPlanillasController {
         addCellTabla(tablaDatosMemo, new Paragraph(tramite.memo, fontTdHeader), [border: Color.WHITE, bct: Color.BLACK, bwt: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("De", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(prsn[0].persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("Para", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1].persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(prsn[1].persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("Fecha", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaDatosMemo, new Paragraph(fechaConFormato(tramite?.fecha, "dd-MM-yyyy"), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -2738,10 +2740,12 @@ class ReportesPlanillasController {
         addCellTabla(tablaDatosMemo, new Paragraph(tramite.memo, fontTdHeader), [border: Color.WHITE, bct: Color.BLACK, bwt: 0.1, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("De", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(prsn[0]?.persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("Para", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+//        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(prsn[1]?.persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("Fecha", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaDatosMemo, new Paragraph(fechaConFormato(tramite?.fecha, "dd-MM-yyyy"), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])

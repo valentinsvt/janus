@@ -4,6 +4,7 @@ import groovy.json.JsonBuilder
 import janus.*
 import janus.pac.CronogramaContrato
 import janus.pac.CronogramaEjecucion
+import janus.pac.Garantia
 import janus.pac.PeriodoEjecucion
 
 class PlanillaController extends janus.seguridad.Shield {
@@ -559,10 +560,24 @@ class PlanillaController extends janus.seguridad.Shield {
         def obra = contrato.oferta.concurso.obra
 
         def fp = janus.FormulaPolinomica.findAllByObra(obra)
+
+        def si = 0
+
+        def garantias = Garantia.findAllByContrato(contrato);
+
+        garantias.each {
+            if(it.fechaFinalizacion >= new Date()){
+                si += 1
+            }
+        }
+//
+//        println("garantias" + garantias)
+//        println("si" + si)
+
 //        println fp
         def firma = Persona.findAllByCargoIlike("Direct%");
         def planillaInstanceList = Planilla.findAllByContrato(contrato, [sort: 'id'])
-        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma]
+        return [contrato: contrato, obra: contrato.oferta.concurso.obra, planillaInstanceList: planillaInstanceList, firma: firma, garantia: si]
 
     }
 
@@ -623,6 +638,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def savePago() {
+//        println("params" + params)
         def planilla = Planilla.get(params.id)
         planilla.fechaPago = new Date().parse("dd-MM-yyyy", params.fechaPago)
 

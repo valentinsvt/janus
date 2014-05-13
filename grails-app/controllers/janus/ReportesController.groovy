@@ -6067,10 +6067,10 @@ class ReportesController {
         def totalPresupuesto = 0;
         def totalPrueba = 0
 
-        PdfPTable tablaVolObraMemoPresu = new PdfPTable(4);
+        PdfPTable tablaVolObraMemoPresu = new PdfPTable(6);
         tablaVolObraMemoPresu.setWidthPercentage(100);
-//        tablaVolObraMemoPresu.setWidths(arregloEnteros([14, 43, 8, 10, 12, 15]))
-        tablaVolObraMemoPresu.setWidths(arregloEnteros([14, 43, 8, 10]))
+        tablaVolObraMemoPresu.setWidths(arregloEnteros([14, 43, 8, 10, 12, 15]))
+//        tablaVolObraMemoPresu.setWidths(arregloEnteros([14, 43, 8, 10]))
 
         def valores = preciosService.rbro_pcun_v2(obra.id)
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
@@ -6084,23 +6084,25 @@ class ReportesController {
             addCellTabla(tablaVolObraMemoPresu, new Paragraph("Descripción", times8bold), prmsCellHead2)
             addCellTabla(tablaVolObraMemoPresu, new Paragraph("Unidad", times8bold), prmsCellHead2)
             addCellTabla(tablaVolObraMemoPresu, new Paragraph("Cantidad", times8bold), prmsCellHead3)
+            addCellTabla(tablaVolObraMemoPresu, new Paragraph("P. Unitario", times8bold), prmsCellHead3)
+            addCellTabla(tablaVolObraMemoPresu, new Paragraph("Total", times8bold), prmsCellHead3)
 
             valores.each {
 
                 if (it.sbprdscr == s.descripcion) {
-
-
                     addCellTabla(tablaVolObraMemoPresu, new Paragraph(it.rbrocdgo, times8normal), prmsCellLeft)
-
-
                     addCellTabla(tablaVolObraMemoPresu, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)
-
-
                     addCellTabla(tablaVolObraMemoPresu, new Paragraph(it.unddcdgo, times8normal), prmsCellCenter)
-
 
                     addCellTabla(tablaVolObraMemoPresu, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
                             2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+
+                    addCellTabla(tablaVolObraMemoPresu, new Paragraph(g.formatNumber(number: (it.pcun), minFractionDigits:
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+
+                    addCellTabla(tablaVolObraMemoPresu, new Paragraph(g.formatNumber(number:(it.totl), minFractionDigits:
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+
 
                     totales = it.totl
                     totalPrueba = total2 += totales

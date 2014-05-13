@@ -139,21 +139,23 @@
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
                                 </g:if>
-                                <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
-                                    <g:link controller="reportesPlanillas2" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                        <i class="icon-print"></i>
-                                    </g:link>
-                                </g:if>
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">
-                                    <g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                        <i class="icon-print"></i>
-                                    </g:link>
-                                </g:if>
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">
-                                    <g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
-                                        <i class="icon-print"></i>
-                                    </g:link>
-                                </g:if>
+                                %{--<g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">--}%
+                                    %{--<g:link controller="reportesPlanillas2" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">--}%
+                                        %{--<i class="icon-print"></i>--}%
+                                    %{--</g:link>--}%
+                                %{--</g:if>--}%
+                                %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'C' && janus.ejecucion.DetallePlanillaCosto.countByPlanilla(planillaInstance) > 0}">--}%
+                                    %{--<g:link controller="reportesPlanillas" action="reportePlanillaCosto" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">--}%
+                                        %{--<i class="icon-print"></i>--}%
+                                    %{--</g:link>--}%
+                                %{--</g:if>--}%
+                                %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'L'}">--}%
+                                    %{--<g:link controller="reportesPlanillas" action="reportePlanillaLiquidacion" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">--}%
+                                        %{--<i class="icon-print"></i>--}%
+                                    %{--</g:link>--}%
+                                %{--</g:if>--}%
+
+
                             %{--<g:if test="${!planillaInstance.fechaOrdenPago}">--}%
                             %{--<g:link action="ordenPago" class="btn btn-small btn-success btn-ajax" rel="tooltip" title="Ordenar pago" id="${planillaInstance.id}">--}%
                             %{--<i class="icon-money icon-large"></i>--}%
@@ -228,18 +230,19 @@
                                     <img src="${resource(dir: 'images', file: 'tick-circle.png')}" alt="Pago completado"/>
                                 </g:elseif>
 
-                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">
-                                    <a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
-                                        <i class="icon-print"></i>
-                                    </a>
+                                %{--<g:if test="${planillaInstance.tipoPlanilla.codigo == 'A' && Math.abs(lblBtn) > 3}">--}%
+                                    %{--<a href="#" class="btn btn-small btnPedidoPagoAnticipo" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">--}%
+                                        %{--<i class="icon-print"></i>--}%
+                                    %{--</a>--}%
 
-                                </g:if>
-                                <g:if test="${(planillaInstance.tipoPlanilla.codigo == 'P' || planillaInstance.tipoPlanilla.codigo == 'Q') && Math.abs(lblBtn) > 3}">
-                                    <a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">
-                                        <i class="icon-print"></i>
-                                    </a>
+                                %{--</g:if>--}%
+                                %{--<g:if test="${(planillaInstance.tipoPlanilla.codigo == 'P' || planillaInstance.tipoPlanilla.codigo == 'Q') && Math.abs(lblBtn) > 3}">--}%
+                                    %{--<a href="#" class="btn btn-small btnPedidoPago" title="Imprimir memo de pedido de pago" data-id="${planillaInstance.id}">--}%
+                                        %{--<i class="icon-print"></i>--}%
+                                    %{--</a>--}%
 
-                                </g:if>
+                                %{--</g:if>--}%
+
                                 </g:if>
                                 <g:else>
                                     <div class="badge badge-important">

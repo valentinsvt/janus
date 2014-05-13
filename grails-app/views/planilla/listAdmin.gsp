@@ -236,9 +236,11 @@
                                         </g:if>
                                         <g:if test="${(lblBtn == 3) || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                             <g:set var="lblBtn" value="${3}"/>
-                                            <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
-                                                Pedir pago
-                                            </a>
+                                            <g:if test="${garantia != 0}">
+                                                <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
+                                                    Pedir pago
+                                                </a>
+                                            </g:if>
                                             <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
                                                 <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}" data-txt="${planillaInstance.tipoPlanilla.codigo == 'A' ? 'reajuste' : 'planilla'}">
                                                     Devolver
