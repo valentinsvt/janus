@@ -91,7 +91,7 @@
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: -10px">
 
 <div style="border-bottom: 1px solid black;padding-left: 50px;position: relative;">
-    <g:form class="frmRubro" action="save">
+    <g:form class="frmRubro" action="save" style="height: 100px;">
         <input type="hidden" id="rubro__id" name="rubro.id" value="${rubro?.id}">
 
         <p class="css-vertical-text">Rubro</p>
@@ -157,7 +157,7 @@
                 <g:select name="rubro.unidad.id" from="${janus.Unidad.list()}" class="span12" optionKey="id" optionValue="codigo" value="${rubro?.unidad?.id}"/>
             </div>
 
-            <div class="span3" style="color: #01a">
+            <div class="span4" style="color: #01a">
                 Responsable: <br>
                 <g:if test="${modifica}">
                     <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id}" id="responsable" optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;"></g:select>

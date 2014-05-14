@@ -2856,9 +2856,13 @@ class ReportesPlanillasController {
         def str = ""
 
         def texto = Pdfs.findAllByObra(obra)
+//        println "................." + texto.size()
         if (texto.size() == 0) {
-            redirect(controller: "planilla", action: "configOrdenInicioObra", id: obra.id)
-            return
+            /* accede a crear inicio de obra solo el administrador */
+            if (contrato.administrador.id == session.usuario.id) {
+                redirect(controller: "planilla", action: "configOrdenInicioObra", id: obra.id)
+                return
+            }
         } else if (texto.size() > 1) {
             str += "<li>Se encontraron ${texto.size()} textos. No se pudo generar el pdf.</li>"
             ok = false

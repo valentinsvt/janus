@@ -37,10 +37,12 @@
                 </g:link>
 
                 <g:if test="${anticipo == 0}">
+                    <g:if test="${contrato.administrador.id == session.usuario.id}">
                     <g:link action="form" class="btn" params="[contrato: contrato.id]">
                         <i class="icon-file"></i>
                         Nueva planilla
                     </g:link>
+                    </g:if>
                 </g:if>
             %{--<g:link action="form" class="btn" params="[contrato: contrato.id]">--}%
             %{--<i class="icon-file"></i>--}%
@@ -52,6 +54,7 @@
             %{--<div class="btn-group">--}%
             %{--<a href="#" class="btn  " id="imprimir">--}%
             %{--<i class="icon-print"></i>--}%
+            %{--Imprimir Orden de Inicio de Obra--}%
             %{--Imprimir Orden de Inicio de Obra--}%
             %{--</a>--}%
             %{--</div>--}%
@@ -159,11 +162,13 @@
                                         <i class="icon-table icon-large"></i>
                                     </g:link>
                                 </g:elseif>
+%{--
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'C'}">
                                     <g:link action="detalleCosto" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>
                                     </g:link>
                                 </g:if>
+--}%
                                 <g:if test="${janus.ejecucion.PeriodoPlanilla.countByPlanilla(planillaInstance) > 0}">
                                     <g:link controller="reportesPlanillas2" action="reportePlanilla" id="${planillaInstance.id}" class="btn btnPrint  btn-small btn-ajax" rel="tooltip" title="Imprimir">
                                         <i class="icon-print"></i>
@@ -237,14 +242,18 @@
                                         <g:if test="${(lblBtn == 3) || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                             <g:set var="lblBtn" value="${3}"/>
                                             <g:if test="${garantia != 0}">
+                                                <g:if test="${contrato.administrador.id == session.usuario.id}">
                                                 <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                                     Pedir pago
                                                 </a>
+                                                </g:if>
                                             </g:if>
                                             <g:if test="${planillaInstance.tipoPlanilla.codigo != 'A'}">
+                                                <g:if test="${contrato.administrador.id == session.usuario.id}">
                                                 <a href="#" class="btn btn-devolver pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}" data-txt="${planillaInstance.tipoPlanilla.codigo == 'A' ? 'reajuste' : 'planilla'}">
                                                     Devolver
                                                 </a>
+                                                </g:if>
                                             </g:if>
                                         </g:if>
                                         <g:if test="${lblBtn == 4}">

@@ -121,11 +121,11 @@ class DocumentosObraController {
         def firmasAdicionales = Persona.findAllByDepartamento(departamento)
 
 
-        def funcionFirmar = Funcion.get(2)
+        def funcionFirmar = Funcion.findByCodigo("F")
 
-        def funcionDirector = Funcion.get(9)
+        def funcionDirector = Funcion.findByCodigo("D")
 
-        def funcionCoordinador = Funcion.get(10)
+        def funcionCoordinador = Funcion.findByCodigo("O")
 
 
         def direccion = departamento.direccion

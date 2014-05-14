@@ -49,17 +49,25 @@ class ContratoController extends janus.seguridad.Shield {
 
     def verContrato() {
         def contrato
-        def obra = Obra.get(params.obra)
-        /* sólo si el usaurio es un Directos puede acceder al os botones de Adminsitrador, Fiscalizador y Delegado */
-        def esDirector = PersonaRol.countByFuncionAndPersona(Funcion.findByCodigo("D"), session.user) == 1 ? "S": "N"
-//        println ":::::" + PersonaRol.countByFuncionAndPersona(Funcion.findByCodigo("D"), session.user)
+
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
+
+            /* sólo si el usaurio es un Directos puede acceder al os botones de Adminsitrador, Fiscalizador y Delegado */
+            def obra = contrato.oferta.concurso.obra
+            println ".........." + obra
+            def dptoDireccion = Departamento.findAllByDireccion(obra.departamento.direccion)
+            def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion)
+            def directores = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalDireccion).persona.id
+            println "directores:" + directores + "  usurio: " + session.usuario.id
+            def esDirector = directores.contains(session.usuario.id)? "S": "N"
+            println "esDirector:" + esDirector
+
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
             [campos: campos, contrato: contrato, esDirector: esDirector]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
-            [campos: campos, esDirector: esDirector]
+            [campos: campos]
         }
     }
 

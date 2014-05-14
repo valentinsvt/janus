@@ -212,7 +212,9 @@
 
                                 <div class="span4">
                                     %{--<elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" minDate="${minDatePres}" maxDate="new Date()" value="${planillaInstance?.fechaOficioEntradaPlanilla}"/>--}%
-                                    <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" value="${planillaInstance?.fechaOficioEntradaPlanilla}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                                    <elm:datepicker name="fechaOficioEntradaPlanilla" class=" span3 required" value="${planillaInstance?.fechaOficioEntradaPlanilla}"
+                                                    minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
+                                                    maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
                                     <span class="mandatory">*</span>
 
                                     <p class="help-block ui-helper-hidden"></p>
@@ -227,7 +229,9 @@
 
                                 <div class="span4">
                                     %{--<elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" minDate="${minDatePres}" maxDate="new Date()" value="${planillaInstance?.fechaIngreso}"/>--}%
-                                    <elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" value="${planillaInstance?.fechaIngreso}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                                    <elm:datepicker name="fechaIngreso" class=" span3 required" onSelect="fechas" value="${planillaInstance?.fechaIngreso}"
+                                                    minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
+                                                    maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
                                     <span class="mandatory">*</span>
 
                                     <p class="help-block ui-helper-hidden"></p>
@@ -239,7 +243,9 @@
 
                                 <div class="span4 hide presentacion">
                                     %{--<elm:datepicker name="fechaPresentacion" class=" span3 required" minDate="${minDatePres}" maxDate="${maxDatePres}" value="${planillaInstance?.fechaPresentacion}"/>--}%
-                                    <elm:datepicker name="fechaPresentacion" class=" span3 required" value="${planillaInstance?.fechaPresentacion}" maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
+                                    <elm:datepicker name="fechaPresentacion" class=" span3 required" value="${planillaInstance?.fechaPresentacion}"
+                                                    minDate="new Date(${contrato.fechaSubscripcion.format('yyyy')},${contrato.fechaSubscripcion.format('MM').toInteger() - 1},${contrato.fechaSubscripcion.format('dd')},0,0,0,0)"
+                                                    maxDate="new Date(${fechaMax.format('yyyy')},${fechaMax.format('MM').toInteger() - 1},${fechaMax.format('dd')},0,0,0,0)"/>
                                     <span class="mandatory">*</span>
 
                                     <p class="help-block ui-helper-hidden"></p>
