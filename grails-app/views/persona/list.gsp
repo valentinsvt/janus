@@ -135,7 +135,7 @@
                 <h3 id="modalTitle"></h3>
             </div>
 
-            <div class="modal-body" id="modalBody">
+            <div class="modal-body" id="modalBody" >
             </div>
 
             <div class="modal-footer" id="modalFooter">

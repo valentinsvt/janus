@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>Mantenimiento de Precios por volumen</title>
+        <title>Mant. de Precios por volumen</title>
 
 
         <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>

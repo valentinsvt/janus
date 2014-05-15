@@ -203,19 +203,23 @@
                     %{--tener una planilla, pueden ser: anticipo, fiscalización, timbres, etc.--}%
                 %{--</div><br>--}%
 
+%{--
                 <div class="item" texto="dstp">
                     <g:link controller="descuentoTipoPlanilla" action="list">Descuentos que se aplican</g:link>
                     a cada tipo de planilla.
                 </div><br>
+--}%
 
                 %{--<div class="item" texto="tpml">--}%
                     %{--<g:link controller="tipoMulta" action="list">Tipo de multa</g:link> que se puede--}%
                     %{--aplicar a una planilla, distintos de a retraso en obra y presentación de la planilla--}%
                 %{--</div><br>--}%
 
+%{--
                 <div class="item" texto="tpin">
                     <g:link controller="tipoIndice" action="list">Tipo de Indice</g:link> según el INEC y Contraloría.
                 </div><br>
+--}%
 
 
                 %{--<div class="item" texto="tppo">--}%
@@ -286,12 +290,14 @@
     contratación y ejecución de obras.</p>
 </div>
 
+%{--
 <div id="tpin" style="display:none">
     <h3>Tipo de Indice</h3><br>
 
     <p>Para distinguir la fuente: INEC o C.G.E., se aplica a la fórmula polinómica y cada uno de sus coeficientes.
     Tanto para la cuadrilla tipo como para fórmula general.</p>
 </div>
+--}%
 
 <div id="tptr" style="display:none">
     <h3>Tipo de Trámite</h3><br>
@@ -411,14 +417,18 @@
     %{--<h3>Tipo de descuento de una Planilla</h3><br>--}%
     %{--<p>Tipo de descuento que puede tener una planilla, pueden ser: anticipo, fiscalización, timbres, etc. </p>--}%
 %{--</div>--}%
+%{--
 <div id="dstp" style="display:none">
     <h3>Descuento por tipo de Planilla</h3><br>
     <p>Descuentos que se aplican a cada tipo de planilla. </p>
 </div>
+--}%
+%{--
 <div id="tpml" style="display:none">
     <h3>Tipo de multa</h3><br>
     <p>Tipo de multa que puede tener una planilla, según el contrato, distintos de retraso en obra y presentación de la planilla.</p>
 </div>
+--}%
 <div id="ddlb" style="display:none">
     <h3>Días laborables</h3><br>
     <p>El calendario se genera en forma automática para cada año, con los fines de semana definidos como días no

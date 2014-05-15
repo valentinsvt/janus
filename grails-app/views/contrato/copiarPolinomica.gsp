@@ -27,7 +27,7 @@
         </style>
 
 
-        <title>Formula Polinómica</title>
+        <title>Fórmula Polinómica</title>
     </head>
 
     <body>
@@ -47,7 +47,7 @@
             <div id="tabs" style="width: 700px; height: 700px; text-align: center">
 
                 <ul>
-                    <li><a href="#tab-formulaPolinomica">Formula Polinómica</a></li>
+                    <li><a href="#tab-formulaPolinomica">Fórmula Polinómica</a></li>
                     <li><a href="#tab-cuadrillaTipo">Cuadrilla Tipo</a></li>
 
                 </ul>
@@ -57,7 +57,7 @@
                     <div class="formula">
 
                         <fieldset class="borde">
-                            <legend>Formula Polinómica</legend>
+                            <legend>Fórmula Polinómica</legend>
 
                             <table class="table table-bordered table-striped table-hover table-condensed" id="tablaPoliContrato">
                                 <thead>
