@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        Volúmenes de obra
+        Importar Obra
     </title>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -28,18 +28,21 @@
     Obras presentes en el sistema de oferentes
 </div>
 
+%{--
 <div class="row">
-    <div class="span12 btn-group" role="navigation" style="margin-left: 0px;">
+    <div class="span12 btn-group" role="navigation" >
         <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
             <i class="icon-arrow-left"></i>
             Regresar
         </a>
     </div>
 </div>
+--}%
 
 
 <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
     <div class="borde_abajo" style="padding-left: 45px;position: relative;">
+        <h4>Filtrar Obras por:</h4>
         <div class="linea" style="height: 98%;"></div>
         <div class="row-fluid" style="margin-left: 0px">
             <div class="span1">
