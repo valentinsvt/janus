@@ -239,9 +239,13 @@
                                         %{--Enviar planilla--}%
                                         %{--</g:else>--}%
                                         </g:if>
+
+                                        %{--${contrato.administrador.id} session: ${session.usuario.id}  garantía: ${garantia}--}%
+
                                         <g:if test="${(lblBtn == 3) || (lblBtn == 2 && planillaInstance.tipoPlanilla.codigo == 'A')}">
                                             <g:set var="lblBtn" value="${3}"/>
                                             <g:if test="${garantia != 0}">
+
                                                 <g:if test="${contrato.administrador.id == session.usuario.id}">
                                                 <a href="#" class="btn btn-pagar pg_${lblBtn}" data-id="${planillaInstance.id}" data-tipo="${lblBtn}">
                                                     Pedir pago

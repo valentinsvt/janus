@@ -56,7 +56,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Memo N.
+                Memorando No.
             </span>
         </div>
 
@@ -76,7 +76,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="motivo" class="required "/>
+            <g:textField name="motivo" class="required span5 "/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -91,7 +91,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="observaciones" class="required "/>
+            <g:textField name="observaciones" class="required span4"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>

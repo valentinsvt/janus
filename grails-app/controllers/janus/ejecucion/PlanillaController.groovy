@@ -567,12 +567,13 @@ class PlanillaController extends janus.seguridad.Shield {
 
         garantias.each {
             if(it.fechaFinalizacion >= new Date()){
+//            if(it.fechaFinalizacion >= contrato.fechaSubscripcion){
                 si += 1
             }
         }
 //
 //        println("garantias" + garantias)
-//        println("si" + si)
+        println("si" + si)
 
 //        println fp
         def firma = Persona.findAllByCargoIlike("Direct%");

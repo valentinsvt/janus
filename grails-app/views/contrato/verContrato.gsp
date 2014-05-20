@@ -46,30 +46,31 @@
             <div class="span12 btn-group" role="navigation" style="margin-left: 0;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
             %{--<button class="btn" id="btn-imprimir" disabled="true"><i class="icon-print"></i> Imprimir</button>--}%
+                <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
+                    <i class="icon-book"></i> Biblioteca
+                </g:link>
+                <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
+                    <i class="icon-pencil"></i> Garantías
+                </g:link>
 
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
-                    <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
-                        <i class="icon-book"></i> Biblioteca
-                    </g:link>
-                    <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
-                        <i class="icon-pencil"></i> Garantías
-                    </g:link>
                     <g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">
                         <i class="icon-th"></i> Cronograma ejecucion
                     </g:link>
-                    <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}" class="btn">
-                        <i class="icon-superscript"></i> Fórmula Polinómica
-                    </a>
-                    <a href="#" class="btn  " id="imprimir_sub">
-                        <i class="icon-print"></i>
-                        Imprimir Presupuesto
-                    </a>
-                    <a href="#" class="btn  " id="btnRubros">
-                        <i class="icon-print"></i>
-                        Rubros
-                    </a>
-
                 </g:if>
+
+                <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}" class="btn">
+                    <i class="icon-superscript"></i> Fórmula Polinómica
+                </a>
+
+                <a href="#" class="btn  " id="imprimir_sub">
+                    <i class="icon-print"></i>
+                    Imprimir Presupuesto
+                </a>
+                <a href="#" class="btn  " id="btnRubros">
+                    <i class="icon-print"></i>
+                    Rubros
+                </a>
 
             </div>
         </div>
@@ -422,6 +423,7 @@
 
                             <li>
                                 <g:if test="${esDirector == 'S'}">
+                                %{--<g:if test="${esDirector == 'N'}">--}%
                                 <a href="#" id="btnAdmin">
                                     <i class="icon-user"></i> Administrador
                                 </a>
@@ -430,6 +432,7 @@
 
                             <li>
                                 <g:if test="${esDirector == 'S'}">
+                                %{--<g:if test="${esDirector == 'N'}">--}%
                                 <a href="#" id="btnFisc">
                                     <i class="icon-user"></i> Fiscalizador
                                 </a>
@@ -438,6 +441,7 @@
 
                             <li>
                                 <g:if test="${esDirector == 'S'}">
+                                %{--<g:if test="${esDirector == 'N'}">--}%
                                 <a href="#" id="btnPref">
                                     <i class="icon-user"></i> Delegado del Prefecto
                                 </a>
@@ -674,7 +678,7 @@
                                 }
                             });
                         });
-                        $("#modal_tittle_var").text("Delegado del prefecto");
+                        $("#modal_tittle_var").text("Delegado del Prefecto");
                         $("#modal_body_var").html(msg);
                         $("#modal_footer_var").html($btnCerrar).append($btnSave);
                         $("#modal-var").modal("show");
