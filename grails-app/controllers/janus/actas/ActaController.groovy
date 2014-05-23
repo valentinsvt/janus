@@ -96,7 +96,7 @@ class ActaController extends janus.seguridad.Shield {
     } //list
 
     def form() {
-        println "**************" + params
+//        println "**************" + params
         if (!params.tipo) {
             params.tipo = 'P' //provisional
         }
@@ -213,6 +213,80 @@ class ActaController extends janus.seguridad.Shield {
                                                         contenido: "El plazo de entrega de la obra, según el contrato, es de: <strong>" + numero(contrato.plazo, 0) + " días calendario</strong>" +
                                                                 " contados a partir del " + fechaConFormato(obra.fechaInicio, "dd-MM-yyyy") + " según orden de inicio impartida por la Dirección de " +
                                                                 "Fiscalización mediante "
+                                                ]
+                                        ]
+                                ],
+                                [
+                                        numero  : 6,
+                                        titulo  : "CONSTANCIA DE LA RECEPCIÓN",
+                                        parrafos: [
+                                                [
+                                                        numero   : 1,
+                                                        contenido: "<strong>RECEPCIÓN PROVISIONAL:</strong><br/>" +
+                                                                "<strong>6.1.a.-</strong> La Comisión integrada para el efecto, procede en el sitio de la obra, " +
+                                                                "a realizar la diligencia de recepción de los rubros materia del contrato.<br/>" +
+                                                                "<strong>6.1.b.- Observaciones:</strong>"
+                                                ],
+                                                [
+                                                        numero   : 2,
+                                                        contenido: "<strong>RECEPCIÓN DEFINITIVA:</strong><br/>" +
+                                                                "<strong>6.2.a.-</strong>"
+                                                ]
+                                        ]
+                                ],
+                                [
+                                        numero  : 7,
+                                        titulo  : "CUMPLIMIENTO DE LAS OBLIGACIONES CONTRACTUALES",
+                                        parrafos: [
+                                                [
+                                                        numero   : 1,
+                                                        contenido: "<strong>Técnicas:</strong>"
+                                                ],
+                                                [
+                                                        numero   : 2,
+                                                        contenido: "<strong>Legales:</strong>"
+                                                ],
+                                                [
+                                                        numero   : 3,
+                                                        contenido: "<strong>Económicas:</strong>"
+                                                ],
+                                                [
+                                                        numero   : 4,
+                                                        contenido: "<strong>Administrativas:</strong>"
+                                                ]
+                                        ]
+                                ],
+                                [
+                                        numero  : 8,
+                                        titulo  : "REAJUSTES DE PRECIOS PAGADOS Ó PENDIENTES",
+                                        parrafos: [
+                                                [
+                                                        numero   : 1,
+                                                        contenido: "<strong>RESÚMEN DE PAGO DE REAJUSTE HASTA LA PRESENTE FECHA:</strong>"
+                                                ]
+                                        ]
+                                ],
+                                [
+                                        numero  : 9,
+                                        titulo  : "OBSERVACIONES GENERALES",
+                                        parrafos: [
+                                                [
+                                                        numero   : 1,
+                                                        contenido: "Ejecución de la obra:"
+                                                ],
+                                                [
+                                                        numero   : 2,
+                                                        contenido: "A la obra concluída:"
+                                                ]
+                                        ]
+                                ],
+                                [
+                                        numero  : 10,
+                                        titulo  : "DOCUMENTACIÓN",
+                                        parrafos: [
+                                                [
+                                                        numero   : 1,
+                                                        contenido: "Forman parte de la presente Acta: "
                                                 ]
                                         ]
                                 ]

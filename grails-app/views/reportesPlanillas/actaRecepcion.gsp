@@ -185,6 +185,24 @@
             width      : 100%;
         }
 
+        #sumillas {
+            margin-top    : 200px;
+            margin-bottom : 10px;
+            width         : 100%;
+            /*position : absolute;*/
+            /*bottom   : 15px;*/
+        }
+
+        .sumilla {
+            border-top    : solid 1px #555;
+            border-bottom : solid 1px #555;
+            padding       : 3px;
+        }
+
+        .left {
+            float : left;
+        }
+
         .firma {
             border-top  : solid 1px #000000;
             margin      : 0.3cm;
@@ -312,17 +330,19 @@
                 <div class="firma">
                     <g:if test="${actaInstance.contrato.administrador}">
                         ${actaInstance.contrato.administrador.titulo ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}
+                    %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
                     </g:if>
                     <br/>
-                    Administrador vigente
+                    Delegado por el administrador por el Sr. Prefecto Provincial
                 </div>
 
                 <div class="firma">
-                    <g:if test="${actaInstance.contrato.delegadoPrefecto}">
-                        ${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}
+                    <g:if test="${actaInstance.contrato.fiscalizadorContrato.fiscalizador}">
+                    %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
+                        ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido}
                     </g:if>
                     <br/>
-                    Delegado del prefecto
+                    Por el Ing. Director de Fiscalización
                 </div>
 
                 <div class="firma">
@@ -332,6 +352,36 @@
                     <br/>
                     Contratista
                 </div>
+            </div>
+
+            <div id="sumillas">
+                <div class="left">
+                    <div class="row" style="height: 20px;">
+                        <div class="sumilla">
+                            Elaborado por:
+                            ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="">
+                            FISCALIZADOR
+                        </div>
+                    </div>
+                </div>
+
+                <div class="left">
+                    <div class="firma"></div>
+                </div>
+
+                %{--<div class="firma">--}%
+                %{--<g:if test="${actaInstance.contrato.administrador}">--}%
+                %{--${actaInstance.contrato.administrador.titulo ?: ""} ${actaInstance.contrato.administrador.nombre} ${actaInstance.contrato.administrador.apellido}--}%
+                %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
+                %{--</g:if>--}%
+                %{--<br/>--}%
+                %{--Delegado por el administrador por el Sr. Prefecto Provincial--}%
+                %{--</div>--}%
             </div>
 
         </div>
