@@ -119,15 +119,19 @@ class ActaController extends janus.seguridad.Shield {
             def secciones = []
             def actaInstance = new Acta(params)
             if (params.id) {
+                println "**2 " + params.id
                 actaInstance = Acta.get(params.id.toLong())
                 tipo = actaInstance.tipo
+                println "**3 " + tipo + "   " + actaInstance
                 if (!actaInstance) {
                     flash.clase = "alert-error"
                     flash.message = "No se encontró Acta con id " + params.id
                     redirect(action: "list")
                     return
                 } //no existe el objeto
-
+                if (!actaProv && tipo == "D") {
+                    actaProv = Acta.findByContratoAndTipo(actaInstance.contrato, "P")
+                }
                 def sec = actaInstance.secciones
                 if (sec.size() == 0) {
                     def contrato = actaInstance.contrato
@@ -262,7 +266,8 @@ class ActaController extends janus.seguridad.Shield {
                                         parrafos: [
                                                 [
                                                         numero   : 1,
-                                                        contenido: "<strong>RESÚMEN DE PAGO DE REAJUSTE HASTA LA PRESENTE FECHA:</strong>"
+                                                        contenido: "<strong>RESÚMEN DE PAGO DE REAJUSTE HASTA LA PRESENTE FECHA:</strong>",
+                                                        tipoTabla: "RPR"
                                                 ]
                                         ]
                                 ],
@@ -323,14 +328,14 @@ class ActaController extends janus.seguridad.Shield {
                         } //secciones.each para guardar
                     } // es provisional: se crean las secciones/parrafos por default
                     else if (tipo == 'D') {
-                        println "AQUIQQQQQ"
+//                        println "AQUIQQQQQ"
                         contrato = actaInstance.contrato
                         actaProv = Acta.findAllByContratoAndTipo(contrato, 'P')
                         if (actaProv.size() == 1) {
                             actaProv = actaProv[0]
-                            println actaProv
-                            println actaProv.fechaRegistro
-                            println actaProv.registrada
+//                            println actaProv
+//                            println actaProv.fechaRegistro
+//                            println actaProv.registrada
                             if (actaProv.fechaRegistro && actaProv.registrada == 1) {
 //                                println "ASDFASDFASDF"
                                 //secciones
@@ -342,12 +347,28 @@ class ActaController extends janus.seguridad.Shield {
                                     ])
                                     if (nuevaSec.save(flush: true)) {
                                         seccion.parrafos.each { parrafo ->
-                                            def nuevoParr = new Parrafo([
-                                                    numero   : parrafo.numero,
-                                                    contenido: parrafo.contenido,
-                                                    tipoTabla: parrafo.tipoTabla,
-                                                    seccion  : nuevaSec
-                                            ])
+//                                            println "........:::::::: " + seccion.numero + "   " + (parrafo.contenido.contains("RECEPCIÓN")) + "   " + parrafo.numero
+                                            def nuevoParr = new Parrafo()
+                                            if (seccion.numero == 6 && parrafo.contenido.contains("RECEPCIÓN") && parrafo.numero == 1) {
+//                                                println "CAMBIA A 2"
+                                                nuevoParr.numero = 2
+                                                nuevoParr.contenido = parrafo.contenido.replaceAll("6\\.1", "6.2")
+                                            } else if (seccion.numero == 6 && parrafo.contenido.contains("RECEPCIÓN") && parrafo.numero == 2) {
+//                                                println "CAMBIA A 1"
+                                                nuevoParr.numero = 1
+                                                nuevoParr.contenido = parrafo.contenido.replaceAll("6\\.2", "6.1")
+                                            } else {
+                                                nuevoParr.numero = parrafo.numero
+                                                nuevoParr.contenido = parrafo.contenido
+                                            }
+                                            nuevoParr.tipoTabla = parrafo.tipoTabla
+                                            nuevoParr.seccion = nuevaSec
+//                                            nuevoParr = new Parrafo([
+//                                                    numero   : parrafo.numero,
+//                                                    contenido: parrafo.contenido,
+//                                                    tipoTabla: parrafo.tipoTabla,
+//                                                    seccion  : nuevaSec
+//                                            ])
                                             if (!nuevoParr.save(flush: true)) {
                                                 println "error al guardar: " + nuevoParr.errors
                                             }
@@ -356,7 +377,7 @@ class ActaController extends janus.seguridad.Shield {
                                         println "error al guardar: " + nuevaSec.errors
                                     }
                                 }
-                                sec = Seccion.findAllByActa(actaInstance)
+                                sec = Seccion.findAllByActa(actaInstance, [order: "numero"])
                             } else {
                                 flash.message = "No ha registrado el acta provisional, no puede generar el acta definitiva."
                                 redirect(action: "errores", params: [contrato: params.contrato])
@@ -365,7 +386,7 @@ class ActaController extends janus.seguridad.Shield {
                         }
                     } //es definitiva: se copian las secciones/parrafos de la provisional
 //                    sec = actaInstance.secciones
-                    sec = Seccion.findAllByActa(actaInstance)
+                    sec = Seccion.findAllByActa(actaInstance, [order: "numero"])
 //                    println sec
                 }
 
@@ -375,7 +396,7 @@ class ActaController extends janus.seguridad.Shield {
                     objSec.numero = s.numero
                     objSec.titulo = s.titulo
                     objSec.parrafos = []
-                    Parrafo.findAllBySeccion(s).each { p ->
+                    Parrafo.findAllBySeccion(s, [order: "numero"]).each { p ->
                         objSec.parrafos.add([
                                 id       : p.id,
                                 numero   : p.numero,

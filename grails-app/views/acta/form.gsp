@@ -678,7 +678,7 @@
             }
 
             function addSeccion(data, isEditable) {
-                console.log(data)
+//                console.log(data)
                 var $seccion = $("<div class='seccion ui-corner-all'></div>");
                 var $titulo = $("<div class='row tituloSeccion'></div>");
                 $("<div class='span1 numero lvl1 bold'>" + data.numero + ".-</div>").appendTo($titulo);
@@ -984,7 +984,9 @@
 //                });
 
                 $("#btnPrint").click(function () {
-                    location.href = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
+                    var url = "${createLink(controller: 'pdf',action: 'pdfLink')}?url=${createLink(controller: 'reportesPlanillas',action: 'actaRecepcion', id:actaInstance.id)}";
+//                    console.log(url);
+                    location.href = url;
                 });
 
                 $("#btnRegistro").click(function () {

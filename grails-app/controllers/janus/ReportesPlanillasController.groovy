@@ -41,7 +41,6 @@ class ReportesPlanillasController {
     def diasLaborablesService
 
 
-
     private String cap(str) {
         return str.replaceAll(/[a-zA-Z_0-9áéíóúÁÉÍÓÚñÑüÜ]+/, {
             it[0].toUpperCase() + ((it.size() > 1) ? it[1..-1].toLowerCase() : '')
@@ -72,8 +71,22 @@ class ReportesPlanillasController {
     }
 
     def actaRecepcion() {
+//        println "acta recepcion: " + params
         def acta = Acta.get(params.id)
-        return [actaInstance: acta]
+//        println ">>>> " + acta
+        def direccion = Direccion.findAllByNombreIlike("%FISCALIZACI%")
+        def directorDeFiscalizacion = null
+        if (direccion.size() == 0) {
+            println "no se encontro direccion de fiscalizacion!!"
+        } else if (direccion.size() > 1) {
+            println "se encontraron ${direccion.size()} direcciones de fiscalizacion!!! " + direccion
+        } else {
+            def dptoDireccion = Departamento.findAllByDireccion(direccion.first())
+            def funcionDirector = Funcion.findByCodigo("D")
+            def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
+            directorDeFiscalizacion = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion).persona
+        }
+        return [actaInstance: acta, directorDeFiscalizacion: directorDeFiscalizacion]
     }
 
     def reporteDiferencias() {
@@ -110,17 +123,17 @@ class ReportesPlanillasController {
 
             if (!detalles[vol.item]) {
                 detalles[vol.item] = [
-                        codigo: vol.item.codigo,
-                        nombre: vol.item.nombre,
-                        unidad: vol.item.unidad.codigo,
-                        precio: precio,
+                        codigo  : vol.item.codigo,
+                        nombre  : vol.item.nombre,
+                        unidad  : vol.item.unidad.codigo,
+                        precio  : precio,
                         cantidad: [
                                 contratado: 0,
-                                ejecutado: 0
+                                ejecutado : 0
                         ],
-                        valor: [
+                        valor   : [
                                 contratado: 0,
-                                ejecutado: 0
+                                ejecutado : 0
                         ]
                 ]
             }
@@ -2909,11 +2922,11 @@ class ReportesPlanillasController {
             def prmsHeaderHoja = [border: Color.WHITE]
             def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
             def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
-                    align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                              align : Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
             def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
-                    align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                               align : Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
             def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
-                    align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+                                align : Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
             def prmsCellHead2 = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
             def prmsCellCenter = [border: Color.BLACK, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
             def prmsCellRight = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
@@ -2922,12 +2935,12 @@ class ReportesPlanillasController {
             def prmsCellLeft2 = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE, align: Element.ALIGN_LEFT]
             def prmsCellLeft3 = [border: Color.WHITE, valign: Element.ALIGN_LEFT, align: Element.ALIGN_LEFT, colspan: 2]
             def prmsSubtotal = [border: Color.BLACK, colspan: 6,
-                    align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+                                align : Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
             def prmsNum = [border: Color.BLACK, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
 
             def prms = [prmsHeaderHoja: prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
-                    prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2,
-                    prmsCellRight: prmsCellRight, prmsCellHead2: prmsCellHead2, prmsCellLeft2: prmsCellLeft2]
+                        prmsCellHead  : prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum, prmsHeaderHoja2: prmsHeaderHoja2,
+                        prmsCellRight : prmsCellRight, prmsCellHead2: prmsCellHead2, prmsCellLeft2: prmsCellLeft2]
 
 
             def baos = new ByteArrayOutputStream()
@@ -2948,8 +2961,8 @@ class ReportesPlanillasController {
 
             times8boldWhite.setColor(Color.WHITE)
             times10boldWhite.setColor(Color.WHITE)
-            def fonts = [times12bold: times12bold, times10bold: times10bold, times8bold: times8bold,
-                    times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
+            def fonts = [times12bold     : times12bold, times10bold: times10bold, times8bold: times8bold,
+                         times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times10normal: times10normal]
 
             Document document
             document = new Document(PageSize.A4);

@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.ejecucion.Planilla; janus.pac.Garantia" contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
         <title>Acta recepción</title>
@@ -232,9 +232,9 @@
             <div class="tituloChevere bold upper">
                 Datos generales
             </div>
-            <g:set var="garantias" value="${janus.pac.Garantia.findAllByContrato(actaInstance.contrato)}"/>
+            <g:set var="garantias" value="${Garantia.findAllByContrato(actaInstance.contrato)}"/>
             <g:set var="obra" value="${actaInstance.contrato.oferta.concurso.obra}"/>
-            <g:set var="fisc" value="${janus.ejecucion.Planilla.findAllByContrato(actaInstance.contrato, [sort: "id", order: "desc"]).first().fiscalizador}"/>
+            <g:set var="fisc" value="${Planilla.findAllByContrato(actaInstance.contrato, [sort: "id", order: "desc"]).first().fiscalizador}"/>
             <div class="well">
                 <div class='row'>
                     <div class="bold span1">Contrato N.</div>
@@ -333,13 +333,14 @@
                     %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
                     </g:if>
                     <br/>
-                    Delegado por el administrador por el Sr. Prefecto Provincial
+                    Administrador/Delegado por el Sr. Prefecto Provincial
                 </div>
 
                 <div class="firma">
-                    <g:if test="${actaInstance.contrato.fiscalizadorContrato.fiscalizador}">
+                    <g:if test="${directorDeFiscalizacion}">
                     %{--${actaInstance.contrato.delegadoPrefecto.titulo ?: ""} ${actaInstance.contrato.delegadoPrefecto.nombre} ${actaInstance.contrato.delegadoPrefecto.apellido}--}%
-                        ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido}
+                    %{--${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido}--}%
+                        ${directorDeFiscalizacion.titulo ?: ""} ${directorDeFiscalizacion.nombre} ${directorDeFiscalizacion.apellido}
                     </g:if>
                     <br/>
                     Por el Ing. Director de Fiscalización

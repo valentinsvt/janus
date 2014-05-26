@@ -502,23 +502,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listFiscalizador() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-//        switch (codigoPerfil) {
-//            case "FINA":
-//                redirect(action: 'listFinanciero', id: params.id)
+        switch (codigoPerfil) {
+            case "FINA":
+                redirect(action: 'listFinanciero', id: params.id)
+                return
+                break;
+            case "ADCT":
+                redirect(action: 'listAdmin', id: params.id)
+                return
+                break;
+            case "FISC":
+//                redirect(action: 'listFiscalizador', id: params.id)
 //                return
-//                break;
-//            case "ADCT":
-//                redirect(action: 'listAdmin', id: params.id)
-//                return
-//                break;
-//            case "FISC":
-////                redirect(action: 'listFiscalizador', id: params.id)
-////                return
-//                break;
-//            default:
-//                redirect(action: 'list', id: params.id)
-//                return
-//        }
+                break;
+            default:
+                redirect(action: 'list', id: params.id)
+                return
+        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -539,23 +539,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listAdmin() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-//        switch (codigoPerfil) {
-//            case "FINA":
-//                redirect(action: 'listFinanciero', id: params.id)
+        switch (codigoPerfil) {
+            case "FINA":
+                redirect(action: 'listFinanciero', id: params.id)
+                return
+                break;
+            case "ADCT":
+//                redirect(action: 'listAdmin', id: params.id)
 //                return
-//                break;
-//            case "ADCT":
-////                redirect(action: 'listAdmin', id: params.id)
-////                return
-//                break;
-//            case "FISC":
-//                redirect(action: 'listFiscalizador', id: params.id)
-//                return
-//                break;
-//            default:
-//                redirect(action: 'list', id: params.id)
-//                return
-//        }
+                break;
+            case "FISC":
+                redirect(action: 'listFiscalizador', id: params.id)
+                return
+                break;
+            default:
+                redirect(action: 'list', id: params.id)
+                return
+        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 
@@ -586,23 +586,23 @@ class PlanillaController extends janus.seguridad.Shield {
     def listFinanciero() {
         def codigoPerfil = session.perfil.codigo
 //        println codigoPerfil
-//        switch (codigoPerfil) {
-//            case "FINA":
-////                redirect(action: 'listFinanciero', id: params.id)
-////                return
-//                break;
-//            case "ADCT":
-//                redirect(action: 'listAdmin', id: params.id)
+        switch (codigoPerfil) {
+            case "FINA":
+//                redirect(action: 'listFinanciero', id: params.id)
 //                return
-//                break;
-//            case "FISC":
-//                redirect(action: 'listFiscalizador', id: params.id)
-//                return
-//                break;
-//            default:
-//                redirect(action: 'list', id: params.id)
-//                return
-//        }
+                break;
+            case "ADCT":
+                redirect(action: 'listAdmin', id: params.id)
+                return
+                break;
+            case "FISC":
+                redirect(action: 'listFiscalizador', id: params.id)
+                return
+                break;
+            default:
+                redirect(action: 'list', id: params.id)
+                return
+        }
         def contrato = Contrato.get(params.id)
         def obra = contrato.oferta.concurso.obra
 

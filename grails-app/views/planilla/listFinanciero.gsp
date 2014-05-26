@@ -85,7 +85,7 @@
                                 ${planillaInstance.tipoPlanilla.nombre}
 
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
-                                    (${cont}/${prej.size()})
+                                    %{--(${cont}/${prej.size()})--}%
                                     <g:if test="${cont == prej.size() && planillaInstance.fechaFin >= prej[0].fechaFin}">
                                         (Liquidación)
                                     </g:if>

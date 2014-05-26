@@ -88,17 +88,17 @@ class ActaTagLib {
             }
             if (!detalles[vol.subPresupuesto][vol.item]) {
                 detalles[vol.subPresupuesto][vol.item] = [
-                        codigo: vol.item.codigo,
-                        nombre: vol.item.nombre,
-                        unidad: vol.item.unidad.codigo,
-                        precio: precio,
+                        codigo  : vol.item.codigo,
+                        nombre  : vol.item.nombre,
+                        unidad  : vol.item.unidad.codigo,
+                        precio  : precio,
                         cantidad: [
                                 contratado: 0,
-                                ejecutado: 0
+                                ejecutado : 0
                         ],
-                        valor: [
+                        valor   : [
                                 contratado: 0,
-                                ejecutado: 0
+                                ejecutado : 0
                         ]
                 ]
             }
@@ -551,9 +551,18 @@ class ActaTagLib {
     }
 
     def rpr(Acta acta) {
+
+        def contrato = acta.contrato
+        def planillas = Planilla.findAllByContrato(contrato, [sort: "numero"])
+
+//        println "---------------------------------------------------------------"
+//        println acta
+//        println contrato
+//        println planillas
+//        println "---------------------------------------------------------------"
+
         def tabla = "<table class='table table-bordered table-condensed'>"
         tabla += "<thead>"
-
         tabla += "<tr>"
         tabla += "<th>N.</th>"
         tabla += "<th>Periodo</th>"
@@ -561,8 +570,43 @@ class ActaTagLib {
         tabla += "<th>Valor definitivo</th>"
         tabla += "<th>Diferencia</th>"
         tabla += "</tr>"
-
         tabla += "</thead>"
+
+        tabla += "<tbody>"
+        def totalProvisional = 0, totalDefinitivo = 0, totalDiferencia = 0
+        planillas.each { planilla ->
+            if (planilla.tipoPlanilla.codigo != "L" && planilla.tipoPlanilla.codigo != "M" && planilla.tipoPlanilla.codigo != "C") {
+                tabla += "<tr>"
+                tabla += "<td style='text-align:center;'>${planilla.numero}</td>"
+                tabla += "<td style='text-align:center;'>"
+                if (planilla.tipoPlanilla.codigo == "A") {
+                    tabla += "ANTICIPO"
+                } else {
+                    tabla += "DEL ${planilla.fechaInicio?.format('yyyy-MM-dd')} AL ${planilla.fechaFin?.format('yyyy-MM-dd')}"
+                }
+                tabla += "</td>"
+                def diferencia = planilla.reajusteLiq - planilla.reajuste
+                tabla += "<td style='text-align:center;'>${numero(numero: planilla.reajuste)}</td>"
+                tabla += "<td style='text-align:center;'>${numero(numero: planilla.reajusteLiq)}</td>"
+                tabla += "<td style='text-align:center;'>${numero(numero: diferencia)}</td>"
+
+                totalProvisional += planilla.reajuste
+                totalDefinitivo += planilla.reajusteLiq
+                totalDiferencia += diferencia
+
+                tabla += "</tr>"
+            }
+        }
+        tabla += "</tbody>"
+
+        tabla += "<tfoot>"
+        tabla += "<tr>"
+        tabla += "<th colspan='2' style='text-align:right;'>TOTAL</th>"
+        tabla += "<th style='text-align:center;'>${numero(numero: totalProvisional)}</th>"
+        tabla += "<th style='text-align:center;'>${numero(numero: totalDefinitivo)}</th>"
+        tabla += "<th style='text-align:center;'>${numero(numero: totalDiferencia)}</th>"
+        tabla += "</tr>"
+        tabla += "</tfoot>"
 
         tabla += "</table>"
         return tabla
