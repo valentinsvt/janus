@@ -943,12 +943,29 @@ class ObraController extends janus.seguridad.Shield {
         def usuario = session.usuario.id
         def persona = Persona.get(usuario)
         def rolUsuario = PersonaRol.findByPersona(persona)
+        //old
         def departamento = Departamento.get(params.id)
-        def direccion = departamento.direccion
         def personas = Persona.findAllByDepartamento(departamento)
-        def funcionInsp = Funcion.get(3)
-        def funcionRevi = Funcion.get(5)
-        def funcionResp = Funcion.get(1)
+
+        //nuevo
+
+//        def direccion = Direccion.get(params.id)
+//
+//        def departamentos = Departamento.findAllByDireccion(direccion)
+//
+//        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+//        println("pers" + personas)
+
+
+//        def funcionInsp = Funcion.get(3)
+//        def funcionRevi = Funcion.get(5)
+//        def funcionResp = Funcion.get(1)
+
+        def funcionInsp = Funcion.findByCodigo('I')
+        def funcionRevi = Funcion.findByCodigo('R')
+        def funcionResp = Funcion.findByCodigo('S')
+
 
 
         def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
@@ -958,9 +975,9 @@ class ObraController extends janus.seguridad.Shield {
 //        println("---->>" + personasRolResp)
 //        println("---->>" + personas)
 
-//        println(personasRolInsp)
-//        println(personasRolRevi)
-//        println(personasRolResp)
+        println(personasRolInsp)
+        println(personasRolRevi)
+        println(personasRolResp)
 //
 //        println(personasRolInsp.persona)
 //        println(personasRolRevi.persona)
@@ -971,6 +988,50 @@ class ObraController extends janus.seguridad.Shield {
         return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona]
     }
 
+
+    def getPersonas2() {
+
+
+        println("--->" + params)
+
+        def obra = Obra.get(params.obra)
+        def usuario = session.usuario.id
+        def persona = Persona.get(usuario)
+
+
+        def rolUsuario = PersonaRol.findByPersona(persona)
+
+        def direccion = Direccion.get(params.id)
+
+        def departamentos = Departamento.findAllByDireccion(direccion)
+
+        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+        def funcionInsp = Funcion.findByCodigo('I')
+        def funcionRevi = Funcion.findByCodigo('R')
+        def funcionResp = Funcion.findByCodigo('S')
+
+        def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
+        def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
+        def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
+
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+//        println("---->>" + personasRolResp)
+//        println("---->>" + personas)
+
+        println(personasRolInsp)
+        println(personasRolRevi)
+        println(personasRolResp)
+////
+//        println(personasRolInsp.persona)
+//        println(personasRolRevi.persona)
+//        println(personasRolResp.persona)
+
+//        println(personas)
+
+        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona, personasUtfpu: personasUtfpu ]
+    }
 
     def getSalida() {
 
@@ -1187,7 +1248,7 @@ class ObraController extends janus.seguridad.Shield {
 
 //            def departamento = Departamento.get(params.departamento)
 
-            obraInstance.departamento = persona.departamento
+//            obraInstance.departamento = persona.departamento
 
 //            obraInstance.properties = params
 
