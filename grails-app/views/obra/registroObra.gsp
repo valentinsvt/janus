@@ -229,13 +229,13 @@
 
             <div class="span3">
                 <g:if test="${obra?.id}">
-                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamentoId}"/>
+                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.direccion?.id}"/>
 
                     <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:if>
                 <g:else>
-                    <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
+                    <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.direccion?.id}"/>
 
                     <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
@@ -1195,13 +1195,20 @@
 
         var idP
 
+
+
+
+        <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
         <g:if test="${obra}">
         idP = $("#departamento").val();
         </g:if>
         <g:else>
         idP = $("#departamento option:selected").attr("class");
         </g:else>
-
+        </g:if>
+        <g:else>
+        idP = $("#departamento").val();
+        </g:else>
 
 
 
