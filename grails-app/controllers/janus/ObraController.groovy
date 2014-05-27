@@ -449,7 +449,7 @@ class ObraController extends janus.seguridad.Shield {
 
         def fechaPrecio = new Date()
         cn.eachRow("select max(rbpcfcha) fcha from rbpc, item where rbpc.item__id = item.item__id and " +
-                "itemnmbr ilike '%cemento%port%1'"){d ->
+                "itemnmbr ilike '%cemento%port%'"){d ->
             fechaPrecio = d.fcha
         }
 
