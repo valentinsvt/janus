@@ -402,6 +402,7 @@ class Reportes4Controller {
         def cn
         def res
 
+        def obrasFiltradas = []
 
         def total1 = 0;
         def totales
@@ -427,6 +428,7 @@ class Reportes4Controller {
                 "  o.obraofsl    oficio,\n" +
                 "  o.obrammsl    memo,\n" +
                 "  e.dptodscr    elaborado,\n" +
+                "  e.dptocdgo    codigodepar,\n" +
                 "  d.dptodscr    destino,\n" +
                 "  o.obraofig    ingreso,\n" +
                 "  o.obraetdo    estado,\n" +
@@ -478,28 +480,6 @@ class Reportes4Controller {
 
         }
 
-//       def bandera = 0
-//
-//        if(params.estado == '1'){
-//
-//            bandera = 1
-//
-//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-//        }
-//        else if(params.estado == '2'){
-//
-//            bandera = 1
-//
-//            filtro = " where obraofig is NOT NULL "
-//
-//        }
-//        else if(params.estado == '3'){
-//
-//            bandera = 1
-//
-//            filtro = " where obraetdo='R' "
-//
-//        }
 
         filtro = " where obraetdo='N' "
 
@@ -551,7 +531,14 @@ class Reportes4Controller {
 
 //        println("##" + valoresTotales)
 
-        return [obras: obras, res: res, valoresTotales: valoresTotales, params:params]
+        res.each{
+           if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
+               obrasFiltradas += it
+           }
+        }
+
+
+        return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params]
     }
 
 
@@ -574,6 +561,8 @@ class Reportes4Controller {
         def valores
         def subPres
 
+        def obrasFiltradas = []
+
         params.old = params.criterio
 
         params.criterio=cleanCriterio(params.criterio)
@@ -590,6 +579,7 @@ class Reportes4Controller {
                 "  o.obraofsl    oficio,\n" +
                 "  o.obrammsl    memo,\n" +
                 "  e.dptodscr    elaborado,\n" +
+                "  e.dptocdgo    codigodepar,\n" +
                 "  d.dptodscr    destino,\n" +
                 "  o.obraofig    ingreso,\n" +
                 "  o.obraetdo    estado,\n" +
@@ -641,29 +631,6 @@ class Reportes4Controller {
 
         }
 
-//       def bandera = 0
-//
-//        if(params.estado == '1'){
-//
-//            bandera = 1
-//
-//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-//        }
-//        else if(params.estado == '2'){
-//
-//            bandera = 1
-//
-//            filtro = " where obraofig is NOT NULL "
-//
-//        }
-//        else if(params.estado == '3'){
-//
-//            bandera = 1
-//
-//            filtro = " where obraetdo='R' "
-//
-//        }
-
         filtro = " where obraetdo='R' "
 
 
@@ -714,10 +681,13 @@ class Reportes4Controller {
 
 //        println("##" + valoresTotales)
 
-        return [obras: obras, res: res, valoresTotales: valoresTotales, params:params]
+        res.each{
+            if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
+                obrasFiltradas += it
+            }
+        }
 
-
-
+        return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params]
 
     }
 
@@ -1766,7 +1736,7 @@ class Reportes4Controller {
 
         def valores
         def subPres
-
+        def obrasFiltradas = []
         params.old = params.criterio
 
         params.criterio=cleanCriterio(params.criterio)
@@ -1783,6 +1753,7 @@ class Reportes4Controller {
                 "  o.obraofsl    oficio,\n" +
                 "  o.obrammsl    memo,\n" +
                 "  e.dptodscr    elaborado,\n" +
+                "  e.dptocdgo    codigodepar,\n" +
                 "  d.dptodscr    destino,\n" +
                 "  o.obraofig    ingreso,\n" +
                 "  o.obraetdo    estado,\n" +
@@ -1919,13 +1890,16 @@ class Reportes4Controller {
 
 //        println("##" + valoresTotales)
 
-//        if(!params.criterio){
-//
-//            obras = []
-//        }
+
+        res.each{
+            if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
+                obrasFiltradas += it
+            }
+        }
 
 
-        return [obras: obras, res: res, valoresTotales: valoresTotales, params:params, contratos: contratos, bandera: bandera]
+
+        return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params, contratos: contratos, bandera: bandera]
 
 
 
@@ -3295,7 +3269,9 @@ class Reportes4Controller {
                 "  c.cntrfcsb    fechasu,\n" +
                 "  r.cncrcdgo    concurso,\n" +
                 "  o.obracdgo    obracodigo,\n" +
+                "  o.obratipo     tipo,\n" +
                 "  o.obranmbr    obranombre,\n" +
+                "  k.dptocdgo    codigodepar,\n"+
                 "  n.cntnnmbr    canton,\n" +
                 "  p.parrnmbr    parroquia,\n" +
                 "  t.tpobdscr    tipoobra,\n" +
@@ -3311,6 +3287,7 @@ class Reportes4Controller {
                 "  LEFT JOIN ofrt f ON c.ofrt__id = f.ofrt__id\n" +
                 "  LEFT JOIN cncr r ON f.cncr__id = r.cncr__id\n" +
                 "  LEFT JOIN obra o ON r.obra__id = o.obra__id\n" +
+                "  LEFT JOIN dpto k ON o.dpto__id = k.dpto__id\n" +
                 "  LEFT JOIN cmnd d ON o.cmnd__id = d.cmnd__id\n" +
                 "  LEFT JOIN parr p ON o.parr__id = p.parr__id\n" +
                 "  LEFT JOIN cntn n ON p.cntn__id = n.cntn__id\n" +
@@ -3412,7 +3389,16 @@ class Reportes4Controller {
 //        println(sql)
 //        println(res)
 
-        return [res: res, params:params]
+        def obrasFiltradas = []
+
+        res.each{
+            if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
+                obrasFiltradas += it
+            }
+        }
+
+
+        return [res: obrasFiltradas, params:params]
 
     }
 
