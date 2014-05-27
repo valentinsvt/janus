@@ -68,6 +68,8 @@ class Reportes5Controller {
                 "  c.cntr__id               id,\n" +
                 "  b.obracdgo               obra_cod,\n" +
                 "  b.obranmbr               obra_nmbr,\n" +
+                "  b.obratipo               tipo,\n" +
+                "  z.dptocdgo               codigodepar,\n" +
                 "  m.cmndnmbr               comunidad,\n" +
                 "  a.parrnmbr               parroquia,\n" +
                 "  k.cntnnmbr               canton,\n" +
@@ -95,6 +97,7 @@ class Reportes5Controller {
                 "  INNER JOIN ofrt o ON c.ofrt__id = o.ofrt__id\n" +
                 "  INNER JOIN cncr n ON o.cncr__id = n.cncr__id\n" +
                 "  INNER JOIN obra b ON n.obra__id = b.obra__id\n" +
+                "  INNER JOIN dpto z ON b.dpto__id = z.dpto__id\n" +
                 "  INNER JOIN tpob t ON b.tpob__id = t.tpob__id\n" +
                 "  INNER JOIN prve p ON o.prve__id = p.prve__id\n" +
                 "  INNER JOIN cmnd m ON b.cmnd__id = m.cmnd__id\n" +
@@ -144,6 +147,9 @@ class Reportes5Controller {
 //        println sql
 
         return cn.rows(sql.toString())
+
+
+
     }
 
     def avance() {
@@ -156,10 +162,23 @@ class Reportes5Controller {
         params.criterio = cleanCriterio(params.criterio)
 
         def res = filasAvance(params)
+
+
+        def obrasFiltradas = []
+
+        res.each{
+            if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
+                obrasFiltradas += it
+            }
+        }
+
+
 //        println res
+
+//        println(obrasFiltradas)
         params.criterio = params.old
 
-        return [res: res, params: params]
+        return [res: obrasFiltradas, params: params]
     }
 
     def reporteAvance() {
