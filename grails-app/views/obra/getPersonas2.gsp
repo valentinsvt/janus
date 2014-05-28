@@ -12,7 +12,15 @@
                                      value="${obra?.revisor?.id}" title="Persona para la revisión de la Obra"/></div>
 
         <div class="span1" style="margin-left: -10px">Elaboró presupuesto</div>
-        <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasUtfpu}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>
+
+        <g:if test="${personasUtfpu}">
+            <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasUtfpu}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>
+
+        </g:if>
+        <g:else>
+            <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="" optionKey="id" title="No existen personas responsable de la Obra asignadas!"/></div>
+        </g:else>
+
 
     </g:if>
     <g:else>
@@ -29,7 +37,13 @@
                                          value="${obra?.revisor?.id}" title="Persona para la revisión de la Obra"/></div>
 
             <div class="span1" style="margin-left: -10px">Elaboró presupuesto</div>
-            <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasUtfpu}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>
+
+            <g:if test="${personasUtfpu}">
+                <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasUtfpu}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>
+            </g:if>
+            <g:else>
+                <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="" optionKey="id" title="No existen personas responsable de la Obra asignadas!"/></div>
+            </g:else>
 
 
         </g:if>
@@ -47,9 +61,14 @@
 
             <div class="span1">Elaboró Presupuesto</div>
 
+
+        <g:if test="${personasUtfpu}">
             <g:hiddenField name="responsableObra.id" id="hiddenResponsable" value="${obra?.responsableObra?.id}"/>
             <div class="span3"><g:textField name="responsableText" class="responsable required" value="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}" readonly="readonly" title="Persona responsable de la Obra"/></div>
-
+        </g:if>
+        <g:else>
+                <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="" optionKey="id" title="No existen personas responsable de la Obra asignadas!"/></div>
+         </g:else>
         </g:else>
 
     </g:else>
