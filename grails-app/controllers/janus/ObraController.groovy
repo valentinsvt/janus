@@ -446,6 +446,11 @@ class ObraController extends janus.seguridad.Shield {
         def programa
         def tipoObra
         def claseObra
+        def dueñoObra
+
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra
+
 
         def fechaPrecio = new Date()
         cn.eachRow("select max(rbpcfcha) fcha from rbpc, item where rbpc.item__id = item.item__id and " +
@@ -519,7 +524,16 @@ class ObraController extends janus.seguridad.Shield {
             }
             cn.close()
 //  println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, concurso: concurso]
+
+            responsableObra = obra?.responsableObra?.id
+
+            personasUtfpu.each{
+                if(it.id == responsableObra ){
+                    dueñoObra = 1
+                }
+            }
+
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, dueñoObra : dueñoObra]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento
@@ -536,7 +550,15 @@ class ObraController extends janus.seguridad.Shield {
 //            numero += "-" + (new Date().format("yy"))
             /* ********* fin genera el numero de memo de formula polinoica ***************************** */
 
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio]
+            responsableObra = obra?.responsableObra?.id
+
+            personasUtfpu.each{
+                if(it.id == responsableObra ){
+                    dueñoObra = 1
+                }
+            }
+
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio, personasUtfpu: personasUtfpu, dueñoObra : dueñoObra]
         }
 
 
@@ -1016,6 +1038,8 @@ class ObraController extends janus.seguridad.Shield {
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
 
         def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra
+        def dueñoObra
 
 //        println("---->>" + personasRolResp)
 //        println("---->>" + personas)
@@ -1029,6 +1053,14 @@ class ObraController extends janus.seguridad.Shield {
 //        println(personasRolResp.persona)
 
 //        println(personas)
+
+        responsableObra = obra?.responsableObra?.id
+
+        personasUtfpu.each{
+            if(it.id == responsableObra ){
+                dueñoObra = 1
+            }
+        }
 
         return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona, personasUtfpu: personasUtfpu ]
     }
@@ -1246,9 +1278,12 @@ class ObraController extends janus.seguridad.Shield {
 
             obraInstance = new Obra(params)
 
-//            def departamento = Departamento.get(params.departamento)
+            println("params dep"+ params.departamento.id)
+
+            def departamento = Departamento.get(params.departamento.id)
 
 //            obraInstance.departamento = persona.departamento
+
 
 //            obraInstance.properties = params
 
@@ -1271,10 +1306,15 @@ class ObraController extends janus.seguridad.Shield {
 
 
 
+            obraInstance.departamento = departamento
+
             obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
                     obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
 
             obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
+
+
+            println("___>>>" + obraInstance.departamento)
 
 //            numero = dpto.documento ?: 0 + 1
 //            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {

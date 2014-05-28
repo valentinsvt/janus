@@ -101,69 +101,139 @@
     <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
     <button class="btn" id="listaLq"><i class="icon-book"></i> Liquidación</button>
     <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
-    <g:if test="${obra?.estado != 'R'}">
-        <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-            <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
-            </button>
-        </g:if>
-    </g:if>
 
-    <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-        <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
-    </g:if>
-    <g:if test="${obra?.liquidacion == 0}">
+  <g:if test="${persona?.departamento?.codigo != 'UTFPU'}">
+
+      <g:if test="${obra?.estado != 'R'}">
+          <g:if test="${(obra?.departamento?.id == persona?.departamento?.id && dueñoObra != 1) || obra?.id == null }">
+              <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
+              </button>
+          </g:if>
+      </g:if>
+
+      <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
+          <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
+      </g:if>
+      <g:if test="${obra?.liquidacion == 0}">
+          <g:if test="${obra?.estado != 'R'}">
+              <g:if test="${(obra?.departamento?.id == persona?.departamento?.id && dueñoObra != 1) || obra?.id == null}">
+                  <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+              </g:if>
+          </g:if>
+
+      </g:if>
+      <g:if test="${obra?.id != null}">
+
+          <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+      </g:if>
+      <g:if test="${obra?.liquidacion == 0}">
+          <g:if test="${(obra?.departamento?.id == persona?.departamento?.id && dueñoObra != 1) && Concurso.countByObra(obra) == 0}">
+              <g:if test="${obra?.fechaInicio == null}">
+                  <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+              </g:if>
+          </g:if>
+
+          <g:if test="${obra?.id != null}">
+              <g:if test="${(obra?.departamento?.id == persona?.departamento?.id && dueñoObra != 1) || obra?.id == null}">
+                  <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+              </g:if>
+          </g:if>
+
+          <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
+              <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
+              </button>
+          </g:if>
+      </g:if>
+      <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
+          <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
+          </button>
+      </g:if>
+      <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
+          <g:if test="${!obra?.fechaInicio}">
+              <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+              </button>
+          </g:if>
+      </g:if>
+      <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
+          <g:if test="${!obra?.fechaInicio}">
+              <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
+              </button>
+          </g:if>
+          <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
+              <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
+              </button>
+          </g:if>
+      </g:if>
+  </g:if>
+    <g:else>
+    %{--//botones utfpu--}%
+
+
         <g:if test="${obra?.estado != 'R'}">
-            <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-                <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+            <g:if test="${dueñoObra == 1 || obra?.id == null }">
+                <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
+                </button>
             </g:if>
         </g:if>
 
-    </g:if>
-    <g:if test="${obra?.id != null}">
-
-        <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-    </g:if>
-    <g:if test="${obra?.liquidacion == 0}">
-        <g:if test="${obra?.departamento?.id == persona?.departamento?.id && Concurso.countByObra(obra) == 0}">
-        %{--<g:if test="${obra?.tipo != 'D' || (obra?.tipo == 'D' && obra?.fechaInicio == null)}">--}%
-            <g:if test="${obra?.fechaInicio == null}">
-                <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
-            </g:if>
+        <g:if test="${dueñoObra == 1 || obra?.id == null}">
+            <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
         </g:if>
+        <g:if test="${obra?.liquidacion == 0}">
+            <g:if test="${obra?.estado != 'R'}">
+                <g:if test="${dueñoObra == 1 || obra?.id == null}">
+                    <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+                </g:if>
+            </g:if>
 
+        </g:if>
         <g:if test="${obra?.id != null}">
-            <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-                <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+
+            <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+        </g:if>
+
+        <g:if test="${obra?.liquidacion == 0}">
+            <g:if test="${dueñoObra == 1 && Concurso.countByObra(obra) == 0}">
+                <g:if test="${obra?.fechaInicio == null}">
+                    <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+                </g:if>
+            </g:if>
+
+            <g:if test="${obra?.id != null}">
+                <g:if test="${dueñoObra == 1 || obra?.id == null}">
+                    <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+                </g:if>
+            </g:if>
+
+            <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
+                <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
+                </button>
             </g:if>
         </g:if>
 
-        <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
-        %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">--}%
-            <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
-            </button>
-        %{--</g:if>--}%
-        </g:if>
-    </g:if>
-    <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
-        <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
-        </button>
-    </g:if>
-    <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
-        <g:if test="${!obra?.fechaInicio}">
-            <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+        <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
+            <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
             </button>
         </g:if>
-    </g:if>
-    <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
-        <g:if test="${!obra?.fechaInicio}">
-            <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
-            </button>
+        <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
+            <g:if test="${!obra?.fechaInicio}">
+                <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+                </button>
+            </g:if>
         </g:if>
-        <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
-            <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
-            </button>
+        <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
+            <g:if test="${!obra?.fechaInicio}">
+                <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
+                </button>
+            </g:if>
+            <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
+                <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
+                </button>
+            </g:if>
         </g:if>
-    </g:if>
+
+
+    </g:else>
 
 </div>
 
@@ -229,13 +299,13 @@
 
             <div class="span3">
                 <g:if test="${obra?.id}">
-                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.direccion?.id}"/>
+                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.id}"/>
 
                     <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:if>
                 <g:else>
-                    <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.direccion?.id}"/>
+                    <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
 
                     <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
@@ -1207,7 +1277,7 @@
         </g:else>
         </g:if>
         <g:else>
-        idP = $("#departamento").val();
+        idP = ${persona?.departamento?.direccion?.id}
         </g:else>
 
 
