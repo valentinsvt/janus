@@ -1062,7 +1062,7 @@ class ObraController extends janus.seguridad.Shield {
             }
         }
 
-        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona, personasUtfpu: personasUtfpu ]
+        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona, personasUtfpu: personasUtfpu, dueñoObra: dueñoObra]
     }
 
     def getSalida() {
