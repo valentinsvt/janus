@@ -68,12 +68,13 @@
             <div>
                 <span class="control-label label label-inverse">
                     Es requirente de Obras?
+
                 </span>
             </div>
 
             <div class="controls">
                 <g:select name="requirente" from="${[1: 'SI', 0: 'NO']}" optionKey="key" optionValue="value"
-                          class="form-control" value="${departamentoInstance.requirente}"/>
+                          class="form-control" value="${departamentoInstance?.requirente?:0}"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
