@@ -1014,7 +1014,7 @@ class ObraController extends janus.seguridad.Shield {
     def getPersonas2() {
 
 
-        println("--->" + params)
+//        println("--->" + params)
 
         def obra = Obra.get(params.obra)
         def usuario = session.usuario.id
@@ -1044,9 +1044,9 @@ class ObraController extends janus.seguridad.Shield {
 //        println("---->>" + personasRolResp)
 //        println("---->>" + personas)
 
-        println(personasRolInsp)
-        println(personasRolRevi)
-        println(personasRolResp)
+//        println(personasRolInsp)
+//        println(personasRolRevi)
+//        println(personasRolResp)
 ////
 //        println(personasRolInsp.persona)
 //        println(personasRolRevi.persona)

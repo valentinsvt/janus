@@ -266,15 +266,33 @@
 
             <div class="span3">
                 <g:if test="${obra?.id}">
+                    %{--<g:if test="${dueñoObra == 1}">--}%
+
+
+                        <elm:select name="departamento.id" from="${Departamento.findAllByRequirente(1,[sort:'direccion'])}" id="departamento" value="${obra?.departamento?.id}"
+                                    optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
+                    %{--</g:if>--}%
+                    %{--<g:else>--}%
+                        %{--<g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.id}"/>--}%
+
+                        %{--<g:textField name="departamento.id" id="departamento" value="${obra?.departamento?.id}"--}%
+                                     %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección de la obra"/>--}%
+                    %{--</g:else>--}%
+
+
+
+
                     %{--<g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.id}"/>--}%
-                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.direccion?.id}"/>
+                    %{--<g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.direccion?.id}"/>--}%
 
                 %{--<g:select name="departamento.id" from="${janus.Direccion.list()}" id="departamentoObra" value="${obra?.departamento?.direccion?.id}"--}%
                 %{--optionKey="id" optionValue="nombre" style="width: 670px; margin-left: 40px"/>--}%
 
 
-                    <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
-                                 style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                    %{--<g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"--}%
+                                 %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
+
+
 
                 </g:if>
                 <g:else>
@@ -285,8 +303,11 @@
                 %{--<g:select name="departamentoText" from="${janus.Direccion.list()}" id="departamentoObra" value="${persona?.departamento?.direccion?.id}"--}%
                 %{--optionKey="id" optionValue="nombre" style="width: 670px; margin-left: 40px"/>--}%
 
-                    <elm:select name="departamento.id" from="${Departamento.list([sort:'direccion'])}" id="departamento" value="${persona?.departamento?.id}"
-                              optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
+                    %{--<elm:select name="departamento.id" from="${Departamento.list([sort:'direccion'])}" id="departamento" value="${persona?.departamento?.id}"--}%
+                              %{--optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>--}%
+
+                    <elm:select name="departamento.id" from="${Departamento.findAllByRequirente(1,[sort:'direccion'])}" id="departamento" value="${persona?.departamento?.id}"
+                                optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
 
                 %{--<g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"--}%
                 %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
@@ -1270,7 +1291,8 @@
 
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
         <g:if test="${obra}">
-        idP = $("#departamento").val();
+//        idP = $("#departamento").val();
+        idP = $("#departamento option:selected").attr("class");
         </g:if>
         <g:else>
         idP = $("#departamento option:selected").attr("class");
@@ -1869,7 +1891,8 @@
 
             var direccionEl;
             <g:if test="${obra}">
-            direccionEl = $("#departamento").val();
+//            direccionEl = $("#departamento").val();
+            direccionEl = $("#departamento option:selected").attr("class");
             </g:if>
             <g:else>
             direccionEl = $("#departamento option:selected").attr("class");
