@@ -1728,31 +1728,78 @@
 
         $(".borrarItem").click(function () {
             var tr = $(this).parent().parent()
+            var boton = $(this)
             if (confirm("Esta seguro de eliminar este registro? Esta acción es irreversible")) {
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'eliminarRubroDetalle')}",
-                    data     : "id=" + $(this).attr("iden"),
+                $("#dlgLoad").dialog("open")
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'verificaRubro')}",
+                    data     : "id=${rubro?.id}",
                     success  : function (msg) {
-                        if (msg == "Registro eliminado") {
-                            tr.remove()
-                        }
+                        $("#dlgLoad").dialog("close")
+                        if(msg=="1"){
+                            var d =   $.box({
+                                imageClass : "box_info",
+                                text       : "Este rubro ya forma parte de una obra.",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    draggable : false,
+                                    buttons   : {
+                                        "Cancelar":function(){
 
-                        $.box({
-                            imageClass : "box_info",
-                            text       : msg,
-                            title      : "Alerta",
-                            iconClose  : false,
-                            dialog     : {
-                                resizable : false,
-                                draggable : false,
-                                buttons   : {
-                                    "Aceptar" : function () {
+                                        }
+                                        %{--"Aceptar" : function () {--}%
+                                            %{--$("#dlgLoad").dialog("open")--}%
+                                            %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'copiaRubro')}",--}%
+                                                %{--data     : "id=${rubro?.id}",--}%
+                                                %{--success  : function (msg) {--}%
+                                                    %{--$("#dlgLoad").dialog("close")--}%
+                                                    %{--if(msg=="true"){--}%
+                                                        %{--alert("Error al generar historico del rubro, comunique este error al administrador del sistema")--}%
+                                                    %{--}else{--}%
+%{--//                                                    console.log("es historico",msg)--}%
+                                                        %{--$("#boxHiddenDlg").dialog("close")--}%
+                                                        %{--agregar(msg,"H");--}%
+
+                                                    %{--}--}%
+
+                                                %{--}--}%
+                                            %{--});--}%
+                                        %{--}--}%
+
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }else{
+                            $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'eliminarRubroDetalle')}",
+                                data     : "id=" + boton.attr("iden"),
+                                success  : function (msg) {
+                                    if (msg == "Registro eliminado") {
+                                        tr.remove()
+                                    }
 
+                                    $.box({
+                                        imageClass : "box_info",
+                                        text       : msg,
+                                        title      : "Alerta",
+                                        iconClose  : false,
+                                        dialog     : {
+                                            resizable : false,
+                                            draggable : false,
+                                            buttons   : {
+                                                "Aceptar" : function () {
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                }
+                            });
+
+                        }
                     }
                 });
+
             }
 
         });
