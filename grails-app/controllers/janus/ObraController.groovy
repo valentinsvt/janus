@@ -1039,9 +1039,6 @@ class ObraController extends janus.seguridad.Shield {
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
         def personasRolElab= PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personas)
 
-
-
-
         def personasUtfpu1 = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
 
         def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personasUtfpu1)
