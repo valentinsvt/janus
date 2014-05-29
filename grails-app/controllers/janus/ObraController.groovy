@@ -1027,7 +1027,11 @@ class ObraController extends janus.seguridad.Shield {
 
         def departamentos = Departamento.findAllByDireccion(direccion)
 
+//        println("depar " + departamentos)
+
         def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+//        println("personas " + personas)
 
         def funcionInsp = Funcion.findByCodigo('I')
         def funcionRevi = Funcion.findByCodigo('R')
@@ -1053,7 +1057,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println(personasRolInsp)
 //        println(personasRolRevi)
 //        println(personasRolResp)
-//        println(personasElab)
+        println(personasRolElab)
 ////
 //        println(personasRolInsp.persona)
 //        println(personasRolRevi.persona)

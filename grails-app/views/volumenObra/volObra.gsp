@@ -125,7 +125,8 @@
 
                         </span>
 
-                    <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
+                    <g:if test="${dueñoObra == 1}">
                         <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-plus"></i>
                         </a>
@@ -138,7 +139,17 @@
 
                     </g:if>
                         <g:else>
-
+                        <g:if test="${persona?.departamento?.id == obra?.departamento?.id}">
+                            <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
+                                <i class="icon-plus"></i>
+                            </a>
+                            <a href="#" class="btn" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">
+                                <i class="icon-minus"></i>
+                            </a>
+                            <a href="#" class="btn" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">
+                                <i class="icon-edit"></i>
+                            </a>
+                        </g:if>
                         </g:else>
 
                     </div>
@@ -168,12 +179,20 @@
 
                     <div class="span1" style="margin-left: -13px;padding-top:30px">
                         <input type="hidden" value="" id="vol_id">
-                    %{--<g:if test="${obra?.estado != 'R'}">--}%
-                        <g:if test="${obra.estado != 'R' && obra?.departamento?.id == persona?.departamento?.id}">
+
+                        <g:if test="${obra?.estado != 'R' && dueñoObra == 1}">
                             <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
                                 <i class="icon-plus"></i>
                             </a>
                         </g:if>
+                        <g:else>
+                            <g:if test="${obra.estado != 'R' && obra?.departamento?.id == persona?.departamento?.id}">
+                                <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
+                                    <i class="icon-plus"></i>
+                                </a>
+                            </g:if>
+                        </g:else>
+
                     </div>
                 </div>
             </div>

@@ -320,13 +320,13 @@
 
             <div class="span3">
                 <g:if test="${obra?.id}">
-                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.id}"/>
+                    <g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>
 
                     <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:if>
                 <g:else>
-                    <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>
+                    <g:hiddenField name="departamento.id" id="departamentoDire" value="${persona?.departamento?.direccion?.id}"/>
 
                     <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
@@ -439,6 +439,7 @@
     %{--<g:textField name="programacion" class="programacion" value="${obra?.programacion?.descripcion}" readonly="true"/>--}%
     %{--</g:else>--}%
 
+        %{--${persona?.departamento?.codigo}--}%
 
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
 
@@ -1290,16 +1291,22 @@
 
 
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-        <g:if test="${obra}">
+               <g:if test="${obra}">
 //        idP = $("#departamento").val();
         idP = $("#departamento option:selected").attr("class");
-        </g:if>
-        <g:else>
+              </g:if>
+              <g:else>
         idP = $("#departamento option:selected").attr("class");
-        </g:else>
+             </g:else>
         </g:if>
         <g:else>
-        idP = ${persona?.departamento?.direccion?.id}
+               <g:if test="${obra}">
+               idP = $("#departamentoDire").val();
+              </g:if>
+              <g:else>
+                idP = ${persona?.departamento?.direccion?.id}
+              </g:else>
+
         </g:else>
 
 

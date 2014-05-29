@@ -32,11 +32,22 @@ class VolumenObraController extends janus.seguridad.Shield {
         def obra = Obra.get(params.id)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
+
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra = obra?.responsableObra?.id
+        def dueñoObra
+
+        personasUtfpu.each{
+            if(it.id == responsableObra ){
+                dueñoObra = 1
+            }
+        }
+
         def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia]
+        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia, dueñoObra: dueñoObra]
     }
 
     def cargarSubpres() {
