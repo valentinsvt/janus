@@ -116,6 +116,14 @@ class ActaController extends janus.seguridad.Shield {
         def actaProv = null
         if (params.contrato || params.id) {
             println "**1"
+            def cntr
+            if (!params.id){
+                cntr = Contrato.get(params.contrato)
+            } else {
+                cntr = Acta.get(params.id.toLong()).contrato
+            }
+
+            println "..." + cntr
             def secciones = []
             def actaInstance = new Acta(params)
             if (params.id) {
@@ -491,8 +499,7 @@ class ActaController extends janus.seguridad.Shield {
 //                    return
 //                }
             }
-
-            return [actaInstance: actaInstance, secciones: jsonSecciones, editable: editable, tipos: tipos, actaProv: actaProv]
+            return [actaInstance: actaInstance, secciones: jsonSecciones, editable: editable, tipos: tipos, actaProv: actaProv, contrato: cntr]
         } else {
             flash.message = "No puede crear un acta sin contrato"
             redirect(action: 'errores')

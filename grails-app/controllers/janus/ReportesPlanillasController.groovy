@@ -84,7 +84,7 @@ class ReportesPlanillasController {
             def dptoDireccion = Departamento.findAllByDireccion(direccion.first())
             def funcionDirector = Funcion.findByCodigo("D")
             def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
-            directorDeFiscalizacion = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion).persona
+            directorDeFiscalizacion = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)?.persona
         }
         return [actaInstance: acta, directorDeFiscalizacion: directorDeFiscalizacion]
     }

@@ -257,6 +257,9 @@
         <g:if test="${session.perfil.codigo == 'COGS'}">
             <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">COGESTIÓN</div>
         </g:if>
+        <g:else>
+            <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
+        </g:else>
     </g:if>
 
     <div class="span12" style="margin-top: 0px">
