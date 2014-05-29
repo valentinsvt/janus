@@ -412,6 +412,10 @@ class Reportes4Controller {
         def valores
         def subPres
 
+
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra
+
         params.old = params.criterio
 
         params.criterio=cleanCriterio(params.criterio)
@@ -422,6 +426,7 @@ class Reportes4Controller {
                 "  o.obranmbr    nombre,\n" +
                 "  o.obratipo    tipo,\n" +
                 "  o.obrafcha    fecha,\n" +
+                "  o.prsn__id    responsable,\n" +
                 "  c.cmndnmbr    comunidad,\n" +
                 "  p.parrnmbr    parroquia,\n" +
                 "  n.cntnnmbr    canton,\n" +
@@ -530,14 +535,19 @@ class Reportes4Controller {
         }
 
 //        println("##" + valoresTotales)
+//          println("->" + personasUtfpu)
 
         res.each{
-           if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
-               obrasFiltradas += it
-           }
+            responsableObra = it.responsable
+
+//            println("responsable" + Persona.get(responsableObra))
+
+            if((personasUtfpu.contains(Persona.get(responsableObra))) || it.tipo == 'D'){
+
+                obrasFiltradas += it
+            }
         }
-
-
+//        println("obras filtradas " + obrasFiltradas)
         return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params]
     }
 

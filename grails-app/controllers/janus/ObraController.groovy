@@ -1032,12 +1032,21 @@ class ObraController extends janus.seguridad.Shield {
         def funcionInsp = Funcion.findByCodigo('I')
         def funcionRevi = Funcion.findByCodigo('R')
         def funcionResp = Funcion.findByCodigo('S')
+        def funcionElab = Funcion.findByCodigo('E')
 
         def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
         def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
+        def personasRolElab= PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personas)
 
-        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+
+
+        def personasUtfpu1 = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personasUtfpu1)
+
+
         def responsableObra
         def dueñoObra
 
@@ -1047,6 +1056,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println(personasRolInsp)
 //        println(personasRolRevi)
 //        println(personasRolResp)
+//        println(personasElab)
 ////
 //        println(personasRolInsp.persona)
 //        println(personasRolRevi.persona)
@@ -1062,7 +1072,7 @@ class ObraController extends janus.seguridad.Shield {
             }
         }
 
-        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona, personasUtfpu: personasUtfpu, dueñoObra: dueñoObra]
+        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona,personasRolElab : personasRolElab.persona , obra: obra, persona: persona, personasUtfpu: personasUtfpu.persona, dueñoObra: dueñoObra]
     }
 
     def getSalida() {
