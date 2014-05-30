@@ -126,7 +126,7 @@
                         </span>
 
                     %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
-                    <g:if test="${dueñoObra == 1}">
+                    <g:if test="${duenoObra == 1}">
                         <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-plus"></i>
                         </a>
@@ -180,7 +180,7 @@
                     <div class="span1" style="margin-left: -13px;padding-top:30px">
                         <input type="hidden" value="" id="vol_id">
 
-                        <g:if test="${obra?.estado != 'R' && dueñoObra == 1}">
+                        <g:if test="${obra?.estado != 'R' && duenoObra == 1}">
                             <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
                                 <i class="icon-plus"></i>
                             </a>

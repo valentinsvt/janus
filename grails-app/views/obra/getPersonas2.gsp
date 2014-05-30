@@ -3,12 +3,12 @@
     <g:if test="${obra?.id == null}">
         <div class="span1">Responsable Cantidades de Obra</div>
 
-        <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
+        <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
 
 
         <div class="span1">Responsable Estudios</div>
 
-        <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + ' ' + it.apellido }}"
+        <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + ' ' + it.apellido }}"
                                      value="${obra?.revisor?.id}" title="Persona para la revisión de la Obra"/></div>
 
         <div class="span1" style="margin-left: -10px">Elaboró presupuesto</div>
@@ -25,15 +25,15 @@
     </g:if>
     <g:else>
 
-        <g:if test="${dueñoObra == 1}">
+        <g:if test="${duenoObra == 1}">
             <div class="span1">Responsable Cantidades de Obra</div>
 
-            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
+            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
 
 
             <div class="span1">Responsable Estudios</div>
 
-            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + ' ' + it.apellido }}"
+            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + ' ' + it.apellido }}"
                                          value="${obra?.revisor?.id}" title="Persona para la revisión de la Obra"/></div>
 
             <div class="span1" style="margin-left: -10px">Elaboró presupuesto</div>
@@ -49,7 +49,7 @@
         </g:if>
         <g:else>
 
-            <div class="span1">Responsable Cantidades de Obra</div>
+            <div class="span1">Responsable Cantidades de Obra1</div>
 
             <g:hiddenField name="inspector.id" id="hiddenInspector" value="${obra?.inspector?.id}"/>
             <div class="span3"><g:textField name="inspector" class="inspector required" value="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}" readonly="readonly" title="Persona para Inspección de la Obra"/></div>
@@ -80,23 +80,23 @@
 
         <g:if test="${persona?.departamento?.id == obra?.inspector?.departamento?.id || obra?.id == null}">
             <div class="span1">Responsable Cantidades de Obra</div>
-            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
+            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
         </g:if>
         <g:else>
             <div class="span1">Responsable Cantidades de Obra</div>
             <g:hiddenField name="inspector.id" id="hiddenInspector" value="${obra?.inspector?.id}"/>
-            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
+            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
         </g:else>
 
         <g:if test="${persona?.departamento?.id == obra?.revisor?.departamento?.id || obra?.id == null}">
             <div class="span1">Responsable Estudios</div>
-            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + ' ' + it.apellido }}"
+            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + ' ' + it.apellido }}"
                                          value="${obra?.revisor?.id}" title="Persona para la revisión de la Obra"/></div>
         </g:if>
         <g:else>
             <div class="span1" style="margin-left: -30px">Responsable Estudios</div>
             <g:hiddenField name="revisor.id" id="hiddenRevisor" value="${obra?.revisor?.id}"/>
-            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + ' ' + it.apellido }}"
+            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + ' ' + it.apellido }}"
                                          value="${obra?.revisor?.id}" title="Persona para la revisión de la Obra"/></div>
         </g:else>
 
@@ -110,17 +110,17 @@
     </g:if>
     <g:else>
 
-        <g:if test="${persona?.departamento?.id == obra?.departamento?.id}">
+        <g:if test="${persona?.departamento?.id == obra?.departamento?.id && duenoObra != 1}">
 
             <div class="span1">Responsable Cantidades de Obra</div>
-            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
+            <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>
 
 
             <div class="span1" style="margin-left: -30px">Responsable Estudios</div>
-            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ it?.titulo + ' ' + it.nombre + ' ' + it.apellido }}"
+            <div class="span3"><g:select name="revisor.id" class="revisor required" from="${personasRolRevi}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + ' ' + it.apellido }}"
                                          value="${obra?.revisor?.id}" title="Persona para la revisión de la Obra"/></div>
 
-            <div class="span1" style="margin-left: -10px">Elaboró presupuesto1</div>
+            <div class="span1" style="margin-left: -10px">Elaboró presupuesto</div>
         %{--<div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasRolResp}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>--}%
             <div class="span3"><g:select name="responsableObra.id" class="responsable required" from="${personasRolElab}" optionKey="id" optionValue="${{it?.nombre + ' ' + it?.apellido }}" value="${obra?.responsableObra?.id}" title="Persona responsable de la Obra"/></div>
 

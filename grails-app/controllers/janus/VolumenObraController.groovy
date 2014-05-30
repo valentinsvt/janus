@@ -35,11 +35,11 @@ class VolumenObraController extends janus.seguridad.Shield {
 
         def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
         def responsableObra = obra?.responsableObra?.id
-        def dueñoObra
+        def duenoObra
 
         personasUtfpu.each{
             if(it.id == responsableObra ){
-                dueñoObra = 1
+                duenoObra = 1
             }
         }
 
@@ -47,7 +47,7 @@ class VolumenObraController extends janus.seguridad.Shield {
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia, dueñoObra: dueñoObra]
+        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia, duenoObra: duenoObra]
     }
 
     def cargarSubpres() {

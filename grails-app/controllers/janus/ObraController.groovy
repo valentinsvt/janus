@@ -446,9 +446,13 @@ class ObraController extends janus.seguridad.Shield {
         def programa
         def tipoObra
         def claseObra
-        def dueñoObra
+        def duenoObra = 0
+        def funcionElab = Funcion.findByCodigo('E')
 
-        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def personasUtfpu1 = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personasUtfpu1)
+
         def responsableObra
 
 
@@ -525,15 +529,31 @@ class ObraController extends janus.seguridad.Shield {
             cn.close()
 //  println matriz + "matriz ok: " + matrizOk
 
-            responsableObra = obra?.responsableObra?.id
+//            responsableObra = obra?.responsableObra?.id
+//
+//            println("ññññ" + responsableObra)
+//            personasUtfpu.each{
+//                println("res" + it.id)
+//                if(it.id == responsableObra){
+//                    duenoObra += 1
+//                }
+//            }
+
+
+            responsableObra = obra?.responsableObra
+
+            def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
 
             personasUtfpu.each{
-                if(it.id == responsableObra ){
-                    dueñoObra = 1
+                if(it.id == responsableRol.id ){
+                    duenoObra = 1
+                }else {
+
                 }
             }
 
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, dueñoObra : dueñoObra]
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo,
+                    dire: direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, duenoObra : duenoObra]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento
@@ -550,15 +570,18 @@ class ObraController extends janus.seguridad.Shield {
 //            numero += "-" + (new Date().format("yy"))
             /* ********* fin genera el numero de memo de formula polinoica ***************************** */
 
-            responsableObra = obra?.responsableObra?.id
+//            responsableObra = obra?.responsableObra?.id
+//
+//            personasUtfpu.each{
+//                if(it.id == responsableObra ){
+//                    duenoObra = 1
+//                }
+//            }
 
-            personasUtfpu.each{
-                if(it.id == responsableObra ){
-                    dueñoObra = 1
-                }
-            }
+            duenoObra = 0
 
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio, personasUtfpu: personasUtfpu, dueñoObra : dueñoObra]
+
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio, personasUtfpu: personasUtfpu, duenoObra : duenoObra]
         }
 
 
@@ -1049,7 +1072,7 @@ class ObraController extends janus.seguridad.Shield {
 
 
         def responsableObra
-        def dueñoObra
+        def duenoObra = 0
 
 //        println("---->>" + personasRolResp)
 //        println("---->>" + personas)
@@ -1057,7 +1080,7 @@ class ObraController extends janus.seguridad.Shield {
 //        println(personasRolInsp)
 //        println(personasRolRevi)
 //        println(personasRolResp)
-        println(personasRolElab)
+//        println(personasRolElab)
 ////
 //        println(personasRolInsp.persona)
 //        println(personasRolRevi.persona)
@@ -1065,15 +1088,42 @@ class ObraController extends janus.seguridad.Shield {
 
 //        println(personas)
 
-        responsableObra = obra?.responsableObra?.id
 
-        personasUtfpu.each{
-            if(it.id == responsableObra ){
-                dueñoObra = 1
+        if(obra){
+            responsableObra = obra?.responsableObra
+
+            def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
+
+            personasUtfpu.each{
+                if(it.id == responsableRol.id ){
+                    duenoObra = 1
+                }else {
+
+                }
             }
+
+        }else{
+
+//            responsableObra = obra?.responsableObra
+//
+//            personasUtfpu.each{
+//                if(it.id == responsableObra){
+//                    duenoObra = 1
+//                }else {
+//
+//                }
+//            }
+
+
+            duenoObra = 0
+
         }
 
-        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona,personasRolElab : personasRolElab.persona , obra: obra, persona: persona, personasUtfpu: personasUtfpu.persona, dueñoObra: dueñoObra]
+
+
+
+        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona,
+                personasRolResp: personasRolResp.persona,personasRolElab : personasRolElab.persona , obra: obra, persona: persona, personasUtfpu: personasUtfpu.persona, duenoObra: duenoObra]
     }
 
     def getSalida() {
