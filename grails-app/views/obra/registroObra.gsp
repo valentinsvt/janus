@@ -293,14 +293,17 @@
             <div class="span 1 formato">DIRECCIÓN</div>
             <div class="span3">
                 <g:if test="${obra?.id}">
+
                     <g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>
+                    <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
 
                     <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:if>
                 <g:else>
-                    <g:hiddenField name="departamento.id" id="departamentoDire" value="${persona?.departamento?.direccion?.id}"/>
 
+                    <g:hiddenField name="departamento.id" id="departamentoDire" value="${persona?.departamento?.direccion?.id}"/>
+                    <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
                     <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:else>

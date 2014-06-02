@@ -1293,9 +1293,6 @@ class ObraController extends janus.seguridad.Shield {
 
         }
 
-
-
-
         if (params.formulaPolinomica) {
             params.formulaPolinomica = params.formulaPolinomica.toUpperCase()
         }
@@ -1314,10 +1311,24 @@ class ObraController extends janus.seguridad.Shield {
         }
 
 
+        if(params.id){
+            if(session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS'){
+               params.departamento = Departamento.get(params.per.id)
+            }else{
+               params.departamento =  Departamento.get(params.departamento.id)
+            }
+
+        }
+        params."departamento.id" = params.departamento.id
+
+//        println("depto" + params.departamento.id)
+//        println("depto aaaa " + params."departamento.id")
+
         def obraInstance
 
 
         if (params.id) {
+
             obraInstance = Obra.get(params.id)
 
             if (!obraInstance) {
@@ -1343,21 +1354,29 @@ class ObraController extends janus.seguridad.Shield {
                 }
             }
 
+//            println("-->" +params.departamento.id)
+
             obraInstance.properties = params
+
+            obraInstance.departamento = params.departamento
+
+//            println("-->" +params.departamento.id)
+
         }//es edit
         else {
 
+
             obraInstance = new Obra(params)
 
-            println("params dep"+ params.departamento.id)
+            def departamento
 
-            def departamento = Departamento.get(params.departamento.id)
+            if(session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS'){
+               departamento = Departamento.get(persona?.departamento?.id)
+            }else{
+                departamento =  Departamento.get(params.departamento.id)
+            }
 
-//            obraInstance.departamento = persona.departamento
-
-
-//            obraInstance.properties = params
-
+            obraInstance.departamento = departamento
 
             def par = Parametros.list()
             if (par.size() > 0)
@@ -1376,16 +1395,13 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.indiceCostosIndirectosTimbresProvinciales = par.indiceCostosIndirectosTimbresProvinciales
 
 
-
-            obraInstance.departamento = departamento
-
             obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
                     obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
 
             obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
 
 
-            println("___>>>" + obraInstance.departamento)
+//            println("___>>>" + obraInstance.departamento)
 
 //            numero = dpto.documento ?: 0 + 1
 //            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
@@ -1397,7 +1413,10 @@ class ObraController extends janus.seguridad.Shield {
             }
 
         } //es create
+
         obraInstance.estado = "N"
+//        obraInstance.departamento.id = params.departamento.id
+
         if (!obraInstance.save(flush: true)) {
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"
