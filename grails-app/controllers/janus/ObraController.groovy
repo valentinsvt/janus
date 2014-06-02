@@ -544,13 +544,18 @@ class ObraController extends janus.seguridad.Shield {
 
             def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
 
-            personasUtfpu.each{
-                if(it.id == responsableRol.id ){
-                    duenoObra = 1
-                }else {
+            if(responsableRol){
+                personasUtfpu.each{
+                    if(it.id == responsableRol.id ){
+                        duenoObra = 1
+                    }else {
 
+                    }
                 }
+            }else{
+
             }
+
 
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo,
                     dire: direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, duenoObra : duenoObra]
@@ -1094,13 +1099,18 @@ class ObraController extends janus.seguridad.Shield {
 
             def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
 
-            personasUtfpu.each{
-                if(it.id == responsableRol.id ){
-                    duenoObra = 1
-                }else {
+            if(responsableRol){
+                personasUtfpu.each{
+                    if(it.id == responsableRol.id ){
+                        duenoObra = 1
+                    }else {
 
+                    }
                 }
+            }else{
+
             }
+
 
         }else{
 
