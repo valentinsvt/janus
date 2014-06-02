@@ -144,10 +144,12 @@
               </button>
           </g:if>
       </g:if>
+%{--
       <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
           <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
           </button>
       </g:if>
+--}%
       <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
           <g:if test="${!obra?.fechaInicio}">
               <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
@@ -211,10 +213,12 @@
             </g:if>
         </g:if>
 
+%{--
         <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
             <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
             </button>
         </g:if>
+--}%
         <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
             <g:if test="${!obra?.fechaInicio}">
                 <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
@@ -253,13 +257,13 @@
         <g:if test="${session.perfil.codigo == 'ADDI'}">
             <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
         </g:if>
+        <g:else>
+            <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
+        </g:else>
     %{--<g:if test="${session.perfil.codigo == 'ADDI'}">--}%
         <g:if test="${session.perfil.codigo == 'COGS'}">
             <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">COGESTIÓN</div>
         </g:if>
-        <g:else>
-            <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
-        </g:else>
     </g:if>
 
     <div class="span12" style="margin-top: 0px">
