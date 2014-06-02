@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>Subir archivo de Indices</title>
+        <title>Subir archivo de Índices</title>
     </head>
 
     <body>
@@ -18,7 +18,7 @@
             <fieldset class="span4" style="position: relative; height: 120px; float: left;padding: 10px;border-bottom: 1px solid black; border-top: 1px solid black">
 
                 <g:uploadForm action="uploadFile" method="post" name="frmUpload" enctype="multipart/form-data">
-                    <fieldset class="form" name="form-envio">
+                    <fieldset class="form" name="form-envio" style="width: 450px;">
                         <div class="fieldcontain required">
                             %{--<label  for="file">--}%
                             %{--Archivo--}%
@@ -26,11 +26,12 @@
                             %{--</label>--}%
                             <input type="file" id="file" name="file"/>
                         </div>
-                        <g:select name="periodo" from="${janus.pac.PeriodoValidez.list([order: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+                        <br/>
+                        Seleccione el periodo a subir: <g:select name="periodo" from="${janus.pac.PeriodoValidez.list([order: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
 
                     </fieldset>
                 </g:uploadForm>
-                <div class="span4 btn-group" role="navigation" style="margin-left: 0px;width: 100%;float: left;height: 35px;">
+                <div class="span4 btn-group" role="navigation" style="margin-left: 120px;width: 100%;float: left;height: 35px; margin-top: -10px">
                     <button class="btn" id="aceptar"><i class="icon-check"></i> Aceptar</button>
                     <button class="btn" id="regresar"><i class="icon-undo"></i> Regresar</button>
                 </div>

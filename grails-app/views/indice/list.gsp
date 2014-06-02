@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Indices
+            Lista de Índices
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -131,7 +131,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Indice");
+                            $("#modalTitle").html("Crear Índice");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Indice").modal("show");
@@ -158,7 +158,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Indice");
+                            $("#modalTitle").html("Editar Índice");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Indice").modal("show");
@@ -178,7 +178,7 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-show");
-                            $("#modalTitle").html("Ver Indice");
+                            $("#modalTitle").html("Ver Índice");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
                             $("#modal-Indice").modal("show");
@@ -201,7 +201,7 @@
 
                     $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-delete");
                     $("#modalTitle").html("Eliminar Indice");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Indice?</p>");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Índice?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-Indice").modal("show");
                     return false;
