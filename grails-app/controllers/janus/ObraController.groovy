@@ -540,22 +540,29 @@ class ObraController extends janus.seguridad.Shield {
 //            }
 
 
-            responsableObra = obra?.responsableObra
+//            responsableObra = obra?.responsableObra
 
-            def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
-            println  "responsable" + responsableRol
-            if(responsableRol){
-                personasUtfpu.each{
-                    if(it.id == responsableRol.id ){
-                        duenoObra = 1
-                    } else {
+//            def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
+//            if(responsableRol){
+//                personasUtfpu.each{
+//                    if(it.id == responsableRol.id ){
+//                        duenoObra = 1
+//                    } else {
+//
+//                    }
+//                }
+//            } else {
+//
+//            }
+//            println  "responsable" + responsableRol +  " dueño " + duenoObra
+//            if (session.usuario.id == responsableObra.id) duenoObra++
+//            duenoObra = duenoObra > 0? 1: 0
+//            println  "responsable" + responsableRol +  " dueño " + duenoObra + "sesion: " + session.usuario.id
+//            println "funcion: " + esDuenoObra(obra)
 
-                    }
-                }
-            } else {
+            duenoObra = esDuenoObra(obra)? 1 : 0
 
-            }
-
+            println "dueÑo: " + duenoObra
 
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo,
                     dire: direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, duenoObra : duenoObra]
@@ -591,6 +598,26 @@ class ObraController extends janus.seguridad.Shield {
 
 
     }
+
+    def esDuenoObra(obra) {
+//        def responsableObra = obra?.responsableObra
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+
+        if(responsableRol) {
+            println personasUtfpu
+            dueno = personasUtfpu.contains(responsableRol)
+        }
+        println  "responsable" + responsableRol +  " dueño " + dueno
+                dueno = session.usuario.departamento.id == obra?.responsableObra.id || dueno
+        println  ">>>>responsable" + responsableRol +  " dueño " + dueno
+
+        dueno
+    }
+
+
 
     def generaNumeroFP() {
         /*
