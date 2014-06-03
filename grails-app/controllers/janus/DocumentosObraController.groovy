@@ -27,6 +27,19 @@ class DocumentosObraController {
         return [notaFormu: notaFormu, nota: idFinal]
     }
 
+    def esDuenoObra(obra) {
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+
+        if(responsableRol) {
+            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+        }
+        dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+        dueno
+    }
+
 
     def documentosObra () {
 
@@ -155,9 +168,17 @@ class DocumentosObraController {
         def resEq = Composicion.findAll("from Composicion where obra=${params.id} and grupo in (${3})")
         resEq.sort{it.item.codigo}
 
+        def duenoObra = 0
+
+        duenoObra = esDuenoObra(obra)? 1 : 0
+
+        def funcionCoor = Funcion.findByCodigo('O')
+        def personasUtfpuCoor = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+
+
         [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
                 totalPresupuestoBien: totalPresupuestoBien, persona: persona,
-                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu]
+                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor]
 
     }
 

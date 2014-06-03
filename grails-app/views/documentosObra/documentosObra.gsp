@@ -257,14 +257,27 @@
                 %{--</g:else>--}%
 
                 <g:if test="${coordinadores != null}">
-                    <tr>
-                        <td>
-                            <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                        </td>
-                        <td>
-                            COORDINADOR
-                        </td>
-                    </tr>
+                   <g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">
+                       <tr>
+                           <td>
+                               <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                           </td>
+                           <td>
+                               COORDINADOR
+                           </td>
+                       </tr>
+                   </g:if>
+                    <g:else>
+                        <tr>
+                            <td>
+                                <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
+                    </g:else>
+
                 </g:if>
                 <g:else>
                     <tr>
