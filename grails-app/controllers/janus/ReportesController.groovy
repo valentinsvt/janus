@@ -2796,10 +2796,6 @@ class ReportesController {
         }else{
             addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
         }
-
-
-
-
         //cargos
 
 //            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
@@ -2811,24 +2807,17 @@ class ReportesController {
                addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
                addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
 
+//               addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+//               addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+//               addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.cargo?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
 
-               addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-               addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
-               addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.cargo?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+                addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+                addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//            }
-
-//            document.add(tablaFirmas);
-//        }
-
-
 
         //sumilla
 

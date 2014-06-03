@@ -35,13 +35,15 @@ class VolumenObraController extends janus.seguridad.Shield {
 
         def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
         def responsableObra = obra?.responsableObra?.id
-        def duenoObra
+        def duenoObra = 0
 
-        personasUtfpu.each{
-            if(it.id == responsableObra ){
-                duenoObra = 1
-            }
-        }
+//        personasUtfpu.each{
+//            if(it.id == responsableObra ){
+//                duenoObra = 1
+//            }
+//        }
+
+        duenoObra = esDuenoObra(obra)? 1 : 0
 
         def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
 
@@ -221,7 +223,7 @@ class VolumenObraController extends janus.seguridad.Shield {
 
 
         def volumenes = VolumenesObra.findAllByObra(obra);
-
+        def duenoObra = 0
 
         def detalle
         def valores
@@ -263,10 +265,33 @@ class VolumenObraController extends janus.seguridad.Shield {
 //        /*Todo ver como mismo es esta suma*/
         def indirecto = obra.totales / 100
 
+        duenoObra = esDuenoObra(obra)? 1 : 0
 
-        [subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado, msg: params.msg, persona: persona]
+
+        [subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores,
+                subPresupuesto1: subPresupuesto1, estado: estado, msg: params.msg, persona: persona, duenoObra: duenoObra]
 
     }
+
+    def esDuenoObra(obra) {
+//        def responsableObra = obra?.responsableObra
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+
+        if(responsableRol) {
+//            println personasUtfpu
+            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+        }
+
+//        println  "responsable" + responsableRol +  " dueño " + dueno
+        dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+//        println  ">>>>responsable" + responsableRol +  " dueño " + dueno
+
+        dueno
+    }
+
 
     def eliminarRubro() {
         println "elm rubro " + params

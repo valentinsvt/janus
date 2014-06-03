@@ -434,7 +434,7 @@ class ObraController extends janus.seguridad.Shield {
     def registroObra() {
 
         def cn = dbConnectionService.getConnection()
-        println "---" + params
+//        println "---" + params
 //        println "---" + params
         def obra
         def usuario = session.usuario.id
@@ -562,7 +562,7 @@ class ObraController extends janus.seguridad.Shield {
 
             duenoObra = esDuenoObra(obra)? 1 : 0
 
-            println "dueÑo: " + duenoObra
+//            println "dueÑo: " + duenoObra
 
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo,
                     dire: direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, duenoObra : duenoObra]
@@ -607,13 +607,13 @@ class ObraController extends janus.seguridad.Shield {
         def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
 
         if(responsableRol) {
-            println personasUtfpu
+//            println personasUtfpu
             dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
         }
 
-        println  "responsable" + responsableRol +  " dueño " + dueno
-                dueno = session.usuario.departamento.id == obra?.responsableObra.departamento.id || dueno
-        println  ">>>>responsable" + responsableRol +  " dueño " + dueno
+//        println  "responsable" + responsableRol +  " dueño " + dueno
+                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+//        println  ">>>>responsable" + responsableRol +  " dueño " + dueno
 
         dueno
     }

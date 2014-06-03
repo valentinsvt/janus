@@ -208,54 +208,53 @@
 
 
                 <tbody id="firmasFijasPresu">
-                <g:if test="${firmaDirector != null}">
-                    <tr data-id="${firmaDirector?.persona?.id}">
-                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
+                %{--<g:if test="${firmaDirector != null}">--}%
+                    %{--<tr data-id="${firmaDirector?.persona?.id}">--}%
+                        %{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
 
-                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-                        </td>
-                        <td>
-                            DIRECTOR
-                            %{--${firmaDirector?.persona?.cargo?.toUpperCase()}--}%
-                        </td>
-                    </tr>
-                </g:if>
-                <g:else>
-                    <tr>
-                        <td style="color: #ff2a08">
-                            DIRECCIÓN SIN DIRECTOR
-                        </td>
-                        <td>
-                            DIRECTOR
-                        </td>
-                    </tr>
-                </g:else>
+                            %{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--DIRECTOR                           --}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                            %{--DIRECCIÓN SIN DIRECTOR--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--DIRECTOR--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:else>--}%
 
-                <g:if test="${obra?.inspector?.id != null}">
-                    <tr data-id="${obra?.inspector?.id}">
+                %{--<g:if test="${obra?.inspector?.id != null}">--}%
+                    %{--<tr data-id="${obra?.inspector?.id}">--}%
 
-                        <td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">
-                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}
-                        </td>
-                        <td>
+                        %{--<td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">--}%
+                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
 
-                            RESPONSABLE DEL PROYECTO
-                        </td>
-                    </tr>
-                </g:if>
-                <g:else>
+                            %{--RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+                %{--<g:else>--}%
 
-                    <tr>
-                        <td style="color: #ff2a08">
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
 
-                            SIN RESPONSABLE DEL PROYECTO
-                        </td>
-                        <td>
-                            RESPONSABLE DEL PROYECTO
-                        </td>
+                            %{--SIN RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
 
-                    </tr>
-                </g:else>
+                    %{--</tr>--}%
+                %{--</g:else>--}%
 
                 <g:if test="${coordinadores != null}">
                     <tr>
