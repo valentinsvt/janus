@@ -543,16 +543,16 @@ class ObraController extends janus.seguridad.Shield {
             responsableObra = obra?.responsableObra
 
             def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
-
+            println  "responsable" + responsableRol
             if(responsableRol){
                 personasUtfpu.each{
                     if(it.id == responsableRol.id ){
                         duenoObra = 1
-                    }else {
+                    } else {
 
                     }
                 }
-            }else{
+            } else {
 
             }
 

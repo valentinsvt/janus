@@ -2001,7 +2001,8 @@
                     %{--<g:if test="${obra?.estado!='R'}">--}%
                     %{--$("#modal_footer_var").html("").append(btnSave);--}%
                     %{--</g:if>--}%
-                    <g:if test="${obra?.departamento?.id == persona?.departamento?.id && obra?.estado != 'R'}">
+                    %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id && obra?.estado != 'R'}">--}%
+                    <g:if test="${duenoObra == 1 && obra?.estado != 'R'}">
                     $("#modal_footer_var").html("").append(btnSave);
 
                     </g:if>
