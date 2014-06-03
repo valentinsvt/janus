@@ -608,10 +608,11 @@ class ObraController extends janus.seguridad.Shield {
 
         if(responsableRol) {
             println personasUtfpu
-            dueno = personasUtfpu.contains(responsableRol)
+            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
         }
+
         println  "responsable" + responsableRol +  " dueño " + dueno
-                dueno = session.usuario.departamento.id == obra?.responsableObra.id || dueno
+                dueno = session.usuario.departamento.id == obra?.responsableObra.departamento.id || dueno
         println  ">>>>responsable" + responsableRol +  " dueño " + dueno
 
         dueno
