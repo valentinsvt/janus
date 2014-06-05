@@ -646,21 +646,19 @@
     </div>
 
 
-    <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-        <div class="span12" style="margin-top: 10px" id="dirSalida">
+    %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
+        %{--<div class="span12" style="margin-top: 10px" id="dirSalida">--}%
 
-        </div>
-    </g:if>
-    <g:else>
+        %{--</div>--}%
+    %{--</g:if>--}%
+    %{--<g:else>--}%
         <div class="span12" style="margin-top: 10px" id="dirSalida">
             <div class="span2 formato" style="width: 230px;">Destino: Dirección
-            %{--<g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
             <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
 
             </div>
 
             <div class="span2 formato" style="width: 230px;">Destino: Coordinación
-            %{--<g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id + ' order by descripcion')}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
             <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
             </div>
 
@@ -674,15 +672,14 @@
 
             <g:if test="${obra?.id && obra?.tipo != 'D'}">
                 <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
                     <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
-                    %{--<g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : ''}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
                         <div style="font-weight: normal;">${obra?.formulaPolinomica}</div>
                     </g:if>
                     <g:else>
                         <a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">
                             Generar
                         </a>
+
                     </g:else>
                 </div>
             </g:if>
@@ -692,7 +689,7 @@
                             value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
             </div>
         </div>
-    </g:else>
+    %{--</g:else>--}%
 
     <div class="span12" style="margin-top: 10px">
 
@@ -1587,6 +1584,7 @@
         });
 
         $("#btnGenerarFP").click(function () {
+            console.log("entro fp")
             var btn = $(this);
             var $btn = btn.clone(true);
             $.box({

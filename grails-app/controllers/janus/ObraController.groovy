@@ -621,6 +621,8 @@ class ObraController extends janus.seguridad.Shield {
 
 
     def generaNumeroFP() {
+
+        println("FP:" + params)
         /*
         El sistema debe generar un número de fórmula polinómica de liquidación en el formato: FP-nnn-CEV-13-LIQ,
         para oferentes:  FP-nnn-CEV-13-OFE. Para las otras obras el formato se mantiene (FP-nnn-CEV-13).
@@ -665,7 +667,7 @@ class ObraController extends janus.seguridad.Shield {
         } else if (obra.liquidacion == 2) {
             numero += "-OFE"
         }
-//        println numero
+        println("numero:" + numero)
         obra.formulaPolinomica = numero
         if (obra.save(flush: true)) {
             dpto.documento = num

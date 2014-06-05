@@ -38,3 +38,60 @@
     <elm:datepicker name="fechaOficioSalida" class="span1 datepicker input-small"
                     value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
     </div>
+<script type="text/javascript">
+
+
+
+
+
+$("#btnGenerarFP").click(function () {
+
+    var btn = $(this);
+    var $btn = btn.clone(true);
+    $.box({
+        imageClass : "box_info",
+        text       : "Una vez generado el número de fórmula polinómica no se puede revertir y se utlizará el siguiente de la secuencia. ¿Está seguro de querer continuar?",
+        title      : "Alerta",
+        iconClose  : false,
+        dialog     : {
+            resizable : false,
+            draggable : false,
+            buttons   : {
+                "Generar"  : function () {
+                    btn.replaceWith(spinner);
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action: 'generaNumeroFP')}",
+                                data    : "obra=${obra?.id}",
+                                success : function (msg) {
+                                    var parts = msg.split("_");
+                                    if (parts[0] == "OK") {
+                                        spinner.replaceWith("<div style='font-weight: normal;'>" + parts[1] + "</div>");
+                                    } else {
+                                        $.box({
+                                            imageClass : "box_info",
+                                            text       : parts[1],
+                                            title      : "Errores",
+                                            iconClose  : false,
+                                            dialog     : {
+                                                resizable : false,
+                                                draggable : false,
+                                                buttons   : {
+                                                    "Aceptar" : function () {
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        spinner.replaceWith($btn);
+                                    }
+                                }
+                            });
+                        },
+                        "Cancelar" : function () {
+                        }
+                    }
+                }
+            });
+            return false;
+        });
+</script>
