@@ -1222,7 +1222,7 @@ class ReportesController {
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
-                            "                    <b>SUBSISTEMA APU</b>\n" +
+                            "                    <b>UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b>\n" +
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
@@ -2281,13 +2281,13 @@ class ReportesController {
 
         if (obra?.oficioSalida == null) {
 
-            headers.add(new Paragraph("Oficio" + " ", times12bold));
+            headers.add(new Paragraph("Informe" + " ", times12bold));
 
 
         } else {
 //            headers.add(new Paragraph("Oficio", times12bold));
 //            headers.add(new Paragraph("N°. " + obra?.oficioSalida, times12bold));
-            headers.add(new Paragraph("Oficio N°. " + obra?.oficioSalida, times12bold));
+            headers.add(new Paragraph("Informe N°. " + obra?.oficioSalida, times12bold));
         }
 
 //        headers.add(new Paragraph("Quito, " + formatDate(date: obra?.fechaOficioSalida, format: "dd-MM-yyyy"), times10bold));
@@ -2366,7 +2366,7 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8normal), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph("Responsable del Proyecto", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Responsable Cantidades de Obra", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
 
@@ -2620,7 +2620,7 @@ class ReportesController {
         addCellTabla(tablaCondiciones, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.porcentajeAnticipo, format: "###", locale: "ec") + " %", times8normal), prmsHeaderHoja)
 
-        addCellTabla(tablaCondiciones, new Paragraph("Elaboró", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph("Responsable Estudios", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaCondiciones, new Paragraph((obra?.responsableObra?.titulo ?: '') + " " + (obra?.responsableObra?.nombre ?: '')+ " " + (obra?.responsableObra?.apellido ?: ''), times8normal), prmsHeaderHoja)
 //        addCellTabla(tablaCondiciones, new Paragraph(obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
@@ -3126,7 +3126,7 @@ class ReportesController {
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph("Oficio N°: " + obra?.oficioSalida, times10normal), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph("Informe N°: " + obra?.oficioSalida, times10normal), prmsHeaderHoja)
         }
 
         addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -3463,6 +3463,7 @@ class ReportesController {
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         headers.add(new Paragraph("FÓRMULA POLINÓMICA", times12bold))
+        headers.add(new Paragraph("UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS", times12bold))
         headers.add(new Paragraph(obra?.formulaPolinomica, times12bold))
         document.add(headers);
 
@@ -3725,12 +3726,6 @@ class ReportesController {
 
             firmas = Persona.get(firmaFijaFormu[0])
 
-//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[2]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[0]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[0]?.apellido?.toUpperCase() ?: '') , times8bold), prmsHeaderHoja)
-
-            //cambio firmas 24/4
-
             if(arregloFirmas[2]){
             addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[2]?.titulo?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.nombre?.toUpperCase() ?: '')  + " " + (arregloFirmas[2]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             }else {
@@ -3745,17 +3740,9 @@ class ReportesController {
                 addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
             }
 
-            //cargos
-
-//            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[2]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph((obra?.departamento?.direccion?.jefatura?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-
-
             addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
-
 
             addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[2]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
@@ -4086,7 +4073,7 @@ class ReportesController {
         label = new Label(2, 2, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
 
 
-        label = new Label(2, 4, "SUBSISTEMA APU", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
 
 
         label = new Label(2, 6, "PRESUPUESTO", times16format); sheet.addCell(label);

@@ -562,6 +562,7 @@ class ObraController extends janus.seguridad.Shield {
 
             duenoObra = esDuenoObra(obra)? 1 : 0
 
+
 //            println "dueÑo: " + duenoObra
 
             [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo,
@@ -600,20 +601,31 @@ class ObraController extends janus.seguridad.Shield {
     }
 
     def esDuenoObra(obra) {
-//        def responsableObra = obra?.responsableObra
+//
         def dueno = false
         def funcionElab = Funcion.findByCodigo('E')
         def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
         def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
-
-        if(responsableRol) {
-//            println personasUtfpu
-            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
-        }
+//
+//        if(responsableRol) {
+////            println personasUtfpu
+//            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+//        }
 
 //        println  "responsable" + responsableRol +  " dueño " + dueno
-                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
-//        println  ">>>>responsable" + responsableRol +  " dueño " + dueno
+//                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+
+        if(responsableRol){
+                      if(obra?.responsableObra?.departamento?.id == Persona.get(session.usuario.id).departamento?.id){
+                          dueno = true
+                      }else{
+                          dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+                      }
+        }
+
+
+
+//        println  ">>>>responsable" + responsableRol +  " dueño " + dueno + " usuario "  + session.usuario.departamento.id + " respDep " + obra?.responsableObra?.departamento?.id
 
         dueno
     }
