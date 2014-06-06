@@ -372,42 +372,30 @@
             <div class="span1">DE:</div>
 
 
-            <div class="span3"><g:textField name="deMemo" style="width: 470px"
-                                            value="${obra?.departamento?.direccion?.nombre}"
-                                            disabled="true"/></div>
+            %{--<div class="span3"><g:textField name="deMemo" style="width: 470px"--}%
+                                            %{--value="${obra?.departamento?.direccion?.nombre}"--}%
+                                            %{--disabled="true"/></div>--}%
+
+
+            <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS'}" disabled="true"/> </div>
 
         </div>
 
         <div class="span6">
             <div class="span1">PARA:</div>
 
-            %{--<div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.descripcion}"--}%
-            %{--style="width: 470px" disabled="true"/></div>--}%
+            <div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.direccion?.nombre + ' - ' + obra?.departamento?.descripcion}"
+            style="width: 470px" disabled="true"/></div>
 
-            <div class="span3"><g:select name="paraMemo" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>
+            %{--<div class="span3"><g:select name="paraMemo" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>--}%
         </div>
 
         <div class="span7">
             <div class="span1">Valor de la Base:</div>
 
             <div class="span2">
-                %{--<g:textField name="baseMemo" style="width: 100px" disabled="true"--}%
-                %{--value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>--}%
-
                 <g:textField name="baseMemo" style="width: 100px" disabled="true"  value="${totalPresupuestoBien}"/>
             </div>
-
-            %{--<div class="span1" style="margin-left: -30px">Valor de Reajuste:</div>--}%
-
-            %{--<div class="span2"><g:textField name="reajusteMemo" id="reajusteMemo" style="width: 100px; margin-left: -20px" value="" disabled="true"/></div>--}%
-
-            %{--<div class="span2" style="margin-left: -45px"><g:textField name="porcentajeMemo" id="porcentajeMemo" style="width: 35px; margin-right: 10px" disabled="false"--}%
-            %{--maxlength="3"/>--}%
-
-            %{--<button class="btn" id="btnCalBase" style="width: 35px; margin-top: -9px; margin-left: -14px"><i class="icon-table"></i>--}%
-            %{--</button>--}%
-            %{--</div>--}%
-
         </div>
 
     </fieldset>
@@ -749,119 +737,80 @@
 
                 <tbody id="firmasFijasPoli">
 
-                %{--<g:if test="${obra?.inspector}">--}%
-
-                %{--<tr data-id="${obra?.inspector?.id}">--}%
-                <g:if test="${firmaDirector != null}">
-                    <tr data-id="${firmaDirector?.persona?.id}">
-
-                        %{--<td>--}%
-
-                        %{--</td>--}%
-
-                        %{--<td id="  ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
-
-                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
-
+                %{--<g:if test="${firmaDirector != null}">--}%
+                    %{--<tr data-id="${firmaDirector?.persona?.id}">--}%
+                        %{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
+                            %{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--${obra?.inspector?.cargo}--}%
-
+                            %{--DIRECTOR--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                            %{--DIRECCIÓN SIN DIRECTOR--}%
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--DIRECTOR--}%
                         %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:else>--}%
+                    %{--<tr data-id="${obra?.revisor?.id}">--}%
+                    %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                        %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                        %{--SUPERVISIÓN--}%
+                    %{--</td>--}%
+                %{--</tr>--}%
 
-                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
-
-                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-
-                        </td>
-                        <td>
-
-                            DIRECTOR
-
-                        </td>
+                %{--<tr data-id="${obra?.responsableObra?.id}">--}%
+                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
+                        %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                        %{--ELABORÓ--}%
+                    %{--</td>--}%
+                %{--</tr>--}%
 
 
-                    </tr>
+                <g:if test="${coordinadores != null}">
+                    <g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">
+                        <tr>
+                            <td>
+                                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
+                    </g:if>
+                    <g:else>
+                        <tr>
+                            <td>
+                                <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
+                    </g:else>
+
                 </g:if>
                 <g:else>
-
                     <tr>
                         <td style="color: #ff2a08">
-
-                            DIRECCIÓN SIN DIRECTOR
+                            SIN COORDINADOR
                         </td>
                         <td>
-                            DIRECTOR
+                            COORDINADOR
                         </td>
-
                     </tr>
-
-
                 </g:else>
-                %{--</g:if>--}%
-
-
-                %{--<g:if test="${obra?.revisor}">--}%
-                <tr data-id="${obra?.revisor?.id}">
-
-                    %{--<td>--}%
-
-                    %{--</td>--}%
-                    %{--<td id="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                    %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--${obra?.revisor?.cargo}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
-                    %{--</td>--}%
-
-                    <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                        ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
-                    </td>
-                    <td>
-                        SUPERVISIÓN
-                    </td>
-
-                </tr>
-                %{--</g:if>--}%
-                %{--<g:if test="${obra?.responsableObra}">--}%
-
-                <tr data-id="${obra?.responsableObra?.id}">
-
-                    %{--<td>--}%
-
-                    %{--</td>--}%
-                    %{--<td id="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
-                    %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--${obra?.responsableObra?.cargo}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
-
-                    %{--</td>--}%
-
-                    <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
-                        ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
-                    </td>
-                    <td>
-                        ELABORÓ
-                    </td>
-
-
-                </tr>
-
-                %{--</g:if>--}%
 
                 </tbody>
-
-
 
                 <tbody id="bodyFirmas_polinomica">
 
@@ -2281,6 +2230,21 @@
                 firmasIdFormu = [];
                 firmasFijasFormu = [];
 
+
+                var idCoordinador = $("#coordinador").val()
+
+                var idFirmaCoor
+
+                if(idCoordinador != null){
+
+                    idFirmaCoor= $("#coordinador").val()
+                }else{
+
+                    idFirmaCoor = ''
+                }
+
+                firmaCoordinador = idFirmaCoor
+
                 $("#bodyFirmas_polinomica").children("tr").each(function (i) {
                     firmasIdFormu[i] = $(this).data("id")
                 });
@@ -2314,7 +2278,7 @@
 //                            console.log(msg)
                         if(part[0] == 'ok'){
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
-                                    + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id}
+                                    + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id} + "&firmaCoordinador=" + firmaCoordinador
                         }
                     }
                 });
