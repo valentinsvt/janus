@@ -1745,15 +1745,29 @@ class Reportes2Controller {
 
         def personaElaboro
         def firmaCoordinador
+        def ban = 0
 
         def deptoUsu = Persona.get(session.usuario.id).departamento
+
         def funcionCoor = Funcion.findByCodigo('O')
+        def funcionElab = Funcion.findByCodigo('E')
 
         def personasDep = Persona.findAllByDepartamento(deptoUsu)
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
 
         def coordinador = PersonaRol.findByPersonaInListAndFuncion(personasDep,funcionCoor)
+        def coordinadorUtfpu = PersonaRol.findByPersonaInListAndFuncion(personasUtfpu,funcionCoor)
 
-//        println("coord" + coordinador)
+        def elabUtfpu = PersonaRol.findAllByPersonaInListAndFuncion(personasUtfpu,funcionElab)
+
+        def responsableRol = PersonaRol.findByPersona(Persona.get(obra?.responsableObra?.id))
+
+        elabUtfpu.each {
+           if(it?.id == responsableRol?.id){
+               ban = 1
+           }
+        }
+
 
         PdfPTable tablaFirmas = new PdfPTable(3);
         tablaFirmas.setWidthPercentage(100);
@@ -1784,9 +1798,14 @@ class Reportes2Controller {
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
         if(coordinador){
-//            def personaRol = PersonaRol.get(params.firmaCoordina)
-            firmaCoordinador = coordinador.persona
-            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+                if(ban == 1){
+                    firmaCoordinador = coordinadorUtfpu.persona
+                    addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+                }else{
+                    firmaCoordinador = coordinador.persona
+                    addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+                }
+
         }else{
             addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
         }
@@ -1816,6 +1835,7 @@ class Reportes2Controller {
         response.getOutputStream().write(b)
 
     }
+
 
     def reporteCronograma() {
         def obra = Obra.get(params.id.toLong())
