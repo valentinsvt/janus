@@ -955,7 +955,7 @@ class ReportesController {
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
         def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 2, "Departamento de costos".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2, "UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 
         sheet.mergeCells(0, 1, 1, 1)
