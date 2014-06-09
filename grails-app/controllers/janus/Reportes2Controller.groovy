@@ -1556,16 +1556,24 @@ class Reportes2Controller {
 
         preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont3));
 
-        preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont2));
+//        preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont2));
+        preface.add(new Paragraph("CRONOGRAMA", catFont2));
+        preface.add(new Paragraph("UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", catFont2));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
-        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+//        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
         document.add(preface);
         document.add(preface2);
         Paragraph pMeses = new Paragraph();
         pMeses.add(new Paragraph("Obra: ${obra.descripcion} (${meses} mes${meses == 1 ? '' : 'es'})", info))
         addEmptyLine(pMeses, 1);
         document.add(pMeses);
+
+        Paragraph pRequirente = new Paragraph();
+        pRequirente.add(new Paragraph("Requirente: ${obra?.departamento?.direccion?.nombre + ' - ' + obra.departamento?.descripcion}", info))
+//        addEmptyLine(pRequirente, 1);
+        document.add(pRequirente);
+
 
         Paragraph codigoObra = new Paragraph();
         codigoObra.add(new Paragraph("Código de la Obra: ${obra?.codigo}", info))
@@ -1579,6 +1587,10 @@ class Reportes2Controller {
         fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
 //        addEmptyLine(fecha, 1);
         document.add(fecha);
+
+        Paragraph plazo = new Paragraph();
+        plazo.add(new Paragraph("Plazo: ${obra?.plazoEjecucionMeses} Meses" + " ${obra?.plazoEjecucionDias} Días", info))
+        document.add(plazo);
 
         Paragraph rutaCritica = new Paragraph();
         rutaCritica.add(new Paragraph("Los rubros pertenecientes a la ruta crítica están marcados con un * antes de su código.", info))

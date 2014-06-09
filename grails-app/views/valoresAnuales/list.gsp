@@ -42,6 +42,7 @@
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
+
                     
                         <g:sortableColumn property="anio" title="Año" />
                     

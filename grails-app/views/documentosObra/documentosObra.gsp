@@ -501,101 +501,77 @@
 
                 <tbody id="firmasFijasMemo">
 
-                %{--<g:if test="${obra?.inspector}">--}%
 
-                %{--<tr data-id="${obra?.inspector?.id}">--}%
-                <g:if test="${firmaDirector != null}">
+                %{--<g:if test="${firmaDirector != null}">--}%
 
-                    <tr data-id="${firmaDirector?.persona?.id}">
+                    %{--<tr data-id="${firmaDirector?.persona?.id}">--}%
+         %{----}%
 
-                        %{--<td>--}%
+                        %{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
 
-                        %{--</td>--}%
-
-                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
-
-                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+                            %{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
 
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--${obra?.inspector?.cargo}--}%
 
+                            %{--DIRECTOR--}%
+
+                        %{--</td>--}%
+
+
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+
+                %{--<g:else>--}%
+
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+
+                            %{--DIRECCIÓN SIN DIRECTOR--}%
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--DIRECTOR--}%
                         %{--</td>--}%
 
-                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
-
-                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-
-                        </td>
-                        <td>
-
-                            DIRECTOR
-
-                        </td>
+                    %{--</tr>--}%
 
 
-                    </tr>
+                %{--</g:else>--}%
+          %{----}%
+
+                <g:if test="${coordinadores != null}">
+                    <g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">
+                        <tr>
+                            <td>
+                                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
+                    </g:if>
+                    <g:else>
+                        <tr>
+                            <td>
+                                <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
+                    </g:else>
+
                 </g:if>
-
                 <g:else>
-
                     <tr>
                         <td style="color: #ff2a08">
-
-                            DIRECCIÓN SIN DIRECTOR
+                            SIN COORDINADOR
                         </td>
                         <td>
-                            DIRECTOR
+                            COORDINADOR
                         </td>
-
                     </tr>
-
-
                 </g:else>
-                %{--</g:if>--}%
-
-
-                %{--<g:if test="${obra?.revisor}">--}%
-
-
-             %{--inicio revisor--}%
-                %{--<tr data-id="${obra?.revisor?.id}">--}%
-                    %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                        %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                        %{--SUPERVISIÓN--}%
-                    %{--</td>--}%
-                %{--</tr>--}%
-              %{--fin revisor--}%
-
-
-
-
-                %{--</g:if>--}%
-                %{--<g:if test="${obra?.responsableObra}">--}%
-
-
-
-                %{--inicio elaboro--}%
-                %{--<tr data-id="${obra?.responsableObra?.id}">--}%
-               %{----}%
-
-                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
-                        %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                        %{--ELABORÓ--}%
-                    %{--</td>--}%
-                %{--</tr>--}%
-               %{--fin elaboro --}%
-
-
-
-                %{--</g:if>--}%
 
                 </tbody>
 
@@ -2158,6 +2134,21 @@
             }
 
             if (active == 1) {
+
+                var idCoordinador = $("#coordinador").val()
+
+                var idFirmaCoor
+
+                if(idCoordinador != null){
+
+                    idFirmaCoor= $("#coordinador").val()
+                }else{
+
+                    idFirmaCoor = ''
+                }
+
+                firmaCoordinador = idFirmaCoor
+
                 firmasIdMemo = [];
                 firmasFijasMemo = [];
 
@@ -2218,7 +2209,7 @@
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1]
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
                             }
                         }
                     });
@@ -2527,7 +2518,6 @@
 
 
     $("#btnAceptarMemo").click(function () {
-
         $.ajax({
            type: 'POST',
             url: '${createLink(controller: 'nota', action: 'saveNotaMemo')}',
@@ -2585,43 +2575,33 @@
                         success: function (msg) {
                             $("#divSelFormu").html(msg);
                         }
-
                     })
                 }
-
             }
         });
     });
 
     $("#btnNuevo").click(function () {
-
         $("#piePaginaSel").val('-1')
-
         $("#notaAdicional").attr("checked", true)
-
         $("#descripcion").val("");
         $("#texto").val("");
         $("#adicional").val("");
-
     });
 
 
     $("#btnNuevoMemo").click(function () {
-
         $("#memo1").val("");
         $("#memo2").val("");
         $("#descripcionMemo").val("");
         $("#selMemo").val('-1')
-
     });
 
 
     $("#btnNuevoFormu").click(function () {
-
         $("#notaFormula").val("");
         $("#descripcionFormu").val("");
         $("#selFormu").val('-1');
-
     });
 
 
@@ -2630,18 +2610,15 @@
     });
 
     function desbloquear() {
-
         $("#piePaginaSel").attr("disabled", false);
         $("#descripcion").attr("disabled", false);
         $("#texto").attr("disabled", false);
 //        $("#adicional").attr("disabled",false);
         $("#notaAdicional").attr("disabled", false)
-
     }
 
 
     $("#borrarFirmaPresuDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2654,26 +2631,18 @@
             "Aceptar": function () {
 
                 $("#borrarFirmaPresu").parents("tr").remove();
-                console.log($("#borrarFirmaPresu").children("tr"))
-
+//                console.log($("#borrarFirmaPresu").children("tr"))
                 $("#borrarFirmaPresuDialog").dialog("close");
                 return false;
             },
             "Cancelar" : function () {
-
                 $("#borrarFirmaPresuDialog").dialog("close");
-
             }
         }
-
-
-
     }) ;
 
 
-
     $("#tipoReporteDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2738,7 +2707,6 @@
         buttons: {
             "Aceptar": function () {
 
-
                 proyeccion = $("#proyeccionReajuste").is(':checked');
                 reajusteIva = $("#reajusteIva").is(':checked');
                 reajusteMeses = $("#mesesReajuste").val();
@@ -2779,10 +2747,20 @@
                 reajusteMesesMemo = $("#mesesReajusteMemo").val();
                 paraMemo1 = $("#paraMemo").val()
 
+
+            var idCoordinador = $("#coordinador").val()
+            var idFirmaCoor
+
+            if(idCoordinador != null){
+                idFirmaCoor= $("#coordinador").val()
+            }else{
+                idFirmaCoor = ''
+            }
+
+            firmaCoordinador = idFirmaCoor
+
                 if (proyeccionMemo == true && reajusteMesesMemo == "") {
                     $("#mesesCeroDialog").dialog("open")
-
-
                 } else {
 
                     %{--var tipoReporte = tipoClickMemo;--}%
@@ -2792,9 +2770,7 @@
 
 
                     var tipoReporte = tipoClickMemo;
-
                     $.ajax({
-
                         type: "POST",
                         url : "${createLink(controller: 'nota', action: 'saveNotaMemo')}",
                         data: {
@@ -2812,23 +2788,16 @@
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +  "&notaValue=" + part[1]
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
 
                             }
                         }
                     });
-
                     $("#reajusteMemoDialog").dialog("close");
-
                 }
-
-
             },
             "Cancelar": function () {
-
-
                 $("#reajusteMemoDialog").dialog("close");
-
             }
         }
 
@@ -2836,7 +2805,6 @@
 
 
     $("#maxFirmasDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2847,17 +2815,13 @@
         title: 'Máximo Número de Firmas',
         buttons: {
             "Aceptar": function () {
-
                 $("#maxFirmasDialog").dialog("close");
-
             }
         }
-
     });
 
 
     $("#mesesCeroDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2868,17 +2832,13 @@
         title: 'No existe un valor en el campo Meses',
         buttons: {
             "Aceptar": function () {
-
                 $("#mesesCeroDialog").dialog("close");
-
             }
         }
-
     });
 
 
     $("#tasaCeroDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2889,12 +2849,9 @@
         title: 'No existe una tasa de cambio!',
         buttons: {
             "Aceptar": function () {
-
                 $("#tasaCeroDialog").dialog("close");
-
             }
         }
-
     });
 
     $("#btnEliminar").click(function () {
