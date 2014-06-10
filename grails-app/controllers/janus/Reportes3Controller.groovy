@@ -842,7 +842,7 @@ class Reportes3Controller {
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
-                            "                    SUBSISTEMA APU\n" +
+                            "                    UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS\n" +
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
