@@ -175,10 +175,26 @@ class DocumentosObraController {
         def funcionCoor = Funcion.findByCodigo('O')
         def personasUtfpuCoor = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
 
+        //coordinador
+
+        def personasDepartamento = Persona.findAllByDepartamento(obra?.departamento)
+
+        def coordinadorOtros = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor, Persona.findAllByDepartamento(Departamento.get(obra?.departamento?.id)))
+
+
+        def personalUtfpu =  Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+        def duo = 0
+
+        personalUtfpu.each {
+             if(it.id == obra?.responsableObra?.id){
+                duo = 1
+             }
+         }
 
         [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
                 totalPresupuestoBien: totalPresupuestoBien, persona: persona,
-                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor]
+                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor, cordinadorOtros: coordinadorOtros, duo: duo]
 
     }
 

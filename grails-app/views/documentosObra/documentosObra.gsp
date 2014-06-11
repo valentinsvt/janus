@@ -256,39 +256,123 @@
                     %{--</tr>--}%
                 %{--</g:else>--}%
 
-                <g:if test="${coordinadores != null}">
-                   <g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">
-                       <tr>
-                           <td>
-                               <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                           </td>
-                           <td>
-                               COORDINADOR
-                           </td>
-                       </tr>
-                   </g:if>
-                    <g:else>
-                        <tr>
-                            <td>
-                                <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                            </td>
-                            <td>
-                                COORDINADOR
-                            </td>
-                        </tr>
-                    </g:else>
 
-                </g:if>
-                <g:else>
-                    <tr>
-                        <td style="color: #ff2a08">
-                            SIN COORDINADOR
-                        </td>
-                        <td>
-                            COORDINADOR
-                        </td>
-                    </tr>
-                </g:else>
+     %{--//nuevo--}%
+
+<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+       <g:if test="${duenoObra == 1}">
+        <tr>
+            <td>
+                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+            </td>
+            <td>
+                COORDINADOR
+            </td>
+        </tr>
+    </g:if>
+    <g:else>
+        <g:if  test="${cordinadorOtros[0]}">
+            <tr>
+                <td style="color: #ff2a08">
+                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:if>
+        <g:else>
+            <tr>
+                <td style="color: #ff2a08">
+                    SIN COORDINADOR
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:else>
+
+    </g:else>
+
+</g:if>
+<g:else>
+    <g:if test="${duo == 1}">
+
+        <tr>
+            <td style="color: #ff2a08">
+                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+              <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+            </td>
+            <td>
+                COORDINADOR
+            </td>
+        </tr>
+
+    </g:if>
+    <g:else>
+        <g:if test="${coordinadores}">
+            <tr>
+                <td style="color: #ff2a08">
+                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:if>
+        <g:else>
+            <tr>
+                <td style="color: #ff2a08">
+                    SIN COORDINADOR
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:else>
+
+    </g:else>
+</g:else>
+
+
+
+
+                %{--//old--}%
+                %{--<g:if test="${coordinadores != null}">--}%
+                   %{--<g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">--}%
+                       %{--<tr>--}%
+                           %{--<td>--}%
+                               %{--<g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                           %{--</td>--}%
+                           %{--<td>--}%
+                               %{--COORDINADOR--}%
+                           %{--</td>--}%
+                       %{--</tr>--}%
+                   %{--</g:if>--}%
+                    %{--<g:else>--}%
+                        %{--<tr>--}%
+                            %{--<td>--}%
+                                %{--<g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--COORDINADOR--}%
+                            %{--</td>--}%
+                        %{--</tr>--}%
+                    %{--</g:else>--}%
+
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                            %{--SIN COORDINADOR--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--COORDINADOR--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:else>--}%
+
 
 
 
@@ -539,8 +623,10 @@
                 %{--</g:else>--}%
           %{----}%
 
-                <g:if test="${coordinadores != null}">
-                    <g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">
+
+
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    <g:if test="${duenoObra == 1}">
                         <tr>
                             <td>
                                 <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
@@ -551,27 +637,73 @@
                         </tr>
                     </g:if>
                     <g:else>
+                        <g:if  test="${cordinadorOtros[0]}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
+
+                    </g:else>
+
+                </g:if>
+                <g:else>
+                    <g:if test="${duo == 1}">
+
                         <tr>
-                            <td>
-                                <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            <td style="color: #ff2a08">
+                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
                             </td>
                             <td>
                                 COORDINADOR
                             </td>
                         </tr>
-                    </g:else>
 
-                </g:if>
-                <g:else>
-                    <tr>
-                        <td style="color: #ff2a08">
-                            SIN COORDINADOR
-                        </td>
-                        <td>
-                            COORDINADOR
-                        </td>
-                    </tr>
+                    </g:if>
+                    <g:else>
+                        <g:if test="${coordinadores}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
+
+                    </g:else>
                 </g:else>
+
+
+
+
 
                 </tbody>
 
@@ -752,8 +884,8 @@
                 %{--</tr>--}%
 
 
-                <g:if test="${coordinadores != null}">
-                    <g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    <g:if test="${duenoObra == 1}">
                         <tr>
                             <td>
                                 <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
@@ -764,26 +896,68 @@
                         </tr>
                     </g:if>
                     <g:else>
+                        <g:if  test="${cordinadorOtros[0]}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
+
+                    </g:else>
+
+                </g:if>
+                <g:else>
+                    <g:if test="${duo == 1}">
+
                         <tr>
-                            <td>
-                                <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            <td style="color: #ff2a08">
+                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
                             </td>
                             <td>
                                 COORDINADOR
                             </td>
                         </tr>
-                    </g:else>
 
-                </g:if>
-                <g:else>
-                    <tr>
-                        <td style="color: #ff2a08">
-                            SIN COORDINADOR
-                        </td>
-                        <td>
-                            COORDINADOR
-                        </td>
-                    </tr>
+                    </g:if>
+                    <g:else>
+                        <g:if test="${coordinadores}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
+
+                    </g:else>
                 </g:else>
 
                 </tbody>
