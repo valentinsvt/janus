@@ -71,7 +71,7 @@
 
 <div style='page-break-after: auto'></div>
 
-<div id="tabs" style="width: 800px; height: 1150px">
+<div id="tabs" style="width: 800px; height: 1060px">
 
 <ul>
 
