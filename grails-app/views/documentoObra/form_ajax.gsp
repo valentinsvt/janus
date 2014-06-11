@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:textArea name="nombre" cols="40" rows="5" maxlength="255" class="" value="${documentoObraInstance?.nombre}"/>
+                <g:textArea name="nombre" cols="50" rows="1" maxlength="255" class="" value="${documentoObraInstance?.nombre}"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -35,12 +35,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Resumen
+                    Resumen del documento
                 </span>
             </div>
 
             <div class="controls">
-                <g:textArea name="resumen" cols="40" rows="5" maxlength="1024" class="" value="${documentoObraInstance?.resumen}"/>
+                <g:textArea name="resumen" cols="40" rows="3" maxlength="1024" class="" value="${documentoObraInstance?.resumen}"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -48,7 +48,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción del contenido
                 </span>
             </div>
 

@@ -253,6 +253,8 @@
 
     </div>
 
+    %{--${obra?.tipo}--}%
+    %{--${session.perfil.codigo}--}%
     <g:if test="${obra?.tipo == 'D'}">
         <g:if test="${session.perfil.codigo == 'ADDI'}">
             <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
