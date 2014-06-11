@@ -282,6 +282,7 @@
                     </g:if>
                     <g:else>
                         <g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>
+                        <g:hiddenField name="departamentoId" id="departamentoId" value="${obra?.departamento?.id}"/>
 
                         <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
                                      style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
@@ -1246,6 +1247,7 @@
         %{--var idP = ${(obra)?obra.departamento?.direccion?.id:persona?.departamento?.direccion?.id }--}%
 
         var idP
+        var idDep1
 
 
 
@@ -1254,21 +1256,27 @@
                <g:if test="${obra}">
                     <g:if test="${duenoObra == 1}">
                 idP = $("#departamento option:selected").attr("class");
+                idDep1 = $("#departamento option:selected").val();
                     </g:if>
                     <g:else>
                 idP = $("#departamentoDire").val();
+                idDep1 = $("#departamentoId").val();
                     </g:else>
               </g:if>
               <g:else>
                 idP = $("#departamento option:selected").attr("class");
+                idDep1 = $("#departamento option:selected").val();
              </g:else>
         </g:if>
         <g:else>
                <g:if test="${obra}">
-               idP = $("#departamentoDire").val();
+//               idP = $("#departamentoDire").val();
+                 idP = ${persona?.departamento?.direccion?.id}
+                 idDep1 = ${persona?.departamento?.id}
               </g:if>
               <g:else>
                 idP = ${persona?.departamento?.direccion?.id}
+                idDep1 = ${persona?.departamento?.id}
               </g:else>
 
         </g:else>
@@ -1280,6 +1288,8 @@
                     type    : "POST",
                     url     : "${g.createLink(action:'getPersonas2')}",
                     data    : {id : idP,
+                        %{--idDep : ${persona?.departamento?.id},--}%
+                        idDep : idDep1,
                         obra      : idObra
 
                     },

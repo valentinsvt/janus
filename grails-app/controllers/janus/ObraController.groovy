@@ -1093,11 +1093,14 @@ class ObraController extends janus.seguridad.Shield {
 
         def direccion = Direccion.get(params.id)
 
-        def departamentos = Departamento.findAllByDireccion(direccion)
+//        def departamentos = Departamento.findAllByDireccion(direccion)
+        def departamentos = Departamento.get(params.idDep)
 
 //        println("depar " + departamentos)
 
-        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+//        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+//        def personas = Persona.findAllByDepartamento(departamentos)
+        def personas = Persona.findAllByDepartamento(Departamento.get(params.idDep))
 
 //        println("personas " + personas)
 
