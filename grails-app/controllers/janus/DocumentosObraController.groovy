@@ -27,18 +27,18 @@ class DocumentosObraController {
         return [notaFormu: notaFormu, nota: idFinal]
     }
 
-    def esDuenoObra(obra) {
-        def dueno = false
-        def funcionElab = Funcion.findByCodigo('E')
-        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
-        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
-
-        if(responsableRol) {
-            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
-        }
-        dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
-        dueno
-    }
+//    def esDuenoObra(obra) {
+//        def dueno = false
+//        def funcionElab = Funcion.findByCodigo('E')
+//        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+//        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+//
+//        if(responsableRol) {
+//            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+//        }
+//        dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+//        dueno
+//    }
 
 
     def documentosObra () {
@@ -196,6 +196,42 @@ class DocumentosObraController {
                 totalPresupuestoBien: totalPresupuestoBien, persona: persona,
                 resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor, cordinadorOtros: coordinadorOtros, duo: duo]
 
+    }
+
+
+    def esDuenoObra(obra) {
+//
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+//
+//        if(responsableRol) {
+////            println personasUtfpu
+//            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+//        }
+
+        println "responsable" + responsableRol + " dueño " + dueno
+//                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+
+        if (responsableRol) {
+//            println "..................."
+//            println "${obra?.responsableObra?.departamento?.id} ==== ${Persona.get(session.usuario.id).departamento?.id}"
+//            println "${Persona.get(session.usuario.id)}"
+            if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
+                dueno = true
+            } else {
+                dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+            }
+        }
+
+
+        println(" usuarioDep " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id + " dueño " + dueno)
+
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + session.usuario.departamento.id + " respDep " + obra?.responsableObra?.departamento?.id
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id
+
+        dueno
     }
 
 

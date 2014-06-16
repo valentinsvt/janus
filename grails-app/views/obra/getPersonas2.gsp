@@ -110,7 +110,7 @@
     </g:if>
     <g:else>
 
-        <g:if test="${persona?.departamento?.id == obra?.departamento?.id && duenoObra != 1}">
+        <g:if test="${persona?.departamento?.direccion?.id == obra?.departamento?.direccion?.id && duenoObra != 1}">
 
             <div class="span1">Responsable Cantidades de Obra</div>
             <div class="span3"><g:select name="inspector.id" class="inspector required" from="${personasRolInsp}" optionKey="id" optionValue="${{ (it?.titulo ?: '') + ' ' + it.nombre + " " + it.apellido }}" value="${obra?.inspector?.id}" title="Persona para Inspección de la Obra"/></div>

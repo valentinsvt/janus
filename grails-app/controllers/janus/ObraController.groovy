@@ -614,10 +614,10 @@ class ObraController extends janus.seguridad.Shield {
 //                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
 
         if (responsableRol) {
-            println "..................."
-            println "${obra?.responsableObra?.departamento?.id} ==== ${Persona.get(session.usuario.id).departamento?.id}"
-            println "${Persona.get(session.usuario.id)}"
-            if (obra?.responsableObra?.departamento?.id == Persona.get(session.usuario.id).departamento?.id) {
+//            println "..................."
+//            println "${obra?.responsableObra?.departamento?.id} ==== ${Persona.get(session.usuario.id).departamento?.id}"
+//            println "${Persona.get(session.usuario.id)}"
+            if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
                 dueno = true
             } else {
                 dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
@@ -625,8 +625,10 @@ class ObraController extends janus.seguridad.Shield {
         }
 
 
+        println(" usuarioDep " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id + " dueño " + dueno)
 
-        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + session.usuario.departamento.id + " respDep " + obra?.responsableObra?.departamento?.id
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + session.usuario.departamento.id + " respDep " + obra?.responsableObra?.departamento?.id
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id
 
         dueno
     }
@@ -1093,14 +1095,16 @@ class ObraController extends janus.seguridad.Shield {
 
         def direccion = Direccion.get(params.id)
 
-//        def departamentos = Departamento.findAllByDireccion(direccion)
-        def departamentos = Departamento.get(params.idDep)
+        def departamentos = Departamento.findAllByDireccion(direccion)
+
+//        def departamentos = Departamento.get(params.idDep)
 
 //        println("depar " + departamentos)
 
-//        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
 //        def personas = Persona.findAllByDepartamento(departamentos)
-        def personas = Persona.findAllByDepartamento(Departamento.get(params.idDep))
+
+//        def personas = Persona.findAllByDepartamento(Departamento.get(params.idDep))
 
 //        println("personas " + personas)
 

@@ -106,18 +106,18 @@
 
 
       <g:if test="${obra?.estado != 'R'}">
-          <g:if test="${(obra?.responsableObra?.departamento?.id == persona?.departamento?.id && duenoObra == 1) || obra?.id == null }">
+          <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
               <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
               </button>
           </g:if>
       </g:if>
 
-      <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
+      <g:if test="${obra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id || obra?.id == null}">
           <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar </button>
       </g:if>
       <g:if test="${obra?.liquidacion == 0}">
           <g:if test="${obra?.estado != 'R'}">
-              <g:if test="${(obra?.responsableObra?.departamento?.id == persona?.departamento?.id && duenoObra == 1) || obra?.id == null}">
+              <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null}">
                   <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
               </g:if>
           </g:if>
@@ -128,7 +128,7 @@
           <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
       </g:if>
       <g:if test="${obra?.liquidacion == 0}">
-          <g:if test="${(obra?.responsableObra?.departamento?.id == persona?.departamento?.id && duenoObra == 1) && Concurso.countByObra(obra) == 0}">
+          <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) && Concurso.countByObra(obra) == 0}">
               <g:if test="${obra?.fechaInicio == null}">
                   <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
               </g:if>
@@ -298,18 +298,19 @@
             <div class="span 1 formato">DIRECCIÓN</div>
             <div class="span3">
                 <g:if test="${obra?.id}">
-
-                    <g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>
+                    <g:hiddenField name="departamento.id" id="departamentoObra" value="${obra?.departamento?.id}"/>
+                    %{--<g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>--}%
                     <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
 
-                    <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
+                    <g:textField name="departamentoText" id="departamentoText" value="${obra?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:if>
                 <g:else>
 
-                    <g:hiddenField name="departamento.id" id="departamentoDire" value="${persona?.departamento?.direccion?.id}"/>
+                    %{--<g:hiddenField name="departamento.id" id="departamentoDire" value="${persona?.departamento?.direccion?.id}"/>--}%
+                    <g:hiddenField name="departamento.id" id="departamentoObra" value="${persona?.departamento?.id}"/>
                     <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
-                    <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
+                    <g:textField name="departamentoText" id="departamentoText" value="${persona?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:else>
             </div>
