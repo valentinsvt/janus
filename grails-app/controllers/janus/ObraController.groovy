@@ -496,12 +496,9 @@ class ObraController extends janus.seguridad.Shield {
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "canton": ["Canton", "string"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"], "estado": ["Estado", "string"], "valor": ["Monto", "number"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
-
             def subs = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
             def volumen = VolumenesObra.findByObra(obra)
-
             def formula = FormulaPolinomica.findByObra(obra)
-
 
             def sqlVer = "SELECT\n" +
                     "voit__id             id\n" +
