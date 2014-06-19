@@ -35,7 +35,7 @@
             <div class="span8 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Oferente sss
+                    Crear  Oferente
                 </a>
 %{--
                 <a href="#" class="btn btn-ajax btn-copy">
