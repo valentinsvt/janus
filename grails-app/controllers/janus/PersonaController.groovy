@@ -254,7 +254,7 @@ class PersonaController extends janus.seguridad.Shield {
 
     def formOferente () {
 
-
+        println "....123"
         def personaInstance = new Persona(params)
         if (params.id) {
             personaInstance = Persona.get(params.id)

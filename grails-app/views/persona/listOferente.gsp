@@ -35,7 +35,7 @@
             <div class="span8 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Oferente
+                    Crear  Oferente sss
                 </a>
 %{--
                 <a href="#" class="btn btn-ajax btn-copy">
@@ -248,7 +248,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Oferente");
+                            $("#modalTitle").html("Crear cuenta de Oferente");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-Persona").modal("show");
@@ -373,14 +373,13 @@
                         "Aceptar" : function () {
 
 
-                            var id = ${sesion2?.usuario?.id}
+                            var id = ${sesion2?.usuario?.id?:0}
 
-//                            ////console.log("-->>" + id)
+//                            console.log("-->>" + id)
 
-                            var estado = ${sesion2?.usuario?.activo}
+                            var estado = ${sesion2?.usuario?.activo?:0 }
 
-//                            ////console.log("estado:" + estado)
-
+//                            console.log("estado:" + estado)
 
                             if (estado == 0) {
 
