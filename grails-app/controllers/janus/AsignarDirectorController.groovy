@@ -49,7 +49,7 @@ class AsignarDirectorController  {
 
 //           println("personas:" + personas)
 
-            def funcionDirector = Funcion.get(9)
+            def funcionDirector = Funcion.findByCodigo('D')
 
             def dptoDireccion = Departamento.findAllByDireccion(direccion)
 
@@ -89,21 +89,40 @@ class AsignarDirectorController  {
 
     def mensaje () {
 
-    def direccion = Direccion.get(params.id)
+//        println("params" + params)
 
-        def departamentos = Departamento.findAllByDireccion(direccion)
+        def direccion = Direccion.get(params.id)
 
-        def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+        def personas = []
+        def departamentos = []
 
-        def funcionDirector = Funcion.get(9)
 
-        def dptoDireccion = Departamento.findAllByDireccion(direccion)
+        if(direccion){
 
-        def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
+            departamentos = Departamento.findAllByDireccion(direccion)
 
-//        def obtenerDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDireccion)
+        }else{
 
-//        println("od" + obtenerDirector)
+            departamentos = []
+        }
+
+
+
+        if(departamentos){
+            personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+        }else{
+         personas = []
+
+        }
+
+        def funcionDirector = Funcion.findByCodigo('D')
+
+
+
+//        def dptoDireccion = Departamento.findAllByDireccion(direccion)
+
+        def personalDireccion = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
 
 
         def obtenerDirector
@@ -121,6 +140,8 @@ class AsignarDirectorController  {
             obtenerDirector = null
         }
 
+
+//        println("personas" + personas + "direc" + obtenerDirector)
 
 
         return [personas: personas, obtenerDirector: obtenerDirector]
@@ -147,7 +168,7 @@ class AsignarDirectorController  {
 
             def persona = Persona.get(params.id);
 
-            def funcion = Funcion.get(9)
+            def funcion = Funcion.findByCodigo('D')
 
             def rol = PersonaRol.findByPersonaAndFuncion(persona, funcion)
 
@@ -158,9 +179,13 @@ class AsignarDirectorController  {
 
 
         def grabarFuncion () {
+            println("params" + params)
             def personaRol = new PersonaRol()
-            personaRol.persona = Persona.get(params.id)
-            personaRol.funcion = Funcion.get(params.rol)
+            if(params.id){
+                personaRol.persona = Persona.get(params.id)
+                personaRol.funcion = Funcion.get(params.rol)
+            }
+
             if (!personaRol.save([flush: true])) {
                 render "NO"
                 println "ERROR al guardar rolPersona: "+personaRol.errors
@@ -278,7 +303,7 @@ class AsignarDirectorController  {
             def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
 
 
-            def funcion = Funcion.get(9)
+            def funcion = Funcion.findByCodigo('D')
 
 
             def roles = PersonaRol.findAllByPersonaInListAndFuncion(personas, funcion )
