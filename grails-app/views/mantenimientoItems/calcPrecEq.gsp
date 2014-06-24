@@ -281,7 +281,7 @@ h4 {
                 <tr>
                     <th class="st-title">Seguros</th>
                     %{--<th class="st-cod">s</th>--}%
-                    <td class="tdCs num st-total" data-dec="2"></td>
+                    <td class="tdCs num st-total" data-dec="4"></td>
                 </tr>
                 <tr class="totalParcial">
                     <th class="st-title">Costo de seguros</th>
@@ -421,7 +421,7 @@ h4 {
         frc  : 0,
         i    : 0,
         s    : 0,
-        cs   : ${valoresAnuales.seguro},
+        cs   : ${valoresAnuales.seguro/100},
         m    : 0,
         k    : ${valoresAnuales.factorCostoRepuestosReparaciones},
         r    : 0,

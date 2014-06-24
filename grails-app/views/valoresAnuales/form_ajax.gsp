@@ -128,7 +128,7 @@
             <div class="controls">
                 <g:textField type="number" name="seguro" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
                         field: 'seguro')}" style="width:60px;"/>
-                <span class="mandatory">*</span> Prima anual: Ej: 0.03
+                <span class="mandatory">*</span> Prima anual. Ej: 3% ingrese 3.00
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
