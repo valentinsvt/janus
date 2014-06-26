@@ -2320,11 +2320,45 @@ class ReportesController {
                 txtIzq.add(new Paragraph(' ', times10bold));
                 txtIzq.add(new Paragraph('Sr. Director.', times10bold));
             }else {
-                txtIzq.add(new Paragraph('No se ha seleccionado una dirección de destino, en la pantalla de Registro de Obra', times10bold));
+//                txtIzq.add(new Paragraph('No se ha seleccionado una dirección de destino, en la pantalla de Registro de Obra', times10bold));
+
+                txtIzq.add(new Paragraph('SR. DIRECTOR', times10bold));
+                txtIzq.add(new Paragraph('Presente.', times10bold));
+                txtIzq.add(new Paragraph(' ', times10bold));
+                txtIzq.add(new Paragraph('Sr. Director.', times10bold));
             }
 
         }else{
-            txtIzq.add(new Paragraph(auxiliar?.general, times10bold));
+           if(obra?.departamentoDestino){
+
+
+               def departamentoDestino = Departamento.get(obra?.departamentoDestino?.id)
+               def direccionDestino = departamentoDestino?.direccion
+               def funcionDirector = Funcion.findByCodigo('D')
+               def departamentosDestino = Departamento.findAllByDireccion(direccionDestino)
+               def personasDir = []
+
+               departamentosDestino.each {
+                   personasDir += Persona.findAllByDepartamento(Departamento.get(it.id))
+               }
+
+               def rolDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector,personasDir)
+
+               txtIzq.add(new Paragraph(rolDirector?.persona?.titulo?.toUpperCase() ?: '', times10bold));
+               txtIzq.add(new Paragraph(rolDirector?.persona?.nombre?.toUpperCase() + ' ' + rolDirector?.persona?.apellido?.toUpperCase(), times10bold));
+               txtIzq.add(new Paragraph('DIRECTOR - ' + rolDirector?.persona?.departamento?.direccion?.nombre?.toUpperCase(), times10bold));
+               txtIzq.add(new Paragraph('Presente.', times10bold));
+               txtIzq.add(new Paragraph(' ', times10bold));
+               txtIzq.add(new Paragraph('Sr. Director.', times10bold));
+
+           }else{
+//               txtIzq.add(new Paragraph('No se ha seleccionado una dirección de destino, en la pantalla de Registro de Obra', times10bold));
+               txtIzq.add(new Paragraph('SR. DIRECTOR', times10bold));
+               txtIzq.add(new Paragraph('Presente.', times10bold));
+               txtIzq.add(new Paragraph(' ', times10bold));
+               txtIzq.add(new Paragraph('Sr. Director.', times10bold));
+           }
+//            txtIzq.add(new Paragraph(auxiliar?.general, times10bold));
         }
 
         if (params.tipoReporte == '1') {
@@ -2420,7 +2454,6 @@ class ReportesController {
         addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
         addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
         addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
-
 
 
         PdfPTable tablaVolObra = new PdfPTable(6);

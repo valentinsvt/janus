@@ -1001,16 +1001,16 @@
                 </div>
 
 
-                <div class="span6">
-                    <div class="span1">General</div>
-                </div>
+                %{--<div class="span6">--}%
+                    %{--<div class="span1">General</div>--}%
+                %{--</div>--}%
 
-                <div class="span6">
-                    <div class="span3"><g:textArea name="general" value="${auxiliarFijo?.general}" rows="4" cols="4"
-                                                   style="width: 665px; height: 130px; resize: none;"
-                                                   disabled="true"/></div>
+                %{--<div class="span6">--}%
+                    %{--<div class="span3"><g:textArea name="general" value="${auxiliarFijo?.general}" rows="4" cols="4"--}%
+                                                   %{--style="width: 665px; height: 130px; resize: none;"--}%
+                                                   %{--disabled="true"/></div>--}%
 
-                </div>
+                %{--</div>--}%
 
 
                 <div class="span6">
