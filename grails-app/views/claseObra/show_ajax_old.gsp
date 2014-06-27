@@ -1,38 +1,38 @@
 
-<%@ page import="janus.EstadoObra" %>
+<%@ page import="janus.ClaseObra" %>
 
-<div id="show-estadoObra" class="span5" role="main">
+<div id="show-claseObra" class="span5" role="main">
 
     <form class="form-horizontal">
     
-    <g:if test="${estadoObraInstance?.codigo}">
+    <g:if test="${claseObraInstance?.codigo}">
         <div class="control-group">
             <div>
                 <span id="codigo-label" class="control-label label label-inverse">
-                    Código
+                    Codigo
                 </span>
             </div>
             <div class="controls">
         
                 <span aria-labelledby="codigo-label">
-                    <g:fieldValue bean="${estadoObraInstance}" field="codigo"/>
+                    <g:fieldValue bean="${claseObraInstance}" field="codigo"/>
                 </span>
         
             </div>
         </div>
     </g:if>
     
-    <g:if test="${estadoObraInstance?.descripcion}">
+    <g:if test="${claseObraInstance?.descripcion}">
         <div class="control-group">
             <div>
                 <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripción
+                    Descripcion
                 </span>
             </div>
             <div class="controls">
         
                 <span aria-labelledby="descripcion-label">
-                    <g:fieldValue bean="${estadoObraInstance}" field="descripcion"/>
+                    <g:fieldValue bean="${claseObraInstance}" field="descripcion"/>
                 </span>
         
             </div>

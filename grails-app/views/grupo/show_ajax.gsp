@@ -8,7 +8,7 @@
             <div class="control-group">
                 <div>
                     <span id="codigo-label" class="control-label label label-inverse">
-                        Codigo
+                        Código
                     </span>
                 </div>
 
@@ -26,7 +26,7 @@
             <div class="control-group">
                 <div>
                     <span id="descripcion-label" class="control-label label label-inverse">
-                        Descripcion
+                        Descripción
                     </span>
                 </div>
 
@@ -44,7 +44,7 @@
             <div class="control-group">
                 <div>
                     <span id="direccion-label" class="control-label label label-inverse">
-                        Direccion
+                        Dirección
                     </span>
                 </div>
 

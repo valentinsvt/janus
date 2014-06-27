@@ -1,11 +1,11 @@
 
-<%@ page import="janus.EstadoObra" %>
+<%@ page import="janus.Programacion" %>
 <!doctype html>
 <html>
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Estados de la Obra
+            Lista de Programación
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,44 +24,48 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Nuevo Estado de la Obra
+                Nueva Programación
             </a>
         </div>
 
-        <g:form action="delete" name="frmDelete-estadoObraInstance">
+        <g:form action="delete" name="frmDelete-programacionInstance">
             <g:hiddenField name="id"/>
         </g:form>
 
-        <div id="list-estadoObra" class="span12" role="main" style="margin-top: 10px;">
+        <div id="list-programacion" class="span12" role="main" style="margin-top: 10px;">
 
             <table class="table table-bordered table-striped table-condensed table-hover">
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="codigo" title="Código" />
-                    
                         <g:sortableColumn property="descripcion" title="Descripción" />
+                    
+                        <g:sortableColumn property="fechaInicio" title="Fecha Inicio" />
+                    
+                        <g:sortableColumn property="fechaFin" title="Fecha Fin" />
                     
                         <th width="150">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                <g:each in="${estadoObraInstanceList}" status="i" var="estadoObraInstance">
+                <g:each in="${programacionInstanceList}" status="i" var="programacionInstance">
                     <tr>
                     
-                        <td>${fieldValue(bean: estadoObraInstance, field: "codigo")}</td>
+                        <td>${fieldValue(bean: programacionInstance, field: "descripcion")}</td>
                     
-                        <td>${fieldValue(bean: estadoObraInstance, field: "descripcion")}</td>
+                        <td><g:formatDate date="${programacionInstance.fechaInicio}" format="dd-MM-yyyy" /></td>
+                    
+                        <td><g:formatDate date="${programacionInstance.fechaFin}" format="dd-MM-yyyy"/></td>
                     
                         <td>
-                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${estadoObraInstance.id}">
+                            <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${programacionInstance.id}">
                                 <i class="icon-zoom-in"></i>
                             </a>
-                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${estadoObraInstance.id}">
+                            <a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${programacionInstance.id}">
                                 <i class="icon-pencil"></i>
                             </a>
 
-                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${estadoObraInstance.id}">
+                            <a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${programacionInstance.id}">
                                 <i class="icon-trash"></i>
                             </a>
                         </td>
@@ -70,11 +74,11 @@
                 </tbody>
             </table>
             <div class="pagination">
-                <elm:paginate total="${estadoObraInstanceTotal}" params="${params}" />
+                <elm:paginate total="${programacionInstanceTotal}" params="${params}" />
             </div>
         </div>
 
-        <div class="modal hide fade" id="modal-estadoObra">
+        <div class="modal hide fade" id="modal-programacion">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
 
@@ -105,17 +109,17 @@
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-estadoObraInstance").valid()) {
+                                if ($("#frmSave-programacionInstance").valid()) {
                                     btnSave.replaceWith(spinner);
                                 }
-                                $("#frmSave-estadoObraInstance").submit();
+                                $("#frmSave-programacionInstance").submit();
                                 return false;
                             });
 
-                            $("#modalTitle").html("Crear Estado Obra");
+                            $("#modalTitle").html("Crear Programación");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-estadoObra").modal("show");
+                            $("#modal-programacion").modal("show");
                         }
                     });
                     return false;
@@ -134,17 +138,17 @@
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-ok"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                if ($("#frmSave-estadoObraInstance").valid()) {
+                                if ($("#frmSave-programacionInstance").valid()) {
                                     btnSave.replaceWith(spinner);
                                 }
-                                $("#frmSave-estadoObraInstance").submit();
+                                $("#frmSave-programacionInstance").submit();
                                 return false;
                             });
 
-                            $("#modalTitle").html("Editar Estado Obra");
+                            $("#modalTitle").html("Editar Programación");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
-                            $("#modal-estadoObra").modal("show");
+                            $("#modal-programacion").modal("show");
                         }
                     });
                     return false;
@@ -160,10 +164,10 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>');
-                            $("#modalTitle").html("Ver Estado Obra");
+                            $("#modalTitle").html("Ver Programación");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
-                            $("#modal-estadoObra").modal("show");
+                            $("#modal-programacion").modal("show");
                         }
                     });
                     return false;
@@ -177,14 +181,14 @@
 
                     btnDelete.click(function () {
                         btnDelete.replaceWith(spinner);
-                        $("#frmDelete-estadoObraInstance").submit();
+                        $("#frmDelete-programacionInstance").submit();
                         return false;
                     });
 
-                    $("#modalTitle").html("Eliminar EstadoObra");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Estado Obra?</p>");
+                    $("#modalTitle").html("Eliminar Programación");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este programación?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
-                    $("#modal-estadoObra").modal("show");
+                    $("#modal-programacion").modal("show");
                     return false;
                 });
 

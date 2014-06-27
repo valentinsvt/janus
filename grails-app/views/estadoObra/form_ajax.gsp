@@ -12,11 +12,22 @@
                 </span>
             </div>
 
-            <div class="controls">
-                <g:textField name="codigo" style="width: 20px" maxlength="1" class=" required" value="${estadoObraInstance?.codigo}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+            <g:if test="${estadoObraInstance?.id}">
+                <div class="controls">
+                    <g:textField name="codigo" style="width: 20px" readonly="readonly" maxlength="1" class=" required" value="${estadoObraInstance?.codigo}"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:if>
+            <g:else>
+                <div class="controls">
+                    <g:textField name="codigo" style="width: 20px" maxlength="1" class=" required" value="${estadoObraInstance?.codigo}"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:else>
+
+
         </div>
                 
         <div class="control-group">

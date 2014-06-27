@@ -31,22 +31,36 @@ class EstadoObraController extends janus.seguridad.Shield {
 
     def save() {
         def estadoObraInstance
+
+        def existe = EstadoObra.findByCodigo(params.codigo)
+
         if (params.id) {
             estadoObraInstance = EstadoObra.get(params.id)
             if (!estadoObraInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró EstadoObra con id " + params.id
+                flash.message = "No se encontró Estado Obra con id " + params.id
                 redirect(action: 'list')
                 return
             }//no existe el objeto
             estadoObraInstance.properties = params
         }//es edit
         else {
-            estadoObraInstance = new EstadoObra(params)
+
+            if(!existe){
+                estadoObraInstance = new EstadoObra(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el estado de la obra, el código ya existe!!"
+                redirect(action: 'list')
+                return
+
+            }
+
+
         } //es create
         if (!estadoObraInstance.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar EstadoObra " + (estadoObraInstance.id ? estadoObraInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar Estado Obra " + (estadoObraInstance.id ? estadoObraInstance.id : "") + "</h4>"
 
             str += "<ul>"
             estadoObraInstance.errors.allErrors.each { err ->
@@ -65,10 +79,10 @@ class EstadoObraController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente EstadoObra " + estadoObraInstance.id
+            flash.message = "Se ha actualizado correctamente Estado Obra: " + estadoObraInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente EstadoObra " + estadoObraInstance.id
+            flash.message = "Se ha creado correctamente Estado Obra " + estadoObraInstance?.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -77,7 +91,7 @@ class EstadoObraController extends janus.seguridad.Shield {
         def estadoObraInstance = EstadoObra.get(params.id)
         if (!estadoObraInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró EstadoObra con id " + params.id
+            flash.message = "No se encontró Estado Obra con id " + params.id
             redirect(action: "list")
             return
         }
@@ -88,7 +102,7 @@ class EstadoObraController extends janus.seguridad.Shield {
         def estadoObraInstance = EstadoObra.get(params.id)
         if (!estadoObraInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró EstadoObra con id " + params.id
+            flash.message = "No se encontró Estado Obra con id " + params.id
             redirect(action: "list")
             return
         }
@@ -96,12 +110,12 @@ class EstadoObraController extends janus.seguridad.Shield {
         try {
             estadoObraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente EstadoObra " + estadoObraInstance.id
+            flash.message = "Se ha eliminado correctamente Estado Obra " + estadoObraInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar EstadoObra " + (estadoObraInstance.id ? estadoObraInstance.id : "")
+            flash.message = "No se pudo eliminar Estado Obra " + (estadoObraInstance.id ? estadoObraInstance.id : "")
             redirect(action: "list")
         }
     } //delete
