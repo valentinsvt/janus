@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Tipo Garantias
+            Lista de Tipo de Garantías
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Tipo Garantia
+                    Nuevo Tipo de Garantía
                 </a>
             </div>
             <div class="span3" id="busqueda-TipoGarantia"></div>
@@ -43,9 +43,9 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="codigo" title="Codigo" />
+                        <g:sortableColumn property="codigo" title="Código" />
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción" />
                     
                         <th width="150">Acciones</th>
                     </tr>
@@ -127,7 +127,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Tipo Garantia");
+                            $("#modalTitle").html("Crear Tipo de Garantia");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoGarantia").modal("show");
@@ -154,7 +154,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Tipo Garantia");
+                            $("#modalTitle").html("Editar Tipo de Garantia");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoGarantia").modal("show");

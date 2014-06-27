@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Tipo Aseguradora
+                    Nuevo Tipo de Aseguradora
                 </a>
             </div>
             <div class="span3" id="busqueda-TipoAseguradora"></div>
@@ -43,9 +43,9 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="codigo" title="Codigo" />
+                        <g:sortableColumn property="codigo" title="Código" />
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción" />
                     
                         <th width="150">Acciones</th>
                     </tr>
@@ -127,7 +127,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Tipo Aseguradora");
+                            $("#modalTitle").html("Crear Tipo de Aseguradora");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoAseguradora").modal("show");
@@ -154,7 +154,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Tipo Aseguradora");
+                            $("#modalTitle").html("Editar Tipo de Aseguradora");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoAseguradora").modal("show");

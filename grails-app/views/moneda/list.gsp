@@ -43,9 +43,9 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="codigo" title="Codigo" />
+                        <g:sortableColumn property="codigo" title="Código" />
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción" />
                     
                         <th width="150">Acciones</th>
                     </tr>

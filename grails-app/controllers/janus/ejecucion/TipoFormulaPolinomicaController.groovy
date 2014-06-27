@@ -29,6 +29,10 @@ class TipoFormulaPolinomicaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+        def existe = TipoFormulaPolinomica.findByCodigo(params.codigo)
+
         def tipoFormulaPolinomicaInstance
         if (params.id) {
             tipoFormulaPolinomicaInstance = TipoFormulaPolinomica.get(params.id)
@@ -41,7 +45,17 @@ class TipoFormulaPolinomicaController extends janus.seguridad.Shield {
             tipoFormulaPolinomicaInstance.properties = params
         }//es edit
         else {
-            tipoFormulaPolinomicaInstance = new TipoFormulaPolinomica(params)
+
+            if(!existe){
+                tipoFormulaPolinomicaInstance = new TipoFormulaPolinomica(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar la fórmula polinómica, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
+
         } //es create
         if (!tipoFormulaPolinomicaInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -64,10 +78,10 @@ class TipoFormulaPolinomicaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Tipo Formula Polinomica " + tipoFormulaPolinomicaInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo Formula Polinomica " + tipoFormulaPolinomicaInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Tipo Formula Polinomica " + tipoFormulaPolinomicaInstance.id
+            flash.message = "Se ha creado correctamente Tipo Formula Polinomica " + tipoFormulaPolinomicaInstance?.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -95,7 +109,7 @@ class TipoFormulaPolinomicaController extends janus.seguridad.Shield {
         try {
             tipoFormulaPolinomicaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Formula Polinomica " + tipoFormulaPolinomicaInstance.id
+            flash.message = "Se ha eliminado correctamente Tipo Formula Polinomica " + tipoFormulaPolinomicaInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

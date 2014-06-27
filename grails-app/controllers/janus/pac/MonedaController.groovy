@@ -30,6 +30,9 @@ class MonedaController extends janus.seguridad.Shield {
 
     def save() {
 //        println params
+
+        def existe = Moneda.findByCodigo(params.codigo)
+
         def monedaInstance
         if (params.id) {
             monedaInstance = Moneda.get(params.id)
@@ -42,7 +45,16 @@ class MonedaController extends janus.seguridad.Shield {
             monedaInstance.properties = params
         }//es edit
         else {
-            monedaInstance = new Moneda(params)
+            if(!existe){
+                monedaInstance = new Moneda(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar la moneda, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
+
         } //es create
         if (!monedaInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -65,7 +77,7 @@ class MonedaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Moneda " + monedaInstance.id
+            flash.message = "Se ha actualizado correctamente Moneda " + monedaInstance?.descripcion
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Moneda " + monedaInstance.id
@@ -96,7 +108,7 @@ class MonedaController extends janus.seguridad.Shield {
         try {
             monedaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Moneda " + monedaInstance.id
+            flash.message = "Se ha eliminado correctamente Moneda " + monedaInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

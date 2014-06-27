@@ -8,21 +8,31 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Codigo
+                    Código
                 </span>
             </div>
+            <g:if test="${tipoAseguradoraInstance?.id}">
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="1" class="" value="${tipoAseguradoraInstance?.codigo}" readonly="readonly"/>
 
-            <div class="controls">
-                <g:textField name="codigo" maxlength="1" class="" value="${tipoAseguradoraInstance?.codigo}"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:if>
+            <g:else>
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="1" class="" value="${tipoAseguradoraInstance?.codigo}"/>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:else>
+
+
         </div>
                 
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
 

@@ -12,11 +12,22 @@
                 </span>
             </div>
 
-            <div class="controls">
-                <g:textField name="codigo" maxlength="7" class="" value="${tipoContratoInstance?.codigo}"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+            <g:if test="${tipoContratoInstance?.id}">
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="7" class="" value="${tipoContratoInstance?.codigo}" readonly="readonly"/>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:if>
+            <g:else>
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="7" class="" value="${tipoContratoInstance?.codigo}"/>
+
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:else>
+
+
         </div>
                 
         <div class="control-group">

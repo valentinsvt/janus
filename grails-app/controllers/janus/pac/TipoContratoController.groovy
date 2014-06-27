@@ -29,6 +29,10 @@ class TipoContratoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+        def existe = TipoContrato.findByCodigo(params.codigo)
+
         def tipoContratoInstance
         if (params.id) {
             tipoContratoInstance = TipoContrato.get(params.id)
@@ -41,7 +45,17 @@ class TipoContratoController extends janus.seguridad.Shield {
             tipoContratoInstance.properties = params
         }//es edit
         else {
-            tipoContratoInstance = new TipoContrato(params)
+
+            if(!existe){
+                tipoContratoInstance = new TipoContrato(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el tipo de contrato, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
+
         } //es create
         if (!tipoContratoInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -64,10 +78,10 @@ class TipoContratoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Tipo Contrato " + tipoContratoInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo Contrato " + tipoContratoInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Tipo Contrato " + tipoContratoInstance.id
+            flash.message = "Se ha creado correctamente Tipo Contrato " + tipoContratoInstance?.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -95,7 +109,7 @@ class TipoContratoController extends janus.seguridad.Shield {
         try {
             tipoContratoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Contrato " + tipoContratoInstance.id
+            flash.message = "Se ha eliminado correctamente Tipo Contrato " + tipoContratoInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

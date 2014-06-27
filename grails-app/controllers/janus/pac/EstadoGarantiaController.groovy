@@ -29,6 +29,9 @@ class EstadoGarantiaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+        def existe = EstadoGarantia.findByCodigo(params.codigo)
+
         def estadoGarantiaInstance
         if (params.id) {
             estadoGarantiaInstance = EstadoGarantia.get(params.id)
@@ -41,7 +44,15 @@ class EstadoGarantiaController extends janus.seguridad.Shield {
             estadoGarantiaInstance.properties = params
         }//es edit
         else {
-            estadoGarantiaInstance = new EstadoGarantia(params)
+            if(!existe){
+                estadoGarantiaInstance = new EstadoGarantia(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el estado de la garantía, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
         } //es create
         if (!estadoGarantiaInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -64,7 +75,7 @@ class EstadoGarantiaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Estado Garantia " + estadoGarantiaInstance.id
+            flash.message = "Se ha actualizado correctamente Estado Garantia " + estadoGarantiaInstance?.descripcion
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Estado Garantia " + estadoGarantiaInstance.id
@@ -95,7 +106,7 @@ class EstadoGarantiaController extends janus.seguridad.Shield {
         try {
             estadoGarantiaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Estado Garantia " + estadoGarantiaInstance.id
+            flash.message = "Se ha eliminado correctamente Estado Garantía " + estadoGarantiaInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

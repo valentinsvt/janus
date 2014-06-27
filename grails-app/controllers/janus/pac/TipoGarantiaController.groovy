@@ -29,6 +29,9 @@ class TipoGarantiaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+        def existe = TipoGarantia.findByCodigo(params.codigo)
+
         def tipoGarantiaInstance
         if (params.id) {
             tipoGarantiaInstance = TipoGarantia.get(params.id)
@@ -38,10 +41,19 @@ class TipoGarantiaController extends janus.seguridad.Shield {
                 redirect(action: 'list')
                 return
             }//no existe el objeto
+
             tipoGarantiaInstance.properties = params
         }//es edit
         else {
-            tipoGarantiaInstance = new TipoGarantia(params)
+            if(!existe){
+                tipoGarantiaInstance = new TipoGarantia(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el tipo de garantía, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
         } //es create
         if (!tipoGarantiaInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -64,10 +76,10 @@ class TipoGarantiaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Tipo Garantia " + tipoGarantiaInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo Garantía " + tipoGarantiaInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Tipo Garantia " + tipoGarantiaInstance.id
+            flash.message = "Se ha creado correctamente Tipo Garantía " + tipoGarantiaInstance?.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -95,12 +107,12 @@ class TipoGarantiaController extends janus.seguridad.Shield {
         try {
             tipoGarantiaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Garantia " + tipoGarantiaInstance.id
+            flash.message = "Se ha eliminado correctamente Tipo Garantía " + tipoGarantiaInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Tipo Garantia " + (tipoGarantiaInstance.id ? tipoGarantiaInstance.id : "")
+            flash.message = "No se pudo eliminar Tipo Garantía " + (tipoGarantiaInstance.id ? tipoGarantiaInstance.id : "")
             redirect(action: "list")
         }
     } //delete

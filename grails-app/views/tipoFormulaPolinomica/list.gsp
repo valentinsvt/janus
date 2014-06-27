@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear Tipo Formula Polinomica
+                    Crear Tipo de Formula Polinomica
                 </a>
             </div>
             <div class="span3" id="busqueda-TipoFormulaPolinomica"></div>
@@ -43,9 +43,9 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="codigo" title="Codigo" />
+                        <g:sortableColumn property="codigo" title="Código" />
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción" />
                     
                         <th width="150">Acciones</th>
                     </tr>
@@ -127,7 +127,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                            $("#modalTitle").html("Crear Tipo Formula Polinomica");
+                            $("#modalTitle").html("Crear Tipo de Fórmula Polinómica");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoFormulaPolinomica").modal("show");
@@ -154,7 +154,7 @@
                             });
 
                             $("#modalHeader").removeClass("btn-edit btn-show btn-delete").addClass("btn-edit");
-                            $("#modalTitle").html("Editar Tipo Formula Polinomica");
+                            $("#modalTitle").html("Editar Tipo de Fórmula Polinómica");
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk).append(btnSave);
                             $("#modal-TipoFormulaPolinomica").modal("show");

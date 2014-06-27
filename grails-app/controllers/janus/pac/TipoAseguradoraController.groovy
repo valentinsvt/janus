@@ -29,6 +29,8 @@ class TipoAseguradoraController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        def existe = TipoAseguradora.findByCodigo(params.codigo)
+
         def tipoAseguradoraInstance
         if (params.id) {
             tipoAseguradoraInstance = TipoAseguradora.get(params.id)
@@ -41,7 +43,15 @@ class TipoAseguradoraController extends janus.seguridad.Shield {
             tipoAseguradoraInstance.properties = params
         }//es edit
         else {
-            tipoAseguradoraInstance = new TipoAseguradora(params)
+            if(!existe){
+                tipoAseguradoraInstance = new TipoAseguradora(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el tipo de aseguradora, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
         } //es create
         if (!tipoAseguradoraInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -64,7 +74,7 @@ class TipoAseguradoraController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Tipo Aseguradora " + tipoAseguradoraInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo Aseguradora " + tipoAseguradoraInstance?.descripcion
         } else {
             flash.clase = "alert-success"
             flash.message = "Se ha creado correctamente Tipo Aseguradora " + tipoAseguradoraInstance.id
@@ -95,7 +105,7 @@ class TipoAseguradoraController extends janus.seguridad.Shield {
         try {
             tipoAseguradoraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Aseguradora " + tipoAseguradoraInstance.id
+            flash.message = "Se ha eliminado correctamente Tipo Aseguradora " + tipoAseguradoraInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

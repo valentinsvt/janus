@@ -29,6 +29,8 @@ class TipoDocumentoGarantiaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+        def existe = TipoDocumentoGarantia.findByCodigo(params.codigo)
         def tipoDocumentoGarantiaInstance
         if (params.id) {
             tipoDocumentoGarantiaInstance = TipoDocumentoGarantia.get(params.id)
@@ -41,7 +43,15 @@ class TipoDocumentoGarantiaController extends janus.seguridad.Shield {
             tipoDocumentoGarantiaInstance.properties = params
         }//es edit
         else {
-            tipoDocumentoGarantiaInstance = new TipoDocumentoGarantia(params)
+            if(!existe){
+                tipoDocumentoGarantiaInstance = new TipoDocumentoGarantia(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el grupo, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
         } //es create
         if (!tipoDocumentoGarantiaInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -64,10 +74,10 @@ class TipoDocumentoGarantiaController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Tipo Documento Garantia " + tipoDocumentoGarantiaInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo Documento Garantia " + tipoDocumentoGarantiaInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Tipo Documento Garantia " + tipoDocumentoGarantiaInstance.id
+            flash.message = "Se ha creado correctamente Tipo Documento Garantia " + tipoDocumentoGarantiaInstance?.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -95,7 +105,7 @@ class TipoDocumentoGarantiaController extends janus.seguridad.Shield {
         try {
             tipoDocumentoGarantiaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Documento Garantia " + tipoDocumentoGarantiaInstance.id
+            flash.message = "Se ha eliminado correctamente Tipo Documento Garantia " + tipoDocumentoGarantiaInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
