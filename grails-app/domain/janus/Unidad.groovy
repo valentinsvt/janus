@@ -15,7 +15,7 @@ class Unidad implements Serializable {
         }
     }
     static constraints = {
-        codigo(size: 1..5, blank: false, attributes: [title: 'numero'])
+        codigo(size: 1..5, blank: false, attributes: [title: 'numero'],unique:true)
         descripcion(size: 1..31, blank: false, nullable: false, attributes: [title: 'descripcion'])
     }
 

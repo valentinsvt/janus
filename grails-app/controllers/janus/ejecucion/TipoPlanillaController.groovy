@@ -41,7 +41,15 @@ class TipoPlanillaController extends janus.seguridad.Shield {
             tipoPlanillaInstance.properties = params
         }//es edit
         else {
-            tipoPlanillaInstance = new TipoPlanilla(params)
+            def existe= TipoPlanilla.findByCodigo(params.codigo)
+            if(!existe)
+                tipoPlanillaInstance = new TipoPlanilla(params)
+            else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el código ya existe."
+                redirect(action: 'list')
+                return
+            }
         } //es create
         if (!tipoPlanillaInstance.save(flush: true)) {
             flash.clase = "alert-error"

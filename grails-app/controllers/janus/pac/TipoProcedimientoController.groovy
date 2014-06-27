@@ -41,7 +41,15 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
             tipoProcedimientoInstance.properties = params
         }//es edit
         else {
-            tipoProcedimientoInstance = new TipoProcedimiento(params)
+            def existe= TipoProcedimiento.findBySigla(params.sigla)
+            if(!existe)
+                tipoProcedimientoInstance = new TipoProcedimiento(params)
+            else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el código ya existe."
+                redirect(action: 'list')
+                return
+            }
         } //es create
         if (!tipoProcedimientoInstance.save(flush: true)) {
             flash.clase = "alert-error"

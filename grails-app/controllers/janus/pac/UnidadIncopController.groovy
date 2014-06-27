@@ -41,7 +41,15 @@ class UnidadIncopController extends janus.seguridad.Shield {
             unidadIncopInstance.properties = params
         }//es edit
         else {
-            unidadIncopInstance = new UnidadIncop(params)
+            def existe= UnidadIncop.findByCodigo(params.codigo)
+            if(!existe)
+                unidadIncopInstance = new UnidadIncop(params)
+            else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el código ya existe."
+                redirect(action: 'list')
+                return
+            }
         } //es create
         if (!unidadIncopInstance.save(flush: true)) {
             flash.clase = "alert-error"

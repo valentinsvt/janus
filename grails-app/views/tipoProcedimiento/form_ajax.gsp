@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="sigla" maxlength="5" class=" required" value="${tipoProcedimientoInstance?.sigla}"/>
+                <g:textField name="sigla" maxlength="5" class=" required" value="${tipoProcedimientoInstance?.sigla}" disabled="${tipoProcedimientoInstance.id?'true':'false'}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

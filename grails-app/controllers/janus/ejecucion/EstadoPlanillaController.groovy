@@ -43,7 +43,15 @@ class EstadoPlanillaController {
             estadoPlanillaInstance.properties = params
         }//es edit
         else {
-            estadoPlanillaInstance = new EstadoPlanilla(params)
+            def existe= EstadoPlanilla.findByCodigo(params.codigo)
+            if(!existe)
+                estadoPlanillaInstance = new EstadoPlanilla(params)
+            else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el código ya existe."
+                redirect(action: 'list')
+                return
+            }
         } //es create
         if (!estadoPlanillaInstance.save(flush: true)) {
             flash.clase = "alert-error"

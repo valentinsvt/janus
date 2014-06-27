@@ -17,7 +17,7 @@ class UnidadIncop {
         }
     }
     static constraints = {
-        codigo(nullable: true,blank: true,size: 1..7)
+        codigo(nullable: true,blank: true,size: 1..7,unique: true)
         descripcion(nullable: true,blank: true,size:1..32)
     }
 }

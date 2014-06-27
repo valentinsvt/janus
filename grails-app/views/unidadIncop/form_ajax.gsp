@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="7" class="" value="${unidadIncopInstance?.codigo}"/>
+                <g:textField name="codigo" maxlength="7" class="" value="${unidadIncopInstance?.codigo}" disabled="${unidadIncopInstance.id?'true':'false'}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

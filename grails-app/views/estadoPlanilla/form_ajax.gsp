@@ -8,13 +8,13 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Codigo
+                    Código
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" class="" value="${estadoPlanillaInstance?.codigo}"/>
-                
+                <g:textField name="codigo" class="" value="${estadoPlanillaInstance?.codigo}" disabled="${estadoPlanillaInstance.id?'true':'false'}"/>
+
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
