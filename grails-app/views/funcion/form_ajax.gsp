@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="15" class=" required" value="${funcionInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="31" class=" required" value="${funcionInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

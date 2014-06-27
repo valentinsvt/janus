@@ -412,6 +412,10 @@ class Reportes4Controller {
         def valores
         def subPres
 
+
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra
+
         params.old = params.criterio
 
         params.criterio=cleanCriterio(params.criterio)
@@ -422,6 +426,7 @@ class Reportes4Controller {
                 "  o.obranmbr    nombre,\n" +
                 "  o.obratipo    tipo,\n" +
                 "  o.obrafcha    fecha,\n" +
+                "  o.prsn__id    responsable,\n" +
                 "  c.cmndnmbr    comunidad,\n" +
                 "  p.parrnmbr    parroquia,\n" +
                 "  n.cntnnmbr    canton,\n" +
@@ -530,14 +535,23 @@ class Reportes4Controller {
         }
 
 //        println("##" + valoresTotales)
+//          println("->" + personasUtfpu)
 
-        res.each{
-           if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
-               obrasFiltradas += it
-           }
+
+
+        if(Persona.get(session.usuario.id).departamento?.codigo == 'UTFPU'){
+
+            res.each{
+                responsableObra = it.responsable
+                if((personasUtfpu.contains(Persona.get(responsableObra))) || it.tipo == 'D'){
+                    obrasFiltradas += it
+                }
+            }
+        }else {
+            obrasFiltradas = res
         }
 
-
+//        println("obras filtradas " + obrasFiltradas)
         return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params]
     }
 
@@ -563,6 +577,9 @@ class Reportes4Controller {
 
         def obrasFiltradas = []
 
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra
+
         params.old = params.criterio
 
         params.criterio=cleanCriterio(params.criterio)
@@ -573,6 +590,7 @@ class Reportes4Controller {
                 "  o.obranmbr    nombre,\n" +
                 "  o.obratipo    tipo,\n" +
                 "  o.obrafcha    fecha,\n" +
+                "  o.prsn__id    responsable,\n" +
                 "  c.cmndnmbr    comunidad,\n" +
                 "  p.parrnmbr    parroquia,\n" +
                 "  n.cntnnmbr    canton,\n" +
@@ -681,10 +699,15 @@ class Reportes4Controller {
 
 //        println("##" + valoresTotales)
 
-        res.each{
-            if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
-                obrasFiltradas += it
+        if(Persona.get(session.usuario.id).departamento?.codigo == 'UTFPU'){
+            res.each{
+                responsableObra = it.responsable
+                if((personasUtfpu.contains(Persona.get(responsableObra))) || it.tipo == 'D'){
+                    obrasFiltradas += it
+                }
             }
+        }else{
+            obrasFiltradas = res
         }
 
         return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params]
@@ -1737,6 +1760,11 @@ class Reportes4Controller {
         def valores
         def subPres
         def obrasFiltradas = []
+
+
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra
+
         params.old = params.criterio
 
         params.criterio=cleanCriterio(params.criterio)
@@ -1747,6 +1775,7 @@ class Reportes4Controller {
                 "  o.obranmbr    nombre,\n" +
                 "  o.obratipo    tipo,\n" +
                 "  o.obrafcha    fecha,\n" +
+                "  o.prsn__id    responsable,\n" +
                 "  c.cmndnmbr    comunidad,\n" +
                 "  p.parrnmbr    parroquia,\n" +
                 "  n.cntnnmbr    canton,\n" +
@@ -1891,13 +1920,16 @@ class Reportes4Controller {
 //        println("##" + valoresTotales)
 
 
-        res.each{
-            if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
-                obrasFiltradas += it
+        if(Persona.get(session.usuario.id).departamento?.codigo == 'UTFPU'){
+            res.each{
+                responsableObra = it.responsable
+                if((personasUtfpu.contains(Persona.get(responsableObra))) || it.tipo == 'D'){
+                    obrasFiltradas += it
+                }
             }
+        }else{
+            obrasFiltradas = res
         }
-
-
 
         return [obras: obras, res: obrasFiltradas, valoresTotales: valoresTotales, params:params, contratos: contratos, bandera: bandera]
 

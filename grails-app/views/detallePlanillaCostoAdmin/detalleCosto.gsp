@@ -84,7 +84,7 @@
                 <thead>
                     <tr>
                         %{--<th>Factura N.</th>--}%
-                        <th>Descripción del rubro</th>
+                        <th>Descripción del material</th>
                         <th>Unidad</th>
                         <th>Cantidad</th>
                         <th>Valor sin IVA</th>
@@ -138,7 +138,7 @@
             <thead>
                 <tr>
                     %{--<th style="width: 80px;">Factura N.</th>--}%
-                    <th>Descripción del rubro</th>
+                    <th>Descripción del material</th>
                     <th style="width: 70px;">U.</th>
                     <th style="width: 100px;">Cantidad</th>
                     <th style="width: 100px;">Valor sin IVA</th>

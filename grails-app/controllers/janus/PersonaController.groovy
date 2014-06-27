@@ -199,7 +199,7 @@ class PersonaController extends janus.seguridad.Shield {
 
         def perfil = Prfl.get(4);
 
-
+        /* departamento de OFERENTES: id = 13 */
         def departamento = Departamento.get(13)
 
 ////        def perfil1 = Prfl.get(1);
@@ -254,7 +254,7 @@ class PersonaController extends janus.seguridad.Shield {
 
     def formOferente () {
 
-
+        println "....123"
         def personaInstance = new Persona(params)
         if (params.id) {
             personaInstance = Persona.get(params.id)

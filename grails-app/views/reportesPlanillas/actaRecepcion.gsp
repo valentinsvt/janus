@@ -186,8 +186,8 @@
         }
 
         #sumillas {
-            margin-top    : 200px;
-            margin-bottom : 10px;
+            margin-top    : 60px;
+            margin-bottom : 0px;
             width         : 100%;
             /*position : absolute;*/
             /*bottom   : 15px;*/
@@ -360,15 +360,18 @@
                     <div class="row" style="height: 20px;">
                         <div class="sumilla">
                             Elaborado por:
-                            ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido}
+                            ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.titulo ?: ""} ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.nombre}
+                            ${actaInstance.contrato.fiscalizadorContrato.fiscalizador.apellido} (FISCALIZADOR)
                         </div>
                     </div>
 
+%{--
                     <div class="row">
                         <div class="">
                             FISCALIZADOR
                         </div>
                     </div>
+--}%
                 </div>
 
                 <div class="left">

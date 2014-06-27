@@ -16,6 +16,6 @@ class Funcion implements Serializable {
     }
     static constraints = {
         codigo(size: 1..1, blank: false, attributes: [title: 'numero'])
-        descripcion(size: 1..15, blank: false, attributes: [title: 'descripcion'])
+        descripcion(size: 1..31, blank: false, attributes: [title: 'descripcion'])
     }
 }

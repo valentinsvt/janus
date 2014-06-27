@@ -164,14 +164,21 @@
 
                 <div class="texto"><b>Manuales del sistema:</b>
                     <g:link controller="manual" action="manualIngreso" target="_blank">Ingreso al Sistema</g:link>,
-                    <g:link controller="manual" action="manualIngresoObras"
-                            target="_blank">Análisis de Precios Unitarios</g:link>,
-                    <g:link controller="manual" action="manualRegistroObra" target="_blank">Obras</g:link>,
-                    <g:link controller="manual" action="manualComprasPublicas" target="_blank">Contratación</g:link>,
-                    <g:link controller="manual" action="manualEjecucion" target="_blank">Fiscalización</g:link>,
-                    <g:link controller="manual" action="manualFinanciero" target="_blank">Financiero</g:link>,
-                    <g:link controller="manual" action="manualOferentes" target="_blank">Oferentes</g:link>,
-                    <g:link controller="manual" action="manualReportes" target="_blank">Reportes</g:link>
+                    %{--<g:link controller="manual" action="manualIngresoObras" target="_blank">Análisis de Precios Unitarios</g:link>,--}%
+                    %{--<g:link controller="manual" action="manualRegistroObra" target="_blank">Obras</g:link>,--}%
+                    %{--<g:link controller="manual" action="manualComprasPublicas" target="_blank">Contratación</g:link>,--}%
+                    %{--<g:link controller="manual" action="manualEjecucion" target="_blank">Fiscalización</g:link>,--}%
+                    %{--<g:link controller="manual" action="manualFinanciero" target="_blank">Financiero</g:link>,--}%
+                    %{--<g:link controller="manual" action="manualOferentes" target="_blank">Oferentes</g:link>,--}%
+                    %{--<g:link controller="manual" action="manualReportes" target="_blank">Reportes</g:link>--}%
+                    <a href="${resource(dir: 'manuales', file: 'Manual obras.html')}" title="Manual de Obras">Obras</a>,
+                    <a href="${resource(dir: 'manuales', file: 'Manual APU.html')}" title="Manual de Obras">Análisis de Precios Unitarios</a>,
+                    <a href="${resource(dir: 'manuales', file: 'Manual contrataciones.html')}" title="Manual de Contratación">Contratación</a>,
+                    <a href="${resource(dir: 'manuales', file: 'Manual de ejecución.html')}" title="Manual de Fiscalización">Fiscalización</a>,
+                    <a href="${resource(dir: 'manuales', file: 'Manual financiero.html')}" title="Manual de Financiero">Financiero</a>,
+                    <a href="${resource(dir: 'manuales', file: 'Manual sep-oferentes.html')}" title="Manual de Oferentes">Oferentes</a>,
+                    <a href="${resource(dir: 'manuales', file: 'Manual de reportes.html')}" title="Manual de Reportes">Reportes</a>,
+                    <a href="${resource(dir: 'manuales', file: 'Manual administración directa.html')}" title="Manual de Administración Directa">Administración Directa</a>
                 </div>
             </div>
         </div>

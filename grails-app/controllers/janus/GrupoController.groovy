@@ -593,6 +593,18 @@ class GrupoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+//        println("params " + params)
+
+        def grupos = Grupo.list()
+        def codigos = []
+        def existe  = 0
+        grupos.each {
+            codigos += it?.codigo
+        }
+
+//        println("codigos " + codigos)
+
         def grupoInstance
         if (params.id) {
             grupoInstance = Grupo.get(params.id)
@@ -605,7 +617,22 @@ class GrupoController extends janus.seguridad.Shield {
             grupoInstance.properties = params
         }//es edit
         else {
-            grupoInstance = new Grupo(params)
+             codigos.each {
+                 if(it == params.codigo){
+                  existe = 1
+                 }
+             }
+
+            if(existe != 1){
+                grupoInstance = new Grupo(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el grupo, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
+
         } //es create
         if (!grupoInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -628,10 +655,12 @@ class GrupoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Grupo " + grupoInstance.id
+//            flash.message = "Se ha actualizado correctamente Grupo " + grupoInstance.id
+            flash.message = "Se ha actualizado correctamente Grupo: " + grupoInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Grupo " + grupoInstance.id
+//            flash.message = "Se ha creado correctamente Grupo " + grupoInstance.id
+            flash.message = "Se ha creado correctamente Grupo: " + grupoInstance?.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -659,7 +688,8 @@ class GrupoController extends janus.seguridad.Shield {
         try {
             grupoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Grupo " + grupoInstance.id
+//            flash.message = "Se ha eliminado correctamente Grupo " + grupoInstance.id
+            flash.message = "Se ha eliminado correctamente Grupo: " + grupoInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

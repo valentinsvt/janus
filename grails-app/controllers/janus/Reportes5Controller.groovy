@@ -69,6 +69,7 @@ class Reportes5Controller {
                 "  b.obracdgo               obra_cod,\n" +
                 "  b.obranmbr               obra_nmbr,\n" +
                 "  b.obratipo               tipo,\n" +
+                "  b.prsn__id               responsable,\n" +
                 "  z.dptocdgo               codigodepar,\n" +
                 "  m.cmndnmbr               comunidad,\n" +
                 "  a.parrnmbr               parroquia,\n" +
@@ -163,13 +164,21 @@ class Reportes5Controller {
 
         def res = filasAvance(params)
 
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra
 
         def obrasFiltradas = []
 
-        res.each{
-            if(it.codigodepar == 'UTFPU' || it.tipo == 'D'){
-                obrasFiltradas += it
+
+        if(Persona.get(session.usuario.id).departamento?.codigo == 'UTFPU'){
+            res.each{
+                responsableObra = it.responsable
+                if((personasUtfpu.contains(Persona.get(responsableObra))) || it.tipo == 'D'){
+                    obrasFiltradas += it
+                }
             }
+        }else{
+            obrasFiltradas = res
         }
 
 

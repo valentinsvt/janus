@@ -58,10 +58,11 @@ fieldset {
             <g:select name="lugarRep" from="${janus.Lugar.findAllByTipoListaInList(tipoMQ, [sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
         </g:else>
 
+        %{--<g:set var="d" value="${new Date()}"/>--}%
 
         <elm:datepicker name="fechaRep" class="datepicker required" style="width: 90px" value="${new Date()}"
                         yearRange="${(new Date().format('yyyy').toInteger() - 40).toString() + ':' + new Date().format('yyyy')}"
-                        maxDate="new Date()"/>
+                        maxDate="${(new Date().format('dd').toInteger() + 31)}"/>
 
         %{--<div class="row-fluid" style="margin-top: 10px">--}%
 

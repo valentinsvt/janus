@@ -434,7 +434,7 @@ class ObraController extends janus.seguridad.Shield {
     def registroObra() {
 
         def cn = dbConnectionService.getConnection()
-        println "---" + params
+//        println "---" + params
 //        println "---" + params
         def obra
         def usuario = session.usuario.id
@@ -446,10 +446,19 @@ class ObraController extends janus.seguridad.Shield {
         def programa
         def tipoObra
         def claseObra
+        def duenoObra = 0
+        def funcionElab = Funcion.findByCodigo('E')
+
+        def personasUtfpu1 = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personasUtfpu1)
+
+        def responsableObra
+
 
         def fechaPrecio = new Date()
         cn.eachRow("select max(rbpcfcha) fcha from rbpc, item where rbpc.item__id = item.item__id and " +
-                "itemnmbr ilike '%cemento%port%'"){d ->
+                "itemnmbr ilike '%cemento%port%'") { d ->
             fechaPrecio = d.fcha
         }
 
@@ -487,12 +496,9 @@ class ObraController extends janus.seguridad.Shield {
         def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "descripcion": ["Descripción", "string"], "oficioIngreso": ["Memo ingreso", "string"], "oficioSalida": ["Memo salida", "string"], "sitio": ["Sitio", "string"], "plazoEjecucionMeses": ["Plazo", "number"], "canton": ["Canton", "string"], "parroquia": ["Parroquia", "string"], "comunidad": ["Comunidad", "string"], "departamento": ["Dirección", "string"], "fechaCreacionObra": ["Fecha", "date"], "estado": ["Estado", "string"], "valor": ["Monto", "number"]]
         if (params.obra) {
             obra = Obra.get(params.obra)
-
             def subs = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
             def volumen = VolumenesObra.findByObra(obra)
-
             def formula = FormulaPolinomica.findByObra(obra)
-
 
             def sqlVer = "SELECT\n" +
                     "voit__id             id\n" +
@@ -519,7 +525,43 @@ class ObraController extends janus.seguridad.Shield {
             }
             cn.close()
 //  println matriz + "matriz ok: " + matrizOk
-            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, concurso: concurso]
+
+//            responsableObra = obra?.responsableObra?.id
+//
+//            println("ññññ" + responsableObra)
+//            personasUtfpu.each{
+//                println("res" + it.id)
+//                if(it.id == responsableObra){
+//                    duenoObra += 1
+//                }
+//            }
+
+//            responsableObra = obra?.responsableObra
+
+//            def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
+//            if(responsableRol){
+//                personasUtfpu.each{
+//                    if(it.id == responsableRol.id ){
+//                        duenoObra = 1
+//                    } else {
+//
+//                    }
+//                }
+//            } else {
+//
+//            }
+//            println  "responsable" + responsableRol +  " dueño " + duenoObra
+//            if (session.usuario.id == responsableObra.id) duenoObra++
+//            duenoObra = duenoObra > 0? 1: 0
+//            println  "responsable" + responsableRol +  " dueño " + duenoObra + "sesion: " + session.usuario.id
+//            println "funcion: " + esDuenoObra(obra)
+
+            duenoObra = esDuenoObra(obra) ? 1 : 0
+
+//            println "dueÑo: " + duenoObra
+
+            [campos: campos, prov: prov, obra: obra, subs: subs, persona: persona, formula: formula, volumen: volumen, matrizOk: matrizOk, verif: verif, verifOK: verifOK, perfil: perfil, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo,
+             dire  : direccion, depar: departamentos, concurso: concurso, personasUtfpu: personasUtfpu, duenoObra: duenoObra]
         } else {
             /* ********* genera el numero de memo de formula polinoica ********************************* */
 //            def dpto = persona.departamento
@@ -536,13 +578,62 @@ class ObraController extends janus.seguridad.Shield {
 //            numero += "-" + (new Date().format("yy"))
             /* ********* fin genera el numero de memo de formula polinoica ***************************** */
 
-            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio]
+//            responsableObra = obra?.responsableObra?.id
+//
+//            personasUtfpu.each{
+//                if(it.id == responsableObra ){
+//                    duenoObra = 1
+//                }
+//            }
+
+            duenoObra = 0
+
+
+            [campos: campos, prov: prov, persona: persona, matrizOk: matrizOk, perfil: perfil/*, numero: numero*/, programa: programa, tipoObra: tipoObra, claseObra: claseObra, grupoDir: grupo, dire: direccion, depar: departamentos, fcha: fechaPrecio, personasUtfpu: personasUtfpu, duenoObra: duenoObra]
         }
 
 
     }
 
+    def esDuenoObra(obra) {
+//
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+//
+//        if(responsableRol) {
+////            println personasUtfpu
+//            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+//        }
+
+        println "responsable" + responsableRol + " dueño " + dueno
+//                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+
+        if (responsableRol) {
+//            println "..................."
+//            println "${obra?.responsableObra?.departamento?.id} ==== ${Persona.get(session.usuario.id).departamento?.id}"
+//            println "${Persona.get(session.usuario.id)}"
+            if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
+                dueno = true
+            } else {
+                dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+            }
+        }
+
+
+        println(" usuarioDep " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id + " dueño " + dueno)
+
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + session.usuario.departamento.id + " respDep " + obra?.responsableObra?.departamento?.id
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id
+
+        dueno
+    }
+
+
     def generaNumeroFP() {
+
+        println("FP:" + params)
         /*
         El sistema debe generar un número de fórmula polinómica de liquidación en el formato: FP-nnn-CEV-13-LIQ,
         para oferentes:  FP-nnn-CEV-13-OFE. Para las otras obras el formato se mantiene (FP-nnn-CEV-13).
@@ -587,7 +678,7 @@ class ObraController extends janus.seguridad.Shield {
         } else if (obra.liquidacion == 2) {
             numero += "-OFE"
         }
-//        println numero
+        println("numero:" + numero)
         obra.formulaPolinomica = numero
         if (obra.save(flush: true)) {
             dpto.documento = num
@@ -957,7 +1048,6 @@ class ObraController extends janus.seguridad.Shield {
 
 //        println("pers" + personas)
 
-
 //        def funcionInsp = Funcion.get(3)
 //        def funcionRevi = Funcion.get(5)
 //        def funcionResp = Funcion.get(1)
@@ -991,8 +1081,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def getPersonas2() {
 
-
-        println("--->" + params)
+//        println("--->" + params)
 
         def obra = Obra.get(params.obra)
         def usuario = session.usuario.id
@@ -1005,24 +1094,43 @@ class ObraController extends janus.seguridad.Shield {
 
         def departamentos = Departamento.findAllByDireccion(direccion)
 
+//        def departamentos = Departamento.get(params.idDep)
+
+//        println("depar " + departamentos)
+
         def personas = Persona.findAllByDepartamentoInList(departamentos, [sort: 'nombre'])
+
+//        def personas = Persona.findAllByDepartamento(departamentos)
+
+//        def personas = Persona.findAllByDepartamento(Departamento.get(params.idDep))
+
+//        println("personas " + personas)
 
         def funcionInsp = Funcion.findByCodigo('I')
         def funcionRevi = Funcion.findByCodigo('R')
         def funcionResp = Funcion.findByCodigo('S')
+        def funcionElab = Funcion.findByCodigo('E')
 
         def personasRolInsp = PersonaRol.findAllByFuncionAndPersonaInList(funcionInsp, personas)
         def personasRolRevi = PersonaRol.findAllByFuncionAndPersonaInList(funcionRevi, personas)
         def personasRolResp = PersonaRol.findAllByFuncionAndPersonaInList(funcionResp, personas)
+        def personasRolElab = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personas)
 
-        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def personasUtfpu1 = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, personasUtfpu1)
+
+
+        def responsableObra
+        def duenoObra = 0
 
 //        println("---->>" + personasRolResp)
 //        println("---->>" + personas)
 
-        println(personasRolInsp)
-        println(personasRolRevi)
-        println(personasRolResp)
+//        println(personasRolInsp)
+//        println(personasRolRevi)
+//        println(personasRolResp)
+//        println(personasRolElab)
 ////
 //        println(personasRolInsp.persona)
 //        println(personasRolRevi.persona)
@@ -1030,7 +1138,47 @@ class ObraController extends janus.seguridad.Shield {
 
 //        println(personas)
 
-        return [personas: personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona, personasRolResp: personasRolResp.persona, obra: obra, persona: persona, personasUtfpu: personasUtfpu ]
+
+        if (obra) {
+            responsableObra = obra?.responsableObra
+
+            def responsableRol = PersonaRol.findByPersonaAndFuncion(responsableObra, funcionElab)
+
+            if (responsableRol) {
+                personasUtfpu.each {
+                    if (it.id == responsableRol.id) {
+                        duenoObra = 1
+                    } else {
+
+                    }
+                }
+            } else {
+
+            }
+
+
+        } else {
+
+//            responsableObra = obra?.responsableObra
+//
+//            personasUtfpu.each{
+//                if(it.id == responsableObra){
+//                    duenoObra = 1
+//                }else {
+//
+//                }
+//            }
+
+
+            duenoObra = 0
+
+        }
+
+
+
+
+        return [personas       : personas, personasRolInsp: personasRolInsp.persona, personasRolRevi: personasRolRevi.persona,
+                personasRolResp: personasRolResp.persona, personasRolElab: personasRolElab.persona, obra: obra, persona: persona, personasUtfpu: personasUtfpu.persona, duenoObra: duenoObra]
     }
 
     def getSalida() {
@@ -1190,9 +1338,6 @@ class ObraController extends janus.seguridad.Shield {
 
         }
 
-
-
-
         if (params.formulaPolinomica) {
             params.formulaPolinomica = params.formulaPolinomica.toUpperCase()
         }
@@ -1211,10 +1356,24 @@ class ObraController extends janus.seguridad.Shield {
         }
 
 
+        if (params.id) {
+            if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {
+                params.departamento = Departamento.get(params.per.id)
+            } else {
+                params.departamento = Departamento.get(params.departamento.id)
+            }
+
+        }
+        params."departamento.id" = params.departamento.id
+
+//        println("depto" + params.departamento.id)
+//        println("depto aaaa " + params."departamento.id")
+
         def obraInstance
 
 
         if (params.id) {
+
             obraInstance = Obra.get(params.id)
 
             if (!obraInstance) {
@@ -1240,18 +1399,29 @@ class ObraController extends janus.seguridad.Shield {
                 }
             }
 
+//            println("-->" +params.departamento.id)
+
             obraInstance.properties = params
+
+            obraInstance.departamento = params.departamento
+
+//            println("-->" +params.departamento.id)
+
         }//es edit
         else {
 
+
             obraInstance = new Obra(params)
 
-//            def departamento = Departamento.get(params.departamento)
+            def departamento
 
-//            obraInstance.departamento = persona.departamento
+            if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {
+                departamento = Departamento.get(persona?.departamento?.id)
+            } else {
+                departamento = Departamento.get(params.departamento.id)
+            }
 
-//            obraInstance.properties = params
-
+            obraInstance.departamento = departamento
 
             def par = Parametros.list()
             if (par.size() > 0)
@@ -1270,11 +1440,12 @@ class ObraController extends janus.seguridad.Shield {
             obraInstance.indiceCostosIndirectosTimbresProvinciales = par.indiceCostosIndirectosTimbresProvinciales
 
 
-
             obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
                     obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
 
             obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
+
+//            println("___>>>" + obraInstance.departamento)
 
 //            numero = dpto.documento ?: 0 + 1
 //            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
@@ -1286,7 +1457,10 @@ class ObraController extends janus.seguridad.Shield {
             }
 
         } //es create
+
         obraInstance.estado = "N"
+//        obraInstance.departamento.id = params.departamento.id
+
         if (!obraInstance.save(flush: true)) {
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"

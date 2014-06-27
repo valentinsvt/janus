@@ -91,7 +91,7 @@ class DescargasController extends janus.seguridad.Shield {
     }
 
     def manualRprt() {
-        def filePath = "Manual de gestión y reportes.pdf"
+        def filePath = "Manual de reportes.pdf"
         def path = servletContext.getRealPath("/") + File.separatorChar + filePath
         def file = new File(path)
         def b = file.getBytes()
@@ -100,5 +100,17 @@ class DescargasController extends janus.seguridad.Shield {
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
+
+    def manualAdmnDire() {
+        def filePath = "Manual administracion directa.pdf"
+        def path = servletContext.getRealPath("/") + File.separatorChar + filePath
+        def file = new File(path)
+        def b = file.getBytes()
+        response.setContentType('pdf')
+        response.setHeader("Content-disposition", "attachment; filename=" + filePath)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
 
 } //fin controller

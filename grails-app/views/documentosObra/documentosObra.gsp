@@ -71,7 +71,7 @@
 
 <div style='page-break-after: auto'></div>
 
-<div id="tabs" style="width: 800px; height: 1150px">
+<div id="tabs" style="width: 800px; height: 1060px">
 
 <ul>
 
@@ -208,75 +208,171 @@
 
 
                 <tbody id="firmasFijasPresu">
-                <g:if test="${firmaDirector != null}">
-                    <tr data-id="${firmaDirector?.persona?.id}">
-                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
+                %{--<g:if test="${firmaDirector != null}">--}%
+                    %{--<tr data-id="${firmaDirector?.persona?.id}">--}%
+                        %{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
 
-                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-                        </td>
-                        <td>
-                            DIRECTOR
-                            %{--${firmaDirector?.persona?.cargo?.toUpperCase()}--}%
-                        </td>
-                    </tr>
-                </g:if>
-                <g:else>
-                    <tr>
-                        <td style="color: #ff2a08">
-                            DIRECCIÓN SIN DIRECTOR
-                        </td>
-                        <td>
-                            DIRECTOR
-                        </td>
-                    </tr>
-                </g:else>
+                            %{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--DIRECTOR                           --}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                            %{--DIRECCIÓN SIN DIRECTOR--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--DIRECTOR--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:else>--}%
 
-                <g:if test="${obra?.inspector?.id != null}">
-                    <tr data-id="${obra?.inspector?.id}">
+                %{--<g:if test="${obra?.inspector?.id != null}">--}%
+                    %{--<tr data-id="${obra?.inspector?.id}">--}%
 
-                        <td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">
-                            ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}
-                        </td>
-                        <td>
+                        %{--<td id=" ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}">--}%
+                            %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido}--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
 
-                            RESPONSABLE DEL PROYECTO
-                        </td>
-                    </tr>
-                </g:if>
-                <g:else>
+                            %{--RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+                %{--<g:else>--}%
 
-                    <tr>
-                        <td style="color: #ff2a08">
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
 
-                            SIN RESPONSABLE DEL PROYECTO
-                        </td>
-                        <td>
-                            RESPONSABLE DEL PROYECTO
-                        </td>
+                            %{--SIN RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--RESPONSABLE DEL PROYECTO--}%
+                        %{--</td>--}%
 
-                    </tr>
-                </g:else>
+                    %{--</tr>--}%
+                %{--</g:else>--}%
 
-                <g:if test="${coordinadores != null}">
-                    <tr>
-                        <td>
-                            <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                        </td>
-                        <td>
-                            COORDINADOR
-                        </td>
-                    </tr>
-                </g:if>
-                <g:else>
-                    <tr>
-                        <td style="color: #ff2a08">
-                            SIN COORDINADOR
-                        </td>
-                        <td>
-                            COORDINADOR
-                        </td>
-                    </tr>
-                </g:else>
+
+     %{--//nuevo--}%
+
+<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+       <g:if test="${duenoObra == 1}">
+        <tr>
+            <td>
+                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+            </td>
+            <td>
+                COORDINADOR
+            </td>
+        </tr>
+    </g:if>
+    <g:else>
+        <g:if  test="${cordinadorOtros[0]}">
+            <tr>
+                <td style="color: #ff2a08">
+                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:if>
+        <g:else>
+            <tr>
+                <td style="color: #ff2a08">
+                    SIN COORDINADOR
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:else>
+
+    </g:else>
+
+</g:if>
+<g:else>
+    <g:if test="${duo == 1}">
+
+        <tr>
+            <td style="color: #ff2a08">
+                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+              <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+            </td>
+            <td>
+                COORDINADOR
+            </td>
+        </tr>
+
+    </g:if>
+    <g:else>
+        <g:if test="${coordinadores}">
+            <tr>
+                <td style="color: #ff2a08">
+                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:if>
+        <g:else>
+            <tr>
+                <td style="color: #ff2a08">
+                    SIN COORDINADOR
+                </td>
+                <td>
+                    COORDINADOR
+                </td>
+            </tr>
+        </g:else>
+
+    </g:else>
+</g:else>
+
+
+
+
+                %{--//old--}%
+                %{--<g:if test="${coordinadores != null}">--}%
+                   %{--<g:if test="${duenoObra == 1 && persona?.departamento?.codigo == 'UTFPU'}">--}%
+                       %{--<tr>--}%
+                           %{--<td>--}%
+                               %{--<g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                           %{--</td>--}%
+                           %{--<td>--}%
+                               %{--COORDINADOR--}%
+                           %{--</td>--}%
+                       %{--</tr>--}%
+                   %{--</g:if>--}%
+                    %{--<g:else>--}%
+                        %{--<tr>--}%
+                            %{--<td>--}%
+                                %{--<g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                            %{--</td>--}%
+                            %{--<td>--}%
+                                %{--COORDINADOR--}%
+                            %{--</td>--}%
+                        %{--</tr>--}%
+                    %{--</g:else>--}%
+
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                            %{--SIN COORDINADOR--}%
+                        %{--</td>--}%
+                        %{--<td>--}%
+                            %{--COORDINADOR--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:else>--}%
+
 
 
 
@@ -360,42 +456,30 @@
             <div class="span1">DE:</div>
 
 
-            <div class="span3"><g:textField name="deMemo" style="width: 470px"
-                                            value="${obra?.departamento?.direccion?.nombre}"
-                                            disabled="true"/></div>
+            %{--<div class="span3"><g:textField name="deMemo" style="width: 470px"--}%
+                                            %{--value="${obra?.departamento?.direccion?.nombre}"--}%
+                                            %{--disabled="true"/></div>--}%
+
+
+            <div class="span3"><g:textField name="deMemo" style="width: 470px" value="${'UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS'}" disabled="true"/> </div>
 
         </div>
 
         <div class="span6">
             <div class="span1">PARA:</div>
 
-            %{--<div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.descripcion}"--}%
-            %{--style="width: 470px" disabled="true"/></div>--}%
+            <div class="span3"><g:textField name="paraMemo" value="${obra?.departamento?.direccion?.nombre + ' - ' + obra?.departamento?.descripcion}"
+            style="width: 470px" disabled="true"/></div>
 
-            <div class="span3"><g:select name="paraMemo" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>
+            %{--<div class="span3"><g:select name="paraMemo" from="${janus.Direccion.list()}" optionKey="id" optionValue="nombre" style="width: 485px"/></div>--}%
         </div>
 
         <div class="span7">
             <div class="span1">Valor de la Base:</div>
 
             <div class="span2">
-                %{--<g:textField name="baseMemo" style="width: 100px" disabled="true"--}%
-                %{--value="${formatNumber(number: totalPresupuestoBien, format: '##,##0', minFractionDigits: 2, maxFractionDigits: 2, locale: 'ec')}"/>--}%
-
                 <g:textField name="baseMemo" style="width: 100px" disabled="true"  value="${totalPresupuestoBien}"/>
             </div>
-
-            %{--<div class="span1" style="margin-left: -30px">Valor de Reajuste:</div>--}%
-
-            %{--<div class="span2"><g:textField name="reajusteMemo" id="reajusteMemo" style="width: 100px; margin-left: -20px" value="" disabled="true"/></div>--}%
-
-            %{--<div class="span2" style="margin-left: -45px"><g:textField name="porcentajeMemo" id="porcentajeMemo" style="width: 35px; margin-right: 10px" disabled="false"--}%
-            %{--maxlength="3"/>--}%
-
-            %{--<button class="btn" id="btnCalBase" style="width: 35px; margin-top: -9px; margin-left: -14px"><i class="icon-table"></i>--}%
-            %{--</button>--}%
-            %{--</div>--}%
-
         </div>
 
     </fieldset>
@@ -501,101 +585,125 @@
 
                 <tbody id="firmasFijasMemo">
 
-                %{--<g:if test="${obra?.inspector}">--}%
 
-                %{--<tr data-id="${obra?.inspector?.id}">--}%
-                <g:if test="${firmaDirector != null}">
+                %{--<g:if test="${firmaDirector != null}">--}%
 
-                    <tr data-id="${firmaDirector?.persona?.id}">
+                    %{--<tr data-id="${firmaDirector?.persona?.id}">--}%
+         %{----}%
 
-                        %{--<td>--}%
+                        %{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
 
-                        %{--</td>--}%
-
-                        %{--<td id="${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
-
-                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
+                            %{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
 
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--${obra?.inspector?.cargo}--}%
 
+                            %{--DIRECTOR--}%
+
+                        %{--</td>--}%
+
+
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+
+                %{--<g:else>--}%
+
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+
+                            %{--DIRECCIÓN SIN DIRECTOR--}%
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--<a href='#' class='btn btn-danger borrarFirmaMemo'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--DIRECTOR--}%
                         %{--</td>--}%
 
-                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
-
-                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-
-                        </td>
-                        <td>
-
-                            DIRECTOR
-
-                        </td>
+                    %{--</tr>--}%
 
 
-                    </tr>
+                %{--</g:else>--}%
+          %{----}%
+
+
+
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    <g:if test="${duenoObra == 1}">
+                        <tr>
+                            <td>
+                                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
+                    </g:if>
+                    <g:else>
+                        <g:if  test="${cordinadorOtros[0]}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
+
+                    </g:else>
+
                 </g:if>
-
                 <g:else>
+                    <g:if test="${duo == 1}">
 
-                    <tr>
-                        <td style="color: #ff2a08">
+                        <tr>
+                            <td style="color: #ff2a08">
+                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
 
-                            DIRECCIÓN SIN DIRECTOR
-                        </td>
-                        <td>
-                            DIRECTOR
-                        </td>
+                    </g:if>
+                    <g:else>
+                        <g:if test="${coordinadores}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
 
-                    </tr>
-
-
+                    </g:else>
                 </g:else>
-                %{--</g:if>--}%
-
-
-                %{--<g:if test="${obra?.revisor}">--}%
-
-
-             %{--inicio revisor--}%
-                %{--<tr data-id="${obra?.revisor?.id}">--}%
-                    %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                        %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                        %{--SUPERVISIÓN--}%
-                    %{--</td>--}%
-                %{--</tr>--}%
-              %{--fin revisor--}%
 
 
 
 
-                %{--</g:if>--}%
-                %{--<g:if test="${obra?.responsableObra}">--}%
-
-
-
-                %{--inicio elaboro--}%
-                %{--<tr data-id="${obra?.responsableObra?.id}">--}%
-               %{----}%
-
-                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
-                        %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                        %{--ELABORÓ--}%
-                    %{--</td>--}%
-                %{--</tr>--}%
-               %{--fin elaboro --}%
-
-
-
-                %{--</g:if>--}%
 
                 </tbody>
 
@@ -737,119 +845,122 @@
 
                 <tbody id="firmasFijasPoli">
 
-                %{--<g:if test="${obra?.inspector}">--}%
-
-                %{--<tr data-id="${obra?.inspector?.id}">--}%
-                <g:if test="${firmaDirector != null}">
-                    <tr data-id="${firmaDirector?.persona?.id}">
-
-                        %{--<td>--}%
-
-                        %{--</td>--}%
-
-                        %{--<td id="  ${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }">--}%
-
-                        %{--${obra?.inspector?.nombre + " " + obra?.inspector?.apellido + " " + " (INSPECTOR)" }--}%
-
+                %{--<g:if test="${firmaDirector != null}">--}%
+                    %{--<tr data-id="${firmaDirector?.persona?.id}">--}%
+                        %{--<td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">--}%
+                            %{--${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}--}%
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--${obra?.inspector?.cargo}--}%
-
+                            %{--DIRECTOR--}%
+                        %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:if>--}%
+                %{--<g:else>--}%
+                    %{--<tr>--}%
+                        %{--<td style="color: #ff2a08">--}%
+                            %{--DIRECCIÓN SIN DIRECTOR--}%
                         %{--</td>--}%
                         %{--<td>--}%
-                        %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
+                            %{--DIRECTOR--}%
                         %{--</td>--}%
+                    %{--</tr>--}%
+                %{--</g:else>--}%
+                    %{--<tr data-id="${obra?.revisor?.id}">--}%
+                    %{--<td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
+                        %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                        %{--SUPERVISIÓN--}%
+                    %{--</td>--}%
+                %{--</tr>--}%
 
-                        <td id="${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}">
-
-                            ${firmaDirector?.persona?.nombre + " " + firmaDirector?.persona?.apellido}
-
-                        </td>
-                        <td>
-
-                            DIRECTOR
-
-                        </td>
+                %{--<tr data-id="${obra?.responsableObra?.id}">--}%
+                    %{--<td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">--}%
+                        %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}--}%
+                    %{--</td>--}%
+                    %{--<td>--}%
+                        %{--ELABORÓ--}%
+                    %{--</td>--}%
+                %{--</tr>--}%
 
 
-                    </tr>
+                <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    <g:if test="${duenoObra == 1}">
+                        <tr>
+                            <td>
+                                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
+                    </g:if>
+                    <g:else>
+                        <g:if  test="${cordinadorOtros[0]}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
+
+                    </g:else>
+
                 </g:if>
                 <g:else>
+                    <g:if test="${duo == 1}">
 
-                    <tr>
-                        <td style="color: #ff2a08">
+                        <tr>
+                            <td style="color: #ff2a08">
+                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                            </td>
+                            <td>
+                                COORDINADOR
+                            </td>
+                        </tr>
 
-                            DIRECCIÓN SIN DIRECTOR
-                        </td>
-                        <td>
-                            DIRECTOR
-                        </td>
+                    </g:if>
+                    <g:else>
+                        <g:if test="${coordinadores}">
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:if>
+                        <g:else>
+                            <tr>
+                                <td style="color: #ff2a08">
+                                    SIN COORDINADOR
+                                </td>
+                                <td>
+                                    COORDINADOR
+                                </td>
+                            </tr>
+                        </g:else>
 
-                    </tr>
-
-
+                    </g:else>
                 </g:else>
-                %{--</g:if>--}%
-
-
-                %{--<g:if test="${obra?.revisor}">--}%
-                <tr data-id="${obra?.revisor?.id}">
-
-                    %{--<td>--}%
-
-                    %{--</td>--}%
-                    %{--<td id="${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">--}%
-                    %{--${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--${obra?.revisor?.cargo}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
-                    %{--</td>--}%
-
-                    <td id=" ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido + " " + "       (REVISOR)"}">
-                        ${obra?.revisor?.nombre + " " + obra?.revisor?.apellido}
-                    </td>
-                    <td>
-                        SUPERVISIÓN
-                    </td>
-
-                </tr>
-                %{--</g:if>--}%
-                %{--<g:if test="${obra?.responsableObra}">--}%
-
-                <tr data-id="${obra?.responsableObra?.id}">
-
-                    %{--<td>--}%
-
-                    %{--</td>--}%
-                    %{--<td id="${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}">--}%
-                    %{--${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (RESPONSABLE OBRA)"}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--${obra?.responsableObra?.cargo}--}%
-                    %{--</td>--}%
-                    %{--<td>--}%
-                    %{--<a href='#' class='btn btn-danger borrarFirmaPoli'><i class='icon-trash icon-large'></i></a>--}%
-
-                    %{--</td>--}%
-
-                    <td id=" ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido + " " + " (ELABORO)"}">
-                        ${obra?.responsableObra?.nombre + " " + obra?.responsableObra?.apellido}
-                    </td>
-                    <td>
-                        ELABORÓ
-                    </td>
-
-
-                </tr>
-
-                %{--</g:if>--}%
 
                 </tbody>
-
-
 
                 <tbody id="bodyFirmas_polinomica">
 
@@ -890,16 +1001,16 @@
                 </div>
 
 
-                <div class="span6">
-                    <div class="span1">General</div>
-                </div>
+                %{--<div class="span6">--}%
+                    %{--<div class="span1">General</div>--}%
+                %{--</div>--}%
 
-                <div class="span6">
-                    <div class="span3"><g:textArea name="general" value="${auxiliarFijo?.general}" rows="4" cols="4"
-                                                   style="width: 665px; height: 130px; resize: none;"
-                                                   disabled="true"/></div>
+                %{--<div class="span6">--}%
+                    %{--<div class="span3"><g:textArea name="general" value="${auxiliarFijo?.general}" rows="4" cols="4"--}%
+                                                   %{--style="width: 665px; height: 130px; resize: none;"--}%
+                                                   %{--disabled="true"/></div>--}%
 
-                </div>
+                %{--</div>--}%
 
 
                 <div class="span6">
@@ -2197,6 +2308,21 @@
             }
 
             if (active == 1) {
+
+                var idCoordinador = $("#coordinador").val()
+
+                var idFirmaCoor
+
+                if(idCoordinador != null){
+
+                    idFirmaCoor= $("#coordinador").val()
+                }else{
+
+                    idFirmaCoor = ''
+                }
+
+                firmaCoordinador = idFirmaCoor
+
                 firmasIdMemo = [];
                 firmasFijasMemo = [];
 
@@ -2257,7 +2383,7 @@
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1]
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
                             }
                         }
                     });
@@ -2268,6 +2394,21 @@
 
                 firmasIdFormu = [];
                 firmasFijasFormu = [];
+
+
+                var idCoordinador = $("#coordinador").val()
+
+                var idFirmaCoor
+
+                if(idCoordinador != null){
+
+                    idFirmaCoor= $("#coordinador").val()
+                }else{
+
+                    idFirmaCoor = ''
+                }
+
+                firmaCoordinador = idFirmaCoor
 
                 $("#bodyFirmas_polinomica").children("tr").each(function (i) {
                     firmasIdFormu[i] = $(this).data("id")
@@ -2302,7 +2443,7 @@
 //                            console.log(msg)
                         if(part[0] == 'ok'){
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
-                                    + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id}
+                                    + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id} + "&firmaCoordinador=" + firmaCoordinador
                         }
                     }
                 });
@@ -2551,7 +2692,6 @@
 
 
     $("#btnAceptarMemo").click(function () {
-
         $.ajax({
            type: 'POST',
             url: '${createLink(controller: 'nota', action: 'saveNotaMemo')}',
@@ -2609,43 +2749,33 @@
                         success: function (msg) {
                             $("#divSelFormu").html(msg);
                         }
-
                     })
                 }
-
             }
         });
     });
 
     $("#btnNuevo").click(function () {
-
         $("#piePaginaSel").val('-1')
-
         $("#notaAdicional").attr("checked", true)
-
         $("#descripcion").val("");
         $("#texto").val("");
         $("#adicional").val("");
-
     });
 
 
     $("#btnNuevoMemo").click(function () {
-
         $("#memo1").val("");
         $("#memo2").val("");
         $("#descripcionMemo").val("");
         $("#selMemo").val('-1')
-
     });
 
 
     $("#btnNuevoFormu").click(function () {
-
         $("#notaFormula").val("");
         $("#descripcionFormu").val("");
         $("#selFormu").val('-1');
-
     });
 
 
@@ -2654,18 +2784,15 @@
     });
 
     function desbloquear() {
-
         $("#piePaginaSel").attr("disabled", false);
         $("#descripcion").attr("disabled", false);
         $("#texto").attr("disabled", false);
 //        $("#adicional").attr("disabled",false);
         $("#notaAdicional").attr("disabled", false)
-
     }
 
 
     $("#borrarFirmaPresuDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2678,26 +2805,18 @@
             "Aceptar": function () {
 
                 $("#borrarFirmaPresu").parents("tr").remove();
-                console.log($("#borrarFirmaPresu").children("tr"))
-
+//                console.log($("#borrarFirmaPresu").children("tr"))
                 $("#borrarFirmaPresuDialog").dialog("close");
                 return false;
             },
             "Cancelar" : function () {
-
                 $("#borrarFirmaPresuDialog").dialog("close");
-
             }
         }
-
-
-
     }) ;
 
 
-
     $("#tipoReporteDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2762,7 +2881,6 @@
         buttons: {
             "Aceptar": function () {
 
-
                 proyeccion = $("#proyeccionReajuste").is(':checked');
                 reajusteIva = $("#reajusteIva").is(':checked');
                 reajusteMeses = $("#mesesReajuste").val();
@@ -2803,10 +2921,20 @@
                 reajusteMesesMemo = $("#mesesReajusteMemo").val();
                 paraMemo1 = $("#paraMemo").val()
 
+
+            var idCoordinador = $("#coordinador").val()
+            var idFirmaCoor
+
+            if(idCoordinador != null){
+                idFirmaCoor= $("#coordinador").val()
+            }else{
+                idFirmaCoor = ''
+            }
+
+            firmaCoordinador = idFirmaCoor
+
                 if (proyeccionMemo == true && reajusteMesesMemo == "") {
                     $("#mesesCeroDialog").dialog("open")
-
-
                 } else {
 
                     %{--var tipoReporte = tipoClickMemo;--}%
@@ -2816,9 +2944,7 @@
 
 
                     var tipoReporte = tipoClickMemo;
-
                     $.ajax({
-
                         type: "POST",
                         url : "${createLink(controller: 'nota', action: 'saveNotaMemo')}",
                         data: {
@@ -2836,23 +2962,16 @@
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +  "&notaValue=" + part[1]
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
 
                             }
                         }
                     });
-
                     $("#reajusteMemoDialog").dialog("close");
-
                 }
-
-
             },
             "Cancelar": function () {
-
-
                 $("#reajusteMemoDialog").dialog("close");
-
             }
         }
 
@@ -2860,7 +2979,6 @@
 
 
     $("#maxFirmasDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2871,17 +2989,13 @@
         title: 'Máximo Número de Firmas',
         buttons: {
             "Aceptar": function () {
-
                 $("#maxFirmasDialog").dialog("close");
-
             }
         }
-
     });
 
 
     $("#mesesCeroDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2892,17 +3006,13 @@
         title: 'No existe un valor en el campo Meses',
         buttons: {
             "Aceptar": function () {
-
                 $("#mesesCeroDialog").dialog("close");
-
             }
         }
-
     });
 
 
     $("#tasaCeroDialog").dialog({
-
         autoOpen: false,
         resizable: false,
         modal: true,
@@ -2913,12 +3023,9 @@
         title: 'No existe una tasa de cambio!',
         buttons: {
             "Aceptar": function () {
-
                 $("#tasaCeroDialog").dialog("close");
-
             }
         }
-
     });
 
     $("#btnEliminar").click(function () {

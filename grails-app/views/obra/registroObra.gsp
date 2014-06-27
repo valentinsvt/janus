@@ -101,69 +101,143 @@
     <button class="btn" id="lista"><i class="icon-book"></i> Lista</button>
     <button class="btn" id="listaLq"><i class="icon-book"></i> Liquidación</button>
     <button class="btn" id="nuevo"><i class="icon-plus"></i> Nuevo</button>
-    <g:if test="${obra?.estado != 'R'}">
-        <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-            <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
-            </button>
-        </g:if>
-    </g:if>
 
-    <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-        <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
-    </g:if>
-    <g:if test="${obra?.liquidacion == 0}">
-        <g:if test="${obra?.estado != 'R'}">
-            <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-                <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+  <g:if test="${persona?.departamento?.codigo != 'UTFPU'}">
+
+
+      <g:if test="${obra?.estado != 'R'}">
+          <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
+              <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
+              </button>
+          </g:if>
+      </g:if>
+
+      <g:if test="${obra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id || obra?.id == null}">
+          <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar </button>
+      </g:if>
+      <g:if test="${obra?.liquidacion == 0}">
+          <g:if test="${obra?.estado != 'R'}">
+              <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null}">
+                  <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+              </g:if>
+          </g:if>
+
+      </g:if>
+      <g:if test="${obra?.id != null}">
+
+          <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+      </g:if>
+      <g:if test="${obra?.liquidacion == 0}">
+          <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) && Concurso.countByObra(obra) == 0}">
+              <g:if test="${obra?.fechaInicio == null}">
+                  <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+              </g:if>
+          </g:if>
+
+          <g:if test="${obra?.id != null}">
+              <g:if test="${duenoObra == 1 || obra?.id == null}">
+                  <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+              </g:if>
+          </g:if>
+
+          <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
+              <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
+              </button>
+          </g:if>
+      </g:if>
+%{--
+      <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
+          <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
+          </button>
+      </g:if>
+--}%
+      <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
+          <g:if test="${!obra?.fechaInicio}">
+              <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+              </button>
+          </g:if>
+      </g:if>
+      <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
+          <g:if test="${!obra?.fechaInicio}">
+              <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
+              </button>
+          </g:if>
+          <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
+              <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
+              </button>
+          </g:if>
+      </g:if>
+  </g:if>
+    <g:else>
+    %{--//botones utfpu--}%
+
+           <g:if test="${obra?.estado != 'R'}">
+            <g:if test="${duenoObra == 1 || obra?.id == null }">
+                <button class="btn" id="btn-aceptar"><i class="icon-ok"></i> Grabar
+                </button>
             </g:if>
         </g:if>
 
-    </g:if>
-    <g:if test="${obra?.id != null}">
-
-        <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
-    </g:if>
-    <g:if test="${obra?.liquidacion == 0}">
-        <g:if test="${obra?.departamento?.id == persona?.departamento?.id && Concurso.countByObra(obra) == 0}">
-        %{--<g:if test="${obra?.tipo != 'D' || (obra?.tipo == 'D' && obra?.fechaInicio == null)}">--}%
-            <g:if test="${obra?.fechaInicio == null}">
-                <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
-            </g:if>
+        <g:if test="${duenoObra == 1 || obra?.id == null}">
+            <button class="btn" id="cancelarObra"><i class="icon-ban-circle"></i> Cancelar</button>
         </g:if>
+        <g:if test="${obra?.liquidacion == 0}">
+            <g:if test="${obra?.estado != 'R'}">
+                <g:if test="${duenoObra == 1 || obra?.id == null}">
+                    <button class="btn" id="eliminarObra"><i class="icon-remove"></i> Eliminar la Obra</button>
+                </g:if>
+            </g:if>
 
+        </g:if>
         <g:if test="${obra?.id != null}">
-            <g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">
-                <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+
+            <button class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</button>
+        </g:if>
+
+        <g:if test="${obra?.liquidacion == 0}">
+            <g:if test="${duenoObra == 1 && Concurso.countByObra(obra) == 0}">
+                <g:if test="${obra?.fechaInicio == null}">
+                    <button class="btn" id="cambiarEstado"><i class="icon-retweet"></i> Cambiar de Estado</button>
+                </g:if>
+            </g:if>
+
+            <g:if test="${obra?.id != null}">
+                <g:if test="${duenoObra == 1 || obra?.id == null}">
+                    <button class="btn" id="copiarObra"><i class="icon-copy"></i> Copiar Obra</button>
+                </g:if>
+            </g:if>
+
+            <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
+                <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
+                </button>
             </g:if>
         </g:if>
 
-        <g:if test="${obra?.id != null && obra?.estado == 'R' && perfil.codigo == 'CNTR' && concurso}">
-        %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id || obra?.id == null}">--}%
-            <button class="btn" id="copiarObraOfe"><i class="icon-copy"></i> Copiar Obra a Oferentes
-            </button>
-        %{--</g:if>--}%
-        </g:if>
-    </g:if>
-    <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
-        <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
-        </button>
-    </g:if>
-    <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
-        <g:if test="${!obra?.fechaInicio}">
-            <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+%{--
+        <g:if test="${obra && obra?.tipo != 'D' && obra?.estado != 'R'}">
+            <button class="btn" id="btn-setAdminDirecta"><i class="icon-ok"></i> Admin. directa
             </button>
         </g:if>
-    </g:if>
-    <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
-        <g:if test="${!obra?.fechaInicio}">
-            <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
-            </button>
+--}%
+        <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D'}">
+            <g:if test="${!obra?.fechaInicio}">
+                <button class="btn" id="btn-adminDirecta"><i class="icon-ok"></i> Iniciar obra
+                </button>
+            </g:if>
         </g:if>
-        <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
-            <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
-            </button>
+        <g:if test="${obra?.estado == 'R' && obra?.tipo != 'D'}">
+            <g:if test="${!obra?.fechaInicio}">
+                <button class="btn" id="btn-memoSIF"><i class="icon-file-text"></i> Memo al S.I.F.
+                </button>
+            </g:if>
+            <g:if test="${obra?.memoSif!="" && obra?.estadoSif!='R'}">
+                <button class="btn" id="btn-aprobarSif"><i class="icon-file-text"></i> Aprobar S.I.F.
+                </button>
+            </g:if>
         </g:if>
-    </g:if>
+
+
+    </g:else>
 
 </div>
 
@@ -179,88 +253,69 @@
 
     </div>
 
+    %{--${obra?.tipo}--}%
+    %{--${session.perfil.codigo}--}%
     <g:if test="${obra?.tipo == 'D'}">
         <g:if test="${session.perfil.codigo == 'ADDI'}">
             <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA</div>
         </g:if>
+        <g:else>
+            <g:if test="${session.perfil.codigo == 'COGS'}">
+                <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">COGESTIÓN</div>
+            </g:if>
+            <g:else>
+            <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">ADMINISTRACIÓN DIRECTA / COGESTIÓN</div>
+            </g:else>
+        </g:else>
     %{--<g:if test="${session.perfil.codigo == 'ADDI'}">--}%
-        <g:if test="${session.perfil.codigo == 'COGS'}">
-            <div class="span 12" style="margin-top: -15px; margin-left: 500px; color: #008; font-size: 14px;">COGESTIÓN</div>
-        </g:if>
     </g:if>
 
     <div class="span12" style="margin-top: 0px">
-
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
             <div class="span 1 formato">REQUIRENTE</div>
-
             <div class="span3">
                 <g:if test="${obra?.id}">
-                    %{--<g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.id}"/>--}%
-                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.direccion?.id}"/>
+                    <g:if test="${duenoObra == 1}">
+                        <elm:select name="departamento.id" from="${Departamento.findAllByRequirente(1,[sort:'direccion'])}" id="departamento" value="${obra?.departamento?.id}"
+                                    optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
 
-                %{--<g:select name="departamento.id" from="${janus.Direccion.list()}" id="departamentoObra" value="${obra?.departamento?.direccion?.id}"--}%
-                %{--optionKey="id" optionValue="nombre" style="width: 670px; margin-left: 40px"/>--}%
+                    </g:if>
+                    <g:else>
+                        <g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>
+                        <g:hiddenField name="departamentoId" id="departamentoId" value="${obra?.departamento?.id}"/>
 
-
-                    <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
-                                 style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
-
+                        <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
+                                     style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
+                    </g:else>
                 </g:if>
                 <g:else>
-                %{--<g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>--}%
-                    %{--<g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>--}%
-
-
-                %{--<g:select name="departamentoText" from="${janus.Direccion.list()}" id="departamentoObra" value="${persona?.departamento?.direccion?.id}"--}%
-                %{--optionKey="id" optionValue="nombre" style="width: 670px; margin-left: 40px"/>--}%
-
-                    <elm:select name="departamento.id" from="${Departamento.list([sort:'direccion'])}" id="departamento" value="${persona?.departamento?.id}"
-                              optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
-
-                %{--<g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"--}%
-                %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
+                    <elm:select name="departamento.id" from="${Departamento.findAllByRequirente(1,[sort:'direccion'])}" id="departamento" value="${persona?.departamento?.id}"
+                                optionKey="id" optionValue="${{it.direccion.nombre+' - '+it.descripcion}}" optionClass="${{it.direccion.id}}" style="width: 670px; margin-left: 40px"/>
                 </g:else>
             </div>
-
         </g:if>
         <g:else>
             <div class="span 1 formato">DIRECCIÓN</div>
-
             <div class="span3">
                 <g:if test="${obra?.id}">
-                    <g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamento?.direccion?.id}"/>
+                    <g:hiddenField name="departamento.id" id="departamentoObra" value="${obra?.departamento?.id}"/>
+                    %{--<g:hiddenField name="departamento.id" id="departamentoDire" value="${obra?.departamento?.direccion?.id}"/>--}%
+                    <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
 
-                    <g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"
+                    <g:textField name="departamentoText" id="departamentoText" value="${obra?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:if>
                 <g:else>
-                    <g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.direccion?.id}"/>
 
-                    <g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"
+                    %{--<g:hiddenField name="departamento.id" id="departamentoDire" value="${persona?.departamento?.direccion?.id}"/>--}%
+                    <g:hiddenField name="departamento.id" id="departamentoObra" value="${persona?.departamento?.id}"/>
+                    <g:hiddenField name="per.id" id="per" value="${persona?.departamento?.id}"/>
+                    <g:textField name="departamentoText" id="departamentoText" value="${persona?.departamento}"
                                  style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>
                 </g:else>
             </div>
         </g:else>
 
-    %{--<div class="span 3"><g:select from="${janus.Departamento.list()}" name="departamento.id" id="departamentoObra"--}%
-    %{--value="${persona?.departamento?.id}" optionKey="id" optionValue="descripcion" style="width: 450px" disabled="true" title="Departamento actual del usuario"/></div>--}%
-
-
-    %{--<div class="span3">--}%
-    %{--<g:if test="${obra?.id}">--}%
-    %{--<g:hiddenField name="departamento.id" id="departamento" value="${obra?.departamentoId}"/>--}%
-
-    %{--<g:textField name="departamentoText" id="departamentoObra" value="${obra?.departamento}"--}%
-    %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
-    %{--</g:if>--}%
-    %{--<g:else>--}%
-    %{--<g:hiddenField name="departamento.id" id="departamento" value="${persona?.departamento?.id}"/>--}%
-
-    %{--<g:textField name="departamentoText" id="departamentoObra" value="${persona?.departamento}"--}%
-    %{--style="width: 670px; margin-left: 40px" readonly="true" title="Dirección actual del usuario"/>--}%
-    %{--</g:else>--}%
-    %{--</div>--}%
 
         <div class="span1" style="margin-left: 506px; font-weight: bold">ESTADO</div>
 
@@ -348,6 +403,7 @@
     %{--<g:textField name="programacion" class="programacion" value="${obra?.programacion?.descripcion}" readonly="true"/>--}%
     %{--</g:else>--}%
 
+        %{--${persona?.departamento?.codigo}--}%
 
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
 
@@ -596,25 +652,23 @@
     </div>
 
 
-    <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-        <div class="span12" style="margin-top: 10px" id="dirSalida">
+    %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
+        %{--<div class="span12" style="margin-top: 10px" id="dirSalida">--}%
 
-        </div>
-    </g:if>
-    <g:else>
+        %{--</div>--}%
+    %{--</g:if>--}%
+    %{--<g:else>--}%
         <div class="span12" style="margin-top: 10px" id="dirSalida">
             <div class="span2 formato" style="width: 230px;">Destino: Dirección
-            %{--<g:select style="width: 230px;" name="direccionDestino.id" from="${janus.Direccion.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
             <g:select style="width: 230px;" name="direccionDestino.id" from="${dire}" optionKey="id" optionValue="nombre" value="${obra?.direccionDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
 
             </div>
 
             <div class="span2 formato" style="width: 230px;">Destino: Coordinación
-            %{--<g:select style="width: 230px;" name="departamentoDestino.id" from="${janus.Departamento.findAll('from Departamento where id != ' + obra?.departamento?.id + ' order by descripcion')}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>--}%
             <g:select style="width: 230px;" name="departamentoDestino.id" from="${depar}" optionKey="id" optionValue="descripcion" value="${obra?.departamentoDestino?.id}" title="Destino de documentos" noSelection="['null': 'Seleccione ...']"/>
             </div>
 
-            <div class="span1 formato" style="width: 120px;margin-left: 30px;">Oficio
+            <div class="span1 formato" style="width: 120px;margin-left: 30px;">Informe
             <g:textField name="oficioSalida" class="span2 allCaps" value="${obra?.oficioSalida}" maxlength="20" title="Número Oficio de Salida" style="width: 120px;"/>
             </div>
 
@@ -624,15 +678,15 @@
 
             <g:if test="${obra?.id && obra?.tipo != 'D'}">
                 <div class="span1 formato" style="width: 120px; margin-left: 20px;">Fórmula P.
-                %{--<g:textField name="formulaPolinomica" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : numero}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
                     <g:if test="${obra?.formulaPolinomica && obra?.formulaPolinomica != ''}">
-                    %{--<g:textField name="formulaPolinomica" readonly="" class="span2 allCaps" value="${obra ? obra?.formulaPolinomica : ''}" maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>--}%
-                        <div style="font-weight: normal;">${obra?.formulaPolinomica}</div>
+                        %{--<div style="font-weight: normal;">${obra?.formulaPolinomica}</div>--}%
+                        <g:textField name="formulaPolinomica" class="span2 allCaps"  maxlength="20" title="Fórmula Polinómica" style="width: 120px;" value="${obra?.formulaPolinomica}"/>
                     </g:if>
                     <g:else>
-                        <a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">
-                            Generar
-                        </a>
+                        %{--<a href="#" id="btnGenerarFP" class="btn btn-info" style="font-weight: normal;">--}%
+                            %{--Generar--}%
+                        %{--</a>--}%
+                        <g:textField name="formulaPolinomica" class="span2 allCaps"  maxlength="20" title="Fórmula Polinómica" style="width: 120px;"/>
                     </g:else>
                 </div>
             </g:if>
@@ -642,7 +696,7 @@
                             value="${obra?.fechaOficioSalida}" style="width: 120px; margin-left: -20px;"/>
             </div>
         </div>
-    </g:else>
+    %{--</g:else>--}%
 
     <div class="span12" style="margin-top: 10px">
 
@@ -1194,20 +1248,38 @@
         %{--var idP = ${(obra)?obra.departamento?.direccion?.id:persona?.departamento?.direccion?.id }--}%
 
         var idP
+        var idDep1
 
 
 
 
         <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
-        <g:if test="${obra}">
-        idP = $("#departamento").val();
+               <g:if test="${obra}">
+                    <g:if test="${duenoObra == 1}">
+                idP = $("#departamento option:selected").attr("class");
+                idDep1 = $("#departamento option:selected").val();
+                    </g:if>
+                    <g:else>
+                idP = $("#departamentoDire").val();
+                idDep1 = $("#departamentoId").val();
+                    </g:else>
+              </g:if>
+              <g:else>
+                idP = $("#departamento option:selected").attr("class");
+                idDep1 = $("#departamento option:selected").val();
+             </g:else>
         </g:if>
         <g:else>
-        idP = $("#departamento option:selected").attr("class");
-        </g:else>
-        </g:if>
-        <g:else>
-        idP = $("#departamento").val();
+               <g:if test="${obra}">
+//               idP = $("#departamentoDire").val();
+                 idP = ${persona?.departamento?.direccion?.id}
+                 idDep1 = ${persona?.departamento?.id}
+              </g:if>
+              <g:else>
+                idP = ${persona?.departamento?.direccion?.id}
+                idDep1 = ${persona?.departamento?.id}
+              </g:else>
+
         </g:else>
 
 
@@ -1217,6 +1289,8 @@
                     type    : "POST",
                     url     : "${g.createLink(action:'getPersonas2')}",
                     data    : {id : idP,
+                        %{--idDep : ${persona?.departamento?.id},--}%
+                        idDep : idDep1,
                         obra      : idObra
 
                     },
@@ -1526,6 +1600,7 @@
         });
 
         $("#btnGenerarFP").click(function () {
+            console.log("entro fp")
             var btn = $(this);
             var $btn = btn.clone(true);
             $.box({
@@ -1761,49 +1836,38 @@
         });
 
         $("#departamento").change(function () {
-
-            %{--var direccionEl;--}%
-
-            %{--<g:if test="${obra}">--}%
-            %{--direccionEl = $("#departamento").val();--}%
-            %{--</g:if>--}%
-            %{--<g:else>--}%
-            %{--direccionEl = $("#departamento option:selected").attr("class");--}%
-            %{--</g:else>--}%
-
-                        %{--var idObra = ${obra?.id}--}%
-
-%{--//                    console.log("DP:" + direccionEl)--}%
-%{--//                    console.log("ID:" + idObra)--}%
-
-                    %{--$.ajax({--}%
-                        %{--type    : "POST",--}%
-                        %{--url     : "${g.createLink(action:'getSalida')}",--}%
-                        %{--data    : {direccion : direccionEl,--}%
-                            %{--obra      : idObra--}%
-                        %{--},--}%
-                        %{--success : function (msg) {--}%
-
-                            %{--$("#dirSalida").html(msg);--}%
-                        %{--}--}%
-                    %{--});--}%
-
-                    loadSalida();
-                   loadPersonas();
-
-
+          loadSalida();
+          loadPersonas();
         });
 
 
         function loadSalida() {
 
             var direccionEl;
+
+            <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
             <g:if test="${obra}">
-            direccionEl = $("#departamento").val();
+            <g:if test="${duenoObra == 1}">
+            direccionEl = $("#departamento option:selected").attr("class");
+            </g:if>
+            <g:else>
+            direccionEl = $("#departamentoDire").val();
+            </g:else>
             </g:if>
             <g:else>
             direccionEl = $("#departamento option:selected").attr("class");
             </g:else>
+            </g:if>
+            <g:else>
+            <g:if test="${obra}">
+            direccionEl = $("#departamentoDire").val();
+            </g:if>
+            <g:else>
+            direccionEl = ${persona?.departamento?.direccion?.id}
+            </g:else>
+
+            </g:else>
+
 
             var idObra = ${obra?.id}
 
@@ -1951,7 +2015,8 @@
                     %{--<g:if test="${obra?.estado!='R'}">--}%
                     %{--$("#modal_footer_var").html("").append(btnSave);--}%
                     %{--</g:if>--}%
-                    <g:if test="${obra?.departamento?.id == persona?.departamento?.id && obra?.estado != 'R'}">
+                    %{--<g:if test="${obra?.departamento?.id == persona?.departamento?.id && obra?.estado != 'R'}">--}%
+                    <g:if test="${duenoObra == 1 && obra?.estado != 'R'}">
                     $("#modal_footer_var").html("").append(btnSave);
 
                     </g:if>

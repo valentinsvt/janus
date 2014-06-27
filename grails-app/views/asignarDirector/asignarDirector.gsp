@@ -42,12 +42,13 @@
     </div>
 
     <div class="span12" id="personasSel"></div>
+
     <div class="span12" id="confirmacion"></div>
 
     <hr>
     <div class="span4" id="funcionDiv" style="margin-top: 10px;">
         <div class="span2" style="font-weight: bold; margin-left: -10px">Asignar Función:</div>
-        <elm:select name="funcion" id="funcion" from="${janus.Funcion?.findAllById(9)}" optionValue="descripcion" optionKey="id"
+        <elm:select name="funcion" id="funcion" from="${janus.Funcion?.findAllByCodigo('D')}" optionValue="descripcion" optionKey="id"
                     optionClass="${{ it?.descripcion }}" style="margin-left: -60px"/>
     </div>
 
@@ -88,6 +89,8 @@
 
 
 <script type="text/javascript">
+
+
 
 
     $("#adicionar").click(function () {
@@ -179,6 +182,8 @@
                                     tdFuncion.html(valorAdicionar);
                                     tr.append(tdNumero).append(tdFuncion).append(tdAccion);
                                     tbody.append(tr);
+                                }else{
+                                    alert('No se ha asignado ninguna persona!')
                                 }
                             }
                         });
@@ -216,6 +221,8 @@
 
 
     });
+
+
 
     function cargarPersonas() {
 
@@ -265,7 +272,7 @@
 
         if ($("#direccion").val() != -1) {
             cargarPersonas();
-            cargarMensaje();
+//            cargarMensaje();
 
 
         }else {
@@ -289,11 +296,7 @@
 
 
 
-
     });
-
-
-
 
 
 

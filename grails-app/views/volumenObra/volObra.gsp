@@ -103,8 +103,8 @@
                     </div>
 
                     <div class="span3" style="width: 320px; margin-top: -8px;">
-                        <b>Solicitante:</b><g:select name="grupos" id="grupos" from="${grupoFiltrado}" optionKey="id" optionValue="descripcion"
-                        style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>
+                        <b>Tipo de Obra:</b><g:select name="grupos" id="grupos" from="${grupoFiltrado}" optionKey="id" optionValue="descripcion"
+                        style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"/>
 
                         %{--<b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"--}%
                                                      %{--style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>--}%
@@ -125,7 +125,8 @@
 
                         </span>
 
-                    <g:if test="${persona?.departamento?.codigo == 'UTFPU'}">
+                    %{--<g:if test="${persona?.departamento?.codigo == 'UTFPU'}">--}%
+                    <g:if test="${duenoObra == 1}">
                         <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
                             <i class="icon-plus"></i>
                         </a>
@@ -138,7 +139,17 @@
 
                     </g:if>
                         <g:else>
-
+                        <g:if test="${persona?.departamento?.id == obra?.departamento?.id}">
+                            <a href="#" class="btn" id="btnCrearSP" title="Crear subpresupuesto" style="margin-top: -10px;">
+                                <i class="icon-plus"></i>
+                            </a>
+                            <a href="#" class="btn" id="btnBorrarSP" title="Borrar subpresupuesto" style="margin-top: -10px;">
+                                <i class="icon-minus"></i>
+                            </a>
+                            <a href="#" class="btn" id="btnEditarSP" title="Editar subpresupuesto" style="margin-top: -10px;">
+                                <i class="icon-edit"></i>
+                            </a>
+                        </g:if>
                         </g:else>
 
                     </div>
@@ -168,12 +179,20 @@
 
                     <div class="span1" style="margin-left: -13px;padding-top:30px">
                         <input type="hidden" value="" id="vol_id">
-                    %{--<g:if test="${obra?.estado != 'R'}">--}%
-                        <g:if test="${obra.estado != 'R' && obra?.departamento?.id == persona?.departamento?.id}">
+
+                        <g:if test="${obra?.estado != 'R' && duenoObra == 1}">
                             <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
                                 <i class="icon-plus"></i>
                             </a>
                         </g:if>
+                        <g:else>
+                            <g:if test="${obra.estado != 'R' && obra?.departamento?.id == persona?.departamento?.id}">
+                                <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
+                                    <i class="icon-plus"></i>
+                                </a>
+                            </g:if>
+                        </g:else>
+
                     </div>
                 </div>
             </div>

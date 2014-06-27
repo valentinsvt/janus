@@ -13,9 +13,18 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width:60px;" />
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
+                %{--<g:field type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width:60px;" />--}%
+                <g:if test="${valoresAnualesInstance?.id}">
+                    <g:textField type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width: 60px" readonly="readonly"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </g:if>
+                <g:else>
+                    <g:textField type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width: 60px"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </g:else>
+
             </div>
         </div>
                 
@@ -27,7 +36,8 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="costoDiesel" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoDiesel')}" style="width:60px;"/>
+                %{--<g:field type="number" name="costoDiesel" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoDiesel')}" style="width:60px;"/>--}%
+                <g:textField type="number" name="costoDiesel" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoDiesel')}" style="width:60px;"/>
                 <span class="mandatory">*</span> Galón
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -41,7 +51,8 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="costoGrasa" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoGrasa')}" style="width:60px;"/>
+                %{--<g:field type="number" name="costoGrasa" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoGrasa')}" style="width:60px;"/>--}%
+                <g:textField type="number" name="costoGrasa" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoGrasa')}" style="width:60px;"/>
                 <span class="mandatory">*</span> Kilo
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -55,7 +66,8 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="costoLubricante" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoLubricante')}" style="width:60px;"/>
+                %{--<g:field type="number" name="costoLubricante" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoLubricante')}" style="width:60px;"/>--}%
+                <g:textField type="number" name="costoLubricante" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'costoLubricante')}" style="width:60px;"/>
                 <span class="mandatory">*</span> Galón
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -69,7 +81,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="factorCostoRepuestosReparaciones" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                <g:textField type="number" name="factorCostoRepuestosReparaciones" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
                         field: 'factorCostoRepuestosReparaciones')}" style="width:60px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
@@ -84,7 +96,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="sueldoBasicoUnificado" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                <g:textField type="number" name="sueldoBasicoUnificado" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
                         field: 'sueldoBasicoUnificado')}" style="width:60px;"/>
                 <span class="mandatory">*</span> Dólares
                 <p class="help-block ui-helper-hidden"></p>
@@ -99,7 +111,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="tasaInteresAnual" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                <g:textField type="number" name="tasaInteresAnual" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
                         field: 'tasaInteresAnual')}" style="width:60px;"/>
                 <span class="mandatory">*</span> %. Ej: 13
                 <p class="help-block ui-helper-hidden"></p>
@@ -114,9 +126,9 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="seguro" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                <g:textField type="number" name="seguro" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
                         field: 'seguro')}" style="width:60px;"/>
-                <span class="mandatory">*</span> Prima anual: Ej: 0.03
+                <span class="mandatory">*</span> Prima anual. Ej: 3% ingrese 3.00
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -130,7 +142,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="inflacion" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
+                <g:textField type="number" name="inflacion" class=" required" value="${fieldValue(bean: valoresAnualesInstance,
                         field: 'inflacion')}" style="width:60px;"/>
                 <span class="mandatory">*</span> % Anual
                 <p class="help-block ui-helper-hidden"></p>

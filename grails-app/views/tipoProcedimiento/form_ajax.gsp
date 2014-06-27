@@ -55,7 +55,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="bases" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'bases')}"/>
+                <g:textField type="number" name="bases" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'bases')}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -70,7 +70,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="preparatorio" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'preparatorio')}"/>
+                <g:textField type="number" name="preparatorio" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'preparatorio')}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -84,7 +84,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="precontractual" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'precontractual')}"/>
+                <g:textField type="number" name="precontractual" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'precontractual')}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -98,7 +98,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="contractual" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'contractual')}"/>
+                <g:textField type="number" name="contractual" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'contractual')}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -112,7 +112,7 @@
             </div>
 
             <div class="controls">
-                <g:field type="number" name="techo" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'techo')}"/>
+                <g:textField type="number" name="techo" class=" required" value="${fieldValue(bean: tipoProcedimientoInstance, field: 'techo')}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

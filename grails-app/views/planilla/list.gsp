@@ -253,9 +253,9 @@
 
                 </g:if>
                 <g:else>
-                    <div class="badge badge-important">
-                        Existe un error en los valores de índice.<br/> Revise el resumen.
-                    </div>
+                    %{--<div class="badge badge-important">--}%
+                        %{--Existe un error en los valores de índice.<br/> Revise el resumen.--}%
+                    %{--</div>--}%
                 </g:else>
 
             </td>

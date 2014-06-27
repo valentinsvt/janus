@@ -8,7 +8,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Tipo Indice
+                    Tipo Índice
                 </span>
             </div>
 
@@ -22,7 +22,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Codigo
+                    Código
                 </span>
             </div>
 
@@ -36,12 +36,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
 
-            <div class="controls">
-                <g:textField name="descripcion" maxlength="131" class=" required" value="${indiceInstance?.descripcion}"/>
+            <div class="controls" style="width: 325px;">
+                <g:textField name="descripcion" maxlength="131" class=" required" value="${indiceInstance?.descripcion}" style="width: 300px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

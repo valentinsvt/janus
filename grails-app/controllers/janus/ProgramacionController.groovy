@@ -50,6 +50,19 @@ class ProgramacionController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+//        println("params " + params )
+
+        def fechaI = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        def fechaF = new Date().parse("dd-MM-yyyy", params.fechaFin)
+
+//        println("fechas" + fechaI + ' ' + fechaF)
+
+        params.fechaInicio = fechaI
+        params.fechaFin = fechaF
+
+
         def programacionInstance
         if (params.id) {
             programacionInstance = Programacion.get(params.id)
@@ -85,10 +98,10 @@ class ProgramacionController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Programacion " + programacionInstance.id
+            flash.message = "Se ha actualizado correctamente Programación " + programacionInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Programacion " + programacionInstance.id
+            flash.message = "Se ha creado correctamente Programación " + programacionInstance?.descripcion
         }
         redirect(action: 'list')
     } //save

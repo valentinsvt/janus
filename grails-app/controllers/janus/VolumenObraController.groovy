@@ -32,11 +32,24 @@ class VolumenObraController extends janus.seguridad.Shield {
         def obra = Obra.get(params.id)
         def volumenes = VolumenesObra.findAllByObra(obra)
 
+
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+        def responsableObra = obra?.responsableObra?.id
+        def duenoObra = 0
+
+//        personasUtfpu.each{
+//            if(it.id == responsableObra ){
+//                duenoObra = 1
+//            }
+//        }
+
+        duenoObra = esDuenoObra(obra)? 1 : 0
+
         def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 
-        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia]
+        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia, duenoObra: duenoObra]
     }
 
     def cargarSubpres() {
@@ -210,7 +223,7 @@ class VolumenObraController extends janus.seguridad.Shield {
 
 
         def volumenes = VolumenesObra.findAllByObra(obra);
-
+        def duenoObra = 0
 
         def detalle
         def valores
@@ -252,10 +265,49 @@ class VolumenObraController extends janus.seguridad.Shield {
 //        /*Todo ver como mismo es esta suma*/
         def indirecto = obra.totales / 100
 
+        duenoObra = esDuenoObra(obra)? 1 : 0
 
-        [subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores, subPresupuesto1: subPresupuesto1, estado: estado, msg: params.msg, persona: persona]
+
+        [subPres: subPres, subPre: params.sub, obra: obra, precioVol: prch, precioChof: prvl, indirectos: indirecto * 100, valores: valores,
+                subPresupuesto1: subPresupuesto1, estado: estado, msg: params.msg, persona: persona, duenoObra: duenoObra]
 
     }
+
+    def esDuenoObra(obra) {
+//
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+//
+//        if(responsableRol) {
+////            println personasUtfpu
+//            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+//        }
+
+        println "responsable" + responsableRol + " dueño " + dueno
+//                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
+
+        if (responsableRol) {
+//            println "..................."
+//            println "${obra?.responsableObra?.departamento?.id} ==== ${Persona.get(session.usuario.id).departamento?.id}"
+//            println "${Persona.get(session.usuario.id)}"
+            if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
+                dueno = true
+            } else {
+                dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+            }
+        }
+
+
+        println(" usuarioDep " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id + " dueño " + dueno)
+
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + session.usuario.departamento.id + " respDep " + obra?.responsableObra?.departamento?.id
+//        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id
+
+        dueno
+    }
+
 
     def eliminarRubro() {
         println "elm rubro " + params

@@ -1082,7 +1082,8 @@ class Reportes2Controller {
             sheet.setColumnView(4, 20)
             sheet.setColumnView(5, 20)
             sheet.setColumnView(6, 20)
-            sheet.setColumnView(7, 25)
+            sheet.setColumnView(7, 20)
+            sheet.setColumnView(8, 25)
 
             def label
             def number
@@ -1108,10 +1109,11 @@ class Reportes2Controller {
             label = new jxl.write.Label(1, 16, "ITEM", times16format); sheet.addCell(label);
             label = new jxl.write.Label(2, 16, "UNIDAD", times16format); sheet.addCell(label);
             label = new jxl.write.Label(3, 16, "CANTIDAD", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(4, 16, "P.UNITARIO", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(5, 16, "TRANSPORTE", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(6, 16, "COSTO", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(7, 16, "TIPO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(4, 16, "C. REDONDEADA", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(5, 16, "P.UNITARIO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(6, 16, "TRANSPORTE", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(7, 16, "COSTO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(8, 16, "TIPO", times16format); sheet.addCell(label);
 
             res.each {
                 if (it?.item == null) {
@@ -1134,10 +1136,11 @@ class Reportes2Controller {
                 label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
                 label = new jxl.write.Label(2, fila, it?.unidad ? it?.unidad.toString() : ""); sheet.addCell(label);
                 number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(4, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(5, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(6, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
-                label = new jxl.write.Label(7, fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
+                number = new jxl.write.Number(4, fila,0); sheet.addCell(number);
+                number = new jxl.write.Number(5, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(6, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(7, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
+                label = new jxl.write.Label(8, fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
 
                 fila++
 
@@ -1291,13 +1294,13 @@ class Reportes2Controller {
             label = new jxl.write.Label(1, 16, "ITEM", times16format); sheet.addCell(label);
             label = new jxl.write.Label(2, 16, "UNIDAD", times16format); sheet.addCell(label);
             label = new jxl.write.Label(3, 16, "CANTIDAD", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(4, 16, "C. REDONDEADA", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(5, 16, "P.UNITARIO", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(6, 16, "TRANSPORTE", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(7, 16, "COSTO", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(8, 16, "TOTAL", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(9, 16, "TIPO", times16format); sheet.addCell(label);
-            label = new jxl.write.Label(10, 16, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
+//            label = new jxl.write.Label(4, 16, "C. REDONDEADA", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(4, 16, "P.UNITARIO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(5, 16, "TRANSPORTE", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(6, 16, "COSTO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(7, 16, "TOTAL", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(8, 16, "TIPO", times16format); sheet.addCell(label);
+            label = new jxl.write.Label(9, 16, "SUBPRESUPUESTO", times16format); sheet.addCell(label);
 
             res.each {
                 if (it?.item == null) {
@@ -1323,13 +1326,13 @@ class Reportes2Controller {
                 label = new jxl.write.Label(1, fila, it?.item.toString()); sheet.addCell(label);
                 label = new jxl.write.Label(2, fila, it?.unidad ? it?.unidad.toString() : ""); sheet.addCell(label);
                 number = new jxl.write.Number(3, fila, it?.cantidad.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(4, fila,0); sheet.addCell(number);
-                number = new jxl.write.Number(5, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(6, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(7, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
-                number = new jxl.write.Number(8, fila, it?.total.toDouble().round(2) ?: 0); sheet.addCell(number);
-                label = new jxl.write.Label(9,fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
-                label = new jxl.write.Label(10, fila, it?.subpresupuesto ? it?.subpresupuesto.toString() : "");
+//                number = new jxl.write.Number(4, fila,0); sheet.addCell(number);
+                number = new jxl.write.Number(4, fila, it?.punitario.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(5, fila, it?.transporte.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(6, fila, it?.costo.toDouble().round(2) ?: 0); sheet.addCell(number);
+                number = new jxl.write.Number(7, fila, it?.total.toDouble().round(2) ?: 0); sheet.addCell(number);
+                label = new jxl.write.Label(8,fila, it?.grupo ? it?.grupo.toString() : ""); sheet.addCell(label);
+                label = new jxl.write.Label(9, fila, it?.subpresupuesto ? it?.subpresupuesto.toString() : "");
                 sheet.addCell(label);
 
                 fila++
@@ -1537,6 +1540,11 @@ class Reportes2Controller {
         Font fontTitle = new Font(Font.TIMES_ROMAN, 9, Font.BOLD);
         Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
         Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
 
         Document document
         document = new Document(PageSize.A4.rotate());
@@ -1556,16 +1564,24 @@ class Reportes2Controller {
 
         preface.add(new Paragraph("G.A.D. PROVINCIA DE PICHINCHA", catFont3));
 
-        preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont2));
+//        preface.add(new Paragraph("CRONOGRAMA DE ${lbl.toUpperCase()} " + obra.nombre, catFont2));
+        preface.add(new Paragraph("CRONOGRAMA", catFont2));
+        preface.add(new Paragraph("UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", catFont2));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
-        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+//        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
         document.add(preface);
         document.add(preface2);
         Paragraph pMeses = new Paragraph();
         pMeses.add(new Paragraph("Obra: ${obra.descripcion} (${meses} mes${meses == 1 ? '' : 'es'})", info))
         addEmptyLine(pMeses, 1);
         document.add(pMeses);
+
+        Paragraph pRequirente = new Paragraph();
+        pRequirente.add(new Paragraph("Requirente: ${obra?.departamento?.direccion?.nombre + ' - ' + obra.departamento?.descripcion}", info))
+//        addEmptyLine(pRequirente, 1);
+        document.add(pRequirente);
+
 
         Paragraph codigoObra = new Paragraph();
         codigoObra.add(new Paragraph("Código de la Obra: ${obra?.codigo}", info))
@@ -1579,6 +1595,10 @@ class Reportes2Controller {
         fecha.add(new Paragraph("Fecha: ${printFecha(obra?.fechaCreacionObra)}", info))
 //        addEmptyLine(fecha, 1);
         document.add(fecha);
+
+        Paragraph plazo = new Paragraph();
+        plazo.add(new Paragraph("Plazo: ${obra?.plazoEjecucionMeses} Meses" + " ${obra?.plazoEjecucionDias} Días", info))
+        document.add(plazo);
 
         Paragraph rutaCritica = new Paragraph();
         rutaCritica.add(new Paragraph("Los rubros pertenecientes a la ruta crítica están marcados con un * antes de su código.", info))
@@ -1725,6 +1745,89 @@ class Reportes2Controller {
 
         document.add(tabla)
         /* ***************************************************** Fin Tabla cronograma *****************************************************/
+
+        def personaElaboro
+        def firmaCoordinador
+        def ban = 0
+
+        def deptoUsu = Persona.get(session.usuario.id).departamento
+
+        def funcionCoor = Funcion.findByCodigo('O')
+        def funcionElab = Funcion.findByCodigo('E')
+
+        def personasDep = Persona.findAllByDepartamento(deptoUsu)
+        def personasUtfpu = Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
+
+        def coordinador = PersonaRol.findByPersonaInListAndFuncion(personasDep,funcionCoor)
+        def coordinadorUtfpu = PersonaRol.findByPersonaInListAndFuncion(personasUtfpu,funcionCoor)
+
+        def elabUtfpu = PersonaRol.findAllByPersonaInListAndFuncion(personasUtfpu,funcionElab)
+
+        def responsableRol = PersonaRol.findByPersona(Persona.get(obra?.responsableObra?.id))
+
+        elabUtfpu.each {
+           if(it?.id == responsableRol?.id){
+               ban = 1
+           }
+        }
+
+
+        PdfPTable tablaFirmas = new PdfPTable(3);
+        tablaFirmas.setWidthPercentage(100);
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+
+        if(obra?.responsableObra){
+            personaElaboro = Persona.get(obra?.responsableObra?.id)
+            addCellTabla(tablaFirmas, new Paragraph((personaElaboro?.titulo?.toUpperCase() ?: '') + " " + (personaElaboro?.nombre.toUpperCase() ?: '' ) + " " + (personaElaboro?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        }
+
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
+        if(coordinador){
+                if(ban == 1){
+                    firmaCoordinador = coordinadorUtfpu.persona
+                    addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+                }else{
+                    firmaCoordinador = coordinador.persona
+                    addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+                }
+
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+        }
+        //cargos
+
+        addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        document.add(tablaFirmas);
+
         document.close();
 
         pdfw.close()
@@ -1735,6 +1838,7 @@ class Reportes2Controller {
         response.getOutputStream().write(b)
 
     }
+
 
     def reporteCronograma() {
         def obra = Obra.get(params.id.toLong())

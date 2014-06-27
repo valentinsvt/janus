@@ -152,6 +152,12 @@
                 }
                 $("#frmSave-Persona").submit();
             }
+            function submitFormOferente(btn) {
+                if ($("#frmSave-Oferente").valid()) {
+                    btn.replaceWith(spinner);
+                }
+                $("#frmSave-Oferente").submit();
+            }
 
             $(function () {
                 $('[rel=tooltip]').tooltip();
@@ -192,7 +198,7 @@
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                             btnSave.click(function () {
-                                submitForm(btnSave);
+                                submitFormOferente(btnSave);
                                 return false;
                             });
 

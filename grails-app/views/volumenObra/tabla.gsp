@@ -65,7 +65,7 @@
         </th>
         <th class="col_precio" style="display: none;">Unitario</th>
         <th class="col_total" style="display: none;">C.Total</th>
-        <g:if test="${obra.estado!='R' && obra?.departamento?.id == persona?.departamento?.id}">
+        <g:if test="${obra.estado!='R' && duenoObra == 1}">
             <th style="width: 40px" class="col_delete"></th>
         </g:if>
     </tr>
@@ -90,7 +90,7 @@
             <td class="col_total total" style="display: none;text-align: right">
                 <g:formatNumber number="${val.totl}" format="##,##0" minFractionDigits="2"  maxFractionDigits="2"  locale="ec"/>
             </td>
-            <g:if test="${obra.estado!='R' && obra?.departamento?.id == persona?.departamento?.id}">
+            <g:if test="${obra.estado!='R' && duenoObra == 1}">
                 <td style="width: 40px;text-align: center" class="col_delete">
 
                     <a class="btn btn-small btn-danger borrarItem" href="#" rel="tooltip" title="Eliminar"
@@ -167,7 +167,7 @@
                 ${precioChof}
                 var clickImprimir = $(this).attr("id");
 
-                console.log("c" + clickImprimir)
+//                console.log("c" + clickImprimir)
 
                 var fechaSalida1 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
 

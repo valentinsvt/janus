@@ -11,7 +11,7 @@ class ClaseObraController extends janus.seguridad.Shield {
     } //index
 
     def list() {
-        params.max = Math.min(params.max ? params.int('max') : 15, 100)
+        params.max = Math.min(params.max ? params.int('max') : 100, 100)
         [claseObraInstanceList: ClaseObra.list(params), claseObraInstanceTotal: ClaseObra.count(), params: params]
     } //list
 
@@ -100,6 +100,23 @@ class ClaseObraController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+//        println("params " + params)
+
+        def clases = ClaseObra.list()
+        def pp = ClaseObra.findByCodigo(params.codigo)
+
+//        println('---->' + pp)
+
+//        def codigosCo = []
+//        def existeCo  = 0
+//        clases.each {
+//            codigosCo += it?.codigo
+//        }
+//
+//        println("codigos " + codigosCo)
+
+
         def claseObraInstance
         if (params.id) {
             claseObraInstance = ClaseObra.get(params.id)
@@ -112,7 +129,27 @@ class ClaseObraController extends janus.seguridad.Shield {
             claseObraInstance.properties = params
         }//es edit
         else {
-            claseObraInstance = new ClaseObra(params)
+
+//            codigosCo.each {
+//                if(it ==  params.codigo){
+//                    println("entro")
+//                    existeCo = 1
+//                }
+//            }
+//
+//            println("existe" + existeCo)
+
+            if(!pp){
+                claseObraInstance = new ClaseObra(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar la clase de obra, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
+
+
         } //es create
         if (!claseObraInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -135,10 +172,10 @@ class ClaseObraController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente ClaseObra " + claseObraInstance.id
+            flash.message = "Se ha actualizado correctamente ClaseObra " + claseObraInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente ClaseObra " + claseObraInstance.id
+            flash.message = "Se ha creado correctamente ClaseObra " + claseObraInstance?.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -166,7 +203,7 @@ class ClaseObraController extends janus.seguridad.Shield {
         try {
             claseObraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente ClaseObra " + claseObraInstance.id
+            flash.message = "Se ha eliminado correctamente ClaseObra " + claseObraInstance?.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

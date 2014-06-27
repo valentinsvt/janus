@@ -9,6 +9,7 @@ class Departamento implements Serializable {
 
     Integer documento = 0
     Date fechaUltimoDoc
+    Integer requirente = 0
 
     static mapping = {
         table 'dpto'
@@ -24,6 +25,7 @@ class Departamento implements Serializable {
             codigo column: 'dptocdgo'
             documento column: 'dptodcmt'
             fechaUltimoDoc column: 'dptofcud'
+            requirente column: 'dptorqre'
         }
     }
 
@@ -34,6 +36,7 @@ class Departamento implements Serializable {
         codigo(maxSize: 6, blank: false, unique: true, attributes: [title: 'codigo'])
         documento(blank: false, attributes: [title: 'documento'])
         fechaUltimoDoc(blank: true, nullable: true)
+        requirente(blank: true, nullable: true)
     }
 
     String toString() {

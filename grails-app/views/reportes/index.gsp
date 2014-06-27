@@ -154,12 +154,13 @@
     </div>
 
     <div id="obrargst" style="display: none">
-        <h3>Obras Registradas</h3><br>
+        <h3>Obras Ingresadas</h3><br>
 
         <p>Listado de obras que están ingresadas al sistema. Estas obras se hallan en la fase inicial de registro de
            cantidades de obra, elaboración de la matriz de la fórmula polinómica, fórmula polinómica, determinación de
            plazos y cronograma de ejecución.</p>
         <p>En esta fase se preparan los documentos precontractuales.</p>
+        <p>Estado = 'N'</p>
     </div>
 
     <div id="obraprsp" style="display: none;">

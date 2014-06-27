@@ -133,7 +133,7 @@
             <a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"
                style="margin-top: -10px;" id="btnBorrar">
                 <i class="icon-trash"></i>
-                Borrar la Fórmula Polinomica
+                Reiniciar la Fórmula Polinomica
             </a>
             <g:link controller="reportes5" action="imprimirCoeficientes" id="${obra?.id}" class="btn btnImprimir" title="Imprimir la Fórmula Polinómica" style="margin-top: -10px;">
                 <i class="icon-print"></i>
@@ -142,6 +142,13 @@
             <a href="#" id="creaIndice" class="btn" title="Crear Índices" style="margin-top: -10px;">
                 Crear Índices
             </a>
+
+            <a href="${g.createLink(action: 'borrarFP', params: [obra: obra?.id])}" class="btn " title="Borrar la Fórmula Polinómica"
+               style="margin-top: -10px;" id="btnEliminar">
+                <i class="icon-trash"></i>
+                Eliminar Fórmula
+            </a>
+
         </div>
 
         <div class="row">
@@ -757,6 +764,24 @@
                     });
                     return false;
                 });
+
+                $("#btnEliminar").click(function () {
+                    $(this).replaceWith(spinner);
+                    $.ajax({
+                        async   : false,
+                        type    : "POST",
+                        url     : "${createLink(action:'borrarFP')}",
+                        data    : {
+                            obra : ${obra.id}
+                        },
+                        success : function (msg) {
+//                            ////console.log(msg);
+                              location.reload(true);
+                        }
+                    });
+                    return false;
+                });
+
 
                 $("#btnAgregarItems").click(function () {
                     var $btn = $(this);
