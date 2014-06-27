@@ -151,6 +151,7 @@
                         "icon": icons.canton
                     }, //canton
                     "parroquia" : {
+
                         "label": "Parroquia",
                         "action": function (obj) {
                             var url = "${createLink(controller: 'canton', action: 'editar')}";
@@ -160,7 +161,7 @@
                                 "data": {
                                     "tipo": "parroquia",
                                     "crear": true,
-                                    "padre": idParent
+                                    "padre": idNode
                                 },
                                 "success": function(msg) {
                                     $("#dlg_editar").dialog("option", "title", "Crear parroquia en el cantón " + textNode);
