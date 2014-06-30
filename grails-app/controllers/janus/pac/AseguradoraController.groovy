@@ -29,6 +29,12 @@ class AseguradoraController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+        println("params" + params)
+
+        def fecha = new Date().parse("dd-MM-yyyy", params.fechaContacto)
+
         def aseguradoraInstance
         if (params.id) {
             aseguradoraInstance = Aseguradora.get(params.id)
@@ -44,6 +50,8 @@ class AseguradoraController extends janus.seguridad.Shield {
             aseguradoraInstance.properties = params
         }//es edit
         else {
+
+            params.fechaContacto = fecha
             aseguradoraInstance = new Aseguradora(params)
         } //es create
         if (!aseguradoraInstance.save(flush: true)) {
@@ -67,10 +75,10 @@ class AseguradoraController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Aseguradora " + aseguradoraInstance.id
+            flash.message = "Se ha actualizado correctamente Aseguradora " + aseguradoraInstance?.nombre
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Aseguradora " + aseguradoraInstance.id
+            flash.message = "Se ha creado correctamente Aseguradora " + aseguradoraInstance?.nombre
         }
         redirect(action: 'list')
     } //save
@@ -98,7 +106,7 @@ class AseguradoraController extends janus.seguridad.Shield {
         try {
             aseguradoraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Aseguradora " + aseguradoraInstance.id
+            flash.message = "Se ha eliminado correctamente Aseguradora " + aseguradoraInstance?.nombre
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
