@@ -29,6 +29,9 @@ class UnidadIncopController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+        params.codigo = params.codigo.toUpperCase();
+
         def unidadIncopInstance
         if(params.id) {
             unidadIncopInstance = UnidadIncop.get(params.id)

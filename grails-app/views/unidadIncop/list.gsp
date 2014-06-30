@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear  Unidad Incop
+                    Nueva Unidad Incop
                 </a>
             </div>
             <div class="span3" id="busqueda-UnidadIncop"></div>
@@ -43,9 +43,9 @@
                 <thead>
                     <tr>
                     
-                        <g:sortableColumn property="codigo" title="Codigo" />
+                        <g:sortableColumn property="codigo" title="Código" />
                     
-                        <g:sortableColumn property="descripcion" title="Descripcion" />
+                        <g:sortableColumn property="descripcion" title="Descripción" />
                     
                         <th width="150">Acciones</th>
                     </tr>

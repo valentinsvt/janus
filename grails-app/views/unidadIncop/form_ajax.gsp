@@ -8,12 +8,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Codigo
+                    Código
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="7" class="" value="${unidadIncopInstance?.codigo}" disabled="${unidadIncopInstance.id?'true':'false'}"/>
+                <g:textField name="codigo" maxlength="7" class="required allCaps" value="${unidadIncopInstance?.codigo}" disabled="${unidadIncopInstance.id?'true':'false'}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -22,12 +22,12 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="32" class="" value="${unidadIncopInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="32" class="required" value="${unidadIncopInstance?.descripcion}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

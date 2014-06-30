@@ -31,6 +31,13 @@ class EstadoPlanillaController {
     } //form_ajax
 
     def save() {
+
+        println("params" + params)
+        if(params.codigo){
+            params.codigo = params.codigo?.toUpperCase();
+        }
+
+
         def estadoPlanillaInstance
         if (params.id) {
             estadoPlanillaInstance = EstadoPlanilla.get(params.id)

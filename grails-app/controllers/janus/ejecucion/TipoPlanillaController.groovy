@@ -29,6 +29,9 @@ class TipoPlanillaController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        if(params.codigo){
+            params.codigo = params.codigo.toUpperCase();
+        }
         def tipoPlanillaInstance
         if(params.id) {
             tipoPlanillaInstance = TipoPlanilla.get(params.id)

@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" class="" value="${estadoPlanillaInstance?.codigo}" disabled="${estadoPlanillaInstance.id?'true':'false'}"/>
+                <g:textField name="codigo" class="required allCaps" maxlength="1" value="${estadoPlanillaInstance?.codigo}" disabled="${estadoPlanillaInstance.id?'true':'false'}"/>
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -27,7 +27,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="nombre" class="" value="${estadoPlanillaInstance?.nombre}"/>
+                <g:textField name="nombre" class="required" value="${estadoPlanillaInstance?.nombre}"/>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>

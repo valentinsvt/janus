@@ -29,6 +29,9 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+        params.sigla = params.sigla.toUpperCase();
+
         def tipoProcedimientoInstance
         if(params.id) {
             tipoProcedimientoInstance = TipoProcedimiento.get(params.id)
