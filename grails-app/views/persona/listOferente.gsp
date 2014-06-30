@@ -37,18 +37,17 @@
                     <i class="icon-file"></i>
                     Crear  Oferente
                 </a>
-%{--
-                <a href="#" class="btn btn-ajax btn-copy">
-                    <i class="icon-copy"></i>
-                    Copiar al sistema de Oferentes
-                </a>
---}%
+                %{--
+                                <a href="#" class="btn btn-ajax btn-copy">
+                                    <i class="icon-copy"></i>
+                                    Copiar al sistema de Oferentes
+                                </a>
+                --}%
             </div>
 
             <div class="span3" id="search">
             </div>
         </div>
-
 
         <g:form action="delete" name="frmDelete-Oferente">
             <g:hiddenField name="id"/>
@@ -59,42 +58,26 @@
                 <table class="table table-bordered table-striped table-condensed table-hover">
                     <thead>
                         <tr>
-
                             <g:sortableColumn property="cedula" title="Cedula"/>
-
                             <g:sortableColumn property="nombre" title="Nombre"/>
-
                             <g:sortableColumn property="apellido" title="Apellido"/>
-
                             <g:sortableColumn property="login" title="Login"/>
-
                             <g:sortableColumn property="departamento" title="Departamento"/>
-
                             <g:sortableColumn property="activo" title="Activo"/>
-
                             <th width="150">Acciones</th>
-
                             %{--<th width="50">Copiar <input type="checkbox" id="chkAll"/></th>--}%
                         </tr>
                     </thead>
                     <tbody class="paginate">
 
                         <g:each in="${sesion}" status="j" var="sesionPerfil">
-
                             <tr>
-
                                 <td>${sesionPerfil?.usuario?.cedula}</td>
-
                                 <td>${sesionPerfil?.usuario?.nombre}</td>
-
                                 <td>${sesionPerfil?.usuario?.apellido}</td>
-
                                 <td>${sesionPerfil?.usuario?.login}</td>
-
                                 <td>${sesionPerfil?.usuario?.departamento?.descripcion}</td>
-
                                 <td><g:formatBoolean boolean="${sesionPerfil?.usuario?.activo == 1}" true="Sí" false="No"/></td>
-
                                 <td>
                                     <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${sesionPerfil?.usuario?.id}">
                                         <i class="icon-zoom-in icon-large"></i>
@@ -109,48 +92,13 @@
                                         <i class="icon-refresh icon-large"></i>
                                     </a>
                                 </td>
-%{--
-                                <td style="text-align: center;">
-                                    <input type="checkbox" name="id" value="${sesionPerfil?.usuario?.id}" class="chk" id="${sesionPerfil?.usuario?.id}"/>
-                                </td>
---}%
-
+                                %{--
+                                                                <td style="text-align: center;">
+                                                                    <input type="checkbox" name="id" value="${sesionPerfil?.usuario?.id}" class="chk" id="${sesionPerfil?.usuario?.id}"/>
+                                                                </td>
+                                --}%
                             </tr>
-
                         </g:each>
-                    %{--<g:each in="${personaInstanceList}" status="i" var="personaInstance">--}%
-
-
-                    %{--<tr>--}%
-
-                    %{--<td>${fieldValue(bean: personaInstance, field: "cedula")}</td>--}%
-
-                    %{--<td>${fieldValue(bean: personaInstance, field: "nombre")}</td>--}%
-
-                    %{--<td>${fieldValue(bean: personaInstance, field: "apellido")}</td>--}%
-
-                    %{--<td>${fieldValue(bean: personaInstance, field: "login")}</td>--}%
-
-                    %{--<td>${personaInstance.departamento?.descripcion}</td>--}%
-
-                    %{--<td><g:formatBoolean boolean="${personaInstance.activo == 1}" true="Sí" false="No"/></td>--}%
-
-                    %{--<td>--}%
-                    %{--<a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${personaInstance.id}">--}%
-                    %{--<i class="icon-zoom-in icon-large"></i>--}%
-                    %{--</a>--}%
-                    %{--<a class="btn btn-small btn-edit btn-ajax" href="#" rel="tooltip" title="Editar" data-id="${personaInstance.id}">--}%
-                    %{--<i class="icon-pencil icon-large"></i>--}%
-                    %{--</a>--}%
-                    %{--<a class="btn btn-small btn-password btn-ajax" href="#" rel="tooltip" title="Cambiar password" data-id="${personaInstance.id}">--}%
-                    %{--<i class="icon-lock icon-large"></i>--}%
-                    %{--</a>--}%
-                    %{--<a class="btn btn-small btn-delete" href="#" rel="tooltip" title="Eliminar" data-id="${personaInstance.id}">--}%
-                    %{--<i class="icon-trash icon-large"></i>--}%
-                    %{--</a>--}%
-                    %{--</td>--}%
-                    %{--</tr>--}%
-                    %{--</g:each>--}%
                     </tbody>
                 </table>
             </form>
@@ -173,17 +121,11 @@
         </div>
 
 
-    <div id="cambiarEstado-dialog">
-
+        <div id="cambiarEstado-dialog">
             <div class="span3">
                 Está seguro de querer cambiar el estado del oferente?
-
             </div>
-
-
-    </div>
-
-
+        </div>
 
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
@@ -205,11 +147,11 @@
                     float          : "right"
                 });
 
-/*
-                $("#chkAll").click(function () {
-                    $(".chk").attr("checked", $(this).is(":checked"));
-                });
-*/
+                /*
+                 $("#chkAll").click(function () {
+                 $(".chk").attr("checked", $(this).is(":checked"));
+                 });
+                 */
 
                 $(".chk").click(function () {
                     if (!$(this).is(":checked")) {
@@ -303,11 +245,10 @@
                     });
                     return false;
                 }); //click btn show
-
+                var id;
                 $(".btn-cambiarEstado").click(function () {
-
+                    id = $(this).data("id");
                     $("#cambiarEstado-dialog").dialog("open");
-
                 });
 
 //                $(".btn-delete").click(function () {
@@ -356,9 +297,6 @@
                     return false;
                 }); //click btn password
 
-
-
-
                 $("#cambiarEstado-dialog").dialog({
 
                     autoOpen  : false,
@@ -369,87 +307,32 @@
                     height    : 200,
                     position  : 'center',
                     title     : 'Cambiar Estado',
-                    buttons: {
-                        "Aceptar" : function () {
-
-
-                            var id = ${sesion2?.usuario?.id?:0}
-
-//                            console.log("-->>" + id)
-
-                            var estado = ${sesion2?.usuario?.activo?:0 }
-
-//                            console.log("estado:" + estado)
-
-                            if (estado == 0) {
-
-                                $.ajax({
-
-                                    type    : "POST",
-                                    url     : "${g.createLink(action: 'cambiarEstado')}",
-                                    data    : {id : id,
-                                        activo    : '1'
-
-                                    },
-                                    success : function (msg) {
-
-                                        if (msg == 'ok') {
-
-                                            location.href = "${createLink(action: 'listOferente')}"
-
-                                        }
-
+                    buttons   : {
+                        "Aceptar"  : function () {
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${g.createLink(action: 'cambiarEstado')}",
+                                data    : {
+                                    id : id
+                                },
+                                success : function (msg) {
+                                    if (msg == 'ok') {
+                                        %{--location.href = "${createLink(action: 'listOferente')}"--}%
+                                        location.reload(true);
+                                    } else {
+                                        $("#divError").removeClass("hide");
+                                        $("#spanError").html(msg);
+                                        $("#cambiarEstado-dialog").dialog("close");
                                     }
-
-
-
-                                });
-
-                            }
-                            if (estado == 1) {
-
-                                $.ajax({
-
-                                    type    : "POST",
-                                    url     : "${g.createLink(action: 'cambiarEstado')}",
-                                    data    : {id : id,
-                                        activo    : '0'
-
-                                    },
-                                    success : function (msg) {
-
-                                        if (msg == 'ok') {
-
-                                            location.href = "${createLink(action: 'listOferente')}"
-
-                                        }
-
-                                    }
-
-
-
-                                });
-
-                            }
-
-
-
-
+                                }
+                            });
                         },
-                        "Cancelar"  : function () {
-
+                        "Cancelar" : function () {
                             $("#cambiarEstado-dialog").dialog("close");
-
                         }
-
                     }
-
                 });
-
-
-
             });
-
         </script>
 
     </body>

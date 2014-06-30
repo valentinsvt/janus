@@ -37,15 +37,15 @@
                 <span class="mandatory">*</span>
             </td>
             %{--<td>--}%
-                %{--<span class="control-label label label-inverse">--}%
-                    %{--Código--}%
-                %{--</span>--}%
+            %{--<span class="control-label label label-inverse">--}%
+            %{--Código--}%
+            %{--</span>--}%
             %{--</td>--}%
             %{--<td>--}%
-                %{--<g:field type="number" name="codigo" class="span2 required" value="${fieldValue(bean: personaInstance, field: 'codigo')}"/>--}%
-                %{--<span class="mandatory">*</span>--}%
+            %{--<g:field type="number" name="codigo" class="span2 required" value="${fieldValue(bean: personaInstance, field: 'codigo')}"/>--}%
+            %{--<span class="mandatory">*</span>--}%
 
-                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
             %{--</td>--}%
 
             <td>
@@ -57,9 +57,9 @@
                 %{--<g:select name="perfiles" class="span2" multiple="" from="${janus.seguridad.Prfl.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre"--}%
                 %{--value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"/>--}%
 
-                <g:textField name="perfilesTxt" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")}" readonly="true"/>
+                <g:textField name="perfilesTxt" class="span2" value="${janus.seguridad.Prfl.findByCodigo("OFRT")}" readonly="true"/>
 
-                <g:hiddenField name="perfiles" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")?.id}"/>
+                <g:hiddenField name="perfiles" class="span2" value="${janus.seguridad.Prfl.findByCodigo("OFRT")?.id}"/>
 
             </td>
 
@@ -81,7 +81,7 @@
             </td>
             <td>
                 %{--<g:select id="departamento" name="departamento.id" from="${janus.Departamento.list()}" optionKey="id" class="many-to-one span2"--}%
-                          %{--value="${personaInstance?.departamento?.id}" noSelection="['null': '']" optionValue="descripcion"/>--}%
+                %{--value="${personaInstance?.departamento?.id}" noSelection="['null': '']" optionValue="descripcion"/>--}%
 
 
                 %{--<g:textField name="departamentoTxt" class="span2" value="${janus.Departamento?.findByDescripcion("OFERENTES")}" readonly="true"/>--}%
@@ -118,14 +118,14 @@
         </tr>
         <tr>
             %{--<td>--}%
-                %{--<span class="control-label label label-inverse">--}%
-                    %{--Sigla--}%
-                %{--</span>--}%
+            %{--<span class="control-label label label-inverse">--}%
+            %{--Sigla--}%
+            %{--</span>--}%
             %{--</td>--}%
             %{--<td>--}%
-                %{--<g:textField name="sigla" maxlength="3" class="span2" value="${personaInstance?.sigla}"/>--}%
+            %{--<g:textField name="sigla" maxlength="3" class="span2" value="${personaInstance?.sigla}"/>--}%
 
-                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
             %{--</td>--}%
             <td>
                 <span class="control-label label label-inverse">
@@ -146,9 +146,9 @@
             <td>
                 <g:textField name="email" maxlength="63" class="span2 required" value="${personaInstance?.email}"/>
                 <span class="mandatory">*</span>
+
                 <p class="help-block ui-helper-hidden"></p>
             </td>
-
 
         </tr>
         <tr>
@@ -174,7 +174,7 @@
                 <p class="help-block ui-helper-hidden"></p>
             </td>
         </tr>
-        %{--<g:if test="${!personaInstance?.id}">--}%
+        <g:if test="${!personaInstance?.id}">
             <tr>
                 <td>
                     <span class="control-label label label-inverse">
@@ -199,31 +199,32 @@
                     <p class="help-block ui-helper-hidden"></p>
                 </td>
             </tr>
-            %{--<tr>--}%
-                %{--<td>--}%
-                    %{--<span class="control-label label label-inverse">--}%
-                        %{--Autorizacion--}%
-                    %{--</span>--}%
-                %{--</td>--}%
-                %{--<td>--}%
-                    %{--<g:passwordField name="autorizacion" maxlength="63" class="span2 required" value="${personaInstance?.autorizacion}"/>--}%
-                    %{--<span class="mandatory">*</span>--}%
+        </g:if>
+    %{--<tr>--}%
+    %{--<td>--}%
+    %{--<span class="control-label label label-inverse">--}%
+    %{--Autorizacion--}%
+    %{--</span>--}%
+    %{--</td>--}%
+    %{--<td>--}%
+    %{--<g:passwordField name="autorizacion" maxlength="63" class="span2 required" value="${personaInstance?.autorizacion}"/>--}%
+    %{--<span class="mandatory">*</span>--}%
 
-                    %{--<p class="help-block ui-helper-hidden"></p>--}%
-                %{--</td>--}%
-                %{--<td>--}%
-                    %{--<span class="control-label label label-inverse">--}%
-                        %{--Verificar Autorizacion--}%
-                    %{--</span>--}%
-                %{--</td>--}%
-                %{--<td>--}%
-                    %{--<g:passwordField name="autorizacionVerif" equalTo="#autorizacion" maxlength="63" class="span2 required" value="${personaInstance?.password}"/>--}%
-                    %{--<span class="mandatory">*</span>--}%
+    %{--<p class="help-block ui-helper-hidden"></p>--}%
+    %{--</td>--}%
+    %{--<td>--}%
+    %{--<span class="control-label label label-inverse">--}%
+    %{--Verificar Autorizacion--}%
+    %{--</span>--}%
+    %{--</td>--}%
+    %{--<td>--}%
+    %{--<g:passwordField name="autorizacionVerif" equalTo="#autorizacion" maxlength="63" class="span2 required" value="${personaInstance?.password}"/>--}%
+    %{--<span class="mandatory">*</span>--}%
 
-                    %{--<p class="help-block ui-helper-hidden"></p>--}%
-                %{--</td>--}%
-            %{--</tr>--}%
-        %{--</g:if>--}%
+    %{--<p class="help-block ui-helper-hidden"></p>--}%
+    %{--</td>--}%
+    %{--</tr>--}%
+    %{--</g:if>--}%
         <tr>
             <td>
                 <span class="control-label label label-inverse">
@@ -236,51 +237,52 @@
                 </g:radioGroup>
                 <p class="help-block ui-helper-hidden"></p>
             </td>
-        <td>
-            <span class="control-label label label-inverse">
-                Firma
-            </span>
-        </td>
-        <td>
-            <g:textField name="firma" maxlength="50" class="span2 required" value="${personaInstance?.firma}"/>
-            <span class="mandatory">*</span>
-            <p class="help-block ui-helper-hidden"></p>
-        </td>
+            <td>
+                <span class="control-label label label-inverse">
+                    Firma
+                </span>
+            </td>
+            <td>
+                <g:textField name="firma" maxlength="50" class="span2 required" value="${personaInstance?.firma}"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
             %{--<td>--}%
-                %{--<span class="control-label label label-inverse">--}%
-                    %{--Fecha Actualizacion Pass--}%
-                %{--</span>--}%
+            %{--<span class="control-label label label-inverse">--}%
+            %{--Fecha Actualizacion Pass--}%
+            %{--</span>--}%
             %{--</td>--}%
             %{--<td>--}%
-                %{--<elm:datepicker name="fechaActualizacionPass" class="span2" value="${personaInstance?.fechaActualizacionPass}"/>--}%
+            %{--<elm:datepicker name="fechaActualizacionPass" class="span2" value="${personaInstance?.fechaActualizacionPass}"/>--}%
 
-                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
             %{--</td>--}%
         </tr>
         <tr>
             %{--<td>--}%
-                %{--<span class="control-label label label-inverse">--}%
-                    %{--Perfiles--}%
-                %{--</span>--}%
+            %{--<span class="control-label label label-inverse">--}%
+            %{--Perfiles--}%
+            %{--</span>--}%
             %{--</td>--}%
             %{--<td>--}%
-                %{--<g:select name="perfiles" class="span2" multiple="" from="${janus.seguridad.Prfl.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre"--}%
-                          %{--value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"/>--}%
+            %{--<g:select name="perfiles" class="span2" multiple="" from="${janus.seguridad.Prfl.list([sort: 'nombre'])}" optionKey="id" optionValue="nombre"--}%
+            %{--value="${personaInstance.id ? janus.seguridad.Sesn.findAllByUsuario(personaInstance)?.id : ''}"/>--}%
 
-                %{--<g:textField name="perfilesTxt" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")}" readonly="true"/>--}%
+            %{--<g:textField name="perfilesTxt" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")}" readonly="true"/>--}%
 
-                %{--<g:hiddenField name="perfiles" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")?.id}"/>--}%
+            %{--<g:hiddenField name="perfiles" class="span2" value="${janus.seguridad.Prfl.findByDescripcion("Oferente")?.id}"/>--}%
 
             %{--</td>--}%
             %{--<td>--}%
-                %{--<span class="control-label label label-inverse">--}%
-                    %{--Mail--}%
-                %{--</span>--}%
+            %{--<span class="control-label label label-inverse">--}%
+            %{--Mail--}%
+            %{--</span>--}%
             %{--</td>--}%
             %{--<td>--}%
-                %{--<g:textField name="email" maxlength="63" class="span2 required" value="${personaInstance?.email}"/>--}%
-                %{--<span class="mandatory">*</span>--}%
-                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--<g:textField name="email" maxlength="63" class="span2 required" value="${personaInstance?.email}"/>--}%
+            %{--<span class="mandatory">*</span>--}%
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
             %{--</td>--}%
         </tr>
     </table>

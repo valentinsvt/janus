@@ -146,7 +146,7 @@ class PersonaController extends janus.seguridad.Shield {
             str += "<ul>"
             user.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -169,30 +169,25 @@ class PersonaController extends janus.seguridad.Shield {
     } //index
 
 
-
-    def cambiarEstado () {
-
+    def cambiarEstado() {
 //         println(params.id)
-
         def persona = Persona.get(params.id)
-
 //          println(persona)
-
-        persona.activo = params.activo.toInteger()
-
+        if (persona.activo == 0) {
+            persona.activo = 1
+        } else {
+            persona.activo = 0
+        }
 //           println("id: " + persona.id)
 //           println("activo: " + persona.activo)
-
-        if (persona.save(flush: true))
+        if (persona.save(flush: true)) {
             render "ok"
-        flash.message = "El estado de la persona ha sido cambiado!"
-
+        } else {
+            render renderErrors(bean: persona)
+        }
 //        redirect(action: 'list')
-
         return
-
     }
-
 
 
     def list() {
@@ -217,19 +212,14 @@ class PersonaController extends janus.seguridad.Shield {
 //
 //        }
 
-
 //        [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params]
         [personaInstanceList: Persona.findAllByDepartamentoNotEqual(departamento), personaInstanceTotal: Persona.count(), params: params]
     } //list
 
-    def listOferente(){
-
-        def perfil = Prfl.get(4);
-
-
-        [personaInstanceList: Persona.list(params), personaInstanceTotal: Persona.count(), params: params, sesion: Sesn.findAllByPerfil(perfil), sesion2 : Sesn.findByPerfil(perfil)]
+    def listOferente() {
+        def perfil = Prfl.findByCodigo("OFRT")
+        [params: params, sesion: Sesn.findAllByPerfil(perfil)]
         //list
-
     }
 
 
@@ -251,8 +241,7 @@ class PersonaController extends janus.seguridad.Shield {
     } //form_ajax
 
 
-
-    def formOferente () {
+    def formOferente() {
 
         println "....123"
         def personaInstance = new Persona(params)
@@ -297,20 +286,19 @@ class PersonaController extends janus.seguridad.Shield {
 //            println(params.password.encodeAsMD5())
 //            println(Persona.get(params.id).password)
 
-            if ((params.password) == Persona.get(params.id).password){
+            if ((params.password) == Persona.get(params.id).password) {
 
                 params.password = Persona.get(params.id).password
 
 //                println("entro")
-            }else{
+            } else {
 
                 params.password = params.password.encodeAsMD5()
 //                println("entro1")
             }
-        }
-        else {
+        } else {
 
-            params.password =   params.password.encodeAsMD5()
+            params.password = params.password.encodeAsMD5()
 
         }
 
@@ -343,7 +331,7 @@ class PersonaController extends janus.seguridad.Shield {
             str += "<ul>"
             personaInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -359,49 +347,49 @@ class PersonaController extends janus.seguridad.Shield {
         def perfilesNue = params.perfiles
 
 
-        if(perfilesNue){
+        if (perfilesNue) {
 
             if (perfilesNue.class == java.lang.String) {
 
-                perfilesNue=[perfilesNue]
+                perfilesNue = [perfilesNue]
 
             }
 
 
         }
-        def  perfiles = Sesn.findAllByUsuario(personaInstance)
+        def perfiles = Sesn.findAllByUsuario(personaInstance)
 //        println "perfile nue "+perfilesNue
 //        println "!!!  "+perfiles.perfil.id
 
 
-        def borrar=true
+        def borrar = true
 
 
         perfilesNue.each {
-            def perfil =janus.seguridad.Prfl.get(it)
-            def ses = janus.seguridad.Sesn.findByUsuarioAndPerfil(personaInstance,perfil)
-            if(!ses){
-                ses = new janus.seguridad.Sesn([usuario:personaInstance,perfil:perfil])
-                println "grabando "+it
+            def perfil = janus.seguridad.Prfl.get(it)
+            def ses = janus.seguridad.Sesn.findByUsuarioAndPerfil(personaInstance, perfil)
+            if (!ses) {
+                ses = new janus.seguridad.Sesn([usuario: personaInstance, perfil: perfil])
+                println "grabando " + it
                 ses.save(flush: true)
             }
 
         }
-        for(int i = perfiles.size()-1;i>-1;i--){
-            perfilesNue.each {pn->
-                println "pn "+pn+"   "+    perfiles[i].perfil.id.toInteger()
-                if(pn.toInteger()==perfiles[i].perfil.id.toInteger()){
-                    borrar=false
+        for (int i = perfiles.size() - 1; i > -1; i--) {
+            perfilesNue.each { pn ->
+                println "pn " + pn + "   " + perfiles[i].perfil.id.toInteger()
+                if (pn.toInteger() == perfiles[i].perfil.id.toInteger()) {
+                    borrar = false
                 }
             }
-            if(borrar) {
-                println "borrando "+perfiles[i]
+            if (borrar) {
+                println "borrando " + perfiles[i]
                 def per = perfiles[i]
                 perfiles.remove(i)
                 per.delete(flush: true)
 
-            }else{
-                borrar=true
+            } else {
+                borrar = true
             }
 //            if(!perfilesNue.contains(perfiles[i].perfil.id.toString())) {
 //                println "borrando "+perfiles[i]
@@ -424,6 +412,7 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def saveOferente() {
+        println "Save oferente: " + params
         if (params.fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
         }
@@ -465,15 +454,13 @@ class PersonaController extends janus.seguridad.Shield {
             personaInstance = new Persona(params)
         } //es create
         if (!personaInstance.save(flush: true)) {
-
-
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Persona " + (personaInstance.id ? personaInstance.nombre + " " + personaInstance.apellido : "") + "</h4>"
 
             str += "<ul>"
             personaInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"
@@ -511,7 +498,7 @@ class PersonaController extends janus.seguridad.Shield {
 
 //            println("sesiones:" + sesiones.id)
 
-            if (!sesiones){
+            if (!sesiones) {
 //
 //                println("no")
 
@@ -522,10 +509,7 @@ class PersonaController extends janus.seguridad.Shield {
                     println "error al grabar sesn perfil: " + it + " persona " + personaInstance.id
                 }
 
-            }
-
-
-            else {
+            } else {
 
 //                    println("si")
 
@@ -544,11 +528,10 @@ class PersonaController extends janus.seguridad.Shield {
 
 
             def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
-            if (sesn){
+            if (sesn) {
 
                 sesn.delete()
             }
-
 
 
         }
@@ -564,12 +547,6 @@ class PersonaController extends janus.seguridad.Shield {
     } //save
 
 
-
-
-
-
-
-
     def show_ajax() {
         def personaInstance = Persona.get(params.id)
         if (!personaInstance) {
@@ -582,8 +559,7 @@ class PersonaController extends janus.seguridad.Shield {
     } //show
 
 
-
-    def showOferente () {
+    def showOferente() {
 
 
         def personaInstance = Persona.get(params.id)

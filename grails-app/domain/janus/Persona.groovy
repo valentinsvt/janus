@@ -63,7 +63,7 @@ class Persona implements Serializable {
         }
     }
     static constraints = {
-        cedula(size: 1..10, attributes: [title: 'cedula'])
+        cedula(size: 1..10, unique: true, attributes: [title: 'cedula'])
         nombre(size: 1..30, attributes: [title: 'nombre'])
         apellido(size: 1..30, attributes: [title: 'apellido'])
         codigo(blank: true, nullable: true, attributes: [title: 'numero'])
@@ -75,10 +75,10 @@ class Persona implements Serializable {
         titulo(size: 1..4, blank: true, nullable: true, attributes: [title: 'titulo'])
         cargo(size: 1..50, blank: true, nullable: true, attributes: [title: 'cargo'])
 
-        login(size: 1..16, blank: false, nullable: false, attributes: [title: 'login'])
+        login(size: 1..16, unique: true, blank: false, nullable: false, attributes: [title: 'login'])
         password(size: 1..63, blank: false, nullable: false, attributes: [title: 'password'])
         autorizacion(size: 1..63, blank: true, nullable: true, attributes: [title: 'autorizacion'])
-        email(blank: true, nullable: true, email: true, attributes: [title: 'email'])
+        email(blank: true, nullable: true, email: true, unique: true, attributes: [title: 'email'])
 
         activo(blank: false, nullable: false, attributes: [title: 'activo'])
         fechaActualizacionPass(blank: true, nullable: true, attributes: [title: 'fecha cmabio pass'])
