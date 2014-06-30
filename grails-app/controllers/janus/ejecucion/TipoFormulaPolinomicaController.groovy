@@ -30,6 +30,7 @@ class TipoFormulaPolinomicaController extends janus.seguridad.Shield {
 
     def save() {
 
+        params.codigo = params.codigo.toUpperCase();
 
         def existe = TipoFormulaPolinomica.findByCodigo(params.codigo)
 

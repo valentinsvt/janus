@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="main">
     <title>
-        Lista de Programacions
+        Lista de Programaciones
     </title>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
     <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
     <div class="span9 btn-group" role="navigation">
         <a href="#" class="btn btn-ajax btn-new">
             <i class="icon-file"></i>
-            Crear  Programacion
+            Crear  Programación
         </a>
     </div>
 
@@ -44,7 +44,7 @@
         <thead>
         <tr>
 
-            <g:sortableColumn property="descripcion" title="Descripcion"/>
+            <g:sortableColumn property="descripcion" title="Descripción"/>
 
             <g:sortableColumn property="fechaInicio" title="Fecha Inicio"/>
 
@@ -61,9 +61,9 @@
 
                 <td>${fieldValue(bean: programacionInstance, field: "descripcion")}</td>
 
-                <td><g:formatDate date="${programacionInstance.fechaInicio}"/></td>
+                <td><g:formatDate date="${programacionInstance.fechaInicio}" format="dd-MM-yyyy"/></td>
 
-                <td><g:formatDate date="${programacionInstance.fechaFin}"/></td>
+                <td><g:formatDate date="${programacionInstance.fechaFin}" format="dd-MM-yyyy"/></td>
 
                 <td>${fieldValue(bean: programacionInstance, field: "grupo")}</td>
 

@@ -29,6 +29,9 @@ class TipoAseguradoraController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+        params.codigo = params.codigo.toUpperCase();
+
         def existe = TipoAseguradora.findByCodigo(params.codigo)
 
         def tipoAseguradoraInstance

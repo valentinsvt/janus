@@ -14,15 +14,15 @@
 
             <g:if test="${monedaInstance?.id}">
                 <div class="controls">
-                    <g:textField name="codigo" maxlength="4" class="" value="${monedaInstance?.codigo}" readonly="readonly"/>
+                    <g:textField name="codigo" maxlength="4" class="required" value="${monedaInstance?.codigo}" readonly="readonly"/>
 
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </g:if>
             <g:else>
                 <div class="controls">
-                    <g:textField name="codigo" maxlength="4" class="" value="${monedaInstance?.codigo}"/>
-
+                    <g:textField name="codigo" maxlength="4" class="required allCaps" value="${monedaInstance?.codigo}" />
+                    <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </g:else>
@@ -37,8 +37,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="31" class="" value="${monedaInstance?.descripcion}"/>
-                
+                <g:textField name="descripcion" maxlength="31" class="required" value="${monedaInstance?.descripcion}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

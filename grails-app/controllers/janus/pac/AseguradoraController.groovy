@@ -33,7 +33,15 @@ class AseguradoraController extends janus.seguridad.Shield {
 
         println("params" + params)
 
-        def fecha = new Date().parse("dd-MM-yyyy", params.fechaContacto)
+        def fecha
+
+        if(params.fechaContacto){
+            fecha = new Date().parse("dd-MM-yyyy", params.fechaContacto)
+        }else{
+//            fecha = new Date()
+        }
+
+
 
         def aseguradoraInstance
         if (params.id) {

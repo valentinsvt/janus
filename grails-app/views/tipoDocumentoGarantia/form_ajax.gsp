@@ -21,8 +21,8 @@
             </g:if>
             <g:else>
                 <div class="controls">
-                    <g:textField name="codigo" maxlength="2" class="" value="${tipoDocumentoGarantiaInstance?.codigo}"/>
-
+                    <g:textField name="codigo" maxlength="2" class="required allCaps" value="${tipoDocumentoGarantiaInstance?.codigo}"/>
+                    <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </g:else>
@@ -38,8 +38,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="31" class="" value="${tipoDocumentoGarantiaInstance?.descripcion}"/>
-                
+                <g:textField name="descripcion" maxlength="31" class="required" value="${tipoDocumentoGarantiaInstance?.descripcion}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

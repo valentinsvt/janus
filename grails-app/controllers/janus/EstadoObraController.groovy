@@ -32,6 +32,8 @@ class EstadoObraController extends janus.seguridad.Shield {
     def save() {
         def estadoObraInstance
 
+        params.codigo = params.codigo.toUpperCase();
+
         def existe = EstadoObra.findByCodigo(params.codigo)
 
         if (params.id) {

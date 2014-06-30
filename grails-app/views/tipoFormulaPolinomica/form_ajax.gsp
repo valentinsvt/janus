@@ -21,8 +21,8 @@
             </g:if>
             <g:else>
                 <div class="controls">
-                    <g:textField name="codigo" class="" value="${tipoFormulaPolinomicaInstance?.codigo}"/>
-
+                    <g:textField name="codigo" class="allCaps required" value="${tipoFormulaPolinomicaInstance?.codigo}" maxlength="1"/>
+                    <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </g:else>
@@ -38,8 +38,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" class="" value="${tipoFormulaPolinomicaInstance?.descripcion}"/>
-                
+                <g:textField name="descripcion" class="required" value="${tipoFormulaPolinomicaInstance?.descripcion}" maxlength="15"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

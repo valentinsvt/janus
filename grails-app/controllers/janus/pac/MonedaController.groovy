@@ -31,6 +31,8 @@ class MonedaController extends janus.seguridad.Shield {
     def save() {
 //        println params
 
+        params.codigo = params.codigo.toUpperCase();
+
         def existe = Moneda.findByCodigo(params.codigo)
 
         def monedaInstance
@@ -46,6 +48,7 @@ class MonedaController extends janus.seguridad.Shield {
         }//es edit
         else {
             if(!existe){
+
                 monedaInstance = new Moneda(params)
             }else{
                 flash.clase = "alert-error"
@@ -80,7 +83,7 @@ class MonedaController extends janus.seguridad.Shield {
             flash.message = "Se ha actualizado correctamente Moneda " + monedaInstance?.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Moneda " + monedaInstance.id
+            flash.message = "Se ha creado correctamente Moneda " + monedaInstance?.descripcion
         }
         redirect(action: 'list')
     } //save

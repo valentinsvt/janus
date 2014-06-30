@@ -12,8 +12,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="nombre" maxlength="61" class="" value="${aseguradoraInstance?.nombre}"/>
-
+            <g:textField name="nombre" maxlength="61" class="required" value="${aseguradoraInstance?.nombre}" />
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -35,7 +35,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Telefonos
+                Teléfonos
             </span>
         </div>
 
@@ -92,7 +92,7 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Direccion
+                Dirección
             </span>
         </div>
 
@@ -154,4 +154,36 @@
             submitForm($(".btn-success"));
         }
     });
+
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+
+    $("#fax").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#telefonos").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+
 </script>

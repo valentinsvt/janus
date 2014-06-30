@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Tipo Formula Polinómica
+            Lista de Tipo de Fórmulas Polinómicas
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -27,7 +27,7 @@
             <div class="span9 btn-group" role="navigation">
                 <a href="#" class="btn btn-ajax btn-new">
                     <i class="icon-file"></i>
-                    Crear Tipo de Formula Polinomica
+                    Crear Tipo de Fórmula Polinómica
                 </a>
             </div>
             <div class="span3" id="busqueda-TipoFormulaPolinomica"></div>

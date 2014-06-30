@@ -14,15 +14,15 @@
 
             <g:if test="${tipoContratoInstance?.id}">
                 <div class="controls">
-                    <g:textField name="codigo" maxlength="7" class="" value="${tipoContratoInstance?.codigo}" readonly="readonly"/>
-
+                    <g:textField name="codigo" maxlength="2" class="" value="${tipoContratoInstance?.codigo}" readonly="readonly"/>
+                    <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </g:if>
             <g:else>
                 <div class="controls">
-                    <g:textField name="codigo" maxlength="7" class="" value="${tipoContratoInstance?.codigo}"/>
-
+                    <g:textField name="codigo" maxlength="2" class="required allCaps" value="${tipoContratoInstance?.codigo}"/>
+                    <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </g:else>
@@ -38,8 +38,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="32" class="" value="${tipoContratoInstance?.descripcion}"/>
-                
+                <g:textField name="descripcion" maxlength="32" class="required" value="${tipoContratoInstance?.descripcion}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

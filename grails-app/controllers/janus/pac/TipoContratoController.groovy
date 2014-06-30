@@ -30,6 +30,7 @@ class TipoContratoController extends janus.seguridad.Shield {
 
     def save() {
 
+        params.codigo = params.codigo.toUpperCase();
 
         def existe = TipoContrato.findByCodigo(params.codigo)
 
