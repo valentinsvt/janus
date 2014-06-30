@@ -29,6 +29,66 @@ class ParroquiaController extends janus.seguridad.Shield {
         return [parroquiaInstance: parroquiaInstance]
     } //form_ajax
 
+    def fixCodigos() {
+        def html = "<style>"
+        html += "table{ border-collapse: collapse; }"
+        html += "th{ padding: 5px; }"
+        html += "td{ padding: 2px; }"
+        html += "tr.ok, tr.ok td{ background-color: #93C19A; }"
+        html += "tr.no, tr.no td{ background-color: #C1939B; }"
+        html += "</style>"
+        html += "<p>Se han cambiado los códigos de las siguientes parroquias: </p>"
+        html += "<table border='1'>"
+        html += "<tr>"
+        html += "<thead>"
+        html += "<th>Parroquia</th>"
+        html += "<th>Cantón</th>"
+        html += "<th>Código Cantón</th>"
+        html += "<th>Código Parroquia</th>"
+        html += "<th>Nuevo Código Parroquia</th>"
+        html += "</thead>"
+        html += "</tr>"
+        def list = Parroquia.withCriteria {
+            canton {
+                order("numero", "asc")
+            }
+            order("codigo", "asc")
+        }
+        list.each { parr ->
+
+            parr.codigo = parr.codigo.replaceAll(parr.canton.numero.padLeft(2, '0'), '')
+            if (parr.codigo == '') {
+                parr.codigo = parr.canton.numero.padLeft(2, '0')
+            }
+            def nc = parr.canton.numero.padLeft(2, '0') + parr.codigo.padLeft(2, '0')
+
+            def ok = false
+            if (Parroquia.countByCodigoAndIdNotEqual(nc, parr.id) > 0) {
+                while (Parroquia.countByCodigoAndIdNotEqual(nc, parr.id) > 0) {
+                    println "repetido: ${parr.id} ${nc}"
+                    nc += "r"
+                }
+            }
+            parr.codigo = nc
+            if (parr.save(flush: true)) {
+                ok = true
+            } else {
+                println parr.errors
+            }
+
+            html += "<tr class='${ok ? 'ok' : 'no'}'>"
+            html += "<td>${parr.nombre}</td>"
+            html += "<td>${parr.canton.nombre}</td>"
+            html += "<td>${parr.canton.numero}</td>"
+            html += "<td>${parr.codigo}</td>"
+            html += "<td>${nc}</td>"
+            html += "</tr>"
+//            }
+        }
+        html += "</table>"
+        render html
+    }
+
     def save() {
         def parroquiaInstance
         if (params.id) {
