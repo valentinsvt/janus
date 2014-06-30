@@ -43,6 +43,15 @@ class ParroquiaController extends janus.seguridad.Shield {
         }//es edit
         else {
             parroquiaInstance = new Parroquia(params)
+            def existe = Parroquia.findByCodigo(params.codigo)
+            if (!existe)
+                parroquiaInstance = new Parroquia(params)
+            else {
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el código ya existe."
+                redirect(action: 'list')
+                return
+            }
         } //es create
         if (!parroquiaInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -51,7 +60,7 @@ class ParroquiaController extends janus.seguridad.Shield {
             str += "<ul>"
             parroquiaInstance.errors.allErrors.each { err ->
                 def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
+                err.arguments.eachWithIndex { arg, i ->
                     msg = msg.replaceAll("\\{" + i + "}", arg.toString())
                 }
                 str += "<li>" + msg + "</li>"

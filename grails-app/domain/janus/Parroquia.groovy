@@ -1,4 +1,5 @@
 package janus
+
 class Parroquia implements Serializable {
     Canton canton
     String codigo
@@ -24,7 +25,7 @@ class Parroquia implements Serializable {
     }
     static constraints = {
         nombre(size: 1..63, blank: false, attributes: [title: 'nombre'])
-        codigo(size: 1..6, blank: false, attributes: [title: 'numero'])
+        codigo(size: 1..6, unique: true, blank: false, attributes: [title: 'numero'])
         canton(blank: true, nullable: true, attributes: [title: 'canton'])
         urbana(size: 1..1, blank: true, nullable: true, attributes: [title: 'urbana'])
         latitud(blank: true, nullable: true, attributes: [title: 'latitud'])
@@ -32,7 +33,7 @@ class Parroquia implements Serializable {
 
     }
 
-    String toString(){
+    String toString() {
         return "${this.nombre}"
     }
 }
