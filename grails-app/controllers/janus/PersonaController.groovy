@@ -218,6 +218,8 @@ class PersonaController extends janus.seguridad.Shield {
 
     def listOferente() {
         def perfil = Prfl.findByCodigo("OFRT")
+//        println perfil
+//        println Sesn.findAllByPerfil(perfil)
         [params: params, sesion: Sesn.findAllByPerfil(perfil)]
         //list
     }
@@ -472,68 +474,16 @@ class PersonaController extends janus.seguridad.Shield {
             return
         }
 
-        //guardo los perfiles de la persona
-        //saco los perfiles q ya tiene
-        def perfilesAct = Sesn.findAllByUsuario(personaInstance).id*.toString()
-        //perfiles q llegaron como parametro
-        def perfilesNue = params.perfiles
-//
-//        println("-->>>" + params.perfiles)
-        def perfilesAdd = [], perfilesDel = []
-
-        perfilesAct.each { per ->
-            if (!perfilesNue.contains(per)) {
-                perfilesDel.add(per)
+        //le asigna perfil oferente si no tiene perfil
+        def oferente = Prfl.findByCodigo("OFRT")
+        def sesiones = Sesn.findAllByUsuario(personaInstance)
+        if (sesiones.size() == 0) {
+            def sesn = new Sesn()
+            sesn.perfil = oferente
+            sesn.usuario = personaInstance
+            if (!sesn.save(flush: true)) {
+                println "error al grabar sesn perfil: " + oferente + " persona " + personaInstance.id
             }
-        }
-        perfilesNue.each { per ->
-            if (!perfilesAct.contains(per)) {
-                perfilesAdd.add(per)
-            }
-        }
-
-        perfilesAdd.each {
-
-            def sesiones = Sesn.findAllByUsuario(personaInstance)
-
-//            println("sesiones:" + sesiones.id)
-
-            if (!sesiones) {
-//
-//                println("no")
-
-                def sesn = new Sesn()
-                sesn.perfil = Prfl.get(it)
-                sesn.usuario = personaInstance
-                if (!sesn.save(flush: true)) {
-                    println "error al grabar sesn perfil: " + it + " persona " + personaInstance.id
-                }
-
-            } else {
-
-//                    println("si")
-
-//                    sesiones.usuario.properties = params
-//                    sesiones.save(flush: true){
-//
-//                        println("actualizado");
-//
-//                    }
-
-
-            }
-
-        }
-        perfilesDel.each {
-
-
-            def sesn = Sesn.findByUsuarioAndPerfil(personaInstance, Prfl.get(it))
-            if (sesn) {
-
-                sesn.delete()
-            }
-
-
         }
 
         if (params.id) {

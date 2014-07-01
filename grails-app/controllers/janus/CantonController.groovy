@@ -69,10 +69,6 @@ class CantonController extends janus.seguridad.Shield {
                     flash.clase = "alert-success"
                     flash.message = "Se ha creado correctamente Canton " + cantonInstance.nombre
                 }
-
-
-
-
                 break;
             case "parroquia":
 
@@ -105,6 +101,7 @@ class CantonController extends janus.seguridad.Shield {
                     str += "</ul>"
 
                     flash.message = str
+                    render str
 //                    redirect(action: 'list')
 
 //                    loadTreePart()
