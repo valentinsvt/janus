@@ -31,7 +31,7 @@ class TipoGarantia {
 
 
 
-        codigo(size: 1..1, blank: true, nullable: true, attributes: [title: 'código'])
+        codigo(size: 1..2, blank: true, nullable: true, attributes: [title: 'código'])
         descripcion(size: 1..30, blank: true, nullable: true, attributes: [title: 'descripción'])
 
     }

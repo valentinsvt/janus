@@ -13,14 +13,14 @@
             </div>
             <g:if test="${tipoGarantiaInstance?.id}">
                 <div class="controls">
-                    <g:textField name="codigo" maxlength="1" class="" value="${tipoGarantiaInstance?.codigo}" readonly="readonly"/>
+                    <g:textField name="codigo" maxlength="2" class="allCaps" value="${tipoGarantiaInstance?.codigo}" readonly="readonly"/>
 
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
             </g:if>
             <g:else>
                 <div class="controls">
-                    <g:textField name="codigo" maxlength="1" class="required allCaps" value="${tipoGarantiaInstance?.codigo}"/>
+                    <g:textField name="codigo" maxlength="2" class="required allCaps" value="${tipoGarantiaInstance?.codigo}"/>
                     <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </div>
