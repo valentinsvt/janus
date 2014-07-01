@@ -955,7 +955,7 @@ class ReportesController {
 //        sheet.setColumnView(4, 30)
 //        sheet.setColumnView(8, 20)
         def label = new Label(0, 1, "G.A.D. PROVINCIA DE PICHINCHA".toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 2, "UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
+        label = new Label(0, 2, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS".toUpperCase(), times16format); sheet.addCell(label);
         label = new Label(0, 3, "Análisis de precios unitarios".toUpperCase(), times16format); sheet.addCell(label);
 
         sheet.mergeCells(0, 1, 1, 1)
@@ -1222,7 +1222,7 @@ class ReportesController {
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
-                            "                    <b>UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b>\n" +
+                            "                    <b>DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b>\n" +
                             "                </p>\n" +
                             "\n" +
                             "                <p style=\"font-size: 14px\">\n" +
@@ -2244,6 +2244,7 @@ class ReportesController {
         def baos = new ByteArrayOutputStream()
         def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
         Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times13bold = new Font(Font.TIMES_ROMAN, 12);
         Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
         Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
@@ -2279,7 +2280,7 @@ class ReportesController {
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
 //        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times12bold));
-        headers.add(new Paragraph("Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+        headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
 
         if (obra?.oficioSalida == null) {
             headers.add(new Paragraph("Informe" + " ", times12bold));
@@ -2288,9 +2289,12 @@ class ReportesController {
 //            headers.add(new Paragraph("N°. " + obra?.oficioSalida, times12bold));
             headers.add(new Paragraph("Informe N°. " + obra?.oficioSalida, times12bold));
         }
+//        headers.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times12bold));
 
-//        headers.add(new Paragraph("Quito, " + formatDate(date: obra?.fechaOficioSalida, format: "dd-MM-yyyy"), times10bold));
-        headers.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida).toUpperCase(), times12bold));
+        Paragraph headerFecha = new Paragraph();
+        headerFecha.setAlignment(Element.ALIGN_RIGHT);
+        headerFecha.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times13bold));
+        addEmptyLine(headerFecha, 1);
 
         Paragraph txtIzq = new Paragraph();
         addEmptyLine(txtIzq, 1);
@@ -2372,6 +2376,7 @@ class ReportesController {
 
         addEmptyLine(headers, 1);
         document.add(headers);
+        document.add(headerFecha);
         document.add(txtIzq);
 
         PdfPTable tablaPresupuesto = new PdfPTable(7);
@@ -2425,7 +2430,7 @@ class ReportesController {
         addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph("Responsable Cantidades de Obra", times8bold), prmsHeaderHoja)
         addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaPresupuesto, new Paragraph(obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph((obra?.inspector?.titulo ?: '')+ ' ' + obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
 
         PdfPTable tablaCoordenadas = new PdfPTable(3);
         tablaCoordenadas.setWidthPercentage(100);
@@ -3138,7 +3143,7 @@ class ReportesController {
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
         addEmptyLine(headers, 1);
 //        headers.add(new Paragraph(obra?.departamento?.direccion?.nombre, times14bold));
-        headers.add(new Paragraph("UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", times14bold));
+        headers.add(new Paragraph("DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", times14bold));
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("MEMORANDO", times14bold))
 
@@ -3614,7 +3619,7 @@ class ReportesController {
 
         headers.setAlignment(Element.ALIGN_CENTER);
         headers.add(new Paragraph(auxiliar.titulo, times18bold));
-        headers.add(new Paragraph("UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", times12bold))
+        headers.add(new Paragraph("DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS", times12bold))
         headers.add(new Paragraph("FÓRMULA POLINÓMICA", times12bold))
         headers.add(new Paragraph(obra?.formulaPolinomica, times12bold))
         document.add(headers);
@@ -4277,7 +4282,7 @@ class ReportesController {
         label = new Label(2, 2, "G.A.D. PROVINCIA DE PICHINCHA", times16format); sheet.addCell(label);
 
 
-        label = new Label(2, 4, "UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
+        label = new Label(2, 4, "DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS", times16format); sheet.addCell(label);
 
 
         label = new Label(2, 6, "PRESUPUESTO", times16format); sheet.addCell(label);

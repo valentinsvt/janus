@@ -145,8 +145,8 @@
             <div class="span6">
                 <div class="span2" style="margin-left: -1px"> Descripción de la Nota </div>
 
-                <g:textArea name="texto" value="${nota?.texto}" rows="5" cols="5"
-                            style="height: 125px; width:685px ; resize: none"/>
+                <g:textArea name="texto" value="${nota?.texto}"  rows="5" cols="5"
+                            style="height: 125px; width:685px ; resize: none" maxlength="1023"/>
             </div>
 
             <div class="span6" style="margin-top: 5px; margin-bottom: 10px">
@@ -159,7 +159,7 @@
 
             <div class="span6">
                 <g:textArea name="adicional" value="${nota?.adicional}" rows="5" cols="5"
-                            style="height: 125px; width:685px ; resize: none" />
+                            style="height: 125px; width:685px ; resize: none" maxlength="1023"/>
             </div>
 
             <g:hiddenField name="obraTipo" value="${obra?.claseObra?.tipo}"/>
@@ -525,7 +525,7 @@
                 <div class="span1">Texto</div>
 
                 <div class="span3"><g:textArea name="memo1" value="${auxiliarFijo?.memo1}" rows="4" cols="4"
-                                               style="width: 600px; height: 55px; margin-left: -50px;resize: none;"
+                                               style="width: 600px; height: 55px; margin-left: -50px;resize: none;" maxlength="1023"
                                                /></div>
 
             </div>
@@ -535,7 +535,7 @@
                 <div class="span1">Pie</div>
 
                 <div class="span3"><g:textArea name="memo2" value="${auxiliarFijo?.memo2}" rows="4" cols="4"
-                                               style="width: 600px; height: 55px; margin-left: -50px; resize: none;"
+                                               style="width: 600px; height: 55px; margin-left: -50px; resize: none;" maxlength="1023"
                                                /></div>
 
             </div>
@@ -798,7 +798,7 @@
         <div class="span6">
             <div class="span3"><g:textArea name="notaFormula" rows="4" value="${notaFormu}"
                                            cols="4"
-                                           style="width: 690px; margin-left: -30px; height: 70px; resize: none"
+                                           style="width: 690px; margin-left: -30px; height: 70px; resize: none"  maxlength="1023"
             /></div>
 
         </div>

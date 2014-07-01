@@ -34,7 +34,7 @@ class TipoGarantiaController extends janus.seguridad.Shield {
 
         params.codigo = params.codigo.toUpperCase();
 
-        println("-->" + params.codigo)
+//        println("-->" + params.codigo)
 
         def existe = TipoGarantia.findByCodigo(params.codigo)
 
