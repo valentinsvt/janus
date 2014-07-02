@@ -31,7 +31,7 @@ class Nota implements Serializable {
     static constraints = {
 
         obraTipo(maxSize: 1, blank: true, nullable: true, attributes: [title: 'obraTipo'])
-        descripcion(size: 1..1023, blank:true, attributes: [title: 'descripcion'])
+        descripcion(size: 1..253, blank:true, attributes: [title: 'descripcion'])
         texto(size: 1..1023, blank: true, attributes: [title: 'texto'])
         adicional(size: 1..1023, blank: true, nullable: true, attributes: [title: 'adicional'])
         tipo(size: 1..15, blank: true, nullable: true, attributes: [title: 'tipo'])

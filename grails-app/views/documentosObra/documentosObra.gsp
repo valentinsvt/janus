@@ -137,7 +137,7 @@
             <g:hiddenField name="obra" value="${obra?.id}"/>
 
             <div class="span7">
-                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" class="required"/> </div>
+                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcion" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" class="required" maxlength="253"/> </div>
             </div>
 
 
@@ -516,7 +516,7 @@
            </div>
 
             <div class="span7" style="margin-left: 100px">
-                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionMemo" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" /> </div>
+                <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionMemo" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" maxlength="253" /> </div>
             </div>
 
 
@@ -791,7 +791,7 @@
 
 
         <div class="span7" style="margin-left: 30px">
-            <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionFormu" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px"/> </div>
+            <div style="margin-left: -1px">Nombre de la Nota: <g:textField name="descripcionFormu" value="${nota?.descripcion}" style="width: 480px; margin-left: 20px" maxlength="253"/> </div>
         </div>
 
 
