@@ -16,7 +16,8 @@
 
 
 
-        <script src="${resource(dir: 'js/jquery/plugins/jquery.countdown', file: 'jquery.countdown.min.js')}"></script>
+        %{--<script src="${resource(dir: 'js/jquery/plugins/jquery.countdown', file: 'jquery.countdown.min.js')}"></script>--}%
+        <script src="${resource(dir: 'js/jquery/plugins/jquery.countdown', file: 'jquery.countdown.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery.countdown', file: 'jquery.countdown-es.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins', file: 'date.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/paginate/js', file: 'jquery.luz.paginate.js')}"></script>
