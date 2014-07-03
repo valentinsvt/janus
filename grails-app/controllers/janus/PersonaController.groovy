@@ -414,7 +414,7 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def saveOferente() {
-        println "Save oferente: " + params
+//        println "Save oferente: " + params
         if (params.fechaInicio) {
             params.fechaInicio = new Date().parse("dd-MM-yyyy", params.fechaInicio)
         }
@@ -474,15 +474,21 @@ class PersonaController extends janus.seguridad.Shield {
             return
         }
 
+        println "Creada la persona: " + personaInstance.login + " (${personaInstance.id})"
+
         //le asigna perfil oferente si no tiene perfil
-        def oferente = Prfl.findByCodigo("OFRT")
+        def perfilOferente = Prfl.findByCodigo("OFRT")
+        println "Asignando perfil " + perfilOferente.codigo + " " + perfilOferente.descripcion + " (${perfilOferente.id})"
         def sesiones = Sesn.findAllByUsuario(personaInstance)
+        println "La persona tiene ${sesiones.size()} sesiones"
         if (sesiones.size() == 0) {
             def sesn = new Sesn()
-            sesn.perfil = oferente
+            sesn.perfil = perfilOferente
             sesn.usuario = personaInstance
             if (!sesn.save(flush: true)) {
-                println "error al grabar sesn perfil: " + oferente + " persona " + personaInstance.id
+                println "error al grabar sesn perfil: " + perfilOferente + " persona " + personaInstance.id
+            } else {
+                println "Asignacion OK"
             }
         }
 

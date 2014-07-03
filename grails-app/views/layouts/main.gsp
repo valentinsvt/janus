@@ -102,10 +102,20 @@
 
             var ot = document.title;
 
+//            function resetTimer() {
+//                var ahora = new Date();
+//                var fin = ahora.clone().add(20).minute();
+//                $("#countdown").countdown('change', {
+//                    until : fin
+//                });
+//                $(".countdown_amount").removeClass("highlight");
+//                document.title = ot;
+//            }
             function resetTimer() {
                 var ahora = new Date();
                 var fin = ahora.clone().add(20).minute();
-                $("#countdown").countdown('change', {
+//                fin.add(1).second()
+                $("#countdown").countdown('option', {
                     until : fin
                 });
                 $(".countdown_amount").removeClass("highlight");
