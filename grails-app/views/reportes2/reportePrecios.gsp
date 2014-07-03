@@ -90,16 +90,16 @@
         <div class="hoja">
             <h1 style="font-size: 16px">G.A.D. PROVINCIA DE PICHINCHA</h1>
 
-            <h2>REPORTE DE COSTOS DE ${grupo.descripcion.toUpperCase()}</h2>
+            <h2>REPORTE DE COSTOS DE ${grupo?.descripcion?.toUpperCase()}</h2>
 
             <div style="height: 30px;">
-                <div class="left strong"> LISTA DE PRECIOS: ${lugar.descripcion.toUpperCase()}</div>
+                <div class="left strong"> LISTA DE PRECIOS: ${lugar?.descripcion?.toUpperCase()}</div>
 
                 <div class="right strong">FECHA DE CONSULTA: <g:formatDate date="${new Date()}" format="dd-MM-yyyy"/></div>
             </div>
 
 
-            <g:if test="${precios.size() > 0 }">
+            <g:if test="${precios?.size() > 0 }">
                 <table border="1">
                     <thead>
                     <tr>
@@ -107,24 +107,24 @@
                             CODIGO
                         </th>
                         <th>
-                            ${grupo.descripcion.toUpperCase()}
+                            ${grupo?.descripcion?.toUpperCase()}
                         </th>
-                        <g:if test="${cols.contains('u')}">
+                        <g:if test="${cols?.contains('u')}">
                             <th>
                                 UNIDAD
                             </th>
                         </g:if>
-                        <g:if test="${cols.contains('t')}">
+                        <g:if test="${cols?.contains('t')}">
                             <th>
                                 PESO/VOL
                             </th>
                         </g:if>
-                        <g:if test="${cols.contains('p')}">
+                        <g:if test="${cols?.contains('p')}">
                             <th>
                                 COSTO
                             </th>
                         </g:if>
-                        <g:if test="${cols.contains('f')}">
+                        <g:if test="${cols?.contains('f')}">
                             <th>
                                 FECHA ACT.
                             </th>
@@ -135,37 +135,39 @@
                     <g:each in="${precios}" var="precio" status="i">
                         <tr class="${i % 2 == 0 ? 'even' : 'odd'}">
                             <td>
-                                ${precio.item.codigo}
+                                ${precio?.item?.codigo}
                             </td>
                             <td>
-                                ${precio.item.nombre}
+                                ${precio?.item?.nombre}
                             </td>
-                            <g:if test="${cols.contains('u')}">
+                            <g:if test="${cols?.contains('u')}">
                                 <td class="tcenter">
-                                    ${precio.item.unidad.codigo}
+                                    ${precio?.item?.unidad?.codigo}
                                 </td>
                             </g:if>
-                            <g:if test="${cols.contains('t')}">
+                            <g:if test="${cols?.contains('t')}">
                                 <td>
                                     %{--${precio.item.peso}--}%
-                                    <g:formatNumber number="${precio.item.peso}" minFractionDigits="6" maxFractionDigits="6" format="##,##0" locale='ec'/>
-                                    <g:if test="${precio.item.transporte == 'P'}">
+                                    <g:formatNumber number="${precio?.item?.peso}" minFractionDigits="6" maxFractionDigits="6" format="##,##0" locale='ec'/>
+
+                                    <g:if test="${precio?.item?.transporte == 'P'}">
                                         Tn
                                     </g:if>
-                                    <g:elseif test="${precio.item.transporte == 'V'}">
+                                    <g:elseif test="${precio?.item?.transporte == 'V'}">
                                         M3
                                     </g:elseif>
                                 </td>
                             </g:if>
-                            <g:if test="${cols.contains('p')}">
+                            <g:if test="${cols?.contains('p')}">
                                 <td class="tright">
                                     %{--<g:formatNumber number="${(precio.precioUnitario)}" minFractionDigits="5" maxFractionDigits="5" format="##,#####0" locale='ec'/>--}%
-                                    <g:formatNumber number="${precio.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,##0" locale='ec'/>
+                                    <g:formatNumber number="${precio?.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,##0" locale='ec'/>
+
                                 </td>
                             </g:if>
-                            <g:if test="${cols.contains('f')}">
+                            <g:if test="${cols?.contains('f')}">
                                 <td class="tright">
-                                    <g:formatDate date="${precio.fecha}" format="dd-MM-yyyy"/>
+                                    <g:formatDate date="${precio?.fecha}" format="dd-MM-yyyy"/>
                                 </td>
                             </g:if>
                         </tr>

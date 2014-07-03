@@ -934,7 +934,7 @@ class Reportes2Controller {
 //        params.lugar = "4"
 //        params.grupo = "1"
 //
-//        println "params" + params
+        println "params" + params
 
         def grupo = Grupo.get(params.grupo.toLong())
 
@@ -964,10 +964,7 @@ class Reportes2Controller {
         def res = []
 
 
-//        items = []
         def tmp
-
-//        println items
         if(items == [] || items == ''){
 
             res = []
@@ -982,6 +979,7 @@ class Reportes2Controller {
 
         }
 
+        println("res" + res + "grupo" + grupo)
 
         return [lugar: lugar, cols: params.col, precios: res, grupo: grupo]
     }
@@ -1393,6 +1391,8 @@ class Reportes2Controller {
 
     def reportePreciosExcel() {
 
+        println("params " + params)
+
         def orden = "itemnmbr"
         if (params.orden == "n") {
             orden = "itemcdgo"
@@ -1421,6 +1421,8 @@ class Reportes2Controller {
         tmp.each {
             res.add(PrecioRubrosItems.get(it))
         }
+
+        println("excel" + res)
 
         //excel
 
@@ -1867,7 +1869,7 @@ class Reportes2Controller {
         def obra = Obra.get(params.id)
 
         def transTotal
-        def eqTotal
+        def eqTotal = 0
         def eqDesglosado
         def b = []
         def c = []

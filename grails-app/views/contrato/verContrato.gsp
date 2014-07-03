@@ -45,10 +45,12 @@
         <div class="row">
             <div class="span12 btn-group" role="navigation" style="margin-left: 0;width: 100%;height: 35px;">
                 <button class="btn" id="btn-lista"><i class="icon-book"></i> Lista</button>
-            %{--<button class="btn" id="btn-imprimir" disabled="true"><i class="icon-print"></i> Imprimir</button>--}%
-                <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
-                    <i class="icon-book"></i> Biblioteca
-                </g:link>
+                <g:if test="${contrato?.id}">
+                    <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
+                        <i class="icon-book"></i> Biblioteca
+                    </g:link>
+                </g:if>
+
                 <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
                     <i class="icon-pencil"></i> Garantías
                 </g:link>
@@ -63,14 +65,18 @@
                     <i class="icon-superscript"></i> Fórmula Polinómica
                 </a>
 
-                <a href="#" class="btn  " id="imprimir_sub">
-                    <i class="icon-print"></i>
-                    Imprimir Presupuesto
-                </a>
-                <a href="#" class="btn  " id="btnRubros">
-                    <i class="icon-print"></i>
-                    Rubros
-                </a>
+                <g:if test="${contrato?.id}">
+                    <a href="#" class="btn  " id="imprimir_sub">
+                        <i class="icon-print"></i>
+                        Imprimir Presupuesto
+                    </a>
+                </g:if>
+                <g:if test="${contrato?.id}">
+                    <a href="#" class="btn  " id="btnRubros">
+                        <i class="icon-print"></i>
+                        Rubros
+                    </a>
+                </g:if>
 
             </div>
         </div>

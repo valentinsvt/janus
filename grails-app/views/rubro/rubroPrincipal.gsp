@@ -62,10 +62,13 @@
         Imprimir
     </a>
 </g:if>
-    <a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">
-        <i class="icon-print"></i>
-        Excel
-    </a>
+    <g:if test="${rubro}">
+        <a href="#" class="btn btn-ajax btn-new" id="excel" title="Imprimir">
+            <i class="icon-print"></i>
+            Excel
+        </a>
+    </g:if>
+
     <g:if test="${rubro}">
         <a href="#" id="detalle" class="btn btn-ajax btn-new">
             <i class="icon-list"></i>

@@ -191,6 +191,7 @@ class Reportes5Controller {
     }
 
     def reporteAvance() {
+        println("params-->" + params)
         def baos = new ByteArrayOutputStream()
         def name = "avance_obras_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
 //            println "name "+name

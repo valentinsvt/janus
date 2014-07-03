@@ -50,8 +50,8 @@ class Reportes3Controller {
         def detalle
         def valores
         def subPre
-        def fechaNueva = obra?.fechaCreacionObra.format("dd-MM-yyyy");
-        def fechaPU = (obra?.fechaPreciosRubros.format("dd-MM-yyyy"));
+        def fechaNueva = obra?.fechaCreacionObra?.format("dd-MM-yyyy");
+        def fechaPU = (obra?.fechaPreciosRubros?.format("dd-MM-yyyy"));
 
         if (params.sub != '-1'){
 
@@ -65,9 +65,9 @@ class Reportes3Controller {
         if (params.sub)
 //            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
             if (params.sub == '-1'){
-                valores = preciosService.rbro_pcun_v2(obra.id)
+                valores = preciosService.rbro_pcun_v2(obra?.id)
             }else {
-               valores = preciosService.rbro_pcun_v3(obra.id, params.sub)
+               valores = preciosService.rbro_pcun_v3(obra?.id, params.sub)
             }
         else
 //            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
