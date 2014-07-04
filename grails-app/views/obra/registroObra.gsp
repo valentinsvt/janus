@@ -2382,11 +2382,15 @@
                             url     : "${createLink(controller: 'claseObra', action:'save_ext')}",
                             data    : $("#frmSave-claseObraInstance").serialize(),
                             success : function (msg) {
-                                if (msg != 'error') {
+                                if (msg.lastIndexOf("No", 0) === 0) {
+                                    alert (msg)
+                                }else{
                                     $("#claseObra").replaceWith(msg);
                                 }
                                 $("#modal-TipoObra").modal("hide");
                             }
+
+
                         });
 
                         return false;

@@ -34,6 +34,11 @@ class ClaseObraController extends janus.seguridad.Shield {
 
     def save_ext() {
 
+
+        params.codigo = params.codigo.toUpperCase();
+
+        def existe = ClaseObra.findByCodigo(params.codigo)
+
         def grupo = Grupo.get(params.grupo)
         params.grupo = grupo
 
@@ -49,7 +54,16 @@ class ClaseObraController extends janus.seguridad.Shield {
             claseObraInstance.properties = params
         }//es edit
         else {
-            claseObraInstance = new ClaseObra(params)
+            if(!existe){
+                claseObraInstance = new ClaseObra(params)
+            }else{
+//                re.clase = "alert-error"
+                render "No se pudo guardar la clase de obra, el código ya existe!!"
+
+                return
+
+            }
+
         } //es create
         if (!claseObraInstance.save(flush: true)) {
             def str = "<h4>No se pudo guardar ClaseObra " + (claseObraInstance.id ? claseObraInstance.id : "") + "</h4>"
