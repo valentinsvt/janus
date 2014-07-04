@@ -174,6 +174,7 @@ class Reportes2Controller {
 
     def reporteRubroIlustracion() {
         def obra = Obra.get(params.id)
+        def persona = Persona.get(session.usuario.id)
         def rubros = VolumenesObra.findAllByObra(obra).item.unique()
 
         def baos = new ByteArrayOutputStream()
@@ -187,6 +188,10 @@ class Reportes2Controller {
         Document document
         document = new Document(PageSize.A4);
         def pdfw = PdfWriter.getInstance(document, baos);
+        HeaderFooter footer1 = new HeaderFooter(new Phrase('', fontTd), true);
+        footer1.setBorder(Rectangle.NO_BORDER);
+        footer1.setAlignment(Element.ALIGN_CENTER);
+        document.setFooter(footer1);
         document.open();
         PdfContentByte cb = pdfw.getDirectContent();
         document.addTitle("Rubros de la obra " + obra.nombre + " " + new Date().format("dd_MM_yyyy"));
@@ -202,7 +207,8 @@ class Reportes2Controller {
         preface.add(new Paragraph("ANEXO DE ESPECIFICACIÓN DE RUBROS DE LA OBRA " + obra.nombre, catFont));
         addEmptyLine(preface, 1);
         Paragraph preface2 = new Paragraph();
-        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+//        preface2.add(new Paragraph("Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
+        preface2.add(new Paragraph("Generado por el usuario: " + (persona?.titulo ?: '') + ' ' + (persona?.nombre ?: '') + ' ' + (persona?.apellido ?: '') + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), info))
         addEmptyLine(preface2, 1);
         document.add(preface);
         document.add(preface2);
@@ -322,8 +328,8 @@ class Reportes2Controller {
             document.add(tablaRubro)
 
             infoText(cb, document, rubrosText, DOC)
-            infoText(cb, document, pagAct.toString(), PAG)
-            pagAct++
+//            infoText(cb, document, pagAct.toString(), PAG)
+//            pagAct++
 
             if (extEspecificacion == "pdf") {
                 pagesEspecificacion.times {
@@ -352,8 +358,10 @@ class Reportes2Controller {
                 }
                 document.newPage();
             }
-            document.newPage();
+//            document.newPage();
         }
+
+
 
         document.close();
         pdfw.close()
@@ -934,7 +942,7 @@ class Reportes2Controller {
 //        params.lugar = "4"
 //        params.grupo = "1"
 //
-        println "params" + params
+//        println "params" + params
 
         def grupo = Grupo.get(params.grupo.toLong())
 
@@ -971,15 +979,34 @@ class Reportes2Controller {
 
         }else {
 
+            def nombres = []
+            def corregidos = []
+
             tmp = preciosService.getPrecioRubroItemOrder(fecha, lugar, items, orden, "asc")
             tmp.each {
                 res.add(PrecioRubrosItems.get(it))
             }
 
+            res.each {
+            nombres += it?.item?.nombre
+            }
+
+            nombres.each {
+                def text = (it ?: '')
+
+                text = text.decodeHTML()
+                text = text.replaceAll(/</, /&lt;/);
+                text = text.replaceAll(/>/, /&gt;/);
+                corregidos += text
+            }
+
+            res.eachWithIndex{ j,i->
+                j.item.nombre = corregidos[i]
+            }
 
         }
 
-        println("res" + res + "grupo" + grupo)
+//        println("res" + res + "grupo" + grupo)
 
         return [lugar: lugar, cols: params.col, precios: res, grupo: grupo]
     }
@@ -1391,7 +1418,7 @@ class Reportes2Controller {
 
     def reportePreciosExcel() {
 
-        println("params " + params)
+//        println("params " + params)
 
         def orden = "itemnmbr"
         if (params.orden == "n") {
@@ -1422,7 +1449,7 @@ class Reportes2Controller {
             res.add(PrecioRubrosItems.get(it))
         }
 
-        println("excel" + res)
+//        println("excel" + res)
 
         //excel
 

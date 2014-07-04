@@ -160,9 +160,7 @@
                             </g:if>
                             <g:if test="${cols?.contains('p')}">
                                 <td class="tright">
-                                    %{--<g:formatNumber number="${(precio.precioUnitario)}" minFractionDigits="5" maxFractionDigits="5" format="##,#####0" locale='ec'/>--}%
                                     <g:formatNumber number="${precio?.precioUnitario}" minFractionDigits="5" maxFractionDigits="5" format="##,##0" locale='ec'/>
-
                                 </td>
                             </g:if>
                             <g:if test="${cols?.contains('f')}">

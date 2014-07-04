@@ -393,10 +393,11 @@ class ReportesController {
             sheet.setColumnView(i, p.toInteger())
         }
 
-
+        def persona1 = Persona.get(session.usuario.id)
 
         def label = new Label(0, 1, "Reporte de " + params.titulo.toUpperCase(), times16format); sheet.addCell(label);
-        label = new Label(0, 2, "Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), times16format);
+//        label = new Label(0, 2, "Generado por el usuario: " + session.usuario + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), times16format);
+        label = new Label(0, 2, "Generado por el usuario: " + (persona1?.titulo ?: '') + ' ' + (persona1?.nombre ?: '') + ' ' + (persona1?.apellido ?: '') + "   el: " + new Date().format("dd/MM/yyyy hh:mm"), times16format);
         sheet.addCell(label);
         listaTitulos.eachWithIndex { h, i ->
             //write cell
@@ -3016,7 +3017,7 @@ class ReportesController {
 
 //        document.add(table3);
 
-        println(document.getPageNumber())
+//        println(document.getPageNumber())
         document.close();
         pdfw.close()
         byte[] b = baos.toByteArray();

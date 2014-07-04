@@ -296,6 +296,7 @@ class PacController extends janus.seguridad.Shield {
     }
 
     def buscaCpac() {
+//        println("params C" + params)
         def listaTitulos = ["Código", "Descripción"]
         def listaCampos = ["numero", "descripcion"]
         def funciones = [null, null]
@@ -307,9 +308,19 @@ class PacController extends janus.seguridad.Shield {
         def numRegistros = 20
         def extras = " and movimiento=1"
         if (!params.reporte) {
-            def lista = buscadorService.buscar(CodigoComprasPublicas, "CodigoComprasPublicas", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-            lista.pop()
-            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            if(params.excel){
+//                println("entro")
+                session.dominio = CodigoComprasPublicas
+                session.funciones = funciones
+                def anchos = [15, 50, 70, 20, 20, 20, 20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "CodigoComprasPublicas", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "CodigoComprasPublicas", anchos: anchos, extras: extras, landscape: true])
+
+            }else{
+                def lista = buscadorService.buscar(CodigoComprasPublicas, "CodigoComprasPublicas", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            }
         } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
@@ -321,6 +332,7 @@ class PacController extends janus.seguridad.Shield {
     }
 
     def buscaPrsp() {
+
         def listaTitulos = ["Código", "Descripción", "Fuente", "programa", "Subprograma", "Proyecto"]
         def listaCampos = ["numero", "descripcion", "fuente", "programa", "subPrograma", "proyecto"]
         def funciones = [null, null]
@@ -331,10 +343,21 @@ class PacController extends janus.seguridad.Shield {
         funcionJs += '}'
         def numRegistros = 20
         def extras = ""
+
+        println("params" + params)
+
         if (!params.reporte) {
-            def lista = buscadorService.buscar(janus.Presupuesto, "Presupuesto", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-            lista.pop()
-            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            if(params.excel){
+                session.dominio = Presupuesto
+                session.funciones = funciones
+                def anchos = [15, 50, 70, 20, 20, 20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Presupuesto", anchos: anchos, extras: extras, landscape: true])
+            }else{
+                def lista = buscadorService.buscar(janus.Presupuesto, "Presupuesto", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            }
         } else {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Presupuesto
