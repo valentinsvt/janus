@@ -491,11 +491,11 @@
 
     <div class="span5"><g:textField name="referencia" class="referencia" style="width: 470px; margin-left: -20px" value="${obra?.referencia}" maxlength="127" title="Referencia de la disposición para realizar la Obra"/></div>
 
-    <div class="span1" style="width: 100px;">Longitud de la vía:</div>
+    <div class="span1" style="width: 120px;">Longitud de la vía(m):</div>
 
-    <div class="span1"><g:textField name="longitudVia" class="referencia number" type="number" style="width: 80px; margin-left: -20px" maxlength="9" value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Longitud de la vía en metros. Sólo obras viales"/></div>
+    <div class="span1"><g:textField name="longitudVia" class="referencia number" type="number" style="width: 60px; margin-left: -20px" maxlength="9" value="${g.formatNumber(number: obra?.longitudVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Longitud de la vía en metros. Sólo obras viales"/></div>
 
-    <div class="span1" style="width: 90px;">Ancho de la vía:</div>
+    <div class="span1" style="width: 110px; margin-left: -10px">Ancho de la vía(m):</div>
 
     <div class="span1"><g:textField name="anchoVia" class="referencia number" type="number" style="width: 50px; margin-left: -10px" maxlength="4" value="${g.formatNumber(number: obra?.anchoVia, maxFractionDigits: 1, minFractionDigits: 1, format: '##,##0', locale: 'ec')}" title="Ancho de la vía en metros. Sólo obras viales"/></div>
 </div>
@@ -2344,9 +2344,13 @@
                                 if (msg != 'error') {
 //                                            $("#divTipoObra").html(msg);
                                     $("#tipoObra").replaceWith(msg);
+                                    alert('Tipo de obra creada!')
+                                }else{
+                                  alert('No se pudo grabar el tipo de obra, el código ingresado ya existe!')
                                 }
 
                                 $("#modal-TipoObra").modal("hide");
+
                             }
                         });
 
@@ -2382,22 +2386,20 @@
                             url     : "${createLink(controller: 'claseObra', action:'save_ext')}",
                             data    : $("#frmSave-claseObraInstance").serialize(),
                             success : function (msg) {
-                                if (msg.lastIndexOf("No", 0) === 0) {
+                                if (msg.lastIndexOf("No", 0) == 0) {
                                     alert (msg)
                                 }else{
                                     $("#claseObra").replaceWith(msg);
+                                    alert('Clase de obra creada!')
                                 }
                                 $("#modal-TipoObra").modal("hide");
                             }
-
-
                         });
-
                         return false;
                     });
 
                     $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");
-                    $("#modalTitle_tipo").html("Crear Tipo de Obra");
+                    $("#modalTitle_tipo").html("Crear Clase de Obra");
                     $("#modalBody_tipo").html(msg);
                     $("#modalFooter_tipo").html("").append(btnOk).append(btnSave);
                     $("#modal-TipoObra").modal("show");
@@ -2418,15 +2420,17 @@
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                     btnSave.click(function () {
-//                            submitForm(btnSave);
                         $(this).replaceWith(spinner);
                         $.ajax({
                             type    : "POST",
                             url     : "${createLink(controller: 'programacion', action:'save_ext')}",
-                            data    : $("#frmSave-programacionInstance").serialize(),
+                            data    : $("#frmSave-Programacion").serialize(),
                             success : function (msg) {
                                 if (msg != 'error') {
                                     $("#programacion").replaceWith(msg);
+                                    alert("Programa creado!")
+                                }else{
+                                    alert("No se pudo guardar el programa!")
                                 }
                                 $("#modal-TipoObra").modal("hide");
                             }

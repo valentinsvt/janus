@@ -59,7 +59,7 @@
 
         <div class="controls">
             <g:select id="grupo" name="grupo.id" from="${janus.Grupo.list()}" optionKey="id" class="many-to-one "
-                      value="${programacionInstance?.grupo?.id}" noSelection="['null': '']"/>
+                      value="${programacionInstance?.grupo?.id}" />
 
             <p class="help-block ui-helper-hidden"></p>
         </div>

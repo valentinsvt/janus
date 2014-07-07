@@ -2294,6 +2294,8 @@ class ReportesController {
 
         Paragraph headerFecha = new Paragraph();
         headerFecha.setAlignment(Element.ALIGN_RIGHT);
+        addEmptyLine(headerFecha, 1);
+        addEmptyLine(headerFecha, 1);
         headerFecha.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times13bold));
         addEmptyLine(headerFecha, 1);
 
@@ -2785,45 +2787,54 @@ class ReportesController {
             txtDatos.add(new Paragraph("DATOS PARA EL PRESUPUESTO", times8bold));
             txtDatos.add(new Paragraph(" ", times8bold));
 
+           if(obra?.distanciaPeso != 0){
+               addCellTabla(tablaDatos, new Paragraph("Cantón", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaDatos, new Paragraph(obra?.lugar?.descripcion, times8bold), prmsHeaderHoja)
+               addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+               addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
 
-            addCellTabla(tablaDatos, new Paragraph("Cantón", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(obra?.lugar?.descripcion, times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+           }
 
-
-            addCellTabla(tablaDatos, new Paragraph("Especial", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(obra?.listaPeso1?.descripcion, times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPesoEspecial, format: "###", locale: "ec" ) + ' Km', times8normal), prmsHeaderHoja)
-
-            addCellTabla(tablaDatos, new Paragraph("Mejoramiento", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen1?.descripcion, times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenMejoramiento, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            if(obra?.distanciaPesoEspecial != 0){
+                addCellTabla(tablaDatos, new Paragraph("Especial", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaPeso1?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPesoEspecial, format: "###", locale: "ec" ) + ' Km', times8normal), prmsHeaderHoja)
+            }
 
 
-            addCellTabla(tablaDatos, new Paragraph("Petreos Hormigones", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen0?.descripcion, times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            if(obra?.distanciaVolumenMejoramiento != 0){
 
-            addCellTabla(tablaDatos, new Paragraph("Carpeta Asfáltica", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen2?.descripcion, times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Mejoramiento", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen1?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenMejoramiento, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            }
 
+            if(obra?.distanciaVolumen != 0){
+                addCellTabla(tablaDatos, new Paragraph("Petreos Hormigones", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen0?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            }
 
+            if(obra?.distanciaVolumenCarpetaAsfaltica != 0){
+
+                addCellTabla(tablaDatos, new Paragraph("Carpeta Asfáltica", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen2?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            }
 
             txtDatos1.setAlignment(Element.ALIGN_CENTER);
             txtDatos1.add(new Paragraph("COSTO INDIRECTO TOTAL : 21 %", times8bold));

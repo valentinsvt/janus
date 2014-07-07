@@ -34,13 +34,16 @@ class ClaseObraController extends janus.seguridad.Shield {
 
     def save_ext() {
 
+//println("params" + params)
 
         params.codigo = params.codigo.toUpperCase();
 
         def existe = ClaseObra.findByCodigo(params.codigo)
 
-        def grupo = Grupo.get(params.grupo)
+        def grupo = Grupo.get(params."grupo.id")
         params.grupo = grupo
+
+//        println("rupo" + params.grupo)
 
         def claseObraInstance, message
         if (params.id) {
@@ -89,10 +92,8 @@ class ClaseObraController extends janus.seguridad.Shield {
         }
 
         println message
-//        def sel = g.select(id: "claseObra", name: "claseObra.id", "class": "claseObra required", from: ClaseObra?.list(), value: claseObraInstance.id,
-//                optionValue: "descripcion", optionKey: "id", style: "margin-left: -35px; width: 230px", title: "Clase de Obra")
 
-        def sel = g.select(id: "claseObra", name: "claseObra.id", "class": "claseObra required", from: ClaseObra.findAllByGrupo(grupo), value: claseObraInstance.id,
+        def sel = g.select(id: "claseObra", name: "claseObra.id", "class": "claseObra required", from: ClaseObra.list(), value: claseObraInstance.id,
                 optionValue: "descripcion", optionKey: "id", style: "margin-left: -35px; width: 230px", title: "Clase de Obra")
 
 

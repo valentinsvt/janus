@@ -1,9 +1,8 @@
 <%@ page import="janus.Programacion" %>
 
-<div id="create-programacionInstance" class="span" role="main">
-<g:form class="form-horizontal" name="frmSave-programacionInstance" action="save_ext">
+<div id="create-Programacion" class="span" role="main">
+<g:form class="form-horizontal" name="frmSave-Programacion" action="save">
     <g:hiddenField name="id" value="${programacionInstance?.id}"/>
-    <g:hiddenField name="grupo" value="${grupo}" />
 
     <div class="control-group">
         <div>
@@ -13,7 +12,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="descripcion" maxlength="40" class=" required" value="${programacionInstance?.descripcion}"/>
+            <g:textField name="descripcion" maxlength="40" class=" required"
+                         value="${programacionInstance?.descripcion}"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
@@ -28,17 +28,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="fechaInicio" class="datepicker" style="width: 90px" value="${programacionInstance?.fechaInicio}"/>
-            <script type="text/javascript">
-                $("#fechaInicio").datepicker({
-                    changeMonth     : true,
-                    changeYear      : true,
-                    dateFormat      : "dd-mm-yy",
-//showOn: "both",
-                    buttonImage     : "${resource(dir:'images', file:'calendar.png')}",
-                    buttonImageOnly : true
-                });
-            </script>
+            <elm:datepicker name="fechaInicio" class="" value="${programacionInstance?.fechaInicio}"/>
+
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -52,17 +43,23 @@
         </div>
 
         <div class="controls">
-            <g:textField name="fechaFin" class="datepicker" style="width: 90px" value="${programacionInstance?.fechaFin}"/>
-            <script type="text/javascript">
-                $("#fechaFin").datepicker({
-                    changeMonth     : true,
-                    changeYear      : true,
-                    dateFormat      : "dd-mm-yy",
-//showOn: "both",
-                    buttonImage     : "${resource(dir:'images', file:'calendar.png')}",
-                    buttonImageOnly : true
-                });
-            </script>
+            <elm:datepicker name="fechaFin" class="" value="${programacionInstance?.fechaFin}"/>
+
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Grupo
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:select id="grupo" name="grupo.id" from="${janus.Grupo.list()}" optionKey="id" class="many-to-one "
+                      value="${programacionInstance?.grupo?.id}"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -71,20 +68,23 @@
 </g:form>
 
 <script type="text/javascript">
-    var url = "${resource(dir:'images', file:'spinner_24.gif')}";
-    var spinner = $("<img style='margin-left:15px;' src='" + url + "' alt='Cargando...'/>")
-
-    $("#frmSave-programacionInstance").validate({
-        errorPlacement : function (error, element) {
+    $("#frmSave-Programacion").validate({
+        errorPlacement: function (error, element) {
             element.parent().find(".help-block").html(error).show();
         },
-        success        : function (label) {
+        success: function (label) {
             label.parent().hide();
         },
-        errorClass     : "label label-important",
-        submitHandler  : function (form) {
-            $("[name=btnSave-programacionInstance]").replaceWith(spinner);
+        errorClass: "label label-important",
+        submitHandler: function (form) {
+            $(".btn-success").replaceWith(spinner);
             form.submit();
+        }
+    });
+
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
         }
     });
 </script>

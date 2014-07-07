@@ -31,8 +31,6 @@ class ProgramacionController extends janus.seguridad.Shield {
 
     def form_ext_ajax() {
 
-//        println("form" + params)
-
         def grupo = params.grupo
 
         def programacionInstance = new Programacion(params)
@@ -51,13 +49,19 @@ class ProgramacionController extends janus.seguridad.Shield {
 
     def save() {
 
+        println("params " + params )
 
-//        println("params " + params )
+        def fechaI
+        def fechaF
 
-        def fechaI = new Date().parse("dd-MM-yyyy", params.fechaInicio)
-        def fechaF = new Date().parse("dd-MM-yyyy", params.fechaFin)
+        if(params.fechaInicio){
+            fechaI = new Date().parse("dd-MM-yyyy", params.fechaInicio)
+        }
 
-//        println("fechas" + fechaI + ' ' + fechaF)
+        if(params.fechaFin){
+            fechaF = new Date().parse("dd-MM-yyyy", params.fechaFin)
+        }
+
 
         params.fechaInicio = fechaI
         params.fechaFin = fechaF
@@ -107,13 +111,9 @@ class ProgramacionController extends janus.seguridad.Shield {
     } //save
 
     def save_ext() {
-//        println ("save" + params)
+        println("params" + params)
 
-        def grupo = Grupo.get(params.grupo)
 
-        params.grupo = grupo
-
-        def programa = Programacion.findAllByGrupo(grupo)
 
         def programacionInstance, message
 
@@ -158,24 +158,15 @@ class ProgramacionController extends janus.seguridad.Shield {
         }
 
         if (params.id) {
-            message = "Se ha actualizado correctamente Programacion " + programacionInstance.id
+            message = "Se ha actualizado correctamente la Programacion " + programacionInstance.descripcion
         } else {
-            message = "Se ha creado correctamente Programacion " + programacionInstance.id
+            message = "Se ha creado correctamente la Programacion " + programacionInstance.id
         }
         println message
 
-//        def sel = g.select(id: "programacion", name: "programacion.id", "class": "programacion required", from: Programacion?.list(), value: programacionInstance.id, optionValue: "descripcion",
-//                optionKey: "id", title: "Programa")
-
-        def sel = g.select(id: "programacion", name: "programacion.id", "class": "programacion required", from: Programacion.findAllByGrupo(grupo), value: programacionInstance.id, optionValue: "descripcion",
+        def sel = g.select(id: "programacion", name: "programacion.id", "class": "programacion required", from: Programacion.list(), value: programacionInstance.id, optionValue: "descripcion",
                 optionKey: "id", title: "Programa")
-
-//        <g:select id="programacion" name="programacion.id" class="programacion required" from="${programa}" value="${obra?.programacion?.id}" optionValue="descripcion" optionKey="id" title="Programa"/>
-
-
-
-
-                render sel
+        render sel
     } //save
 
     def show_ajax() {
@@ -201,12 +192,12 @@ class ProgramacionController extends janus.seguridad.Shield {
         try {
             programacionInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Programacion " + programacionInstance.id
+            flash.message = "Se ha eliminado correctamente la Programacion " + programacionInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Programacion " + (programacionInstance.id ? programacionInstance.id : "")
+            flash.message = "No se pudo eliminar la Programacion " + (programacionInstance.id ? programacionInstance.id : "")
             redirect(action: "list")
         }
     } //delete

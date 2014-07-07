@@ -12,11 +12,13 @@
             </span>
         </div>
 
-        <div class="controls">
-            <g:textField name="codigo" maxlength="4" class=" required" value="${tipoObraInstance?.codigo}" style="width: 40px;"/>
-            <span class="mandatory">*</span>
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
+            <div class="controls">
+                <g:textField name="codigo" maxlength="4" class=" required allCaps" value="${tipoObraInstance?.codigo}"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+
     </div>
 
     <div class="control-group">
@@ -27,8 +29,24 @@
         </div>
 
         <div class="controls">
-            <g:textField name="descripcion" maxlength="63" class=" required" value="${tipoObraInstance?.descripcion}" style="width: 300px;"/>
+            <g:textField name="descripcion" maxlength="63" class=" required" value="${tipoObraInstance?.descripcion}"/>
             <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Grupo
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:select id="grupo" name="grupo.id" from="${janus.Grupo.list()}" optionKey="id" class="many-to-one "
+                      value="${tipoObraInstance?.grupo?.id}" />
+
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>

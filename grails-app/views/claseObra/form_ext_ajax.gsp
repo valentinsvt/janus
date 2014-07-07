@@ -12,18 +12,9 @@
             </span>
         </div>
 
-        %{--<div class="controls">--}%
-            %{--<g:field type="number" name="codigo" class=" required" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}" style="width: 40px;"/>--}%
-            %{--<span class="mandatory">*</span>--}%
-
-            %{--<p class="help-block ui-helper-hidden"></p>--}%
-        %{--</div>--}%
         <g:if test="${claseObraInstance?.id}">
 
             <div class="controls">
-                %{--<g:field type="number" name="codigo" class=" required" --}%
-                %{--value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>--}%
-
                 <g:textField name="codigo" readonly="readonly" class=" required allCaps" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
@@ -32,7 +23,7 @@
         </g:if>
         <g:else>
             <div class="controls">
-                <g:textField name="codigo" class=" required allCaps" value=""/>
+                <g:textField name="codigo"  id="codigo1" class=" required allCaps" value=""/>
                 <span class="mandatory">*</span>
 
                 <p class="help-block ui-helper-hidden"></p>
@@ -50,6 +41,21 @@
         <div class="controls">
             <g:textField name="descripcion" maxlength="63" class=" required" value="${claseObraInstance?.descripcion}"/>
             <span class="mandatory">*</span>
+
+            <p class="help-block ui-helper-hidden"></p>
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div>
+            <span class="control-label label label-inverse">
+                Grupo
+            </span>
+        </div>
+
+        <div class="controls">
+            <g:select id="grupo" name="grupo.id" from="${janus.Grupo.list()}" optionKey="id" class="many-to-one "
+                      value="${claseObraInstance?.grupo?.id}"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -75,6 +81,13 @@
         }
     });
 
+//    $("input").keyup(function (ev) {
+//        if (ev.keyCode == 13) {
+//            submitForm($(".btn-success"));
+//        }
+//    });
+
+
 
     function validarNum(ev) {
         /*
@@ -96,7 +109,7 @@
     }
 
 
-    $("#codigo").keydown(function (ev){
+    $("#codigo1").keydown(function (ev){
 
         return validarNum(ev)
     })
