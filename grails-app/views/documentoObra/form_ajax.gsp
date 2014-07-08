@@ -12,9 +12,8 @@
                 </span>
             </div>
 
-            <div class="controls">
-                <input type="file" id="archivo" name="archivo"/>
-
+            <div class="controls" >
+                <input type="file" id="archivo" name="archivo" style="height: 32px; margin-top: -5px"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -27,7 +26,8 @@
             </div>
 
             <div class="controls">
-                <g:textArea name="nombre" cols="50" rows="1" maxlength="255" class="" value="${documentoObraInstance?.nombre}"/>
+                <g:textArea name="nombre" cols="60" rows="1" maxlength="255" class="" value="${documentoObraInstance?.nombre}"
+                style="height:25px; width: 300px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -35,12 +35,13 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Resumen del documento
+                    Resumen del contenido
                 </span>
             </div>
 
             <div class="controls">
-                <g:textArea name="resumen" cols="40" rows="3" maxlength="1024" class="" value="${documentoObraInstance?.resumen}"/>
+                <g:textArea name="resumen" cols="40" rows="3" maxlength="1024" class="" value="${documentoObraInstance?.resumen}"
+                            style="height:60px; width: 300px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
@@ -48,7 +49,7 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripción del contenido
+                    Descripción del documento
                 </span>
             </div>
 
@@ -66,7 +67,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="palabrasClave" maxlength="63" class="" value="${documentoObraInstance?.palabrasClave}"/>
+                <g:textField name="palabrasClave" maxlength="63" class="" value="${documentoObraInstance?.palabrasClave}"
+                             style="height:25px; width: 300px;"/>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

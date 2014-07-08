@@ -45,6 +45,7 @@
 
         <g:form action="delete" name="frmDelete-DocumentoObra">
             <g:hiddenField name="id"/>
+            <g:hiddenField name="obra_id"/>
         </g:form>
 
         <div id="list-DocumentoObra" role="main">
@@ -204,7 +205,9 @@
 
                 $(".btn-delete").click(function () {
                     var id = $(this).data("id");
+                    var obraId = "${obra?.id}";
                     $("#id").val(id);
+                    $("#obra_id").val(obraId);
                     var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                     var btnDelete = $('<a href="#" class="btn btn-danger"><i class="icon-trash"></i> Eliminar</a>');
 

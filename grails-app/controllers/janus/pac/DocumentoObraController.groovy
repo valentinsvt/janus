@@ -101,7 +101,7 @@ class DocumentoObraController extends janus.seguridad.Shield {
         if (f && !f.empty) {
             def fileName = f.getOriginalFilename() //nombre original del archivo
 
-            def accepted = ["jpg", 'png', "pdf"]
+            def accepted = ["jpg", 'png', "pdf", "dwg", "xls", "xlsx", "doc", "docx"]
 
 //            def tipo = f.
 
@@ -229,15 +229,16 @@ class DocumentoObraController extends janus.seguridad.Shield {
     } //show
 
     def delete() {
+//        println "..." + params
         def documentoObraInstance = DocumentoObra.get(params.id)
         if (!documentoObraInstance) {
             flash.clase = "alert-error"
             flash.message = "No se encontró Documento Obra con id " + params.id
-            redirect(action: "list")
+            redirect(action: "list", id: params.obra_id)
             return
         }
-        def path = documentoObraInstance.path
-        def cid = documentoObraInstance.concursoId
+        def path = documentoObraInstance?.path
+//        def cid = documentoObraInstance?.concursoId
         try {
             documentoObraInstance.delete(flush: true)
             flash.clase = "alert-success"
@@ -247,13 +248,13 @@ class DocumentoObraController extends janus.seguridad.Shield {
             path = servletContext.getRealPath("/") + folder + File.separatorChar + path
             def file = new File(path)
             file.delete()
-
-            redirect(action: "list")
+            redirect(action: "list", id: params.obra_id)
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
             flash.message = "No se pudo eliminar Documento Obra " + (documentoObraInstance.id ? documentoObraInstance.id : "")
-            redirect(action: "list")
+            params.id = params.obra_id
+            redirect(action: "list", id: params.obra_id)
         }
     } //delete
 } //fin controller
