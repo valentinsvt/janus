@@ -81,11 +81,11 @@
         }
     });
 
-//    $("input").keyup(function (ev) {
-//        if (ev.keyCode == 13) {
-//            submitForm($(".btn-success"));
-//        }
-//    });
+    $("input").keyup(function (ev) {
+        if (ev.keyCode == 13) {
+            submitForm($(".btn-success"));
+        }
+    });
 
 
 

@@ -2346,7 +2346,7 @@
                                     $("#tipoObra").replaceWith(msg);
                                     alert('Tipo de obra creada!')
                                 }else{
-                                  alert('No se pudo grabar el tipo de obra, el código ingresado ya existe!')
+                                  alert('No se pudo grabar el tipo de obra')
                                 }
 
                                 $("#modal-TipoObra").modal("hide");
@@ -2379,23 +2379,27 @@
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                     btnSave.click(function () {
-//                            submitForm(btnSave);
-                        $(this).replaceWith(spinner);
-                        $.ajax({
-                            type    : "POST",
-                            url     : "${createLink(controller: 'claseObra', action:'save_ext')}",
-                            data    : $("#frmSave-claseObraInstance").serialize(),
-                            success : function (msg) {
-                                if (msg.lastIndexOf("No", 0) == 0) {
-                                    alert (msg)
-                                }else{
-                                    $("#claseObra").replaceWith(msg);
-                                    alert('Clase de obra creada!')
+                        if($("#codigo1").val()){
+                            $(this).replaceWith(spinner);
+                            $.ajax({
+                                type    : "POST",
+                                url     : "${createLink(controller: 'claseObra', action:'save_ext')}",
+                                data    : $("#frmSave-claseObraInstance").serialize(),
+                                success : function (msg) {
+                                    if (msg.lastIndexOf("No", 0) == 0) {
+                                        alert (msg)
+                                    }else{
+                                        $("#claseObra").replaceWith(msg);
+                                        alert('Clase de obra creada!')
+                                    }
+                                    $("#modal-TipoObra").modal("hide");
                                 }
-                                $("#modal-TipoObra").modal("hide");
-                            }
-                        });
-                        return false;
+                            });
+                            return false;
+                        }else{
+                            alert('No ingreso ningun código!')
+                        }
+
                     });
 
                     $("#modalHeader_tipo").removeClass("btn-edit btn-show btn-delete");

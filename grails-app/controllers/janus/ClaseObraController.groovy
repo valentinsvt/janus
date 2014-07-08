@@ -35,10 +35,8 @@ class ClaseObraController extends janus.seguridad.Shield {
     def save_ext() {
 
 //println("params" + params)
-
         params.codigo = params.codigo.toUpperCase();
-
-        def existe = ClaseObra.findByCodigo(params.codigo)
+        def  existe = ClaseObra.findByCodigo(params.codigo)
 
         def grupo = Grupo.get(params."grupo.id")
         params.grupo = grupo
@@ -60,9 +58,7 @@ class ClaseObraController extends janus.seguridad.Shield {
             if(!existe){
                 claseObraInstance = new ClaseObra(params)
             }else{
-//                re.clase = "alert-error"
                 render "No se pudo guardar la clase de obra, el código ya existe!!"
-
                 return
 
             }
@@ -81,7 +77,7 @@ class ClaseObraController extends janus.seguridad.Shield {
             }
             str += "</ul>"
             println message
-            render "error"
+            render "No se pudo guardar la clase de obra!"
             return
         }
 
@@ -121,17 +117,6 @@ class ClaseObraController extends janus.seguridad.Shield {
         def clases = ClaseObra.list()
         def pp = ClaseObra.findByCodigo(params.codigo)
 
-//        println('---->' + pp)
-
-//        def codigosCo = []
-//        def existeCo  = 0
-//        clases.each {
-//            codigosCo += it?.codigo
-//        }
-//
-//        println("codigos " + codigosCo)
-
-
         def claseObraInstance
         if (params.id) {
             claseObraInstance = ClaseObra.get(params.id)
@@ -144,16 +129,6 @@ class ClaseObraController extends janus.seguridad.Shield {
             claseObraInstance.properties = params
         }//es edit
         else {
-
-//            codigosCo.each {
-//                if(it ==  params.codigo){
-//                    println("entro")
-//                    existeCo = 1
-//                }
-//            }
-//
-//            println("existe" + existeCo)
-
             if(!pp){
                 claseObraInstance = new ClaseObra(params)
             }else{
