@@ -59,7 +59,8 @@
         <g:each in="${claseObraInstanceList}" status="i" var="claseObraInstance">
             <tr>
 
-                <td>${fieldValue(bean: claseObraInstance, field: "codigo")}</td>
+                %{--<td>${fieldValue(bean: claseObraInstance, field: "codigo")}</td>--}%
+                <td>${claseObraInstance?.codigo}</td>
 
                 <td>${fieldValue(bean: claseObraInstance, field: "descripcion")}</td>
 

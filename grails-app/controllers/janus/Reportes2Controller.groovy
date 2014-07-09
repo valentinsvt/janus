@@ -1891,7 +1891,7 @@ class Reportes2Controller {
 
     def reporteDesgloseEquipos() {
 
-//        println("params" + params)
+        println("params" + params)
 
         def obra = Obra.get(params.id)
 
@@ -1902,6 +1902,8 @@ class Reportes2Controller {
         def c = []
         def sqlEquipoTotal1
         def sqlVerificarTransporte
+        def sqlEquiposs2
+        def sqlEquiposs1
         def et1 = []
         def et2
         def et3
@@ -1917,6 +1919,13 @@ class Reportes2Controller {
 
         def fechaIngreso = printFecha(obra?.fechaCreacionObra)
         def fechaPrecios = printFecha(obra?.fechaPreciosRubros)
+
+
+
+        def nuevoa = []
+        def nuevob = []
+        def nuevoc = []
+        def nuevod = []
 
         def sqlTransTotal = "SELECT\n" +
                 "valor\n" +
@@ -1952,24 +1961,34 @@ class Reportes2Controller {
                 "codigo = 'sS1' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
 
-//        println("--><" + sqlVerificarTransporte)
 
-//            select valor
-//        from mfvl, mfcl
-//        where mfvl.obra__id = mfcl.obra__id and mfvl.obra__id = 1430
-//        and mfcl.clmndscr = '5051_T' and
-//        codigo = 'sS1'  and mfvl.clmncdgo = mfcl.clmncdgo;
+        sqlEquiposs2 = "SELECT\n" +
+                "valor\n" +
+                "from mfvl, mfcl\n" +
+                "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
+                "mfvl.obra__id = ${obra.id} AND\n" +
+                "mfcl.clmndscr = '1256_T' AND \n" +
+                "codigo = 'sS2' AND\n " +
+                "mfvl.clmncdgo = mfcl.clmncdgo"
 
-//
-//        select valor
-//        from mfvl, mfcl
-//        where mfvl.obra__id = mfcl.obra__id
-//        and mfvl.obra__id = 1430 and mfcl.clmndscr = '5051_T' and
-//        codigo = 'sS2'
-//        and mfvl.clmncdgo = mfcl.clmncdgo;
+
+        sqlEquiposs1 = "SELECT\n" +
+                "valor\n" +
+                "from mfvl, mfcl\n" +
+                "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
+                "mfvl.obra__id = ${obra.id} AND\n" +
+                "mfcl.clmndscr = '1256_T' AND \n" +
+                "codigo = 'sS1' AND\n " +
+                "mfvl.clmncdgo = mfcl.clmncdgo"
+
+
+
 
 
         def cn = dbConnectionService.getConnection()
+
+
+        def hhh = cn.rows(sqlEquiposs2.toString())
 
         ed4 = cn.rows(sqlVerificarTransporte.toString())
         ed4.each {
@@ -1995,6 +2014,8 @@ class Reportes2Controller {
 
             ed3 = cn.rows(sqlEquipoDesglosado1.toString())
 
+//            println("ed3" + ed3)
+
             ed3.each {
 
 
@@ -2007,6 +2028,8 @@ class Reportes2Controller {
 
 
         }
+
+
 
 
         def tt = cn.rows(sqlTransTotal.toString())
@@ -2037,7 +2060,7 @@ class Reportes2Controller {
         valores += (obra?.desgloseMecanico)
         valores += (obra?.desgloseSaldo)
 
-//        valores.add(obra?.desgloseEquipo)
+        println("obradesglose" + obra?.desgloseEquipo)
 
 //        println("coeficientes:" + valores)
 ////
@@ -2048,8 +2071,9 @@ class Reportes2Controller {
 
         if (varTrans > 0) {
             valores.eachWithIndex { item, i ->
-
-                if (item > 0) {
+//println("item " + item)
+//println("ed " + ed1)
+                if (item > 0 && ed1[1]) {
 
 
                     b += (((ed1[i]) / (item)) - eqTotal)
@@ -2080,6 +2104,34 @@ class Reportes2Controller {
         }
 
 //      println("C:" + c)
+
+
+
+        //nuevos valores
+
+
+        def equipoA = cn.rows(sqlEquiposs1.toString())
+        def equipoC = cn.rows(sqlEquiposs2.toString())
+
+        println("--->" + equipoA)
+        println("--->" + equipoC)
+
+        equipoA.each{
+
+            nuevoa += it
+        }
+
+//        equipoC.each {
+//            nuevoc += it
+//        }
+
+        nuevoc = equipoC[0]/obra?.desgloseEquipo
+
+        println("A" + nuevoa)
+        println("C" + nuevoc)
+
+
+
 
 
         def prmsHeaderHoja = [border: Color.WHITE]

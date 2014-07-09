@@ -57,7 +57,8 @@
         <g:each in="${tipoObraInstanceList}" status="i" var="tipoObraInstance">
             <tr>
 
-                <td>${fieldValue(bean: tipoObraInstance, field: "codigo")}</td>
+
+                <td>${tipoObraInstance?.codigo}</td>
 
                 <td>${fieldValue(bean: tipoObraInstance, field: "descripcion")}</td>
 
