@@ -1922,10 +1922,14 @@ class Reportes2Controller {
 
 
 
-        def nuevoa = []
-        def nuevob = []
-        def nuevoc = []
-        def nuevod = []
+        def nuevoa = 0
+        def nuevob = 0
+        def nuevoc = 0
+        def nuevod = 0
+        def nuevoe = 0
+        def nuevof = 0
+        def nuevog = 0
+        def nuevoh = 0
 
         def sqlTransTotal = "SELECT\n" +
                 "valor\n" +
@@ -1981,14 +1985,10 @@ class Reportes2Controller {
                 "codigo = 'sS1' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
 
-
-
+//        println("s1" + sqlEquiposs1)
 
 
         def cn = dbConnectionService.getConnection()
-
-
-        def hhh = cn.rows(sqlEquiposs2.toString())
 
         ed4 = cn.rows(sqlVerificarTransporte.toString())
         ed4.each {
@@ -2060,7 +2060,7 @@ class Reportes2Controller {
         valores += (obra?.desgloseMecanico)
         valores += (obra?.desgloseSaldo)
 
-        println("obradesglose" + obra?.desgloseEquipo)
+//        println("obradesglose" + obra?.desgloseEquipo)
 
 //        println("coeficientes:" + valores)
 ////
@@ -2113,26 +2113,30 @@ class Reportes2Controller {
         def equipoA = cn.rows(sqlEquiposs1.toString())
         def equipoC = cn.rows(sqlEquiposs2.toString())
 
-        println("--->" + equipoA)
-        println("--->" + equipoC)
+//        println("--->" + equipoA)
+//        println("--->" + equipoC)
 
         equipoA.each{
 
-            nuevoa += it
+            nuevoa = it?.valor
         }
 
-//        equipoC.each {
-//            nuevoc += it
-//        }
+        equipoC.each {
+            nuevoc = it?.valor/obra?.desgloseEquipo
+        }
+//
+//        println("A" + nuevoa)
+//        println("C" + nuevoc)
 
-        nuevoc = equipoC[0]/obra?.desgloseEquipo
+        nuevob = nuevoc -nuevoa
 
-        println("A" + nuevoa)
-        println("C" + nuevoc)
+//        println("B" + nuevob)
 
-
-
-
+        nuevod = nuevoc*obra?.desgloseEquipo
+        nuevoe = nuevoc*obra?.desgloseRepuestos
+        nuevof = nuevoc*obra?.desgloseCombustible
+        nuevog = nuevoc*obra?.desgloseMecanico
+        nuevoh = nuevoc*obra?.desgloseSaldo
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
@@ -2248,7 +2252,9 @@ class Reportes2Controller {
 
         addCellTabla(tablaDesglose, new Paragraph("Valor de Equipos", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: eqTotal, minFractionDigits:
+//        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: eqTotal, minFractionDigits:
+//                5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: nuevoa , minFractionDigits:
                 5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2257,26 +2263,33 @@ class Reportes2Controller {
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
-        if (b[0] > 0) {
+//        if (b[0] > 0) {
+//
+//
+//            addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+//            addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
+//                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
+//            addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+//
+//        } else {
+//
+//
+//            addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+//            addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
+//                    5, maxFractionDigits: 5, format: "##.##", locale: "ec"), times10normal), prmsDerecha)
+//            addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
+//
+//
+//        }
 
 
-            addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-            addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
-                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times10normal), prmsDerecha)
-            addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
-
-        } else {
-
-
-            addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-            addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: b[0], minFractionDigits:
-                    5, maxFractionDigits: 5, format: "##.##", locale: "ec"), times10normal), prmsDerecha)
-            addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
-
-
-        }
+        addCellTabla(tablaDesglose, new Paragraph("Valor de Transporte excluyendo al Chofer", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: nuevob, minFractionDigits:
+                5, maxFractionDigits: 5, format: "##.##", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
 
 
@@ -2287,7 +2300,9 @@ class Reportes2Controller {
 
         addCellTabla(tablaDesglose, new Paragraph("Total Equipos + Transporte", times10bold), prmsHeaderHoja)
         addCellTabla(tablaDesglose, new Paragraph(" : "), prmsHeaderHoja)
-        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: c[0], minFractionDigits:
+//        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: c[0], minFractionDigits:
+//                5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesglose, new Paragraph(g.formatNumber(number: nuevoc, minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesglose, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2307,9 +2322,9 @@ class Reportes2Controller {
                 0, maxFractionDigits: 0, format: "###,##0", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[0], minFractionDigits:
-//                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[0], minFractionDigits:
+//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[0], minFractionDigits:
+//                5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: nuevod, minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2318,9 +2333,9 @@ class Reportes2Controller {
                 0, maxFractionDigits: 0, format: "###,##0", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[1], minFractionDigits:
-//                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[1], minFractionDigits:
+//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[1], minFractionDigits:
+//                5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: nuevoe, minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2329,9 +2344,9 @@ class Reportes2Controller {
                 0, maxFractionDigits: 0, format: "###,##0", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[2], minFractionDigits:
-//                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[2], minFractionDigits:
+//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[2], minFractionDigits:
+//                5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: nuevof, minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2340,9 +2355,9 @@ class Reportes2Controller {
                 0, maxFractionDigits: 0, format: "###,##0", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[3], minFractionDigits:
-//                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[3], minFractionDigits:
+//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[3], minFractionDigits:
+//                5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: nuevog, minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
@@ -2351,9 +2366,9 @@ class Reportes2Controller {
                 0, maxFractionDigits: 0, format: "###,##0", locale: "ec") + " %", times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
         addCellTabla(tablaDesgloseBody, new Paragraph(" : "), prmsHeaderHoja)
-//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: ed1[4], minFractionDigits:
-//                5, maxFractionDigits: 5, format: "###,###", locale: "ec"), times10normal), prmsDerecha)
-        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[4], minFractionDigits:
+//        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: c[0] * valores[4], minFractionDigits:
+//                5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
+        addCellTabla(tablaDesgloseBody, new Paragraph(g.formatNumber(number: nuevoh, minFractionDigits:
                 5, maxFractionDigits: 5, format: "###,##0", locale: "ec"), times10normal), prmsDerecha)
         addCellTabla(tablaDesgloseBody, new Paragraph(" "), prmsHeaderHoja)
 
