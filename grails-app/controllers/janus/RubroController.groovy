@@ -281,6 +281,7 @@ class RubroController extends janus.seguridad.Shield {
                 params.factor = "1"
             factor = params.factor?.toDouble()
             detalles.each {
+                println ""+it.item.departamento.subgrupo.grupo.descripcion+"  "+it.item.departamento.subgrupo.grupo.codigo
                 def tmp = Rubro.findByRubroAndItem(rubro, it.item)
                 if (!tmp) {
 //                    println "no temnp "
@@ -288,6 +289,7 @@ class RubroController extends janus.seguridad.Shield {
                     nuevo.rubro = rubro
                     nuevo.item = it.item
 //                    println " asd "  +it.item.nombre
+
                     if(it.item.departamento.subgrupo.grupo.id.toInteger()==1){
                         nuevo.cantidad = it.cantidad * factor
                     }else{
@@ -308,9 +310,24 @@ class RubroController extends janus.seguridad.Shield {
 //                    println "else si hay "
                     if (!(it.item.nombre =~ "HERRAMIENTA MENOR")) {
 //                        println "entro 2 "+factor
-                        tmp.cantidad = tmp.cantidad + it.cantidad * factor
-                        tmp.fecha = new Date()
-                        tmp.save(flush: true)
+                        if(it.item.departamento.subgrupo.grupo.id.toInteger()==2){
+                            //println "es mano de obra"
+                            def maxCant = Math.max(tmp.cantidad,it.cantidad*factor)
+                            def sum = tmp.cantidad*tmp.rendimiento+(it.cantidad*factor*it.rendimiento)
+                            //println "maxcant "+maxCant+" sum "+sum
+                            def rend = sum/maxCant
+                            tmp.cantidad = maxCant
+                            tmp.rendimiento=rend
+                            tmp.fecha = new Date()
+                            tmp.save(flush: true)
+
+
+                        }else{
+                            tmp.cantidad = tmp.cantidad + it.cantidad * factor
+                            tmp.fecha = new Date()
+                            tmp.save(flush: true)
+                        }
+
 
                     }
                 }
@@ -552,7 +569,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def getPreciosTransporte() {
-        println "get precios "+params
+       // println "get precios "+params
         def lugar = Lugar.get(params.ciudad)
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
         def tipo = params.tipo
@@ -758,7 +775,7 @@ class RubroController extends janus.seguridad.Shield {
 
 
     def verificaRubro(){
-        println "verifica rubro "+params
+//        println "verifica rubro "+params
         def rubro = Item.get(params.id)
         def volumenes = VolumenesObra.findAllByItem(rubro);
         println "vol " +volumenes
