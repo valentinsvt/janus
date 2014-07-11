@@ -312,7 +312,7 @@ class RubroController extends janus.seguridad.Shield {
 //                        println "entro 2 "+factor
                         if(it.item.departamento.subgrupo.grupo.id.toInteger()==2){
                             //println "es mano de obra"
-                            def maxCant = Math.max(tmp.cantidad,it.cantidad*factor)
+                            def maxCant = Math.max(tmp.cantidad,it.cantidad)
                             def sum = tmp.cantidad*tmp.rendimiento+(it.cantidad*factor*it.rendimiento)
                             //println "maxcant "+maxCant+" sum "+sum
                             def rend = sum/maxCant
