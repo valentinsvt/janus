@@ -1699,16 +1699,65 @@
 
         $("#btn_copiarComp").click(function () {
             if ($("#rubro__id").val() * 1 > 0) {
-                var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-                $("#modalTitle").html("Lista de rubros");
-                $("#modalFooter").html("").append(btnOk);
-                $(".contenidoBuscador").html("")
-                $("#tipos").hide()
-                $("#btn_reporte").show()
-                $("#btn_excel").show()
-                $("#modal-rubro").modal("show");
-                $("#buscarDialog").unbind("click")
-                $("#buscarDialog").bind("click", enviarCopiar)
+
+                /*----*/
+                $.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'verificaRubro')}",
+                    data     : "id=${rubro?.id}",
+                    success  : function (msg) {
+                        $("#dlgLoad").dialog("close")
+                        if(msg=="1"){
+                            var d =   $.box({
+                                imageClass : "box_info",
+                                text       : "Este rubro ya forma parte de una obra.",
+                                title      : "Alerta",
+                                iconClose  : false,
+                                dialog     : {
+                                    resizable : false,
+                                    draggable : false,
+                                    buttons   : {
+                                        "Cancelar":function(){
+
+                                        }
+                                        %{--"Aceptar" : function () {--}%
+                                        %{--$("#dlgLoad").dialog("open")--}%
+                                        %{--$.ajax({type : "POST", url : "${g.createLink(controller: 'rubro',action:'copiaRubro')}",--}%
+                                        %{--data     : "id=${rubro?.id}",--}%
+                                        %{--success  : function (msg) {--}%
+                                        %{--$("#dlgLoad").dialog("close")--}%
+                                        %{--if(msg=="true"){--}%
+                                        %{--alert("Error al generar historico del rubro, comunique este error al administrador del sistema")--}%
+                                        %{--}else{--}%
+                                        %{--//                                                    console.log("es historico",msg)--}%
+                                        %{--$("#boxHiddenDlg").dialog("close")--}%
+                                        %{--agregar(msg,"H");--}%
+
+                                        %{--}--}%
+
+                                        %{--}--}%
+                                        %{--});--}%
+                                        %{--}--}%
+
+                                    }
+                                }
+                            });
+                        }else{
+                            var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+                            $("#modalTitle").html("Lista de rubros");
+                            $("#modalFooter").html("").append(btnOk);
+                            $(".contenidoBuscador").html("")
+                            $("#tipos").hide()
+                            $("#btn_reporte").show()
+                            $("#btn_excel").show()
+                            $("#modal-rubro").modal("show");
+                            $("#buscarDialog").unbind("click")
+                            $("#buscarDialog").bind("click", enviarCopiar)
+
+                        }
+                    }
+                });
+
+                /*aqui*/
+
             } else {
                 $.box({
                     imageClass : "box_info",

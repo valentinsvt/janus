@@ -108,8 +108,15 @@ class RubroController extends janus.seguridad.Shield {
     def getDatosItem() {
 //        println "get datos items "+params
         def item = Item.get(params.id)
-//        println "render "+  item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad.codigo + "&" + item.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
-        render "" + item.id + "&" + item.codigo + "&" + item.nombre + "&" + item.unidad?.codigo?.trim() + "&" + item.rendimiento + "&" + ((item.tipoLista) ? item.tipoLista?.id : "0")+"&"+item.departamento.subgrupo.grupo.id
+        def nombre = item.nombre
+       // println "nombre antes de "+item.nombre
+        nombre = nombre.replaceAll(/>/, / mayor que /)
+        nombre = nombre.replaceAll(/</, / menor que /)
+        nombre = nombre.replaceAll(/&gt;/, / mayor que /)
+        nombre = nombre.replaceAll(/&lt;/, / menor que /)
+       // println "nombre despues de "+nombre
+        //println "render "+  item.id + "&" + item.codigo + "&" + nombre + "&" + item.unidad.codigo + "&" + item.rendimiento+"&"+((item.tipoLista)?item.tipoLista?.id:"0")
+        render "" + item.id + "&" + item.codigo + "&" + nombre + "&" + item.unidad?.codigo?.trim() + "&" + item.rendimiento + "&" + ((item.tipoLista) ? item.tipoLista?.id : "0")+"&"+item.departamento.subgrupo.grupo.id
     }
 
     def addItem() {
@@ -144,7 +151,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def buscaItem() {
-        println "busca item "+params
+        //println "busca item "+params
         def listaTitulos = ["Código", "Descripción"]
         def listaCampos = ["codigo", "nombre"]
         def funciones = [null, null]
@@ -154,10 +161,16 @@ class RubroController extends janus.seguridad.Shield {
         funcionJs += '$.ajax({type: "POST",url: "' + g.createLink(controller: 'rubro', action: 'getDatosItem') + '",'
         funcionJs += ' data: "id="+idReg,'
         funcionJs += ' success: function(msg){'
+       // funcionJs += 'console.log("desc " +msg);'
         funcionJs += 'var parts = msg.split("&");'
         funcionJs += ' $("#item_id").val(parts[0]);'
         funcionJs += ' $("#item_id").attr("tipo",parts[6]);'
         funcionJs += '$("#cdgo_buscar").val(parts[1]);'
+        funcionJs += 'var desc =parts[2]; '
+        //funcionJs += 'console.log("desc "+desc);'
+        funcionJs += 'desc =desc.replace(/>/g, " mayor "); '
+        funcionJs += 'desc =desc.replace(/</g, " menor "); '
+       // funcionJs += 'console.log("desc "+desc);'
         funcionJs += '$("#item_desc").val(parts[2]);'
         funcionJs += '$("#item_unidad").val(parts[3]);'
         funcionJs += '$("#item_tipoLista").val(parts[5]);'
@@ -598,7 +611,12 @@ class RubroController extends janus.seguridad.Shield {
 //        println "buscar rubro "+params
         def rubro = Item.findByCodigoAndTipoItem(params.codigo?.trim(), TipoItem.get(1))
         if (rubro) {
-            render "" + rubro.id + "&&" + rubro.tipoLista?.id + "&&" + rubro.nombre + "&&" + rubro.unidad?.codigo
+            def nombre = rubro.nombre
+            nombre = nombre.replaceAll(/>/, / mayor /)
+            nombre = nombre.replaceAll(/</, / menor /)
+            nombre = nombre.replaceAll(/&gt;/, / mayor /)
+            nombre = nombre.replaceAll(/&lt;/, / menor /)
+            render "" + rubro.id + "&&" + rubro.tipoLista?.id + "&&" + nombre + "&&" + rubro.unidad?.codigo
             return
         } else {
             render "-1"
@@ -778,7 +796,7 @@ class RubroController extends janus.seguridad.Shield {
 //        println "verifica rubro "+params
         def rubro = Item.get(params.id)
         def volumenes = VolumenesObra.findAllByItem(rubro);
-        println "vol " +volumenes
+        //println "vol " +volumenes
         if(volumenes.size()>0)
             render "1"
         else
