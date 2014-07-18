@@ -172,7 +172,7 @@
                                         <g:set var="sum" value="${sum + parcial}"/>
                                     </td>
                                     <td style="text-align: center" class="dias">
-                                        <span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="1" minFractionDigits="1" locale="ec"/></span>
+                                        <span style="color:#008"><g:formatNumber number="${vol.dias}" maxFractionDigits="2" minFractionDigits="2" locale="ec"/></span>
                                     </td>
                                     <td class="tiny">
                                         $

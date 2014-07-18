@@ -166,7 +166,7 @@
                             <td>${res.itemnmbr.trim()}</td>
                             <td>${res.unddcdgo.trim()}</td>
                             <td class="num"><g:formatNumber number="${res.rbrocntd}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></td>
-                            <td class="num"><b><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="1" maxFractionDigits="1"/></b>
+                            <td class="num"><b><g:formatNumber number="${res.dias}" locale="ec" minFractionDigits="2" maxFractionDigits="2"/></b>
                             </td>
                             <g:set var="sum" value="${sum + val}"/>
                         </tr>
