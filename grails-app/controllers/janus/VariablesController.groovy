@@ -125,7 +125,7 @@ class VariablesController  extends janus.seguridad.Shield{
                              "g.grpo__id, g.grpodscr " +
                   "ORDER BY g.grpo__id ASC, i.itemcdgo"
 
-        println "composicion" + sql
+//        println "composicion" + sql
         def sqlSP = "SELECT\n" +
                 "  DISTINCT v.sbpr__id      id,\n" +
                 "  s.sbprdscr               dsc,\n" +
