@@ -30,6 +30,8 @@ class RolTramiteController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        params.codigo = params.codigo.toUpperCase();
+        def existe = RolTramite.findByCodigo(params.codigo)
         def rolTramiteInstance
         if (params.id) {
             rolTramiteInstance = RolTramite.get(params.id)
@@ -42,7 +44,15 @@ class RolTramiteController extends janus.seguridad.Shield {
             rolTramiteInstance.properties = params
         }//es edit
         else {
-            rolTramiteInstance = new RolTramite(params)
+            if(!existe){
+                rolTramiteInstance = new RolTramite(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el Rol Trámite, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
         } //es create
         if (!rolTramiteInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -65,10 +75,10 @@ class RolTramiteController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente RolTramite " + rolTramiteInstance.id
+            flash.message = "Se ha actualizado correctamente RolTramite " + rolTramiteInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente RolTramite " + rolTramiteInstance.id
+            flash.message = "Se ha creado correctamente RolTramite " + rolTramiteInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -96,12 +106,12 @@ class RolTramiteController extends janus.seguridad.Shield {
         try {
             rolTramiteInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente RolTramite " + rolTramiteInstance.id
+            flash.message = "Se ha eliminado correctamente RolTramite " + rolTramiteInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar RolTramite " + (rolTramiteInstance.id ? rolTramiteInstance.id : "")
+            flash.message = "No se pudo eliminar RolTramite " + (rolTramiteInstance.descripcion ? rolTramiteInstance.descripcion : "")
             redirect(action: "list")
         }
     } //delete

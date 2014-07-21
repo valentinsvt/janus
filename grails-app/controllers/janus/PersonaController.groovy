@@ -170,7 +170,7 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def cambiarEstado() {
-//         println(params.id)
+//         println("params " +params)
         def persona = Persona.get(params.id)
 //          println(persona)
         if (persona.activo == 0) {
@@ -180,10 +180,16 @@ class PersonaController extends janus.seguridad.Shield {
         }
 //           println("id: " + persona.id)
 //           println("activo: " + persona.activo)
-        if (persona.save(flush: true)) {
-            render "ok"
-        } else {
+
+        if (!persona.save(flush: true)) {
+//            println("error")
+//            println(errors)
             render renderErrors(bean: persona)
+
+        } else {
+//println("ok")
+
+            render "ok"
         }
 //        redirect(action: 'list')
         return

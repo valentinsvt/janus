@@ -828,10 +828,33 @@ class Reportes3Controller {
 
         def html = ""
 
+        def nombresTodos = []
+        def corregidos = []
+
+//        println("rubros" + rubros)
+
+        rubros.each { rubro->
+            nombresTodos += rubro?.nombre
+        }
+            nombresTodos.each {
+                def text = (it ?: '')
+
+                text = text.decodeHTML()
+                text = text.replaceAll(/</, /&lt;/);
+                text = text.replaceAll(/>/, /&gt;/);
+                corregidos += text
+            }
+
+
+        rubros.eachWithIndex{ j,i->
+            j.nombre = corregidos[i]
+        }
+
+//        println("nomnbres " + rubros?.nombre)
+
 
         rubros.each { rubro ->
-            def nombre = rubro.nombre.replaceAll('<', '(menor)').replaceAll('>', '(mayor)')
-
+//            def nombre = rubro.nombre.replaceAll('<', '(menor)').replaceAll('>', '(mayor)')
             def header, tablas, footer, nota
             def tablaHer, tablaMano, tablaMat, tablaTrans, tablaIndi
 
@@ -873,7 +896,8 @@ class Reportes3Controller {
                     "\n" +
                     "                <div class=\"row-fluid\">\n" +
                     "                    <div class=\"span12\">\n" +
-                    "                        <b>Descripción:</b> ${nombre}\n" +
+//                    "                        <b>Descripción:</b> ${nombre}\n" +
+                    "                        <b>Descripción:</b> ${rubro.nombre}\n" +
                     "                    </div>\n" +
                     "                </div>\n" +
                     "            </div>"
@@ -883,6 +907,10 @@ class Reportes3Controller {
 //            println lugar
             preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
             def res = preciosService.rb_precios(parametros, "")
+
+//            println("res" + res)
+
+
             tablaHer = '<table class=""> '
             tablaMano = '<table class=""> '
             tablaMat = '<table class=""> '
@@ -1049,23 +1077,12 @@ class Reportes3Controller {
             tablas = "<div style=\"width: 100%;margin-top: 10px;\">"
 
             if (params.trans == 'no'){
-
-
                 tablas += tablaHer + tablaMano + tablaMat + tablaIndi
-
-
             }else {
-
-
-
                 tablas += tablaHer + tablaMano + tablaMat + tablaTrans + tablaIndi
-
-
             }
 
-
             tablas += "</div>"
-
             footer = " <table class=\"table table-bordered table-striped table-condensed table-hover\" style=\"margin-top: 20px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000\">\n" +
                     "                    <tbody>\n" +
                     "                        <tr>\n" +

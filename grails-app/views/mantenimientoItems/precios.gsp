@@ -159,12 +159,13 @@
 
         <div class="modal hide fade" id="modal-tree">
             <div class="modal-header" id="modalHeader">
-                <button type="button" class="close" data-dismiss="modal">×</button>
+                <button type="button" class="close simplemodal-close" data-dismiss="modal">×</button>
 
                 <h3 id="modalTitle"></h3>
             </div>
 
             <div class="modal-body" id="modalBody">
+
             </div>
 
             <div class="modal-footer" id="modalFooter">
@@ -879,8 +880,8 @@
                         },
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
-                            var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-print"></i> Ver</a>');
-                            var btnExcel = $('<a href="#" class="btn btnExcel"><i class="icon-table"></i> Excel</a>');
+                            var btnSave = $('<a href="#"  class="btn btn-success" data-dismiss="modal"><i class="icon-print"></i> Ver</a>');
+                            var btnExcel = $('<a href="#" class="btn btnExcel" data-dismiss="modal"><i class="icon-table"></i> Excel</a>');
 
                             btnSave.click(function () {
                                 var data = "";
@@ -901,10 +902,14 @@
                                 wait.prepend(spinnerBg);
 
                                 var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+
                                 $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
                                 $("#modalTitle").html("Procesando");
                                 $("#modalBody").html(wait);
+                                $("#modalBody").close();
                                 $("#modalFooter").html("").append(btnClose);
+
+                                $.modal.close();
 
                                 return false;
                             });
@@ -917,14 +922,14 @@
 
                                 location.href = "${g.createLink(controller: 'reportes2', action: 'reportePreciosExcel')}?fecha=" + fecha + "&lugar=" + lugar + "&grupo=" + grupo;
 
-                                var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
-                                wait.prepend(spinnerBg);
-
-                                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-                                $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
-                                $("#modalTitle").html("Procesando");
-                                $("#modalBody").html(wait);
-                                $("#modalFooter").html("").append(btnClose);
+//                                var wait = $("<div style='text-align: center;'> Estamos procesando su reporte......Por favor espere......</div>");
+//                                wait.prepend(spinnerBg);
+//
+//                                var btnClose = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
+//                                $("#modalHeader").removeClass("btn-edit btn-show btn-delete");
+//                                $("#modalTitle").html("Procesando");
+//                                $("#modalBody").html(wait);
+//                                $("#modalFooter").html("").append(btnClose);
 
                             });
 

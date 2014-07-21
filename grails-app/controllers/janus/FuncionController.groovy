@@ -30,6 +30,10 @@ class FuncionController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+        params.codigo = params.codigo.toUpperCase();
+
+        def existe = Funcion.findByCodigo(params.codigo)
+
         def funcionInstance
         if (params.id) {
             funcionInstance = Funcion.get(params.id)
@@ -42,7 +46,15 @@ class FuncionController extends janus.seguridad.Shield {
             funcionInstance.properties = params
         }//es edit
         else {
-            funcionInstance = new Funcion(params)
+            if(!existe){
+                funcionInstance = new Funcion(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar la función, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
         } //es create
         if (!funcionInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -65,10 +77,10 @@ class FuncionController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Funcion " + funcionInstance.id
+            flash.message = "Se ha actualizado correctamente Funcion " + funcionInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Funcion " + funcionInstance.id
+            flash.message = "Se ha creado correctamente Funcion " + funcionInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -96,12 +108,12 @@ class FuncionController extends janus.seguridad.Shield {
         try {
             funcionInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Funcion " + funcionInstance.id
+            flash.message = "Se ha eliminado correctamente Funcion " + funcionInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Funcion " + (funcionInstance.id ? funcionInstance.id : "")
+            flash.message = "No se pudo eliminar Funcion " + (funcionInstance.descripcion ? funcionInstance.descripcion : "")
             redirect(action: "list")
         }
     } //delete

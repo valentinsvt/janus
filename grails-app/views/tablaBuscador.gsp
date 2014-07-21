@@ -14,9 +14,10 @@
                         <g:set var="propiedades" value=""></g:set>
                         <tr style="font-size: 10px !important;">
                             <td style="text-align: right;width: 50px">
-                                <a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>
-                                    <i class="icon-share"></i>
-                                </a>
+                                %{--<a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>--}%
+                                    %{--<i class="icon-share"></i>--}%
+                                %{--</a>--}%
+
                                 %{--<div  style="float: right; margin-right: 5px;" class="ok btnpq ui-corner-all btn-info " id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}"  ${propiedades}>--}%
                                 %{--<span class="ui-icon ui-icon-circle-check"></span>--}%
                                 %{--</div>--}%

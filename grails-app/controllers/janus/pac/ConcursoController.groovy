@@ -50,6 +50,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
     def buscarConcurso() {
+        println("params" + params)
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {
             if (params.campos == "obra") {
@@ -124,6 +125,7 @@ class ConcursoController extends janus.seguridad.Shield {
                 /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PROCESOS DE CONTRATACION", anchos: anchos, extras: extras, landscape: true])
             } else {
+                println("pdf")
                 def lista = buscadorService.buscar(Concurso, "Concurso", "excluyente", params, true, extras)
                 /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
@@ -207,6 +209,7 @@ class ConcursoController extends janus.seguridad.Shield {
     }
 
     def buscaPac() {
+        println("params" + params)
         def listaTitulos = ["Descripción", "Departamento", "Presupuesto"]
         def listaCampos = ["descripcion", "departamento", "presupuesto"]
         def funciones = [null, null]
@@ -222,23 +225,34 @@ class ConcursoController extends janus.seguridad.Shield {
         def numRegistros = 20
         def extras = ""
         if (!params.reporte) {
-            def lista2 = buscadorService.buscar(Pac, "Pac", "excluyente", params, true, extras)
-            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-            lista2.pop()
-            def lista = []
-            lista2.each { l ->
-                if (Concurso.countByPac(l) == 0) {
-                    lista.add(l)
-                }
-            }
+            if(params.excel){
+                session.dominio = Pac
+                session.funciones = funciones
+                def anchos = [40,40,20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
 
-            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
-        } else {
+//                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE PAC, anchos: anchos, extras: extras, landscape: true])
+
+                  redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Pac", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PAC", anchos: anchos, extras: extras, landscape: true])
+
+            } else {
+                def lista2 = buscadorService.buscar(Pac, "Pac", "excluyente", params, true, extras)
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista2.pop()
+                def lista = []
+                lista2.each { l ->
+                    if (Concurso.countByPac(l) == 0) {
+                        lista.add(l)
+                    }
+                }
+                render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            }
+          } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Pac
             session.funciones = funciones
-            def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
+            def anchos = [40, 40, 20] /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Pac", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Rubros", anchos: anchos, extras: extras, landscape: true])
         }
     }

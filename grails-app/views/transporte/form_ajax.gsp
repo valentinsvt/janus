@@ -11,12 +11,22 @@
                     Código
                 </span>
             </div>
+            <g:if test="${transporteInstance?.id}">
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="1" style="width: 20px" class=" required" value="${transporteInstance?.codigo}" readonly="readonly"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:if>
+            <g:else>
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="1" style="width: 20px" class=" required allCaps" value="${transporteInstance?.codigo}"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:else>
 
-            <div class="controls">
-                <g:textField name="codigo" maxlength="1" style="width: 20px" class=" required" value="${transporteInstance?.codigo}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+
         </div>
                 
         <div class="control-group">
@@ -27,7 +37,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="31" style="width: 310px" class=" required" value="${transporteInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="31" style="width: 280px" class=" required" value="${transporteInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

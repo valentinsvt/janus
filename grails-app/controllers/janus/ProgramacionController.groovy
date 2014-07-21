@@ -197,7 +197,7 @@ class ProgramacionController extends janus.seguridad.Shield {
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar la Programacion " + (programacionInstance.id ? programacionInstance.id : "")
+            flash.message = "No se pudo eliminar la Programacion " + (programacionInstance.descripcion ? programacionInstance.descripcion : "")
             redirect(action: "list")
         }
     } //delete

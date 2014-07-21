@@ -405,9 +405,12 @@
 
                         var obra = $("#selectObra").val();
 
-                        location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistroTramitexObra')}?idObra=" + obra
-
-                        $("#tramiteDialog").dialog("close");
+                        if(obra){
+                            location.href = "${g.createLink(controller: 'reportes', action: 'reporteRegistroTramitexObra')}?idObra=" + obra
+                            $("#tramiteDialog").dialog("close");
+                        }else{
+                            $("#tramiteDialog").dialog("close");
+                        }
 
                     }, "Cancelar" : function () {
 

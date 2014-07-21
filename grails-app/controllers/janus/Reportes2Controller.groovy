@@ -607,6 +607,10 @@ class Reportes2Controller {
             def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
             preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
             def res = preciosService.rb_precios(parametros, "")
+
+//            println("res" + res)
+
+
             def temp = [:]
             def total = 0
             res.each { r ->

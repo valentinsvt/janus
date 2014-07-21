@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Tipo Item
+            Lista de Tipo de Item
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,7 +24,7 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Nuevo Tipo Item
+                Nuevo Tipo de Item
             </a>
         </div>
 
@@ -181,8 +181,8 @@
                         return false;
                     });
 
-                    $("#modalTitle").html("Eliminar Tipo Item");
-                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Tipo Item?</p>");
+                    $("#modalTitle").html("Eliminar Tipo de Item");
+                    $("#modalBody").html("<p>¿Está seguro de querer eliminar este Tipo de Item?</p>");
                     $("#modalFooter").html("").append(btnOk).append(btnDelete);
                     $("#modal-tipoItem").modal("show");
                     return false;

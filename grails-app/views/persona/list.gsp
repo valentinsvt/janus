@@ -21,6 +21,21 @@
             </g:if>
         </div>
 
+    <div class="row hide" id="divError">
+        <div class="span12">
+            <div class="alert " role="status">
+                %{--<a class="close" data-dismiss="alert" href="#">×</a>--}%
+                <span id="spanError"></span>
+            </div>
+        </div>
+    </div>
+    <div class="span12 hide" style="margin-bottom: 10px;" id="divOk">
+        <div class="alert alert-info" role="status">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            <span id="spanOk"></span>
+        </div>
+    </div>
+
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
@@ -141,6 +156,9 @@
             <div class="modal-footer" id="modalFooter">
             </div>
         </div>
+
+
+
 
         <script type="text/javascript">
             var url = "${resource(dir:'images', file:'spinner_24.gif')}";
@@ -265,75 +283,67 @@
                     var id = $(this).data("id");
 
                     var estado = $(this).data("activo");
+//                    var activo = 0;
 
-                    var activo = 0;
+                    %{--if(estado == 0) {--}%
+                    %{--estado = $(this).data("activo",1)--}%
+                        %{--$.ajax({--}%
+                            %{--type: "POST",--}%
+                            %{--url: "${g.createLink(action: 'cambiarEstado')}",--}%
+                            %{--data : {id: id,--}%
+                                %{--activo:   '1'--}%
+                            %{--},--}%
+                            %{--success: function (msg){--}%
+                                %{--if (msg == 'ok') {--}%
+                                    %{--location.href = "${createLink(action: 'list')}"--}%
+                                %{--}--}%
+                            %{--}--}%
+                        %{--});--}%
 
-                    if(estado == 0) {
+                    %{--}if(estado == 1) {--}%
+                        %{--$(this).data("activo", 0)--}%
+                       %{--$.ajax({--}%
+                            %{--type: "POST",--}%
+                            %{--url: "${g.createLink(action: 'cambiarEstado')}",--}%
+                            %{--data : {id: id,--}%
+                                %{--activo:   '0'--}%
+                            %{--},--}%
+                            %{--success: function (msg){--}%
+                                %{--if (msg == 'ok') {--}%
+                                    %{--location.href = "${createLink(action: 'list')}"--}%
+                                %{--}--}%
+                            %{--}--}%
+                        %{--});--}%
+
+                    %{--}--}%
 
 
-                    estado = $(this).data("activo",1)
 
-                        $.ajax({
 
-                            type: "POST",
-                            url: "${g.createLink(action: 'cambiarEstado')}",
-                            data : {id: id,
-                                activo:   '1'
+                    $.ajax({
+                        type: "POST",
+                        url: "${g.createLink(action: 'cambiarEstado')}",
+                        data : {id: id,
+                            activo:   estado
 
-                            },
-                            success: function (msg){
+                        },
+                        success: function (msg){
+                            if (msg == 'ok') {
 
-                                if (msg == 'ok') {
 
-                                    location.href = "${createLink(action: 'list')}"
+                                $("#divOk").removeClass("hide");
+                                $("#spanOk").html("Estado cambiado!");
+                                location.href = "${createLink(action: 'list')}"
 
-                                }
+                            }else{
+//                                location.reload(true);
+//                                $("#divError").show();
+                                $("#divError").removeClass("hide");
+                                $("#spanError").html(msg);
 
                             }
-
-
-
-                        });
-
-                    }if(estado == 1) {
-
-
-                        $(this).data("activo", 0)
-
-                       $.ajax({
-
-                            type: "POST",
-                            url: "${g.createLink(action: 'cambiarEstado')}",
-                            data : {id: id,
-                                activo:   '0'
-
-                            },
-                            success: function (msg){
-
-                                if (msg == 'ok') {
-
-                                    location.href = "${createLink(action: 'list')}"
-
-                                }
-
-
-                            }
-
-
-
-                        });
-
-
-
-                    }
-
-
-
-
-
-
-
-
+                        }
+                    });
 
                 });
 

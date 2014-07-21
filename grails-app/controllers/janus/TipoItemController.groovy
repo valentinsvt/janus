@@ -30,6 +30,12 @@ class TipoItemController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+
+        params.codigo = params.codigo.toUpperCase();
+
+        def existe = TipoItem.findByCodigo(params.codigo)
+
         def tipoItemInstance
         if (params.id) {
             tipoItemInstance = TipoItem.get(params.id)
@@ -42,11 +48,19 @@ class TipoItemController extends janus.seguridad.Shield {
             tipoItemInstance.properties = params
         }//es edit
         else {
-            tipoItemInstance = new TipoItem(params)
+            if(!existe){
+                tipoItemInstance = new TipoItem(params)
+            }else{
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar el tipo de item, el código ya existe!!"
+                redirect(action: 'list')
+                return
+            }
+
         } //es create
         if (!tipoItemInstance.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar TipoItem " + (tipoItemInstance.id ? tipoItemInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar Tipo de Item " + (tipoItemInstance.id ? tipoItemInstance.id : "") + "</h4>"
 
             str += "<ul>"
             tipoItemInstance.errors.allErrors.each { err ->
@@ -65,10 +79,10 @@ class TipoItemController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente TipoItem " + tipoItemInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo de Item " + tipoItemInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente TipoItem " + tipoItemInstance.id
+            flash.message = "Se ha creado correctamente Tipo de Item " + tipoItemInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -77,7 +91,7 @@ class TipoItemController extends janus.seguridad.Shield {
         def tipoItemInstance = TipoItem.get(params.id)
         if (!tipoItemInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró TipoItem con id " + params.id
+            flash.message = "No se encontró Tipo de Item con id " + params.id
             redirect(action: "list")
             return
         }
@@ -88,7 +102,7 @@ class TipoItemController extends janus.seguridad.Shield {
         def tipoItemInstance = TipoItem.get(params.id)
         if (!tipoItemInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró TipoItem con id " + params.id
+            flash.message = "No se encontró Tipo de Item con id " + params.id
             redirect(action: "list")
             return
         }
@@ -96,7 +110,7 @@ class TipoItemController extends janus.seguridad.Shield {
         try {
             tipoItemInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente TipoItem " + tipoItemInstance.id
+            flash.message = "Se ha eliminado correctamente Tipo de Item " + tipoItemInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

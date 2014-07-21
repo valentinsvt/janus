@@ -1344,7 +1344,7 @@
                                 type    : "POST",
                                 url     : "${createLink(action:'aprobarSif')}",
                                 data    : {
-                                    obra : "${obra?.id}",
+                                    obra : "${obra?.id}"
                                 },
                                 success : function (msg) {
                                     if (msg== "ok") {

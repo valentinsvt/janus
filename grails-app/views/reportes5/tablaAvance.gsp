@@ -34,10 +34,13 @@
             <i class="icon-search"></i>
             Buscar
         </a>
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-        %{--<i class="icon-print"></i>--}%
-        %{--Imprimir--}%
-        %{--</a>--}%
+
+            <a href="#" class="btn hide" id="imprimir" >
+                <i class="icon-print"></i>
+                Imprimir
+            </a>
+
+
         %{--<a href="#" class="btn" id="regresar">--}%
         %{--<i class="icon-arrow-left"></i>--}%
         %{--Regresar--}%
@@ -124,31 +127,29 @@
 
 <script type="text/javascript">
 
-    var checkeados = []
+    var checkeados = [];
 
     $("#buscar").click(function () {
 
         var datos = "si=${"si"}&buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
-        var interval = loading("detalle")
+//        var interval = loading("detalle")
         $.ajax({type : "POST", url : "${g.createLink(controller: 'reportes5',action:'tablaAvance')}",
             data     : datos,
             success  : function (msg) {
-                clearInterval(interval)
+//                clearInterval(interval)
                 $("#detalle").html(msg)
+                $("#imprimir").removeClass("hide");
+
             }
         });
     });
 
     $("#regresar").click(function () {
-
         location.href = "${g.createLink(controller: 'reportes', action: 'index')}"
-
     });
 
     $("#imprimir").click(function () {
-
         location.href = "${g.createLink(controller: 'reportes5', action:'reporteAvance' )}?buscador=" + $("#buscador_con").val() + "&criterio=" + $("#criterio_con").val()
-
     });
 
     %{--$("#excel").click(function () {--}%

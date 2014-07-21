@@ -2118,51 +2118,28 @@ class ReportesController {
 //        println("--->" + params)
 
         def cd
-
         def auxiliar = Auxiliar.get(1);
-
-
         def nota
 
         if (params.notaValue && params.notaValue != '' && params.notaValue != 'null' && params.notaValue != 'undefined') {
-
-
             nota = Nota.get(params.notaValue)
-
         } else {
-
-
             nota = new Nota();
         }
 
-
         def obra = Obra.get(params.id)
-
         def paux = Parametros.get(1);
-
-
         def ivaTotal = 0
-
         def proyeccionTotal = 0
-
         def presupuestoTotal = 0;
-
         def inflacion = 0;
-
         def meses = 0;
-
         def firma=[]
-
         def firmas
-
         def firmaFija
-
         def firmaCoordinador
-
         def personaElaboro
-
         def cuenta = 0;
-
         def cantidadMeses = params.meses
 
 //        println(obra.revisor.nombre);
@@ -2185,13 +2162,10 @@ class ReportesController {
 //        cuenta = firma.size()
 
         if (params.firmasFijas.trim().size() > 0) {
-
             firmaFija = params.firmasFijas.split(",")
 //            firmaFija = firmaFija.toList().unique()
         } else {
-
             firmaFija = []
-
         }
 
         cuenta = firma.size() + firmaFija.size() + 1
@@ -2206,11 +2180,8 @@ class ReportesController {
         def prmsHeaderHoja5 = [border: Color.WHITE, bordeBot: "1"]
         def prmsHeaderHoja6 = [border: Color.WHITE, bordeLeft: "1"]
 
-
-
         def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
-
         def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
                 align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
 //        def prmsCellHead = [border: Color.WHITE, bg: new Color(73, 175, 205),
@@ -2239,8 +2210,6 @@ class ReportesController {
                 prmsCellHead: prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
                 prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
                 prmsCellRight2: prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
-
-
 
         def baos = new ByteArrayOutputStream()
         def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
@@ -2273,8 +2242,6 @@ class ReportesController {
         document.addAuthor("Janus");
         document.addCreator("Tedein SA");
 
-
-
         Paragraph headers = new Paragraph();
         addEmptyLine(headers, 1);
         headers.setAlignment(Element.ALIGN_CENTER);
@@ -2303,17 +2270,13 @@ class ReportesController {
         addEmptyLine(txtIzq, 1);
         txtIzq.setAlignment(Element.ALIGN_LEFT);
 
-
-
         if(Persona.get(session.usuario.id).departamento?.codigo == 'UTFPU'){
             if(obra?.departamentoDestino){
-
                 def departamentoDestino = Departamento.get(obra?.departamentoDestino?.id)
                 def direccionDestino = departamentoDestino?.direccion
                 def funcionDirector = Funcion.findByCodigo('D')
                 def departamentosDestino = Departamento.findAllByDireccion(direccionDestino)
                 def personasDir = []
-
                 departamentosDestino.each {
                     personasDir += Persona.findAllByDepartamento(Departamento.get(it.id))
                 }
@@ -2337,8 +2300,6 @@ class ReportesController {
 
         }else{
            if(obra?.departamentoDestino){
-
-
                def departamentoDestino = Departamento.get(obra?.departamentoDestino?.id)
                def direccionDestino = departamentoDestino?.direccion
                def funcionDirector = Funcion.findByCodigo('D')
@@ -2486,28 +2447,20 @@ class ReportesController {
 
 
         def precios = [:]
-
         def indirecto = obra.totales / 100
-
         def c;
-
         def total1 = 0;
         def total2 = 0;
-
         def totales
-
         def totalPresupuesto = 0;
         def totalPrueba = 0
         def totalPrueba1 = 0
-
         def valores = preciosService.rbro_pcun_v2(obra.id)
-
         def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
 
         tablaVolObra.setWidths(arregloEnteros([14, 43, 8, 10, 12, 15]))
 
 //        tablaHeaderVol.setWidths(arregloEnteros([100, 0, 0, 0, 0, 0]))
-
         addCellTabla(tablaVolObra, new Paragraph("RUBRO N°", times8bold), prmsCellHead2)
         addCellTabla(tablaVolObra, new Paragraph("DESCRIPCIÓN", times8bold), prmsCellHead2)
         addCellTabla(tablaVolObra, new Paragraph("UNIDAD", times8bold), prmsCellHead2)
@@ -2565,7 +2518,6 @@ class ReportesController {
 
         tablaTotal.setWidths(arregloEnteros([85, 0, 0, 0, 0, 15]))
 
-
         addCellTabla(tablaTotal, new Paragraph("TOTAL DEL PRESUPUESTO: ", times8bold), prmsCellRight2)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
         addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
@@ -2586,7 +2538,6 @@ class ReportesController {
             ivaTotal = (totalPresupuesto * paux?.iva) / 100
             presupuestoTotal = totalPresupuesto + ivaTotal;
 
-
             addCellTabla(tablaTotal, new Paragraph("IVA " + paux?.iva + "% : ", times8bold), prmsCellRight)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
@@ -2594,15 +2545,12 @@ class ReportesController {
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
-
             addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRightBot)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
             addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
-
-
         }
         //solo Proyeccion del reajuste
 
