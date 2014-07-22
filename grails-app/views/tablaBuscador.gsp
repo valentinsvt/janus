@@ -3,7 +3,10 @@
         <div url="${url}" style="max-width: 200%;${(width) ? 'width:' + width + 'px' : ''}">
             <table id="tablaBuscador" class="table table-bordered table-striped table-condensed table-hover" style="max-width: 100%;width: 100%">
                 <thead>
-                    <th style="width: 40px"></th>
+                <g:set var="planilla" value="${["OBRA", "CONTRATO", "DECRIPCION", "FECHA PRESENTACION", "MEMO PAGO", "MONTO"]}"/>
+                <g:set var="titulos" value="${listaTitulos}"/>
+
+                <th style="width: 40px"></th>
                     <g:each in="${listaTitulos}">
                         <th>${it}</th>
                     </g:each>
@@ -14,9 +17,11 @@
                         <g:set var="propiedades" value=""></g:set>
                         <tr style="font-size: 10px !important;">
                             <td style="text-align: right;width: 50px">
-                                %{--<a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>--}%
-                                    %{--<i class="icon-share"></i>--}%
-                                %{--</a>--}%
+                                <g:if test="${planilla != titulos}">
+                                    <a class="ok btn btn-small btn-success btn-ajax" href="#" rel="tooltip" style="margin-right: 5px" title="Seleccionar" id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}" ${propiedades}>
+                                        <i class="icon-share"></i>
+                                    </a>
+                                </g:if>
 
                                 %{--<div  style="float: right; margin-right: 5px;" class="ok btnpq ui-corner-all btn-info " id="reg_${i}" regId="${reg?.id}" txtReg="${reg.toString()}"  ${propiedades}>--}%
                                 %{--<span class="ui-icon ui-icon-circle-check"></span>--}%
