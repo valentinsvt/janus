@@ -22,16 +22,18 @@ class DocumentoObraController extends janus.seguridad.Shield {
 //        println path
 
         def file = new File(path)
-        def b = file.getBytes()
+        if(file.exists()) {
+            def b = file.getBytes()
 
-        def ext = doc.path.split("\\.")
-        ext = ext[ext.size() - 1]
+            def ext = doc.path.split("\\.")
+            ext = ext[ext.size() - 1]
 //        println ext
 
-        response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
-        response.setHeader("Content-disposition", "attachment; filename=" + doc.path)
-        response.setContentLength(b.length)
-        response.getOutputStream().write(b)
+            response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
+            response.setHeader("Content-disposition", "attachment; filename=" + doc.path)
+            response.setContentLength(b.length)
+            response.getOutputStream().write(b)
+        }
     }
 
 
