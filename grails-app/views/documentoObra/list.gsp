@@ -69,7 +69,7 @@
                             <td>${fieldValue(bean: documentoObraInstance, field: "resumen")}</td>
                             <td>${fieldValue(bean: documentoObraInstance, field: "palabrasClave")}</td>
                             <td>
-                                <g:set var="p" value="${documentoObraInstance.path.split("\\.")}"/>
+                                <g:set var="p" value="${documentoObraInstance.path?.split("\\.")}"/>
                                 ${p[p.size() - 1]}
                             </td>
                             <td>
