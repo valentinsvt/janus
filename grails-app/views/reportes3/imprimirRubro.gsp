@@ -196,9 +196,9 @@
 
                 <div class="row-fluid">
                     <div class="span12">
-                        <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>
-                        <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(mayor)')}"></g:set>
-                        <b>Descripción:</b> ${nombre}
+                        %{--<g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>--}%
+                        %{--<g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(mayor)')}"></g:set>--}%
+                        <b>Descripción:</b> ${rubro.nombre}
                     </div>
                 </div>
             </div>

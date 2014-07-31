@@ -587,13 +587,21 @@ class Reportes3Controller {
 
     def imprimirRubro() {
 //        println "imprimir rubro "+params
+
         def rubro = Item.get(params.id)
 
+//        println("rubro " + rubro)
+
+        def corregido
+        def text = (rubro.nombre ?: '')
+        text = text.decodeHTML()
+        text = text.replaceAll(/</, /&lt;/);
+        text = text.replaceAll(/>/, /&gt;/);
+        rubro.nombre = text
 
 
 //        def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
 //        def fecha1 = new Date().parse("dd-MM-yyyy", params.fechaSalida)
-
 
         def fecha
         def fecha1
@@ -901,6 +909,8 @@ class Reportes3Controller {
                     "                    </div>\n" +
                     "                </div>\n" +
                     "            </div>"
+
+
 
             def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
 //            println parametros
