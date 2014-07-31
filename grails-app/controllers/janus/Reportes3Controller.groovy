@@ -323,8 +323,8 @@ class Reportes3Controller {
 
         if (total == 0)
             tablaTrans = ""
-        if (totalHer == 0)
-            tablaHer = ""
+//        if (totalHer == 0)
+//            tablaHer = ""
         if (totalMan == 0)
             tablaMano = ""
         if (totalMat == 0)
@@ -792,8 +792,8 @@ class Reportes3Controller {
 
         if (total == 0 || params.trans == "no")
             tablaTrans = ""
-        if (totalHer == 0)
-            tablaHer = ""
+//        if (totalHer == 0)
+//            tablaHer = ""
         if (totalMan == 0)
             tablaMano = ""
         if (totalMat == 0)
