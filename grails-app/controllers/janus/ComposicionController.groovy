@@ -220,6 +220,10 @@ class ComposicionController extends janus.seguridad.Shield {
 
 
     def tabla() {
+
+        def persona = Persona.get(session.usuario.id)
+        def duenoObra = 0
+
         if (!params.tipo) {
             params.tipo = "-1"
         }
@@ -236,7 +240,9 @@ class ComposicionController extends janus.seguridad.Shield {
         def res = Composicion.findAll("from Composicion where obra=${params.id} and grupo in (${params.tipo})")
         res.sort { it.item.codigo }
 
-        return [res: res, obra: obra, tipo: params.tipo, rend: params.rend, campos: campos]
+        duenoObra = esDuenoObra(obra) ? 1 : 0
+
+        return [res: res, obra: obra, tipo: params.tipo, rend: params.rend, campos: campos, duenoObra: duenoObra, persona: persona]
 
     }
 
@@ -432,5 +438,23 @@ class ComposicionController extends janus.seguridad.Shield {
 
         render "ok"
 
+    }
+
+
+    def esDuenoObra(obra) {
+
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+
+        if (responsableRol) {
+            if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
+                dueno = true
+            } else {
+                dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+            }
+        }
+        dueno
     }
 }

@@ -35,13 +35,16 @@
     </div>
 
     <div class="btn-group">
-        <a href="#" class="btn btn-primary " title="Guardar" id="guardar">
+<g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
+
+<a href="#" class="btn btn-primary " title="Guardar" id="guardar">
             <i class="icon-save"></i>
             Guardar
         </a>
         <g:link action="formArchivo" class="btn" id="${obra.id}">
             <i class="icon-cloud-upload"></i> Cargar Excel
         </g:link>
+</g:if>
     </div>
 
     <div class="btn-group" data-toggle="buttons-radio">
@@ -95,11 +98,11 @@
 
         <div class="span1" style="padding-top:30px">
             <input type="hidden" value="" id="vol_id">
-            %{--<g:if test="${obra?.estado != 'R'}">--}%
+            <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
             <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
                 <i class="icon-plus"></i>
             </a>
-            %{--</g:if>--}%
+            </g:if>
         </div>
     </div>
 </div>

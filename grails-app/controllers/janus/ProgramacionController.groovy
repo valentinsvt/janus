@@ -49,7 +49,9 @@ class ProgramacionController extends janus.seguridad.Shield {
 
     def save() {
 
-        println("params " + params )
+//        println("params " + params )
+
+        params.descripcion = params.descripcion.toUpperCase();
 
         def fechaI
         def fechaF
@@ -67,6 +69,11 @@ class ProgramacionController extends janus.seguridad.Shield {
         params.fechaFin = fechaF
 
 
+        if(fechaI >= fechaF){
+            flash.clase = "alert-error"
+            flash.message = "No se puede crear la Programación la Fecha Fin debe ser mayor a la Fecha Inicio"
+            redirect(action: 'list')
+        }else{
         def programacionInstance
         if (params.id) {
             programacionInstance = Programacion.get(params.id)
@@ -108,13 +115,13 @@ class ProgramacionController extends janus.seguridad.Shield {
             flash.message = "Se ha creado correctamente Programación " + programacionInstance?.descripcion
         }
         redirect(action: 'list')
+
+        }
+
     } //save
 
     def save_ext() {
-        println("params" + params)
-
-
-
+//        println("params" + params)
         def programacionInstance, message
 
         if (params.fechaInicio) {
@@ -123,6 +130,11 @@ class ProgramacionController extends janus.seguridad.Shield {
         if (params.fechaFin) {
             params.fechaFin = new Date().parse("dd-MM-yyyy", params.fechaFin)
         }
+
+        if(params.fechaInicio >= params.fechaFin){
+          render "error"
+          return
+        }else{
 
         if (params.id) {
             programacionInstance = Programacion.get(params.id)
@@ -167,6 +179,8 @@ class ProgramacionController extends janus.seguridad.Shield {
         def sel = g.select(id: "programacion", name: "programacion.id", "class": "programacion required", from: Programacion.list(), value: programacionInstance.id, optionValue: "descripcion",
                 optionKey: "id", title: "Programa")
         render sel
+
+        }
     } //save
 
     def show_ajax() {

@@ -42,48 +42,62 @@ class PeriodosInecController extends janus.seguridad.Shield {
         if (params.fechaFin){
             params.fechaFin=new Date().parse("dd-MM-yyyy",params.fechaFin)
         }
-        if(params.id) {
-            periodosInecInstance = PeriodosInec.get(params.id)
-            if(!periodosInecInstance) {
+
+
+        if(params.fechaInicio >= params.fechaFin){
+
+            flash.clase = "alert-error"
+            flash.message = "No se pudo guardar el Período Inec, la Fecha Fin debe ser mayor a la Fecha Inicio"
+            redirect(action: 'list')
+
+        }else{
+
+            if(params.id) {
+                periodosInecInstance = PeriodosInec.get(params.id)
+                if(!periodosInecInstance) {
+                    flash.clase = "alert-error"
+                    flash.message = "No se encontró Periodos Inec con id " + params.id
+                    redirect(action: 'list')
+                    return
+                }//no existe el objeto
+                periodosInecInstance.properties = params
+            }//es edit
+            else {
+                periodosInecInstance = new PeriodosInec(params)
+
+            } //es create
+
+            if (!periodosInecInstance.save(flush: true)) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Periodos Inec con id " + params.id
+                def str = "<h4>No se pudo guardar Periodos Inec " + (periodosInecInstance.id ? periodosInecInstance.id : "") + "</h4>"
+
+                str += "<ul>"
+                periodosInecInstance.errors.allErrors.each { err ->
+                    def msg = err.defaultMessage
+                    err.arguments.eachWithIndex {  arg, i ->
+                        msg = msg.replaceAll("\\{" + i + "}", arg.toString())
+                    }
+                    str += "<li>" + msg + "</li>"
+                }
+                str += "</ul>"
+
+                flash.message = str
                 redirect(action: 'list')
                 return
-            }//no existe el objeto
-            periodosInecInstance.properties = params
-        }//es edit
-        else {
-            periodosInecInstance = new PeriodosInec(params)
-
-        } //es create
-
-        if (!periodosInecInstance.save(flush: true)) {
-            flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar Periodos Inec " + (periodosInecInstance.id ? periodosInecInstance.id : "") + "</h4>"
-
-            str += "<ul>"
-            periodosInecInstance.errors.allErrors.each { err ->
-                def msg = err.defaultMessage
-                err.arguments.eachWithIndex {  arg, i ->
-                    msg = msg.replaceAll("\\{" + i + "}", arg.toString())
-                }
-                str += "<li>" + msg + "</li>"
             }
-            str += "</ul>"
 
-            flash.message = str
+            if(params.id) {
+                flash.clase = "alert-success"
+                flash.message = "Se ha actualizado correctamente el Período Inec " + periodosInecInstance.descripcion
+            } else {
+                flash.clase = "alert-success"
+                flash.message = "Se ha creado correctamente el Período Inec " + periodosInecInstance.descripcion
+            }
             redirect(action: 'list')
-            return
         }
 
-        if(params.id) {
-            flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Periodos Inec " + periodosInecInstance.id
-        } else {
-            flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Periodos Inec " + periodosInecInstance.id
-        }
-        redirect(action: 'list')
+
+
     } //save
 
     def show_ajax() {
@@ -101,7 +115,7 @@ class PeriodosInecController extends janus.seguridad.Shield {
         def periodosInecInstance = PeriodosInec.get(params.id)
         if (!periodosInecInstance) {
             flash.clase = "alert-error"
-            flash.message =  "No se encontró Periodos Inec con id " + params.id
+            flash.message =  "No se encontró el Período Inec con id " + params.id
             redirect(action: "list")
             return
         }
@@ -109,12 +123,12 @@ class PeriodosInecController extends janus.seguridad.Shield {
         try {
             periodosInecInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message =  "Se ha eliminado correctamente Periodos Inec " + periodosInecInstance.id
+            flash.message =  "Se ha eliminado correctamente el Período Inec " + periodosInecInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message =  "No se pudo eliminar Periodos Inec " + (periodosInecInstance.id ? periodosInecInstance.id : "")
+            flash.message =  "No se pudo eliminar el Período Inec " + (periodosInecInstance.id ? periodosInecInstance.id : "")
             redirect(action: "list")
         }
     } //delete

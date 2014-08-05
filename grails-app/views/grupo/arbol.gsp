@@ -960,6 +960,7 @@
         });
 
         $(".btnPrint").click(function () {
+
             var dsp0 = $("#dist_p1").val();
             var dsp1 = $("#dist_p2").val();
             var dsv0 = $("#dist_v1").val();

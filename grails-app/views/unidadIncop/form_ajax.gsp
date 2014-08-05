@@ -12,11 +12,25 @@
                 </span>
             </div>
 
-            <div class="controls">
-                <g:textField name="codigo" maxlength="7" class="required allCaps" value="${unidadIncopInstance?.codigo}" disabled="${unidadIncopInstance.id?'true':'false'}"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+            <g:if test="${unidadIncopInstance?.id}">
+
+
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="7" class="required allCaps" value="${unidadIncopInstance?.codigo}" readonly="readonly"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+
+            </g:if>
+            <g:else>
+                <div class="controls">
+                    <g:textField name="codigo" maxlength="7" class="required allCaps" value="${unidadIncopInstance?.codigo}"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+
+            </g:else>
+
         </div>
                 
         <div class="control-group">
@@ -28,7 +42,7 @@
 
             <div class="controls">
                 <g:textField name="descripcion" maxlength="32" class="required" value="${unidadIncopInstance?.descripcion}"/>
-                
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

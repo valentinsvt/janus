@@ -7,12 +7,12 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Descripcion
+                Descripción
             </span>
         </div>
 
         <div class="controls">
-            <g:textField name="descripcion" maxlength="40" class=" required"
+            <g:textField name="descripcion" maxlength="40" class=" required allCaps"
                          value="${programacionInstance?.descripcion}"/>
             <span class="mandatory">*</span>
 

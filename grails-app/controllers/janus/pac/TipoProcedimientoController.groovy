@@ -75,10 +75,10 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
 
         if(params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.id
+            flash.message = "Se ha actualizado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.id
+            flash.message = "Se ha creado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -106,7 +106,7 @@ class TipoProcedimientoController extends janus.seguridad.Shield {
         try {
             tipoProcedimientoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message =  "Se ha eliminado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.id
+            flash.message =  "Se ha eliminado correctamente Tipo Procedimiento " + tipoProcedimientoInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

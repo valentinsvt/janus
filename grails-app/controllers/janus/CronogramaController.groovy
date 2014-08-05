@@ -352,6 +352,10 @@ class CronogramaController extends janus.seguridad.Shield {
 
         def obra = Obra.get(params.id)
         def subpres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+        def persona = Persona.get(session.usuario.id)
+        def duenoObra = 0
+
+        duenoObra = esDuenoObra(obra) ? 1 : 0
 
         def subpre = params.subpre
         if (!subpre) {
@@ -385,7 +389,7 @@ class CronogramaController extends janus.seguridad.Shield {
 //            println res
 //            precios.put(it.id.toString(), res)
         }
-        return [detalle: detalle, detalleP: detalleP, precios: precios, obra: obra, subpres: subpres, subpre: subpre]
+        return [detalle: detalle, detalleP: detalleP, precios: precios, obra: obra, subpres: subpres, subpre: subpre, persona: persona, duenoObra: duenoObra]
     }
 
     def cronogramaObra_antesPresupuestos() {
@@ -508,4 +512,27 @@ class CronogramaController extends janus.seguridad.Shield {
             redirect(action: "list")
         }
     } //delete
+
+
+    def esDuenoObra(obra) {
+
+        def dueno = false
+        def funcionElab = Funcion.findByCodigo('E')
+        def personasUtfpu = PersonaRol.findAllByFuncionAndPersonaInList(funcionElab, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+        def responsableRol = PersonaRol.findByPersonaAndFuncion(obra?.responsableObra, funcionElab)
+
+        if (responsableRol) {
+            if (obra?.responsableObra?.departamento?.direccion?.id == Persona.get(session.usuario.id).departamento?.direccion?.id) {
+                dueno = true
+            } else {
+                dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
+            }
+        }
+        dueno
+    }
+
+
+
+
+
 } //fin controller

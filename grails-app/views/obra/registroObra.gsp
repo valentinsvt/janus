@@ -546,7 +546,9 @@
 
 
     <g:if test="${matrizOk}">
+        <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
         <div class="span1" style="margin-left: 0px; width: 100px;"><g:link action="calculaPlazo" id="${obra.id}" style="margin-left: 0px;" class="btn btn-info">Calcular</g:link></div>
+        </g:if>
     </g:if>
 
     <div class="span1" style="margin-left: 10px; width:50px;">Plazo</div>
@@ -2379,7 +2381,7 @@
                     var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
 
                     btnSave.click(function () {
-                        if($("#codigo1").val()){
+//                        if($("#codigo1").val()){
                             $(this).replaceWith(spinner);
                             $.ajax({
                                 type    : "POST",
@@ -2396,9 +2398,9 @@
                                 }
                             });
                             return false;
-                        }else{
-                            alert('No ingreso ningun código!')
-                        }
+//                        }else{
+//                            alert('No ingreso ningun código!')
+//                        }
 
                     });
 

@@ -4,39 +4,29 @@
 <g:form class="form-horizontal" name="frmSave-ClaseObra" action="save">
     <g:hiddenField name="id" value="${claseObraInstance?.id}"/>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Código
-            </span>
-        </div>
+    %{--<div class="control-group">--}%
+        %{--<div>--}%
+            %{--<span class="control-label label label-inverse">--}%
+                %{--Código--}%
+            %{--</span>--}%
+        %{--</div>--}%
 
-        <g:if test="${claseObraInstance?.id}">
+        %{--<g:if test="${claseObraInstance?.id}">--}%
+            %{--<div class="controls">--}%
+               %{--<g:textField name="codigo" readonly="readonly" class=" required" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>--}%
+                %{--<span class="mandatory">*</span>--}%
+                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--</div>--}%
+        %{--</g:if>--}%
 
-            <div class="controls">
-                %{--<g:field type="number" name="codigo" class=" required" --}%
-                         %{--value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>--}%
-
-               <g:textField name="codigo" readonly="readonly" class=" required" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>
-
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-
-        </g:if>
-        <g:else>
-            <div class="controls">
-                <g:textField name="codigo" class=" required" value=""/>
-
-                %{--<g:field type="number" name="codigo" class=" required"--}%
-                         %{--value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>--}%
-                <span class="mandatory">*</span>
-
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </g:else>
-    </div>
+        %{--<g:else>--}%
+            %{--<div class="controls">--}%
+                %{--<g:textField name="codigo" class=" required" value=""/>--}%
+                %{--<span class="mandatory">*</span>--}%
+                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--</div>--}%
+        %{--</g:else>--}%
+    %{--</div>--}%
 
     <div class="control-group">
         <div>
@@ -53,19 +43,19 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Tipo
-            </span>
-        </div>
+    %{--<div class="control-group">--}%
+        %{--<div>--}%
+            %{--<span class="control-label label label-inverse">--}%
+                %{--Tipo--}%
+            %{--</span>--}%
+        %{--</div>--}%
 
-        <div class="controls">
-            <g:textField name="tipo" maxlength="1" class="" value="${claseObraInstance?.tipo}"/>
+        %{--<div class="controls">--}%
+            %{--<g:textField name="tipo" maxlength="1" class="" value="${claseObraInstance?.tipo}"/>--}%
 
-            <p class="help-block ui-helper-hidden"></p>
-        </div>
-    </div>
+            %{--<p class="help-block ui-helper-hidden"></p>--}%
+        %{--</div>--}%
+    %{--</div>--}%
 
     <div class="control-group">
         <div>

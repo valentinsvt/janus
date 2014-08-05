@@ -200,7 +200,9 @@
 
             <button class="btn noprint" id="btnVolver"><i class="icon-arrow-left"></i> Regresar</button>
             <g:if test="${obra?.liquidacion == 0}">
+            <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
                 <button class="btn noprint" id="btnGuardar"><i class="icon-check"></i> Guardar</button>
+            </g:if>
             </g:if>
         %{--<form>--}%
         %{--<input type="button" value="Print this page" onClick="window.print()">--}%

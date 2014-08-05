@@ -117,6 +117,8 @@
                     float          : "right"
                 });
 
+
+
                 $(".btn-new").click(function () {
                     $.ajax({
                         type    : "POST",
@@ -124,6 +126,7 @@
                         success : function (msg) {
                             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cancelar</a>');
                             var btnSave = $('<a href="#"  class="btn btn-success"><i class="icon-save"></i> Guardar</a>');
+
 
                             btnSave.click(function () {
                                 submitForm(btnSave);

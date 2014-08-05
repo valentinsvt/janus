@@ -25,12 +25,21 @@
                     Sigla
                 </span>
             </div>
+            <g:if test="${tipoProcedimientoInstance?.id}">
+                <div class="controls">
+                    <g:textField name="sigla" maxlength="5" class=" required allCaps" value="${tipoProcedimientoInstance?.sigla}" readonly="readonly"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:if>
+            <g:else>
+                <div class="controls">
+                    <g:textField name="sigla" maxlength="5" class=" required allCaps" value="${tipoProcedimientoInstance?.sigla}"/>
+                    <span class="mandatory">*</span>
+                    <p class="help-block ui-helper-hidden"></p>
+                </div>
+            </g:else>
 
-            <div class="controls">
-                <g:textField name="sigla" maxlength="5" class=" required allCaps" value="${tipoProcedimientoInstance?.sigla}" disabled="${tipoProcedimientoInstance.id?'true':'false'}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
         </div>
                 
         <div class="control-group">

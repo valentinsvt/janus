@@ -20,7 +20,7 @@ class TipoCompraController extends janus.seguridad.Shield {
             tipoCompraInstance = TipoCompra.get(params.id)
             if (!tipoCompraInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Tipo Compra con id " + params.id
+                flash.message = "No se encontró el Tipo Compra con id " + params.id
                 redirect(action: "list")
                 return
             } //no existe el objeto
@@ -34,7 +34,7 @@ class TipoCompraController extends janus.seguridad.Shield {
             tipoCompraInstance = TipoCompra.get(params.id)
             if (!tipoCompraInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró Tipo Compra con id " + params.id
+                flash.message = "No se encontró el Tipo Compra con id " + params.id
                 redirect(action: 'list')
                 return
             }//no existe el objeto
@@ -45,7 +45,7 @@ class TipoCompraController extends janus.seguridad.Shield {
         } //es create
         if (!tipoCompraInstance.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar Tipo Compra " + (tipoCompraInstance.id ? tipoCompraInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar el Tipo Compra " + (tipoCompraInstance.id ? tipoCompraInstance.id : "") + "</h4>"
 
             str += "<ul>"
             tipoCompraInstance.errors.allErrors.each { err ->
@@ -64,10 +64,10 @@ class TipoCompraController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Tipo Compra " + tipoCompraInstance.id
+            flash.message = "Se ha actualizado correctamente el Tipo Compra " + tipoCompraInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Tipo Compra " + tipoCompraInstance.id
+            flash.message = "Se ha creado correctamente el Tipo Compra " + tipoCompraInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -95,12 +95,12 @@ class TipoCompraController extends janus.seguridad.Shield {
         try {
             tipoCompraInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Tipo Compra " + tipoCompraInstance.id
+            flash.message = "Se ha eliminado correctamente el Tipo Compra " + tipoCompraInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar Tipo Compra " + (tipoCompraInstance.id ? tipoCompraInstance.id : "")
+            flash.message = "No se pudo eliminar el Tipo Compra " + (tipoCompraInstance.id ? tipoCompraInstance.id : "")
             redirect(action: "list")
         }
     } //delete

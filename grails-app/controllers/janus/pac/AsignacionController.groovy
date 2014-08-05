@@ -1,5 +1,6 @@
 package janus.pac
 
+import janus.Presupuesto
 import org.springframework.dao.DataIntegrityViolationException
 
 class AsignacionController extends janus.seguridad.Shield {
@@ -52,27 +53,54 @@ class AsignacionController extends janus.seguridad.Shield {
     }
 
     def buscaPrsp(){
+//        println("entro prsp!")
+        println("params" + params)
         def listaTitulos = ["Código", "Descripción","Fuente","programa","Subprograma","Proyecto"]
         def listaCampos = ["numero", "descripcion","fuente","programa","subPrograma","proyecto"]
         def funciones = [null, null]
-        def url = g.createLink(action: "buscaCpac", controller: "pac")
+//        def url = g.createLink(action: "buscaCpac", controller: "pac")
+        def url = g.createLink(action: "buscaPrsp")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-ccp").modal("hide");'
         funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion"));$("#item_desc").val($(this).attr("prop_descripcion"));$("#item_fuente").val($(this).attr("prop_fuente"));$("#item_prog").val($(this).attr("prop_programa"));$("#item_spro").val($(this).attr("prop_subprograma"));$("#item_proy").val($(this).attr("prop_proyecto"));cargarTecho();'
         funcionJs += '}'
         def numRegistros = 20
         def extras = ""
+//        if (!params.reporte) {
+//            def lista = buscadorService.buscar(janus.Presupuesto, "Presupuesto", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+//            lista.pop()
+//            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+//        } else {
+//            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+//            session.dominio = janus.Presupuesto
+//            session.funciones = funciones
+//            def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
+//            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Partidas presupuestarias", anchos: anchos, extras: extras, landscape: false])
+//        }
+
+
         if (!params.reporte) {
-            def lista = buscadorService.buscar(janus.Presupuesto, "Presupuesto", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-            lista.pop()
-            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            if(params.excel){
+                session.dominio = Presupuesto
+                session.funciones = funciones
+                def anchos = [15, 50, 70, 20, 20, 20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Presupuesto", anchos: anchos, extras: extras, landscape: true])
+            }else{
+                def lista = buscadorService.buscar(janus.Presupuesto, "Presupuesto", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            }
         } else {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
-            session.dominio = janus.Presupuesto
+            session.dominio = Presupuesto
             session.funciones = funciones
-            def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
+            def anchos = [20, 20,20,10,10,10] /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Partidas presupuestarias", anchos: anchos, extras: extras, landscape: false])
         }
+
+
+
     }
     def cargarTecho(){
         def prsp = janus.Presupuesto.get(params.id)

@@ -21,7 +21,7 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
             especialidadProveedorInstance = EspecialidadProveedor.get(params.id)
             if (!especialidadProveedorInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró EspecialidadProveedor con id " + params.id
+                flash.message = "No se encontró la Especialidad de Proveedor con id " + params.id
                 redirect(action: "list")
                 return
             } //no existe el objeto
@@ -35,7 +35,7 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
             especialidadProveedorInstance = EspecialidadProveedor.get(params.id)
             if (!especialidadProveedorInstance) {
                 flash.clase = "alert-error"
-                flash.message = "No se encontró EspecialidadProveedor con id " + params.id
+                flash.message = "No se encontró la Especialidad de Proveedor con id " + params.id
                 redirect(action: 'list')
                 return
             }//no existe el objeto
@@ -46,7 +46,7 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
         } //es create
         if (!especialidadProveedorInstance.save(flush: true)) {
             flash.clase = "alert-error"
-            def str = "<h4>No se pudo guardar EspecialidadProveedor " + (especialidadProveedorInstance.id ? especialidadProveedorInstance.id : "") + "</h4>"
+            def str = "<h4>No se pudo guardar la Especialidad de Proveedor " + (especialidadProveedorInstance.id ? especialidadProveedorInstance.id : "") + "</h4>"
 
             str += "<ul>"
             especialidadProveedorInstance.errors.allErrors.each { err ->
@@ -65,10 +65,10 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente EspecialidadProveedor " + especialidadProveedorInstance.id
+            flash.message = "Se ha actualizado correctamente la Especialidad de Proveedor " + especialidadProveedorInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente EspecialidadProveedor " + especialidadProveedorInstance.id
+            flash.message = "Se ha creado correctamente la Especialidad de Proveedor " + especialidadProveedorInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -77,7 +77,7 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
         def especialidadProveedorInstance = EspecialidadProveedor.get(params.id)
         if (!especialidadProveedorInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró EspecialidadProveedor con id " + params.id
+            flash.message = "No se encontró la Especialidad de Proveedor con id " + params.id
             redirect(action: "list")
             return
         }
@@ -88,7 +88,7 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
         def especialidadProveedorInstance = EspecialidadProveedor.get(params.id)
         if (!especialidadProveedorInstance) {
             flash.clase = "alert-error"
-            flash.message = "No se encontró EspecialidadProveedor con id " + params.id
+            flash.message = "No se encontró la Especialidad de Proveedor con id " + params.id
             redirect(action: "list")
             return
         }
@@ -96,12 +96,12 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
         try {
             especialidadProveedorInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente EspecialidadProveedor " + especialidadProveedorInstance.id
+            flash.message = "Se ha eliminado correctamente la Especialidad de Proveedor " + especialidadProveedorInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {
             flash.clase = "alert-error"
-            flash.message = "No se pudo eliminar EspecialidadProveedor " + (especialidadProveedorInstance.id ? especialidadProveedorInstance.id : "")
+            flash.message = "No se pudo eliminar la Especialidad de Proveedor " + (especialidadProveedorInstance.id ? especialidadProveedorInstance.id : "")
             redirect(action: "list")
         }
     } //delete

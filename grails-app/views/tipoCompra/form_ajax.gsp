@@ -8,13 +8,13 @@
         <div class="control-group">
             <div>
                 <span class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="64" class="" value="${tipoCompraInstance?.descripcion}"/>
-                
+                <g:textField name="descripcion" maxlength="64" class=" required" value="${tipoCompraInstance?.descripcion}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

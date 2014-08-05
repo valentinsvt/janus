@@ -15,7 +15,7 @@
 
             <div class="controls">
                 <g:textField name="descripcion" maxlength="63" class=" required" value="${departamentoInstance?.descripcion}"
-                style="width: 300px;"/>
+                style="width: 290px;"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
@@ -35,6 +35,20 @@
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
+
+        <div class="control-group">
+            <div>
+                <span class="control-label label label-inverse">
+                    Código
+                </span>
+            </div>
+
+            <div class="controls">
+                <g:textField name="codigo" maxlength="6" class=" required allCaps" value="${departamentoInstance?.codigo}"/>
+                <span class="mandatory">*</span>
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+        </div>
                 
         <div class="control-group">
             <div>
@@ -50,19 +64,7 @@
             </div>
         </div>
                 
-        <div class="control-group">
-            <div>
-                <span class="control-label label label-inverse">
-                    Código
-                </span>
-            </div>
 
-            <div class="controls">
-                <g:textField name="codigo" maxlength="6" class=" required" value="${departamentoInstance?.codigo}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </div>
 
         <div class="control-group">
             <div>

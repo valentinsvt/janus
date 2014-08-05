@@ -2468,6 +2468,35 @@ class ReportesController {
         addCellTabla(tablaVolObra, new Paragraph("P. UNITARIO", times8bold), prmsCellHead3)
         addCellTabla(tablaVolObra, new Paragraph("COSTO TOTAL", times8bold), prmsCellHead3)
 
+
+//        def nombres
+//        def corregidos
+//
+//        subPres.each {s->
+//            valores.each{
+//                if (it.sbprdscr == s.descripcion) {
+//                nombres += it?.rbronmbr
+//                }
+//            }
+//
+//        }
+//
+//        nombres.each {
+//            def text = (it ?: '')
+//
+////            text = text.encodeAsHTML()
+////            text = text.decodeHTML()
+////            text = text.replaceAll(/</, /&lt;/);
+////            text = text.replaceAll(/>/, /&gt;/);
+//            text = text.replace('&lt;', '<');
+//            text = text.replace('&gt;', '>');
+//
+////            text = text.decodeHTML()
+//            corregidos += text
+//        }
+//
+//        println("corregidos" + corregidos)
+
         subPres.each { s ->
 
             total2 = 0
@@ -2477,6 +2506,17 @@ class ReportesController {
             valores.each {
 
                 if (it.sbprdscr == s.descripcion) {
+//                    println("antes: " + it.rbronmbr)
+
+                    def textoC = (it.rbronmbr ?: '')
+                    textoC = textoC.decodeHTML()
+//                    textoC = textoC.replaceAll(/</, /&lt;/);
+//                    textoC = textoC.replaceAll(/>/, /&gt;/);
+
+//                    textoC = textoC.encodeAsHTML()
+                    it?.rbronmbr = textoC
+
+//                    println("despues: " + textoC)
 
                     addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellLeft)
                     addCellTabla(tablaVolObra, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)

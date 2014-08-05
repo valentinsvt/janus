@@ -5,31 +5,31 @@
     <g:hiddenField name="id" value="${claseObraInstance?.id}"/>
     <g:hiddenField name="grupo" value="${grupo}"/>
 
-    <div class="control-group">
-        <div>
-            <span class="control-label label label-inverse">
-                Código
-            </span>
-        </div>
+    %{--<div class="control-group">--}%
+        %{--<div>--}%
+            %{--<span class="control-label label label-inverse">--}%
+                %{--Código--}%
+            %{--</span>--}%
+        %{--</div>--}%
 
-        <g:if test="${claseObraInstance?.id}">
+        %{--<g:if test="${claseObraInstance?.id}">--}%
 
-            <div class="controls">
-                <g:textField name="codigo" readonly="readonly" class=" required allCaps" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>
-                <span class="mandatory">*</span>
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
+            %{--<div class="controls">--}%
+                %{--<g:textField name="codigo" readonly="readonly" class=" required allCaps" value="${fieldValue(bean: claseObraInstance, field: 'codigo')}"/>--}%
+                %{--<span class="mandatory">*</span>--}%
+                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--</div>--}%
 
-        </g:if>
-        <g:else>
-            <div class="controls">
-                <g:textField name="codigo"  id="codigo1" class=" required allCaps" value=""/>
-                <span class="mandatory">*</span>
+        %{--</g:if>--}%
+        %{--<g:else>--}%
+            %{--<div class="controls">--}%
+                %{--<g:textField name="codigo"  id="codigo1" class=" required allCaps" value=""/>--}%
+                %{--<span class="mandatory">*</span>--}%
 
-                <p class="help-block ui-helper-hidden"></p>
-            </div>
-        </g:else>
-    </div>
+                %{--<p class="help-block ui-helper-hidden"></p>--}%
+            %{--</div>--}%
+        %{--</g:else>--}%
+    %{--</div>--}%
 
     <div class="control-group">
         <div>

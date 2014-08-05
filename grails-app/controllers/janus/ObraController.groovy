@@ -609,7 +609,7 @@ class ObraController extends janus.seguridad.Shield {
 //            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
 //        }
 
-        println "responsable" + responsableRol + " dueño " + dueno
+//        println "responsable" + responsableRol + " dueño " + dueno
 //                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
 
         if (responsableRol) {
@@ -624,7 +624,7 @@ class ObraController extends janus.seguridad.Shield {
         }
 
 
-        println(" usuarioDep " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id + " dueño " + dueno)
+//        println(" usuarioDep " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id + " dueño " + dueno)
 
 //        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + session.usuario.departamento.id + " respDep " + obra?.responsableObra?.departamento?.id
 //        println ">>>>responsable" + responsableRol + " dueño " + dueno + " usuario " + Persona.get(session.usuario.id).departamento?.direccion?.id + " respDep " + obra?.responsableObra?.departamento?.direccion?.id
@@ -1005,6 +1005,7 @@ class ObraController extends janus.seguridad.Shield {
 
     def mapaObra() {
         def obra = Obra.get(params.id)
+        def persona = Persona.get(session.usuario.id)
 
         def coordsParts = obra.coordenadas.split(" ")
         def lat, lng
@@ -1012,7 +1013,11 @@ class ObraController extends janus.seguridad.Shield {
         lat = (coordsParts[0] == 'N' ? 1 : -1) * (coordsParts[1].toInteger() + (coordsParts[2].toDouble() / 60))
         lng = (coordsParts[3] == 'N' ? 1 : -1) * (coordsParts[4].toInteger() + (coordsParts[5].toDouble() / 60))
 
-        return [obra: obra, lat: lat, lng: lng]
+        def duenoObra = 0
+
+        duenoObra = esDuenoObra(obra) ? 1 : 0
+
+        return [obra: obra, lat: lat, lng: lng, duenoObra: duenoObra, persona: persona]
     }
 
     def saveCoords() {

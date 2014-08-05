@@ -296,7 +296,7 @@ class PacController extends janus.seguridad.Shield {
     }
 
     def buscaCpac() {
-//        println("params C" + params)
+        println("params C" + params)
         def listaTitulos = ["Código", "Descripción"]
         def listaCampos = ["numero", "descripcion"]
         def funciones = [null, null]
@@ -336,7 +336,7 @@ class PacController extends janus.seguridad.Shield {
         def listaTitulos = ["Código", "Descripción", "Fuente", "programa", "Subprograma", "Proyecto"]
         def listaCampos = ["numero", "descripcion", "fuente", "programa", "subPrograma", "proyecto"]
         def funciones = [null, null]
-        def url = g.createLink(action: "buscaCpac", controller: "pac")
+        def url = g.createLink(action: "buscaPrsp", controller: "asignacion")
         def funcionJs = "function(){"
         funcionJs += '$("#modal-ccp").modal("hide");'
         funcionJs += '$("#item_prsp").val($(this).attr("regId"));$("#item_presupuesto").val($(this).attr("prop_numero"));$("#item_presupuesto").attr("title",$(this).attr("prop_descripcion")+" Fuente: "+$(this).attr("prop_fuente")+" - Programa: "+$(this).attr("prop_programa")+" - Subprograma: "+$(this).attr("prop_subPrograma")+" - Proyecto: "+$(this).attr("prop_proyecto"));cargarTecho();'
@@ -344,7 +344,7 @@ class PacController extends janus.seguridad.Shield {
         def numRegistros = 20
         def extras = ""
 
-        println("params" + params)
+//        println("params" + params)
 
         if (!params.reporte) {
             if(params.excel){
@@ -362,7 +362,7 @@ class PacController extends janus.seguridad.Shield {
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Presupuesto
             session.funciones = funciones
-            def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
+            def anchos = [20, 20,20,10,10,10] /*el ancho de las columnas en porcentajes... solo enteros*/
             redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Presupuesto", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Partidas presupuestarias", anchos: anchos, extras: extras, landscape: false])
         }
     }

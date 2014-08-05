@@ -13,9 +13,9 @@
             </div>
 
             <div class="controls">
-                <g:select id="tipoIndice" name="tipoIndice.id" from="${janus.TipoIndice.list()}" optionKey="id" class="many-to-one " value="${indiceInstance?.tipoIndice?.id}" noSelection="['null': '']"/>
-                
-                <p class="help-block ui-helper-hidden"></p>
+
+                <g:select id="tipoIndice" name="tipoIndice.id" from="${janus.TipoIndice.list()}" optionKey="id" class="many-to-one" value="${indiceInstance?.tipoIndice?.id}"/>
+                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>
                 

@@ -30,6 +30,8 @@ class UnidadIncopController extends janus.seguridad.Shield {
 
     def save() {
 
+//        println("params " + params)
+
         params.codigo = params.codigo.toUpperCase();
 
         def unidadIncopInstance
@@ -75,10 +77,10 @@ class UnidadIncopController extends janus.seguridad.Shield {
 
         if(params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Unidad Incop " + unidadIncopInstance.id
+            flash.message = "Se ha actualizado correctamente Unidad Incop " + unidadIncopInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Unidad Incop " + unidadIncopInstance.id
+            flash.message = "Se ha creado correctamente Unidad Incop " + unidadIncopInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -106,7 +108,7 @@ class UnidadIncopController extends janus.seguridad.Shield {
         try {
             unidadIncopInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message =  "Se ha eliminado correctamente Unidad Incop " + unidadIncopInstance.id
+            flash.message =  "Se ha eliminado correctamente Unidad Incop " + unidadIncopInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

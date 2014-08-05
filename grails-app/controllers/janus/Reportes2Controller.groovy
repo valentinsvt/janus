@@ -603,6 +603,8 @@ class Reportes2Controller {
         }
 
         def datos = []
+        def nombresTodos = []
+        def corregidos = []
         rubros.each { rubro ->
             def parametros = "" + rubro.id + ",'" + fecha.format("yyyy-MM-dd") + "'," + listas + "," + params.dsp0 + "," + params.dsp1 + "," + params.dsv0 + "," + params.dsv1 + "," + params.dsv2 + "," + params.chof + "," + params.volq
             preciosService.ac_rbroV2(rubro.id, fecha.format("yyyy-MM-dd"), params.lugar)
@@ -610,6 +612,9 @@ class Reportes2Controller {
 
 //            println("res" + res)
 
+//            println("rubro " + rubro)
+
+            nombresTodos += rubro.nombre
 
             def temp = [:]
             def total = 0
@@ -624,6 +629,7 @@ class Reportes2Controller {
             datos.add(temp)
 //            println "res "+res
 
+//            println("datos " + datos)
         }
         def l = listas.split(",")
 //        println "listas str "+listas+" "+l
@@ -633,7 +639,19 @@ class Reportes2Controller {
         }
 //        println "listas "+listas
 
-        [datos: datos, fecha: fecha, indi: indi, params: params, listas: listas]
+        nombresTodos.each {
+            def text = (it ?: '')
+
+            text = text.decodeHTML()
+            text = text.replaceAll(/</, /&lt;/);
+            text = text.replaceAll(/>/, /&gt;/);
+            corregidos += text
+        }
+
+
+//        println("nombres " +corregidos)
+
+        [datos: datos, fecha: fecha, indi: indi, params: params, listas: listas, nombres: corregidos]
     }
 
 

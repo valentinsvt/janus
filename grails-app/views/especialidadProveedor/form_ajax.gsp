@@ -13,8 +13,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="63" class="" value="${especialidadProveedorInstance?.descripcion}"/>
-                
+                <g:textField name="descripcion" maxlength="63" class=" required" value="${especialidadProveedorInstance?.descripcion}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

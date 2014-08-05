@@ -42,6 +42,7 @@
                 %{--<i class="icon-th-large"></i>--}%
                 %{--Limpiar Cronograma--}%
                 %{--</a>--}%
+                <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
                     <a href="#" class="btn disabled" id="btnDeleteRubro">
                         <i class="icon-minus"></i>
                         Eliminar Rubro
@@ -50,6 +51,8 @@
                         <i class="icon-trash"></i>
                         Eliminar Cronograma
                     </a>
+
+                </g:if>
                 </g:if>
             </div>
 
@@ -83,7 +86,9 @@
                     Subpresupuesto: <g:select name="subpresupuesto" from="${subpres}" optionKey="id" optionValue="descripcion"
                                               style="width: 300px;font-size: 10px" id="subpres" value="${subpre}"
                                               noSelection="['-1': 'TODOS']"/>
+                    <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
                     <a href="#" class="btn" style="margin-top: -10px;" id="btnSubpre">Cambiar</a>
+                    </g:if>
 
                     <g:if test="${obra.estado != 'R'}">
                         <a href="#" class="btn" style="margin-top: -10px;" id="btnDesmarcar">Desmarcar todo</a>
@@ -962,7 +967,10 @@
                     $(".spUnidad").text(unidad);
 
                     var $btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-                    var $btnOk = $('<a href="#" class="btn btn-success">Aceptar</a>');
+
+
+                  var $btnOk = $('<a href="#" class="btn btn-success">Aceptar</a>');
+
 
                     $btnOk.click(function () {
                         if (validar()) {
@@ -1043,8 +1051,12 @@
                     });
 
                     $("#modalTitle").html("Registro del Cronograma");
-
+                    <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
                     $("#modalFooter").html("").append($btnCancel).append($btnOk);
+                    </g:if>
+                    <g:else>
+                    $("#modalFooter").html("").append($btnCancel);
+                    </g:else>
                     $("#modal-cronograma").modal("show");
                 }
 
@@ -1126,7 +1138,10 @@
                             $("#spPrct").text(100);
 
                             var $btnCancel = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-                            var $btnOk = $('<a href="#" class="btn btn-success">Aceptar</a>');
+
+                            %{--<g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">--}%
+                            var  $btnOk = $('<a href="#" class="btn btn-success">Aceptar</a>');
+
 
                             $btnOk.click(function () {
                                 if (validar2()) {
@@ -1229,13 +1244,21 @@
                                 } //if validar
                             });
 
-                            $("#modalTitle").html("Registro del Cronograma");
-                            $("#modalFooter").html("").append($btnCancel).append($btnOk);
-                            $("#modal-cronograma").modal("show");
-                        }
-                    }
+                            %{--</g:if>--}%
 
-                }); //fin dblclick
+                            $("#modalTitle").html("Registro del Cronograma");
+                <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
+
+                    $("#modalFooter").html("").append($btnCancel).append($btnOk);
+                </g:if>
+                            <g:else>
+                            $("#modalFooter").html("").append($btnCancel);
+                </g:else>
+                    $("#modal-cronograma").modal("show");
+                }
+            }
+
+        }); //fin dblclick
 
 //                $("#btnLimpiarRubro").click(function () {
 //                    if (!$(this).hasClass("disabled")) {
@@ -1288,17 +1311,17 @@
 //                    });
 //                });
 
-                $("#btnDeleteRubro").click(function () {
-                    $.box({
-                        imageClass : "box_info",
-                        text       : "Se eliminarán los rubros marcados, continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
-                        title      : "Confirmación",
-                        iconClose  : false,
-                        dialog     : {
-                            resizable : false,
-                            draggable : false,
-                            buttons   : {
-                                "Aceptar"  : function () {
+        $("#btnDeleteRubro").click(function () {
+            $.box({
+                imageClass : "box_info",
+                text       : "Se eliminarán los rubros marcados, continuar?<br/>Los datos serán eliminados inmediatamente, y no se puede deshacer.",
+                title      : "Confirmación",
+                iconClose  : false,
+                dialog     : {
+                    resizable : false,
+                    draggable : false,
+                    buttons   : {
+                        "Aceptar"  : function () {
                                     %{--var id = $(".item_row.rowSelected").data("id");--}%
                                     %{--$.ajax({--}%
                                     %{--type    : "POST",--}%

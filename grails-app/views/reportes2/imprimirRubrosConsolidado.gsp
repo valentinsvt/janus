@@ -183,10 +183,11 @@
         </thead>
         <tbody>
         <g:set var="total" value="${0}"></g:set>
-        <g:each in="${datos}" var="rubro">
+        <g:each in="${datos}" var="rubro" status="j">
             <tr>
                 <td>${rubro["codigo"]}</td>
-                <td>${rubro["nombre"]}</td>
+                %{--<td>${rubro["nombre"]}</td>--}%
+                <td>${nombres[j]}</td>
                 <td>${rubro["unidad"]}</td>
                 <td style="text-align: right"><g:formatNumber number="${rubro["total"]}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
                 <g:set var="total" value="${total+rubro["total"]}"></g:set>
