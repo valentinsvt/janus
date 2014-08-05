@@ -94,8 +94,11 @@ class ProveedorController extends janus.seguridad.Shield {
 
 
 //        println("params: " + params)
+        if(params.fechaContacto){
+            params.fechaContacto = new Date().parse("dd-MM-yyyy", params.fechaContacto)
+        }
 
-        params.fechaContacto = new Date().parse("dd-MM-yyyy", params.fechaContacto)
+
 
         def proveedorInstance
         if (params.id) {
