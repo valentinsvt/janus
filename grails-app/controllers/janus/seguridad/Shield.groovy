@@ -23,23 +23,36 @@ class Shield {
             return false
         } else {
 
-                return true
+                if( isAllowed()){
+                    return true
+                }else{
+                    redirect(controller: "shield",action:  "ataques")
+                }
 
         }
+        return false
         /*************************************************************************** */
     }
 
     boolean isAllowed() {
 
-//        try {
-//            if (session.permisos[actionName] == controllerName)
-//                return true
-//        } catch (e) {
-//            println "Shield execption e: " + e
-//            return true
-//        }
+        try {
+            println "is allowed Accion: ${actionName} Controlador: ${controllerName} Permisos de ese controlador: "+session.permisos[controllerName]
+            if(!session.permisos[controllerName])
+                return false
+            else{
+                if(session.permisos[controllerName].contains(actionName))
+                    return true
+                else
+                    return false
+            }
+
+        } catch (e) {
+            println "Shield execption e: " + e
+            return false
+        }
+        return false
 //        return true
-        return true
     }
 }
  

@@ -3,7 +3,7 @@ package janus.seguridad
 class ShieldController {
     def loginService
     def ataques = {
-        def msn="Se ha detectado que esta ejecutando una acción que atenta contra la seguridad del sistema.<br>Dicha accion sera registrada en su historial.<br>"
+        def msn="Mensaje de acceso no permitido aqui"
         render(view:"advertencia",model:[msn:msn])
     }
 

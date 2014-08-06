@@ -100,6 +100,18 @@ class LoginController {
 
         if (perf) {
             session.perfil = perf
+            def permisos=Prms.findAllByPerfil(session.perfil)
+            def hp=[:]
+            permisos.each{
+                if(hp[it.accion.control]){
+                    hp[it.accion.control].add(it.accion.accnNombre.toLowerCase())
+                }else{
+                    hp.put(it.accion.control.ctrlNombre.toLowerCase(),[it.accion.accnNombre.toLowerCase()])
+                }
+
+            }
+            session.permisos=hp
+            println "permisos "+hp
             if (session.an && session.cn) {
                 if (session.an.toString().contains("ajax")) {
                     redirect(controller: "inicio", action: "index")
