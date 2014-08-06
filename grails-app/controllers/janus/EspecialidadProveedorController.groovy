@@ -30,6 +30,13 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+//        println("params " + params)
+
+        params.descripcion = params.descripcion.toUpperCase()
+
+        def existe = EspecialidadProveedor.findByDescripcion(params.descripcion)
+
         def especialidadProveedorInstance
         if (params.id) {
             especialidadProveedorInstance = EspecialidadProveedor.get(params.id)
@@ -42,7 +49,15 @@ class EspecialidadProveedorController extends janus.seguridad.Shield {
             especialidadProveedorInstance.properties = params
         }//es edit
         else {
-            especialidadProveedorInstance = new EspecialidadProveedor(params)
+            if(existe){
+                flash.clase = "alert-error"
+                flash.message = " Ya existe una Especialidad con ese nombre!"
+                redirect(action: 'list')
+                return
+            }else{
+                especialidadProveedorInstance = new EspecialidadProveedor(params)
+            }
+
         } //es create
         if (!especialidadProveedorInstance.save(flush: true)) {
             flash.clase = "alert-error"

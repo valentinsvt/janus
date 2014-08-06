@@ -9,7 +9,7 @@
         <div class="control-group">
             <div>
                 <span id="nombrePrefecto-label" class="control-label label label-inverse">
-                    Nombre Prefecto
+                    Nombre del Prefecto
                 </span>
             </div>
             <div class="controls">
@@ -26,7 +26,7 @@
         <div class="control-group">
             <div>
                 <span id="descripcion-label" class="control-label label label-inverse">
-                    Descripcion
+                    Descripción
                 </span>
             </div>
             <div class="controls">
