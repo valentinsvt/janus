@@ -29,6 +29,13 @@ class FuenteFinanciamientoController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+
+//        println("params " + params)
+
+        params.descripcion = params.descripcion.toUpperCase();
+
+        def existe = FuenteFinanciamiento.findByDescripcion(params.descripcion)
+
         def fuenteFinanciamientoInstance
         if (params.id) {
             fuenteFinanciamientoInstance = FuenteFinanciamiento.get(params.id)
@@ -41,7 +48,15 @@ class FuenteFinanciamientoController extends janus.seguridad.Shield {
             fuenteFinanciamientoInstance.properties = params
         }//es edit
         else {
-            fuenteFinanciamientoInstance = new FuenteFinanciamiento(params)
+            if(existe){
+                flash.clase = "alert-error"
+                flash.message = "Ya existe una Fuente de Financiamiento con ese nombre!"
+                redirect(action: 'list')
+                return
+            }else{
+                fuenteFinanciamientoInstance = new FuenteFinanciamiento(params)
+            }
+
         } //es create
         if (!fuenteFinanciamientoInstance.save(flush: true)) {
             flash.clase = "alert-error"
@@ -64,10 +79,10 @@ class FuenteFinanciamientoController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Fuente Financiamiento " + fuenteFinanciamientoInstance.id
+            flash.message = "Se ha actualizado correctamente Fuente Financiamiento " + fuenteFinanciamientoInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Fuente Financiamiento " + fuenteFinanciamientoInstance.id
+            flash.message = "Se ha creado correctamente Fuente Financiamiento " + fuenteFinanciamientoInstance.descripcion
         }
         redirect(action: 'list')
     } //save
@@ -95,7 +110,7 @@ class FuenteFinanciamientoController extends janus.seguridad.Shield {
         try {
             fuenteFinanciamientoInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Fuente Financiamiento " + fuenteFinanciamientoInstance.id
+            flash.message = "Se ha eliminado correctamente Fuente Financiamiento " + fuenteFinanciamientoInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

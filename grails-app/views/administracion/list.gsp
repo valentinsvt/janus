@@ -5,7 +5,7 @@
     <head>
         <meta name="layout" content="main">
         <title>
-            Lista de Administración
+            Lista de Administraciones
         </title>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'jquery.validate.min.js')}"></script>
         <script src="${resource(dir: 'js/jquery/plugins/jquery-validation-1.9.0', file: 'messages_es.js')}"></script>
@@ -24,7 +24,7 @@
         <div class="span12 btn-group" role="navigation">
             <a href="#" class="btn btn-ajax btn-new">
                 <i class="icon-file"></i>
-                Nuevo Administración
+                Nueva Administración
             </a>
         </div>
 
@@ -57,9 +57,9 @@
                     
                         <td>${fieldValue(bean: administracionInstance, field: "descripcion")}</td>
                     
-                        <td><g:formatDate date="${administracionInstance.fechaInicio}" /></td>
+                        <td><g:formatDate date="${administracionInstance.fechaInicio}" format="dd-MM-yyyy" /></td>
                     
-                        <td><g:formatDate date="${administracionInstance.fechaFin}" /></td>
+                        <td><g:formatDate date="${administracionInstance.fechaFin}" format="dd-MM-yyyy"/></td>
                     
                         <td>
                             <a class="btn btn-small btn-show btn-ajax" href="#" rel="tooltip" title="Ver" data-id="${administracionInstance.id}">

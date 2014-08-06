@@ -13,7 +13,7 @@
             </div>
 
             <div class="controls">
-                <g:textField name="descripcion" maxlength="100" class=" required" value="${fuenteFinanciamientoInstance?.descripcion}"/>
+                <g:textField name="descripcion" maxlength="100" class=" required allCaps" value="${fuenteFinanciamientoInstance?.descripcion}"/>
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

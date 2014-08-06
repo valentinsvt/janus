@@ -158,7 +158,7 @@ class PersonaController extends janus.seguridad.Shield {
             flash.clase = "alert-success"
             flash.message = "Se ha guardado correctamente Persona " + user.login
         }
-        redirect(action: 'listOferente')
+        redirect(action: 'list')
     }
 
 

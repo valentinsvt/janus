@@ -43,7 +43,7 @@
         </div>
 
         <div class="controls">
-            <g:select id="especialidad" name="especialidad.id" from="${janus.EspecialidadProveedor.list()}" optionKey="id" optionValue="descripcion" class="many-to-one " value="${proveedorInstance?.especialidad?.id}" noSelection="['null': '']"/>
+            <g:select id="especialidad" name="especialidad.id" from="${janus.EspecialidadProveedor.list()}" optionKey="id" optionValue="descripcion" class="many-to-one " value="${proveedorInstance?.especialidad?.id}" />
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -75,7 +75,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="ruc" maxlength="13" class="" value="${proveedorInstance?.ruc}" style="width: 130px;"/>
+            <g:textField name="ruc" maxlength="13" class=" " value="${proveedorInstance?.ruc}" style="width: 130px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -89,7 +89,7 @@
         </div>
 
         <div class="controls">
-            <g:textField name="nombre" maxlength="63" class="" value="${proveedorInstance?.nombre}"/>
+            <g:textField name="nombre" maxlength="63" class=" " value="${proveedorInstance?.nombre}"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -141,12 +141,12 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Direccion
+                Dirección
             </span>
         </div>
 
         <div class="controls">
-            <g:textField name="direccion" maxlength="60" class="" value="${proveedorInstance?.direccion}"/>
+            <g:textField name="direccion" maxlength="60" class=" " value="${proveedorInstance?.direccion}"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
@@ -169,12 +169,12 @@
     <div class="control-group">
         <div>
             <span class="control-label label label-inverse">
-                Telefonos
+                Teléfonos
             </span>
         </div>
 
         <div class="controls">
-            <g:textField name="telefonos" maxlength="40" class="" value="${proveedorInstance?.telefonos}" style="width: 120px;"/>
+            <g:textField name="telefonos" maxlength="40" class=" " value="${proveedorInstance?.telefonos}" style="width: 120px;"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>

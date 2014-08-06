@@ -36,6 +36,14 @@ class AdministracionController extends janus.seguridad.Shield {
         if(params.fechaFin){
             params.fechaFin = new Date().parse("dd-MM-yyyy", params.fechaFin)
         }
+
+
+        if(params.fechaInicio >= params.fechaFin){
+            flash.clase = "alert-error"
+            flash.message = "No se pudo guardar, la Fecha de Inicio debe ser menor a la Fecha Fin"
+            redirect(action: 'list')
+            return
+        }else{
         def administracionInstance
         if (params.id) {
             administracionInstance = Administracion.get(params.id)
@@ -71,12 +79,13 @@ class AdministracionController extends janus.seguridad.Shield {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Administracion " + administracionInstance.id
+            flash.message = "Se ha actualizado correctamente Administracion " + administracionInstance.descripcion
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Administracion " + administracionInstance.id
+            flash.message = "Se ha creado correctamente Administracion " + administracionInstance.descripcion
         }
         redirect(action: 'list')
+        }
     } //save
 
     def show_ajax() {
@@ -102,7 +111,7 @@ class AdministracionController extends janus.seguridad.Shield {
         try {
             administracionInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Administracion " + administracionInstance.id
+            flash.message = "Se ha eliminado correctamente Administracion " + administracionInstance.descripcion
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

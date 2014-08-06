@@ -12,7 +12,7 @@
         </div>
 
         <div class="controls">
-            <g:textField style="width: 310px" name="nombrePrefecto" maxlength="63" class=" required" value="${administracionInstance?.nombrePrefecto}"/>
+            <g:textField style="width: 290px" name="nombrePrefecto" maxlength="63" class=" required" value="${administracionInstance?.nombrePrefecto}"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
