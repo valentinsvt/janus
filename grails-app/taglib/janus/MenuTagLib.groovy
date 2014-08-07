@@ -13,11 +13,13 @@ class MenuTagLib {
 //            println "Acciones:" + acciones
 
             acciones.each { ac ->
-                if (!items[ac.modulo.nombre]) {
-                    items.put(ac.modulo.nombre, [ac.accnDescripcion, g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre)])
-                } else {
-                    items[ac.modulo.nombre].add(ac.accnDescripcion)
-                    items[ac.modulo.nombre].add(g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre))
+                if(ac.tipo.id.toInteger()==1) {
+                    if (!items[ac.modulo.nombre]) {
+                        items.put(ac.modulo.nombre, [ac.accnDescripcion, g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre)])
+                    } else {
+                        items[ac.modulo.nombre].add(ac.accnDescripcion)
+                        items[ac.modulo.nombre].add(g.createLink(controller: ac.control.ctrlNombre, action: ac.accnNombre))
+                    }
                 }
 //                if (!items[ac.modulo.nombre]) {
 //                    def temp =[:]
