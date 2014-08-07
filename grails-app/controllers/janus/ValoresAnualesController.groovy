@@ -35,6 +35,8 @@ class ValoresAnualesController extends janus.seguridad.Shield {
     } //form_ajax
 
     def save() {
+//        println("params" + params)
+        def existe = ValoresAnuales.findByAnio(params.anio)
         def valoresAnualesInstance
         if (params.id) {
             valoresAnualesInstance = ValoresAnuales.get(params.id)
@@ -47,7 +49,14 @@ class ValoresAnualesController extends janus.seguridad.Shield {
             valoresAnualesInstance.properties = params
         }//es edit
         else {
+            if(existe){
+                flash.clase = "alert-error"
+                flash.message = "No se pudo guardar, Año ya existente!"
+                redirect(action: 'list')
+                return
+            }else{
             valoresAnualesInstance = new ValoresAnuales(params)
+            }
         } //es create
         if (!valoresAnualesInstance.save(flush: true)) {
             flash.clase = "alert-error"

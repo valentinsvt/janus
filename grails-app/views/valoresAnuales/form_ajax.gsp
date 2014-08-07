@@ -15,12 +15,12 @@
             <div class="controls">
                 %{--<g:field type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width:60px;" />--}%
                 <g:if test="${valoresAnualesInstance?.id}">
-                    <g:textField type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width: 60px" readonly="readonly"/>
+                    <g:textField type="number" name="anio" class=" required" value="${valoresAnualesInstance?.anio}" style="width: 60px" readonly="readonly"/>
                     <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </g:if>
                 <g:else>
-                    <g:textField type="number" name="anio" class=" required" value="${fieldValue(bean: valoresAnualesInstance, field: 'anio')}" style="width: 60px"/>
+                    <g:textField type="number" name="anio" class=" required" value="${valoresAnualesInstance?.anio}" style="width: 60px"/>
                     <span class="mandatory">*</span>
                     <p class="help-block ui-helper-hidden"></p>
                 </g:else>
@@ -166,6 +166,97 @@
             form.submit();
         }
     });
+
+
+    function validarNum(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                (ev.keyCode == 190 || ev.keyCode == 110) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+    function validarNumSin(ev) {
+        /*
+         48-57      -> numeros
+         96-105     -> teclado numerico
+         188        -> , (coma)
+         190        -> . (punto) teclado
+         110        -> . (punto) teclado numerico
+         8          -> backspace
+         46         -> delete
+         9          -> tab
+         37         -> flecha izq
+         39         -> flecha der
+         */
+        return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
+                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+                ev.keyCode == 37 || ev.keyCode == 39);
+    }
+
+
+    $("#anio").keydown(function (ev){
+
+        return validarNumSin(ev)
+    })
+
+    $("#costoDiesel").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#costoGrasa").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#costoLubricante").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#factorCostoRepuestosReparaciones").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#sueldoBasicoUnificado").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#tasaInteresAnual").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#seguro").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+    $("#inflacion").keydown(function (ev){
+
+        return validarNum(ev)
+    })
+
+
+
+
+
 
     $("input").keyup(function (ev) {
         if (ev.keyCode == 13) {

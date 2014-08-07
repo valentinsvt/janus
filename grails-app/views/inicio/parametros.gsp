@@ -90,10 +90,12 @@
                             action="list">Clase de Obra</g:link> para distinguir entre varios clases de obra civiles y viales.
                 </div><br>
 
+%{--
                 <div class="item" texto="prsp">
                     <g:link controller="presupuesto"
                             action="list">Partida Presupuestaria</g:link> con la cual se financia o construye a obra.
                 </div><br>
+--}%
 
                 <div class="item" texto="edob">
                     <g:link controller="estadoObra"

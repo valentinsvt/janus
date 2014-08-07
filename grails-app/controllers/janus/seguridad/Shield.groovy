@@ -35,28 +35,29 @@ class Shield {
     }
 
     boolean isAllowed() {
+//        println "request.method" : request.method + params
 
-        try {
-            if (request.method == "POST") {
-                println "es post no audit"
-                return true
-            }
-            println "is allowed Accion: ${actionName.toLowerCase()} ---  Controlador: ${controllerName.toLowerCase()} --- Permisos de ese controlador: "+session.permisos[controllerName.toLowerCase()]
-            if(!session.permisos[controllerName.toLowerCase()])
-                return false
-            else{
-                if(session.permisos[controllerName.toLowerCase()].contains(actionName.toLowerCase()))
-                    return true
-                else
-                    return false
-            }
-
-        } catch (e) {
-            println "Shield execption e: " + e
-            return false
-        }
-        return false
-//        return true
+//        try {
+//            if (request.method == "POST") {
+//                println "es post no audit"
+//                return true
+//            }
+//            println "is allowed Accion: ${actionName.toLowerCase()} ---  Controlador: ${controllerName.toLowerCase()} --- Permisos de ese controlador: "+session.permisos[controllerName.toLowerCase()]
+//            if(!session.permisos[controllerName.toLowerCase()])
+//                return false
+//            else{
+//                if(session.permisos[controllerName.toLowerCase()].contains(actionName.toLowerCase()))
+//                    return true
+//                else
+//                    return false
+//            }
+//
+//        } catch (e) {
+//            println "Shield execption e: " + e
+//            return false
+//        }
+//        return false
+        return true
     }
 }
  
