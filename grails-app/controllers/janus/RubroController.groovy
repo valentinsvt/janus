@@ -283,7 +283,7 @@ class RubroController extends janus.seguridad.Shield {
     }
 
     def copiarComposicion() {
-        println "copiar!!! " + params + "  " + request.method
+        //println "copiar!!! " + params + "  " + request.method
         if (request.method == "POST") {
             def rubro = Item.get(params.rubro)
             def copiar = Item.get(params.copiar)
@@ -336,9 +336,24 @@ class RubroController extends janus.seguridad.Shield {
 
 
                         }else{
-                            tmp.cantidad = tmp.cantidad + it.cantidad * factor
-                            tmp.fecha = new Date()
-                            tmp.save(flush: true)
+                            if(it.item.departamento.subgrupo.grupo.id.toInteger()==3){
+                                //println "es mano de obra"
+                                def maxCant = Math.max(tmp.cantidad,it.cantidad)
+                                def sum = tmp.cantidad*tmp.rendimiento+(it.cantidad*it.rendimiento)
+                                //println "maxcant "+maxCant+" sum "+sum
+                                def rend = sum/maxCant
+                                tmp.cantidad = maxCant
+                                tmp.rendimiento=rend
+                                tmp.fecha = new Date()
+                                tmp.save(flush: true)
+
+
+                            }else{
+                                tmp.cantidad = tmp.cantidad + it.cantidad * factor
+                                tmp.fecha = new Date()
+                                tmp.save(flush: true)
+                            }
+
                         }
 
 
