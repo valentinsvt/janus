@@ -1,7 +1,7 @@
 <g:form action="grabar" method="post">
     <!-- <div style="height: 400px; overflow: auto;"> -->
     <input type="hidden" id="mdlo__id" value="${mdlo__id}">
-    <input type="hidden" id="tpac__id" value="${mdlo__id}">
+    <input type="hidden" id="tpac__id" value="${tpac__id}">
     <g:if test="${datos?.size()>0}">
         <div class="ui-corner-all" style="height: 440px; overflow:auto; margin-bottom: 5px; margin-left: -20px; background-color: #efeff8;
              border-style: solid; border-color: #AAA; border-width: 1px; ">
