@@ -135,6 +135,11 @@
 
     }
 
+    .blanco{
+       background: #ffffff !important;
+       color: #000000 !important;
+    }
+
 
     </style>
 </head>
@@ -362,8 +367,8 @@
 
     <table class="table table-bordered table-striped table-condensed table-hover">
         <thead>
-        <tr>
-            <th colspan="7" class="theaderBot theaderup padTopBot">
+        <tr class="theaderBot theaderup padTopBot">
+            %{--<th colspan="7" >--}%
             <th style="width: 20px;">
                 N°
             </th>
@@ -381,19 +386,25 @@
             </th>
             <th class="col_precio %{--theaderBot theaderup padTopBot--}%" style="width:80px ; text-align: right">P. U.</th>
             <th class="col_total %{-- theaderBot theaderup padTopBot--}%" style="width:80px; text-align: right">C.Total</th>
-        </th>
+        %{--</th>--}%
         </tr>
         </thead>
+
+        <tr class="item-row">
+            <th colspan="7" style="font-size: 14px; font-weight: bold; text-align: left" class="blanco">
+                ${subPre}
+            </th>
+        </tr>
+
         <tbody id="tabla_material">
         <g:set var="total" value="${0}"></g:set>
-
         <g:each in="${valores}" var="val" status="j">
 
             <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
 
                 <td style="width: 20px" class="orden">${val.vlobordn}</td>
-                <td></td>
-                <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
+                %{--<td></td>--}%
+                %{--<td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>--}%
                 <td class="cdgo">${val.rbrocdgo.trim()}</td>
 
                 %{--<g:set var="nombre" value="${val?.rbronmbr?.trim()?.replaceAll('<', '(menor)')}"/>--}%

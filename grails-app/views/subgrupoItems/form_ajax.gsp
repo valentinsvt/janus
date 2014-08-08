@@ -28,6 +28,7 @@
 
             <div class="controls">
                 <g:field type="number" name="codigo" class=" required" value="${fieldValue(bean: subgrupoItemsInstance, field: 'codigo')}"/>
+                %{--<g:textField name="codigo" class=" required" maxlength="3" value="${subgrupoItemsInstance?.codigo}"/>--}%
                 <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>

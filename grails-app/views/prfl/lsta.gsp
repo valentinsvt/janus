@@ -10,7 +10,7 @@
                 <tr>
                     <th style="padding:4px;" width="100px">Permisos</th>
                     <th "width="150px">Menú</th>
-                    <th "width="300px">Accion</th>
+                    <th "width="300px">Acción</th>
                     <th "width="200px">Controlador</th>
                 </tr>
                 </thead>
@@ -19,7 +19,7 @@
                 <g:each in="${datos}" status="i" var="d">
                     <tr class="${(i % 2) == 0 ? 'odd' : 'even'}" style="background: ${(d[4]) ? '#7cf' : ''}">
                         <td><input type="checkbox" name="cdgo" class="ndm"
-                                   value="${d[0].encodeAsHTML()}" ${(d[4]) ? 'checked' : ''}></td>
+                                   value="${d[0].encodeAsHTML()}" ${(d[4]) ? 'checked' : ''} style="margin-left: 35px"></td>
                         <td>${d[1]?.encodeAsHTML()}</td>
                         <td>${d[2]?.encodeAsHTML()}</td>
                         <td>${d[3]?.encodeAsHTML()}</td>

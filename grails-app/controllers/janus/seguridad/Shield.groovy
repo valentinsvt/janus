@@ -35,7 +35,6 @@ class Shield {
     }
 
     boolean isAllowed() {
-//        println "request.method" : request.method + params
 
 //        try {
 //            if (request.method == "POST") {
