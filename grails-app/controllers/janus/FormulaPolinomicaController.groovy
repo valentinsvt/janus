@@ -212,7 +212,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                     "  INNER JOIN item i ON v.item__id = i.item__id\n" +
                     "WHERE v.obra__id = ${obra.id} AND voitgrpo IN (${params.filtro})\n and v.item__id NOT IN (SELECT\n" +
                     "      t.item__id FROM itfp t\n" +
-                    "      INNER JOIN fpob f ON t.fpob__id = f.fpob__id AND f.obra__id = ${obra.id});"
+                    "      INNER JOIN fpob f ON t.fpob__id = f.fpob__id AND f.obra__id = ${obra.id}) order by v.voitcoef desc;"
 
 //            println "SQL items: " + sql
             def rows = cn.rows(sql.toString())

@@ -41,7 +41,7 @@ class Shield {
                 println "es post no audit"
                 return true
             }
-            println "is allowed Accion: ${actionName.toLowerCase()} ---  Controlador: ${controllerName.toLowerCase()} --- Permisos de ese controlador: "+session.permisos[controllerName.toLowerCase()]
+//            println "is allowed Accion: ${actionName.toLowerCase()} ---  Controlador: ${controllerName.toLowerCase()} --- Permisos de ese controlador: "+session.permisos[controllerName.toLowerCase()]
             if(!session.permisos[controllerName.toLowerCase()])
                 return false
             else{
