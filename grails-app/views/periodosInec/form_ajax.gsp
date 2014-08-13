@@ -42,8 +42,8 @@
             </div>
 
             <div class="controls">
-                <elm:datepicker name="fechaFin" class="" value="${periodosInecInstance?.fechaFin}" style="width: 120px;"/>
-
+                <elm:datepicker name="fechaFin" class=" required" value="${periodosInecInstance?.fechaFin}" style="width: 120px;"/>
+                <span class="mandatory">*</span>
                 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
