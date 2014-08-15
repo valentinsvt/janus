@@ -1,5 +1,6 @@
 package janus.seguridad
 
+import janus.Parametros
 import janus.Persona
 
 //import janus.Contabilidad
@@ -75,6 +76,7 @@ class LoginController {
         } else {
             user = user[0]
             session.usuario = user
+            session.valida = Parametros.get(1).valida
             redirect(action: "perfiles")
             return
         }

@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="janus.pac.Concurso; janus.Departamento" contentType="text/html;charset=UTF-8" %>
+<%@ page import="janus.FormulaPolinomica; janus.pac.Concurso; janus.Departamento" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
 
@@ -988,6 +988,11 @@
                 <span>Seleccione el subpresupuesto:</span>
                 <g:select name="mtariz_sub" from="${subs}" noSelection="['0': 'Todos los subpresupuestos']" optionKey="id" optionValue="descripcion" style="margin-right: 20px"></g:select>
                 <p>Generar con desglose de Transporte <input type="checkbox" id="si_trans" style="margin-top: -3px" checked="true">
+
+                %{--"FP.... ${FormulaPolinomica.countByObra(janus.Obra.get(obra?.id))}"--}%
+                <g:if test="${FormulaPolinomica.countByObra(janus.Obra.get(obra?.id)) > 0}">
+                     <p>Borrar la Fórmula Polinómica<input type="checkbox" id="borra_fp" style="margin-top: -3px" checked="true">
+                </g:if>
                 </p>
                 <a href="#" class="btn btn-success" id="ok_matiz">Generar</a>
             </div>
@@ -1656,6 +1661,7 @@
             var sp = $("#mtariz_sub").val();
 //            var tr = $("#si_trans").attr("checked");
             var tr = $("#si_trans").is(':checked');
+            var borrar = $("#borra_fp").is(':checked');
             ////console.log(sp,tr)
 //                    if (sp != "-1")
 
@@ -1664,7 +1670,7 @@
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(action: 'validaciones',controller: 'obraFP')}",
-                data    : "obra=${obra.id}&sub=" + sp + "&trans=" + tr,
+                data    : "obra=${obra.id}&sub=" + sp + "&trans=" + tr + "&borraFP=" + borrar,
                 success : function (msg) {
                     $("#dlgLoad").dialog("close");
                     $("#modal-matriz").modal("hide")

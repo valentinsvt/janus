@@ -30,4 +30,33 @@ class ObraService {
 
     }
 
+    def borrarFP(obra) {
+
+        def ob = Obra.get(obra)
+        def fp = FormulaPolinomica.findAllByObra(ob, [sort: "numero"])
+        def ok = true
+
+        fp.each { f ->
+            def children = ItemsFormulaPolinomica.findAllByFormulaPolinomica(f)
+            children.each { ch ->
+                try {
+                    ch.delete(flush: true)
+                } catch (e) {
+                    ok = false
+                    println "servicio borrarFP error al borrar ITFP ${ch.id}"
+                    println e.printStackTrace()
+                }
+            }
+            try {
+                f.delete(flush: true)
+            } catch (e) {
+                ok = false
+                println "servicio borrarFP error al borrar FP ${f.id}"
+                println e.printStackTrace()
+            }
+        }
+        return ok
+    }
+
+
 }

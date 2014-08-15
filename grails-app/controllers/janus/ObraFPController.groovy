@@ -2,6 +2,7 @@ package janus
 
 class ObraFPController {
     def dbConnectionService
+    def obraService
     //static ArrayList rg_cmpo = []
     def rg_cmpo = []
     def numeroCampos = 0
@@ -70,6 +71,9 @@ class ObraFPController {
         def obra__id = params.obra.toInteger()
         def sbpr = params.sub.toInteger()
         def res
+
+//        println params
+        if (params.borraFP == "true") obraService.borrarFP(params.obra)
 
         res = pone_ids()
 //        println "equipo: ${id_equipo}, repuestos: ${id_repuestos}, combustible: ${id_combustible}, " +
@@ -145,7 +149,7 @@ class ObraFPController {
         def camioneta = Item.get(Obra.get(obra__id).transporteCamioneta?.id)
         def acemila   = Item.get(Obra.get(obra__id).transporteAcemila?.id)
         def trnpEspecial =  camioneta || acemila
-        println "tranporte especial: " + trnpEspecial
+//        println "tranporte especial: " + trnpEspecial
         transporteEspecial(obra__id)
 
         if (trnpEspecial){
@@ -166,9 +170,9 @@ class ObraFPController {
         //<<<<<<<<<<<<<<<<<<<<<<<<< >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 //
-        println "verificaMatriz" + verificaMatriz(obra__id)
+//        println "verificaMatriz" + verificaMatriz(obra__id)
 //        //println "pasa verificaMatriz"
-        println "verifica_precios \n" + verifica_precios(obra__id)
+//        println "verifica_precios \n" + verifica_precios(obra__id)
 
 
         /* --------------------------------------- procesaMatriz --------------------------------

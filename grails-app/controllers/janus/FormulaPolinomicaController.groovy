@@ -8,6 +8,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def dbConnectionService
+    def obraService
 
     def addItemFormula() {
 
@@ -419,6 +420,7 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
 
     def borrarFP() {
 
+/*
         def obra = Obra.get(params.obra)
         def fp = FormulaPolinomica.findAllByObra(obra, [sort: "numero"])
 
@@ -445,7 +447,8 @@ class FormulaPolinomicaController extends janus.seguridad.Shield {
                 println e.printStackTrace()
             }
         }
-        render ok
+*/
+        render obraService.borrarFP(params.obra)
     }
 
     def creaIndice() {

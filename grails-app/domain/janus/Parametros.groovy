@@ -28,6 +28,7 @@ class Parametros implements Serializable {
     Item volquete
     int iva
     double inflacion
+    int valida
 
     Persona subdirector
 
@@ -69,6 +70,7 @@ class Parametros implements Serializable {
             inflacion column: 'pauxinfl'
 
             subdirector column: 'prsnsbdr'
+            valida column: 'pauxvlda'
         }
     }
     static constraints = {
