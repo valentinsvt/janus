@@ -174,7 +174,7 @@
                 <p class="help-block ui-helper-hidden"></p>
             </td>
         </tr>
-        <g:if test="${!personaInstance?.id}">
+        %{--<g:if test="${personaInstance?.id}">--}%
             <tr>
                 <td>
                     <span class="control-label label label-inverse">
@@ -199,7 +199,7 @@
                     <p class="help-block ui-helper-hidden"></p>
                 </td>
             </tr>
-        </g:if>
+        %{--</g:if>--}%
     %{--<tr>--}%
     %{--<td>--}%
     %{--<span class="control-label label label-inverse">--}%

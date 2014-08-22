@@ -30,7 +30,7 @@
         <script type="text/javascript">
             var plotEco = $.jqplot("grafEco", ${params.datae},
                     {
-                        title       : "Avance económico de la obra ${obra.descripcion}",
+                        title       : "Avance económico de la obra ${titulo}",
                         axes        : {
                             xaxis : {
                                 min           : 0,
@@ -63,7 +63,7 @@
                     });
             var plotFis = $.jqplot("grafFis", ${params.dataf},
                     {
-                        title       : "Avance físico de la obra ${obra.descripcion}",
+                        title       : "Avance físico de la obra ${titulo}",
                         axes        : {
                             xaxis : {
                                 min           : 0,

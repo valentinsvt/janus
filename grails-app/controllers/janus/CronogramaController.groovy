@@ -106,7 +106,14 @@ class CronogramaController extends janus.seguridad.Shield {
 //            println it
 //        }
         def obra = Obra.get(params.obra)
-        return [params: params, obra: obra]
+
+        def titulo = obra.descripcion.replaceAll('"',"")
+//        println "*************************************"
+//        println obra.descripcion
+//        println titulo
+//        println "*************************************"
+
+        return [params: params, obra: obra, titulo:titulo]
     }
 
     def graficos() {

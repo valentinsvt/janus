@@ -3242,8 +3242,12 @@ class ReportesController {
 
 
         if (tipo == '1') {
+//            addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaMemo, new Paragraph("Base de Contrato N°", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaMemo, new Paragraph(obra?.oficioSalida, times10normal), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph("Base de Contrato N°", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial N°", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(obra?.oficioSalida, times10normal), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)

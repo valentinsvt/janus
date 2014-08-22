@@ -455,11 +455,19 @@ class ContratoController extends janus.seguridad.Shield {
 //        println "extras "+extras
 
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
-            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-            lista.pop()
-            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
-        } else {
+            if(params.excel){
+                session.dominio = Contrato
+                session.funciones = funciones
+                def anchos = [10, 20, 10, 10, 5, 10, 20, 10, 5] /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Contrato", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Contratos", anchos: anchos, extras: extras, landscape: true])
+
+            }else{
+                def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            }
+            } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Contrato
@@ -593,13 +601,17 @@ class ContratoController extends janus.seguridad.Shield {
 //        println "extras "+extras
 
         if (!params.reporte) {
-            def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
+            if(params.excel){
+                session.dominio = Contrato
+                session.funciones = funciones
+                def anchos = [10, 20, 10, 10, 5, 10, 20, 10, 5] /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Contrato", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Contratos", anchos: anchos, extras: extras, landscape: true])
+            }else{
+                def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
             /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-
-
             lista.pop()
-
             render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+        }
         } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/

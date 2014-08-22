@@ -27,8 +27,8 @@
             </div>
 
             <div class="controls">
-                <g:textField name="codigo" maxlength="20" class="" value="${indiceInstance?.codigo}"/>
-                
+                <g:textField name="codigo" maxlength="20" class="required" value="${indiceInstance?.codigo}"/>
+                <span class="mandatory">*</span>
                 <p class="help-block ui-helper-hidden"></p>
             </div>
         </div>

@@ -9,7 +9,7 @@
         <div class="control-group">
             <div>
                 <span id="cedula-label" class="control-label label label-inverse">
-                    Cedula
+                    Cédula
                 </span>
             </div>
             <div class="controls">
@@ -83,7 +83,7 @@
             <div class="controls">
         
                 <span aria-labelledby="fechaNacimiento-label">
-                    <g:formatDate date="${personaInstance?.fechaNacimiento}" />
+                    <g:formatDate date="${personaInstance?.fechaNacimiento}" format="dd-MM-yyyy" />
                 </span>
         
             </div>
@@ -119,7 +119,7 @@
             <div class="controls">
         
                 <span aria-labelledby="fechaInicio-label">
-                    <g:formatDate date="${personaInstance?.fechaInicio}" />
+                    <g:formatDate date="${personaInstance?.fechaInicio}" format="dd-MM-yyyy"/>
                 </span>
         
             </div>
@@ -136,7 +136,7 @@
             <div class="controls">
         
                 <span aria-labelledby="fechaFin-label">
-                    <g:formatDate date="${personaInstance?.fechaFin}" />
+                    <g:formatDate date="${personaInstance?.fechaFin}" format="dd-MM-yyyy" />
                 </span>
         
             </div>

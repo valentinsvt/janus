@@ -23,7 +23,7 @@ var textFieldBinds = {
 
 function doEdit(sel) {
     var texto = $.trim(sel.text());
-    console.log("doEdit", sel,sel.text(), texto, sel.data("valor"));
+//    console.log("doEdit", sel,sel.text(), texto, sel.data("valor"));
     if (texto == "" && sel.data("valor") > 0) {
         texto = sel.data("valor");
     }
@@ -41,20 +41,30 @@ function doEdit(sel) {
 }
 
 function stopEdit() {
-//    var value = $(".editando").val(); //valor del texfield (despues de editar)
+//    console.log("-->")
     var $sel = $(".selected");
     beforeStopEdit($sel);
 //    if (parseFloat(value) == 0 || value == "") {
-    var value = $sel.data("valor"); //valor antes de la edicion
-
-//    console.log("stopEdit", $sel, value);
+//    var value = $sel.data("valor"); //valor antes de la edicion
+    var valueTF = $(".editando").val(); //valor del texfield (despues de editar)
+    var valueData = $sel.data("valor"); //valor del data nuevo
+    var valueOriginal =  $sel.data("valor"); //valororiginal cargado de la base
+    console.log("stopEdit", $sel, valueTF, valueData, valueOriginal);
 
 //    }
-    if (value) {
-        $sel.html(number_format(value, decimales, ".", ""));
-        if ($sel.data("original") != $sel.data("valor")) {
+    if (valueTF || parseInt(valueTF) == 0) {
+        $sel.html(number_format(valueTF, decimales, ".", ""));
+        if (valueOriginal != valueTF) {
+            $sel.addClass("changed");
+            $sel.data("valor",number_format(valueTF, decimales, ".", ""));
+        }
+    } else if(valueData) {
+        $sel.html(number_format(valueData, decimales, ".", ""));
+        if (valueOriginal != valueData) {
             $sel.addClass("changed");
         }
+    } else if(valueOriginal) {
+        $sel.html(number_format(valueOriginal, decimales, ".", ""));
     } else {
         $sel.html("");
     }

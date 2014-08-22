@@ -75,8 +75,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="ruc" maxlength="13" class=" " value="${proveedorInstance?.ruc}" style="width: 130px;"/>
-
+            <g:textField name="ruc" maxlength="13" class=" required" value="${proveedorInstance?.ruc}" style="width: 130px;"/>
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -89,8 +89,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="nombre" maxlength="63" class=" " value="${proveedorInstance?.nombre}"/>
-
+            <g:textField name="nombre" maxlength="63" class=" required" value="${proveedorInstance?.nombre}"/>
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -103,8 +103,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="nombreContacto" maxlength="31" class="" value="${proveedorInstance?.nombreContacto}"/>
-
+            <g:textField name="nombreContacto" maxlength="31" class="required" value="${proveedorInstance?.nombreContacto}"/>
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -117,8 +117,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="apellidoContacto" maxlength="31" class="" value="${proveedorInstance?.apellidoContacto}"/>
-
+            <g:textField name="apellidoContacto" maxlength="31" class="required" value="${proveedorInstance?.apellidoContacto}"/>
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -146,8 +146,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="direccion" maxlength="60" class=" " value="${proveedorInstance?.direccion}"/>
-
+            <g:textField name="direccion" maxlength="60" class=" required" value="${proveedorInstance?.direccion}"/>
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -174,8 +174,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="telefonos" maxlength="40" class=" " value="${proveedorInstance?.telefonos}" style="width: 120px;"/>
-
+            <g:textField name="telefonos" maxlength="40" class="required " value="${proveedorInstance?.telefonos}" style="width: 120px;"/>
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>
@@ -204,8 +204,8 @@
         </div>
 
         <div class="controls">
-            <g:textField name="email" maxlength="40" class="" value="${proveedorInstance?.email}"/>
-
+            <g:textField name="email" maxlength="40" class="required" value="${proveedorInstance?.email}"/>
+            <span class="mandatory">*</span>
             <p class="help-block ui-helper-hidden"></p>
         </div>
     </div>

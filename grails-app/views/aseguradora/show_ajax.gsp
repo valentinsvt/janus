@@ -44,7 +44,7 @@
             <div class="control-group">
                 <div>
                     <span id="telefonos-label" class="control-label label label-inverse">
-                        Telefonos
+                        Teléfonos
                     </span>
                 </div>
 
@@ -105,7 +105,7 @@
                 <div class="controls">
 
                     <span aria-labelledby="fechaContacto-label">
-                        <g:formatDate date="${aseguradoraInstance?.fechaContacto}"/>
+                        <g:formatDate date="${aseguradoraInstance?.fechaContacto}" format="dd-MM-yyyy"/>
                     </span>
 
                 </div>
@@ -116,7 +116,7 @@
             <div class="control-group">
                 <div>
                     <span id="direccion-label" class="control-label label label-inverse">
-                        Direccion
+                        Dirección
                     </span>
                 </div>
 
@@ -160,7 +160,7 @@
 
                     <span aria-labelledby="tipo-label">
                         %{--<g:link controller="tipoAseguradora" action="show" id="${aseguradoraInstance?.tipo?.id}">--}%
-                        ${aseguradoraInstance?.tipo?.encodeAsHTML()}
+                        ${aseguradoraInstance?.tipo?.descripcion?.encodeAsHTML()}
                         %{--</g:link>--}%
                     </span>
 
