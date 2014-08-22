@@ -776,7 +776,7 @@ class ObraFPController {
                     tx_cr = "select item__id, itemcdgo, parcial + parcial_t pcun from rb_precios_r(${id}, ${row.item__id}) where grpocdgo = 1"
                 }
             }
-            //println "des_Materiales: " + tx_cr
+            println "des_Materiales: " + tx_cr
             cn1.eachRow(tx_cr.toString()) { cr ->
                 //poneValores(id, cr.cmpo, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
                 poneValores(id, cr.item__id, cr.pcun, cr.pcun * row.vlobcntd, row.vlobcntd, row.itemcdgo)
