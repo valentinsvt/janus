@@ -165,8 +165,19 @@
         <div class="label">Carpeta Asfáltica: </div> <div class="dato large">${listas[4]}</div>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsv2}</div>
         <div class="dato" style="width: 100%;font-weight: bold;border-top: 1px solid black;height: 1px"></div>
-        <div class="label">Chofer: </div> <div class="dato large">${janus.Item.get(params.chof).nombre} <b>($${params.prch.toDouble().round(2)})</b></div>
-        <div class="label half">Volquete: </div> <div class="dato small">${janus.Item.get(params.volq).nombre} <b>($${params.prvl.toDouble().round(2)})</b></div>
+        <g:if test="${params.chof != '-1'}">
+            <div class="label">Chofer: </div> <div class="dato large">${janus.Item.get(params.chof).nombre} <b>($${params.prch.toDouble().round(2)})</b></div>
+        </g:if>
+        <g:else>
+            <div class="label">Chofer: </div> <div class="dato large"> No seleccionado Chofer <b>($${params.prch.toDouble().round(2)})</b></div>
+        </g:else>
+        <g:if test="${params.volq != '-1'}">
+            <div class="label half">Volquete: </div> <div class="dato small">${janus.Item.get(params.volq).nombre} <b>($${params.prvl.toDouble().round(2)})</b></div>
+        </g:if>
+        <g:else>
+            <div class="label half">Volquete: </div> <div class="dato small"> No seleccionada Volqueta <b>($${params.prvl.toDouble().round(2)})</b></div>
+        </g:else>
+
 
 
         %{--<div class="label">Distancia 2:</div> <div class="dato">${indi}</div>--}%

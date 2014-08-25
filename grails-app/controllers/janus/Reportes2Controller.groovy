@@ -647,8 +647,6 @@ class Reportes2Controller {
             text = text.replaceAll(/>/, /&gt;/);
             corregidos += text
         }
-
-
 //        println("nombres " +corregidos)
 
         [datos: datos, fecha: fecha, indi: indi, params: params, listas: listas, nombres: corregidos]
