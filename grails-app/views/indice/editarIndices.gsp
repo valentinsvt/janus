@@ -64,7 +64,9 @@
                 <div class="btn-group span1" style="margin-left: 5px; margin-right: 10px; width: 200px;">
                     <a href="#" class="btn btn-consultar"><i class="icon-search"></i> Ver</a>
                     <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i> Guardar</a>
+
                 </div>
+                <div> <b>NOTA:</b> No se puede guardar valores iguales a <b> 0</b></div>
             </div>
         </fieldset>
 
