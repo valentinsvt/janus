@@ -631,15 +631,13 @@
 
         <fieldset>
 
-            <div class="span3">
-
-                Desea imprimir el reporte incluido transporte?
-
-            </div>
-
             <div class="span2" style="margin-top: 10px">
               Fecha:
               <elm:datepicker name="fechaSalida" class="span24" id="fechaSalidaId" value="${rubro?.fechaModificacion}" style="width: 100px"/>
+            </div>
+
+            <div class="span3" style="margin-top: 20px;">
+                ¿Desea imprimir el reporte desglosando el transporte?
             </div>
 
         </fieldset>
@@ -2119,10 +2117,12 @@
             width     : 350,
             height    : 220,
             position  : 'center',
-            title     : 'Imprimir con o sin transporte',
-//            open: function( event, ui ) {
-//                $( "#fechaSalidaId" ).datepicker( "hide" );
-//            },
+            title     : 'Imprimir Rubro',
+/*
+            open: function( event, ui ) {
+                $( "#fechaSalidaId" ).datepicker( "hide" );
+            },
+*/
             buttons   : {
                 "Si" : function () {
                     var dsp0 = $("#dist_p1").val()

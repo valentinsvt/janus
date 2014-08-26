@@ -1913,21 +1913,23 @@
             %{--var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";--}%
             $.box({
                 imageClass : "box_info",
-                text       : "Desea imprimir con desglose de transporte?",
-                title      : "Confirme",
-                iconClose  : false,
+                text       : "Imprimir Rubros, Ilustraciones y Especificaciones",
+                title      : "Imprimir Rubros",
+                iconClose  : true,
                 dialog     : {
                     resizable : false,
                     draggable : false,
+                    width     : 450,
+                    height    : 230,
                     buttons   : {
 
-                        "Sí"                               : function () {
+                        "Con desglose de T."                               : function () {
                             url += "1";
 //                                    location.href = url;
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                             %{--location.href = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&desglose=1";--}%
                         },
-                        "No"                               : function () {
+                        "Sin desglose de T."                               : function () {
                             url += "0";
 //                                    location.href = url;
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
@@ -1946,7 +1948,7 @@
                         %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=e";--}%
                         %{--location.href = url;--}%
                         %{--},--}%
-                        "Ilustraciones y Especificaciones" : function () {
+                        "Imprimir Ilustraciones y Especificaciones de los Rubros" : function () {
                             var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
                             location.href = url;
                         },
