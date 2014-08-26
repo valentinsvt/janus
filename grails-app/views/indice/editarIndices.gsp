@@ -66,7 +66,7 @@
                     <a href="#" class="btn btn-actualizar btn-success"><i class="icon-save"></i> Guardar</a>
 
                 </div>
-                <div> <b>NOTA:</b> No se puede guardar valores iguales a <b> 0</b></div>
+                %{--<div> <b>NOTA:</b> No se puede guardar valores iguales a <b> 0</b></div>--}%
             </div>
         </fieldset>
 
@@ -134,7 +134,8 @@
                         var data1 = $(this).data("original");
                         ////console.log(chk);
 
-                        if ((parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
+//                        if ((parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
+                        if ((parseFloat(data1) != parseFloat(valor))) {
                             if (data != "") {
                                 data += "&";
                             }
