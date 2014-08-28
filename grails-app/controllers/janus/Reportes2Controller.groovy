@@ -1911,7 +1911,7 @@ class Reportes2Controller {
 
     def reporteDesgloseEquipos() {
 
-        println("params" + params)
+//        println("params" + params)
 
         def obra = Obra.get(params.id)
 
@@ -1991,11 +1991,12 @@ class Reportes2Controller {
                 "from mfvl, mfcl\n" +
                 "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
                 "mfvl.obra__id = ${obra.id} AND\n" +
-                "mfcl.clmndscr = '1256_T' AND \n" +
+                "mfcl.clmndscr = '${Item.findByCodigo("EQPO").id}_T' AND \n" +
                 "codigo = 'sS2' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
 
 
+/*
         sqlEquiposs1 = "SELECT\n" +
                 "valor\n" +
                 "from mfvl, mfcl\n" +
@@ -2004,18 +2005,30 @@ class Reportes2Controller {
                 "mfcl.clmndscr = '1256_T' AND \n" +
                 "codigo = 'sS1' AND\n " +
                 "mfvl.clmncdgo = mfcl.clmncdgo"
+*/
+        sqlEquiposs1 = "SELECT\n" +
+                "valor\n" +
+                "from mfvl, mfcl\n" +
+                "WHERE mfvl.obra__id = mfcl.obra__id AND\n" +
+                "mfvl.obra__id = ${obra.id} AND\n" +
+                "mfcl.clmndscr = '${Item.findByCodigo("EQPO").id}_T' AND \n" +
+                "codigo = 'sS1' AND\n " +
+                "mfvl.clmncdgo = mfcl.clmncdgo"
 
-//        println("s1" + sqlEquiposs1)
+//        println "equipos1" + sqlEquiposs1
 
 
         def cn = dbConnectionService.getConnection()
 
         ed4 = cn.rows(sqlVerificarTransporte.toString())
         ed4.each {
-
             varTrans = it?.valor
-
         }
+
+/*
+        def idEqpo = Item.findByCodigo("EQPO")
+        println "-----------" + idEqpo
+*/
 
 
         columnas.each {
@@ -2033,41 +2046,24 @@ class Reportes2Controller {
 
 
             ed3 = cn.rows(sqlEquipoDesglosado1.toString())
-
+//            println sqlEquipoDesglosado1
 //            println("ed3" + ed3)
 
             ed3.each {
-
-
                 ed2 = it?.valor
-
             }
-
-
             ed1 += ed2
-
-
         }
-
-
-
 
         def tt = cn.rows(sqlTransTotal.toString())
         et1 = cn.rows(sqlEquipoTotal1.toString())
 
-
-
-
         tt.each {
-
             transTotal = it?.valor
-
         }
 
         et1.each {
-
             eqTotal = it?.valor
-
         }
 
 //        println("A:" + eqTotal)
@@ -2107,28 +2103,18 @@ class Reportes2Controller {
             }
 
         } else {
-
-
             b[0] = 0.00
-
         }
 
 //        println("B:" + b)
 
         b.each {
-
-
             c += (it + eqTotal)
-
-
         }
 
 //      println("C:" + c)
 
-
-
         //nuevos valores
-
 
         def equipoA = cn.rows(sqlEquiposs1.toString())
         def equipoC = cn.rows(sqlEquiposs2.toString())
@@ -2150,7 +2136,7 @@ class Reportes2Controller {
 
         nuevob = nuevoc -nuevoa
 
-//        println("B" + nuevob)
+//        println "nuevoB" + nuevob
 
         nuevod = nuevoc*obra?.desgloseEquipo
         nuevoe = nuevoc*obra?.desgloseRepuestos
