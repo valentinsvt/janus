@@ -1338,7 +1338,7 @@ class ObraController extends janus.seguridad.Shield {
 
         if (params.longitudVia) {
 
-            params.longitudVia = params.longitudVia.toDouble()
+            params.longitudVia = params.longitudVia.replaceAll(",", "").toDouble()
         } else {
 
             params.longitudVia = 0
