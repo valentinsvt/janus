@@ -131,7 +131,7 @@ class PersonaController extends janus.seguridad.Shield {
 
 
     def savePass() {
-        println params
+//        println params
 
         def user = Persona.get(params.id)
 
@@ -141,9 +141,14 @@ class PersonaController extends janus.seguridad.Shield {
         if (params.password.trim() != "") {
             user.password = params.password.trim().encodeAsMD5()
         }
-        if (params.autorizacion.trim() != "") {
-            user.autorizacion = params.autorizacion.trim().encodeAsMD5()
+
+
+        if(params.autorizacion){
+            if (params.autorizacion.trim() != "") {
+                user.autorizacion = params.autorizacion.trim().encodeAsMD5()
+            }
         }
+
 
         if (!user.save(flush: true)) {
             flash.clase = "alert-error"
