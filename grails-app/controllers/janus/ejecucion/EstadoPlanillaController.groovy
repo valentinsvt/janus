@@ -81,10 +81,10 @@ class EstadoPlanillaController {
 
         if (params.id) {
             flash.clase = "alert-success"
-            flash.message = "Se ha actualizado correctamente Estado Planilla " + estadoPlanillaInstance.id
+            flash.message = "Se ha actualizado correctamente el Estado Planilla " + estadoPlanillaInstance.nombre
         } else {
             flash.clase = "alert-success"
-            flash.message = "Se ha creado correctamente Estado Planilla " + estadoPlanillaInstance.id
+            flash.message = "Se ha creado correctamente el Estado Planilla " + estadoPlanillaInstance.nombre
         }
         redirect(action: 'list')
     } //save
@@ -112,7 +112,7 @@ class EstadoPlanillaController {
         try {
             estadoPlanillaInstance.delete(flush: true)
             flash.clase = "alert-success"
-            flash.message = "Se ha eliminado correctamente Estado Planilla " + estadoPlanillaInstance.id
+            flash.message = "Se ha eliminado correctamente Estado Planilla " + estadoPlanillaInstance.nombre
             redirect(action: "list")
         }
         catch (DataIntegrityViolationException e) {

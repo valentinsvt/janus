@@ -158,11 +158,26 @@
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsp0}</div>
         <div class="label">Especial: </div> <div class="dato large">${listas[1]}</div>
         <div class="label half">Distancia: </div> <div class="dato small ">${params.dsp1}</div>
-        <div class="label">Mejoramiento: </div> <div class="dato large">${listas[3]}</div>
+        <g:if test="${listas[3]}">
+            <div class="label">Mejoramiento: </div> <div class="dato large">${listas[3]}</div>
+        </g:if>
+        <g:else>
+            No seleccionó Mejoramiento
+        </g:else>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsv0}</div>
-        <div class="label">Petreos Hormigones:</div> <div class="dato large">${listas[2]}</div>
+        <g:if test="${listas[2]}">
+            <div class="label">Petreos Hormigones:</div> <div class="dato large">${listas[2]}</div>
+        </g:if>
+        <g:else>
+            No seleccionó Petreos Hormigones
+        </g:else>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsv1}</div>
-        <div class="label">Carpeta Asfáltica: </div> <div class="dato large">${listas[4]}</div>
+        <g:if test="${listas[4]}">
+            <div class="label">Carpeta Asfáltica: </div> <div class="dato large">${listas[4]}</div>
+        </g:if>
+        <g:else>
+            No seleccionó carpeta asfáltica
+        </g:else>
         <div class="label half">Distancia: </div> <div class="dato small">${params.dsv2}</div>
         <div class="dato" style="width: 100%;font-weight: bold;border-top: 1px solid black;height: 1px"></div>
         <g:if test="${params.chof != '-1'}">

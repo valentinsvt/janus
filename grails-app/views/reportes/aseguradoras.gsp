@@ -126,7 +126,7 @@
                     <tr class="item_row ${(i % 2 == 0) ? 'even' : 'odd'}">
 
                         <td>${a?.nombre}</td>
-                        <td>${a.tipo}</td>
+                        <td>${a.tipo?.descripcion}</td>
                         <td>${a.fax}</td>
                         <td>${a.telefonos}</td>
                         <td>${a.mail}</td>
