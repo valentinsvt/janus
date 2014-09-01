@@ -1064,24 +1064,29 @@ class ObraFPController {
             }
             cn.close()
 
-            println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}"
+//            println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}"
 
             fraccion = pu_vlqt / (pu_chfr + pu_vlqt)
         } else {
             fraccion = 1.0
         }
-        println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}, fraccion: ${fraccion}"
+//        println "valores de chofer: ${pu_chfr} y volqueta: ${pu_vlqt}, fraccion: ${fraccion}"
 
-        def totalTrnp = (totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1"))
+//        def totalTrnp = (totalSx(id, 'TRANSPORTE_T', 'sS1') + totalSx(id, "${id_equipo}_T", "sS1"))
+        def trnp = totalSx(id, 'TRANSPORTE_T', 'sS1')
         def transporte = (totalSx(id, 'TRANSPORTE_T', 'sS1') * fraccion + totalSx(id, "${id_equipo}_T", "sS1"))
 
-        println "transporte: $transporte, total equipos:" + totalSx(id, "${id_equipo}_T", "sS1")
+//        println "transporte: $transporte, total equipos:" + totalSx(id, "${id_equipo}_T", "sS1")
 
         def saldo = totalSx(id, "${id_saldo}_T", "sS1")
         def mecanico = totalSx(id, "${id_mecanico}_T", "sS1")
         def repuestos = totalSx(id, "${id_repuestos}_T", "sS1")
         def combustible = totalSx(id, "${id_combustible}_T", "sS1")
         def chofer = totalSx(id, "${obra.chofer.id}_T", "sS1")
+
+//        println "valor inicial de chofer: $chofer"
+//        println "a anadir: ${trnp * (1 - fraccion)}"
+
 
 /*
         actualizaS2(id, "${id_equipo}_T", transporte * 0.52)
@@ -1097,7 +1102,7 @@ class ObraFPController {
         actualizaS2(id, "${id_mecanico}_T", transporte * obra.desgloseMecanico + mecanico)
         actualizaS2(id, "${id_saldo}_T", transporte * obra.desgloseSaldo + saldo)
 
-        actualizaS2(id, "${obra.chofer.id}_T", totalTrnp * (1 - fraccion) + chofer)
+        actualizaS2(id, "${obra.chofer.id}_T", trnp * (1 - fraccion) + chofer)
     }
 
     def completaTotalS2(id, hayEqpo) {
