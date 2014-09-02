@@ -95,7 +95,7 @@
 
     <g:each in="${valores}" var="val" status="">
 
-        <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
+        <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}" ord="${val.vlobordn}" cant="${val.vlobcntd}">
 
             <td style="width: 10px" class="sel"><g:checkBox class="chec" name="selec" checked="false" id="seleccionar1" value="${val.item__id}"/></td>
             %{--<td style="width: 10px" class="sel"><input type="checkbox" id="seleccionar1" class="chec" checked="false" value="${val.item__id}"></td>--}%
@@ -194,6 +194,8 @@
         var datos
         var subPresDest = $("#subPres_destino").val()
         var subPre = $("#subPres_desc").val()
+        var rbros = []
+
 
         tbody.children("tr").each(function () {
 
@@ -201,13 +203,19 @@
 
             if(($(this).children("td").children().get(1).checked) == true){
 
+                var selec = []
+
                 var trId = $(this).attr("id")
+                var ord = $(this).attr("ord")
+                var canti = $(this).attr("cant")
 
-//                //console.log("ids: " + trId)
 
-                datos ="&rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre
+                datos ="&rubro=" + trId + "&subDest=" + subPresDest + "&obra=" + ${obra.id} + "&sub=" + subPre + "&orden=" + ord + "&canti=" + canti
 
-                $.ajax({type : "POST", url : "${g.createLink(controller: 'volumenObra',action:'copiarItem')}",
+                $.ajax({
+                    type : "POST",
+                    async : false,
+                    url : "${g.createLink(controller: 'volumenObra',action:'copiarItem')}",
                     data     : datos,
                     success  : function (msg) {
                         $("#detalle").html(msg)

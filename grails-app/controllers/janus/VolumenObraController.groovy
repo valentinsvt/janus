@@ -136,6 +136,7 @@ class VolumenObraController extends janus.seguridad.Shield {
         volumen.subPresupuesto = SubPresupuesto.get(params.sub)
         volumen.obra = obra
         volumen.item = rubro
+
         if (!volumen.save(flush: true)) {
             println "error volumen obra " + volumen.errors
             render "error"
@@ -150,6 +151,7 @@ class VolumenObraController extends janus.seguridad.Shield {
 //        println "copiarItem "+params
         def obra = Obra.get(params.obra)
         def rubro = Item.get(params.rubro)
+//        println("rubro " + rubro)
         def sbprDest = SubPresupuesto.get(params.subDest)
         def sbpr = SubPresupuesto.get(params.sub)
 
@@ -180,12 +182,12 @@ class VolumenObraController extends janus.seguridad.Shield {
             }
         }
 
-        volumen.cantidad = itemVolumen.cantidad.toDouble()
+//        volumen.cantidad = itemVolumen.cantidad.toDouble()
+        volumen.cantidad = params.canti.toDouble()
         volumen.orden = (volu.orden.size().toInteger()) + 1
         volumen.subPresupuesto = SubPresupuesto.get(params.subDest)
         volumen.obra = obra
         volumen.item = rubro
-
         if (!volumen.save(flush: true)) {
 //            println "error volumen obra "+volumen.errors
 
