@@ -634,8 +634,10 @@ class Reportes2Controller {
         def l = listas.split(",")
 //        println "listas str "+listas+" "+l
         listas = []
+
         l.each {
-            listas.add(Lugar.get(it).descripcion)
+            if(it != 'null')
+                listas.add(Lugar.get(it).descripcion)
         }
 //        println "listas "+listas
 
