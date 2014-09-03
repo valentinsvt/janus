@@ -242,7 +242,7 @@ class ItemController extends janus.seguridad.Shield {
         def precios = cn.rows(sqlPrecios.toString())
         cn.close()
 
-        def r1 = "", r2 = "<tr>", last = arr[0].tipo, c = 1
+        def r1 = "", r2 = "<tr>", last = arr[0]?.tipo, c = 1
 
         arr.eachWithIndex { row, index ->
             lugares.add(row.id)
