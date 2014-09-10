@@ -629,32 +629,40 @@
                     <g:if test="${duenoObra == 1}">
                         <tr>
                             <td>
-                                <g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                %{--<g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                                <g:select name="coordinador" from="${directorUtfpu}" optionValue="persona" optionKey="id" style="width: 380px"/>
                             </td>
                             <td>
-                                COORDINADOR
+                                %{--COORDINADOR--}%
+                                DIRECTOR
                             </td>
                         </tr>
                     </g:if>
                     <g:else>
-                        <g:if  test="${cordinadorOtros[0]}">
+                        %{--<g:if  test="${cordinadorOtros[0]}">--}%
+                        <g:if  test="${firmaDirector}">
                             <tr>
                                 <td style="color: #ff2a08">
-                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
-                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                    %{--<g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>--}%
+                                    <g:hiddenField name="coordinador" value="${firmaDirector?.persona?.id}"/>
+                                    %{--<g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>--}%
+                                    <g:textField name="coordinadorText" value="${firmaDirector?.persona?.nombre + ' ' + firmaDirector?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
                                 </td>
                                 <td>
-                                    COORDINADOR
+                                    %{--COORDINADOR--}%
+                                    DIRECTOR
                                 </td>
                             </tr>
                         </g:if>
                         <g:else>
                             <tr>
                                 <td style="color: #ff2a08">
-                                    SIN COORDINADOR
+                                    %{--SIN COORDINADOR--}%
+                                    SIN DIRECTOR
                                 </td>
                                 <td>
-                                    COORDINADOR
+                                    %{--COORDINADOR--}%
+                                    DIRECTOR
                                 </td>
                             </tr>
                         </g:else>
@@ -667,33 +675,41 @@
 
                         <tr>
                             <td style="color: #ff2a08">
-                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
-                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                %{--<g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>--}%
+                                <g:hiddenField name="coordinador" value="${directorUtfpu?.persona?.id}"/>
+                                %{--<g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>--}%
+                                <g:textField name="coordinadorText" value="${directorUtfpu?.persona?.nombre + ' ' + directorUtfpu?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
                             </td>
                             <td>
-                                COORDINADOR
+                                %{--COORDINADOR--}%
+                                DIRECTOR
                             </td>
                         </tr>
 
                     </g:if>
                     <g:else>
-                        <g:if test="${coordinadores}">
+                        %{--<g:if test="${coordinadores}">--}%
+                        <g:if test="${firmaDirector}">
                             <tr>
                                 <td style="color: #ff2a08">
-                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                    %{--<g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
+                                    <g:select name="coordinador" from="${firmaDirector}" optionValue="persona" optionKey="id" style="width: 380px"/>
                                 </td>
                                 <td>
-                                    COORDINADOR
+                                    %{--COORDINADOR--}%
+                                    DIRECTOR
                                 </td>
                             </tr>
                         </g:if>
                         <g:else>
                             <tr>
                                 <td style="color: #ff2a08">
-                                    SIN COORDINADOR
+                                    %{--SIN COORDINADOR--}%
+                                    SIN DIRECTOR
                                 </td>
                                 <td>
-                                    COORDINADOR
+                                    %{--COORDINADOR--}%
+                                    DIRECTOR
                                 </td>
                             </tr>
                         </g:else>
@@ -2972,7 +2988,7 @@ console.log("active", active )
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
                                         "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +
-                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmDire
+                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmaCoordinador
 
                             }
                         }

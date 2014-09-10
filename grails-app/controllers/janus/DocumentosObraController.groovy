@@ -55,7 +55,7 @@ class DocumentosObraController {
 //        def cuadrilla = FormulaPolinomica.findAllByObraAndNumeroIlike(obra,'c%')
 //        println("cuadrilla:" + cuadrilla)
         def departamento = Departamento.get(obra?.departamento?.id)
-//        println("departamento: " + obra?.departamento?.id)
+        println("departamento: " + obra?.departamento?.descripcion)
         def personas = Persona.list()
         def departamentos = Departamento.list()
 
@@ -143,6 +143,7 @@ class DocumentosObraController {
 
         def direccion = departamento.direccion
 
+
         def dptoDireccion = Departamento.findAllByDireccion(direccion)
 
         def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion, [sort: 'nombre'])
@@ -173,7 +174,20 @@ class DocumentosObraController {
         duenoObra = esDuenoObra(obra)? 1 : 0
 
         def funcionCoor = Funcion.findByCodigo('O')
+
         def personasUtfpuCoor = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+
+//        def directorUtfpu = PersonaRol.findByFuncionAndPersonaInList(funcionDirector,Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+
+        def dirUtfpu = Departamento.findByCodigo('UTFPU').direccion
+
+        def dptoDireccion1 = Departamento.findAllByDireccion(dirUtfpu)
+
+        def personalDirUtfpu = Persona.findAllByDepartamentoInList(dptoDireccion1, [sort: 'nombre'])
+
+        def directorUtfpu = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personalDirUtfpu)
+
+        println("Dire " + directorUtfpu?.persona?.nombre)
 
         //coordinador
 
@@ -184,6 +198,8 @@ class DocumentosObraController {
 
         def personalUtfpu =  Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU'))
 
+        println("-->" + personalUtfpu)
+
         def duo = 0
 
         personalUtfpu.each {
@@ -192,9 +208,18 @@ class DocumentosObraController {
              }
          }
 
+        def firmaCambiada
+
+        if(esDuenoObra(obra)){
+
+        }else{
+
+        }
+
         [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
                 totalPresupuestoBien: totalPresupuestoBien, persona: persona,
-                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor, cordinadorOtros: coordinadorOtros, duo: duo]
+                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor,
+                cordinadorOtros: coordinadorOtros, duo: duo, directorUtfpu: directorUtfpu]
 
     }
 
