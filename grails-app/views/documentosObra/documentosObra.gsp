@@ -1645,6 +1645,7 @@
 
     var firmaCoordinador;
     var firmaElaboro;
+    var firmDire
 
 
     function validarNum(ev) {
@@ -2306,7 +2307,7 @@
                     });
                 }
             }
-
+console.log("active", active )
             if (active == 1) {
 
                 var idCoordinador = $("#coordinador").val()
@@ -2320,6 +2321,9 @@
 
                     idFirmaCoor = ''
                 }
+
+                firmDire = ${firmaDirector?.id}
+
 
                 firmaCoordinador = idFirmaCoor
 
@@ -2352,7 +2356,7 @@
 
                     firmasFijasMemo = "";
                 }
-
+                console.log("AQUI 1: "+tipoClickMemo)
                 if (tipoClickMemo == 1) {
                     $("#reajusteMemoDialog").dialog("open")
                 }
@@ -2373,7 +2377,7 @@
                         },
                         success : function (msg)  {
                             var part = msg.split('_');
-//                            console.log(msg)
+
                             if(part[0] == 'ok'){
 //                                $("#divOk").show(msg);
 
@@ -2381,9 +2385,10 @@
                                         %{--+ "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador--}%
 
 
-                                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
-                                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
+                                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo--}%
+                                        %{--+ "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +--}%
+                                        %{--"&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" +--}%
+                                        %{--firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmDire--}%
                             }
                         }
                     });
@@ -2704,6 +2709,7 @@
                 descripcion : $("#descripcionMemo").val()
             },
             success :  function (msg) {
+                console.log("QWEQWE")
                var part = msg
                if(part == '1'){
                    alert("Nota actualizada correctamente")
@@ -2931,6 +2937,8 @@
                 idFirmaCoor = ''
             }
 
+                firmDire = ${firmaDirector?.id}
+
             firmaCoordinador = idFirmaCoor
 
                 if (proyeccionMemo == true && reajusteMesesMemo == "") {
@@ -2956,13 +2964,15 @@
                             obraTipo     : "${obra?.claseObra?.tipo}"
                         },
                         success : function (msg)  {
+
                             var part = msg.split('_');
 //                            console.log(msg)
                             if(part[0] == 'ok'){
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +
+                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmDire
 
                             }
                         }

@@ -3038,6 +3038,7 @@ class ReportesController {
         def firmas
         def firmaFijaMemo
         def firmaCoordinador
+        def prsnDire
         def cuenta = 0;
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor;
@@ -3444,24 +3445,33 @@ class ReportesController {
              addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
              addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         //nuevas
-        if(params.firmaCoordinador != ''){
+//        if(params.firmaCoordinador != ''){
+        if(params.firmDire != ''){
             def personaRol = PersonaRol.get(params.firmaCoordinador)
             firmaCoordinador = personaRol?.persona
 
-            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            prsnDire = PersonaRol.get(params.firmDire).persona
+
+
+
+//            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph((prsnDire?.titulo?.toUpperCase() ?: '') + " " + (prsnDire?.nombre?.toUpperCase() ?: '') + " " + (prsnDire?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }else{
-            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Director no asignado", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
 
-        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("DIRECTOR", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
-        addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+//        addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(prsnDire?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph('', times8bold), prmsHeaderHoja)
 
@@ -3470,6 +3480,10 @@ class ReportesController {
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             document.add(tablaFirmas);
+
+
+
+
 
         //old
 //            firmaFijaMemo.each {f->
