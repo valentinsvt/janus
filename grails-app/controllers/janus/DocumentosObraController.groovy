@@ -56,7 +56,7 @@ class DocumentosObraController {
 //        println("cuadrilla:" + cuadrilla)
         def departamento = Departamento.get(obra?.departamento?.id)
         println("departamento: " + obra?.departamento?.descripcion)
-        def personas = Persona.list()
+//        def personas = Persona.list()
         def departamentos = Departamento.list()
 
         //selector notas
@@ -174,8 +174,16 @@ class DocumentosObraController {
         duenoObra = esDuenoObra(obra)? 1 : 0
 
         def funcionCoor = Funcion.findByCodigo('O')
+        def funcionDire = Funcion.findByCodigo('D')
 
         def personasUtfpuCoor = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
+
+        def personas = Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion))
+        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor,Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion)))
+
+        println "lista de personas" + personasUtfpuDire
+
+//        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionDire, Persona.findAllByDepartamentoInList(Direccion.findByDepartamento(Departamento.findByCodigo('UTFPU'))))
 
 //        def directorUtfpu = PersonaRol.findByFuncionAndPersonaInList(funcionDirector,Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
 
@@ -218,8 +226,9 @@ class DocumentosObraController {
 
         [obra: obra, nota: nota, auxiliar: auxiliar, auxiliarFijo: auxiliarFijo, totalPresupuesto: totalPresupuesto, firmas: firmas.persona,
                 totalPresupuestoBien: totalPresupuestoBien, persona: persona,
-                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores, notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor,
-                cordinadorOtros: coordinadorOtros, duo: duo, directorUtfpu: directorUtfpu]
+                resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores,
+                notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor,
+                personasUtfpuDire: personasUtfpuDire, cordinadorOtros: coordinadorOtros, duo: duo, directorUtfpu: directorUtfpu]
 
     }
 

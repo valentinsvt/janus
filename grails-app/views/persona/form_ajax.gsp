@@ -125,11 +125,30 @@
                     Cargo
                 </span>
             </td>
-            <td>
-                <g:textField name="cargo" maxlength="50" class="span2" value="${personaInstance?.cargo}"/>
+            <td colspan="3">
+                <g:textField name="cargo" maxlength="50" class="span2" value="${personaInstance?.cargo}" style="width: 500px;"/>
 
                 <p class="help-block ui-helper-hidden"></p>
             </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="control-label label label-inverse">
+                    Sexo
+                </span>
+            </td>
+%{--
+            <td>
+                <g:textField name="login" maxlength="16" class="span2 required" value="${personaInstance?.login}"/>
+                <span class="mandatory">*</span>
+
+                <p class="help-block ui-helper-hidden"></p>
+            </td>
+--}%
+            <td>
+                <g:select name="sexo" from="${personaInstance.constraints.sexo.inList}" class="" value="${personaInstance?.sexo}" style="width:60px;"/>
+            </td>
+
             <td>
                 <span class="control-label label label-inverse">
                     Login

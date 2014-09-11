@@ -630,8 +630,7 @@
                         <tr>
                             <td>
                                 %{--<g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
-                                <g:select name="coordinador" from="${directorUtfpu}" optionValue="persona" optionKey="id" style="width: 380px"/>
-                                <g:hiddenField name="direDGCP" value="${directorUtfpu?.id}"/>
+                                <g:select name="coordinador" from="${personasUtfpuDire}" optionValue="persona" optionKey="id" style="width: 380px"/>
                             </td>
                             <td>
                                 %{--COORDINADOR--}%
@@ -641,30 +640,23 @@
                     </g:if>
                     <g:else>
                         <g:if  test="${cordinadorOtros[0]}">
-                        %{--<g:if  test="${firmaDirector}">--}%
                             <tr>
                                 <td style="color: #ff2a08">
-                                    %{--<g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>--}%
-                                    <g:hiddenField name="coordinador" value="${firmaDirector?.persona?.id}"/>
-                                    %{--<g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>--}%
-                                    <g:textField name="coordinadorText" value="${firmaDirector?.persona?.nombre + ' ' + firmaDirector?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
-
+                                    <g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>
+                                    <g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
                                 </td>
                                 <td>
-                                    %{--COORDINADOR--}%
-                                    DIRECTOR
+                                    COORDINADOR
                                 </td>
                             </tr>
                         </g:if>
                         <g:else>
                             <tr>
                                 <td style="color: #ff2a08">
-                                    %{--SIN COORDINADOR--}%
-                                    SIN DIRECTOR
+                                    SIN COORDINADOR
                                 </td>
                                 <td>
-                                    %{--COORDINADOR--}%
-                                    DIRECTOR
+                                    COORDINADOR
                                 </td>
                             </tr>
                         </g:else>
@@ -677,41 +669,33 @@
 
                         <tr>
                             <td style="color: #ff2a08">
-                                %{--<g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>--}%
-                                <g:hiddenField name="coordinador" value="${directorUtfpu?.persona?.id}"/>
-                                %{--<g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>--}%
-                                <g:textField name="coordinadorText" value="${directorUtfpu?.persona?.nombre + ' ' + directorUtfpu?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+                                <g:hiddenField name="coordinador" value="${personasUtfpuCoor[0]?.id}"/>
+                                <g:textField name="coordinadorText" value="${personasUtfpuCoor[0]?.persona?.nombre + ' ' + personasUtfpuCoor[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
                             </td>
                             <td>
-                                %{--COORDINADOR--}%
-                                DIRECTOR
+                                COORDINADOR
                             </td>
                         </tr>
 
                     </g:if>
                     <g:else>
-                        %{--<g:if test="${coordinadores}">--}%
-                        <g:if test="${firmaDirector}">
+                        <g:if test="${coordinadores}">
                             <tr>
                                 <td style="color: #ff2a08">
-                                    %{--<g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
-                                    <g:select name="coordinador" from="${firmaDirector}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                    <g:select name="coordinador" from="${coordinadores}" optionValue="persona" optionKey="id" style="width: 380px"/>
                                 </td>
                                 <td>
-                                    %{--COORDINADOR--}%
-                                    DIRECTOR
+                                    COORDINADOR
                                 </td>
                             </tr>
                         </g:if>
                         <g:else>
                             <tr>
                                 <td style="color: #ff2a08">
-                                    %{--SIN COORDINADOR--}%
-                                    SIN DIRECTOR
+                                    SIN COORDINADOR
                                 </td>
                                 <td>
-                                    %{--COORDINADOR--}%
-                                    DIRECTOR
+                                    COORDINADOR
                                 </td>
                             </tr>
                         </g:else>
@@ -1663,7 +1647,6 @@
 
     var firmaCoordinador;
     var firmaElaboro;
-    var firmDire
 
 
     function validarNum(ev) {
@@ -2325,7 +2308,7 @@
                     });
                 }
             }
-console.log("active", active )
+
             if (active == 1) {
 
                 var idCoordinador = $("#coordinador").val()
@@ -2339,9 +2322,6 @@ console.log("active", active )
 
                     idFirmaCoor = ''
                 }
-
-                firmDire = ${firmaDirector?.id}
-
 
                 firmaCoordinador = idFirmaCoor
 
@@ -2374,7 +2354,7 @@ console.log("active", active )
 
                     firmasFijasMemo = "";
                 }
-                console.log("AQUI 1: "+tipoClickMemo)
+
                 if (tipoClickMemo == 1) {
                     $("#reajusteMemoDialog").dialog("open")
                 }
@@ -2395,7 +2375,7 @@ console.log("active", active )
                         },
                         success : function (msg)  {
                             var part = msg.split('_');
-
+//                            console.log(msg)
                             if(part[0] == 'ok'){
 //                                $("#divOk").show(msg);
 
@@ -2403,10 +2383,9 @@ console.log("active", active )
                                         %{--+ "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador--}%
 
 
-                                %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo--}%
-                                        %{--+ "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +--}%
-                                        %{--"&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" +--}%
-                                        %{--firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmDire--}%
+                                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
+                                        + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + textoMemo + "&pie=" + pieMemo +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
                             }
                         }
                     });
@@ -2727,7 +2706,6 @@ console.log("active", active )
                 descripcion : $("#descripcionMemo").val()
             },
             success :  function (msg) {
-                console.log("QWEQWE")
                var part = msg
                if(part == '1'){
                    alert("Nota actualizada correctamente")
@@ -2955,8 +2933,6 @@ console.log("active", active )
                 idFirmaCoor = ''
             }
 
-                firmDire = ${firmaDirector?.id}
-
             firmaCoordinador = idFirmaCoor
 
                 if (proyeccionMemo == true && reajusteMesesMemo == "") {
@@ -2982,16 +2958,13 @@ console.log("active", active )
                             obraTipo     : "${obra?.claseObra?.tipo}"
                         },
                         success : function (msg)  {
-
                             var part = msg.split('_');
 //                            console.log(msg)
                             if(part[0] == 'ok'){
 
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
-                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +
-//                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmaCoordinador
-                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + $("#direDGCP").val()
+                                        "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +  "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador
 
                             }
                         }

@@ -25,6 +25,7 @@ class Persona implements Serializable {
     Date fechaActualizacionPass
 
     String firma
+    String sexo
 
     //static hasMany = [sesiones: Sesn, accesos: Accs, alertas: janus.alertas.Alerta]
     static hasMany = [sesiones: Sesn, accesos: Accs]
@@ -60,6 +61,7 @@ class Persona implements Serializable {
             fechaActualizacionPass column: 'prsnfcps'
 
             firma column: 'prsnfrma'
+            sexo  column: 'prsnsexo'
         }
     }
     static constraints = {
@@ -84,6 +86,7 @@ class Persona implements Serializable {
         fechaActualizacionPass(blank: true, nullable: true, attributes: [title: 'fecha cmabio pass'])
 
         firma(blank: true, nullable: true)
+        sexo(size: 1..1, blank: false, nullable: false, inList: ['M', 'F'], attributes: [title: 'Sexo'])
     }
 
     String toString() {

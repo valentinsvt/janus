@@ -3028,17 +3028,16 @@ class ReportesController {
 
 
     def reporteDocumentosObraMemo() {
-        println("--->>" + params)
+//        println("--->>" + params)
         def cd
-        def auxiliar = janus.Auxiliar.get(1)
-        def auxiliarFijo = janus.Auxiliar.get(1)
+        def auxiliar = Auxiliar.get(1)
+        def auxiliarFijo = Auxiliar.get(1)
         def obra = Obra.get(params.id)
         def paux = Parametros.get(1);
         def firma
         def firmas
         def firmaFijaMemo
         def firmaCoordinador
-        def prsnDire
         def cuenta = 0;
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor;
@@ -3426,69 +3425,51 @@ class ReportesController {
 
 //        if (cuenta == 3) {
 
-             PdfPTable tablaFirmas = new PdfPTable(2)
+             PdfPTable tablaFirmas = new PdfPTable(3)
              tablaFirmas.setWidthPercentage(90);
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-
-
-        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
 
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
              addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         //nuevas
-//        if(params.firmaCoordinador != ''){
-        if(params.firmDire != ''){
+        if(params.firmaCoordinador != ''){
             def personaRol = PersonaRol.get(params.firmaCoordinador)
             firmaCoordinador = personaRol?.persona
 
-            prsnDire = PersonaRol.get(params.firmDire).persona
-//            println "prsnDire: $prsnDire"
-
-
-//            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph((prsnDire?.titulo?.toUpperCase() ?: '') + " " + (prsnDire?.nombre?.toUpperCase() ?: '') + " " + (prsnDire?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }else{
-//            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("Director no asignado", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
 
-//        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
-
-        addCellTabla(tablaFirmas, new Paragraph("DIRECTORA", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-//        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
-
-//        addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph(prsnDire?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
-//        addCellTabla(tablaFirmas, new Paragraph('', times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph('', times8bold), prmsHeaderHoja)
 
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-//        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
 
             document.add(tablaFirmas);
-
-
-
-
 
         //old
 //            firmaFijaMemo.each {f->
