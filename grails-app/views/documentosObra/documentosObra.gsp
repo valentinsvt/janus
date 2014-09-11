@@ -99,18 +99,12 @@
                                    style="margin-left: 220px"/> Presupuesto Referencial
 
                         </div>
-                    </fieldset>
+                        <div class="span6" style="margin-bottom: 10px; ">
 
-                    <fieldset class="borde">
-
-                        <legend>Encabezado</legend>
-
-                        <div class="span6" style="margin-bottom: 10px; margin-top: -20px">
-
-                            <input type="radio" name="encabezado" class="encabezado uno" value="1" checked="true"/>  Sí
+                            <input type="radio" name="encabezado" class="encabezado uno" value="1" checked="true"/>  Con encabezado
 
                             <input type="radio" name="encabezado" class="encabezado" value="0"
-                                   style="margin-left: 220px"/> No
+                                   style="margin-left: 220px"/> Sin encabezado
 
                         </div>
                     </fieldset>
