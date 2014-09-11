@@ -631,6 +631,7 @@
                             <td>
                                 %{--<g:select name="coordinador" from="${personasUtfpuCoor}" optionValue="persona" optionKey="id" style="width: 380px"/>--}%
                                 <g:select name="coordinador" from="${directorUtfpu}" optionValue="persona" optionKey="id" style="width: 380px"/>
+                                <g:hiddenField name="direDGCP" value="${directorUtfpu?.id}"/>
                             </td>
                             <td>
                                 %{--COORDINADOR--}%
@@ -639,14 +640,15 @@
                         </tr>
                     </g:if>
                     <g:else>
-                        %{--<g:if  test="${cordinadorOtros[0]}">--}%
-                        <g:if  test="${firmaDirector}">
+                        <g:if  test="${cordinadorOtros[0]}">
+                        %{--<g:if  test="${firmaDirector}">--}%
                             <tr>
                                 <td style="color: #ff2a08">
                                     %{--<g:hiddenField name="coordinador" value="${cordinadorOtros[0]?.id}"/>--}%
                                     <g:hiddenField name="coordinador" value="${firmaDirector?.persona?.id}"/>
                                     %{--<g:textField name="coordinadorText" value="${cordinadorOtros[0]?.persona?.nombre + ' ' + cordinadorOtros[0]?.persona?.apellido}" readonly="readonly" style="width: 380px"/>--}%
                                     <g:textField name="coordinadorText" value="${firmaDirector?.persona?.nombre + ' ' + firmaDirector?.persona?.apellido}" readonly="readonly" style="width: 380px"/>
+
                                 </td>
                                 <td>
                                     %{--COORDINADOR--}%
@@ -2988,7 +2990,8 @@ console.log("active", active )
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
                                         "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 + "&firmasFijasMemo=" + firmasFijasMemo + "&texto=" + $("#memo1").val() + "&pie=" + $("#memo2").val() +
-                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmaCoordinador
+//                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + firmaCoordinador
+                                        "&notaValue=" + part[1] + "&firmaCoordinador=" + firmaCoordinador + "&firmDire=" + $("#direDGCP").val()
 
                             }
                         }

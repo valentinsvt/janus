@@ -155,7 +155,7 @@ class DocumentosObraController {
 
         def coordinadores = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoordinador, personalDireccion)
 
-//        println("Director-->" + firmaDirector)
+        println("Director-->" + firmaDirector)
 
         //calculo de composición
 
