@@ -2118,7 +2118,7 @@ class ReportesController {
 //        println("--->" + params)
 
         def cd
-        def auxiliar = Auxiliar.get(1);
+        def auxiliar = janus.Auxiliar.get(1);
         def nota
 
         if (params.notaValue && params.notaValue != '' && params.notaValue != 'null' && params.notaValue != 'undefined') {

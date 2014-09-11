@@ -178,11 +178,17 @@ class DocumentosObraController {
 
         def personasUtfpuCoor = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor, Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
 
-        def personas = Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion))
-        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionCoor,Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion)))
+//        def personas = Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion))
+        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionDire,Persona.findAllByDepartamentoInList(Departamento.findAllByDireccion(Departamento.findByCodigo('UTFPU').direccion)))
 
-        println "lista de personas" + personasUtfpuDire
 
+        def firmantes = []
+        firmantes.add([persona: personasUtfpuCoor, rol:'COORDINADOR'])
+        firmantes.add([persona: personasUtfpuDire, rol:'DIRECTOR'])
+
+        println "lista de personas" + firmantes
+
+        personasUtfpuDire.add(personasUtfpuCoor)
 //        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionDire, Persona.findAllByDepartamentoInList(Direccion.findByDepartamento(Departamento.findByCodigo('UTFPU'))))
 
 //        def directorUtfpu = PersonaRol.findByFuncionAndPersonaInList(funcionDirector,Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
@@ -228,6 +234,7 @@ class DocumentosObraController {
                 totalPresupuestoBien: totalPresupuestoBien, persona: persona,
                 resComp: resComp, resMano: resMano, resEq: resEq, firmaDirector: firmaDirector, coordinadores: coordinadores,
                 notaMemo: notaMemo, notaFormu: notaFormu, duenoObra: duenoObra, personasUtfpuCoor: personasUtfpuCoor,
+//                personasUtfpuDire: firmantes, cordinadorOtros: coordinadorOtros, duo: duo, directorUtfpu: directorUtfpu]
                 personasUtfpuDire: personasUtfpuDire, cordinadorOtros: coordinadorOtros, duo: duo, directorUtfpu: directorUtfpu]
 
     }

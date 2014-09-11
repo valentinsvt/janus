@@ -632,7 +632,7 @@
                                                 </td>
                                                 <td>
                                                     %{--COORDINADOR--}%
-                                                    DIRECTOR
+                                                    DIRECTOR/COORDINADOR
                                                 </td>
                                             </tr>
                                         </g:if>
