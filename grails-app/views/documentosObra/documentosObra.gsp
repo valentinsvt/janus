@@ -2253,7 +2253,7 @@
 //                            console.log(msg)
                                     if (part[0] == 'ok') {
 //                                $("#divOk").show(msg);
-
+                                        console.log($(".encabezado:checked").val());
                                         location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte +
                                                         "&forzarValue=" + forzarValue + "&notaValue=" + part[1] + "&firmasId=" + firmasId +
                                                         "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses +
