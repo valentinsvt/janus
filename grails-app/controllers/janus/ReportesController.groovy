@@ -3060,7 +3060,7 @@ class ReportesController {
         def direccion = Direccion.get(obra?.departamento?.direccion?.id)
         def nota
 
-        def firmaNueva = Persona.get(params.firmaNueva)
+        def firmaNueva = PersonaRol.get(params.firmaNueva).persona
 
         if (params.notaValue && params.notaValue != '' && params.notaValue != 'null' && params.notaValue != 'undefined') {
             nota = Nota.get(params.notaValue)
@@ -3454,7 +3454,9 @@ class ReportesController {
         if(params.firmaCoordinador != ''){
             personaRol = PersonaRol.get(params.firmaCoordinador)
             firmaCoordinador = personaRol?.persona
-
+            if(firmaNueva) {
+                firmaCoordinador = firmaNueva
+            }
 
             addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -3465,6 +3467,7 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
         def rolPrint = "COORDINADOR"
+        println "firma nueva "+firmaNueva
         if(firmaNueva) {
             firmaCoordinador = firmaNueva
             def rol = PersonaRol.findAllByPersona(firmaNueva)

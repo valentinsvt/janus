@@ -2004,7 +2004,7 @@
 
         }
 
-//        console.log(maxFirmas)
+//        //console.log(maxFirmas)
 
         if (maxFirmas > 4) {
 
@@ -2124,10 +2124,10 @@
         $("#reajusteMemo").val(number_format(base, 2, ".", ""))
 
 //
-//        ////console.log(porcentajeCal)
-//        ////console.log(totalPres)
-//        ////console.log(base)
-//        ////console.log("entro cal!")
+//        //////console.log(porcentajeCal)
+//        //////console.log(totalPres)
+//        //////console.log(base)
+//        //////console.log("entro cal!")
 
     });
 
@@ -2157,7 +2157,7 @@
         if (!$(this).hasClass("disabled")) {
             reajusteMemo = $("#reajusteMemo").val()
 
-            ////console.log("Memo:" + reajusteMemo)
+            //////console.log("Memo:" + reajusteMemo)
 
             var active = $("#tabs").tabs("option", "active");
             if (active == 0) {
@@ -2199,7 +2199,7 @@
                             }
 
                         });
-//           console.log("1:" + firmasFijas)
+//           //console.log("1:" + firmasFijas)
 
                 notaValue = $("#piePaginaSel").val();
 
@@ -2241,10 +2241,10 @@
                         },
                         success : function (msg) {
                             var part = msg.split('_');
-//                            console.log(msg)
+//                            //console.log(msg)
                             if (part[0] == 'ok') {
 //                                $("#divOk").show(msg);
-                                console.log($(".encabezado:checked").val());
+                                //console.log($(".encabezado:checked").val());
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte +
                                         "&forzarValue=" + forzarValue + "&notaValue=" + part[1] + "&firmasId=" + firmasId +
                                         "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses +
@@ -2291,7 +2291,7 @@
                     firmasFijasMemo[i] = $(this).data("id")
                 });
 
-//            console.log("2:" + firmasFijasMemo)
+//            //console.log("2:" + firmasFijasMemo)
 
                 if (firmasIdMemo.length == 0) {
 
@@ -2322,13 +2322,13 @@
                         },
                         success : function (msg) {
                             var part = msg.split('_');
-//                            console.log(msg)
+//                            //console.log(msg)
                             if (part[0] == 'ok') {
 //                                $("#divOk").show(msg);
 
                                 %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObra',id: obra?.id)}?tipoReporte=" + tipoReporte + "&forzarValue=" + forzarValue + "&notaValue=" + part[1]--}%
                                 %{--+ "&firmasId=" + firmasId + "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses + "&firmasFijas=" +firmasFijas + "&firmaCoordinador=" + firmaCoordinador--}%
-//                                console.log("LINK 1")
+//                                //console.log("LINK 1")
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte +
                                         "&firmasIdMemo=" + firmasIdMemo  + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
                                         "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo +
@@ -2367,7 +2367,7 @@
                     firmasFijasFormu[i] = $(this).data("id")
                 });
 
-//            console.log("3:" + firmasIdFormu)
+//            //console.log("3:" + firmasIdFormu)
                 if (firmasIdFormu.length == 0) {
                     firmasIdFormu = "";
                 }
@@ -2388,7 +2388,7 @@
                     },
                     success : function (msg) {
                         var part = msg.split('_');
-//                            console.log(msg)
+//                            //console.log(msg)
                         if (part[0] == 'ok') {
                             location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraFormu',id: obra?.id)}?firmasIdFormu=" + firmasIdFormu + "&totalPresupuesto=" + totalPres + "&firmasFijasFormu=" + firmasFijasFormu
                                     + "&notaFormula=" + $("#notaFormula").val() + "&notaValue=" + part[1] + "&firmaElaboro=" + ${obra?.responsableObra?.id} +"&firmaCoordinador=" + firmaCoordinador
@@ -2553,7 +2553,7 @@
 
         var nombreFirmas = $("#setFirmasMemo").val()
 
-//        ////console.log(nombreFirmas)
+//        //////console.log(nombreFirmas)
 
         var tbody = $("#bodyFirmasMemo")
 
@@ -2574,7 +2574,7 @@
 
         var nombreFirmas = $("#setFirmasFor").val()
 
-//        ////console.log(nombreFirmas)
+//        //////console.log(nombreFirmas)
 
         var tbody = $("#bodyFirmasFor")
 
@@ -2742,7 +2742,7 @@
             "Aceptar"  : function () {
 
                 $("#borrarFirmaPresu").parents("tr").remove();
-//                console.log($("#borrarFirmaPresu").children("tr"))
+//                //console.log($("#borrarFirmaPresu").children("tr"))
                 $("#borrarFirmaPresuDialog").dialog("close");
                 return false;
             },
@@ -2887,9 +2887,9 @@
                         },
                         success : function (msg) {
                             var part = msg.split('_');
-//                            console.log(msg)
+//                            //console.log(msg)
                             if (part[0] == 'ok') {
-//                                console.log("LINK 3 : ", $("#tab-memorando").find("#coordinador"), );
+//                                //console.log("LINK 3 : ", $("#tab-memorando").find("#coordinador"), );
                                 location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraMemo',id: obra?.id)}?tipoReporte=" + tipoReporte + "&firmasIdMemo=" + firmasIdMemo
                                         + "&totalPresupuesto=" + totalPres + "&proyeccionMemo=" + proyeccionMemo +
                                         "&reajusteIvaMemo=" + reajusteIvaMemo + "&reajusteMesesMemo=" + reajusteMesesMemo + "&para=" + paraMemo1 +
@@ -3110,7 +3110,7 @@
 //         porcentaje = ((parseFloat($("#materialesMemo").val()) + parseFloat($("#manoObraMemo").val()) + parseFloat($("#equiposMemo").val()))*($("#costoPorcentaje").val()))/100
             porcentaje = ((parseFloat($("#tMaterial").val()) + parseFloat($("#tMano").val()) + parseFloat($("#tEquipo").val())) * ($("#costoPorcentaje").val())) / 100
 
-//         console.log("%:" + porcentaje)
+//         //console.log("%:" + porcentaje)
 
             $("#costoMemo").val(number_format(porcentaje, 2, ".", ""));
         }
