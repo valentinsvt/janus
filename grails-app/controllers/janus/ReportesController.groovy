@@ -2115,7 +2115,7 @@ class ReportesController {
 
     def reporteDocumentosObra() {
 
-//        println("--->" + params)
+        println("*****--->" + params)
 
         def cd
         def auxiliar = janus.Auxiliar.get(1);
@@ -3032,7 +3032,7 @@ class ReportesController {
 
 
     def reporteDocumentosObraMemo() {
-//        println("--->>" + params)
+        println("-memo-->>" + params)
         def cd
         def auxiliar = Auxiliar.get(1)
         def auxiliarFijo = Auxiliar.get(1)
@@ -3059,6 +3059,8 @@ class ReportesController {
         def valores = preciosService.rbro_pcun_v2(obra.id)
         def direccion = Direccion.get(obra?.departamento?.direccion?.id)
         def nota
+
+        def firmaNueva = Persona.get(params.firmaNueva)
 
         if (params.notaValue && params.notaValue != '' && params.notaValue != 'null' && params.notaValue != 'undefined') {
             nota = Nota.get(params.notaValue)
@@ -3448,9 +3450,11 @@ class ReportesController {
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         //nuevas
+        def personaRol=null
         if(params.firmaCoordinador != ''){
-            def personaRol = PersonaRol.get(params.firmaCoordinador)
+            personaRol = PersonaRol.get(params.firmaCoordinador)
             firmaCoordinador = personaRol?.persona
+
 
             addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo?.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -3460,8 +3464,21 @@ class ReportesController {
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         }
-
-        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+        def rolPrint = "COORDINADOR"
+        if(firmaNueva) {
+            firmaCoordinador = firmaNueva
+            def rol = PersonaRol.findAllByPersona(firmaNueva)
+            rol.each {
+                if(it.funcion.codigo=="D"){
+                    if(firmaNueva.sexo=="M"){
+                        rolPrint="DIRECTOR"
+                    }else{
+                        rolPrint="DIRECTORA"
+                    }
+                }
+            }
+        }
+        addCellTabla(tablaFirmas, new Paragraph(rolPrint, times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 

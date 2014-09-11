@@ -183,12 +183,19 @@ class DocumentosObraController {
 
 
         def firmantes = []
-        firmantes.add([persona: personasUtfpuCoor, rol:'COORDINADOR'])
-        firmantes.add([persona: personasUtfpuDire, rol:'DIRECTOR'])
+//        firmantes.add([persona: personasUtfpuCoor, rol:'COORDINADOR'])
+//        firmantes.add([persona: personasUtfpuDire, rol:'DIRECTOR'])
+        personasUtfpuCoor.each {puc->
+            firmantes.add([persona: puc, rol:'COORDINADOR'])
+        }
+        personasUtfpuDire.each {puc->
+            firmantes.add([persona: puc, rol:'DIRECTOR'])
+        }
 
         println "lista de personas" + firmantes
 
-        personasUtfpuDire.add(personasUtfpuCoor)
+//        personasUtfpuDire.add(personasUtfpuCoor)
+        personasUtfpuDire+=personasUtfpuCoor
 //        def personasUtfpuDire = PersonaRol.findAllByFuncionAndPersonaInList(funcionDire, Persona.findAllByDepartamentoInList(Direccion.findByDepartamento(Departamento.findByCodigo('UTFPU'))))
 
 //        def directorUtfpu = PersonaRol.findByFuncionAndPersonaInList(funcionDirector,Persona.findAllByDepartamento(Departamento.findByCodigo('UTFPU')))
