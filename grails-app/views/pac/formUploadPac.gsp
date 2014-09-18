@@ -52,6 +52,19 @@
                 </div>
 
                 <div class="row-fluid" style="margin-left: 0px">
+                    <div class="span12">
+                        <div class="span3"><b>Columnas que debe contener el archivo excel:</b></div>
+                    </div>
+                </div>
+                <div class="row-fluid" style="margin-left: 0px">
+                    <div class="span12">
+                        <div class="span12">Año, Código Compras Públicas, Descripćión, Cantidad, Costo Unitario, Cuatrimestre 1, Cuatrimestre 2, Cuatrimestre 3</div>
+                    </div>
+                </div>
+
+
+
+                <div class="row-fluid" style="margin-left: 0px">
                     <div class="span4">
                         <div class="span3"><b>Archivo:</b></div>
                         <input type="file" class="required" id="file" name="file"/>
