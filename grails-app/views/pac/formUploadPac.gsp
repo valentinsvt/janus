@@ -53,12 +53,62 @@
 
                 <div class="row-fluid" style="margin-left: 0px">
                     <div class="span12">
-                        <div class="span3"><b>Columnas que debe contener el archivo excel:</b></div>
+                        <div class="span10">
+                            <p><b>Reglas a seguir para el archivo Excel:</b></p>
+                            <ul>
+                                <li>Puede tener varias hojas</li>
+                                <li>Los tipos de compra aceptados son <b>obra</b>, <b>consultoria</b>, <b>consultoría</b> (sin importar mayúsculas y minúsculas)</li>
+                                <li>Al terminar de procesar su archivo se mostrará un resumen de las filas procesadas</li>
+                                <li>Las columnas deben ser las siguientes (todas las columnas de cantidad y costo deben tener un valor):</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="row-fluid" style="margin-left: 0px">
                     <div class="span12">
-                        <div class="span12">Año, Código Compras Públicas, Descripćión, Cantidad, Costo Unitario, Cuatrimestre 1, Cuatrimestre 2, Cuatrimestre 3</div>
+                        <div class="span12">
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>A</th>
+                                        <th>B</th>
+                                        <th>C</th>
+                                        <th>D</th>
+                                        <th>E</th>
+                                        <th>F</th>
+                                        <th>G</th>
+                                        <th>H</th>
+                                        <th>I</th>
+                                        <th>J</th>
+                                        <th>K</th>
+                                        <th>L</th>
+                                        <th>M</th>
+                                        <th>N</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="centrado">
+                                    <tr>
+                                        <td>AÑO</td>
+                                        <td>PARTIDA PRESUPUESTARIA / CUENTA CONTABLE</td>
+                                        <td>CODIGO CATEGORIA CPC A NIVEL 8</td>
+                                        <td>TIPO COMPRA (Bien, obra, servicio o consultoría)</td>
+                                        <td>DETALLE DEL PRODUCTO (Descripción de la contratación)</td>
+                                        <td>CANTIDAD ANUAL</td>
+                                        <td>UNIDAD (metro, litro etc)</td>
+                                        <td>COSTO UNITARIO (PORTAL)</td>
+                                        <td>COSTO UNITARIO (A SUMAR)</td>
+                                        <td>COSTO TOTAL</td>
+                                        <td>CUATRIMESTRE 1
+                                        (marcar con una S en el cuatrimestre que va a contratar)</td>
+                                        <td>CUATRIMESTRE 2
+                                        (marcar con una S en el cuatrimestre que va a contratar)</td>
+                                        <td>CUATRIMESTRE 3
+                                        (marcar con una S en el cuatrimestre que va a contratar)</td>
+                                        <td>OBSERVACIONES</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
