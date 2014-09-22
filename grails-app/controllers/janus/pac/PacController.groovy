@@ -297,8 +297,15 @@ class PacController extends janus.seguridad.Shield {
 
     def registrarPac() {
         def campos = ["numero": ["Código", "string"], "descripcion": ["Descripción", "string"]]
+        def actual
+        if (params.anio)
+            actual = Anio.get(params.anio)
+        else
+            actual = Anio.findByAnio(new Date().format("yyyy"))
+        if (!actual)
+            actual = Anio.list([sort: 'anio', order: 'desc']).pop()
 
-        [campos: campos]
+        [campos: campos, actual: actual]
     }
 
     def buscaCpac() {

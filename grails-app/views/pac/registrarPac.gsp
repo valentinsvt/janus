@@ -54,7 +54,7 @@
                 <div class="row-fluid" style="margin-left: 0px">
                     <div class="span1">
                         <b>Año:</b>
-                        <g:select name="anio" from="${janus.pac.Anio.list()}" id="item_anio" optionValue="anio" optionKey="id" style="width: 80px;font-size: 14px; font-weight: bold "></g:select>
+                        <g:select name="anio" from="${janus.pac.Anio.list([sort: 'anio'])}" id="item_anio" optionValue="anio" optionKey="id" value="${actual.id}" style="width: 80px;font-size: 14px; font-weight: bold "></g:select>
                     </div>
 
                     <div class="span3">

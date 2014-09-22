@@ -56,6 +56,7 @@
                         <div class="span10">
                             <p><b>Reglas a seguir para el archivo Excel:</b></p>
                             <ul>
+                                <li style="font-size: large">Cada archivo debe ser de una sola coordinación</li>
                                 <li>Puede tener varias hojas</li>
                                 <li>Los tipos de compra aceptados son <b>obra</b>, <b>consultoria</b>, <b>consultoría</b> (sin importar mayúsculas y minúsculas)</li>
                                 <li>Al terminar de procesar su archivo se mostrará un resumen de las filas procesadas</li>
