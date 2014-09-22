@@ -199,7 +199,7 @@ class PacController extends janus.seguridad.Shield {
                                     if (!error) {
                                         def total = cant * costoUnitario
 
-                                        def asignaciones =  Asignacion.findAllByAnioAndPrespuesto(anio, presupuesto)
+                                        def asignaciones =  Asignacion.findAllByAnioAndPrespuesto(anioObj, presupuesto)
                                         if(asignaciones.size() == 1) {
                                             def asignacion = asignaciones.first()
                                             asignacion.valor += total
