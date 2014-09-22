@@ -199,25 +199,6 @@ class PacController extends janus.seguridad.Shield {
                                     if (!error) {
                                         def total = cant * costoUnitario
 
-                                        def asignaciones =  Asignacion.findAllByAnioAndPrespuesto(anioObj, presupuesto)
-                                        if(asignaciones.size() == 1) {
-                                            def asignacion = asignaciones.first()
-                                            asignacion.valor += total
-                                            if(!asignacion.save(flush:true)) {
-                                                println "Error al guardar actualizacion de asignacion"
-                                            }
-                                        } else if(asignaciones.size() == 0) {
-                                            def asignacion = new Asignacion()
-                                            asignacion.anio = anio
-                                            asignacion.prespuesto = presupuesto
-                                            asignacion.valor = total
-                                            if(!asignacion.save(flush:true)) {
-                                                println "Error al guardar nueva asignacion"
-                                            }
-                                        } else {
-                                            println "Existen ${asignaciones.size()} asignaciones del anio: ${anio.anio} y presupuesto ${presupuesto.descripcion}"
-                                        }
-
                                         def tipoProcedimiento = TipoProcedimiento.findAllByMinimoLessThanEqualsAndTechoGreaterThan(total, total)
                                         if (tipoProcedimiento.size() == 1) {
                                             tipoProcedimiento = tipoProcedimiento[0]
@@ -239,6 +220,25 @@ class PacController extends janus.seguridad.Shield {
                                                 eq("descripcion", descripcion)
                                             }
                                             if (pacs.size() == 0) {
+                                                def asignaciones =  Asignacion.findAllByAnioAndPrespuesto(anioObj, presupuesto)
+                                                if(asignaciones.size() == 1) {
+                                                    def asignacion = asignaciones.first()
+                                                    asignacion.valor += total
+                                                    if(!asignacion.save(flush:true)) {
+                                                        println "Error al guardar actualizacion de asignacion"
+                                                    }
+                                                } else if(asignaciones.size() == 0) {
+                                                    def asignacion = new Asignacion()
+                                                    asignacion.anio = anioObj
+                                                    asignacion.prespuesto = presupuesto
+                                                    asignacion.valor = total
+                                                    if(!asignacion.save(flush:true)) {
+                                                        println "Error al guardar nueva asignacion"
+                                                    }
+                                                } else {
+                                                    println "Existen ${asignaciones.size()} asignaciones del anio: ${anio.anio} y presupuesto ${presupuesto.descripcion}"
+                                                }
+
                                                 def pac = new Pac([
                                                         unidad: unidad,
                                                         cpp: cpp,
