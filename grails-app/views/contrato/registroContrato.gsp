@@ -175,6 +175,11 @@
 
                         <div class="span3"><g:textField name="contratista" class="contratista" value="${contrato?.oferta?.proveedor?.nombre}" disabled="true"/></div>
 
+                        <div class="span3 formato" style="margin-left: -1px">Fecha presentación de la Oferta</div>
+
+                        <div class="span2"><g:textField name="fechaPresentacion" class="fechaPresentacion" value="${contrato?.oferta?.fechaEntrega?.format('dd-MM-yyyy') ?: ''}"
+                                                        disabled="true" style="width: 100px; margin-left: -180px"/></div>
+
                     </div>
 
                 </g:if>
@@ -204,6 +209,17 @@
                         <div class="span3" id="div_ofertas">
                             <g:select name="oferta.id" from="" noSelection="['-1': 'Seleccione']" id="oferta" optionKey="id"/>
                         </div>
+
+                        %{--<div class="span3 formato" style="margin-left: -1px">Fecha presentación de la Oferta</div>--}%
+
+                        %{--<div class="span2"><g:textField name="fechaPresentacion" class="fechaPresentacion" value="${contrato?.oferta?.fechaEntrega?.format('dd-MM-yyyy') ?: ''}"--}%
+                                                        %{--disabled="true" style="width: 100px; margin-left: -180px"/></div>--}%
+
+                       <div class="span6" id="filaFecha">
+
+                       </div>
+                        %{--<div class="span2"><g:textField name="fechaPresentacion" class="fechaPresentacion" id="fechaPresentacion"--}%
+                                                       %{--disabled="true" style="width: 100px; margin-left: -180px"/></div>--}%
                     </div>
 
                     <div class="span12" style="margin-top: 5px" align="center">
