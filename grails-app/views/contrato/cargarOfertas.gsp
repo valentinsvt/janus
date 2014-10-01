@@ -20,6 +20,18 @@
                         }
                     });
 
+            $.ajax({
+                type    : "POST",
+                url     : "${g.createLink(action:'getIndice')}",
+                data    : {id : idOferta
+
+                },
+                success : function (msg) {
+
+                    $("#filaIndice").html(msg);
+                }
+            });
+
 
 
             var cl = $selected.attr("class");

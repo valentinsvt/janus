@@ -349,9 +349,15 @@
                                      value="${g.formatNumber(number: contrato?.anticipo, maxFractionDigits: 2, minFractionDigits: 2, locale: 'ec')}"/>
                     </div>
 
-                    <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
 
+                <g:if test="${contrato?.codigo != null}">
+                    <div class="span2 formato">Indices 30 días antes de la presentación de la oferta</div>
                     <div class="span3"><g:select name="periodoValidez.id" from="${janus.pac.PeriodoValidez.list([sort: 'fechaFin'])}" class="indiceOferta activo" value="${contrato?.periodoValidez?.id}" optionValue="descripcion" optionKey="id"/></div>
+                   </g:if>
+                    <g:else>
+                        <div class="span6" id="filaIndice">
+                        </div>
+                    </g:else>
 
                 </div>
 
