@@ -4,7 +4,7 @@ class DepartamentoTramite {
     TipoTramite tipoTramite
     RolTramite rolTramite
     Departamento departamento
-
+    static auditable = true
     static mapping = {
         table 'dptr'
         cache usage: 'read-write', include: 'non-lazy'

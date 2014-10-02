@@ -3,7 +3,7 @@ package janus.pac
 class UnidadIncop {
     String codigo
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'uncp'
         cache usage: 'read-write', include: 'non-lazy'

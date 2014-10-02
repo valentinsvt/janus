@@ -76,6 +76,7 @@ class LoginController {
         } else {
             user = user[0]
             session.usuario = user
+            session.usuarioKerberos=user.login
             session.valida = Parametros.get(1).valida
             redirect(action: "perfiles")
             return
@@ -134,6 +135,7 @@ class LoginController {
     def logout() {
 
         session.usuario = null
+        session.usuarioKerberos=null
         session.perfil = null
         session.permisos = null
         session.menu = null

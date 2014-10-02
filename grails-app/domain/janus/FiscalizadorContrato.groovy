@@ -6,7 +6,7 @@ class FiscalizadorContrato {
     Persona fiscalizador
     Date fechaInicio
     Date fechaFin
-
+    static auditable = true
     static mapping = {
         table 'fscr'
         cache usage: 'read-write', include: 'non-lazy'

@@ -5,7 +5,7 @@ class TipoDocumentoGarantia {
 
     String codigo
     String descripcion
-
+    static auditable = true
 
     static  mapping = {
 

@@ -5,7 +5,7 @@ class CuadroResumenCalificacion {
     Oferta oferta
     String descripcion
     Double valor
-
+    static auditable = true
     static mapping = {
         table 'calf'
         cache usage: 'read-write', include: 'non-lazy'

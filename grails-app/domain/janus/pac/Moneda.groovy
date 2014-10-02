@@ -4,7 +4,7 @@ class Moneda {
 
     String codigo
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'mnda'
         cache usage: 'read-write', include: 'non-lazy'

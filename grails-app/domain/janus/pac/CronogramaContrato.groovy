@@ -12,7 +12,7 @@ class CronogramaContrato {
     Double precio
     Double porcentaje
     Double cantidad
-
+    static auditable = true
     static mapping = {
         table 'crng'
         cache usage: 'read-write', include: 'non-lazy'

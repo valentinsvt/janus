@@ -5,7 +5,7 @@ class EstadoPlanilla implements Serializable{
       String codigo
       String nombre
 
-
+    static auditable = true
     static mapping = {
 
         table 'edpl'

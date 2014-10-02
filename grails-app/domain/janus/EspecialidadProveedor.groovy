@@ -1,6 +1,7 @@
 package janus
 class EspecialidadProveedor implements Serializable {
     String descripcion
+    static auditable = true
     static mapping = {
         table 'espc'
         cache usage: 'read-write', include: 'non-lazy'

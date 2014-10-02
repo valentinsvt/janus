@@ -22,7 +22,7 @@ class Garantia {
     String pedido
     String observaciones
 
-
+    static auditable = true
     static mapping = {
 
 

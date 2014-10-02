@@ -4,6 +4,7 @@ class Base implements Serializable {
     Concurso2 concurso
     Date fecha
     double monto
+    static auditable = true
     static mapping = {
         table 'base'
         cache usage: 'read-write', include: 'non-lazy'

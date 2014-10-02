@@ -6,7 +6,7 @@ class FraseClima {
     String manana
     String tarde
     static belongsTo = [avance: Avance]
-
+    static auditable = true
     static mapping = {
         table 'avfr'
         cache usage: 'read-write', include: 'non-lazy'

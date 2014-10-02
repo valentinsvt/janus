@@ -6,7 +6,7 @@ class PrecioRubrosItems implements Serializable {
     double precioUnitario
     Date fechaIngreso = new Date()
     String registrado = "N"
-
+    static auditable = true
     static mapping = {
         table 'rbpc'
         cache usage: 'read-write', include: 'non-lazy'

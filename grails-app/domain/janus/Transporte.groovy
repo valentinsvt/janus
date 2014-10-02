@@ -2,6 +2,7 @@ package janus
 class Transporte implements Serializable {
     String codigo
     String descripcion
+    static auditable = true
     static mapping = {
         table 'trnp'
         cache usage: 'read-write', include: 'non-lazy'

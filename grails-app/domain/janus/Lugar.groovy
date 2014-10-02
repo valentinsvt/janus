@@ -4,6 +4,7 @@ class Lugar implements Serializable {
     String descripcion
     String tipo
     TipoLista tipoLista
+    static auditable = true
     static mapping = {
         table 'lgar'
         cache usage: 'read-write', include: 'non-lazy'

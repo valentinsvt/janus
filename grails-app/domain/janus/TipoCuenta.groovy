@@ -2,6 +2,7 @@ package janus
 class TipoCuenta implements Serializable {
     String codigo
     String descripcion
+    static auditable = true
     static mapping = {
         table 'tpcn'
         cache usage: 'read-write', include: 'non-lazy'

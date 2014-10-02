@@ -6,7 +6,7 @@ class DepartamentoItem implements Serializable {
     Transporte transporte
     String codigo
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'dprt'
         cache usage: 'read-write', include: 'non-lazy'

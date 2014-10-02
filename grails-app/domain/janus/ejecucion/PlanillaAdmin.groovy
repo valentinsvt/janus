@@ -18,7 +18,7 @@ class PlanillaAdmin {
 
     String oficioEntradaPlanilla
     Date fechaOficioEntradaPlanilla
-
+    static auditable = true
 
 
     static mapping = {

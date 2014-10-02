@@ -8,7 +8,7 @@ class Nota implements Serializable {
     String texto
     String adicional
     String tipo
-
+    static auditable = true
 
     static mapping = {
 

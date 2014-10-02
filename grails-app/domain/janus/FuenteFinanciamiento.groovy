@@ -4,7 +4,7 @@ class FuenteFinanciamiento {
 
 
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'fnfn'
         cache usage: 'read-write', include: 'non-lazy'

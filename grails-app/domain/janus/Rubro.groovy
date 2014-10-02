@@ -5,6 +5,7 @@ class Rubro implements Serializable {
     Date fecha
     double cantidad
     double rendimiento = 1
+    static auditable = true
     static mapping = {
         table 'rbro'
         cache usage: 'read-write', include: 'non-lazy'

@@ -4,7 +4,7 @@ class TipoPlazo {
 
     String codigo
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'tppz'
         cache usage: 'read-write', include: 'non-lazy'

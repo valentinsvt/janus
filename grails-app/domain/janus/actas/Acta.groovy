@@ -15,7 +15,7 @@ class Acta {
     Date fechaRegistro
 
     static hasMany = [secciones: Seccion]
-
+    static auditable = true
     static mapping = {
         secciones sort: "numero"
         table 'acta'

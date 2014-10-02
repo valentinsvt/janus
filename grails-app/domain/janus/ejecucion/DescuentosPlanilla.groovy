@@ -5,7 +5,7 @@ class DescuentosPlanilla {
     Planilla planilla
     DescuentoTipoPlanilla descuentoTipoPlanilla
     double monto
-
+    static auditable = true
     static mapping = {
         table 'dspl'
         cache usage: 'read-write', include: 'non-lazy'

@@ -4,7 +4,7 @@ class Anio {
 
     String anio
     int estado=0
-
+    static auditable = true
     static mapping = {
         table 'anio'
         cache usage: 'read-write', include: 'non-lazy'

@@ -15,6 +15,7 @@ class PrecioVenta implements Serializable {
     String licenciaColegioIngenieros
     String registroCamaraConstruccion
     String tituloProfecionalTitular
+    static auditable = true
     static mapping = {
         table 'prve'
         cache usage: 'read-write', include: 'non-lazy'

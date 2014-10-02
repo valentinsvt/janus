@@ -49,7 +49,7 @@ class Concurso {
     Date fechaNotificacionAdjudicacion
 
     String memoSif
-
+    static auditable = true
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'

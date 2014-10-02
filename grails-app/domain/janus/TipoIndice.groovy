@@ -5,7 +5,7 @@ class TipoIndice {
     String codigo
     String descripcion
 
-
+    static auditable = true
 
     static mapping = {
 

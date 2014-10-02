@@ -18,7 +18,7 @@ class Auxiliar implements Serializable {
     String memo2
     String notaMemoAd
     String notaPieAd
-
+    static auditable = true
     static mapping = {
         table 'auxl'
         cache usage: 'read-write', include: 'non-lazy'

@@ -4,6 +4,7 @@ class ItemsFormulaPolinomica implements Serializable {
     FormulaPolinomica formulaPolinomica
     Item item
     Double valor
+    static auditable = true
     static mapping = {
         table 'itfp'
         cache usage: 'read-write', include: 'non-lazy'

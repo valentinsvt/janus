@@ -4,7 +4,7 @@ class EstadoTramite {
 
     String codigo
     String descripcion
-
+    static auditable = true
     static constraints = {
         codigo(size: 1..3, blank: false, nullable: false, attributes: [title: 'codigo'])
         descripcion(size: 1..31, blank: false, nullable: false, attributes: [title: 'descripcion'])

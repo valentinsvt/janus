@@ -32,7 +32,7 @@ class Parametros implements Serializable {
 
     Persona subdirector
 
-
+    static auditable = true
     static mapping = {
         table 'paux'
         cache usage: 'read-write', include: 'non-lazy'

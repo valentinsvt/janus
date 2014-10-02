@@ -5,7 +5,7 @@ class PersonasTramite implements Serializable{
     RolTramite rolTramite
     Persona persona
     Departamento departamento
-
+    static auditable = true
     static mapping = {
         table 'prtr'
         cache usage: 'read-write', include: 'non-lazy'

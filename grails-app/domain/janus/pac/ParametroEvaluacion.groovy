@@ -8,7 +8,7 @@ class ParametroEvaluacion {
     String descripcion
     Double puntaje
     Double minimo = 0
-
+    static auditable = true
     static mapping = {
         table 'prev'
         cache usage: 'read-write', include: 'non-lazy'

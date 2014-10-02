@@ -5,7 +5,7 @@ class SubgrupoItems implements Serializable {
     Grupo grupo
     String codigo
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'sbgr'
         cache usage: 'read-write', include: 'non-lazy'

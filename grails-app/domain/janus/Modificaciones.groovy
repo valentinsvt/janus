@@ -13,7 +13,7 @@ class Modificaciones implements Serializable {
     String motivo
     String observaciones
     VolumenesObra volObra
-
+    static auditable = true
     static mapping = {
 
         table 'mdce'

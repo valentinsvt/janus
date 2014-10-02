@@ -6,7 +6,7 @@ class PeriodoValidez {
     Date fechaInicio
     Date fechaFin
     String cierre
-
+    static auditable = true
     static mapping = {
         table 'prin'
         cache usage: 'read-write', include: 'non-lazy'

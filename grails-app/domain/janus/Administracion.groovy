@@ -4,7 +4,7 @@ class Administracion implements Serializable {
     String descripcion
     Date fechaInicio
     Date fechaFin
-
+    static auditable = true
     static mapping = {
         table 'admn'
         cache usage: 'read-write', include: 'non-lazy'

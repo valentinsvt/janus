@@ -10,7 +10,7 @@ class DocumentoObra {
     String resumen
     String nombre
     String path
-
+    static auditable = true
     static mapping = {
         table 'dcob'
         cache usage: 'read-write', include: 'non-lazy'

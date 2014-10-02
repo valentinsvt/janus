@@ -26,7 +26,7 @@ class Item implements Serializable {
     String foto
     TipoLista tipoLista
     String especificaciones
-
+    static auditable = true
     static mapping = {
         table 'item'
         cache usage: 'read-write', include: 'non-lazy'

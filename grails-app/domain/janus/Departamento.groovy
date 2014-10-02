@@ -10,7 +10,7 @@ class Departamento implements Serializable {
     Integer documento = 0
     Date fechaUltimoDoc
     Integer requirente = 0
-
+    static auditable = true
     static mapping = {
         table 'dpto'
         cache usage: 'read-write', include: 'non-lazy'

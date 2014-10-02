@@ -4,7 +4,7 @@ class TipoFormulaPolinomica implements Serializable {
 
      String codigo
      String descripcion
-
+    static auditable = true
     static mapping = {
 
         table 'tpfp'

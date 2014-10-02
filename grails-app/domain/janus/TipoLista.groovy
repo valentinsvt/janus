@@ -4,6 +4,7 @@ class TipoLista {
     String codigo
     String descripcion
     String unidad
+    static auditable = true
     static mapping = {
         table 'tpls'
         cache usage: 'read-write', include: 'non-lazy'

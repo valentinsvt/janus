@@ -50,7 +50,7 @@ class Contrato implements Serializable {
     String clausula
     String numeralPlazo
     String numeralAnticipo
-
+    static auditable = true
     static mapping = {
 
         table 'cntr'

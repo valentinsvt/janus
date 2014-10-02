@@ -2,6 +2,7 @@ package janus
 class Unidad implements Serializable {
     String codigo
     String descripcion
+    static auditable = true
     static mapping = {
         table 'undd'
         cache usage: 'read-write', include: 'non-lazy'

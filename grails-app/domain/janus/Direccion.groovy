@@ -3,6 +3,7 @@ package janus
 class Direccion {
     String nombre
     String jefatura
+    static auditable = true
     static mapping = {
         table 'dire'
         cache usage: 'read-write', include: 'non-lazy'

@@ -4,7 +4,7 @@ class DescuentoTipoPlanilla implements Serializable {
 
      TipoPlanilla tipoPlanilla
      TipoDescuentoPlanilla tipoDescuentoPlanilla
-
+    static auditable = true
 
     static mapping = {
 

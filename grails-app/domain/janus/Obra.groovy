@@ -117,7 +117,7 @@ class Obra implements Serializable {
     String memoSif
     String estadoSif
     Persona oferente=null
-
+    static auditable = true
     static mapping = {
         table 'obra'
         cache usage: 'read-write', include: 'non-lazy'

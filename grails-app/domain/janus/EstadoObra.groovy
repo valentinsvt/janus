@@ -2,6 +2,7 @@ package janus
 class EstadoObra implements Serializable {
     String codigo
     String descripcion
+    static auditable = true
     static mapping = {
         table 'edob'
         cache usage: 'read-write', include: 'non-lazy'

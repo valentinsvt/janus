@@ -6,7 +6,7 @@ class AdministradorContrato {
     Persona administrador
     Date fechaInicio
     Date fechaFin
-
+    static auditable = true
     static mapping = {
         table 'adcr'
         cache usage: 'read-write', include: 'non-lazy'

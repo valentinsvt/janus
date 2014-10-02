@@ -18,7 +18,7 @@ class Oferta {
     String observaciones
 
     Persona responsableProceso
-
+    static auditable = true
     static mapping = {
         table 'ofrt'
         cache usage: 'read-write', include: 'non-lazy'

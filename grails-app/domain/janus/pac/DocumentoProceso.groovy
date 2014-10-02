@@ -9,7 +9,7 @@ class DocumentoProceso {
     String resumen
     String nombre
     String path
-
+    static auditable = true
     static mapping = {
         table 'dcmt'
         cache usage: 'read-write', include: 'non-lazy'

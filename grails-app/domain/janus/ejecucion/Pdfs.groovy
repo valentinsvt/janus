@@ -12,7 +12,7 @@ class Pdfs {
     String parrafo4
     String parrafo5
     Date fecha = new Date()
-
+    static auditable = true
     static mapping = {
         table 'pdfs'
         cache usage: 'read-write', include: 'non-lazy'

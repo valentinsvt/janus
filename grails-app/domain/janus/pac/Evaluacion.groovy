@@ -7,7 +7,7 @@ class Evaluacion {
     String descripcion
     Double puntaje
     Double valor
-
+    static auditable = true
     static mapping = {
         table 'eval'
         cache usage: 'read-write', include: 'non-lazy'

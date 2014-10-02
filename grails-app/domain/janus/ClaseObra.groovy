@@ -4,6 +4,7 @@ class ClaseObra implements Serializable {
     String descripcion
     String tipo
     Grupo grupo
+    static auditable = true
     static mapping = {
         table 'csob'
         cache usage: 'read-write', include: 'non-lazy'

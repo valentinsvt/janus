@@ -19,7 +19,7 @@ class Tramite implements Serializable {
     Date fechaRecepcion     //fecha de recepcion
     Date fechaRespuesta     //fecha de respuesta
     Date fechaFinalizacion  //fecha de finalizacion
-
+    static auditable = true
     static mapping = {
 
         table 'trmt'

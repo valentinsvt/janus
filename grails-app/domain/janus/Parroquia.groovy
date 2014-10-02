@@ -7,6 +7,7 @@ class Parroquia implements Serializable {
     String urbana
     double longitud
     double latitud
+    static auditable = true
     static mapping = {
         table 'parr'
         cache usage: 'read-write', include: 'non-lazy'

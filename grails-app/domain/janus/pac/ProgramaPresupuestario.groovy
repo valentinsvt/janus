@@ -4,6 +4,7 @@ class ProgramaPresupuestario {
 
     String descripcion
     String codigo
+    static auditable = true
     static mapping = {
         table 'pgps'
         cache usage: 'read-write', include: 'non-lazy'

@@ -4,6 +4,7 @@ class Programacion implements Serializable {
     Date fechaInicio
     Date fechaFin
     Grupo grupo
+    static auditable = true
     static mapping = {
         table 'prog'
         cache usage: 'read-write', include: 'non-lazy'

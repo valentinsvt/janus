@@ -8,6 +8,7 @@ class CodigoComprasPublicas {
     int nivel = 1
     Date fecha
     int movimiento
+    static auditable = true
     static mapping = {
         table 'cpac'
         cache usage: 'read-write', include: 'non-lazy'

@@ -21,7 +21,7 @@ class Proveedor {
     String titulo //título profesional del titular
     String estado //activo o inactivo
     String observaciones
-
+    static auditable = true
     String origen       //Nacional, Extranjero o Mixto (N,E,M)
 
     static mapping = {

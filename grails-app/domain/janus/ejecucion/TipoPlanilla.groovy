@@ -4,7 +4,7 @@ class TipoPlanilla implements Serializable{
 
      String codigo
     String nombre
-
+    static auditable = true
     static mapping = {
 
         table 'tppl'

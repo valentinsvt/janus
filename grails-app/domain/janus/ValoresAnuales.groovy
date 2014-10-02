@@ -11,7 +11,7 @@ class ValoresAnuales {
     Double costoLubricante
     Double costoGrasa
     double inflacion
-
+    static auditable = true
     static mapping = {
         table 'vlan'
         cache usage: 'read-write', include: 'non-lazy'

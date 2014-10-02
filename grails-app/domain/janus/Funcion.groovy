@@ -2,6 +2,7 @@ package janus
 class Funcion implements Serializable {
     String codigo
     String descripcion
+    static auditable = true
     static mapping = {
         table 'func'
         cache usage: 'read-write', include: 'non-lazy'

@@ -11,7 +11,7 @@ class Presupuesto implements Serializable {
     String subPrograma
     String proyecto
     int nivel=0;
-
+    static auditable = true
     static mapping = {
         table 'prsp'
         cache usage: 'read-write', include: 'non-lazy'

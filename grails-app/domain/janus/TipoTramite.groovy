@@ -6,7 +6,7 @@ class TipoTramite implements Serializable {
     int tiempo
     String descripcion
     String tipo
-
+    static auditable = true
     String requiereRespuesta
 
     static mapping = {

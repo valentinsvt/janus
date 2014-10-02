@@ -7,7 +7,7 @@ class Cronograma implements Serializable {
     Double precio
     Double porcentaje
     Double cantidad
-
+    static auditable = true
     static mapping = {
         table 'crno'
         cache usage: 'read-write', include: 'non-lazy'

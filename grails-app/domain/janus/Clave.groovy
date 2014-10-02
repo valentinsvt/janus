@@ -2,6 +2,7 @@ package janus
 class Clave implements Serializable {
     String clave
     String dlgd
+    static auditable = true
     static mapping = {
         table 'clve'
         cache usage: 'read-write', include: 'non-lazy'

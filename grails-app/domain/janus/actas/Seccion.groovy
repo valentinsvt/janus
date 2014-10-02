@@ -7,7 +7,7 @@ class Seccion {
 
     static belongsTo = [acta: Acta]
     static hasMany = [parrafos: Parrafo]
-
+    static auditable = true
     static mapping = {
         parrafos sort: "numero"
         table 'sccn'

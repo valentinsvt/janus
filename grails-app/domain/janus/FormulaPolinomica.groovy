@@ -4,6 +4,7 @@ class FormulaPolinomica implements Serializable {
     Indice indice
     String numero
     double valor
+    static auditable = true
     static mapping = {
         table 'fpob'
         cache usage: 'read-write', include: 'non-lazy'

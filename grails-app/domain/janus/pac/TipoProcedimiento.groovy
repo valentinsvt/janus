@@ -13,7 +13,7 @@ class TipoProcedimiento {
     int contractual = 0
 
     String fuente
-
+    static auditable = true
     static mapping = {
         table 'tppc'
         cache usage: 'read-write', include: 'non-lazy'

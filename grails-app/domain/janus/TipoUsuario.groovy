@@ -2,7 +2,7 @@ package janus
 
 class TipoUsuario {
     String descripcion
-
+    static auditable = true
     static mapping = {
 
         table 'tpus'

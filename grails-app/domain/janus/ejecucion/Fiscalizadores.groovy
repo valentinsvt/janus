@@ -11,7 +11,7 @@ class Fiscalizadores implements Serializable {
      Date    fechaInicio
      Date    fechaFinalizacion
 
-
+    static auditable = true
 
     static mapping = {
 

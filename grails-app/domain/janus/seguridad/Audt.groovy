@@ -14,7 +14,7 @@ class Audt implements Serializable {
     String new_value
     Date fecha
     String operacion
-    
+    static auditable = false
     static mapping = {
         table: 'audt'
         cache usage:'read-write', include:'non-lazy'

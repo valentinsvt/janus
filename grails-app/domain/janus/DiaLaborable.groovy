@@ -6,7 +6,7 @@ class DiaLaborable {
     Integer anio            //anio de la fecha (para facilitar las busquedas)
     Integer ordinal
     String observaciones
-
+    static auditable = true
     static mapping = {
         table 'ddlb'
         cache usage: 'read-write', include: 'non-lazy'

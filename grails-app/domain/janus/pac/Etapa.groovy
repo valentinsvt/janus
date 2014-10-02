@@ -3,7 +3,7 @@ package janus.pac
 class Etapa {
 
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'etpa'
         cache usage: 'read-write', include: 'non-lazy'

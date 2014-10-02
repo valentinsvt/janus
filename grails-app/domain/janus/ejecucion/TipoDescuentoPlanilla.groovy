@@ -6,7 +6,7 @@ class TipoDescuentoPlanilla implements Serializable{
      double porcentaje
      String valor
 
-
+    static auditable = true
     static mapping = {
 
         table 'tpds'

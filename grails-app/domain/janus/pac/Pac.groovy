@@ -19,7 +19,7 @@ class Pac {
     String estado
     String memo
     String requiriente
-
+    static auditable = true
     static mapping = {
         table 'pacp'
         cache usage: 'read-write', include: 'non-lazy'

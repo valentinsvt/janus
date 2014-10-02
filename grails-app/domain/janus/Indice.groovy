@@ -3,6 +3,7 @@ class Indice implements Serializable {
     TipoIndice tipoIndice
     String codigo
     String descripcion
+    static auditable = true
     static mapping = {
         table 'indc'
         cache usage: 'read-write', include: 'non-lazy'

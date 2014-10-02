@@ -18,7 +18,7 @@ class Aseguradora {
     Date fechaContacto
     String direccion
     String observaciones
-
+    static auditable = true
 
     static mapping = {
 

@@ -5,6 +5,7 @@ class Canton implements Serializable {
     String nombre
     double longitud
     double latitud
+    static auditable = true
     static mapping = {
         table 'cntn'
         cache usage: 'read-write', include: 'non-lazy'

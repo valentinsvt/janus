@@ -3,6 +3,7 @@ class TipoObra implements Serializable {
     String codigo
     String descripcion
     Grupo grupo
+    static auditable = true
     static mapping = {
         table 'tpob'
         cache usage: 'read-write', include: 'non-lazy'

@@ -7,7 +7,7 @@ class PeriodosInec implements Serializable {
     Date fechaInicio
     Date fechaFin
     String periodoCerrado = "N"
-
+    static auditable = true
     static mapping = {
         table 'prin'
         cache usage: 'read-write', include: 'non-lazy'

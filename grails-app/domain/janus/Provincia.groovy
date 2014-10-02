@@ -4,6 +4,7 @@ class Provincia implements Serializable {
     String nombre
     double longitud
     double latitud
+    static auditable = true
     static mapping = {
         table 'prov'
         cache usage: 'read-write', include: 'non-lazy'

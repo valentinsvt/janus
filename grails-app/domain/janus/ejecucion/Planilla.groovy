@@ -61,7 +61,7 @@ class Planilla {
     Planilla padreCosto
 
     Double avanceFisico
-
+    static auditable = true
     static mapping = {
         table 'plnl'
         cache usage: 'read-write', include: 'non-lazy'

@@ -7,7 +7,7 @@ class MultasPlanilla {
     TipoMulta tipoMulta
     double monto
     int dias
-
+    static auditable = true
     static mapping = {
         table 'mlpl'
         cache usage: 'read-write', include: 'non-lazy'

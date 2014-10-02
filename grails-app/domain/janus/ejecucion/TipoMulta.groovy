@@ -4,7 +4,7 @@ class TipoMulta {
 
     String descripcion
     double porcentaje
-
+    static auditable = true
     static mapping = {
         table 'tpml'
         cache usage: 'read-write', include: 'non-lazy'

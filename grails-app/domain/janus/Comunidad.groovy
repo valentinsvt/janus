@@ -5,6 +5,7 @@ class Comunidad implements Serializable {
     String nombre
     double latitud
     double longitud
+    static auditable = true
     static mapping = {
         table 'cmnd'
         cache usage: 'read-write', include: 'non-lazy'

@@ -5,7 +5,7 @@ class Asignacion {
     janus.Presupuesto prespuesto
     Anio anio
     Double valor = 0
-
+    static auditable = true
     static mapping = {
         table 'asgn'
         cache usage: 'read-write', include: 'non-lazy'

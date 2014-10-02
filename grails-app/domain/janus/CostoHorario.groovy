@@ -13,7 +13,7 @@ class CostoHorario {
     double horasAnoBaja  = 0
     double vidaLlantasAnoBaja  = 0
 
-
+    static auditable = true
     static mapping = {
         table 'csho'
         cache usage: 'read-write', include: 'non-lazy'

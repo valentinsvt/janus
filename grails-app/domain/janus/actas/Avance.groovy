@@ -23,7 +23,7 @@ class Avance {
     String frase14
 
     static hasMany = [frases: FraseClima]
-
+    static auditable = true
     static mapping = {
         table 'avnc'
         cache usage: 'read-write', include: 'non-lazy'

@@ -12,7 +12,7 @@ class Concurso2 implements Serializable {
     String estado
     String observaciones
 
-
+    static auditable = true
 
 
     static mapping = {

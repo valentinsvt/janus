@@ -5,7 +5,7 @@ class Grupo implements Serializable {
     String codigo
     String descripcion
     Direccion direccion
-
+    static auditable = true
     static mapping = {
         table 'grpo'
         cache usage: 'read-write', include: 'non-lazy'

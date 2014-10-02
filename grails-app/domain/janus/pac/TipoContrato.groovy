@@ -4,7 +4,7 @@ class TipoContrato {
 
     String codigo
     String descripcion
-
+    static auditable = true
     static mapping = {
         table 'tpcr'
         cache usage: 'read-write', include: 'non-lazy'

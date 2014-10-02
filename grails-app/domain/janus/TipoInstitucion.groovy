@@ -2,6 +2,7 @@ package janus
 class TipoInstitucion implements Serializable {
     String codigo
     String descripcion
+    static auditable = true
     static mapping = {
         table 'tpin'
         cache usage: 'read-write', include: 'non-lazy'
