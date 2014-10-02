@@ -1041,7 +1041,10 @@ class MantenimientoItemsController extends Shield {
         }
 
         if (params.lugarId == "all") {
-            lugar = Lugar.list([sort: "descripcion"])
+//            lugar = Lugar.list([sort: "descripcion"])
+            def item = Item.get(params.itemId)
+            def tipoLista = item.tipoLista
+            lugar = Lugar.findAllByTipoLista(tipoLista, [sort: "descripcion"])
         } else {
             lugar.add(Lugar.get(params.lugarId))
         }
