@@ -3,7 +3,7 @@ package janus
 class PreciosService {
 
     def dbConnectionService
-
+    boolean transactional = true
 
     def getPrecioItems(fecha, lugar, items) {
         def cn = dbConnectionService.getConnection()
