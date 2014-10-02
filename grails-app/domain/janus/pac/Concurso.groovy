@@ -51,7 +51,7 @@ class Concurso {
     String memoSif
 
     String memoCertificacionFondos
-
+    static auditable=true
     static mapping = {
         table 'cncr'
         cache usage: 'read-write', include: 'non-lazy'
