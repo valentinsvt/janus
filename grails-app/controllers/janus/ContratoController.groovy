@@ -6,6 +6,8 @@ import janus.ejecucion.TipoFormulaPolinomica
 import janus.pac.Concurso
 import janus.pac.CronogramaContrato
 import janus.pac.DocumentoProceso
+import janus.pac.Oferta
+import janus.pac.PeriodoValidez
 import org.springframework.dao.DataIntegrityViolationException
 
 class ContratoController extends janus.seguridad.Shield {
@@ -692,6 +694,9 @@ class ContratoController extends janus.seguridad.Shield {
         def concurso = janus.pac.Concurso.findByObraAndEstado(obra, "R")
 //        println "concurso " + concurso
         def ofertas = janus.pac.Oferta.findAllByConcurso(concurso)
+
+
+//        new Date('dd-MM-yyyy', ofertas?.fechaEntrega)
 //        println ofertas
 //        println ofertas.monto
 //        println ofertas.plazo
@@ -702,6 +707,36 @@ class ContratoController extends janus.seguridad.Shield {
     def cargarCanton() {
         def obra = Obra.get(params.id)
         render obra?.parroquia?.canton?.nombre
+    }
+
+
+    def getFecha () {
+
+        def fechaOferta = Oferta.get(params.id).fechaEntrega?.format('dd-MM-yyyy')
+
+        return [fechaOferta: fechaOferta]
+
+    }
+
+    def getIndice () {
+
+
+        def fechaOferta = Oferta.get(params.id).fechaEntrega?.format('dd-MM-yyyy')
+
+//        println("fechaOferta " + fechaOferta)
+
+        def fechaOfertaMenos = (Oferta.get(params.id).fechaEntrega - 30).format("dd-MM-yyyy")
+        def fechaOfertaSin = (Oferta.get(params.id).fechaEntrega - 30)
+
+//        println("fechaNueva " + fechaOfertaMenos)
+
+        def idFecha = PeriodoValidez.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaOfertaSin, fechaOfertaSin)
+
+//        println("-->" + idFecha.id)
+
+        return [fechaOferta: fechaOferta, periodoValidez: idFecha]
+
+
     }
 
     def form_ajax() {

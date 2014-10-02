@@ -288,7 +288,13 @@ class ConcursoController extends janus.seguridad.Shield {
         def maxPre = 5
         def maxCon = 5
 
+
         def concursoInstance = new Concurso(params)
+//        def prf = Administracion.findByDescripcion('Prefecto Provincial')
+//        concursoInstance.administracion = prf
+
+//        println("--->"  + concursoInstance?.administracion?.nombrePrefecto)
+
         if (params.id) {
             concursoInstance = Concurso.get(params.id.toLong())
             if (!concursoInstance) {

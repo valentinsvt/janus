@@ -110,7 +110,7 @@
 
                 <div class="controls" style="width: 120px;">
                     <g:select id="anio" name="anio.id" from="${janus.pac.Anio.list()}" optionKey="id" optionValue="anio"
-                              class="many-to-one required" value="${actual}" style="width: 100px;"/>
+                              class="many-to-one required" value="${actual.id}" style="width: 100px;"/>
                     <span class="mandatory">*</span>
 
                     <p class="help-block ui-helper-hidden"></p>

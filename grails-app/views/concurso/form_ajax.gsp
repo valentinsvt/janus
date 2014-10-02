@@ -245,18 +245,25 @@
                                     </div>
                                 </div>
 
+
+
+
                                 <div class="control-group">
                                     <div>
                                         <span class="control-label label label-inverse">
-                                            Memo de requerimiento
+                                            Memo Certificación Fondos
                                         </span>
                                     </div>
 
                                     <div class="controls">
-                                        <g:textField name="memoRequerimiento" value="${concursoInstance?.memoRequerimiento}" class="allCaps"/>
-                                        <p class="help-block ui-helper-hidden allCaps"></p>
+                                        <div class="input-append">
+                                            <g:textField name="memoCertificacionFondos" value="${concursoInstance?.memoCertificacionFondos}" style="text-align: left;width: 180px;" class="allCaps"/>
+                                        </div>
+
+                                        <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
+
 
                                 <div class="control-group">
                                     <div>
@@ -281,11 +288,6 @@
                                     <div class="controls">
                                         <input type="hidden" id="obra_id" name="obra.id" value="${concursoInstance?.obra?.id}">
                                         <input type="text" id="obra_busqueda" value="${concursoInstance?.obra?.codigo}" title="${concursoInstance?.obra?.nombre}" style="width: 400px;">
-                                        %{--
-                                        <g:select id="obra" name="obra.id" from="${janus.Obra.list([sort: 'nombre'])}" optionKey="id" class="many-to-one " value="${concursoInstance?.obra?.id}"
-                                        --}%
-                                        %{--noSelection="['null': '']"
-                                        optionValue="${{ it.descripcion && it.descripcion.size() > 55 ? it.nombre + " " + it.descripcion[0..45] + '...' : it.nombre + " " + it.descripcion }}"/>--}%
                                         <p class="help-block ui-helper-hidden"></p>
                                     </div>
                                 </div>
@@ -328,22 +330,39 @@
                                     </div>
                                 </div>
 
-                                <div class="control-group">
-                                    <div>
-                                        <span class="control-label label label-inverse">
-                                            Monto referencial
-                                        </span>
-                                    </div>
-
-                                    <div class="controls">
-                                        <div class="input-append">
-                                            <g:field type="text" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right;width: 180px;"/>
-                                            <span class="add-on">$</span>
-                                        </div>
-
-                                        <p class="help-block ui-helper-hidden"></p>
-                                    </div>
+                            <div class="control-group">
+                                <div>
+                                    <span class="control-label label label-inverse">
+                                        Memo de requerimiento
+                                    </span>
                                 </div>
+
+                                <div class="controls">
+                                    <g:textField name="memoRequerimiento" value="${concursoInstance?.memoRequerimiento}" class="allCaps"/>
+                                    <p class="help-block ui-helper-hidden allCaps"></p>
+                                </div>
+                            </div>
+
+
+                            <div class="control-group">
+                                <div>
+                                    <span class="control-label label label-inverse">
+                                        Monto referencial
+                                    </span>
+                                </div>
+
+                                <div class="controls">
+                                    <div class="input-append">
+                                        <g:field type="text" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right;width: 180px;"/>
+                                        <span class="add-on">$</span>
+                                    </div>
+
+                                    <p class="help-block ui-helper-hidden"></p>
+                                </div>
+                            </div>
+
+
+
                             </div> <!-- fin col 2-->
 
                             <div class="span10">
