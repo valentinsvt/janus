@@ -3253,17 +3253,17 @@ class ReportesController {
 //            addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
 //            addCellTabla(tablaMemo, new Paragraph(obra?.oficioSalida, times10normal), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial N°", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(obra?.oficioSalida, times10normal), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph("Fórmula Polinómica N°", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph("Fórmula Polinómica", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(obra?.formulaPolinomica, times10normal), prmsHeaderHoja)
         }
         if (tipo == '2') {
             addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-            addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial N°", times10bold), prmsHeaderHoja)
+            addCellTabla(tablaMemo, new Paragraph("Presupuesto Referencial", times10bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
             addCellTabla(tablaMemo, new Paragraph(" : " + obra?.oficioSalida, times10normal), prmsHeaderHoja)
         }
@@ -3304,7 +3304,7 @@ class ReportesController {
         addCellTabla(tablaMemo, new Paragraph(obra?.parroquia?.nombre, times10normal), prmsHeaderHoja)
 
         addCellTabla(tablaMemo, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaMemo, new Paragraph("Documento de Referencia N°", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaMemo, new Paragraph("Documento de Referencia", times10bold), prmsHeaderHoja)
         addCellTabla(tablaMemo, new Paragraph(" : ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaMemo, new Paragraph(obra?.oficioIngreso, times10normal), prmsHeaderHoja)
 
@@ -3333,7 +3333,7 @@ class ReportesController {
         if (tipo == '1') {
 
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times10bold), prmsHeaderHojaLeft)
-            addCellTabla(tablaBaseMemo, new Paragraph("Valor de la Base :", times10bold), prmsHeaderHojaLeft)
+            addCellTabla(tablaBaseMemo, new Paragraph("Valor del Presupuesto :", times10bold), prmsHeaderHojaLeft)
             addCellTabla(tablaBaseMemo, new Paragraph(g.formatNumber(number: (totalBase), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10bold), prmsHeaderHojaRight)
             addCellTabla(tablaBaseMemo, new Paragraph(" ", times8normal), prmsHeaderHoja)
 
