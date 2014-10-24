@@ -22,8 +22,8 @@
         <div id="tipo" style="width: 960px; margin-top:10px; padding: 4px;" class="ui-corner-all ui-widget-content">
             Selecione el tipo de acción
             <g:each var="tp" in="${janus.seguridad.Tpac.list()}" status="i">
-                <input class="rd_tipo" type="radio" id="tpac${i}" name="tpac" value="${tp.id}" ${(tp.id == 1) ? 'checked=' : ''}/><label
-                    for="tpac${i}">${tp.tipo}</label>
+                <input class="rd_tipo" type="radio" id="tpac${i}" name="tpac" value="${tp.id}" ${(tp.id == 1) ? 'checked=' : ''}/>
+                <label for="tpac${i}">${tp.tipo}</label>
             </g:each>
             <span style="font-size: 10pt; color: black; margin-left: 160px;">Seleccione un Perfil
             <g:select optionKey="id" from="${janus.seguridad.Prfl.list()}" name="perfil" value="${prflInstace?.id}" style="width: 180px;"></g:select>
