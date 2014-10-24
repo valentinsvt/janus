@@ -80,7 +80,7 @@ class VolumenObraController extends janus.seguridad.Shield {
 
         def sub = SubPresupuesto.get(params.id)
         def grupo = sub?.grupo
-        def subs = SubPresupuesto.findAllByGrupo(grupo)
+        def subs = SubPresupuesto.findAllByGrupo(grupo,[sort:"descripcion"])
         [subs: subs, sub: sub]
     }
 
