@@ -1,6 +1,10 @@
 <%@ page import="janus.SubPresupuesto" %>
 
 <div id="create-SubPresupuesto" class="span" role="main">
+<div class="alert " role="status" style="background: rgba(255, 0, 0, 0.42);color: black;font-weight: bold;font-size: 14px">
+<a class="close" data-dismiss="alert" href="#">×</a>
+Antes de crear un subpresupuesto asegúrese de que no exista en ningún grupo. Recuerde que la lista de subpresupuestos depende de la opción seleccionada en "Tipo de obra"
+</div>
 <g:form class="form-horizontal" name="frmSave-SubPresupuesto" action="save">
     <g:hiddenField name="id" value="${subPresupuestoInstance?.id}"/>
     <g:hiddenField name="volob" value="0"/>

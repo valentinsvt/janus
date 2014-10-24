@@ -64,7 +64,19 @@ class SubPresupuestoController extends janus.seguridad.Shield {
             subPresupuestoInstance.properties = params
         }//es edit
         else {
-            subPresupuestoInstance = new SubPresupuesto(params)
+            def subp = SubPresupuesto.findByDescripcion(params.descripcion)
+            println "sub "+subp
+            if(subp){
+                if (params.volob.toString() == "1") {
+                    render "NO_El subpresupuesto ${params.descripcion} ya existe"
+                } else {
+                    redirect(action: 'list')
+                }
+                return
+            }else{
+                subPresupuestoInstance = new SubPresupuesto(params)
+            }
+
         } //es create
         if (!subPresupuestoInstance.save(flush: true)) {
             flash.clase = "alert-error"

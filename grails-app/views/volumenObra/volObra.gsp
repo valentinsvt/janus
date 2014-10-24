@@ -86,6 +86,14 @@
                 <div class="linea" style="height: 98%;"></div>
 
                 <div class="row-fluid" style="margin-left: 0px">
+                    <div class="span3" style="width: 320px; margin-top: -8px;">
+                        <b>Tipo de Obra:</b><g:select name="grupos" id="grupos" from="${grupoFiltrado}" optionKey="id" optionValue="descripcion"
+                                                      style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"/>
+
+                    %{--<b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"--}%
+                    %{--style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>--}%
+
+                    </div>
                     <div class="span2">
                         <b>Memo:</b> ${obra?.memoCantidadObra}
                     </div>
@@ -102,14 +110,7 @@
                         <b>Dist. volúmen:</b> ${obra?.distanciaVolumen}
                     </div>
 
-                    <div class="span3" style="width: 320px; margin-top: -8px;">
-                        <b>Tipo de Obra:</b><g:select name="grupos" id="grupos" from="${grupoFiltrado}" optionKey="id" optionValue="descripcion"
-                        style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"/>
 
-                        %{--<b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"--}%
-                                                     %{--style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>--}%
-
-                    </div>
                 </div>
 
                 <div class="row-fluid" style="margin-left: 0px">
