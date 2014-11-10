@@ -2861,7 +2861,12 @@ class ReportesController {
 
         addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+        if(session.perfil.id != 16){
+            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        }
+
 
         def arregloFirmas = []
 
@@ -2908,7 +2913,7 @@ class ReportesController {
 
         //cambio firmas 24/04
 
-//        println("firma: " + params.firmaElaboro)
+//        println("firma: " + params.firmaElaboro + " perfil " + session.perfil.id)
         if(params.firmaElaboro){
             personaElaboro = Persona.get(params.firmaElaboro)
             addCellTabla(tablaFirmas, new Paragraph((personaElaboro?.titulo?.toUpperCase() ?: '') + " " + (personaElaboro?.nombre.toUpperCase() ?: '' ) + " " + (personaElaboro?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
@@ -2918,13 +2923,18 @@ class ReportesController {
 
         addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
 
-        if(params.firmaCoordinador != ''){
-            def personaRol = PersonaRol.get(params.firmaCoordinador)
-            firmaCoordinador = personaRol.persona
-            addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-        }else{
-            addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
-        }
+       if(session.perfil.id != 16){
+           if(params.firmaCoordinador != ''){
+               def personaRol = PersonaRol.get(params.firmaCoordinador)
+               firmaCoordinador = personaRol.persona
+               addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+           }else{
+               addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+           }
+       }else{
+           addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+       }
+
         //cargos
 
 //            addCellTabla(tablaFirmas, new Paragraph(arregloFirmas[1]?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
@@ -2934,7 +2944,12 @@ class ReportesController {
 
         addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
         addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
-        addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+        if(session.perfil.id == 16){
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+        }
+
 
 //               addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.cargo?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
 //               addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
