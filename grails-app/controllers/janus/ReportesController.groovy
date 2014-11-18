@@ -2334,12 +2334,24 @@ class ReportesController {
         }
 
         if (params.tipoReporte == '1') {
-            txtIzq.add(new Paragraph(auxiliar?.baseCont, times10bold));
-            txtIzq.add(new Paragraph(" ", times10bold));
+            if(session.perfil.id == 16){
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }else{
+                txtIzq.add(new Paragraph(auxiliar?.baseCont, times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }
+
         }
         if (params.tipoReporte == '2') {
-            txtIzq.add(new Paragraph(auxiliar?.presupuestoRef, times10bold));
-            txtIzq.add(new Paragraph(" ", times10bold));
+            if(session.perfil.id == 16){
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }else{
+                txtIzq.add(new Paragraph(auxiliar?.presupuestoRef, times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }
+
         }
 
         addEmptyLine(headers, 1);
