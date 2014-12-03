@@ -385,7 +385,7 @@
 
                     }
                     if (cpac * 1 < 1) {
-                        msg += "<br>Error en el Código CP: Escoja un código de compras públicas válido"
+                        msg += "<br>Error en el Código CP: Escoja un código de compras públicas (CPC) válido"
 
                     }
                     var disponible = $("#disponible").val()
