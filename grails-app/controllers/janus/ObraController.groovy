@@ -1417,51 +1417,62 @@ class ObraController extends janus.seguridad.Shield {
         }//es edit
         else {
 
+//            println("params " + params)
 
-            obraInstance = new Obra(params)
 
-            def departamento
 
-            if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {
-                departamento = Departamento.get(persona?.departamento?.id)
-            } else {
-                departamento = Departamento.get(params.departamento.id)
+            if(!Obra.findByCodigo(params.codigo)){
+
+                obraInstance = new Obra(params)
+
+                def departamento
+
+                if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {
+                    departamento = Departamento.get(persona?.departamento?.id)
+                } else {
+                    departamento = Departamento.get(params.departamento.id)
+                }
+
+                obraInstance.departamento = departamento
+
+                def par = Parametros.list()
+                if (par.size() > 0)
+                    par = par.pop()
+
+                obraInstance.indiceCostosIndirectosObra = par.indiceCostosIndirectosObra
+                obraInstance.indiceCostosIndirectosPromocion = par.indiceCostosIndirectosPromocion
+                obraInstance.indiceCostosIndirectosMantenimiento = par.indiceCostosIndirectosMantenimiento
+                obraInstance.administracion = par.administracion
+                obraInstance.indiceCostosIndirectosGarantias = par.indiceCostosIndirectosGarantias
+                obraInstance.indiceCostosIndirectosCostosFinancieros = par.indiceCostosIndirectosCostosFinancieros
+                obraInstance.indiceCostosIndirectosVehiculos = par.indiceCostosIndirectosVehiculos
+
+                obraInstance.impreso = par.impreso
+                obraInstance.indiceUtilidad = par.indiceUtilidad
+                obraInstance.indiceCostosIndirectosTimbresProvinciales = par.indiceCostosIndirectosTimbresProvinciales
+
+
+                obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
+                        obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
+
+                obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
+
+                /* si pefiles administración directa o cogestion pone obratipo = 'D' */
+                if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {
+                    obraInstance.tipo = 'D'
+                }
+            }else {
+
+//                println("entro codigo no")
+
+                flash.clase = "alert-error"
+                flash.message = " No se pudo guardar la obra,  código duplicado!"
+                redirect(action: 'registroObra')
+                return
+
             }
 
-            obraInstance.departamento = departamento
 
-            def par = Parametros.list()
-            if (par.size() > 0)
-                par = par.pop()
-
-            obraInstance.indiceCostosIndirectosObra = par.indiceCostosIndirectosObra
-            obraInstance.indiceCostosIndirectosPromocion = par.indiceCostosIndirectosPromocion
-            obraInstance.indiceCostosIndirectosMantenimiento = par.indiceCostosIndirectosMantenimiento
-            obraInstance.administracion = par.administracion
-            obraInstance.indiceCostosIndirectosGarantias = par.indiceCostosIndirectosGarantias
-            obraInstance.indiceCostosIndirectosCostosFinancieros = par.indiceCostosIndirectosCostosFinancieros
-            obraInstance.indiceCostosIndirectosVehiculos = par.indiceCostosIndirectosVehiculos
-
-            obraInstance.impreso = par.impreso
-            obraInstance.indiceUtilidad = par.indiceUtilidad
-            obraInstance.indiceCostosIndirectosTimbresProvinciales = par.indiceCostosIndirectosTimbresProvinciales
-
-
-            obraInstance.indiceGastosGenerales = (obraInstance.indiceCostosIndirectosObra + obraInstance.indiceCostosIndirectosPromocion + obraInstance.indiceCostosIndirectosMantenimiento +
-                    obraInstance.administracion + obraInstance.indiceCostosIndirectosGarantias + obraInstance.indiceCostosIndirectosCostosFinancieros + obraInstance.indiceCostosIndirectosVehiculos)
-
-            obraInstance.totales = (obraInstance.impreso + obraInstance.indiceUtilidad + obraInstance.indiceCostosIndirectosTimbresProvinciales + obraInstance.indiceGastosGenerales)
-
-//            println("___>>>" + obraInstance.departamento)
-
-//            numero = dpto.documento ?: 0 + 1
-//            if (dpto.fechaUltimoDoc && dpto.fechaUltimoDoc.format("yy") != new Date().format("yy")) {
-//                numero = 1
-//            }
-            /* si pefiles administración directa o cogestion pone obratipo = 'D' */
-            if (session.perfil.codigo == 'ADDI' || session.perfil.codigo == 'COGS') {
-                obraInstance.tipo = 'D'
-            }
 
         } //es create
 
@@ -1469,6 +1480,8 @@ class ObraController extends janus.seguridad.Shield {
 //        obraInstance.departamento.id = params.departamento.id
 
         if (!obraInstance.save(flush: true)) {
+
+//            println("--->>>>>>>>>>>>>>>>>>>")
             flash.clase = "alert-error"
             def str = "<h4>No se pudo guardar Obra " + (obraInstance.id ? obraInstance.id : "") + "</h4>"
 
@@ -1486,13 +1499,7 @@ class ObraController extends janus.seguridad.Shield {
             redirect(action: 'registroObra')
             return
         } else {
-//            if (numero) {
-//                dpto.documento = numero
-//                dpto.fechaUltimoDoc = new Date()
-//                if (!dpto.save(flush: true)) {
-//                    println "Error al actualizar el numero de documento del departamento ${dpto.id}: " + dpto.errors
-//                }
-//            }
+//            println("entro")
         }
 
         if (params.id) {

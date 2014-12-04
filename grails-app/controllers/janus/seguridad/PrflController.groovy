@@ -203,7 +203,7 @@ class PrflController extends janus.seguridad.Shield  {
               "from accn where mdlo__id = " + modulo + " and  " +
               "accn__id in (${ids})) and prfl__id = ${prfl} and tpac__id = ${tpac}"
 //
-//      println "grabar SQL: ${tx}"
+      println "grabar SQL: ${tx}"
       cn.eachRow(tx) { d ->
         Prms.get(d.prms__id).delete()
       }
@@ -212,7 +212,8 @@ class PrflController extends janus.seguridad.Shield  {
       tx = "select prms.accn__id from prms, accn where accn.accn__id = prms.accn__id and " +
               "mdlo__id = ${modulo} and " +
               "prms.accn__id in (select accn__id " +
-              "from accn where mdlo__id = " + modulo + " and accn__id in (${ids})) and prfl__id = ${prfl} and tpac__id = ${tpac}"
+              "from accn where mdlo__id = " + modulo + " and accn__id in (${ids})) and prfl__id = ${prfl} and " +
+              "tpac__id = ${tpac}"
 //      println "grabar IN SQL: ${tx}"
       exst = []
       cn.eachRow(tx) { d ->
