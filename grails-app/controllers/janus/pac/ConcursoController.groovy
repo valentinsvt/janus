@@ -303,6 +303,7 @@ class ConcursoController extends janus.seguridad.Shield {
                 redirect(action: "list")
                 return
             }
+            session.concurso=concursoInstance
             def ahora = new Date()
             maxPrep = concursoInstance.pac.tipoProcedimiento?.preparatorio
             maxPre = concursoInstance.pac.tipoProcedimiento?.precontractual
@@ -426,8 +427,15 @@ class ConcursoController extends janus.seguridad.Shield {
             }
         }
 
-        def limite = TipoProcedimiento.findBySigla("MCD").techo
+        def limite
+        if(session.concurso){
+            def con = Concurso.get(session.concurso.id)
+            limite = con.pac.tipoProcedimiento.techo
+        }else{
+            limite = TipoProcedimiento.findBySigla("MCD").techo
+        }
 
+//        println "limite "+limite+"  "
         def extras = " and (valor<${limite}  or  liquidacion = 1) and estadoSif='R' "
         if (extraParr.size() > 1)
             extras += " and parroquia in (${extraParr})"

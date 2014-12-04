@@ -450,7 +450,7 @@ class PersonaController extends janus.seguridad.Shield {
         if (params.autorizacion) {
             params.autorizacion = params.autorizacion.encodeAsMD5()
         }
-
+        params.sexo="M"
         def personaInstance
 
 //        println(params.id)
