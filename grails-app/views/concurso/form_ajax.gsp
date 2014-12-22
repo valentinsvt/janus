@@ -65,7 +65,7 @@
                 </g:if>
 
                 <g:if test="${Oferta.countByConcurso(concursoInstance) == 0}">
-                        <button class="btn" id="btn-desregistrar"><i class="icon-exchange"></i> Cambiar Estado</button>
+                        <button class="btn" id="btnRegi"><i class="icon-exchange"></i> Cambiar Estado</button>
                 </g:if>
             </div>
         </div>
