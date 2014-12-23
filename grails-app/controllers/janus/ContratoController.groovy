@@ -251,7 +251,12 @@ class ContratoController extends janus.seguridad.Shield {
     def copiarPolinomica() {
         def contrato = Contrato.get(params.id)
         def pac = contrato.oferta.concurso.pac.tipoProcedimiento.fuente
-        def obra = contrato.oferta.concurso.obra
+        def obraOld = contrato.oferta.concurso.obra
+
+        def obra = Obra.findByCodigo(obraOld.codigo+"-OF")
+        if(!obra) {
+            obra = obraOld
+        }
 
         def fp = FormulaPolinomica.findAllByObra(obra)
         def fr = FormulaPolinomicaContractual.findAllByContrato(contrato)
@@ -650,7 +655,7 @@ class ContratoController extends janus.seguridad.Shield {
         funcionJs += 'cargarCombo();'
         funcionJs += 'cargarCanton();'
         funcionJs += '}'
-        extras+= " and codigo like '%OF'"
+//        extras+= " and codigo like '%OF'"
         def numRegistros = 20
 
         def nuevaLista = []
@@ -859,6 +864,13 @@ class ContratoController extends janus.seguridad.Shield {
         }
 
         try {
+
+            def fpId = FormulaPolinomicaContractual.findAllByContrato(contratoInstance).id
+            fpId.each {id->
+
+                FormulaPolinomicaContractual.get(id).delete(flush: true)
+            }
+
             contratoInstance.delete(flush: true)
             flash.clase = "alert-success"
             flash.message = "Se ha eliminado correctamente Contrato " + contratoInstance.id

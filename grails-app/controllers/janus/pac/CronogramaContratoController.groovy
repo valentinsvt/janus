@@ -28,8 +28,8 @@ class CronogramaContratoController extends janus.seguridad.Shield {
             redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
             return
         }
-        def obra = contrato?.oferta?.concurso?.obra
-        if (!obra) {
+        def obraOld = contrato?.oferta?.concurso?.obra
+        if (!obraOld) {
             flash.message = "No se encontró la obra"
             flash.clase = "alert-error"
             redirect(controller: 'contrato', action: "registroContrato", params: [contrato: params.id])
@@ -42,6 +42,10 @@ class CronogramaContratoController extends janus.seguridad.Shield {
          *  no se deberia copiar el cronograma de la obra sino del oferente ganador
          */
 
+        def obra = Obra.findByCodigo(obraOld.codigo+"-OF")
+        if(!obra) {
+            obra = obraOld
+        }
         //solo copia si esta vacio el cronograma del contrato
         def cronoCntr = CronogramaContrato.countByContrato(contrato)
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])

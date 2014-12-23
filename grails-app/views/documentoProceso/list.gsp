@@ -58,6 +58,10 @@
                     <i class="icon-file"></i>
                     Nuevo Documento
                 </a>
+                <a href="#" class="btn btn-ajax btn-copy">
+                    <i class="icon-copy"></i>
+                    Copiar documentos de la obra
+                </a>
             </div>
 
             <div class="span3" id="busca">
@@ -226,6 +230,23 @@
                             $("#modalBody").html(msg);
                             $("#modalFooter").html("").append(btnOk);
                             $("#modal-DocumentoProceso").modal("show");
+                        }
+                    });
+                    return false;
+                }); //click btn show
+
+                $(".btn-copy").click(function () {
+                    $(this).replaceWith(spinner);
+                    var id = $(this).data("id");
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(action:'copiarDocumentos')}",
+                        data    : {
+                            id : "${concurso.id}",
+                            contrato : "${contrato.id}"
+                        },
+                        success : function (msg) {
+                            location.reload();
                         }
                     });
                     return false;

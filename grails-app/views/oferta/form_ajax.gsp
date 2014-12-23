@@ -61,7 +61,7 @@
         </div>
 
         <div class="controls">
-            <g:field type="number" name="monto" class="" value="${fieldValue(bean: ofertaInstance, field: 'monto')}" style="width:140px;"/>
+            <g:field type="number" name="monto" class="" value="${ofertaInstance.monto}" style="width:140px;"/>
             <span class="mandatory">*</span>
 
             <p class="help-block ui-helper-hidden"></p>
