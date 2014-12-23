@@ -650,6 +650,7 @@ class ContratoController extends janus.seguridad.Shield {
         funcionJs += 'cargarCombo();'
         funcionJs += 'cargarCanton();'
         funcionJs += '}'
+        extras+= " and codigo like '%OF'"
         def numRegistros = 20
 
         def nuevaLista = []
