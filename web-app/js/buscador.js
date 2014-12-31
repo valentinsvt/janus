@@ -100,17 +100,17 @@ $("#mas").button({
 
 
     });
-
-$(".btnpq").livequery(function() {
-    $(this).hover(
-        function () {
-            $(this).addClass("ui-state-hover");
-        },
-        function () {
-            $(this).removeClass("ui-state-hover");
-        }
-    );
-});
+//
+//$(".btnpq").livequery(function() {
+//    $(this).hover(
+//        function () {
+//            $(this).addClass("ui-state-hover");
+//        },
+//        function () {
+//            $(this).removeClass("ui-state-hover");
+//        }
+//    );
+//});
 
 
 function cambiaOperador() {

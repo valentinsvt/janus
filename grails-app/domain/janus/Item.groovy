@@ -1,5 +1,7 @@
 package janus
 
+import janus.pac.CodigoComprasPublicas
+
 class Item implements Serializable {
     Persona responsable
     Unidad unidad
@@ -26,7 +28,12 @@ class Item implements Serializable {
     String foto
     TipoLista tipoLista
     String especificaciones
+    String codigoEspecificacion
+    TipoDeBien tipoDeBien
+    CodigoComprasPublicas codigoComprasPublicas
+
     static auditable = true
+
     static mapping = {
         table 'item'
         cache usage: 'read-write', include: 'non-lazy'
@@ -60,6 +67,9 @@ class Item implements Serializable {
             foto column: 'itemfoto'
             tipoLista column: 'tpls__id'
             especificaciones column: 'itemespc'
+            codigoEspecificacion column: 'itemcdes'
+            tipoDeBien column: 'tpbn__id'
+            codigoComprasPublicas column: 'cpac__id'
         }
     }
     static constraints = {
@@ -88,6 +98,9 @@ class Item implements Serializable {
         foto(size: 1..100, blank: true, nullable: true)
         tipoLista(blank: true, nullable: true)
         especificaciones(blank: true, nullable: true, size: 1..1024)
+        codigoEspecificacion(blank: true, nullable: true, size: 1..30)
+        tipoDeBien(blank: true, nullable: true, attributes: [title: 'Tipo de Bien'])
+        codigoComprasPublicas(blank: true, nullable: true, attributes: [title: 'Código de Compras Públicas'])
     }
 
     String toString() {

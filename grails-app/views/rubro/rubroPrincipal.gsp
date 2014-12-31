@@ -102,24 +102,32 @@
         <div class="linea" style="height: 100px;"></div>
 
         <div class="row-fluid">
-            <div class="span2">
+            <div class="span2" style="width: 150px;">
                 Código
-                <input type="text" name="rubro.codigo" class="span24 allCaps required input-small" value="${rubro?.codigo}" id="input_codigo" maxlength="30">
+                <input type="text" name="rubro.codigo" class="span20 allCaps required input-small" value="${rubro?.codigo}"
+                       id="input_codigo" maxlength="30">
 
                 <p class="help-block ui-helper-hidden"></p>
             </div>
 
-            <div class="span6">
+            <div class="span2" style="width: 130px; margin-left: 10px">
+                Código Especificación
+                <input type="text" name="rubro.codigoEspecificacion" class="span24 allCaps required input-small" value="${rubro?.codigoEspecificacion}" id="input_codigo_es" maxlength="30">
+
+                <p class="help-block ui-helper-hidden"></p>
+            </div>
+
+            <div class="span6" style="width: 550px; margin-left: 10px">
                 Descripción
                 <input type="text" name="rubro.nombre" class="span72" value="${rubro?.nombre}" id="input_descripcion">
             </div>
 
-            <div class="span2" style="width: 120px;">
+            <div class="span2" style="width: 105px; margin-left: 10px">
                 Fecha Creación
                 <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fecha}" disabled="true" id="fechaCreacion"/>
             </div>
 
-            <div class="span2">
+            <div class="span2"  style="width: 140px; margin-left: 10px">
                 Fecha Modificación
                 <elm:datepicker name="rubro.fechaReg" class="span24" value="${rubro?.fechaModificacion}" format="dd-MM-yyyy hh:mm " disabled="true" id="fchaMod"/>
             </div>
@@ -127,13 +135,13 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span2">
+            <div class="span2" style="width: 150px;">
                 Dirección responsable
                 <g:select name="rubro.grupo.id" id="selClase" from="${grupos}" class="span12" optionKey="id" optionValue="descripcion"
                           value="${rubro?.departamento?.subgrupo?.grupo?.id}" noSelection="['': '--Seleccione--']"/>
             </div>
 
-            <div class="span2">
+            <div class="span2" style="width: 350px; margin-left: 10px">
                 Grupo
                 <g:if test="${rubro?.departamento?.subgrupo?.id}">
                     <g:select id="selGrupo" name="rubro.suggrupoItem.id" from="${janus.SubgrupoItems.findAllByGrupo(rubro?.departamento?.subgrupo?.grupo)}"
@@ -144,7 +152,7 @@
                 </g:else>
             </div>
 
-            <div class="span3">
+            <div class="span3" style="width: 200px; margin-left: 10px">
                 Sub grupo
                 <g:if test="${rubro?.departamento?.id}">
                     <g:select name="rubro.departamento.id" id="selSubgrupo" from="${janus.DepartamentoItem.findAllBySubgrupo(rubro?.departamento?.subgrupo)}"
@@ -155,12 +163,12 @@
                 </g:else>
             </div>
 
-            <div class="span1">
+            <div class="span1" style="width: 75px; margin-left: 10px">
                 Unidad
                 <g:select name="rubro.unidad.id" from="${janus.Unidad.list()}" class="span12" optionKey="id" optionValue="codigo" value="${rubro?.unidad?.id}"/>
             </div>
 
-            <div class="span4" style="color: #01a">
+            <div class="span4" style="color: #01a; width: 300px; margin-left: 10px" >
                 Responsable: <br>
                 <g:if test="${modifica}">
                     <g:select name="responsable" from="${resps}" value="${rubro?.responsable?.id}" id="responsable" optionKey="id" noSelection="['-1': 'Seleccione..']" style="width:100%;"></g:select>

@@ -1,5 +1,7 @@
 package janus
 
+import janus.pac.Anio
+import janus.pac.CodigoComprasPublicas
 import janus.seguridad.Shield
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -11,10 +13,11 @@ class MantenimientoItemsController extends Shield {
     def oferentesService
     def dbConnectionService
 
+    def buscadorService
+
     def index() {
         redirect(action: "registro", params: params)
     } //index
-
 
     String makeBasicTree(params) {
 
@@ -679,8 +682,48 @@ class MantenimientoItemsController extends Shield {
         if (params.id) {
             itemInstance = Item.get(params.id)
         }
-        return [departamento: departamento, itemInstance: itemInstance, grupo: params.grupo]
+
+        def campos = ["numero": ["Código", "string"], "descripcion": ["Descripción", "string"]]
+
+        return [departamento: departamento, itemInstance: itemInstance, grupo: params.grupo, campos: campos]
     }
+
+    def buscaCpac() {
+        println("params Cpac" + params)
+        def listaTitulos = ["Código", "Descripción"]
+        def listaCampos = ["numero", "descripcion"]
+        def funciones = [null, null]
+        def url = g.createLink(action: "buscaCpac", controller: "pac")
+        def funcionJs = "function(){"
+        funcionJs += '$("#modal-ccp").modal("hide");'
+        funcionJs += '$("#item_cpac").val($(this).attr("regId"));$("#item_codigo").val($(this).attr("prop_numero"));$("#item_codigo").attr("title",$(this).attr("prop_descripcion"))'
+        funcionJs += '}'
+        def numRegistros = 20
+        def extras = " and movimiento=1"
+        if (!params.reporte) {
+            if(params.excel){
+//                println("entro")
+                session.dominio = CodigoComprasPublicas
+                session.funciones = funciones
+                def anchos = [15, 50, 70, 20, 20, 20, 20]
+                /*anchos para el set column view en excel (no son porcentajes)*/
+                redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "CodigoComprasPublicas", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "CodigoComprasPublicas", anchos: anchos, extras: extras, landscape: true])
+
+            }else{
+                def lista = buscadorService.buscar(CodigoComprasPublicas, "CodigoComprasPublicas", "excluyente", params, true, extras) /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            }
+        } else {
+//            println "entro reporte"
+            /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
+            session.dominio = CodigoComprasPublicas
+            session.funciones = funciones
+            def anchos = [20, 80] /*el ancho de las columnas en porcentajes... solo enteros*/
+            redirect(controller: "reportes", action: "reporteBuscador", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "CodigoComprasPublicas", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Código compras publcias", anchos: anchos, extras: extras, landscape: false])
+        }
+    }
+
 
     def checkCdIt_ajax() {
         def dep = DepartamentoItem.get(params.dep)
