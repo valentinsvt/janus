@@ -124,6 +124,10 @@
                     <g:link controller="valoresAnuales" action="list">Valores Anuales</g:link>
                 </div><br>
 
+                <div class="item" texto="tpbn">
+                    <g:link controller="tipoDeBien" action="list">Tipo de Bien</g:link> Detalle de si el bien se halla dentro de la lista de bienes producidos a nivel nacional.
+                </div><br>
+
             </div>
 
             <div id="cntr" class="ui-widget-content" style="height: 560px">
@@ -347,6 +351,10 @@
 <div id="anua" style="display:none">
     <h3>Variables Anuales</h3><br>
     <p>Valores de las variables anuales.</p>
+</div>
+<div id="tpbn" style="display:none">
+    <h3>Tipo de Bien</h3><br>
+    <p>Detalle de si el bien se halla dentro de la lista de bienes producidos a nivel nacional.</p>
 </div>
 
 
