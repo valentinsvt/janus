@@ -219,6 +219,7 @@
             }
 
             function createUpdate(params) {
+//                console.log("params:", params);
                 var obj = {
                     label            : params.label,
                     separator_before : params.sepBefore, // Insert a separator before the item
@@ -243,7 +244,7 @@
                                             data    : $("#frmSave").serialize(),
                                             success : function (msg) {
                                                 var parts = msg.split("_");
-                                                if (parts[0] == "OK") {
+                                                    if (parts[0] == "OK") {
                                                     if (params.action == "create") {
                                                         if (params.open) {
                                                             $("#" + params.nodeStrId).removeClass("jstree-leaf").addClass("jstree-closed");
@@ -275,7 +276,9 @@
                                 }
                                 $("#modalTitle").html(params.title);
                                 $("#modalBody").html(msg);
+//                                console.log("Botones", btnOk, btnSave)
                                 $("#modalFooter").html("").append(btnOk).append(btnSave);
+//                                console.log("Footer:", $("#modalFooter"))
                                 $("#modal-tree").modal("show");
                             },
                             complete : function () {

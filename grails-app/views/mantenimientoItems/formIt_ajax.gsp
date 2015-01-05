@@ -1,4 +1,4 @@
-<%@ page import="janus.Item" %>
+<%@ page import="janus.pac.CodigoComprasPublicas; janus.Item" %>
 
 <div id="create" class="span" role="main">
 <g:form class="form-horizontal" name="frmSave" action="saveIt_ajax">
@@ -102,8 +102,9 @@
         %{--TODO: buscador de CPC--}%
 
         <div class="controls">
-        <input type="text" style="width: 154px;;font-size: 12px" id="item_codigo">
-        <input type="hidden" style="width: 60px" id="item_cpac">
+        %{--<g:hiddenField name="id" value="${itemInstance?.id}"/>--}%
+        <input readonly="" type="text" style="width: 154px;;font-size: 12px;" id="item_codigo" value="${janus.pac.CodigoComprasPublicas.get(itemInstance?.codigoComprasPublicas?.id)?.numero}">
+        <input type="hidden" style="width: 60px" id="item_cpac" name="codigoComprasPublicas.id" value="${itemInstance?.codigoComprasPublicas?.id}">
 %{--
             <g:select id="item_codigo" name="unidad.id" from="${janus.Unidad.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"
                       class="many-to-one " value="${itemInstance?.unidad?.id}" noSelection="['': '']"/>
@@ -275,14 +276,14 @@
     <div class="modal-header btn-info">
         <button type="button" class="close" data-dismiss="modal">×</button>
 
-        <h3 id="modalTitle"></h3>
+        <h3 id="modalTitle2"></h3>
     </div>
 
-    <div class="modal-body" id="modalBody">
+    <div class="modal-body" id="modalBody2">
         <bsc:buscador name="pac.buscador.id" value="" accion="buscaCpac" controlador="mantenimientoItems" campos="${campos}" label="cpac" tipo="lista"/>
     </div>
 
-    <div class="modal-footer" id="modalFooter">
+    <div class="modal-footer" id="modalFooter2">
     </div>
 </div>
 
@@ -443,8 +444,8 @@
     $(function () {
         $("#item_codigo").dblclick(function () {
             var btnOk = $('<a href="#" data-dismiss="modal" class="btn">Cerrar</a>');
-            $("#modalTitle").html("Código compras públicas");
-            $("#modalFooter").html("").append(btnOk);
+            $("#modalTitle2").html("Código compras públicas");
+            $("#modalFooter2").html("").append(btnOk);
             $(".contenidoBuscador").html("")
             $("#modal-ccp").modal("show");
             $("#buscarDialog").unbind("click")

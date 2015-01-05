@@ -823,7 +823,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     def saveIt_ajax() {
-//        println 'SAVE ITEM: ' + params
+        println 'SAVE ITEM: ' + params
         def dep = DepartamentoItem.get(params.departamento.id)
         params.tipoItem = TipoItem.findByCodigo("I")
         params.fechaModificacion = new Date()
