@@ -204,6 +204,57 @@
 
 
             }
+
+            if (key == 'print-key3') {
+
+
+                var dsps =
+                ${obra.distanciaPeso}
+                var dsvs =
+                ${obra.distanciaVolumen}
+                var volqueta =
+                ${precioVol}
+                var chofer =
+                ${precioChof}
+                var clickImprimir = $(this).attr("id");
+
+//                console.log("c" + clickImprimir)
+
+                var fechaSalida1 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
+
+
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}"--}%
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "WfechaSalida=" + fechaSalida1
+
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObraVae')}" + datos
+                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+
+
+            }
+
+            if (key == 'print-key4') {
+
+
+                var dsps =
+                ${obra.distanciaPeso}
+                var dsvs =
+                ${obra.distanciaVolumen}
+                var volqueta =
+                ${precioVol}
+                var chofer =
+                ${precioChof}
+                var clickImprimir = $(this).attr("id");
+
+                var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
+
+                %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
+                var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "Wdesglose=${1}" + "WfechaSalida=" + fechaSalida2
+
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObraVae')}" + datos
+                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+
+
+            }
         },
         %{--<g:if test="${obra?.estado!='R'}">--}%
         items: {
@@ -215,7 +266,10 @@
                     "print-key1": {"name": "Imprimir sin Desglose", icon: "print"
 
                     },
-                    "print-key2": {"name": "Imprimir con Desglose", icon: "print"}
+                    "print-key2": {"name": "Imprimir con Desglose", icon: "print"},
+                    "print-key3": {"name": "Imprimir Vae sin Desglose", icon: "print"},
+                    "print-key4": {"name": "Imprimir Vae con Desglose", icon: "print"}
+
 
                 }
 

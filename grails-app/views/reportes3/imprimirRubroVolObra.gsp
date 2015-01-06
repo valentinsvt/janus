@@ -23,9 +23,11 @@
         <link href="../css/font-awesome.css" rel="stylesheet" type="text/css"/>
         <style type="text/css">
         @page {
-            size   : 21cm 29.7cm;  /*width height */
+            size   : 21cm 29.7cm;
+            /*size   : 29.7cm 21cm;  *//*width height */
             margin : 2cm;
             margin-left: 2.5cm;
+            ;
         }
 
         body {
@@ -37,7 +39,7 @@
             height      : 24.7cm; /*29.7-(1.5*2)*/
             font-family : arial;
             font-size   : 10px;
-            width       : 16cm;
+            width       : 15cm;
         }
 
         .tituloPdf {

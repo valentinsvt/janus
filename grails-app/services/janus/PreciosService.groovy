@@ -468,6 +468,19 @@ class PreciosService {
     }
 
 
+    def vae_rb(obra, rubro){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from vae_rb_precios("+ rubro + ","+ obra +") order by itemcdgo asc "
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+
+    }
+
+
     def actualizaOrden(volumen, tipo) {
 
         def vlob = VolumenesObra.findAll("from VolumenesObra where obra = ${volumen.obra.id} order by orden asc,id desc")
