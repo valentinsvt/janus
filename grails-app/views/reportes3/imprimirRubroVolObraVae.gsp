@@ -33,7 +33,7 @@
         /*size   : 21cm 29.7cm;  *//*width height */
         size   : 29.7cm 21cm;  /*width height */
         margin : 2cm;
-        margin-left: 2.5cm;
+        margin-left: 2.0cm;
     ;
     }
 
@@ -50,7 +50,7 @@
     }
 
     .tituloPdf {
-        height        : 100px;
+        height        : 70px;
         font-size     : 11px;
         /*font-weight   : bold;*/
         text-align    : center;
@@ -139,7 +139,7 @@
 
     .row-fluid {
         width  : 100%;
-        height : 20px;
+        height : 15px;
     }
 
     .span3 {
@@ -172,18 +172,15 @@
             <b>G.A.D. PROVINCIA DE PICHINCHA</b>
         </p>
 
-        <p style="font-size: 14px">
-            <b>DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b>
-        </p>
-
-        <p style="font-size: 14px">
+        <p style="font-size: 14px; margin-top: -15px;">
+            <b>DGCP - UNIDAD TÉCNICA DE FIJACIÓN DE PRECIOS UNITARIOS</b><br/>
             <b>ANÁLISIS DE PRECIOS UNITARIOS</b>
         </p>
     </div>
 
-    <div style="margin-top: 20px">
+    <div style="margin-top:0px">
         <div class="row-fluid">
-            <div class="span3" style="margin-right: 195px !important;">
+            <div class="span3" style="margin-right: 195px !important; width: 500px;">
                 <g:if test="${fechaSalida}">
                     <b>Fecha:</b> ${fechaSalida.format("dd-MM-yyyy")}
 
@@ -193,7 +190,7 @@
                 </g:else>
 
             </div>
-            <div class="span3">
+            <div class="span3" style="width: 200px;">
                 <g:if test="${fechaPrecios}">
 
                     <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
@@ -223,11 +220,11 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span3" style="margin-right: 195px !important;">
+            <div class="span3" style="margin-right: 195px !important; width: 500px;">
                 <b>Código de rubro:</b> ${rubro?.codigo}
             </div>
 
-            <div class="span3">
+            <div class="span3" style="width: 200px;">
 
                 <b>Unidad:</b> ${rubro?.unidad?.codigo}
             </div>
@@ -256,7 +253,8 @@
             ${tablaTrans2}
         </g:if>
         ${tablaIndi}
-        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float:
+            right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
             <tbody>
             <tr>
                 <td style="width: 350px; border-bottom: #000000">

@@ -137,9 +137,10 @@
             </span>
         </div>
 
-        <div class="controls">
-            <g:select id="tipoDeBien" name="tipoDeBien.id" from="${janus.TipoDeBien.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"
-                      class="many-to-one " value="${itemInstance?.tipoDeBien?.id}" noSelection="['': '']"/>
+        <div class="controls" >
+            <g:select id="tipoDeBien" name="tipoDeBien.id" from="${janus.TipoDeBien.list([sort: 'descripcion'])}" optionKey="id"
+                      optionValue="descripcion" class="span4" value="${itemInstance?.tipoDeBien?.id}"
+                      noSelection="['': '']"/>
 
             <p class="help-block ui-helper-hidden"></p>
         </div>
