@@ -391,7 +391,7 @@ class Reportes3Controller {
         def tablaMano = '<table class=""> '
         def tablaMat = '<table class=""> '
         def tablaTrans = '<table class=""> '
-        def tablaIndi = '<table class="marginTop" style="width:635px"> '
+        def tablaIndi = '<table class="marginTop" style="width:663px"> '
 
         def tablaMat2 = '<table class="marginTop"> '
         def tablaTrans2 = '<table class="marginTop"> '

@@ -251,7 +251,7 @@
                 var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "Wdesglose=${1}" + "WfechaSalida=" + fechaSalida2
 
                 var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObraVae')}" + datos
-//                console.log("url "  + url)
+                console.log("url "  + url)
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
 
 

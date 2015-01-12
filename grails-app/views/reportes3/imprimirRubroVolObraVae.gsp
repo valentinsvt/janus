@@ -50,7 +50,7 @@
     }
 
     .tituloPdf {
-        height        : 70px;
+        height        : 100px;
         font-size     : 11px;
         /*font-weight   : bold;*/
         text-align    : center;
@@ -83,15 +83,10 @@
         margin : 0px;
 
 
-
-
-
     }
 
     th, td {
         font-size : 10px !important;
-
-
 
 
     }
@@ -144,7 +139,7 @@
 
     .row-fluid {
         width  : 100%;
-        height : 15px;
+        height : 20px;
     }
 
     .span3 {
@@ -183,7 +178,7 @@
         </p>
     </div>
 
-    <div style="margin-top:0px">
+    <div style="margin-top: 20px">
         <div class="row-fluid">
             <div class="span3" style="margin-right: 195px !important; width: 500px;">
                 <g:if test="${fechaSalida}">
@@ -229,7 +224,7 @@
                 <b>Código de rubro:</b> ${rubro?.codigo}
             </div>
 
-            <div class="span3" style="width: 200px;">
+            <div class="span2" style="width: 2500px;">
 
                 <b>Unidad:</b> ${rubro?.unidad?.codigo}
             </div>
@@ -258,8 +253,7 @@
             ${tablaTrans2}
         </g:if>
         ${tablaIndi}
-        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float:
-            right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
             <tbody>
             <tr>
                 <td style="width: 350px; border-bottom: #000000">
