@@ -83,10 +83,15 @@
         margin : 0px;
 
 
+
+
+
     }
 
     th, td {
         font-size : 10px !important;
+
+
 
 
     }
