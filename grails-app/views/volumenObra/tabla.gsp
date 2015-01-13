@@ -245,13 +245,13 @@
                 ${precioChof}
                 var clickImprimir = $(this).attr("id");
 
-                var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'
+                var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}';
 
                 %{--var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid="+$(".item_row").attr("id") +"Wobra=${obra.id}" + "Wdesglose=${1}"--}%
                 var datos = "?fecha=${obra.fechaPreciosRubros?.format('dd-MM-yyyy')}Wid=" + clickImprimir + "Wobra=${obra.id}" + "Wdesglose=${1}" + "WfechaSalida=" + fechaSalida2
 
-                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObraVae')}" + datos
-                console.log("url "  + url)
+                var url = "${g.createLink(controller: 'reportes3',action: 'imprimirRubroVolObraVae')}" + datos;
+//                console.log("url "  + url)
                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
 
 

@@ -253,43 +253,29 @@
             ${tablaTrans2}
         </g:if>
         ${tablaIndi}
-        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 50%;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;margin-left: 330px;  width: 40%;float: left;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
             <tbody>
             <tr>
-                <td style="width: 350px; border-bottom: #000000">
+                <td style="width: 300px; border-bottom: #000000">
                     <b>COSTO UNITARIO DIRECTO</b>
                 </td>
-                <td style="text-align: right">
+                <td style="text-align: left">
                     <b> <g:formatNumber number="${totalRubro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
-                </td>
-                <td>  </td><td>  </td>
-                <td style="width: 350px; border-bottom: #000000">
-                    <b>TOTAL COSTO RELATIVO</b>
-                </td>
-                <td style="text-align: right">
-                    <b> <g:formatNumber number="${totalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>
             </tr>
             <tr>
                 <td>
                     <b>COSTOS INDIRECTOS</b>
                 </td>
-                <td style="text-align: right;">
+                <td style="text-align: left;">
                     <b> <g:formatNumber number="${totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
-                </td>
-                <td>  </td><td>  </td>
-                <td>
-                    <b>TOTAL VAE ELEMENTO</b>
-                </td>
-                <td style="text-align: right">
-                    <b> <g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>
             </tr>
             <tr>
                 <td>
                     <b>COSTO TOTAL DEL RUBRO</b>
                 </td>
-                <td style="text-align: right">
+                <td style="text-align: left">
                     <b>  <g:formatNumber number="${totalRubro + totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>
 
@@ -298,13 +284,25 @@
                 <td>
                     <b>PRECIO UNITARIO $USD</b>
                 </td>
-                <td style="text-align: right">
+                <td style="text-align: left">
                     <b><g:formatNumber number="${(totalRubro + totalIndi).toDouble().round(2)}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
 
                 </td>
             </tr>
 
 
+            </tbody>
+        </table>
+        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 25%;float: right;  border-top: 1px solid #000000;">
+            <tbody>
+            <tr>
+                <td style="width: 350px;">
+                    <b> <g:formatNumber number="${totalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
+                </td>
+                <td style="text-align: right">
+                    <b> <g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
+                </td>
+            </tr>
             </tbody>
         </table>
 
