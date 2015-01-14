@@ -287,7 +287,7 @@ class PreciosService {
     def rb_preciosAsc(parametros, condicion) {
         def cn = dbConnectionService.getConnection()
         def sql = "select * from rb_precios_v2(" + parametros + ") order by itemcdgo asc " + condicion
-//        println "sql " + sql
+        //cd /h g   ja  println "sql " + sql
         def result = []
         cn.eachRow(sql) { r ->
             result.add(r.toRowResult())

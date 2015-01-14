@@ -36,7 +36,7 @@
 <div class="row-fluid" style="margin-left: 0px">
     <div class="span5" style="width: 550px">
         <b>Subpresupuesto de destino:</b>
-        <g:select name="subpresupuestoDes" from="${janus.SubPresupuesto.list([order: 'descripcion', sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px; margin-left: 45px" id="subPres_destino"
+        <g:select name="subpresupuestoDes" from="${janus.SubPresupuesto.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px; margin-left: 45px" id="subPres_destino"
                   noSelection="['' : ' - Seleccione un subpresupuesto - ']"></g:select>
 
         %{--todo descomentar esto--}%

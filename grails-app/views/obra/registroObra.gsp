@@ -889,6 +889,10 @@
                     <li>
                         <a href="#" id="btnVeri"><i class="icon-ok"></i>Precios no Act.</a>
                     </li>
+                    <li>
+                        <g:link controller="variables" action="composicionVae" id="${obra?.id}"><i class="icon-paste"></i>Fijar VAE
+                        </g:link>
+                    </li>
 
                     <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D' && obra?.fechaInicio}">
                         <li>
@@ -1810,24 +1814,17 @@
         });
 
         $("#btnVeri").click(function () {
-
-
             %{--var verificar = ${verifOK}--}%
-
             if (${verifOK == true}) {
-
                 location.href = "${g.createLink(controller: 'verificacionPrecios', action: 'verificacion', id: obra?.id)}"
-
             }
             else {
                 $("#dlgVerificacion").dialog("open");
             }
-
         });
 
         $("#btn-aceptar").click(function () {
 //                    $(this).replaceWith(spinner);
-
             %{--<g:if test="${!obra}">--}%
             %{--$("#departamento").val($("#departamentoObra").val())--}%
             %{--</g:if>--}%

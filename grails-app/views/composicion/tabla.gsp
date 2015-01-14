@@ -197,7 +197,7 @@
 
     <div id="totales" style="width:100%;">
         <input type='text' id='txt' style='height:20px;width:110px;margin: 0px;padding: 0px;padding-right:2px;text-align: right !important;display: none;margin-left: 0px;margin-right: 0px;'>
-        <table class="table table-bordered table-condensed pull-right" style="width: 20%;">
+        <table class="table table-bordered ta195ble-condensed pull-right" style="width: 20%;">
             <tr>
                 <th>Equipos</th>
                 <td class="numero"><g:formatNumber number="${totalEquipo}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>

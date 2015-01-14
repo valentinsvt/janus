@@ -27,7 +27,7 @@
                             <input type="file" id="file" name="file"/>
                         </div>
                         <br/>
-                        Seleccione el periodo a subir: <g:select name="periodo" from="${janus.pac.PeriodoValidez.list([order: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
+                        Seleccione el periodo a subir: <g:select name="periodo" from="${janus.pac.PeriodoValidez.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion"/>
 
                     </fieldset>
                 </g:uploadForm>

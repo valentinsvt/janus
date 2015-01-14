@@ -47,7 +47,7 @@
                     <div class="span4">
                         <b>Coordinación:</b>
                         <input type="hidden" id="item_id">
-                        <g:select name="coordinacion" from="${janus.Departamento.list([order: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 250px;font-size: 12px;"/>
+                        <g:select name="coordinacion" from="${janus.Departamento.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 250px;font-size: 12px;"/>
                     </div>
                 </div>
 
