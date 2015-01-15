@@ -1,50 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
     <head>
-        <g:if test="${rend == 'screen'}">
             <meta name="layout" content="main">
             <script src="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/js', file: 'jquery.dataTables.min.js')}"></script>
             <link href="${resource(dir: 'js/jquery/plugins/DataTables-1.9.4/media/css', file: 'jquery.dataTables.css')}" rel="stylesheet">
-        </g:if>
+
+        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
+            <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}"/>
+
         <title>Composición de la obra</title>
 
-        <g:if test="${rend == 'pdf'}">
-            <style type="text/css">
-            @page {
-                size   : 21cm 29.7cm ;  /*width height */
-                margin : 1.5cm;
-            }
+        <style type="text/css">
 
-            html {
-                font-family : Verdana, Arial, sans-serif;
-                font-size   : 8px;
-            }
+        .editable {
+            background    : url(${resource(dir:'images', file:'edit.gif')}) right no-repeat;
+            padding-right : 18px !important;
+        }
 
-            thead tr {
-                margin : 0px
-            }
 
-            th, td {
-                font-size : 10px !important;
+        </style>
 
-            }
-
-            .tituloChevere {
-                color       : #0088CC;
-                border      : 0px solid red;
-                white-space : nowrap;
-                display     : block;
-                width       : 98%;
-                height      : 30px;
-                font-weight : bold;
-                font-size   : 22px;
-                text-shadow : -2px 2px 1px rgba(0, 0, 0, 0.25);
-                margin-top  : 10px;
-                line-height : 22px;
-            }
-
-            </style>
-        </g:if>
 
     </head>
 
@@ -90,6 +65,13 @@
                         </g:link>
                     </div>
 
+                    <div class="btn-group">
+                        <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn btn-success" title="Regresar a la obra">
+                            <i class="icon-save"></i>
+                            Guardar
+                        </a>
+                    </div>
+
                 </div>
             </g:if>
 
@@ -99,17 +81,17 @@
                         <tr>
                             <g:if test="${tipo.contains(",") || tipo == '1'}">
                                 <th>Código</th>
-                                <th>Item</th>
+                                <th width="500px">Item</th>
                                 <th>U</th>
                                 <th>Cantidad</th>
                                 <th>P. Unitario</th>
                                 <th>Transporte</th>
                                 <th>Costo</th>
                                 <th>Total</th>
-                                <th>VAE (%)</th>
                                 <g:if test="${tipo.contains(",")}">
                                     <th>Tipo</th>
                                 </g:if>
+                                <th>VAE (%)</th>
                             </g:if>
                             <g:elseif test="${tipo == '2'}">
                                 <th>Código</th>
@@ -138,6 +120,9 @@
                         <g:set var="totalEquipo" value="${0}"/>
                         <g:set var="totalMano" value="${0}"/>
                         <g:set var="totalMaterial" value="${0}"/>
+                        <g:set var="sumaVaeEq" value="${0}"/>                               sumaVaeMt/totalMaterial*100
+                        <g:set var="sumaVaeMt" value="${0}"/>
+                        <g:set var="sumaVaeMo" value="${0}"/>
                         <g:each in="${res}" var="r">
                             <tr>
                                 <td class="">${r.codigo}</td>
@@ -166,11 +151,13 @@
                                         <g:if test="${r?.total == null}">
 
                                             <g:set var="totalMaterial" value="${totalMaterial}"/>
+                                            <g:set var="sumaVaeMt" value="${sumaVaeMt}"/>
 
                                         </g:if>
                                         <g:else>
 
                                             <g:set var="totalMaterial" value="${totalMaterial + r?.total}"/>
+                                            <g:set var="sumaVaeMt" value="${sumaVaeMt + r?.total * r?.tpbnpcnt/100}"/>
                                         </g:else>
 
                                     </g:if>
@@ -180,6 +167,7 @@
                                         </g:if>
                                         <g:else>
                                             <g:set var="totalMano" value="${totalMano + r?.total}"/>
+                                            <g:set var="sumaVaeMo" value="${sumaVaeMo + r?.total * r?.tpbnpcnt/100}"/>
                                         </g:else>
                                     </g:elseif>
                                     <g:elseif test="${r?.grid == 3}">
@@ -189,6 +177,7 @@
                                         </g:if>
                                         <g:else>
                                             <g:set var="totalEquipo" value="${totalEquipo + r?.total}"/>
+                                            <g:set var="sumaVaeEq" value="${sumaVaeEq + r?.total * r?.tpbnpcnt/100}"/>
 
                                         </g:else>
 
@@ -199,13 +188,40 @@
                                 <g:if test="${tipo.contains(",")}">
                                     <td>${r?.grupo}</td>
                                 </g:if>
-                                <td class="numero cantidad texto " iden="${r.codigo}">
-                                    <g:formatNumber number="${r.cantidad}" minFractionDigits="2" maxFractionDigits="7" format="##,##0" locale="ec"/>
+                                <td class="editable numero cantidad texto" data-original="${r?.tpbnpcnt}"
+                                    data-id="${r?.voit__id}" data-valor='00'> ${r?.tpbnpcnt}
+                                    %{--<g:formatNumber number="${r?.tpbnpcnt}" minFractionDigits="2" maxFractionDigits="2" format="###,#0" locale="ec"/>--}%
                                 </td>
                             </tr>
                         </g:each>
                     </tbody>
                 </table>
+
+                <div style="width:100%;">
+                    <table class="table table-bordered table-condensed pull-right" style="width: 20%;">
+                        <tr>
+                            <th>Equipos</th>
+                            <td class="numero"><g:formatNumber number="${totalEquipo}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
+                            <td class="numero"><g:formatNumber number="${sumaVaeEq/totalEquipo*100}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>%</td>
+                        </tr>
+                        <tr>
+                            <th>Mano de obra</th>
+                            <td class="numero"><g:formatNumber number="${totalMano}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
+                            <td class="numero"><g:formatNumber number="${sumaVaeMo/totalMano*100}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>%</td>
+                        </tr>
+                        <tr>
+                            <th>Materiales</th>
+                            <td class="numero"><g:formatNumber number="${totalMaterial}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
+                            <td class="numero"><g:formatNumber number="${sumaVaeMt/totalMaterial*100}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>%</td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL OBRA</th>
+                            <td class="numero"><g:formatNumber number="${totalEquipo + totalMano + totalMaterial}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/></td>
+                            <td class="numero"><g:formatNumber number="${(sumaVaeEq/totalEquipo + sumaVaeMo/totalMano + sumaVaeMt/totalMaterial)/3*100}" minFractionDigits="2" maxFractionDigits="2" format="##,##0" locale="ec"/>%</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <input type='text' id='txt' style='height:20px;width:110px;margin: 0px;padding: 0px;padding-right:2px;text-align: right !important;display: none;margin-left: 0px;margin-right: 0px;'>
             </div>
         </div>
@@ -213,22 +229,6 @@
         <g:if test="${rend == 'screen'}">
             <script type="text/javascript">
                 $(function () {
-
-                    function updateTotal(celda) {
-                        if(celda.parent().hasClass("precio")){
-                            var val = celda.val()
-                            val = val.replace(",", "")
-                            var cant = celda.parent().parent().find(".cantidad").html()
-                            cant = cant.replace(",", "")
-                            celda.parent().parent().find(".total").html(number_format(cant * val, 2, ".", ""))
-                        }else{
-                            var val = celda.val()
-                            val = val.replace(",", "")
-                            var precio = celda.parent().parent().find(".precio").html()
-                            precio = precio.replace(",", "")
-                            celda.parent().parent().find(".total").html(number_format(precio * val, 2, ".", ""))
-                        }
-                    }
 
                     $('#tbl').dataTable({
                         sScrollY        : "600px",
@@ -276,37 +276,44 @@
                         }
                     });
 
-                    $("#txt").blur(function () {
-//            console.log("blur")
-                        if ($("#txt").val() != "") {
-                            updateTotal($(this))
-                            var valor = $(this).val()
-                            $(this).val("")
-                            $(this).hide()
-                            var padre = $(this).parent()
-                            $("#totales").append($(this))
-                            padre.addClass("changed")
-                            padre.html(valor)
-                            if(padre.hasClass("precio"))
-                                padre.addClass("textoPrecio")
-                            else
-                                padre.addClass("texto")
-                        }
-                    })
+
+                    function stopEditing() {
+//                        console.log("stop editing txt", $("#txt"), "val=",$("#txt").val());
+                        var valor = $("#txt").val();
+                        $("#txt").val("");
+                        $("#txt").hide();
+                        var padre = $("td.editando");
+                        console.log("padre: ",padre);
+//                        $("#totales").append($("#txt"));
+                        padre.addClass("changed");
+                        padre.html(valor);
+                        padre.addClass("texto");
+                        padre.removeClass("editando");
+                    }
 
                     var txt = $("#txt")
-                    $(".cantidad").click(function () {
-                        if ($(this).hasClass("texto")) {
-                            txt.width($(this).innerWidth() - 25)
-                            var valor = $(this).html().trim()
-                            $(this).html("")
-                            txt.val(valor)
-                            $(this).append(txt)
-                            txt.show()
-                            $(this).removeClass("texto")
-                            txt.focus()
+                    txt.keyup(function(ev) {
+                        console.log('key:' , ev.keyCode)
+                        if(ev.keyCode==13) {
+                            stopEditing();
                         }
+                    });
 
+                    $(".cantidad").click(function () {
+                        console.log("click", $(this));
+                        if ($(this).hasClass("texto")) {
+                            stopEditing();
+                            txt.width($(this).innerWidth() - 25);
+                            var valor = $(this).html().trim();
+                            console.log("...." + valor);
+                            $(this).html("");
+                            txt.val(valor);
+                            $(this).append(txt);
+                            txt.show();
+                            $(this).removeClass("texto");
+                            txt.focus();
+                            $(this).addClass("editando");
+                        }
                     });
 
                 });

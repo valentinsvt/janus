@@ -396,6 +396,7 @@ class IndiceController extends janus.seguridad.Shield {
         html += "<th>Nombre del Indice</th>"
         html += "<th>${PeriodosInec.get(prinAnterior)?.descripcion}</th>"
         html += "<th>${PeriodosInec.get(prin).descripcion}</th>"
+        html += "<th>Copiar Anterior</th>"
 
         def body = ""
         cn.eachRow(sqlTx.toString()) { d ->
@@ -421,6 +422,12 @@ class IndiceController extends janus.seguridad.Shield {
                 }
                 body += "<td class='${editar} number' data-original='${p}' data-prin='${periodos[cont]}' " +
                         "data-id='${rubro}' data-indc='${d.indc__id}' data-valor='${p}'>" + prec + '</td>'
+                if(cont==1){
+                    body += "<td style='text-align:center'><a class='btn btn-small btn-show btn-ajax btCopia' href='#' rel='tooltip' title='Copiar' " +
+                            "</a>Copiar</td>"
+                }
+
+
                 cont++
             }
 /*
@@ -443,6 +450,13 @@ class IndiceController extends janus.seguridad.Shield {
         cn.close()
         cn1.close()
         html += body
+        html += "<script type=\'text/javascript\'>  \$(function () { \$('.btCopia').click(function () {" +
+//                "console.log('--->' + \$(this).parent().prev().data('valor'));" +
+//                "console.log('--->' + \$(this).parent().prev().prev().data('valor'));" +
+                "var vl = \$(this).parent().prev().prev().data('valor');" +
+                "\$(this).parent().prev().data('valor',vl).text(vl);" +
+                "}); });</script>"
+
         html += "</tbody>"
         html += "</table>"
         //println html

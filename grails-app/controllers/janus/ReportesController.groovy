@@ -2841,7 +2841,7 @@ class ReportesController {
             }
 
             txtDatos1.setAlignment(Element.ALIGN_CENTER);
-            txtDatos1.add(new Paragraph("COSTO INDIRECTO TOTAL : 21 %", times8bold));
+            txtDatos1.add(new Paragraph("COSTO INDIRECTO TOTAL : ${obra?.totales} %", times8bold));
             txtDatos1.add(new Paragraph(" ", times8bold));
 
             addEmptyLine(txtRetenciones, 1);

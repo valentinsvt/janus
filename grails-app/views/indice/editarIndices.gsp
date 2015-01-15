@@ -70,13 +70,14 @@
             </div>
         </fieldset>
 
-        <fieldset class="borde" style="width: 1000px">
+        <fieldset class="borde" style="width: 1100px">
 
             <div id="divTabla" style="height: 760px; overflow-y:auto; overflow-x: hidden;">
 
             </div>
 
 
+%{--
             <fieldset class="borde hide" style="width: 1170px; height: 58px" id="error">
 
                 <div class="alert alert-error">
@@ -90,6 +91,7 @@
                 </div>
 
             </fieldset>
+--}%
         </fieldset>
 
         <script type="text/javascript">
@@ -100,7 +102,7 @@
 
                 var prin = $("#periodoIndices").val();
 
-//                //console.log("antes de ajax .. periodo de indices:" + prin);
+//                console.log("antes de ajax .. periodo de indices:" + prin);
 
                 $.ajax({
                     type    : "POST",
@@ -121,7 +123,7 @@
                     consultar();
                     $("#divTabla").show();
                 });
-
+                          36
                 $(".btn-actualizar").click(function () {
                     $("#dlgLoad").dialog("open");
                     var data = "";
@@ -134,7 +136,6 @@
                         var data1 = $(this).data("original");
                         ////console.log(chk);
 
-//                        if ((parseFloat(valor) > 0 && parseFloat(data1) != parseFloat(valor))) {
                         if ((parseFloat(data1) != parseFloat(valor))) {
                             if (data != "") {
                                 data += "&";

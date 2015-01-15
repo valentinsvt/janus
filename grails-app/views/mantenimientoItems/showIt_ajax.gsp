@@ -155,6 +155,42 @@
         </div>
     </g:if>
 
+    <g:if test="${itemInstance?.fechaModificacion}">
+        <div class="control-group">
+            <div>
+                <span id="fechaModificacion-label" class="control-label label label-inverse">
+                    Tipo de Bien
+                </span>
+            </div>
+
+            <div class="controls">
+
+                <span aria-labelledby="fecha-label">
+                    ${itemInstance?.tipoDeBien} (${itemInstance?.tipoDeBien?.codigo})
+                </span>
+
+            </div>
+        </div>
+    </g:if>
+
+    <g:if test="${itemInstance?.fechaModificacion}">
+        <div class="control-group">
+            <div>
+                <span id="fechaModificacion-label" class="control-label label label-inverse">
+                    Código CPC
+                </span>
+            </div>
+
+            <div class="controls">
+
+                <span aria-labelledby="fecha-label">
+                    ${itemInstance?.codigoComprasPublicas?.numero}
+                </span>
+
+            </div>
+        </div>
+    </g:if>
+
     <g:if test="${itemInstance?.transportePeso}">
         <div class="control-group">
             <div>
