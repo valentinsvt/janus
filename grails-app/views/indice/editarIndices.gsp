@@ -123,7 +123,7 @@
                     consultar();
                     $("#divTabla").show();
                 });
-                          36
+
                 $(".btn-actualizar").click(function () {
                     $("#dlgLoad").dialog("open");
                     var data = "";
