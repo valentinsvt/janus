@@ -50,7 +50,7 @@
     }
 
     .tituloPdf {
-        height        : 100px;
+        height        : 60px;
         font-size     : 11px;
         /*font-weight   : bold;*/
         text-align    : center;
@@ -120,10 +120,7 @@
     }
 
     .tituloHeader{
-
         font-size: 14px !important;
-
-
     }
 
 
@@ -178,7 +175,7 @@
         </p>
     </div>
 
-    <div style="margin-top: 20px">
+    <div style="margin-top: 0px">
         <div class="row-fluid">
             <div class="span3" style="margin-right: 195px !important; width: 500px;">
                 <g:if test="${fechaSalida}">
@@ -253,30 +250,51 @@
             ${tablaTrans2}
         </g:if>
         ${tablaIndi}
-        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;margin-left: 330px;  width: 40%;float: left;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000">
+        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 25px; width: 600px;float: right;  border-top: 1px solid #000000;  border-bottom: 1px solid #000000;">
             <tbody>
             <tr>
-                <td style="width: 300px; border-bottom: #000000">
+                <td style="width: 240px; border-bottom: #000000">
                     <b>COSTO UNITARIO DIRECTO</b>
                 </td>
-                <td style="text-align: left">
+                <td style="text-align: right; width: 50px;">
                     <b> <g:formatNumber number="${totalRubro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
+                </td>
+
+                %{--<td style="border-left: 1px solid #000000; width: 14px">&nbsp; </td>--}%
+                <td style="width: 120px; text-align: center">
+                    <b> <g:formatNumber number="${totalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
+                </td>
+                <td style="width: 100px"> </td>
+                <td style="text-align: right; width: 40px;">
+                    <b> <g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>
             </tr>
             <tr>
                 <td>
                     <b>COSTOS INDIRECTOS</b>
                 </td>
-                <td style="text-align: left;">
+                <td style="text-align: right;">
                     <b> <g:formatNumber number="${totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
+                </td>
+                <td style="text-align: center"><b>TOTAL</b></td>
+                <td> </td>
+                <td style="text-align: center">
+                    <b>TOTAL</b>
                 </td>
             </tr>
             <tr>
                 <td>
                     <b>COSTO TOTAL DEL RUBRO</b>
                 </td>
-                <td style="text-align: left">
+                <td style="text-align: right">
                     <b>  <g:formatNumber number="${totalRubro + totalIndi}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
+                </td>
+                <td style="text-align: center">
+                    <b>PESO</b>
+                </td>
+                <td> </td>
+                <td style="text-align: center">
+                    <b>VAE</b>
                 </td>
 
             </tr>
@@ -284,28 +302,22 @@
                 <td>
                     <b>PRECIO UNITARIO $USD</b>
                 </td>
-                <td style="text-align: left">
+                <td style="text-align: right">
                     <b><g:formatNumber number="${(totalRubro + totalIndi).toDouble().round(2)}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
 
                 </td>
+                <td style="text-align: center">
+                    <b>RELATIVO (%)</b>
+                </td>
+                <td> </td>
+                <td style="text-align: center">
+                    <b>(%)</b>
+                </td>
             </tr>
 
 
             </tbody>
         </table>
-        <table class="table table-bordered table-striped table-condensed table-hover" style="margin-top: 40px;width: 25%;float: right;  border-top: 1px solid #000000;">
-            <tbody>
-            <tr>
-                <td style="width: 350px;">
-                    <b> <g:formatNumber number="${totalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
-                </td>
-                <td style="text-align: right">
-                    <b> <g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
 
     </div>
     <table style="margin-top: 130px">
