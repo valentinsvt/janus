@@ -54,14 +54,26 @@ class ContratoController extends janus.seguridad.Shield {
 
         if (params.contrato) {
             contrato = Contrato.get(params.contrato)
+//            println "ANT " + contrato.anticipo
+            if (!contrato.anticipo) {
+                println "...no tiene anticipo....."
+                if (contrato.monto && contrato.porcentajeAnticipo) {
+                    println "\ttiene monto y porcentaje de anticipo....calcula el monto del anticipo...."
+                    def anticipo = contrato.monto * (contrato.porcentajeAnticipo / 100)
+                    contrato.anticipo = anticipo
+                    contrato.save(flush: true)
+                } else {
+                    println "\tno tiene monto o porcentaje de anticipo...no puedo calcular el monto del anticipo...."
+                }
+            }
 
             /* sólo si el usaurio es un Directos puede acceder al os botones de Adminsitrador, Fiscalizador y Delegado */
             def obra = contrato.oferta.concurso.obra
-            println ".........." + obra
+//            println ".........." + obra
             def dptoDireccion = Departamento.findAllByDireccion(obra.departamento.direccion)
             def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion)
             def directores = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalDireccion).persona.id
-            println "directores:" + directores + "  usurio: " + session.usuario.id
+//            println "directores:" + directores + "  usurio: " + session.usuario.id
             def esDirector = directores.contains(session.usuario.id)? "S": "N"
             println "esDirector:" + esDirector
 

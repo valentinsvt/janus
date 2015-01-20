@@ -1613,6 +1613,9 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         def perOferta = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaOferta, fechaOferta)
         def perAnticipo = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(fechaAnticipo, fechaAnticipo)
+        if(!perAnticipo){
+            perAnticipo = PeriodosInec.list([sort: "fechaFin",order: "desc","limit":3]).first()
+        }
 
         //TODO: comentar todo esto despues de las pruebas
 //        def dof = fechaOferta.format("dd")
@@ -2007,23 +2010,31 @@ class Planilla2Controller extends janus.seguridad.Shield {
             pcs.each { c ->
                 def val = ValorIndice.findByIndiceAndPeriodo(c.indice, per)
                 if (!val) {
-                    def vals = ValorIndice.withCriteria {
-                        eq("indice", c.indice)
-                        periodo {
-                            le("fechaInicio", per.fechaInicio)
-                            order("fechaInicio", "asc")
-                        }
-                    }
-//                println "no hay val   ${c.indice.id}---- ${per} "+vals.periodo
-                    if (vals.size() > 0) {
-                        perNuevo = vals.pop().periodo
-                    } else {
-                        if (!flash.message.contains(c.indice.toString()) || !flash.message.contains(per.toString())) {
-                            flash.message += "<li>No se encontró el valor de índice de  " + c.indice + " en el periodo " + per + "</li>"
-                        }
-                        println "error wtf  " + c.indice + " (" + c.indice.id + ") " + per + " (" + per.id + ")"
-                        perNuevo = null
-                    }
+//                    def vals = ValorIndice.withCriteria {
+//                        eq("indice", c.indice)
+//                        periodo {
+//                            le("fechaInicio", per.fechaInicio)
+//                            order("fechaInicio", "asc")
+//                        }
+//                    }
+////                println "no hay val   ${c.indice.id}---- ${per} "+vals.periodo
+//                    if (vals.size() > 0) {
+//                        perNuevo = vals.pop().periodo
+//                    } else {
+//                        if (!flash.message.contains(c.indice.toString()) || !flash.message.contains(per.toString())) {
+//                            flash.message += "<li>No se encontró el valor de índice de  " + c.indice + " en el periodo " + per + "</li>"
+//                        }
+//                        println "error wtf  " + c.indice + " (" + c.indice.id + ") " + per + " (" + per.id + ")"
+//                        perNuevo = null
+//                    }
+                    /*Agrego un valor en 1 20-01-2015*/
+                    println "creando nuevo valor  para "+c.indice+" , "+per+" "
+                    def valNuevo = new ValorIndice()
+                    valNuevo.indice=c.indice
+                    valNuevo.periodo=per
+                    valNuevo.valor=1
+                    valNuevo.save(flush: true)
+                    val = valNuevo
                 }
             }
 
