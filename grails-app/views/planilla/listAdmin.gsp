@@ -37,7 +37,7 @@
                 </g:link>
 
                 <g:if test="${anticipo == 0}">
-                    <g:if test="${contrato.administrador.id == session.usuario.id}">
+                    <g:if test="${contrato?.administrador?.id == session.usuario.id}">
                     <g:link action="form" class="btn" params="[contrato: contrato.id]">
                         <i class="icon-file"></i>
                         Nueva planilla

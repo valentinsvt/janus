@@ -1082,12 +1082,14 @@ class PlanillaController extends janus.seguridad.Shield {
                     def tipoTramitePadre
                     tiposTramitePadre.each { tt ->
                         def dptoDe = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("DE"))
+                        println "dptode "+dptoDe +"   "+tt
 //                    def dptoPara = DepartamentoTramite.findByTipoTramiteAndRolTramite(tt, RolTramite.findByCodigo("PARA"))
-                        if (dptoDe.departamento == obraDpto) {
+                        if (dptoDe?.departamento == obraDpto) {
 //                        println "SIP"
                             tipoTramitePadre = tt
                         }
                     }
+                    println " asdasd "+tipoTramitePadre
                     //////////////////////////////////
                     tipoTramite = new TipoTramite([
                             padre            : tipoTramitePadre,

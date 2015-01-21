@@ -59,7 +59,8 @@ class ReportesPlanillas2Controller {
 
         def periodoPlanilla
         if (planilla.tipoPlanilla.codigo == "A") {
-              periodoPlanilla = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion)
+            println "aaa"
+            periodoPlanilla = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion)
             if(!periodoPlanilla){
                 periodoPlanilla = PeriodosInec.list([sort: "fechaFin",order: "desc","limit":3]).first()
             }

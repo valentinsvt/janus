@@ -40,8 +40,8 @@
                         Contrato
                     </g:link>
                     <g:if test="${anticipo > 0}">
-                        <g:if test="${contrato.fiscalizador.id == session.usuario.id}">
-                        <g:link action="form" class="btn" params="[contrato: contrato.id]">
+                        <g:if test="${contrato?.fiscalizador?.id == session.usuario.id}">
+                        <g:link action="form" class="btn" params="[contrato: contrato?.id]">
                             <i class="icon-file"></i>
                             Nueva planilla
                         </g:link>
