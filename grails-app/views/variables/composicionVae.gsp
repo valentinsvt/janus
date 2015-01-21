@@ -117,7 +117,7 @@
             <g:set var="totalEquipo" value="${0}"/>
             <g:set var="totalMano" value="${0}"/>
             <g:set var="totalMaterial" value="${0}"/>
-            <g:set var="sumaVaeEq" value="${0}"/>                               sumaVaeMt/totalMaterial*100
+            <g:set var="sumaVaeEq" value="${0}"/>
             <g:set var="sumaVaeMt" value="${0}"/>
             <g:set var="sumaVaeMo" value="${0}"/>
             <g:each in="${res}" var="r">
@@ -192,7 +192,7 @@
                         <td>${r?.grupo}</td>
                     </g:if>
                     <td class="editable numero cantidad texto" data-original="${r?.tpbnpcnt}"
-                        data-id="${r?.item__id}" data-valor='00'>${r?.tpbnpcnt}
+                        data-id="${r?.item__id}" data-valor="${r?.tpbnpcnt}">${r?.tpbnpcnt}
                     %{--<g:formatNumber number="${r?.tpbnpcnt}" minFractionDigits="2" maxFractionDigits="2" format="###,#0" locale="ec"/>--}%
                     </td>
                 </tr>
@@ -266,7 +266,15 @@
 </div>
 
 <script type="text/javascript">
+    function doEdit() {
+
+    }
+
     $(function () {
+
+        $( "#dlgLoad" ).dialog({
+            autoOpen: false
+        });
 
         $('#tbl').dataTable({
             sScrollY: "600px",
@@ -289,13 +297,12 @@
 
 
         function stopEditing() {
-//                        console.log("stop editing txt", $("#txt"), "val=",$("#txt").val());
+//            console.log("stop editing txt", $("#txt"), "val=",$("#txt").val());
             var valor = $("#txt").val();
             $("#txt").val("");
             $("#txt").hide();
             var padre = $("td.editando");
-            console.log("padre: ", padre);
-//                        $("#totales").append($("#txt"));
+//            console.log("padre: ", padre);
             padre.addClass("changed");
             padre.html(valor);
             padre.addClass("texto");
@@ -303,20 +310,14 @@
         }
 
         var txt = $("#txt")
-        txt.keyup(function (ev) {
-            console.log('key:', ev.keyCode)
-            if (ev.keyCode == 13) {
-                stopEditing();
-            }
-        });
 
         $(".cantidad").click(function () {
-            console.log("click", $(this));
+//            console.log("click", $(this));
             if ($(this).hasClass("texto")) {
                 stopEditing();
                 txt.width($(this).innerWidth() - 25);
                 var valor = $(this).html().trim();
-                console.log("...." + valor);
+//                console.log("...." + valor);
                 $(this).html("");
                 txt.val(valor);
                 $(this).append(txt);
@@ -324,6 +325,13 @@
                 $(this).removeClass("texto");
                 txt.focus();
                 $(this).addClass("editando");
+                txt.keyup(function (ev) {
+//                    console.log('key:', ev.keyCode)
+                    if (ev.keyCode == 13) {
+                        stopEditing();
+                    }
+                });
+
             }
         });
 
@@ -333,25 +341,25 @@
 
             $(".editable").each(function () {
                 var id = $(this).data("id");
-                var valor = $(this).data("valor");
+                var valor = $(this).html().trim();
                 var data1 = $(this).data("original");
-                ////console.log(chk);
+//                console.log('valores' + id, "valor:" + $(this).html().trim(), "original: " + data1);
 
                 if ((parseFloat(data1) != parseFloat(valor))) {
                     if (data != "") {
                         data += "&";
                     }
                     var val = valor ? valor : data1;
-                    data += "item=" + id + "_" + prin + "_" + indc + "_" + valor;
+                    data += "item=" + id + "_" + valor;
+//                    console.log("item: ", data)
                 }
-                //console.log("item: " + data)
             });
 
 
             $.ajax({
                 type    : "POST",
                 url     : "${createLink(action: 'actualizaVae')}",
-                data    : data,
+                data    : data + "&obra=" + ${obra.id},
                 success : function (msg) {
                     $("#dlgLoad").dialog("close");
                     var parts = msg.split("_");

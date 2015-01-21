@@ -155,6 +155,7 @@
         </div>
     </g:if>
 
+%{--
     <g:if test="${itemInstance?.fechaModificacion}">
         <div class="control-group">
             <div>
@@ -172,6 +173,7 @@
             </div>
         </div>
     </g:if>
+--}%
 
     <g:if test="${itemInstance?.fechaModificacion}">
         <div class="control-group">

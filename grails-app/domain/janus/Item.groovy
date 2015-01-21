@@ -29,7 +29,6 @@ class Item implements Serializable {
     TipoLista tipoLista
     String especificaciones
     String codigoEspecificacion
-    TipoDeBien tipoDeBien
     CodigoComprasPublicas codigoComprasPublicas
 
     static auditable = true
@@ -68,7 +67,6 @@ class Item implements Serializable {
             tipoLista column: 'tpls__id'
             especificaciones column: 'itemespc'
             codigoEspecificacion column: 'itemcdes'
-            tipoDeBien column: 'tpbn__id'
             codigoComprasPublicas column: 'cpac__id'
         }
     }
@@ -99,7 +97,6 @@ class Item implements Serializable {
         tipoLista(blank: true, nullable: true)
         especificaciones(blank: true, nullable: true, size: 1..1024)
         codigoEspecificacion(blank: true, nullable: true, size: 1..30)
-        tipoDeBien(blank: true, nullable: true, attributes: [title: 'Tipo de Bien'])
         codigoComprasPublicas(blank: true, nullable: true, attributes: [title: 'Código de Compras Públicas'])
     }
 
