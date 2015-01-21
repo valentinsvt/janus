@@ -20,12 +20,13 @@ class MantenimientoItemsController extends Shield {
     } //index
 
     String makeBasicTree(params) {
-
+        println "PARAMS: "+params
         def id = params.id
         def tipo = params.tipo
         def precios = params.precios
         def all = params.all ? params.all.toBoolean() : false
         def ignore = params.ignore ? params.ignore.toBoolean() : false
+        def vae = params.vae
 
 //        println "all:" + all + "     ignore:" + ignore
 //        println id
@@ -44,7 +45,7 @@ class MantenimientoItemsController extends Shield {
 //                if (hijos.size() == 2) {
 //                    hijos = hijos[1].id
 //                }
-//                hijos = DepartamentoItem.findAllBySubgrupo(SubgrupoItems.get(hijos), [sort: 'codigo'])
+//                hijos = DepartamentoItem.findAllBySubgrutipoLispo(SubgrupoItems.get(hijos), [sort: 'codigo'])
 //                break;
             case "grupo_material":
             case "grupo_equipo":
@@ -69,6 +70,7 @@ class MantenimientoItemsController extends Shield {
             case "item_consultoria":
             case "item_material":
             case "item_equipo":
+            println "ITEMS vae "+vae+"   params="+params
                 def tipoLista = Item.get(id).tipoLista
 //                println(tipoLista)
 //
@@ -103,6 +105,8 @@ class MantenimientoItemsController extends Shield {
 //                            /*hijos = Lugar.findAll([sort: 'descripcion'])*/
 //                        }
                     }
+                } else if(vae){
+                    hijos = VaeItems.findAllByItem(Item.get(params.id))
                 }
                 break;
         }
@@ -176,7 +180,10 @@ class MantenimientoItemsController extends Shield {
                                 hijosH = Lugar.findAllByTipoLista(tipoLista)
                             }
                         }
+                    } else if(vae){
+                        hijosH = VaeItems.findAllByItem(hijo)
                     }
+
 
                     desc = hijo.codigo + " " + hijo.nombre
 
@@ -224,6 +231,8 @@ class MantenimientoItemsController extends Shield {
                                 hijosH = Lugar.findAllByTipoLista(tipoLista)
                             }
                         }
+                    } else if(vae){
+                        hijosH = VaeItems.findAllByItem(hijo)
                     }
                     desc = hijo.codigo + " " + hijo.nombre
                     def parts = tipo.split("_")
@@ -257,9 +266,16 @@ class MantenimientoItemsController extends Shield {
 //
 //                        }
 //                    }
-//                    break;
+                    if(vae){
+                        hijosH = []
+                        desc = "VAE"
+                        rel = "vae"
+                        liId = "vae_"+id+"_"+hijo.id
+                    }
+                    break;
                 case "item_material":
                 case "item_equipo":
+                println "AQUI hijo="+hijo
                     if (precios) {
                         hijosH = []
                         if (ignore) {
@@ -284,6 +300,11 @@ class MantenimientoItemsController extends Shield {
                             extra = "data-obras='${obras}'"
 
                         }
+                    }  else if(vae){
+                        hijosH = []
+                       desc = "VAE"
+                        rel = "vae"
+                        liId = "vae_"+id+"_"+hijo.id
                     }
                     break;
             }
@@ -1183,7 +1204,6 @@ class MantenimientoItemsController extends Shield {
                 params: params, precioRef: r.precioRef, anioRef: r.anioRef]
     }
 
-
     def formLg_ajax() {
         def lugarInstance = new Lugar()
         def tipo = "C"
@@ -1319,4 +1339,53 @@ class MantenimientoItemsController extends Shield {
             render "NO"
         }
     }
+
+    def vae() {
+        //<!--grpo--><!--sbgr -> Grupo--><!--dprt -> Subgrupo--><!--item-->
+        //materiales = 1
+        //mano de obra = 2
+        //equipo = 3
+    }
+
+    def showVa_ajax() {
+        def parts = params.id.split("_")
+        def idMaterial = parts[0]
+        def idVae=parts[1]
+        def item = Item.get(parts[0])
+        def vaeItems = VaeItems.findAllByItem(item, [sort: 'fecha'])
+        return [params:params, item:item, vaeItems: vaeItems]
+    }
+
+    def formVa_ajax() {
+        println " vae: " + params
+        def vaeInstance = new VaeItems()
+        if (params.fechaVae)
+            vaeInstance.fecha = new Date().parse("dd-MM-yyyy", params.fechaVae)
+        println vaeInstance.fecha
+        def itemInstance = Item.get(params.item)
+        if (params.id) {
+            vaeInstance = VaeItems.get(params.id)
+        }
+
+        return [vaeInstance: vaeInstance, itemInstance: itemInstance]
+
+    }
+
+    def saveVa_ajax() {
+        println "saveVa_ajax" +  params
+        def accion = "create"
+        def vaeItems = new VaeItems()
+        if (params.fecha)
+            params.fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+        params.fechaIngreso = new Date()
+        vaeItems.properties = params
+        if (vaeItems.save(flush: true)) {
+            render "OK_" + accion + "_" + vaeItems.id + "_" + vaeItems.porcentaje
+        } else {
+            println "Vae items: " + vaeItems.errors
+            def errores = g.renderErrors(bean: vaeItems)
+            render "NO_" + errores
+        }
+    }
+
 }

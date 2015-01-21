@@ -465,7 +465,7 @@ class IndiceController extends janus.seguridad.Shield {
 
     def actualizaVlin() {
         /* TODO hacer función y mejorar presentación de valores */
-//        println "actualizaVlin: " + params
+        println "actualizaVlin: " + params
 //        println("clase " + params?.item?.class)
         // formato de id:###/new _ prin _ indc _ valor
         if(params?.item?.class == java.lang.String) {

@@ -180,4 +180,29 @@ class VariablesController  extends janus.seguridad.Shield{
         return [res: res, obra: obra, tipo: params.tipo]
     }
 
+
+    def actualizaVae() {
+        def cn = dbConnectionService.getConnection()
+//        println "actualizaVae: " + params
+//        println("clase " + params?.item?.class)
+        // formato de id:###/new _ prin _ indc _ valor
+        if(params?.item?.class == java.lang.String) {
+            params?.item = [params?.item]
+        }
+
+        def oks = "", nos = ""
+        params.item.each {
+            //println "Procesa: " + it
+            def vlor = it.split("_")
+//            println "vlor: " + vlor
+            if (vlor[0] != "new") {
+//                println "nuevo valor: " + vlor[0].toInteger()
+//                println "update vlobitem set tpbnpcnt = ${vlor[1].toDouble()} where obra__id = ${params.obra} and item__id = ${vlor[0]}"
+                cn.execute("update vlobitem set tpbnpcnt = ${vlor[1].toDouble()} where obra__id = ${params.obra} and item__id = ${vlor[0]}".toString())
+            }
+        }
+        render "ok"
+    }
+
+
 }

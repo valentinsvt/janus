@@ -59,13 +59,14 @@ class ReportesPlanillas2Controller {
 
         def periodoPlanilla
         if (planilla.tipoPlanilla.codigo == "A") {
-            println "aaa"
-            periodoPlanilla = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion)
+//            println "aaaa"
+              periodoPlanilla = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion)
             if(!periodoPlanilla){
                 periodoPlanilla = PeriodosInec.list([sort: "fechaFin",order: "desc","limit":3]).first()
             }
 //            str += 'Anticipo (' + periodoInec?.descripcion + ")"
             periodoPlanilla = 'Anticipo (' + periodoPlanilla.descripcion + ")"
+//            println "bbbbb"
         } else {
             if (planilla.tipoPlanilla.codigo == "L") {
                 periodoPlanilla = "Liquidación del reajuste (${fechaConFormato(planilla.fechaPresentacion, 'dd-MMM-yyyy')})"
