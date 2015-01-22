@@ -1232,7 +1232,7 @@ class ReportesPlanillas2Controller {
 //        }
 //        // Close the stamper
 //        stamper.close();
-
+            println "aaabb"
         pdfw.close()
         byte[] b = baos.toByteArray();
         response.setContentType("application/pdf")

@@ -414,7 +414,7 @@ class IndiceController extends janus.seguridad.Shield {
                 p = 0.0
                 editar = periodos[cont]? "editable" : ""
                 cn1.eachRow(txValor.toString()) { v ->
-                    if (v.vlinvalr) {
+                    if (v.vlinvalr != null) {
                         prec = g.formatNumber(number: v.vlinvalr, maxFractionDigits: 2, minFractionDigits: 2, locale: "ec")
                         p = v.vlinvalr
                         rubro = v.vlin__id
@@ -465,7 +465,7 @@ class IndiceController extends janus.seguridad.Shield {
 
     def actualizaVlin() {
         /* TODO hacer función y mejorar presentación de valores */
-        println "actualizaVlin: " + params
+//        println "actualizaVlin: " + params
 //        println("clase " + params?.item?.class)
         // formato de id:###/new _ prin _ indc _ valor
         if(params?.item?.class == java.lang.String) {
@@ -474,17 +474,18 @@ class IndiceController extends janus.seguridad.Shield {
 
         def oks = "", nos = ""
         params.item.each {
-            //println "Procesa: " + it
+//            println "Procesa: " + it
+
             def vlor = it.split("_")
             def nuevo = new ValorIndice()
-            println "vlor: " + vlor
+//            println "vlor: " + vlor
             if (vlor[0] != "new") {
                 nuevo = ValorIndice.get(vlor[0].toInteger())
             }
             nuevo.periodo = PeriodosInec.get(vlor[1])
             nuevo.indice = Indice.get(vlor[2])
             nuevo.valor = vlor[3].toDouble()
-            println "periodo: ${nuevo.periodo}, indice: ${nuevo.indice}, valor: ${nuevo.valor}"
+//            println "periodo: ${nuevo.periodo}, indice: ${nuevo.indice}, valor: ${nuevo.valor}"
             if (!nuevo.save(flush: true)) {
                 println "indice controller l 395: "+"error " + vlor
                 if (nos != "") {
