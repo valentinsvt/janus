@@ -1911,6 +1911,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         vlinOferta = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo)?.valor
                         if (!vlinOferta) {
                             println "WTF no hay vlinOferta indice: ${p.indice} (${p.indiceId}), periodo: ${per.periodo} (${per.periodoId})"
+//                            println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
+//                            valor = 0
+                            flash.message = "<p><ul>No hay valor para ${p.indice} en el periodo ${per.periodo}. No se puede generar la planilla</ul></p>"
+                            redirect(action: "errores")
+                            return
                         }
                         tablaFr += "<td class='number'><div>${numero(p.valor, 3)}</div><div class='bold'>${numero(vlinOferta, 3)}</div></td>"
                         valor = vlinOferta
