@@ -58,12 +58,15 @@ class ReportesPlanillas2Controller {
         }
 
         def periodoPlanilla
+        if(!planilla.periodoAnticipo) {
+            periodoPlanilla = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
+//            planilla.periodoAnticipo=periodoPlanilla
+//            planilla.save()
+        }else
+            periodoPlanilla=planilla.periodoAnticipo
         if (planilla.tipoPlanilla.codigo == "A") {
 //            println "aaaa"
-              periodoPlanilla = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(planilla.fechaPresentacion, planilla.fechaPresentacion)
-            if(!periodoPlanilla){
-                periodoPlanilla = PeriodosInec.list([sort: "fechaFin",order: "desc","limit":3]).first()
-            }
+            periodoPlanilla = PeriodosInec.list([sort: "fechaFin",order: "desc","limit":3]).first()
 //            str += 'Anticipo (' + periodoInec?.descripcion + ")"
             periodoPlanilla = 'Anticipo (' + periodoPlanilla.descripcion + ")"
 //            println "bbbbb"
@@ -1203,6 +1206,8 @@ class ReportesPlanillas2Controller {
                 printFirmas([tipo: "detalle", orientacion: "vertical"])
             }
         }
+        if(planilla.tipoPlanilla.codigo=="A")
+            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo}", fontTitle))
         /* ***************************************************** Fin Detalles *************************************************************/
 
         document.close();

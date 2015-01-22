@@ -61,6 +61,9 @@ class Planilla {
     Planilla padreCosto
 
     Double avanceFisico
+
+    PeriodosInec periodoAnticipo
+
     static auditable = true
     static mapping = {
         table 'plnl'
@@ -127,6 +130,7 @@ class Planilla {
             padreCosto column: 'plnlpdcs'
 
             avanceFisico column: 'plnlavfs'
+            periodoAnticipo column: 'prinantc'
         }
     }
 
@@ -176,5 +180,6 @@ class Planilla {
         fiscalizador(blank: true, nullable: true)
 
         padreCosto(blank: true, nullable: true)
+        periodoAnticipo(blank: true, nullable: true)
     }
 }
