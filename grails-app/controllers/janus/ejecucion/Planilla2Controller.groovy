@@ -1763,51 +1763,59 @@ class Planilla2Controller extends janus.seguridad.Shield {
             tablaBo += "<th class='nb'>" + fechaConFormato(it.fechaIncio, "MMM-yy") + "</th>"
         }
 
+        def band = true
         tablaBo += "</tr>"
         tablaBo += "</thead>"
         tablaBo += "<tbody>"
         def totalCoef = 0
         cs.each { c ->
-            tablaBo += "<tr>"
-            tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
-            tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
-            totalCoef += c.valor
-            periodos.each { p ->
+            if(band) {
+                tablaBo += "<tr>"
+                tablaBo += "<th class='tal'>" + c.indice.descripcion + " (${c.numero})</th>"
+                tablaBo += "<th class='number'>" + numero(c.valor) + "</th>"
+                totalCoef += c.valor
+                periodos.each { p ->
 //                println "periodo " + p.periodo + " indice: " + c.indice
 //                println "valor: " + ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)
-                def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)?.valor
-                if (!valor) {
-                    println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
-                    valor = 0
-                    flash.message = "<p><ul>No hay valor para ${c.indice} en el periodo ${p.periodo}. No se puede generar la planilla</ul></p>"
-                    redirect(action: "errores")
-                    return
-                }
+                    def valor = ValorIndice.findByPeriodoAndIndice(p.periodo, c.indice)?.valor
+                    if (!valor) {
+                        println "wtf no valor periodo: per: ${p.periodo} (${p.periodoId}), indice: ${c.indice} (${c.indiceId})"
+                        valor = 0
+                        flash.message = "<p><ul>No hay valor para ${c.indice} en el periodo ${p.periodo}. No se puede generar la planilla</ul></p>"
 
-                p.total += (valor * c.valor).round(3)
-                p.save(flush: true)
+                        band = false
+                        return
+                    }
 
-                tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
-                valor = (valor * c.valor).round(3)
-                def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
-                if (vlrj.size() > 0) {
-                    vlrj = vlrj.pop()
-                    if (vlrj != valor) {
-                        vlrj.valor = valor
+                    p.total += (valor * c.valor).round(3)
+                    p.save(flush: true)
+
+                    tablaBo += "<td class='number'>" + numero(valor, 2) + "</td>"
+                    valor = (valor * c.valor).round(3)
+                    def vlrj = ValorReajuste.findAll("from ValorReajuste where obra=${obra.id} and planilla=${planilla.id} and periodoIndice =${p.periodo.id} and formulaPolinomica=${c.id}")
+                    if (vlrj.size() > 0) {
+                        vlrj = vlrj.pop()
+                        if (vlrj != valor) {
+                            vlrj.valor = valor
+                            if (!vlrj.save(flush: true)) {
+                                println "error vlrj update " + vlrj.errors
+                            }
+                        }
+                    } else {
+                        vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodo, formulaPolinomica: c, valor: valor])
                         if (!vlrj.save(flush: true)) {
-                            println "error vlrj update " + vlrj.errors
+                            println "error vlrj insert " + vlrj.errors
                         }
                     }
-                } else {
-                    vlrj = new ValorReajuste([obra: obra, planilla: planilla, periodoIndice: p.periodo, formulaPolinomica: c, valor: valor])
-                    if (!vlrj.save(flush: true)) {
-                        println "error vlrj insert " + vlrj.errors
-                    }
+                    tablaBo += "<td class='number'>" + numero(valor) + "</td>"
                 }
-                tablaBo += "<td class='number'>" + numero(valor) + "</td>"
-            }
 
-            tablaBo += "</tr>"
+                tablaBo += "</tr>"
+            }
+        }
+        if(!band) {
+            redirect(action: "errores")
+            return
         }
         tablaBo += "</tbody><tfoot>"
         tablaBo += "<tr>" + "<th>TOTALES</th><th class='number'>${numero(totalCoef)}</th>"
