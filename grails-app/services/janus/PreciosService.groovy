@@ -480,6 +480,18 @@ class PreciosService {
 
     }
 
+    def verificaIndicesPeriodo(contrato,periodo){
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from verifica_indices("+ contrato.id + ","+ periodo.id +") "
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+//            println "res "+r
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+    }
+
 
     def actualizaOrden(volumen, tipo) {
 

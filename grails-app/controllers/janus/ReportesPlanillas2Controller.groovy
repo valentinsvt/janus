@@ -213,7 +213,7 @@ class ReportesPlanillas2Controller {
 //                addCellTabla(tablaFirmas, new Paragraph(strAdmin, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                 addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             } else if (params.tipo == "otro") {
-                if (planilla.tipoPlanilla.codigo != 'A') {
+//                if (planilla.tipoPlanilla.codigo != 'A') {
                     if (params.orientacion == "horizontal") {
                         tablaFirmas.setWidths(arregloEnteros([40, 20, 40]))
                     } else if (params.orientacion == "vertical") {
@@ -226,7 +226,7 @@ class ReportesPlanillas2Controller {
                     addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaFirmas, new Paragraph(planilla.tipoPlanilla.codigo == 'A' ? strAdmin : strFiscalizador, fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
                     addCellTabla(tablaFirmas, new Paragraph("", fontThFirmas), [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
-                }
+//                }
             }
             document.add(tablaFirmas)
         }

@@ -10,7 +10,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
     def buscadorService
     def diasLaborablesService
-
+    def preciosService
     def errores() {
     }
 
@@ -1702,12 +1702,32 @@ class Planilla2Controller extends janus.seguridad.Shield {
         }
 
         def erroresPeriodos = false
-        println "periodo oferta  1 "+perOferta
-        println "periodo anticipo  1 "+perAnticipo
+//        println "periodo oferta  1 "+perOferta
+//        println "periodo anticipo  1 "+perAnticipo
         perOferta = verificaIndices(pcs, perOferta, 0)
         perAnticipo = verificaIndices(pcs, perAnticipo, 0)
-        println "periodo oferta "+perOferta
-        println "periodo anticipo "+perAnticipo
+//        println "periodo oferta "+perOferta
+//        println "periodo anticipo "+perAnticipo
+
+//        println "verifica oferta "
+        def res = preciosService.verificaIndicesPeriodo(contrato,perOferta)
+        println "res "+res
+//        println "verficia anticipo "
+       def res2 = preciosService.verificaIndicesPeriodo(contrato,perAnticipo)
+//        println "res "+res2
+
+        if(res.size()+res2.size()>0){
+            res +=res2
+            def mesg ="<p>No se puede generar la planilla</p><br><ul style='margin-left:80px'>"
+            res.each {r->
+                mesg+="<li>No existe valor para: ${r['indcdscr']}, en el periodo: ${r['prindscr']}</li>"
+            }
+            mesg+="</ul><br/><a href='${g.createLink(controller: 'planilla',action: 'list',id:contrato.id)}' class='btn btn-default'>Volver</a>"
+            flash.message = mesg
+            redirect(action: "errores")
+            return
+        }
+
 
         if (!(perOferta && perAnticipo)) {
             erroresPeriodos = false;
@@ -2033,9 +2053,9 @@ class Planilla2Controller extends janus.seguridad.Shield {
         def perNuevo = per
         if (per != null) {
 
-                def val = ValorIndice.findAllByPeriodo(per)
-                println "val para per "+per+" ==> "+val.size()
-                if (val.size()<10) {
+            def val = ValorIndice.findAllByPeriodo(per)
+            println "val para per "+per+" ==> "+val.size()
+            if (val.size()<10) {
 //                    def vals = ValorIndice.withCriteria {
 //                        eq("indice", c.indice)
 //                        periodo {
@@ -2053,7 +2073,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 //                        println "error wtf  " + c.indice + " (" + c.indice.id + ") " + per + " (" + per.id + ")"
 //                        perNuevo = null
 //                    }
-                    /*Agrego un valor en 1 20-01-2015*/
+                /*Agrego un valor en 1 20-01-2015*/
 //                    println "creando nuevo valor  para "+c.indice+" , "+per+" "
 //                    def valNuevo = new ValorIndice()
 //                    valNuevo.indice=c.indice
@@ -2061,15 +2081,15 @@ class Planilla2Controller extends janus.seguridad.Shield {
 //                    valNuevo.valor=1
 //                    valNuevo.save(flush: true)
 //                    val = valNuevo
-                    perNuevo = PeriodosInec.findAllByFechaFinLessThan(per.fechaInicio,[sort:"fechaFin",limit: 3,"order":"desc"])
-                    println "no hay indices en "+per
-                    println "periodos anteriores "+perNuevo
-                    if(perNuevo.size()>0)
-                        perNuevo=perNuevo.first()
-                    else
-                        perNuevo=null
-                    println "per nuevo "+perNuevo
-                }
+                perNuevo = PeriodosInec.findAllByFechaFinLessThan(per.fechaInicio,[sort:"fechaFin",limit: 3,"order":"desc"])
+                println "no hay indices en "+per
+                println "periodos anteriores "+perNuevo
+                if(perNuevo.size()>0)
+                    perNuevo=perNuevo.first()
+                else
+                    perNuevo=null
+                println "per nuevo "+perNuevo
+            }
 
 
 //            if (i > 12 * 5) {
