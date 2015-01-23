@@ -106,7 +106,7 @@ class MantenimientoItemsController extends Shield {
 //                        }
                     }
                 } else if(vae){
-                    hijos = VaeItems.findAllByItem(Item.get(params.id))
+                    hijos = [VaeItems.findByItem(Item.get(params.id))]
                 }
                 break;
         }
@@ -114,6 +114,7 @@ class MantenimientoItemsController extends Shield {
         String tree = "", clase = "", rel = "", extra = ""
 
         tree += "<ul>"
+        println "hijos:" + hijos
         hijos.each { hijo ->
             def hijosH, desc, liId
             switch (tipo) {
@@ -181,7 +182,7 @@ class MantenimientoItemsController extends Shield {
                             }
                         }
                     } else if(vae){
-                        hijosH = VaeItems.findAllByItem(hijo)
+                        hijosH = [VaeItems.findByItem(hijo)]
                     }
 
 
@@ -309,7 +310,11 @@ class MantenimientoItemsController extends Shield {
                     break;
             }
 
-            clase = (hijosH.size() > 0) ? "jstree-closed hasChildren" : ""
+            if (!hijosH) {
+                hijosH = []
+            }
+            println "hijosH " + hijosH
+            clase = (hijosH?.size() > 0) ? "jstree-closed hasChildren" : ""
 
             tree += "<li id='" + liId + "' class='" + clase + "' rel='" + rel + "' " + extra + ">"
             tree += "<a href='#' class='label_arbol'>" + desc + "</a>"
