@@ -20,7 +20,7 @@ class MantenimientoItemsController extends Shield {
     } //index
 
     String makeBasicTree(params) {
-        println "PARAMS  "+params
+//        println "PARAMS  "+params
         def id = params.id
         def tipo = params.tipo
         def precios = params.precios
@@ -78,7 +78,7 @@ class MantenimientoItemsController extends Shield {
         tree += "<ul>"
         hijos.each { hijo ->
             def hijosH, desc, liId
-            println "hijo ... "+tipo
+//            println "hijo ... "+tipo
             switch (tipo) {
                 case "grupo_manoObra":
                     hijosH = Item.findAllByDepartamento(hijo, [sort: 'codigo'])
@@ -214,7 +214,7 @@ class MantenimientoItemsController extends Shield {
     }
 
     String makeBasicTree_bck(params) {
-        println "PARAMS: "+params
+//        println "PARAMS: "+params
         def id = params.id
         def tipo = params.tipo
         def precios = params.precios
@@ -1579,12 +1579,73 @@ class MantenimientoItemsController extends Shield {
         params.fechaIngreso = new Date()
         vaeItems.properties = params
         if (vaeItems.save(flush: true)) {
-            render "OK_" + accion + "_" + vaeItems.id + "_" + vaeItems.porcentaje
+            println "OK_"+ accion + "_" + vaeItems.id + "_" + vaeItems.porcentaje
+            render "OK"
         } else {
             println "Vae items: " + vaeItems.errors
             def errores = g.renderErrors(bean: vaeItems)
             render "NO_" + errores
         }
     }
+
+    def actualizarVae_ajax() {
+        if (params.item instanceof java.lang.String) {
+            params.item = [params.item]
+        }
+
+        def oks = "", nos = ""
+
+        params.item.each {
+            def parts = it.split("_")
+
+//            println "actualiza vae, parts:" + parts
+
+            def id_itva = parts[0]
+            def nuevoVae = parts[1]
+
+            def vaeItems = VaeItems.get(id_itva);
+            vaeItems.porcentaje = nuevoVae.toDouble();
+//            println "nuevo vae: " + vaeItems.porcentaje
+
+            if (!vaeItems.save(flush: true)) {
+                println "mantenimiento items controller l 928: " + "error " + parts
+                if (nos != "") {
+                    nos += ","
+                }
+                nos += "#" + id_itva
+            } else {
+                if (oks != "") {
+                    oks += ","
+                }
+                oks += "#" + id_itva
+            }
+
+        }
+        render oks + "_" + nos
+    }
+
+    def deleteVae_ajax() {
+//        println "delete vae..."  + params
+        def ok = true
+        if (params.auto) {
+            def usu = Persona.get(session.usuario.id)
+            if (params.auto.toString().encodeAsMD5() != usu.autorizacion) {
+                ok = false
+                render "Ha ocurrido un error en la autorización."
+            }
+        }
+        if (ok) {
+            try {
+                def vaeItems = VaeItems.get(params.id);
+                vaeItems.delete(flush: true)
+                render "OK"
+            }
+            catch (DataIntegrityViolationException e) {
+                println "mantenimiento items controller l 903: " + e
+                render "No se pudo eliminar el vae."
+            }
+        }
+    }
+
 
 }

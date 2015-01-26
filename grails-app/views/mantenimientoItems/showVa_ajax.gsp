@@ -159,6 +159,7 @@
                         url     : $("#frmSave").attr("action"),
                         data    : $("#frmSave").serialize(),
                         success : function (msg) {
+                            console.log("mensaje:", msg)
                             if (msg == "OK") {
                                 $("#modal-tree").modal("hide");
                                 var loading = $("<div></div>");
@@ -170,7 +171,7 @@
                                 $("#info").html(loading);
                                 $.ajax({
                                     type    : "POST",
-                                    url     : "${createLink(action:'showLg_ajax')}",
+                                    url     : "${createLink(action:'showVa_ajax')}",
                                     data    : {
                                         id       : "${params.id}",
                                         all      : "${params.all}",
@@ -194,7 +195,7 @@
                     return false;
                 });
 
-                $("#modalTitle").html("Crear Precio");
+                $("#modalTitle").html("Crear valor de VAE");
                 $("#modalBody").html(msg);
                 $("#modalFooter").html("").append(btnOk).append(btnSave);
                 $("#modal-tree").modal("show");
@@ -220,7 +221,7 @@
         });
         $.ajax({
             type    : "POST",
-            url     : "${createLink(action: 'actualizarPrecios_ajax')}",
+            url     : "${createLink(action: 'actualizarVae_ajax')}",
             data    : data,
             success : function (msg) {
                 $("#dlgLoad").dialog("close");
@@ -243,7 +244,7 @@
             btnSave.replaceWith(spinner);
             $.ajax({
                 type    : "POST",
-                url     : "${createLink(action: 'deletePrecio_ajax')}",
+                url     : "${createLink(action: 'deleteVae_ajax')}",
                 data    : {
                     id : id
                 },
@@ -253,7 +254,7 @@
                         log("Precio eliminado correctamente", false);
                         $.ajax({
                             type    : "POST",
-                            url     : "${createLink(action:'showLg_ajax')}",
+                            url     : "${createLink(action:'showVa_ajax')}",
                             data    : {
                                 id       : "${params.id}",
                                 all      : "${params.all}",
@@ -275,7 +276,7 @@
         });
 
         $("#modalTitle-tree1").html("Confirmación");
-        $("#modalBody-tree1").html("Está seguro de querer eliminar este precio?");
+        $("#modalBody-tree1").html("Está seguro de querer eliminar este VAE?");
         $("#modalFooter-tree1").html("").append(btnOk).append(btnSave);
         $("#modal-tree1").modal("show");
         return false;
@@ -412,7 +413,7 @@
                 btnSave.replaceWith(spinner);
                 $.ajax({
                     type    : "POST",
-                    url     : "${createLink(action: 'deletePrecio_ajax')}",
+                    url     : "${createLink(action: 'deleteVae_ajax')}",
                     data    : {
                         id   : id,
                         auto : $auto.val()
@@ -420,10 +421,10 @@
                     success : function (msg) {
                         if (msg == "OK") {
                             $("#modal-tree1").modal("hide");
-                            log("Precio eliminado correctamente", false);
+                            log("VAE eliminado correctamente", false);
                             $.ajax({
                                 type    : "POST",
-                                url     : "${createLink(action:'showLg_ajax')}",
+                                url     : "${createLink(action:'showVa_ajax')}",
                                 data    : {
                                     id       : "${params.id}",
                                     all      : "${params.all}",
@@ -446,7 +447,7 @@
         });
 
         var $p1 = $("<p>").html("Está seguro de querer eliminar este precio?");
-        var $p2 = $("<p>").html("Este precio está registrado. Para eliminarlo necesita ingresar su clave de autorización.");
+        var $p2 = $("<p>").html("Este VAE está registrado. Para eliminarlo necesita ingresar su clave de autorización.");
         var $p3 = $("<p>").html($auto);
 
         var $div = $("<div>").append($p1).append($p2).append($p3);
@@ -506,4 +507,4 @@
     })
 
 </script>
-<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler.js')}"></script>
+<script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandler2.js')}"></script>

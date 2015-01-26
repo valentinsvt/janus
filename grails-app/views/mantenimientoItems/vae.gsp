@@ -25,7 +25,7 @@
 
         <link href="${resource(dir: 'css', file: 'tree.css')}" rel="stylesheet"/>
 
-        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
+        <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody2.js')}"></script>
         <link href="${resource(dir: 'css', file: 'tableHandler.css')}" rel="stylesheet"/>
 
     </head>

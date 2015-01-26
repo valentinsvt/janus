@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-var decimales = 5;
+var decimales = 2;
 
 var beforeStopEdit = function (selected) {
 };
