@@ -734,11 +734,17 @@ class RubroController extends janus.seguridad.Shield {
         def path = servletContext.getRealPath("/") + folder + File.separatorChar + filePath
 
         def file = new File(path)
-        def b = file.getBytes()
-        response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
-        response.setHeader("Content-disposition", "attachment; filename=" + filePath)
-        response.setContentLength(b.length)
-        response.getOutputStream().write(b)
+        if(file.exists()){
+            def b = file.getBytes()
+            response.setContentType(ext == 'pdf' ? "application/pdf" : "image/" + ext)
+            response.setHeader("Content-disposition", "attachment; filename=" + filePath)
+            response.setContentLength(b.length)
+            response.getOutputStream().write(b)
+        }else{
+            flash.message="El archivo seleccionado no se encuentra en el servidor."
+            redirect(action: "showFoto",params: [id:rubro.id,tipo: "dt"])
+        }
+
     }
 
     def uploadFile() {
