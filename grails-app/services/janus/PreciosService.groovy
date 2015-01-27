@@ -409,6 +409,32 @@ class PreciosService {
         return result
      }
 
+    def rbro_pcun_vae(obra){
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rbro_pcun_vae(" + obra + ") order by vlobordn asc"
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+    }
+
+    def rbro_pcun_vae2(obra, subpres){
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from rbro_pcun_vae(" + obra + ") where sbpr__id= ${subpres} order by vlobordn asc"
+//      println(sql)
+        def result = []
+        cn.eachRow(sql.toString()) { r ->
+            result.add(r.toRowResult())
+        }
+        cn.close()
+        return result
+    }
+
+
     def rbro_pcun_v2_item(obra, sbpr, item){
 
         def cn = dbConnectionService.getConnection()

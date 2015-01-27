@@ -61,27 +61,24 @@ class Reportes3Controller {
             subPre= -1
         }
 
-
         if (params.sub)
-//            detalle= VolumenesObra.findAllByObraAndSubPresupuesto(obra,SubPresupuesto.get(params.sub),[sort:"orden"])
             if (params.sub == '-1'){
-                valores = preciosService.rbro_pcun_v2(obra?.id)
+//                valores = preciosService.rbro_pcun_v2(obra?.id)
+                valores = preciosService.rbro_pcun_vae(obra?.id)
             }else {
-               valores = preciosService.rbro_pcun_v3(obra?.id, params.sub)
+//               valores = preciosService.rbro_pcun_v3(obra?.id, params.sub)
+               valores = preciosService.rbro_pcun_vae2(obra?.id, params.sub)
             }
         else
-//            detalle= VolumenesObra.findAllByObra(obra,[sort:"orden"])
-            valores = preciosService.rbro_pcun_v2(obra.id)
+//            valores = preciosService.rbro_pcun_v2(obra.id)
+            valores = preciosService.rbro_pcun_vae(obra.id)
 
         def nombres = []
         def corregidos = []
         def prueba = []
         valores.each {
-
             nombres += it.rbronmbr
-
         }
-
 
         nombres.each {
 
