@@ -42,6 +42,8 @@ class Reportes3Controller {
         return [params: params]
     }
 
+
+
     def imprimirTablaSub() {
 //        println "imprimir tabla sub "+params
         def obra = Obra.get(params.obra)
@@ -63,15 +65,15 @@ class Reportes3Controller {
 
         if (params.sub)
             if (params.sub == '-1'){
-//                valores = preciosService.rbro_pcun_v2(obra?.id)
-                valores = preciosService.rbro_pcun_vae(obra?.id)
+                valores = preciosService.rbro_pcun_v2(obra?.id)
+//                valores = preciosService.rbro_pcun_vae(obra?.id)
             }else {
-//               valores = preciosService.rbro_pcun_v3(obra?.id, params.sub)
-               valores = preciosService.rbro_pcun_vae2(obra?.id, params.sub)
+               valores = preciosService.rbro_pcun_v3(obra?.id, params.sub)
+//               valores = preciosService.rbro_pcun_vae2(obra?.id, params.sub)
             }
         else
-//            valores = preciosService.rbro_pcun_v2(obra.id)
-            valores = preciosService.rbro_pcun_vae(obra.id)
+            valores = preciosService.rbro_pcun_v2(obra.id)
+//            valores = preciosService.rbro_pcun_vae(obra.id)
 
         def nombres = []
         def corregidos = []
@@ -128,6 +130,94 @@ class Reportes3Controller {
 
         [detalle: detalle, precios: precios, subPres: subPres, subPre: subPre, obra: obra, indirectos: indirecto * 100, valores: valores, fechaNueva: fechaNueva, fechaPU: fechaPU, corregidos: corregidos]
 
+    }
+
+
+    def imprimirTablaSubVae () {
+        //        println "imprimir tabla sub "+params
+        def obra = Obra.get(params.obra)
+
+//        println(obra?.fechaCreacionObra)
+        def detalle
+        def valores
+        def subPre
+        def fechaNueva = obra?.fechaCreacionObra?.format("dd-MM-yyyy");
+        def fechaPU = (obra?.fechaPreciosRubros?.format("dd-MM-yyyy"));
+
+        if (params.sub != '-1'){
+
+            subPre= SubPresupuesto.get(params.sub).descripcion
+
+        }else {
+            subPre= -1
+        }
+
+        if (params.sub)
+            if (params.sub == '-1'){
+//                valores = preciosService.rbro_pcun_v2(obra?.id)
+                valores = preciosService.rbro_pcun_vae(obra?.id)
+            }else {
+//               valores = preciosService.rbro_pcun_v3(obra?.id, params.sub)
+                valores = preciosService.rbro_pcun_vae2(obra?.id, params.sub)
+            }
+        else
+//            valores = preciosService.rbro_pcun_v2(obra.id)
+            valores = preciosService.rbro_pcun_vae(obra.id)
+
+        def nombres = []
+        def corregidos = []
+        def prueba = []
+        valores.each {
+            nombres += it.rbronmbr
+        }
+
+        nombres.each {
+
+            def text = (it ?: '')
+//        println "--------------------------------------------------------------"
+//        println text
+//            text = text.replaceAll("&lt;", "*lt*")
+//            text = text.replaceAll("&gt;", "*gt*")
+
+            text = text.decodeHTML()
+            text = text.replaceAll(/</, /&lt;/);
+            text = text.replaceAll(/>/, /&gt;/);
+//        println "--------------------------------------------------------------"
+//        text = util.clean(str: text)
+//            text = text.decodeHTML()
+//            text = text.replaceAll("\\*lt\\*", "&lt;")
+//            text = text.replaceAll("\\*gt\\*", "&gt;")
+//            text = text.replaceAll(/&lt;/, /</)
+//            text = text.replaceAll(/&gt;/,/>/ )
+
+            corregidos += text
+
+        }
+
+
+        valores.eachWithIndex{ j,i->
+
+
+            j.rbronmbr = corregidos[i]
+
+        }
+
+        valores.each {
+            prueba += it.rbronmbr
+
+        }
+
+//
+//        println("nombres" + nombres)
+//        println("corregidos" + corregidos)
+//        println("prueba" + prueba)
+
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+        def precios = [:]
+        def indirecto = obra.totales / 100
+        preciosService.ac_rbroObra(obra.id)
+
+        [detalle: detalle, precios: precios, subPres: subPres, subPre: subPre, obra: obra, indirectos: indirecto * 100, valores: valores, fechaNueva: fechaNueva, fechaPU: fechaPU, corregidos: corregidos]
     }
 
     def imprimirRubroVolObra() {

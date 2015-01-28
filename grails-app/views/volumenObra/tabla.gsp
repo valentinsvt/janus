@@ -6,7 +6,7 @@
         <b>Subpresupuesto:</b>
         <g:select name="subpresupuesto" from="${subPres}" optionKey="id" optionValue="descripcion"
                   style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"
-                  noSelection="['-1': 'TODOS']"></g:select>
+                  noSelection="['-1': 'TODOS']"/>
 
         %{--todo descomentar esto--}%
         %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;font-size: 10px" id="subPres_desc" value="${subPre}"></g:select>--}%
@@ -34,12 +34,15 @@
             <i class="icon-print"></i>
             Imprimir Subpresupuesto
         </a>
-
         <a href="#" class="btn  " id="imprimir_excel" style="margin-left:-5px">
             <i class="icon-table"></i>
             Excel
         </a>
 
+        <a href="#" class="btn  " id="imprimir_sub_vae">
+            <i class="icon-print"></i>
+            Imprimir Sub Vae
+        </a>
     </div>
 </div>
 <table class="table table-bordered table-striped table-condensed table-hover">
@@ -123,17 +126,10 @@
         callback: function (key, options) {
 
             var m = "clicked: " + $(this).attr("id");
-//            window.console && //console.log(m) || alert(m)
-//
-//            if (key == "edit") {
-//                $(this).dblclick()
-//            }
-
 
             if (key == "print") {
 
             }
-
 
             if (key == "foto") {
                 %{--var child = window.open('${createLink(controller:"rubro",action:"showFoto")}/'+$(this).attr("item"), 'Mies', 'width=850,height=800,toolbar=0,resizable=0,menubar=0,scrollbars=1,status=0');--}%
@@ -314,6 +310,34 @@
 
 
     });
+
+
+    $("#imprimir_sub_vae").click(function () {
+
+        if ($("#subPres_desc").val() != '') {
+
+            var dsps =
+            ${obra.distanciaPeso}
+            var dsvs =
+            ${obra.distanciaVolumen}
+            var volqueta =
+            ${precioVol}
+            var chofer =
+            ${precioChof}
+            var datos = "?obra=${obra.id}Wsub=" + $("#subPres_desc").val()
+            var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSubVae')}" + datos
+            console.log(url)
+            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+
+
+        } else {
+
+            alert("Escoja un subpresupuesto")
+        }
+
+
+    });
+
 
     $("#imprimir_excel").click(function () {
 //        var $boton = $(this).clone(true)
