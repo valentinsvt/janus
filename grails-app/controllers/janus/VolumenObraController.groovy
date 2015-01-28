@@ -137,6 +137,7 @@ class VolumenObraController extends janus.seguridad.Shield {
         volumen.subPresupuesto = SubPresupuesto.get(params.sub)
         volumen.obra = obra
         volumen.item = rubro
+        volumen.descripcion = params.dscr
 
         if (!volumen.save(flush: true)) {
             println "error volumen obra " + volumen.errors

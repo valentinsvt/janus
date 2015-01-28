@@ -32,7 +32,7 @@
         </a>
         <a href="#" class="btn  " id="imprimir_sub">
             <i class="icon-print"></i>
-            Imprimir Subpresupuesto
+            Impr. Subpresupuesto
         </a>
         <a href="#" class="btn  " id="imprimir_excel" style="margin-left:-5px">
             <i class="icon-table"></i>
@@ -41,7 +41,7 @@
 
         <a href="#" class="btn  " id="imprimir_sub_vae">
             <i class="icon-print"></i>
-            Imprimir Sub Vae
+            Subpresupuesto Vae
         </a>
     </div>
 </div>
@@ -51,16 +51,19 @@
         <th style="width: 20px;">
             #
         </th>
-        <th style="width: 200px;">
+        <th style="width: 120px;">
             Subpresupuesto
         </th>
         <th style="width: 80px;">
             Código
         </th>
-        <th style="width: 400px;">
+        <th style="width: 100px;">
+            Especificación
+        </th>
+        <th style="width: 300px;">
             Rubro
         </th>
-        <th style="width: 60px" class="col_unidad">
+        <th style="width: 40px" class="col_unidad">
             Unidad
         </th>
         <th style="width: 80px">
@@ -77,11 +80,12 @@
 
     <g:each in="${valores}" var="val" status="j">
     %{--<tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">--}%
-        <tr class="item_row" id="${val.vlob__id}" item="${val}" sub="${val.sbpr__id}" cdgo="${val.item__id}">
+        <tr class="item_row" id="${val.vlob__id}" item="${val}"  dscr="${val.vlobdscr}" sub="${val.sbpr__id}" cdgo="${val.item__id}" title="${val.vlobdscr}">
 
             <td style="width: 20px" class="orden">${val.vlobordn}</td>
             <td style="width: 200px" class="sub">${val.sbprdscr.trim()}</td>
             <td class="cdgo">${val.rbrocdgo.trim()}</td>
+            <td class="cdes">${val.itemcdes?.trim()}</td>
             <td class="nombre">${val.rbronmbr.trim()}</td>
             <td style="width: 60px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
             <td style="text-align: right" class="cant">
@@ -409,6 +413,8 @@
         $("#item_codigo").val($(this).find(".cdgo").html())
         $("#item_id").val($(this).attr("item"))
         $("#subPres").val($(this).attr("sub"))
+        $("#item_descripcion").val($(this).attr("dscr"))
+
         $("#item_nombre").val($(this).find(".nombre").html())
         $("#item_cantidad").val($(this).find(".cant").html().toString().trim())
         $("#item_orden").val($(this).find(".orden").html())

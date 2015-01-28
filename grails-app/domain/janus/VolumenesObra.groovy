@@ -10,6 +10,7 @@ class VolumenesObra implements Serializable {
     double dias
 
     String rutaCritica = "N"
+    String descripcion
 
     static auditable = [ignore: ["orden"]]
     static mapping = {
@@ -29,6 +30,7 @@ class VolumenesObra implements Serializable {
             dias column: 'vlobdias'
 
             rutaCritica column: 'vlobrtcr'
+            descripcion column: 'vlobdscr'
         }
     }
     static constraints = {
@@ -38,5 +40,6 @@ class VolumenesObra implements Serializable {
         subPresupuesto(blank: false, attributes: [title: 'subPresupuesto'])
 
         rutaCritica(blank: true, nullable: true, maxSize: 1, inList: ['S', 'N'], attributes: [title: 'ruta critica'])
+        descripcion(blank: true, nullable: true, maxSize: 1023, attributes: [title: 'descripción del rubro de la obra'])
     }
 }

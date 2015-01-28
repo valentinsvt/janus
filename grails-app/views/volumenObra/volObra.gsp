@@ -26,33 +26,31 @@
             </g:if>
         </div>
 
-        <div class="tituloTree">
-            Volumen de obra de: ${obra.descripcion + " (" + obra.codigo + ")"}
+        %{--<div class="tituloTree">--}%
+        <div style=" font-size: 14px;  color: #0088CC;">
+            Volúmenes de la obra: ${obra.descripcion + " (" + obra.codigo + ")"}
             <input type="hidden" id="override" value="0">
+        </div>
+        <div style="height: 25px; margin-bottom:10px; border-bottom: 1px solid rgba(148, 148, 148, 1);">
+            <div class="span2" style="margin-left: 150px;">
+                <b>Memo:</b> ${obra?.memoCantidadObra}
+            </div>
+            <div class="span3">
+                <b>Ubicación:</b> ${obra?.parroquia?.nombre}
+            </div>
+
+            <div class="span2">
+                <b style="">Dist. peso:</b> ${obra?.distanciaPeso}
+            </div>
+
+            <div class="span2" style="margin-left: -40px;">
+                <b>Dist. volúmen:</b> ${obra?.distanciaVolumen}
+            </div>
+
         </div>
 
         <div class="row">
-            <div class="span12 btn-group" role="navigation" style="margin-left: 0px;">
-                %{--<a href="#" class="btn  " id="btn_lista">--}%
-                %{--<i class="icon-file"></i>--}%
-                %{--Lista--}%
-                %{--</a>--}%
-                %{--<a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">--}%
-                %{--<i class="icon-file"></i>--}%
-                %{--Nuevo--}%
-                %{--</a>--}%
-                %{--<a href="#" class="btn btn-ajax btn-new" id="guardar">--}%
-                %{--<i class="icon-file"></i>--}%
-                %{--Guardar--}%
-                %{--</a>--}%
-                %{--<a href="${g.createLink(action: 'rubroPrincipal')}" class="btn btn-ajax btn-new">--}%
-                %{--<i class="icon-file"></i>--}%
-                %{--Cancelar--}%
-                %{--</a>--}%
-                %{--<a href="#" class="btn btn-ajax btn-new">--}%
-                %{--<i class="icon-file"></i>--}%
-                %{--Borrar--}%
-                %{--</a>--}%
+            <div class="span12 btn-group" role="navigation" style="margin-left: 35px;">
                 <a href="${g.createLink(controller: 'obra', action: 'registroObra', params: [obra: obra?.id])}" class="btn btn-ajax btn-new" id="atras" title="Regresar a la obra">
                     <i class="icon-arrow-left"></i>
                     Regresar
@@ -82,44 +80,26 @@
         </g:if>
 
         <div id="list-grupo" class="span12" role="main" style="margin-top: 10px;margin-left: 0px">
-            <div class="borde_abajo" style="padding-left: 45px;position: relative;">
-                <div class="linea" style="height: 98%;"></div>
+            <div class="borde_abajo" style="padding-left: 5px;position: relative; height: 92px">
+                %{--<div class="linea" style="height: 98%;"></div>--}%
 
                 <div class="row-fluid" style="margin-left: 0px">
-                    <div class="span3" style="width: 320px; margin-top: -8px;">
+                    <div class="span3" style="width: 170px; ">
                         <b>Tipo de Obra:</b><g:select name="grupos" id="grupos" from="${grupoFiltrado}" optionKey="id" optionValue="descripcion"
-                                                      style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"/>
+                                                      style="margin-left: 0px; width: 160px " value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"/>
 
                     %{--<b>Solicitante:</b><g:select name="grupos" id="grupos" from="${janus.Grupo.findByDireccion(obra.departamento.direccion)}" optionKey="id" optionValue="descripcion"--}%
                     %{--style="margin-left: 20px;" value="${janus.Grupo.findByDireccion(obra.departamento.direccion)?.id}"></g:select>--}%
 
-                    </div>
-                    <div class="span2">
-                        <b>Memo:</b> ${obra?.memoCantidadObra}
-                    </div>
-
-                    <div class="span3">
-                        <b>Ubicación:</b> ${obra?.parroquia?.nombre}
-                    </div>
-
-                    <div class="span2">
-                        <b style="">Dist. peso:</b> ${obra?.distanciaPeso}
-                    </div>
-
-                    <div class="span2" style="margin-left: -40px;">
-                        <b>Dist. volúmen:</b> ${obra?.distanciaVolumen}
-                    </div>
-
-
                 </div>
 
                 <div class="row-fluid" style="margin-left: 0px">
-                    <div class="span4" style="width: 440px">
+                    <div class="span4" style="width: 450px">
                         <b>Crear Subpresupuesto / Ingresar Rubros:</b>
                         <span id="sp">
                             %{--<g:select name="subpresupuesto" from="${janus.SubPresupuesto.list([sort: 'descripcion'])}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
 
-                            <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="width: 250px;font-size: 10px" id="subPres"/></span>
+                            <span id="div_cmb_sub"><g:select name="subpresupuesto" from="${subpreFiltrado}" optionKey="id" optionValue="descripcion" style="font-size: 10px" id="subPres"/></span>
 
                             %{--todo descomentar esto--}%
                             %{--<g:select name="subpresupuesto" from="${subPresupuesto1}" optionKey="id" optionValue="descripcion" style="width: 300px;;font-size: 10px" id="subPres"/>--}%
@@ -164,31 +144,35 @@
 
                     <div class="span4" style="margin-left: 15px;">
                         <b>Rubro</b>
-                        <input type="text" style="width: 340px;font-size: 10px" id="item_nombre" disabled="true">
+                        <input type="text" style="width: 420px;font-size: 10px" id="item_nombre" disabled="true">
 
                     </div>
 
-                    <div class="span2" style="margin-left: 0px; width: 100px;">
-                        <b>Cantidad</b>
-                        <input type="text" style="width: 95px;text-align: right" id="item_cantidad" value="">
+                    <div class="span2" style="margin-left: 0px; width: 780px;">
+                        <b>Descripción:</b>
+                        <input type="text" style="width: 680px" id="item_descripcion" value="">
+                    </div>
+                    <div class="span2" style="margin-left: 20px; width: 180px;">
+                        <b>Cantidad:</b>
+                        <input type="text" style="width: 90px;text-align: right" id="item_cantidad" value="">
                     </div>
 
-                    <div class="span1" style="margin-left: 10px; width: 60px;">
-                        <b>Orden</b>
+                    <div class="span1" style="margin-left: 20px; width: 90px;">
+                        <b>Orden:</b>
                         <input type="text" style="width: 30px;text-align: right" id="item_orden" value="${(volumenes?.size() > 0) ? volumenes.size() + 1 : 1}">
                     </div>
 
-                    <div class="span1" style="margin-left: -13px;padding-top:30px">
+                    <div class="span1" style="margin-left: 10px;padding-top:0px; width: 25px;">
                         <input type="hidden" value="" id="vol_id">
 
                         <g:if test="${obra?.estado != 'R' && duenoObra == 1}">
-                            <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
+                            <a href="#" class="btn btn-primary" title="agregar" id="item_agregar">
                                 <i class="icon-plus"></i>
                             </a>
                         </g:if>
                         <g:else>
                             <g:if test="${obra.estado != 'R' && obra?.departamento?.id == persona?.departamento?.id}">
-                                <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
+                                <a href="#" class="btn btn-primary" title="agregar" id="item_agregar">
                                     <i class="icon-plus"></i>
                                 </a>
                             </g:if>
@@ -607,6 +591,7 @@
                     var rubro = $("#item_id").val()
                     var cod = $("#item_codigo").val()
                     var sub = $("#subPres").val()
+                    var dscr = $("#item_descripcion").val()
                     if (isNaN(cantidad))
                         cantidad = 0
                     if (isNaN(orden))
@@ -619,7 +604,9 @@
                         msn = "seleccione un rubro"
 
                     if (msn.length == 0) {
-                        var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&orden=" + orden + "&sub=" + sub + "&obra=${obra.id}" + "&cod=" + cod + "&ord=" + '1&override=' + $("#override").val()
+                        var datos = "rubro=" + rubro + "&cantidad=" + cantidad + "&orden=" + orden + "&sub=" + sub +
+                                "&obra=${obra.id}" + "&cod=" + cod + "&ord=" + '1&override=' + $("#override").val() +
+                                "&dscr=" + dscr
 //                        //console.log(datos)
                         if ($("#vol_id").val() * 1 > 0)
                             datos += "&id=" + $("#vol_id").val()
