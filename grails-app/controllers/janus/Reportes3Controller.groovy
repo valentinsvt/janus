@@ -263,7 +263,7 @@ class Reportes3Controller {
 
         preciosService.ac_rbroObra(obra.id)
         def res = preciosService.precioUnitarioVolumenObraAsc("*", obra.id, rubro.id)
-        def vae = preciosService.vae_rb(obra.id,rubro.id)
+//        def vae = preciosService.vae_rb(obra.id,rubro.id)
 
 //        println("vae " + vae)
 
