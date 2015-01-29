@@ -706,7 +706,8 @@ class PlanillaController extends janus.seguridad.Shield {
         tramite.tipoTramite = tipoTramite
         tramite.estado = EstadoTramite.findByCodigo("C")
 //        println ">>" + tramitePadre.descripcion
-        tramite.descripcion = "Devolución de " + tramitePadre.descripcion
+//        tramite.descripcion = "Devolución de " + tramitePadre.descripcion
+        tramite.descripcion = tramitePadre.descripcion
 //        println "<<" + tramite.descripcion
 
         PersonasTramite.findAllByTramite(tramitePadre).each { p ->
@@ -744,6 +745,20 @@ class PlanillaController extends janus.seguridad.Shield {
         def tipo = params.tipo
         def memo = params.memo.toString().toUpperCase()
         def fecha = new Date().parse("dd-MM-yyyy", params.fecha)
+
+        // borra pdfs de pedido de pago de la planilla
+        def texto = Pdfs.findAllByPlanilla(planilla)
+        if (texto.size() == 0) {
+            println "No hay pdf que borrar"
+        } else if (texto.size() > 0) {
+            println "Hay ${texto.size()} pdf que borrar"
+            texto.id.each {
+                def pdfDel = Pdfs.get(it)
+                pdfDel.delete(flush: true)
+            }
+        }
+
+
 
         def tipoTramite, tramitePadre
 

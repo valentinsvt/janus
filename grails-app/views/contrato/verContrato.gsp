@@ -49,11 +49,15 @@
                     <g:link controller="documentoProceso" class="btn" action="list" id="${contrato?.oferta?.concursoId}" params="[contrato: contrato?.id]">
                         <i class="icon-book"></i> Biblioteca
                     </g:link>
-                </g:if>
 
                 <g:link controller="garantia" class="btn" action="garantiasContrato" id="${contrato?.id}">
                     <i class="icon-pencil"></i> Garantías
                 </g:link>
+                    <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}" class="btn">
+                        <i class="icon-superscript"></i> Fórmula Polinómica
+                    </a>
+
+                </g:if>
 
                 <g:if test="${janus.ejecucion.Planilla.countByContratoAndTipoPlanilla(contrato, TipoPlanilla.findByCodigo('A')) > 0 && contrato.oferta.concurso.obra.fechaInicio}">
                     <g:link controller="cronogramaEjecucion" class="btn" action="index" id="${contrato?.id}">
@@ -61,20 +65,23 @@
                     </g:link>
                 </g:if>
 
-                <a href="${g.createLink(controller: 'contrato', action: 'polinomicaContrato', id: contrato?.id)}" class="btn">
-                    <i class="icon-superscript"></i> Fórmula Polinómica
-                </a>
 
                 <g:if test="${contrato?.id}">
                     <a href="#" class="btn  " id="imprimir_sub">
                         <i class="icon-print"></i>
                         Imprimir Presupuesto
                     </a>
-                </g:if>
-                <g:if test="${contrato?.id}">
                     <a href="#" class="btn  " id="btnRubros">
                         <i class="icon-print"></i>
                         Rubros
+                    </a>
+                    <a href="#" class="btn  " id="imprimir_sub">
+                        <i class="icon-print"></i>
+                        Imprimir Presupuesto VAE
+                    </a>
+                    <a href="#" class="btn  " id="btnRubros">
+                        <i class="icon-print"></i>
+                        Rubros VAE
                     </a>
                 </g:if>
 
