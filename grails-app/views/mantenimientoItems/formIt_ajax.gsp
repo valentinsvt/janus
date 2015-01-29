@@ -1,6 +1,8 @@
 <%@ page import="janus.pac.CodigoComprasPublicas; janus.Item" %>
 
 <div id="create" class="span" role="main">
+<link href="${resource(dir: 'js/jquery/css/bw', file: 'jquery-ui-1.10.2.custom.min.css')}" rel="stylesheet"/>
+<script src="${resource(dir: 'js/jquery/js', file: 'jquery-ui-1.10.2.custom.min.js')}"></script>
 <g:form class="form-horizontal" name="frmSave" action="saveIt_ajax">
     <g:hiddenField name="id" value="${itemInstance?.id}"/>
     <table>

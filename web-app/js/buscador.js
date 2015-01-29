@@ -77,6 +77,7 @@ $("#reset").button({
     });
 
 $("#mas").unbind()
+
 $("#mas").button({
     icons:{
         primary:"ui-icon-plusthick"
