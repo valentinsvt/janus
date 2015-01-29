@@ -2802,12 +2802,13 @@ class ReportesController {
             }
 
             if(obra?.distanciaPesoEspecial != 0){
+
                 addCellTabla(tablaDatos, new Paragraph("Especial", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(obra?.listaPeso1?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPesoEspecial, format: "###", locale: "ec" ) + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPesoEspecial, format: "##,##0", minFractionDigits: 2, locale: "ec" ) + ' Km', times8normal), prmsHeaderHoja)
             }
 
 

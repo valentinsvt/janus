@@ -303,7 +303,6 @@
             %{--location.href="${g.createLink(controller: 'reportes3',action: 'imprimirRubro')}"+datos--}%
             var datos = "?obra=${obra.id}Wsub=" + $("#subPres_desc").val()
             var url = "${g.createLink(controller: 'reportes3',action: 'imprimirTablaSub')}" + datos
-            console.log(url)
             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
 
 

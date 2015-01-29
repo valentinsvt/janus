@@ -216,12 +216,15 @@
                 </div>
 
                 <div class="row-fluid">
-                    <div class="span3" style="margin-right: 195px !important;">
+                    <div class="span3" style="margin-right: 0px !important;width: 180px;">
                         <b>Código de rubro:</b> ${rubro?.codigo}
                     </div>
 
-                    <div class="span3">
+                    <div class="span3" style="margin-right: 0px !important; width: 220px;">
+                        <b>Código de especificación:</b> ${rubro?.codigoEspecificacion}
+                    </div>
 
+                    <div class="span3">
                         <b>Unidad:</b> ${rubro?.unidad?.codigo}
                     </div>
 

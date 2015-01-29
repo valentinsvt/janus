@@ -1,6 +1,13 @@
 <%--
   Created by IntelliJ IDEA.
   User: fabricio
+  Date: 29/01/15
+  Time: 04:15 PM
+--%>
+
+<%--
+  Created by IntelliJ IDEA.
+  User: fabricio
   Date: 06/01/15
   Time: 04:58 PM
 --%>
@@ -17,13 +24,6 @@
 <html>
 <head>
     <title>Rubro :${rubro.codigo}</title>
-    %{--<link href="../../css/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>--}%
-    %{--<link href="../../css/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css"/>--}%
-    %{--<link href="../../font/open/stylesheet.css" rel="stylesheet" type="text/css"/>--}%
-    %{--<link href="../../font/tulpen/stylesheet.css" rel="stylesheet" type="text/css"/>--}%
-    %{--<link href="../../css/custom.css" rel="stylesheet" type="text/css"/>--}%
-    %{--<link href="../../css/font-awesome.css" rel="stylesheet" type="text/css"/>--}%
-    %{--<link href="../css/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>--}%
     <link href="../font/open/stylesheet.css" rel="stylesheet" type="text/css"/>
     <link href="../font/tulpen/stylesheet.css" rel="stylesheet" type="text/css"/>
     <link href="../css/custom.css" rel="stylesheet" type="text/css"/>
@@ -178,8 +178,8 @@
     <div style="margin-top: 0px">
         <div class="row-fluid">
             <div class="span3" style="margin-right: 195px !important; width: 500px;">
-                <g:if test="${fechaSalida}">
-                    <b>Fecha:</b> ${fechaSalida.format("dd-MM-yyyy")}
+                <g:if test="${fechaPala}">
+                    <b>Fecha:</b> ${fechaPala.format("dd-MM-yyyy")}
 
                 </g:if>
                 <g:else>
@@ -189,32 +189,14 @@
             </div>
             <div class="span3" style="width: 200px;">
                 <g:if test="${fechaPrecios}">
-
                     <b>Fecha Act. P.U:</b> ${fechaPrecios.format("dd-MM-yyyy")}
                 </g:if>
                 <g:else>
                     <b>Fecha Act. P.U:</b>
                 </g:else>
-
-            </div>
-
-
-        </div>
-
-        <div class="row-fluid">
-            <div class="span12">
-
-                <b>Código Obra:</b> ${obra?.codigo}
             </div>
         </div>
 
-
-        <div class="row-fluid">
-            <div class="span12">
-
-                <b>Presupuesto:</b> ${obra?.nombre}
-            </div>
-        </div>
 
         <div class="row-fluid">
             <div class="span3" style="margin-right: 0px !important; width: 400px;">
@@ -235,9 +217,8 @@
 
         <div class="row-fluid">
             <div class="span12">
-                <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>
-                %{--<g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(mayor)')}"></g:set>--}%
-                <b>Descripción:</b> ${nombre}
+                %{--<g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>--}%
+                <b>Descripción:</b> ${rubro?.nombre}
             </div>
         </div>
     </div>
@@ -265,8 +246,6 @@
                 <td style="text-align: right; width: 50px;">
                     <b> <g:formatNumber number="${totalRubro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>
-
-                %{--<td style="border-left: 1px solid #000000; width: 14px">&nbsp; </td>--}%
                 <td style="width: 120px; text-align: center">
                     <b> <g:formatNumber number="${totalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>

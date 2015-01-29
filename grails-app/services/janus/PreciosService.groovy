@@ -294,15 +294,19 @@ class PreciosService {
         }
         return result
     }
-//    def rb_precios(parametros,condicion){
-//        def cn = dbConnectionService.getConnection()
-//        def sql = "select * from rb_precios("+parametros+") "+condicion
-//        def result = []
-//        cn.eachRow(sql){r->
-//            result.add(r.toRowResult())
-//        }
-//        return result
-//    }
+
+    def rb_preciosVae (parametros, condicion) {
+
+
+        def cn = dbConnectionService.getConnection()
+        def sql = "select * from vae_rb_precios(" + parametros + ") order by itemcdgo asc " + condicion
+        def result = []
+        cn.eachRow(sql) { r ->
+            result.add(r.toRowResult())
+        }
+        return result
+    }
+
     def rb_precios(select, parametros, condicion) {
         def cn = dbConnectionService.getConnection()
         def sql = "select ${select} from rb_precios(" + parametros + ") " + condicion

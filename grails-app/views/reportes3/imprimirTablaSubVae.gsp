@@ -22,8 +22,8 @@
     <style type="text/css">
     @page {
         /*size   : 21cm 29.7cm;  *//*width height */
-        size   : 29.7cm 21cm;
-        margin : 2cm;
+        size   : 28.7cm 21cm;
+        margin : 1.5cm;
         margin-left: 2.0cm;
     }
 
@@ -244,24 +244,29 @@
                 <th style="width: 20px; text-align: center">
                     N°
                 </th>
-                <th style="width: 90px; text-align: center" >
+                <th style="width: 90px; text-align: left" >
+                    CÓDIGO
+                </th>
+                <th style="width: 70px; text-align: left" >
+                    ESPEC.
+                </th>
+                <th style="width: 300px;">
                     RUBRO
                 </th>
-
-                <th style="width: 210px;">
+                <th style="width: 100px;">
                     DESCRIPCIÓN
                 </th>
-                <th style="width: 60px; text-align: right">
+                <th style="width: 80px; text-align: right">
                     UNIDAD
                 </th>
-                <th style="width: 70px; text-align: right">
+                <th style="width: 70px; text-align: center">
                     CANTIDAD
                 </th>
                 <th class="col_precio " style="width:80px ; text-align: right">P. U.</th>
-                <th class="col_total " style="width:80px; text-align: right">C.TOTAL</th>
-                <th class="col_vae_relativo " style="width:80px ; text-align: right">VAE RELATIVO</th>
-                <th class="col_vae_rbro" style="width:80px ; text-align: right">VAE RUBRO</th>
-                <th class="col_vae_total" style="width:80px ; text-align: right">VAE TOTAL</th>
+                <th class="col_total " style="width:80px; text-align: center">C.TOTAL</th>
+                <th class="col_vae_relativo " style="width:60px ; text-align: right">VAE RELATIVO</th>
+                <th class="col_vae_rbro" style="width:60px ; text-align: right">VAE RUBRO</th>
+                <th class="col_vae_total" style="width:60px ; text-align: right">VAE TOTAL</th>
             </tr>
             </thead>
         </table>
@@ -270,7 +275,7 @@
                 <thead >
 
                 <tr>
-                    <th colspan="10" style="font-size: 14px; font-weight: bold; text-align: left">
+                    <th colspan="12" style="font-size: 14px; font-weight: bold; text-align: left">
                         ${sp.descripcion}
                     </th>
                 </tr>
@@ -292,22 +297,28 @@
                                     ${val.rbrocdgo.trim()}
                                 </g:else>
                             </td>
-                            <td class="nombre" style="text-align: left; width: 230px">
+                            <td class="esp" style="width: 70px; text-align: left">
+                                    ${val.itemcdes?.trim()}
+                            </td>
+                            <td class="nombre" style="text-align: left; width: 200px">
                                 ${val.rbronmbr}
                             </td>
-                            <td style="width: 40px;text-align: right" class="col_unidad">${val.unddcdgo.trim()}</td>
-                            <td style="text-align: right; width: 80px" class="cant">
+                            <td class="desc" style="text-align: left; width: 100px">
+                                ${val.vlobdscr}
+                            </td>
+                            <td style="width: 50px;text-align: right" class="col_unidad">${val.unddcdgo.trim()}</td>
+                            <td style="text-align: right; width: 60px" class="cant">
                                 <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                             </td>
-                            <td class="col_precio" style="text-align: right; width: 80px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                            <td class="col_total total" style="text-align: right; width: 80px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                            <td style="text-align: right; width: 80px" class="relativo">
+                            <td class="col_precio" style="text-align: right; width: 60px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                            <td class="col_total total" style="text-align: right; width: 60px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                            <td style="text-align: right; width: 60px" class="relativo">
                                 <g:formatNumber number="${val.relativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                             </td>
-                            <td style="text-align: right; width: 80px" class="vaeRubro">
+                            <td style="text-align: right; width: 60px" class="vaeRubro">
                                 <g:formatNumber number="${val.vae_rbro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                             </td>
-                            <td style="text-align: right; width: 80px" class="vaeTotal">
+                            <td style="text-align: right; width: 60px" class="vaeTotal">
                                 <g:formatNumber number="${val.vae_totl}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                             </td>
                             <g:set var="total" value="${total.toDouble() + val.totl}"/>
@@ -329,7 +340,7 @@
                     </g:if>
                 </g:each>
                 <tr>
-                    <td style="text-align: right" colspan="6"><b>SUBTOTAL: </b></td>
+                    <td style="text-align: right" colspan="8"><b>SUBTOTAL: </b></td>
                     <td style="text-align: right"><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
                     <td style="text-align: right" colspan="2"><b>SUBTOTAL: </b></td>
                     <td style="text-align: right"><b><g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
@@ -344,10 +355,10 @@
             </thead>
             <tbody>
             <tr class="theaderBot theaderup padTopBot" >
-                <td style="text-align: right; width: 250px;"><b>TOTAL PRESUPUESTO:  </b></td>
+                <td style="text-align: right; width: 400px;"><b>TOTAL PRESUPUESTO:  </b></td>
                 <td style="text-align: right; width: 70px"><b><g:formatNumber number="${totalPresupuesto}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
                 <td style="text-align: right; width: 35px"><b><g:formatNumber number="${finalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
-                <td style="text-align: right; width: 80px"><b><g:formatNumber number="${finalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                <td style="text-align: right; width: 80px;"><b><g:formatNumber number="${finalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
             </tr>
             </tbody>
         </table>
@@ -386,23 +397,29 @@
                 <th style="width: 20px; text-align: center">
                     N°
                 </th>
-                <th style="width: 90px; text-align: center">
+                <th style="width: 90px; text-align: left" >
+                    CÓDIGO
+                </th>
+                <th style="width: 70px; text-align: left" >
+                    ESPEC.
+                </th>
+                <th style="width: 300px;">
                     RUBRO
                 </th>
-                <th style="width: 210px;">
+                <th style="width: 100px;">
                     DESCRIPCIÓN
                 </th>
-                <th style="width: 60px; text-align: right">
+                <th style="width: 80px; text-align: right">
                     UNIDAD
                 </th>
-                <th style="width: 70px; text-align: right">
+                <th style="width: 70px; text-align: center">
                     CANTIDAD
                 </th>
                 <th class="col_precio" style="width:80px ; text-align: right">P. U.</th>
-                <th class="col_total" style="width:80px; text-align: right">C.TOTAL</th>
-                <th class="col_vae_relativo " style="width:80px ; text-align: right">VAE RELATIVO</th>
-                <th class="col_vae_rbro" style="width:80px ; text-align: right">VAE RUBRO</th>
-                <th class="col_vae_total" style="width:80px ; text-align: right">VAE TOTAL</th>
+                <th class="col_total" style="width:80px; text-align: center">C.TOTAL</th>
+                <th class="col_vae_relativo " style="width:60px ; text-align: right">VAE RELATIVO</th>
+                <th class="col_vae_rbro" style="width:60px ; text-align: right">VAE RUBRO</th>
+                <th class="col_vae_total" style="width:60px ; text-align: right">VAE TOTAL</th>
             </tr>
             </thead>
         </table>
@@ -410,7 +427,7 @@
             <thead >
 
             <tr class="item-row">
-                <th colspan="10" style="font-size: 14px; font-weight: bold; text-align: left" class="blanco">
+                <th colspan="12" style="font-size: 14px; font-weight: bold; text-align: left" class="blanco">
                     ${subPre}
                 </th>
             </tr>
@@ -423,21 +440,26 @@
                 <tr class="item_row" id="${val.item__id}" item="${val}" sub="${val.sbpr__id}">
                     <td style="width: 20px" class="orden">${val.vlobordn}</td>
                     <td class="cdgo" style="width: 90px; text-align: left">${val.rbrocdgo.trim()}</td>
-                    <td class="nombre" style="text-align: left; width: 230px">${val.rbronmbr}</td>
-
-                    <td style="width: 40px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
-                    <td style="text-align: right; width: 80px" class="cant">
+                    <td class="esp" style="width: 70px; text-align: left">
+                        ${val.itemcdes?.trim()}
+                    </td>
+                    <td class="nombre" style="text-align: left; width: 200px">${val.rbronmbr}</td>
+                    <td class="desc" style="text-align: left; width: 100px">
+                        ${val.vlobdscr}
+                    </td>
+                    <td style="width: 50px !important;text-align: center" class="col_unidad">${val.unddcdgo.trim()}</td>
+                    <td style="text-align: right; width: 60px" class="cant">
                         <g:formatNumber number="${val.vlobcntd}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                     </td>
-                    <td class="col_precio" style="text-align: right; width: 80px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                    <td class="col_total total" style="text-align: right; width: 80px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
-                    <td style="text-align: right; width: 80px" class="relativo">
+                    <td class="col_precio" style="text-align: right; width: 60px" id="i_${val.item__id}"><g:formatNumber number="${val.pcun}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                    <td class="col_total total" style="text-align: right; width: 60px"><g:formatNumber number="${val.totl}" format="##,##0"  minFractionDigits="2" maxFractionDigits="2" locale="ec"/></td>
+                    <td style="text-align: right; width: 60px" class="relativo">
                         <g:formatNumber number="${val.relativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                     </td>
-                    <td style="text-align: right; width: 80px" class="vaeRubro">
+                    <td style="text-align: right; width: 60px" class="vaeRubro">
                         <g:formatNumber number="${val.vae_rbro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                     </td>
-                    <td style="text-align: right; width: 80px" class="vaeTotal">
+                    <td style="text-align: right; width: 60px" class="vaeTotal">
                         <g:formatNumber number="${val.vae_totl}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/>
                     </td>
                     <g:set var="total" value="${total.toDouble() + val.totl}"/>
@@ -451,10 +473,10 @@
             <thead></thead>
             <tbody>
             <tr class="theaderBot theaderup padTopBot">
-                <td style="text-align: right; width: 650px"><b>TOTAL PRESUPUESTO:</b></td>
-                <td style="text-align: right; width: 100px "><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
-                <td style="text-align: right; width: 100px"><b><g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
-                <td style="text-align: right; width: 100px "><b><g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                <td style="text-align: right; width: 400px"><b>TOTAL PRESUPUESTO:</b></td>
+                <td style="text-align: right; width: 70px "><b><g:formatNumber number="${total}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                <td style="text-align: right; width: 35px"><b><g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
+                <td style="text-align: right; width: 80px "><b><g:formatNumber number="${totalVae}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b></td>
             </tr>
             </tbody>
         </table>
