@@ -1443,7 +1443,7 @@
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
     <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
     <a href="#" class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</a>
-    <a href="#" class="btn" id="btnImprimirVae"><i class="icon-print"></i> Imprimir Vae</a>
+    <a href="#" class="btn" id="btnImprimirVae"><i class="icon-print"></i> Imprimir VAE</a>
     <button class="btn aparecer" id="btnDocExcel"><i class="icon-list-alt"></i> Excel</button>
 
 </div>

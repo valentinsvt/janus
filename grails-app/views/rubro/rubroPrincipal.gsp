@@ -2132,7 +2132,7 @@
             },
 */
             buttons   : {
-                "Si Vae" : function () {
+                "Si VAE" : function () {
                     var dsp0 = $("#dist_p1").val()
                     var dsp1 = $("#dist_p2").val()
                     var dsv0 = $("#dist_v1").val()
@@ -2148,7 +2148,7 @@
                     location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                     $("#imprimirTransporteDialog").dialog("close");
                 },
-                "No Vae" : function () {
+                "No VAE" : function () {
                     var dsp0 = $("#dist_p1").val()
                     var dsp1 = $("#dist_p2").val()
                     var dsv0 = $("#dist_v1").val()

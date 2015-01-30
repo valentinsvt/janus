@@ -278,8 +278,8 @@
         <a href="#" data-dismiss="modal" class="btn btn-primary" id="print_totales" data-transporte="true"><i class="icon-print"></i> Consolidado</a>
         <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="si"><i class="icon-print"></i> Con </br>transporte</a>
         <a href="#" data-dismiss="modal" class="btn btn-primary btnPrint" data-transporte="no"><i class="icon-print"></i> Sin </br>transporte</a>
-        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrintVae" data-transporte="si"><i class="icon-print"></i> Vae con </br>transporte</a>
-        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrintVae" data-transporte="no"><i class="icon-print"></i> Vae sin </br>transporte</a>
+        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrintVae" data-transporte="si"><i class="icon-print"></i> VAE con </br>transporte</a>
+        <a href="#" data-dismiss="modal" class="btn btn-primary btnPrintVae" data-transporte="no"><i class="icon-print"></i> VAE sin </br>transporte</a>
         <a href="#" data-dismiss="modal" class="btn" id="btnCancel">Cancelar</a>
     </div>
 </div>

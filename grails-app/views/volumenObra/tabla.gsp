@@ -41,7 +41,7 @@
 
         <a href="#" class="btn  " id="imprimir_sub_vae">
             <i class="icon-print"></i>
-            Subpresupuesto Vae
+            Subpresupuesto VAE
         </a>
     </div>
 </div>
@@ -268,8 +268,8 @@
 
                     },
                     "print-key2": {"name": "Imprimir con Desglose", icon: "print"},
-                    "print-key3": {"name": "Imprimir Vae sin Desglose", icon: "print"},
-                    "print-key4": {"name": "Imprimir Vae con Desglose", icon: "print"}
+                    "print-key3": {"name": "Imprimir VAE sin Desglose", icon: "print"},
+                    "print-key4": {"name": "Imprimir VAE con Desglose", icon: "print"}
 
 
                 }

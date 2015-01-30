@@ -9,7 +9,7 @@
     <script type="text/javascript" src="${resource(dir: 'js', file: 'tableHandlerBody.js')}"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'tableHandler.css')}"/>
 
-    <title>Composición de la obra</title>
+    <title>Valores del VAE</title>
 
     <style type="text/css">
 

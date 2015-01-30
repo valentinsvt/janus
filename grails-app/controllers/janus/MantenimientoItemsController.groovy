@@ -1582,7 +1582,7 @@ class MantenimientoItemsController extends Shield {
             println "OK_"+ accion + "_" + vaeItems.id + "_" + vaeItems.porcentaje
             render "OK"
         } else {
-            println "Vae items: " + vaeItems.errors
+//            println "Vae items: " + vaeItems.errors
             def errores = g.renderErrors(bean: vaeItems)
             render "NO_" + errores
         }
