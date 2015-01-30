@@ -1443,6 +1443,7 @@
 <div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
     <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
     <a href="#" class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</a>
+    <a href="#" class="btn" id="btnImprimirVae"><i class="icon-print"></i> Imprimir Vae</a>
     <button class="btn aparecer" id="btnDocExcel"><i class="icon-list-alt"></i> Excel</button>
 
 </div>
@@ -2137,6 +2138,12 @@
 
         var active = $("#tabs").tabs("option", "active")
 
+        if(active == 0){
+            $("#btnImprimirVae").show()
+        }else{
+            $("#btnImprimirVae").hide()
+        }
+
         if (active != 2) {
             $("#btnDocExcel").hide();
         }
@@ -2147,6 +2154,7 @@
         if (active == 4) {
 
             $("#btnImprimir").hide()
+
         }
         else {
             $("#btnImprimir").show()
@@ -2428,6 +2436,95 @@
                         firmasIdMP + "&totalPresupuesto=" + totalPres + "&firmasFijasMP=" + firmasFijasMP + "&materiales=" + materiales +
                         "&manoObra=" + manoObra + "&equipos=" + equipos + "&costoPorcentaje=" + costoPorcentaje + "&costo=" + costo + "&total=" + total +
                         "&texto=" + texto + "&para=" + para + "&de=" + de + "&fecha=" + fecha + "&asunto=" + asunto
+            }
+        }
+        return false;
+    });
+
+    $("#btnImprimirVae").click(function () {
+        if (!$(this).hasClass("disabled")) {
+            reajusteMemo = $("#reajusteMemo").val()
+            var active = $("#tabs").tabs("option", "active");
+            if (active == 0) {
+
+                var idCoordinador = $("#coordinador").val()
+                var idFirmaCoor
+                if (idCoordinador != null) {
+                    idFirmaCoor = $("#coordinador").val()
+                } else {
+                    idFirmaCoor = ''
+                }
+
+                firmasId = '';
+                firmasFijas = '';
+                firmaCoordinador = idFirmaCoor
+                firmaElaboro = ${obra?.responsableObra?.id}
+
+                        $("#firmasFijasPresu").children("tr").each(function (i) {
+                            if ($(this).data("id")) {
+                                if (firmasFijas != '') {
+
+                                    firmasFijas += ','
+                                } else {
+                                    firmasFijas += '-1,'
+                                }
+                                firmasFijas += $(this).data("id")
+
+                            }
+
+                        });
+//           //console.log("1:" + firmasFijas)
+
+                notaValue = $("#piePaginaSel").val();
+
+                if ($("#forzar").attr("checked") == "checked") {
+                    forzarValue = 1;
+                } else {
+                    forzarValue = 2;
+                }
+                if (1 != 1) {
+
+                    $("#tipoReporteDialog").dialog("open");
+
+                } else {
+
+                    proyeccion = $("#proyeccionReajuste").is(':checked');
+                    reajusteIva = $("#reajusteIva").is(':checked');
+                    reajusteMeses = $("#mesesReajuste").val();
+
+                    var tipoReporte
+
+                    if ($(".uno").is(':checked')) {
+                        tipoReporte = 1
+
+                    } else {
+                        tipoReporte = 2
+                    }
+
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(controller: 'nota', action: 'saveNota')}",
+                        data    : {
+                            piePaginaSel : $("#piePaginaSel").val(),
+                            obra         : ${obra?.id},
+                            descripcion  : $("#descripcion").val(),
+                            texto        : $("#texto").val(),
+                            adicional    : $("#adicional").val(),
+                            obraTipo     : "${obra?.claseObra?.tipo}"
+                        },
+                        success : function (msg) {
+                            var part = msg.split('_');
+                            if (part[0] == 'ok') {
+                                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraVae',id: obra?.id)}?tipoReporte=" + tipoReporte +
+                                "&forzarValue=" + forzarValue + "&notaValue=" + part[1] + "&firmasId=" + firmasId +
+                                "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses +
+                                "&firmasFijas=" + firmasFijas + "&firmaCoordinador=" + firmaCoordinador +
+                                "&firmaElaboro=" + firmaElaboro + "&encabezado=" + $(".encabezado:checked").val();
+
+                            }
+                        }
+                    });
+                }
             }
         }
         return false;
