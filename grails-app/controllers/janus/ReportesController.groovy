@@ -2797,7 +2797,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.lugar?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
 
             }
 
@@ -2819,7 +2819,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen1?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenMejoramiento, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenMejoramiento, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
             }
 
             if(obra?.distanciaVolumen != 0){
@@ -2828,7 +2828,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen0?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
             }
 
             if(obra?.distanciaVolumenCarpetaAsfaltica != 0){
@@ -2838,7 +2838,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen2?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
             }
 
             txtDatos1.setAlignment(Element.ALIGN_CENTER);
@@ -3380,6 +3380,14 @@ class ReportesController {
         def totalPresupuesto = 0;
         def totalPrueba = 0
         def totalPrueba1 = 0
+
+        def totalRelativo1 = 0
+        def totalRelativo2 = 0
+        def finalRelativo = 0
+
+        def totalVae1 = 0
+        def totalVae2 = 0
+        def finalVae = 0
 //        def valores = preciosService.rbro_pcun_v2(obra.id)
         def valores = preciosService.rbro_pcun_vae(obra.id)
 
@@ -3402,7 +3410,7 @@ class ReportesController {
 
         subPres.each { s ->
             total2 = 0
-            addCellTabla(tablaVolObra, new Paragraph(s.descripcion, times10bold), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 11])
+              addCellTabla(tablaVolObra, new Paragraph(s.descripcion, times10bold), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 11])
             valores.each {
                 if (it.sbprdscr == s.descripcion) {
                     def textoC = (it.rbronmbr ?: '')
@@ -3428,6 +3436,12 @@ class ReportesController {
                     totales = it.totl
                     totalPrueba = total2 += totales
                     totalPresupuesto = (total1 += totales);
+
+                    totalRelativo1 = it.relativo
+                    finalRelativo = (totalRelativo2 += totalRelativo1)
+
+                    totalVae1= it.vae_totl
+                    finalVae = (totalVae2 += totalVae1)
                 } else {  }
             }
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellCenter)
@@ -3436,7 +3450,7 @@ class ReportesController {
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("SUBTOTAL:", times8bold), prmsCellLeft)
+            addCellTabla(tablaVolObra, new Paragraph("SUBTOTAL:", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
 
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
@@ -3448,16 +3462,22 @@ class ReportesController {
         }
 
 
-        PdfPTable tablaTotal = new PdfPTable(6);
+        PdfPTable tablaTotal = new PdfPTable(11);
         tablaTotal.setWidthPercentage(100);
 
-        tablaTotal.setWidths(arregloEnteros([35, 0, 0, 0, 0, 15]))
-        addCellTabla(tablaTotal, new Paragraph("TOTAL DEL PRESUPUESTO: ", times8bold), prmsCellRight2)
-        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
-        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellRight2)
+        tablaTotal.setWidths(arregloEnteros([14,13, 42, 20, 10, 0, 30,15,12,5,10]))
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph("TOTAL DEL PRESUPUESTO: ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: finalRelativo, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: finalVae, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellHead3)
+
 
         //solo IVA
         if (params.iva == 'true' && params.proyeccion == 'false') {
@@ -3658,7 +3678,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.lugar?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
 
             }
 
@@ -3680,7 +3700,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen1?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenMejoramiento, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenMejoramiento, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
             }
 
             if(obra?.distanciaVolumen != 0){
@@ -3689,7 +3709,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen0?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
             }
 
             if(obra?.distanciaVolumenCarpetaAsfaltica != 0){
@@ -3698,7 +3718,7 @@ class ReportesController {
                 addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen2?.descripcion, times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
                 addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
-                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "###", locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
             }
 
             txtDatos1.setAlignment(Element.ALIGN_CENTER);
