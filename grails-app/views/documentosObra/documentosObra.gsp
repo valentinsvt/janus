@@ -179,7 +179,7 @@
 
 <fieldset class="borde">
 
-<legend>Set de Firmas</legend>
+<legend>Firmas</legend>
 
 
 %{--<div class="span6" style="margin-top: -20px">--}%
@@ -551,7 +551,7 @@
 
     <fieldset class="borde">
 
-        <legend>Set de Firmas</legend>
+        <legend>Firmas</legend>
 
         %{--<div class="span6">--}%
 
@@ -804,7 +804,7 @@
 
     <fieldset class="borde">
 
-        <legend>Set de Firmas</legend>
+        <legend>Firmas</legend>
 
 
         %{--<div class="span6">--}%
@@ -1282,7 +1282,7 @@
 
     <fieldset class="borde">
 
-        <legend>Set de Firmas</legend>
+        <legend>Firmas</legend>
 
         %{--<div class="span6">--}%
 
@@ -1440,9 +1440,10 @@
 </div>
 
 
-<div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 210px">
+<div class="btn-group" style="margin-bottom: 10px; margin-top: 20px; margin-left: 180px; text-align: center">
     <button class="btn" id="btnSalir"><i class="icon-arrow-left"></i> Regresar</button>
     <a href="#" class="btn" id="btnImprimir"><i class="icon-print"></i> Imprimir</a>
+    <a href="#" class="btn" id="btnImprimirDscr"><i class="icon-print"></i> con descripción</a>
     <a href="#" class="btn" id="btnImprimirVae"><i class="icon-print"></i> Imprimir VAE</a>
     <button class="btn aparecer" id="btnDocExcel"><i class="icon-list-alt"></i> Excel</button>
 
@@ -2140,7 +2141,9 @@
 
         if(active == 0){
             $("#btnImprimirVae").show()
+            $("#btnImprimirDscr").show()
         }else{
+            $("#btnImprimirDscr").hide()
             $("#btnImprimirVae").hide()
         }
 
