@@ -2444,6 +2444,96 @@
         return false;
     });
 
+    $("#btnImprimirDscr").click(function () {
+        if (!$(this).hasClass("disabled")) {
+            reajusteMemo = $("#reajusteMemo").val()
+            var active = $("#tabs").tabs("option", "active");
+            if (active == 0) {
+
+                var idCoordinador = $("#coordinador").val()
+                var idFirmaCoor
+                if (idCoordinador != null) {
+                    idFirmaCoor = $("#coordinador").val()
+                } else {
+                    idFirmaCoor = ''
+                }
+
+                firmasId = '';
+                firmasFijas = '';
+                firmaCoordinador = idFirmaCoor
+                firmaElaboro = ${obra?.responsableObra?.id}
+
+                        $("#firmasFijasPresu").children("tr").each(function (i) {
+                            if ($(this).data("id")) {
+                                if (firmasFijas != '') {
+
+                                    firmasFijas += ','
+                                } else {
+                                    firmasFijas += '-1,'
+                                }
+                                firmasFijas += $(this).data("id")
+
+                            }
+
+                        });
+//           //console.log("1:" + firmasFijas)
+
+                notaValue = $("#piePaginaSel").val();
+
+                if ($("#forzar").attr("checked") == "checked") {
+                    forzarValue = 1;
+                } else {
+                    forzarValue = 2;
+                }
+                if (1 != 1) {
+
+                    $("#tipoReporteDialog").dialog("open");
+
+                } else {
+
+                    proyeccion = $("#proyeccionReajuste").is(':checked');
+                    reajusteIva = $("#reajusteIva").is(':checked');
+                    reajusteMeses = $("#mesesReajuste").val();
+
+                    var tipoReporte
+
+                    if ($(".uno").is(':checked')) {
+                        tipoReporte = 1
+
+                    } else {
+                        tipoReporte = 2
+                    }
+
+                    $.ajax({
+                        type    : "POST",
+                        url     : "${createLink(controller: 'nota', action: 'saveNota')}",
+                        data    : {
+                            piePaginaSel : $("#piePaginaSel").val(),
+                            obra         : ${obra?.id},
+                            descripcion  : $("#descripcion").val(),
+                            texto        : $("#texto").val(),
+                            adicional    : $("#adicional").val(),
+                            obraTipo     : "${obra?.claseObra?.tipo}"
+                        },
+                        success : function (msg) {
+                            var part = msg.split('_');
+                            if (part[0] == 'ok') {
+                                location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteDocumentosObraDscr',id: obra?.id)}?tipoReporte=" + tipoReporte +
+                                "&forzarValue=" + forzarValue + "&notaValue=" + part[1] + "&firmasId=" + firmasId +
+                                "&proyeccion=" + proyeccion + "&iva=" + reajusteIva + "&meses=" + reajusteMeses +
+                                "&firmasFijas=" + firmasFijas + "&firmaCoordinador=" + firmaCoordinador +
+                                "&firmaElaboro=" + firmaElaboro + "&encabezado=" + $(".encabezado:checked").val();
+
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        return false;
+    });
+
+
     $("#btnImprimirVae").click(function () {
         if (!$(this).hasClass("disabled")) {
             reajusteMemo = $("#reajusteMemo").val()

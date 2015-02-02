@@ -266,7 +266,6 @@
                     <b> <g:formatNumber number="${totalRubro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>
 
-                %{--<td style="border-left: 1px solid #000000; width: 14px">&nbsp; </td>--}%
                 <td style="width: 120px; text-align: center">
                     <b> <g:formatNumber number="${totalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>

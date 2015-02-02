@@ -2902,31 +2902,7 @@ class ReportesController {
             arregloFirmas += firmas
         }
 
-//            println("firmas:" + arregloFirmas[1])
-//            println("firmas:" + arregloFirmas[0])
 
-        //nombres
-
-//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[1]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[1]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-//
-//            if(params.firmaCoordinador != ''){
-//                def personaRol = PersonaRol.get(params.firmaCoordinador)
-//                firmaCoordinador = personaRol.persona
-//                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-//            }else{
-//               addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
-//            }
-//
-//
-//           if(arregloFirmas[0] == null){
-//            addCellTabla(tablaFirmas, new Paragraph("Director no asignado", times8bold), prmsHeaderHoja)
-//              }else{
-//            addCellTabla(tablaFirmas, new Paragraph((arregloFirmas[0]?.titulo?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.nombre?.toUpperCase() ?: '') + " " + (arregloFirmas[0]?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
-//              }
-
-        //cambio firmas 24/04
-
-//        println("firma: " + params.firmaElaboro + " perfil " + session.perfil.id)
         if(params.firmaElaboro){
             personaElaboro = Persona.get(params.firmaElaboro)
             addCellTabla(tablaFirmas, new Paragraph((personaElaboro?.titulo?.toUpperCase() ?: '') + " " + (personaElaboro?.nombre.toUpperCase() ?: '' ) + " " + (personaElaboro?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
@@ -3057,6 +3033,807 @@ class ReportesController {
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
     }
+
+
+    def reporteDocumentosObraDscr() {
+
+        println("*****--->" + params)
+
+        def cd
+        def auxiliar = janus.Auxiliar.get(1);
+        def nota
+
+        if (params.notaValue && params.notaValue != '' && params.notaValue != 'null' && params.notaValue != 'undefined') {
+            nota = Nota.get(params.notaValue)
+        } else {
+            nota = new Nota();
+        }
+
+        def obra = Obra.get(params.id)
+        def paux = Parametros.get(1);
+        def ivaTotal = 0
+        def proyeccionTotal = 0
+        def presupuestoTotal = 0;
+        def inflacion = 0;
+        def meses = 0;
+        def firma = []
+        def firmas
+        def firmaFija
+        def firmaCoordinador
+        def personaElaboro
+        def cuenta = 0;
+        def cantidadMeses = params.meses
+
+//        println(obra.revisor.nombre);
+//        println(obra.inspector.nombre);
+//        println(obra.responsableObra.nombre);
+
+
+        def firma1 = obra?.responsableObra;
+        def firma2 = obra?.revisor
+
+        if (params.firmasFijas.trim().size() > 0) {
+            firmaFija = params.firmasFijas.split(",")
+        } else {
+            firmaFija = []
+        }
+
+        cuenta = firma.size() + firmaFija.size() + 1
+
+        def prmsHeaderHoja = [border: Color.WHITE]
+        def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
+        def prmsHeaderHoja3 = [border: Color.WHITE, colspan: 5]
+        def prmsHeaderHoja4 = [border: Color.WHITE, bordeTop: "1"]
+        def prmsHeaderHoja5 = [border: Color.WHITE, bordeBot: "1"]
+        def prmsHeaderHoja6 = [border: Color.WHITE, bordeLeft: "1"]
+
+        def prmsHeader = [border: Color.WHITE, colspan: 7, bg: new Color(73, 175, 205),
+                          align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsHeader2 = [border: Color.WHITE, colspan: 3, bg: new Color(73, 175, 205),
+                           align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead = [border: Color.WHITE, bg: Color.WHITE,
+                            align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellHead2 = [border: Color.WHITE,
+                             align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHead3 = [border: Color.WHITE,
+                             align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+        def prmsCellHeadRight = [border: Color.WHITE, bg: new Color(73, 175, 205),
+                                 align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenter = [border: Color.WHITE, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE]
+        def prmsCellCenterLeft = [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT]
+
+        def prmsCellRight = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT]
+        def prmsCellRight2 = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1", bordeBot: "1"]
+        def prmsCellRightTop = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeTop: "1"]
+        def prmsCellRightBot = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_RIGHT, bordeBot: "1"]
+        def prmsCellLeft = [border: Color.WHITE, valign: Element.ALIGN_MIDDLE]
+        def prmsSubtotal = [border: Color.WHITE, colspan: 6,
+                            align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+        def prmsNum = [border: Color.WHITE, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE]
+
+        def prms = [prmsHeaderHoja : prmsHeaderHoja, prmsHeader: prmsHeader, prmsHeader2: prmsHeader2,
+                    prmsCellHead   : prmsCellHead, prmsCell: prmsCellCenter, prmsCellLeft: prmsCellLeft, prmsSubtotal: prmsSubtotal, prmsNum: prmsNum,
+                    prmsHeaderHoja2: prmsHeaderHoja2, prmsCellRight: prmsCellRight, prmsCellHeadRight: prmsCellHeadRight, prmsCellHead2: prmsCellHead2,
+                    prmsCellRight2 : prmsCellRight2, prmsCellRightTop: prmsCellRightTop, prmsCellRightBot: prmsCellRightBot]
+
+        def baos = new ByteArrayOutputStream()
+        def name = "presupuesto_" + new Date().format("ddMMyyyy_hhmm") + ".pdf";
+        Font times12bold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+        Font times13bold = new Font(Font.TIMES_ROMAN, 12);
+        Font times18bold = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+        Font times10bold = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8bold = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        Font times8normal = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL)
+        Font times10boldWhite = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
+        Font times8boldWhite = new Font(Font.TIMES_ROMAN, 8, Font.BOLD)
+        times8boldWhite.setColor(Color.WHITE)
+        times10boldWhite.setColor(Color.WHITE)
+        def fonts = [times12bold     : times12bold, times10bold: times10bold, times8bold: times8bold,
+                     times10boldWhite: times10boldWhite, times8boldWhite: times8boldWhite, times8normal: times8normal, times18bold: times18bold]
+
+        Document document
+        document = new Document(PageSize.A4.rotate());
+
+        def pdfw = PdfWriter.getInstance(document, baos);
+        HeaderFooter footer1 = new HeaderFooter(new Phrase('', times8normal), true);
+        footer1.setBorder(Rectangle.NO_BORDER);
+        footer1.setAlignment(Element.ALIGN_CENTER);
+        document.setFooter(footer1);
+        document.open();
+
+//        document.setMargins(2,2,2,2)
+        document.addTitle("Presupuesto " + new Date().format("dd_MM_yyyy"));
+        document.addSubject("Generado por el sistema Janus");
+        document.addKeywords("documentosObra, janus, presupuesto");
+        document.addAuthor("Janus");
+        document.addCreator("Tedein SA");
+
+        Paragraph headers = new Paragraph();
+        addEmptyLine(headers, 1);
+        headers.setAlignment(Element.ALIGN_CENTER);
+        headers.add(new Paragraph(auxiliar.titulo, times18bold));
+        addEmptyLine(headers, 1);
+        headers.add(new Paragraph("DGCP - Unidad Técnica de Fijación de Precios Unitarios", times12bold));
+
+        if (obra?.oficioSalida == null) {
+            headers.add(new Paragraph("Informe" + " ", times12bold));
+        } else {
+            headers.add(new Paragraph("Informe N°. " + obra?.oficioSalida, times12bold));
+        }
+
+        Paragraph headerFecha = new Paragraph();
+        headerFecha.setAlignment(Element.ALIGN_RIGHT);
+        addEmptyLine(headerFecha, 1);
+        addEmptyLine(headerFecha, 1);
+        headerFecha.add(new Paragraph("Quito, " + printFecha(obra?.fechaOficioSalida), times13bold));
+        addEmptyLine(headerFecha, 1);
+
+        Paragraph txtIzq = new Paragraph();
+        addEmptyLine(txtIzq, 1);
+        txtIzq.setAlignment(Element.ALIGN_LEFT);
+
+        if (params.encabezado == "1" || params.encabezado == 1) {
+            if (Persona.get(session.usuario.id).departamento?.codigo == 'UTFPU') {
+                if (obra?.departamentoDestino) {
+                    def departamentoDestino = Departamento.get(obra?.departamentoDestino?.id)
+                    def direccionDestino = departamentoDestino?.direccion
+                    def funcionDirector = Funcion.findByCodigo('D')
+                    def departamentosDestino = Departamento.findAllByDireccion(direccionDestino)
+                    def personasDir = []
+                    departamentosDestino.each {
+                        personasDir += Persona.findAllByDepartamento(Departamento.get(it.id))
+                    }
+
+                    def rolDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personasDir)
+                    txtIzq.add(new Paragraph(rolDirector?.persona?.titulo?.toUpperCase() ?: '', times10bold));
+                    txtIzq.add(new Paragraph(rolDirector?.persona?.nombre?.toUpperCase() + ' ' + rolDirector?.persona?.apellido?.toUpperCase(), times10bold));
+                    txtIzq.add(new Paragraph('DIRECTOR - ' + rolDirector?.persona?.departamento?.direccion?.nombre?.toUpperCase(), times10bold));
+                    txtIzq.add(new Paragraph('Presente.', times10bold));
+                    txtIzq.add(new Paragraph(' ', times10bold));
+                    txtIzq.add(new Paragraph('Sr. Director.', times10bold));
+                } else {
+                    txtIzq.add(new Paragraph('SR. DIRECTOR', times10bold));
+                    txtIzq.add(new Paragraph('Presente.', times10bold));
+                    txtIzq.add(new Paragraph(' ', times10bold));
+                    txtIzq.add(new Paragraph('Sr. Director.', times10bold));
+                }
+
+            } else {
+                if (obra?.departamentoDestino) {
+                    def departamentoDestino = Departamento.get(obra?.departamentoDestino?.id)
+                    def direccionDestino = departamentoDestino?.direccion
+                    def funcionDirector = Funcion.findByCodigo('D')
+                    def departamentosDestino = Departamento.findAllByDireccion(direccionDestino)
+                    def personasDir = []
+                    departamentosDestino.each {
+                        personasDir += Persona.findAllByDepartamento(Departamento.get(it.id))
+                    }
+                    def rolDirector = PersonaRol.findByFuncionAndPersonaInList(funcionDirector, personasDir)
+                    txtIzq.add(new Paragraph(rolDirector?.persona?.titulo?.toUpperCase() ?: '', times10bold));
+                    txtIzq.add(new Paragraph(rolDirector?.persona?.nombre?.toUpperCase() + ' ' + rolDirector?.persona?.apellido?.toUpperCase(), times10bold));
+                    txtIzq.add(new Paragraph('DIRECTOR - ' + rolDirector?.persona?.departamento?.direccion?.nombre?.toUpperCase(), times10bold));
+                    txtIzq.add(new Paragraph('Presente.', times10bold));
+                    txtIzq.add(new Paragraph(' ', times10bold));
+                    txtIzq.add(new Paragraph('Sr. Director.', times10bold));
+                } else {
+                    txtIzq.add(new Paragraph('SR. DIRECTOR', times10bold));
+                    txtIzq.add(new Paragraph('Presente.', times10bold));
+                    txtIzq.add(new Paragraph(' ', times10bold));
+                    txtIzq.add(new Paragraph('Sr. Director.', times10bold));
+                }
+            }
+        } else {
+            txtIzq.add(new Paragraph('PRESUPUESTO REFERENCIAL', times10bold));
+        }
+
+        if (params.tipoReporte == '1') {
+            if(session.perfil.id == 16){
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }else{
+                txtIzq.add(new Paragraph(auxiliar?.baseCont, times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }
+        }
+        if (params.tipoReporte == '2') {
+            if(session.perfil.id == 16){
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }else{
+                txtIzq.add(new Paragraph(auxiliar?.presupuestoRef, times10bold));
+                txtIzq.add(new Paragraph(" ", times10bold));
+            }
+
+        }
+
+        addEmptyLine(headers, 1);
+        document.add(headers);
+        document.add(headerFecha);
+        document.add(txtIzq);
+
+        PdfPTable tablaPresupuesto = new PdfPTable(7);
+        tablaPresupuesto.setWidthPercentage(100);
+        tablaPresupuesto.setWidths(arregloEnteros([12, 2, 13, 2, 8, 2, 26]))
+
+        addCellTabla(tablaPresupuesto, new Paragraph("Requirente", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.departamento?.direccion?.nombre + ' - ' + obra?.departamento?.descripcion, times8normal), prmsHeaderHoja3)
+
+        addCellTabla(tablaPresupuesto, new Paragraph("Código", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.codigo, times8normal), prmsHeaderHoja3)
+
+        addCellTabla(tablaPresupuesto, new Paragraph("Memo Cant. Obra", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.memoCantidadObra, times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Nombre", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.nombre, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaPresupuesto, new Paragraph("Fórmula N°", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.formulaPolinomica, times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Tipo de Obra", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.tipoObjetivo?.descripcion, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaPresupuesto, new Paragraph("Cantón", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.parroquia?.canton?.nombre, times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Parroquia", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.parroquia?.nombre, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaPresupuesto, new Paragraph("Comunidad", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.comunidad?.nombre, times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Sitio", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(obra?.sitio, times8normal), prmsHeaderHoja)
+
+
+        addCellTabla(tablaPresupuesto, new Paragraph("Fecha Act. Precios", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(printFecha(obra?.fechaPreciosRubros), times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" ", times8normal), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph("Responsable Cantidades de Obra", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaPresupuesto, new Paragraph((obra?.inspector?.titulo ?: '')+ ' ' + obra?.inspector?.nombre + " " + obra?.inspector?.apellido, times8normal), prmsHeaderHoja)
+
+        PdfPTable tablaCoordenadas = new PdfPTable(3);
+        tablaCoordenadas.setWidthPercentage(100);
+        tablaCoordenadas.setWidths(arregloEnteros([17, 3, 72]))
+        addCellTabla(tablaCoordenadas, new Paragraph("Coordenadas", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCoordenadas, new Paragraph(obra?.coordenadas, times8normal), prmsHeaderHoja)
+
+        PdfPTable tablaReferencia = new PdfPTable(3);
+        tablaReferencia.setWidthPercentage(100);
+        tablaReferencia.setWidths(arregloEnteros([17, 3, 72]))
+        addCellTabla(tablaReferencia, new Paragraph("Referencia", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph(obra?.referencia, times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaReferencia, new Paragraph("", times8bold), prmsHeaderHoja)
+
+        PdfPTable tablaVolObra = new PdfPTable(8);
+        tablaVolObra.setWidthPercentage(100);
+
+        PdfPTable tablaCabeceraDoc = new PdfPTable(1);
+        tablaVolObra.setWidthPercentage(100);
+
+        PdfPTable tablaTotalSub = new PdfPTable(6);
+        tablaVolObra.setWidthPercentage(100);
+
+        PdfPTable tablaHeaderVol = new PdfPTable(6);
+        tablaHeaderVol.setWidthPercentage(100);
+
+        def detalle
+
+        detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])
+        preciosService.ac_rbroObra(obra.id)
+
+        def precios = [:]
+        def indirecto = obra.totales / 100
+        def c;
+        def total1 = 0;
+        def total2 = 0;
+        def totales
+        def totalPresupuesto = 0;
+        def totalPrueba = 0
+        def totalPrueba1 = 0
+
+        def totalRelativo1 = 0
+        def totalRelativo2 = 0
+        def finalRelativo = 0
+
+        def totalVae1 = 0
+        def totalVae2 = 0
+        def finalVae = 0
+//        def valores = preciosService.rbro_pcun_v2(obra.id)
+        def valores = preciosService.rbro_pcun_vae(obra.id)
+
+        def subPres = VolumenesObra.findAllByObra(obra, [sort: "orden"]).subPresupuesto.unique()
+
+        tablaVolObra.setWidths(arregloEnteros([14,13, 42, 20, 10, 12, 12,12]))
+
+        addCellTabla(tablaVolObra, new Paragraph("CÓDIGO", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("ESPEC.", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("RUBRO", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("DESCRIPCIÓN", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("UNIDAD", times8bold), prmsCellHead2)
+        addCellTabla(tablaVolObra, new Paragraph("CANTIDAD", times8bold), prmsCellHead3)
+        addCellTabla(tablaVolObra, new Paragraph("P. U.", times8bold), prmsCellHead3)
+        addCellTabla(tablaVolObra, new Paragraph("C. TOTAL", times8bold), prmsCellHead3)
+
+
+
+        subPres.each { s ->
+            total2 = 0
+            addCellTabla(tablaVolObra, new Paragraph(s.descripcion, times10bold), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 8])
+            valores.each {
+                if (it.sbprdscr == s.descripcion) {
+                    def textoC = (it.rbronmbr ?: '')
+                    textoC = textoC.decodeHTML()
+                    it?.rbronmbr = textoC
+                    addCellTabla(tablaVolObra, new Paragraph(it.rbrocdgo, times8normal), prmsCellLeft)
+                    addCellTabla(tablaVolObra, new Paragraph(it.itemcdes, times8normal), prmsCellLeft)
+                    addCellTabla(tablaVolObra, new Paragraph(it.rbronmbr, times8normal), prmsCellLeft)
+                    addCellTabla(tablaVolObra, new Paragraph(it.vlobdscr, times8normal), prmsCellLeft)
+                    addCellTabla(tablaVolObra, new Paragraph(it.unddcdgo, times8normal), prmsCellCenter)
+                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.vlobcntd, minFractionDigits:
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.pcun, minFractionDigits:
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                    addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: it.totl, minFractionDigits:
+                            2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+
+                    totales = it.totl
+                    totalPrueba = total2 += totales
+                    totalPresupuesto = (total1 += totales);
+
+                    totalRelativo1 = it.relativo
+                    finalRelativo = (totalRelativo2 += totalRelativo1)
+
+                    totalVae1= it.vae_totl
+                    finalVae = (totalVae2 += totalVae1)
+                } else {  }
+            }
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellCenter)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("SUBTOTAL:", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph(g.formatNumber(number: totalPrueba, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+        }
+
+
+        PdfPTable tablaTotal = new PdfPTable(8);
+        tablaTotal.setWidthPercentage(100);
+
+        tablaTotal.setWidths(arregloEnteros([0,0,0,0,0,90,20,8]))
+
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph("TOTAL DEL PRESUPUESTO: ", times8bold), prmsCellHead2)
+        addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: totalPresupuesto, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight2)
+
+
+
+        //solo IVA
+        if (params.iva == 'true' && params.proyeccion == 'false') {
+            ivaTotal = (totalPresupuesto * paux?.iva) / 100
+            presupuestoTotal = totalPresupuesto + ivaTotal;
+
+            addCellTabla(tablaTotal, new Paragraph("IVA " + paux?.iva + "% : ", times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRightBot)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
+        }
+        //solo Proyeccion del reajuste
+
+        if (params.proyeccion == 'true' && cantidadMeses.toInteger() >= 1 && params.iva == 'false') {
+            inflacion = paux.inflacion
+            meses = params.meses
+
+            proyeccionTotal = (totalPresupuesto * ((inflacion / 1200) * meses.toInteger()))
+            presupuestoTotal = totalPresupuesto + proyeccionTotal;
+
+            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste (período: " + meses + " meses, inflación: " + inflacion + " % ) :", times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRightBot)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
+        }
+
+        if (params.proyeccion == 'true' && cantidadMeses.toInteger() >= 1 && params.iva == 'true') {
+            inflacion = paux.inflacion
+            meses = params.meses
+            proyeccionTotal = (totalPresupuesto * ((inflacion / 1200) * meses.toInteger()))
+            ivaTotal = ((totalPresupuesto + proyeccionTotal) * paux?.iva) / 100;
+            presupuestoTotal = ((totalPresupuesto + proyeccionTotal) + ivaTotal)
+
+            addCellTabla(tablaTotal, new Paragraph("Proyeccion del Reajuste (período: " + meses + " meses, inflación: " + inflacion + " % ) :", times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.inflacion, format: "####.##", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: proyeccionTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+
+            addCellTabla(tablaTotal, new Paragraph("IVA " + paux?.iva + "% : ", times8bold), prmsCellRight)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: paux?.iva, format: "##,##0", locale: "ec"), times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: ivaTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRight)
+
+            addCellTabla(tablaTotal, new Paragraph("Presupuesto Total: ", times8bold), prmsCellRightBot)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(" ", times8bold), prmsCellHead)
+            addCellTabla(tablaTotal, new Paragraph(g.formatNumber(number: presupuestoTotal, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times8bold), prmsCellRightBot)
+        }
+
+        Paragraph txtCondiciones = new Paragraph();
+        addEmptyLine(txtCondiciones, 1);
+        txtCondiciones.setAlignment(Element.ALIGN_LEFT);
+        txtCondiciones.add(new Paragraph("CONDICIONES DEL CONTRATO", times10bold));
+        txtCondiciones.add(new Paragraph(" ", times10bold));
+
+        PdfPTable tablaCondiciones = new PdfPTable(3);
+        tablaCondiciones.setWidthPercentage(100);
+        tablaCondiciones.setWidths(arregloEnteros([7, 2, 60]))
+
+        addCellTabla(tablaCondiciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+        addCellTabla(tablaCondiciones, new Paragraph("Plazo de Ejecución", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.plazoEjecucionMeses, format: "##", locale: "ec") + " mes(es)" + "  "  + obra?.plazoEjecucionDias + " día(s)", times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaCondiciones, new Paragraph("Anticipo", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(g.formatNumber(number: obra?.porcentajeAnticipo, format: "###", locale: "ec") + " %", times8normal), prmsHeaderHoja)
+
+        addCellTabla(tablaCondiciones, new Paragraph("Responsable Estudios", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaCondiciones, new Paragraph((obra?.revisor?.titulo ?: '') + " " + (obra?.revisor?.nombre ?: '')+ " " + (obra?.revisor?.apellido ?: ''), times8normal), prmsHeaderHoja)
+
+        document.add(tablaPresupuesto);
+        document.add(tablaCoordenadas);
+        document.add(tablaReferencia);
+        document.add(tablaVolObra)
+        document.add(tablaTotal);
+
+        PdfPTable tablaRetenciones = new PdfPTable(3);
+        Paragraph txtRetenciones = new Paragraph();
+        Paragraph txtDatos = new Paragraph();
+        Paragraph txtDatos1 = new Paragraph();
+
+
+        PdfPTable tablaDatos = new PdfPTable(6);
+        tablaDatos.setWidthPercentage(100);
+        tablaDatos.setWidths(arregloEnteros([10, 2, 30, 6, 2, 10]))
+
+
+        if (params.forzarValue == '1') {
+            Paragraph headerForzar = new Paragraph();
+            addEmptyLine(headerForzar, 1);
+            headerForzar.setAlignment(Element.ALIGN_CENTER);
+            headerForzar.add(new Paragraph(auxiliar.titulo, times12bold));
+            if (obra?.oficioSalida == null) {
+                headerForzar.add(new Paragraph("Informe N°:" + " ", times10bold));
+            } else {
+                headerForzar.add(new Paragraph("Informe N°:" + obra?.oficioSalida, times10bold));
+            }
+
+            headerForzar.add(new Paragraph(" ", times12bold));
+            headerForzar.add(new Paragraph(" ", times12bold));
+
+            tablaRetenciones.setWidthPercentage(100);
+            tablaRetenciones.setWidths(arregloEnteros([7, 2, 60]))
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+            addCellTabla(tablaRetenciones, new Paragraph("Notas", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(nota?.texto, times8normal), prmsHeaderHoja)
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(auxiliar?.notaAuxiliar, times8normal), prmsHeaderHoja)
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(nota?.adicional, times8normal), prmsHeaderHoja)
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+            txtDatos.setAlignment(Element.ALIGN_CENTER);
+            txtDatos.add(new Paragraph("DATOS PARA EL PRESUPUESTO", times8bold));
+            txtDatos.add(new Paragraph(" ", times8bold));
+
+            addEmptyLine(txtRetenciones, 1);
+            txtRetenciones.setAlignment(Element.ALIGN_LEFT);
+            txtRetenciones.add(new Paragraph("Atentamente, ", times8bold));
+            txtRetenciones.add(new Paragraph(" ", times8bold));
+
+
+        } else {
+
+//            PdfPTable tablaRetenciones = new PdfPTable(3);
+            tablaRetenciones.setWidthPercentage(100);
+            tablaRetenciones.setWidths(arregloEnteros([7, 2, 60]))
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+            addCellTabla(tablaRetenciones, new Paragraph("Notas", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(nota?.texto, times8normal), prmsHeaderHoja)
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(auxiliar?.notaAuxiliar, times8normal), prmsHeaderHoja)
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(nota?.adicional, times8normal), prmsHeaderHoja)
+
+
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+            addCellTabla(tablaRetenciones, new Paragraph(" ", times8bold), prmsHeaderHoja)
+
+            txtDatos.setAlignment(Element.ALIGN_CENTER);
+            txtDatos.add(new Paragraph("DATOS PARA EL PRESUPUESTO", times8bold));
+            txtDatos.add(new Paragraph(" ", times8bold));
+
+            if(obra?.distanciaPeso != 0){
+                addCellTabla(tablaDatos, new Paragraph("Cantón", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.lugar?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPeso, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+
+            }
+
+            if(obra?.distanciaPesoEspecial != 0){
+
+                addCellTabla(tablaDatos, new Paragraph("Especial", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaPeso1?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaPesoEspecial, format: "##,##0", minFractionDigits: 2, locale: "ec" ) + ' Km', times8normal), prmsHeaderHoja)
+            }
+
+
+            if(obra?.distanciaVolumenMejoramiento != 0){
+
+                addCellTabla(tablaDatos, new Paragraph("Mejoramiento", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen1?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenMejoramiento, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            }
+
+            if(obra?.distanciaVolumen != 0){
+                addCellTabla(tablaDatos, new Paragraph("Petreos Hormigones", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen0?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumen, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            }
+
+            if(obra?.distanciaVolumenCarpetaAsfaltica != 0){
+                addCellTabla(tablaDatos, new Paragraph("Carpeta Asfáltica", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(obra?.listaVolumen2?.descripcion, times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph("Distancia", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(" : ", times8bold), prmsHeaderHoja)
+                addCellTabla(tablaDatos, new Paragraph(g.formatNumber(number: obra?.distanciaVolumenCarpetaAsfaltica, format: "##,##0", minFractionDigits: 2, maxFractionDigits: 2, locale: "ec") + ' Km', times8normal), prmsHeaderHoja)
+            }
+
+            txtDatos1.setAlignment(Element.ALIGN_CENTER);
+            txtDatos1.add(new Paragraph("COSTO INDIRECTO TOTAL : ${obra?.totales} %", times8bold));
+            txtDatos1.add(new Paragraph(" ", times8bold));
+            addEmptyLine(txtRetenciones, 1);
+            txtRetenciones.setAlignment(Element.ALIGN_LEFT);
+            txtRetenciones.add(new Paragraph("Atentamente, ", times8bold));
+            txtRetenciones.add(new Paragraph(" ", times8bold));
+
+        }
+
+        PdfPTable tablaFirmas = new PdfPTable(3);
+        tablaFirmas.setWidthPercentage(100);
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        if(session.perfil.id != 16){
+            addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        }
+
+        def arregloFirmas = []
+        def el1
+        def el2
+
+        if(firmaFija.size() == 3){
+            el1 = firmaFija[1]
+            el2 = firmaFija[2]
+
+            firmaFija[0] = el1
+            firmaFija[1] = el2
+        }
+
+        firmaFija.each {f->
+            firmas = Persona.get(f)
+            arregloFirmas += firmas
+        }
+
+        if(params.firmaElaboro){
+            personaElaboro = Persona.get(params.firmaElaboro)
+            addCellTabla(tablaFirmas, new Paragraph((personaElaboro?.titulo?.toUpperCase() ?: '') + " " + (personaElaboro?.nombre.toUpperCase() ?: '' ) + " " + (personaElaboro?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        }
+
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+
+        if(session.perfil.id != 16){
+            if(params.firmaCoordinador != ''){
+                def personaRol = PersonaRol.get(params.firmaCoordinador)
+                firmaCoordinador = personaRol.persona
+                addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.titulo.toUpperCase() ?: '') + " " + (firmaCoordinador?.nombre?.toUpperCase() ?: '') + " " + (firmaCoordinador?.apellido?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+            }else{
+                addCellTabla(tablaFirmas, new Paragraph("Coordinador no asignado", times8bold), prmsHeaderHoja)
+            }
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+        }
+
+        addCellTabla(tablaFirmas, new Paragraph("ELABORÓ", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times8bold), prmsHeaderHoja)
+        if(session.perfil.id == 16){
+            addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+        }else{
+            addCellTabla(tablaFirmas, new Paragraph("COORDINADOR", times8bold), prmsHeaderHoja)
+        }
+
+        addCellTabla(tablaFirmas, new Paragraph(personaElaboro?.departamento?.descripcion?.toUpperCase() ?: '', times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph("", times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph((firmaCoordinador?.departamento?.descripcion?.toUpperCase() ?: ''), times8bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+        addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+
+        //sumilla
+
+        PdfPTable table3 = new PdfPTable(2);
+        table3.setHorizontalAlignment(Element.ALIGN_LEFT)
+        table3.setWidthPercentage(30);
+        table3.setWidths(arregloEnteros([15, 15]))
+        PdfPTable nested2 = new PdfPTable(1);
+        PdfPTable nested3 = new PdfPTable(1);
+        PdfPCell cell1 = new PdfPCell(new Paragraph("SUMILLA", times8bold));
+
+        cell1.setColspan(2);
+        table3.addCell(cell1)
+        PdfPCell cell4 = new PdfPCell(new Paragraph((obra?.responsableObra?.titulo?.toUpperCase() ?: '') + " " + (obra?.responsableObra?.nombre?.toUpperCase() ?: '')+ " " + (obra?.responsableObra?.apellido?.toUpperCase() ?: ''), times8bold));
+        cell4.setFixedHeight(25);
+        PdfPCell cell6 = new PdfPCell(new Paragraph("ELABORÓ", times8bold));
+        nested2.addCell(cell4)
+        nested2.addCell(cell6)
+        table3.addCell(new PdfPCell(nested2));
+        table3.addCell(new PdfPCell(nested3));
+
+        //prueba de separacion de parrafos
+
+        PdfPTable apendice = new PdfPTable(1);
+        apendice.setWidthPercentage(100)
+        apendice.setWidths(arregloEnteros([100]))
+        apendice.setSpacingBefore(30);
+
+
+        PdfPTable nested8 = new PdfPTable(1);
+        PdfPCell celda1 = new PdfPCell()
+        celda1.setBorder(0)
+        celda1.addElement(tablaCondiciones)
+        celda1.addElement(tablaRetenciones)
+        celda1.addElement(txtDatos)
+        celda1.addElement(tablaDatos)
+        celda1.addElement(txtDatos1)
+        celda1.addElement(txtRetenciones)
+        celda1.addElement(tablaFirmas)
+        celda1.setColspan(1)
+        apendice.addCell(celda1)
+        apendice.setKeepTogether(true);
+        document.add(apendice)
+
+        ///
+
+//        document.add(table3);
+
+        document.close();
+        pdfw.close()
+        byte[] b = baos.toByteArray();
+        response.setContentType("application/pdf")
+        response.setHeader("Content-disposition", "attachment; filename=" + name)
+        response.setContentLength(b.length)
+        response.getOutputStream().write(b)
+    }
+
 
     def reporteDocumentosObraVae() {
 
@@ -3456,9 +4233,7 @@ class ReportesController {
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
             addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
-            addCellTabla(tablaVolObra, new Paragraph("", times8bold), prmsCellRight)
+
         }
 
 
