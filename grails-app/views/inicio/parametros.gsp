@@ -124,9 +124,11 @@
                     <g:link controller="valoresAnuales" action="list">Valores Anuales</g:link>
                 </div><br>
 
+%{--
                 <div class="item" texto="tpbn">
                     <g:link controller="tipoDeBien" action="list">Tipo de Bien</g:link> Detalle de si el bien se halla dentro de la lista de bienes producidos a nivel nacional.
                 </div><br>
+--}%
 
             </div>
 
@@ -352,10 +354,13 @@
     <h3>Variables Anuales</h3><br>
     <p>Valores de las variables anuales.</p>
 </div>
+
+%{--
 <div id="tpbn" style="display:none">
     <h3>Tipo de Bien</h3><br>
     <p>Detalle de si el bien se halla dentro de la lista de bienes producidos a nivel nacional.</p>
 </div>
+--}%
 
 
 <div id="tpcr" style="display:none">
@@ -373,7 +378,7 @@
 </div>
 <div id="edgr" style="display:none">
     <h3>Estado de la garantía</h3><br>
-    <p>Estado que puede tener la garantía. Puden ser por ejemplo: Vigente, pedido de cobro, devuelta, efectivizada, pasivo,
+    <p>Estado que puede tener la garantía. Pueden ser por ejemplo: Vigente, pedido de cobro, devuelta, efectivizada, pasivo,
     renovada, vencida, etc.</p>
 </div>
 <div id="mnda" style="display:none">

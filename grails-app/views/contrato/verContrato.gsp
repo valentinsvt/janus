@@ -444,7 +444,7 @@
                             </li>
 
                             <li>
-                                <g:if test="${esDirector == 'S'}">
+                                <g:if test="${esDirFis == 'S'}">
                                 %{--<g:if test="${esDirector == 'N'}">--}%
                                 <a href="#" id="btnFisc">
                                     <i class="icon-user"></i> Fiscalizador
