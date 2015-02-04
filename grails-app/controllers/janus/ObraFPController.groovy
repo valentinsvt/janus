@@ -347,7 +347,7 @@ class ObraFPController {
             /* verifica que hay a los rubros en vlob */
             if (camioneta && (peso > 0)) {
                 def itemCamioneta = VolumenesObra.findByItemAndObra(Item.get(obra.transporteCamioneta.id), obra)
-//                println itemCamioneta
+//                println "itemCamioneta: " + itemCamioneta + " camioneta:" + camioneta
                 if (itemCamioneta) {
 //                    println "ya existe el rubro de camioneta: actualizando..."
                     tx_sql = "update vlob set vlobcntd = ${(peso * obra.distanciaCamioneta).toDouble().round(2)} " +
@@ -359,7 +359,7 @@ class ObraFPController {
                     tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
                              "values(${sbpr.id}, ${camioneta.id}, ${id}, ${(peso * obra.distanciaCamioneta).toDouble().round(2)}, 1000, 0) "
 //                    println tx_sql
-                    res = cn.execute(tx_sql.toString())
+//                    res = cn.execute(tx_sql.toString())
                 }
             }
             if (acemila && (peso > 0)) {

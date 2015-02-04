@@ -62,7 +62,7 @@
 
                 <div class="controls" style="width: 1000px; margin-left: 140px;">
 
-                    <input class="span3" type="text" style="width: 240px;;font-size: 12px" id="item_presupuesto">
+                    <input class="span3" type="text" style="width: 300px;;font-size: 12px" id="item_presupuesto">
 
                     <input type="hidden" id="item_prsp" name="prespuesto.id">
                     %{--<br>--}%
