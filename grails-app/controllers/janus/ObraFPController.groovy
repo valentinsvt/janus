@@ -359,7 +359,7 @@ class ObraFPController {
                     tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
                              "values(${sbpr.id}, ${camioneta.id}, ${id}, ${(peso * obra.distanciaCamioneta).toDouble().round(2)}, 1000, 0) "
 //                    println tx_sql
-//                    res = cn.execute(tx_sql.toString())
+                    res = cn.execute(tx_sql.toString())
                 }
             }
             if (acemila && (peso > 0)) {
@@ -372,7 +372,7 @@ class ObraFPController {
 //                    println tx_sql
                     res = cn.execute(tx_sql.toString())
                 } else {
-//                    println "No hay el rubro de camioneta: creando..."
+//                    println "No hay el rubro de acémila: creando..."
                     tx_sql = "insert into vlob(sbpr__id, item__id, obra__id, vlobcntd, vlobordn, vlobdias) " +
                             "values(${sbpr.id}, ${acemila.id}, ${id}, ${(peso * obra.distanciaAcemila).toDouble().round(2)}, 1001, 0) "
 //                    println tx_sql

@@ -67,7 +67,7 @@
         </div>
 
         <g:if test="${obra.valor > vmc}">
-            <div class="row" style="margin-top: 10px;">
+            <div style="margin-top: 10px;">
                 <div class="alert alert-warning" style="font-weight: bold; font-size: 13px;">
                     <i class="icon icon-info-sign icon-2x pull-left"></i>
                     <p>
@@ -75,6 +75,10 @@
                         por lo que no es obligatoria la elaboración de la fórmula polinómica ni cuadrilla tipo
                         para registrar esta obra.
                     </p>
+                    <g:if test="${obra.valor >= valorLicitacion}">
+                        <i class="icon icon-info-sign icon-2x pull-left"></i>
+                        <p>El presupuesto corresponde a una Licitación por lo que es obligatorio presentar el VAE.</p>
+                    </g:if>
                 </div>
             </div>
         </g:if>

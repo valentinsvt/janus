@@ -46,11 +46,14 @@ class VolumenObraController extends janus.seguridad.Shield {
         duenoObra = esDuenoObra(obra)? 1 : 0
 
         def valorMenorCuantia = TipoProcedimiento.findBySigla("MCD").techo
+        def valorLicitacion = TipoProcedimiento.findBySigla("LICO").minimo
 
         def campos = ["codigo": ["Código", "string"], "nombre": ["Descripción", "string"]]
 //        println "subs "+subpreFiltrado.descripcion
 
-        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado, subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia, duenoObra: duenoObra]
+        [obra: obra, volumenes: volumenes, campos: campos, subPresupuesto1: subPresupuesto1, grupoFiltrado: grupoFiltrado,
+         subpreFiltrado: subpreFiltrado, grupos: grupoFiltrado, persona: persona, vmc: valorMenorCuantia, duenoObra: duenoObra,
+        valorLicitacion: valorLicitacion]
     }
 
     def cargarSubpres() {
@@ -289,7 +292,7 @@ class VolumenObraController extends janus.seguridad.Shield {
 //            dueno = personasUtfpu.contains(responsableRol) && session.usuario.departamento.codigo == 'UTFPU'
 //        }
 
-        println "responsable" + responsableRol + " dueño " + dueno
+//        println "responsable" + responsableRol + " dueño " + dueno
 //                dueno = session.usuario.departamento.id == obra?.responsableObra?.departamento?.id || dueno
 
         if (responsableRol) {

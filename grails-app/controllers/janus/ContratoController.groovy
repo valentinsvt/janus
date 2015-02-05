@@ -145,6 +145,7 @@ class ContratoController extends janus.seguridad.Shield {
             tmp.each { tm ->
                 crono += tm.porcentaje
             }
+            println "crono: $crono"
             if (crono.toDouble().round(2) != 100.00) {
                 errores += "<li>La suma de porcentajes del volumen de obra: ${it.item.codigo} (${crono.toDouble().round(2)}) en el cronograma contractual es diferente de 100%</li>"
             }
