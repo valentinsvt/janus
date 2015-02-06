@@ -217,16 +217,22 @@
         </div>
 
         <div class="row-fluid">
-            <div class="span3" style="margin-right: 195px !important; width: 500px;">
+            <div class="span3" style="margin-right: 0px !important; width: 400px;">
                 <b>Código de rubro:</b> ${rubro?.codigo}
             </div>
 
-            <div class="span2" style="width: 2500px;">
+            <div class="span3" style="margin-right: 0px !important; width: 300px;">
+                <b>Código de especificación:</b> ${rubro?.codigoEspecificacion}
+            </div>
+
+            <div class="span3" style="width: 100px;">
 
                 <b>Unidad:</b> ${rubro?.unidad?.codigo}
             </div>
 
         </div>
+
+
         <div class="row-fluid">
             <div class="span12">
                 <g:set var="nombre" value="${rubro.nombre.replaceAll('<', '(menor)')}"></g:set>
@@ -260,7 +266,6 @@
                     <b> <g:formatNumber number="${totalRubro}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>
 
-                %{--<td style="border-left: 1px solid #000000; width: 14px">&nbsp; </td>--}%
                 <td style="width: 120px; text-align: center">
                     <b> <g:formatNumber number="${totalRelativo}" format="##,##0" minFractionDigits="2" maxFractionDigits="2" locale="ec"/></b>
                 </td>

@@ -1,10 +1,12 @@
+<%@ page import="janus.Departamento; janus.Contrato" %>
 <fieldset>
     <legend>Nuevo Administrador</legend>
 
     <div class="alert alert-error hide" id="divError">
     </div>
 
-    <g:select id="administrador" name="administrador.id" from="${janus.Persona.findAllByActivo(1, [sort: 'apellido'])}"
+    %{--<g:select id="administrador" name="administrador.id" from="${janus.Persona.findAllByActivo(1, [sort: 'apellido'])}"--}%
+    <g:select id="administrador" name="administrador.id" from="${personal}"
               optionKey="id" class="many-to-one required" optionValue="${{ it.apellido + ' ' + it.nombre }}"
               noSelection="['null': 'Seleccione ...']" style="width:300px; margin-right: 20px;"/>
     Desde: <elm:datepicker value="${new Date()}" name="desde" class="input-small"/>

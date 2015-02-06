@@ -71,14 +71,20 @@ class ContratoController extends janus.seguridad.Shield {
             def obra = contrato.oferta.concurso.obra
 //            println ".........." + obra
             def dptoDireccion = Departamento.findAllByDireccion(obra.departamento.direccion)
+//            println "departamentos... a listar:" + dptoDireccion
             def personalDireccion = Persona.findAllByDepartamentoInList(dptoDireccion)
             def directores = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalDireccion).persona.id
 //            println "directores:" + directores + "  usurio: " + session.usuario.id
             def esDirector = directores.contains(session.usuario.id)? "S": "N"
-            println "esDirector:" + esDirector
+//            println "esDirector:" + esDirector
+
+
+            def personalFis = Persona.findAllByDepartamento(Departamento.findByCodigo('FISC'))
+            def directoresFis = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalFis).persona.id
+            def esDirFis = directoresFis.contains(session.usuario.id)? "S": "N"
 
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
-            [campos: campos, contrato: contrato, esDirector: esDirector]
+            [campos: campos, contrato: contrato, esDirector: esDirector, esDirFis: esDirFis]
         } else {
             def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
             [campos: campos]
@@ -139,6 +145,7 @@ class ContratoController extends janus.seguridad.Shield {
             tmp.each { tm ->
                 crono += tm.porcentaje
             }
+            println "crono: $crono"
             if (crono.toDouble().round(2) != 100.00) {
                 errores += "<li>La suma de porcentajes del volumen de obra: ${it.item.codigo} (${crono.toDouble().round(2)}) en el cronograma contractual es diferente de 100%</li>"
             }

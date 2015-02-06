@@ -2632,7 +2632,8 @@ class ReportesPlanillasController {
             return
         }
 
-        def tramite = Tramite.findByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"))
+//        println Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"), [sort:'id', order: 'desc']).id
+        def tramite = Tramite.findAllByPlanillaAndTipoTramite(planilla, TipoTramite.findByCodigo("PDPG"), [sort:'id', order: 'desc']).first()
         def prsn = PersonasTramite.findAllByTramite(tramite, [sort: "rolTramite"])
 
         def detalle = VolumenesObra.findAllByObra(obra, [sort: "orden"])

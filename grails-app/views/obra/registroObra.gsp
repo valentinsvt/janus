@@ -889,10 +889,12 @@
                     <li>
                         <a href="#" id="btnVeri"><i class="icon-ok"></i>Precios no Act.</a>
                     </li>
-                    <li>
-                        <g:link controller="variables" action="composicionVae" id="${obra?.id}"><i class="icon-paste"></i>Fijar VAE
-                        </g:link>
-                    </li>
+                    <g:if test="${obra?.tipo != 'D'}">
+                        <li>
+                            <g:link controller="variables" action="composicionVae" id="${obra?.id}"><i class="icon-paste"></i>Fijar VAE
+                            </g:link>
+                        </li>
+                    </g:if>
 
                     <g:if test="${obra?.estado == 'R' && obra?.tipo == 'D' && obra?.fechaInicio}">
                         <li>

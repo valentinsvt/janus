@@ -390,7 +390,10 @@ class RubroController extends janus.seguridad.Shield {
 
     def save() {
 //        println "save rubro " + params.rubro
+        println("params " +  params)
         params.rubro.codigo = params.rubro.codigo.toUpperCase()
+        params.rubro.codigoEspecificacion = params.rubro.codigoEspecificacion.toUpperCase()
+
         def rubro
         if (params.rubro.id) {
             rubro = Item.get(params.rubro.id)
