@@ -721,6 +721,8 @@ class ItemController extends janus.seguridad.Shield {
 
         def oks = "", nos = ""
 
+
+
         params.item.each {
             def parts = it.split("_")
 //            println ">>" + parts
@@ -728,24 +730,32 @@ class ItemController extends janus.seguridad.Shield {
             def rubroId = parts[0]
             def nuevoPrecio = parts[1]
             def nuevaFecha = parts[2]
-
-//            def reg = parts[3]
-
+//
+////            def reg = parts[3]
+//
             nuevaFecha = new Date().parse("dd-MM-yyyy", nuevaFecha);
-
+//
             def rubroPrecioInstanceOld = PrecioRubrosItems.get(rubroId);
-            def precios = PrecioRubrosItems.countByFechaAndLugar(nuevaFecha, rubroPrecioInstanceOld.lugar)
+//            def precios = PrecioRubrosItems.countByFechaAndLugar(nuevaFecha, rubroPrecioInstanceOld.lugar)
+            def precios = PrecioRubrosItems.withCriteria {
+                  eq("fecha", nuevaFecha)
+                  eq("lugar", rubroPrecioInstanceOld.lugar)
+                  eq("item", rubroPrecioInstanceOld.item)
+            }.size()
+
+//            println "el rubro precioOld: $rubroPrecioInstanceOld "
+//            println "precios: $precios "
+//            println "neva fecha: $nuevaFecha"
             def rubroPrecioInstance
             if (precios == 0) {
                 rubroPrecioInstance = new PrecioRubrosItems();
                 rubroPrecioInstance.properties = rubroPrecioInstanceOld.properties
+                rubroPrecioInstance.id = null
             } else {
                 rubroPrecioInstance = rubroPrecioInstanceOld
             }
             rubroPrecioInstance.precioUnitario = nuevoPrecio.toDouble();
-
             rubroPrecioInstance.registrado = "N"
-
             rubroPrecioInstance.fecha = nuevaFecha
 
             if (!rubroPrecioInstance.save(flush: true)) {
@@ -762,6 +772,7 @@ class ItemController extends janus.seguridad.Shield {
             }
 
         }
+
         render oks + "_" + nos
 
     }

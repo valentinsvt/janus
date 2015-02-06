@@ -33,7 +33,7 @@
                     <g:each in="${rubroPrecio}" var="rubro" status="i">
                         <tr align="right">
                             <td class="itemId" align="center" style="width: 150px;">
-                                ${rubro?.item?.codigo}
+                                ${rubro?.item?.codigo} ${rubro?.id}
                             </td>
                             <td class="itemNombre" align="center">
                                 ${rubro?.item?.nombre}
