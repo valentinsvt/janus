@@ -357,7 +357,7 @@ class ContratoController extends janus.seguridad.Shield {
 
     def buscarContrato() {
 
-        println "buscar contrato " + params
+        //println "buscar contrato " + params
 
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {
@@ -365,13 +365,17 @@ class ContratoController extends janus.seguridad.Shield {
                 def obras = Obra.findAll("from Obra where nombre like '%${params.criterios.toUpperCase()}%'")
                 params.criterios = ""
                 obras.eachWithIndex { p, i ->
+                    // println "obra "+p.nombre
                     def concursos = janus.pac.Concurso.findAllByObraAndEstado(p, "R")
                     concursos.each { co ->
+                        // println "--concurso "+co
                         def ofertas = janus.pac.Oferta.findAllByConcurso(co)
                         ofertas.eachWithIndex { o, k ->
-                            extraObra += "" + o.id
-                            if (k < ofertas.size() - 1)
-                                extraObra += ","
+                            //println "---oferta "+o.id
+                            extraObra += ("" + o.id)
+                            // println "---extra it "+extraObra
+                            extraObra += ","
+                            // println "---extra coma "+extraObra
                         }
 
                     }
@@ -379,8 +383,11 @@ class ContratoController extends janus.seguridad.Shield {
                 }
                 if (extraObra.size() < 1)
                     extraObra = "-1"
+                else
+                    extraObra = extraObra.substring(0,extraObra.size()-1)
                 params.campos = ""
                 params.operadores = ""
+                // println "extra obra nombre "+extraObra
             }
             if (params.campos == "prov") {
                 def provs = janus.pac.Proveedor.findAll("from Proveedor where nombre ilike '%${params.criterios.toUpperCase()}%' or nombreContacto ilike '%${params.criterios.toUpperCase()}%' ")
@@ -389,16 +396,18 @@ class ContratoController extends janus.seguridad.Shield {
                     def ofertas = janus.pac.Oferta.findAllByProveedor(p)
                     ofertas.eachWithIndex { o, k ->
                         extraObra += "" + o.id
-                        if (k < ofertas.size() - 1)
-                            extraObra += ","
+                        extraObra += ","
                     }
                 }
                 if (extraObra.size() < 1)
                     extraObra = "-1"
+                else
+                    extraObra = extraObra.substring(0,extraObra.size()-1)
                 params.campos = ""
                 params.operadores = ""
             }
         } else {
+            println "else"
             def remove = []
             params.campos.eachWithIndex { p, i ->
                 if (p == "nombre") {
@@ -410,8 +419,7 @@ class ContratoController extends janus.seguridad.Shield {
                             def ofertas = janus.pac.Oferta.findAllByConcurso(co)
                             ofertas.eachWithIndex { o, k ->
                                 extraObra += "" + o.id
-                                if (k < ofertas.size() - 1)
-                                    extraObra += ","
+                                extraObra += ","
                                 remove.add(i)
                             }
 
@@ -420,6 +428,8 @@ class ContratoController extends janus.seguridad.Shield {
                     }
                     if (extraObra.size() < 1)
                         extraObra = "-1"
+                    else
+                        extraObra = extraObra.substring(0,extraObra.size()-1)
 
                 }
                 if (p == "prov") {
@@ -429,12 +439,13 @@ class ContratoController extends janus.seguridad.Shield {
                         def ofertas = janus.pac.Oferta.findAllByProveedor(pr)
                         ofertas.eachWithIndex { o, k ->
                             extraObra += "" + o.id
-                            if (k < ofertas.size() - 1)
-                                extraObra += ","
+                            extraObra += ","
                         }
                     }
                     if (extraObra.size() < 1)
                         extraObra = "-1"
+                    else
+                        extraObra = extraObra.substring(0,extraObra.size()-1)
                 }
             }
             remove.each {
@@ -444,7 +455,7 @@ class ContratoController extends janus.seguridad.Shield {
             }
         }
 
-        println "extra obra " + extraObra
+        //println "extra obra " + extraObra
 
         def codObra = { contrato ->
             return contrato?.oferta?.concurso?.obra?.codigo
@@ -471,7 +482,7 @@ class ContratoController extends janus.seguridad.Shield {
         def extras = " "
         if (extraObra.size() > 0)
             extras += " and oferta in (${extraObra})"
-//        println "extras "+extras
+        println "extras "+extras
 
         if (!params.reporte) {
             if(params.excel){
@@ -486,7 +497,7 @@ class ContratoController extends janus.seguridad.Shield {
                 lista.pop()
                 render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
             }
-            } else {
+        } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Contrato
@@ -627,10 +638,10 @@ class ContratoController extends janus.seguridad.Shield {
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Contrato", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Contratos", anchos: anchos, extras: extras, landscape: true])
             }else{
                 def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
-            /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
-            lista.pop()
-            render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
-        }
+                /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
+                lista.pop()
+                render(view: '../tablaBuscadorColDer', model: [listaTitulos: listaTitulos, listaCampos: listaCampos, lista: lista, funciones: funciones, url: url, controller: "llamada", numRegistros: numRegistros, funcionJs: funcionJs])
+            }
         } else {
 //            println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
@@ -642,7 +653,7 @@ class ContratoController extends janus.seguridad.Shield {
     }
 
     def buscarObra() {
-
+//        println "buscar obra "+params
         def extras = " "
         def parr = { p ->
             return p.parroquia?.nombre
@@ -676,8 +687,8 @@ class ContratoController extends janus.seguridad.Shield {
             def lista = buscadorService.buscar(Obra, "Obra", "excluyente", params, true, extras)
             /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
             lista.pop()
-//            println "lista "+lista
-            for (int i = lista.size() - 1; i > 0; i--) {
+           // println "lista "+lista
+            for (int i = lista.size() - 1; i > -1; i--) {
                 def concurso = janus.pac.Concurso.findByObra(lista[i])
                 if (concurso) {
                     def oferta = janus.pac.Oferta.findAllByConcurso(concurso)
