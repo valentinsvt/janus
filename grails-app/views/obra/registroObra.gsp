@@ -1896,20 +1896,14 @@
         }
 
         $("#copiarObra").click(function () {
-
             $("#copiarDialog").dialog("open");
-
         });
         $("#copiarObraOfe").click(function () {
             $("#copiarDialogOfe").dialog("open");
         });
 
         $("#btnRubros").click(function () {
-
-            %{--var fechaSalida2 = '${obra.fechaOficioSalida?.format('dd-MM-yyyy')}'--}%
-
             var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
-            %{--var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&transporte=";--}%
             $.box({
                 imageClass : "box_info",
                 text       : "Imprimir Rubros, Ilustraciones y Especificaciones",
@@ -1919,34 +1913,30 @@
                     resizable : false,
                     draggable : false,
                     width     : 450,
-                    height    : 230,
+                    height    : 250,
                     buttons   : {
 
                         "Con desglose de T."                               : function () {
                             url += "1";
-//                                    location.href = url;
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
-                            %{--location.href = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}&desglose=1";--}%
                         },
                         "Sin desglose de T."                               : function () {
                             url += "0";
-//                                    location.href = url;
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                         },
                         "Exportar a Excel"                 : function () {
                             var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${obra?.id}&transporte=";
                             url += "1";
                             location.href = url;
-
                         },
-                        %{--"Ilustraciones"                    : function () {--}%
-                        %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=i";--}%
-                        %{--location.href = url;--}%
-                        %{--},--}%
-                        %{--"Especificaciones"                 : function () {--}%
-                        %{--var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=e";--}%
-                        %{--location.href = url;--}%
-                        %{--},--}%
+                        "VAE con desglose de T."                               : function () {
+                            url += "1";
+                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                        },
+                        "VAE sin desglose de T."                               : function () {
+                            url += "0";
+                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                        },
                         "Imprimir Ilustraciones y Especificaciones de los Rubros" : function () {
                             var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
                             location.href = url;
