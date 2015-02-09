@@ -34,7 +34,7 @@
             <i class="icon-print"></i>
             Impr. Subpresupuesto
         </a>
-        <a href="#" class="btn  " id="imprimir_excel" style="margin-left:-5px">
+        <a href="#" class="btn  " id="imprimir_excel" style="margin-left:-7px">
             <i class="icon-table"></i>
             Excel
         </a>
