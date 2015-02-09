@@ -626,6 +626,7 @@
                                     $("#item_id").val("")
                                     $("#item_nombre").val("")
                                     $("#item_cantidad").val("")
+                                    $("#item_descripcion").val("")
                                     $("#item_orden").val($("#item_orden").val() * 1 + 1)
                                     $("#override").val("0")
                                 } else {
