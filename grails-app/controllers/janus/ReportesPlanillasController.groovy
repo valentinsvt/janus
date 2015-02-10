@@ -2843,7 +2843,7 @@ class ReportesPlanillasController {
         parrafoFirma.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafoFirma, 1);
         document.add(parrafoFirma)
-        if(texto.copia!=""){
+        if(texto.copia!="" && texto.copia!=null){
             Paragraph cc = new Paragraph("CC:"+texto.copia, fontFirma);
             cc.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(cc)
