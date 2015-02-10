@@ -44,6 +44,8 @@ class ReportesPlanillas2Controller {
 //        println "****************************************"
 
         /* gdo*/
+
+
         def liquidacion = false
         if (planilla?.fechaFin) {
             liquidacion = planilla.fechaFin >= prej[0].fechaFin
