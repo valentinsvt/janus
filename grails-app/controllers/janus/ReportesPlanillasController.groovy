@@ -2839,7 +2839,7 @@ class ReportesPlanillasController {
 
         /* *********************************** FIRMA **********************************/
 
-        def strParrafoFirma = "\n\n\n______________________________________\nAdministrador - Delegado"
+        def strParrafoFirma = "\n\n\n______________________________________\n${nombrePersona(prsn[0].persona)}\nAdministrador - Delegado"
         Paragraph parrafoFirma = new Paragraph(strParrafoFirma, fontFirma);
         parrafoFirma.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafoFirma, 1);
