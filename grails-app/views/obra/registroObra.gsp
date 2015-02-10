@@ -1904,6 +1904,7 @@
 
         $("#btnRubros").click(function () {
             var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${obra?.id}Wdesglose=";
+            var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${obra?.id}Wdesglose=";
             $.box({
                 imageClass : "box_info",
                 text       : "Imprimir Rubros, Ilustraciones y Especificaciones",
@@ -1930,12 +1931,12 @@
                             location.href = url;
                         },
                         "VAE con desglose de T."                               : function () {
-                            url += "1";
-                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                            urlVae += "1";
+                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                         },
                         "VAE sin desglose de T."                               : function () {
-                            url += "0";
-                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
+                            urlVae += "0";
+                            location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                         },
                         "Imprimir Ilustraciones y Especificaciones de los Rubros" : function () {
                             var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";
