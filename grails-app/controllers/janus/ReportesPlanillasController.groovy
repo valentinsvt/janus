@@ -2846,7 +2846,6 @@ class ReportesPlanillasController {
         if(texto.copia!=""){
             Paragraph cc = new Paragraph("CC:"+texto.copia, fontFirma);
             cc.setAlignment(Element.ALIGN_JUSTIFIED);
-            addEmptyLine(cc, 1);
             document.add(cc)
         }
 
