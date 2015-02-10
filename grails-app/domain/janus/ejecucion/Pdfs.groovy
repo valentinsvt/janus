@@ -11,6 +11,7 @@ class Pdfs {
     String parrafo3
     String parrafo4
     String parrafo5
+    String copia
     Date fecha = new Date()
     static auditable = true
     static mapping = {
@@ -29,6 +30,7 @@ class Pdfs {
             parrafo4 column: 'pdfsprr4'
             parrafo5 column: 'pdfsprr5'
             fecha column: 'pdfsfcha'
+            copia column: 'pdfscpia'
         }
     }
 
@@ -40,5 +42,6 @@ class Pdfs {
         parrafo3 maxSize: 1023
         parrafo4 maxSize: 1023, blank: true, nullable: true
         parrafo5 maxSize: 1023, blank: true, nullable: true
+        copia maxSize: 1023, blank: true, nullable: true
     }
 }

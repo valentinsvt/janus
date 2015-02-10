@@ -81,6 +81,7 @@ class PlanillaController extends janus.seguridad.Shield {
                     [tipo: "E", string: strParrafo4, w: "940px", h: "50px"]
             ]
 
+
         } else if (texto.size() > 1) {
             println "Se encontraron ${texto.size()} textos para la obra ${obra.id}: ${texto.id}"
             texto = texto.first()
@@ -352,6 +353,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def savePedidoPagoAnticipo() {
+        println "save textos "+params
         def planilla = Planilla.get(params.id)
         def contrato = planilla.contrato
         def obra = contrato.obra
@@ -393,6 +395,7 @@ class PlanillaController extends janus.seguridad.Shield {
         texto.parrafo3 = strParrafo3
         texto.parrafo4 = params["edit_5_1"]
         texto.parrafo5 = params.extra?.trim()
+        texto.copia=params.copia
 
         if (texto.save([flush: true])) {
             flash.clase = "alert-success"

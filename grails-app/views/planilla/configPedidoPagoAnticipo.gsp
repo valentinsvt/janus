@@ -90,6 +90,13 @@
                     </g:each>
 
                     <g:textArea name="extra" value="" style="width: 940px; height: 80px;"/>
+                    <div class="row" style="margin-left: 5px">
+                        <div style="width:80px;float: left">CC:</div>
+
+                        <div style="width:300px;float: left">
+                            <input type="text" name="copia" class="form-control ">
+                        </div>
+                    </div>
 
                 </div>
 

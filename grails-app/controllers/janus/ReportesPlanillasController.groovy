@@ -2610,7 +2610,7 @@ class ReportesPlanillasController {
 
         def ok = true
         def str = ""
-
+//        println "memo "+params+" "+planilla
         def texto = Pdfs.findAllByPlanilla(planilla)
         if (texto.size() == 0) {
             redirect(controller: "planilla", action: "configPedidoPagoAnticipo", id: planilla.id)
@@ -2755,7 +2755,7 @@ class ReportesPlanillasController {
 
         addCellTabla(tablaDatosMemo, new Paragraph("De", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 //        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[0]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaDatosMemo, new Paragraph(prsn[0]?.persona?.departamento?.descripcion, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+        addCellTabla(tablaDatosMemo, new Paragraph(prsn[0]?.persona?.departamento?.direccion?.nombre, fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 
         addCellTabla(tablaDatosMemo, new Paragraph("Para", fontThHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
 //        addCellTabla(tablaDatosMemo, new Paragraph(nombrePersona(prsn[1]?.persona), fontTdHeader), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
@@ -2838,11 +2838,18 @@ class ReportesPlanillasController {
 
         /* *********************************** FIRMA **********************************/
 
-        def strParrafoFirma = "\n\n\n______________________________________\n${nombrePersona(prsn[0].persona)}\n${prsn[0].persona.departamento}"
+        def strParrafoFirma = "\n\n\n______________________________________\nAdministrador delegado"
         Paragraph parrafoFirma = new Paragraph(strParrafoFirma, fontFirma);
         parrafoFirma.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafoFirma, 1);
         document.add(parrafoFirma)
+        if(texto.copia!=""){
+            Paragraph cc = new Paragraph("CC:"+texto.copia, fontFirma);
+            cc.setAlignment(Element.ALIGN_JUSTIFIED);
+            addEmptyLine(cc, 1);
+            document.add(cc)
+        }
+
         /* *********************************** FIN FIRMA **********************************/
 
 
