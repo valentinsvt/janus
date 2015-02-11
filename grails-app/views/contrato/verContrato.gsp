@@ -73,8 +73,9 @@
                     </a>
                     <a href="#" class="btn  " id="btnRubros">
                         <i class="icon-print"></i>
-                        Rubros
+                        Rubros con o sin desglose VAE
                     </a>
+%{--
                     <a href="#" class="btn  " id="imprimir_sub">
                         <i class="icon-print"></i>
                         Imprimir Presupuesto VAE
@@ -83,6 +84,7 @@
                         <i class="icon-print"></i>
                         Rubros VAE
                     </a>
+--}%
                 </g:if>
 
             </div>
@@ -986,33 +988,44 @@
         });
 
             $("#btnRubros").click(function () {
+/*
+*/
                 var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
+                var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
                 $.box({
                     imageClass : "box_info",
-                    text       : "Desea imprimir con desglose de transporte?",
-                    title      : "Confirme",
-                    iconClose  : false,
+                    text       : "Imprimir Rubros, Ilustraciones y Especificaciones",
+                    title      : "Imprimir Rubros",
+                    iconClose  : true,
                     dialog     : {
                         resizable : false,
                         draggable : false,
+                        width     : 450,
+                        height    : 250,
                         buttons   : {
 
-                            "Sí"  : function () {
+                            "Con desglose de T."                               : function () {
                                 url += "1";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                             },
-                            "No"  : function () {
+                            "Sin desglose de T."                               : function () {
                                 url += "0";
-//                                    location.href = url;
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                             },
-                            "Exportar a Excel"  : function () {
+                            "Exportar a Excel"                 : function () {
                                 var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${contrato?.oferta?.concurso?.obra?.id}&transporte=";
                                 url += "1";
                                 location.href = url;
-
                             },
-                            "Ilustraciones y Especificaciones" : function () {
+                            "VAE con desglose de T."                               : function () {
+                                urlVae += "1";
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
+                            },
+                            "VAE sin desglose de T."                               : function () {
+                                urlVae += "0";
+                                location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
+                            },
+                            "Imprimir Ilustraciones y Especificaciones de los Rubros" : function () {
                                 var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${contrato?.oferta?.concurso?.obra?.id}&tipo=ie";
                                 location.href = url;
                             },

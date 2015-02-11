@@ -88,6 +88,7 @@ class PacController extends janus.seguridad.Shield {
                             }
                             println ">>>>>>>>>>>>>>>" + (j + 1)
                             row = s.getRow(j)
+                            println "row.length: ${row.length}"
                             if (row.length > 12) {
 
                                 def ok = ["obra", "consultoria", "consultoría"]
@@ -138,6 +139,9 @@ class PacController extends janus.seguridad.Shield {
                                         println "hay mas de un presupuesto con numero " + partida + ": " + presupuesto.id
                                         errores += "<li>Se ha encontrado más de un presupuesto con número " + partida + ". El registro de la fila " + (j + 1) + " no fue ingresado</li>"
                                     }
+/*
+    // descomentar para subir también códigos CPAC
+
                                     def ccp = row[2].getContents().toString()
                                     def cpp = CodigoComprasPublicas.findAllByNumero(ccp)
                                     if (cpp.size() == 1) {
@@ -151,6 +155,7 @@ class PacController extends janus.seguridad.Shield {
                                         println "hay mas de un codigo compras publicas con numero " + ccp + ": " + cpp
                                         errores += "<li>Se ha encontrado más de un código de compras públicas con número " + partida + ". El registro de la fila " + (j + 1) + " no fue ingresado</li>"
                                     }
+*/
                                     def tipoCompraObj = TipoCompra.findAllByDescripcionIlike(tipoCompra)
                                     if (tipoCompraObj.size() == 1) {
                                         tipoCompraObj = tipoCompraObj[0]
@@ -196,6 +201,7 @@ class PacController extends janus.seguridad.Shield {
                                     }
 //                                            println "\t cant: " + cant + " cu: " + costoUnitario
 
+                                    println "errores: ${error}"
                                     if (!error) {
                                         def total = cant * costoUnitario
 
@@ -214,7 +220,7 @@ class PacController extends janus.seguridad.Shield {
 
                                         if (!error) {
                                             def pacs = Pac.withCriteria {
-                                                eq("cpp", cpp)
+//                                                eq("cpp", cpp)   //descomentar apra subir CPAC
                                                 eq("presupuesto", presupuesto)
                                                 eq("anio", anioObj)
                                                 eq("descripcion", descripcion)
@@ -241,7 +247,7 @@ class PacController extends janus.seguridad.Shield {
 
                                                 def pac = new Pac([
                                                         unidad: unidad,
-                                                        cpp: cpp,
+//                                                        cpp: cpp,    //descomentar apra subir CPAC
                                                         presupuesto: presupuesto,
                                                         tipoCompra: tipoCompraObj,
                                                         departamento: departamento,

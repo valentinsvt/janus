@@ -58,7 +58,7 @@
                             <ul>
                                 <li style="font-size: large">Cada archivo debe ser de una sola coordinación</li>
                                 <li>Puede tener varias hojas</li>
-                                <li>Los tipos de compra aceptados son <b>obra</b>, <b>consultoria</b>, <b>consultoría</b> (sin importar mayúsculas y minúsculas)</li>
+                                <li>Los tipos de compra aceptados son <b>obra</b> y <b>consultoria</b> (sin importar mayúsculas y minúsculas)</li>
                                 <li>Al terminar de procesar su archivo se mostrará un resumen de las filas procesadas</li>
                                 <li>Las columnas deben ser las siguientes (todas las columnas de cantidad y costo deben tener un valor):</li>
                             </ul>
@@ -97,15 +97,15 @@
                                         <td>CANTIDAD ANUAL</td>
                                         <td>UNIDAD (metro, litro etc)</td>
                                         <td>COSTO UNITARIO (PORTAL)</td>
-                                        <td>COSTO UNITARIO (A SUMAR)</td>
-                                        <td>COSTO TOTAL</td>
+                                        <td>COSTO UNITARIO (A SUMAR) **No se carga el dato</td>
+                                        <td>COSTO TOTAL **No se carga el dato</td>
                                         <td>CUATRIMESTRE 1
                                         (marcar con una S en el cuatrimestre que va a contratar)</td>
                                         <td>CUATRIMESTRE 2
                                         (marcar con una S en el cuatrimestre que va a contratar)</td>
                                         <td>CUATRIMESTRE 3
                                         (marcar con una S en el cuatrimestre que va a contratar)</td>
-                                        <td>OBSERVACIONES</td>
+                                        <td>OBSERVACIONES **No se usa</td>
                                     </tr>
                                 </tbody>
                             </table>

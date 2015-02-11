@@ -83,10 +83,10 @@ class ContratoController extends janus.seguridad.Shield {
             def directoresFis = PersonaRol.findAllByFuncionAndPersonaInList(Funcion.findByCodigo("D"), personalFis).persona.id
             def esDirFis = directoresFis.contains(session.usuario.id)? "S": "N"
 
-            def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
+            def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
             [campos: campos, contrato: contrato, esDirector: esDirector, esDirFis: esDirFis]
         } else {
-            def campos = ["codigo": ["Código", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
+            def campos = ["codigo": ["Contrato No.", "string"], "nombre": ["Nombre", "string"], "prov": ["Contratista", "string"]]
             [campos: campos]
         }
     }
