@@ -32,6 +32,7 @@ class ReportesPlanillas2Controller {
         def obra = planilla.contrato.oferta.concurso.obra
         def contrato = planilla.contrato
 
+        println "obra: ${obra.id}"
         def prej = PeriodoEjecucion.findAllByObra(obra, [sort: 'fechaFin', order: 'desc'])
 
 //
@@ -44,7 +45,10 @@ class ReportesPlanillas2Controller {
 //        println "****************************************"
 
         /* gdo*/
+
+
         def liquidacion = false
+        println "planilla" + planilla
         if (planilla?.fechaFin) {
             liquidacion = planilla.fechaFin >= prej[0].fechaFin
         }
@@ -186,7 +190,7 @@ class ReportesPlanillas2Controller {
             def strContratista = nombrePersona(contratista, "prov") + "\nContratista"
             def strFiscalizador = nombrePersona(fiscalizador) + "\nFiscalizador"
             def strSubdirector = nombrePersona(subdirector) + "\nSubdirector"
-            def strAdmin = nombrePersona(administrador) + "\nAdministrador"
+            def strAdmin = nombrePersona(administrador) + "\nAdministrador - Delegado"
             def strFechaPresentacion = fechaConFormato(planilla.fechaPresentacion, "dd-MMM-yyyy") + "\nFecha de presentación"
             def strFechaAprobacion = "\nFecha de aprobación"
 

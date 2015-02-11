@@ -43,4 +43,14 @@ grails.project.dependency.resolution = {
         runtime ":kerberos:1.3"
         build ":tomcat:$grailsVersion"
     }
+
 }
+
+//-Xmx768M -Xms768M -XX:MaxPermSize=256m -XX:PermSize=256m
+/*
+grails {
+    tomcat {
+        jvmArgs = ["-server", "-XX:MaxPermSize=340m", "-XX:PermSize=340m", "-Xms1024m", "-Xmx1024m"]
+    }
+}
+*/

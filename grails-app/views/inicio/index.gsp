@@ -135,7 +135,7 @@
                         <img src="${resource(dir: 'images', file: 'fiscalizar.png')}" width="100%" height="100%"/>
                     </div>
 
-                    <div class="texto"><b>Fiscalización</b>: seguimiento a la ejecución de las obras: incio de obra,
+                    <div class="texto"><b>Ejecución</b>: seguimiento a la ejecución de las obras: incio de obra,
                     planillas, reajuste de precios, cronograma ...</div>
                 </div>
             </div>

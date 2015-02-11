@@ -1078,7 +1078,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 break;
             case "4":
                 lblMemo = "Memo de pago"
-                lblFecha = "Fecha de memo de pago"
+                lblFecha = "Fecha acreditación del pago"
                 fechaMin = planilla.fechaMemoPedidoPagoPlanilla
                 fecha = planilla.fechaMemoPedidoPagoPlanilla
                 extra = "Fecha de memo de pedido de pago: " + fechaMin.format("dd-MM-yyyy")

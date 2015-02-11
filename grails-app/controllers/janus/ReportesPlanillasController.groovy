@@ -2678,7 +2678,8 @@ class ReportesPlanillasController {
 
         Document document
         document = new Document(PageSize.A4);
-        document.setMargins(86.4, 56.2, 56.2, 86.4);
+//        document.setMargins(86.4, 56.2, 56.2, 86.4);
+        document.setMargins(86.4, 56.2, 56.2, 56.2);
         // margins: left, right, top, bottom
         // 1 in = 72, 1cm=28.1, 3cm = 86.4
         def pdfw = PdfWriter.getInstance(document, baos);
@@ -2838,7 +2839,7 @@ class ReportesPlanillasController {
 
         /* *********************************** FIRMA **********************************/
 
-        def strParrafoFirma = "\n\n\n______________________________________\nAdministrador - Delegado"
+        def strParrafoFirma = "\n\n\n______________________________________\n${nombrePersona(prsn[0].persona)}\nAdministrador - Delegado"
         Paragraph parrafoFirma = new Paragraph(strParrafoFirma, fontFirma);
         parrafoFirma.setAlignment(Element.ALIGN_JUSTIFIED);
         addEmptyLine(parrafoFirma, 1);
@@ -3018,7 +3019,7 @@ class ReportesPlanillasController {
 //            headers.add(new Paragraph("Quito, " + fechaConFormato(new Date(), "dd MMMM yyyy"), times12bold));
             headers.add(new Paragraph("Quito, " + fechaConFormato(obra.fechaImpresionInicioObra, "dd MMMM yyyy"), times12bold));
             headers.add(new Paragraph(" ", times10bold));
-            headers.add(new Paragraph(" ", times10bold));
+//            headers.add(new Paragraph(" ", times10bold));
             headers.add(new Paragraph(oferta?.proveedor?.titulo, times12bold));
             headers.add(new Paragraph(oferta?.proveedor?.nombreContacto.toUpperCase() + " " + oferta?.proveedor?.apellidoContacto.toUpperCase(), times12bold));
             if (oferta?.proveedor?.tipo == 'J')
@@ -3026,7 +3027,7 @@ class ReportesPlanillasController {
 
             headers.add(new Paragraph("Presente", times12bold));
             headers.add(new Paragraph("", times10bold));
-            headers.add(new Paragraph("", times10bold));
+//            headers.add(new Paragraph("", times10bold));
             headers.add(new Paragraph("De nuestra consideración:", times12bold));
             headers.add(new Paragraph("", times10bold));
             document.add(headers);
@@ -3080,9 +3081,9 @@ class ReportesPlanillasController {
             PdfPTable tablaFirmas = new PdfPTable(1);
             tablaFirmas.setWidthPercentage(100);
 
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
+//            addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph(" ", times10bold), prmsHeaderHoja)
             addCellTabla(tablaFirmas, new Paragraph("______________________________________", times8bold), prmsHeaderHoja)
@@ -3103,7 +3104,7 @@ class ReportesPlanillasController {
 //            println firma
 //            println "***************************************"
             addCellTabla(tablaFirmas, new Paragraph(firma, times12bold), prmsHeaderHoja)
-            addCellTabla(tablaFirmas, new Paragraph("Administrador", times12bold), prmsHeaderHoja)
+            addCellTabla(tablaFirmas, new Paragraph("Administrador - Delegado", times12bold), prmsHeaderHoja)
             document.add(tablaFirmas);
 
 //        def footer = new PdfPTable(1);
