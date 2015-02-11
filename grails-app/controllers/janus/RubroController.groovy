@@ -390,7 +390,7 @@ class RubroController extends janus.seguridad.Shield {
 
     def save() {
 //        println "save rubro " + params.rubro
-        println("params " +  params)
+//        println("params " +  params)
         params.rubro.codigo = params.rubro.codigo.toUpperCase()
         params.rubro.codigoEspecificacion = params.rubro.codigoEspecificacion.toUpperCase()
 
@@ -421,6 +421,18 @@ class RubroController extends janus.seguridad.Shield {
 //        println "ren " + rubro.rendimiento
         if (!rubro.save(flush: true)) {
             println "error " + rubro.errors
+        }else{
+            if(rubro.codigoEspecificacion!="" && rubro.codigoEspecificacion){
+                def rubros = Item.findByCodigoNotEqualAndCodigoEspecificacion(rubro.codigo,rubro.codigoEspecificacion,[sort:"codigo"])
+//                println "mismo codigo "+rubros
+                if(rubros){
+//                    println "actualizando "+rubros.especificaciones+"  "+rubros.foto
+                    rubro.especificaciones=rubros.especificaciones
+                    rubro.save(flush: true)
+                }
+
+            }
+
         }
 
         redirect(action: 'rubroPrincipal', params: [idRubro: rubro.id])
@@ -735,7 +747,7 @@ class RubroController extends janus.seguridad.Shield {
         ext = ext[ext.size() - 1]
         def folder = "rubros"
         def path = servletContext.getRealPath("/") + folder + File.separatorChar + filePath
-
+        println "path "+path
         def file = new File(path)
         if(file.exists()){
             def b = file.getBytes()
@@ -800,7 +812,17 @@ class RubroController extends janus.seguridad.Shield {
                 }
 
 
-                rubro.save(flush: true)
+                if(rubro.save(flush: true)){
+                    if(rubro.codigoEspecificacion!="" && rubro.codigoEspecificacion){
+//                        println "buscnado codigos "+rubro.codigoEspecificacion
+                        def rubros = Item.findAllByCodigoNotEqualAndCodigoEspecificacion(rubro.codigo,rubro.codigoEspecificacion)
+                        rubros.each {
+//                            println "actualizando "+it
+                            it.especificaciones=rubro.especificaciones
+                            it.save(flush: true)
+                        }
+                    }
+                }
             } else {
                 flash.clase = "alert-error"
                 flash.message = "Error: Los formatos permitidos son: JPG, JPEG, GIF, PNG y PDF"

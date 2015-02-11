@@ -66,6 +66,9 @@
             <g:if test="${!filePath}">
                    <p style="color: #800">No se ha cargado ningún archivo para este rubro</p>
             </g:if>
+            <g:else>
+                ${filePath}
+            </g:else>
         </fieldset>
         <g:if test="${ext?.toLowerCase() == 'pdf'}">
             <div class="alert alert-info">

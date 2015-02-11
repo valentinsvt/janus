@@ -61,52 +61,74 @@ class DocumentoProcesoController extends janus.seguridad.Shield {
 
             def error = ""
             def msg = ""
-            if (planoContrato.size() == 0) {
-                if (plano.size() == 0) {
-                    error += "<li>No se ha registrado el documento 'Plano' en la biblioteca de la obra.</li>"
-                } else {
-                    if (plano.size() > 1) {
-                        error += "<li>Se han encontrado ${plano.size()} documentos de plano de la obra. Se ha copiado el primero encontrado.</li>"
-                    }
-                    plano = plano.first()
+
+
+            documentos.each {doc->
+                def docu = DocumentoProceso.findAllByConcursoAndNombre(concurso,doc.nombre)
+                if(!docu){
                     def pl = new DocumentoProceso(
                             etapa: Etapa.get(4),
                             concurso: concurso,
-                            descripcion: plano.descripcion,
-                            palabrasClave: plano.palabrasClave,
-                            resumen: plano.resumen,
-                            nombre: plano.nombre,
-                            path: plano.path)
+                            descripcion: doc.descripcion,
+                            palabrasClave: doc.palabrasClave,
+                            resumen: doc.resumen,
+                            nombre: doc.nombre,
+                            path: doc.path)
                     if (!pl.save(flush: true)) {
                         error += "<li>No se pudo copiar el archivo de plano de la obra: " + renderErrors(bean: pl) + "</li>"
                     } else {
                         msg += "<li>Se ha copiado exitosamente el archivo de plano de la obra</li>"
                     }
                 }
+
+
             }
-            if (justificativoContrato.size() == 0) {
-                if (justificativo.size() == 0) {
-                    error += "<li>No se ha registrado el documento 'Justificativo de cantidad de obra' en la biblioteca de la obra.</li>"
-                } else {
-                    if (justificativo.size() > 1) {
-                        error += "<li>Se han encontrado ${justificativo.size()} documentos de justificativo de cantidad de la obra. Se ha copiado el primero encontrado.</li>"
-                    }
-                    justificativo = justificativo.first()
-                    def js = new DocumentoProceso(
-                            etapa: Etapa.get(4),
-                            concurso: concurso,
-                            descripcion: justificativo.descripcion,
-                            palabrasClave: justificativo.palabrasClave,
-                            resumen: justificativo.resumen,
-                            nombre: justificativo.nombre,
-                            path: justificativo.path)
-                    if (!js.save(flush: true)) {
-                        error += "<li>No se pudo copiar el archivo de justificativo de cantidad de la obra: " + renderErrors(bean: js) + "</li>"
-                    } else {
-                        msg += "<li>Se ha copiado exitosamente el archivo de justificativo de cantidad de la obra</li>"
-                    }
-                }
-            }
+//            if (planoContrato.size() == 0) {
+//                if (plano.size() == 0) {
+//                    error += "<li>No se ha registrado el documento 'Plano' en la biblioteca de la obra.</li>"
+//                } else {
+//                    if (plano.size() > 1) {
+//                        error += "<li>Se han encontrado ${plano.size()} documentos de plano de la obra. Se ha copiado el primero encontrado.</li>"
+//                    }
+//                    plano = plano.first()
+//                    def pl = new DocumentoProceso(
+//                            etapa: Etapa.get(4),
+//                            concurso: concurso,
+//                            descripcion: plano.descripcion,
+//                            palabrasClave: plano.palabrasClave,
+//                            resumen: plano.resumen,
+//                            nombre: plano.nombre,
+//                            path: plano.path)
+//                    if (!pl.save(flush: true)) {
+//                        error += "<li>No se pudo copiar el archivo de plano de la obra: " + renderErrors(bean: pl) + "</li>"
+//                    } else {
+//                        msg += "<li>Se ha copiado exitosamente el archivo de plano de la obra</li>"
+//                    }
+//                }
+//            }
+//            if (justificativoContrato.size() == 0) {
+//                if (justificativo.size() == 0) {
+//                    error += "<li>No se ha registrado el documento 'Justificativo de cantidad de obra' en la biblioteca de la obra.</li>"
+//                } else {
+//                    if (justificativo.size() > 1) {
+//                        error += "<li>Se han encontrado ${justificativo.size()} documentos de justificativo de cantidad de la obra. Se ha copiado el primero encontrado.</li>"
+//                    }
+//                    justificativo = justificativo.first()
+//                    def js = new DocumentoProceso(
+//                            etapa: Etapa.get(4),
+//                            concurso: concurso,
+//                            descripcion: justificativo.descripcion,
+//                            palabrasClave: justificativo.palabrasClave,
+//                            resumen: justificativo.resumen,
+//                            nombre: justificativo.nombre,
+//                            path: justificativo.path)
+//                    if (!js.save(flush: true)) {
+//                        error += "<li>No se pudo copiar el archivo de justificativo de cantidad de la obra: " + renderErrors(bean: js) + "</li>"
+//                    } else {
+//                        msg += "<li>Se ha copiado exitosamente el archivo de justificativo de cantidad de la obra</li>"
+//                    }
+//                }
+//            }
             if (error != "") {
                 flash.clase = "alert-error"
                 flash.message = "<ul>${error}</ul>"
