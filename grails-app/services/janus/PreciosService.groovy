@@ -500,7 +500,7 @@ class PreciosService {
 
     def vae_rb(obra, rubro){
         def cn = dbConnectionService.getConnection()
-        def sql = "select * from vae_rb_precios_ob("+ rubro + ","+ obra +") order by itemcdgo asc "
+        def sql = "select * from vae_rb_precios_ob("+ rubro + ","+ obra +") order by grpocdgo desc "
         def result = []
         cn.eachRow(sql.toString()) { r ->
             result.add(r.toRowResult())

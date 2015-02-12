@@ -3234,10 +3234,11 @@ class Reportes3Controller {
         sheet.mergeCells(5, 5, 6, 5)
         label = new Label(5, 6, "Unidad: " + rubro.unidad?.codigo, times16format); sheet.addCell(label);
         sheet.mergeCells(5, 6, 6, 6)
+        label = new Label(5, 7, "Código Especificacion: " + (rubro?.codigoEspecificacion ?: ''), times16format); sheet.addCell(label);
+        sheet.mergeCells(5, 7, 7, 7)
 
         def fila = 12
-        label = new Label(0, fila, "Equipos", times16format); sheet.addCell(label);
-        sheet.mergeCells(0, fila, 1, fila)
+
         fila++
         def number
         def number2
@@ -3253,11 +3254,17 @@ class Reportes3Controller {
         def totalTRel = 0
         def totalTVae = 0
         def total = 0
-        def band = 0
+        def band = 25
         def rowsTrans = []
-        res.eachWithIndex { r, i ->
+        //println(vae)
+        vae.eachWithIndex { r, i ->
+
             if (r["grpocdgo"] == 3) {
-                if (band == 0) {
+                if (band != 0) {
+                    fila++
+                    label = new Label(0, fila, "Equipos", times16format); sheet.addCell(label);
+                    sheet.mergeCells(0, fila, 1, fila)
+                    fila++
                     label = new Label(0, fila, "Código", times16format); sheet.addCell(label);
                     label = new Label(1, fila, "Descripción", times16format); sheet.addCell(label);
                     label = new Label(2, fila, "Cantidad", times16format); sheet.addCell(label);
@@ -3272,7 +3279,7 @@ class Reportes3Controller {
                     label = new Label(11, fila, "VAE(%) Elemento", times16format); sheet.addCell(label);
                     fila++
                 }
-                band = 1
+                band = 0
                 label = new Label(0, fila, r["itemcdgo"], times10); sheet.addCell(label);
                 label = new Label(1, fila, r["itemnmbr"], times10); sheet.addCell(label);
                 number = new Number(2, fila, r["rbrocntd"]); sheet.addCell(number);
@@ -3280,11 +3287,11 @@ class Reportes3Controller {
                 number = new Number(4, fila, r["rbpcpcun"] * r["rbrocntd"]); sheet.addCell(number);
                 number = new Number(5, fila, r["rndm"]); sheet.addCell(number);
                 number = new Number(6, fila, r["parcial"]); sheet.addCell(number);
-                number = new Number(7, fila, vae[i].relativo); sheet.addCell(number);
-                label = new Label(8, fila, vae[i].itemcpac); sheet.addCell(label);
-                label = new Label(9, fila, vae[i].tpbncdgo); sheet.addCell(label);
-                number = new Number(10, fila, vae[i].vae); sheet.addCell(number);
-                number = new Number(11, fila, vae[i].vae_vlor); sheet.addCell(number);
+                number = new Number(7, fila, r["relativo"]); sheet.addCell(number);
+                label = new Label(8, fila, r.itemcpac); sheet.addCell(label);
+                label = new Label(9, fila, r.tpbncdgo); sheet.addCell(label);
+                number = new Number(10, fila, r["vae"]); sheet.addCell(number);
+                number = new Number(11, fila, r["vae_vlor"]); sheet.addCell(number);
 
                 totalHer += r["parcial"]
                 totalHerRel += vae[i].relativo
@@ -3299,6 +3306,7 @@ class Reportes3Controller {
                     number = new Number(11, fila, totalHerVae); sheet.addCell(number);
                     fila++
                 }
+
                 if (band != 2) {
                     fila++
                     label = new Label(0, fila, "Mano de obra", times16format); sheet.addCell(label);
@@ -3342,6 +3350,8 @@ class Reportes3Controller {
                 if (band == 2) {
                     label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
                     number = new Number(6, fila, totalMan); sheet.addCell(number);
+                    number = new Number(7, fila, totalManRel); sheet.addCell(number);
+                    number = new Number(11, fila, totalManVae); sheet.addCell(number);
                     fila++
                 }
                 if (band != 3) {
@@ -3381,12 +3391,8 @@ class Reportes3Controller {
             }
 
             if (r["grpocdgo"] == 1) {
-                println("-------" + i)
+//                println("-------" + i)
                 rowsTrans.add(r)
-
-
-
-
                 total += r["parcial_t"]
                 totalTRel += vae[i].relativo_t
                 totalTVae += vae[i].vae_vlor_t
@@ -3394,7 +3400,7 @@ class Reportes3Controller {
 
         }
         if (band == 3) {
-            label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
+            label = new Label(0, fila, "SUBTOTAL Mat", times10); sheet.addCell(label);
             number = new Number(6, fila, totalMat); sheet.addCell(number);
             number = new Number(7, fila, totalMatRel); sheet.addCell(number);
             number = new Number(11, fila, totalMatVae); sheet.addCell(number);
@@ -3422,9 +3428,6 @@ class Reportes3Controller {
             fila++
 
             rowsTrans.eachWithIndex { rt, j ->
-//                println("-->" + rt)
-//                println("VAE " + vae)
-//                println("j " + j)
                 def tra = rt["parcial_t"]
                 def tot = 0
                 if (tra > 0)
@@ -3437,11 +3440,11 @@ class Reportes3Controller {
                 number = new Number(5, fila, tot); sheet.addCell(number);
                 number = new Number(6, fila, rt["parcial_t"]); sheet.addCell(number);
 
-                number = new Number(7, fila, vae[j].relativo_t); sheet.addCell(number);
-                label = new Label(8, fila, vae[j].itemcpac); sheet.addCell(label);
-                label = new Label(9, fila, vae[j].tpbncdgo); sheet.addCell(label);
-                number = new Number(10, fila, vae[j].vae_t); sheet.addCell(number);
-                number = new Number(11, fila, (vae[j].vae_vlor_t).toDouble().round(5)); sheet.addCell(number);
+                number = new Number(7, fila, rt["relativo_t"]); sheet.addCell(number);
+                label = new Label(8, fila, rt["itemcpac"]); sheet.addCell(label);
+                label = new Label(9, fila, rt["tpbncdgo"]); sheet.addCell(label);
+                number = new Number(10, fila, rt["vae_t"]); sheet.addCell(number);
+                number = new Number(11, fila, rt["vae_vlor_t"]); sheet.addCell(number);
                 fila++
             }
             label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
@@ -3465,6 +3468,8 @@ class Reportes3Controller {
         fila++
         def totalRubro = total + totalHer + totalMan + totalMat
         def totalIndi = totalRubro * indi / 100
+        def totalRelativo = totalTRel + totalHerRel + totalMatRel + totalManRel
+        def totalVae = totalTVae + totalHerVae + totalMatVae + totalManVae
         label = new Label(0, fila, "Costos indirectos", times10); sheet.addCell(label);
         sheet.mergeCells(0, fila, 1, fila)
         number = new Number(5, fila, indi); sheet.addCell(number);
@@ -3484,6 +3489,20 @@ class Reportes3Controller {
         number = new Number(6, fila + 1, totalIndi); sheet.addCell(number);
         number = new Number(6, fila + 2, totalRubro + totalIndi); sheet.addCell(number);
         number = new Number(6, fila + 3, (totalRubro + totalIndi).toDouble().round(2)); sheet.addCell(number);
+        label = new Label(7, fila+1, "TOTAL", times16format); sheet.addCell(label);
+        sheet.mergeCells(7, fila+1, 5, fila+1)
+        label = new Label(7, fila+2, "PESO", times16format); sheet.addCell(label);
+        sheet.mergeCells(7, fila+2, 5, fila+2)
+        label = new Label(7, fila+3, "RELATIVO(%)", times16format); sheet.addCell(label);
+        sheet.mergeCells(7, fila+3, 5, fila+3)
+        label = new Label(11, fila+1, "TOTAL", times16format); sheet.addCell(label);
+        sheet.mergeCells(11, fila+1, 5, fila+1)
+        label = new Label(11, fila+2, "VAE", times16format); sheet.addCell(label);
+        sheet.mergeCells(11, fila+2, 5, fila+2)
+        label = new Label(11, fila+3, "(%)", times16format); sheet.addCell(label);
+        sheet.mergeCells(11, fila+3, 5, fila+3)
+        number = new Number(7, fila, totalRelativo); sheet.addCell(number);
+        number = new Number(11, fila, totalVae); sheet.addCell(number);
 
         return sheet
     }
@@ -3509,6 +3528,7 @@ class Reportes3Controller {
 
         VolumenesObra.findAllByObra(obra, [sort: "orden"]).item.unique().eachWithIndex { rubro, i ->
             def res = preciosService.presioUnitarioVolumenObra("* ", obra.id, rubro.id)
+//            def res = preciosService.precioUnitarioVolumenObraAsc("*", obra.id, rubro.id)
             def vae = preciosService.vae_rb(obra.id,rubro.id)
             WritableSheet sheet = workbook.createSheet(rubro.codigo, i)
             rubroAExcel(sheet, res, rubro, fecha, indi, vae)
