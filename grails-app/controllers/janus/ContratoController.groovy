@@ -499,13 +499,13 @@ class ContratoController extends janus.seguridad.Shield {
         println "extras "+extras
 
         if (!params.reporte) {
-            if(params.excel){
+            if(params.excel) {
                 session.dominio = Contrato
                 session.funciones = funciones
                 def anchos = [10, 20, 10, 10, 5, 10, 20, 10, 5] /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Contrato", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "Contratos", anchos: anchos, extras: extras, landscape: true])
 
-            }else{
+            } else {
                 def lista = buscadorService.buscar(Contrato, "Contrato", "excluyente", params, true, extras)
                 /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
