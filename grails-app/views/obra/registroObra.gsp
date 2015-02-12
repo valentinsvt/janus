@@ -1913,7 +1913,7 @@
                 dialog     : {
                     resizable : false,
                     draggable : false,
-                    width     : 450,
+                    width     : 500,
                     height    : 250,
                     buttons   : {
 
@@ -1937,6 +1937,11 @@
                         "VAE sin desglose de T."                               : function () {
                             urlVae += "0";
                             location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
+                        },
+                        "Exportar VAE Excel."                               : function () {
+                            var urlVaeEx = "${createLink(controller:'reportes3', action:'imprimirRubrosVaeExcel')}?obra=${obra?.id}&transporte=";
+                            urlVaeEx += "1";
+                            location.href = urlVaeEx;
                         },
                         "Imprimir Ilustraciones y Especificaciones de los Rubros" : function () {
                             var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${obra?.id}&tipo=ie";

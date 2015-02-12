@@ -264,7 +264,7 @@
                 </th>
                 <th class="col_precio " style="width:80px ; text-align: right">P. U.</th>
                 <th class="col_total " style="width:80px; text-align: center">C.TOTAL</th>
-                <th class="col_vae_relativo " style="width:60px ; text-align: right">VAE RELATIVO</th>
+                <th class="col_vae_relativo " style="width:60px ; text-align: right">PESO RELATIVO</th>
                 <th class="col_vae_rbro" style="width:60px ; text-align: right">VAE RUBRO</th>
                 <th class="col_vae_total" style="width:60px ; text-align: right">VAE TOTAL</th>
             </tr>
