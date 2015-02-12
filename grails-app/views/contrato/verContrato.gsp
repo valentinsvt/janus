@@ -73,7 +73,7 @@
                     </a>
                     <a href="#" class="btn  " id="btnRubros">
                         <i class="icon-print"></i>
-                        Rubros con o sin desglose VAE
+                        Imprimir Rubros con o sin desglose VAE
                     </a>
 %{--
                     <a href="#" class="btn  " id="imprimir_sub">
@@ -988,44 +988,48 @@
         });
 
             $("#btnRubros").click(function () {
-/*
-*/
                 var url = "${createLink(controller:'reportes', action:'imprimirRubros')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
                 var urlVae = "${createLink(controller:'reportes3', action:'reporteRubrosVaeReg')}?obra=${contrato?.oferta?.concurso?.obra?.id}Wdesglose=";
                 $.box({
                     imageClass : "box_info",
-                    text       : "Imprimir Rubros, Ilustraciones y Especificaciones",
-                    title      : "Imprimir Rubros",
+                    text       : "Imprimir los análisis de precios unitarios de los rubros usados en la obra<br><span style='margin-left: 42px;'>Ilustraciones y Especificaciones</span>",
+                    title      : "Imprimir Rubros de la Obra",
                     iconClose  : true,
                     dialog     : {
                         resizable : false,
                         draggable : false,
-                        width     : 450,
-                        height    : 250,
+                        width     : 600,
+                        height    : 280,
                         buttons   : {
 
-                            "Con desglose de T."                               : function () {
+                            "Con desglose de Trans."                               : function () {
                                 url += "1";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                             },
-                            "Sin desglose de T."                               : function () {
+                            "Sin desglose de Trans."                               : function () {
                                 url += "0";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + url
                             },
-                            "Exportar a Excel"                 : function () {
+                            "Exportar Rubros a Excel"                 : function () {
                                 var url = "${createLink(controller:'reportes', action:'imprimirRubrosExcel')}?obra=${contrato?.oferta?.concurso?.obra?.id}&transporte=";
                                 url += "1";
                                 location.href = url;
                             },
-                            "VAE con desglose de T."                               : function () {
+                            "VAE con desglose de Trans."                               : function () {
                                 urlVae += "1";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                             },
-                            "VAE sin desglose de T."                               : function () {
+                            "VAE sin desglose de Trans."                               : function () {
                                 urlVae += "0";
                                 location.href = "${g.createLink(controller: 'pdf',action: 'pdfLink')}?url=" + urlVae
                             },
-                            "Imprimir Ilustraciones y Especificaciones de los Rubros" : function () {
+                            "Exportar VAE a Excel"                               : function () {
+                                var urlVaeEx = "${createLink(controller:'reportes3', action:'imprimirRubrosVaeExcel')}?obra=${contrato?.oferta?.concurso?.obra?.id}&transporte=";
+                                urlVaeEx += "1";
+                                location.href = urlVaeEx;
+                            },
+
+                            "Imprimir las Ilustraciones y las Especificaciones de los Rubros utilizados en la Obra" : function () {
                                 var url = "${createLink(controller:'reportes2', action:'reporteRubroIlustracion')}?id=${contrato?.oferta?.concurso?.obra?.id}&tipo=ie";
                                 location.href = url;
                             },
