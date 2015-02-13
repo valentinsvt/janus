@@ -406,7 +406,7 @@ class OferentesService {
         campos += ")"
         valores += ")"
 
-        println "\ncampos " + campos
+        //println "\ncampos " + campos
 //        println "valores " + valores
         sql = sql.replace("%", tabla)
         sql = sql.replace("&", campos)
@@ -414,16 +414,16 @@ class OferentesService {
 //        println "\nsql " + sql
         def cn = dbConnectionService.getConnectionOferentes()
         def count = 0
-        println "validacion sql  " + validacion
+       // println "validacion sql  " + validacion
         cn.eachRow(validacion.toString()) { r ->
-            println "r " + r
+          //  println "r " + r
             count = r[0]
         }
-        println "res val "+count
+       // println "res val "+count
         if (count == 0) {
             def res
             try {
-                println "insert "+sql
+              println "insert ! "+sql
                 res = cn.executeInsert(sql.toString())
                 println "res "+res
                 res=res[0][0]
@@ -443,7 +443,7 @@ class OferentesService {
 
 
     def exportDominioSinReferencia(dominio, objeto, oferente, campoOferente,sqlValidacion){
-        println "dom "+dominio+"  obt "+objeto
+        println "dom sin ref "+dominio+"  obt "+objeto
         def sql = "insert into % & values # "
         def campos = "("
         def valores = "("
@@ -484,16 +484,16 @@ class OferentesService {
 
         def cn = dbConnectionService.getConnectionOferentes()
         def count = 0
-        println "validacion " + validacion
+        //println "validacion " + validacion
         cn.eachRow(validacion.toString()) { r ->
             //println "r " + r
             count = r[0]
         }
-        println " res validacion "+count
+       // println " res validacion "+count
         if (count == 0) {
             def res
             try {
-//                println "insert "+sql
+                println "insert!!!!  "+sql
                 res = cn.executeInsert(sql.toString())
 //                println "res "+res
                 res=res[0][0]
@@ -554,8 +554,15 @@ class OferentesService {
         }
 
         if (obj.properties[campo.name]) {
+
             if (tipo =~ "String") {
-                sql += "'" + obj.properties[campo.name] + "'"
+                def cmp = obj.properties[campo.name].replaceAll("'","\\\\'")
+                if(obj.properties[campo.name]=~"'"){
+                   // println "tiene comilla simple"
+                   // println "campo 3  "+obj.properties[campo.name].replaceAll("'","\\\\'")
+                }
+
+                sql += "E'" + cmp+ "'"
             } else {
                 if (tipo =~ "Date") {
                     sql += "'" + obj.properties[campo.name].format("yyyy-MM-dd hh:mm:ss") + "'"
