@@ -33,14 +33,14 @@
     <div class="span12">
 <g:if test="${perfil == 2}">
 
-        <a href="#" class="btn  " id="imprimir">
-            <i class="icon-print"></i>
-            Imprimir
-        </a>
-        <a href="#" class="btn  " id="excel">
-            <i class="icon-table"></i>
-            Excel
-        </a>
+        %{--<a href="#" class="btn  " id="imprimir">--}%
+            %{--<i class="icon-print"></i>--}%
+            %{--Imprimir--}%
+        %{--</a>--}%
+        %{--<a href="#" class="btn  " id="excel">--}%
+            %{--<i class="icon-table"></i>--}%
+            %{--Excel--}%
+        %{--</a>--}%
         </g:if>
         <a href="#" class="btn" id="regresar">
             <i class="icon-arrow-left"></i>
@@ -63,7 +63,7 @@
             }
             $("#loading").append(".");
             y++
-        }, 500);
+        }, 100);
         return interval
     }
     function cargarTabla() {
@@ -81,11 +81,7 @@
 
 
     $(function () {
-
-
-
         cargarTabla();
-
     });
 
 

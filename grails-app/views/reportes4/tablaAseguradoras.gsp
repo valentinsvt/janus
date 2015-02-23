@@ -37,14 +37,14 @@
             <i class="icon-search"></i>
             Buscar
         </a>
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
-        %{--</a>--}%
-        %{--<a href="#" class="btn" id="regresar">--}%
-            %{--<i class="icon-arrow-left"></i>--}%
-            %{--Regresar--}%
-        %{--</a>--}%
+        <a href="#" class="btn hide" id="imprimir">
+            <i class="icon-print"></i>
+            Imprimir
+        </a>
+        <a href="#" class="btn hide" id="excel">
+            <i class="icon-table"></i>
+            Excel
+        </a>
     </div>
 
 </div>
@@ -127,6 +127,8 @@
             success  : function (msg) {
                 clearInterval(interval)
                 $("#detalle").html(msg)
+                $("#imprimir").removeClass("hide");
+                $("#excel").removeClass("hide");
             }
         });
     });

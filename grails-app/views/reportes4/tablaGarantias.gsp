@@ -44,14 +44,7 @@
             <i class="icon-search"></i>
             Buscar
         </a>
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-        %{--<i class="icon-print"></i>--}%
-        %{--Imprimir--}%
-        %{--</a>--}%
-        %{--<a href="#" class="btn" id="regresar">--}%
-        %{--<i class="icon-arrow-left"></i>--}%
-        %{--Regresar--}%
-        %{--</a>--}%
+
     </div>
 
 </div>

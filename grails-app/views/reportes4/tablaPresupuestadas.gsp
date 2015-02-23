@@ -29,18 +29,18 @@
         %{--optionValue="value" id="estado_reg" value="${params.estado}" style="width: 150px"/>--}%
         <b>Criterio: </b>
         <g:textField name="criterio" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
-        <a href="#" class="btn  " id="buscar1">
+        <a href="#" class="btn" id="buscar1">
             <i class="icon-search"></i>
             Buscar
         </a>
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-        %{--<i class="icon-print"></i>--}%
-        %{--Imprimir--}%
-        %{--</a>--}%
-        %{--<a href="#" class="btn" id="regresar">--}%
-        %{--<i class="icon-arrow-left"></i>--}%
-        %{--Regresar--}%
-        %{--</a>--}%
+        <a href="#" class="btn hide" id="imprimir">
+            <i class="icon-print"></i>
+            Imprimir
+        </a>
+        <a href="#" class="btn hide" id="excel">
+            <i class="icon-table"></i>
+            Excel
+        </a>
     </div>
 
 </div>
@@ -128,6 +128,8 @@
             success  : function (msg) {
                 clearInterval(interval)
                 $("#detalle").html(msg)
+                $("#imprimir").removeClass("hide");
+                $("#excel").removeClass("hide");
             }
         });
     });

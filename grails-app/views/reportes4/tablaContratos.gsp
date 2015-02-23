@@ -21,45 +21,46 @@
 
         <b>Buscar Por: </b>
         <g:select name="buscador" from="${['cdgo':'N° Contrato', 'memo': 'Memo', 'fcsb': 'Fecha Suscrip', 'tipo': 'Tipo Contrato', 'cncr': 'Concurso',
-        'obra':'Obra', 'nmbr': 'Nombre', 'cntn':'Cantón', 'parr': 'Parroquia', 'clas':'Clase', 'mnto': 'Monto', 'cont': 'Contratista',
-        'tppz':'Tipo Plazo', 'inic':'Fecha Inicio', 'fin':'Fecha Fin']}" value="${params.buscador}"
+                                           'obra':'Obra', 'nmbr': 'Nombre', 'cntn':'Cantón', 'parr': 'Parroquia', 'clas':'Clase', 'mnto': 'Monto', 'cont': 'Contratista',
+                                           'tppz':'Tipo Plazo', 'inic':'Fecha Inicio', 'fin':'Fecha Fin']}" value="${params.buscador}"
                   optionKey="key" optionValue="value" id="buscador_tra" style="width: 150px"/>
         <b>Fecha: </b>
 
 
         <g:set var="fechas" value="${['fcsb','inic','fin']}" />
-<g:if test="${fechas.contains(params.buscador)}">
-        <elm:datepicker name="fecha" id="fecha_tra" value="${params.fecha}"/>
-        <b>Criterio: </b>
-        <g:textField name="criterio" id="criterio_tra" readonly="readonly" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
-</g:if>
-<g:else>
 
-    <elm:datepicker name="fecha" id="fecha_tra" disabled="disabled" value="${params.fecha}"/>
-    <b>Criterio: </b>
-    <g:textField name="criterio" id="criterio_tra" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+        <g:if test="${fechas.contains(params.buscador)}">
+            <elm:datepicker name="fecha" id="fecha_tra" value="${params.fecha}"/>
+            <b>Criterio: </b>
+            <g:textField name="criterio" id="criterio_tra" readonly="readonly" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+        </g:if>
+        <g:else>
 
-</g:else>
+            <elm:datepicker name="fecha" id="fecha_tra" disabled="disabled" value="${params.fecha}"/>
+            <b>Criterio: </b>
+            <g:textField name="criterio" id="criterio_tra" style="width: 250px; margin-right: 10px" value="${params.criterio}"/>
+
+        </g:else>
         <a href="#" class="btn  " id="buscar">
             <i class="icon-search"></i>
             Buscar
         </a>
-        %{--<a href="#" class="btn  " id="imprimir">--}%
-            %{--<i class="icon-print"></i>--}%
-            %{--Imprimir--}%
-        %{--</a>--}%
-        %{--<a href="#" class="btn" id="regresar">--}%
-            %{--<i class="icon-arrow-left"></i>--}%
-            %{--Regresar--}%
-        %{--</a>--}%
+        <a href="#" class="btn hide" id="imprimir">
+            <i class="icon-print"></i>
+            Imprimir
+        </a>
+        <a href="#" class="btn  hide" id="excel">
+            <i class="icon-print"></i>
+            Excel
+        </a>
     </div>
 
 </div>
 
-<div style="width: 1000px; height: 500px; overflow-y:hidden; overflow-x: auto" >
+<div style="width: 1100px; height: 500px; overflow-y:auto; overflow-x: auto" >
 
 
-    <div style="width: 1800px; height: 500px; overflow-y: hidden" >
+    <div style="width: 1800px; height: 500px; ">
         <table class="table table-bordered table-striped table-condensed table-hover">
             <thead>
             <tr>
@@ -70,9 +71,6 @@
                 <th style="width: 60px;">
                     Suscripción
                 </th>
-                %{--<th style="width: 60px">--}%
-                    %{--Memo Distri.--}%
-                %{--</th>--}%
                 <th style="width: 300px">
                     Concurso
                 </th>
@@ -89,13 +87,13 @@
                     Cantón
                 </th>
                 <th style="width: 120px">
-                   Clase de Obra
+                    Clase de Obra
                 </th>
                 <th style="width: 280px">
-                   Tipo de Contrato
+                    Tipo de Contrato
                 </th>
                 <th style="width: 80px">
-                   Monto
+                    Monto
                 </th>
                 <th style="width: 80px">
                     %
@@ -123,38 +121,34 @@
 
             <tbody id="tabla_material">
 
-
-
-
-
             %{--<g:if test="${params.criterio || params.fecha}">--}%
-                <g:if test="${params.buscador != 'undefined'}">
-            <g:each in="${res}" var="cont" status="j">
-                <tr class="obra_row" id="${cont.id}">
-                    <td>${cont.codigo}</td>
-                    <td><g:formatDate date="${cont.fechasu}" format="dd-MM-yyyy"/></td>
-                    %{--<td>${cont.memo}</td>--}%
-                    <td>${cont.concurso}</td>
-                    <td>${cont.obracodigo}</td>
-                    <td>${cont.obranombre} </td>
-                    <td>${cont.parroquia}</td>
-                    <td>${cont.canton}</td>
-                    <td>${cont.tipoobra}</td>
-                    <td>${cont.tipocontrato}</td>
-                    <td>${cont.monto}</td>
-                    <td>${cont.porcentaje}</td>
-                    <td>${cont.anticipo}</td>
-                    <td>${cont.nombrecontra}</td>
-                    <td><g:formatDate date="${cont.fechainicio}" format="dd-MM-yyyy"/></td>
-                    <td><g:formatDate date="${cont.fechafin}" format="dd-MM-yyyy"/></td>
-                    <td>${cont.plazo}</td>
+            <g:if test="${params.buscador != 'undefined'}">
+                <g:each in="${res}" var="cont" status="j">
+                    <tr class="obra_row" id="${cont.id}">
+                        <td>${cont.codigo}</td>
+                        <td><g:formatDate date="${cont.fechasu}" format="dd-MM-yyyy"/></td>
+                        %{--<td>${cont.memo}</td>--}%
+                        <td>${cont.concurso}</td>
+                        <td>${cont.obracodigo}</td>
+                        <td>${cont.obranombre} </td>
+                        <td>${cont.parroquia}</td>
+                        <td>${cont.canton}</td>
+                        <td>${cont.tipoobra}</td>
+                        <td>${cont.tipocontrato}</td>
+                        <td>${cont.monto}</td>
+                        <td>${cont.porcentaje}</td>
+                        <td>${cont.anticipo}</td>
+                        <td>${cont.nombrecontra}</td>
+                        <td><g:formatDate date="${cont.fechainicio}" format="dd-MM-yyyy"/></td>
+                        <td><g:formatDate date="${cont.fechafin}" format="dd-MM-yyyy"/></td>
+                        <td>${cont.plazo}</td>
 
-                </tr>
+                    </tr>
 
 
-            </g:each>
+                </g:each>
             </g:if>
-%{--</g:if>--}%
+            %{--</g:if>--}%
 
 
             </tbody>
@@ -184,9 +178,9 @@
          39         -> flecha der
          */
         return ((ev.keyCode >= 48 && ev.keyCode <= 57) ||
-                (ev.keyCode >= 96 && ev.keyCode <= 105) ||
-                ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
-                ev.keyCode == 37 || ev.keyCode == 39 || ev.keyCode == 190 || ev.keyCode == 110);
+        (ev.keyCode >= 96 && ev.keyCode <= 105) ||
+        ev.keyCode == 8 || ev.keyCode == 46 || ev.keyCode == 9 ||
+        ev.keyCode == 37 || ev.keyCode == 39 || ev.keyCode == 190 || ev.keyCode == 110);
     }
 
 
@@ -201,46 +195,46 @@
 
         if($("#buscador_tra").val() == 'mnto'){
 
-        if (ev.keyCode == 110 || ev.keyCode == 190) {
+            if (ev.keyCode == 110 || ev.keyCode == 190) {
 
-            if (!dec) {
-                return false;
-            } else {
-                if (val.length == 0) {
-                    $(this).val("0");
-                }
-                if (val.indexOf(".") > -1) {
+                if (!dec) {
                     return false;
-                }
-            }
-
-        } else {
-
-
-            if (val.indexOf(".") > -1) {
-                if (dec) {
-                    var parts = val.split(".");
-                    var l = parts[1].length;
-                    if (l >= dec) {
+                } else {
+                    if (val.length == 0) {
+                        $(this).val("0");
+                    }
+                    if (val.indexOf(".") > -1) {
                         return false;
                     }
                 }
+
             } else {
-                return validarNumDec(ev);
+
+
+                if (val.indexOf(".") > -1) {
+                    if (dec) {
+                        var parts = val.split(".");
+                        var l = parts[1].length;
+                        if (l >= dec) {
+                            return false;
+                        }
+                    }
+                } else {
+                    return validarNumDec(ev);
+                }
+
+
             }
 
 
+            return validarNumDec(ev);
         }
-
-
-        return validarNumDec(ev);
-    }
- return true
+        return true
     }).keyup(function () {
 
 
 
-            });
+    });
 
 
 
@@ -255,6 +249,8 @@
             success  : function (msg) {
                 clearInterval(interval)
                 $("#detalle").html(msg)
+                $("#imprimir").removeClass("hide");
+                $("#excel").removeClass("hide");
             }
         });
 
@@ -285,29 +281,29 @@
 
     $("#buscador_tra").change(function () {
 
-       if($(this).val() == 'fcsb' || $(this).val() == 'inic' || $(this).val() == 'fin'){
+        if($(this).val() == 'fcsb' || $(this).val() == 'inic' || $(this).val() == 'fin'){
 
-           $("#fecha_tra").removeAttr("disabled")
+            $("#fecha_tra").removeAttr("disabled")
 
-           $("#criterio_tra").attr("readonly", "true").val("")
-       }
+            $("#criterio_tra").attr("readonly", "true").val("")
+        }
         else {
 
 
-           if($(this).val() == 'mnto'){
+            if($(this).val() == 'mnto'){
 
-               $("#criterio_tra").val("")
+                $("#criterio_tra").val("")
 
-           }
-
-
-           $("#fecha_tra").attr("disabled", true).val("")
-           $("#criterio_tra").removeAttr("readonly")
+            }
 
 
+            $("#fecha_tra").attr("disabled", true).val("")
+            $("#criterio_tra").removeAttr("readonly")
 
 
-       }
+
+
+        }
 
 
     })

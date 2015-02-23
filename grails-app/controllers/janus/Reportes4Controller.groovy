@@ -848,56 +848,23 @@ class Reportes4Controller {
         }
 
 
-//
-//        if(params.estado == '1'){
-//
-//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-//        }
-//        else if(params.estado == '2'){
-//
-//            filtro = " where obraofig is NOT NULL "
-//
-//        }
-//        else if(params.estado == '3'){
-//
-//            filtro = " where obraetdo='R' "
-//
-//        }
-
         filtro = " where obraetdo='N' "
-
         sql = sqlBase + filtro + filtroBuscador
-
         cn = dbConnectionService.getConnection()
-
         res = cn.rows(sql.toString())
 
-//        println(sql)
-
-        //valor
-
         res.each{
-
             totales = 0
             total1=0
-
             valores =  preciosService.rbro_pcun_v2(it.id)
-
             subPres =  VolumenesObra.findAllByObra(Obra.get(it.id),[sort:"orden"]).subPresupuesto.unique()
-
             subPres.each { s->
-
                 valores.each {
                     if(it.sbprdscr == s.descripcion){
-
                         totales = it.totl
                         totalPresupuestoBien = (total1 += totales)
                     }
-
-
                 }
-
-
             }
 
             valoresTotales += totalPresupuestoBien
@@ -972,7 +939,7 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("REPORTE DE OBRAS INGRESADAS", times12bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
+        headers.add(new Paragraph("AL " + printFecha(new Date()).toUpperCase(), times12bold));
         addEmptyLine(headers, 1);
         document.add(headers);
 
@@ -986,7 +953,7 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Fecha Reg.", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Requirente", times8bold), prmsCellHead2)
 //        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
 
         res.eachWithIndex {i,j->
@@ -1003,7 +970,7 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
             if(valoresTotales[j] != null){
                 addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
-                        5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
             }else {
 
                 addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
@@ -1107,35 +1074,10 @@ class Reportes4Controller {
 
         }
 
-
-//
-//        if(params.estado == '1'){
-//
-//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-//        }
-//        else if(params.estado == '2'){
-//
-//            filtro = " where obraofig is NOT NULL "
-//
-//        }
-//        else if(params.estado == '3'){
-//
-//            filtro = " where obraetdo='R' "
-//
-//        }
-
         filtro = " where obraetdo='R' "
-
         sql = sqlBase + filtro + filtroBuscador
-
         cn = dbConnectionService.getConnection()
-
         res = cn.rows(sql.toString())
-
-//        println(sql)
-
-        //valor
-
         res.each{
 
             totales = 0
@@ -1153,15 +1095,9 @@ class Reportes4Controller {
                         totales = it.totl
                         totalPresupuestoBien = (total1 += totales)
                     }
-
-
                 }
-
-
             }
-
             valoresTotales += totalPresupuestoBien
-
         }
 
         //reporte
@@ -1232,7 +1168,7 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("REPORTE DE OBRAS PRESUPUESTADAS", times12bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
+        headers.add(new Paragraph("AL " + printFecha(new Date()).toUpperCase(), times12bold));
         addEmptyLine(headers, 1);
         document.add(headers);
 
@@ -1246,7 +1182,7 @@ class Reportes4Controller {
         addCellTabla(tablaRegistradas, new Paragraph("Fecha Reg.", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
         addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
-        addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
+        addCellTabla(tablaRegistradas, new Paragraph("Requirente", times8bold), prmsCellHead2)
 //        addCellTabla(tablaRegistradas, new Paragraph("Estado", times8bold), prmsCellHead2)
 
         res.eachWithIndex {i,j->
@@ -1259,7 +1195,7 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.canton + "-" + i.parroquia + "-" + i.comunidad, times8normal), prmsCellLeft)
             if(valoresTotales[j] != null){
                 addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: valoresTotales[j].toDouble(), minFractionDigits:
-                        5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                        2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
             }else {
 
                 addCellTabla(tablaRegistradas, new Paragraph("", times8normal), prmsCellLeft)
@@ -1363,23 +1299,6 @@ class Reportes4Controller {
         }
 
 
-
-//        if(params.estado == '1'){
-//
-//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-//        }
-//        else if(params.estado == '2'){
-//
-//            filtro = " where obraofig is NOT NULL "
-//
-//        }
-//        else if(params.estado == '3'){
-//
-//            filtro = " where obraetdo='R' "
-//
-//        }
-
-
         filtro = " where obraetdo='N' "
 
         sql = sqlBase + filtro + filtroBuscador
@@ -1470,7 +1389,7 @@ class Reportes4Controller {
         label = new Label(3, 4, "Fecha Reg.", times16format); sheet.addCell(label);
         label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
         label = new Label(5, 4, "Valor", times16format); sheet.addCell(label);
-        label = new Label(6, 4, "Elaborado", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Requirente", times16format); sheet.addCell(label);
 //        label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
 
         res.eachWithIndex {i, j->
@@ -1507,14 +1426,9 @@ class Reportes4Controller {
 
     def reporteExcelPresupuestadas () {
 
-
-
-
         def sql
         def cn
         def res
-
-
         def total1 = 0;
         def totales
         def totalPresupuestoBien=[];
@@ -1583,30 +1497,9 @@ class Reportes4Controller {
 
         }
 
-
-
-//        if(params.estado == '1'){
-//
-//            filtro = " where (obraetdo='R' or obraofig is NOT NULL) "
-//        }
-//        else if(params.estado == '2'){
-//
-//            filtro = " where obraofig is NOT NULL "
-//
-//        }
-//        else if(params.estado == '3'){
-//
-//            filtro = " where obraetdo='R' "
-//
-//        }
-
-
         filtro = " where obraetdo='R' "
-
         sql = sqlBase + filtro + filtroBuscador
-
         cn = dbConnectionService.getConnection()
-
         res = cn.rows(sql.toString())
 
 //        println(sql)
@@ -1691,7 +1584,7 @@ class Reportes4Controller {
         label = new Label(3, 4, "Fecha Reg.", times16format); sheet.addCell(label);
         label = new Label(4, 4, "Cantón-Parroquia-Comunidad", times16format); sheet.addCell(label);
         label = new Label(5, 4, "Valor", times16format); sheet.addCell(label);
-        label = new Label(6, 4, "Elaborado", times16format); sheet.addCell(label);
+        label = new Label(6, 4, "Requirente", times16format); sheet.addCell(label);
         label = new Label(7, 4, "Estado", times16format); sheet.addCell(label);
 
         res.eachWithIndex {i, j->
@@ -1722,9 +1615,6 @@ class Reportes4Controller {
         response.setContentType("application/octet-stream")
         response.setHeader("Content-Disposition", header);
         output.write(file.getBytes());
-
-
-
     }
 
 
@@ -2647,24 +2537,9 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("REPORTE DE ASEGURADORAS", times12bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
+        headers.add(new Paragraph("AL " + printFecha(new Date()).toUpperCase(), times12bold));
         addEmptyLine(headers, 1);
         document.add(headers);
-
-//        PdfPTable tablaRegistradas = new PdfPTable(8);
-//        tablaRegistradas.setWidthPercentage(100);
-//        tablaRegistradas.setWidths(arregloEnteros([14, 30, 15, 8, 25, 10, 20, 10]))
-//
-//        addCellTabla(tablaRegistradas, new Paragraph("Código", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Nombre", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Tipo", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Fecha Reg.", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Cantón-Parroquia-Comunidad", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Valor", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Elaborado", times8bold), prmsCellHead2)
-//        addCellTabla(tablaRegistradas, new Paragraph("Contrato", times8bold), prmsCellHead2)
-
-
 
         switch (params.buscador) {
             case "nmbr":
@@ -3053,7 +2928,7 @@ class Reportes4Controller {
         addEmptyLine(headers, 1);
         headers.add(new Paragraph("REPORTE DE CONTRATISTAS", times12bold));
         addEmptyLine(headers, 1);
-        headers.add(new Paragraph("Quito, " + printFecha(new Date()).toUpperCase(), times12bold));
+        headers.add(new Paragraph("AL " + printFecha(new Date()).toUpperCase(), times12bold));
         addEmptyLine(headers, 1);
         document.add(headers);
 
@@ -3417,9 +3292,6 @@ class Reportes4Controller {
 
         res = cn.rows(sql.toString())
 
-//
-//        println(sql)
-//        println(res)
 
         def obrasFiltradas = []
 
@@ -3430,7 +3302,8 @@ class Reportes4Controller {
         }
 
 
-        return [res: obrasFiltradas, params:params]
+//        return [res: obrasFiltradas, params:params]
+        return [res: res, params:params]
 
     }
 
@@ -3646,6 +3519,8 @@ class Reportes4Controller {
 
         res = cn.rows(sql.toString())
 
+
+
         res.eachWithIndex {i,j->
 
             addCellTabla(tablaRegistradas, new Paragraph(i.codigo, times8normal), prmsCellLeft)
@@ -3658,11 +3533,11 @@ class Reportes4Controller {
             addCellTabla(tablaRegistradas, new Paragraph(i.plazo, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(i.nombrecontra, times8normal), prmsCellLeft)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.monto, minFractionDigits:
-                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.porcentaje, minFractionDigits:
                     0, maxFractionDigits: 0, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
             addCellTabla(tablaRegistradas, new Paragraph(g.formatNumber(number: i.anticipo, minFractionDigits:
-                    5, maxFractionDigits: 5, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
+                    2, maxFractionDigits: 2, format: "##,##0", locale: "ec"), times8normal), prmsCellRight)
 
         }
 
@@ -3833,26 +3708,20 @@ class Reportes4Controller {
         label = new Label(9, 4, "Anticipo", times16format); sheet.addCell(label);
 
 
+
         res.eachWithIndex {i, j->
-
-
-            label = new Label(0, fila, i?.codigo.toString()); sheet.addCell(label);
-            label = new Label(1, fila, ""); sheet.addCell(label);
+            label = new Label(0, fila, i?.codigo?.toString()); sheet.addCell(label);
+            label = new Label(1, fila, i?.fechainicio?.toString()); sheet.addCell(label);
             label = new Label(2, fila, i.memo.toString()); sheet.addCell(label);
             label = new Label(3, fila, i?.obranombre?.toString()); sheet.addCell(label);
-            label = new Label(4, fila, i?.canton?.toString() + " " + i?.parroquia?.toString() + " " + i?.comunidad?.toString()); sheet.addCell(label);
+            label = new Label(4, fila, i?.canton?.toString() + " " + i?.parroquia?.toString()); sheet.addCell(label);
             label = new Label(5, fila, i?.plazo?.toString()); sheet.addCell(label);
-            label = new Label(6, fila, i?.nombrcontra?.toString()); sheet.addCell(label);
+            label = new Label(6, fila, i?.nombrecontra?.toString()); sheet.addCell(label);
             number = new jxl.write.Number(7, fila, i.monto); sheet.addCell(number);
             number = new jxl.write.Number(8, fila, i.porcentaje); sheet.addCell(number);
             number = new jxl.write.Number(9, fila, i.anticipo); sheet.addCell(number);
-
-
             fila++
-
         }
-
-
         workbook.write();
         workbook.close();
         def output = response.getOutputStream()
@@ -3863,12 +3732,8 @@ class Reportes4Controller {
     }
 
     def garantias () {
-
         def perfil = session.perfil.id
-
         return [perfil: perfil]
-
-
     }
 
     private String cleanCriterio(String criterio) {
@@ -3897,7 +3762,7 @@ class Reportes4Controller {
 
 
     def tablaGarantias () {
-//        println(params)
+        println(params)
         def sql
         def res
         def cn
@@ -3937,7 +3802,6 @@ class Reportes4Controller {
 
         switch (params.buscador) {
             case "cdgo":
-            case "nmrv":
             case "etdo":
 //            case "mnto":
             case "dias":
@@ -3947,6 +3811,7 @@ class Reportes4Controller {
             case "contrato":
                 filtroBuscador = " where c.cntrcdgo ILIKE ('%${params.criterio}%') "
                 break;
+
             case "tpgr":
                 filtroBuscador = " where t.tpgrdscr ILIKE ('%${params.criterio}%') "
                 break;
@@ -3974,6 +3839,13 @@ class Reportes4Controller {
                     params.criterio=-5
                     filtroBuscador = " where g.grntmnto=-5"
                 }
+                break;
+            case "nmrv":
+                if(!params.criterio){
+                    params.criterio=0
+                }
+
+                filtroBuscador =" where g.grntnmrv = ${params.criterio} "
                 break;
             case "fcin":
 
@@ -4025,6 +3897,8 @@ class Reportes4Controller {
     }
 
     def reporteGarantias () {
+
+
 
         def sql
         def res
@@ -4154,7 +4028,6 @@ class Reportes4Controller {
 
         switch (params.buscador) {
             case "cdgo":
-            case "nmrv":
             case "etdo":
             case "mnto":
             case "dias":
@@ -4178,6 +4051,13 @@ class Reportes4Controller {
                 break;
             case "mnda":
                 filtroBuscador = " where m.mndacdgo ILIKE ('%${params.criterio}%') "
+                break;
+            case "nmrv":
+                if(!params.criterio){
+                    params.criterio=0
+                }
+
+                filtroBuscador =" where g.grntnmrv = ${params.criterio} "
                 break;
             case "fcin":
 
@@ -4305,7 +4185,6 @@ class Reportes4Controller {
 
         switch (params.buscador) {
             case "cdgo":
-            case "nmrv":
             case "etdo":
             case "mnto":
             case "dias":
@@ -4326,6 +4205,12 @@ class Reportes4Controller {
                 break;
             case "cont":
                 filtroBuscador = " where s.prvenmbr ILIKE ('%${params.criterio}%') "
+                break;
+            case "nmrv":
+                if(!params.criterio){
+                    params.criterio=0
+                }
+               filtroBuscador =" where g.grntnmrv = ${params.criterio} "
                 break;
             case "mnda":
                 filtroBuscador = " where m.mndacdgo ILIKE ('%${params.criterio}%') "
@@ -4408,7 +4293,7 @@ class Reportes4Controller {
             label = new Label(1, fila, i?.contratista); sheet.addCell(label);
             label = new Label(2, fila, i.tipogarantia.toString()); sheet.addCell(label);
             label = new Label(3, fila, i?.codigo?.toString()); sheet.addCell(label);
-            label = new Label(4, fila, i?.renovacion?.toString() + " " + i?.parroquia?.toString() + " " + i?.comunidad?.toString()); sheet.addCell(label);
+            number = new jxl.write.Number(4, fila, i.renovacion); sheet.addCell(number);
             label = new Label(5, fila, ""); sheet.addCell(label);
             label = new Label(6, fila, i?.aseguradora?.toString()); sheet.addCell(label);
             label = new Label(7, fila, i?.documento?.toString()); sheet.addCell(label);
