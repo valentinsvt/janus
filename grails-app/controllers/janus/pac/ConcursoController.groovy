@@ -44,7 +44,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
     def concursos() {
-        def campos = ["codigo": ["Código", "string"], "objeto": ["Objeto", "string"], "fechaInicio": ["Fecha inicio", "string"], "presupuestoReferencial": ["Presupuesto", "string"], "obra": ["Obra", "string"]]
+        def campos = ["codigo": ["Contrato No.", "string"], "objeto": ["Objeto", "string"], "fechaInicio": ["Fecha inicio", "string"], "presupuestoReferencial": ["Presupuesto", "string"], "obra": ["Obra", "string"]]
         [campos: campos]
     }
 
