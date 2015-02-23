@@ -36,7 +36,7 @@
     </div>
 </g:if>
 
-<div style="width: 99.7%;height: 400px;overflow-y: auto;float: right;" id="detalle"></div>
+<div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
 <g:if test="${perfil == 2}">
 <a href="#" class="btn  " id="imprimir">
     <i class="icon-print"></i>

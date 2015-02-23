@@ -1,6 +1,3 @@
-
-
-
 <%@ page import="janus.Grupo" %>
 <!doctype html>
 <html>
@@ -30,7 +27,7 @@
     </div>
 </g:if>
 
-<div style="width: 99.7%;height: 400px;overflow-y: auto;float: right;" id="detalle"></div>
+<div style="width: 99.7%;height: 600px;overflow-y: auto;float: right;" id="detalle"></div>
 
 <div class="row-fluid">
     <div class="span12">
