@@ -50,7 +50,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
     def buscarConcurso() {
-        println("params" + params)
+        //println("params" + params)
         def extraObra = ""
         if (params.campos instanceof java.lang.String) {
             if (params.campos == "obra") {
@@ -125,7 +125,7 @@ class ConcursoController extends janus.seguridad.Shield {
                 /*anchos para el set column view en excel (no son porcentajes)*/
                 redirect(controller: "reportes", action: "reporteBuscadorExcel", params: [listaCampos: listaCampos, listaTitulos: listaTitulos, tabla: "Concurso", orden: params.orden, ordenado: params.ordenado, criterios: params.criterios, operadores: params.operadores, campos: params.campos, titulo: "REPORTE DE PROCESOS DE CONTRATACION", anchos: anchos, extras: extras, landscape: true])
             } else {
-                println("pdf")
+                //println("pdf")
                 def lista = buscadorService.buscar(Concurso, "Concurso", "excluyente", params, true, extras)
                 /* Dominio, nombre del dominio , excluyente o incluyente ,params tal cual llegan de la interfaz del buscador, ignore case */
                 lista.pop()
@@ -133,7 +133,7 @@ class ConcursoController extends janus.seguridad.Shield {
             }
 
         } else {
-//            println "entro reporte"
+           // println "entro reporte"
             /*De esto solo cambiar el dominio, el parametro tabla, el paramtero titulo y el tamaño de las columnas (anchos)*/
             session.dominio = Concurso
             session.funciones = funciones

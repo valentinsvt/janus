@@ -66,12 +66,8 @@
         </div>
     </div>
 </g:if>
-<fieldset class="borde" style="position: relative; height: 600px;float: left">
-    <div class="span12" style="margin-top: 15px" align="center">
-    </div>
-    <div style="width: 1150px;margin: auto;overflow: auto">
-        <bsc:buscador name="concursos" value="" accion="buscarConcurso" controlador="concurso" campos="${campos}" label="Concurso" tipo="lista"/>
-    </div>
-</fieldset>
+<div class="row">
+    <bsc:buscador name="concursos" value="" accion="buscarConcurso" controlador="concurso" campos="${campos}" label="Concurso" tipo="lista"/>
+</div>
 </body>
 </html>

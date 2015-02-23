@@ -41,7 +41,9 @@ $("#btn_reporte").button().click(function(){
 
         var div = $("#tablaBuscador").parent()
         //console.log(headers)
-        location.href =div.attr("url")+"?"+data+"&reporte=1"
+        var url = div.attr("url")+"?"+data+"&reporte=1"
+        //console.log("url ",url)
+        location.href =url
     }
 
 });
