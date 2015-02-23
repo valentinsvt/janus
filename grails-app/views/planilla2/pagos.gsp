@@ -66,13 +66,9 @@
         </div>
     </div>
 </g:if>
-<fieldset class="borde" style="position: relative; height: 600px;float: left">
-    <g:hiddenField name="id" value="${obra?.id}"/>
-    <div class="span12" style="margin-top: 15px" align="center">
-    </div>
-    <div style="width: 1150px;margin: auto;overflow: auto">
-        <bsc:buscador name="planillas" value="" accion="buscarPlanilla" controlador="planilla2" campos="${campos}" label="Planillas" tipo="lista"/>
-    </div>
-</fieldset>
+<div class="row">
+    <bsc:buscador name="planillas" value="" accion="buscarPlanilla" controlador="planilla2" campos="${campos}" label="Planillas" tipo="lista"/>
+</div>
+
 </body>
 </html>
