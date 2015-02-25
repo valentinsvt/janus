@@ -2142,24 +2142,8 @@ class ReportesController {
         def cuenta = 0;
         def cantidadMeses = params.meses
 
-//        println(obra.revisor.nombre);
-//        println(obra.inspector.nombre);
-//        println(obra.responsableObra.nombre);
-
-
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor
-
-//        firma = params.firmasId.split(",")
-
-//        if (params.firmasId?.trim().size() > 0) {
-//            firma = params.firmasId.split(",")
-//            firma = firma.toList().unique()
-//        } else {
-//            firma = []
-//        }
-
-//        cuenta = firma.size()
 
         if (params.firmasFijas.trim().size() > 0) {
             firmaFija = params.firmasFijas.split(",")
@@ -2167,11 +2151,7 @@ class ReportesController {
         } else {
             firmaFija = []
         }
-
         cuenta = firma.size() + firmaFija.size() + 1
-
-//        println("#:" + cuenta)
-//        println("#:" + params.firmasFijas.trim().size())
 
         def prmsHeaderHoja = [border: Color.WHITE]
         def prmsHeaderHoja2 = [border: Color.WHITE, colspan: 9]
@@ -2335,7 +2315,7 @@ class ReportesController {
 
         if (params.tipoReporte == '1') {
             if(session.perfil.id == 16){
-                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador para la construcción de", times10bold));
                 txtIzq.add(new Paragraph(" ", times10bold));
             }else{
                 txtIzq.add(new Paragraph(auxiliar?.baseCont, times10bold));
@@ -2345,7 +2325,7 @@ class ReportesController {
         }
         if (params.tipoReporte == '2') {
             if(session.perfil.id == 16){
-                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador para la construcción de", times10bold));
                 txtIzq.add(new Paragraph(" ", times10bold));
             }else{
                 txtIzq.add(new Paragraph(auxiliar?.presupuestoRef, times10bold));
@@ -3228,7 +3208,7 @@ class ReportesController {
 
         if (params.tipoReporte == '1') {
             if(session.perfil.id == 16){
-                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador para la construcción de", times10bold));
                 txtIzq.add(new Paragraph(" ", times10bold));
             }else{
                 txtIzq.add(new Paragraph(auxiliar?.baseCont, times10bold));
@@ -3237,7 +3217,7 @@ class ReportesController {
         }
         if (params.tipoReporte == '2') {
             if(session.perfil.id == 16){
-                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador para la construcción de", times10bold));
                 txtIzq.add(new Paragraph(" ", times10bold));
             }else{
                 txtIzq.add(new Paragraph(auxiliar?.presupuestoRef, times10bold));
@@ -3863,12 +3843,6 @@ class ReportesController {
         def personaElaboro
         def cuenta = 0;
         def cantidadMeses = params.meses
-
-//        println(obra.revisor.nombre);
-//        println(obra.inspector.nombre);
-//        println(obra.responsableObra.nombre);
-
-
         def firma1 = obra?.responsableObra;
         def firma2 = obra?.revisor
 
@@ -4030,7 +4004,7 @@ class ReportesController {
 
         if (params.tipoReporte == '1') {
             if(session.perfil.id == 16){
-                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador para la construcción de", times10bold));
                 txtIzq.add(new Paragraph(" ", times10bold));
             }else{
                 txtIzq.add(new Paragraph(auxiliar?.baseCont, times10bold));
@@ -4039,7 +4013,7 @@ class ReportesController {
         }
         if (params.tipoReporte == '2') {
             if(session.perfil.id == 16){
-                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador y adjunto la Formula Polinómica para la construcción de", times10bold));
+                txtIzq.add(new Paragraph("Tengo a bien presentar a usted el siguiente Presupuesto Borrador para la construcción de", times10bold));
                 txtIzq.add(new Paragraph(" ", times10bold));
             }else{
                 txtIzq.add(new Paragraph(auxiliar?.presupuestoRef, times10bold));

@@ -2190,13 +2190,6 @@
                 firmaCoordinador = idFirmaCoor
                 firmaElaboro = ${obra?.responsableObra?.id}
 
-
-//                $("#bodyFirmas_presupuesto").children("tr").each(function (i) {
-//                    firmasId[i] = $(this).data("id")
-//
-//
-//                });
-
                         $("#firmasFijasPresu").children("tr").each(function (i) {
                             if ($(this).data("id")) {
                                 if (firmasFijas != '') {
