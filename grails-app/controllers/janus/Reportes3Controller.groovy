@@ -3237,7 +3237,7 @@ class Reportes3Controller {
         label = new Label(5, 7, "Código Especificacion: " + (rubro?.codigoEspecificacion ?: ''), times16format); sheet.addCell(label);
         sheet.mergeCells(5, 7, 7, 7)
 
-        def fila = 12
+        def fila = 10
 
         fila++
         def number
@@ -3255,6 +3255,7 @@ class Reportes3Controller {
         def totalTVae = 0
         def total = 0
         def band = 25
+        def flag = 0
         def rowsTrans = []
         //println(vae)
         vae.eachWithIndex { r, i ->
@@ -3299,7 +3300,7 @@ class Reportes3Controller {
                 fila++
             }
             if (r["grpocdgo"] == 2) {
-                if (band == 1) {
+                if (band == 0) {
                     label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
                     number = new Number(6, fila, totalHer); sheet.addCell(number);
                     number = new Number(7, fila, totalHerRel); sheet.addCell(number);
@@ -3344,9 +3345,10 @@ class Reportes3Controller {
                 totalManRel += r["relativo"]
                 totalManVae += r["vae_vlor"]
                 fila++
+
             }
 
-            if (r["grpocdgo"] == 1) {
+            if(r["grpocdgo"] != 2){
                 if (band == 2) {
                     label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
                     number = new Number(6, fila, totalMan); sheet.addCell(number);
@@ -3354,6 +3356,17 @@ class Reportes3Controller {
                     number = new Number(11, fila, totalManVae); sheet.addCell(number);
                     fila++
                 }
+            }
+
+
+            if (r["grpocdgo"] == 1) {
+//                if (band == 2) {
+//                    label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
+//                    number = new Number(6, fila, totalMan); sheet.addCell(number);
+//                    number = new Number(7, fila, totalManRel); sheet.addCell(number);
+//                    number = new Number(11, fila, totalManVae); sheet.addCell(number);
+//                    fila++
+//                }
                 if (band != 3) {
                     fila++
                     label = new Label(0, fila, "Materiales", times16format); sheet.addCell(label);
@@ -3372,6 +3385,7 @@ class Reportes3Controller {
                     fila++
                 }
                 band = 3
+                flag = 1
                 label = new Label(0, fila, r["itemcdgo"], times10); sheet.addCell(label);
                 label = new Label(1, fila, r["itemnmbr"], times10); sheet.addCell(label);
                 number = new Number(2, fila, r["rbrocntd"]); sheet.addCell(number);
@@ -3399,8 +3413,17 @@ class Reportes3Controller {
             }
 
         }
+
+        if (band == 2 && flag != 1) {
+            label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
+            number = new Number(6, fila, totalMan); sheet.addCell(number);
+            number = new Number(7, fila, totalManRel); sheet.addCell(number);
+            number = new Number(11, fila, totalManVae); sheet.addCell(number);
+            fila++
+        }
+
         if (band == 3) {
-            label = new Label(0, fila, "SUBTOTAL Mat", times10); sheet.addCell(label);
+            label = new Label(0, fila, "SUBTOTAL", times10); sheet.addCell(label);
             number = new Number(6, fila, totalMat); sheet.addCell(number);
             number = new Number(7, fila, totalMatRel); sheet.addCell(number);
             number = new Number(11, fila, totalMatVae); sheet.addCell(number);
@@ -3457,10 +3480,10 @@ class Reportes3Controller {
 
         /*indirectos */
 
+        fila++
         label = new Label(0, fila, "Costos Indirectos", times16format); sheet.addCell(label);
         sheet.mergeCells(0, fila, 1, fila)
         fila++
-
         label = new Label(0, fila, "Descripción", times16format); sheet.addCell(label);
         sheet.mergeCells(0, fila, 1, fila)
         label = new Label(5, fila, "Porcentaje", times16format); sheet.addCell(label);
