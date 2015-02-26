@@ -35,15 +35,24 @@
     </div>
 
     <div class="btn-group">
-<g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
+<g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1 && obra?.estado != 'R')}">
 
-<a href="#" class="btn btn-primary " title="Guardar" id="guardar">
+        <a href="#" class="btn btn-primary " title="Guardar" id="guardar">
             <i class="icon-save"></i>
             Guardar
         </a>
         <g:link action="formArchivo" class="btn" id="${obra.id}">
             <i class="icon-cloud-upload"></i> Cargar Excel
         </g:link>
+        <a href="#" class="btn recargarComp" title="Reargar Composición" id="${obra.id}">
+            <i class="icon-refresh"></i>
+            Recargar Composición
+        </a>
+%{--
+    <g:link action="recargar" class="btn recargarComp" id="${obra.id}">
+        <i class="icon-refresh"></i> Recargar Composición
+    </g:link>
+--}%
 </g:if>
     </div>
 
@@ -98,7 +107,7 @@
 
         <div class="span1" style="padding-top:30px">
             <input type="hidden" value="" id="vol_id">
-            <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1) || obra?.id == null }">
+            <g:if test="${(obra?.responsableObra?.departamento?.direccion?.id == persona?.departamento?.direccion?.id && duenoObra == 1 && obra?.estado != 'R')}">
             <a href="#" class="btn btn-primary" title="agregar" style="margin-top: -10px" id="item_agregar">
                 <i class="icon-plus"></i>
             </a>
@@ -234,7 +243,25 @@
     </div>
 </div>
 
+<div id="recargarDialog">
+
+    <fieldset>
+        <div class="span3" style="width:280px;">
+            Está seguro de querer volver a cargar la composición de la obra:<div style="font-weight: bold;">${obra?.nombre} ?
+
+        </div>
+            <br>
+            <span style="color: red">
+                Este proceso elimina todos los datos de "valores reales" de la composición actual.
+            </span>
+
+        </div>
+    </fieldset>
+</div>
+
+
 <script type="text/javascript">
+
 
     function precios(item) {
         var obra = ${obra.id}
@@ -563,6 +590,48 @@
         %{--location.href = "${g.createLink(controller: 'reportes' ,action: 'reporteComposicion',id: obra?.id)}?sp=${sub}"--}%
         %{--}--}%
         %{--});--}%
+
+        $("#recargarDialog").dialog({
+
+            autoOpen  : false,
+            resizable : false,
+            modal     : true,
+            draggable : false,
+            width     : 350,
+            height    : 260,
+            position  : 'center',
+            title     : 'Volver a cargar Composición',
+            buttons   : {
+                "Aceptar"  : function () {
+
+                    $("#dlgLoad").dialog("open");
+//
+                        $.ajax({
+                            type    : "POST",
+                            url     : "${g.createLink(action: 'recargar')}",
+                            data    : "id=${obra?.id}",
+                            success : function (msg) {
+//                                ////console.log(msg)
+                                    $("#dlgLoad").dialog("close");
+                                    location.reload(true)
+                            }
+                        });
+//
+
+                    $("#recargarDialog").dialog("close");
+                },
+                "Cancelar" : function () {
+                    $("#recargarDialog").dialog("close");
+                }
+            }
+        });
+
+        $(".recargarComp").click(function () {
+//            console.log("recargar")
+               $("#recargarDialog").dialog("open")
+
+        });
+
 
     });
 </script>

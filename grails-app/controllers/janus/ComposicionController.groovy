@@ -29,6 +29,19 @@ class ComposicionController extends janus.seguridad.Shield {
         return
     }
 
+    def recargar() {
+//        println "recargar composición de la obra: " + params
+        def sql = "delete from comp where obra__id = ${params.id}"
+        def cn = dbConnectionService.getConnection()
+        cn.execute(sql.toString())
+        cn.close()
+
+        def obra = Obra.get(params.id)
+        redirect(action: "cargarDatos", id: params.id)
+
+        return
+    }
+
     def cargarDatos() {
         def sql = "select item__id,voitpcun,voitcntd, voitcoef, voittrnp from vlobitem where obra__id=${params.id} and voitpcun is not null and voitcntd is not null order by 1"
         def obra = Obra.get(params.id)
