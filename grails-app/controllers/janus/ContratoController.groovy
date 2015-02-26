@@ -936,4 +936,11 @@ class ContratoController extends janus.seguridad.Shield {
         render("Se ha generado la obra para la fórmula polinómica de liquidación")
     }
 
+    def planillasSinPago(){
+
+        def planillas = Planilla.list()
+        [planillas:planillas]
+
+    }
+
 } //fin controller
