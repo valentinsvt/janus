@@ -938,7 +938,7 @@ class ContratoController extends janus.seguridad.Shield {
 
     def planillasSinPago(){
 
-        def planillas = Planilla.list()
+        def planillas = Planilla.list([sort: 'fechaIngreso'])
         [planillas:planillas]
 
     }

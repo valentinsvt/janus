@@ -20,6 +20,7 @@
             Planillas y Pagos
         </h1>
     </div>
+    Detalle de planillas odenadas por fecha de ingreso.
 </div>
 <div class="row" style="margin-top:15px">
     <div class="col-md-12">
