@@ -20,7 +20,7 @@
             Planillas y Pagos
         </h1>
     </div>
-    Detalle de planillas odenadas por fecha de ingreso.
+    Detalle de planillas odenado por fecha de ingreso.
 </div>
 <div class="row" style="margin-top:15px">
     <div class="col-md-12">
@@ -33,9 +33,9 @@
                 <th>Ingreso</th>
                 <th>Presentación</th>
                 <th>Valor</th>
-                <th>Memo <br/> pedido de pago</th>
-                <th>Fecha <br/>memo pedido</th>
-                <th>Fecha de pago</th>
+                <th>Memorando<br/> pedido de pago</th>
+                <th>Fecha <br/>Mem. pedido</th>
+                <th>Fecha de Pago</th>
 
             </tr>
             </thead>
