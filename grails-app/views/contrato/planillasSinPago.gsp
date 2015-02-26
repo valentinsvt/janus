@@ -11,13 +11,13 @@
     <meta name="layout" content="main">
 
 
-    <title>Planillas pendientes de pago</title>
+    <title>Planillas y Pagos</title>
 </head>
 <body>
 <div class="row">
     <div class="col-md-12">
         <h1>
-            Planillas pendientes de pago
+            Planillas y Pagos
         </h1>
     </div>
 </div>

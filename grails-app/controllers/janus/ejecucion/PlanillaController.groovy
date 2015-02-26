@@ -4107,7 +4107,4 @@ class PlanillaController extends janus.seguridad.Shield {
         return [params: params]
     }
 
-    def list_etdo() {
-    }
-
 }
