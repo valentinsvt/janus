@@ -1691,6 +1691,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def save() {
+        println "save "+params
         def tipo
         if (params.id) {
             tipo = Planilla.get(params.id).tipoPlanilla
@@ -1757,6 +1758,8 @@ class PlanillaController extends janus.seguridad.Shield {
                 case 'A':
                     //es anticipo hay q ingresar el valor de la planilla
                     planillaInstance.valor = planillaInstance.contrato.anticipo
+                    //println "llego al save "+params.periodoPlan
+                    planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
                     break;
                 case 'P':
                     //avance de obra: hay q poner fecha inicio y fecha fin

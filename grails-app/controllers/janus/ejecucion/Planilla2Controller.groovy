@@ -1617,7 +1617,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         if(!planilla.periodoAnticipo) {
             perAnticipo = PeriodosInec.list([sort: "fechaFin", order: "desc", "limit": 3]).first()
 
-            planilla.periodoAnticipo=perAnticipo
+            planilla.periodoAnticipo
             planilla.save()
         } else
             perAnticipo=planilla.periodoAnticipo
