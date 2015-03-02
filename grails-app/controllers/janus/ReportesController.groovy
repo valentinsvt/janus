@@ -7907,7 +7907,13 @@ class ReportesController {
         addCellTabla(tablaAdmDirecta, new Paragraph(" ", times8bold), prmsHeaderHoja4)
 
 
-        addCellTabla(tablaAdmDirecta, new Paragraph("PRESUPUESTO REFERENCIAL POR ADMINISTRACIÓN DIRECTA", times10bold), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 4])
+        if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
+            addCellTabla(tablaAdmDirecta, new Paragraph("PRESUPUESTO REFERENCIAL POR COGESTIÓN", times10bold), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 4])
+        } else {
+            addCellTabla(tablaAdmDirecta, new Paragraph("PRESUPUESTO REFERENCIAL POR ADMINISTRACIÓN DIRECTA", times10bold), [border: Color.WHITE, align: Element.ALIGN_LEFT, valign: Element.ALIGN_LEFT, colspan: 4])
+        }
+
+
         addCellTabla(tablaAdmDirecta, new Paragraph(" ", times8bold), prmsHeaderHojaRight)
         addCellTabla(tablaAdmDirecta, new Paragraph("", times10normal), prmsHeaderHojaRight)
         addCellTabla(tablaAdmDirecta, new Paragraph(" ", times8bold), prmsHeaderHoja)
@@ -8404,7 +8410,7 @@ class ReportesController {
 
         PdfPTable tablaValoresMemoPresu1 = new PdfPTable(4);
         tablaValoresMemoPresu1.setWidthPercentage(100);
-        tablaValoresMemoPresu1.setWidths(arregloEnteros([32, 25, 20, 10]))
+        tablaValoresMemoPresu1.setWidths(arregloEnteros([34, 25, 20, 10]))
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsCellHead4)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsCellHead4)
@@ -8448,7 +8454,13 @@ class ReportesController {
 
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja4)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja4)
-        addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por administración directa:", times10bold), prmsHeaderHoja)
+//        println "generando reporte: .."+ session.perfil.codigo
+        if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
+            addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Cogestión:", times10bold), prmsHeaderHoja)
+        } else if(obra.tipo == 'D' & session.perfil.codigo == 'ADDI'){
+            addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Administración Directa:", times10bold), prmsHeaderHoja)
+        } else  addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por administración directa:", times10bold), prmsHeaderHoja)
+
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja)
 //        addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+params.equipos+params.manoObra)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaLeft)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph("USD " + g.formatNumber(number: (params?.total ?: (totalPrueba2+totalTrans+totalPrueba3+totalPrueba4)), format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2), times10normal), prmsHeaderHojaRight)
@@ -8492,8 +8504,19 @@ class ReportesController {
         Paragraph pie = new Paragraph();
         pie.setAlignment(Element.ALIGN_LEFT);
         pie.add(new Paragraph("PLAZO: " + obra?.plazoEjecucionMeses + "mes(es) " + obra?.plazoEjecucionDias + " días calendario", times8normal ))
-        pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por administración directa el valor que se requerirá consiste en el costo de los materiales \$ " + g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
-                + " puesto que la mano de obra y los costos están considerados dentro de los gastos corrientes de la Institución.", times8normal));
+        if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
+            addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Cogestión:", times10bold), prmsHeaderHoja)
+        } else if(obra.tipo == 'D' & session.perfil.codigo == 'ADDI') {
+            addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Administración Directa:", times10bold), prmsHeaderHoja)
+        } else  addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por administración directa:", times10bold), prmsHeaderHoja)
+        if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
+            pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por cogestión el valor que se requerirá consiste en el costo de los materiales \$ " + g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+                    + " puesto que la mano de obra y los costos están considerados dentro de los gastos corrientes de la Institución.", times8normal));
+        } else {
+            pie.add(new Paragraph("Cabe indicar que para ejecutar esta obra por administración directa el valor que se requerirá consiste en el costo de los materiales \$ " + g.formatNumber(number: params?.materiales, format: "##,##0", locale: "ec", maxFractionDigits: 2, minFractionDigits: 2)
+                    + " puesto que la mano de obra y los costos están considerados dentro de los gastos corrientes de la Institución.", times8normal));
+        }
+
         addEmptyLine(pie, 1);
 
         PdfPTable tablaAdjunto = new PdfPTable(2);

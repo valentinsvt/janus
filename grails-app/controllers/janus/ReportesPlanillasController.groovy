@@ -2877,13 +2877,17 @@ class ReportesPlanillasController {
         def str = ""
 
         def texto = Pdfs.findAllByObra(obra)
-//        println "................." + texto.size()
+//        println "................." + texto.size() + " obra:" + obra.id
         if (texto.size() == 0) {
             /* accede a crear inicio de obra solo el administrador */
             if (contrato.administrador.id == session.usuario.id) {
                 redirect(controller: "planilla", action: "configOrdenInicioObra", id: obra.id)
                 return
+            } else {
+                str += "<li>No se ha generado la Orden de Inicio de Obra</li>"
+                ok = false
             }
+
         } else if (texto.size() > 1) {
             str += "<li>Se encontraron ${texto.size()} textos. No se pudo generar el pdf.</li>"
             ok = false
@@ -3057,19 +3061,19 @@ class ReportesPlanillasController {
             def par3 = texto.parrafo3
             def par4 = texto.parrafo4
 
-            Paragraph prueba = new Paragraph(par1, times12normal);
+            Paragraph prueba = new Paragraph(par1.toString(), times12normal);
             prueba.setAlignment(Element.ALIGN_JUSTIFIED);
             prueba.setSpacingAfter(20);
 
-            Paragraph prueba2 = new Paragraph(par2, times12normal);
+            Paragraph prueba2 = new Paragraph(par2.toString(), times12normal);
             prueba2.setAlignment(Element.ALIGN_JUSTIFIED);
             prueba2.setSpacingAfter(20);
 
-            Paragraph prueba3 = new Paragraph(par3, times12normal);
+            Paragraph prueba3 = new Paragraph(par3.toString(), times12normal);
             prueba3.setAlignment(Element.ALIGN_JUSTIFIED);
             prueba3.setSpacingAfter(20);
 
-            Paragraph prueba4 = new Paragraph(par4, times12normal);
+            Paragraph prueba4 = new Paragraph(par4.toString(), times12normal);
             prueba4.setAlignment(Element.ALIGN_JUSTIFIED);
             prueba4.setSpacingAfter(20);
 

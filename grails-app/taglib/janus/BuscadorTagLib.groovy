@@ -64,7 +64,7 @@ class BuscadorTagLib {
                 out << listaHtml(name, value, campos, controlador, accion, label, false)
                 break;
         }
-        println "accion " + accion + "    controlador " + controlador + " campos:" + campos
+//        println "accion " + accion + "    controlador " + controlador + " campos:" + campos
 
     }
 
