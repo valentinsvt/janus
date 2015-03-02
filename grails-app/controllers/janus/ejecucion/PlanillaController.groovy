@@ -1668,7 +1668,7 @@ class PlanillaController extends janus.seguridad.Shield {
             fechaMax = new Date()
 //        println "fecha max " + fechaMax
 
-        println "12: " + tiposPlanilla.codigo
+        //println "12: " + tiposPlanilla.codigo
         return [planillaInstance: planillaInstance, contrato: contrato, tipos: tiposPlanilla, obra: contrato.oferta.concurso.obra,
                 periodos        : periodos, esAnticipo: esAnticipo, anticipoPagado: anticipoPagado, maxDatePres: maxDatePres,
                 minDatePres     : minDatePres, fiscalizadorAnterior: fiscalizadorAnterior, liquidado: liquidado, fechaMax: fechaMax]
@@ -1749,6 +1749,10 @@ class PlanillaController extends janus.seguridad.Shield {
                 return
             }//no existe el objeto
             planillaInstance.properties = params
+            if(planillaInstance.tipoPlanilla.codigo=="A"){
+                println "llego al save !!!!!  "+params.periodoPlan
+                planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
+            }
             session.override = true
         }//es edit
         else {
@@ -1758,7 +1762,7 @@ class PlanillaController extends janus.seguridad.Shield {
                 case 'A':
                     //es anticipo hay q ingresar el valor de la planilla
                     planillaInstance.valor = planillaInstance.contrato.anticipo
-                    //println "llego al save "+params.periodoPlan
+                    println "llego al save !!!!!  "+params.periodoPlan
                     planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
                     break;
                 case 'P':

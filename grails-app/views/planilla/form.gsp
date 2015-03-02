@@ -261,6 +261,18 @@
                             </div>
                         </div>
                     </g:if>
+                <g:else>
+                    <g:if test="${planillaInstance.tipoPlanilla.codigo=='A'}">
+                        <div class="row">
+                            <div class="span2 formato">
+                                Periodo para el reajuste
+                            </div>
+                            <div class="span4" style="width: 400px">
+                                <g:select name="periodoPlan" from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin',order: 'desc',max: 20])}" optionKey="id" style="width: 100%"></g:select>
+                            </div>
+                        </div>
+                    </g:if>
+                </g:else>
                     <g:if test="${!esAnticipo}">
                         <div class="row hide" style="margin-bottom: 10px;" id="divMultaDisp">
                             <div class='span2 formato'>
