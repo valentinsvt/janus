@@ -3933,7 +3933,7 @@ class PlanillaController extends janus.seguridad.Shield {
         def totalAnterior = anteriores.size() > 0 ? anteriores.sum { it.valor } : 0
 
         def indirectos = detalles.size() > 0 ? detalles.first().indirectos : 25
-        def max = contrato.monto * 0.1
+        def max = contrato.monto * 0.1  /* máximo valor a consderar de las planillas costo + porcentae */
         max -= totalAnterior
 
         def json = new JsonBuilder(dets)
