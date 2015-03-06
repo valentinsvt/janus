@@ -262,7 +262,7 @@
                         </div>
                     </g:if>
                 <g:else>
-                    <g:if test="${planillaInstance.tipoPlanilla.codigo=='A'}">
+                    <g:if test="${planillaInstance.tipoPlanilla?.codigo=='A'}">
                         <div class="row">
                             <div class="span2 formato">
                                 Periodo para el reajuste
@@ -289,6 +289,7 @@
 
                             <div class="span4">
                                 <g:field type="number" name="avanceFisico" class="input-mini required number" value="${planillaInstance.avanceFisico}" maxlength="3"/> %
+                                <p class="help-block ui-helper-hidden"></p>
                             </div>
                         </div>
                     </g:if>
