@@ -71,7 +71,13 @@ public abstract class NumberToLetterConverter {
         String splitNumber[] = String.valueOf(doubleNumber).replace('.', '#')
                 .split("#");
 
-        // Descompone el trio de millones
+        if(splitNumber[1].length() == 1) {
+            splitNumber[1] = splitNumber[1] + "0";
+        } else if(splitNumber[1].length() > 2) {
+            splitNumber[1] = splitNumber[1].substring(0,1);
+        }
+
+            // Descompone el trio de millones
         int millon = Integer.parseInt(String.valueOf(getDigitAt(splitNumber[0],
                 8))
                 + String.valueOf(getDigitAt(splitNumber[0], 7))
@@ -112,11 +118,16 @@ public abstract class NumberToLetterConverter {
                 splitNumber[1], 2))
                 + String.valueOf(getDigitAt(splitNumber[1], 1))
                 + String.valueOf(getDigitAt(splitNumber[1], 0)));
+//        System.out.println("num= "+doubleNumber+"   centavos " + centavos);
+//        System.out.println(splitNumber[1]);
+//        System.out.println("pos 2:" + String.valueOf(getDigitAt(splitNumber[1], 2)));
+//        System.out.println("pos 1:" + String.valueOf(getDigitAt(splitNumber[1], 1)));
+//        System.out.println("pos 0:" + String.valueOf(getDigitAt(splitNumber[1], 0)));
         if (centavos == 1)
             converted.append(" CON UN CENTAVO");
         else if (centavos > 1)
             converted.append(" CON " + convertNumber(String.valueOf(centavos))
-                    + "CENTAVOS");
+                    + " CENTAVOS");
 
         return converted.toString();
     }
