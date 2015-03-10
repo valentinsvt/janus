@@ -65,7 +65,7 @@
                 </g:if>
 
                 <g:if test="${Oferta.countByConcurso(concursoInstance) == 0}">
-                        <button class="btn" id="btnRegi"><i class="icon-exchange"></i> Cambiar Estado</button>
+                        <a href="#" class="btn" id="btnRegi"><i class="icon-exchange"></i> Cambiar Estado</a>
                 </g:if>
             </div>
         </div>
@@ -949,7 +949,7 @@
             });
 
             $("#btnSave").click(function () {
-                console.log("aaa")
+//                console.log("aaa")
                 $("#frmSave-Concurso").submit();
             });
 
@@ -969,9 +969,11 @@
                         $("#estado").val("R");
                     }
                     $("#frmSave-Concurso").submit();
+//                    console.log( $("#frmSave-Concurso"))
                 } else {
                     alert("Seleccione una obra!");
                 }
+
             });
             $("#tramites").click(function () {
                 $.ajax({

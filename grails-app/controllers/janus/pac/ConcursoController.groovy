@@ -486,7 +486,7 @@ class ConcursoController extends janus.seguridad.Shield {
 
 
     def save() {
-        println "save concurso " + params
+        println "save concurso... " + params
 
         if (params.codigo) {
             params.codigo = params.codigo.toUpperCase()

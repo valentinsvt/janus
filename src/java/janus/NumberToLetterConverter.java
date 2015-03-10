@@ -13,8 +13,8 @@ public abstract class NumberToLetterConverter {
 
     private static final String[] UNIDADES = {"", "UN ", "DOS ", "TRES ",
             "CUATRO ", "CINCO ", "SEIS ", "SIETE ", "OCHO ", "NUEVE ", "DIEZ ",
-            "ONCE ", "DOCE ", "TRECE ", "CATORCE ", "QUINCE ", "DIECISEIS",
-            "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE"};
+            "ONCE ", "DOCE ", "TRECE ", "CATORCE ", "QUINCE ", "DIECISEIS ",
+            "DIECISIETE ", "DIECIOCHO ", "DIECINUEVE ", "VEINTE "};
 
     private static final String[] DECENAS = {"VENTI", "TREINTA ", "CUARENTA ",
             "CINCUENTA ", "SESENTA ", "SETENTA ", "OCHENTA ", "NOVENTA ",
@@ -104,10 +104,10 @@ public abstract class NumberToLetterConverter {
                 + String.valueOf(getDigitAt(splitNumber[0], 1))
                 + String.valueOf(getDigitAt(splitNumber[0], 0)));
         if (cientos == 1)
-            converted.append("UN");
+            converted.append("UN ");
 
         if (millon + miles + cientos == 0)
-            converted.append("CERO");
+            converted.append("CERO ");
         if (cientos > 1)
             converted.append(convertNumber(String.valueOf(cientos)));
 
@@ -127,7 +127,7 @@ public abstract class NumberToLetterConverter {
             converted.append(" CON UN CENTAVO");
         else if (centavos > 1)
             converted.append(" CON " + convertNumber(String.valueOf(centavos))
-                    + " CENTAVOS");
+                    + "CENTAVOS");
 
         return converted.toString();
     }

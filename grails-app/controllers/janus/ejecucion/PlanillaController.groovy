@@ -48,9 +48,14 @@ class PlanillaController extends janus.seguridad.Shield {
         tabla += "</tr>"
         tabla += "</table>"
 
+//        println "valor: " + numero(planilla.valor + planilla.reajuste, 2).replaceAll(',','').toDouble()
+
         if (texto.size() == 0) {
 
-            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+//            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(planilla?.valor + planilla?.reajuste)
+            def numerosALetras = NumberToLetterConverter.convertNumberToLetter(numero(planilla.valor + planilla.reajuste, 2).replaceAll(',','').toDouble())
+            // prueba de vario números
+//            letras() /* prueba valores */
 
             def strParrafo1 = "De acuerdo al Contrato N° ${contrato?.codigo}, suscrito el ${fechaConFormato(contrato?.fechaSubscripcion, 'dd-MM-yyyy')}, por el valor de " +
                     "USD ${numero(contrato?.monto, 2)}  sin incluir IVA, para realizar ${contrato?.objeto}, " +
@@ -4112,6 +4117,16 @@ class PlanillaController extends janus.seguridad.Shield {
 
     def errores() {
         return [params: params]
+    }
+
+    def letras() {
+        def nn = new Random(777)
+        def nx = 0.0
+        100.times {
+            nx = nn.nextInt(50005)/101
+            println NumberToLetterConverter.convertNumberToLetter(numero(nx, 2).replaceAll(',','').toDouble()) +
+                    " valor original : $nx"
+        }
     }
 
 }
