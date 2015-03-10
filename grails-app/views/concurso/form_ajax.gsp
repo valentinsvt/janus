@@ -159,14 +159,16 @@
                     </span>
 
                     <div class="controls span1" title="">
-                        ${concursoInstance?.pac?.costo.round(2)}
+                        <g:formatNumber number="${concursoInstance?.pac?.costo.round(2)}" type="currency"></g:formatNumber>
+
                     </div>
                     <span class="control-label label label-inverse span1">
                         Total:
                     </span>
 
                     <div class="controls span1" title="">
-                        ${(concursoInstance?.pac?.costo * concursoInstance?.pac?.cantidad).round(2)}
+                        <g:formatNumber number="${(concursoInstance?.pac?.costo * concursoInstance?.pac?.cantidad).round(2)}" type="currency"></g:formatNumber>
+
                     </div>
                 </div>
             </div>
@@ -353,7 +355,7 @@
 
                                 <div class="controls">
                                     <div class="input-append">
-                                        <g:field type="text" name="presupuestoReferencial" class="required number" value="${concursoInstance?.presupuestoReferencial ?: 0}" style="text-align: right;width: 180px;"/>
+                                        <g:field type="text" name="presupuestoReferencial" class="required number" value="${g.formatNumber(number:concursoInstance?.presupuestoReferencial ?: 0, format: '##0.00',maxFractionDigits: 2,minFractionDigits: 2)}" style="text-align: right;width: 180px;"/>
                                         <span class="add-on">$</span>
                                     </div>
 
