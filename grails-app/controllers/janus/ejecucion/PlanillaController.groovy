@@ -358,7 +358,7 @@ class PlanillaController extends janus.seguridad.Shield {
     }
 
     def savePedidoPagoAnticipo() {
-        println "save textos "+params
+//        println "save textos "+params
         def planilla = Planilla.get(params.id)
         def contrato = planilla.contrato
         def obra = contrato.obra
