@@ -151,6 +151,7 @@ class ReportesPlanillas2Controller {
         Font fontTituloGad = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
         Font info = new Font(Font.TIMES_ROMAN, 10, Font.NORMAL)
         Font fontTitle = new Font(Font.TIMES_ROMAN, 14, Font.BOLD);
+        Font fontTitle1 = new Font(Font.TIMES_ROMAN, 10, Font.BOLD);
         Font fontTh = new Font(Font.TIMES_ROMAN, 8, Font.BOLD);
         Font fontTd = new Font(Font.TIMES_ROMAN, 8, Font.NORMAL);
         Font fontThTiny = new Font(Font.TIMES_ROMAN, 7, Font.BOLD);
@@ -1210,8 +1211,8 @@ class ReportesPlanillas2Controller {
                 printFirmas([tipo: "detalle", orientacion: "vertical"])
             }
         }
-        if(planilla.tipoPlanilla.codigo=="A")
-            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo}", fontTitle))
+        if(planilla.tipoPlanilla.codigo=="A" || planilla.tipoPlanilla.codigo=="P" )
+            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo}", fontTitle1))
         /* ***************************************************** Fin Detalles *************************************************************/
 
         document.close();
