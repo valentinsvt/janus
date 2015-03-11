@@ -1165,7 +1165,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         if (p.parcialCronograma > p.parcialPlanilla) {
                             def valorDia = p.parcialCronograma / p.dias
                             retraso = ((p.parcialCronograma - p.parcialPlanilla) / valorDia).round(2)
-                            multa = ((p.parcialCronograma-p.parcialPlanilla) * (prmlMultaIncumplimiento / 1000)).round(2)
+                            multa = ((p.parcialCronograma) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
                         }
                         totalMultaRetraso += multa
                         bodyMultaRetraso += "<tr>"
@@ -1414,7 +1414,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
             if (retraso < 0) {
                 retraso = 0
             }
-
+//            println "retraso" +retraso
             totalMultaRetraso = retraso * ((prmlMultaRetraso / 1000) * totalContrato)
             tablaMl = "<table class=\"table table-bordered table-striped table-condensed table-hover\" style='width:${smallTableWidth}px; margin-top:10px;'>"
             tablaMl += '<tr>'
