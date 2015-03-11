@@ -848,7 +848,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
         }
 
 
-
+        def mensaje = " Se usó el periodo: "
         def bodyMultaRetraso = ""
 
         def totalContrato = contrato.monto
@@ -897,13 +897,15 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
             def fin = getLastDayOfMonth(inicio)
 
-//            println "inicio " + inicio + " fin " + fin + "  planilla " + fechaFinPlanilla
+//            println "inicio " + inicio.format("dd-MM-yyyy") + " fin " + fin.format("dd-MM-yyyy") + "  planilla " + fechaFinPlanilla.format("dd-MM-yyyy")
             if (fin > fechaFinPlanilla) {
                 fin = fechaFinPlanilla
                 while (fin <= fechaFinPlanilla) {
                     def perInec = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, fin)
-//                    println "----------!!!perinec " + perInec + " inicio " + inicio + "  " + fin
-                    def per = verificaIndices(pcs, perInec, 0)
+                   // println "----------!!!perinec " + perInec + " inicio " + inicio.format("dd-MM-yyyy") + "  " + fin.format("dd-MM-yyyy")
+                    def per = verificaIndicesAvance(pcs, perInec, 0,inicio,fin,contrato)
+                   // println "per despues de verficiar "+per
+                    mensaje+=" "+per
                     def periodo = new PeriodoPlanilla([planilla: planilla, periodo: per, fechaIncio: inicio, fechaFin: fin, titulo: "AVANCE"])
                     if (!periodo.save(flush: true)) {
                         println "error al crear periodo avance " + periodo.errors
@@ -916,9 +918,12 @@ class Planilla2Controller extends janus.seguridad.Shield {
             } else {
                 while (fin <= fechaFinPlanilla) {
                     def perInec = PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, fin)
-//                    println "----------!!!perinec " + perInec + " inicio " + inicio + "  " + fin
-                    def per = verificaIndices(pcs, perInec, 0)
+                  //  println "----------!!!perinec " + perInec + " inicio " + inicio.format("dd-MM-yyyy") + "  " + fin.format("dd-MM-yyyy")
+                    def per = verificaIndicesAvance(pcs, perInec, 0,inicio,fin,contrato)
+                  //  println "despues del verifica "+per
+                    mensaje+=" "+per
                     def periodo = new PeriodoPlanilla([planilla: planilla, periodo: per, fechaIncio: inicio, fechaFin: fin, titulo: "AVANCE"])
+
                     if (!periodo.save(flush: true)) {
                         println "error al crear periodo avance " + periodo.errors
                     } else {
@@ -939,6 +944,11 @@ class Planilla2Controller extends janus.seguridad.Shield {
                 }
             }
         } else {
+            pa.each {perPl->
+                //println " msn "+mensaje
+                mensaje+=" "+perPl.periodo+", "
+               // println " msn "+mensaje
+            }
             def detalle = DetallePlanilla.findAllByPlanilla(planilla).sum { it.monto }
             println "monto detalle " + detalle + "   planilla " + planilla.valor
             if (detalle && detalle.toDouble().round(2) != planilla.valor) {
@@ -1155,7 +1165,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                         if (p.parcialCronograma > p.parcialPlanilla) {
                             def valorDia = p.parcialCronograma / p.dias
                             retraso = ((p.parcialCronograma - p.parcialPlanilla) / valorDia).round(2)
-                            multa = ((p.parcialCronograma) * (prmlMultaIncumplimiento / 1000) * retraso).round(2)
+                            multa = ((p.parcialCronograma-p.parcialPlanilla) * (prmlMultaIncumplimiento / 1000)).round(2)
                         }
                         totalMultaRetraso += multa
                         bodyMultaRetraso += "<tr>"
@@ -1566,8 +1576,8 @@ class Planilla2Controller extends janus.seguridad.Shield {
         if (!planilla.save(flush: true)) {
             println "error planilla reajuste " + planilla.id
         }
-
-        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, tablaMlFs: tablaMlFs, liquidacion: liquidacion]
+       // println "mmensaje "+mensaje
+        [tablaBo: tablaBo, planilla: planilla, tablaP0: tablaP0, tablaFr: tablaFr, tablaMl: tablaMl, pMl: pMl, tablaMlFs: tablaMlFs, liquidacion: liquidacion, mensaje:mensaje]
     }
 
     def deletePeriodosPlanilla() {
@@ -2105,6 +2115,31 @@ class Planilla2Controller extends janus.seguridad.Shield {
             }
         }
         return perNuevo
+    }
+    def verificaIndicesAvance(pcs, per, i,Date inicio,Date fin,contrato) {
+        if (!flash.message) {
+            flash.message = ""
+        }
+        i=i+1
+        if(i>10)
+            return null
+      //  println "verifica indices!!! periodo "+per
+        def perNuevo = per
+        if (per == null) {
+            inicio=inicio.minus(30)
+            fin=fin.minus(30)
+          //  println "no encontro resto 30 "+inicio.format("dd-MM-yyyy")+" ---  "+fin.format("dd-MM-yyyy")
+            per =  PeriodosInec.findByFechaInicioLessThanEqualsAndFechaFinGreaterThanEquals(inicio, fin)
+            per = verificaIndicesAvance(pcs,per,i,inicio,fin,contrato)
+        }else {
+            def res = preciosService.verificaIndicesPeriodo(contrato,per)
+          //  println "res "+res
+            if(res.size()>0){
+            //    println "no paso la verificacion "
+                per = verificaIndicesAvance(pcs,null,i,inicio,fin,contrato)
+            }
+        }
+        return per
     }
 //    def verificaIndices(pcs, per, i) {
 //        if (!flash.message) {
