@@ -1212,7 +1212,7 @@ class ReportesPlanillas2Controller {
             }
         }
         if(planilla.tipoPlanilla.codigo=="A" || planilla.tipoPlanilla.codigo=="P" )
-            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo}", fontTitle1))
+            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla?.periodoAnticipo?.descripcion}", fontTitle1))
         /* ***************************************************** Fin Detalles *************************************************************/
 
         document.close();
