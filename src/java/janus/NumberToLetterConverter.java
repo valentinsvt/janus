@@ -65,16 +65,21 @@ public abstract class NumberToLetterConverter {
                     "El numero es mayor de 999'999.999, "
                             + "no es posible convertirlo");
 
+//        System.out.println("llega" + doubleNumber);
+
+        doubleNumber = Math.round(doubleNumber*100.0)/100.0;
+//        System.out.println("a...:" + doubleNumber);
+
         if (doubleNumber < 0)
             throw new NumberFormatException("El numero debe ser positivo");
 
         String splitNumber[] = String.valueOf(doubleNumber).replace('.', '#')
                 .split("#");
-
+//        System.out.println(splitNumber[0] + "con" + splitNumber[1]);
         if(splitNumber[1].length() == 1) {
             splitNumber[1] = splitNumber[1] + "0";
         } else if(splitNumber[1].length() > 2) {
-            splitNumber[1] = splitNumber[1].substring(0,1);
+            splitNumber[1] = splitNumber[1].substring(0,2);
         }
 
             // Descompone el trio de millones
@@ -118,7 +123,7 @@ public abstract class NumberToLetterConverter {
                 splitNumber[1], 2))
                 + String.valueOf(getDigitAt(splitNumber[1], 1))
                 + String.valueOf(getDigitAt(splitNumber[1], 0)));
-//        System.out.println("num= "+doubleNumber+"   centavos " + centavos);
+//        System.out.println("num= "+doubleNumber+"   centavos " + centavos + " a cent..." + String.valueOf(centavos));
 //        System.out.println(splitNumber[1]);
 //        System.out.println("pos 2:" + String.valueOf(getDigitAt(splitNumber[1], 2)));
 //        System.out.println("pos 1:" + String.valueOf(getDigitAt(splitNumber[1], 1)));
@@ -128,6 +133,7 @@ public abstract class NumberToLetterConverter {
         else if (centavos > 1)
             converted.append(" CON " + convertNumber(String.valueOf(centavos))
                     + "CENTAVOS");
+
 
         return converted.toString();
     }
@@ -225,7 +231,7 @@ public abstract class NumberToLetterConverter {
      * @return Numero convertido en letras
      */
     private static String convertNumber(String number) {
-
+//        System.out.println("llega a la func..." + number);
         if (number.length() > 3)
             throw new NumberFormatException(
                     "La longitud maxima debe ser 3 digitos");
@@ -241,7 +247,13 @@ public abstract class NumberToLetterConverter {
 
         int k = Integer.parseInt(String.valueOf(getDigitAt(number, 1))
                 + String.valueOf(getDigitAt(number, 0)));
+//        System.out.println("valor de k:" + k);
 
+
+//        System.out.println("dedenas.." + getDigitAt(number, 1) + "  unidades " + getDigitAt(number, 0));
+//        System.out.println("dedenas.." + (getDigitAt(number, 1) -2));
+//        System.out.println("rrdedenas.." + DECENAS[getDigitAt(number, 1) - 2]);
+//        System.out.println("rrunidad.." + UNIDADES[getDigitAt(number, 0) ]);
         if (k <= 20)
             output.append(UNIDADES[k]);
         else if (k > 30 && getDigitAt(number, 0) != 0)
