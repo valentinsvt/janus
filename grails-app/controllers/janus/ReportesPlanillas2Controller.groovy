@@ -1211,8 +1211,10 @@ class ReportesPlanillas2Controller {
                 printFirmas([tipo: "detalle", orientacion: "vertical"])
             }
         }
-        if(planilla.tipoPlanilla.codigo=="A" || planilla.tipoPlanilla.codigo=="P" )
-            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla?.periodoAnticipo?.descripcion}", fontTitle1))
+        if(planilla.tipoPlanilla.codigo == "A")
+            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo?.descripcion}", fontTitle1))
+        if(planilla.tipoPlanilla.codigo == "P" )
+            document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${PeriodoPlanilla.get(planilla.id).periodo.descripcion}", fontTitle1))
         /* ***************************************************** Fin Detalles *************************************************************/
 
         document.close();
