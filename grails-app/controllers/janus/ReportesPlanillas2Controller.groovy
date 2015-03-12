@@ -1212,8 +1212,6 @@ class ReportesPlanillas2Controller {
             }
         }
 
-        println "planilla:" + planilla + " PeriodoPlanilla:" + PeriodoPlanilla.get(planilla.id)
-
         if(planilla.tipoPlanilla.codigo == "A")
             document.add(new Paragraph( "Nota: Los índices utilizados para el reajuste son del periodo: ${planilla.periodoAnticipo?.descripcion}", fontTitle1))
 
