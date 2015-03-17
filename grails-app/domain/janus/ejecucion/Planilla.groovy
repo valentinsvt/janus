@@ -64,6 +64,10 @@ class Planilla {
 
     PeriodosInec periodoAnticipo
 
+
+    String descripcionMulta
+    Double multaEspecial = 0
+
     static auditable = true
     static mapping = {
         table 'plnl'
@@ -131,6 +135,9 @@ class Planilla {
 
             avanceFisico column: 'plnlavfs'
             periodoAnticipo column: 'prinantc'
+
+            descripcionMulta column: 'plnldsml'
+            multaEspecial column: 'plnlmles'
         }
     }
 
@@ -181,5 +188,8 @@ class Planilla {
 
         padreCosto(blank: true, nullable: true)
         periodoAnticipo(blank: true, nullable: true)
+
+        multaEspecial(blank: true, nullable: true)
+        descripcionMulta(blank: true, nullable: true,size: 1..255)
     }
 }

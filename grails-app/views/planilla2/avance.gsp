@@ -148,6 +148,8 @@
 
             <div class="tituloTree">Multa por no acatar disposiciones del fiscalizador</div>
             ${tablaMlFs}
+            <div class="tituloTree">Otras multas</div>
+            ${tablaMultaUsuario}
         </div> <!-- Multas -->
     </g:if>
 </div>

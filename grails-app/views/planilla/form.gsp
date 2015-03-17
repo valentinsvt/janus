@@ -262,16 +262,16 @@
                         </div>
                     </g:if>
                 <g:else>
-                    <g:if test="${planillaInstance.tipoPlanilla?.codigo=='A'}">
+                    %{--<g:if test="${planillaInstance.tipoPlanilla?.codigo=='A'}">--}%
                         <div class="row">
                             <div class="span2 formato">
                                 Periodo para el reajuste
                             </div>
                             <div class="span4" style="width: 400px">
-                                <g:select name="periodoPlan" from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin',order: 'desc',max: 20])}" optionKey="id" style="width: 100%"></g:select>
+                                <g:select name="periodoIndices.id" from="${janus.ejecucion.PeriodosInec.list([sort: 'fechaFin',order: 'desc',max: 20])}" optionKey="id" style="width: 100%" value="${planillaInstance?.periodoIndices?.id}"></g:select>
                             </div>
                         </div>
-                    </g:if>
+                    %{--</g:if>--}%
                 </g:else>
                     <g:if test="${!esAnticipo}">
                         <div class="row hide" style="margin-bottom: 10px;" id="divMultaDisp">
@@ -320,48 +320,23 @@
                             <p class="help-block ui-helper-hidden"></p>
                         </div>
                     </div>
+                <g:if test="${!esAnticipo}">
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class='span2 formato'>
+                            Multa
+                        </div>
+                        <div class="span5">
+                           <input type="text" name="multaDescripcion" value="${planillaInstance?.descripcionMulta}" style="width: 100%">
+                        </div>
+                        <div class='span1 formato'>
+                            Monto
+                        </div>
+                        <div class="span3">
+                            <input type="text" name="valor_multa" value="${planillaInstance?.multaEspecial}">
+                        </div>
+                    </div>
+                </g:if>
 
-                    %{--<div class="row">--}%
-                    %{--<div class="span2 formato">--}%
-                    %{--Oficio Salida--}%
-                    %{--</div>--}%
-
-                    %{--<div class="span4">--}%
-                    %{--<g:textField name="oficioSalida" maxlength="12" class=" span3 " value="${planillaInstance?.oficioSalida}"/>--}%
-
-                    %{--<p class="help-block ui-helper-hidden"></p>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="span2 formato">--}%
-                    %{--Fecha Oficio Salida--}%
-                    %{--</div>--}%
-
-                    %{--<div class="span4">--}%
-                    %{--<elm:datepicker name="fechaOficioSalida" class=" span3" value="${planillaInstance?.fechaOficioSalida}"/>--}%
-                    %{--<p class="help-block ui-helper-hidden"></p>--}%
-                    %{--</div>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="row">--}%
-                    %{--<div class="span2 formato">--}%
-                    %{--Memo Salida--}%
-                    %{--</div>--}%
-
-                    %{--<div class="span4">--}%
-                    %{--<g:textField name="memoSalida" maxlength="12" class=" span3" value="${planillaInstance?.memoSalida}"/>--}%
-
-                    %{--<p class="help-block ui-helper-hidden"></p>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="span2 formato">--}%
-                    %{--Fecha Memo Salida--}%
-                    %{--</div>--}%
-
-                    %{--<div class="span4">--}%
-                    %{--<elm:datepicker name="fechaMemoSalida" class=" span3" value="${planillaInstance?.fechaMemoSalida}"/>--}%
-                    %{--<p class="help-block ui-helper-hidden"></p>--}%
-                    %{--</div>--}%
-                    %{--</div>--}%
 
                     <div class="row">
                         <div class="span2 formato">

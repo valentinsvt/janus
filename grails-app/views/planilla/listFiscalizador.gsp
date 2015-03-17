@@ -155,6 +155,11 @@
                             %{--</g:link>--}%
                             %{--</g:if>--}%
                                 <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
+                                    <g:link controller="planilla" action="form" params="[id:planillaInstance.id,contrato:planillaInstance.contrato.id]" rel="tooltip" title="Editar" class="btn btn-small">
+                                        <i class="icon-pencil"></i>
+                                    </g:link>
+                                </g:if>
+                                <g:if test="${planillaInstance.tipoPlanilla.codigo == 'P'}">
                                     %{--<g:if test="${contrato.fiscalizador.id == session.usuario.id}">--}%
                                     <g:link action="detalle" id="${planillaInstance.id}" params="[contrato: contrato.id]" rel="tooltip" title="Detalles" class="btn btn-small">
                                         <i class="icon-reorder icon-large"></i>

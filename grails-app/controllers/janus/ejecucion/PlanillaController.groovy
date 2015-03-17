@@ -1754,7 +1754,13 @@ class PlanillaController extends janus.seguridad.Shield {
                 redirect(action: 'form', params: params)
                 return
             }//no existe el objeto
+            println "es update "+params.valor_multa+"  "+params.multaDescripcion
+            println "es update "+params
             planillaInstance.properties = params
+            if(!params.valor_multa ||  params.valor_multa=="")
+                params.valor_multa =0
+            planillaInstance.descripcionMulta = params.multaDescripcion
+            planillaInstance.multaEspecial = params.valor_multa.toDouble()
             if(planillaInstance.tipoPlanilla.codigo=="A"){
                 println "llego al save !!!!!  "+params.periodoPlan
                 planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
@@ -1762,6 +1768,7 @@ class PlanillaController extends janus.seguridad.Shield {
             session.override = true
         }//es edit
         else {
+
             planillaInstance = new Planilla(params)
 
             switch (planillaInstance.tipoPlanilla.codigo) {
@@ -1772,28 +1779,6 @@ class PlanillaController extends janus.seguridad.Shield {
                     planillaInstance.periodoAnticipo=PeriodosInec.get(params.periodoPlan)
                     break;
                 case 'P':
-                    //avance de obra: hay q poner fecha inicio y fecha fin
-
-//                    //las planillas q no son de avance para ver cual es el ultimo periodo planillado
-//                    def otrasPlanillas = Planilla.findAllByContratoAndTipoPlanillaNotEqual(planillaInstance.contrato, TipoPlanilla.findByCodigo("A"), [sort: 'periodoIndices', order: 'asc'])
-//
-//                    def ini
-//                    if (otrasPlanillas.size() > 0) {
-//                        def ultimoPeriodo = otrasPlanillas?.last().fechaFin
-//                        use(TimeCategory) {
-//                            ini = ultimoPeriodo + 1.days
-//                        }
-//                    } else {
-//                        ini = planillaInstance.contrato.oferta.concurso.obra.fechaInicio
-//                    }
-//                    def fin = planillaInstance.periodoIndices.fechaFin
-//
-//                    planillaInstance.fechaInicio = ini
-//                    planillaInstance.fechaFin = fin
-//
-//                    /* ************** La fecha inicio y fecha fin se vuelven las fechas del periodo ***************************/
-//                    planillaInstance.fechaInicio = planillaInstance.periodoIndices.fechaInicio
-//                    planillaInstance.fechaFin = planillaInstance.periodoIndices.fechaFin
 
                     def periodoPlanilla = params.periodoPlanilla
                     def fechas = periodoPlanilla.split("_")
