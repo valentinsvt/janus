@@ -14,7 +14,7 @@ environments {
         dataSource {
             dbCreate = "update"
 //            url = "jdbc:postgresql://10.0.0.3:5432/janus2"
-            url = "jdbc:postgresql://10.0.0.2:5432/janus_prdc6"
+            url = "jdbc:postgresql://10.0.0.2:5432/janus_prdc4"
 //            url = "jdbc:postgresql://10.0.0.2:5432/obras"
 //            url = "jdbc:postgresql://127.0.0.1:5432/gadpp"
             username = "postgres"
@@ -78,7 +78,24 @@ environments {
         dataSource {
             dbCreate = "update"
             //url = "jdbc:postgresql://127.0.0.1:5432/janus"
-            url = "jdbc:postgresql://127.0.0.1:5432/consultoria"
+            url = "jdbc:postgresql://127.0.0.1:5432/prueba"
+            username = "postgres"
+            password = "janus"
+        }
+        dataSource_oferentes {
+            dialect = org.hibernate.dialect.PostgreSQLDialect
+            driverClassName = 'org.postgresql.Driver'
+            url = "jdbc:postgresql://127.0.0.1:5432/oferentes"
+            username = "postgres"
+            password = "janus"
+            dbCreate = 'update'
+        }
+    }
+    pruebas {
+        dataSource {
+            dbCreate = "update"
+            //url = "jdbc:postgresql://127.0.0.1:5432/janus"
+            url = "jdbc:postgresql://127.0.0.1:5432/prueba"
             username = "postgres"
             password = "janus"
         }
