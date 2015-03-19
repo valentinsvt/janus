@@ -1031,7 +1031,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
                     }
                     tablaBo += "<td class='number'>" + numero(valor) + "</td>"
                 }else{
-                    println "es anticipo verficando periodo de anticipo "+p.planilla.fechaPresentacion.format("dd-MM-yyyy")+"  "+p.fechaIncio.format("dd-MM-yyyy")+"  "+p.fechaFin.format("dd-MM-yyyy")
+                    //println "es anticipo verficando periodo de anticipo "+p.planilla.fechaPresentacion.format("dd-MM-yyyy")+"  "+p.fechaIncio.format("dd-MM-yyyy")+"  "+p.fechaFin.format("dd-MM-yyyy")
                     if(p.fechaIncio<=planillaDeAnticipo.fechaPresentacion && p.fechaFin>=planillaDeAnticipo.fechaPresentacion){
 
                         def valor = ValorIndice.findByPeriodoAndIndice(planilla.periodoAnticipo, c.indice).valor
