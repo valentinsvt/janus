@@ -1077,7 +1077,8 @@ class ReportePlanillas3Controller {
 
                     def multasAnt = m1 + m2 + m3 + m4
 //                    def multasAct = totalMultaRetraso + totalMulta
-                    def multasAct = planilla.multaIncumplimiento + planilla.multaRetraso + planilla.multaDisposiciones + planilla.multaPlanilla
+                    def multasAct = planilla.multaIncumplimiento + planilla.multaRetraso + planilla.multaDisposiciones + planilla.multaPlanilla+planilla.multaEspecial
+                    println "planilla retraso "+planilla.multaRetraso
                     def multasAcu = multasAnt + multasAct
 
                     println "multas Ant = " + m1 + " + " + m2 + " + " + m3 + " + " + m4 + " = " + multasAnt

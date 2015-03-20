@@ -1634,7 +1634,7 @@ class Planilla2Controller extends janus.seguridad.Shield {
 
         planilla.reajuste = reajusteTotal
         planilla.multaPlanilla = multaPlanilla
-        planilla.multaRetraso = multaRetraso
+        planilla.multaRetraso = multaInc
         planilla.multaIncumplimiento = multaIncumplimiento
         planilla.multaDisposiciones = multaDisposiciones
 
