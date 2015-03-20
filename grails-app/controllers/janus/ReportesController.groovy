@@ -8455,9 +8455,9 @@ class ReportesController {
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja4)
         addCellTabla(tablaValoresMemoPresu1, new Paragraph(" ", times8bold), prmsHeaderHoja4)
 //        println "generando reporte: .."+ session.perfil.codigo
-        if(obra.tipo == 'D' & session.perfil.codigo == 'COGS') {
+        if(obra.tipo == 'D' && session.perfil.codigo == 'COGS') {
             addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Cogestión:", times10bold), prmsHeaderHoja)
-        } else if(obra.tipo == 'D' & session.perfil.codigo == 'ADDI'){
+        } else if(obra.tipo == 'D' && session.perfil.codigo == 'ADDI'){
             addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por Administración Directa:", times10bold), prmsHeaderHoja)
         } else  addCellTabla(tablaValoresMemoPresu1, new Paragraph("Presupuesto por administración directa:", times10bold), prmsHeaderHoja)
 
