@@ -994,8 +994,14 @@ class Planilla2Controller extends janus.seguridad.Shield {
         periodos.each {
             if(it.planilla.tipoPlanilla.codigo!="A")
             tablaBo += "<th class='nb' colspan='2'>${it.periodo.descripcion} </th>"
-            else
-                tablaBo += "<th class='nb' colspan='2'>${planilla.periodoAnticipo.descripcion} </th>"
+            else{
+                if(it.fechaIncio<=planillaDeAnticipo.fechaPresentacion && it.fechaFin>=planillaDeAnticipo.fechaPresentacion) {
+                    tablaBo += "<th class='nb' colspan='2'>Pago: ${planillaDeAnticipo.fechaPago.format('dd-MM-yyyy')} <br/> Indices:${planilla.periodoAnticipo.descripcion} </th>"
+                }else{
+                    tablaBo += "<th class='nb' colspan='2'></th>"
+                }
+            }
+
         }
         periodos2.each {
 
