@@ -333,8 +333,10 @@ class ReportePlanillas3Controller {
         periodos.each { per ->
             if(per.planilla.tipoPlanilla.codigo!="A"){
                 addCellTabla(tablaB0, new Paragraph(per.periodo.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             }else{
                 addCellTabla(tablaB0, new Paragraph(planilla.periodoAnticipo.descripcion, fontTh), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaB0, new Paragraph(" "), [border: Color.BLACK, bcr: Color.LIGHT_GRAY, bwr: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
             }
 
 //            addCellTabla(tablaB0, new Paragraph(fechaConFormato(per.fechaIncio), fontTh), [border: Color.BLACK, bcl: Color.LIGHT_GRAY, bwl: 0.1, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
@@ -889,6 +891,30 @@ class ReportePlanillas3Controller {
 
             /* ***************************************************** Fin Multa retraso ********************************************************/
 
+            /* ***************************************************** Multa ingresada por el usuario ********************************************************/
+            Paragraph tituloMultaUsu = new Paragraph();
+            tituloMultaUsu.setAlignment(Element.ALIGN_CENTER);
+            tituloMultaUsu.add(new Paragraph("Otras multas", fontTitle));
+            addEmptyLine(tituloMultaUsu, 1);
+            document.add(tituloMultaUsu);
+
+            PdfPTable tablaMultaUsu = new PdfPTable(2);
+            tablaMultaUsu.setWidthPercentage(50);
+            tablaMultaUsu.setSpacingAfter(10f);
+
+            tablaMultaUsu.setHorizontalAlignment(Element.ALIGN_LEFT)
+
+            addCellTabla(tablaMultaUsu, new Paragraph("Concepto", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaUsu, new Paragraph(planilla.descripcionMulta, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaUsu, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+            addCellTabla(tablaMultaUsu, new Paragraph('$'+numero(planilla.multaEspecial, 2),fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
+
+            document.add(tablaMultaUsu);
+
+
+
+            /* ***************************************************** Fin Multa usuario ************************************************/
+
             /* ***************************************************** Multa disposiciones ********************************************************/
             Paragraph tituloMultaDisp = new Paragraph();
             tituloMultaDisp.setAlignment(Element.ALIGN_CENTER);
@@ -914,29 +940,7 @@ class ReportePlanillas3Controller {
         }
         /* ***************************************************** Fin Multa disposiciones ************************************************/
 
-        /* ***************************************************** Multa ingresada por el usuario ********************************************************/
-        Paragraph tituloMultaUsu = new Paragraph();
-        tituloMultaUsu.setAlignment(Element.ALIGN_CENTER);
-        tituloMultaUsu.add(new Paragraph("Otras multas", fontTitle));
-        addEmptyLine(tituloMultaUsu, 1);
-        document.add(tituloMultaUsu);
 
-        PdfPTable tablaMultaUsu = new PdfPTable(2);
-        tablaMultaUsu.setWidthPercentage(50);
-        tablaMultaUsu.setSpacingAfter(10f);
-
-        tablaMultaUsu.setHorizontalAlignment(Element.ALIGN_LEFT)
-
-        addCellTabla(tablaMultaUsu, new Paragraph("Concepto", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaUsu, new Paragraph(planilla.descripcionMulta, fontTd), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaUsu, new Paragraph("Valor", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-        addCellTabla(tablaMultaUsu, new Paragraph(numero(planilla.multaEspecial, 2)), [border: Color.BLACK, align: Element.ALIGN_LEFT, valign: Element.ALIGN_MIDDLE])
-
-        document.add(tablaMultaUsu);
-
-
-
-    /* ***************************************************** Fin Multa disposiciones ************************************************/
 
         /* ***************************************************** Detalles *****************************************************************/
         println "detalles"
