@@ -773,7 +773,7 @@ class ReportePlanillas3Controller {
 //                        tr7 += "<th  class='number'>" + numero(rejActual-rej, 2) + "</th>"
 
                         addCellTabla(tablaFr, new Paragraph(numero(rej, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                        addCellTabla(tablaFr, new Paragraph(numero((rejActual-rej), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                        addCellTabla(tablaFr, new Paragraph(numero((rejActual-rej), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         aPlanillar+=(rejActual-rej)
                     }else{
                         def fr1 = (per.fr - 1).round(3)
@@ -781,8 +781,31 @@ class ReportePlanillas3Controller {
 //                        tr6 += "<th  class='number'>" + numero(0, 2) + "</th>"
 //                        tr7 += "<th  class='number'>" + numero(t, 2) + "</th>"
                         addCellTabla(tablaFr, new Paragraph(numero(0, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-                        addCellTabla(tablaFr, new Paragraph(numero((t), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                        addCellTabla(tablaFr, new Paragraph(numero((t), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
                         aPlanillar+=t
+                    }
+
+                }
+            }
+            periodos.eachWithIndex { per, i ->
+                if (i > 0) {
+                    if(per.planilla.imprimeReajueste==planilla){
+                        def rej = (per.fr-1)*per.p0
+                        def rejActual = (per.frReajuste-1)*per.p0
+//                        tr6 += "<th  class='number'>" + numero(rej, 2) + "</th>"
+//                        tr7 += "<th  class='number'>" + numero(rejActual-rej, 2) + "</th>"
+
+//                        addCellTabla(tablaFr, new Paragraph(numero(rej, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaFr, new Paragraph(numero((rejActual-rej), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                        aPlanillar+=(rejActual-rej)
+                    }else{
+                        def fr1 = (per.fr - 1).round(3)
+                        def t = (per.p0 * fr1).round(2)
+//                        tr6 += "<th  class='number'>" + numero(0, 2) + "</th>"
+//                        tr7 += "<th  class='number'>" + numero(t, 2) + "</th>"
+//                        addCellTabla(tablaFr, new Paragraph(numero(0, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                        addCellTabla(tablaFr, new Paragraph(numero((t), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+//                        aPlanillar+=t
                     }
 
                 }
