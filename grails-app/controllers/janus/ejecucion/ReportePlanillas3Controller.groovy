@@ -755,9 +755,9 @@ class ReportePlanillas3Controller {
         def planillaAnterior, reajusteAnterior, reajustePlanillar
 
         if (periodos.size() > 2) {
-//            planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 2)
-//            reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
-//            reajustePlanillar = reajusteTotal - reajusteAnterior
+            planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 2)
+            reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
+            reajustePlanillar = reajusteTotal - reajusteAnterior
 //
 //            addCellTabla(tablaFr, new Paragraph("REAJUSTE ANTERIOR", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
 //            addCellTabla(tablaFr, new Paragraph(numero(reajusteAnterior, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
