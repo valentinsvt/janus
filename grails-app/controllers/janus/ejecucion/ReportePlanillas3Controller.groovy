@@ -392,7 +392,7 @@ class ReportePlanillas3Controller {
                     valor = -1
                 }
                 addCellTabla(tablaB0, new Paragraph(numero(valor), fontTd), [border: Color.BLACK, bcl: Color.WHITE, bwl: 0.1, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
-               // tablaBo += "<td class='number'>" + numero(valor) + "</td>"
+                // tablaBo += "<td class='number'>" + numero(valor) + "</td>"
 //                if(per.planilla.tipoPlanilla.codigo!="A" ){
 //                    def valor = ValorIndice.findByPeriodoAndIndice(per.periodo, c.indice).valor
 //                    if (!valor) {
@@ -661,10 +661,14 @@ class ReportePlanillas3Controller {
                     def vlin
                     def dec = 3
                     if (i == 0) {
-                        vlin = per.total
+                        vlin=(per.periodoReajuste?per.b0Reajuste:per.total)
 //                        dec = 3
                     } else {
-                        vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
+                        if(per.periodoReajuste){
+                            vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodoReajuste).valor
+                        }else{
+                            vlin = ValorIndice.findByIndiceAndPeriodo(p.indice, per.periodo).valor
+                        }
 //                        dec = 2
                     }
 //                    println "error "+p.indice+" "+p.indice.id+"  "+per.periodo.id+"   "+vlin+"  "+vlinOferta+"  "+p.valor+"  "+"  "+per.periodo.id
@@ -679,7 +683,7 @@ class ReportePlanillas3Controller {
         addCellTabla(tablaFr, new Paragraph(numero(totalFr), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
         periodos.eachWithIndex { per, i ->
             if (i > 0) {
-                addCellTabla(tablaFr, new Paragraph(numero(per.fr), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
+                addCellTabla(tablaFr, new Paragraph(numero(per.periodoReajuste?per.frReajuste:per.fr), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE])
             }
         }
 
@@ -695,14 +699,29 @@ class ReportePlanillas3Controller {
         def reajusteTotal = 0
         periodos.eachWithIndex { per, i ->
             if (i > 0) {
-                def fr1 = (per.fr - 1).round(3)
+                if(per.periodoReajuste){
+                    def fr1 = (per.frReajuste - 1).round(3)
+//                    tr1 += "<th class='number'>${numero(per.frReajuste)}</th>"
+//                    tr2 += "<th class='number'>${numero(fr1)}</th>"
+//                    tr3 += "<th class='number'>${numero(per.p0, 2)}</th>"
+//                    def t = (per.p0 * fr1).round(2)
+//                    tr4 += "<th class='number'>${numero(t, 2)}</th>"
+                    cells[0][i] = new Paragraph(numero(per.frReajuste), fontTd)
+                    cells[1][i] = new Paragraph(numero(fr1), fontTd)
+                    cells[2][i] = new Paragraph(numero(per.p0, 2), fontTd)
+                    def t = (per.p0 * fr1).round(2)
+                    cells[3][i] = new Paragraph(numero(t, 2), fontTd)
+                    reajusteTotal += t
+                }else{
+                    def fr1 = (per.fr - 1).round(3)
+                    cells[0][i] = new Paragraph(numero(per.fr), fontTd)
+                    cells[1][i] = new Paragraph(numero(fr1), fontTd)
+                    cells[2][i] = new Paragraph(numero(per.p0, 2), fontTd)
+                    def t = (per.p0 * fr1).round(2)
+                    cells[3][i] = new Paragraph(numero(t, 2), fontTd)
+                    reajusteTotal += t
+                }
 
-                cells[0][i] = new Paragraph(numero(per.fr), fontTd)
-                cells[1][i] = new Paragraph(numero(fr1), fontTd)
-                cells[2][i] = new Paragraph(numero(per.p0, 2), fontTd)
-                def t = (per.p0 * fr1).round(2)
-                cells[3][i] = new Paragraph(numero(t, 2), fontTd)
-                reajusteTotal += t
             }
         }
         reajusteTotal = reajusteTotal.toDouble().round(2)
@@ -730,22 +749,48 @@ class ReportePlanillas3Controller {
 
         addCellTabla(tablaFr, tablaDatos, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE])
         addCellTabla(tablaFr, inner5, [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_CENTER, valign: Element.ALIGN_MIDDLE, colspan: periodos.size()])
-
-        addCellTabla(tablaFr, new Paragraph("REAJUSTE TOTAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-        addCellTabla(tablaFr, new Paragraph(numero(reajusteTotal, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+        def aPlanillar = 0
+//
 
         def planillaAnterior, reajusteAnterior, reajustePlanillar
 
         if (periodos.size() > 2) {
-            planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 2)
-            reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
-            reajustePlanillar = reajusteTotal - reajusteAnterior
-
+//            planillaAnterior = planillasAnteriores.get(planillasAnteriores.size() - 2)
+//            reajusteAnterior = (planillaAnterior.reajuste).toDouble().round(2)
+//            reajustePlanillar = reajusteTotal - reajusteAnterior
+//
+//            addCellTabla(tablaFr, new Paragraph("REAJUSTE ANTERIOR", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+//            addCellTabla(tablaFr, new Paragraph(numero(reajusteAnterior, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+//            addCellTabla(tablaFr, new Paragraph("REAJUSTE A PLANILLAR", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+//            addCellTabla(tablaFr, new Paragraph(numero(reajustePlanillar, 2)  /*numero(planilla.reajuste, 2)*/, fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
             addCellTabla(tablaFr, new Paragraph("REAJUSTE ANTERIOR", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaFr, new Paragraph(numero(reajusteAnterior, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
-            addCellTabla(tablaFr, new Paragraph("REAJUSTE A PLANILLAR", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
-            addCellTabla(tablaFr, new Paragraph(numero(reajustePlanillar, 2)  /*numero(planilla.reajuste, 2)*/, fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+            periodos.eachWithIndex { per, i ->
+                if (i > 0) {
+                    if(per.planilla.imprimeReajueste==planilla){
+                        def rej = (per.fr-1)*per.p0
+                        def rejActual = (per.frReajuste-1)*per.p0
+//                        tr6 += "<th  class='number'>" + numero(rej, 2) + "</th>"
+//                        tr7 += "<th  class='number'>" + numero(rejActual-rej, 2) + "</th>"
+
+                        addCellTabla(tablaFr, new Paragraph(numero(rej, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+                        addCellTabla(tablaFr, new Paragraph(numero((rejActual-rej), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+                        aPlanillar+=(rejActual-rej)
+                    }else{
+                        def fr1 = (per.fr - 1).round(3)
+                        def t = (per.p0 * fr1).round(2)
+//                        tr6 += "<th  class='number'>" + numero(0, 2) + "</th>"
+//                        tr7 += "<th  class='number'>" + numero(t, 2) + "</th>"
+                        addCellTabla(tablaFr, new Paragraph(numero(0, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+                        addCellTabla(tablaFr, new Paragraph(numero((t-rej), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+                        aPlanillar+=t
+                    }
+
+                }
+            }
+
         }
+        addCellTabla(tablaFr, new Paragraph("REAJUSTE TOTAL", fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: 2])
+        addCellTabla(tablaFr, new Paragraph(numero(aPlanillar, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
 
         document.add(tablaFr);
         printFirmas([tipo: "otro", orientacion: "vertical"])
