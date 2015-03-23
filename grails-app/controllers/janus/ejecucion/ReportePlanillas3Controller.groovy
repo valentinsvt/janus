@@ -781,7 +781,7 @@ class ReportePlanillas3Controller {
 //                        tr6 += "<th  class='number'>" + numero(0, 2) + "</th>"
 //                        tr7 += "<th  class='number'>" + numero(t, 2) + "</th>"
                         addCellTabla(tablaFr, new Paragraph(numero(0, 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
-                        addCellTabla(tablaFr, new Paragraph(numero((t-rej), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
+                        addCellTabla(tablaFr, new Paragraph(numero((t), 2), fontTh), [border: Color.BLACK, bg: Color.LIGHT_GRAY, align: Element.ALIGN_RIGHT, valign: Element.ALIGN_MIDDLE, colspan: periodos.size() - 1])
                         aPlanillar+=t
                     }
 
